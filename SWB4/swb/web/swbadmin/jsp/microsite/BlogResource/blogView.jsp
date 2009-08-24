@@ -20,9 +20,10 @@
         if(blog!=null)
         {
             Member member = Member.getMember(user, wpage);
-            String defaultFormat = "dd 'de' MMMM  'del' yyyy";
+            String defaultFormat = "dd 'de' MMMM  'del' yyyy 'a las' HH:mm";
             SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
             String created = iso8601dateFormat.format(blog.getCreated());
+            String updated = iso8601dateFormat.format(blog.getUpdated());
             if(member.getAccessLevel()==member.LEVEL_OWNER)
             {
                 SWBResourceURL urleditar=paramRequest.getRenderUrl();
@@ -45,6 +46,7 @@
             <div class="clear">&nbsp;</div>
             <h2 class="tituloGrande"><%=blog.getTitle()%></h2>
             <p>Creado el: <%=created%></p>
+            <p>Actualizado el: <%=updated%></p>
             <p><img src="images/solidLine.jpg" alt="" width="495" height="1" ></p>            
             <p><%=blog.getDescription()%></p>
             <p>&nbsp;</p>
