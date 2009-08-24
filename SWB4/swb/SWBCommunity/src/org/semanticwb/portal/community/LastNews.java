@@ -69,8 +69,8 @@ public class LastNews extends GenericAdmResource
         prefixStatement.append(" PREFIX swbcomm: <http://www.semanticwebbuilder.org/swb4/community#>" + NL);
         prefixStatement.append(" PREFIX rdf: <" + SemanticVocabulary.RDF_URI + "> " + NL);
         prefixStatement.append(" PREFIX rdfs: <" + SemanticVocabulary.RDFS_URI + "> " + NL);
-        prefixStatement.append("SELECT ?x ?date WHERE {?x swb:created ?date . ?x rdf:type swbcomm:NewsElement} ORDER BY DESC(?date) LIMIT " + limit);
-        QueryExecution qe = paramRequest.getWebPage().getSemanticObject().getModel().sparQLOntologyQuery(prefixStatement.toString());
+        prefixStatement.append("SELECT ?x ?date WHERE {?x rdf:type swbcomm:NewsElement. ?x swb:created ?date} ORDER BY DESC(?date) LIMIT " + limit);
+        QueryExecution qe = paramRequest.getWebPage().getSemanticObject().getModel().sparQLQuery(prefixStatement.toString());
         ResultSet rs = qe.execSelect();
         while (rs.hasNext())
         {
