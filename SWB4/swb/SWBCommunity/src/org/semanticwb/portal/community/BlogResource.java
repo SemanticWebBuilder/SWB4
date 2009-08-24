@@ -51,7 +51,7 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
         }
         if (blog == null)
         {
-            blog = createBlog("Blog", "Descripción del blog", paramRequest.getWebPage().getWebSite(), paramRequest.getWebPage(), paramRequest.getUser());
+            blog = createBlog("Título del Blog", "Descripción del blog", paramRequest.getWebPage().getWebSite(), paramRequest.getWebPage(), paramRequest.getUser());
         }
         String act = request.getParameter("act");
         if (act == null)
