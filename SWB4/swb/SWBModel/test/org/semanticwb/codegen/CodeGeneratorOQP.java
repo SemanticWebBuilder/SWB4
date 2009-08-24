@@ -70,13 +70,13 @@ public class CodeGeneratorOQP {
         try
         {
             String path=getClass().getResource("/").getPath().replaceAll("%20", " ");
-            File dir = new File(path+"../../../../OQP/src");
-            System.out.println(dir.getAbsolutePath());
+            File dir = new File(path+"../../../../../OQP/src");
             CodeGenerator codeGeneration = new CodeGenerator();
             codeGeneration.generateCode("eng",false,dir);
+            System.out.println(dir.getCanonicalPath());
             System.out.println("Generación de clases completa");
         }
-        catch (CodeGeneratorException cge)
+        catch (Exception cge)
         {
             fail(cge.getMessage());
         }
