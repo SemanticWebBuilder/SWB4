@@ -13,7 +13,7 @@
           <table>
         <%
         Resource base=paramRequest.getResourceBase();
-        String perfilPath=base.getAttribute("perfilPath","");
+        String perfilPath=paramRequest.getWebPage().getWebSite().getWebPage("perfil").getUrl();
 
         SWBResourceURL urlAction=paramRequest.getActionUrl();
         String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
