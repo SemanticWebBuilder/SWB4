@@ -7,10 +7,8 @@
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
      <%
-        SWBResourceURL urlAction=paramRequest.getActionUrl();
-        Resource base=paramRequest.getResourceBase();
-        String perfilPath=base.getAttribute("perfilPath","/swb/Ciudad_Digital/Perfil");
-        String friendsPath=base.getAttribute("friendsPath","/swb/Ciudad_Digital/Mis_amigos");
+        String perfilPath=paramRequest.getWebPage().getWebSite().getWebPage("perfil").getUrl();
+        String friendsPath=paramRequest.getWebPage().getWebSite().getWebPage("Amigos").getUrl();
         User owner=paramRequest.getUser();
         User user=owner;
         if(request.getParameter("user")!=null) 
@@ -67,11 +65,11 @@
                          </div>
                          <%
                          contTot++;
-                         if(isStrategy && contTot==12) break;
+                         if(isStrategy && contTot==18) break;
                      }
                  }
              }
-             if(isStrategy && contTot>=12){%>
+             if(isStrategy && contTot>=18){%>
                  <div class="clear">
                     <p class="vermas"><a href="<%=friendsPath%>" >Ver todos</a></p>
                  </div>
