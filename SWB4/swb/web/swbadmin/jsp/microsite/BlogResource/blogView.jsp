@@ -27,8 +27,7 @@
             if(member.getAccessLevel()==member.LEVEL_OWNER)
             {
                 SWBResourceURL urleditar=paramRequest.getRenderUrl();
-                urleditar.setParameter("act", "edit");
-                urleditar.setParameter("uri", blog.getURI());
+                urleditar.setParameter("act", "edit");                
                 urleditar.setParameter("mode", "editblog");
                 %>
                 <div class="editarInfo"><p><a href="<%=urleditar%>">Editar información</a></p></div>
