@@ -133,6 +133,7 @@ public class SemanticMgr implements SWBInstanceObject
             store = SDBFactory.connectStore(con,sd);
             //Revisar si las tablas existen
             List list=store.getConnection().getTableNames();
+            System.out.println("list:"+list);
             if(!list.contains("nodes") && !list.contains("triples") && !list.contains("quads"))
             {
                 log.event("Formating Database Tables...");
@@ -169,8 +170,8 @@ public class SemanticMgr implements SWBInstanceObject
         //Create Schema
         m_schema = new SemanticOntology("SWBSquema",ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM_TRANS_INF));
         //Create Ontology
-        //m_ontology = new SemanticOntology("SWBOntology",ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM));
-        m_ontology = new SemanticOntology("SWBOntology",ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM_RDFS_INF));
+        m_ontology = new SemanticOntology("SWBOntology",ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM));
+        //m_ontology = new SemanticOntology("SWBOntology",ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM_RDFS_INF));
         
         //Load Ontology from file
         StringTokenizer st=new StringTokenizer(SWB_OWL_PATH,",;");
@@ -422,7 +423,7 @@ public class SemanticMgr implements SWBInstanceObject
             {
                 String name=it.next();
                 log.trace("LoadingModel:"+name);
-                loadDBModel(name);
+                SemanticModel model=loadDBModel(name);
             }
         }else
         {

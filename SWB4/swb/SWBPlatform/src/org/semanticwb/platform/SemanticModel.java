@@ -32,11 +32,11 @@ import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.ontology.OntProperty;
+import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
-import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
@@ -44,12 +44,10 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
-import java.io.File;
 import java.io.OutputStream;
-import java.security.Principal;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.StringTokenizer;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
@@ -61,8 +59,12 @@ import org.semanticwb.rdf.RemoteGraph;
  */
 public class SemanticModel 
 {
+    private static Logger log=SWBUtils.getLogger(SemanticModel.class);
+    
     private Model m_model;
     OntModel m_ont;
+    Dataset dataset=null;
+
     private String m_name;
     private String m_nameSpace;
     private SemanticObject m_modelObject;
@@ -482,6 +484,7 @@ public class SemanticModel
 
     public QueryExecution sparQLQuery(String queryString)
     {
+        log.debug("sparQLQuery:"+queryString);
         QueryExecution ret=null;
         Query query = QueryFactory.create(queryString);
         if(m_model.getGraph() instanceof RemoteGraph)
@@ -495,14 +498,9 @@ public class SemanticModel
     }
     
     public QueryExecution sparQLOntologyQuery(String queryString)
-    {    
+    {
+        log.debug("sparQLOntologyQuery:"+queryString);
         Query query = QueryFactory.create(queryString);
         return QueryExecutionFactory.create(query, m_ont);
     }
-
-
-
-
-    
-
 }
