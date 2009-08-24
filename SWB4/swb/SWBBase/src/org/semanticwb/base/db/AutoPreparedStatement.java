@@ -90,6 +90,7 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement
 
     public void addBatch(String str) throws java.sql.SQLException
     {
+        if(debug)System.out.println("addBatch:"+str);
         checkStatement();
         st.addBatch(str);
         batchs.add(str);
@@ -129,7 +130,16 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement
 
     public int[] executeBatch() throws java.sql.SQLException
     {
-        if(debug)System.out.println("executeBatch():");
+        if(debug)
+        {
+            System.out.println("*************************************");
+            System.out.println("executeBatch():"+query);
+            Iterator<String> it=batchs.iterator();
+            while (it.hasNext()) {
+                String string = it.next();
+                System.out.print(": "+string);
+            }
+        }
         checkStatement();
         return st.executeBatch();
     }
