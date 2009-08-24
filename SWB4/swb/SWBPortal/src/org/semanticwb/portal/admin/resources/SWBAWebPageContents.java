@@ -123,6 +123,7 @@ public class SWBAWebPageContents extends GenericResource {
 
         if (action.equals("")) { //lista de instancias de tipo propiedad existentes para selecionar
             SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(idp);
+            //System.out.println("prop:"+prop+" idp:"+idp);
             SemanticClass clsprop = prop.getRangeClass();
             log.debug("class: " + clsprop.getClassName());
             HashMap<SemanticProperty, SemanticProperty> hmprop = new HashMap();
@@ -152,8 +153,9 @@ public class SWBAWebPageContents extends GenericResource {
             inheritHeader.append("<th>");
             out.println("<th>");
             numcols++;
-            out.println(clsprop.getDisplayNameProperty().getDisplayName(user.getLanguage()));
-            inheritHeader.append(clsprop.getDisplayNameProperty().getDisplayName(user.getLanguage()));
+            //System.out.println("clsprop:"+clsprop+" user:"+user);
+            out.println(clsprop.getDisplayName(user.getLanguage()));
+            inheritHeader.append(clsprop.getDisplayName(user.getLanguage()));
             out.println("</th>");
             inheritHeader.append("</th>");
             String propname = "";
