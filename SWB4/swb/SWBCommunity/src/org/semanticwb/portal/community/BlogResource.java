@@ -115,7 +115,7 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
         return;
         }
         String action = request.getParameter("act");
-        System.out.println("act:" + action);
+        //System.out.println("act:" + action);
         if ("add".equals(action) && mem.canAdd())        
         {
             String title = request.getParameter("title");
