@@ -114,8 +114,7 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
         {
         return;
         }
-        String action = request.getParameter("act");
-        //System.out.println("act:" + action);
+        String action = request.getParameter("act");        
         if ("add".equals(action) && mem.canAdd())        
         {
             String title = request.getParameter("title");
@@ -174,20 +173,29 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
         {
             User user = response.getUser();
             Member member = Member.getMember(user, response.getWebPage());
-            String uri = request.getParameter("uri");
-            if (uri != null)
+            Iterator<Blog> blogs = Blog.listBlogByWebPage(response.getWebPage());
+            Blog blog = null;
+            if (blogs.hasNext())
             {
-                Blog rec = (Blog) SemanticObject.createSemanticObject(uri).createGenericInstance();
+                blog = blogs.next();
+            }
+            if (blog == null)
+            {
+                blog = createBlog("Título del Blog", "Descripción del blog", response.getWebPage().getWebSite(), response.getWebPage(), response.getUser());
+            }            
+            if(blog!=null)
+            {
                 String title = request.getParameter("title");
                 String description = request.getParameter("description");
-                if (rec != null && title != null && description != null && member.getAccessLevel()==Member.LEVEL_OWNER)
+                if (blog != null && title != null && description != null && member.getAccessLevel()==Member.LEVEL_OWNER)
                 {
-                    rec.setTitle(title);
-                    rec.setDescription(description);
+                    blog.setTitle(title);
+                    blog.setDescription(description);
                     Date date = new Date(System.currentTimeMillis());
-                    rec.setUpdated(date);
+                    blog.setUpdated(date);
                 }
             }
+            
         }
         else if ("remove".equals(action))
         {
