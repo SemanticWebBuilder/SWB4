@@ -49,9 +49,9 @@ public class PasswordUpdateBase extends org.semanticwb.model.base.FormElementBas
         return getSemanticObject().getProperty(swb_passUpdVerify);
     }
 
-    public void setVerifyText(String passUpdVerify)
+    public void setVerifyText(String value)
     {
-        getSemanticObject().setProperty(swb_passUpdVerify, passUpdVerify);
+        getSemanticObject().setProperty(swb_passUpdVerify, value);
     }
 
     public String getVerifyText(String lang)

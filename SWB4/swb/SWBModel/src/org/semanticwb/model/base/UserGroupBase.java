@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class UserGroupBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public class UserGroupBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable
 {
     public static final org.semanticwb.platform.SemanticClass swb_UserGroupable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroupable");
     public static final org.semanticwb.platform.SemanticProperty swb_hasGroupedUser=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasGroupedUser");
@@ -66,13 +66,13 @@ public class UserGroupBase extends org.semanticwb.model.SWBClass implements org.
         return getSemanticObject().hasObjectProperty(swb_hasGroupedUser,usergroupable.getSemanticObject());
     }
 
-   public static java.util.Iterator<org.semanticwb.model.UserGroup> listUserGroupByHasUser(org.semanticwb.model.UserGroupable hasgroupeduser,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.model.UserGroup> listUserGroupByUser(org.semanticwb.model.UserGroupable hasgroupeduser,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_hasGroupedUser, hasgroupeduser.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.model.UserGroup> listUserGroupByHasUser(org.semanticwb.model.UserGroupable hasgroupeduser)
+   public static java.util.Iterator<org.semanticwb.model.UserGroup> listUserGroupByUser(org.semanticwb.model.UserGroupable hasgroupeduser)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup> it=new org.semanticwb.model.GenericIterator(hasgroupeduser.getSemanticObject().getModel().listSubjects(swb_hasGroupedUser,hasgroupeduser.getSemanticObject()));
        return it;
@@ -94,14 +94,14 @@ public class UserGroupBase extends org.semanticwb.model.SWBClass implements org.
         return getSemanticObject().getDateProperty(swb_created);
     }
 
-    public void setCreated(java.util.Date created)
+    public void setCreated(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swb_created, created);
+        getSemanticObject().setDateProperty(swb_created, value);
     }
 
-    public void setModifiedBy(org.semanticwb.model.User user)
+    public void setModifiedBy(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_modifiedBy, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
     }
 
     public void removeModifiedBy()
@@ -137,9 +137,9 @@ public class UserGroupBase extends org.semanticwb.model.SWBClass implements org.
         return getSemanticObject().getProperty(swb_title);
     }
 
-    public void setTitle(String title)
+    public void setTitle(String value)
     {
-        getSemanticObject().setProperty(swb_title, title);
+        getSemanticObject().setProperty(swb_title, value);
     }
 
     public String getTitle(String lang)
@@ -162,14 +162,14 @@ public class UserGroupBase extends org.semanticwb.model.SWBClass implements org.
         return getSemanticObject().getDateProperty(swb_updated);
     }
 
-    public void setUpdated(java.util.Date updated)
+    public void setUpdated(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swb_updated, updated);
+        getSemanticObject().setDateProperty(swb_updated, value);
     }
 
-    public void setParent(org.semanticwb.model.UserGroup usergroup)
+    public void setParent(org.semanticwb.model.UserGroup value)
     {
-        getSemanticObject().setObjectProperty(swb_usrgrpParent, usergroup.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_usrgrpParent, value.getSemanticObject());
     }
 
     public void removeParent()
@@ -211,13 +211,13 @@ public class UserGroupBase extends org.semanticwb.model.SWBClass implements org.
         return getSemanticObject().hasObjectProperty(swb_hasUsrGrpChild,usergroup.getSemanticObject());
     }
 
-   public static java.util.Iterator<org.semanticwb.model.UserGroup> listUserGroupByHasChild(org.semanticwb.model.UserGroup hasusrgrpchild,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.model.UserGroup> listUserGroupByChild(org.semanticwb.model.UserGroup hasusrgrpchild,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_hasUsrGrpChild, hasusrgrpchild.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.model.UserGroup> listUserGroupByHasChild(org.semanticwb.model.UserGroup hasusrgrpchild)
+   public static java.util.Iterator<org.semanticwb.model.UserGroup> listUserGroupByChild(org.semanticwb.model.UserGroup hasusrgrpchild)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup> it=new org.semanticwb.model.GenericIterator(hasusrgrpchild.getSemanticObject().getModel().listSubjects(swb_hasUsrGrpChild,hasusrgrpchild.getSemanticObject()));
        return it;
@@ -234,9 +234,9 @@ public class UserGroupBase extends org.semanticwb.model.SWBClass implements org.
          return ret;
     }
 
-    public void setCreator(org.semanticwb.model.User user)
+    public void setCreator(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_creator, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
     }
 
     public void removeCreator()
@@ -272,9 +272,9 @@ public class UserGroupBase extends org.semanticwb.model.SWBClass implements org.
         return getSemanticObject().getProperty(swb_description);
     }
 
-    public void setDescription(String description)
+    public void setDescription(String value)
     {
-        getSemanticObject().setProperty(swb_description, description);
+        getSemanticObject().setProperty(swb_description, value);
     }
 
     public String getDescription(String lang)
@@ -297,9 +297,9 @@ public class UserGroupBase extends org.semanticwb.model.SWBClass implements org.
         return getSemanticObject().getBooleanProperty(swb_undeleteable);
     }
 
-    public void setUndeleteable(boolean undeleteable)
+    public void setUndeleteable(boolean value)
     {
-        getSemanticObject().setBooleanProperty(swb_undeleteable, undeleteable);
+        getSemanticObject().setBooleanProperty(swb_undeleteable, value);
     }
 
     public org.semanticwb.model.UserRepository getUserRepository()

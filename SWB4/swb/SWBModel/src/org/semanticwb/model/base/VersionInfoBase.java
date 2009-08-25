@@ -66,14 +66,14 @@ public class VersionInfoBase extends org.semanticwb.model.SWBClass implements or
         return getSemanticObject().getDateProperty(swb_created);
     }
 
-    public void setCreated(java.util.Date created)
+    public void setCreated(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swb_created, created);
+        getSemanticObject().setDateProperty(swb_created, value);
     }
 
-    public void setModifiedBy(org.semanticwb.model.User user)
+    public void setModifiedBy(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_modifiedBy, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
     }
 
     public void removeModifiedBy()
@@ -109,14 +109,14 @@ public class VersionInfoBase extends org.semanticwb.model.SWBClass implements or
         return getSemanticObject().getProperty(swb_versionValue);
     }
 
-    public void setVersionValue(String versionValue)
+    public void setVersionValue(String value)
     {
-        getSemanticObject().setProperty(swb_versionValue, versionValue);
+        getSemanticObject().setProperty(swb_versionValue, value);
     }
 
-    public void setPreviousVersion(org.semanticwb.model.VersionInfo versioninfo)
+    public void setPreviousVersion(org.semanticwb.model.VersionInfo value)
     {
-        getSemanticObject().setObjectProperty(swb_previousVersion, versioninfo.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_previousVersion, value.getSemanticObject());
     }
 
     public void removePreviousVersion()
@@ -152,9 +152,9 @@ public class VersionInfoBase extends org.semanticwb.model.SWBClass implements or
         return getSemanticObject().getProperty(swb_versionComment);
     }
 
-    public void setVersionComment(String versionComment)
+    public void setVersionComment(String value)
     {
-        getSemanticObject().setProperty(swb_versionComment, versionComment);
+        getSemanticObject().setProperty(swb_versionComment, value);
     }
 
     public java.util.Date getUpdated()
@@ -162,14 +162,14 @@ public class VersionInfoBase extends org.semanticwb.model.SWBClass implements or
         return getSemanticObject().getDateProperty(swb_updated);
     }
 
-    public void setUpdated(java.util.Date updated)
+    public void setUpdated(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swb_updated, updated);
+        getSemanticObject().setDateProperty(swb_updated, value);
     }
 
-    public void setNextVersion(org.semanticwb.model.VersionInfo versioninfo)
+    public void setNextVersion(org.semanticwb.model.VersionInfo value)
     {
-        getSemanticObject().setObjectProperty(swb_nextVersion, versioninfo.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_nextVersion, value.getSemanticObject());
     }
 
     public void removeNextVersion()
@@ -200,9 +200,9 @@ public class VersionInfoBase extends org.semanticwb.model.SWBClass implements or
          return ret;
     }
 
-    public void setVersionLockedBy(org.semanticwb.model.User user)
+    public void setVersionLockedBy(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_versionLockedBy, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_versionLockedBy, value.getSemanticObject());
     }
 
     public void removeVersionLockedBy()
@@ -238,14 +238,14 @@ public class VersionInfoBase extends org.semanticwb.model.SWBClass implements or
         return getSemanticObject().getProperty(swb_versionFile);
     }
 
-    public void setVersionFile(String versionFile)
+    public void setVersionFile(String value)
     {
-        getSemanticObject().setProperty(swb_versionFile, versionFile);
+        getSemanticObject().setProperty(swb_versionFile, value);
     }
 
-    public void setCreator(org.semanticwb.model.User user)
+    public void setCreator(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_creator, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
     }
 
     public void removeCreator()
@@ -281,9 +281,9 @@ public class VersionInfoBase extends org.semanticwb.model.SWBClass implements or
         return getSemanticObject().getIntProperty(swb_versionNumber);
     }
 
-    public void setVersionNumber(int versionNumber)
+    public void setVersionNumber(int value)
     {
-        getSemanticObject().setIntProperty(swb_versionNumber, versionNumber);
+        getSemanticObject().setIntProperty(swb_versionNumber, value);
     }
 
     public org.semanticwb.model.WebSite getWebSite()

@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class PFlowBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.XMLable
+public class PFlowBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.XMLable,org.semanticwb.model.Traceable,org.semanticwb.model.Trashable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -68,14 +68,14 @@ public class PFlowBase extends org.semanticwb.model.SWBClass implements org.sema
         return getSemanticObject().getDateProperty(swb_created);
     }
 
-    public void setCreated(java.util.Date created)
+    public void setCreated(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swb_created, created);
+        getSemanticObject().setDateProperty(swb_created, value);
     }
 
-    public void setModifiedBy(org.semanticwb.model.User user)
+    public void setModifiedBy(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_modifiedBy, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
     }
 
     public void removeModifiedBy()
@@ -111,9 +111,9 @@ public class PFlowBase extends org.semanticwb.model.SWBClass implements org.sema
         return getSemanticObject().getProperty(swb_title);
     }
 
-    public void setTitle(String title)
+    public void setTitle(String value)
     {
-        getSemanticObject().setProperty(swb_title, title);
+        getSemanticObject().setProperty(swb_title, value);
     }
 
     public String getTitle(String lang)
@@ -136,9 +136,9 @@ public class PFlowBase extends org.semanticwb.model.SWBClass implements org.sema
         return getSemanticObject().getProperty(swb_xml);
     }
 
-    public void setXml(String xml)
+    public void setXml(String value)
     {
-        getSemanticObject().setProperty(swb_xml, xml);
+        getSemanticObject().setProperty(swb_xml, value);
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowRef> listPFlowRefInvs()
@@ -152,13 +152,13 @@ public class PFlowBase extends org.semanticwb.model.SWBClass implements org.sema
         return getSemanticObject().hasObjectProperty(swb_hasPFlowRefInv,pflowref.getSemanticObject());
     }
 
-   public static java.util.Iterator<org.semanticwb.model.PFlow> listPFlowByHasPFlowRefInv(org.semanticwb.model.PFlowRef haspflowrefinv,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.model.PFlow> listPFlowByPFlowRefInv(org.semanticwb.model.PFlowRef haspflowrefinv,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlow> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_hasPFlowRefInv, haspflowrefinv.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.model.PFlow> listPFlowByHasPFlowRefInv(org.semanticwb.model.PFlowRef haspflowrefinv)
+   public static java.util.Iterator<org.semanticwb.model.PFlow> listPFlowByPFlowRefInv(org.semanticwb.model.PFlowRef haspflowrefinv)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlow> it=new org.semanticwb.model.GenericIterator(haspflowrefinv.getSemanticObject().getModel().listSubjects(swb_hasPFlowRefInv,haspflowrefinv.getSemanticObject()));
        return it;
@@ -180,9 +180,9 @@ public class PFlowBase extends org.semanticwb.model.SWBClass implements org.sema
         return getSemanticObject().getDateProperty(swb_updated);
     }
 
-    public void setUpdated(java.util.Date updated)
+    public void setUpdated(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swb_updated, updated);
+        getSemanticObject().setDateProperty(swb_updated, value);
     }
 
     public boolean isActive()
@@ -190,9 +190,9 @@ public class PFlowBase extends org.semanticwb.model.SWBClass implements org.sema
         return getSemanticObject().getBooleanProperty(swb_active);
     }
 
-    public void setActive(boolean active)
+    public void setActive(boolean value)
     {
-        getSemanticObject().setBooleanProperty(swb_active, active);
+        getSemanticObject().setBooleanProperty(swb_active, value);
     }
 
     public boolean isDeleted()
@@ -200,9 +200,9 @@ public class PFlowBase extends org.semanticwb.model.SWBClass implements org.sema
         return getSemanticObject().getBooleanProperty(swb_deleted);
     }
 
-    public void setDeleted(boolean deleted)
+    public void setDeleted(boolean value)
     {
-        getSemanticObject().setBooleanProperty(swb_deleted, deleted);
+        getSemanticObject().setBooleanProperty(swb_deleted, value);
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowInstance> listPFlowInstances()
@@ -216,13 +216,13 @@ public class PFlowBase extends org.semanticwb.model.SWBClass implements org.sema
         return getSemanticObject().hasObjectProperty(swb_hasPFlowInstance,pflowinstance.getSemanticObject());
     }
 
-   public static java.util.Iterator<org.semanticwb.model.PFlow> listPFlowByHasPFlowInstance(org.semanticwb.model.PFlowInstance haspflowinstance,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.model.PFlow> listPFlowByPFlowInstance(org.semanticwb.model.PFlowInstance haspflowinstance,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlow> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_hasPFlowInstance, haspflowinstance.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.model.PFlow> listPFlowByHasPFlowInstance(org.semanticwb.model.PFlowInstance haspflowinstance)
+   public static java.util.Iterator<org.semanticwb.model.PFlow> listPFlowByPFlowInstance(org.semanticwb.model.PFlowInstance haspflowinstance)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlow> it=new org.semanticwb.model.GenericIterator(haspflowinstance.getSemanticObject().getModel().listSubjects(swb_hasPFlowInstance,haspflowinstance.getSemanticObject()));
        return it;
@@ -239,9 +239,9 @@ public class PFlowBase extends org.semanticwb.model.SWBClass implements org.sema
          return ret;
     }
 
-    public void setCreator(org.semanticwb.model.User user)
+    public void setCreator(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_creator, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
     }
 
     public void removeCreator()
@@ -277,9 +277,9 @@ public class PFlowBase extends org.semanticwb.model.SWBClass implements org.sema
         return getSemanticObject().getProperty(swb_description);
     }
 
-    public void setDescription(String description)
+    public void setDescription(String value)
     {
-        getSemanticObject().setProperty(swb_description, description);
+        getSemanticObject().setProperty(swb_description, value);
     }
 
     public String getDescription(String lang)

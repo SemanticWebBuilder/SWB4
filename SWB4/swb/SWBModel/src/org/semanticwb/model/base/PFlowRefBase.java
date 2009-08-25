@@ -51,9 +51,9 @@ public class PFlowRefBase extends org.semanticwb.model.Reference implements org.
         return (getPFlowRef(id, model)!=null);
     }
 
-    public void setPflow(org.semanticwb.model.PFlow pflow)
+    public void setPflow(org.semanticwb.model.PFlow value)
     {
-        getSemanticObject().setObjectProperty(swb_pflow, pflow.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_pflow, value.getSemanticObject());
     }
 
     public void removePflow()

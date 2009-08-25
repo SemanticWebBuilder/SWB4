@@ -50,9 +50,9 @@ public class FileUploadBase extends org.semanticwb.model.base.FormElementBase
         return getSemanticObject().getLongProperty(swbxf_fileMaxSize);
     }
 
-    public void setFileMaxSize(long fileMaxSize)
+    public void setFileMaxSize(long value)
     {
-        getSemanticObject().setLongProperty(swbxf_fileMaxSize, fileMaxSize);
+        getSemanticObject().setLongProperty(swbxf_fileMaxSize, value);
     }
 
     public String getFileFilter()
@@ -60,9 +60,9 @@ public class FileUploadBase extends org.semanticwb.model.base.FormElementBase
         return getSemanticObject().getProperty(swbxf_fileFilter);
     }
 
-    public void setFileFilter(String fileFilter)
+    public void setFileFilter(String value)
     {
-        getSemanticObject().setProperty(swbxf_fileFilter, fileFilter);
+        getSemanticObject().setProperty(swbxf_fileFilter, value);
     }
 
     public void remove()

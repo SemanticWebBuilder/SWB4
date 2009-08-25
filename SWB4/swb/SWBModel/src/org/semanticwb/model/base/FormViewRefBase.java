@@ -46,9 +46,9 @@ public class FormViewRefBase extends org.semanticwb.model.Reference implements o
         return (getFormViewRef(id, model)!=null);
     }
 
-    public void setFormView(org.semanticwb.model.FormView formview)
+    public void setFormView(org.semanticwb.model.FormView value)
     {
-        getSemanticObject().setObjectProperty(swb_formView, formview.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_formView, value.getSemanticObject());
     }
 
     public void removeFormView()
@@ -84,8 +84,8 @@ public class FormViewRefBase extends org.semanticwb.model.Reference implements o
         return getSemanticObject().getProperty(swb_formMode);
     }
 
-    public void setFormMode(String formMode)
+    public void setFormMode(String value)
     {
-        getSemanticObject().setProperty(swb_formMode, formMode);
+        getSemanticObject().setProperty(swb_formMode, value);
     }
 }

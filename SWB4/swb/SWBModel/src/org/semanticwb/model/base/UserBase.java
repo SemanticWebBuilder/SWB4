@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class UserBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Traceable,org.semanticwb.model.Expirable,org.semanticwb.model.Activeable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Roleable
+public class UserBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.UserGroupable,org.semanticwb.model.Traceable,org.semanticwb.model.Roleable,org.semanticwb.model.Referensable,org.semanticwb.model.Expirable,org.semanticwb.model.Activeable,org.semanticwb.model.CalendarRefable
 {
     public static final org.semanticwb.platform.SemanticClass swb_UserFavorite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserFavorite");
     public static final org.semanticwb.platform.SemanticProperty swb_userFavorite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userFavorite");
@@ -11,9 +11,9 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
     public static final org.semanticwb.platform.SemanticClass swb_CalendarRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#CalendarRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasCalendarRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasCalendarRef");
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
-    public static final org.semanticwb.platform.SemanticProperty swb_usrSecondLastName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrSecondLastName");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
+    public static final org.semanticwb.platform.SemanticProperty swb_usrSecondLastName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrSecondLastName");
     public static final org.semanticwb.platform.SemanticProperty swb_expiration=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#expiration");
     public static final org.semanticwb.platform.SemanticClass swb_UserGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroup");
     public static final org.semanticwb.platform.SemanticProperty swb_hasUserGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasUserGroup");
@@ -79,9 +79,9 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
         return (getUser(id, model)!=null);
     }
 
-    public void setUserFavorite(org.semanticwb.model.UserFavorite userfavorite)
+    public void setUserFavorite(org.semanticwb.model.UserFavorite value)
     {
-        getSemanticObject().setObjectProperty(swb_userFavorite, userfavorite.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_userFavorite, value.getSemanticObject());
     }
 
     public void removeUserFavorite()
@@ -117,9 +117,9 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
         return getSemanticObject().getProperty(swb_usrLastName);
     }
 
-    public void setLastName(String usrLastName)
+    public void setLastName(String value)
     {
-        getSemanticObject().setProperty(swb_usrLastName, usrLastName);
+        getSemanticObject().setProperty(swb_usrLastName, value);
     }
 
     public String getExternalID()
@@ -127,9 +127,9 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
         return getSemanticObject().getProperty(swb_externalID);
     }
 
-    public void setExternalID(String externalID)
+    public void setExternalID(String value)
     {
-        getSemanticObject().setProperty(swb_externalID, externalID);
+        getSemanticObject().setProperty(swb_externalID, value);
     }
 
     public boolean isActive()
@@ -137,9 +137,9 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
         return getSemanticObject().getBooleanProperty(swb_active);
     }
 
-    public void setActive(boolean active)
+    public void setActive(boolean value)
     {
-        getSemanticObject().setBooleanProperty(swb_active, active);
+        getSemanticObject().setBooleanProperty(swb_active, value);
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.CalendarRef> listCalendarRefs()
@@ -153,9 +153,9 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
         return getSemanticObject().hasObjectProperty(swb_hasCalendarRef,calendarref.getSemanticObject());
     }
 
-    public void addCalendarRef(org.semanticwb.model.CalendarRef calendarref)
+    public void addCalendarRef(org.semanticwb.model.CalendarRef value)
     {
-        getSemanticObject().addObjectProperty(swb_hasCalendarRef, calendarref.getSemanticObject());
+        getSemanticObject().addObjectProperty(swb_hasCalendarRef, value.getSemanticObject());
     }
 
     public void removeAllCalendarRef()
@@ -168,13 +168,13 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
         getSemanticObject().removeObjectProperty(swb_hasCalendarRef,calendarref.getSemanticObject());
     }
 
-   public static java.util.Iterator<org.semanticwb.model.User> listUserByHasCalendarRef(org.semanticwb.model.CalendarRef hascalendarref,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.model.User> listUserByCalendarRef(org.semanticwb.model.CalendarRef hascalendarref,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.model.User> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_hasCalendarRef, hascalendarref.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.model.User> listUserByHasCalendarRef(org.semanticwb.model.CalendarRef hascalendarref)
+   public static java.util.Iterator<org.semanticwb.model.User> listUserByCalendarRef(org.semanticwb.model.CalendarRef hascalendarref)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.model.User> it=new org.semanticwb.model.GenericIterator(hascalendarref.getSemanticObject().getModel().listSubjects(swb_hasCalendarRef,hascalendarref.getSemanticObject()));
        return it;
@@ -196,24 +196,14 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
         return getSemanticObject().getDateProperty(swb_created);
     }
 
-    public void setCreated(java.util.Date created)
+    public void setCreated(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swb_created, created);
+        getSemanticObject().setDateProperty(swb_created, value);
     }
 
-    public String getSecondLastName()
+    public void setModifiedBy(org.semanticwb.model.User value)
     {
-        return getSemanticObject().getProperty(swb_usrSecondLastName);
-    }
-
-    public void setSecondLastName(String usrSecondLastName)
-    {
-        getSemanticObject().setProperty(swb_usrSecondLastName, usrSecondLastName);
-    }
-
-    public void setModifiedBy(org.semanticwb.model.User user)
-    {
-        getSemanticObject().setObjectProperty(swb_modifiedBy, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
     }
 
     public void removeModifiedBy()
@@ -244,14 +234,24 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
          return ret;
     }
 
+    public String getSecondLastName()
+    {
+        return getSemanticObject().getProperty(swb_usrSecondLastName);
+    }
+
+    public void setSecondLastName(String value)
+    {
+        getSemanticObject().setProperty(swb_usrSecondLastName, value);
+    }
+
     public java.util.Date getExpiration()
     {
         return getSemanticObject().getDateProperty(swb_expiration);
     }
 
-    public void setExpiration(java.util.Date expiration)
+    public void setExpiration(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swb_expiration, expiration);
+        getSemanticObject().setDateProperty(swb_expiration, value);
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup> listUserGroups()
@@ -265,9 +265,9 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
         return getSemanticObject().hasObjectProperty(swb_hasUserGroup,usergroup.getSemanticObject());
     }
 
-    public void addUserGroup(org.semanticwb.model.UserGroup usergroup)
+    public void addUserGroup(org.semanticwb.model.UserGroup value)
     {
-        getSemanticObject().addObjectProperty(swb_hasUserGroup, usergroup.getSemanticObject());
+        getSemanticObject().addObjectProperty(swb_hasUserGroup, value.getSemanticObject());
     }
 
     public void removeAllUserGroup()
@@ -280,13 +280,13 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
         getSemanticObject().removeObjectProperty(swb_hasUserGroup,usergroup.getSemanticObject());
     }
 
-   public static java.util.Iterator<org.semanticwb.model.User> listUserByHasUserGroup(org.semanticwb.model.UserGroup hasusergroup,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.model.User> listUserByUserGroup(org.semanticwb.model.UserGroup hasusergroup,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.model.User> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_hasUserGroup, hasusergroup.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.model.User> listUserByHasUserGroup(org.semanticwb.model.UserGroup hasusergroup)
+   public static java.util.Iterator<org.semanticwb.model.User> listUserByUserGroup(org.semanticwb.model.UserGroup hasusergroup)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.model.User> it=new org.semanticwb.model.GenericIterator(hasusergroup.getSemanticObject().getModel().listSubjects(swb_hasUserGroup,hasusergroup.getSemanticObject()));
        return it;
@@ -308,9 +308,9 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
         return getSemanticObject().getProperty(swb_usrEmail);
     }
 
-    public void setEmail(String usrEmail)
+    public void setEmail(String value)
     {
-        getSemanticObject().setProperty(swb_usrEmail, usrEmail);
+        getSemanticObject().setProperty(swb_usrEmail, value);
     }
 
     public String getFirstName()
@@ -318,9 +318,9 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
         return getSemanticObject().getProperty(swb_usrFirstName);
     }
 
-    public void setFirstName(String usrFirstName)
+    public void setFirstName(String value)
     {
-        getSemanticObject().setProperty(swb_usrFirstName, usrFirstName);
+        getSemanticObject().setProperty(swb_usrFirstName, value);
     }
 
     public java.util.Date getUpdated()
@@ -328,9 +328,9 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
         return getSemanticObject().getDateProperty(swb_updated);
     }
 
-    public void setUpdated(java.util.Date updated)
+    public void setUpdated(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swb_updated, updated);
+        getSemanticObject().setDateProperty(swb_updated, value);
     }
 
     public String getLanguage()
@@ -338,9 +338,9 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
         return getSemanticObject().getProperty(swb_usrLanguage);
     }
 
-    public void setLanguage(String usrLanguage)
+    public void setLanguage(String value)
     {
-        getSemanticObject().setProperty(swb_usrLanguage, usrLanguage);
+        getSemanticObject().setProperty(swb_usrLanguage, value);
     }
 
     public java.util.Iterator<String> listUserTypes()
@@ -375,9 +375,9 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
         return getSemanticObject().getDateProperty(swb_usrPasswordChanged);
     }
 
-    public void setPasswordChanged(java.util.Date usrPasswordChanged)
+    public void setPasswordChanged(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swb_usrPasswordChanged, usrPasswordChanged);
+        getSemanticObject().setDateProperty(swb_usrPasswordChanged, value);
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.AdminFilter> listAdminFilters()
@@ -391,9 +391,9 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
         return getSemanticObject().hasObjectProperty(swb_hasAdminFilter,adminfilter.getSemanticObject());
     }
 
-    public void addAdminFilter(org.semanticwb.model.AdminFilter adminfilter)
+    public void addAdminFilter(org.semanticwb.model.AdminFilter value)
     {
-        getSemanticObject().addObjectProperty(swb_hasAdminFilter, adminfilter.getSemanticObject());
+        getSemanticObject().addObjectProperty(swb_hasAdminFilter, value.getSemanticObject());
     }
 
     public void removeAllAdminFilter()
@@ -406,13 +406,13 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
         getSemanticObject().removeObjectProperty(swb_hasAdminFilter,adminfilter.getSemanticObject());
     }
 
-   public static java.util.Iterator<org.semanticwb.model.User> listUserByHasAdminFilter(org.semanticwb.model.AdminFilter hasadminfilter,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.model.User> listUserByAdminFilter(org.semanticwb.model.AdminFilter hasadminfilter,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.model.User> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_hasAdminFilter, hasadminfilter.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.model.User> listUserByHasAdminFilter(org.semanticwb.model.AdminFilter hasadminfilter)
+   public static java.util.Iterator<org.semanticwb.model.User> listUserByAdminFilter(org.semanticwb.model.AdminFilter hasadminfilter)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.model.User> it=new org.semanticwb.model.GenericIterator(hasadminfilter.getSemanticObject().getModel().listSubjects(swb_hasAdminFilter,hasadminfilter.getSemanticObject()));
        return it;
@@ -434,9 +434,9 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
         return getSemanticObject().getProperty(swb_ursPhoto);
     }
 
-    public void setPhoto(String ursPhoto)
+    public void setPhoto(String value)
     {
-        getSemanticObject().setProperty(swb_ursPhoto, ursPhoto);
+        getSemanticObject().setProperty(swb_ursPhoto, value);
     }
 
     public java.util.Date getLastLogin()
@@ -444,14 +444,14 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
         return getSemanticObject().getDateProperty(swb_usrLastLogin);
     }
 
-    public void setLastLogin(java.util.Date usrLastLogin)
+    public void setLastLogin(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swb_usrLastLogin, usrLastLogin);
+        getSemanticObject().setDateProperty(swb_usrLastLogin, value);
     }
 
-    public void setCreator(org.semanticwb.model.User user)
+    public void setCreator(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_creator, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
     }
 
     public void removeCreator()
@@ -488,10 +488,10 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
         return getSemanticObject().getProperty(swb_usrPassword,false);
     }
 
-    public void setPassword(String usrPassword)
+    public void setPassword(String value)
     {
         //Override this method in User object
-        getSemanticObject().setProperty(swb_usrPassword, usrPassword,false);
+        getSemanticObject().setProperty(swb_usrPassword, value,false);
     }
 
     public String getLogin()
@@ -499,9 +499,9 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
         return getSemanticObject().getProperty(swb_usrLogin);
     }
 
-    public void setLogin(String usrLogin)
+    public void setLogin(String value)
     {
-        getSemanticObject().setProperty(swb_usrLogin, usrLogin);
+        getSemanticObject().setProperty(swb_usrLogin, value);
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Role> listRoles()
@@ -515,9 +515,9 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
         return getSemanticObject().hasObjectProperty(swb_hasRole,role.getSemanticObject());
     }
 
-    public void addRole(org.semanticwb.model.Role role)
+    public void addRole(org.semanticwb.model.Role value)
     {
-        getSemanticObject().addObjectProperty(swb_hasRole, role.getSemanticObject());
+        getSemanticObject().addObjectProperty(swb_hasRole, value.getSemanticObject());
     }
 
     public void removeAllRole()
@@ -530,13 +530,13 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
         getSemanticObject().removeObjectProperty(swb_hasRole,role.getSemanticObject());
     }
 
-   public static java.util.Iterator<org.semanticwb.model.User> listUserByHasRole(org.semanticwb.model.Role hasrole,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.model.User> listUserByRole(org.semanticwb.model.Role hasrole,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.model.User> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_hasRole, hasrole.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.model.User> listUserByHasRole(org.semanticwb.model.Role hasrole)
+   public static java.util.Iterator<org.semanticwb.model.User> listUserByRole(org.semanticwb.model.Role hasrole)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.model.User> it=new org.semanticwb.model.GenericIterator(hasrole.getSemanticObject().getModel().listSubjects(swb_hasRole,hasrole.getSemanticObject()));
        return it;
@@ -558,9 +558,9 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
         return getSemanticObject().getIntProperty(swb_usrSecurityQuestion);
     }
 
-    public void setSecurityQuestion(int usrSecurityQuestion)
+    public void setSecurityQuestion(int value)
     {
-        getSemanticObject().setIntProperty(swb_usrSecurityQuestion, usrSecurityQuestion);
+        getSemanticObject().setIntProperty(swb_usrSecurityQuestion, value);
     }
 
     public String getSecurityAnswer()
@@ -568,9 +568,9 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
         return getSemanticObject().getProperty(swb_usrSecurityAnswer);
     }
 
-    public void setSecurityAnswer(String usrSecurityAnswer)
+    public void setSecurityAnswer(String value)
     {
-        getSemanticObject().setProperty(swb_usrSecurityAnswer, usrSecurityAnswer);
+        getSemanticObject().setProperty(swb_usrSecurityAnswer, value);
     }
 
     public org.semanticwb.model.UserRepository getUserRepository()

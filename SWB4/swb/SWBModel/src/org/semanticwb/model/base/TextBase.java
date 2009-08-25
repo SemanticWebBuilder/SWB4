@@ -49,9 +49,9 @@ public class TextBase extends org.semanticwb.model.base.FormElementBase
         return getSemanticObject().getProperty(swbxf_textRegExp);
     }
 
-    public void setRegExp(String textRegExp)
+    public void setRegExp(String value)
     {
-        getSemanticObject().setProperty(swbxf_textRegExp, textRegExp);
+        getSemanticObject().setProperty(swbxf_textRegExp, value);
     }
 
     public void remove()

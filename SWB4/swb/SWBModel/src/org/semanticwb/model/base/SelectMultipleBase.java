@@ -50,9 +50,9 @@ public class SelectMultipleBase extends org.semanticwb.model.base.FormElementBas
         return getSemanticObject().getBooleanProperty(swbxf_sm_globalScope);
     }
 
-    public void setGlobalScope(boolean sm_globalScope)
+    public void setGlobalScope(boolean value)
     {
-        getSemanticObject().setBooleanProperty(swbxf_sm_globalScope, sm_globalScope);
+        getSemanticObject().setBooleanProperty(swbxf_sm_globalScope, value);
     }
 
     public boolean isNullSupport()
@@ -60,9 +60,9 @@ public class SelectMultipleBase extends org.semanticwb.model.base.FormElementBas
         return getSemanticObject().getBooleanProperty(swbxf_sm_nullSupport);
     }
 
-    public void setNullSupport(boolean sm_nullSupport)
+    public void setNullSupport(boolean value)
     {
-        getSemanticObject().setBooleanProperty(swbxf_sm_nullSupport, sm_nullSupport);
+        getSemanticObject().setBooleanProperty(swbxf_sm_nullSupport, value);
     }
 
     public void remove()

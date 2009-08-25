@@ -51,9 +51,9 @@ public class CalendarRefBase extends org.semanticwb.model.Reference implements o
         return (getCalendarRef(id, model)!=null);
     }
 
-    public void setCalendar(org.semanticwb.model.Calendar calendar)
+    public void setCalendar(org.semanticwb.model.Calendar value)
     {
-        getSemanticObject().setObjectProperty(swb_calendar, calendar.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_calendar, value.getSemanticObject());
     }
 
     public void removeCalendar()

@@ -57,9 +57,9 @@ public class UserFavoriteBase extends org.semanticwb.model.SWBClass
         return new org.semanticwb.platform.SemanticIterator<org.semanticwb.platform.SemanticObject>(stit);
     }
 
-    public void addObject(org.semanticwb.platform.SemanticObject semanticobject)
+    public void addObject(org.semanticwb.platform.SemanticObject value)
     {
-        getSemanticObject().addObjectProperty(swb_usrfHasObject, semanticobject);
+        getSemanticObject().addObjectProperty(swb_usrfHasObject, value);
     }
 
     public void removeAllObject()
