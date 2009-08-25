@@ -47,6 +47,13 @@ import org.semanticwb.portal.util.ContentUtils;
 
 public class WordResource extends org.semanticwb.resource.office.sem.base.WordResourceBase {
 
+
+    int snpages = 15;
+    String stxtant = "Anterior";
+    String stxtsig = "Siguiente";
+    String stfont = "font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"2\" color=\"#000000\"";
+    int position = 1;
+
     public WordResource() {
         super();
     }
@@ -114,16 +121,24 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                         beforePrintDocument(out);
 
                         //Agregado por Jorge Jiménez para poner estilos predefinidos y paginación MsWord y OpenOffice (5/07/2009)
+                        if(paramRequest.getLocaleString("txtant")!=null) stxtant=paramRequest.getLocaleString("txtant");
+                        if(paramRequest.getLocaleString("txtsig")!=null) stxtsig=paramRequest.getLocaleString("txtsig");
+                        if(getNpages()>0) snpages=getNpages();
+                        if(getTxtant()!=null && getTxtant().trim().length()>0) stxtant=getTxtant();
+                        if(getTxtsig()!=null && getTxtsig().trim().length()>0) stxtsig=getTxtsig();
+                        if(getTfont()!=null && getTfont().trim().length()>0) stfont=getTfont();
+                        if(getPosition()>0) position=getPosition();
+
                         boolean iswordcontent = true;
                         int posword = htmlOut.toLowerCase().indexOf("name=\"generator\" content=\"openoffice.org"); //detección de si el contenido es de openOffice
                         if (posword > -1) iswordcontent = false;
                         if (iswordcontent) { //Contenido MsWord
-                            htmlOut=contentUtils.predefinedStyles(htmlOut, base); //Estilos predefinidos
+                            htmlOut=contentUtils.predefinedStyles(htmlOut, base, isTpred()); //Estilos predefinidos
                             if(isPages()) {
-                                htmlOut = contentUtils.paginationMsWord(htmlOut, page, request.getParameter("page"), base);
+                                htmlOut = contentUtils.paginationMsWord(htmlOut, page, request.getParameter("page"), base, snpages, stxtant, stxtsig, stfont, position);
                             } //Paginación
                         } else if(isPages()){ //Contenido OpenOffice
-                            htmlOut = contentUtils.paginationOpenOffice(htmlOut, page, request.getParameter("page"), base); //Paginación
+                            htmlOut = contentUtils.paginationOpenOffice(htmlOut, page, request.getParameter("page"), base, snpages, stxtant, stxtsig, stfont, position); //Paginación
                         }
                         //Termina Agregado por Jorge Jiménez (5/07/2009)
 
