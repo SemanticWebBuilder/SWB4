@@ -151,7 +151,9 @@ namespace WBOffice4.Forms
             if (this.listViewPages.SelectedItems.Count > 0 && this.listViewPages.SelectedItems[0].Tag is ResourceInfo)
             {
                 ResourceInfo portletInfo = (ResourceInfo)this.listViewPages.SelectedItems[0].Tag;
+                this.Cursor = Cursors.WaitCursor;
                 FormEditPorlet formEditPorlet = new FormEditPorlet(portletInfo, repositoryName, contentID);
+                this.Cursor = Cursors.Default;
                 formEditPorlet.ShowDialog();
                 loadPorlets();
             }
@@ -343,6 +345,20 @@ namespace WBOffice4.Forms
         {
             document.Publish();
             loadPorlets();
+        }
+
+        private void listViewPages_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            ListViewItem item=this.listViewPages.GetItemAt(e.X, e.Y);
+            if (item != null)
+            {
+                ResourceInfo portletInfo = (ResourceInfo)item.Tag;
+                this.Cursor = Cursors.WaitCursor;
+                FormEditPorlet formEditPorlet = new FormEditPorlet(portletInfo, repositoryName, contentID);
+                this.Cursor = Cursors.Default;
+                formEditPorlet.ShowDialog();
+                loadPorlets();
+            }
         }
         
     }
