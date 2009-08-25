@@ -81,6 +81,11 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
         if(base.getAttribute(USE_ADD)==null&&base.getAttribute(USE_SELECT)==null){
             base.setAttribute(USE_ADD, "0");
             base.setAttribute(USE_SELECT, "1");
+            try {
+                base.updateAttributesToDB();
+            } catch (Exception e) {log.error(e);
+            }
+
         }
 
 
