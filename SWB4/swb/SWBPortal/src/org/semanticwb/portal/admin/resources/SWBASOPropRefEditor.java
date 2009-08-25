@@ -152,10 +152,11 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
 
 
             SemanticClass sclassref = null;
-            
+            String strTitleProp = cls.getDisplayName(user.getLanguage());
             if(spref!=null)
             {
                 sclassref = spref.getRangeClass();
+                strTitleProp=sclassref.getDisplayName(user.getLanguage());
                 ite_sp = sclassref.listProperties();
                 while (ite_sp.hasNext()) {
                     SemanticProperty sp = ite_sp.next();
@@ -163,6 +164,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                     hmprop.put(sp, sp);
                 }
             }
+
             SemanticProperty sptemp = null;
 
             int numcols = 0;
@@ -185,8 +187,8 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
             out.println("<th>");
             inheritHeader.append("<th>");
             numcols++;
-            out.println(sclassref.getDisplayName(user.getLanguage()));
-            inheritHeader.append(sclassref.getDisplayName(user.getLanguage()));
+            out.println(strTitleProp);
+            inheritHeader.append(strTitleProp);
             out.println("</th>");
             inheritHeader.append("</th>");
             if (hmprop.get(Template.swb_language) != null) {
