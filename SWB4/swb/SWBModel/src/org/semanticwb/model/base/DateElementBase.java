@@ -49,9 +49,9 @@ public class DateElementBase extends org.semanticwb.model.base.FormElementBase
         return getSemanticObject().getProperty(swb_dateConstraints);
     }
 
-    public void setConstraints(String dateConstraints)
+    public void setConstraints(String value)
     {
-        getSemanticObject().setProperty(swb_dateConstraints, dateConstraints);
+        getSemanticObject().setProperty(swb_dateConstraints, value);
     }
 
     public void remove()

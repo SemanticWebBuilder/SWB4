@@ -51,9 +51,9 @@ public class RoleRefBase extends org.semanticwb.model.Reference implements org.s
         return (getRoleRef(id, model)!=null);
     }
 
-    public void setRole(org.semanticwb.model.Role role)
+    public void setRole(org.semanticwb.model.Role value)
     {
-        getSemanticObject().setObjectProperty(swb_role, role.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_role, value.getSemanticObject());
     }
 
     public void removeRole()

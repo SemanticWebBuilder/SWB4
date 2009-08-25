@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class DnsBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.WebPageable,org.semanticwb.model.Traceable
+public class DnsBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.WebPageable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -63,14 +63,14 @@ public class DnsBase extends org.semanticwb.model.SWBClass implements org.semant
         return getSemanticObject().getDateProperty(swb_created);
     }
 
-    public void setCreated(java.util.Date created)
+    public void setCreated(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swb_created, created);
+        getSemanticObject().setDateProperty(swb_created, value);
     }
 
-    public void setModifiedBy(org.semanticwb.model.User user)
+    public void setModifiedBy(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_modifiedBy, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
     }
 
     public void removeModifiedBy()
@@ -106,14 +106,14 @@ public class DnsBase extends org.semanticwb.model.SWBClass implements org.semant
         return getSemanticObject().getDateProperty(swb_updated);
     }
 
-    public void setUpdated(java.util.Date updated)
+    public void setUpdated(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swb_updated, updated);
+        getSemanticObject().setDateProperty(swb_updated, value);
     }
 
-    public void setWebPage(org.semanticwb.model.WebPage webpage)
+    public void setWebPage(org.semanticwb.model.WebPage value)
     {
-        getSemanticObject().setObjectProperty(swb_webPage, webpage.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_webPage, value.getSemanticObject());
     }
 
     public void removeWebPage()
@@ -144,9 +144,9 @@ public class DnsBase extends org.semanticwb.model.SWBClass implements org.semant
          return ret;
     }
 
-    public void setCreator(org.semanticwb.model.User user)
+    public void setCreator(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_creator, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
     }
 
     public void removeCreator()
@@ -182,9 +182,9 @@ public class DnsBase extends org.semanticwb.model.SWBClass implements org.semant
         return getSemanticObject().getBooleanProperty(swb_dnsDefault);
     }
 
-    public void setDefault(boolean dnsDefault)
+    public void setDefault(boolean value)
     {
-        getSemanticObject().setBooleanProperty(swb_dnsDefault, dnsDefault);
+        getSemanticObject().setBooleanProperty(swb_dnsDefault, value);
     }
 
     public String getDns()
@@ -192,9 +192,9 @@ public class DnsBase extends org.semanticwb.model.SWBClass implements org.semant
         return getSemanticObject().getProperty(swb_dns);
     }
 
-    public void setDns(String dns)
+    public void setDns(String value)
     {
-        getSemanticObject().setProperty(swb_dns, dns);
+        getSemanticObject().setProperty(swb_dns, value);
     }
 
     public org.semanticwb.model.WebSite getWebSite()

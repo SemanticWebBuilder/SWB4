@@ -49,8 +49,8 @@ public class PropertyGroupBase extends org.semanticwb.model.SWBClass implements 
         return getSemanticObject().getIntProperty(swb_index);
     }
 
-    public void setIndex(int index)
+    public void setIndex(int value)
     {
-        getSemanticObject().setIntProperty(swb_index, index);
+        getSemanticObject().setIntProperty(swb_index, value);
     }
 }

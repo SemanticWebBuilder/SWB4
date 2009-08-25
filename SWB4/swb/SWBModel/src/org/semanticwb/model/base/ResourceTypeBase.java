@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class ResourceTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public class ResourceTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -64,14 +64,14 @@ public class ResourceTypeBase extends org.semanticwb.model.SWBClass implements o
         return getSemanticObject().getDateProperty(swb_created);
     }
 
-    public void setCreated(java.util.Date created)
+    public void setCreated(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swb_created, created);
+        getSemanticObject().setDateProperty(swb_created, value);
     }
 
-    public void setModifiedBy(org.semanticwb.model.User user)
+    public void setModifiedBy(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_modifiedBy, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
     }
 
     public void removeModifiedBy()
@@ -107,9 +107,9 @@ public class ResourceTypeBase extends org.semanticwb.model.SWBClass implements o
         return getSemanticObject().getProperty(swb_title);
     }
 
-    public void setTitle(String title)
+    public void setTitle(String value)
     {
-        getSemanticObject().setProperty(swb_title, title);
+        getSemanticObject().setProperty(swb_title, value);
     }
 
     public String getTitle(String lang)
@@ -132,9 +132,9 @@ public class ResourceTypeBase extends org.semanticwb.model.SWBClass implements o
         return getSemanticObject().getProperty(swb_resourceBundle);
     }
 
-    public void setResourceBundle(String resourceBundle)
+    public void setResourceBundle(String value)
     {
-        getSemanticObject().setProperty(swb_resourceBundle, resourceBundle);
+        getSemanticObject().setProperty(swb_resourceBundle, value);
     }
 
     public java.util.Date getUpdated()
@@ -142,9 +142,9 @@ public class ResourceTypeBase extends org.semanticwb.model.SWBClass implements o
         return getSemanticObject().getDateProperty(swb_updated);
     }
 
-    public void setUpdated(java.util.Date updated)
+    public void setUpdated(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swb_updated, updated);
+        getSemanticObject().setDateProperty(swb_updated, value);
     }
 
     public String getResourceOWL()
@@ -152,9 +152,9 @@ public class ResourceTypeBase extends org.semanticwb.model.SWBClass implements o
         return getSemanticObject().getProperty(swb_resourceOWL);
     }
 
-    public void setResourceOWL(String resourceOWL)
+    public void setResourceOWL(String value)
     {
-        getSemanticObject().setProperty(swb_resourceOWL, resourceOWL);
+        getSemanticObject().setProperty(swb_resourceOWL, value);
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceSubType> listSubTypes()
@@ -168,13 +168,13 @@ public class ResourceTypeBase extends org.semanticwb.model.SWBClass implements o
         return getSemanticObject().hasObjectProperty(swb_hasPTSubType,resourcesubtype.getSemanticObject());
     }
 
-   public static java.util.Iterator<org.semanticwb.model.ResourceType> listResourceTypeByHasSubType(org.semanticwb.model.ResourceSubType hasptsubtype,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.model.ResourceType> listResourceTypeBySubType(org.semanticwb.model.ResourceSubType hasptsubtype,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceType> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_hasPTSubType, hasptsubtype.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.model.ResourceType> listResourceTypeByHasSubType(org.semanticwb.model.ResourceSubType hasptsubtype)
+   public static java.util.Iterator<org.semanticwb.model.ResourceType> listResourceTypeBySubType(org.semanticwb.model.ResourceSubType hasptsubtype)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceType> it=new org.semanticwb.model.GenericIterator(hasptsubtype.getSemanticObject().getModel().listSubjects(swb_hasPTSubType,hasptsubtype.getSemanticObject()));
        return it;
@@ -196,9 +196,9 @@ public class ResourceTypeBase extends org.semanticwb.model.SWBClass implements o
         return getSemanticObject().getIntProperty(swb_resourceMode);
     }
 
-    public void setResourceMode(int resourceMode)
+    public void setResourceMode(int value)
     {
-        getSemanticObject().setIntProperty(swb_resourceMode, resourceMode);
+        getSemanticObject().setIntProperty(swb_resourceMode, value);
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource> listResources()
@@ -212,13 +212,13 @@ public class ResourceTypeBase extends org.semanticwb.model.SWBClass implements o
         return getSemanticObject().hasObjectProperty(swb_hasPTResource,resource.getSemanticObject());
     }
 
-   public static java.util.Iterator<org.semanticwb.model.ResourceType> listResourceTypeByHasResource(org.semanticwb.model.Resource hasptresource,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.model.ResourceType> listResourceTypeByResource(org.semanticwb.model.Resource hasptresource,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceType> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_hasPTResource, hasptresource.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.model.ResourceType> listResourceTypeByHasResource(org.semanticwb.model.Resource hasptresource)
+   public static java.util.Iterator<org.semanticwb.model.ResourceType> listResourceTypeByResource(org.semanticwb.model.Resource hasptresource)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceType> it=new org.semanticwb.model.GenericIterator(hasptresource.getSemanticObject().getModel().listSubjects(swb_hasPTResource,hasptresource.getSemanticObject()));
        return it;
@@ -240,9 +240,9 @@ public class ResourceTypeBase extends org.semanticwb.model.SWBClass implements o
         return getSemanticObject().getIntProperty(swb_resourceCache);
     }
 
-    public void setResourceCache(int resourceCache)
+    public void setResourceCache(int value)
     {
-        getSemanticObject().setIntProperty(swb_resourceCache, resourceCache);
+        getSemanticObject().setIntProperty(swb_resourceCache, value);
     }
 
     public String getResourceClassName()
@@ -250,14 +250,14 @@ public class ResourceTypeBase extends org.semanticwb.model.SWBClass implements o
         return getSemanticObject().getProperty(swb_resourceClassName);
     }
 
-    public void setResourceClassName(String resourceClassName)
+    public void setResourceClassName(String value)
     {
-        getSemanticObject().setProperty(swb_resourceClassName, resourceClassName);
+        getSemanticObject().setProperty(swb_resourceClassName, value);
     }
 
-    public void setCreator(org.semanticwb.model.User user)
+    public void setCreator(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_creator, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
     }
 
     public void removeCreator()
@@ -293,9 +293,9 @@ public class ResourceTypeBase extends org.semanticwb.model.SWBClass implements o
         return getSemanticObject().getProperty(swb_description);
     }
 
-    public void setDescription(String description)
+    public void setDescription(String value)
     {
-        getSemanticObject().setProperty(swb_description, description);
+        getSemanticObject().setProperty(swb_description, value);
     }
 
     public String getDescription(String lang)

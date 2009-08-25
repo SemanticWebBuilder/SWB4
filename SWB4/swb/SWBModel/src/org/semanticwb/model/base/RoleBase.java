@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class RoleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public class RoleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -62,14 +62,14 @@ public class RoleBase extends org.semanticwb.model.SWBClass implements org.seman
         return getSemanticObject().getDateProperty(swb_created);
     }
 
-    public void setCreated(java.util.Date created)
+    public void setCreated(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swb_created, created);
+        getSemanticObject().setDateProperty(swb_created, value);
     }
 
-    public void setModifiedBy(org.semanticwb.model.User user)
+    public void setModifiedBy(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_modifiedBy, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
     }
 
     public void removeModifiedBy()
@@ -105,9 +105,9 @@ public class RoleBase extends org.semanticwb.model.SWBClass implements org.seman
         return getSemanticObject().getProperty(swb_title);
     }
 
-    public void setTitle(String title)
+    public void setTitle(String value)
     {
-        getSemanticObject().setProperty(swb_title, title);
+        getSemanticObject().setProperty(swb_title, value);
     }
 
     public String getTitle(String lang)
@@ -136,13 +136,13 @@ public class RoleBase extends org.semanticwb.model.SWBClass implements org.seman
         return getSemanticObject().hasObjectProperty(swb_hasRoleRefInv,roleref.getSemanticObject());
     }
 
-   public static java.util.Iterator<org.semanticwb.model.Role> listRoleByHasRoleRefInv(org.semanticwb.model.RoleRef hasrolerefinv,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.model.Role> listRoleByRoleRefInv(org.semanticwb.model.RoleRef hasrolerefinv,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.model.Role> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_hasRoleRefInv, hasrolerefinv.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.model.Role> listRoleByHasRoleRefInv(org.semanticwb.model.RoleRef hasrolerefinv)
+   public static java.util.Iterator<org.semanticwb.model.Role> listRoleByRoleRefInv(org.semanticwb.model.RoleRef hasrolerefinv)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.model.Role> it=new org.semanticwb.model.GenericIterator(hasrolerefinv.getSemanticObject().getModel().listSubjects(swb_hasRoleRefInv,hasrolerefinv.getSemanticObject()));
        return it;
@@ -170,13 +170,13 @@ public class RoleBase extends org.semanticwb.model.SWBClass implements org.seman
         return getSemanticObject().hasObjectProperty(swb_hasRoleChild,role.getSemanticObject());
     }
 
-   public static java.util.Iterator<org.semanticwb.model.Role> listRoleByHasChild(org.semanticwb.model.Role hasrolechild,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.model.Role> listRoleByChild(org.semanticwb.model.Role hasrolechild,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.model.Role> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_hasRoleChild, hasrolechild.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.model.Role> listRoleByHasChild(org.semanticwb.model.Role hasrolechild)
+   public static java.util.Iterator<org.semanticwb.model.Role> listRoleByChild(org.semanticwb.model.Role hasrolechild)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.model.Role> it=new org.semanticwb.model.GenericIterator(hasrolechild.getSemanticObject().getModel().listSubjects(swb_hasRoleChild,hasrolechild.getSemanticObject()));
        return it;
@@ -198,9 +198,9 @@ public class RoleBase extends org.semanticwb.model.SWBClass implements org.seman
         return getSemanticObject().getDateProperty(swb_updated);
     }
 
-    public void setUpdated(java.util.Date updated)
+    public void setUpdated(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swb_updated, updated);
+        getSemanticObject().setDateProperty(swb_updated, value);
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Permission> listPermissions()
@@ -214,9 +214,9 @@ public class RoleBase extends org.semanticwb.model.SWBClass implements org.seman
         return getSemanticObject().hasObjectProperty(swb_hasPermission,permission.getSemanticObject());
     }
 
-    public void addPermission(org.semanticwb.model.Permission permission)
+    public void addPermission(org.semanticwb.model.Permission value)
     {
-        getSemanticObject().addObjectProperty(swb_hasPermission, permission.getSemanticObject());
+        getSemanticObject().addObjectProperty(swb_hasPermission, value.getSemanticObject());
     }
 
     public void removeAllPermission()
@@ -229,13 +229,13 @@ public class RoleBase extends org.semanticwb.model.SWBClass implements org.seman
         getSemanticObject().removeObjectProperty(swb_hasPermission,permission.getSemanticObject());
     }
 
-   public static java.util.Iterator<org.semanticwb.model.Role> listRoleByHasPermission(org.semanticwb.model.Permission haspermission,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.model.Role> listRoleByPermission(org.semanticwb.model.Permission haspermission,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.model.Role> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_hasPermission, haspermission.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.model.Role> listRoleByHasPermission(org.semanticwb.model.Permission haspermission)
+   public static java.util.Iterator<org.semanticwb.model.Role> listRoleByPermission(org.semanticwb.model.Permission haspermission)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.model.Role> it=new org.semanticwb.model.GenericIterator(haspermission.getSemanticObject().getModel().listSubjects(swb_hasPermission,haspermission.getSemanticObject()));
        return it;
@@ -252,9 +252,9 @@ public class RoleBase extends org.semanticwb.model.SWBClass implements org.seman
          return ret;
     }
 
-    public void setCreator(org.semanticwb.model.User user)
+    public void setCreator(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_creator, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
     }
 
     public void removeCreator()
@@ -290,9 +290,9 @@ public class RoleBase extends org.semanticwb.model.SWBClass implements org.seman
         return getSemanticObject().getProperty(swb_description);
     }
 
-    public void setDescription(String description)
+    public void setDescription(String value)
     {
-        getSemanticObject().setProperty(swb_description, description);
+        getSemanticObject().setProperty(swb_description, value);
     }
 
     public String getDescription(String lang)
@@ -315,14 +315,14 @@ public class RoleBase extends org.semanticwb.model.SWBClass implements org.seman
         return getSemanticObject().getBooleanProperty(swb_undeleteable);
     }
 
-    public void setUndeleteable(boolean undeleteable)
+    public void setUndeleteable(boolean value)
     {
-        getSemanticObject().setBooleanProperty(swb_undeleteable, undeleteable);
+        getSemanticObject().setBooleanProperty(swb_undeleteable, value);
     }
 
-    public void setParent(org.semanticwb.model.Role role)
+    public void setParent(org.semanticwb.model.Role value)
     {
-        getSemanticObject().setObjectProperty(swb_roleParent, role.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_roleParent, value.getSemanticObject());
     }
 
     public void removeParent()

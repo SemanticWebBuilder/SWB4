@@ -50,9 +50,9 @@ public class SelectOneBase extends org.semanticwb.model.base.FormElementBase
         return getSemanticObject().getBooleanProperty(swbxf_so_globalScope);
     }
 
-    public void setGlobalScope(boolean so_globalScope)
+    public void setGlobalScope(boolean value)
     {
-        getSemanticObject().setBooleanProperty(swbxf_so_globalScope, so_globalScope);
+        getSemanticObject().setBooleanProperty(swbxf_so_globalScope, value);
     }
 
     public boolean isBlankSuport()
@@ -60,9 +60,9 @@ public class SelectOneBase extends org.semanticwb.model.base.FormElementBase
         return getSemanticObject().getBooleanProperty(swbxf_so_nullSuport);
     }
 
-    public void setBlankSuport(boolean so_nullSuport)
+    public void setBlankSuport(boolean value)
     {
-        getSemanticObject().setBooleanProperty(swbxf_so_nullSuport, so_nullSuport);
+        getSemanticObject().setBooleanProperty(swbxf_so_nullSuport, value);
     }
 
     public void remove()

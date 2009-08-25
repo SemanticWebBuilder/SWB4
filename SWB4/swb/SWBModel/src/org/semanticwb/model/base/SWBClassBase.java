@@ -50,10 +50,10 @@ public class SWBClassBase extends org.semanticwb.model.base.GenericObjectBase
         return getSemanticObject().getBooleanProperty(swb_valid,false);
     }
 
-    public void setValid(boolean valid)
+    public void setValid(boolean value)
     {
         //Override this method in SWBClass object
-        getSemanticObject().setBooleanProperty(swb_valid, valid,false);
+        getSemanticObject().setBooleanProperty(swb_valid, value,false);
     }
 
     public void remove()

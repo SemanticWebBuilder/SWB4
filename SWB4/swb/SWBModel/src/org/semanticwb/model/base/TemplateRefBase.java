@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class TemplateRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Activeable,org.semanticwb.model.Inheritable,org.semanticwb.model.Priorityable
+public class TemplateRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Priorityable,org.semanticwb.model.Inheritable,org.semanticwb.model.Activeable
 {
     public static final org.semanticwb.platform.SemanticClass swb_Template=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Template");
     public static final org.semanticwb.platform.SemanticProperty swb_template=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#template");
@@ -53,9 +53,9 @@ public class TemplateRefBase extends org.semanticwb.model.Reference implements o
         return (getTemplateRef(id, model)!=null);
     }
 
-    public void setTemplate(org.semanticwb.model.Template template)
+    public void setTemplate(org.semanticwb.model.Template value)
     {
-        getSemanticObject().setObjectProperty(swb_template, template.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_template, value.getSemanticObject());
     }
 
     public void removeTemplate()
@@ -91,9 +91,9 @@ public class TemplateRefBase extends org.semanticwb.model.Reference implements o
         return getSemanticObject().getIntProperty(swb_priority);
     }
 
-    public void setPriority(int priority)
+    public void setPriority(int value)
     {
-        getSemanticObject().setIntProperty(swb_priority, priority);
+        getSemanticObject().setIntProperty(swb_priority, value);
     }
 
     public int getInherit()
@@ -101,9 +101,9 @@ public class TemplateRefBase extends org.semanticwb.model.Reference implements o
         return getSemanticObject().getIntProperty(swb_inherit);
     }
 
-    public void setInherit(int inherit)
+    public void setInherit(int value)
     {
-        getSemanticObject().setIntProperty(swb_inherit, inherit);
+        getSemanticObject().setIntProperty(swb_inherit, value);
     }
 
     public org.semanticwb.model.WebSite getWebSite()

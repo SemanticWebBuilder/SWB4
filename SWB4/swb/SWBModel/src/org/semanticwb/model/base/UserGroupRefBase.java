@@ -51,9 +51,9 @@ public class UserGroupRefBase extends org.semanticwb.model.Reference implements 
         return (getUserGroupRef(id, model)!=null);
     }
 
-    public void setUserGroup(org.semanticwb.model.UserGroup usergroup)
+    public void setUserGroup(org.semanticwb.model.UserGroup value)
     {
-        getSemanticObject().setObjectProperty(swb_userGroup, usergroup.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_userGroup, value.getSemanticObject());
     }
 
     public void removeUserGroup()

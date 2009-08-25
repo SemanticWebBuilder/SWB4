@@ -58,9 +58,9 @@ public class DisplayPropertyBase extends org.semanticwb.model.SWBClass implement
         return getSemanticObject().getIntProperty(swb_index);
     }
 
-    public void setIndex(int index)
+    public void setIndex(int value)
     {
-        getSemanticObject().setIntProperty(swb_index, index);
+        getSemanticObject().setIntProperty(swb_index, value);
     }
 
     public String getSelectValues()
@@ -68,9 +68,9 @@ public class DisplayPropertyBase extends org.semanticwb.model.SWBClass implement
         return getSemanticObject().getProperty(swbxf_propSelectValues);
     }
 
-    public void setSelectValues(String propSelectValues)
+    public void setSelectValues(String value)
     {
-        getSemanticObject().setProperty(swbxf_propSelectValues, propSelectValues);
+        getSemanticObject().setProperty(swbxf_propSelectValues, value);
     }
 
     public String getSelectValues(String lang)
@@ -93,9 +93,9 @@ public class DisplayPropertyBase extends org.semanticwb.model.SWBClass implement
         return getSemanticObject().getBooleanProperty(swbxf_propDisabled);
     }
 
-    public void setDisabled(boolean propDisabled)
+    public void setDisabled(boolean value)
     {
-        getSemanticObject().setBooleanProperty(swbxf_propDisabled, propDisabled);
+        getSemanticObject().setBooleanProperty(swbxf_propDisabled, value);
     }
 
     public boolean isHidden()
@@ -103,9 +103,9 @@ public class DisplayPropertyBase extends org.semanticwb.model.SWBClass implement
         return getSemanticObject().getBooleanProperty(swbxf_propHidden);
     }
 
-    public void setHidden(boolean propHidden)
+    public void setHidden(boolean value)
     {
-        getSemanticObject().setBooleanProperty(swbxf_propHidden, propHidden);
+        getSemanticObject().setBooleanProperty(swbxf_propHidden, value);
     }
 
     public String getInvalidMessage()
@@ -113,9 +113,9 @@ public class DisplayPropertyBase extends org.semanticwb.model.SWBClass implement
         return getSemanticObject().getProperty(swbxf_propInvalidMessage);
     }
 
-    public void setInvalidMessage(String propInvalidMessage)
+    public void setInvalidMessage(String value)
     {
-        getSemanticObject().setProperty(swbxf_propInvalidMessage, propInvalidMessage);
+        getSemanticObject().setProperty(swbxf_propInvalidMessage, value);
     }
 
     public String getInvalidMessage(String lang)
@@ -133,9 +133,9 @@ public class DisplayPropertyBase extends org.semanticwb.model.SWBClass implement
         getSemanticObject().setProperty(swbxf_propInvalidMessage, propInvalidMessage, lang);
     }
 
-    public void setFormElement(org.semanticwb.platform.SemanticObject semanticobject)
+    public void setFormElement(org.semanticwb.platform.SemanticObject value)
     {
-        getSemanticObject().setObjectProperty(swbxf_formElement, semanticobject);
+        getSemanticObject().setObjectProperty(swbxf_formElement, value);
     }
 
     public void removeFormElement()
@@ -150,9 +150,9 @@ public class DisplayPropertyBase extends org.semanticwb.model.SWBClass implement
          return ret;
     }
 
-    public void setGroup(org.semanticwb.model.PropertyGroup propertygroup)
+    public void setGroup(org.semanticwb.model.PropertyGroup value)
     {
-        getSemanticObject().setObjectProperty(swbxf_propGroup, propertygroup.getSemanticObject());
+        getSemanticObject().setObjectProperty(swbxf_propGroup, value.getSemanticObject());
     }
 
     public void removeGroup()
@@ -188,9 +188,9 @@ public class DisplayPropertyBase extends org.semanticwb.model.SWBClass implement
         return getSemanticObject().getProperty(swbxf_propPromptMessage);
     }
 
-    public void setPromptMessage(String propPromptMessage)
+    public void setPromptMessage(String value)
     {
-        getSemanticObject().setProperty(swbxf_propPromptMessage, propPromptMessage);
+        getSemanticObject().setProperty(swbxf_propPromptMessage, value);
     }
 
     public String getPromptMessage(String lang)

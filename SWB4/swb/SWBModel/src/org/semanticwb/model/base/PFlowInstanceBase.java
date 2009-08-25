@@ -62,14 +62,14 @@ public class PFlowInstanceBase extends org.semanticwb.model.SWBClass implements 
         return getSemanticObject().getDateProperty(swb_pfiTime);
     }
 
-    public void setTime(java.util.Date pfiTime)
+    public void setTime(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swb_pfiTime, pfiTime);
+        getSemanticObject().setDateProperty(swb_pfiTime, value);
     }
 
-    public void setPfinstResource(org.semanticwb.model.Resource resource)
+    public void setPfinstResource(org.semanticwb.model.Resource value)
     {
-        getSemanticObject().setObjectProperty(swb_pfinstResource, resource.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_pfinstResource, value.getSemanticObject());
     }
 
     public void removePfinstResource()
@@ -100,9 +100,9 @@ public class PFlowInstanceBase extends org.semanticwb.model.SWBClass implements 
          return ret;
     }
 
-    public void setPflow(org.semanticwb.model.PFlow pflow)
+    public void setPflow(org.semanticwb.model.PFlow value)
     {
-        getSemanticObject().setObjectProperty(swb_pfiPFlow, pflow.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_pfiPFlow, value.getSemanticObject());
     }
 
     public void removePflow()
@@ -138,9 +138,9 @@ public class PFlowInstanceBase extends org.semanticwb.model.SWBClass implements 
         return getSemanticObject().getIntProperty(swb_pfiStatus);
     }
 
-    public void setStatus(int pfiStatus)
+    public void setStatus(int value)
     {
-        getSemanticObject().setIntProperty(swb_pfiStatus, pfiStatus);
+        getSemanticObject().setIntProperty(swb_pfiStatus, value);
     }
 
     public int getVersion()
@@ -148,9 +148,9 @@ public class PFlowInstanceBase extends org.semanticwb.model.SWBClass implements 
         return getSemanticObject().getIntProperty(swb_pfiVersion);
     }
 
-    public void setVersion(int pfiVersion)
+    public void setVersion(int value)
     {
-        getSemanticObject().setIntProperty(swb_pfiVersion, pfiVersion);
+        getSemanticObject().setIntProperty(swb_pfiVersion, value);
     }
 
     public String getStep()
@@ -158,8 +158,8 @@ public class PFlowInstanceBase extends org.semanticwb.model.SWBClass implements 
         return getSemanticObject().getProperty(swb_pfiStep);
     }
 
-    public void setStep(String pfiStep)
+    public void setStep(String value)
     {
-        getSemanticObject().setProperty(swb_pfiStep, pfiStep);
+        getSemanticObject().setProperty(swb_pfiStep, value);
     }
 }

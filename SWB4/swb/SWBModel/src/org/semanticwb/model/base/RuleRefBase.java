@@ -51,9 +51,9 @@ public class RuleRefBase extends org.semanticwb.model.Reference implements org.s
         return (getRuleRef(id, model)!=null);
     }
 
-    public void setRule(org.semanticwb.model.Rule rule)
+    public void setRule(org.semanticwb.model.Rule value)
     {
-        getSemanticObject().setObjectProperty(swb_rule, rule.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_rule, value.getSemanticObject());
     }
 
     public void removeRule()

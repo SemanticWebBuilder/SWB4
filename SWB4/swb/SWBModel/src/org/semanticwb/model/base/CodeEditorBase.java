@@ -49,8 +49,8 @@ public class CodeEditorBase extends org.semanticwb.model.TextArea
         return getSemanticObject().getProperty(swbxf_codeEditorLanguage);
     }
 
-    public void setLanguage(String codeEditorLanguage)
+    public void setLanguage(String value)
     {
-        getSemanticObject().setProperty(swbxf_codeEditorLanguage, codeEditorLanguage);
+        getSemanticObject().setProperty(swbxf_codeEditorLanguage, value);
     }
 }

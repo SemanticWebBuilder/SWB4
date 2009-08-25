@@ -1,8 +1,9 @@
 package org.semanticwb.model.base;
 
 
-public class ObjectBehaviorBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Resourceable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Rankable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Expirable,org.semanticwb.model.Trashable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Viewable,org.semanticwb.model.Iconable,org.semanticwb.model.RuleRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Indexable,org.semanticwb.model.Filterable,org.semanticwb.model.Referensable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Hiddenable
+public class ObjectBehaviorBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Rankable,org.semanticwb.model.Traceable,org.semanticwb.model.Expirable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Undeleteable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Indexable,org.semanticwb.model.Iconable,org.semanticwb.model.Viewable,org.semanticwb.model.Referensable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Resourceable,org.semanticwb.model.Filterable,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Hiddenable,org.semanticwb.model.CalendarRefable
 {
+    public static final org.semanticwb.platform.SemanticClass owl_Class=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.w3.org/2002/07/owl#Class");
     public static final org.semanticwb.platform.SemanticProperty swbxf_interface=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#interface");
     public static final org.semanticwb.platform.SemanticProperty swbxf_behaviorURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#behaviorURL");
     public static final org.semanticwb.platform.SemanticProperty swbxf_behaviorPropertyFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#behaviorPropertyFilter");
@@ -49,9 +50,9 @@ public class ObjectBehaviorBase extends org.semanticwb.model.WebPage implements 
         return (getObjectBehavior(id, model)!=null);
     }
 
-    public void setInterface(org.semanticwb.platform.SemanticObject semanticobject)
+    public void setInterface(org.semanticwb.platform.SemanticObject value)
     {
-        getSemanticObject().setObjectProperty(swbxf_interface, semanticobject);
+        getSemanticObject().setObjectProperty(swbxf_interface, value);
     }
 
     public void removeInterface()
@@ -71,9 +72,9 @@ public class ObjectBehaviorBase extends org.semanticwb.model.WebPage implements 
         return getSemanticObject().getProperty(swbxf_behaviorURL);
     }
 
-    public void setBehaviorURL(String behaviorURL)
+    public void setBehaviorURL(String value)
     {
-        getSemanticObject().setProperty(swbxf_behaviorURL, behaviorURL);
+        getSemanticObject().setProperty(swbxf_behaviorURL, value);
     }
 
     public String getPropertyFilter()
@@ -81,9 +82,9 @@ public class ObjectBehaviorBase extends org.semanticwb.model.WebPage implements 
         return getSemanticObject().getProperty(swbxf_behaviorPropertyFilter);
     }
 
-    public void setPropertyFilter(String behaviorPropertyFilter)
+    public void setPropertyFilter(String value)
     {
-        getSemanticObject().setProperty(swbxf_behaviorPropertyFilter, behaviorPropertyFilter);
+        getSemanticObject().setProperty(swbxf_behaviorPropertyFilter, value);
     }
 
     public String getIconClass()
@@ -91,9 +92,9 @@ public class ObjectBehaviorBase extends org.semanticwb.model.WebPage implements 
         return getSemanticObject().getProperty(swb_iconClass);
     }
 
-    public void setIconClass(String iconClass)
+    public void setIconClass(String value)
     {
-        getSemanticObject().setProperty(swb_iconClass, iconClass);
+        getSemanticObject().setProperty(swb_iconClass, value);
     }
 
     public boolean isRefreshOnShow()
@@ -101,9 +102,9 @@ public class ObjectBehaviorBase extends org.semanticwb.model.WebPage implements 
         return getSemanticObject().getBooleanProperty(swbxf_behaviorRefreshOnShow);
     }
 
-    public void setRefreshOnShow(boolean behaviorRefreshOnShow)
+    public void setRefreshOnShow(boolean value)
     {
-        getSemanticObject().setBooleanProperty(swbxf_behaviorRefreshOnShow, behaviorRefreshOnShow);
+        getSemanticObject().setBooleanProperty(swbxf_behaviorRefreshOnShow, value);
     }
 
     public String getBehaviorParams()
@@ -111,8 +112,8 @@ public class ObjectBehaviorBase extends org.semanticwb.model.WebPage implements 
         return getSemanticObject().getProperty(swbxf_behaviorParams);
     }
 
-    public void setBehaviorParams(String behaviorParams)
+    public void setBehaviorParams(String value)
     {
-        getSemanticObject().setProperty(swbxf_behaviorParams, behaviorParams);
+        getSemanticObject().setProperty(swbxf_behaviorParams, value);
     }
 }
