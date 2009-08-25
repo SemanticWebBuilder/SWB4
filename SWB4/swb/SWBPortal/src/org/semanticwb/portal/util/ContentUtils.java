@@ -91,20 +91,9 @@ public class ContentUtils {
     /**
      * Metodo que regresa el contenido por página
      */
-    private String getContentByPage(String content, int totPages, int npage, WebPage webpage, Resource base, String contentType) {
+    private String getContentByPage(String content, int totPages, int npage, WebPage webpage, Resource base, String contentType, int snpages, String stxtant, String stxtsig, String stfont, int position) {
         StringBuffer strb = new StringBuffer();
         try {
-            int snpages = Integer.parseInt(base.getProperty("npages", "15"));
-            String stxtant = base.getProperty("txtant", "Anterior");
-            String stxtsig = base.getProperty("txtsig", "Siguiente");
-            String stfont = base.getProperty("tfont", "font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"2\" color=\"#000000\"");
-            int position = Integer.parseInt(base.getProperty("position", "1"));
-
-            System.out.println("snpages:"+snpages);
-            System.out.println("stxtant:"+stxtant);
-            System.out.println("stxtsig:"+stxtsig);
-            System.out.println("stfont:"+stfont);
-            System.out.println("position:"+position);
 
             StringBuffer strb1 = new StringBuffer();
 
@@ -173,7 +162,7 @@ public class ContentUtils {
         return strb.toString();
     }
 
-    public String paginationMsWord(String htmlOut, WebPage page, String npage, Resource base) {
+    public String paginationMsWord(String htmlOut, WebPage page, String npage, Resource base, int snpages, String stxtant, String stxtsig, String stfont, int position) {
         int totPages = getMsContentPagesNumber(htmlOut);
         if (totPages > 1) {
             int ipage = 1;
@@ -182,7 +171,7 @@ public class ContentUtils {
             } else {
                 ipage = 1;
             }
-            htmlOut = getContentByPage(htmlOut, totPages, ipage, page, base, "MsWord");
+            htmlOut = getContentByPage(htmlOut, totPages, ipage, page, base, "MsWord", snpages, stxtant, stxtsig, stfont, position);
         }
         return htmlOut;
     }
@@ -290,9 +279,7 @@ public class ContentUtils {
     }
 
 
-    public String predefinedStyles(String content, Resource base) {
-        int tpred = Integer.parseInt(base.getAttribute("tpred", "0")); //TODO:Decirle a vic que agregue esta propiedad
-        tpred=1;
+    public String predefinedStyles(String content, Resource base, boolean isTpred) {
         String sTmchangeStyles = (String) hTMChangeStyles.get(base.getWebSiteId());
         if ((schangeStyles != null && schangeStyles.equals("true")) || (sTmchangeStyles != null && sTmchangeStyles.equals("true"))) {
             if (flag) {
@@ -301,7 +288,7 @@ public class ContentUtils {
                 }
             }
         } else if (schangeStyles == null) {
-            if (tpred == 1 && flag) {
+            if (isTpred && flag) {
                 content = SWBPortal.removeStylesOutDivs(content, base.getWebSiteId(), hTMhStyleObjs);
             }
         }
@@ -517,7 +504,7 @@ public class ContentUtils {
                 //////////METODOS PARA MANEJO DE OPEN OFFICE////////////////////////////
 
 
-    public String paginationOpenOffice(String htmlOut, WebPage page, String npage, Resource base) {
+    public String paginationOpenOffice(String htmlOut, WebPage page, String npage, Resource base, int snpages, String stxtant, String stxtsig, String stfont, int position) {
         int totPages = getOpenOfficeContentPagesNumber(htmlOut);
         if (totPages > 1) {
             int ipage = 1;
@@ -526,7 +513,7 @@ public class ContentUtils {
             } else {
                 ipage = 1;
             }
-            htmlOut = getContentByPage(htmlOut, totPages, ipage, page, base, "OpenOffice");
+            htmlOut = getContentByPage(htmlOut, totPages, ipage, page, base, "OpenOffice", snpages, stxtant, stxtsig, stfont, position);
         }
         return htmlOut;
     }
@@ -619,7 +606,7 @@ public class ContentUtils {
     //////////METODOS PARA MANEJO DE HTMLCONTENT////////////////////////////
 
 
-     public String paginationHtmlContent(String htmlOut, WebPage page, String npage, Resource base) {
+     public String paginationHtmlContent(String htmlOut, WebPage page, String npage, Resource base, int snpages, String stxtant, String stxtsig, String stfont, int position) {
         int totPages = getHtmlContentPagesNumber(htmlOut);
         if (totPages > 1) {
             int ipage = 1;
@@ -628,7 +615,7 @@ public class ContentUtils {
             } else {
                 ipage = 1;
             }
-            htmlOut = getContentByPage(htmlOut, totPages, ipage, page, base, "HtmlContent");
+            htmlOut = getContentByPage(htmlOut, totPages, ipage, page, base, "HtmlContent", snpages, stxtant, stxtsig, stfont, position);
         }
         return htmlOut;
     }
