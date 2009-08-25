@@ -176,6 +176,17 @@ namespace WBOffice4.Forms
                     String type = document.DocumentType.ToString().ToLower();
                     name = OfficeApplication.OfficeDocumentProxy.createPreview(repositoryName, version.contentId, version.nameOfVersion,type);
                     String urlproxy = OfficeApplication.OfficeDocumentProxy.WebAddress.ToString();
+                    if (!urlproxy.EndsWith("/gtw"))
+                    {
+                        if (!urlproxy.EndsWith("/"))
+                        {
+                            urlproxy += "/";
+                        }
+                        if (!urlproxy.EndsWith("gtw"))
+                        {
+                            urlproxy += "gtw";
+                        }
+                    }
                     Uri url = new Uri(urlproxy + "?contentId=" + version.contentId + "&versionName=" + version.nameOfVersion + "&repositoryName=" + repositoryName + "&name=" + name+"&type="+type);
                     String title = OfficeApplication.OfficeDocumentProxy.getTitle(repositoryName, version.contentId);
                     FormPreview formPreview = new FormPreview(url, false,title);
