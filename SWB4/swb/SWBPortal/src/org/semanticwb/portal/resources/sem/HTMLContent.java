@@ -55,6 +55,12 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
     /**Ruta relativa para carpeta de archivos asociados a cada version */
     private static final String FOLDER = "images";
 
+    int snpages = 15;
+    String stxtant = "Anterior";
+    String stxtsig = "Siguiente";
+    String stfont = "font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"2\" color=\"#000000\"";
+    int position = 1;
+
 
     public HTMLContent()
     {
@@ -101,7 +107,9 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
             ,SWBPlatform.getWebWorkPath() + resource.getWorkPath() + "/" + versionNumber + "/");
 
         //Paginación (Jorge Jiménez-10/Julio/2009)
-        fileContent=new ContentUtils().paginationHtmlContent(fileContent, page, request.getParameter("page"), resource);
+        if(paramRequest.getLocaleString("txtant")!=null) stxtant=paramRequest.getLocaleString("txtant");
+        if(paramRequest.getLocaleString("txtsig")!=null) stxtsig=paramRequest.getLocaleString("txtsig");
+        fileContent=new ContentUtils().paginationHtmlContent(fileContent, page, request.getParameter("page"), resource, snpages, stxtant, stxtsig, stfont, position);
         //Termina Páginación
 
         response.getWriter().println(fileContent);
