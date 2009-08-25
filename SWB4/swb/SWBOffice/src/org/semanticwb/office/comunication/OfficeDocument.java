@@ -1027,7 +1027,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         else if (semanticProperty.isLong())
                         {
                             long bvalue = Long.parseLong(value);
-                            officeResource.getSemanticObject().setFloatProperty(semanticProperty, bvalue);
+                            officeResource.getSemanticObject().setLongProperty(semanticProperty, bvalue);
                         }
                         else if (semanticProperty.isShort())
                         {
