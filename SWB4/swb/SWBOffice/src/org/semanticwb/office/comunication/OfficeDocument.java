@@ -1004,6 +1004,36 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                             boolean bvalue = Boolean.parseBoolean(value);
                             officeResource.getSemanticObject().setBooleanProperty(semanticProperty, bvalue);
                         }
+                        else if (semanticProperty.isInt())
+                        {
+                            int bvalue = Integer.parseInt(value);
+                            officeResource.getSemanticObject().setIntProperty(semanticProperty, bvalue);
+                        }
+                        else if (semanticProperty.isByte())
+                        {
+                            byte bvalue = Byte.parseByte(value);
+                            officeResource.getSemanticObject().setIntProperty(semanticProperty, bvalue);
+                        }
+                        else if (semanticProperty.isDouble())
+                        {
+                            double bvalue = Double.parseDouble(value);
+                            officeResource.getSemanticObject().setDoubleProperty(semanticProperty, bvalue);
+                        }
+                        else if (semanticProperty.isFloat())
+                        {
+                            float bvalue = Float.parseFloat(value);
+                            officeResource.getSemanticObject().setFloatProperty(semanticProperty, bvalue);
+                        }
+                        else if (semanticProperty.isLong())
+                        {
+                            long bvalue = Long.parseLong(value);
+                            officeResource.getSemanticObject().setFloatProperty(semanticProperty, bvalue);
+                        }
+                        else if (semanticProperty.isShort())
+                        {
+                            short bvalue = Short.parseShort(value);
+                            officeResource.getSemanticObject().setIntProperty(semanticProperty, bvalue);
+                        }
                         else
                         {
                             officeResource.getSemanticObject().setProperty(semanticProperty, value);
