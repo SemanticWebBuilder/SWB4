@@ -72,6 +72,8 @@
             this.imageList1.Images.SetKeyName(0, "home.png");
             this.imageList1.Images.SetKeyName(1, "site.png");
             this.imageList1.Images.SetKeyName(2, "page.png");
+            this.imageList1.Images.SetKeyName(3, "home_deactivated.png");
+            this.imageList1.Images.SetKeyName(4, "pag_deactivated.png");
             // 
             // toolStrip1
             // 
