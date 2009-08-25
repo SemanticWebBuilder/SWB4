@@ -130,11 +130,27 @@ public class SelectPage extends WizardPage
                 {
                     if (object instanceof HomeWebPage)
                     {
-                        label.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/home.png")));
+                        HomeWebPage homeWebPage=(HomeWebPage)object;
+                        if(homeWebPage.isActive())
+                        {
+                            label.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/home.png")));
+                        }
+                        else
+                        {
+                            label.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/home_deactivated.png")));
+                        }
                     }
                     else
                     {
-                        label.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/page.png")));
+                        WebPage page=(WebPage)object;
+                        if(page.isActive())
+                        {
+                            label.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/page.png")));
+                        }
+                        else
+                        {
+                            label.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/pag_deactivated.png")));
+                        }
                     }
                 }
                 else
@@ -182,7 +198,7 @@ public class SelectPage extends WizardPage
                     Site site = new Site(website.id, website.title);
                     model.insertNodeInto(site, root, 0);                    
                     WebPageInfo home = OfficeApplication.getOfficeApplicationProxy().getHomePage(website);
-                    HomeWebPage child = new HomeWebPage(home.id, home.title, home.description, website.id, home.url);
+                    HomeWebPage child = new HomeWebPage(home.id, home.title, home.description, website.id, home.url,home.active);
                     site.add(child);
                     if (home.childs > 0)
                     {
@@ -199,7 +215,7 @@ public class SelectPage extends WizardPage
                         Site site = new Site(website.id, website.title);
                         model.insertNodeInto(site, root, 0);                        
                         WebPageInfo home = OfficeApplication.getOfficeApplicationProxy().getHomePage(website);
-                        HomeWebPage child = new HomeWebPage(home.id, home.title, home.description, website.id, home.url);
+                        HomeWebPage child = new HomeWebPage(home.id, home.title, home.description, website.id, home.url,home.active);
                         site.add(child);
                         if (home.childs > 0)
                         {
@@ -237,7 +253,7 @@ public class SelectPage extends WizardPage
             parent.siteID = nodeParent.webSite;
             for (WebPageInfo webpage : OfficeApplication.getOfficeApplicationProxy().getPages(parent))
             {
-                WebPage child = new WebPage(webpage.id, webpage.title, webpage.description, webpage.siteID, webpage.url);
+                WebPage child = new WebPage(webpage.id, webpage.title, webpage.description, webpage.siteID, webpage.url,webpage.active);
                 nodeParent.add(child);
                 if (webpage.childs > 0)
                 {
@@ -473,9 +489,9 @@ private void jTreeSiteTreeWillExpand(javax.swing.event.TreeExpansionEvent evt)th
     public class HomeWebPage extends WebPage
     {
 
-        public HomeWebPage(String id, String title, String description, String webSite, String url)
+        public HomeWebPage(String id, String title, String description, String webSite, String url,boolean active)
         {
-            super(id, title, description, webSite, url);
+            super(id, title, description, webSite, url,active);
         }
     }
 
@@ -488,17 +504,22 @@ private void jTreeSiteTreeWillExpand(javax.swing.event.TreeExpansionEvent evt)th
         private String description;
         private String webSite;
         private String url;
-
-        public WebPage(String id, String title, String description, String webSite, String url)
+        private boolean active;
+        public WebPage(String id, String title, String description, String webSite, String url,boolean active)
         {
             this.id = id;
             this.title = title;
             this.description = description;
             this.webSite = webSite;
             this.url = url;
+            this.active=active;
             component.setText(title);
             component.setToolTipText(description);
             component.setOpaque(true);
+        }
+        public boolean isActive()
+        {
+            return active;
         }
 
         public String getURL()
