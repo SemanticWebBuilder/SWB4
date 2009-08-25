@@ -17,11 +17,11 @@
         <name lang="en" xlink:href="http://www.infotec.com.mx">INFOTEC</name>
     </publisher>
     <extension-description>
-        <src lang="en" xlink:href="description/Licencia_SWB.rtf"/>
+        <src lang="en" xlink:href="description/Licencia_SWB.txt"/>
     </extension-description>
     <registration>
         <simple-license accept-by="user" default-license-id="en">
-            <license-text lang="en" license-id="en" xlink:href="licenses/Licencia_SWB.rtf"/>
+            <license-text lang="en" license-id="en" xlink:href="licenses/Licencia_SWB.txt"/>
         </simple-license>
     </registration>
 </description>
