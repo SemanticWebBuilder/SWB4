@@ -25,7 +25,7 @@
 using System.Windows.Forms;
 namespace Editor
 {
-    partial class PropertyEditor : UserControl
+    public partial class PropertyEditor : UserControl
     {
         /// <summary> 
         /// Required designer variable.

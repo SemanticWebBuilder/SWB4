@@ -33,7 +33,7 @@ using WBOffice4.Interfaces;
 
 namespace Editor
 {
-    partial class PropertyEditor : UserControl
+    public partial class PropertyEditor : UserControl
     {
         private PropertyInfo[] properties=null;        
         public PropertyEditor()
@@ -51,7 +51,7 @@ namespace Editor
                     foreach (PropertyInfo prop in this.properties)
                     {
                         Panel pcontrol = (Panel)this.paneProperties.Controls[prop.id];
-                        Control control = pcontrol.Controls[prop.id];
+                        Control control = pcontrol.Controls[prop.id];                        
                         if (control is TextBox)
                         {
                             values[i] = ((TextBox)control).Text;
@@ -88,7 +88,7 @@ namespace Editor
                         if (values[i] != null)
                         {
                             Panel pcontrol = (Panel)this.paneProperties.Controls[prop.id];
-                            Control control = pcontrol.Controls[prop.id];
+                            Control control = pcontrol.Controls[prop.id];                            
                             if (control is TextBox)
                             {
                                 ((TextBox)control).Text = values[i].ToString();
@@ -136,28 +136,32 @@ namespace Editor
                 this.paneProperties.Controls.Clear();
                 Array.Reverse(this.properties);
                 int i = 0;
+                int tabindex = this.properties.Length*5;
                 foreach (PropertyInfo prop in this.properties)
                 {
                     Panel plabelspace = new Panel();
+                    plabelspace.TabIndex = tabindex--;
                     plabelspace.Height = 10;
                     plabelspace.Dock = DockStyle.Top;
 
 
                     Panel plabel = new Panel();
+                    plabel.TabIndex = tabindex--;
                     plabel.Name = prop.id;
                     plabel.Height = 20;
                     plabel.Dock = DockStyle.Top;
 
-                    Control box = getControl(prop);
+                    Control box = getControl(prop);                    
                     toolTip1.SetToolTip(box, prop.title);
                     box.Name = prop.id;
-                    box.TabIndex = i;
+                    box.TabIndex = tabindex--;
                     box.Height = 20;
                     box.Dock = DockStyle.Fill;                    
                     box.BackColor = Color.White;
                     plabel.Controls.Add(box);
 
                     Label label2 = new Label();
+                    label2.TabIndex = tabindex--;                    
                     label2.Width = 20;
                     label2.AutoSize = false;
                     label2.Dock = DockStyle.Left;                    
@@ -165,6 +169,7 @@ namespace Editor
                     
                                         
                     Label label = new Label();
+                    label.TabIndex = tabindex--;
                     toolTip1.SetToolTip(label, prop.title);                    
                     label.Height = 20;
                     label.Width = 200;
@@ -174,10 +179,15 @@ namespace Editor
                     label.Text = prop.title;
                     label.AutoEllipsis = true;
                     plabel.Controls.Add(label);
-
-                    i++;                    
+                                        
                     this.paneProperties.Controls.Add(plabel);
-                    this.paneProperties.Controls.Add(plabelspace);                    
+                    this.paneProperties.Controls.Add(plabelspace);
+                    if (i == this.properties.Length-1)
+                    {
+                        box.Focus();
+                    }                    
+                    label2.Text = " p:" + box.TabIndex;
+                    i++;                    
                 }
                 Array.Reverse(this.properties);
             }

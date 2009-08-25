@@ -55,6 +55,7 @@
       <DependentUpon>PropertyEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="PropertyInfo.cs" />
+    <Compile Include="Value.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="PropertyEditor.resx">
