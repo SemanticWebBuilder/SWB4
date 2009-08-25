@@ -568,8 +568,8 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
             out.println("<fieldset>");
             if(base.getAttribute(USE_ADD,"0").equals("1"))
             {
-                String urlAddNew = "/swbadmin/jsp/SemObjectEditor.jsp";
-                urlAddNew+="?scls="+spro.getRangeClass().getEncodedURI()+"&sref="+id;
+                String urlAddNew = SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp";
+                urlAddNew+="?scls="+spro.getRangeClass().getEncodedURI()+"&sref="+obj.getEncodedURI();
 
                 out.println("<button dojoType=\"dijit.form.Button\" onclick=\"showDialog('" + urlAddNew + "','"+paramRequest.getLocaleString("btn_addnewelement")+" "+spro.getRangeClass().getDisplayName(user.getLanguage())+"'); return false;\">" + paramRequest.getLocaleString("btn_addnewelement") + "</button>");
             }
