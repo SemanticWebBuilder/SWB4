@@ -1,4 +1,16 @@
 <%@page contentType="text/html"%><%@page pageEncoding="UTF-8"%><%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*,org.semanticwb.portal.api.*"%>
+<%!
+
+    String replaceUriID(String txt)
+    {
+        String ret=txt;
+        ret=SWBUtils.TEXT.replaceAll(ret, "swb:", URLEncoder.encode(SemanticVocabulary.URI));
+        ret=SWBUtils.TEXT.replaceAll(ret, "eng:", URLEncoder.encode("http://www.owl-ontologies.com/oqp_engine.owl#"));
+        return ret;
+    }    
+
+%>
+
 <%
     User user=SWBPortal.getSessionUser();
     String lang="es";
@@ -92,7 +104,7 @@
             String bp=ob.getBehaviorParams();
             if(bp!=null)
             {
-                params+="&"+SWBUtils.TEXT.replaceAll(bp, "swb:", URLEncoder.encode(SemanticVocabulary.URI));
+                params+="&"+replaceUriID(bp);
             }
 
             //out.println("<div dojoType=\"dojox.layout.ContentPane\" title=\""+title+"\" _style=\"display:true;padding:10px;\" refreshOnShow=\""+refresh+"\" href=\""+url+"?"+params+"\" executeScripts=\"true\">");

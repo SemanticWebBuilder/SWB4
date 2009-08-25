@@ -11,6 +11,7 @@
             @import "<webpath/>/swbadmin/js/dojo/dojo/resources/dojo.css";
             /*@import "<webpath/>/swbadmin/js/dojo/dojo/resources/dnd.css";*/
             @import "<webpath/>/swbadmin/js/dojo/dijit/themes/soria/soria.css";
+            @import "<webpath/>/swbadmin/js/dojo/dojox/layout/resources/ExpandoPane.css";
             @import "<webpath/>/swbadmin/css/swb.css";
 
             /* pre-loader specific stuff to prevent unsightly flash of unstyled content */
@@ -77,7 +78,9 @@
                 }
             );
         </script>
-
+        <script type="text/javascript">
+	 dojo.require("dojox.layout.ExpandoPane");
+        </script>
     </head>
     <body class="soria">
         <!-- basic preloader: -->
@@ -111,6 +114,14 @@
                            id="sitesComboBox"
                            region="top"
                            />
+
+                <div dojoType="dojox.layout.ExpandoPane" splitter="true"
+				duration="125"
+				region="left"
+				title="Left Section"
+				id="leftPane"
+				maxWidth="275"
+				style="width: 275px;">
 -->
                     <div dojoType="dijit.layout.AccordionContainer" id="leftAccordion" region="center" splitter="true">
 
