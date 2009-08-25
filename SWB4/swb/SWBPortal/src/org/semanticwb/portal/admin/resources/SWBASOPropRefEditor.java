@@ -104,7 +104,11 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
         //GenericObject gobj = ont.getGenericObject(id);
         SemanticObject obj = ont.getSemanticObject(id);
         SemanticProperty spro = ont.getSemanticProperty(idp);
-        SemanticProperty spref = ont.getSemanticProperty(idpref);
+        SemanticProperty spref = null;
+
+        if(idpref!=null){
+            spref=ont.getSemanticProperty(idpref);
+        }
 
         System.out.println("spref: "+spref);
 
@@ -147,15 +151,18 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
             }
 
 
-            SemanticClass sclassref = spref.getRangeClass();
-
-            ite_sp = sclassref.listProperties();
-            while (ite_sp.hasNext()) {
-                SemanticProperty sp = ite_sp.next();
-                log.debug("prop ref:" + sp.getName());
-                hmprop.put(sp, sp);
+            SemanticClass sclassref = null;
+            
+            if(spref!=null)
+            {
+                sclassref = spref.getRangeClass();
+                ite_sp = sclassref.listProperties();
+                while (ite_sp.hasNext()) {
+                    SemanticProperty sp = ite_sp.next();
+                    log.debug("prop ref:" + sp.getName());
+                    hmprop.put(sp, sp);
+                }
             }
-
             SemanticProperty sptemp = null;
 
             int numcols = 0;
@@ -317,7 +324,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
             Iterator<SemanticObject> itso = null;
 
             if (obj.getSemanticClass().equals(User.swb_User) && !prop.getRangeClass().equals(User.swb_CalendarRef)) {
-                itso = obj.listObjectProperties(spref);
+                if(spref!=null) itso = obj.listObjectProperties(spref);
             } else if (obj.getSemanticClass().equals(User.swb_User) && prop.getRangeClass().equals(User.swb_CalendarRef)) {
                 itso = obj.listObjectProperties(spro);
             } else {
