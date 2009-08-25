@@ -83,6 +83,17 @@ namespace WBOffice4.Steps
                 {                    
                     name = OfficeApplication.OfficeDocumentProxy.createPreview(repository, version.contentId, version.nameOfVersion,type);
                     String urlproxy = OfficeApplication.OfficeDocumentProxy.WebAddress.ToString();
+                    if (!urlproxy.EndsWith("/gtw"))
+                    {
+                        if (!urlproxy.EndsWith("/"))
+                        {
+                            urlproxy += "/";
+                        }
+                        if (!urlproxy.EndsWith("gtw"))
+                        {
+                            urlproxy += "gtw";
+                        }
+                    }
                     Uri url = new Uri(urlproxy + "?contentId=" + version.contentId + "&versionName=" + version.nameOfVersion + "&repositoryName=" + repository + "&name=" + name + "&type=" + type);
                     String title = OfficeApplication.OfficeDocumentProxy.getTitle(repository, version.contentId);
                     FormPreview formPreview = new FormPreview(url,false,title);
