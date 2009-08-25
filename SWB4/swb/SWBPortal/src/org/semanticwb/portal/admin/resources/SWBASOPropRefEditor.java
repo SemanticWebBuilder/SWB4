@@ -110,7 +110,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
             spref=ont.getSemanticProperty(idpref);
         }
 
-        System.out.println("spref: "+spref);
+        //System.out.println("spref: "+spref);
 
 
         SemanticClass cls = obj.getSemanticClass();
@@ -1028,14 +1028,14 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                     String str_lid = id_usr_request + lid;
                     SemanticObject nobj = obj.getModel().createSemanticObject(obj.getModel().getObjectUri(str_lid, ncls), ncls);
                     if (prop.getName().startsWith("has")) {
-                        System.out.println("'has' property..." + prop.getName());
+                        //System.out.println("'has' property..." + prop.getName());
                         obj.addObjectProperty(prop, nobj);
                     } else {
                         log.debug("'no has' property..." + prop.getName());
                         obj.setObjectProperty(prop, nobj);
                     }
                     if (prop.getName().endsWith("Ref") && spropref != null) {
-                        System.out.println("'Ref' property..." + prop.getName());
+                        //System.out.println("'Ref' property..." + prop.getName());
                         String soid = valores[i]; //request.getParameter("sobj");  // id de Template seleccionado, según sea el tipo de SO
                         SemanticObject soref = null;
                         if (soid != null && soid.trim().length() > 0) {
@@ -1151,7 +1151,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
             String pname = prop.getName();
             log.debug("Property Name:" + pname);
             if (!pname.startsWith("has")) {
-                System.out.println("Property Name:" + pname);
+                //System.out.println("Property Name:" + pname);
                 if (sval != null) {
                     if (sval.length() > 0) {
                         if (prop.isBoolean()) {
