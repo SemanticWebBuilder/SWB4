@@ -1090,6 +1090,36 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             boolean bvalue = Boolean.parseBoolean(value);
             resource.getSemanticObject().setBooleanProperty(prop, bvalue);
         }
+        else if (prop.isInt())
+        {
+            int bvalue = Integer.parseInt(value);
+            resource.getSemanticObject().setIntProperty(prop, bvalue);
+        }
+        else if (prop.isByte())
+        {
+            byte bvalue = Byte.parseByte(value);
+            resource.getSemanticObject().setIntProperty(prop, bvalue);
+        }
+        else if (prop.isDouble())
+        {
+            double bvalue = Double.parseDouble(value);
+            resource.getSemanticObject().setDoubleProperty(prop, bvalue);
+        }
+        else if (prop.isFloat())
+        {
+            float bvalue = Float.parseFloat(value);
+            resource.getSemanticObject().setFloatProperty(prop, bvalue);
+        }
+        else if (prop.isLong())
+        {
+            long bvalue = Long.parseLong(value);
+            resource.getSemanticObject().setLongProperty(prop, bvalue);
+        }
+        else if (prop.isShort())
+        {
+            short bvalue = Short.parseShort(value);
+            resource.getSemanticObject().setIntProperty(prop, bvalue);
+        }
         else
         {
             resource.getSemanticObject().setProperty(prop, value);
@@ -1105,6 +1135,36 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         {
             boolean bvalue = Boolean.parseBoolean(value);
             resource.getSemanticObject().setBooleanProperty(prop, bvalue);
+        }
+        else if (prop.isInt())
+        {
+            int bvalue = Integer.parseInt(value);
+            resource.getSemanticObject().setIntProperty(prop, bvalue);
+        }
+        else if (prop.isByte())
+        {
+            byte bvalue = Byte.parseByte(value);
+            resource.getSemanticObject().setIntProperty(prop, bvalue);
+        }
+        else if (prop.isDouble())
+        {
+            double bvalue = Double.parseDouble(value);
+            resource.getSemanticObject().setDoubleProperty(prop, bvalue);
+        }
+        else if (prop.isFloat())
+        {
+            float bvalue = Float.parseFloat(value);
+            resource.getSemanticObject().setFloatProperty(prop, bvalue);
+        }
+        else if (prop.isLong())
+        {
+            long bvalue = Long.parseLong(value);
+            resource.getSemanticObject().setLongProperty(prop, bvalue);
+        }
+        else if (prop.isShort())
+        {
+            short bvalue = Short.parseShort(value);
+            resource.getSemanticObject().setIntProperty(prop, bvalue);
         }
         else
         {
