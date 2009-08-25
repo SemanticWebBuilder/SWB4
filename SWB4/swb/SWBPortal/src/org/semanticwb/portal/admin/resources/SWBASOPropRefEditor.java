@@ -30,8 +30,6 @@ package org.semanticwb.portal.admin.resources;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
-//import java.util.Date;
-//import java.util.*;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -49,10 +47,12 @@ import org.semanticwb.portal.api.*;
  *
  * @author juan.fernandez
  */
-public class SWBASOPropRefEditor extends GenericResource {
+public class SWBASOPropRefEditor extends GenericAdmResource {
 
     private Logger log = SWBUtils.getLogger(SWBASOPropRefEditor.class);
     static String MODE_IdREQUEST = "FORMID";
+    static String USE_SELECT = "useselect";
+    static String USE_ADD = "useadd";
     String Mode_Action = "PACTION";
     Resource base = null;
 
@@ -77,6 +77,13 @@ public class SWBASOPropRefEditor extends GenericResource {
         String id = request.getParameter("suri");
         String idp = request.getParameter("sprop");
         String idpref = request.getParameter("spropref");
+
+        if(base.getAttribute(USE_ADD)==null&&base.getAttribute(USE_SELECT)==null){
+            base.setAttribute(USE_ADD, "0");
+            base.setAttribute(USE_SELECT, "1");
+        }
+
+
 
         log.debug("suri: " + id);
         log.debug("sprop: " + idp);
@@ -554,12 +561,22 @@ public class SWBASOPropRefEditor extends GenericResource {
             out.println("</table>");
             out.println("</fieldset>");
             out.println("<fieldset>");
-            SWBResourceURL urlNew = paramRequest.getRenderUrl();
-            urlNew.setParameter("suri", id);
-            urlNew.setParameter("sprop", idp);
-            urlNew.setParameter("spropref", idpref);
-            urlNew.setParameter("act", "choose");
-            out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlNew + "',this.domNode); return false;\">" + paramRequest.getLocaleString("btn_addnew") + "</button>");
+            if(base.getAttribute(USE_ADD,"0").equals("1"))
+            {
+                String urlAddNew = "/swbadmin/jsp/SemObjectEditor.jsp";
+                urlAddNew+="?scls="+spro.getRangeClass().getEncodedURI()+"&sref="+id;
+
+                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"showDialog('" + urlAddNew + "','"+paramRequest.getLocaleString("btn_addnewelement")+" "+spro.getRangeClass().getDisplayName(user.getLanguage())+"'); return false;\">" + paramRequest.getLocaleString("btn_addnewelement") + "</button>");
+            }
+            if(base.getAttribute(USE_SELECT,"0").equals("1"))
+            {
+                SWBResourceURL urlNew = paramRequest.getRenderUrl();
+                urlNew.setParameter("suri", id);
+                urlNew.setParameter("sprop", idp);
+                urlNew.setParameter("spropref", idpref);
+                urlNew.setParameter("act", "choose");
+                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlNew + "',this.domNode); return false;\">" + paramRequest.getLocaleString("btn_addnew") + "</button>");
+            }
             if (hasAsoc) {
                 if (hasActive) {
                     SWBResourceURL urlAAll = paramRequest.getActionUrl();
