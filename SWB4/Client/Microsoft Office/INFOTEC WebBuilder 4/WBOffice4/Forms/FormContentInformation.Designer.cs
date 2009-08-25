@@ -260,6 +260,7 @@
             this.listViewPages.TabIndex = 1;
             this.listViewPages.UseCompatibleStateImageBehavior = false;
             this.listViewPages.View = System.Windows.Forms.View.Details;
+            this.listViewPages.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listViewPages_MouseDoubleClick);
             this.listViewPages.SelectedIndexChanged += new System.EventHandler(this.listViewPages_SelectedIndexChanged);
             // 
             // columnHeader4
@@ -477,6 +478,7 @@
             this.propertyEditor1.Properties = null;
             this.propertyEditor1.Size = new System.Drawing.Size(486, 211);
             this.propertyEditor1.TabIndex = 0;
+            this.propertyEditor1.Values = new string[0];
             // 
             // FormContentInformation
             // 
