@@ -28,7 +28,6 @@
 package org.semanticwb.portal.social.facebook.util;
 
 import java.util.ArrayList;
-import org.semanticwb.SWBUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -70,4 +69,5 @@ public class FacebookUtils {
         }
         return aAlbums;
     }
+   
 }
