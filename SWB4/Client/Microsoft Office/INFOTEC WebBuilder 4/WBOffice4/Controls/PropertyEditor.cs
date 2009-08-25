@@ -185,8 +185,7 @@ namespace Editor
                     if (i == this.properties.Length-1)
                     {
                         box.Focus();
-                    }                    
-                    label2.Text = " p:" + box.TabIndex;
+                    }                                        
                     i++;                    
                 }
                 Array.Reverse(this.properties);
