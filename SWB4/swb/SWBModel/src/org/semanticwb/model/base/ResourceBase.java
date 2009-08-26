@@ -1,14 +1,14 @@
 package org.semanticwb.model.base;
 
 
-public class ResourceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Hitable,org.semanticwb.model.Sortable,org.semanticwb.model.Viewable,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.model.Expirable,org.semanticwb.model.Localeable,org.semanticwb.model.Deviceable,org.semanticwb.model.RoleRefable,org.semanticwb.model.XMLConfable,org.semanticwb.model.XMLable,org.semanticwb.model.Campable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Priorityable,org.semanticwb.model.Trashable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Indexable,org.semanticwb.model.CalendarRefable
+public class ResourceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.XMLable,org.semanticwb.model.Viewable,org.semanticwb.model.Expirable,org.semanticwb.model.Deviceable,org.semanticwb.model.Trashable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.RuleRefable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Priorityable,org.semanticwb.model.Localeable,org.semanticwb.model.XMLConfable,org.semanticwb.model.Traceable,org.semanticwb.model.Sortable,org.semanticwb.model.Referensable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Indexable,org.semanticwb.model.Campable,org.semanticwb.model.Hitable
 {
     public static final org.semanticwb.platform.SemanticClass swb_UserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasUserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasUserGroupRef");
     public static final org.semanticwb.platform.SemanticClass swb_Camp=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Camp");
     public static final org.semanticwb.platform.SemanticProperty swb_camp=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#camp");
-    public static final org.semanticwb.platform.SemanticProperty swb_hits=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hits");
     public static final org.semanticwb.platform.SemanticProperty swb_xml=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#xml");
+    public static final org.semanticwb.platform.SemanticProperty swb_hits=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hits");
     public static final org.semanticwb.platform.SemanticProperty swb_xmlConf=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#xmlConf");
     public static final org.semanticwb.platform.SemanticProperty swb_tags=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#tags");
     public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
@@ -185,6 +185,16 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
          return ret;
     }
 
+    public String getXml()
+    {
+        return getSemanticObject().getProperty(swb_xml);
+    }
+
+    public void setXml(String value)
+    {
+        getSemanticObject().setProperty(swb_xml, value);
+    }
+
     public long getHits()
     {
         //Override this method in Resource object
@@ -195,16 +205,6 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
     {
         //Override this method in Resource object
         getSemanticObject().setLongProperty(swb_hits, value,false);
-    }
-
-    public String getXml()
-    {
-        return getSemanticObject().getProperty(swb_xml);
-    }
-
-    public void setXml(String value)
-    {
-        getSemanticObject().setProperty(swb_xml, value);
     }
 
     public String getXmlConf()
