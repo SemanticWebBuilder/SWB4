@@ -22,7 +22,7 @@ if (year != null && month != null && day != null) {
 
 %><div align="center"><%=renderCalendar(user, current, wpage, paramRequest)%>
     <p class="vermas">
-    <a href ="<%=paramRequest.getRenderUrl()%>">Ver todos</a>
+    <a href ="<%=paramRequest.getResourceBase().getAttribute("eventsPath")%>">Ver todos</a>
 </p>
 </div>
 <%!
