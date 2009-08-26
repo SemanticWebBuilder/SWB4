@@ -635,7 +635,7 @@ public class DialogEditResource extends javax.swing.JDialog
         jToolBarRules.setRollover(true);
 
         jButtonAddRule.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/add.png"))); // NOI18N
-        jButtonAddRule.setToolTipText("Agregar una calendarizacin para la publicación actual");
+        jButtonAddRule.setToolTipText("Agregar una regla, rol ó grupo para la publicación actual");
         jButtonAddRule.setFocusable(false);
         jButtonAddRule.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonAddRule.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -648,7 +648,7 @@ public class DialogEditResource extends javax.swing.JDialog
         jToolBarRules.add(jSeparator2);
 
         jButtonDeleteRule.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/delete.png"))); // NOI18N
-        jButtonDeleteRule.setToolTipText("Eliminar la calendarización seleccionada");
+        jButtonDeleteRule.setToolTipText("Eliminar la regla, rol o grupo seleccionada");
         jButtonDeleteRule.setEnabled(false);
         jButtonDeleteRule.setFocusable(false);
         jButtonDeleteRule.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
