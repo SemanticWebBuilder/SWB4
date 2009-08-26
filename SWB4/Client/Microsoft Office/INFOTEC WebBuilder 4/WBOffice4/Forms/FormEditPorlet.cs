@@ -86,6 +86,7 @@ namespace WBOffice4.Forms
             comboBoxVersiones.SelectedItem = selected;
             loadProperties();
             loadRules();
+            loadTitles();
             try
             {
                 DateTime date = OfficeApplication.OfficeDocumentProxy.getEndDate(pageInformation);
@@ -105,6 +106,19 @@ namespace WBOffice4.Forms
             {
                 Debug.WriteLine(ue.StackTrace);
             }
+        }
+        private void loadTitles()
+        {
+            this.titleEditor1.Languages = OfficeApplication.OfficeDocumentProxy.getLanguages(this.pageInformation.page.site);
+            String[] titles = new String[this.titleEditor1.Languages.Length];
+            int i = 0;
+            foreach(LanguageInfo lang in this.titleEditor1.Languages)
+            {
+                String title = OfficeApplication.OfficeDocumentProxy.getTitleOfWebPage(this.pageInformation.page, lang);
+                titles[i] = title;
+                i++;
+            }
+            this.titleEditor1.Titles = titles;
         }
         private void loadRules()
         {
@@ -316,6 +330,7 @@ namespace WBOffice4.Forms
                 {
                     OfficeApplication.OfficeDocumentProxy.activateResource(pageInformation, this.checkBoxActive.Checked);
                 }
+                OfficeApplication.OfficeDocumentProxy.setTitlesOfWebPage(this.pageInformation.page, this.titleEditor1.Languages, this.titleEditor1.Titles);
                 foreach (ListViewItem calendar in this.listViewCalendar.Items)
                 {
                     CalendarItem calendarItem = (CalendarItem)calendar;

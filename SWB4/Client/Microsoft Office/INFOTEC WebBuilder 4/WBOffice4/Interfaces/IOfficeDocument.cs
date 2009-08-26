@@ -198,5 +198,14 @@ namespace WBOffice4.Interfaces
 
         [XmlRpcMethod("OfficeDocument.changeResourceOfWebPage")]
         void changeResourceOfWebPage(ResourceInfo info, WebPageInfo webPageInfo);
+
+        [XmlRpcMethod("OfficeDocument.getLanguages")]
+        LanguageInfo[] getLanguages(SiteInfo site);
+
+        [XmlRpcMethod("OfficeDocument.getTitleOfWebPage")]
+        String getTitleOfWebPage(PageInfo webPageInfo,LanguageInfo laguage);
+
+        [XmlRpcMethod("OfficeDocument.setTitlesOfWebPage")]
+        void setTitlesOfWebPage(PageInfo webPageInfo,LanguageInfo[] languages,String[] values);
     }
 }
