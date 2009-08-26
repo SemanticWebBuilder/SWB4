@@ -36,11 +36,20 @@ namespace WBOffice4.Forms
         {
             this.info = info;
             this.Text = info.title;
-            if (this.SubItems.Count == 1)
+            this.SubItems.Add(info.type);
+            if (info.active)
             {
+                this.SubItems.Add("Sí");
+            }
+            else
+            {
+                this.SubItems.Add("No");
+            }
+            /*if (this.SubItems.Count == 1)
+            {                
                 this.SubItems[0].Text = info.type;
             }
-            if (this.SubItems.Count == 2)
+            else if (this.SubItems.Count == 2)
             {
                 if (info.active)
                 {
@@ -51,8 +60,9 @@ namespace WBOffice4.Forms
                     this.SubItems[0].Text = "No";
                 }
                 this.SubItems[1].Text = info.type;
-            }
+            }*/
         }
+
         public ElementInfo ElementInfo
         {
             get

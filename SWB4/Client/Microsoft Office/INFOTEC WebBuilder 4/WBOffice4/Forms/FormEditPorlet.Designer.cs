@@ -89,8 +89,9 @@
             this.tabPageRules = new System.Windows.Forms.TabPage();
             this.listViewRules = new System.Windows.Forms.ListView();
             this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader4 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader5 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader4 = new System.Windows.Forms.ColumnHeader();
+            this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonAddRule = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -105,6 +106,8 @@
             this.tabPageCalendar.SuspendLayout();
             this.toolStripCalendar.SuspendLayout();
             this.tabPageRules.SuspendLayout();
+            this.toolStripContainer1.ContentPanel.SuspendLayout();
+            this.toolStripContainer1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.tabPageTitles.SuspendLayout();
             this.SuspendLayout();
@@ -445,7 +448,7 @@
             // tabPageRules
             // 
             this.tabPageRules.Controls.Add(this.listViewRules);
-            this.tabPageRules.Controls.Add(this.toolStrip1);
+            this.tabPageRules.Controls.Add(this.toolStripContainer1);
             this.tabPageRules.Location = new System.Drawing.Point(4, 22);
             this.tabPageRules.Name = "tabPageRules";
             this.tabPageRules.Padding = new System.Windows.Forms.Padding(3);
@@ -458,15 +461,17 @@
             // 
             this.listViewRules.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader3,
-            this.columnHeader4,
-            this.columnHeader5});
+            this.columnHeader5,
+            this.columnHeader4});
             this.listViewRules.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listViewRules.Location = new System.Drawing.Point(3, 3);
+            this.listViewRules.FullRowSelect = true;
+            this.listViewRules.Location = new System.Drawing.Point(3, 30);
             this.listViewRules.Name = "listViewRules";
-            this.listViewRules.Size = new System.Drawing.Size(429, 241);
-            this.listViewRules.TabIndex = 2;
+            this.listViewRules.Size = new System.Drawing.Size(429, 214);
+            this.listViewRules.TabIndex = 3;
             this.listViewRules.UseCompatibleStateImageBehavior = false;
             this.listViewRules.View = System.Windows.Forms.View.Details;
+            this.listViewRules.SelectedIndexChanged += new System.EventHandler(this.listViewRules_SelectedIndexChanged);
             this.listViewRules.KeyUp += new System.Windows.Forms.KeyEventHandler(this.listView1_KeyUp);
             // 
             // columnHeader3
@@ -474,15 +479,34 @@
             this.columnHeader3.Text = "Título";
             this.columnHeader3.Width = 200;
             // 
+            // columnHeader5
+            // 
+            this.columnHeader5.DisplayIndex = 2;
+            this.columnHeader5.Text = "Tipo";
+            this.columnHeader5.Width = 120;
+            // 
             // columnHeader4
             // 
+            this.columnHeader4.DisplayIndex = 1;
             this.columnHeader4.Text = "Activo";
             this.columnHeader4.Width = 100;
             // 
-            // columnHeader5
+            // toolStripContainer1
             // 
-            this.columnHeader5.Text = "Tipo";
-            this.columnHeader5.Width = 120;
+            this.toolStripContainer1.BottomToolStripPanelVisible = false;
+            // 
+            // toolStripContainer1.ContentPanel
+            // 
+            this.toolStripContainer1.ContentPanel.Controls.Add(this.toolStrip1);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(429, 2);
+            this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.toolStripContainer1.LeftToolStripPanelVisible = false;
+            this.toolStripContainer1.Location = new System.Drawing.Point(3, 3);
+            this.toolStripContainer1.Name = "toolStripContainer1";
+            this.toolStripContainer1.RightToolStripPanelVisible = false;
+            this.toolStripContainer1.Size = new System.Drawing.Size(429, 27);
+            this.toolStripContainer1.TabIndex = 0;
+            this.toolStripContainer1.Text = "toolStripContainer1";
             // 
             // toolStrip1
             // 
@@ -491,12 +515,11 @@
             this.toolStripButtonAddRule,
             this.toolStripSeparator1,
             this.toolStripButtonDeleteRule});
-            this.toolStrip1.Location = new System.Drawing.Point(3, 3);
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(495, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(429, 25);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
-            this.toolStrip1.Visible = false;
             // 
             // toolStripButtonAddRule
             // 
@@ -570,7 +593,10 @@
             this.toolStripCalendar.ResumeLayout(false);
             this.toolStripCalendar.PerformLayout();
             this.tabPageRules.ResumeLayout(false);
-            this.tabPageRules.PerformLayout();
+            this.toolStripContainer1.ContentPanel.ResumeLayout(false);
+            this.toolStripContainer1.ContentPanel.PerformLayout();
+            this.toolStripContainer1.ResumeLayout(false);
+            this.toolStripContainer1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.tabPageTitles.ResumeLayout(false);
@@ -611,19 +637,20 @@
         private System.Windows.Forms.CheckBox checkBoxEndDate;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TabPage tabPageRules;
-        private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton toolStripButtonAddRule;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripButton toolStripButtonDeleteRule;
-        private System.Windows.Forms.ListView listViewRules;
-        private System.Windows.Forms.ColumnHeader columnHeader3;
-        private System.Windows.Forms.ColumnHeader columnHeader4;
-        private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.Button buttonMove;
         private System.Windows.Forms.CheckBox checkBoxActivePag;
         private Editor.PropertyEditor propertyEditor1;
         private System.Windows.Forms.Button buttonSenttoAuthorize;
         private System.Windows.Forms.TabPage tabPageTitles;
         private Editor.TitleEditor titleEditor1;
+        private System.Windows.Forms.ToolStripContainer toolStripContainer1;
+        private System.Windows.Forms.ListView listViewRules;
+        private System.Windows.Forms.ColumnHeader columnHeader3;
+        private System.Windows.Forms.ColumnHeader columnHeader4;
+        private System.Windows.Forms.ColumnHeader columnHeader5;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton toolStripButtonAddRule;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripButton toolStripButtonDeleteRule;
     }
 }

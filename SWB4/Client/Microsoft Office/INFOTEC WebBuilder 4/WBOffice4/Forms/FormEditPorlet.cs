@@ -427,12 +427,10 @@ namespace WBOffice4.Forms
 
         private void listViewCalendar_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.toolStripButtonDelete.Enabled = false;
-            //this.toolStripButtonEdit.Enabled = false;
+            this.toolStripButtonDelete.Enabled = false;            
             if (this.listViewCalendar.SelectedItems.Count > 0)
             {
-                this.toolStripButtonDelete.Enabled = true;
-                //this.toolStripButtonEdit.Enabled = true;
+                this.toolStripButtonDelete.Enabled = true;                
             }
         }
 
@@ -537,7 +535,7 @@ namespace WBOffice4.Forms
         {
             if (e.KeyCode == Keys.Delete && this.listViewRules.SelectedItems.Count > 0)
             {
-                this.toolStripButtonAddRule_Click(null, null);
+                this.toolStripButtonDeleteRule_Click(null, null);
             }
         }
 
@@ -546,6 +544,15 @@ namespace WBOffice4.Forms
             if (e.KeyCode == Keys.Delete && this.listViewRules.SelectedItems.Count > 0)
             {
                 this.toolStripButtonDelete_Click(null, null);
+            }
+        }
+
+        private void listViewRules_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.toolStripButtonDeleteRule.Enabled = false;
+            if (this.listViewCalendar.SelectedItems.Count > 0)
+            {
+                this.toolStripButtonDeleteRule.Enabled = true;
             }
         }
 
