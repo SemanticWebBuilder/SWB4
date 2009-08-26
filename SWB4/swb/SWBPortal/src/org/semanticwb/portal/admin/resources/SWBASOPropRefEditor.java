@@ -84,13 +84,6 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
             } catch (Exception e) {log.error(e);
             }
         }
-//        if(base.getAttribute(DEL_SO)==null){
-//            base.setAttribute(DEL_SO, "1");
-//            try {
-//                base.updateAttributesToDB();
-//            } catch (Exception e) {log.error(e);
-//            }
-//        }
 
         log.debug("suri: " + id);
         log.debug("sprop: " + idp);
@@ -152,7 +145,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
 
 
             SemanticClass sclassref = null;
-            String strTitleProp = cls.getDisplayName(user.getLanguage());
+            String strTitleProp = prop.getDisplayName(user.getLanguage());
             if(spref!=null)
             {
                 sclassref = spref.getRangeClass();
@@ -581,7 +574,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
             if(base.getAttribute(USE_ADD,"0").equals("1"))
             {
                 String urlAddNew = SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp";
-                urlAddNew+="?scls="+spro.getRangeClass().getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+spro.getEncodedURI();
+                urlAddNew+="?scls="+spro.getRangeClass().getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+spro.getEncodedURI()+"&reloadTab=true";
 
                 out.println("<button dojoType=\"dijit.form.Button\" onclick=\"showDialog('" + urlAddNew + "','"+paramRequest.getLocaleString("btn_addnewelement")+" "+spro.getRangeClass().getDisplayName(user.getLanguage())+"'); return false;\">" + paramRequest.getLocaleString("btn_addnewelement") + "</button>");
             }
