@@ -42,39 +42,39 @@ Error: Elemento no encontrado...
                 </p>
                 <p>
                     <label for="event_title">Título del evento:&nbsp;</label>
-                    <input type="text" id="event_title" name="event_title"/>
+                    <input type="text" id="event_title" name="event_title" value="<%=(rec.getTitle()==null?"":rec.getTitle())%>"/>
                 </p>
                 <p>
                     <label for="event_description">Descripción del evento:&nbsp;</label>
-                    <textarea id="event_description" name="event_description" cols="30" rows="5"></textarea>
+                    <textarea id="event_description" name="event_description" cols="30" rows="5"><%=(rec.getDescription()==null?"":rec.getDescription())%></textarea>
                 </p>
                 <p>
                     <label for="event_audience">Dirigido a:&nbsp;</label>
-                    <input type="text" id="event_audience" name="event_audience" value="Todos"/>
+                    <input type="text" id="event_audience" name="event_audience" value="<%=(rec.getAudienceType()==null?"":rec.getAudienceType())%>"/>
                 </p>
                 <p>
                     <label for="event_startDate">Fecha de inicio:&nbsp;</label>
-                    <input dojoType="dijit.form.DateTextBox" type="text" id="event_startDate" name="event_startDate" constraints="{datePattern:'yyyy/MM/dd'}" onchange="dijit.byId('event_endDate').constraints.min = arguments[0];"/>
+                    <input dojoType="dijit.form.DateTextBox" type="text" id="event_startDate" name="event_startDate" value="<%=(rec.getStartDate()==null?"":dateFormat.format(rec.getStartDate()))%>" constraints="{datePattern:'yyyy/MM/dd'}" onchange="dijit.byId('event_endDate').constraints.min = arguments[0];"/>
                 </p>
                 <p>
                     <label for="event_endDate">Fecha de término:&nbsp;</label>
-                    <input dojoType="dijit.form.DateTextBox" type="text" id="event_endDate" name="event_endDate" constraints="{datePattern:'yyyy/MM/dd'}" onchange="dijit.byId('event_startDate').constraints.max = arguments[0];"/>
+                    <input dojoType="dijit.form.DateTextBox" type="text" id="event_endDate" name="event_endDate" value="<%=(rec.getEndDate()==null?"":dateFormat.format(rec.getEndDate()))%>" constraints="{datePattern:'yyyy/MM/dd'}" onchange="dijit.byId('event_startDate').constraints.max = arguments[0];"/>
                 </p>
                 <p>
                     <label for="event_startTime">Hora de inicio:&nbsp;</label>
-                    <input dojoType="dijit.form.TimeTextBox" type="text" id="event_startTime" name="event_startTime" constraints="{timePattern:'hh:mm a', visibleRange:'T01:30:00'}" />
+                    <input dojoType="dijit.form.TimeTextBox" type="text" id="event_startTime" name="event_startTime" value="<%=(rec.getStartTime()==null?"":"T" + timeFormat.format(rec.getStartTime()))%>" constraints="{timePattern:'hh:mm a', visibleRange:'T01:30:00'}" />
                 </p>
                 <p>
                     <label for="event_endTime">Hora de término:&nbsp;</label>
-                    <input dojoType="dijit.form.TimeTextBox" type="text" id="event_endTime" name="event_endTime" constraints="{timePattern:'hh:mm a', visibleRange:'T01:30:00'}" />
+                    <input dojoType="dijit.form.TimeTextBox" type="text" id="event_endTime" name="event_endTime" value="<%=(rec.getEndTime()==null?"":"T" + timeFormat.format(rec.getEndTime()))%>" constraints="{timePattern:'hh:mm a', visibleRange:'T01:30:00'}" />
                 </p>
                 <p>
                     <label for="event_place">Lugar del evento:&nbsp;</label>
-                    <input type="text" id="event_place" name="event_place"/>
+                    <input type="text" id="event_place" name="event_place" value="<%=(rec.getPlace()==null?"":rec.getPlace())%>"/>
                 </p>
                 <p>
                     <label for="event_tags">Etiquetas:&nbsp;</label>
-                    <input type="text" id="event_tags" name="event_tags"/>
+                    <input type="text" id="event_tags" name="event_tags" value="<%=(rec.getTags()==null?"":rec.getTags())%>"/>
                 </p>
             </div>
         </fieldset>
