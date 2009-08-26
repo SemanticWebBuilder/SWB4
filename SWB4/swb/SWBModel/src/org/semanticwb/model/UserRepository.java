@@ -718,7 +718,7 @@ public class UserRepository extends UserRepositoryBase
         return EXTERNAL;
     }
 
-    ExtUserRepInt getBridge()
+    public ExtUserRepInt getBridge()
     {
         return bridge;
     }
