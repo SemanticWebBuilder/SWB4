@@ -436,7 +436,9 @@ namespace WBOffice4.Forms
 
         private void toolStripButtonAddRule_Click(object sender, EventArgs e)
         {
+            this.Cursor = Cursors.WaitCursor;
             FormAddElement frm = new FormAddElement(this.pageInformation.page.site, this.pageInformation);
+            this.Cursor = Cursors.Default;
             DialogResult res = frm.ShowDialog(this);
             if (res == DialogResult.OK)
             {
