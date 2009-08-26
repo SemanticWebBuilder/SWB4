@@ -480,7 +480,7 @@ public class PanelPropertyEditor extends javax.swing.JPanel
                 {
                     for (Value o_value : property.values)
                     {
-                        if (o_value.key.equals(value.toString()))
+                        if(value==null)
                         {
                             Object[] data =
                             {
@@ -488,6 +488,18 @@ public class PanelPropertyEditor extends javax.swing.JPanel
                             };
                             model.addRow(data);
                             break;
+                        }
+                        else
+                        {
+                            if (o_value.key.equals(value.toString()))
+                            {
+                                Object[] data =
+                                {
+                                    property, o_value
+                                };
+                                model.addRow(data);
+                                break;
+                            }
                         }
                     }
                 }
