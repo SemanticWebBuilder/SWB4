@@ -21,10 +21,6 @@
 *  http://www.semanticwebbuilder.org
 **/ 
  
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.semanticwb.servlet.internal;
 
 import java.io.IOException;
@@ -123,7 +119,7 @@ public class Login implements InternalServlet
                 if ((url == null || url.equals("/")))
                 {
                     url = path + "/" + SWBPlatform.getEnv("swb/distributor") + "/" + dparams.getWebPage().getWebSiteId() + "/" + dparams.getWebPage().getId() + "/_lang/" + dparams.getUser().getLanguage();
-                    log.debug("LOGOUT3(Path, uri, url): " + path + "   |   " + uri + "    |  " + url);
+                    log.debug("LOGOUT (Path, uri, url): " + path + "   |   " + uri + "    |  " + url);
                     sendRedirect(response, url);
                     return;
                 }

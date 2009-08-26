@@ -250,7 +250,7 @@ public class SWBVirtualHostFilter implements Filter
             log.event("Initializing VirtualHostFilter...");
             String prefix = filterConfig.getServletContext().getRealPath("/");
             SWBUtils.createInstance(prefix);
-            swbPlatform = SWBPlatform.createInstance(filterConfig.getServletContext());
+            swbPlatform = SWBPlatform.createInstance(filterConfig.getServletContext(), this);
         }
 
         InternalServlet serv = new Distributor();
@@ -363,5 +363,11 @@ public class SWBVirtualHostFilter implements Filter
         PrintWriter out = response.getWriter();
         out.println(msg);
         out.close();
+    }
+
+    public void addMapping(String map, InternalServlet iServlet)
+    {
+        if (!intServlets.containsKey(map) && iServlet!=null)
+        intServlets.put(map, iServlet);
     }
 }
