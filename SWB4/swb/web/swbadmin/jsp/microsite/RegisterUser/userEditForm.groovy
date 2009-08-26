@@ -41,6 +41,7 @@ try {uri = user.getEncodedURI()} catch (Exception e) {}
 def acc_url = paramRequest.getActionUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setAction("edit")
 def url_chk = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_HELP)
 def url_actPic = paramRequest.getActionUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setAction("upload")
+def url_actFB = paramRequest.getActionUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setAction("actFB").setMode(SWBResourceURL.Mode_EDIT)
 def id = user.getId()
 def usr_name = (user.getFirstName()==null?"":user.getFirstName())
 def usr_lname = (user.getLastName()==null?"":user.getLastName())
@@ -48,7 +49,7 @@ def usr_sname = (user.getSecondLastName()==null?"":user.getSecondLastName())
 def usr_mail = (user.getEmail()==null?"":user.getEmail())
 def usr_login = user.getLogin()
 def usr_age = user.getExtendedAttribute(mapa.get("userAge"))
-if (null==usr_age) usr_status = ""
+if (null==usr_age) usr_age = ""
 def usr_sex = user.getExtendedAttribute(mapa.get("userSex"))
 def usr_sexM = ""
 def usr_sexF = ""
@@ -62,7 +63,7 @@ def usr_hobbies = user.getExtendedAttribute(mapa.get("userHobbies"))
 if (null==usr_hobbies) usr_hobbies = ""
 def usr_inciso = user.getExtendedAttribute(mapa.get("userInciso"))
 if (null==usr_inciso) usr_inciso = ""
-
+def fb_app_key = "f5193e81d8840596eb930aee0768590d"
 
 println """
 <script language="javascript" type="text/javascript" src="/swbadmin/js/upload.js"></script>
@@ -176,9 +177,52 @@ action="$acc_url"   method="post">
 	</table>
     </fieldset>
 </form>
+
 <fieldset><span align="center">
-    <button dojoType="dijit.form.Button" type="button" onclick="enviar()">Guardar</button>
+    <button dojoType="dijit.form.Button" type="button" onclick="enviar()">Guardar</button> &nbsp; <f b :login-button></f b :login-button>
 </span></fieldset>
-
 """
+System.out.println "*********************** User: ${user.getExternalID()} ${user.getLogin()}"
+if (user.getExternalID()==null){
+println """
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml">
+<script src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php" type="text/javascript"></script>
 
+<script type="text/javascript">
+var name_user ;
+function onConnected(sess){
+
+    var api = FB.Facebook.apiClient;
+    var idFB = api.get_session().uid;
+    var keyFB = api.get_session().session_key;
+    var secretFB  =api.get_session().secret;
+    var sigFB  =api.get_session().sig;
+    api.users_getInfo(idFB,'last_name, first_name',function(test)
+{ 
+    name_user =  (test[0].first_name+" "+test[0].last_name);
+    sess = idFB;
+    var answer = confirm ("Deseas ligar tu cuenta $usr_login al usuario "+sess+":"+name_user+"?");
+    if (answer) {
+    var x=document.getElementById('fbaddid');
+    x.action="$url_actFB";
+    var s=document.getElementById('fb_sess');
+    s.value=idFB;
+    var s=document.getElementById('fb_key');
+    s.value=keyFB;
+    var s=document.getElementById('fb_secret');
+    s.value=secretFB;
+    var s=document.getElementById('fb_sig');
+    s.value=sigFB;
+    x.submit();
+}
+}) ;
+           
+
+}
+    FB.init("$fb_app_key", "/scripts/xd_receiver.groovy" , {"ifUserConnected":onConnected, "doNotUseCachedConnectState":true});
+</script><form id="fbaddid" name="fbaddid" method="post" action="" target="pictureTransferFrame"><input type="hidden" id="fb_sess" name="fb_sess">
+<input type="hidden" id="fb_key" name="fb_key"><input type="hidden" id="fb_secret" name="fb_secret">
+<input type="hidden" id="fb_sig" name="fb_sig"></form>
+</div>
+"""
+}
