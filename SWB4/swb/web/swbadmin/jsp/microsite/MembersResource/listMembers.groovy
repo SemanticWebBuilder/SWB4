@@ -64,7 +64,7 @@ if (null!=microsite){
                 def uri = mem_usr.getEncodedURI()
                 def nombre = mem_usr.getFullName()
                 def img = SWBPlatform.getWebWorkPath()+mem_usr.getPhoto()
-                if (null==img) img = "/ruta/a/foto/defecto"
+                if (null==img) img = "/swbadmin/images/defaultPhoto.jpg"
                 println """<div class="moreUser"><a href="${perfil}?user=$uri" alt="Ir al perfil de $nombre"><img src="$img" width="39" height="39"  /></a></div>"""
             }
         }
@@ -95,7 +95,7 @@ Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().ge
                 def uri = mem_usr.getEncodedURI()
                 def nombre = mem_usr.getFullName()
                 def img = SWBPlatform.getWebWorkPath()+mem_usr.getPhoto()
-                if (null==img) img = "/ruta/a/foto/defecto"
+                if (null==img) img = "/swbadmin/images/defaultPhoto.jpg"
                 def usr_age = mem_usr.getExtendedAttribute(mapa.get("userAge"))
                 if (null==usr_age) usr_age = ""
                 def usr_sex = mem_usr.getExtendedAttribute(mapa.get("userSex"))
