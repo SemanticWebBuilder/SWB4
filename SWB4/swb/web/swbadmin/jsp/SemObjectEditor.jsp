@@ -11,6 +11,7 @@
     String scls=request.getParameter("scls");
     String sref=request.getParameter("sref");
     String sprop=request.getParameter("sprop");
+    String reloadTab=request.getParameter("reloadTab");
     //System.out.println("SemObjectEditor suri:"+suri+" scls:"+scls+" sref:"+sref+" sprop:"+sprop);
     //System.out.println("debug:1");
     if(suri==null && scls==null)
@@ -41,10 +42,11 @@ try
         SWBFormMgr frm=new SWBFormMgr(cls,ref,null);
         frm.setLang(lang);
         frm.addHiddenParameter("sprop", sprop);
+        if(reloadTab!=null)frm.addHiddenParameter("reloadTab",reloadTab);
         frm.setSubmitByAjax(true);
         frm.setType(SWBFormMgr.TYPE_DOJO);
 
-        //System.out.println("debug:4");
+        //System.out.println("scls"+scls+" sref"+sref+" sprop:"+sprop);
         SemanticObject obj=frm.processForm(request);
         if(obj!=null)
         {
@@ -56,8 +58,26 @@ try
                 if(prop!=null && prop.hasInverse())
                 {
                     //System.out.println("prop:"+prop.getURI()+" "+prop.hasInverse()+" "+prop.getInverse());
-                    obj.setObjectProperty(prop.getInverse(), ref);
+                    if(prop.getInverse().getCardinality()==0)
+                    {
+                       obj.addObjectProperty(prop.getInverse(), ref);
+                    }else
+                    {
+                        obj.setObjectProperty(prop.getInverse(), ref);
+                    }
+                }else if(prop!=null && !prop.hasInverse())
+                {
+                    //System.out.println("prop:"+prop.getURI()+" "+prop.hasInverse()+" "+prop.getInverse());
+                    if(prop.getCardinality()==0)
+                    {
+                        ref.addObjectProperty(prop, obj);
+                    }else
+                    {
+                        ref.setObjectProperty(prop, obj);
+                    }
                 }
+
+
                 //GenericObject gobj=cls.newGenericInstance(obj);
                 //if(gobj instanceof WebPage)
                 //{
@@ -67,6 +87,7 @@ try
                 out.println("<script type=\"text/javascript\">");
                 out.println("hideDialog();");
                 out.println("reloadTreeNodeByURI('"+ref.getURI()+"');");
+                if(reloadTab!=null && reloadTab.equals("true"))out.println("reloadTab('"+ref.getURI()+"');");
                 out.println("showStatus('"+obj.getSemanticClass().getDisplayName(lang)+" creado');");
                 out.println("addNewTab('"+obj.getURI()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/objectTab.jsp"+"','"+obj.getDisplayName(lang)+"');");
                 out.println("</script>");
