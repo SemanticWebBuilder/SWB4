@@ -2040,6 +2040,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 Rule rule = ref.getRule();
                 if (rule.getId().equals(ruleInfo.id))
                 {
+                    ref.setActive(ruleInfo.active);
                     exists = true;
                     break;
                 }
@@ -2062,6 +2063,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 Role rule = ref.getRole();
                 if (rule.getId().equals(ruleInfo.id))
                 {
+                    ref.setActive(ruleInfo.active);
                     exists = true;
                     break;
                 }
@@ -2084,6 +2086,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 UserGroup rule = ref.getUserGroup();
                 if (rule.getId().equals(ruleInfo.id))
                 {
+                    ref.setActive(ruleInfo.active);
                     exists = true;
                     break;
                 }
