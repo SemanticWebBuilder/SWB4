@@ -1,0 +1,264 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.semanticwb.portal.admin.resources;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Iterator;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.model.AssMember;
+import org.semanticwb.model.Association;
+import org.semanticwb.model.Resource;
+import org.semanticwb.model.Topic;
+import org.semanticwb.model.User;
+import org.semanticwb.model.WebPage;
+import org.semanticwb.model.WebSite;
+import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.portal.api.GenericResource;
+import org.semanticwb.portal.api.SWBActionResponse;
+import org.semanticwb.portal.api.SWBParamRequest;
+import org.semanticwb.portal.api.SWBResourceException;
+import org.semanticwb.portal.api.SWBResourceURL;
+
+/**
+ * Este recurso sirve para el despliegue de asociaciones existentes.
+ * Se pueden agregar nuevas asociaciones.
+ *
+ * @author juan.fernandez
+ */
+public class SWBAWebPageAssociation extends GenericResource {
+
+    private Logger log = SWBUtils.getLogger(SWBAWebPageAssociation.class);
+    private Resource base = null;
+
+    @Override
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        PrintWriter out = response.getWriter();
+        base = getResourceBase();
+        User user = paramRequest.getUser();
+        String lang = user.getLanguage();
+        WebPage wp = paramRequest.getWebPage();
+
+        String suri = request.getParameter("suri");
+
+        SemanticObject so = SWBPlatform.getSemanticMgr().getOntology().getSemanticObject(suri);
+        if (so.getGenericInstance() instanceof WebPage) {
+
+            WebPage wpso = (WebPage) so.getGenericInstance();
+            WebSite ws = wpso.getWebSite();
+
+            out.println("<div class=\"swbform\">");
+            out.println("<fieldset>");
+            out.println("<legend>");
+            out.println("Asociaciones existentes");
+            out.println("</legend>");
+            out.println("<table>");
+            out.println("<thead>");
+            out.println("<tr>");
+            out.println("<th>");
+            out.println("Role");
+            out.println("</th>");
+            out.println("<th>");
+            out.println("Type");
+            out.println("</th>");
+            out.println("<th>");
+            out.println("Member");
+            out.println("</th>");
+            out.println("<th>");
+            out.println("Member Role");
+            out.println("</th>");
+            out.println("</tr>");
+            out.println("</thead>");
+
+            //lista de asociaciones existentes de la página
+
+            out.println("<tbody>");
+            Iterator<Association> itassoc = wpso.listThisTypeAssociations();
+            while (itassoc.hasNext()) {
+                Association assoc = itassoc.next();
+
+                out.println("<tr>");
+                out.println("<td>");
+                out.println(wpso.getThisRoleAssMember().getRole().getDisplayTitle(lang));
+                out.println("</td>");
+                out.println("<td>");
+                out.println(assoc.getType().getDisplayTitle(lang));
+                out.println("</td>");
+                out.println("<td>");
+                out.println(assoc.getMember().getMember().getDisplayTitle(lang));
+                out.println("</td>");
+                out.println("<td>");
+                out.println(assoc.getMember().getRole().getDisplayTitle(lang));
+                out.println("</td>");
+                out.println("</tr>");
+            }
+            out.println("</tbody>");
+            out.println("</table>");
+            out.println("</fieldset>");
+
+            out.println("<fieldset>");
+            SWBResourceURL urlAdd = paramRequest.getRenderUrl();
+            urlAdd.setMode(SWBResourceURL.Mode_EDIT);
+            urlAdd.setAction("add");
+            urlAdd.setParameter("suri",suri);
+            out.println("<button dojoType=\"dijit.form.Button\" type=\"button\" name=\"btn_addAssoc\" onclick=\"window.location='" + urlAdd + "';\">Agregar Asociación</button>");
+            out.println("</fieldset>");
+            out.println("</div>");
+        }
+    }
+
+    @Override
+    public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        PrintWriter out = response.getWriter();
+        base = getResourceBase();
+        User user = paramRequest.getUser();
+        String lang = user.getLanguage();
+        WebPage wp = paramRequest.getWebPage();
+
+        String suri = request.getParameter("suri");
+
+        SemanticObject so = SWBPlatform.getSemanticMgr().getOntology().getSemanticObject(suri);
+        if (so.getGenericInstance() instanceof WebPage) {
+
+            WebPage wpso = (WebPage) so.getGenericInstance();
+            WebSite ws = wpso.getWebSite();
+
+            out.println("<div class=\"swbform\">");
+
+            SWBResourceURL urlAdd = paramRequest.getActionUrl();
+            urlAdd.setMode(SWBResourceURL.Mode_VIEW);
+            urlAdd.setAction("new");
+
+            out.println("<form name=\"frmAddAsoc\" method=\"post\" action=\""+urlAdd+"\">");
+            out.println("<input type=\"hidden\" name=\"suri\" value=\""+suri+"\" />");
+
+            out.println("<fieldset>");
+            out.println("<legend>");
+            out.println("Agregar asociación");
+            out.println("</legend>");
+
+            out.println("<table>");
+            out.println("<tbody>");
+            out.println("<tr>");
+            out.println("<td>");
+            out.println("<label for=\"selRole\">Role</label><select id=\"selRole\" name=\"selRole\">");
+
+            Iterator<AssMember> it = wpso.listThisRoleAssMembers();
+            while(it.hasNext())
+            {
+                AssMember am = it.next();
+                out.println("<option value=\""+am.getURI()+"\">");
+                out.println(am.getMember().getDisplayTitle(lang));
+                out.println("</option>");
+            }
+
+            out.println("</select>");
+            out.println("</td>");
+            out.println("</tr>");
+
+            out.println("<tr>");
+            out.println("<td>");
+            out.println("<label for=\"selType\">Type</label><select id=\"selType\" name=\"selType\">");
+
+            Iterator<Association> ita = wpso.listThisTypeAssociations();
+            while(ita.hasNext())
+            {
+                Association assoc = ita.next();
+                out.println("<option value=\""+assoc.getType().getURI()+"\">");
+                out.println(assoc.getType().getDisplayTitle(lang));
+                out.println("</option>");
+            }
+
+            out.println("</td>");
+            out.println("</tr>");
+
+            out.println("<tr>");
+            out.println("<td>");
+            out.println("<label for=\"selMember\">Member</label><select id=\"selMember\" name=\"selMember\">");
+
+            Iterator<Association> itm = wpso.listThisTypeAssociations();
+            while(itm.hasNext())
+            {
+                Association assoc = itm.next();
+                out.println("<option value=\""+assoc.getMember().getMember().getURI()+"\">");
+                out.println(assoc.getMember().getMember().getDisplayTitle(lang));
+                out.println("</option>");
+            }
+
+            out.println("</td>");
+            out.println("</tr>");
+
+            out.println("<tr>");
+            out.println("<td>");
+            out.println("<label for=\"selMemberRole\">Member Role</label><select id=\"selMemberRole\" name=\"selMemberRole\">");
+
+            Iterator<Association> itmr = wpso.listThisTypeAssociations();
+            while(itmr.hasNext())
+            {
+                Association assoc = itmr.next();
+                out.println("<option value=\""+assoc.getMember().getRole().getURI()+"\">");
+                out.println(assoc.getMember().getRole().getDisplayTitle(lang));
+                out.println("</option>");
+            }
+
+            out.println("</td>");
+            out.println("</tr>");
+
+            out.println("</tbody>");
+            out.println("</table>");
+
+            out.println("</fieldset>");
+
+            out.println("<fieldset>");
+            out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"btn_newAssoc\" >Agregar Asociación</button>");
+            out.println("</fieldset>");
+
+            out.println("</form>");
+            out.println("</div>");
+        }
+    }
+
+    @Override
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+        String action = response.getAction();
+        String suri = request.getParameter("suri");
+        if(action==null) action="";
+        if(action.equals("new"))
+        {
+            String selRole = request.getParameter("selRole");
+            String selType = request.getParameter("selType");
+            String selMember = request.getParameter("selMember");
+            String selMemberRole = request.getParameter("selMemberRole");
+
+            SemanticObject so = SWBPlatform.getSemanticMgr().getOntology().getSemanticObject(suri);
+            if (so.getGenericInstance() instanceof WebPage)
+            {
+                WebPage wpso = (WebPage) so.getGenericInstance();
+                WebSite ws = wpso.getWebSite();
+
+                Association assoc = Association.createAssociation(ws);
+                assoc.setType((Topic)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(selType));
+
+                AssMember amember1 = AssMember.createAssMember(ws);
+                amember1.setMember((Topic)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri));
+                amember1.setRole((Topic)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(selRole));
+
+                AssMember amember2 = AssMember.createAssMember(ws);
+                amember2.setMember((Topic)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(selMember));
+                amember2.setRole((Topic)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(selMemberRole));
+
+                assoc.addMember(amember1);
+                assoc.addMember(amember2);
+
+            }
+
+
+        }
+    }
+}
