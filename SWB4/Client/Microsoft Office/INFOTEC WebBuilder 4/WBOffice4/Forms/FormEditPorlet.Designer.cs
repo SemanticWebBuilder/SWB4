@@ -87,7 +87,7 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonDelete = new System.Windows.Forms.ToolStripButton();
             this.tabPageRules = new System.Windows.Forms.TabPage();
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.listViewRules = new System.Windows.Forms.ListView();
             this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader4 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader5 = new System.Windows.Forms.ColumnHeader();
@@ -95,9 +95,9 @@
             this.toolStripButtonAddRule = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonDeleteRule = new System.Windows.Forms.ToolStripButton();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tabPageTitles = new System.Windows.Forms.TabPage();
             this.titleEditor1 = new Editor.TitleEditor();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panel1.SuspendLayout();
             this.tabControlProperties.SuspendLayout();
             this.tabPageInformation.SuspendLayout();
@@ -351,7 +351,7 @@
             this.tabPageProperties.Location = new System.Drawing.Point(4, 22);
             this.tabPageProperties.Name = "tabPageProperties";
             this.tabPageProperties.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageProperties.Size = new System.Drawing.Size(501, 254);
+            this.tabPageProperties.Size = new System.Drawing.Size(435, 247);
             this.tabPageProperties.TabIndex = 1;
             this.tabPageProperties.Text = "Propiedades de publicación";
             this.tabPageProperties.UseVisualStyleBackColor = true;
@@ -362,7 +362,7 @@
             this.propertyEditor1.Location = new System.Drawing.Point(3, 3);
             this.propertyEditor1.Name = "propertyEditor1";
             this.propertyEditor1.Properties = null;
-            this.propertyEditor1.Size = new System.Drawing.Size(495, 248);
+            this.propertyEditor1.Size = new System.Drawing.Size(429, 241);
             this.propertyEditor1.TabIndex = 0;
             this.propertyEditor1.Values = new string[0];
             // 
@@ -372,7 +372,7 @@
             this.tabPageCalendar.Controls.Add(this.toolStripCalendar);
             this.tabPageCalendar.Location = new System.Drawing.Point(4, 22);
             this.tabPageCalendar.Name = "tabPageCalendar";
-            this.tabPageCalendar.Size = new System.Drawing.Size(501, 254);
+            this.tabPageCalendar.Size = new System.Drawing.Size(435, 247);
             this.tabPageCalendar.TabIndex = 2;
             this.tabPageCalendar.Text = "Calendarización";
             this.tabPageCalendar.UseVisualStyleBackColor = true;
@@ -386,11 +386,12 @@
             this.listViewCalendar.FullRowSelect = true;
             this.listViewCalendar.Location = new System.Drawing.Point(0, 25);
             this.listViewCalendar.Name = "listViewCalendar";
-            this.listViewCalendar.Size = new System.Drawing.Size(501, 229);
+            this.listViewCalendar.Size = new System.Drawing.Size(435, 222);
             this.listViewCalendar.TabIndex = 1;
             this.listViewCalendar.UseCompatibleStateImageBehavior = false;
             this.listViewCalendar.View = System.Windows.Forms.View.Details;
             this.listViewCalendar.SelectedIndexChanged += new System.EventHandler(this.listViewCalendar_SelectedIndexChanged);
+            this.listViewCalendar.KeyUp += new System.Windows.Forms.KeyEventHandler(this.listViewCalendar_KeyUp);
             // 
             // columnHeader1
             // 
@@ -411,7 +412,7 @@
             this.toolStripButtonDelete});
             this.toolStripCalendar.Location = new System.Drawing.Point(0, 0);
             this.toolStripCalendar.Name = "toolStripCalendar";
-            this.toolStripCalendar.Size = new System.Drawing.Size(501, 25);
+            this.toolStripCalendar.Size = new System.Drawing.Size(435, 25);
             this.toolStripCalendar.TabIndex = 0;
             this.toolStripCalendar.Text = "toolStrip1";
             // 
@@ -443,29 +444,30 @@
             // 
             // tabPageRules
             // 
-            this.tabPageRules.Controls.Add(this.listView1);
+            this.tabPageRules.Controls.Add(this.listViewRules);
             this.tabPageRules.Controls.Add(this.toolStrip1);
             this.tabPageRules.Location = new System.Drawing.Point(4, 22);
             this.tabPageRules.Name = "tabPageRules";
             this.tabPageRules.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageRules.Size = new System.Drawing.Size(501, 254);
+            this.tabPageRules.Size = new System.Drawing.Size(435, 247);
             this.tabPageRules.TabIndex = 3;
             this.tabPageRules.Text = "Reglas / Roles ó Grupos de Usuarios";
             this.tabPageRules.UseVisualStyleBackColor = true;
             // 
-            // listView1
+            // listViewRules
             // 
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.listViewRules.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader3,
             this.columnHeader4,
             this.columnHeader5});
-            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView1.Location = new System.Drawing.Point(3, 3);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(495, 248);
-            this.listView1.TabIndex = 2;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
+            this.listViewRules.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listViewRules.Location = new System.Drawing.Point(3, 3);
+            this.listViewRules.Name = "listViewRules";
+            this.listViewRules.Size = new System.Drawing.Size(429, 241);
+            this.listViewRules.TabIndex = 2;
+            this.listViewRules.UseCompatibleStateImageBehavior = false;
+            this.listViewRules.View = System.Windows.Forms.View.Details;
+            this.listViewRules.KeyUp += new System.Windows.Forms.KeyEventHandler(this.listView1_KeyUp);
             // 
             // columnHeader3
             // 
@@ -535,9 +537,9 @@
             // titleEditor1
             // 
             this.titleEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.titleEditor1.Languages = null;
             this.titleEditor1.Location = new System.Drawing.Point(0, 0);
             this.titleEditor1.Name = "titleEditor1";
-            this.titleEditor1.Languages = null;
             this.titleEditor1.Size = new System.Drawing.Size(435, 247);
             this.titleEditor1.TabIndex = 0;
             this.titleEditor1.Titles = new string[0];
@@ -613,7 +615,7 @@
         private System.Windows.Forms.ToolStripButton toolStripButtonAddRule;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton toolStripButtonDeleteRule;
-        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ListView listViewRules;
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader4;
         private System.Windows.Forms.ColumnHeader columnHeader5;
