@@ -317,7 +317,10 @@ public class DialogEditResource extends javax.swing.JDialog
                 String value = OfficeApplication.getOfficeDocumentProxy().getViewPropertyValue(pageInformation, info);
                 properties.put(info, value);
             }
-            this.panelPropertyEditor1.loadProperties(properties);
+            if(this.panelPropertyEditor1!=null && properties!=null)
+            {
+                this.panelPropertyEditor1.loadProperties(properties);
+            }
         }
         catch (Exception e)
         {
