@@ -829,7 +829,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                 SemanticObject so = ite_so.next();
                 if (null != so) {
                     log.debug("--prop--so--" + so.getURI());
-                    if (so.createGenericInstance() instanceof UserGroup) {
+                    if (so.createGenericInstance() instanceof UserGroup || idp.endsWith("hasProcessActivity")) {
                         hmSO.put(so.getURI(), so);
                     } else {
                         SemanticObject soref = so.getObjectProperty(propref);
@@ -1109,7 +1109,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                 soc.removeObjectProperty(sp, soval);
 
             } else {
-                if(base.getAttribute(DEL_SO, "0").equals("1"))
+                if(base.getAttribute(DEL_SO, "0").equals("0"))
                 {
                     SemanticObject sobj = ont.getSemanticObject(sval);
                     sobj.remove();
