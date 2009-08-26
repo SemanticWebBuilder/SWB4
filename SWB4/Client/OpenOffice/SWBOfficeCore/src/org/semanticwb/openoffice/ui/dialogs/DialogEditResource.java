@@ -30,6 +30,7 @@ package org.semanticwb.openoffice.ui.dialogs;
 
 import java.awt.Cursor;
 import java.awt.Frame;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -583,6 +584,11 @@ public class DialogEditResource extends javax.swing.JDialog
         jTableScheduler.setColumnSelectionAllowed(true);
         jTableScheduler.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jTableScheduler.getTableHeader().setReorderingAllowed(false);
+        jTableScheduler.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTableSchedulerKeyReleased(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTableScheduler);
         jTableScheduler.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
@@ -658,31 +664,22 @@ public class DialogEditResource extends javax.swing.JDialog
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 489, Short.MAX_VALUE)
-            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel4Layout.createSequentialGroup()
-                    .addGap(0, 20, Short.MAX_VALUE)
-                    .addComponent(jToolBarRules, javax.swing.GroupLayout.PREFERRED_SIZE, 448, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 21, Short.MAX_VALUE)))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addComponent(jToolBarRules, javax.swing.GroupLayout.PREFERRED_SIZE, 448, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(41, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 30, Short.MAX_VALUE)
-            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel4Layout.createSequentialGroup()
-                    .addGap(0, 1, Short.MAX_VALUE)
-                    .addComponent(jToolBarRules, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 2, Short.MAX_VALUE)))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addComponent(jToolBarRules, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanelRules.add(jPanel4, java.awt.BorderLayout.NORTH);
 
         jTableRules.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "Título", "Activar", "Tipo"
@@ -704,6 +701,11 @@ public class DialogEditResource extends javax.swing.JDialog
             }
         });
         jTableRules.setColumnSelectionAllowed(true);
+        jTableRules.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTableRulesKeyPressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTableRules);
         jTableRules.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
@@ -1126,6 +1128,23 @@ private void jButtonMoveActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIR
         this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }
 }//GEN-LAST:event_jButtonMoveActionPerformed
+
+private void jTableSchedulerKeyReleased(java.awt.event.KeyEvent evt)//GEN-FIRST:event_jTableSchedulerKeyReleased
+{//GEN-HEADEREND:event_jTableSchedulerKeyReleased
+    if (evt.getKeyCode() == KeyEvent.VK_DELETE && jTableScheduler.getSelectedRow() != -1)
+    {
+        jButtonDeleteSchedulerActionPerformed(null);
+    }
+}//GEN-LAST:event_jTableSchedulerKeyReleased
+
+private void jTableRulesKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_jTableRulesKeyPressed
+{//GEN-HEADEREND:event_jTableRulesKeyPressed
+    if (evt.getKeyCode() == KeyEvent.VK_DELETE && jTableScheduler.getSelectedRow() != -1)
+    {
+        jButtonDeleteRuleActionPerformed(null);
+    }
+}//GEN-LAST:event_jTableRulesKeyPressed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAddCalendar;
     private javax.swing.JButton jButtonAddRule;
