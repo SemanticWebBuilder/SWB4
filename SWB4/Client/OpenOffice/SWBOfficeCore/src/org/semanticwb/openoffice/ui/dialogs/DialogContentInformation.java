@@ -171,15 +171,15 @@ public class DialogContentInformation extends javax.swing.JDialog
         try
         {
             PropertyInfo[] props = OfficeApplication.getOfficeDocumentProxy().getContentProperties(repositoryName, type);
-            if (props.length == 0)
+            if (props==null || props.length == 0)
             {
-                this.remove(this.panelPropertyEditor1);
-                JPanel panel = new JPanel();
+                this.jTabbedPane1.remove(this.jPanelProperties);
+                /*JPanel panel = new JPanel();
                 panel.setBackground(new Color(255, 255, 255));
                 panel.setLayout(new BorderLayout());
                 JLabel label = new JLabel("No se tienen propiedades para este tipo de contenido, puede continuar.");
                 panel.add(label, BorderLayout.NORTH);
-                this.add(panel);
+                this.add(panel);*/
             }
             else
             {
@@ -647,6 +647,11 @@ public class DialogContentInformation extends javax.swing.JDialog
         jTableSummary1.setFocusable(false);
         jTableSummary1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jTableSummary1.getTableHeader().setReorderingAllowed(false);
+        jTableSummary1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTableSummary1KeyReleased(evt);
+            }
+        });
         jScrollPane3.setViewportView(jTableSummary1);
         jTableSummary1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
@@ -1105,6 +1110,14 @@ public class DialogContentInformation extends javax.swing.JDialog
             }
         }
     }//GEN-LAST:event_jTablePagesMouseClicked
+
+    private void jTableSummary1KeyReleased(java.awt.event.KeyEvent evt)//GEN-FIRST:event_jTableSummary1KeyReleased
+    {//GEN-HEADEREND:event_jTableSummary1KeyReleased
+        if (evt.getKeyCode() == KeyEvent.VK_DELETE && jTablePages.getSelectedRow() != -1)
+        {
+            jButtonDeleteVersionActionPerformed(null);
+        }
+    }//GEN-LAST:event_jTableSummary1KeyReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAccept;

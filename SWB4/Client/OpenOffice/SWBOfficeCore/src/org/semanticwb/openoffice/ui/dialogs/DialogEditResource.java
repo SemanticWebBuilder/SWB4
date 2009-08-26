@@ -75,7 +75,7 @@ public class DialogEditResource extends javax.swing.JDialog
         super((Frame) null, ModalityType.TOOLKIT_MODAL);
         initComponents();
         this.jSpinnerEndDate.setEditor(new JSpinner.DateEditor(jSpinnerEndDate, DATE_FORMAT));
-        this.jPanelInformation.add(panelPropertyEditor1);
+        this.jPanelProperties.add(panelPropertyEditor1);
         this.setIconImage(ImageLoader.images.get("semius").getImage());
         this.setModal(true);
         setLocationRelativeTo(null);
@@ -312,15 +312,24 @@ public class DialogEditResource extends javax.swing.JDialog
         try
         {
             HashMap<PropertyInfo, Object> properties = new HashMap<PropertyInfo, Object>();
-            for (PropertyInfo info : OfficeApplication.getOfficeDocumentProxy().getResourceProperties(repositoryName, contentID))
+            PropertyInfo[] o_properties=OfficeApplication.getOfficeDocumentProxy().getResourceProperties(repositoryName, contentID);
+            if(o_properties==null || o_properties.length==0)
             {
-                String value = OfficeApplication.getOfficeDocumentProxy().getViewPropertyValue(pageInformation, info);
-                properties.put(info, value);
+                this.jTabbedPane1.remove(this.jPanelProperties);
             }
-            if(this.panelPropertyEditor1!=null && properties!=null)
+            else
             {
-                this.panelPropertyEditor1.loadProperties(properties);
+                for (PropertyInfo info : o_properties)
+                {
+                    String value = OfficeApplication.getOfficeDocumentProxy().getViewPropertyValue(pageInformation, info);
+                    properties.put(info, value);
+                }
+                if(this.panelPropertyEditor1!=null && properties!=null)
+                {
+                    this.panelPropertyEditor1.loadProperties(properties);
+                }
             }
+            
         }
         catch (Exception e)
         {
@@ -342,7 +351,7 @@ public class DialogEditResource extends javax.swing.JDialog
         jButtonOK = new javax.swing.JButton();
         jButtonCancel = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel2 = new javax.swing.JPanel();
+        jPanelInformation = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jTextFieldTitle = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -361,7 +370,7 @@ public class DialogEditResource extends javax.swing.JDialog
         jCheckBoxEndDateActive = new javax.swing.JCheckBox();
         jButtonMove = new javax.swing.JButton();
         jCheckBoxPageActive = new javax.swing.JCheckBox();
-        jPanelInformation = new javax.swing.JPanel();
+        jPanelProperties = new javax.swing.JPanel();
         jPanelSchedule = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableScheduler = new javax.swing.JTable();
@@ -369,7 +378,7 @@ public class DialogEditResource extends javax.swing.JDialog
         jButtonAddCalendar = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         jButtonDeleteScheduler = new javax.swing.JButton();
-        jPanelElementsToAdd = new javax.swing.JPanel();
+        jPanelRules = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jToolBarRules = new javax.swing.JToolBar();
         jButtonAddRule = new javax.swing.JButton();
@@ -377,7 +386,7 @@ public class DialogEditResource extends javax.swing.JDialog
         jButtonDeleteRule = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableRules = new javax.swing.JTable();
-        jPanel1 = new javax.swing.JPanel();
+        jPanelTitles = new javax.swing.JPanel();
         jLanguageEditor = new org.semanticwb.openoffice.ui.wizard.LanguageEditor();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -460,91 +469,91 @@ public class DialogEditResource extends javax.swing.JDialog
 
         jCheckBoxPageActive.setText("Página activa");
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanelInformationLayout = new javax.swing.GroupLayout(jPanelInformation);
+        jPanelInformation.setLayout(jPanelInformationLayout);
+        jPanelInformationLayout.setHorizontalGroup(
+            jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelInformationLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelInformationLayout.createSequentialGroup()
+                        .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
                             .addComponent(jLabel1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 140, Short.MAX_VALUE)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jTextFieldTitle, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)))
                     .addComponent(jLabel8)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelInformationLayout.createSequentialGroup()
+                        .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
                             .addComponent(jLabel5)
                             .addComponent(jLabel6)
                             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabelSite, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jCheckBoxActive, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(jPanelInformationLayout.createSequentialGroup()
                                     .addComponent(jLabelPage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                     .addComponent(jButtonMove)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(jCheckBoxPageActive))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanelInformationLayout.createSequentialGroup()
                                     .addGap(1, 1, 1)
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addGroup(jPanelInformationLayout.createSequentialGroup()
                                             .addComponent(jCheckBoxEndDateActive)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .addComponent(jSpinnerEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addComponent(jComboBoxVersion, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
                 .addContainerGap())
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        jPanelInformationLayout.setVerticalGroup(
+            jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelInformationLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jTextFieldTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabelSite)
                     .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(jLabelPage)
                     .addComponent(jButtonMove)
                     .addComponent(jCheckBoxPageActive))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCheckBoxActive)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(jComboBoxVersion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelInformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jSpinnerEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jCheckBoxEndDateActive))
                     .addComponent(jLabel5))
                 .addContainerGap(9, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Información", jPanel2);
+        jTabbedPane1.addTab("Información", jPanelInformation);
 
-        jPanelInformation.setLayout(new java.awt.BorderLayout());
-        jTabbedPane1.addTab("Propiedades de publicación", jPanelInformation);
+        jPanelProperties.setLayout(new java.awt.BorderLayout());
+        jTabbedPane1.addTab("Propiedades de publicación", jPanelProperties);
 
         jPanelSchedule.setLayout(new java.awt.BorderLayout());
 
@@ -612,7 +621,7 @@ public class DialogEditResource extends javax.swing.JDialog
 
         jTabbedPane1.addTab("Calendarización", jPanelSchedule);
 
-        jPanelElementsToAdd.setLayout(new java.awt.BorderLayout());
+        jPanelRules.setLayout(new java.awt.BorderLayout());
 
         jPanel4.setPreferredSize(new java.awt.Dimension(448, 30));
 
@@ -666,7 +675,7 @@ public class DialogEditResource extends javax.swing.JDialog
                     .addGap(0, 2, Short.MAX_VALUE)))
         );
 
-        jPanelElementsToAdd.add(jPanel4, java.awt.BorderLayout.NORTH);
+        jPanelRules.add(jPanel4, java.awt.BorderLayout.NORTH);
 
         jTableRules.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -698,14 +707,14 @@ public class DialogEditResource extends javax.swing.JDialog
         jScrollPane1.setViewportView(jTableRules);
         jTableRules.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
-        jPanelElementsToAdd.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        jPanelRules.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        jTabbedPane1.addTab("Reglas / Roles o Grupos de Usuarios", jPanelElementsToAdd);
+        jTabbedPane1.addTab("Reglas / Roles o Grupos de Usuarios", jPanelRules);
 
-        jPanel1.setLayout(new java.awt.BorderLayout());
-        jPanel1.add(jLanguageEditor, java.awt.BorderLayout.CENTER);
+        jPanelTitles.setLayout(new java.awt.BorderLayout());
+        jPanelTitles.add(jLanguageEditor, java.awt.BorderLayout.CENTER);
 
-        jTabbedPane1.addTab("Títulos de página", jPanel1);
+        jTabbedPane1.addTab("Títulos de página", jPanelTitles);
 
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
@@ -1140,13 +1149,13 @@ private void jButtonMoveActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIR
     private javax.swing.JLabel jLabelPage;
     private javax.swing.JLabel jLabelSite;
     private org.semanticwb.openoffice.ui.wizard.LanguageEditor jLanguageEditor;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanelElementsToAdd;
     private javax.swing.JPanel jPanelInformation;
     private javax.swing.JPanel jPanelOptions;
+    private javax.swing.JPanel jPanelProperties;
+    private javax.swing.JPanel jPanelRules;
     private javax.swing.JPanel jPanelSchedule;
+    private javax.swing.JPanel jPanelTitles;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
