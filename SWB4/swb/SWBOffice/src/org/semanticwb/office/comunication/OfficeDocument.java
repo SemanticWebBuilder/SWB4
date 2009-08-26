@@ -54,6 +54,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.CalendarRef;
 import org.semanticwb.model.DisplayProperty;
 import org.semanticwb.model.GenericIterator;
+import org.semanticwb.model.Language;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.Resourceable;
@@ -70,8 +71,10 @@ import org.semanticwb.model.WebSite;
 import org.semanticwb.office.interfaces.CalendarInfo;
 import org.semanticwb.office.interfaces.CategoryInfo;
 import org.semanticwb.office.interfaces.IOfficeDocument;
+import org.semanticwb.office.interfaces.LanguageInfo;
 import org.semanticwb.office.interfaces.PFlow;
 
+import org.semanticwb.office.interfaces.PageInfo;
 import org.semanticwb.office.interfaces.PropertyInfo;
 import org.semanticwb.office.interfaces.ResourceInfo;
 import org.semanticwb.office.interfaces.ElementInfo;
@@ -2152,6 +2155,41 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         WebPage newpageofResource = site.getWebPage(webPageInfo.id);
         newpageofResource.addResource(resource);
         oldWebPage.removeResource(resource);
+    }
+
+    public LanguageInfo[] getLanguages(SiteInfo site) throws Exception
+    {
+        ArrayList<LanguageInfo> languages=new ArrayList<LanguageInfo>();
+        WebSite osite=WebSite.getWebSite(site.id);
+        Iterator<Language> itlenguages=osite.listLanguages();
+        while(itlenguages.hasNext())
+        {
+            Language language=itlenguages.next();
+            LanguageInfo info=new LanguageInfo();
+            info.id=language.getId();
+            info.title=language.getTitle();
+            languages.add(info);
+        }
+        return languages.toArray(new LanguageInfo[languages.size()]);
+    }
+
+    public String getTitleOfWebPage(PageInfo webPageInfo, LanguageInfo laguage) throws Exception
+    {
+        WebSite osite=WebSite.getWebSite(webPageInfo.site.id);        
+        WebPage page=osite.getWebPage(webPageInfo.id);
+        return page.getTitle(laguage.id);
+    }
+
+    public void setTitlesOfWebPage(PageInfo webPageInfo, LanguageInfo[] languages, String[] values) throws Exception
+    {
+        WebSite osite=WebSite.getWebSite(webPageInfo.site.id);
+        WebPage page=osite.getWebPage(webPageInfo.id);
+        int i=0;
+        for(LanguageInfo lang : languages)
+        {
+            page.setTitle(values[i],lang.id);
+            i++;
+        }
     }
 }
 
