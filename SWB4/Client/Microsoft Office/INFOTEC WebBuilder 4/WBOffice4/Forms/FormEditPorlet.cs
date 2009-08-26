@@ -122,13 +122,13 @@ namespace WBOffice4.Forms
         }
         private void loadRules()
         {
-            this.listView1.Items.Clear();
+            this.listViewRules.Items.Clear();
             this.Cursor = Cursors.WaitCursor;
             try
             {
                 foreach (ElementInfo info in OfficeApplication.OfficeDocumentProxy.getElementsOfResource(pageInformation))
                 {
-                    this.listView1.Items.Add(new ElementListView(info));
+                    this.listViewRules.Items.Add(new ElementListView(info));
                 }
             }
             catch (Exception ue)
@@ -448,7 +448,7 @@ namespace WBOffice4.Forms
                     this.Cursor = Cursors.WaitCursor;
                     OfficeApplication.OfficeDocumentProxy.addElementToResource(this.pageInformation, element);
                     loadRules();
-                    if (listView1.Items.Count == 0 || listView1.SelectedIndices.Count == 0)
+                    if (listViewRules.Items.Count == 0 || listViewRules.SelectedIndices.Count == 0)
                     {
                         toolStripButtonDeleteRule.Enabled = false;
                     }
@@ -470,9 +470,9 @@ namespace WBOffice4.Forms
 
         private void toolStripButtonDeleteRule_Click(object sender, EventArgs e)
         {
-            if (this.listView1.Items.Count > 0 && this.listView1.SelectedIndices.Count > 0)
+            if (this.listViewRules.Items.Count > 0 && this.listViewRules.SelectedIndices.Count > 0)
             {
-                ElementInfo info = ((ElementListView)listView1.SelectedItems[0]).ElementInfo;
+                ElementInfo info = ((ElementListView)listViewRules.SelectedItems[0]).ElementInfo;
                 DialogResult res = MessageBox.Show(this, "¿Desea eliminar la regla / rol ó grupo de usuario " + info.title, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Question);
                 if (res == DialogResult.OK)
                 {
@@ -481,7 +481,7 @@ namespace WBOffice4.Forms
                         this.Cursor = Cursors.WaitCursor;
                         OfficeApplication.OfficeDocumentProxy.deleteElementToResource(pageInformation, info);
                         loadRules();
-                        if (listView1.Items.Count == 0 || listView1.SelectedIndices.Count == 0)
+                        if (listViewRules.Items.Count == 0 || listViewRules.SelectedIndices.Count == 0)
                         {
                             toolStripButtonDeleteRule.Enabled = false;
                         }
@@ -531,6 +531,22 @@ namespace WBOffice4.Forms
                 OfficeApplication.OfficeDocumentProxy.sendToAuthorize(pageInformation, formSendToAutorize.pflow, formSendToAutorize.textBoxMessage.Text);
                 this.buttonSenttoAuthorize.Visible = false;
             }            
+        }
+
+        private void listView1_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete && this.listViewRules.SelectedItems.Count > 0)
+            {
+                this.toolStripButtonAddRule_Click(null, null);
+            }
+        }
+
+        private void listViewCalendar_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete && this.listViewRules.SelectedItems.Count > 0)
+            {
+                this.toolStripButtonDelete_Click(null, null);
+            }
         }
 
 
