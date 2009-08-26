@@ -606,6 +606,11 @@ public class DialogContentInformation extends javax.swing.JDialog
                 jTablePagesKeyReleased(evt);
             }
         });
+        jTablePages.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTablePagesMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTablePages);
         jTablePages.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
@@ -1005,7 +1010,9 @@ public class DialogContentInformation extends javax.swing.JDialog
         if (jTablePages.getSelectedRow() != -1)
         {
             ResourceInfo resourceInfo = (ResourceInfo) jTablePages.getModel().getValueAt(jTablePages.getSelectedRow(), 0);
+            this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
             DialogEditResource dialogEditPorlet = new DialogEditResource(resourceInfo, repository, contentId);
+            this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             dialogEditPorlet.setVisible(true);
             if (!dialogEditPorlet.isCancel)
             {
@@ -1085,6 +1092,19 @@ public class DialogContentInformation extends javax.swing.JDialog
             }
         }
     }//GEN-LAST:event_jButtonDeleteVersionActionPerformed
+
+    private void jTablePagesMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_jTablePagesMouseClicked
+    {//GEN-HEADEREND:event_jTablePagesMouseClicked
+        if(evt.getClickCount()==2)
+        {
+            int row = jTablePages.getSelectedRow();
+            //int column = jTablePages.getSelectedColumn();
+            if(row!=-1)
+            {
+                jButtonEditActionPerformed(null);
+            }
+        }
+    }//GEN-LAST:event_jTablePagesMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAccept;
