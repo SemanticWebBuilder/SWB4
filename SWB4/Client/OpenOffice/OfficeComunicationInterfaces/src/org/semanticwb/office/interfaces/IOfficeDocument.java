@@ -205,6 +205,15 @@ public interface IOfficeDocument
 
     @XmlRpcMethod(methodName = "OfficeDocument.changeResourceOfWebPage")
     public void changeResourceOfWebPage(ResourceInfo info, WebPageInfo webPageInfo) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeDocument.getLanguages")
+    public LanguageInfo[] getLanguages(SiteInfo site) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeDocument.getTitleOfWebPage")
+    public String getTitleOfWebPage(PageInfo webPageInfo,LanguageInfo laguage) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeDocument.setTitlesOfWebPage")
+    public void setTitlesOfWebPage(PageInfo webPageInfo,LanguageInfo[] languages,String[] values) throws Exception;
 }
 
 
