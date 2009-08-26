@@ -262,6 +262,7 @@
             this.listViewPages.View = System.Windows.Forms.View.Details;
             this.listViewPages.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listViewPages_MouseDoubleClick);
             this.listViewPages.SelectedIndexChanged += new System.EventHandler(this.listViewPages_SelectedIndexChanged);
+            this.listViewPages.KeyUp += new System.Windows.Forms.KeyEventHandler(this.listViewPages_KeyUp);
             // 
             // columnHeader4
             // 
@@ -392,6 +393,7 @@
             this.listViewVersions.UseCompatibleStateImageBehavior = false;
             this.listViewVersions.View = System.Windows.Forms.View.Details;
             this.listViewVersions.SelectedIndexChanged += new System.EventHandler(this.listViewVersions_SelectedIndexChanged);
+            this.listViewVersions.KeyUp += new System.Windows.Forms.KeyEventHandler(this.listViewVersions_KeyUp);
             // 
             // columnHeader1
             // 
