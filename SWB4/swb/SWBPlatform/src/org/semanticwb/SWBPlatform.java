@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Properties;
 import javax.servlet.ServletContext;
+import javax.servlet.Filter;
 import org.semanticwb.platform.SemanticMgr;
 import org.semanticwb.base.util.SWBProperties;
 import org.semanticwb.base.util.URLEncoder;
@@ -66,6 +67,7 @@ public class SWBPlatform
     private static String webWorkPath = "";
     
     private static ServletContext servletContext=null;
+    private static Filter virtualHostFilter=null;
 
     private static boolean haveDB=false;
     private static boolean haveDBTables=false;
@@ -299,16 +301,23 @@ public class SWBPlatform
     {
         return haveDBTables;
     }    
-    
+
+    static public synchronized SWBPlatform createInstance(ServletContext servletContext)
+    {
+        new Exception().printStackTrace();
+        return createInstance(servletContext, null);
+    }
     /** Create Instance.
      * @param servletContext 
      * @return  SWBContext*/
-    static public synchronized SWBPlatform createInstance(ServletContext servletContext)
+    static public synchronized SWBPlatform createInstance(ServletContext servletContext, Filter filter)
     {
         if (instance == null)
         {
+            SWBPlatform.virtualHostFilter=filter;
             instance = new SWBPlatform();
             SWBPlatform.servletContext=servletContext;
+            
         }
         return instance;
     }
@@ -425,6 +434,11 @@ public class SWBPlatform
     {
         return servletContext;
     }    
+
+    public static Filter getVirtualHostFilter()
+    {
+        return virtualHostFilter;
+    }
 
     public static SemanticMgr getSemanticMgr()
     {
