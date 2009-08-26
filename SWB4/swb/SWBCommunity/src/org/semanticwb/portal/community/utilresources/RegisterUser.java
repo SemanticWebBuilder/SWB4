@@ -22,8 +22,10 @@
  **/
 package org.semanticwb.portal.community.utilresources;
 
+import com.google.code.facebookapi.FacebookJsonRestClient;
+import com.google.code.facebookapi.FacebookWebappHelper;
+import com.google.code.facebookapi.IFacebookRestClient;
 import java.awt.AlphaComposite;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -33,11 +35,11 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import javax.imageio.ImageIO;
 import javax.security.auth.Subject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.ProgressListener;
@@ -50,13 +52,13 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
-import org.semanticwb.model.UserTypeDef;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.security.auth.SWB4FacebookBridge;
 
 /**
  *
@@ -257,23 +259,43 @@ public class RegisterUser extends GenericResource
                 String name = user.getLogin() + currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
                 String photoName = path + "/" + name;
                 currentFile.write(new File(photoName));
-                path =  user.getWorkPath();
+                path = user.getWorkPath();
                 //SWBPlatform.getWebWorkPath() +
-                user.setPhoto(path+"/"+name);
+                user.setPhoto(path + "/" + name);
                 per.setPercentage(100);
                 File f = new File(photoName);
 
-/*                BufferedImage bi = ImageIO.read(f);
+                /*                BufferedImage bi = ImageIO.read(f);
                 int calcHeight = (150 * bi.getHeight() / bi.getWidth());
                 ImageIO.write(createResizedCopy(bi, 150, calcHeight), name.substring(name.lastIndexOf(".")+1), f);*/
 
-                ImageResizer.resize(f, 150, true, f, name.substring(name.lastIndexOf(".")+1).toLowerCase());
+                ImageResizer.resize(f, 150, true, f, name.substring(name.lastIndexOf(".") + 1).toLowerCase());
 
 
             } catch (Exception ex)
             {
                 log.error(ex);
             }
+        }
+        if ("actFB".equals(response.getAction()) && user.isSigned())
+        {
+            String extId = request.getParameter("fb_sess");
+
+            if (null != extId && !"".equals(extId) && (null == user.getUserRepository().getUserByExternalID(extId)))
+            {
+                SWB4FacebookBridge bridge = (SWB4FacebookBridge)user.getUserRepository().getBridge();
+                IFacebookRestClient<Object> userClient = new FacebookJsonRestClient(bridge.getAppKey(), bridge.getAppSecret(), request.getParameter("fb_key"));
+                FacebookWebappHelper<Object> facebook = new FacebookWebappHelper(request, null, bridge.getAppKey(), bridge.getAppSecret(), userClient);
+                System.out.println("secrets: app:"+bridge.getAppSecret()+" ses:"+request.getParameter("fb_secret"));
+                if (facebook.get_loggedin_user().equals(Long.valueOf(extId)))
+                    user.setExternalID(extId);
+            }
+            HttpSession sess = request.getSession(true);
+            sess.setAttribute("fb_uid", request.getParameter("fb_sess"));
+            sess.setAttribute("fb_key", request.getParameter("fb_key"));
+            sess.setAttribute("fb_secret", request.getParameter("fb_secret"));
+            sess.setAttribute("fb_sig", request.getParameter("fb_sig"));
+
         }
     }
 
