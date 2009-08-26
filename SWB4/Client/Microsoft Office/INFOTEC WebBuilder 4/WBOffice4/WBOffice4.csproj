@@ -409,7 +409,7 @@
       <DependentUpon>PropertyEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\CalendarItem.cs" />
-    <Compile Include="Forms\Element.cs">
+    <Compile Include="Forms\ElementListView.cs">
     </Compile>
     <Compile Include="Forms\FlowItem.cs" />
     <Compile Include="Forms\FormAddElement.cs">
