@@ -84,13 +84,13 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
             } catch (Exception e) {log.error(e);
             }
         }
-        if(base.getAttribute(DEL_SO)==null){
-            base.setAttribute(DEL_SO, "1");
-            try {
-                base.updateAttributesToDB();
-            } catch (Exception e) {log.error(e);
-            }
-        }
+//        if(base.getAttribute(DEL_SO)==null){
+//            base.setAttribute(DEL_SO, "1");
+//            try {
+//                base.updateAttributesToDB();
+//            } catch (Exception e) {log.error(e);
+//            }
+//        }
 
         log.debug("suri: " + id);
         log.debug("sprop: " + idp);
@@ -344,6 +344,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                     title = sobj.getObjectProperty(UserGroupRef.swb_userGroup).getProperty(UserGroup.swb_title);
                 }
 
+                if(idpref==null) idpref = idp;  //
                 SemanticProperty semprop = ont.getSemanticProperty(idpref);
                 SemanticProperty sem_p = ont.getSemanticProperty(idpref);
                 SemanticObject semobj = null;
@@ -625,7 +626,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
             // Para mostrar heredados
 
             log.debug("PRO: " + spro.getName() + " es inheritable " + spro.isInheritProperty());
-            log.debug("PROREF: " + spref.getName() + " es inheritable " + spref.isInheritProperty());
+            //log.debug("PROREF: " + spref.getName() + " es inheritable " + spref.isInheritProperty());
 
             if (isInherit && spro.isInheritProperty()) {
                 itso = null;
@@ -816,6 +817,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
             if (idpref != null) {
                 propref = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(idpref);
             }
+            else propref = prop;
 
             SemanticClass clsprop = propref.getRangeClass();
             title = clsprop.getName();
@@ -868,7 +870,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
             log.debug("choose:" + clsprop.getName() + ", " + idp);
 
             SWBResourceURL urladd = paramRequest.getActionUrl();
-            if ((idp.endsWith("hasRole") && clsprop.equals(Role.swb_Role)) || idp.endsWith("hasUserGroup") && clsprop.equals(UserGroup.swb_UserGroup)) {
+            if ((idp.endsWith("hasRole") && clsprop.equals(Role.swb_Role)) || (idp.endsWith("hasUserGroup") && clsprop.equals(UserGroup.swb_UserGroup))|| (idp.endsWith("hasProcessActivity"))) {
                 urladd.setAction("choose");
             } else {
                 urladd.setAction("new");
@@ -937,7 +939,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                     out.println("<tr>");
                     out.println("<td>" + stitle + "</td> ");
                     SWBResourceURL urlchoose = paramRequest.getActionUrl();
-                    if ((idp.endsWith("hasRole") && clsprop.equals(Role.swb_Role)) || (idp.endsWith("hasUserGroup") && clsprop.equals(UserGroup.swb_UserGroup)) || (idp.endsWith("hasProcessActivity") &&idpref==null)) {
+                    if ((idp.endsWith("hasRole") && clsprop.equals(Role.swb_Role)) || (idp.endsWith("hasUserGroup") && clsprop.equals(UserGroup.swb_UserGroup)) || (idp.endsWith("hasProcessActivity"))) {
                         urlchoose.setAction("choose");
                         urlchoose.setParameter("suri", id);
                     } else {
