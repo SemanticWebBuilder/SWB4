@@ -46,6 +46,7 @@ import org.semanticwb.office.interfaces.CalendarInfo;
 import org.semanticwb.office.interfaces.ResourceInfo;
 import org.semanticwb.office.interfaces.PropertyInfo;
 import org.semanticwb.office.interfaces.ElementInfo;
+import org.semanticwb.office.interfaces.LanguageInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.openoffice.MoveContentResultProducer;
 import org.semanticwb.openoffice.OfficeApplication;
@@ -110,7 +111,7 @@ public class DialogEditResource extends javax.swing.JDialog
         this.jLabelSite.setText(pageInformation.page.site.title);
         this.jLabelPage.setText(pageInformation.page.title);
 
-
+        loadTitles();
 
         loadProperties();
         loadCalendars();
@@ -237,6 +238,25 @@ public class DialogEditResource extends javax.swing.JDialog
             this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
     }
+    private void loadTitles()
+    {
+        try
+        {
+            LanguageInfo[] languages=OfficeApplication.getOfficeDocumentProxy().getLanguages(pageInformation.page.site);
+            ArrayList<String> titles=new ArrayList<String>(languages.length);
+            for(LanguageInfo language : languages)
+            {
+                String title=OfficeApplication.getOfficeDocumentProxy().getTitleOfWebPage(this.pageInformation.page, language);
+                titles.add(title);
+            }
+            this.jLanguageEditor.setLenguages(languages, titles.toArray(new String[titles.size()]));
+
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 
     private void loadCalendars()
     {
@@ -354,6 +374,8 @@ public class DialogEditResource extends javax.swing.JDialog
         jButtonDeleteRule = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableRules = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        jLanguageEditor = new org.semanticwb.openoffice.ui.wizard.LanguageEditor();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Editar Propiedades");
@@ -513,7 +535,7 @@ public class DialogEditResource extends javax.swing.JDialog
                         .addComponent(jSpinnerEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jCheckBoxEndDateActive))
                     .addComponent(jLabel5))
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(9, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Información", jPanel2);
@@ -677,6 +699,11 @@ public class DialogEditResource extends javax.swing.JDialog
 
         jTabbedPane1.addTab("Reglas / Roles o Grupos de Usuarios", jPanelElementsToAdd);
 
+        jPanel1.setLayout(new java.awt.BorderLayout());
+        jPanel1.add(jLanguageEditor, java.awt.BorderLayout.CENTER);
+
+        jTabbedPane1.addTab("Títulos de página", jPanel1);
+
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -815,6 +842,9 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                     e.printStackTrace();
                 }
             }
+            String[] titles=this.jLanguageEditor.getTitles();
+            LanguageInfo[] languages=this.jLanguageEditor.getLanguages();
+            OfficeApplication.getOfficeDocumentProxy().setTitlesOfWebPage(this.pageInformation.page, languages, titles);
             OfficeApplication.getOfficeApplicationProxy().activePage(this.pageInformation.page, this.jCheckBoxPageActive.isSelected());
             DefaultTableModel model = (DefaultTableModel) jTableScheduler.getModel();
             for (int i = 0; i < jTableScheduler.getRowCount(); i++)
@@ -1106,6 +1136,8 @@ private void jButtonMoveActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIR
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabelPage;
     private javax.swing.JLabel jLabelSite;
+    private org.semanticwb.openoffice.ui.wizard.LanguageEditor jLanguageEditor;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanelElementsToAdd;
