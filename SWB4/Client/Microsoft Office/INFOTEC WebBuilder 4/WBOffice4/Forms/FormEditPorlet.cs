@@ -144,15 +144,22 @@ namespace WBOffice4.Forms
         {
             PropertyInfo[] props = OfficeApplication.OfficeDocumentProxy.getResourceProperties(repositoryName, contentID);
             this.propertyEditor1.Properties = props;
-            String[] values = new String[props.Length];
-            int i = 0;
-            foreach (PropertyInfo prop in props)
+            if (props == null || props.Length == 0)
             {
-                String value = OfficeApplication.OfficeDocumentProxy.getViewPropertyValue(this.pageInformation, prop);
-                values[i] = value;
-                i++;
+                this.tabControlProperties.Controls.Remove(this.tabPageProperties);
             }
-            this.propertyEditor1.Values = values;
+            else
+            {
+                String[] values = new String[props.Length];
+                int i = 0;
+                foreach (PropertyInfo prop in props)
+                {
+                    String value = OfficeApplication.OfficeDocumentProxy.getViewPropertyValue(this.pageInformation, prop);
+                    values[i] = value;
+                    i++;
+                }
+                this.propertyEditor1.Values = values;
+            }
 
         }
         private void loadCalendars()
