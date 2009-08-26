@@ -75,15 +75,25 @@ namespace WBOffice4.Forms
                     this.contentType = contentType;
                     PropertyInfo[] props = OfficeApplication.OfficeDocumentProxy.getContentProperties(repositoryName, contentType.id);
                     this.propertyEditor1.Properties = props;
-                    String[] values = new String[props.Length];
-                    int i=0;
-                    foreach (PropertyInfo prop in props)
+                    if (props == null || props.Length == 0)
                     {
-                        String value=OfficeApplication.OfficeDocumentProxy.getContentProperty(prop, repositoryName, contentID);
-                        values[i] = value;
-                        i++;
+                        this.tabControl1.Controls.Remove(this.tabPageProperties);
                     }
-                    this.propertyEditor1.Values = values;                    
+                    else
+                    {
+                        String[] values = new String[props.Length];
+                        int i = 0;
+                        foreach (PropertyInfo prop in props)
+                        {
+                            String value = OfficeApplication.OfficeDocumentProxy.getContentProperty(prop, repositoryName, contentID);
+                            values[i] = value;
+                            i++;
+                        }
+                        this.propertyEditor1.Values = values;    
+                    }
+                    
+
+                                    
                 }
             }
             
@@ -369,6 +379,22 @@ namespace WBOffice4.Forms
                 this.Cursor = Cursors.Default;
                 formEditPorlet.ShowDialog();
                 loadPorlets();
+            }
+        }
+
+        private void listViewPages_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete && this.listViewPages.SelectedItems.Count>0)
+            {
+                this.toolStripButtonDeletePage_Click(null, null);
+            }
+        }
+
+        private void listViewVersions_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete && this.listViewVersions.SelectedItems.Count > 0)
+            {
+                this.toolStripButtonDeleteVersion_Click(null, null);
             }
         }
         
