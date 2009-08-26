@@ -42,27 +42,27 @@ Error: Elemento no encontrado...
             </p>
             <p>
                 <label for="new_title">Título de la noticia:&nbsp;</label>
-                <input type="text" id="new_title" name="new_title"/>
+                <input type="text" id="new_title" name="new_title" value="<%=(rec.getTitle()==null?"":rec.getTitle())%>"/>
             </p>
             <p>
                 <label for="new_author">Autor de la noticia:&nbsp;</label>
-                <input type="text" id="new_author" name="new_author"/>
+                <input type="text" id="new_author" name="new_author" value="<%=(rec.getAuthor()==null?"":rec.getAuthor())%>"/>
             </p>
             <p>
                 <label for="new_abstract">Resumen de la noticia:&nbsp;</label>
-                <textarea id="new_abstract" name="new_abstract" cols="30" rows="5"></textarea>
+                <textarea id="new_abstract" name="new_abstract" cols="30" rows="5"><%=(rec.getDescription()==null?"":rec.getDescription())%></textarea>
             </p>
             <p>
                 <label for="new_fulltext">Texto completo:&nbsp;</label>
-                <textarea id="new_fulltext" name="new_fulltext" cols="30" rows="5"></textarea>
+                <textarea id="new_fulltext" name="new_fulltext" cols="30" rows="5"><%=(rec.getFullText()==null?"":rec.getFullText())%></textarea>
             </p>
             <p>
                 <label for="new_citation">Fuente:&nbsp;</label>
-                <input type="text" id="new_citation" name="new_citation"/>
+                <input type="text" id="new_citation" name="new_citation" value="<%=(rec.getCitation()==null?"":rec.getCitation())%>"/>
             </p>
             <p>
                 <label for="new_tags">Etiquetas:&nbsp;</label>
-                <input type="text" id="new_tags" name="new_tags"/>
+                <input type="text" id="new_tags" name="new_tags" value="<%=(rec.getTags()==null?"":rec.getTags())%>"/>
             </p>
         </div>
         </fieldset>
