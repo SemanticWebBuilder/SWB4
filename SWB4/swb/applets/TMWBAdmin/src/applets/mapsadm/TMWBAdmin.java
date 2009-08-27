@@ -1015,19 +1015,23 @@ public class TMWBAdmin extends javax.swing.JApplet implements TMWBContainer
     public void setTopicMap(String tmid, String homeid)
     {
         String data=getData("<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><topicmap>"+tmid+"</topicmap><cmd>getTopicMap4Adm</cmd></req>");
-        data=getCData(data);
+        System.out.println("data1:"+data);
+        data=getCData(data,"map");
         if(data.length()>0)
         {
             viewer.candraw=false;
             viewer.over=null;
             viewer.getMap(data);
+            System.out.println("data2:"+data);
             viewer.setActual(homeid);
+            System.out.println("homeid:"+homeid);
             viewer.home=tm.getHome();
             viewer.topicMap=tmid;
+            System.out.println("tmid:"+tmid);
             viewer.candraw=true;   
             setEditing(false,0);
             getLanguages(tmid);
-            //System.out.println(viewer.actual);
+            System.out.println(viewer.actual);
         }        
     }
     
@@ -1732,28 +1736,48 @@ public class TMWBAdmin extends javax.swing.JApplet implements TMWBContainer
     {
         this.topicMenu = topicMenu;
     }
-    
+
     private String getCData(String data)
     {
-        StringBuffer cdata=new StringBuffer();
-        int s=data.indexOf("<![CDATA[");
-        while(s>0)
+        return getCData(data, null);
+    }
+    
+    private String getCData(String data, String tag)
+    {
+        String ret=null;
+
+        if(tag!=null)
         {
-            int f=data.indexOf("]]>",s);
-            //System.out.println("l:"+data.length()+" s:"+s+" f:"+f);
-            //System.out.println(data.substring(f-100,f+100));
-            cdata.append(data.substring(s+9,f));
-            //System.out.println(viewer.actual);
-            s=data.indexOf("<![CDATA[", f);
+            int s=data.indexOf("<"+tag+">");
             if(s>0)
             {
-                String aux=data.substring(f+3,s);
-                //String rpl=WBXMLParser.replaceStrTags(aux);
-                //System.out.println(aux+" "+rpl);
-                cdata.append(aux);
+                data=data.substring(s+tag.length()+2,data.indexOf("</"+tag+">",s));
+                ret=data;
             }
         }
-        return cdata.toString();
+        int s=data.indexOf("<![CDATA[");
+        if(s>0)
+        {
+            StringBuffer cdata=new StringBuffer();
+            while(s>0)
+            {
+                int f=data.indexOf("]]>",s);
+                //System.out.println("l:"+data.length()+" s:"+s+" f:"+f);
+                //System.out.println(data.substring(f-100,f+100));
+                cdata.append(data.substring(s+9,f));
+                //System.out.println(viewer.actual);
+                s=data.indexOf("<![CDATA[", f);
+                if(s>0)
+                {
+                    String aux=data.substring(f+3,s);
+                    //String rpl=WBXMLParser.replaceStrTags(aux);
+                    //System.out.println(aux+" "+rpl);
+                    cdata.append(aux);
+                }
+            }
+            ret=cdata.toString();
+        }
+        return ret;
     }
     
 
@@ -2420,7 +2444,7 @@ public class TMWBAdmin extends javax.swing.JApplet implements TMWBContainer
                 }
 
                 String data=getData("<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><topicmap>"+tm.getId()+"</topicmap><cmd>getTopicMap4Adm</cmd></req>");
-                data=getCData(data);
+                data=getCData(data,"map");
                 if(data.length()>0)
                 {
                     viewer.candraw=false;
