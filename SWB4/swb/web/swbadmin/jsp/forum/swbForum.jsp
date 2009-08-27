@@ -31,7 +31,6 @@
 }
 body {
 	font-family: Arial, Helvetica, sans-serif;
-	background-image: url(../images/bg.gif);
 	background-repeat: no-repeat;
 }
 p {margin-bottom: 10px; color: #626262;	font-size: 0.7em;}
@@ -82,6 +81,7 @@ a:hover {text-decoration: underline;}
               <p>&nbsp;</p>
             </div>
             <%
+                String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.png";
                 SWBFormMgr mgr = new SWBFormMgr(Post.frm_Post, thread.getSemanticObject(), null);
                 actionURL.setParameter("threadUri", thread.getURI());
                 lang = user.getLanguage();
@@ -108,7 +108,7 @@ a:hover {text-decoration: underline;}
                     if (post.getCreator() != null) {
                         userPost = post.getCreator();
                         postCreator = post.getCreator().getFullName();
-                        //postCreated=SWBUtils.TEXT.getStrDate(post.getCreated(), user.getLanguage());
+                        if(post.getCreator().getPhoto()!=null) photo=SWBPlatform.getWebWorkPath()+post.getCreator().getPhoto();
                     }
                     String rowClass = "pluginRow2";
                     if (!cambiaColor) {
@@ -118,7 +118,7 @@ a:hover {text-decoration: underline;}
              %>
                     <div class="replyForo">
                       <div class="img_ReplyForo">
-                        <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/usuarionoregistrado.jpg" alt="Usuario" width="80" height="80" />
+                        <img src="<%=photo%>" alt="Usuario" width="80" height="80" />
                       </div>
                       <p class="tituloNoticia"><%=postCreator%></p>
                       <p><%=post.getBody()%></p>
