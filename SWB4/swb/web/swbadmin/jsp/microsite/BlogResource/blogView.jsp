@@ -21,7 +21,7 @@
         {
             Member member = Member.getMember(user, wpage);
             String defaultFormat = "dd 'de' MMMM  'del' yyyy 'a las' HH:mm";
-            SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
+            SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat,new Locale("es"));
             String created = iso8601dateFormat.format(blog.getCreated());
             String updated = iso8601dateFormat.format(blog.getUpdated());
             if(member.getAccessLevel()==member.LEVEL_OWNER)
