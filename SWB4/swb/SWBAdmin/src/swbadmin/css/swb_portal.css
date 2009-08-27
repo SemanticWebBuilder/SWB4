@@ -755,6 +755,7 @@ div.sitesectiontree ul.treeres {
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
+.img_ReplyForo {float: left;height: 80px; width: 80px; margin-right: 10px;}
 .tituloNota {
 	color: #095c8a;
 	font-size: 1.2em;
@@ -762,5 +763,16 @@ div.sitesectiontree ul.treeres {
 	height: 32px;
 	margin-bottom: 10px;
 }
+.tituloNota a {
+	color: #095c8a;
+}
+.tituloNoticia {
+	font-size: 0.75em;
+	color: #095c8a;
+}
+.tituloNoticia a {
+	color: #095c8a;
+}
+.clearNosp{clear: both; height: 1px;}
 
 /*------Termina Foro---*/
