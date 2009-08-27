@@ -35,7 +35,6 @@ public class MyEvents extends GenericAdmResource {
         Resourceable rsa = paramRequest.getResourceBase().getResourceable();
         if (rsa != null && rsa instanceof WebPage) {
                 url = ((WebPage) rsa).getUrl();
-                System.out.println("url on resource.."+url);
         }
         String path = SWBPlatform.getContextPath() + "/swbadmin/jsp/microsite/perfil/myEvents.jsp";
         if (action == null) action = "view";
