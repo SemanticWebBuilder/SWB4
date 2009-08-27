@@ -44,25 +44,27 @@ namespace WBOffice4.Forms
             else
             {
                 this.SubItems.Add("No");
-            }
-            /*if (this.SubItems.Count == 1)
-            {                
-                this.SubItems[0].Text = info.type;
-            }
-            else if (this.SubItems.Count == 2)
+            }            
+        }
+        public bool Active
+        {
+            set
             {
+                this.info.active = value;
                 if (info.active)
                 {
-                    this.SubItems[0].Text = "Sí";
+                    this.SubItems[2].Text="Sí";
                 }
                 else
                 {
-                    this.SubItems[0].Text = "No";
-                }
-                this.SubItems[1].Text = info.type;
-            }*/
+                    this.SubItems[2].Text = "No";
+                }                   
+            }
+            get
+            {
+                return this.ElementInfo.active;
+            }
         }
-
         public ElementInfo ElementInfo
         {
             get
