@@ -46,6 +46,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Descriptiveable;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
@@ -399,8 +400,8 @@ public class SWBModelAdmin extends GenericResource {
                         //if(obj.instanceOf(WebSite.sclass)) //Que datos saco si es un rep de usuarios o de documentos y como los parseo despues
                         strbr.append("<id>" + sObj.getId() + "</id>\n");
                         strbr.append("<namespace>" + sObj.getModel().getNameSpace() + "</namespace>\n");
-                        strbr.append("<title>" + sObj.getProperty(WebPage.swb_title) + "</title>\n");
-                        strbr.append("<description>" + sObj.getProperty(WebPage.swb_description) + "</description>\n");
+                        strbr.append("<title>" + sObj.getProperty(Descriptiveable.swb_title) + "</title>\n");
+                        strbr.append("<description>" + sObj.getProperty(Descriptiveable.swb_description) + "</description>\n");
                         strbr.append("</model>\n");
                     }
                     strbr.append("</model>");
