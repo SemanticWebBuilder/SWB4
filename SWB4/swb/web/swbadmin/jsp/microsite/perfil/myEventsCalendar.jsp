@@ -22,7 +22,7 @@ if (year != null && month != null && day != null) {
 
 %><div align="center"><%=renderCalendar(user, current, wpage, paramRequest)%>
     <p class="vermas">
-    <a href ="<%=paramRequest.getResourceBase().getAttribute("eventsPath")%>">Ver todos</a>
+    <a href ="<%=request.getAttribute("admurl")%>">Ver todos</a>
 </p>
 </div>
 <%!
@@ -105,10 +105,6 @@ if (year != null && month != null && day != null) {
                 if (!eventTitles.equals("")) {
                     String viewUrl = paramRequest.getResourceBase().getAttribute("eventsPath", "#");
                     viewUrl = viewUrl + "?y=" + String.valueOf(year) + "&m=" +String.valueOf(month) + "&d=" + String.valueOf(i);
-                    //SWBResourceURL viewUrl = paramRequest.getRenderUrl();//.setParameter("act", "daily");
-                    //viewUrl.setParameter("y", String.valueOf(year));
-                    //viewUrl.setParameter("m", String.valueOf(month));
-                    //viewUrl.setParameter("d", String.valueOf(i));
 
                     sbf.append("      <td class=\"dated\">\n" +
                             "        <div class=\"daylabel\"><a href=\"" + viewUrl + "\">" + i + "</a></div>\n" +
@@ -123,10 +119,6 @@ if (year != null && month != null && day != null) {
                 //Not today
                 evsNow = EventElement.listEventElementsByDate(user, new Date(year, month, i), wpage, wpage.getWebSite());
                 if (!eventTitles.equals("")) {
-                    /*SWBResourceURL viewUrl = paramRequest.getRenderUrl();//.setParameter("act", "daily");
-                    viewUrl.setParameter("y", String.valueOf(year));
-                    viewUrl.setParameter("m", String.valueOf(month));
-                    viewUrl.setParameter("d", String.valueOf(i));*/
                     String viewUrl = paramRequest.getResourceBase().getAttribute("eventsPath", "#");
                     viewUrl = viewUrl + "?y=" + String.valueOf(year) + "&m=" +String.valueOf(month) + "&d=" + String.valueOf(i);
 
