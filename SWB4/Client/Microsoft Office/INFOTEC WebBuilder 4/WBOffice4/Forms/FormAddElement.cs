@@ -104,5 +104,13 @@ namespace WBOffice4.Forms
             this.DialogResult = DialogResult.OK;
             this.Close();
         }
+
+        private void listView1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (this.listView1.SelectedIndices.Count > 0)
+            {
+                buttonAdd_Click(null, null);
+            }
+        }
     }
 }
