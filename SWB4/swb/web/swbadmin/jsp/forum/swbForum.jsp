@@ -25,10 +25,10 @@
 * {
 	margin: 0px;
 	padding: 0px;
-	border: 0px;
 	font-size: 100%;
 	vertical-align: baseline;
 }
+
 body {
 	font-family: Arial, Helvetica, sans-serif;
 	background-repeat: no-repeat;
@@ -74,9 +74,9 @@ a:hover {text-decoration: underline;}
               <p><%=thread.getBody()%></p>
               <div class="vistasForo">
                 <p> (<%=thread.getReplyCount()%>) <%=paramRequest.getLocaleString("responses")%> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/commentsForo.png" alt="<%=paramRequest.getLocaleString("responses")%>" width="14" height="12" /> |  (<%=thread.getViewCount()%>) <%=paramRequest.getLocaleString("visites")%> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/viewsForo.png" alt="<%=paramRequest.getLocaleString("visites")%>" width="10" height="9" />
-                 |  <%urlthread.setMode("editThread");%><a href="<%=urlthread%>"><%=paramRequest.getLocaleString("edit")%></a> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/viewsForo.png" alt="<%=paramRequest.getLocaleString("edit")%>" width="10" height="9" />
+                 |  <%urlthread.setMode("editThread");%><a href="<%=urlthread%>"><%=paramRequest.getLocaleString("edit")%></a> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/editar_foro.png" alt="<%=paramRequest.getLocaleString("edit")%>" width="7" height="15" />
                  |  <%url.setAction("removePost");url.setParameter("isthread", "1");
-                         %> <a href="<%=url%>"><%=paramRequest.getLocaleString("remove")%></a> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/viewsForo.png" alt="<%=paramRequest.getLocaleString("remove")%>" width="10" height="9" /></p>
+                         %> <a href="<%=url%>"><%=paramRequest.getLocaleString("remove")%></a> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/eliminar_foro.png" alt="<%=paramRequest.getLocaleString("remove")%>" width="11" height="12" /></p>
               </div>
               <p>&nbsp;</p>
             </div>
@@ -87,7 +87,8 @@ a:hover {text-decoration: underline;}
                 lang = user.getLanguage();
                 mgr.setLang(lang);
                 mgr.setSubmitByAjax(false);
-                mgr.setType(mgr.TYPE_XHTML);
+                mgr.setType(mgr.TYPE_DOJO);
+                //mgr.setType(mgr.TYPE_XHTML);
                 actionURL.setAction("replyPost");
                 mgr.setAction(actionURL.toString());
                 mgr.addButton(SWBFormButton.newSaveButton());
@@ -124,8 +125,8 @@ a:hover {text-decoration: underline;}
                       <p><%=post.getBody()%></p>
                       <div class="vistasForo">
                           <%urlthread.setMode("replyPost");urlthread.setParameter("postUri", post.getURI());%>
-                          <p> <a href="<%=urlthread%>"><%=paramRequest.getLocaleString("comment")%></a> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/commentsForo.png" alt="<%=paramRequest.getLocaleString("comment")%>" width="14" height="12" /> |  <%urlthread.setMode("editPost");%><a href="<%=urlthread%>"><%=paramRequest.getLocaleString("edit")%></a> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/viewsForo.png" alt="<%=paramRequest.getLocaleString("edit")%>" width="10" height="9" /> |  <%url.setAction("removePost");%>
-                                <a href="<%=url%>"><%=paramRequest.getLocaleString("remove")%></a> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/viewsForo.png" alt="<%=paramRequest.getLocaleString("remove")%>" width="10" height="9" /></p>
+                          <p> <a href="<%=urlthread%>"><%=paramRequest.getLocaleString("comment")%></a> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/commentsForo.png" alt="<%=paramRequest.getLocaleString("comment")%>" width="14" height="12" /> |  <%urlthread.setMode("editPost");%><a href="<%=urlthread%>"><%=paramRequest.getLocaleString("edit")%></a> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/editar_foro.png" alt="<%=paramRequest.getLocaleString("edit")%>" width="7" height="15" /> |  <%url.setAction("removePost");%>
+                                <a href="<%=url%>"><%=paramRequest.getLocaleString("remove")%></a> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/eliminar_foro.png" alt="<%=paramRequest.getLocaleString("remove")%>" width="11" height="12" /></p>
                       </div>
                     </div>
                     <%
