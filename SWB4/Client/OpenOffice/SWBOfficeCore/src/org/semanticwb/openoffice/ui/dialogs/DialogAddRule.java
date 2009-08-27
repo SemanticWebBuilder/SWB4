@@ -194,6 +194,11 @@ public class DialogAddRule extends javax.swing.JDialog
                 return canEdit [columnIndex];
             }
         });
+        jTableRule.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableRuleMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTableRule);
 
         getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -219,6 +224,15 @@ public class DialogAddRule extends javax.swing.JDialog
         this.rule = (ElementInfo) model.getValueAt(this.jTableRule.getSelectedRow(), 0);
         this.setVisible(false);
     }//GEN-LAST:event_jButtonAddActionPerformed
+
+    private void jTableRuleMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_jTableRuleMouseClicked
+    {//GEN-HEADEREND:event_jTableRuleMouseClicked
+        if(evt.getClickCount()==2 && this.jTableRule.getSelectedRow()!=-1)
+        {
+            jButtonAddActionPerformed(null);
+        }
+    }//GEN-LAST:event_jTableRuleMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAdd;
     private javax.swing.JButton jButtonClose;
