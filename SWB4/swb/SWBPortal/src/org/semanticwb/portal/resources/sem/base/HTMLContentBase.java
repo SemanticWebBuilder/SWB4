@@ -18,9 +18,9 @@ public class HTMLContentBase extends org.semanticwb.portal.resources.sem.Content
     }
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/resource/ontology#HTMLContent");
 
-    public void setActualVersion(org.semanticwb.model.VersionInfo versioninfo)
+    public void setActualVersion(org.semanticwb.model.VersionInfo value)
     {
-        getSemanticObject().setObjectProperty(swb_actualVersion, versioninfo.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_actualVersion, value.getSemanticObject());
     }
 
     public void removeActualVersion()
@@ -51,9 +51,9 @@ public class HTMLContentBase extends org.semanticwb.portal.resources.sem.Content
          return ret;
     }
 
-    public void setLastVersion(org.semanticwb.model.VersionInfo versioninfo)
+    public void setLastVersion(org.semanticwb.model.VersionInfo value)
     {
-        getSemanticObject().setObjectProperty(swb_lastVersion, versioninfo.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_lastVersion, value.getSemanticObject());
     }
 
     public void removeLastVersion()

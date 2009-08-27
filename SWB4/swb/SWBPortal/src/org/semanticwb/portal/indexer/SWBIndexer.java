@@ -41,6 +41,7 @@ import java.util.TimerTask;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Descriptiveable;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
@@ -341,7 +342,7 @@ public abstract class SWBIndexer
         StringBuffer names = new StringBuffer();
         if (page!=null)
         {
-            Iterator<SemanticLiteral> it=page.getSemanticObject().listLiteralProperties(WebPage.swb_title);
+            Iterator<SemanticLiteral> it=page.getSemanticObject().listLiteralProperties(Descriptiveable.swb_title);
             while(it.hasNext())
             {
                 SemanticLiteral lit=it.next();
@@ -372,7 +373,7 @@ public abstract class SWBIndexer
         StringBuffer descb = new StringBuffer();
         if (page!=null)
         {
-            Iterator<SemanticLiteral> it=page.getSemanticObject().listLiteralProperties(WebPage.swb_description);
+            Iterator<SemanticLiteral> it=page.getSemanticObject().listLiteralProperties(Descriptiveable.swb_description);
             while(it.hasNext())
             {
                 SemanticLiteral lit=it.next();
