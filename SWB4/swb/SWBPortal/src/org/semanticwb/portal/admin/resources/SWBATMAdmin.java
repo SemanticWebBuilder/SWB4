@@ -92,7 +92,7 @@ public class SWBATMAdmin extends GenericResource
     
     private Document getService(String cmd, Document src, User user, HttpServletRequest request, HttpServletResponse response, Topic tp)
     {
-        //System.out.println("Service mi entrada:"+cmd);
+        System.out.println("Service mi entrada:"+cmd);
         if (cmd.equals("getTopicMaps"))
         {
             return getTopicMaps(user, src);
@@ -145,19 +145,22 @@ public class SWBATMAdmin extends GenericResource
                 WebSite tm = (WebSite) it.next();
                 //TODO:
                 //if(tm==SWBContext.getGlobalWebSite() || !AdmFilterMgr.getInstance().haveAccess2Topic(user, tm.getHome()))continue;
+                if(tm==SWBContext.getGlobalWebSite())continue;
                 if (!tm.isDeleted())
                 {
                     Element topicmap = dom.createElement("WebSite");
                     res.appendChild(topicmap);
                     addElement("id", tm.getId(), topicmap);
-                    addElement("idadm", "" + tm.getCreator().getURI(), topicmap);
+                    if(tm.getCreator()!=null)addElement("idadm", "" + tm.getCreator().getURI(), topicmap);
+                    else addElement("idadm", "1", topicmap);
                     addElement("title", tm.getTitle(), topicmap);
-                    addElement("home", tm.getHomePage().getId(), topicmap);
+                    if(tm.getHomePage()!=null)addElement("home", tm.getHomePage().getId(), topicmap);
                     addElement("description", tm.getDescription(), topicmap);
                     addElement("active", "" + (tm.isActive()?1:0), topicmap);
                     addElement("lastupdate", "" + tm.getUpdated(), topicmap);
                     addElement("created", "" + tm.getCreated(), topicmap);
-                    addElement("language", tm.getLanguage().getId(), topicmap);
+                    if(tm.getLanguage()!=null)addElement("language", tm.getLanguage().getId(), topicmap);
+                    else addElement("language", "es", topicmap);
                     //addElement("size",""+SWBContext.getWebSite(tm.getId()).getTopics().size(),topicmap);
                     addElement("size", "" + 0, topicmap);
                 }
@@ -220,7 +223,7 @@ public class SWBATMAdmin extends GenericResource
         try
         {
             WebSite tm = SWBContext.getWebSite(src.getElementsByTagName("topicmap").item(0).getFirstChild().getNodeValue());
-            Topic tp = tm.getWebPage(src.getElementsByTagName("topicid").item(0).getFirstChild().getNodeValue());
+            WebPage tp = tm.getWebPage(src.getElementsByTagName("topicid").item(0).getFirstChild().getNodeValue());
             String id = src.getElementsByTagName("id").item(0).getFirstChild().getNodeValue();
             NodeList lista = src.getElementsByTagName("name");
             if (!tm.hasWebPage(id))
@@ -228,6 +231,7 @@ public class SWBATMAdmin extends GenericResource
                 Element elm = (Element) lista.item(0);
                 WebPage page=tm.createWebPage(id);
                 page.setTitle(elm.getAttribute("value"),elm.getAttribute("scope"));
+                page.setParent(tp);
                 result = "1";
                 dom = SWBUtils.XML.getNewDocument();
                 Element res = dom.createElement("res");
@@ -421,7 +425,7 @@ public class SWBATMAdmin extends GenericResource
                 PrintWriter ptr = new PrintWriter(sw);
 
                 ptr.print("cgi\n");
-                ptr.print(SWBPortal.getDistributorPath() + "/"+tm+"/\n");
+                ptr.print(SWBPortal.getDistributorPath() + "/"+tm.getId()+"/\n");
 
                 Iterator it;
 
@@ -472,13 +476,16 @@ public class SWBATMAdmin extends GenericResource
                     if (t1.getId() != null)
                     {
                         WebPage type = (WebPage) t1.getParent();
-                        ptr.print("Association\n");
-                        ptr.print("t:null\n");
-                        ptr.print("n:null\n");
-                        ptr.print("r:null\n");
-                        ptr.print("p:" + type.getId() + "\n");
-                        ptr.print("r:null\n");
-                        ptr.print("p:" + t1.getId() + "\n");
+                        if(type!=null)
+                        {
+                            ptr.print("Association\n");
+                            ptr.print("t:null\n");
+                            ptr.print("n:null\n");
+                            ptr.print("r:null\n");
+                            ptr.print("p:" + type.getId() + "\n");
+                            ptr.print("r:null\n");
+                            ptr.print("p:" + t1.getId() + "\n");
+                        }
 
                         Iterator itaux = t1.listVirtualParents();
                         while (itaux.hasNext())
@@ -533,9 +540,7 @@ public class SWBATMAdmin extends GenericResource
                     }
                 }
                 ptr.flush();
-
                 map.appendChild(dom.createCDATASection(sw.toString()));
-
             } else
                 return getError(4);
         } catch (Exception e)
@@ -554,305 +559,294 @@ public class SWBATMAdmin extends GenericResource
     public Document setTopicMap4Adm(User user, Document src)
     {
         Document dom = null;
-//        try
-//        {
-//            String topicmap = null;
-//            String data = null;
-//            if (src.getElementsByTagName("topicmap").getLength() > 0)
-//                topicmap = src.getElementsByTagName("topicmap").item(0).getFirstChild().getNodeValue();
-//
-//            if (src.getElementsByTagName("data").getLength() > 0)
-//                data = src.getElementsByTagName("data").item(0).getFirstChild().getNodeValue();
-//
-//            if (topicmap != null && data != null)
-//            {
-//                dom = SWBUtils.XML.getNewDocument();
-//                Element res = dom.createElement("res");
-//                dom.appendChild(res);
-//
-//                WebSite tm = SWBContext.getWebSite(topicmap);
-//                if (tm == null) return getError(5);
-//
-//                Element map = dom.createElement("ok");
-//                res.appendChild(map);
-//
-//                //System.out.println(data);
-//
+        try
+        {
+            String topicmap = null;
+            String data = null;
+            if (src.getElementsByTagName("topicmap").getLength() > 0)
+                topicmap = src.getElementsByTagName("topicmap").item(0).getFirstChild().getNodeValue();
+
+            if (src.getElementsByTagName("data").getLength() > 0)
+                data = src.getElementsByTagName("data").item(0).getFirstChild().getNodeValue();
+
+            System.out.println("data:"+data);
+
+            if (topicmap != null && data != null)
+            {
+                dom = SWBUtils.XML.getNewDocument();
+                Element res = dom.createElement("res");
+                dom.appendChild(res);
+
+                WebSite tm = SWBContext.getWebSite(topicmap);
+                if (tm == null) return getError(5);
+
+                Element map = dom.createElement("ok");
+                res.appendChild(map);
+
+                //System.out.println(data);
+
 //                Topic tpl = tm.getWebPage("CNF_WBTemplate");
 //                Topic rule = tm.getWebPage("CNF_WBRule");
 //                Topic pflow = tm.getWebPage("CNF_WBPFlow");
-//
-//                int type = 1;
-//
-//                BufferedReader in = null;
-//                try
-//                {
-//                    in = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(data.getBytes())));
-//                    if (in != null)
-//                    {
-//                        String aux;
-//                        boolean update = false;
-//                        boolean remove = false;
-//                        boolean removeR = false;
-//                        boolean add = false;
-//                        boolean topic = false;
-//                        boolean assoc = false;
-//                        boolean isnew = false;
-//                        boolean bad = false;
-//                        Topic auxtopic = null;
-//                        int asstype = 0;
-//
-//                        int nass = 0;
-//                        Topic mem[] = new Topic[2];
-//                        String assName = "";
-//                        String assTypeId = "";
-//                        String assRole[] = new String[2];
-//
-//                        BaseName auxname = null;
-//
-//                        while ((aux = in.readLine()) != null)
-//                        {
-//                            //System.out.println(aux);
-//                            if (aux.startsWith("Type:"))
-//                            {
-//                                type = Integer.parseInt(aux.substring(5));
-//                            }
-//                            if (aux.equals("Add Topic"))
-//                            {
-//                                remove = false;
-//                                removeR = false;
-//                                update = false;
-//                                add = true;
-//                                topic = true;
-//                                assoc = false;
-//                                isnew = true;
-//                            }
-//                            if (aux.equals("Remove Topic"))
-//                            {
-//                                remove = true;
-//                                removeR = false;
-//                                update = false;
-//                                add = false;
-//                                topic = true;
-//                                assoc = false;
-//                                isnew = true;
-//                            }
-//                            if (aux.equals("RRemove Topic"))
-//                            {
-//                                remove = false;
-//                                removeR = true;
-//                                update = false;
-//                                add = false;
-//                                topic = true;
-//                                assoc = false;
-//                                isnew = true;
-//                            } else if (aux.equals("Update Topic"))
-//                            {
-//                                update = true;
-//                                remove = false;
-//                                removeR = false;
-//                                add = false;
-//                                topic = true;
-//                                assoc = false;
-//                                isnew = true;
-//                            } else if (aux.equals("Update Association"))
-//                            {
-//                                update = true;
-//                                remove = false;
-//                                removeR = false;
-//                                add = false;
-//                                topic = false;
-//                                assoc = true;
-//                                isnew = true;
-//                                assName = "";
-//                                assTypeId = "";
-//                            } else if (aux.equals("Topic"))
-//                            {
-//                                update = false;
-//                                remove = false;
-//                                removeR = false;
-//                                add = false;
-//                                topic = true;
-//                                assoc = false;
-//                                isnew = true;
-//                            } else if (aux.equals("Association"))
-//                            {
-//                                update = false;
-//                                remove = false;
-//                                removeR = false;
-//                                add = false;
-//                                topic = false;
-//                                assoc = true;
-//                                isnew = true;
-//                                assName = "";
-//                                assTypeId = "";
-//                            } else
-//                                isnew = false;
-//
-//                            if (topic && (!isnew))
-//                            {
-//                                if (aux.startsWith("i:"))
-//                                {
-//                                    if (!(aux.substring(2).length() == 0))
-//                                    {
-//                                        bad = false;
-//                                        //System.out.println(aux.substring(2));
-//                                        if (remove) tm.removeTopic(user, aux.substring(2));
-//                                        if (removeR) tm.removeTopicandChild(user, aux.substring(2));
-//                                        if (add)
-//                                        {
-//                                            auxtopic = new Topic(tm);
-//                                            auxtopic.setId(aux.substring(2));
-//                                            tm.addTopic(auxtopic);
-///*
-//                                            Occurrence occ = new Occurrence(tpl, "");
-//                                            occ.setResourceData(null);
-//                                            occ.setResourceRef("_parent");
-//                                            occ.getDbdata().setActive(1);
-//                                            auxtopic.addOccurrence(occ);
-//
-//                                            occ = new Occurrence(rule, "");
-//                                            occ.setResourceData(null);
-//                                            occ.setResourceRef("_parent");
-//                                            occ.getDbdata().setActive(1);
-//                                            auxtopic.addOccurrence(occ);
-//
-//                                            occ = new Occurrence(pflow, "");
-//                                            occ.setResourceData(null);
-//                                            occ.setResourceRef("_parent");
-//                                            occ.getDbdata().setActive(1);
-//                                            auxtopic.addOccurrence(occ);
-// **/
-//                                        }
-//                                        if (update)
-//                                        {
-//                                            auxtopic = tm.getWebPage(aux.substring(2));
-//                                            if (auxtopic == null)
-//                                            {
-//                                                auxtopic = new Topic(tm);
-//                                                auxtopic.setId(aux.substring(2));
-//                                                tm.addTopic(auxtopic);
-//                                            } else
-//                                            {
-//                                                auxtopic.setBaseNames(new ArrayList());
-//                                                if (type > 1)
-//                                                {
-//                                                    auxtopic.removeAllTypes();
-//                                                    tm.removeAssociationsToTopic(auxtopic);
-//                                                }
-//                                            }
-//                                        }
-//                                    } else
-//                                        bad = true;
-//                                } else if (aux.startsWith("n:") && !bad)
-//                                {
-//                                    auxname = new BaseName();
-//                                    auxname.setBaseNameString(aux.substring(2));
-//                                    auxtopic.getBaseNames().add(auxname);
-//                                } else if (aux.startsWith("s:") && !bad)
-//                                {
-//                                    auxname.setScope(new Scope(tm.getWebPage(aux.substring(2))));
-//                                } else if (aux.startsWith("v:") && !bad)
-//                                {
-//                                    Variant v = new Variant();
-//                                    VariantName vn = new VariantName();
-//                                    vn.setResourceData(aux.substring(2));
-//                                    v.setVariantName(vn);
-//                                    auxname.getVariants().add(v);
-//                                    //System.out.println(aux.substring(2));
-//                                }
-//                            }
-//
-//                            if (assoc && (!isnew))
-//                            {
-//                                if (aux.startsWith("t:"))
-//                                {
-//                                    bad = false;
-//                                    nass = 0;
-//                                    if (!(aux.substring(2).length() == 0))
-//                                    {
-//                                        assTypeId = aux.substring(2);
-//                                        asstype = 3;
-//                                    } else
-//                                    {
-//                                        asstype = 0;
-//                                        assTypeId = "";
-//                                    }
-//                                }
-//                                if (aux.startsWith("n:"))
-//                                {
-//                                    if (!(aux.substring(2).length() == 0))
-//                                    {
-//                                        assName = aux.substring(2);
-//                                    } else
-//                                    {
-//                                        assName = "";
-//                                    }
-//                                } else if (aux.startsWith("r:"))
-//                                {
-//                                    if (!(aux.substring(2).length() == 0))
-//                                    {
-//                                        assRole[nass] = aux.substring(2);
-//                                    } else
-//                                        assRole[nass] = "";
-//                                } else if (aux.startsWith("p:"))
-//                                {
-//                                    mem[nass] = (Topic) tm.getWebPage(aux.substring(2));
-//                                    if (mem[nass] == null) bad = true;
-//                                    nass++;
-//                                    if (nass == 2 && !bad)
-//                                    {
-//                                        if (asstype == 0)
-//                                        {
-//                                            //TopicImpl[] arr=new TopicImpl[1];
-//                                            //arr[0]=mem[0];
-//                                            //mem[1].setTypes(arr);
-//                                            if (!mem[1].isParentof(mem[0]))
-//                                                mem[1].addType(mem[0]);
-//                                            //System.out.println("Addtype:"+mem[0].getDisplayName());
-//                                        } else
-//                                        {
-//                                            Association as = new Association();
-//                                            InstanceOf insof = new InstanceOf();
-//                                            insof.setTopicRef(tm.getWebPage(assTypeId));
-//                                            as.setInstanceOf(insof);
-//                                            com.infotec.topicmaps.Member me = new Member();
-//                                            as.getMembers().add(me);
-//                                            me.getTopicRefs().put(mem[0].getId(), mem[0]);
-//                                            RoleSpec rol = new RoleSpec();
-//                                            rol.setTopicRef(tm.getWebPage(assRole[0]));
-//                                            me.setRoleSpec(rol);
-//                                            me = new Member();
-//                                            as.getMembers().add(me);
-//                                            me.getTopicRefs().put(mem[1].getId(), mem[1]);
-//                                            rol = new RoleSpec();
-//                                            rol.setTopicRef(tm.getWebPage(assRole[1]));
-//                                            me.setRoleSpec(rol);
-//                                            //System.out.println("Addmember:"+mem[0].getDisplayName());
-//                                            //System.out.println("Addmember:"+mem[1].getDisplayName());
-//                                            tm.addAssociation(as);
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                } catch (Exception ex)
-//                {
-//                    log.error(ex, SWBUtils.TEXT.getLocaleString("locale_Gateway", "error_Gateway_getService_UpdateTopicError"), true);
-//                    return getError(3);
-//                }
+
+                int type = 1;
+
+                BufferedReader in = null;
+                try
+                {
+                    in = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(data.getBytes())));
+                    if (in != null)
+                    {
+                        String aux;
+                        boolean update = false;
+                        boolean remove = false;
+                        boolean removeR = false;
+                        boolean add = false;
+                        boolean topic = false;
+                        boolean assoc = false;
+                        boolean isnew = false;
+                        boolean bad = false;
+                        Topic auxtopic = null;
+                        int asstype = 0;
+
+                        int nass = 0;
+                        WebPage mem[] = new WebPage[2];
+                        String assName = "";
+                        String assTypeId = "";
+                        String assRole[] = new String[2];
+
+                        //BaseName auxname = null;
+
+                        while ((aux = in.readLine()) != null)
+                        {
+                            //System.out.println(aux);
+                            if (aux.startsWith("Type:"))
+                            {
+                                type = Integer.parseInt(aux.substring(5));
+                            }
+                            if (aux.equals("Add Topic"))
+                            {
+                                remove = false;
+                                removeR = false;
+                                update = false;
+                                add = true;
+                                topic = true;
+                                assoc = false;
+                                isnew = true;
+                            }
+                            if (aux.equals("Remove Topic"))
+                            {
+                                remove = true;
+                                removeR = false;
+                                update = false;
+                                add = false;
+                                topic = true;
+                                assoc = false;
+                                isnew = true;
+                            }
+                            if (aux.equals("RRemove Topic"))
+                            {
+                                remove = false;
+                                removeR = true;
+                                update = false;
+                                add = false;
+                                topic = true;
+                                assoc = false;
+                                isnew = true;
+                            } else if (aux.equals("Update Topic"))
+                            {
+                                update = true;
+                                remove = false;
+                                removeR = false;
+                                add = false;
+                                topic = true;
+                                assoc = false;
+                                isnew = true;
+                            } else if (aux.equals("Update Association"))
+                            {
+                                update = true;
+                                remove = false;
+                                removeR = false;
+                                add = false;
+                                topic = false;
+                                assoc = true;
+                                isnew = true;
+                                assName = "";
+                                assTypeId = "";
+                            } else if (aux.equals("Topic"))
+                            {
+                                update = false;
+                                remove = false;
+                                removeR = false;
+                                add = false;
+                                topic = true;
+                                assoc = false;
+                                isnew = true;
+                            } else if (aux.equals("Association"))
+                            {
+                                update = false;
+                                remove = false;
+                                removeR = false;
+                                add = false;
+                                topic = false;
+                                assoc = true;
+                                isnew = true;
+                                assName = "";
+                                assTypeId = "";
+                            } else
+                                isnew = false;
+
+                            if (topic && (!isnew))
+                            {
+                                if (aux.startsWith("i:"))
+                                {
+                                    if (!(aux.substring(2).length() == 0))
+                                    {
+                                        bad = false;
+                                        //System.out.println(aux.substring(2));
+                                        if (remove) 
+                                        {
+                                            //TODO: validar no eliminar dependencias
+                                            WebPage page=tm.getWebPage(aux.substring(2));
+                                            if(page!=null)page.remove();
+                                        }
+                                        if (removeR)
+                                        {
+                                            WebPage page=tm.getWebPage(aux.substring(2));
+                                            if(page!=null)page.remove();
+                                        }
+                                        if (add)
+                                        {
+                                            WebPage page=tm.createWebPage(aux.substring(2));
+                                        }
+                                        if (update)
+                                        {
+                                            auxtopic = tm.getWebPage(aux.substring(2));
+                                            if (auxtopic == null)
+                                            {
+                                                auxtopic = tm.createWebPage(aux.substring(2));
+                                            } else
+                                            {
+                                                auxtopic.getSemanticObject().removeProperties();
+                                                auxtopic = tm.createWebPage(aux.substring(2));
+                                            }
+                                        }
+                                    } else
+                                        bad = true;
+                                } else if (aux.startsWith("n:") && !bad)
+                                {
+                                    auxtopic.setTitle(aux.substring(2));
+                                } else if (aux.startsWith("s:") && !bad)
+                                {
+                                    //TODO:
+                                    System.out.println("s:"+aux.substring(2));
+                                    //auxname.setScope(new Scope(tm.getWebPage(aux.substring(2))));
+                                } else if (aux.startsWith("v:") && !bad)
+                                {
+                                    //TODO:
+                                    System.out.println("v:"+aux.substring(2));
+                                    /*
+                                    Variant v = new Variant();
+                                    VariantName vn = new VariantName();
+                                    vn.setResourceData(aux.substring(2));
+                                    v.setVariantName(vn);
+                                    auxname.getVariants().add(v);
+                                    //System.out.println(aux.substring(2));
+                                     */
+                                }
+                            }
+
+                            if (assoc && (!isnew))
+                            {
+                                if (aux.startsWith("t:"))
+                                {
+                                    bad = false;
+                                    nass = 0;
+                                    if (!(aux.substring(2).length() == 0))
+                                    {
+                                        assTypeId = aux.substring(2);
+                                        asstype = 3;
+                                    } else
+                                    {
+                                        asstype = 0;
+                                        assTypeId = "";
+                                    }
+                                }
+                                if (aux.startsWith("n:"))
+                                {
+                                    if (!(aux.substring(2).length() == 0))
+                                    {
+                                        assName = aux.substring(2);
+                                    } else
+                                    {
+                                        assName = "";
+                                    }
+                                } else if (aux.startsWith("r:"))
+                                {
+                                    if (!(aux.substring(2).length() == 0))
+                                    {
+                                        assRole[nass] = aux.substring(2);
+                                    } else
+                                        assRole[nass] = "";
+                                } else if (aux.startsWith("p:"))
+                                {
+                                    mem[nass] = tm.getWebPage(aux.substring(2));
+                                    if (mem[nass] == null) bad = true;
+                                    nass++;
+                                    if (nass == 2 && !bad)
+                                    {
+                                        if (asstype == 0)
+                                        {
+                                            //TopicImpl[] arr=new TopicImpl[1];
+                                            //arr[0]=mem[0];
+                                            //mem[1].setTypes(arr);
+                                            if (!mem[1].isParentof(mem[0]))
+                                            {
+                                                if(mem[1].getParent()==null)
+                                                    mem[1].setParent(mem[0]);
+                                                else
+                                                    mem[1].addVirtualParent(mem[0]);
+                                            }
+                                            //System.out.println("Addtype:"+mem[0].getDisplayName());
+                                        } else
+                                        {
+                                            Association as=tm.createAssociation();
+                                            as.setType(tm.getWebPage(assTypeId));
+                                            
+                                            AssMember me = AssMember.createAssMember(tm);
+                                            as.addMember(me);
+                                            me.setMember(mem[0]);
+                                            me.setRole(tm.getWebPage(assRole[0]));
+
+                                            me = AssMember.createAssMember(tm);
+                                            as.addMember(me);
+                                            me.setMember(mem[1]);
+                                            me.setRole(tm.getWebPage(assRole[1]));
+
+                                            //System.out.println("Addmember:"+mem[0].getDisplayName());
+                                            //System.out.println("Addmember:"+mem[1].getDisplayName());
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } catch (Exception ex)
+                {
+                    log.error(SWBUtils.TEXT.getLocaleString("locale_Gateway", "error_Gateway_getService_UpdateTopicError"), ex);
+                    return getError(3);
+                }
 //                if (tm.isDBSyncronized())
 //                    tm.update2DB();
 //                else
 //                    TopicMgr.getInstance().writeTopicMap(tm, "e:/default.xtm.xml");
-//            } else
-//                return getError(4);
-//        } catch (Exception e)
-//        {
-//            log.error(e, SWBUtils.TEXT.getLocaleString("locale_Gateway", "error_Gateway_getService_UpdateTopicServiceError"), true);
-//            return getError(3);
-//        }
+            } else
+                return getError(4);
+        } catch (Exception e)
+        {
+            log.error(SWBUtils.TEXT.getLocaleString("locale_Gateway", "error_Gateway_getService_UpdateTopicServiceError"), e);
+            return getError(3);
+        }
         return dom;
     }    
     
@@ -1064,7 +1058,7 @@ public class SWBATMAdmin extends GenericResource
         PrintWriter out=response.getWriter();
         String act=request.getParameter("act");
         //out.println("<table border=\"0\" cellspacing=\"0\" height=\"100%\" cellpadding=\"0\" width=\"100%\"><tr><td width=\"100%\" height=\"100%\">");
-        out.println("<APPLET id=\"appttmadmin\" name=\"appttmadmin\" code=\"applets.mapsadm.TMWBAdmin.class\" codebase=\""+SWBPlatform.getContextPath()+"/\" ARCHIVE=\"swbadmin/lib/SWBTMAdmin.jar, swbadmin/lib/SWBCommons.jar\" width=\"100%\" height=\"100%\">");
+        out.println("<APPLET id=\"appttmadmin\" name=\"appttmadmin\" code=\"applets.mapsadm.TMWBAdmin.class\" codebase=\""+SWBPlatform.getContextPath()+"/\" ARCHIVE=\"swbadmin/lib/SWBAplTMAdmin.jar, swbadmin/lib/SWBAplCommons.jar\" width=\"100%\" height=\"100%\">");
         SWBResourceURL url=paramsRequest.getRenderUrl();
         url.setMode("gateway");
         url.setCallMethod(url.Call_DIRECT);
