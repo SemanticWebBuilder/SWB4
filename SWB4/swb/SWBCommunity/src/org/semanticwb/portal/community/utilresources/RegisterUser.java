@@ -269,7 +269,7 @@ public class RegisterUser extends GenericResource
                 int calcHeight = (150 * bi.getHeight() / bi.getWidth());
                 ImageIO.write(createResizedCopy(bi, 150, calcHeight), name.substring(name.lastIndexOf(".")+1), f);*/
 
-                ImageResizer.resize(f, 150, true, f, name.substring(name.lastIndexOf(".") + 1).toLowerCase());
+                ImageResizer.resizeCrop(f, 150, f, name.substring(name.lastIndexOf(".") + 1).toLowerCase());
 
 
             } catch (Exception ex)
