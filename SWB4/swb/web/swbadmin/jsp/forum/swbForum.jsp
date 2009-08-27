@@ -2,12 +2,13 @@
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="org.semanticwb.model.WebPage"%>
 <%@page import="org.semanticwb.model.WebSite"%>
-<%@page import="org.semanticwb.model.Resource"%>
 <%@page import="org.semanticwb.model.User"%>
+<%@page import="org.semanticwb.model.Resource"%>
 <%@page import="org.semanticwb.model.GenericIterator"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="org.semanticwb.SWBUtils"%>
 <%@page import="org.semanticwb.portal.resources.sem.forum.UserFavThread"%>
 <%@page import="org.semanticwb.portal.resources.sem.forum.SWBForum"%>
 <%@page import="org.semanticwb.portal.resources.sem.forum.Thread"%>
@@ -16,13 +17,29 @@
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="org.semanticwb.model.SWBModel"%>
+<%@page import="org.semanticwb.platform.SemanticObject"%>
+<%@page import="org.semanticwb.portal.SWBFormButton"%>
+<%@page import="org.semanticwb.portal.SWBFormMgr"%>
 
-<link href="<%=org.semanticwb.SWBPlatform.getContextPath()%>/swbadmin/css/forum.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+* {
+	margin: 0px;
+	padding: 0px;
+	border: 0px;
+	font-size: 100%;
+	vertical-align: baseline;
+}
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	background-image: url(../images/bg.gif);
+	background-repeat: no-repeat;
+}
+p {margin-bottom: 10px; color: #626262;	font-size: 0.7em;}
+a {text-decoration: none;}
+a:hover {text-decoration: underline;}
+</style>
 
-
-<table>
-    <tr><td>
-            <%
+      <%
         WebPage webpage = paramRequest.getWebPage();
         Resource base = paramRequest.getResourceBase();
         WebSite website = webpage.getWebSite();
@@ -32,174 +49,53 @@
         User user = paramRequest.getUser();
         String lang = user.getLanguage();
         String action = paramRequest.getAction();
+        String autor = "";
         if (action != null && action.equals("viewPost")) {
             SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
             Thread thread = Thread.getThread(semObject.getId(), website);
-            thread.setViewCount(thread.getViewCount() + 1);
+            if(request.getParameter("addView")!=null) thread.setViewCount(thread.getViewCount() + 1);
             url.setParameter("threadUri", thread.getURI());
-            //url.setParameter("forumUri", request.getParameter("forumUri"));
             urlthread.setParameter("threadUri", thread.getURI());
-            //urlp.setParameter("forumUri", request.getParameter("forumUri"));
-%>
-            <table border="0" cellspacing="1" cellpadding="2" width="100%">
-                <tr>
-                    <td align="left" valign="top"  height="25" class="block-title"><%=thread.getTitle()%>&nbsp;</td>
-                    <td nowrap>
-                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                            <tr>
-                                <td><!-- start newtopic.thtml -->
-                                    <%urlthread.setMode("addThread");%>
-                                    <a href="<%=urlthread.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/post_newtopic.gif" border="0" align="absmiddle" alt="<%=paramRequest.getLocaleString("newthread")%>" TITLE="<%=paramRequest.getLocaleString("newthread")%>"></a>
-                                <!-- end newtopic.thtml --></td>
-                                <td><!-- start replytopic.thtml -->
-<!-- Post Reply -->
-                                    <%urlthread.setMode("replyPost");%>
-                                    <a href="<%=urlthread.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/post_reply.gif" border="0" align="absmiddle" alt="<%=paramRequest.getLocaleString("replyPost")%>" TITLE="P<%=paramRequest.getLocaleString("replyPost")%>"></a>
-                                <!-- end replytopic.thtml --></td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-            <br>
-            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pluginCellTitle alignleft">
-                <tr>
-                    <td class="pluginBreadCrumbs alignleft" style="padding-left:5px;" nowrap></td>
-                    <td width="90%" class="alignright pluginBreadCrumbs" nowrap><!-- start subscribe.thtml -->
-                        <a href=""><%=paramRequest.getLocaleString("track")%></a>
-                    <!-- end subscribe.thtml --></td>
-                    <td class="pluginBreadCrumbs" nowrap>&nbsp;|&nbsp;</td>
-                    <td class="pluginBreadCrumbs" style="padding-right:5px;" nowrap><!-- start print.thtml -->
-                    <a href="">Versión para imprimir</a>
-                </tr>
-            </table>
-            <table width="100%" border="0" cellspacing="1" cellpadding="0" class="pluginSolidOutline alignleft">
-                <!-- end topic_navbar.thtml -->
-<%
-                String userCreated = "";
-                String threadCreator = "";
-                User userThread = null;
-                String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
-                if (thread.getCreator() != null) {
-                    userThread = thread.getCreator();
-                    userCreated = "" + userThread.getCreated();
-                    threadCreator = userThread.getName();
-                    if(userThread.getPhoto()!=null) photo=userThread.getPhoto();
-                }
-                %>
-                <!-- start topic.thtml -->
-                <tr class="pluginRow1">
-                    <td height="30" style="padding-left:6px; padding-right:6px;"><a href="" class="authorname 1"><b><%=threadCreator%></b></a><a name="34151"></a></td>
-                    <td style="padding-left:6px; padding-right:6px;">
-                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                            <tr>
-                                <td width="8" class="aligncenter"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
-                                <td nowrap>&nbsp;<%=thread.getCreated()%> &nbsp;(<%=paramRequest.getLocaleString("read")%> <%=thread.getViewCount()%> <%=paramRequest.getLocaleString("times")%>) &nbsp;
-                                    <%
-                if (userThread != null && user.getURI() != null && user.getURI().equals(userThread.getURI())) { //imprimir combo de edición y eliminar
-                                    urlthread.setMode(urlthread.Mode_VIEW);
-                                    urlthread.setMode("editThread");
-                                    SWBResourceURL urlthread1 = paramRequest.getRenderUrl();
-                                    urlthread1.setAction("removePost");
-                                    %>
-                                    <form name="admActions" action="<%=urlthread.toString()%>">
-                                        <input type="hidden" name="threadUri" value="<%=thread.getURI()%>">
-                                        <input type="hidden" name="isthread" value="1">
-                                        <select name="admAction">
-                                            <option value="editThread">Editar</option>
-                                            <option value="removePost">Eliminar</option>
-                                        </select>
-                                        <button onclick="redirect(this.form);">ir</button>
-                                    </form>
-                                    <script type="text/javascript">
-                                        function redirect(forma){
-                                            if(forma.admAction.selectedIndex==1){
-                                              forma.action="<%=urlthread1.toString()%>";
-                                              forma.submit();
-                                            }else{
-                                                forma.submit();
-                                            }
-                                            return true;
-                                        }
-                                    </script>
-                                    <%
-                }
-                                    %>
-                                </td>
-                                <td class="alignright">
-                                    <div style="vertical-align:top; padding-top:2px;" class="alignright">
-
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                <tr class="pluginRow1">
-                    <td style="vertical-align:top; padding:6px;" nowrap>
-                        <div>
-                            <br>
-
-                        </div>
-                        <div>
-                            <img src="<%=photo%>" valign="top" width="80" height="80"/><br>
-                            Registrado: <%=userCreated%>
-                         </div>
-                        <div style="background:transparent; width:110px; height:1px;"></div>
-                    </td>
-                    <td width="100%" style="vertical-align:top; padding:6px;" class="pluginRow1">
-                        <div style="min-height:100px;">
-                            <p><%=thread.getBody()%></p>
-
-                        </div>
-                        <div style="height:45px; padding-top:10px;display:none;">
-                            <br>
-
-                        </div>
-                    </td>
-                </tr>
-                <tr class="pluginRow1">
-                    <td style="height:30px;">&nbsp;</td>
-                    <td style="padding-left:6px; padding-right:6px;">
-                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                            <tr>
-                                <td nowrap>
-                                <table border="0" cellspacing="0" cellpadding="0">
-                                    <tr>
-                                        <!-- start profile.thtml -->
-                                        <td style="padding-right:3px;"><a href=""><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/profile.gif" border="0" align="absmiddle" alt="<%=paramRequest.getLocaleString("Profile")%>" TITLE="<%=paramRequest.getLocaleString("Profile")%>"></a></td>
-                                        <!-- end profile.thtml -->
-                                        <!-- start email.thtml -->
-                                        <td style="padding-right:3px;"><a href=""><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/email.gif" border="0" align="absmiddle" alt="<%=paramRequest.getLocaleString("email")%>" TITLE="<%=paramRequest.getLocaleString("email")%>"></a></td>
-                                        <!-- end email.thtml -->
-
-
-                                    </tr>
-                                </table>
-                                <td class="alignright" style="float:right;" nowrap>
-                                    <table border="0" cellspacing="0" cellpadding="0">
-                                        <tr>
-
-                                            <!-- start quotetopic.thtml -->
-                                            <%url.setMode("replyPost");%>
-                                            <td><a href="<%=url.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/quote.gif" border="0" align="absmiddle" alt="<%=paramRequest.getLocaleString("reply")%>" TITLE="<%=paramRequest.getLocaleString("reply")%>"></a></td>
-                                            <!-- end quotetopic.thtml -->
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="pluginSolidOutline"><div style="background:transparent; width:1px; height:10px;"></div></td>
-                </tr>
-                <!-- end topic.thtml -->
-
-
-<!-- start topic.thtml -->
-
-<%
+            urlthread.setMode("addThread");
+            if (thread.getCreator() != null) {
+                autor = thread.getCreator().getFullName();
+            }
+        %>
+        <div id="contenido">
+        <div class="innerContent">
+           <div id="WBForo">
+               <p class="agregarContenido"><a href="<%=urlthread%>"><%=paramRequest.getLocaleString("publicThread")%></a></p>
+            <!-- INICIA ENTRADA -->
+            <div class="entradaForo">
+              <div class="readNotread_foro">
+                <p><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/leido.png" alt="Leido" width="18" height="24" /></p>
+              </div>
+              <p class="tituloNota"><%=thread.getTitle()%></p>
+              <p class="tituloNoticia"><a href="#"><%=autor%></a></p>
+              <p><%=thread.getBody()%></p>
+              <div class="vistasForo">
+                <p> (<%=thread.getReplyCount()%>) <%=paramRequest.getLocaleString("responses")%> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/commentsForo.png" alt="<%=paramRequest.getLocaleString("responses")%>" width="14" height="12" /> |  (<%=thread.getViewCount()%>) <%=paramRequest.getLocaleString("visites")%> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/viewsForo.png" alt="<%=paramRequest.getLocaleString("visites")%>" width="10" height="9" />
+                 |  <%urlthread.setMode("editThread");%><a href="<%=urlthread%>"><%=paramRequest.getLocaleString("edit")%></a> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/viewsForo.png" alt="<%=paramRequest.getLocaleString("edit")%>" width="10" height="9" />
+                 |  <%url.setAction("removePost");url.setParameter("isthread", "1");
+                         %> <a href="<%=url%>"><%=paramRequest.getLocaleString("remove")%></a> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/viewsForo.png" alt="<%=paramRequest.getLocaleString("remove")%>" width="10" height="9" /></p>
+              </div>
+              <p>&nbsp;</p>
+            </div>
+            <%
+                SWBFormMgr mgr = new SWBFormMgr(Post.frm_Post, thread.getSemanticObject(), null);
+                actionURL.setParameter("threadUri", thread.getURI());
+                lang = user.getLanguage();
+                mgr.setLang(lang);
+                mgr.setSubmitByAjax(false);
+                mgr.setType(mgr.TYPE_XHTML);
+                actionURL.setAction("replyPost");
+                mgr.setAction(actionURL.toString());
+                mgr.addButton(SWBFormButton.newSaveButton());
+                mgr.addButton(SWBFormButton.newCancelButton());
+                request.setAttribute("formName", mgr.getFormName());
+            %>
+                <%=mgr.renderForm(request)%>
+            <%
                 boolean cambiaColor = true;
                 GenericIterator<Post> itPost = thread.listPosts();
                 while (itPost.hasNext()) {
@@ -211,160 +107,34 @@
                     String postCreated = "";
                     if (post.getCreator() != null) {
                         userPost = post.getCreator();
-                        postCreator = post.getCreator().getName();
-                        postCreated = "" + post.getCreator().getCreated();
+                        postCreator = post.getCreator().getFullName();
+                        //postCreated=SWBUtils.TEXT.getStrDate(post.getCreated(), user.getLanguage());
                     }
                     String rowClass = "pluginRow2";
                     if (!cambiaColor) {
                         rowClass = "pluginRow1";
                     }
                     cambiaColor = !(cambiaColor);
-                %>
-
-                <tr class="<%=rowClass%>">
-                    <td height="30" style="padding-left:6px; padding-right:6px;"><a href="" class="authorname 2"><b><%=postCreator%></b></a><a name="34152"></a></td>
-                    <td style="padding-left:6px; padding-right:6px;">
-                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                            <tr>
-                                <td width="8" class="aligncenter"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
-                                <td nowrap>&nbsp;<%=post.getCreated()%> &nbsp;&nbsp;
-                                    <%
-                    if (userPost != null && user.getURI() != null && user.getURI().equals(userPost.getURI())) { //imprimir combo de edición y eliminar
-                                    url.setMode(urlthread.Mode_VIEW);
-                                    url.setMode("editPost");
-                                    SWBResourceURL urlpost = paramRequest.getRenderUrl();
-                                    urlpost.setAction("removePost");
-                                    %>
-                                    <form name="admActions" action="<%=url.toString()%>">
-                                        <input type="hidden" name="threadUri" value="<%=thread.getURI()%>">
-                                        <input type="hidden" name="postUri" value="<%=post.getURI()%>">
-                                        <select name="admAction">
-                                            <option value="editPost">Editar</option>
-                                            <option value="removePost">Eliminar</option>
-                                        </select>
-                                        <button onclick="redirect(this.form);">ir</button>
-                                    </form>
-                                    <script type="text/javascript">
-                                        function redirect(forma){
-                                            if(forma.admAction.selectedIndex==1){
-                                              forma.action="<%=urlpost.toString()%>";
-                                              forma.submit();
-                                            }else{
-                                                forma.submit();
-                                            }
-                                            return true;
-                                        }
-                                    </script>
-                                    <%
+             %>
+                    <div class="replyForo">
+                      <div class="img_ReplyForo">
+                        <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/usuarionoregistrado.jpg" alt="Usuario" width="80" height="80" />
+                      </div>
+                      <p class="tituloNoticia"><%=postCreator%></p>
+                      <p><%=post.getBody()%></p>
+                      <div class="vistasForo">
+                          <%urlthread.setMode("replyPost");urlthread.setParameter("postUri", post.getURI());%>
+                          <p> <a href="<%=urlthread%>"><%=paramRequest.getLocaleString("comment")%></a> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/commentsForo.png" alt="<%=paramRequest.getLocaleString("comment")%>" width="14" height="12" /> |  <%urlthread.setMode("editPost");%><a href="<%=urlthread%>"><%=paramRequest.getLocaleString("edit")%></a> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/viewsForo.png" alt="<%=paramRequest.getLocaleString("edit")%>" width="10" height="9" /> |  <%url.setAction("removePost");%>
+                                <a href="<%=url%>"><%=paramRequest.getLocaleString("remove")%></a> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/viewsForo.png" alt="<%=paramRequest.getLocaleString("remove")%>" width="10" height="9" /></p>
+                      </div>
+                    </div>
+                    <%
                     }
-                                    %>
-                                </td>
-                                <td class="alignright">
-                                    <div style="vertical-align:top; padding-top:2px;" class="alignright">
-
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                <tr class="<%=rowClass%>">
-                    <td style="vertical-align:top; padding:6px;" nowrap>
-                        <div>
-
-                            <div style="padding-top:3px;">
-                                <img src="<%=photo%>" valign="top" width="80" height="80"/><br>
-                            </div>
-                            <p />
-                            Registrado: <%=postCreated%><br>
-                     
-                        </div>
-                        <div style="background:transparent; width:110px; height:1px;"></div>
-                    </td>
-                    <td width="100%" style="vertical-align:top; padding:6px;" class="<%=rowClass%>">
-                        <div style="min-height:100px;">
-                            <%=post.getBody()%>
-                        </div>
-                        <div style="height:45px; padding-top:10px;display:none;">
-                            <br>
-
-                        </div>
-                    </td>
-                </tr>
-                <tr class="<%=rowClass%>" style="display:;">
-                    <td style="height:30px;">&nbsp;</td>
-                    <td style="padding-left:6px; padding-right:6px;">
-                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                            <tr>
-                                <td nowrap>
-                                <table border="0" cellspacing="0" cellpadding="0">
-                                    <tr>
-                                        <!-- start profile.thtml -->
-                                        <td style="padding-right:3px;"><a href=""><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/profile.gif" border="0" align="absmiddle" alt="Profile" TITLE="Profile"></a></td>
-                                        <!-- end profile.thtml -->
-                                        <!-- start email.thtml -->
-                                        <td style="padding-right:3px;"><a href=""><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/email.gif" border="0" align="absmiddle" alt="Email" TITLE="Email"></a></td>
-                                        <!-- end email.thtml -->
-
-
-                                    </tr>
-                                </table>
-                                <td class="alignright" style="float:right;" nowrap>
-                                    <table border="0" cellspacing="0" cellpadding="0">
-                                        <tr>
-
-                                            <!-- start quotetopic.thtml -->
-                                            <%url.setMode("replyPost");%>
-                                            <td><a href="<%=url.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/quote.gif" border="0" align="absmiddle" alt="Quote" TITLE="Quote"></a></td>
-                                            <!-- end quotetopic.thtml -->
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="pluginSolidOutline"><div style="background:transparent; width:1px; height:10px;"></div></td>
-                </tr>
-                <!-- end topic.thtml -->
-<%
-                }
-                %>
-
-                <!-- start topicfooter.thtml -->
-            </table>
-            <table border="0" cellspacing="1" cellpadding="2" width="100%">
-                <tr>
-                    <td width="95%" class="alignleft" height="24" nowrap style="padding-left:6px;">&nbsp;</td>
-                    <td nowrap>
-                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                            <tr>
-                                <td><!-- start newtopic.thtml -->
-                                    <%urlthread.setMode("addThread");%>
-                                    <a href="<%=urlthread.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/post_newtopic.gif" border="0" align="absmiddle" alt="<%=paramRequest.getLocaleString("newthread")%>" TITLE="<%=paramRequest.getLocaleString("newthread")%>"></a>
-                                <!-- end newtopic.thtml --></td>
-                                <td><!-- start replytopic.thtml -->
-<!-- Post Reply -->
-                                    <%urlthread.setMode("replyPost");%>
-                                    <a href="<%=urlthread.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/post_reply.gif" border="0" align="absmiddle" alt="<%=paramRequest.getLocaleString("replyPost")%>" TITLE="P<%=paramRequest.getLocaleString("replyPost")%>"></a>
-                                <!-- end replytopic.thtml --></td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-            <p />
-            <table border="0" cellspacing="0" cellpadding="2" width="100%">
-                <tr>
-                    <td class="aligncenter" nowrap></td>
-                </tr>
-            </table>
-            <p/><br>
-            <!-- end topicfooter.thtml -->
-
-
-<%} else if (action != null && action.equals("removePost")) {
+                  %>
+          </div>
+        </div>
+        </div>
+        <%} else if (action != null && action.equals("removePost")) {
                 if (request.getParameter("isthread") != null) {
                     SemanticObject soThread = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
                     Thread thread = Thread.getThread(soThread.getId(), website);
@@ -546,12 +316,12 @@
                                     </table>
                                 </td>
                                 <td style="padding-left:6px; padding-right:6px;">&nbsp;
-                                <%if (post.getCreator() != null) {%>
-                                <%=post.getCreator().getName()%>
-                                <%}%>
+                                    <%if (post.getCreator() != null) {%>
+                                    <%=post.getCreator().getName()%>
+                                    <%}%>
                                 &nbsp;</td>
                             </tr>
-                             <%
+                            <%
                     int attchmentsSize = 0;
                     GenericIterator<Attachment> itattach = post.listAttachmentss();
                     while (itattach.hasNext()) {
@@ -559,7 +329,6 @@
                         attchmentsSize++;
                     }
                     int noAttach = attchmentsSize;
-                    System.out.println("entra a Integersss");
                     int postSize = 0;
                     String postandAttach = "0/0";
                     Iterator<Post> itPost = post.listchildPosts();
@@ -578,61 +347,61 @@
                     String[] posattachX = postandAttach.split("/");
                     int postCount = Integer.parseInt(posattachX[0]);
                     int AttachCount = Integer.parseInt(posattachX[1]);
-                %>
-                <tr class="pluginRow2">
-                    <td style="padding-left:6px; padding-right:6px;">
-                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                            <tr>
-                                <td width="8" class="aligncenter"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
-                                <td height="30" style="padding-left:6px; padding-right:6px;"><b><%=paramRequest.getLocaleString("noResponse")%></b></td>
+                            %>
+                            <tr class="pluginRow2">
+                                <td style="padding-left:6px; padding-right:6px;">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td width="8" class="aligncenter"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
+                                            <td height="30" style="padding-left:6px; padding-right:6px;"><b><%=paramRequest.getLocaleString("noResponse")%></b></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td style="padding-left:6px; padding-right:6px;">&nbsp; <%=postSize%> &nbsp;</td>
                             </tr>
-                        </table>
-                    </td>
-                    <td style="padding-left:6px; padding-right:6px;">&nbsp; <%=postSize%> &nbsp;</td>
-                </tr>
-                <tr class="pluginRow1">
-                    <td style="padding-left:6px; padding-right:6px;">
-                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                            <tr>
-                                <td width="8" class="aligncenter"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
-                                <td height="30" style="padding-left:6px; padding-right:6px;"><b><%=paramRequest.getLocaleString("TotReply")%></b></td>
+                            <tr class="pluginRow1">
+                                <td style="padding-left:6px; padding-right:6px;">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td width="8" class="aligncenter"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
+                                            <td height="30" style="padding-left:6px; padding-right:6px;"><b><%=paramRequest.getLocaleString("TotReply")%></b></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td style="padding-left:6px; padding-right:6px;">&nbsp; <%=postCount%> &nbsp;</td>
                             </tr>
-                        </table>
-                    </td>
-                    <td style="padding-left:6px; padding-right:6px;">&nbsp; <%=postCount%> &nbsp;</td>
-                </tr>
-                <tr class="pluginRow2">
-                    <td style="padding-left:6px; padding-right:6px;">
-                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                            <tr>
-                                <td width="8" class="aligncenter"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
-                                <td height="30" style="padding-left:6px; padding-right:6px;"><b><%=paramRequest.getLocaleString("noAttachments")%></b></td>
+                            <tr class="pluginRow2">
+                                <td style="padding-left:6px; padding-right:6px;">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td width="8" class="aligncenter"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
+                                            <td height="30" style="padding-left:6px; padding-right:6px;"><b><%=paramRequest.getLocaleString("noAttachments")%></b></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td style="padding-left:6px; padding-right:6px;">&nbsp; <%=attchmentsSize%> &nbsp;</td>
                             </tr>
-                        </table>
-                    </td>
-                    <td style="padding-left:6px; padding-right:6px;">&nbsp; <%=attchmentsSize%> &nbsp;</td>
-                </tr>
-                <tr class="pluginRow1">
-                    <td style="padding-left:6px; padding-right:6px;">
-                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                            <tr>
-                                <td width="8" class="aligncenter"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
-                                <td height="30" style="padding-left:6px; padding-right:6px;"><b><%=paramRequest.getLocaleString("totAttach")%></b></td>
+                            <tr class="pluginRow1">
+                                <td style="padding-left:6px; padding-right:6px;">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td width="8" class="aligncenter"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
+                                            <td height="30" style="padding-left:6px; padding-right:6px;"><b><%=paramRequest.getLocaleString("totAttach")%></b></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td style="padding-left:6px; padding-right:6px;">&nbsp; <%=AttachCount%> &nbsp;</td>
                             </tr>
-                        </table>
-                    </td>
-                    <td style="padding-left:6px; padding-right:6px;">&nbsp; <%=AttachCount%> &nbsp;</td>
-                </tr>
 
-                <form name="removePost" action="<%=actionURL.toString()%>">
-                    <input type="hidden" name="postUri" value="<%=post.getURI()%>">
-                    <input type="hidden" name="threadUri" value="<%=request.getParameter("threadUri")%>">
-                    <tr><td><input type="submit" value="<%=paramRequest.getLocaleString("remove")%>"></td>
-                        <td><input type="button" value="<%=paramRequest.getLocaleString("cancel")%>" onClick="retorna(this.form);"></td>
-                    </tr>
-                </form>
-               </table>
-              </td></tr>
+                            <form name="removePost" action="<%=actionURL.toString()%>">
+                                <input type="hidden" name="postUri" value="<%=post.getURI()%>">
+                                <input type="hidden" name="threadUri" value="<%=request.getParameter("threadUri")%>">
+                                <tr><td><input type="submit" value="<%=paramRequest.getLocaleString("remove")%>"></td>
+                                    <td><input type="button" value="<%=paramRequest.getLocaleString("cancel")%>" onClick="retorna(this.form);"></td>
+                                </tr>
+                            </form>
+                        </table>
+                </td></tr>
             </table>
             <%
                 }
@@ -647,88 +416,61 @@
             <%} else {
                 url.setMode("addThread");
             %>
-            <form name="viewthreads" action="<%=url.toString()%>">
-                <table width="100%">
-                    <tr>
-                        <td align="right">
-                            <img onClick="document.viewthreads.submit();" src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/post_newtopic.gif" alt="<%=paramRequest.getLocaleLogString("newthread")%>"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pluginCellTitle alignleft">
-                            </table>
-                            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="alignleft">
-                                <tr>
-                                    <td>
-                                        <table width="100%" border="0" cellspacing="1" cellpadding="2" class="pluginSolidOutline">
-                                            <tr>
-                                                <td colspan="2" class="aligncenter pluginCellSubTitle">&nbsp;   &nbsp;<%=paramRequest.getLocaleString("thread")%></td>
-                                                <td class="aligncenter pluginCellSubTitle"><%=paramRequest.getLocaleString("views")%></td>
-                                                <td class="aligncenter pluginCellSubTitle"><%=paramRequest.getLocaleString("replies")%></td>
-                                                <td class="aligncenter pluginCellSubTitle"><%=paramRequest.getLocaleString("lastMsg")%></td>
-                                            </tr>
-                                            <%
-                String autor = "";
-                url.setMode(url.Mode_VIEW);
-                url.setAction("viewPost");
-                GenericIterator<WebPage> itThreads = webpage.listChilds();
-                while (itThreads.hasNext()) {
-                    WebPage wp = itThreads.next();
-                    Thread thread = (Thread) wp.getSemanticObject().createGenericInstance();
-                    SWBForum forum = thread.getForum();
-                    if (forum.getId().equals(base.getId())) {
-                        url.setParameter("threadUri", thread.getURI());
-                        if (thread.getCreator() != null) {
-                            autor = thread.getCreator().getName();
+            <div id="contenido">
+             <div class="innerContent">
+                <div id="WBForo">
+                    <p class="agregarContenido"><a href="<%=url%>"><%=paramRequest.getLocaleString("publicThread")%></a></p>
+                    <%
+                    autor = "";
+                    url.setMode(url.Mode_VIEW);
+                    url.setAction("viewPost");
+                    GenericIterator<WebPage> itThreads = webpage.listChilds();
+                    while (itThreads.hasNext()) {
+                        WebPage wp = itThreads.next();
+                        Thread thread = (Thread) wp.getSemanticObject().createGenericInstance();
+                        SWBForum forum = thread.getForum();
+                        if (forum.getId().equals(base.getId())) {
+                            url.setParameter("threadUri", thread.getURI());
+                            if (thread.getCreator() != null) {
+                                autor = thread.getCreator().getFullName();
+                            }
+                    %>
+                      <div class="entradaForo" >
+                          <div class="readNotread_foro"><p>
+                          <%
+                            url.setParameter("addView", "1");
+                            if(thread.getViewCount()==0){%> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/noleido.png" alt="Leido" width="18" height="24" />
+                          <%}else{%> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/leido.png" alt="Leido" width="18" height="24" />
+                          <%}%>
+                          </p>
+                          </div>
+                            <p class="tituloNota"><a href="<%=url%>"><%=thread.getTitle()%></a></p>
+                            <p class="tituloNoticia"><a href="#"><%=autor%></a></p>
+
+                            <div class="lastView_foro">
+                                <%String date=SWBUtils.TEXT.getStrDate(thread.getCreated(), user.getLanguage());%>
+                                <p>Última entrada: <%=date%></p>
+                            </div>
+                            <div class="vistasForo">
+                                <p> (<%=thread.getReplyCount()%>) <%=paramRequest.getLocaleString("responses")%> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/commentsForo.png" alt="<%=paramRequest.getLocaleString("responses")%>" width="14" height="12" /> |  (<%=thread.getViewCount()%>) <%=paramRequest.getLocaleString("visites")%> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/viewsForo.png" alt="<%=paramRequest.getLocaleString("visites")%>" width="10" height="9" /></p>
+                            </div>
+                            <div class="clearNosp">&nbsp;</div>                        
+                       </div>
+                 <%
                         }
-                                            %>
-                                            <tr class="pluginRollOut" onMouseOver="className='pluginRollOver';" onMouseOut="className='pluginRollOut pluginLinks';">
-                                                <td width="25" class="aligncenter pluginCol"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/newposts.png" border="0" align="absmiddle" alt="<%=paramRequest.getLocaleString("replyPost")%>" TITLE="P<%=paramRequest.getLocaleString("replyPost")%>">
-                                                <td width="200" onMouseOver="this.style.cursor='pointer';" onclick="window.location.href='<%=url.toString()%>'">
-                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                        <tr class="pluginLinks">
-                                                            <td nowrap width="50%"><a class="tooltip" style="text-decoration:none;" href="<%=url.toString()%>"><%=thread.getTitle()%><span style="left:50px;"><b>Started by:<%=autor%>, <%=thread.getCreated()%>&nbsp;</b><br /><%=thread.getBody()%>
-                                                            </span></a></td>
-                                                            <td colspan="2" class="alignright pluginLinks">&nbsp;</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                                <td class="aligncenter pluginCol" width="45" nowrap><%=thread.getViewCount()%></td>
-                                                <td class="aligncenter pluginCol" width="45" nowrap><%=thread.getReplyCount()%></td>
-                                                <td onMouseOver="this.style.cursor='pointer';" onclick="window.location.href='<%=url.toString()%>'" TITLE="Click to go directly to last post">
-                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                        <tr>
-                                                            <td nowrap style="padding-left:2px;" class="pluginLinks">By:<%=autor%></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td nowrap style="padding-left:2px" class="pluginLinks"><%=thread.getCreated()%>&nbsp;</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <%
                     }
-                }
-                                            %>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </form>
-            <%
-            }
-            %>
-    </td></tr>
-</table>
+                 %>
+               </div>
+           </div>
+           </div>
+           <%
+           }
+          %>
+
 
 
 <%!
     private String getPostAndAttachments(Post post, String posattach) {
-        System.out.println("entra a getPostAndAttachments");
         String[] posattachX = posattach.split("/");
         int postCount = Integer.parseInt(posattachX[0]);
         int AttachCount = Integer.parseInt(posattachX[1]);
