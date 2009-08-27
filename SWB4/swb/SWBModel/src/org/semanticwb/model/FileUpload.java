@@ -54,6 +54,8 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
     }
 
     public String renderXHTML(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
+        //boolean DOJO=false;
+        //if(type.equals("dojo"))DOJO=true;
         String ret = "";
         String name = prop.getName();
         String label = prop.getDisplayName(lang);
