@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Resourceable;
+import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -29,6 +31,12 @@ public class MyEvents extends GenericAdmResource {
         //String mode = paramRequest.getArgument("mode");
         String action = request.getParameter("act");
         String mode = request.getParameter("mode");
+        String url = "";
+        Resourceable rsa = paramRequest.getResourceBase().getResourceable();
+        if (rsa != null && rsa instanceof WebPage) {
+                url = ((WebPage) rsa).getUrl();
+                System.out.println("url on resource.."+url);
+        }
         String path = SWBPlatform.getContextPath() + "/swbadmin/jsp/microsite/perfil/myEvents.jsp";
         if (action == null) action = "view";
         
@@ -42,6 +50,7 @@ public class MyEvents extends GenericAdmResource {
         
         try {
             request.setAttribute("paramRequest", paramRequest);
+            request.setAttribute("admurl", url);
             RequestDispatcher rd = request.getRequestDispatcher(path);
             rd.include(request, response);
         } catch (Exception e) {
