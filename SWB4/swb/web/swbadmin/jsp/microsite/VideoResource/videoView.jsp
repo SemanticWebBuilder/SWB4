@@ -1,5 +1,5 @@
 <%@page contentType="text/html"%>
-<%@page import="org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<%@page import="java.text.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%
     SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
     User user=paramRequest.getUser();
@@ -17,6 +17,7 @@
         SWBResourceURL viewurl=paramRequest.getRenderUrl().setParameter("act","detail").setParameter("uri",video.getURI());
         if(video.canView(member))
         {
+            
             if(i%2==0)out.println("<tr>");
 %>
     <td width="50%" valign="top">
@@ -30,8 +31,12 @@
         <%=video.getDescription()%> <BR>
         <%=video.getCreator().getFullName()%> <BR>
         <%=SWBUtils.TEXT.getTimeAgo(video.getCreated(),user.getLanguage())%> <BR>
-        <%=video.getRank()%> <BR>
-        <!--</small></td><td valign="top"><small>-->
+        <%
+            DecimalFormat df=new DecimalFormat("#0.0#");
+            String rank=df.format(video.getRank());
+        %>
+        Calificación: <%=rank%> de 5<BR>
+       
         <%=video.getViews()%> vistas<BR>
         </small></td></tr>
       </table>
