@@ -22,8 +22,10 @@
 **/
 import org.semanticwb.model.User
 import org.semanticwb.model.WebPage
+import org.semanticwb.model.DisplayProperty
 import org.semanticwb.portal.api.SWBResourceURL
 import org.semanticwb.platform.SemanticProperty
+import org.semanticwb.platform.SemanticObject
 
 def paramRequest=request.getAttribute("paramRequest")
 User user = paramRequest.getUser()
@@ -63,6 +65,31 @@ def usr_hobbies = user.getExtendedAttribute(mapa.get("userHobbies"))
 if (null==usr_hobbies) usr_hobbies = ""
 def usr_inciso = user.getExtendedAttribute(mapa.get("userInciso"))
 if (null==usr_inciso) usr_inciso = ""
+def usr_doings = user.getExtendedAttribute(mapa.get("userDoings"))
+if (null==usr_doings) usr_doings = ""
+SemanticObject sobj=mapa.get("userDoings").getDisplayProperty()
+DisplayProperty dobj=new DisplayProperty(sobj);
+def selectValues=dobj.getDisplaySelectValues("es");
+def usr_do_sel = ""
+StringTokenizer st=new StringTokenizer(selectValues,"|");
+                while(st.hasMoreTokens())
+                {
+                    String tok=st.nextToken();
+                    int ind=tok.indexOf(':');
+                    String vid=tok;
+                    String val=tok;
+                    if(ind>0)
+                    {
+                        vid=tok.substring(0,ind);
+                        val=tok.substring(ind+1);
+                    }
+                    usr_do_sel = usr_do_sel + "<option value=\""+vid+"\" "
+                    if(vid.equals(usr_doings))
+                        usr_do_sel = usr_do_sel + "selected"
+                    usr_do_sel = usr_do_sel + ">"+val+"</option>\n"
+                }
+                
+
 def fb_app_key = "f5193e81d8840596eb930aee0768590d"
 
 println """
@@ -70,6 +97,10 @@ println """
 
 	<style type="text/css">
  @import "/swbadmin/css/upload.css";
+import org.semanticwb.platform.SemanticObject
+import org.semanticwb.platform.SemanticObject
+import org.semanticwb.platform.SemanticObject
+import org.semanticwb.model.DisplayProperty
  </style>
     <script type="text/javascript">
     var uploads_in_progress = 0;
@@ -144,6 +175,11 @@ action="$acc_url"   method="post">
                     <option value=""></option>
                     <option value="M" $usr_sexM>Hombre</option>
                     <option value="F" $usr_sexF>Mujer</option>
+                    </select></td></tr>
+            <tr><td width="200px" align="right"><label for="userDoings">Ocupaci&oacute;n &nbsp;</label></td>
+                    <td><select dojoType="dijit.form.FilteringSelect" autocomplete="false" _id="userDoings" name="userDoings" value="$usr_doings"
+                    required="false" promptMessage="Elige ocupaci&oacute;n" invalidMessage="Dato Invalido" >
+                    $usr_do_sel
                     </select></td></tr>
         </table>
     </fieldset>
