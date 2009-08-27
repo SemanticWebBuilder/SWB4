@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="org.semanticwb.platform.*,java.text.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<%@page import="java.text.*,org.semanticwb.platform.*,java.text.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <script language="Javascript" type="text/javascript">
         function validateremove(url, title,uri)
         {
@@ -87,12 +87,14 @@
                         {
                             srcImageUsuario=pathIamge+post.getCreator().getPhoto();
                         }
+                        DecimalFormat df=new DecimalFormat("#0.0#");
+                        String rank=df.format(post.getRank());
                         %>
                         <div class="entryBlog">
                         <p><img src="<%=srcImageUsuario%>" alt="<%=postAuthor%>" width="90" height="90" ></p>
                         <p class="tituloNaranja"><%=post.getTitle()%></p>
                         <p>Creado por: <%=postAuthor%> , <%=createdPost%></p>
-                        <p>Visitas: <%=post.getViews()%>, Calificación: <%=post.getRank()%></p>
+                        <p>Visitas: <%=post.getViews()%>, Calificación: <%=rank%></p>
                         <p><%=description%></p>
                         <div class="vermasFloat"><p class="vermas"><a href="<%=urlDetail%>">Ver más</a></p></div>
                         <%
