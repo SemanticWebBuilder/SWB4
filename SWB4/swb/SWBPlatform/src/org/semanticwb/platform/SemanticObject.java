@@ -1262,7 +1262,7 @@ public class SemanticObject
         return ret;
     }
 
-    public void removeDependencies()
+    public void removeDependencies(ArrayList<SemanticObject> stack)
     {
         Iterator<SemanticProperty> itp=getSemanticClass().listProperties();
         while(itp.hasNext())
@@ -1279,7 +1279,7 @@ public class SemanticObject
                         //System.out.println(dep);
                         try
                         {
-                            dep.remove();
+                            if(!stack.contains(dep))dep.remove(stack);
                         }catch(Exception e){log.error(e);}
                     }
                 }else
@@ -1291,7 +1291,7 @@ public class SemanticObject
                         //System.out.println(dep);
                         try
                         {
-                            dep.remove();
+                            if(!stack.contains(dep))dep.remove(stack);
                         }catch(Exception e){log.error(e);}
                     }
                 }
@@ -1325,9 +1325,15 @@ public class SemanticObject
 
     public void remove()
     {
+        remove(new ArrayList());
+    }
+
+    public void remove(ArrayList<SemanticObject> stack)
+    {
+        stack.add(this);
         if(getModel().getModelObject().equals(this))    //es un modelo
         {
-            removeDependencies();
+            removeDependencies(stack);
             SWBPlatform.getSemanticMgr().removeModel(getId());
             SWBPlatform.getSemanticMgr().notifyChange(this, null, "REMOVE");
         }else                                           //es un objeto
@@ -1348,7 +1354,7 @@ public class SemanticObject
             resetRelatedsCache();
 
             //Eliminar dependencias
-            removeDependencies();
+            removeDependencies(stack);
 
             //Borrar objeto
             Resource res=getRDFResource();
@@ -1369,6 +1375,11 @@ public class SemanticObject
             }
         }
         removeCache(getURI());
+    }
+
+    public void removeProperties()
+    {
+        m_res.removeProperties();
     }
 
 /******************************************************************************************************************/
