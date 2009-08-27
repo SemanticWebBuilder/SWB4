@@ -1,11 +1,8 @@
-<%-- 
-    Document   : blogDetail
-    Created on : 13/08/2009, 06:01:12 PM
-    Author     : victor.lorenzana
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.text.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+ 
+   
+
 <%
     SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
     User user=paramRequest.getUser();
@@ -19,7 +16,7 @@
         <%
         return;
     }    
-    String defaultFormat = "dd/MM/yyyy HH:mm";
+    //String defaultFormat = "dd/MM/yyyy HH:mm";
     //SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
     String updated = SWBUtils.TEXT.getTimeAgo(post.getUpdated(), user.getLanguage());
     String postAuthor = post.getCreator().getFirstName();
@@ -31,6 +28,8 @@
     {
         content=post.getContent();
     }
+    DecimalFormat df=new DecimalFormat("#0.0#");
+    String rank=df.format(post.getRank());
 %>
 <br>
 <div id="blog">
@@ -48,7 +47,7 @@
 if(email!=null)
     {
     %>
-    <p>Escrito por: <a href="mailto:<%=email%>"><%=postAuthor%></a> , <%=updated%>, visitas: <%=post.getViews()%> , calificación: <%=post.getRank()%></p>
+    <p>Escrito por: <a href="mailto:<%=email%>"><%=postAuthor%></a> , <%=updated%>, visitas: <%=post.getViews()%> , calificación: <%=rank%></p>
     <p><img src="images/solidLine.jpg" alt="" width="680" height="1" ></p>
     <%
     }
@@ -65,7 +64,7 @@ if(email!=null)
     </tr>       
     <tr>
         <td>            
-            <p id="content"><%=content%></p>
+             <p id="content"><%=content%></p> 
         </td>
     </tr>
 
@@ -82,6 +81,8 @@ if(email!=null)
     <br>    
     <br>
     <br>
+
+    
 <%
 post.renderGenericElements(request, out, paramRequest);
 %>
