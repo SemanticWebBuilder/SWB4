@@ -33,7 +33,9 @@ import java.util.Iterator;
 import javax.servlet.http.*;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.User;
+import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.*;
 
@@ -448,7 +450,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
+        if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {            
             doShowGadget(request, response, paramRequest);
         } else {
             doShowAdmin(request, response, paramRequest);
@@ -562,7 +564,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         User user = paramRequest.getUser();
         StringBuffer sbf = new StringBuffer();
         String lang = "es";
-
+        
         response.setContentType("text/html");
         response.setHeader("Cache-control", "no-cache");
         response.setHeader("Pragma", "no-cache");
@@ -581,6 +583,11 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
             return;
         }
 
+        String url = "";
+        Resourceable rsa = getResourceBase().getResourceable();
+        if (rsa != null && rsa instanceof WebPage) {
+                url = ((WebPage) rsa).getUrl();
+        }
         //Add necesary scripting
         sbf.append("<script type=\"text/javascript\" charset=\"utf-8\" src=\"" + SWBPlatform.getContextPath() + "/swbadmin/js/swb.js\"></script>\n");
         sbf.append("<script type=\"text/javascript\" charset=\"utf-8\" src=\"" + SWBPlatform.getContextPath() + "/swbadmin/js/swb_admin.js\"></script>\n");
@@ -644,7 +651,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                     " " + BookmarkEntry.sclass.getDisplayName(lang) +
                     "'); return false;\">" +
                     paramRequest.getLocaleString("lblMark") + "</a> \n" +
-                    "  <a href=\"#\" onClick=\"openWindow('" + getAdmUrl() + "','')\">" +
+                    "  <a href=\""+ url +"\">" +
                     paramRequest.getLocaleString("lblManage") + "</a>\n" +
                     "  </p>\n");
             ////-------Termina bloque de controles
