@@ -487,7 +487,7 @@ public class MicroSiteElement
             ret.append("\n    </div>");
         }
 
-        ret.append("\n  </div>\n<div>");
+        ret.append("\n  </div>\n</div>");
 //        ret.append("\n  </td>\n</tr>\n</table>\n");
         return ret.toString();
     }
