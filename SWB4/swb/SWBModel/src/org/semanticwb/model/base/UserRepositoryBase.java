@@ -1,22 +1,22 @@
 package org.semanticwb.model.base;
 
 
-public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable
+public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Filterable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
-    public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
-    public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
-    public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
-    public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
-    public static final org.semanticwb.platform.SemanticProperty swb_userRepLoginContext=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepLoginContext");
-    public static final org.semanticwb.platform.SemanticProperty swb_userRepAuthMethod=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepAuthMethod");
-    public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
     public static final org.semanticwb.platform.SemanticProperty swb_userRepSecurityQuestionList=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepSecurityQuestionList");
     public static final org.semanticwb.platform.SemanticProperty swb_userRepAlternateLoginURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepAlternateLoginURL");
     public static final org.semanticwb.platform.SemanticProperty swb_userRepCallBackHandlerClassName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepCallBackHandlerClassName");
-    public static final org.semanticwb.platform.SemanticProperty swb_userRepExternalConfigFile=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepExternalConfigFile");
-    public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
-    public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
     public static final org.semanticwb.platform.SemanticProperty swb_undeleteable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#undeleteable");
+    public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
+    public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
+    public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
+    public static final org.semanticwb.platform.SemanticProperty swb_userRepLoginContext=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepLoginContext");
+    public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
+    public static final org.semanticwb.platform.SemanticProperty swb_userRepAuthMethod=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepAuthMethod");
+    public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
+    public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
+    public static final org.semanticwb.platform.SemanticProperty swb_userRepExternalConfigFile=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepExternalConfigFile");
+    public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
     public static final org.semanticwb.platform.SemanticClass swb_UserGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroup");
     public static final org.semanticwb.platform.SemanticClass swb_UserFavorite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserFavorite");
     public static final org.semanticwb.platform.SemanticClass swb_Role=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Role");
@@ -77,104 +77,6 @@ public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements
         return (getUserRepository(id)!=null);
     }
 
-    public java.util.Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(swb_created);
-    }
-
-    public void setCreated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_created, value);
-    }
-
-    public void setModifiedBy(org.semanticwb.model.User value)
-    {
-        getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
-    }
-
-    public void removeModifiedBy()
-    {
-        getSemanticObject().removeProperty(swb_modifiedBy);
-    }
-
-   public static java.util.Iterator<org.semanticwb.model.UserRepository> listUserRepositoryByModifiedBy(org.semanticwb.model.User modifiedby,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.model.UserRepository> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_modifiedBy, modifiedby.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.model.UserRepository> listUserRepositoryByModifiedBy(org.semanticwb.model.User modifiedby)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.model.UserRepository> it=new org.semanticwb.model.GenericIterator(modifiedby.getSemanticObject().getModel().listSubjects(swb_modifiedBy,modifiedby.getSemanticObject()));
-       return it;
-   }
-
-    public org.semanticwb.model.User getModifiedBy()
-    {
-         org.semanticwb.model.User ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.User)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
-    public String getTitle()
-    {
-        return getSemanticObject().getProperty(swb_title);
-    }
-
-    public void setTitle(String value)
-    {
-        getSemanticObject().setProperty(swb_title, value);
-    }
-
-    public String getTitle(String lang)
-    {
-        return getSemanticObject().getProperty(swb_title, null, lang);
-    }
-
-    public String getDisplayTitle(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(swb_title, lang);
-    }
-
-    public void setTitle(String title, String lang)
-    {
-        getSemanticObject().setProperty(swb_title, title, lang);
-    }
-
-    public String getLoginContext()
-    {
-        return getSemanticObject().getProperty(swb_userRepLoginContext);
-    }
-
-    public void setLoginContext(String value)
-    {
-        getSemanticObject().setProperty(swb_userRepLoginContext, value);
-    }
-
-    public String getAuthMethod()
-    {
-        return getSemanticObject().getProperty(swb_userRepAuthMethod);
-    }
-
-    public void setAuthMethod(String value)
-    {
-        getSemanticObject().setProperty(swb_userRepAuthMethod, value);
-    }
-
-    public java.util.Date getUpdated()
-    {
-        return getSemanticObject().getDateProperty(swb_updated);
-    }
-
-    public void setUpdated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_updated, value);
-    }
-
     public String getUserRepSecurityQuestionList()
     {
         return getSemanticObject().getProperty(swb_userRepSecurityQuestionList);
@@ -220,14 +122,112 @@ public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements
         getSemanticObject().setProperty(swb_userRepCallBackHandlerClassName, value);
     }
 
-    public String getUserRepExternalConfigFile()
+    public boolean isUndeleteable()
     {
-        return getSemanticObject().getProperty(swb_userRepExternalConfigFile);
+        return getSemanticObject().getBooleanProperty(swb_undeleteable);
     }
 
-    public void setUserRepExternalConfigFile(String value)
+    public void setUndeleteable(boolean value)
     {
-        getSemanticObject().setProperty(swb_userRepExternalConfigFile, value);
+        getSemanticObject().setBooleanProperty(swb_undeleteable, value);
+    }
+
+    public java.util.Date getCreated()
+    {
+        return getSemanticObject().getDateProperty(swb_created);
+    }
+
+    public void setCreated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_created, value);
+    }
+
+    public void setModifiedBy(org.semanticwb.model.User value)
+    {
+        getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+    }
+
+    public void removeModifiedBy()
+    {
+        getSemanticObject().removeProperty(swb_modifiedBy);
+    }
+
+   public static java.util.Iterator<org.semanticwb.model.UserRepository> listUserRepositoryByModifiedBy(org.semanticwb.model.User modifiedby,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.UserRepository> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_modifiedBy, modifiedby.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.model.UserRepository> listUserRepositoryByModifiedBy(org.semanticwb.model.User modifiedby)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.UserRepository> it=new org.semanticwb.model.GenericIterator(modifiedby.getSemanticObject().getModel().listSubjects(swb_modifiedBy,modifiedby.getSemanticObject()));
+       return it;
+   }
+
+    public org.semanticwb.model.User getModifiedBy()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+    public String getLoginContext()
+    {
+        return getSemanticObject().getProperty(swb_userRepLoginContext);
+    }
+
+    public void setLoginContext(String value)
+    {
+        getSemanticObject().setProperty(swb_userRepLoginContext, value);
+    }
+
+    public String getTitle()
+    {
+        return getSemanticObject().getProperty(swb_title);
+    }
+
+    public void setTitle(String value)
+    {
+        getSemanticObject().setProperty(swb_title, value);
+    }
+
+    public String getTitle(String lang)
+    {
+        return getSemanticObject().getProperty(swb_title, null, lang);
+    }
+
+    public String getDisplayTitle(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_title, lang);
+    }
+
+    public void setTitle(String title, String lang)
+    {
+        getSemanticObject().setProperty(swb_title, title, lang);
+    }
+
+    public String getAuthMethod()
+    {
+        return getSemanticObject().getProperty(swb_userRepAuthMethod);
+    }
+
+    public void setAuthMethod(String value)
+    {
+        getSemanticObject().setProperty(swb_userRepAuthMethod, value);
+    }
+
+    public java.util.Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(swb_updated);
+    }
+
+    public void setUpdated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_updated, value);
     }
 
     public void setCreator(org.semanticwb.model.User value)
@@ -263,6 +263,16 @@ public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements
          return ret;
     }
 
+    public String getUserRepExternalConfigFile()
+    {
+        return getSemanticObject().getProperty(swb_userRepExternalConfigFile);
+    }
+
+    public void setUserRepExternalConfigFile(String value)
+    {
+        getSemanticObject().setProperty(swb_userRepExternalConfigFile, value);
+    }
+
     public String getDescription()
     {
         return getSemanticObject().getProperty(swb_description);
@@ -286,16 +296,6 @@ public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
-    }
-
-    public boolean isUndeleteable()
-    {
-        return getSemanticObject().getBooleanProperty(swb_undeleteable);
-    }
-
-    public void setUndeleteable(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(swb_undeleteable, value);
     }
 
     public org.semanticwb.model.UserGroup getUserGroup(String id)
