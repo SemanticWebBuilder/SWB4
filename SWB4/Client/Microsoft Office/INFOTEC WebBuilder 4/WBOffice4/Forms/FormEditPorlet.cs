@@ -451,10 +451,12 @@ namespace WBOffice4.Forms
                     if (listViewRules.Items.Count == 0 || listViewRules.SelectedIndices.Count == 0)
                     {
                         toolStripButtonDeleteRule.Enabled = false;
+                        toolStripButtonActivate.Enabled = false;
                     }
                     else
                     {
                         toolStripButtonDeleteRule.Enabled = true;
+                        toolStripButtonActivate.Enabled = true;
                     }
                 }
                 catch (Exception ue)
@@ -484,10 +486,12 @@ namespace WBOffice4.Forms
                         if (listViewRules.Items.Count == 0 || listViewRules.SelectedIndices.Count == 0)
                         {
                             toolStripButtonDeleteRule.Enabled = false;
+                            toolStripButtonActivate.Enabled = false;
                         }
                         else
                         {
                             toolStripButtonDeleteRule.Enabled = true;
+                            toolStripButtonActivate.Enabled = true;
                         }
                     }
                     catch (Exception ue)
@@ -552,9 +556,36 @@ namespace WBOffice4.Forms
         private void listViewRules_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.toolStripButtonDeleteRule.Enabled = false;
-            if (this.listViewCalendar.SelectedItems.Count > 0)
+            this.toolStripButtonActivate.Enabled = false;
+            this.toolStripButtonActivate.Text = "Activar";
+            if (this.listViewRules.SelectedItems.Count > 0)
             {
                 this.toolStripButtonDeleteRule.Enabled = true;
+                ElementListView item=(ElementListView) this.listViewRules.SelectedItems[0];
+                if(item.ElementInfo.active)
+                {
+                    this.toolStripButtonActivate.Text = "Desactivar";
+                }
+                else
+                {
+                    this.toolStripButtonActivate.Text = "Activar";
+                }
+                this.toolStripButtonActivate.Enabled = true;
+            }
+        }
+
+        private void toolStripButtonActivate_Click(object sender, EventArgs e)
+        {
+            if (this.listViewRules.SelectedItems.Count > 0)
+            {
+                ElementListView item = (ElementListView)this.listViewRules.SelectedItems[0];
+                item.Active = !item.Active;
+                this.Cursor = Cursors.WaitCursor;
+                OfficeApplication.OfficeDocumentProxy.addElementToResource(this.pageInformation, item.ElementInfo);
+                this.listViewRules_SelectedIndexChanged(null, null);
+                this.listViewRules.Refresh();
+                this.Cursor = Cursors.Default;
+
             }
         }
 

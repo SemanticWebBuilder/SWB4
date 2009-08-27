@@ -77,7 +77,6 @@
             this.textBoxTitle = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPageProperties = new System.Windows.Forms.TabPage();
-            this.propertyEditor1 = new Editor.PropertyEditor();
             this.tabPageCalendar = new System.Windows.Forms.TabPage();
             this.listViewCalendar = new System.Windows.Forms.ListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
@@ -97,8 +96,11 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonDeleteRule = new System.Windows.Forms.ToolStripButton();
             this.tabPageTitles = new System.Windows.Forms.TabPage();
-            this.titleEditor1 = new Editor.TitleEditor();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButtonActivate = new System.Windows.Forms.ToolStripButton();
+            this.propertyEditor1 = new Editor.PropertyEditor();
+            this.titleEditor1 = new Editor.TitleEditor();
             this.panel1.SuspendLayout();
             this.tabControlProperties.SuspendLayout();
             this.tabPageInformation.SuspendLayout();
@@ -359,16 +361,6 @@
             this.tabPageProperties.Text = "Propiedades de publicación";
             this.tabPageProperties.UseVisualStyleBackColor = true;
             // 
-            // propertyEditor1
-            // 
-            this.propertyEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.propertyEditor1.Location = new System.Drawing.Point(3, 3);
-            this.propertyEditor1.Name = "propertyEditor1";
-            this.propertyEditor1.Properties = null;
-            this.propertyEditor1.Size = new System.Drawing.Size(429, 241);
-            this.propertyEditor1.TabIndex = 0;
-            this.propertyEditor1.Values = new string[0];
-            // 
             // tabPageCalendar
             // 
             this.tabPageCalendar.Controls.Add(this.listViewCalendar);
@@ -498,7 +490,7 @@
             // toolStripContainer1.ContentPanel
             // 
             this.toolStripContainer1.ContentPanel.Controls.Add(this.toolStrip1);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(429, 2);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(429, 27);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Top;
             this.toolStripContainer1.LeftToolStripPanelVisible = false;
             this.toolStripContainer1.Location = new System.Drawing.Point(3, 3);
@@ -514,6 +506,8 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonAddRule,
             this.toolStripSeparator1,
+            this.toolStripButtonActivate,
+            this.toolStripSeparator3,
             this.toolStripButtonDeleteRule});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
@@ -556,6 +550,33 @@
             this.tabPageTitles.TabIndex = 4;
             this.tabPageTitles.Text = "Títulos de la página";
             this.tabPageTitles.UseVisualStyleBackColor = true;
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripButtonActivate
+            // 
+            this.toolStripButtonActivate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonActivate.Enabled = false;
+            this.toolStripButtonActivate.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonActivate.Image")));
+            this.toolStripButtonActivate.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonActivate.Name = "toolStripButtonActivate";
+            this.toolStripButtonActivate.Size = new System.Drawing.Size(45, 22);
+            this.toolStripButtonActivate.Text = "Activar";
+            this.toolStripButtonActivate.ToolTipText = "Activar o desactivar regla, rol o grupo";
+            this.toolStripButtonActivate.Click += new System.EventHandler(this.toolStripButtonActivate_Click);
+            // 
+            // propertyEditor1
+            // 
+            this.propertyEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.propertyEditor1.Location = new System.Drawing.Point(3, 3);
+            this.propertyEditor1.Name = "propertyEditor1";
+            this.propertyEditor1.Properties = null;
+            this.propertyEditor1.Size = new System.Drawing.Size(429, 241);
+            this.propertyEditor1.TabIndex = 0;
+            this.propertyEditor1.Values = new string[0];
             // 
             // titleEditor1
             // 
@@ -652,5 +673,7 @@
         private System.Windows.Forms.ToolStripButton toolStripButtonAddRule;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton toolStripButtonDeleteRule;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripButton toolStripButtonActivate;
     }
 }
