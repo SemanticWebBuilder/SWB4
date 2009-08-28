@@ -61,8 +61,8 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
         String act=request.getParameter("act");
         if(act==null) {
             act = (String)request.getSession(true).getAttribute("act");
-            request.getSession(true).setAttribute("act", null);
-            request.getSession(true).removeAttribute("act");
+            /*request.getSession(true).setAttribute("act", null);
+            request.getSession(true).removeAttribute("act");*/
         }
         if(act==null) {
             act = "view";
