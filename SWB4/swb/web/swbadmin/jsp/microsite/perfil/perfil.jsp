@@ -134,7 +134,7 @@
                      <%
                         if(owner==user || areFriends){ //Agregar datos privados (email, sexo, fotos, etc)
                             %>
-                                <tr><td><br/><br/></br>
+                                <tr><td><br><br><br>
                                 <table width="100%" border="0" cellspacing="10" cellpadding="0">
                                     <tr><td>Email</td><td><p><%=email%></p></td></tr>
                                     <tr><td>Edad</td><td><p><%=age%></p></td></tr>
