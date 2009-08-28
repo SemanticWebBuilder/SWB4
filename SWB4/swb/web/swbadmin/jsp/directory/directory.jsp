@@ -31,15 +31,6 @@ String scope = (String) request.getAttribute("scope");
 SemanticObject sobj = (SemanticObject) request.getAttribute("sobj");
 SemanticClass semClass=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sobj.getURI());
 
-/*
-Iterator <SemanticProperty> itPropsJ=semClass.listProperties();
-while(itPropsJ.hasNext()){
-    SemanticProperty semProp=itPropsJ.next();
-    System.out.println("semProp:"+semProp.getName());
-}
- * */
-
-
 ArrayList aprops2display=new ArrayList();
 String props2display=(String)request.getAttribute("props2display");
 if(props2display!=null && semClass!=null){
