@@ -30,7 +30,15 @@
             SemanticObject semObj=SemanticObject.createSemanticObject(request.getParameter("user"));
             user=(User)semObj.createGenericInstance();
         }
-        if(!owner.isRegistered() || !user.isRegistered()) return;
+        if(!owner.isRegistered() || !user.isRegistered())
+        {
+            %>
+            <script type="text/javascript">
+                window.location.href='<%=wpage.getWebSite().getHomePage().getUrl()%>';
+            </script>
+            <%
+            return;
+        }
 
         if(request.getParameter("changePhoto")!=null && request.getParameter("changePhoto").equals("1") && !isStrategy){
             
@@ -187,6 +195,7 @@
 
                   <%
                 }
+
           }
         %>
         
