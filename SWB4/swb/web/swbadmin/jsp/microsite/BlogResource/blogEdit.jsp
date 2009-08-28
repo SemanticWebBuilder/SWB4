@@ -70,20 +70,20 @@
                             var title = document.frmaddpost.title.value;                            
                             if(!title)
                             {
-                                alert('Debe ingresar el título de la entrada');
+                                alert('¡Debe ingresar el título de la entrada!');
                                 return;
                             }
                             
                             var description = document.frmaddpost.description.value;
                             if(!description)
                             {
-                                alert('Debe ingresar la descripción de la entrada');
+                                alert('¡Debe ingresar la descripción de la entrada!');
                                 return;
                             }                            
                             content = dijit.byId('editor').getValue(false);
                             if(!content || content=='<br _moz_editor_bogus_node="TRUE" />' || content=='<br />')
                             {
-                                alert('Debe ingresar la entrada del post');
+                                alert('¡Debe ingresar la entrada del post!');
                                 dijit.byId('editor').focus();
                                 return;
                             }                            
