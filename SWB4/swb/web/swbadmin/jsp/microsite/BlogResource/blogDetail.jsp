@@ -49,12 +49,7 @@
         <td>
             <h2 class="tituloGrande"><%=post.getTitle()%></h2>
         </td>
-    </tr>
-    <tr>
-        <td>
-            <div class="blogcontent"><%=post.getDescription()%></div>
-        </td>
-    </tr>
+    </tr>    
     
     <tr>
         <td>            
@@ -63,21 +58,26 @@
 if(email!=null)
     {
     %>
-    <p>Escrito por: <a href="mailto:<%=email%>"><%=postAuthor%></a> , <%=updated%>, visitas: <%=post.getViews()%> , calificación: <%=rank%></p>
-    <p><img src="<%=srcLine%>" alt="" width="680" height="1" ></p>
+    <p>Escrito por: <a href="mailto:<%=email%>"><%=postAuthor%></a> , <%=updated%>, visitas: <%=post.getViews()%> , calificación: <%=rank%></p>    
     <%
     }
     else
         {
         %>
         <p id="author">Escrito por: <%=postAuthor%></p> , <%=updated%>, visitas: <%=post.getViews()%> , calificación: <%=post.getRank()%></p>
-        <p><img src="<%=srcLine%>" alt="" width="680" height="1" ></p>
+        
         <%
         }
 %>
 
         </td>
-    </tr>       
+    </tr>
+    <tr>
+        <td>
+            <div class="blogcontent"><p><b><%=post.getDescription()%></b></p></div>
+            <p><img src="<%=srcLine%>" alt="" width="680" height="1" ></p>
+        </td>
+    </tr>
     <tr>
         <td>
             <br>
