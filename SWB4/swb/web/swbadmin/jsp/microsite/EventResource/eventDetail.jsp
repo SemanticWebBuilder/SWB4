@@ -28,8 +28,8 @@
                 <hr>
                 <p><%=event.getDescription()%></p>
                 <p>Dirigido a: <%= event.getAudienceType()%></p>
-                <p>Inicia: <b><%= dateFormat.format(event.getStartDate())%></b> a las <b><%=timeFormat.format(event.getStartTime())%></b></p>
-                <p>Termina: <b><%= dateFormat.format(event.getEndDate())%></b> a las <b><%=timeFormat.format(event.getEndTime())%></b></p>
+                <p>Inicia: <strong><%= (event.getStartDate()==null?"":dateFormat.format(event.getStartDate()))%></strong> a las <strong><%= (event.getStartTime()==null?"":timeFormat.format(event.getStartTime()))%></strong></p>
+                <p>Termina: <strong><%= (event.getEndDate()==null?"":dateFormat.format(event.getEndDate()))%></strong> a las <strong><%= (event.getEndTime()==null?"":timeFormat.format(event.getEndTime()))%></strong></p>
                 <p>Lugar: <%= event.getPlace()%></p>
                 <p>Asistentes:
                 <%
