@@ -6,11 +6,12 @@
             if(confirm('¿Esta seguro de borrar la entrada '+title+'?'))
                 {
                     var url=url+'&uri='+escape(uri);
-                    document.URL=url;
+                    window.location.href=url;
                 }
         }
     </script>
-<div id="centerProfile">            
+<div id="panorama">
+    <br>
 <%
         String pathIamge = SWBPlatform.getWebWorkPath();
         SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
