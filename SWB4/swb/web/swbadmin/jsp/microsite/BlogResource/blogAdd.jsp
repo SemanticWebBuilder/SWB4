@@ -41,18 +41,21 @@
                             if(!title)
                             {
                                 alert('Debe ingresar el título de la entrada');
+                                document.frmaddpost.title.focus();
                                 return;
                             }
                             var description = document.frmaddpost.description.value;
                             if(!description)
                             {
                                 alert('Debe ingresar la descripción de la entrada');
+                                document.frmaddpost.description.focus();
                                 return;
-                            }
-                            content = dijit.byId('editor').getValue(false);
+                            }                            
+                            content = dijit.byId('editor').getValue(false);                                                        
                             if(!content)
                             {
                                 alert('Debe ingresar la entrada del post');
+                                dijit.byId('editor').focus();
                                 return;
                             }
                             var msg='¿Estan los datos correctos de la entrada del blog?';
