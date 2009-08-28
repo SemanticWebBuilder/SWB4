@@ -25,7 +25,7 @@
         WebPage wpage=paramRequest.getWebPage();
         User owner=paramRequest.getUser();
         User user=owner;
-        if(request.getParameter("user")!=null) 
+        if(request.getParameter("user")!=null)
         {
             SemanticObject semObj=SemanticObject.createSemanticObject(request.getParameter("user"));
             user=(User)semObj.createGenericInstance();
@@ -78,7 +78,24 @@
                                         <input type="file" name="picture" onchange="beginAsyncUpload(this,'picture');" size="30"/>
                                         <div class="progresscontainer" style="display: none;"><div class="progressbar" id="picture_progress"></div></div>
                                     </td></tr>
-                                    <tr><td colspan="2" align="center"><br/><br/><input type="submit" value="enviar"></td></tr>
+                                    <tr><td colspan="2" align="center"><br/><br/>
+                                            <!-- <input type="submit" value="enviar"> -->
+                                            <br>
+                                        <div class="editarInfo">
+                                        <p><a href="javascript:enviar();">Cambiar imagen</a></p>
+                                        </div>
+                                        <div class="editarInfo">
+                                        <p><a href="javascript:window.location.href='<%=wpage.getUrl()%>';">Cancelar</a></p>
+                                        </div>
+                                        <script type="text/javascript">
+                                            function enviar()
+                                            {                                                
+                                                document.fupload.submit();
+                                                window.location.href='<%=wpage.getUrl()%>';                                                
+                                            }
+                                        </script>
+                          
+                                        </td></tr>
                             </table>
                         </fieldset>
                 </form>
