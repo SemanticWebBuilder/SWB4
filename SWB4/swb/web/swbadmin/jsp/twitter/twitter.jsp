@@ -118,7 +118,7 @@
                     "<td>Login:</td><td><input type=\"text\" name=\"twitterLogin\" size=\"25\" value=\"" + login + "\" /></td>" +
                     "</tr>" +
                     "<tr>" +
-                    "<td>Password:</td><td><input type=\"password\" name=\"twitterPass\" size=\"25\" value=\"" + password + "\"/></td>" +
+                    "<td>Password:</td><td><input type=\"password\" name=\"twitterPass\" size=\"25\" /></td>" +
                     "</tr>" +
                     "<tr>" +
                     "<td colspan=\"2\" align=\"center\"><input type=\"button\" value=\"regresar\" onClick=\"history.go(-1);\">          " +
