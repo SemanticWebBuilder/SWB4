@@ -30,9 +30,9 @@
                 </td>
                 <td valign="top" align="left">
                     <small>
-                        <b><a href="<%=viewurl%>"><%=event.getTitle()%></a></b>(<%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%>) <BR>
-                        Inicia:<b><%=dateFormat.format(event.getStartDate())%></b> a las <b><%=timeFormat.format(event.getStartTime())%></b>
-                        Termina:<b><%=dateFormat.format(event.getEndDate())%></b> a las <b><%=timeFormat.format(event.getEndTime())%></b>
+                        <strong><a href="<%=viewurl%>"><%=event.getTitle()%></a></strong>(<%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%>) <BR>
+                        Inicia:<strong><%= (event.getStartDate()==null?"":dateFormat.format(event.getStartDate()))%></strong> a las <strong><%= (event.getStartTime()==null?"":timeFormat.format(event.getStartTime()))%></strong>
+                        Termina:<strong><%= (event.getEndDate()==null?"":dateFormat.format(event.getEndDate()))%></strong> a las <strong><%= (event.getEndTime()==null?"":timeFormat.format(event.getEndTime()))%></strong>
                         Valoraci&oacute;n:<%=event.getRank()%> <BR>
                         <%=event.getViews()%> vistas<BR>
                     </small>
