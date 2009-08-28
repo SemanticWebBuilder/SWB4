@@ -300,7 +300,21 @@ public class CodeGenerator
         }
     }
 
-    private String getInterfaces(SemanticClass tpc)
+    private HashSet<SemanticClass> getInterfaces(SemanticClass tpc)
+    {
+        HashSet<SemanticClass> interfaces=new HashSet<SemanticClass>();
+        Iterator<SemanticClass> it = tpc.listSuperClasses();
+        while (it.hasNext())
+        {
+            SemanticClass clazz = it.next();
+            if (clazz.isSWBInterface())
+            {
+                interfaces.add(clazz);
+            }
+        }
+        return interfaces;
+    }
+    private String getInterfacesAsString(SemanticClass tpc)
     {
         StringBuilder interfaces = new StringBuilder();
         Iterator<SemanticClass> it = tpc.listSuperClasses();
@@ -525,7 +539,7 @@ public class CodeGenerator
             javaClassContent.append("" + ENTER);
         }
         javaClassContent.append(ENTER);
-        javaClassContent.append("public class " + toUpperCase(tpc.getClassCodeName()) + "Base extends " + exts + " " + getInterfaces(tpc) + "" + ENTER);
+        javaClassContent.append("public class " + toUpperCase(tpc.getClassCodeName()) + "Base extends " + exts + " " + getInterfacesAsString(tpc) + "" + ENTER);
         javaClassContent.append("{" + ENTER);
         HashSet<SemanticClass> staticClasses = new HashSet<SemanticClass>();
         HashSet<SemanticClass> staticProperties = new HashSet<SemanticClass>();
@@ -642,11 +656,12 @@ public class CodeGenerator
             javaClassContent.append("" + ENTER);
         }
         javaClassContent.append(ENTER);
-        javaClassContent.append("public class " + toUpperCase(tpc.getClassCodeName()) + "Base extends " + exts + " " + getInterfaces(tpc) + "" + ENTER);
+        javaClassContent.append("public class " + toUpperCase(tpc.getClassCodeName()) + "Base extends " + exts + " " + getInterfacesAsString(tpc) + "" + ENTER);
         javaClassContent.append("{" + ENTER);
         HashSet<SemanticClass> staticClasses = new HashSet<SemanticClass>();
         HashSet<SemanticClass> staticProperties = new HashSet<SemanticClass>();
         Iterator<SemanticProperty> properties = tpc.listProperties();
+        HashSet<SemanticClass> interfaces=getInterfaces(tpc);
         while (properties.hasNext())
         {
             SemanticProperty tpp = properties.next();
@@ -674,6 +689,28 @@ public class CodeGenerator
                     }
                 }
             }
+            if (!isInClass)
+            {
+                for(SemanticClass ointerface : interfaces)
+                {
+                    Iterator<SemanticProperty> propInterfaces = ointerface.listProperties();
+                    while (propInterfaces.hasNext())
+                    {
+                        SemanticProperty propSuperClass = propInterfaces.next();
+                        if (propSuperClass.equals(tpp))
+                        {
+                            isInClass = true;
+                            break;
+                        }
+                    }
+                    if (isInClass)
+                    {
+                        break;
+                    }
+                }
+            }
+
+
             if (!isInClass)
             {
                 SemanticClass range = tpp.getRangeClass();
