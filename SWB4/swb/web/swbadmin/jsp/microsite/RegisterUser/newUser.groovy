@@ -66,8 +66,34 @@ method="POST">
 			</td>
 		</tr>
 	<tr>
-		<td align="center" colspan="2"><button dojoType='dijit.form.Button' type="submit">Guardar</button>
-
+		<td align="center" colspan="2">
+                    <br>
+                    <!--<button dojoType='dijit.form.Button' type="submit">Guardar</button> -->
+                    <div class="editarInfo">
+                    <p><a href="javascript:enviar();">Siguiente</a></p>
+                    </div>
+                    <div class="editarInfo">
+                    <p><a href="javascript:history.back();">Cancelar</a></p>
+                    </div>
+<script type="text/javascript">
+    function enviar()
+    {
+        var x=document.getElementById('org.semanticwb.community.User/com/create');        
+        if(!x.login.value)
+        {
+            alert('El identificador de usuario es requerido.');
+            x.login.focus();
+            return;
+        }
+        if(!x.passwd.value)
+        {
+            alert('La contraseña de usuario es requerido.');
+            x.passwd.focus();
+            return;
+        }
+        x.submit();
+    }
+</script>
 
 			</td>
 		</tr>
