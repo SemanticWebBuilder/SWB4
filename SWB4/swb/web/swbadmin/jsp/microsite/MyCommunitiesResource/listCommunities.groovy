@@ -26,6 +26,7 @@ import org.semanticwb.model.User
 import org.semanticwb.model.WebPage
 import org.semanticwb.portal.community.Member
 import org.semanticwb.portal.community.MicroSite
+import org.semanticwb.SWBPlatform
 
 
 
@@ -43,6 +44,7 @@ lista.each(){
     MicroSite mem_mcs = mem_curr.getMicroSite()
     def titulo = mem_mcs.getDisplayName()
     def url = mem_mcs.getUrl()
-    println """<li><a class="contactos_nombre" href="${url}">$titulo</a></li>"""
+    def urlimg=SWBPlatform.getWebWorkPath()+"/models/"+ paramRequest.getWebPage().getWebSiteId()  +"/css/boton_contacto.png"
+    println """<li><a class="contactos_nombre" href="${url}"><img src="${urlimg}" alt="Ir a Nombre de la empresa"></a><a class="contactos_nombre" href="${url}">$titulo</a></li>"""
 }
 println """</ul></div>"""
