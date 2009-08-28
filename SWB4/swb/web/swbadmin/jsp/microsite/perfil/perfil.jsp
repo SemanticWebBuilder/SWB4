@@ -10,6 +10,7 @@
 
 
      <%
+        String perfilPath=paramRequest.getWebPage().getWebSite().getWebPage("perfil").getUrl();
         HashMap <String, SemanticProperty> mapa = new HashMap();
         Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#_ExtendedAttributes").listProperties();
         while(list.hasNext()){
@@ -34,6 +35,37 @@
         if(request.getParameter("changePhoto")!=null && request.getParameter("changePhoto").equals("1") && !isStrategy){
             String registryPath=paramRequest.getWebPage().getWebSite().getWebPage("Registro_de_Usuarios").getUrl();
            %>
+            <script type="text/javascript">
+                var uploads_in_progress = 0;
+
+                function beginAsyncUpload(ul,sid) {
+                  ul.form.submit();
+                    uploads_in_progress = uploads_in_progress + 1;
+                    var pb = document.getElementById(ul.name + "_progress");
+                    pb.parentNode.style.display='block';
+                    new ProgressTracker(sid,{
+                        progressBar: pb,
+                        onComplete: function() {
+                            var inp_id = pb.id.replace("_progress","");
+                            uploads_in_progress = uploads_in_progress - 1;
+                            var inp = document.getElementById(inp_id);
+                            if(inp) {
+                                inp.value = sid;
+                            }
+                            pb.parentNode.style.display='none';
+                            document.location="<%=perfilPath%>";
+                        },
+                        onFailure: function(msg) {
+                            pb.parentNode.style.display='none';
+                            alert(msg);
+                            uploads_in_progress = uploads_in_progress - 1;
+                        },
+                        url: '<%=registryPath%>/_rid/46/_mto/3/_mod/help'
+                    });
+                }
+
+             </script>
+
                 <form id="fupload" name="fupload" enctype="multipart/form-data" class="swbform" dojoType="dijit.form.Form"
                         action="<%=registryPath%>/_aid/46/_mto/3/_act/upload"
                         method="post" target="pictureTransferFrame" >
@@ -72,6 +104,11 @@
                   %>
                     <p class="addOn"><a href="<%=urlAction%>">Agregar como amigo</a></p>
                   <%
+              }
+              if(!owner.getURI().equals(user.getURI())){
+                %>
+                  <p class="addOn"><a href="<%=perfilPath%>">Mi perfil</a></p>
+                <%
               }
             }else {
                  String userFirstName="", userLastName="", secondName="", email="", age="", sex="", userStatus="",userInterest="",userHobbies="",userInciso="";
