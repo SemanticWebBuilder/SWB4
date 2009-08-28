@@ -44,6 +44,7 @@ a:hover {text-decoration: underline;}
         WebSite website = webpage.getWebSite();
         SWBResourceURL urlthread = paramRequest.getRenderUrl();
         SWBResourceURL url = paramRequest.getRenderUrl();
+        SWBResourceURL urlRemovePost = paramRequest.getRenderUrl();
         SWBResourceURL actionURL = paramRequest.getActionUrl();
         User user = paramRequest.getUser();
         String lang = user.getLanguage();
@@ -54,6 +55,7 @@ a:hover {text-decoration: underline;}
             Thread thread = Thread.getThread(semObject.getId(), website);
             if(request.getParameter("addView")!=null) thread.setViewCount(thread.getViewCount() + 1);
             url.setParameter("threadUri", thread.getURI());
+            urlRemovePost.setParameter("threadUri", thread.getURI());
             urlthread.setParameter("threadUri", thread.getURI());
             urlthread.setMode("addThread");
             if (thread.getCreator() != null) {
@@ -102,6 +104,7 @@ a:hover {text-decoration: underline;}
                 while (itPost.hasNext()) {
                     Post post = itPost.next();
                     url.setParameter("postUri", post.getURI());
+                    urlRemovePost.setParameter("postUri", post.getURI());
 
                     User userPost = null;
                     String postCreator = "";
@@ -123,10 +126,11 @@ a:hover {text-decoration: underline;}
                       </div>
                       <p class="tituloNoticia"><%=postCreator%></p>
                       <p><%=post.getBody()%></p>
-                      <div class="vistasForo">
+                      <%urlRemovePost.setAction("removePost");%>
+                      <div class="vistasForo_comment">
                           <%urlthread.setMode("replyPost");urlthread.setParameter("postUri", post.getURI());%>
                           <p> <a href="<%=urlthread%>"><%=paramRequest.getLocaleString("comment")%></a> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/commentsForo.png" alt="<%=paramRequest.getLocaleString("comment")%>" width="14" height="12" /> |  <%urlthread.setMode("editPost");%><a href="<%=urlthread%>"><%=paramRequest.getLocaleString("edit")%></a> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/editar_foro.png" alt="<%=paramRequest.getLocaleString("edit")%>" width="7" height="15" /> |  <%url.setAction("removePost");%>
-                                <a href="<%=url%>"><%=paramRequest.getLocaleString("remove")%></a> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/eliminar_foro.png" alt="<%=paramRequest.getLocaleString("remove")%>" width="11" height="12" /></p>
+                                <a href="<%=urlRemovePost%>"><%=paramRequest.getLocaleString("remove")%></a> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/eliminar_foro.png" alt="<%=paramRequest.getLocaleString("remove")%>" width="11" height="12" /></p>
                       </div>
                     </div>
                     <%
@@ -141,129 +145,82 @@ a:hover {text-decoration: underline;}
                     Thread thread = Thread.getThread(soThread.getId(), website);
                     actionURL.setAction("removeThread");
             %>
-            <table width="100%">
-                <tr><td>
-                        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pluginCellTitle alignleft">
-                            <tr>
-                                <td class="pluginBreadCrumbs alignleft" style="padding-left:5px;" nowrap></td>
-                                <td width="90%" class="alignright pluginBreadCrumbs" nowrap><!-- start subscribe.thtml -->
-                                    <%=paramRequest.getLocaleString("threadData")%>
-                                </td>
-                                <td class="pluginBreadCrumbs" nowrap>&nbsp; &nbsp;</td>
-                                <td class="pluginBreadCrumbs" style="padding-right:5px;" nowrap><!-- start print.thtml -->
-                                &nbsp; &nbsp;
-                            </tr>
-                        </table>
-                </td></tr>
-                <tr><td>
-                        <table width="100%" border="0" cellspacing="1" cellpadding="0" class="pluginSolidOutline alignleft">
-                            <tr class="pluginRow1">
-                                <td style="padding-left:6px; padding-right:6px;">
-                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                        <tr>
-                                            <td width="8" class="aligncenter"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
-                                            <td height="30" style="padding-left:6px; padding-right:6px;"><b><%=paramRequest.getLocaleString("thread")%></b></td>
-                                        </tr>
-                                    </table>
-                                </td>
-                                <td style="padding-left:6px; padding-right:6px;">&nbsp; <%=thread.getTitle()%> &nbsp;</td>
-                            </tr>
-                            <tr class="pluginRow2">
-                                <td style="padding-left:6px; padding-right:6px;">
-                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                        <tr>
-                                            <td width="8" class="aligncenter"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
-                                            <td height="30" style="padding-left:6px; padding-right:6px;"><b><%=paramRequest.getLocaleString("msg")%></b></td>
-                                        </tr>
-                                    </table>
-                                </td>
-                                <td style="padding-left:6px; padding-right:6px;">&nbsp; <%=thread.getBody()%> &nbsp;</td>
-                            </tr>
-                            <tr class="pluginRow1">
-                                <td style="padding-left:6px; padding-right:6px;">
-                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                        <tr>
-                                            <td width="8" class="aligncenter"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
-                                            <td height="30" style="padding-left:6px; padding-right:6px;"><b><%=paramRequest.getLocaleString("autor")%></b></td>
-                                        </tr>
-                                    </table>
-                                </td>
-                                <td style="padding-left:6px; padding-right:6px;">&nbsp;
-                                    <%if (thread.getCreator() != null) {%>
-                                    <%=thread.getCreator().getName()%>
-                                    <%}%>
-                                &nbsp;</td>
-                            </tr>
-                            <tr class="pluginRow2">
-                                <td style="padding-left:6px; padding-right:6px;">
-                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                        <tr>
-                                            <td width="8" class="aligncenter"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
-                                            <td height="30" style="padding-left:6px; padding-right:6px;"><b><%=paramRequest.getLocaleString("noMsgs")%></b></td>
-                                        </tr>
-                                    </table>
-                                </td>
-                                <%
-                    int postSize = 0;
-                    GenericIterator<Post> itPost = thread.listPosts();
-                    while (itPost.hasNext()) {
-                        Post post = itPost.next();
-                        postSize++;
-                    }
-                                %>
-                                <td style="padding-left:6px; padding-right:6px;">&nbsp;
-                                <%=postSize%> &nbsp;</td>
-                            </tr>
-                            <tr class="pluginRow1">
-                                <td style="padding-left:6px; padding-right:6px;">
-                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                        <tr>
-                                            <td width="8" class="aligncenter"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
-                                            <td height="30" style="padding-left:6px; padding-right:6px;"><b><%=paramRequest.getLocaleString("noAttachments")%></b></td>
-                                        </tr>
-                                    </table>
-                                </td>
-                                <td style="padding-left:6px; padding-right:6px;">&nbsp;
-                                    <%
-                    int attchmentsSize = 0;
-                    GenericIterator<Attachment> itattach = thread.listAttachments();
-                    while (itattach.hasNext()) {
-                        itattach.next();
-                        attchmentsSize++;
-                    }
+              <table class="eliminarDatos">
+                  <caption>
+                    <%=paramRequest.getLocaleString("threadData")%>
+                  </caption>
 
-                                    %>
-                                <%=attchmentsSize%> &nbsp;</td>
-                            </tr>
-                            <tr class="pluginRow2">
-                                <td style="padding-left:6px; padding-right:6px;">
-                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                        <tr>
-                                            <td width="8" class="aligncenter"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
-                                            <td height="30" style="padding-left:6px; padding-right:6px;"><b><%=paramRequest.getLocaleString("totAttach")%></b></td>
-                                        </tr>
-                                    </table>
-                                </td>
-                                <td style="padding-left:6px; padding-right:6px;">&nbsp;
-                                    <%
-                    int attchmentsTotSize = attchmentsSize;
-                    itPost = thread.listPosts();
-                    while (itPost.hasNext()) {
-                        attchmentsTotSize = getTotAttachments(itPost.next(), attchmentsTotSize);
-                    }
-                                    %>
-                                <%=attchmentsTotSize%> &nbsp;</td>
-                            </tr>
-                            <form name="removeThread" action="<%=actionURL.toString()%>">
-                                <input type="hidden" name="threadUri" value="<%=thread.getURI()%>">
-                                <input type="hidden" name="forumUri" value="<%=request.getParameter("forumUri")%>">
-                                <tr class="pluginRow1"><td><input type="submit" value="<%=paramRequest.getLocaleString("remove")%>"></td>
-                                    <td><input type="button" value="<%=paramRequest.getLocaleString("cancel")%>" onClick="retorna(this.form);"></td>
-                                </tr>
-                            </form>
-                        </table>
-                </td></tr>
-            </table>
+                <tr>
+                    <td><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
+                    <th><%=paramRequest.getLocaleString("thread")%></th>
+                    <td><%=thread.getTitle()%></td>
+                  </tr>
+                  <tr>
+                    <td><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
+                    <th><%=paramRequest.getLocaleString("msg")%></th>
+                    <td><%=thread.getBody()%></td>
+                  </tr>
+                  <tr>
+                    <td><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
+                    <th><%=paramRequest.getLocaleString("autor")%></th>
+                    <td>
+                    <%if (thread.getCreator() != null) {%>
+                     <%=thread.getCreator().getName()%>
+                    <%}%>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
+                    <th><%=paramRequest.getLocaleString("noMsgs")%></th>
+                    <td>
+                      <%
+                        int postSize = 0;
+                        GenericIterator<Post> itPost = thread.listPosts();
+                        while (itPost.hasNext()) {
+                            Post post = itPost.next();
+                            postSize++;
+                        }
+                      %>
+                        <%=postSize%>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
+                    <th><%=paramRequest.getLocaleString("noAttachments")%></th>
+                    <td>
+                       <%
+                        int attchmentsSize = 0;
+                        GenericIterator<Attachment> itattach = thread.listAttachments();
+                        while (itattach.hasNext()) {
+                            itattach.next();
+                            attchmentsSize++;
+                        }
+                       %>
+                        <%=attchmentsSize%>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
+                    <th><%=paramRequest.getLocaleString("totAttach")%></th>
+                    <td>
+                        <%
+                        int attchmentsTotSize = attchmentsSize;
+                        itPost = thread.listPosts();
+                        while (itPost.hasNext()) {
+                            attchmentsTotSize = getTotAttachments(itPost.next(), attchmentsTotSize);
+                        }
+                        %>
+                        <%=attchmentsTotSize%>
+                    </td>
+                  </tr>
+                  <form name="removeThread" action="<%=actionURL.toString()%>">
+                    <input type="hidden" name="threadUri" value="<%=thread.getURI()%>">
+                    <input type="hidden" name="forumUri" value="<%=request.getParameter("forumUri")%>">
+                    <tr class="pluginRow1"><td><input type="submit" value="<%=paramRequest.getLocaleString("remove")%>"></td>
+                        <td><input type="button" value="<%=paramRequest.getLocaleString("cancel")%>" onClick="retorna(this.form);"></td>
+                    </tr>
+                 </form>
+                </table>
             <%} else {
                     actionURL.setAction("removePost");
                     SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("postUri"));
