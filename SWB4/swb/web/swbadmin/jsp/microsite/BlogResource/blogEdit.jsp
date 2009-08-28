@@ -37,15 +37,17 @@
         <form name="frmaddpost" id="frmaddpost" method="post" action="<%=paramRequest.getActionUrl()%>">
             <input type="hidden" name="act" value="edit">
             <input type="hidden" name="mode" value="editpost">
-            <input type="hidden" name="uri" value="<%=request.getParameter("uri")%>">            
+            <input type="hidden" name="uri" value="<%=request.getParameter("uri")%>">
+            <input type="hidden" name="content" id="content" value="">
             <div>
                 <fieldset><legend>Editar entrada</legend>
                     <div>
                         <p>
                             <br><label for="title">Título:&nbsp;&nbsp;&nbsp;&nbsp;</label><br><input size="50" id="title" name="title" value="<%=post.getTitle()%>" maxlength="50"><br><br>
-                            <label for="description">Descripción:&nbsp;&nbsp;&nbsp;&nbsp;</label><br><input size="50" id="description" name="description" maxlength="255" value="<%=post.getDescription()%>"><br><br>
-                            <label for="content">Contenido de entrada:</label><br><br>
-                            <textarea plugins="['undo', 'redo', 'cut', 'copy', 'paste','|','bold','italic','underline', 'strikethrough','forecolor', 'hilitecolor','|','insertUnorderedList','insertOrderedList','|','createLink','unlink','|','indent', 'outdent','justifyCenter', 'justifyFull', 'justifyLeft', 'justifyRight', 'delete', 'selectall']" dojoType="dijit.Editor" id="content" rows="5" cols="23" name="content"><%=post.getContent()%></textarea>
+                            <label for="description">Descripción:&nbsp;&nbsp;&nbsp;&nbsp;</label><br>
+                            <textarea size="50" rows="10" cols="80" id="description" name="description" maxlength="255" ><%=post.getDescription()%></textarea><br><br>
+                            <label for="editor">Contenido de entrada:</label><br><br>
+                            <textarea plugins="['undo', 'redo', 'cut', 'copy', 'paste','|','bold','italic','underline', 'strikethrough','forecolor', 'hilitecolor','|','insertUnorderedList','insertOrderedList','|','createLink','unlink','|','indent', 'outdent','justifyCenter', 'justifyFull', 'justifyLeft', 'justifyRight', 'delete', 'selectall']" dojoType="dijit.Editor" id="editor" rows="5" cols="23" name="editor"><%=post.getContent()%></textarea>
                         </p>
                     </div>
                 </fieldset>
@@ -65,29 +67,30 @@
                     <script type="text/javascript">
                         function validaForma()
                         {                            
-                            var title = frmaddpost.title.value;
+                            var title = document.frmaddpost.title.value;                            
                             if(!title)
                             {
                                 alert('Debe ingresar el título de la entrada');
                                 return;
                             }
-                            var description = frmaddpost.description.value;
+                            
+                            var description = document.frmaddpost.description.value;
                             if(!description)
                             {
                                 alert('Debe ingresar la descripción de la entrada');
                                 return;
-                            }
-                            content = dijit.byId('content').getValue(false);
+                            }                            
+                            content = dijit.byId('editor').getValue(false);
                             if(!content)
                             {
                                 alert('Debe ingresar la entrada del post');
                                 return;
-                            }
+                            }                            
                             var msg='¿Estan los datos correctos de la entrada del blog?';
                             if(confirm(msg))
-                            {
-                                dojo.byId('content').value=content;                                
-                                dojo.byId('frmaddpost').submit();
+                            {                                
+                                document.frmaddpost.content.value=content;
+                                document.frmaddpost.submit();
                             }
                         }
                     </script>
