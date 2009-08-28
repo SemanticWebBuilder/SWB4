@@ -71,6 +71,7 @@
                             if(!title)
                             {
                                 alert('¡Debe ingresar el título de la entrada!');
+                                document.frmaddpost.title.focus();
                                 return;
                             }
                             
@@ -78,6 +79,7 @@
                             if(!description)
                             {
                                 alert('¡Debe ingresar la descripción de la entrada!');
+                                document.frmaddpost.description.focus();
                                 return;
                             }                            
                             content = dijit.byId('editor').getValue(false);
