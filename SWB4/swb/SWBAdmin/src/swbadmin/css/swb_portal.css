@@ -746,6 +746,7 @@ div.sitesectiontree ul.treeres {
 	margin-left: 5px;
 }
 .vistasForo {float: right;}
+.vistasForo_comment {clear: both; float: right; margin-top: -20px;}
 .lastView_foro {float: left;}
 .vistasForo a {color: #095c8a;}
 .replyForo {
