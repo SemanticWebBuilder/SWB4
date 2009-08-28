@@ -38,6 +38,9 @@ import org.semanticwb.portal.SWBFormButton;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
 
+/**
+* @autor:Jorge Jiménez
+*/
 public class Directory extends org.semanticwb.portal.resources.sem.directory.base.DirectoryBase {
 
     private static Logger log = SWBUtils.getLogger(Directory.class);
