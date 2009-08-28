@@ -81,7 +81,7 @@
                                 return;
                             }                            
                             content = dijit.byId('editor').getValue(false);
-                            if(!content)
+                            if(!content || content=='<br _moz_editor_bogus_node="TRUE" />' || content=='<br />')
                             {
                                 alert('Debe ingresar la entrada del post');
                                 return;
