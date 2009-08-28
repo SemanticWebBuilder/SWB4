@@ -84,6 +84,7 @@
                             if(!content || content=='<br _moz_editor_bogus_node="TRUE" />' || content=='<br />')
                             {
                                 alert('Debe ingresar la entrada del post');
+                                dijit.byId('editor').focus();
                                 return;
                             }                            
                             var msg='¿Estan los datos correctos de la entrada del blog?';
