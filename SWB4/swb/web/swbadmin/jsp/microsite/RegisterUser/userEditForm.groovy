@@ -214,9 +214,16 @@ action="$acc_url"   method="post">
     </fieldset>
 </form>
 
-<fieldset><span align="center">
-    <button dojoType="dijit.form.Button" type="button" onclick="enviar()">Guardar</button> &nbsp; <f b :login-button></f b :login-button>
-</span></fieldset>
+
+    <!--<button dojoType="dijit.form.Button" type="button" onclick="enviar()">Guardar</button> &nbsp; <f b :login-button></f b :login-button>-->
+    <br>
+    <div class="editarInfo">
+                    <p><a href="javascript:enviar()">Guardar</a></p>
+                    </div>
+    <div class="editarInfo">
+                    <p><a href="javascript:history.back();">Cancelar</a></p>
+                    </div>
+
 """
 System.out.println "*********************** User: ${user.getExternalID()} ${user.getLogin()}"
 if (user.getExternalID()==null){
