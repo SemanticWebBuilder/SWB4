@@ -205,10 +205,17 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
             String uri = request.getParameter("uri");
             if (uri != null)
             {
-                PostElement rec = (PostElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
-                if (rec != null && rec.canModify(mem))
+                try
                 {
-                    rec.remove();                                       //elimina el registro
+                    PostElement rec = (PostElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
+                    if (rec != null && rec.canModify(mem))
+                    {
+                        rec.remove();                                       //elimina el registro
+                    }
+                }
+                catch(Throwable e)
+                {
+                    log.error(e);
                 }
             }
         }
