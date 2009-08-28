@@ -45,7 +45,7 @@
                             <label for="title">Título:&nbsp;&nbsp;&nbsp;&nbsp;</label><input size="50" id="title" name="title" value="<%=post.getTitle()%>" maxlength="50"><br>
                             <label for="description">Descripción:&nbsp;&nbsp;&nbsp;&nbsp;</label><input size="50" id="description" name="description" maxlength="255" value="<%=post.getDescription()%>"><br>
                             <label for="content">Contenido de entrada:&nbsp;&nbsp;&nbsp;</label>
-                            <textarea plugins="['bold','italic','underline', 'strikethrough','|','insertUnorderedList','insertOrderedList','|','createLink','unlink']" dojoType="dijit.Editor" id="content" rows="5" cols="23" name="content"><%=post.getContent()%></textarea>
+                            <textarea plugins="['undo', 'redo', 'cut', 'copy', 'paste','|','bold','italic','underline', 'strikethrough','forecolor', 'hilitecolor','|','insertUnorderedList','insertOrderedList','|','createLink','unlink','|','indent', 'outdent','justifyCenter', 'justifyFull', 'justifyLeft', 'justifyRight', 'delete', 'selectall']" dojoType="dijit.Editor" id="content" rows="5" cols="23" name="content"><%=post.getContent()%></textarea>
                         </p>
                     </div>
                 </fieldset>
