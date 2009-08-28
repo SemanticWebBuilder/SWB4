@@ -51,7 +51,7 @@
                 </fieldset>
                         <br>
                     <fieldset>
-                        <legend><strong>¿Quién puede ver este video?</strong></legend>
+                        <legend><strong>¿Quién puede ver esta entrada?</strong></legend>
                         <ul class="options">
                             <%String chk="checked=\"checked\"";%>
                             <li><label><input type="radio" class="radio" name="level" value="0" <%if(post.getVisibility()==0)out.println(chk);%>/> Cualquiera</label></li>
