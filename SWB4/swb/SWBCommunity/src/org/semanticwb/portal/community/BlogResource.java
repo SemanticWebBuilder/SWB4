@@ -91,7 +91,7 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
         }
     }
 
-    private void addPost(String title, String description,String content, User user, Blog blog,int level)
+    private void addPost(String title, String description, String content, User user, Blog blog, int level)
     {
         PostElement rec = PostElement.createPostElement(getResourceBase().getWebSite());
         rec.setTitle(title);
@@ -112,10 +112,10 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
         Member mem = Member.getMember(response.getUser(), response.getWebPage());
         if (!mem.canView())
         {
-        return;
+            return;
         }
-        String action = request.getParameter("act");        
-        if ("add".equals(action) && mem.canAdd())        
+        String action = request.getParameter("act");
+        if ("add".equals(action) && mem.canAdd())
         {
             String title = request.getParameter("title");
             String description = request.getParameter("description");
@@ -129,10 +129,10 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
                     blog = blogs.next();
                     try
                     {
-                        int level= Integer.parseInt(request.getParameter("level"));
-                        addPost(title, description,content, response.getUser(), blog,level);
+                        int level = Integer.parseInt(request.getParameter("level"));
+                        addPost(title, description, content, response.getUser(), blog, level);
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         log.error(e);
                     }
@@ -147,25 +147,28 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
             if (uri != null)
             {
                 PostElement rec = (PostElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
-                String title = request.getParameter("title");
-                String description = request.getParameter("description");
-                String content = request.getParameter("content");
-                try
+                if (rec != null)
                 {
-                    int level= Integer.parseInt(request.getParameter("level"));
-                    if (rec != null && rec.canModify(mem) && title != null && description != null && user.getLogin().equals(rec.getCreator().getLogin()))
+                    String title = request.getParameter("title");
+                    String description = request.getParameter("description");
+                    String content = request.getParameter("content");
+                    try
                     {
-                        rec.setTitle(title);
-                        rec.setVisibility(level);
-                        rec.setDescription(description);
-                        rec.setContent(content);
-                        Date date = new Date(System.currentTimeMillis());
-                        rec.setUpdated(date);
+                        int level = Integer.parseInt(request.getParameter("level"));
+                        if (rec != null && rec.canModify(mem) && title != null && description != null && user.getLogin().equals(rec.getCreator().getLogin()))
+                        {
+                            rec.setTitle(title);
+                            rec.setVisibility(level);
+                            rec.setDescription(description);
+                            rec.setContent(content);
+                            Date date = new Date(System.currentTimeMillis());
+                            rec.setUpdated(date);
+                        }
                     }
-                }
-                catch(Exception e)
-                {
-                    log.error(e);
+                    catch (Exception e)
+                    {
+                        log.error(e);
+                    }
                 }
             }
         }
@@ -182,12 +185,12 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
             if (blog == null)
             {
                 blog = createBlog("Título del Blog", "Descripción del blog", response.getWebPage().getWebSite(), response.getWebPage(), response.getUser());
-            }            
-            if(blog!=null)
+            }
+            if (blog != null)
             {
                 String title = request.getParameter("title");
                 String description = request.getParameter("description");
-                if (blog != null && title != null && description != null && member.getAccessLevel()==Member.LEVEL_OWNER)
+                if (blog != null && title != null && description != null && member.getAccessLevel() == Member.LEVEL_OWNER)
                 {
                     blog.setTitle(title);
                     blog.setDescription(description);
@@ -195,7 +198,7 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
                     blog.setUpdated(date);
                 }
             }
-            
+
         }
         else if ("remove".equals(action))
         {
@@ -203,13 +206,14 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
             if (uri != null)
             {
                 PostElement rec = (PostElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
-                if (rec != null && rec.canModify(mem))                
+                if (rec != null && rec.canModify(mem))
                 {
                     rec.remove();                                       //elimina el registro
                 }
             }
         }
-        else {
+        else
+        {
             super.processAction(request, response);
         }
     }
