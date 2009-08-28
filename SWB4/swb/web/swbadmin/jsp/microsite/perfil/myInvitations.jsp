@@ -28,7 +28,6 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) isStrategy=true;
 String firstName="", lastName="";
 int contTot=0;
 %>
-   <div class="miembros">
     <p class="addOn">Mis Invitaciones</p>
 <%
 Iterator<FriendshipProspect> itFriendshipProspect=FriendshipProspect.listFriendshipProspectByFriendShipRequested(owner, wpage.getWebSite());
@@ -63,4 +62,3 @@ if(isStrategy && contTot>0){%>
   <%}else if(contTot==0){%>
      <p class="titulo">No tienes invitaciones de amistad</p>
   <%}%>  
-</div>
