@@ -19,6 +19,7 @@
         Blog blog = (Blog) request.getAttribute("blog");
         if(blog!=null)
         {
+            String srcLine=SWBPlatform.getWebWorkPath()+"/models/"+ paramRequest.getWebPage().getWebSiteId()  +"/css/solidLine.jpg";
             Member member = Member.getMember(user, wpage);
             String defaultFormat = "dd 'de' MMMM  'del' yyyy 'a las' HH:mm";
             SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat,new Locale("es"));
@@ -46,7 +47,7 @@
             <h2 class="tituloGrande"><%=blog.getTitle()%></h2>
             <p>Creado el: <%=created%></p>
             <p>Actualizado el: <%=updated%></p>
-            <p><img src="images/solidLine.jpg" alt="" width="495" height="1" ></p>            
+            <p><img src="<%=srcLine%>" alt="" width="495" height="1" ></p>
             <p><%=blog.getDescription()%></p>
             <p>&nbsp;</p>
             <div id="blog">
