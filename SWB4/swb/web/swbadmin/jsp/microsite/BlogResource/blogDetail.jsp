@@ -64,7 +64,7 @@ if(email!=null)
     </tr>       
     <tr>
         <td>            
-             <p id="content"><%=content%></p> 
+             <div class="blogcontent"><%=content%></div>
         </td>
     </tr>
 
