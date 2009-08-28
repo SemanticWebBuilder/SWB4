@@ -50,6 +50,11 @@
             <h2 class="tituloGrande"><%=post.getTitle()%></h2>
         </td>
     </tr>
+    <tr>
+        <td>
+            <div class="blogcontent"><%=post.getDescription()%></div>
+        </td>
+    </tr>
     
     <tr>
         <td>            
