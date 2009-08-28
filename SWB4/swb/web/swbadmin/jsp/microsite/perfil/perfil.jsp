@@ -8,8 +8,8 @@
 <%@page import="org.semanticwb.platform.*"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 
-
      <%
+        String registryPath=paramRequest.getWebPage().getWebSite().getWebPage("Registro_de_Usuarios").getUrl();
         String perfilPath=paramRequest.getWebPage().getWebSite().getWebPage("perfil").getUrl();
         HashMap <String, SemanticProperty> mapa = new HashMap();
         Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#_ExtendedAttributes").listProperties();
@@ -33,7 +33,7 @@
         if(!owner.isRegistered() || !user.isRegistered()) return;
 
         if(request.getParameter("changePhoto")!=null && request.getParameter("changePhoto").equals("1") && !isStrategy){
-            String registryPath=paramRequest.getWebPage().getWebSite().getWebPage("Registro_de_Usuarios").getUrl();
+            
            %>
             <script type="text/javascript">
                 var uploads_in_progress = 0;
@@ -111,11 +111,8 @@
                 <%
               }
             }else {
-                 String userFirstName="", userLastName="", secondName="", email="", age="", sex="", userStatus="",userInterest="",userHobbies="",userInciso="";
+                 String email="", age="", sex="", userStatus="",userInterest="",userHobbies="",userInciso="";
 
-                 if(user.getFirstName()!=null) userFirstName=user.getFirstName();
-                 if(user.getLastName()!=null) userLastName=user.getLastName();
-                 if(user.getSecondLastName()!=null) secondName=user.getSecondLastName();
                  if(user.getEmail()!=null) email=user.getEmail();
                  if(user.getExtendedAttribute(mapa.get("userAge"))!=null) age=""+user.getExtendedAttribute(mapa.get("userAge"));
                  if(user.getExtendedAttribute(mapa.get("userSex"))!=null) sex=""+user.getExtendedAttribute(mapa.get("userSex"));
@@ -123,32 +120,54 @@
                  if(user.getExtendedAttribute(mapa.get("userInterest"))!=null) userInterest=""+user.getExtendedAttribute(mapa.get("userInterest"));
                  if(user.getExtendedAttribute(mapa.get("userHobbies"))!=null) userHobbies=""+user.getExtendedAttribute(mapa.get("userHobbies"));
                  if(user.getExtendedAttribute(mapa.get("userInciso"))!=null) userInciso=""+user.getExtendedAttribute(mapa.get("userInciso"));
+                 if(sex.equalsIgnoreCase("M"))
+                 {
+                     sex="Masculino";
+                 }
+                 else
+                 {
+                     sex="Femenino";
+                 }
                  %>
+                 <div id="tabs">
+          <div id="TabbedPanels1" class="TabbedPanels">
+            <div class="TabbedPanelsContentGroup">
+              <div class="TabbedPanelsContent">
+              <h2 class="h2oculto">Información</h2>
 
-                 <table>
-                     <tr>
-                         <td><br/><br/>
-                             <%=userFirstName%> <%=userLastName%> <%=secondName%><br/>
-                         </td>
-                     </tr>
+                 <div id="informacionPersonal">
+                     <div class="editarInfo">
+                    <p><a href="<%=registryPath%>">Editar información</a></p>
+                    </div>
+                 <div class="clear">&nbsp;</div>
+                 <h3><%=user.getFullName()%></h3>                                      
                      <%
                         if(owner==user || areFriends){ //Agregar datos privados (email, sexo, fotos, etc)
-                            %>
-                                <tr><td><br><br><br>
+                            %>                                
                                 <table width="100%" border="0" cellspacing="10" cellpadding="0">
-                                    <tr><td>Email</td><td><p><%=email%></p></td></tr>
-                                    <tr><td>Edad</td><td><p><%=age%></p></td></tr>
-                                    <tr><td>Sexo</td><td><p><%=sex%></p></td></tr>
-                                    <tr><td>Estatus</td><td><p><%=userStatus%></p></td></tr>
-                                    <tr><td>Interes</td><td><p><%=userInterest%></p></td></tr>
-                                    <tr><td>Hobbies</td><td><p><%=userHobbies%></p></td></tr>
-                                    <tr><td>Inciso</td><td><p><%=userInciso%></p></td></tr>
-                               </table>
-                               </td></tr>
+                                    <tr><th valign="top">E-mail</th><td><p><%=email%></p></td></tr>
+                                    <tr><th valign="top">Edad</th><td><p><%=age%></p></td></tr>
+                                    <tr><th valign="top">Sexo</th><td><p><%=sex%></p></td></tr>
+                                    <tr><th valign="top">Estado Civil</th><td><p><%=userStatus%></p></td></tr>
+                                    <tr><th valign="top">Intereses</th><td><p><%=userInterest%></p></td></tr>
+                                    <tr><th valign="top">Hobbies</th><td><p><%=userHobbies%></p></td></tr>
+                                    <tr><th valign="top">Inciso</th><td><p><%=userInciso%></p></td></tr>
+                               </table>                               
                             <%
                         }
                      %>
-                  </table>
+                 
+                  </div>
+                     <div class="clear">&nbsp;</div>
+                     <div class="editarInfo">
+                    <p><a href="<%=registryPath%>">Editar información</a></p>
+                    </div>
+              </div>
+                                   </div>
+
+                                   </div>
+              </div>
+
                   <%
                 }
           }
