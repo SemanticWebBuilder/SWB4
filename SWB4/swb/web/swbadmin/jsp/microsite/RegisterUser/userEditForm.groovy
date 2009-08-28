@@ -213,9 +213,6 @@ action="$acc_url"   method="post">
 	</table>
     </fieldset>
 </form>
-
-
-    <!--<button dojoType="dijit.form.Button" type="button" onclick="enviar()">Guardar</button> &nbsp; <f b :login-button></f b :login-button>-->
     <br>
     <div class="editarInfo">
                     <p><a href="javascript:enviar()">Guardar</a></p>
