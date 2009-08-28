@@ -217,6 +217,34 @@ public class SWBATemplateEdit extends GenericResource {
         return ver;
     }
 
+    private VersionInfo findVersionNumber(GenericObject obj,int vnum) {
+        VersionInfo ver = findFirstVersion(obj);
+
+        if(ver!=null)
+        {
+            //System.out.println("version inicial:"+ver.getVersionNumber());
+            if(ver.getVersionNumber()!=vnum)
+            {
+                VersionInfo vnext = ver.getNextVersion();
+                while(vnext!=null)
+                {
+                    if(vnext.getVersionNumber()==vnum)
+                    {
+                        ver = vnext;
+                        break;
+                    }
+                    vnext = vnext.getNextVersion();
+                }
+                //System.out.println("version encontrada:"+vnext.getVersionNumber());
+            }
+//            else
+//            {
+//                System.out.println("version inicial requerida:"+ver.getVersionNumber()+", "+ver.getVersionFile());
+//            }
+        }
+        return ver;
+    }
+
     // Edición de la VersionInfo dependiendo el SemanticObject relacionado
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -253,6 +281,7 @@ public class SWBATemplateEdit extends GenericResource {
             out.println("<div class=\"swbform\">");
             out.println("<form id=\"" + id + "/" + idvi + "/" + base.getId() + "/FVIComment\" action=\"" + urla + "\" method=\"post\" onsubmit=\"submitForm('" + id + "/" + idvi + "/" + base.getId() + "/FVIComment');return false;\">");
             out.println("<input type=\"hidden\" name=\"suri\" value=\"" + id + "\">");
+            //System.out.println("VNUM comment: " + vnum);
             if (vnum != null) {
                 out.println("<input type=\"hidden\" name=\"vnum\" value=\"" + vnum + "\">");
             }
@@ -340,21 +369,23 @@ public class SWBATemplateEdit extends GenericResource {
                     lid = sobase.getModel().getCounter(sc);
                 }
                 SemanticObject nvinf = sobase.getModel().createSemanticObject(sobase.getModel().getObjectUri("" + lid, sc), sc);
-                GenericObject ngo = ont.getGenericObject(nvinf.getURI());
+                GenericObject ngo = nvinf.getGenericInstance(); //ont.getGenericObject(nvinf.getURI());
                 vin = (VersionInfo) ngo;
                 int vnum = 1;
                 vio = (VersionInfo) findFirstVersion(go);
+                VersionInfo vicopy = null;
                 if (vio != null) {
                     vil = gov.getLastVersion();
                     vnum = vil.getVersionNumber() + 1;
                     log.debug("version num:" + vnum);
+                    //if (request.getParameter("vnum") != null)
                     nvinf.setObjectProperty(VersionInfo.swb_previousVersion, vil.getSemanticObject()); //vin.setVersionComment(VersionComment);
                     vil.getSemanticObject().setObjectProperty(VersionInfo.swb_nextVersion, nvinf);
                 } else {
                     gov.getSemanticObject().setObjectProperty(Versionable.swb_actualVersion, nvinf);
                 }
                 nvinf.setIntProperty(VersionInfo.swb_versionNumber, vnum);
-                nvinf.setProperty(VersionInfo.swb_versionFile, "template.html");
+                if(request.getParameter("vnum")==null) nvinf.setProperty(VersionInfo.swb_versionFile, "template.html");
                 String VersionComment = request.getParameter("versionComment");
                 log.debug(VersionComment);
                 if (VersionComment != null) {
@@ -363,19 +394,34 @@ public class SWBATemplateEdit extends GenericResource {
                 gov.getSemanticObject().setObjectProperty(Versionable.swb_lastVersion, nvinf);
 
                 Template tmpl = (Template) go;
+
+//                System.out.println("VNUM:"+request.getParameter("vnum"));
+
                 if (request.getParameter("vnum") != null) {
                     // copiar archivos
+
+                    VersionInfo vi = findVersionNumber(go,Integer.parseInt(request.getParameter("vnum")));
+//                    System.out.println("Archivo:"+vi.getVersionFile());
+
+                    //vin.setVersionFile(vi.getVersionFile());
+
+                    nvinf.setProperty(VersionInfo.swb_versionFile, vi.getVersionFile());
+
                     String rutaFS_source_path = SWBPlatform.getWorkPath() + tmpl.getWorkPath() + "/" + request.getParameter("vnum") + "/";
                     String rutaFS_target_path = SWBPlatform.getWorkPath() + tmpl.getWorkPath() + "/" + vnum + "/";
                     String rutaWeb_source_path = SWBPlatform.getWebWorkPath() + tmpl.getWorkPath() + "/" + request.getParameter("vnum");
                     String rutaWeb_target_path = SWBPlatform.getWebWorkPath() + tmpl.getWorkPath() + "/" + vnum;
 
+//                    System.out.println("Ruta FS Source:"+rutaFS_source_path);
+//                    System.out.println("Ruta FS Target:"+rutaFS_target_path);
+//                    System.out.println("Ruta Web Source:"+rutaWeb_source_path);
+//                    System.out.println("Ruta Web Target:"+rutaWeb_target_path);
+
                     if (SWBUtils.IO.copyStructure(rutaFS_source_path, rutaFS_target_path, true, rutaWeb_source_path, rutaWeb_target_path)) {
-                        //System.out.println("Copied OK");
+//                        System.out.println("Copied OK");
                     }
                 } else {
-                    String defaultTPL = tmpl.DEFAUL_HTML;
-                    
+                    String defaultTPL = Template.DEFAUL_HTML;
                     String rutaFS_target_path = SWBPlatform.getWorkPath() + tmpl.getWorkPath() + "/" + vnum + "/";
                     File f = new File(rutaFS_target_path);
                     if (!f.exists()) {
@@ -411,7 +457,7 @@ public class SWBATemplateEdit extends GenericResource {
             response.setRenderParameter(act, "");
             response.setMode(response.Mode_VIEW);
         } else if ("remove".equals(act)) {
-            //System.out.println("remove");
+            // System.out.println("remove");
             String idval = request.getParameter("sval"); // version a eliminar
             log.debug("suri:" + id + "sval:" + idval);
             SemanticObject sobj = ont.getSemanticObject(id);
