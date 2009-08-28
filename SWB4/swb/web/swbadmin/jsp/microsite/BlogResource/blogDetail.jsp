@@ -15,9 +15,9 @@
         <p>No tiene permisos para ver esta entrada, o la entrada ya no existe</p>
         <%
         return;
-    }    
-    //String defaultFormat = "dd/MM/yyyy HH:mm";
-    //SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
+    }
+    String srcLine=SWBPlatform.getWebWorkPath()+"/models/"+ paramRequest.getWebPage().getWebSiteId()  +"/css/solidLine.jpg";
+
     String updated = SWBUtils.TEXT.getTimeAgo(post.getUpdated(), user.getLanguage());
     String postAuthor = post.getCreator().getFirstName();
     postAuthor=post.getCreator().getFullName();
@@ -48,14 +48,14 @@ if(email!=null)
     {
     %>
     <p>Escrito por: <a href="mailto:<%=email%>"><%=postAuthor%></a> , <%=updated%>, visitas: <%=post.getViews()%> , calificación: <%=rank%></p>
-    <p><img src="images/solidLine.jpg" alt="" width="680" height="1" ></p>
+    <p><img src="<%=srcLine%>" alt="" width="680" height="1" ></p>
     <%
     }
     else
         {
         %>
         <p id="author">Escrito por: <%=postAuthor%></p> , <%=updated%>, visitas: <%=post.getViews()%> , calificación: <%=post.getRank()%></p>
-        <p><img src="images/solidLine.jpg" alt="" width="680" height="1" ></p>
+        <p><img src="<%=srcLine%>" alt="" width="680" height="1" ></p>
         <%
         }
 %>
@@ -63,7 +63,8 @@ if(email!=null)
         </td>
     </tr>       
     <tr>
-        <td>            
+        <td>
+            <br>
              <div class="blogcontent"><%=content%></div>
         </td>
     </tr>
@@ -72,7 +73,7 @@ if(email!=null)
 </div>
 
 <br>
-<p><img src="images/solidLine.jpg" alt="" width="680" height="1" ></p>
+<p><img src="<%=srcLine%>" alt="" width="680" height="1" ></p>
 <center>
     <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Regresar</a></p></div>
     <%if(post.canModify(member)){%><div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act","edit").setParameter("uri",post.getURI()).setParameter("mode","editpost")%>">Editar Información</a></p></div><%}%>
