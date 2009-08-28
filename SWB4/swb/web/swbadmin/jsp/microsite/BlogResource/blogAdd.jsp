@@ -26,12 +26,12 @@
 <form name="frmaddpost" id="frmaddpost" method="post" action="<%=paramRequest.getActionUrl()%>">
     <input type="hidden" name="act" value="<%=request.getParameter("act")%>">
     <div>
-        <fieldset><legend></legend>
+        <fieldset><legend>Agregar entrada</legend>
             <div>
                 <p>
-                    <label for="title">Título:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><input id="title" size="50" maxlength="50" name="title" value=""><br>
-                    <label for="description">Descripción:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><input size="50" maxlength="255" id="description" name="description" value=""><br>
-                    <label for="content">Contenido de la entrada:&nbsp;&nbsp;&nbsp;</label>
+                    <br><label for="title">Título:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><br><input id="title" size="50" maxlength="50" name="title" value=""><br><br>
+                    <label for="description">Descripción:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><br><input size="50" maxlength="255" id="description" name="description" value=""><br><br>
+                    <label for="content">Contenido de la entrada:&nbsp;&nbsp;&nbsp;</label><br><br>
                     <textarea id="content" plugins="['undo', 'redo', 'cut', 'copy', 'paste','|','bold','italic','underline', 'strikethrough','forecolor', 'hilitecolor','|','insertUnorderedList','insertOrderedList','|','createLink','unlink','|','indent', 'outdent','justifyCenter', 'justifyFull', 'justifyLeft', 'justifyRight', 'delete', 'selectall']" dojoType="dijit.Editor" rows="5" cols="23" name="content"></textarea>
                     <script>
                         function validaForma()
@@ -67,7 +67,7 @@
         </fieldset>
         <br>
                     <fieldset>
-                        <legend><strong>¿Quién puede ver este video?</strong></legend>
+                        <legend><strong>¿Quién puede ver esta entrada?</strong></legend>
                         <ul class="options">
                             <%String chk="checked=\"checked\"";%>
                             <li><label><input type="radio" checked class="radio" name="level" value="0" /> Cualquiera</label></li>
