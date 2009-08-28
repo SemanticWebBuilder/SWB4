@@ -52,7 +52,9 @@ public class SWBContextBase
     {
        return org.semanticwb.model.UserRepository.createUserRepository(name, namespace);
     }
+    public static final SemanticClass eng_OQPWebSite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.owl-ontologies.com/oqp_engine.owl#OQPWebSite");
 
+    
     public static final SemanticClass swbrep_Workspace=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/repository#Workspace");
 
     public static org.semanticwb.repository.Workspace getWorkspace(String name)
