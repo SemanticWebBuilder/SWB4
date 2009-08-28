@@ -25,30 +25,31 @@
 
 <form name="frmaddpost" id="frmaddpost" method="post" action="<%=paramRequest.getActionUrl()%>">
     <input type="hidden" name="act" value="<%=request.getParameter("act")%>">
+    <input type="hidden" name="content" id="content" value="">
     <div>
         <fieldset><legend>Agregar entrada</legend>
             <div>
                 <p>
                     <br><label for="title">Título:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><br><input id="title" size="50" maxlength="50" name="title" value=""><br><br>
-                    <label for="description">Descripción:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><br><input size="50" maxlength="255" id="description" name="description" value=""><br><br>
-                    <label for="content">Contenido de la entrada:&nbsp;&nbsp;&nbsp;</label><br><br>
-                    <textarea id="content" plugins="['undo', 'redo', 'cut', 'copy', 'paste','|','bold','italic','underline', 'strikethrough','forecolor', 'hilitecolor','|','insertUnorderedList','insertOrderedList','|','createLink','unlink','|','indent', 'outdent','justifyCenter', 'justifyFull', 'justifyLeft', 'justifyRight', 'delete', 'selectall']" dojoType="dijit.Editor" rows="5" cols="23" name="content"></textarea>
-                    <script>
+                    <label for="description">Descripción:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><br><textarea rows="10" cols="80" id="description" name="description"></textarea><br><br>
+                    <label for="editor">Contenido de la entrada:&nbsp;&nbsp;&nbsp;</label><br><br>
+                    <textarea id="editor" plugins="['undo', 'redo', 'cut', 'copy', 'paste','|','bold','italic','underline', 'strikethrough','forecolor', 'hilitecolor','|','insertUnorderedList','insertOrderedList','|','createLink','unlink','|','indent', 'outdent','justifyCenter', 'justifyFull', 'justifyLeft', 'justifyRight', 'delete', 'selectall']" dojoType="dijit.Editor" rows="5" cols="23" name="editor"></textarea>
+                    <script type="text/javascript">
                         function validaForma()
                         {                            
-                            var title = frmaddpost.title.value;
+                            var title = document.frmaddpost.title.value;
                             if(!title)
                             {
                                 alert('Debe ingresar el título de la entrada');
                                 return;
                             }
-                            var description = frmaddpost.description.value;
+                            var description = document.frmaddpost.description.value;
                             if(!description)
                             {
                                 alert('Debe ingresar la descripción de la entrada');
                                 return;
                             }
-                            content = dijit.byId('content').getValue(false);
+                            content = dijit.byId('editor').getValue(false);
                             if(!content)
                             {
                                 alert('Debe ingresar la entrada del post');
@@ -57,8 +58,8 @@
                             var msg='¿Estan los datos correctos de la entrada del blog?';
                             if(confirm(msg))
                             {
-                                dojo.byId('content').value=content;
-                                dojo.byId('frmaddpost').submit();
+                                document.frmaddpost.content.value=content;
+                                document.frmaddpost.submit();
                             }
                         }
                     </script>
