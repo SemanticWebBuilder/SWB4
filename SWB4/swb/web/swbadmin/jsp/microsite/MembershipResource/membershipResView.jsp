@@ -3,7 +3,7 @@
 
 <%!
 
-        private Member getMember(User user, MicroSite site)
+    private Member getMember(User user, MicroSite site)
     {
         //System.out.println("getMember:"+user+" "+site);
         if(site!=null)
@@ -75,18 +75,7 @@
         out.println("<p>Creada: "+SWBUtils.TEXT.getTimeAgo(site.getCreated(),user.getLanguage())+"</p>");
         out.println("<p>Modificada: "+SWBUtils.TEXT.getTimeAgo(site.getUpdated(),user.getLanguage())+"</p>");
 %>
-        <!--h2 class="titulo">Contenidos</h2>
-        <div id="contenidosComunidad">
-          <ul>
-            <li><a class="contenidosComunidad" href=""><img src="images/arrowBullet.jpg" alt="" >Sed et lectus in massa imperdiet tincidunt. Praesent neque tortor, sollicitudin non, euismod a, adipiscing a, est. Mauris diam metus, varius nec</a></li>
-  			<li><a class="contenidosComunidad" href=""><img src="images/arrowBullet.jpg" alt="" >Sed et lectus in massa imperdiet tincidunt. Praesent neque tortor, sollicitudin non, euismod a, adipiscing a, est. Mauris diam metus, varius nec</a></li>
-            <li><a class="contenidosComunidad" href=""><img src="images/arrowBullet.jpg" alt="" >Sed et lectus in massa imperdiet tincidunt. Praesent neque tortor, sollicitudin non, euismod a, adipiscing a, est. Mauris diam metus, varius nec</a></li>
-            <li><a class="contenidosComunidad" href=""><img src="images/arrowBullet.jpg" alt="" >Sed et lectus in massa imperdiet tincidunt. Praesent neque tortor, sollicitudin non, euismod a, adipiscing a, est. Mauris diam metus, varius nec</a></li>
-            <li><a class="contenidosComunidad" href=""><img src="images/arrowBullet.jpg" alt="" >Sed et lectus in massa imperdiet tincidunt. Praesent neque tortor, sollicitudin non, euismod a, adipiscing a, est. Mauris diam metus, varius nec</a></li>
-          </ul>
-          <div id="bottomContComunidad">&nbsp;</div>
-        </div-->
-        <!--p class="vermas"><a href="#">Ver Todos</a></p-->
+
 </div>
 
 
