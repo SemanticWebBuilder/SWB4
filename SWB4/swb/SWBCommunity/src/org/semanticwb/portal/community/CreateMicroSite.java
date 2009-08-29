@@ -8,6 +8,7 @@ package org.semanticwb.portal.community;
 
 import java.io.IOException;
 
+import java.io.PrintWriter;
 import java.util.Iterator;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,10 @@ import org.semanticwb.SWBPlatform;
 
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.Priorityable;
+import org.semanticwb.model.Template;
+import org.semanticwb.model.TemplateGroup;
+import org.semanticwb.model.TemplateRef;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
@@ -26,6 +31,8 @@ import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
+import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.portal.lib.SWBRequest;
 
 /**
  *
@@ -95,6 +102,23 @@ public class CreateMicroSite extends GenericResource
             ms.setPrivate(bprivate);
             ms.setModerate(bmoderate);
 
+            String tplURI = getResourceBase().getAttribute("defaultTemplate","");
+            if(!"".equals(tplURI))
+            {
+                GenericObject got = ont.getGenericObject(tplURI);
+                if(got instanceof Template)
+                {
+                    Template template = (Template)got;
+                    TemplateRef tmpRef = model.createTemplateRef();
+                    tmpRef.setTemplate(template);
+                    tmpRef.setActive(Boolean.TRUE);
+                    tmpRef.setInherit(TemplateRef.INHERIT_ACTUALANDCHILDS);
+                    tmpRef.setValid(Boolean.TRUE);
+                    tmpRef.setPriority(3);
+                    ms.addTemplateRef(tmpRef);
+                }
+            }
+
             if(null!=utils&&utils.length>0)
             {
 
@@ -128,13 +152,66 @@ public class CreateMicroSite extends GenericResource
             // Suscribo al creador de la nueva comunidad a esta.
 
             Member member=Member.createMember(page.getWebSite());
-            member.setAccessLevel(Member.LEVEL_OWNER);
+            member.setAccessLevel(Member.LEVEL_OWNER); //Member.LEVEL_EDIT
             member.setUser(user);
             member.setMicroSite(ms);
 
         }
+        else if("updateConfig".equals(action))
+        {
+            try {
+                getResourceBase().setAttribute("defaultTemplate", request.getParameter("defaultTemp"));
+                getResourceBase().updateAttributesToDB();
+            } catch (Exception e) {
+            }
+
+        }
         else super.processAction(request, response);
     }
+
+    @Override
+    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        PrintWriter out = response.getWriter();
+        WebPage wp = paramRequest.getWebPage();
+        WebSite ws = wp.getWebSite();
+        User user = paramRequest.getUser();
+        SWBResourceURL urla = paramRequest.getActionUrl();
+        String tmpSel = getResourceBase().getAttribute("defaultTemplate","");
+        urla.setParameter("act","updateConfig");
+        out.println("<div class=\"swbform\">");
+        out.println("<form action=\""+urla+"\" method=\"post\" id=\"frm_cfgTemp\">");
+        out.println("<fieldset>");
+        out.println("<legend>Datos</legend>");
+        out.println("<laber for=\"defaultTemp\">Selecciona el template por default para el MicroSitio</label>");
+        out.println("<select name=\"defaultTemp\" id=\"defaultTemp\">");
+        Iterator<TemplateGroup> ittg = ws.listTemplateGroups();
+        while(ittg.hasNext())
+        {
+            TemplateGroup tg = ittg.next();
+            out.println("<optgroup label=\""+tg.getDisplayTitle(user.getLanguage())+"\">");
+            tg.getTitle();
+            Iterator<Template> itt = tg.listTemplates();
+            while(itt.hasNext())
+            {
+                Template tem = itt.next();
+                if(tem.isValid())
+                {
+                    out.println("<option value=\"" + tem.getURI() + "\" "+(tmpSel.equals(tem.getURI())?"selected":"")+">" + tem.getDisplayTitle(user.getLanguage()) + "</option>");
+                }
+            }
+            out.println("</optgroup>");
+        }
+        out.println("</select>");
+        out.println("</fieldset>");
+        out.println("<fieldset>");
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"btnSend\">Guardar</button>");
+        out.println("</fieldset>");
+        out.println("</form>");
+        out.println("</div>");
+
+    }
+
+
 
 
 }
