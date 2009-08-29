@@ -3,12 +3,12 @@
 <%
     SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
     User user=paramRequest.getUser();
-    //WebPage wpage=paramRequest.getWebPage();
-    if(user.isRegistered())
+    WebPage wpage=paramRequest.getWebPage();
+
+    if(user.isRegistered()&&wpage.getLevel()==3)
         {
 %>
-<a href="<%=paramRequest.getRenderUrl().setParameter("act","add").setWindowState(SWBResourceURL.WinState_MAXIMIZED)%>">Crear Comunidad</a>
-
+<p align="right"><a href="<%=paramRequest.getRenderUrl().setParameter("act","add").setWindowState(SWBResourceURL.WinState_MAXIMIZED)%>">Crear Comunidad</a></p>
 <%
         }
 %>
