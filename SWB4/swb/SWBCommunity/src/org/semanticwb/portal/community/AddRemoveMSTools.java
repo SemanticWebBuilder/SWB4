@@ -1,0 +1,234 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.semanticwb.portal.community;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.User;
+import org.semanticwb.model.WebPage;
+import org.semanticwb.model.WebSite;
+import org.semanticwb.platform.SemanticOntology;
+import org.semanticwb.portal.api.GenericResource;
+import org.semanticwb.portal.api.SWBActionResponse;
+import org.semanticwb.portal.api.SWBParamRequest;
+import org.semanticwb.portal.api.SWBResourceException;
+
+/**
+ *
+ * @author juan.fernandez
+ */
+public class AddRemoveMSTools extends GenericResource {
+
+    private static Logger log=SWBUtils.getLogger(AddRemoveMSTools.class);
+
+    @Override
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+
+        String act=request.getParameter("act");
+        if(act==null)act="view";
+        String path="/swbadmin/jsp/microsite/AddRemoveMSTools/view.jsp";
+        if(act.equals("add"))path="/swbadmin/jsp/microsite/AddRemoveMSTools/add.jsp";
+        if(act.equals("edit"))path="/swbadmin/jsp/microsite/AddRemoveMSTools/edit.jsp";
+        if(act.equals("detail"))path="/swbadmin/jsp/microsite/AddRemoveMSTools/detail.jsp";
+
+        RequestDispatcher dis=request.getRequestDispatcher(path);
+        try
+        {
+            request.setAttribute("paramRequest", paramRequest);
+            dis.include(request, response);
+        }catch(Exception e){log.error(e);}
+
+
+
+//        PrintWriter out = response.getWriter();
+//        User user = paramRequest.getUser();
+//        WebPage wp = paramRequest.getWebPage();
+//        WebSite model = wp.getWebSite();
+//        String act = request.getParameter("act");
+//        if (null == act) {
+//            act = "";
+//        }
+//
+//        boolean isMicrosite = false;
+//
+//        if (wp.getSemanticObject().getGenericInstance() instanceof MicroSite) {
+//            isMicrosite = true;
+//        }
+//
+//        if (isMicrosite) {
+//            if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
+//                SWBResourceURL url = paramRequest.getRenderUrl();
+//                url.setParameter("act", "edit");
+//                url.setCallMethod(SWBResourceURL.Call_CONTENT);
+//                url.setWindowState(SWBResourceURL.WinState_MAXIMIZED);
+//                out.println("<ul id=\"menuRight\">");
+//                out.println("<li><a href=\"" + url + "\">Administrar Herramientas</a></li>");
+//                out.println("</ul>");
+//            } else {
+//                if (act.equals("edit")) {
+//
+//                    HashMap hmwp = new HashMap();
+//                    Iterator<WebPage> itwp = wp.listChilds(user.getLanguage(), true, false, false, false);
+//                    while(itwp.hasNext())
+//                    {
+//                        WebPage wpc = itwp.next();
+//                        hmwp.put(wpc.getId(), wp);
+//                    }
+//
+//                    out.println("<div>");
+//                    out.println("<fieldset>");
+//                    out.println("<legend>Agregar o quitar herramientas de la comunidad</legend>");
+//                    SWBResourceURL urla = paramRequest.getActionUrl();
+//                    urla.setAction("update");
+//                    out.println("<form action=\""+urla+"\" method=\"post\" name=\"frm_adminTools\">");
+//                    Iterator<MicroSiteUtil> itmsu = ((MicrositeContainer) model).listMicroSiteUtils();
+//
+//                    while (itmsu.hasNext()) {
+//                        MicroSiteUtil msu = itmsu.next();
+//
+//                        String toolsel = "";
+//                        if(hmwp.get(wp.getId()+"_"+msu.getId())!=null) toolsel = "checked";
+//                        out.println("<label for=\"" + msu.getId() + "\">"+msu.getDisplayTitle(user.getLanguage())+"</label><input type=\"checkbox\" id=\"" + msu.getId() + "\" name=\"micrositeutil\" "+toolsel+"><br/>");
+//                    }
+//
+//                    out.println("</fieldset>");
+//                    out.println("<fieldset>");
+//                    out.println("<button type=\"submit\" name=\"btn_save\">Actualizar</button>");
+//                    out.println("</fieldset>");
+//                    out.println("</form>");
+//                    out.println("</div>");
+//
+//                }
+//            }
+//
+//
+//        }
+    }
+
+    @Override
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+        
+        User user = response.getUser();
+        WebPage wp = response.getWebPage();
+        WebSite model = wp.getWebSite();
+        
+        String action=request.getParameter("act");
+
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+        
+        String[] utils = request.getParameterValues("micrositeutil");
+        
+        boolean isMicrosite = false;
+
+        if (wp.getSemanticObject().getGenericInstance() instanceof MicroSite) {
+            isMicrosite = true;
+        }
+        
+        if(isMicrosite)
+        {
+            if("update".equals(action))
+            {
+                //Lista de utilerias activas actualmente
+                HashMap hmwp = new HashMap();
+                HashMap hmndel = new HashMap();
+
+                String title = request.getParameter("title");
+                String description = request.getParameter("description");
+                String tags = request.getParameter("tags");
+
+                if(title!=null&&title.trim().length()>0) wp.setTitle(title);
+                if(description!=null&&description.trim().length()>0) wp.setDescription(description);
+                if(tags!=null&&tags.trim().length()>0) wp.setTags(tags);
+
+                Iterator<WebPage> itwp = wp.listChilds(user.getLanguage(), true, false, false, false);
+                while(itwp.hasNext())
+                {
+                    WebPage wpc = itwp.next();
+                    hmwp.put(wpc.getId(), wpc);
+                    //System.out.println("wp tool: "+wpc.getId());
+                }
+
+
+                MicroSite ms = (MicroSite)wp;
+
+                if(null!=utils&&utils.length>0)
+                {
+
+                    for(int i=0;i<utils.length;i++)
+                    {
+
+                        GenericObject sowpu = ont.getGenericObject(utils[i]);
+
+                        //System.out.println("checked tool: "+sowpu.getURI());
+                        if(hmwp.get(ms.getId()+"_"+sowpu.getId())!=null)
+                        {
+                            //System.out.println("exist tool: "+sowpu.getURI());
+                            //hmndel.put(ms.getId()+"_"+sowpu.getId(),sowpu);
+                            hmwp.remove(ms.getId()+"_"+sowpu.getId());
+                        }
+                        else 
+                        {
+                            //System.out.println("new checked tool: "+sowpu.getURI());
+                            if(sowpu!=null && sowpu instanceof MicroSiteUtil )
+                            {
+                                MicroSiteUtil msu = (MicroSiteUtil)sowpu;
+                                MicroSiteWebPageUtil mswpu = MicroSiteWebPageUtil.createMicroSiteWebPageUtil(ms.getId()+"_"+msu.getId(), model);
+
+                                mswpu.setTitle(msu.getTitle());
+
+                                mswpu.setMicroSite(ms);
+                                mswpu.setMicroSiteUtil(msu);
+
+                                mswpu.setParent(ms);
+                                mswpu.setActive(Boolean.TRUE);
+
+                            }
+                        }
+                    }
+                }
+
+                //Eliminando utilerias de-seleccionadas
+                Iterator<WebPage> itwpu = hmwp.values().iterator();
+                while(itwpu.hasNext())
+                {
+                    WebPage wprem = itwpu.next();
+                    //System.out.println("wp tool to delete: "+wprem.getURI());
+                    wprem.remove();
+                }
+
+                response.setRenderParameter("act", "view");
+                response.setCallMethod(SWBActionResponse.Call_STRATEGY);
+                response.setMode(SWBActionResponse.Mode_VIEW);
+            }
+        }
+    }
+
+    private Member getMember(User user, MicroSite site)
+    {
+        //System.out.println("getMember:"+user+" "+site);
+        if(site!=null)
+        {
+            Iterator<Member> it=Member.listMemberByUser(user,site.getWebSite());
+            while(it.hasNext())
+            {
+                Member mem=it.next();
+                //System.out.println("mem:"+mem+" "+mem.getMicroSite());
+                if(mem.getMicroSite().equals(site))
+                {
+                   return mem;
+                }
+            }
+        }
+        return null;
+    }
+}
