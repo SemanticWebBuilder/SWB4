@@ -3,6 +3,7 @@ package org.semanticwb.model.base;
 
 public class SelectTreeBase extends org.semanticwb.model.SelectOne 
 {
+    public static final org.semanticwb.platform.SemanticProperty swbxf_st_startElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#st_startElement");
     public static final org.semanticwb.platform.SemanticClass swbxf_SelectTree=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectTree");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectTree");
 
@@ -41,5 +42,15 @@ public class SelectTreeBase extends org.semanticwb.model.SelectOne
     public static boolean hasSelectTree(String id, org.semanticwb.model.SWBModel model)
     {
         return (getSelectTree(id, model)!=null);
+    }
+
+    public String getStartElement()
+    {
+        return getSemanticObject().getProperty(swbxf_st_startElement);
+    }
+
+    public void setStartElement(String value)
+    {
+        getSemanticObject().setProperty(swbxf_st_startElement, value);
     }
 }
