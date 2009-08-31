@@ -8,57 +8,83 @@
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 
 <%
-User owner=paramRequest.getUser();
-User user=owner;
-if(request.getParameter("user")!=null){
-    SemanticObject semObj=SemanticObject.createSemanticObject(request.getParameter("user"));
-    user=(User)semObj.createGenericInstance();
-}
-String userParam="";
-if(owner!=user) userParam="?user="+user.getEncodedURI();
+            User owner = paramRequest.getUser();
+            User user = owner;
+            if (request.getParameter("user") != null)
+            {
+                SemanticObject semObj = SemanticObject.createSemanticObject(request.getParameter("user"));
+                user = (User) semObj.createGenericInstance();
+            }
+            String userParam = "";
+            if (owner != user)
+            {
+                userParam = "?user=" + user.getEncodedURI();
+            }
 
-WebPage wpage=paramRequest.getWebPage();
-SWBResourceURL urlAction=paramRequest.getActionUrl();
+            WebPage wpage = paramRequest.getWebPage();
+            SWBResourceURL urlAction = paramRequest.getActionUrl();
 
-String perfilPath=paramRequest.getWebPage().getWebSite().getWebPage("perfil").getUrl();
-String requesterPath=paramRequest.getWebPage().getWebSite().getWebPage("mis_invitaciones").getUrl();
-String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
-boolean isStrategy=false;
-if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) isStrategy=true;
-String firstName="", lastName="";
-int contTot=0;
+            String perfilPath = paramRequest.getWebPage().getWebSite().getWebPage("perfil").getUrl();
+            String requesterPath = paramRequest.getWebPage().getWebSite().getWebPage("mis_invitaciones").getUrl();
+            String photo = SWBPlatform.getContextPath() + "/swbadmin/images/defaultPhoto.jpg";
+            boolean isStrategy = false;
+            if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY)
+            {
+                isStrategy = true;
+            }            
+            boolean hasInvitations = false;
+            Iterator<FriendshipProspect> itFriendshipProspect = FriendshipProspect.listFriendshipProspectByFriendShipRequested(owner, wpage.getWebSite());
+            if (itFriendshipProspect.hasNext())
+            {
+                hasInvitations = true;
+            }
+            if (hasInvitations)
+            {
 %>
-    <p class="addOn">Mis Invitaciones</p>
+<p class="addOn">Mis Invitaciones</p>
 <%
-Iterator<FriendshipProspect> itFriendshipProspect=FriendshipProspect.listFriendshipProspectByFriendShipRequested(owner, wpage.getWebSite());
-while(itFriendshipProspect.hasNext()){
-    FriendshipProspect friendshipProspect=itFriendshipProspect.next();
-    User userRequester=friendshipProspect.getFriendShipRequester();
-    if(userRequester.getPhoto()!=null) photo=userRequester.getPhoto();
-    if(userRequester.getFirstName()!=null) firstName=userRequester.getFirstName();
-    if(userRequester.getLastName()!=null) lastName=userRequester.getLastName();
-    urlAction.setParameter("user", userRequester.getURI());
-    if(!isStrategy){
+                int contTot = 0;
+                itFriendshipProspect = FriendshipProspect.listFriendshipProspectByFriendShipRequested(owner, wpage.getWebSite());
+                while (itFriendshipProspect.hasNext())
+                {
+                    FriendshipProspect friendshipProspect = itFriendshipProspect.next();
+                    User userRequester = friendshipProspect.getFriendShipRequester();
+                    if (userRequester.getPhoto() != null)
+                    {
+                        photo = SWBPlatform.getWebWorkPath() + userRequester.getPhoto();
+                    }                    
+                    urlAction.setParameter("user", userRequester.getURI());
+                    if (!isStrategy)
+                    {
 %>
-    <div class="moreUser">
-            <a href="<%=perfilPath%>?user=<%=userRequester.getEncodedURI()%>"><img src="<%=photo%>" title="<%=firstName%> <%=lastName%>" width="80" height="70">
-                <br>
-                <%=firstName%>
-                <%=lastName%>
-            </a>
-            <br>
-            <%urlAction.setAction("acceptfriend");%>
-            <a href="<%=urlAction%>">Aceptar</a>|
-            <%urlAction.setAction("noacceptfriend");%><a href="<%=urlAction%>">No aceptar</a>
-     </div>
-     <%
-      }
-      contTot++;
-  }
-if(isStrategy && contTot>0){%>
-     <div class="clear">
-        <p class="titulo"><a href="<%=requesterPath%><%=userParam%>" >Tienes <%=contTot%> invitacion(es) de amistad</a></p>
-     </div>     
-  <%}else if(contTot==0){%>
-     <p class="titulo">No tienes invitaciones de amistad</p>
-  <%}%>  
+<div class="moreUser">
+    <a href="<%=perfilPath%>?user=<%=userRequester.getEncodedURI()%>"><img src="<%=photo%>" alt="<%=userRequester.getFullName()%>" width="80" height="70">
+        <br><%=userRequester.getFullName()%>
+    </a>
+    <br>
+    <%urlAction.setAction("acceptfriend");%>
+    <div class="editarInfo"><p><a href="<%=urlAction%>">Aceptar</a></p></div>
+    <%urlAction.setAction("noacceptfriend");%>
+    <div class="editarInfo"><p><a href="<%=urlAction%>">No aceptar</a></p></div>    
+</div>
+<%
+                    }
+                    contTot++;
+                }
+                if (isStrategy && contTot > 0)
+                {
+%>
+<div class="clear">
+    <p class="titulo"><a href="<%=requesterPath%><%=userParam%>" >Te han invitado <%=contTot%> persona(s) a que te unas como su amigo</a></p>
+</div>
+<%
+                }
+                else if (!hasInvitations)
+                {
+%>
+<p class="titulo">No Te han invitado personas a ser su amigo</p>
+<%                }
+
+            }           
+
+%>
