@@ -272,12 +272,6 @@
       </swb:SemanticResource>
     </rdfs:domain>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasDirWebPage">
-    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
-    <rdfs:domain rdf:resource="#DirectoryObject"/>
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >hasWebPage</swb:propertyCodeName>
-  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="type">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_type">
@@ -354,6 +348,12 @@
   <owl:ObjectProperty rdf:ID="hasEvent">
     <rdfs:domain rdf:resource="#EventResource"/>
     <rdfs:range rdf:resource="#EventElement"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="dirWebPage">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >webPage</swb:propertyCodeName>
+    <rdfs:domain rdf:resource="#DirectoryObject"/>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="#blogInv">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
