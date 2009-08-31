@@ -1,14 +1,14 @@
 package org.semanticwb.model.base;
 
 
-public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Localeable,org.semanticwb.model.Indexable
+public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.Traceable,org.semanticwb.model.Indexable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Localeable
 {
-    public static final org.semanticwb.platform.SemanticClass swb_SWBModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#SWBModel");
-    public static final org.semanticwb.platform.SemanticProperty swb_hasSubModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasSubModel");
     public static final org.semanticwb.platform.SemanticClass swb_UserRepository=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserRepository");
     public static final org.semanticwb.platform.SemanticProperty swb_userRepository=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepository");
     public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
     public static final org.semanticwb.platform.SemanticProperty swb_homePage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#homePage");
+    public static final org.semanticwb.platform.SemanticClass swb_SWBModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#SWBModel");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasSubModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasSubModel");
     public static final org.semanticwb.platform.SemanticClass swb_ResourceSubType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceSubType");
     public static final org.semanticwb.platform.SemanticClass swb_Association=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Association");
     public static final org.semanticwb.platform.SemanticClass swb_ResourceRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceRef");
@@ -89,118 +89,6 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
         return (getWebSite(id)!=null);
     }
 
-    public boolean isDeleted()
-    {
-        return getSemanticObject().getBooleanProperty(swb_deleted);
-    }
-
-    public void setDeleted(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(swb_deleted, value);
-    }
-
-    public boolean isActive()
-    {
-        return getSemanticObject().getBooleanProperty(swb_active);
-    }
-
-    public void setActive(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(swb_active, value);
-    }
-
-    public void setLanguage(org.semanticwb.model.Language value)
-    {
-        getSemanticObject().setObjectProperty(swb_language, value.getSemanticObject());
-    }
-
-    public void removeLanguage()
-    {
-        getSemanticObject().removeProperty(swb_language);
-    }
-
-   public static java.util.Iterator<org.semanticwb.model.WebSite> listWebSiteByLanguage(org.semanticwb.model.Language language,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.model.WebSite> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_language, language.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.model.WebSite> listWebSiteByLanguage(org.semanticwb.model.Language language)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.model.WebSite> it=new org.semanticwb.model.GenericIterator(language.getSemanticObject().getModel().listSubjects(swb_language,language.getSemanticObject()));
-       return it;
-   }
-
-    public org.semanticwb.model.Language getLanguage()
-    {
-         org.semanticwb.model.Language ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_language);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.Language)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.model.SWBModel> listSubModels()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.SWBModel>(getSemanticObject().listObjectProperties(swb_hasSubModel));
-    }
-
-    public boolean hasSubModel(org.semanticwb.model.SWBModel swbmodel)
-    {
-        if(swbmodel==null)return false;
-        return getSemanticObject().hasObjectProperty(swb_hasSubModel,swbmodel.getSemanticObject());
-    }
-
-    public void addSubModel(org.semanticwb.model.SWBModel value)
-    {
-        getSemanticObject().addObjectProperty(swb_hasSubModel, value.getSemanticObject());
-    }
-
-    public void removeAllSubModel()
-    {
-        getSemanticObject().removeProperty(swb_hasSubModel);
-    }
-
-    public void removeSubModel(org.semanticwb.model.SWBModel swbmodel)
-    {
-        getSemanticObject().removeObjectProperty(swb_hasSubModel,swbmodel.getSemanticObject());
-    }
-
-   public static java.util.Iterator<org.semanticwb.model.WebSite> listWebSiteBySubModel(org.semanticwb.model.SWBModel hassubmodel,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.model.WebSite> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_hasSubModel, hassubmodel.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.model.WebSite> listWebSiteBySubModel(org.semanticwb.model.SWBModel hassubmodel)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.model.WebSite> it=new org.semanticwb.model.GenericIterator(hassubmodel.getSemanticObject().getModel().listSubjects(swb_hasSubModel,hassubmodel.getSemanticObject()));
-       return it;
-   }
-
-    public org.semanticwb.model.SWBModel getSubModel()
-    {
-         org.semanticwb.model.SWBModel ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasSubModel);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.SWBModel)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
-    public boolean isUndeleteable()
-    {
-        return getSemanticObject().getBooleanProperty(swb_undeleteable);
-    }
-
-    public void setUndeleteable(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(swb_undeleteable, value);
-    }
-
     public java.util.Date getCreated()
     {
         return getSemanticObject().getDateProperty(swb_created);
@@ -279,6 +167,16 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
         getSemanticObject().setDateProperty(swb_updated, value);
     }
 
+    public boolean isIndexable()
+    {
+        return getSemanticObject().getBooleanProperty(swb_indexable);
+    }
+
+    public void setIndexable(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_indexable, value);
+    }
+
     public void setUserRepository(org.semanticwb.model.UserRepository value)
     {
         getSemanticObject().setObjectProperty(swb_userRepository, value.getSemanticObject());
@@ -312,14 +210,57 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
          return ret;
     }
 
-    public boolean isIndexable()
+    public boolean isActive()
     {
-        return getSemanticObject().getBooleanProperty(swb_indexable);
+        return getSemanticObject().getBooleanProperty(swb_active);
     }
 
-    public void setIndexable(boolean value)
+    public void setActive(boolean value)
     {
-        getSemanticObject().setBooleanProperty(swb_indexable, value);
+        getSemanticObject().setBooleanProperty(swb_active, value);
+    }
+
+    public boolean isDeleted()
+    {
+        return getSemanticObject().getBooleanProperty(swb_deleted);
+    }
+
+    public void setDeleted(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_deleted, value);
+    }
+
+    public void setLanguage(org.semanticwb.model.Language value)
+    {
+        getSemanticObject().setObjectProperty(swb_language, value.getSemanticObject());
+    }
+
+    public void removeLanguage()
+    {
+        getSemanticObject().removeProperty(swb_language);
+    }
+
+   public static java.util.Iterator<org.semanticwb.model.WebSite> listWebSiteByLanguage(org.semanticwb.model.Language language,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.WebSite> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_language, language.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.model.WebSite> listWebSiteByLanguage(org.semanticwb.model.Language language)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.WebSite> it=new org.semanticwb.model.GenericIterator(language.getSemanticObject().getModel().listSubjects(swb_language,language.getSemanticObject()));
+       return it;
+   }
+
+    public org.semanticwb.model.Language getLanguage()
+    {
+         org.semanticwb.model.Language ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_language);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.Language)obj.createGenericInstance();
+         }
+         return ret;
     }
 
     public void setCreator(org.semanticwb.model.User value)
@@ -411,6 +352,65 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
+    }
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.SWBModel> listSubModels()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.SWBModel>(getSemanticObject().listObjectProperties(swb_hasSubModel));
+    }
+
+    public boolean hasSubModel(org.semanticwb.model.SWBModel swbmodel)
+    {
+        if(swbmodel==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasSubModel,swbmodel.getSemanticObject());
+    }
+
+    public void addSubModel(org.semanticwb.model.SWBModel value)
+    {
+        getSemanticObject().addObjectProperty(swb_hasSubModel, value.getSemanticObject());
+    }
+
+    public void removeAllSubModel()
+    {
+        getSemanticObject().removeProperty(swb_hasSubModel);
+    }
+
+    public void removeSubModel(org.semanticwb.model.SWBModel swbmodel)
+    {
+        getSemanticObject().removeObjectProperty(swb_hasSubModel,swbmodel.getSemanticObject());
+    }
+
+   public static java.util.Iterator<org.semanticwb.model.WebSite> listWebSiteBySubModel(org.semanticwb.model.SWBModel hassubmodel,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.WebSite> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_hasSubModel, hassubmodel.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.model.WebSite> listWebSiteBySubModel(org.semanticwb.model.SWBModel hassubmodel)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.WebSite> it=new org.semanticwb.model.GenericIterator(hassubmodel.getSemanticObject().getModel().listSubjects(swb_hasSubModel,hassubmodel.getSemanticObject()));
+       return it;
+   }
+
+    public org.semanticwb.model.SWBModel getSubModel()
+    {
+         org.semanticwb.model.SWBModel ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasSubModel);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.SWBModel)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+    public boolean isUndeleteable()
+    {
+        return getSemanticObject().getBooleanProperty(swb_undeleteable);
+    }
+
+    public void setUndeleteable(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_undeleteable, value);
     }
 
     public org.semanticwb.model.ResourceSubType getResourceSubType(String id)

@@ -130,7 +130,7 @@ public class SecurityQuestion extends org.semanticwb.model.base.SecurityQuestion
                 SemanticClass cls=prop.getRangeClass();
                 Iterator<SemanticObject> it=null;
 
-                it=SWBComparator.sortSermanticObjects(getModel().listInstancesOfClass(cls),lang);
+                it=SWBComparator.sortSermanticObjects(lang, getModel().listInstancesOfClass(cls));
 
                 while(it!=null && it.hasNext())
                 {

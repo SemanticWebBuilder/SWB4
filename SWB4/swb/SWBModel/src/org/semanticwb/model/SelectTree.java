@@ -163,14 +163,14 @@ public class SelectTree extends org.semanticwb.model.base.SelectTreeBase
                     {
                         if(cls!=null)
                         {
-                            it=SWBComparator.sortSermanticObjects(cls.listInstances(),lang);
+                            it=SWBComparator.sortSermanticObjects(lang, cls.listInstances());
                         }else
                         {
-                            it=SWBComparator.sortSermanticObjects(SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClassesAsSemanticObjects(),lang);
+                            it=SWBComparator.sortSermanticObjects(lang, SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClassesAsSemanticObjects());
                         }
                     }else
                     {
-                        it=SWBComparator.sortSermanticObjects(getModel().listInstancesOfClass(cls),lang);
+                        it=SWBComparator.sortSermanticObjects(lang, getModel().listInstancesOfClass(cls));
                     }
                     boolean hp=false;
                     if(cls!=null)hp=cls.hasHerarquicalProperties();

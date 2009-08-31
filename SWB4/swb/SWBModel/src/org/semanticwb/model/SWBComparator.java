@@ -93,7 +93,23 @@ public class SWBComparator implements Comparator
         }
         return ret;
     }
-    
+
+    public static Iterator sortSermanticObjects(String lang, Iterator... its)
+    {
+        TreeSet set=new TreeSet(new SWBComparator(lang));
+        for(int x=0;x<its.length;x++)
+        {
+            Iterator it=its[x];
+            while(it.hasNext())
+            {
+                Object obj=it.next();
+                if(obj!=null)set.add(obj);
+                else System.out.println("Warn: obj==null");
+            }
+        }
+        return set.iterator();
+    }
+/*
     public static Iterator sortSermanticObjects(Iterator it, String lang)
     {    
         TreeSet set=new TreeSet(new SWBComparator(lang));
@@ -105,7 +121,7 @@ public class SWBComparator implements Comparator
         }
         return set.iterator();        
     }
-    
+*/
     public static Iterator sortSermanticObjects(Iterator it)
     {
         TreeSet set=new TreeSet(new SWBComparator());

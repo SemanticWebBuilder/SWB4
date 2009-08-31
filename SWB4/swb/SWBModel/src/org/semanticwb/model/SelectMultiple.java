@@ -144,14 +144,14 @@ public class SelectMultiple extends org.semanticwb.model.base.SelectMultipleBase
                 {
                     if(cls!=null)
                     {
-                        it=SWBComparator.sortSermanticObjects(cls.listInstances(),lang);
+                        it=SWBComparator.sortSermanticObjects(lang, cls.listInstances());
                     }else
                     {
-                        it=SWBComparator.sortSermanticObjects(SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClassesAsSemanticObjects(),lang);
+                        it=SWBComparator.sortSermanticObjects(lang, SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClassesAsSemanticObjects());
                     }
                 }else
                 {
-                    it=SWBComparator.sortSermanticObjects(getModel().listInstancesOfClass(cls),lang);
+                    it=SWBComparator.sortSermanticObjects(lang, getModel().listInstancesOfClass(cls));
                 }
                 while(it.hasNext())
                 {
