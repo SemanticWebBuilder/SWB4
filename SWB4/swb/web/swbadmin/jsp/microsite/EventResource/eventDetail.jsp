@@ -8,30 +8,57 @@
     Member member = Member.getMember(user, wpage);
 
     String uri = request.getParameter("uri");
-    EventElement event = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
+    EventElement event = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();  
+
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");
+
     if(event!=null && event.canView(member)) {
-
-     SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-     SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");
-
         event.incViews();
 %>
-<table border="0" cellspacing="10">
+
+<br/>
+<div id="panorama">
+<%
+    SWBResourceURL back = paramRequest.getRenderUrl().setParameter("act", "view");
+    back = paramRequest.getRenderUrl().setParameter("act", "edit");
+    back.setParameter("year", request.getParameter("year"));
+    back.setParameter("month", request.getParameter("month"));
+    back.setParameter("day", request.getParameter("day"));
+    back.setParameter("uri", event.getURI());
+%>    
+<%if (event.canModify(member)) {%>
+    <div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act", "attend").setParameter("uri", event.getURI())%>">Asistir al evento</a></p></div>
+<%}%>
+<%if (event.canModify(member)) {%>
+    <div class="editarInfo"><p><a href="<%= back%>">Editar información</a></p></div>
+<%}%>
+<%if (event.canModify(member)) {%>
+    <div class="editarInfo"><p><a href="<%= paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", event.getURI())%>">Eliminar evento</a></p></div>
+<%}%>
+    <div class="editarInfo"><p><a href="<%= paramRequest.getRenderUrl()%>">Regresar</a></p></div>
+</div>
+
+<div id="panorama">
+<table border="0" cellspacing="3">
     <tr>
-        <td valign="top">
+        <td>
             <a href="<%= SWBPlatform.getWebWorkPath()+event.getEventImage()%>" target="_self">
             <img id="img_<%=event.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+event.getEventImage()%>" alt="<%=event.getTitle()%>" border="0" />
             </a>
         </td>
         <td valign="top">
-                <%=event.getTitle()%> (<%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%>)<BR>
-                <hr>
-                <p><%=event.getDescription()%></p>
-                <p>Dirigido a: <%= event.getAudienceType()%></p>
-                <p>Inicia: <strong><%= (event.getStartDate()==null?"":dateFormat.format(event.getStartDate()))%></strong> a las <strong><%= (event.getStartTime()==null?"":timeFormat.format(event.getStartTime()))%></strong></p>
-                <p>Termina: <strong><%= (event.getEndDate()==null?"":dateFormat.format(event.getEndDate()))%></strong> a las <strong><%= (event.getEndTime()==null?"":timeFormat.format(event.getEndTime()))%></strong></p>
-                <p>Lugar: <%= event.getPlace()%></p>
-                <p>Asistentes:
+            <div class="entryEvent">
+                <p style="line-height:1px;"><%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%></p>
+                <p style="line-height:1px;">&nbsp;</p>
+                <p class="tituloNaranja"><%= event.getTitle()%></p>
+                <p style="line-height:13px;"><%= event.getDescription()%></p>
+                <p style="line-height:1px;">&nbsp;</p>
+                <p style="line-height:13px;">Dirigido a: <strong><%= event.getAudienceType()%></strong></p>
+                <p style="line-height:13px;">Inicia:<strong><%= (event.getStartDate()==null?"":dateFormat.format(event.getStartDate()))%></strong> a las <strong><%= (event.getStartTime()==null?"":timeFormat.format(event.getStartTime()))%></strong></p>
+                <p style="line-height:13px;">Termina:<strong><%= (event.getEndDate()==null?"":dateFormat.format(event.getEndDate()))%></strong> a las <strong><%= (event.getEndTime()==null?"":timeFormat.format(event.getEndTime()))%></strong></p>
+                <p style="line-height:13px;">Lugar: <strong><%= event.getPlace()%></strong></p>
+                <p style="line-height:13px;">Asistentes:
                 <%
                 Iterator<User> users = event.listAttendants();
                 while (users.hasNext()) {
@@ -43,10 +70,12 @@
                     }
                 }
                 %></p>
-                <p><%=event.getViews()%> vistas</p>
+                <p style="line-height:13px;"><%=event.getViews()%> vistas</p>
+            </div>
         </td>
     </tr>
 </table>
+</div>
 <script type="text/javascript">
     var img = document.getElementById('img_<%=event.getId()%>');
     if( img.width>img.height && img.width>450) {
@@ -64,19 +93,5 @@
 %>
 <%
 event.renderGenericElements(request, out, paramRequest);
-SWBResourceURL back = paramRequest.getRenderUrl().setParameter("act", "view");
 %>
 
-<center>
-    <a href="<%=back%>">Regresar</a>
-    <%
-            back = paramRequest.getRenderUrl().setParameter("act", "edit");
-            back.setParameter("year", request.getParameter("year"));
-            back.setParameter("month", request.getParameter("month"));
-            back.setParameter("day", request.getParameter("day"));
-            back.setParameter("uri", event.getURI());
-    %>
-    <%if (event.canModify(member)) {%><a href="<%=paramRequest.getActionUrl().setParameter("act", "attend").setParameter("uri", event.getURI())%>">Asistir al evento</a><%}%>
-    <%if (event.canModify(member)) {%><a href="<%=back%>">Editar Información</a><%}%>
-    <%if (event.canModify(member)) {%><a href="<%=paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", event.getURI())%>">Eliminar Evento</a><%}%>
-</center>

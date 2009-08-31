@@ -27,8 +27,37 @@ Error: Elemento no encontrado...
     dojo.require("dijit.form.RadioButton");
     dojo.require("dijit.form.Button");
     dojo.require("dojo.parser");
+
+    function validaForma()
+    {
+        var title = document.frmaeditevent.event_title.value;
+        if(!title)
+        {
+            alert('¡Debe ingresar el título del evento!');
+            document.frmaeditevent.event_title.focus();
+            return;
+        }
+        var description = document.frmaeditevent.event_description.value;
+        if(!description)
+        {
+            alert('¡Debe ingresar la description del evento!');
+            document.frmaeditevent.event_description.focus();
+            return;
+        }
+        var event_audience = document.frmaeditevent.event_audience.value;
+        if(!event_audience)
+        {
+            alert('¡Debe ingresar la audiencia a la que está dirigido el evento!');
+            document.frmaeditevent.event_audience.focus();
+            return;
+        }
+        document.frmaeditevent.submit();
+    }
 </script>
-<form class="swbform" enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
+
+<br />
+<div id="panorama">
+<form name="frmaeditevent" id="frmaeditevent" class="swbform" enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
     <div>
         <fieldset>
             <legend>Editar evento</legend>
@@ -41,39 +70,39 @@ Error: Elemento no encontrado...
                     <input type="file" id="foto" name="foto" />
                 </p>
                 <p>
-                    <label for="event_title">Título del evento:&nbsp;</label>
+                    <label for="event_title">Título del evento:&nbsp;</label><br />
                     <input type="text" id="event_title" name="event_title" value="<%=(rec.getTitle()==null?"":rec.getTitle())%>"/>
                 </p>
                 <p>
-                    <label for="event_description">Descripción del evento:&nbsp;</label>
+                    <label for="event_description">Descripción del evento:&nbsp;</label><br />
                     <textarea id="event_description" name="event_description" cols="30" rows="5"><%=(rec.getDescription()==null?"":rec.getDescription())%></textarea>
                 </p>
                 <p>
-                    <label for="event_audience">Dirigido a:&nbsp;</label>
+                    <label for="event_audience">Dirigido a:&nbsp;</label><br />
                     <input type="text" id="event_audience" name="event_audience" value="<%=(rec.getAudienceType()==null?"":rec.getAudienceType())%>"/>
                 </p>
                 <p>
-                    <label for="event_startDate">Fecha de inicio:&nbsp;</label>
-                    <input dojoType="dijit.form.DateTextBox" type="text" id="event_startDate" name="event_startDate" value="<%=(rec.getStartDate()==null?"":dateFormat.format(rec.getStartDate()))%>" constraints="{datePattern:'yyyy/MM/dd'}" onchange="dijit.byId('event_endDate').constraints.min = arguments[0];"/>
+                    <label for="event_startDate">Fecha de inicio:&nbsp;</label><br />
+                    <input dojoType="dijit.form.DateTextBox" type="text" id="event_startDate" name="event_startDate" value="<%=(rec.getStartDate()==null?"":dateFormat.format(rec.getStartDate()))%>" constraints="{datePattern:'dd/MM/yyyy'}" onchange="dijit.byId('event_endDate').constraints.min = arguments[0];"/>
                 </p>
                 <p>
-                    <label for="event_endDate">Fecha de término:&nbsp;</label>
-                    <input dojoType="dijit.form.DateTextBox" type="text" id="event_endDate" name="event_endDate" value="<%=(rec.getEndDate()==null?"":dateFormat.format(rec.getEndDate()))%>" constraints="{datePattern:'yyyy/MM/dd'}" onchange="dijit.byId('event_startDate').constraints.max = arguments[0];"/>
+                    <label for="event_endDate">Fecha de término:&nbsp;</label><br />
+                    <input dojoType="dijit.form.DateTextBox" type="text" id="event_endDate" name="event_endDate" value="<%=(rec.getEndDate()==null?"":dateFormat.format(rec.getEndDate()))%>" constraints="{datePattern:'dd/MM/yyyy'}" onchange="dijit.byId('event_startDate').constraints.max = arguments[0];"/>
                 </p>
                 <p>
-                    <label for="event_startTime">Hora de inicio:&nbsp;</label>
+                    <label for="event_startTime">Hora de inicio:&nbsp;</label><br />
                     <input dojoType="dijit.form.TimeTextBox" type="text" id="event_startTime" name="event_startTime" value="<%=(rec.getStartTime()==null?"":"T" + timeFormat.format(rec.getStartTime()))%>" constraints="{timePattern:'hh:mm a', visibleRange:'T01:30:00'}" />
                 </p>
                 <p>
-                    <label for="event_endTime">Hora de término:&nbsp;</label>
+                    <label for="event_endTime">Hora de término:&nbsp;</label><br />
                     <input dojoType="dijit.form.TimeTextBox" type="text" id="event_endTime" name="event_endTime" value="<%=(rec.getEndTime()==null?"":"T" + timeFormat.format(rec.getEndTime()))%>" constraints="{timePattern:'hh:mm a', visibleRange:'T01:30:00'}" />
                 </p>
                 <p>
-                    <label for="event_place">Lugar del evento:&nbsp;</label>
+                    <label for="event_place">Lugar del evento:&nbsp;</label><br />
                     <input type="text" id="event_place" name="event_place" value="<%=(rec.getPlace()==null?"":rec.getPlace())%>"/>
                 </p>
                 <p>
-                    <label for="event_tags">Etiquetas:&nbsp;</label>
+                    <label for="event_tags">Etiquetas:&nbsp;</label><br />
                     <input type="text" id="event_tags" name="event_tags" value="<%=(rec.getTags()==null?"":rec.getTags())%>"/>
                 </p>
             </div>
@@ -105,8 +134,9 @@ Error: Elemento no encontrado...
             <legend></legend>
             <div>
             <p>
-                <input type="submit" value="Enviar" />
-                <input type="button" value="Cancelar" onclick="window.location='<%= back%>'"/>
+                <div class="editarInfo"><p><a onclick="validaForma()" href="#">Enviar</a></p></div>
+                <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Cancelar</a></p></div>
+
             </p>
             </div>
         </fieldset>
@@ -114,7 +144,8 @@ Error: Elemento no encontrado...
     <input type="hidden" name="uri" value="<%=rec.getURI()%>"/>
     <input type="hidden" name="act" value="edit"/>
 </form>
-
+</div>
+    
 <script type="text/javascript">
     var img = document.getElementById('img_<%=rec.getId()%>');
     if( img.width>img.height && img.width>350) {
