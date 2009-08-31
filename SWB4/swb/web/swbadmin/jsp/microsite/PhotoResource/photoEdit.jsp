@@ -17,9 +17,37 @@
             return;
         }
 %>
+<script type="text/javascript">
+function validaForma()
+{
+    var foto = document.frmaddfoto.title.value;
+    if(!foto)
+    {
+        alert('¡Debe ingresar el archivo de la foto!');
+        document.frmaddfoto.foto.focus();
+        return;
+    }
+    var title = document.frmaddfoto.title.value;
+    if(!title)
+    {
+        alert('¡Debe ingresar el título de la foto!');
+        document.frmaddfoto.description.focus();
+        return;
+    }
+    var description = document.frmaddfoto.description.value;
+    if(!description)
+    {
+        alert('¡Debe ingresar la description de la foto!');
+        document.frmaddfoto.description.focus();
+        return;
+    }
+    document.frmaddfoto.submit();
+}
+</script>
+
 <br />
 <div id="panorama">
-<form method="post" action="<%=paramRequest.getActionUrl()%>">
+<form name="frmaddfoto" id="frmaddfoto" method="post" action="<%=paramRequest.getActionUrl()%>">
     <div>
         <fieldset>
             <legend>Editar foto</legend>
@@ -61,8 +89,8 @@
             <legend></legend>
             <div>
             <p>
-                <input type="submit" value="Enviar" />
-                <input type="button" value="Cancelar" onclick="window.location='<%= paramRequest.getRenderUrl()%>'"/>
+                <div class="editarInfo"><p><a onclick="validaForma()" href="#">Enviar</a></p></div>
+                <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Cancelar</a></p></div>
             </p>
             </div>
         </fieldset>
