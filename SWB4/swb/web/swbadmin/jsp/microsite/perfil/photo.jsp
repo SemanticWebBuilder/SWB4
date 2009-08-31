@@ -30,7 +30,7 @@ String attributes=base.getAttribute("attributes","");
  <img src="<%=photo%>" width="150" height="150" alt="<%=user.getFullName()%>" valign="top"/><br>
  <%if(owner.equals(user)){%>
     <p class="addOn"><a href="<%=wpage.getUrl()%>?changePhoto=1">Cambiar imagen</a></p>
-    <p class="addOn"><a href="<%=registryPath%>" <%=attributes%>>Registro de usuarios</p></a>
+    <%-- <p class="addOn"><a href="<%=registryPath%>" <%=attributes%>>Registro de usuarios</p></a> --%>
  <%}%>
                       
           
