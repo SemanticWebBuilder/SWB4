@@ -461,8 +461,6 @@
     <rdf:type rdf:resource="#Class"/>
   </owl:Class>
   <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectTree">
-    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >startElement</swb:classCodePackage>
     <rdfs:subClassOf>
       <swb:FormElement rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectOne">
         <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
@@ -2240,6 +2238,8 @@
     </swb:displayProperty>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#st_startElement">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >startElement</swb:propertyCodeName>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectTree"/>
   </owl:DatatypeProperty>
