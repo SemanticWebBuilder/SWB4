@@ -41,6 +41,7 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.AssMember;
 import org.semanticwb.model.Association;
+import org.semanticwb.model.Descriptiveable;
 import org.semanticwb.model.Language;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.Topic;
@@ -606,7 +607,7 @@ public class SWBATMAdmin extends GenericResource
                         boolean assoc = false;
                         boolean isnew = false;
                         boolean bad = false;
-                        Topic auxtopic = null;
+                        WebPage auxtopic = null;
                         int asstype = 0;
 
                         int nass = 0;
@@ -615,7 +616,7 @@ public class SWBATMAdmin extends GenericResource
                         String assTypeId = "";
                         String assRole[] = new String[2];
 
-                        //BaseName auxname = null;
+                        String auxname = null;
 
                         while ((aux = in.readLine()) != null)
                         {
@@ -727,24 +728,44 @@ public class SWBATMAdmin extends GenericResource
                                                 auxtopic = tm.createWebPage(aux.substring(2));
                                             } else
                                             {
-                                                auxtopic.getSemanticObject().removeProperties();
-                                                auxtopic = tm.createWebPage(aux.substring(2));
+                                                //Eliminar titulos
+                                                auxtopic.setTitle(null);
+                                                Iterator<Language> langit=auxtopic.getWebSite().listLanguages();
+                                                while(langit.hasNext())
+                                                {
+                                                    auxtopic.setTitle(null,langit.next().getId());
+                                                }
+                                                if (type > 1)
+                                                {
+                                                    auxtopic.removeParent();
+                                                    auxtopic.removeAllVirtualParent();
+                                                    Iterator<AssMember> it=auxtopic.listAssMembers();
+                                                    while(it.hasNext())
+                                                    {
+                                                        it.next().remove();
+                                                    }
+                                                }
                                             }
                                         }
                                     } else
                                         bad = true;
                                 } else if (aux.startsWith("n:") && !bad)
                                 {
-                                    auxtopic.setTitle(aux.substring(2));
+                                    if(auxname!=null)
+                                    {
+                                        auxtopic.setTitle(auxname);    
+                                    }
+                                    auxname=aux.substring(2);
                                 } else if (aux.startsWith("s:") && !bad)
                                 {
-                                    //TODO:
-                                    System.out.println("s:"+aux.substring(2));
-                                    //auxname.setScope(new Scope(tm.getWebPage(aux.substring(2))));
+                                    String lang=aux.substring(2);
+                                    if(lang.startsWith("IDM_WB"))lang=lang.substring(6);
+                                    auxtopic.setTitle(auxname, lang);
+                                    auxname=null;
                                 } else if (aux.startsWith("v:") && !bad)
                                 {
                                     //TODO:
-                                    System.out.println("v:"+aux.substring(2));
+                                    //System.out.println("v:"+aux.substring(2));
                                     /*
                                     Variant v = new Variant();
                                     VariantName vn = new VariantName();
@@ -754,6 +775,10 @@ public class SWBATMAdmin extends GenericResource
                                     //System.out.println(aux.substring(2));
                                      */
                                 }
+                            }
+                            if(auxname!=null)
+                            {
+                                auxtopic.setTitle(auxname);
                             }
 
                             if (assoc && (!isnew))

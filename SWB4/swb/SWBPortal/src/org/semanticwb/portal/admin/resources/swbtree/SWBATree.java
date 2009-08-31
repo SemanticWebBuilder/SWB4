@@ -203,7 +203,7 @@ public class SWBATree extends GenericResource
     public void addWebSites(JSONArray arr, SWBParamRequest paramRequest)  throws JSONException
     {
         //System.out.println("addWebSites");
-        Iterator<WebSite> it=SWBComparator.sortSermanticObjects(SWBContext.listWebSites(),paramRequest.getUser().getLanguage());
+        Iterator<WebSite> it=SWBComparator.sortSermanticObjects(paramRequest.getUser().getLanguage(), SWBContext.listWebSites());
         while(it.hasNext())
         {
             WebSite site=it.next();
@@ -218,7 +218,7 @@ public class SWBATree extends GenericResource
     public void addUserReps(JSONArray arr, SWBParamRequest paramRequest)  throws JSONException
     {
         //System.out.println("addWebSites");
-        Iterator<UserRepository> it=SWBComparator.sortSermanticObjects(SWBContext.listUserRepositorys(),paramRequest.getUser().getLanguage());
+        Iterator<UserRepository> it=SWBComparator.sortSermanticObjects(paramRequest.getUser().getLanguage(), SWBContext.listUserRepositorys());
         while(it.hasNext())
         {
             UserRepository rep=it.next();
@@ -232,7 +232,7 @@ public class SWBATree extends GenericResource
     public void addDocRepositories(JSONArray arr, SWBParamRequest paramRequest)  throws JSONException
     {
         //System.out.println("addWebSites");
-        Iterator<org.semanticwb.repository.Workspace> it=SWBComparator.sortSermanticObjects(SWBContext.listWorkspaces(),paramRequest.getUser().getLanguage());
+        Iterator<org.semanticwb.repository.Workspace> it=SWBComparator.sortSermanticObjects(paramRequest.getUser().getLanguage(), SWBContext.listWorkspaces());
         while(it.hasNext())
         {
             org.semanticwb.repository.Workspace rep=it.next();
@@ -265,7 +265,7 @@ public class SWBATree extends GenericResource
 
     public void addWebSitesTrash(JSONArray arr, SWBParamRequest paramRequest)  throws JSONException
     {
-        Iterator<WebSite> it=SWBComparator.sortSermanticObjects(SWBContext.listWebSites(),paramRequest.getUser().getLanguage());
+        Iterator<WebSite> it=SWBComparator.sortSermanticObjects(paramRequest.getUser().getLanguage(), SWBContext.listWebSites());
         while(it.hasNext())
         {
             WebSite site=it.next();
@@ -293,7 +293,7 @@ public class SWBATree extends GenericResource
             }
         }
 
-        it=SWBComparator.sortSermanticObjects(SWBContext.listWebSites(),paramRequest.getUser().getLanguage());
+        it=SWBComparator.sortSermanticObjects(paramRequest.getUser().getLanguage(), SWBContext.listWebSites());
         while(it.hasNext())
         {
             WebSite site=it.next();
@@ -335,7 +335,7 @@ public class SWBATree extends GenericResource
 
         JSONArray childs=new JSONArray();
         jobj.putOpt("children", childs);
-        Iterator<SemanticObject> it=SWBObjectFilter.filter(SWBComparator.sortSermanticObjects(obj.getModel().listInstancesOfClass(cls),paramRequest.getUser().getLanguage()),pf);
+        Iterator<SemanticObject> it=SWBObjectFilter.filter(SWBComparator.sortSermanticObjects(paramRequest.getUser().getLanguage(), obj.getModel().listInstancesOfClass(cls)),pf);
 
         //System.out.println("obj:"+obj.getId());
         //drop acceptance
@@ -493,7 +493,7 @@ public class SWBATree extends GenericResource
             Iterator<SemanticObject> it=obj.listHerarquicalChilds();
             if(addChilds)
             {
-                Iterator<SemanticObject> it2=SWBComparator.sortSermanticObjects(it,paramRequest.getUser().getLanguage());
+                Iterator<SemanticObject> it2=SWBComparator.sortSermanticObjects(paramRequest.getUser().getLanguage(), it);
                 while(it2.hasNext())
                 {
                     SemanticObject ch=it2.next();
@@ -649,7 +649,7 @@ public class SWBATree extends GenericResource
             Iterator<SemanticObject> it=obj.listHerarquicalChilds();
             if(addChilds)
             {
-                Iterator<SemanticObject> it2=SWBComparator.sortSermanticObjects(it,paramRequest.getUser().getLanguage());
+                Iterator<SemanticObject> it2=SWBComparator.sortSermanticObjects(paramRequest.getUser().getLanguage(), it);
                 while(it2.hasNext())
                 {
                     SemanticObject ch=it2.next();

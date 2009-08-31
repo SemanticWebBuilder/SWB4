@@ -1074,7 +1074,7 @@ public class SWBAFilters extends SWBATree {
         if (hmclass == null) {
             hmclass = new HashMap();
         }
-        Iterator<WebSite> it = SWBComparator.sortSermanticObjects(SWBContext.listWebSites(), user.getLanguage());
+        Iterator<WebSite> it = SWBComparator.sortSermanticObjects(user.getLanguage(), SWBContext.listWebSites());
         while (it.hasNext()) {
             WebSite site = it.next();
             addSemanticObject(user, site.getSemanticObject(), true, false);//, ele);
@@ -1103,7 +1103,7 @@ public class SWBAFilters extends SWBATree {
     {
         SemanticClass cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(node.getHClass().getURI());
         hmclass.put(cls.getName(), cls);
-        Iterator<SemanticObject> it = SWBComparator.sortSermanticObjects(obj.getModel().listInstancesOfClass(cls), user.getLanguage());
+        Iterator<SemanticObject> it = SWBComparator.sortSermanticObjects(user.getLanguage(), obj.getModel().listInstancesOfClass(cls));
 
         SemanticProperty herarprop = null;   //Herarquical property;
         Iterator<SemanticProperty> hprops = cls.listInverseHerarquicalProperties();
@@ -1145,7 +1145,7 @@ public class SWBAFilters extends SWBATree {
 
             Iterator<SemanticObject> it = obj.listHerarquicalChilds();
             if (addChilds) {
-                Iterator<SemanticObject> it2 = SWBComparator.sortSermanticObjects(it, user.getLanguage());
+                Iterator<SemanticObject> it2 = SWBComparator.sortSermanticObjects(user.getLanguage(), it);
                 while (it2.hasNext()) {
                     SemanticObject ch = it2.next();
                     addSemanticObject(user, ch, false);//,etp);
