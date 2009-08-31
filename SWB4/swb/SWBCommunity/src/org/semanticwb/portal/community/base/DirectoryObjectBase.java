@@ -1,15 +1,15 @@
 package org.semanticwb.portal.community.base;
 
 
-public class DirectoryObjectBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Trashable
+public class DirectoryObjectBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_tags=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#tags");
     public static final org.semanticwb.platform.SemanticClass swbcomm_DirectoryResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#DirectoryResource");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_directoryResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#directoryResource");
     public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_hasDirProfileWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasDirProfileWebPage");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_dirWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#dirWebPage");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_hasDirTopicWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasDirTopicWebPage");
-    public static final org.semanticwb.platform.SemanticProperty swbcomm_hasDirWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasDirWebPage");
     public static final org.semanticwb.platform.SemanticClass swbcomm_DirectoryObject=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#DirectoryObject");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#DirectoryObject");
 
@@ -220,6 +220,39 @@ public class DirectoryObjectBase extends org.semanticwb.model.base.GenericObject
         getSemanticObject().setProperty(swb_title, title, lang);
     }
 
+    public void setWebPage(org.semanticwb.model.WebPage value)
+    {
+        getSemanticObject().setObjectProperty(swbcomm_dirWebPage, value.getSemanticObject());
+    }
+
+    public void removeWebPage()
+    {
+        getSemanticObject().removeProperty(swbcomm_dirWebPage);
+    }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.DirectoryObject> listDirectoryObjectByWebPage(org.semanticwb.model.WebPage dirwebpage,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.DirectoryObject> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_dirWebPage, dirwebpage.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.DirectoryObject> listDirectoryObjectByWebPage(org.semanticwb.model.WebPage dirwebpage)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.DirectoryObject> it=new org.semanticwb.model.GenericIterator(dirwebpage.getSemanticObject().getModel().listSubjects(swbcomm_dirWebPage,dirwebpage.getSemanticObject()));
+       return it;
+   }
+
+    public org.semanticwb.model.WebPage getWebPage()
+    {
+         org.semanticwb.model.WebPage ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbcomm_dirWebPage);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.WebPage)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
     public java.util.Date getUpdated()
     {
         return getSemanticObject().getDateProperty(swb_updated);
@@ -272,55 +305,6 @@ public class DirectoryObjectBase extends org.semanticwb.model.base.GenericObject
     {
          org.semanticwb.model.WebPage ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbcomm_hasDirTopicWebPage);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.WebPage)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage> listWebPages()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage>(getSemanticObject().listObjectProperties(swbcomm_hasDirWebPage));
-    }
-
-    public boolean hasWebPage(org.semanticwb.model.WebPage webpage)
-    {
-        if(webpage==null)return false;
-        return getSemanticObject().hasObjectProperty(swbcomm_hasDirWebPage,webpage.getSemanticObject());
-    }
-
-    public void addWebPage(org.semanticwb.model.WebPage value)
-    {
-        getSemanticObject().addObjectProperty(swbcomm_hasDirWebPage, value.getSemanticObject());
-    }
-
-    public void removeAllWebPage()
-    {
-        getSemanticObject().removeProperty(swbcomm_hasDirWebPage);
-    }
-
-    public void removeWebPage(org.semanticwb.model.WebPage webpage)
-    {
-        getSemanticObject().removeObjectProperty(swbcomm_hasDirWebPage,webpage.getSemanticObject());
-    }
-
-   public static java.util.Iterator<org.semanticwb.portal.community.DirectoryObject> listDirectoryObjectByWebPage(org.semanticwb.model.WebPage hasdirwebpage,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.DirectoryObject> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_hasDirWebPage, hasdirwebpage.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.portal.community.DirectoryObject> listDirectoryObjectByWebPage(org.semanticwb.model.WebPage hasdirwebpage)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.DirectoryObject> it=new org.semanticwb.model.GenericIterator(hasdirwebpage.getSemanticObject().getModel().listSubjects(swbcomm_hasDirWebPage,hasdirwebpage.getSemanticObject()));
-       return it;
-   }
-
-    public org.semanticwb.model.WebPage getWebPage()
-    {
-         org.semanticwb.model.WebPage ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbcomm_hasDirWebPage);
          if(obj!=null)
          {
              ret=(org.semanticwb.model.WebPage)obj.createGenericInstance();
