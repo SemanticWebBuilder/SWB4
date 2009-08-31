@@ -48,8 +48,26 @@
 
 
 </script>
-<div>
-    <div>
+
+<br />
+<div id="panorama">
+<%  if (member.canAdd()) { %>
+    <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act", "add")%>">Agregar evento</a></p></div>
+<%  }
+    if (wputil != null && member.canView()) {
+%>
+    <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act", "view")%>">Ver todos</a></p></div>
+<%      if (!wputil.isSubscribed(member)) { %>
+    <div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act", "subcribe")%>">Suscribirse</a></p></div>
+<%
+        }else {
+%>
+    <div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act", "unsubcribe")%>">Cancelar suscripción</a></p></div>
+<%      }
+   } %>
+</div>
+<br/>
+<div id="panorama">
     <form action="<%=paramRequest.getRenderUrl().setParameter("act", "calendar")%>" method="post">
         <fieldset><legend>Elige una fecha</legend>
             <label for="year">Año:</label>
@@ -73,30 +91,8 @@
             <input type="submit" dojoType="dijit.form.Button" label="Ir" value="Ir"/>
         </fieldset>
     </form>
-    </div>                
+            
     <%=renderCalendar(current, wpage, paramRequest)%>
-    <a href="<%=paramRequest.getRenderUrl().setParameter("act", "view")%>">Ver todos</a>
-    <%
-                if (member.canAdd()) {
-    %>
-    <center>
-        <a href="<%=paramRequest.getRenderUrl().setParameter("act", "add")%>">Agregar Evento</a>
-        <%
-            if (wputil != null && member.canView()) {
-                if (!wputil.isSubscribed(member)) {
-        %>
-        <a href="<%=paramRequest.getActionUrl().setParameter("act", "subcribe")%>">Suscribirse a este elemento</a>
-        <%
-                    } else {
-        %>
-        <a href="<%=paramRequest.getActionUrl().setParameter("act", "unsubcribe")%>">Cancelar suscripción</a>
-        <%
-                }
-
-            }
-        %>
-    </center>
-    <%  }%>
 </div>
 <%!
     private String renderCalendar(Date current, WebPage wpage, SWBParamRequest paramRequest) {
