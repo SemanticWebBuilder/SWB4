@@ -17,26 +17,28 @@
             return;
         }
 %>
+<br />
+<div id="panorama">
 <form method="post" action="<%=paramRequest.getActionUrl()%>">
     <div>
         <fieldset>
             <legend>Editar foto</legend>
             <div>
                 <p>
-                    <label for="foto">Archivo:&nbsp;</label>
+                    <label for="foto">Archivo:&nbsp;</label><br />
                     <input id="foto" type="file" size="22" name="foto" />
                 </p>
                 <p>
-                    <label for="title">Título:&nbsp;</label>
-                    <input id="title" type="text" size="25" name="title" maxlength="200" />
+                    <label for="title">Título:&nbsp;</label><br />
+                    <input id="title" type="text" size="25" name="title" maxlength="200" value="<%= rec.getTitle()%>" />
                 </p>
                 <p>
-                    <label for="description">Descripción</label>
-                    <textarea id="description" cols="30" rows="5" name="description"></textarea>
+                    <label for="description">Descripción</label><br />
+                    <textarea id="description" cols="30" rows="5" name="description"><%= rec.getDescription()%></textarea>
                  </p>
                  <p>
-                    <label for="tags">Etiquetas:&nbsp;</label>
-                    <input id="tags" type="text" size="22" name="tags" maxlength="2000" />
+                    <label for="tags">Etiquetas:&nbsp;</label><br />
+                    <input id="tags" type="text" size="22" name="tags" maxlength="2000" value="<%= rec.getTags()%>" />
                 </p>
             </div>
         </fieldset>
@@ -68,3 +70,4 @@
     <input type="hidden" name="uri" value="<%=rec.getURI()%>"/>
     <input type="hidden" name="act" value="edit"/>
 </form>
+</div>
