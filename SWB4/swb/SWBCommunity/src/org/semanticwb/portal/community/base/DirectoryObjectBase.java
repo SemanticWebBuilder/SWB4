@@ -4,6 +4,8 @@ package org.semanticwb.portal.community.base;
 public class DirectoryObjectBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Trashable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_tags=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#tags");
+    public static final org.semanticwb.platform.SemanticClass swbcomm_DirectoryResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#DirectoryResource");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_directoryResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#directoryResource");
     public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_hasDirProfileWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasDirProfileWebPage");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_hasDirTopicWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasDirTopicWebPage");
@@ -56,6 +58,39 @@ public class DirectoryObjectBase extends org.semanticwb.model.base.GenericObject
     public void setTags(String value)
     {
         getSemanticObject().setProperty(swb_tags, value);
+    }
+
+    public void setDirectoryResource(org.semanticwb.portal.community.DirectoryResource value)
+    {
+        getSemanticObject().setObjectProperty(swbcomm_directoryResource, value.getSemanticObject());
+    }
+
+    public void removeDirectoryResource()
+    {
+        getSemanticObject().removeProperty(swbcomm_directoryResource);
+    }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.DirectoryObject> listDirectoryObjectByDirectoryResource(org.semanticwb.portal.community.DirectoryResource directoryresource,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.DirectoryObject> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_directoryResource, directoryresource.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.DirectoryObject> listDirectoryObjectByDirectoryResource(org.semanticwb.portal.community.DirectoryResource directoryresource)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.DirectoryObject> it=new org.semanticwb.model.GenericIterator(directoryresource.getSemanticObject().getModel().listSubjects(swbcomm_directoryResource,directoryresource.getSemanticObject()));
+       return it;
+   }
+
+    public org.semanticwb.portal.community.DirectoryResource getDirectoryResource()
+    {
+         org.semanticwb.portal.community.DirectoryResource ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbcomm_directoryResource);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.portal.community.DirectoryResource)obj.createGenericInstance();
+         }
+         return ret;
     }
 
     public boolean isDeleted()
