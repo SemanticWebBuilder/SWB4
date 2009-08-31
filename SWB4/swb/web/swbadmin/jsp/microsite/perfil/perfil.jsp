@@ -162,9 +162,16 @@ if(request.getParameter("changePhoto")!=null && request.getParameter("changePhot
                     <div class="TabbedPanelsContent">
                         <h2 class="h2oculto">Información</h2>
                         <div id="informacionPersonal">
-                            <div class="editarInfo">
-                            <p><a href="<%=registryPath%>">Editar información</a></p>
-                            </div>
+                               <%
+                            if(owner==user)
+                            {
+                                %>
+                                <div class="editarInfo">
+                                <p><a href="<%=registryPath%>">Editar información</a></p>
+                                </div>
+                                <%
+                            }
+                            %>   
                             <div class="clear">&nbsp;</div>
                                 <h3><%=user.getFullName()%></h3>
              <%
@@ -184,9 +191,18 @@ if(request.getParameter("changePhoto")!=null && request.getParameter("changePhot
              %>
                             </div>
                             <div class="clear">&nbsp;</div>
-                            <div class="editarInfo">
+                            
+                                 <%
+                            if(owner==user)
+                            {
+                                %>
+                                <div class="editarInfo">
                                 <p><a href="<%=registryPath%>">Editar información</a></p>
-                            </div>
+                                </div>
+                                <%
+                            }
+                            %>   
+                            
                         </div>
                     </div>
                 </div>
