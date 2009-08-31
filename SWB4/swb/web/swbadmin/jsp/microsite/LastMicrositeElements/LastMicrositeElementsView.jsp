@@ -1,6 +1,60 @@
 <%@page import="java.text.*,java.net.*,org.semanticwb.platform.SemanticObject,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*" %>
+<%
+            SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
+            int columnas = 1;
+            try
+            {
+                columnas = Integer.parseInt(paramRequest.getResourceBase().getAttribute("columns", "1"));
+            }
+            catch (Exception e)
+            {
+            }
+            if (columnas <= 0)
+            {
+                columnas = 1;
+            }
+
+            String defaultFormat = "dd/MM/yy";
+            SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
+            ArrayList<MicroSiteElement> elements = (ArrayList<MicroSiteElement>) request.getAttribute("elements");
+            if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT)
+            {
+            }
+            else
+            {
+                String path = paramRequest.getWebPage().getWebSite().getWebPage("Lo_ultimo").getUrl();
+%>
+<div class="espacio1_home">
+    <h2 class="tituloEspacio">Actividad reciente en el sitio</h2>
+    <div class="cajas">
+        <ul>
+            <%
+                for (MicroSiteElement element : elements)
+                {
+                    String created = "Sin fecha";
+                    if (element.getCreated() != null)
+                    {
+                        created = iso8601dateFormat.format(element.getCreated());
+                    }
+                    String title = element.getTitle();
+
+            %>
+            <li><%=element.getCreator().getFullName()%>, <a href="#"><%=title%></a>
+						(<%=created%>)</li>
+                <%            }
+                %>
+        </ul>
+        <p class="vermas"><a href="<%=path%>" >Ver m&aacute;s</a></p>
+    </div>
+</div>
 
 <%
+            }
+%>
+
+
+
+<%--
 SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
 int columnas=1;
 
@@ -10,7 +64,7 @@ try
 }
 catch(Exception e)
 {
-    
+
 }
 if(columnas<=0)
 {
@@ -25,7 +79,7 @@ if(paramRequest.getCallMethod()==paramRequest.Call_CONTENT)
     <div class="<%=classAtt%>">
     <h2 class="titulo">Lo último en la ciudad digital</h2>
     <%
-    
+
     String webpath=SWBPlatform.getContextPath()+"/swbadmin/jsp/microsite/LastMicrositeElements/";
     String defaultFormat = "dd/MM/yyyy HH:mm";
     SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
@@ -159,3 +213,5 @@ else
 
 %>
     </div>
+--%>
+
