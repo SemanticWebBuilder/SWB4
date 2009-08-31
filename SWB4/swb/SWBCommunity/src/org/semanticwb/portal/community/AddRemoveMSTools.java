@@ -7,6 +7,7 @@ package org.semanticwb.portal.community;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.StringTokenizer;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -206,6 +207,39 @@ public class AddRemoveMSTools extends GenericResource {
                     wprem.remove();
                 }
 
+                //Revisando miembros de la comunidad
+
+                String[] msmla = request.getParameterValues("memberlevelaccess");
+                for(int j=0;j<msmla.length;j++)
+                {
+                    StringTokenizer stoken = new StringTokenizer(msmla[j],"|");
+                    String usr_id = stoken.nextToken();
+                    int level = Integer.parseInt(stoken.nextToken());
+                    //System.out.println("User: "+usr_id+", access: "+level);
+
+                    User umember = user.getUserRepository().getUser(usr_id);
+                    
+                    Member member = Member.getMember(umember, wp);
+
+                    if(member.getAccessLevel()!=level)
+                    {
+                        //System.out.println("User: "+umember.getFullName()+" nivel anterior: "+member.getAccessLevel()+" a nivel: "+level+", modificado.");
+                        if(level==Member.LEVEL_EDIT)
+                        {
+                            member.setAccessLevel(Member.LEVEL_EDIT);
+                        }
+                        else if(level==Member.LEVEL_ADMIN)
+                        {
+                            member.setAccessLevel(Member.LEVEL_ADMIN);
+                        }
+                        else if(level==0)
+                        {
+                            member.remove();
+                        }
+                    }
+
+                }
+
                 response.setRenderParameter("act", "view");
                 response.setCallMethod(SWBActionResponse.Call_STRATEGY);
                 response.setMode(SWBActionResponse.Mode_VIEW);
@@ -222,7 +256,7 @@ public class AddRemoveMSTools extends GenericResource {
             while(it.hasNext())
             {
                 Member mem=it.next();
-                //System.out.println("mem:"+mem+" "+mem.getMicroSite());
+                //System.out.println("mem:"+mem+" "+mem.getMicroSite());me
                 if(mem.getMicroSite().equals(site))
                 {
                    return mem;
