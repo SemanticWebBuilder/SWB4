@@ -30,7 +30,6 @@
         %>
                 <li><a href="<%=entry.getBookmarkURL()%>"><%=entry.getTitle()%></a>&nbsp;[<a href="<%=paramRequest.getActionUrl().setAction("DELETE").setParameter("id", entry.getId())%>">-</a>]</li>
         <%
-                    //System.out.println(entry.getTitle() + "--" + entry.getBookmarkURL() + "--" + entry.getId());
                 bkCount++;
             }
         %>
