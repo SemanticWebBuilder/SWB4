@@ -13,38 +13,81 @@
     dojo.require("dijit.form.TimeTextBox");
     dojo.require("dijit.form.Button");
     dojo.require("dojo.parser");
+
+    function validaForma()
+    {
+        var new_title = document.frmaaddnews.new_title.value;
+        if(!new_title)
+        {
+            alert('¡Debe ingresar el título de la noticia!');
+            document.frmaaddnews.new_title.focus();
+            return;
+        }
+        var new_author = document.frmaaddnews.new_author.value;
+        if(!new_author)
+        {
+            alert('¡Debe ingresar el autor de la noticia!');
+            document.frmaaddnews.new_author.focus();
+            return;
+        }
+        var new_abstract = document.frmaaddnews.new_abstract.value;
+        if(!new_abstract)
+        {
+            alert('¡Debe ingresar el resumen de la noticia!');
+            document.frmaaddnews.new_abstract.focus();
+            return;
+        }
+        var new_fulltext = document.frmaaddnews.new_fulltext.value;
+        if(!new_fulltext)
+        {
+            alert('¡Debe ingresar el texto de la noticia!');
+            document.frmaaddnews.new_fulltext.focus();
+            return;
+        }
+        var new_citation = document.frmaaddnews.new_citation.value;
+        if(!new_citation)
+        {
+            alert('¡Debe ingresar la fuente de la noticia!');
+            document.frmaaddnews.new_citation.focus();
+            return;
+        }
+        document.frmaaddnews.submit();
+    }
 </script>
-<form class="swbform" enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
+
+<br />
+<div id="panorama">
+<form name="frmaaddnews" id="frmaaddnews" class="swbform" enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
     <div>
         <fieldset>
             <legend>Agregar noticia</legend>
             <div>
                 <p>
-                    <label for="new_image">Imagen de la noticia:&nbsp;</label>
+                    <label for="new_image">Imagen de la noticia:&nbsp;</label><br />
                     <input type="file" id="foto" name="foto" />
                 </p>
                 <p>
-                    <label for="new_title">Título de la noticia:&nbsp;</label>
+                    <label for="new_title">Título de la noticia:&nbsp;</label><br />
                     <input type="text" id="new_title" name="new_title"/>
                 </p>
                 <p>
-                    <label for="new_author">Autor de la noticia:&nbsp;</label>
+                    <label for="new_author">Autor de la noticia:&nbsp;</label><br />
                     <input type="text" id="new_author" name="new_author"/>
                 </p>
                 <p>
-                    <label for="new_abstract">Resumen de la noticia:&nbsp;</label>
+                    <label for="new_abstract">Resumen de la noticia:&nbsp;</label><br />
                     <textarea id="new_abstract" name="new_abstract" cols="30" rows="5"></textarea>
                 </p>
                 <p>
-                    <label for="new_fulltext">Texto completo:&nbsp;</label>
+                    <label for="new_fulltext">Texto completo:&nbsp;</label><br />
                     <textarea id="new_fulltext" name="new_fulltext" cols="30" rows="5"></textarea>
                 </p>
                 <p>
-                    <label for="new_citation">Fuente:&nbsp;</label>
+                    <label for="new_citation">Fuente:&nbsp;</label><br />
                     <input type="text" id="new_citation" name="new_citation"/>
                 </p>
                 <p>
-                    <label for="new_tags">Etiquetas:&nbsp;</label>
+                    <label for="new_tags">Etiquetas:&nbsp;</label><br />
                     <input type="text" id="new_tags" name="new_tags"/>
                 </p>
             </div>
@@ -53,11 +96,12 @@
             <legend></legend>
             <div>
             <p>
-                <input type="submit" value="Guardar" />
-                <input type="button" value="Cancelar" onclick="window.location='<%=paramRequest.getRenderUrl()%>';"/>
+                <div class="editarInfo"><p><a onclick="validaForma()" href="#">Enviar</a></p></div>
+                <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Cancelar</a></p></div>
             </p>
             </div>
         </fieldset>
     </div>
     <input type="hidden" name="act" value="add"/>
 </form>
+</div>

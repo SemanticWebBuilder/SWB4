@@ -27,8 +27,51 @@ Error: Elemento no encontrado...
     dojo.require("dijit.form.RadioButton");
     dojo.require("dijit.form.Button");
     dojo.require("dojo.parser");
+
+    function validaForma()
+    {
+        var new_title = document.frmaeditnews.new_title.value;
+        if(!new_title)
+        {
+            alert('¡Debe ingresar el título de la noticia!');
+            document.frmaeditnews.new_title.focus();
+            return;
+        }
+        var new_author = document.frmaeditnews.new_author.value;
+        if(!new_author)
+        {
+            alert('¡Debe ingresar el autor de la noticia!');
+            document.frmaeditnews.new_author.focus();
+            return;
+        }
+        var new_abstract = document.frmaeditnews.new_abstract.value;
+        if(!new_abstract)
+        {
+            alert('¡Debe ingresar el resumen de la noticia!');
+            document.frmaeditnews.new_abstract.focus();
+            return;
+        }
+        var new_fulltext = document.frmaeditnews.new_fulltext.value;
+        if(!new_fulltext)
+        {
+            alert('¡Debe ingresar el texto de la noticia!');
+            document.frmaeditnews.new_fulltext.focus();
+            return;
+        }
+        var new_citation = document.frmaeditnews.new_citation.value;
+        if(!new_citation)
+        {
+            alert('¡Debe ingresar la fuente de la noticia!');
+            document.frmaeditnews.new_citation.focus();
+            return;
+        }
+        document.frmaeditnews.submit();
+    }
 </script>
-<form class="swbform" enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
+
+<br />
+<div id="panorama">
+<form name="frmaeditnews" id="frmaeditnews" class="swbform" enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
     <div>
         <fieldset>
         <legend>Editar noticia</legend>
@@ -36,32 +79,32 @@ Error: Elemento no encontrado...
             <p>
                 <label for="new_image">Imagen de la noticia:&nbsp;</label>
                 <a href="<%= SWBPlatform.getWebWorkPath()+rec.getNewsImage()%>" target="_self">
-                    <img src="<%= SWBPlatform.getWebWorkPath()+rec.getNewsImage() %>" alt="<%= rec.getTitle() %>" border="0" />
+                    <img id="img_<%=rec.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+rec.getNewsImage() %>" alt="<%= rec.getTitle() %>" border="0" />
                 </a><br />
                 <input type="file" id="foto" name="foto" />
             </p>
             <p>
-                <label for="new_title">Título de la noticia:&nbsp;</label>
+                <label for="new_title">Título de la noticia:&nbsp;</label><br />
                 <input type="text" id="new_title" name="new_title" value="<%=(rec.getTitle()==null?"":rec.getTitle())%>"/>
             </p>
             <p>
-                <label for="new_author">Autor de la noticia:&nbsp;</label>
+                <label for="new_author">Autor de la noticia:&nbsp;</label><br />
                 <input type="text" id="new_author" name="new_author" value="<%=(rec.getAuthor()==null?"":rec.getAuthor())%>"/>
             </p>
             <p>
-                <label for="new_abstract">Resumen de la noticia:&nbsp;</label>
+                <label for="new_abstract">Resumen de la noticia:&nbsp;</label><br />
                 <textarea id="new_abstract" name="new_abstract" cols="30" rows="5"><%=(rec.getDescription()==null?"":rec.getDescription())%></textarea>
             </p>
             <p>
-                <label for="new_fulltext">Texto completo:&nbsp;</label>
+                <label for="new_fulltext">Texto completo:&nbsp;</label><br />
                 <textarea id="new_fulltext" name="new_fulltext" cols="30" rows="5"><%=(rec.getFullText()==null?"":rec.getFullText())%></textarea>
             </p>
             <p>
-                <label for="new_citation">Fuente:&nbsp;</label>
+                <label for="new_citation">Fuente:&nbsp;</label><br />
                 <input type="text" id="new_citation" name="new_citation" value="<%=(rec.getCitation()==null?"":rec.getCitation())%>"/>
             </p>
             <p>
-                <label for="new_tags">Etiquetas:&nbsp;</label>
+                <label for="new_tags">Etiquetas:&nbsp;</label><br />
                 <input type="text" id="new_tags" name="new_tags" value="<%=(rec.getTags()==null?"":rec.getTags())%>"/>
             </p>
         </div>
@@ -85,8 +128,8 @@ Error: Elemento no encontrado...
             <legend></legend>
             <div>
             <p>
-                <input type="submit" value="Enviar" />
-                <input type="button" value="Cancelar" onclick="window.location='<%= paramRequest.getRenderUrl()%>'"/>
+                <div class="editarInfo"><p><a onclick="validaForma()" href="#">Enviar</a></p></div>
+                <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Cancelar</a></p></div>
             </p>
             </div>
         </fieldset>
@@ -94,3 +137,17 @@ Error: Elemento no encontrado...
     <input type="hidden" name="uri" value="<%=rec.getURI()%>"/>
     <input type="hidden" name="act" value="edit"/>
 </form>
+</div>
+
+<script type="text/javascript">
+    var img = document.getElementById('img_<%=rec.getId()%>');
+    if( img.width>img.height && img.width>350) {
+        img.width = 350;
+        img.height = 270;
+    }else {
+        if(img.height>270) {
+            img.width = 270;
+            img.height = 350;
+        }
+    }
+</script>
