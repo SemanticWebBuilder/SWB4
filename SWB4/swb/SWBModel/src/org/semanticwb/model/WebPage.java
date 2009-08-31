@@ -412,10 +412,21 @@ public class WebPage extends WebPageBase
             WebPage tp=it.next();
             if(tp.isVisible())set.add(tp);
         }
+        it = listWebPageVirtualChilds();
+        while (it.hasNext())
+        {
+            WebPage tp=it.next();
+            if(tp.isVisible())set.add(tp);
+        }
         return set.iterator();
     }
-    
+
     public Iterator<WebPage> listChilds(String sortLang, Boolean active, Boolean deleted, Boolean hidden, Boolean onSchedule)
+    {
+        return listChilds(sortLang, active, deleted, hidden, onSchedule, true);
+    }
+    
+    public Iterator<WebPage> listChilds(String sortLang, Boolean active, Boolean deleted, Boolean hidden, Boolean onSchedule, boolean incVirChilds)
     {
         TreeSet set= new TreeSet(new SWBComparator(sortLang));
         //set.addAll(getChild());
@@ -428,6 +439,19 @@ public class WebPage extends WebPageBase
             if (hidden!=null && tp.isHidden() != hidden) continue;
             if (onSchedule!=null && tp.isOnSchedule() == onSchedule) continue;
             set.add(tp);
+        }
+        if(incVirChilds)
+        {
+            it = listWebPageVirtualChilds();
+            while (it.hasNext())
+            {
+                WebPage tp=it.next();
+                if (active!=null && tp.isActive() != active) continue;
+                if (deleted!=null && tp.isDeleted() != deleted) continue;
+                if (hidden!=null && tp.isHidden() != hidden) continue;
+                if (onSchedule!=null && tp.isOnSchedule() == onSchedule) continue;
+                set.add(tp);
+            }
         }
         return set.iterator();        
     }

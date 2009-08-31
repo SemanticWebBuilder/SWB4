@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class ResourceSubTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public class ResourceSubTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
     public static final org.semanticwb.platform.SemanticProperty swb_hasPSTResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasPSTResource");
@@ -159,39 +159,6 @@ public class ResourceSubTypeBase extends org.semanticwb.model.SWBClass implement
          return ret;
     }
 
-    public void setType(org.semanticwb.model.ResourceType value)
-    {
-        getSemanticObject().setObjectProperty(swb_PSTType, value.getSemanticObject());
-    }
-
-    public void removeType()
-    {
-        getSemanticObject().removeProperty(swb_PSTType);
-    }
-
-   public static java.util.Iterator<org.semanticwb.model.ResourceSubType> listResourceSubTypeByType(org.semanticwb.model.ResourceType psttype,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceSubType> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_PSTType, psttype.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.model.ResourceSubType> listResourceSubTypeByType(org.semanticwb.model.ResourceType psttype)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceSubType> it=new org.semanticwb.model.GenericIterator(psttype.getSemanticObject().getModel().listSubjects(swb_PSTType,psttype.getSemanticObject()));
-       return it;
-   }
-
-    public org.semanticwb.model.ResourceType getType()
-    {
-         org.semanticwb.model.ResourceType ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_PSTType);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.ResourceType)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
     public void setCreator(org.semanticwb.model.User value)
     {
         getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
@@ -221,6 +188,39 @@ public class ResourceSubTypeBase extends org.semanticwb.model.SWBClass implement
          if(obj!=null)
          {
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+    public void setType(org.semanticwb.model.ResourceType value)
+    {
+        getSemanticObject().setObjectProperty(swb_PSTType, value.getSemanticObject());
+    }
+
+    public void removeType()
+    {
+        getSemanticObject().removeProperty(swb_PSTType);
+    }
+
+   public static java.util.Iterator<org.semanticwb.model.ResourceSubType> listResourceSubTypeByType(org.semanticwb.model.ResourceType psttype,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceSubType> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_PSTType, psttype.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.model.ResourceSubType> listResourceSubTypeByType(org.semanticwb.model.ResourceType psttype)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceSubType> it=new org.semanticwb.model.GenericIterator(psttype.getSemanticObject().getModel().listSubjects(swb_PSTType,psttype.getSemanticObject()));
+       return it;
+   }
+
+    public org.semanticwb.model.ResourceType getType()
+    {
+         org.semanticwb.model.ResourceType ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_PSTType);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.ResourceType)obj.createGenericInstance();
          }
          return ret;
     }
