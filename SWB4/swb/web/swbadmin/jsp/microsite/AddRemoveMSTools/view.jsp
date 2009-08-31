@@ -48,7 +48,7 @@
         member = getMember(user, (MicroSite)wp);
     }
 
-    if (isMicrosite&&member!=null&&member.getAccessLevel()==Member.LEVEL_OWNER&&user.isRegistered()) {
+    if (isMicrosite&&member!=null&&member.getAccessLevel()>=Member.LEVEL_ADMIN&&user.isRegistered()) {
         if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
             SWBResourceURL url = paramRequest.getRenderUrl();
             url.setParameter("act", "edit");

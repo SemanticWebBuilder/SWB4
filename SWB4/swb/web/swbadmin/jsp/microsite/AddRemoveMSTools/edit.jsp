@@ -13,17 +13,18 @@
     WebSite model = wp.getWebSite();
 %>
     <body>
-
-
 <%
 
         boolean isMicrosite = false;
+        Member member = null;
 
         if (wp.getSemanticObject().getGenericInstance() instanceof MicroSite) {
             isMicrosite = true;
+            member = getMember(user, (MicroSite)wp);
         }
 
-        if (isMicrosite) {
+        if (isMicrosite&&member!=null&&member.getAccessLevel()>=Member.LEVEL_ADMIN&&user.isRegistered())
+        {
            if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
                 SWBResourceURL url = paramRequest.getRenderUrl();
                 url.setParameter("act", "edit");
@@ -118,6 +119,40 @@
                 out.println("</table>");
                 out.println("</td>");
                 out.println("</tr>");
+                out.println("<tr><td colspan=\"2\"><hr noshade/></td></tr>");
+                out.println("<tr><th colspan=\"2\" align=\"left\"><h2 class=\"tituloGrande\">Miembros de la comunidad</h2></th></tr>");
+
+                //Lista de miembros de la comunidad
+
+                out.println("<tr><td colspan=\"2\"><table>");
+
+                MicroSite ms = null;
+                if(wp.getSemanticObject().getGenericInstance() instanceof MicroSite)
+                {
+                    ms = (MicroSite)wp;
+                    Iterator<Member> itmms = ms.listMemberss();
+                    ncol=0;
+                    while (itmms.hasNext()) {
+                        Member mms = itmms.next();
+                        out.println("<tr>");
+                        if(mms.getAccessLevel()!=Member.LEVEL_OWNER)
+                        {
+                            out.println("<td>");
+                            out.println("<p align=\"right\"><label for=\"" + mms.getId() + "\">"+mms.getUser().getFullName()+"</label>&nbsp;-&nbsp;<select name=\"memberlevelaccess\" id=\""+mms.getId()+"\">" +getStrMemberLevelAccess(mms)+"</select></p>");
+                            out.println("</td>");
+                        }
+                        else
+                        {
+                            out.println("<tr>");
+                            out.println("<td>");
+                            out.println("<p  align=\"right\">"+mms.getUser().getFullName()+" - Propietario de la comunidad.</p>");
+                            out.println("</td>");
+                        }
+                        out.println("</tr>");
+                    }
+                }
+                out.println("</table>");
+                out.println("</td></tr>");
                 out.println("</tbody>");
                 out.println("<tfoot>");
                 out.println("<tr><td colspan=\"2\"><hr noshade/><p>");
@@ -140,3 +175,36 @@
 %>
 
     </body>
+
+<%!
+
+    private String getStrMemberLevelAccess(Member member)
+    {
+        int level = member.getAccessLevel();
+        StringBuffer ret = new StringBuffer();
+        ret.append("\n<option value=\""+member.getUser().getId()+"|0\">Cancelar suscripción</option>");
+        ret.append("\n<option value=\""+member.getUser().getId()+"|"+Member.LEVEL_EDIT+"\" "+(level==Member.LEVEL_EDIT?"selected":"")+">Participar en comunidad</option>");
+        ret.append("\n<option value=\""+member.getUser().getId()+"|"+Member.LEVEL_ADMIN+"\" "+(level==Member.LEVEL_ADMIN?"selected":"")+">Administrar comunidad</option>");
+        return ret.toString();
+    }
+
+    private Member getMember(User user, MicroSite site)
+    {
+        //System.out.println("getMember:"+user+" "+site);
+        if(site!=null)
+        {
+            Iterator<Member> it=Member.listMemberByUser(user,site.getWebSite());
+            while(it.hasNext())
+            {
+                Member mem=it.next();
+                //System.out.println("mem:"+mem+" "+mem.getMicroSite());
+                if(mem.getMicroSite().equals(site))
+                {
+                   return mem;
+                }
+            }
+        }
+        return null;
+    }
+
+%>
