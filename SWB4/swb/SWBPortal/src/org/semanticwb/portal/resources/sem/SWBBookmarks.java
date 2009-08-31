@@ -30,7 +30,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resourceable;
@@ -76,6 +78,8 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         }
     };
 
+    public static Logger log = SWBUtils.getLogger(SWBBookmarks.class);
+
     /**
      * Default constructor.
      */
@@ -93,16 +97,30 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String action = response.getAction();
         User user = response.getUser();
-        WebSite model = response.getWebPage().getWebSite();
+        WebSite model = response.getWebPage().getWebSite();        
+        String tgs = request.getParameter("tags");        
+
+        if(tgs == null) {
+            tgs = "";
+        } else {
+            tgs.trim();
+        }
 
         if (action.equals("ADDNEW")) {
+            if (entryExists(user, response.getWebPage().getTitle(), response.getWebPage().getUrl())) {
+                return;
+            }
+            
             //Create new bookmark entry and fill data
             BookmarkEntry entry = BookmarkEntry.createBookmarkEntry(model);
-            String tgs = stripHtmlTags(request.getParameter("tags").trim());
-            entry.setTitle(stripHtmlTags(request.getParameter("title")));
-            entry.setBookmarkURL(stripHtmlTags(request.getParameter("urllink")));
-            entry.setDescription(stripHtmlTags(request.getParameter("description")));
-            entry.setTags(tgs);
+            tgs = stripHtmlTags(tgs);
+
+            entry.setTitle(response.getWebPage().getTitle());
+            entry.setBookmarkURL(response.getWebPage().getUrl());
+            //entry.setTitle(stripHtmlTags(request.getParameter("title")));
+            //entry.setBookmarkURL(stripHtmlTags(request.getParameter("urllink")));
+            //entry.setDescription(stripHtmlTags(request.getParameter("description")));
+            //entry.setTags(tgs);
 
             //Separate tags string
             String tags[] = tgs.split(",");
@@ -143,8 +161,8 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                 addGroup(group);
             }
             group.addEntry(entry);
-            response.setCallMethod(response.Call_CONTENT);
-            response.setMode(response.Mode_VIEW);
+            //response.setCallMethod(response.Call_CONTENT);
+            //response.setMode(response.Mode_VIEW);
         } else if (action.equals("DELALL")) {
             if (user.isSigned()) {
                 //Get user's bookmark groups
@@ -192,12 +210,12 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                     }
                 }
             }
-            response.setCallMethod(response.Call_CONTENT);
-            response.setMode(response.Mode_VIEW);
+            //response.setCallMethod(response.Call_CONTENT);
+            //response.setMode(response.Mode_VIEW);
         } else if (action.equals("EDIT")) {
             //Get bookmarkgroup data from request
             String title = stripHtmlTags(request.getParameter("title"));
-            String tgs = stripHtmlTags(request.getParameter("tags").trim());
+            tgs = stripHtmlTags(request.getParameter("tags").trim());
             String url = stripHtmlTags(request.getParameter("urllink"));
             String description = stripHtmlTags(request.getParameter("description"));
 
@@ -450,10 +468,34 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {            
+        String path = SWBPlatform.getContextPath() + "/swbadmin/jsp/bookmarks/bookmarksView.jsp";
+        User user = paramRequest.getUser();
+        String showList = paramRequest.getArgument("showList", "false");
+        
+        String url = "";
+        Resourceable rsa = paramRequest.getResourceBase().getResourceable();
+        if (rsa != null && rsa instanceof WebPage) {
+                url = ((WebPage) rsa).getUrl();
+        }
+        
+        /*if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
             doShowGadget(request, response, paramRequest);
         } else {
             doShowAdmin(request, response, paramRequest);
+        }*/
+
+        try {
+            request.setAttribute("paramRequest", paramRequest);
+            request.setAttribute("l", Boolean.valueOf(showList));
+            //request.setAttribute("admurl", url);
+            Iterator<BookmarkEntry> entries = listAllEntriesByUser(user);
+            if (entries != null)
+                request.setAttribute("entries", entries);
+            RequestDispatcher rd = request.getRequestDispatcher(path);
+            rd.include(request, response);
+        } catch (Exception e) {
+            log.error("Bookmarks say ");
+            e.printStackTrace();
         }
     }
 
@@ -704,6 +746,15 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
             sbf.append(paramRequest.getLocaleString("msgNotLogged"));
         }
         out.print(sbf.toString());
+    }
+
+    public Iterator<BookmarkEntry> listAllEntriesByUser(User user) throws SWBResourceException {
+        BookmarkGroup group = getUserBookmarkGroupByName(user, "general");
+
+        if (group != null)
+            return group.listEntrys();
+        else
+            return null;
     }
 
     public String renderEntriesByUserGroup(String groupId, int sortType, SWBParamRequest paramRequest) throws SWBResourceException {
@@ -1133,5 +1184,19 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                 }
             }
         }
+    }
+
+    public boolean entryExists(User user, String title, String url) throws SWBResourceException {
+        Iterator<BookmarkEntry> entries = listAllEntriesByUser(user);
+
+        if (entries != null) {
+            while (entries.hasNext()) {
+                BookmarkEntry entry = entries.next();
+                if (entry.getTitle().equals(title) && entry.getBookmarkURL().equals(url)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
