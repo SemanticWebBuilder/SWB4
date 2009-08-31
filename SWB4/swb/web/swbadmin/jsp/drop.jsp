@@ -96,9 +96,18 @@
     SemanticObject obj=ont.getSemanticObject(request.getParameter("suri"));
     SemanticObject newp=ont.getSemanticObject(request.getParameter("newp"));
     SemanticObject oldp=ont.getSemanticObject(request.getParameter("oldp"));
+    boolean copy=Boolean.parseBoolean(request.getParameter("copy"));
 
-    //System.out.println("suri;"+obj+" newp:"+newp+" oldp:"+oldp);
+    //System.out.println("suri;"+obj+" newp:"+newp+" oldp:"+oldp+" copy:"+copy);
 
+
+    if(copy && obj.instanceOf(WebPage.sclass))
+    {
+        obj.addObjectProperty(WebPage.swb_hasWebPageVirtualParent, newp);
+        out.println("Referencia creada...");
+        out.println("<script type=\"text/javascript\">reloadTreeNodeByURI('"+newp.getURI()+"');</script>");
+        return;
+    }
 
     SemanticProperty oprop=null;
     SemanticProperty nprop=null;

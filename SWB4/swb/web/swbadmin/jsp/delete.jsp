@@ -21,6 +21,7 @@
     response.setHeader("Cache-Control", "no-cache"); 
     response.setHeader("Pragma", "no-cache"); 
     String suri=request.getParameter("suri");
+    String virp=request.getParameter("virp");
     //System.out.println("suri:"+suri);
     if(suri==null)
     {
@@ -38,16 +39,25 @@
     SemanticObject obj=ont.getSemanticObject(suri);
     if(obj!=null)
     {
-        String type=obj.getSemanticClass().getDisplayName(lang);
-        ArrayList list=new ArrayList();
-        getAllChilds(list, obj);
-        obj.remove();
-        out.println(type+" fue eliminado...");
-        Iterator<SemanticObject> it=list.iterator();
-        while(it.hasNext())
+        if(virp!=null)
         {
-            SemanticObject ch=it.next();
-            out.println("<script type=\"text/javascript\">removeTreeNodeByURI('"+ch.getURI()+"');</script>");
+            SemanticObject vp=ont.getSemanticObject(virp);
+            obj.removeObjectProperty(WebPage.swb_hasWebPageVirtualParent, vp);
+            out.println("Referencia eliminada...");
+            out.println("<script type=\"text/javascript\">reloadTreeNodeByURI('"+vp.getURI()+"');</script>");
+        }else
+        {
+            String type=obj.getSemanticClass().getDisplayName(lang);
+            ArrayList list=new ArrayList();
+            getAllChilds(list, obj);
+            obj.remove();
+            out.println(type+" fue eliminado...");
+            Iterator<SemanticObject> it=list.iterator();
+            while(it.hasNext())
+            {
+                SemanticObject ch=it.next();
+                out.println("<script type=\"text/javascript\">removeTreeNodeByURI('"+ch.getURI()+"');</script>");
+            }
         }
     }
     //out.println(obj.getDisplayName(lang)+" "+act);
