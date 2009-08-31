@@ -153,8 +153,8 @@
                             var ac=confirm("<%=getLocaleString("aceptmove",lang)%>");
                             if(ac)
                             {
-                                var f=showStatusURL('<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/drop.jsp?suri='+encodeURIComponent(childItem.id)+'&newp='+encodeURIComponent(newParentItem.id)+'&oldp='+encodeURIComponent(oldParentItem.id),true);
-                                if(f)
+                                var f=showStatusURL('<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/drop.jsp?suri='+encodeURIComponent(childItem.id)+'&newp='+encodeURIComponent(newParentItem.id)+'&oldp='+encodeURIComponent(oldParentItem.id)+'&copy='+copy,true);
+                                if(f && !copy)
                                 {
                                     //model.pasteItem(childItem, oldParentItem, newParentItem, copy);
                                     pasteItemByURIs(childItem.id,oldParentItem.id,newParentItem.id);
