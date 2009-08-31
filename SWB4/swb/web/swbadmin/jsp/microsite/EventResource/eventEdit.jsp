@@ -136,7 +136,6 @@ Error: Elemento no encontrado...
             <p>
                 <div class="editarInfo"><p><a onclick="validaForma()" href="#">Enviar</a></p></div>
                 <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Cancelar</a></p></div>
-
             </p>
             </div>
         </fieldset>

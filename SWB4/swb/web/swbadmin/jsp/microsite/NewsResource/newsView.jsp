@@ -1,17 +1,37 @@
 <%@page contentType="text/html"%>
 <%@page import="java.util.Calendar, java.util.GregorianCalendar, java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%
-            SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
-            Resource base = paramRequest.getResourceBase();
-            User user = paramRequest.getUser();
-            WebPage wpage = paramRequest.getWebPage();
-            MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
-            Member member = Member.getMember(user, wpage);
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+    SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
+    Resource base = paramRequest.getResourceBase();
+    User user = paramRequest.getUser();
+    WebPage wpage = paramRequest.getWebPage();
+    MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
+    Member member = Member.getMember(user, wpage);
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
 %>
+
+<%  if (member.canAdd()) {
+%>
+<div id="panorama">
+    <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act", "add").toString()%>">Agregar noticia</a></p></div>
+    <%  if(wputil != null && member.canView()) {
+            if(!wputil.isSubscribed(member)) {
+    %>
+    <div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act", "subcribe").toString()%>">Suscribirse</a></p></div>
+    <%
+            }else {
+    %>
+    <div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act", "unsubcribe").toString()%>">Cancelar suscripción</a></p></div>
+    <%
+            }
+        }
+    %>
+</div>
+<%  } %>
+
+<div id="panorama">
 <h1>Noticias</h1>
 <table>
-    <tbody>
 <%
     Iterator<NewsElement> eit = NewsElement.listNewsElementByNewsWebPage(wpage, wpage.getWebSite());
     while (eit.hasNext()) {
@@ -41,28 +61,5 @@
         }
     }
 %>
-    </tbody>
 </table>
-<%
-            if (member.canAdd()) {
-%>
-<center>
-    <a href="<%=paramRequest.getRenderUrl().setParameter("act", "add").toString()%>">Agregar Noticia</a>
-    <%
-                if (wputil != null && member.canView()) {
-                    if (!wputil.isSubscribed(member)) {
-    %>
-    <a href="<%=paramRequest.getActionUrl().setParameter("act", "subcribe").toString()%>">Suscribirse a este elemento</a>
-    <%
-                    } else {
-    %>
-    <a href="<%=paramRequest.getActionUrl().setParameter("act", "unsubcribe").toString()%>">Cancelar suscripción</a>
-    <%
-                    }
-
-                }
-    %>
-</center>
-<%
-            }
-%>
+</div>
