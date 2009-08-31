@@ -113,11 +113,11 @@ public class RegisterUser extends GenericResource
         UserRepository ur = response.getWebPage().getWebSite().getUserRepository();
         User user = response.getUser();
         String login = request.getParameter("login");
-        if ("create".equals(response.getAction()) && (null != login) && (!user.isSigned()) && (null == ur.getUserByLogin(login)))
+        if ("create".equals(response.getAction()) && (null != login) && (!"".equals(login.trim())) && (!user.isSigned()) && (null == ur.getUserByLogin(login)))
         {
             Subject subject = SWBPortal.getUserMgr().getSubject(request, response.getWebPage().getWebSiteId());
             User newUser = ur.createUser();
-            newUser.setLogin(login);
+            newUser.setLogin(login.trim());
             subject.getPrincipals().clear();
             subject.getPrincipals().add(newUser);
             newUser.setLanguage(user.getLanguage());
