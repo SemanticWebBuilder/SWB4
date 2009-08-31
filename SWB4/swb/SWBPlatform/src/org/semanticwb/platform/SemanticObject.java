@@ -279,12 +279,24 @@ public class SemanticObject
                     while(it.hasNext())
                     {
                         SemanticObject obj=(SemanticObject)it.next();
-                        obj.m_cacheprops.remove(inv.getURI()+"|"+"list");
+//                        if(inv.getCardinality()==1)
+                        {
+                            obj.m_cacheprops.remove(inv.getURI()+"|"+null);
+//                        }else
+//                        {
+                            obj.m_cacheprops.remove(inv.getURI()+"|"+"list");
+                        }
                     }
                 }else
                 {
                     SemanticObject obj=(SemanticObject)aux;
-                    obj.m_cacheprops.remove(inv.getURI()+"|"+null);
+//                    if(inv.getCardinality()==1)
+                    {
+                        obj.m_cacheprops.remove(inv.getURI()+"|"+null);
+//                    }else
+//                    {
+                        obj.m_cacheprops.remove(inv.getURI()+"|"+"list");
+                    }
                 }
             }
         }
@@ -876,6 +888,7 @@ public class SemanticObject
             }
             return this;
         }
+        listObjectProperties(prop);
         StmtIterator it = m_res.listProperties(prop.getRDFProperty());
         while (it.hasNext())
         {
