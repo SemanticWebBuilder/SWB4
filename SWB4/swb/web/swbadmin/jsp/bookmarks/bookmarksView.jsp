@@ -7,7 +7,7 @@
             boolean showList = (Boolean) request.getAttribute("l");
             int maxBookmarks = 10;
 %>
-
+<p class="addOn">Mis Favoritos</p>
 <div>
     <%
     if (paramRequest.getUser().isSigned()) {
