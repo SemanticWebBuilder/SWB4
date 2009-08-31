@@ -64,6 +64,7 @@ html, body, #main{
 .swbIconWebPageE,
 .swbIconWebPageW,
 .swbIconWebPageF,
+.swbIconWebPageV,
 .swbIconCamps,
 .swbIconCamp,
 .swbIconCampU,
@@ -136,6 +137,7 @@ html, body, #main{
 .swbIconWebPageF    { background-position: -0px -72px; }
 .swbIconWebPageW    { background-position: -20px -72px; }
 .swbIconWebPageE    { background-position: -40px -72px; }
+.swbIconWebPageV    { background-position: -140px -199px; }
 .swbIconDnss        { background-position: -80px -0px; }
 .swbIconDns         { background-position: -80px -18px; }
 .swbIconLanguages   { background-position: -20px -0px; }
