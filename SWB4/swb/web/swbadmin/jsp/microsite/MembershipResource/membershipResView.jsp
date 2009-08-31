@@ -71,6 +71,7 @@
         {
             out.println("<p>"+site.getDescription()+"</p>");
         }
+        out.println("<p>Palabras clave: "+site.getTags()+"</p>");
         out.println("<p>Creador: "+site.getCreator().getFullName()+"</p>");
         out.println("<p>Creada: "+SWBUtils.TEXT.getTimeAgo(site.getCreated(),user.getLanguage())+"</p>");
         out.println("<p>Modificada: "+SWBUtils.TEXT.getTimeAgo(site.getUpdated(),user.getLanguage())+"</p>");
