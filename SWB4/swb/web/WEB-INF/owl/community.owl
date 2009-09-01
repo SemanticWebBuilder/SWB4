@@ -891,11 +891,15 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </swbcomm:DirectoryClass>
   <swb:Class rdf:ID="Hotel">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
     <rdf:type rdf:resource="#DirectoryClass"/>
     <rdfs:subClassOf rdf:resource="#Organization"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
   <swb:Class rdf:ID="ClasifiedRealState">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
     <rdf:type rdf:resource="#DirectoryClass"/>
     <rdfs:subClassOf rdf:resource="#Clasified"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
@@ -910,6 +914,8 @@
     >swbIconTemplates</swb:iconClass>
   </swbxf:HerarquicalNode>
   <swb:Class rdf:ID="ClasifiedJob">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
     <rdf:type rdf:resource="#DirectoryClass"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
     <rdfs:subClassOf rdf:resource="#Clasified"/>
@@ -919,26 +925,36 @@
     >swbIconWebSite</swb:iconClass>
   </swbxf:DisplayObject>
   <swb:Class rdf:ID="ClasifiedService">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
     <rdf:type rdf:resource="#DirectoryClass"/>
     <rdfs:subClassOf rdf:resource="#Clasified"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
   <swb:Class rdf:ID="ClasifiedCourse">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
     <rdf:type rdf:resource="#DirectoryClass"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
     <rdfs:subClassOf rdf:resource="#Clasified"/>
   </swb:Class>
   <swb:Class rdf:ID="AirPort">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
     <rdf:type rdf:resource="#DirectoryClass"/>
     <rdfs:subClassOf rdf:resource="#Organization"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
   <swb:Class rdf:ID="ClasifiedBuySell">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
     <rdf:type rdf:resource="#DirectoryClass"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
     <rdfs:subClassOf rdf:resource="#Clasified"/>
   </swb:Class>
   <swb:Class rdf:ID="Restaurant">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
     <rdf:type rdf:resource="#DirectoryClass"/>
     <rdfs:subClassOf rdf:resource="#Organization"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
@@ -981,6 +997,8 @@
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_UserGroups"/>
   </swb:Model>
   <swb:Class rdf:ID="ClasifiedVehicle">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
     <rdf:type rdf:resource="#DirectoryClass"/>
     <rdfs:subClassOf rdf:resource="#Clasified"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
