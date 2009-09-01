@@ -47,7 +47,16 @@
             <div class="clear">&nbsp;</div>
             <h2 class="tituloGrande"><%=blog.getTitle()%></h2>
             <p>Creado el: <%=created%></p>
-            <p>Actualizado el: <%=updated%></p>
+            <%
+                if(!created.equals(updated))
+                {
+                    %>
+                    <p>Actualizado el: <%=updated%></p>
+                    <%
+                }
+            %>
+            
+            
             <p><img src="<%=srcLine%>" alt="" width="495" height="1" ></p>
             <p><%=blog.getDescription()%></p>
             <p>&nbsp;</p>
