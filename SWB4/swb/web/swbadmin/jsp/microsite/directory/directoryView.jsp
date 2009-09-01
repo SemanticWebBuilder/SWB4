@@ -17,6 +17,7 @@
 <%@page import="org.semanticwb.model.SWBModel"%>
 <%@page import="org.semanticwb.model.Descriptiveable"%>
 <%@page import="org.semanticwb.platform.SemanticClass"%>
+<%@page import="org.semanticwb.portal.community.*"%>
 
 <%!
 private final int I_PAGE_SIZE = 5;
@@ -24,15 +25,18 @@ private final int I_INIT_PAGE = 1;
 %>
 
 <%
+Resource base=paramRequest.getResourceBase();
+WebPage wpage=paramRequest.getWebPage();
 String action=paramRequest.getAction();
 String scope = (String) request.getAttribute("scope");
+Iterator<DirectoryObject> itObjs=(Iterator)request.getAttribute("itDirObjs");
 
 SemanticObject sobj = (SemanticObject) request.getAttribute("sobj");
 SemanticClass semClass=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sobj.getURI());
 
 ArrayList aprops2display=new ArrayList();
 //String props2display=(String)request.getAttribute("props2display");
-String props2display="title,description,tags";
+String props2display="dirPhoto,title,description,tags";
 if(props2display!=null && semClass!=null){
     StringTokenizer strTokens=new StringTokenizer(props2display,",");
     while(strTokens.hasMoreTokens()){
@@ -68,7 +72,7 @@ if (sobj != null) {
                             </tr>
                             <%
                             int actualPage = 1;
-                            String strResTypes[] = getCatSortArray(sobj, actualPage, request.getParameter("txtFind"), paramRequest, scope);
+                            String strResTypes[] = getCatSortArray(itObjs, sobj, actualPage, request.getParameter("txtFind"), paramRequest, scope);
                             String[] pageParams = strResTypes[strResTypes.length - 1].toString().split(":swbp4g1:");
                             int iIniPage = Integer.parseInt(pageParams[0]);
                             int iFinPage = Integer.parseInt(pageParams[1]);
@@ -89,6 +93,7 @@ if (sobj != null) {
                                     Iterator <SemanticProperty> itObjProps=semObject.getSemanticClass().listProperties();
                                     while(itObjProps.hasNext()){
                                         SemanticProperty semProp=itObjProps.next();
+                                        System.out.println("property:"+semProp.getName());
                                         //if(aprops2display.contains(semProp))
                                         if(semProp.isDataTypeProperty())
                                         {
@@ -123,7 +128,6 @@ SWBResourceURL url=paramRequest.getRenderUrl();
 SWBResourceURL urlExcel=paramRequest.getRenderUrl();
 url.setParameter("uri", sobj.getURI());
 %>
-<div id="centerProfile">
         <%url.setParameter("act","add");%>
         <form action="<%=url.toString()%>">
             <%=paramRequest.getLocaleString("find")%>:<input type="text" name="txtFind"/><button type="submit"><%=paramRequest.getLocaleString("go")%></button>
@@ -144,7 +148,7 @@ url.setParameter("uri", sobj.getURI());
             if (request.getParameter("actualPage") != null) {
                 actualPage = Integer.parseInt(request.getParameter("actualPage"));
             }
-            String strResTypes[] = getCatSortArray(sobj, actualPage, request.getParameter("txtFind"), paramRequest, scope);
+            String strResTypes[] = getCatSortArray(itObjs, sobj, actualPage, request.getParameter("txtFind"), paramRequest, scope);
             String[] pageParams = strResTypes[strResTypes.length - 1].toString().split(":swbp4g1:");
             
             int iIniPage = Integer.parseInt(pageParams[0]);
@@ -195,7 +199,10 @@ url.setParameter("uri", sobj.getURI());
                 <div id="catalogo">
                  <div class="entryCatalogo">
                 <%
+                HashMap map=new HashMap();
+                map.put("separator", "-");
                 SemanticObject semObject = SemanticObject.createSemanticObject(ObjUri);
+                //DirectoryObject dirObj=(DirectoryObject)sobj.createGenericInstance();
                 Iterator<SemanticProperty> itProps1=aprops2display.iterator();
                 while(itProps1.hasNext())
                 {
@@ -203,12 +210,13 @@ url.setParameter("uri", sobj.getURI());
                    SemanticProperty semProp1=semObject.getSemanticClass().getProperty(semProp.getName());
                    String propValue=semObject.getProperty(semProp1);
                    if(propValue!=null && !propValue.equals("null")){
-                        if(semProp.getName().equals("title"))
+                        if(semProp.getName().equals("dirPhoto"))
                         {%>
-                            <p><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/leido.png" width="90" height="90" ></p>
+                            <p><img src="<%=SWBPlatform.getWebWorkPath()%><%=base.getWorkPath()%>/<%=semObject.getId()%>/<%=propValue%>"width="90" height="90" ></p>
                         <%}if(semProp.getName().equals("title")) {
                         %>
                           <p class="tituloNaranja"><%=propValue%></p>
+                          <p><%=wpage.getPath(map)%></p>
                         <%
                         }else if(semProp.getName().equals("description")){
                         %>
@@ -229,7 +237,6 @@ url.setParameter("uri", sobj.getURI());
                 <%
                 }
                 %>              
-         </div>
     <%
     }
  }
@@ -237,42 +244,42 @@ url.setParameter("uri", sobj.getURI());
 
 
 <%!
-private String[] getCatSortArray(SemanticObject sobj, int actualPage, String txtFind, org.semanticwb.portal.api.SWBParamRequest paramRequest, String scope)
+private String[] getCatSortArray(Iterator<DirectoryObject> itSebObj, SemanticObject sobj, int actualPage, String txtFind, org.semanticwb.portal.api.SWBParamRequest paramRequest, String scope)
 {
     String[] strArray=null;
     try{
         Vector vRO = new Vector();
-        SemanticClass swbClass = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sobj.getURI());
-        Iterator<SemanticObject> itSebObj=swbClass.listInstances();
+        //SemanticClass swbClass = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sobj.getURI());
+        //Iterator<SemanticObject> itSebObj=swbClass.listInstances();
         //if(scope!=null && scope.equals("gl")) itSebObj = swbClass.listInstances();  //Para cuando se pide el objeto de global (todos los modelos)
         //else if(scope!=null && scope.equals("ml")) itSebObj = paramRequest.getWebPage().getSemanticObject().getModel().listInstancesOfClass(swbClass);
 
         if(itSebObj!=null)
         {
             while (itSebObj.hasNext()) {
-                 SemanticObject semObj = itSebObj.next();
+                 DirectoryObject dirObj = itSebObj.next();
                  if(txtFind!=null && txtFind.trim().length()>0){
-                     SemanticProperty semProp=semObj.getSemanticClass().getProperty("title");
+                     String sprop=dirObj.getProperty("title");
                      //revisar esto con George
-                     if(semProp==null)semProp=semObj.getSemanticClass().getProperty("nombre");
-                     if(semObj.getProperty(semProp).toLowerCase().startsWith(txtFind.toLowerCase())){
-                         vRO.add(semObj);
+                     if(sprop==null)sprop=dirObj.getProperty("nombre");
+                     if(sprop.toLowerCase().startsWith(txtFind.toLowerCase())){
+                         vRO.add(dirObj);
                      }
                  }else{
-                     vRO.add(semObj);
+                     vRO.add(dirObj);
                  }
             }
 
             strArray = new String[vRO.size() + 1];
 
-            Iterator itSObjs=vRO.iterator();
+            Iterator<DirectoryObject> itSObjs=vRO.iterator();
             int cont=0;
             while(itSObjs.hasNext()){
-                SemanticObject semObj=(SemanticObject)itSObjs.next();
-                SemanticProperty semPropName=semObj.getSemanticClass().getProperty("title");
+                DirectoryObject dirObj=(DirectoryObject)itSObjs.next();
+                String sPropName=dirObj.getProperty("title");
                 //revisar esto con George
-                if(semPropName==null)semPropName=semObj.getSemanticClass().getProperty("nombre");
-                String value=semObj.getProperty(semPropName)+":swbp4g1:"+semObj.getURI();
+                if(sPropName==null)sPropName=dirObj.getProperty("nombre");
+                String value=sPropName+":swbp4g1:"+dirObj.getURI();
                 strArray[cont]=value;
                 cont++;
             }
