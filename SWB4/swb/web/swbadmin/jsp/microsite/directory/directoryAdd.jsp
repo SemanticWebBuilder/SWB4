@@ -37,6 +37,7 @@
         url.setParameter("uri", cls.getURI());
         url.setAction(url.Action_ADD);
         mgr.setAction(url.toString());
+        request.setAttribute("formName", mgr.getFormName());
         mgr.addButton(SWBFormButton.newSaveButton());
         mgr.addButton(SWBFormButton.newBackButton());
       %>
