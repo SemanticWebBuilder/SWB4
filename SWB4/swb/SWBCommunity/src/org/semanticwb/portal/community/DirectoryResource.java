@@ -79,7 +79,6 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             try
             {
                 DirectoryObject dirObj=(DirectoryObject)semObject.createGenericInstance();
-                //String actualPhoto=dirObj.getPhoto();
                 mgr.processForm(request);
                 
                 String dirPhoto=request.getParameter("dirPhotoHidden");
@@ -106,7 +105,6 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             }catch(FormValidateException e)
             {
                 log.event(e);
-                //TODO: Validar error
             }
         }
         response.setMode(response.Mode_VIEW);
