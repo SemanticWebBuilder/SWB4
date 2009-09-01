@@ -101,6 +101,13 @@ public class StaticText extends GenericAdmResource {
             String s=(String)it.next();
             str=SWBUtils.TEXT.replaceAll(str, "{session.getAttribute(\""+s+"\")}", (String)request.getSession().getAttribute(replaceTags(s,request,paramRequest)));
         }
+
+        it=SWBUtils.TEXT.findInterStr(str, "{template.getArgument(\"", "\")}");
+        while(it.hasNext())
+        {
+            String s=(String)it.next();
+            str=SWBUtils.TEXT.replaceAll(str, "{template.getArgument(\""+s+"\")}", (String)paramRequest.getArgument(replaceTags(s,request,paramRequest)));
+        }
         
         it=SWBUtils.TEXT.findInterStr(str, "{getEnv(\"", "\")}");
         while(it.hasNext())
