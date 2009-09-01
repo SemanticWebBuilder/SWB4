@@ -1,6 +1,6 @@
 package org.semanticwb.model;
 
-public interface CalendarRefable extends org.semanticwb.model.GenericObject
+public interface CalendarRefable extends org.semanticwb.model.Referensable
 {
     public static final org.semanticwb.platform.SemanticClass swb_CalendarRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#CalendarRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasCalendarRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasCalendarRef");
