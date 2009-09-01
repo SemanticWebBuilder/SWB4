@@ -71,9 +71,9 @@ public class StaticText extends GenericAdmResource {
         Resource base=getResourceBase();
         String staticText = replaceTags(base.getAttribute("text"), request, paramRequest);
         
-        SWBResourceURL url=paramRequest.getActionUrl();
-        url.setCallMethod(url.Call_DIRECT);
-        url.setMode(url.Mode_EDIT);
+//        SWBResourceURL url=paramRequest.getActionUrl();
+//        url.setCallMethod(url.Call_DIRECT);
+//        url.setMode(url.Mode_EDIT);
         
         PrintWriter out = response.getWriter();
         out.println(staticText);
