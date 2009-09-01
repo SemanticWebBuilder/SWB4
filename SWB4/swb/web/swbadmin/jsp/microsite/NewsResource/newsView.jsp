@@ -12,26 +12,27 @@
 
 
 
-<%  if (member.canAdd()) {
+<%  
+    if (member.canAdd()) {
 %>
-<div id="panorama">
-    <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act", "add").toString()%>">Agregar noticia</a></p></div>
-    <%  if(wputil != null && member.canView()) {
+    <br />
+    <div class="editarInfo">
+        <p><a href="<%=paramRequest.getRenderUrl().setParameter("act", "add").toString()%>">Agregar noticia</a></p>
+    </div>
+<%
+        if(wputil != null && member.canView()) {
             if(!wputil.isSubscribed(member)) {
-    %>
+%>
     <div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act", "subcribe").toString()%>">Suscribirse</a></p></div>
-    <%
+<%
             }else {
-    %>
+%>
     <div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act", "unsubcribe").toString()%>">Cancelar suscripción</a></p></div>
-    <%
+<%
             }
         }
-    %>
-</div>
-<%  } %>
-
-
+    }
+%>
 
 <br /><br />
 <div id="entriesWrapper">
