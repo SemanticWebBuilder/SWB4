@@ -49,6 +49,16 @@ public class OrganizationBase extends org.semanticwb.portal.community.DirectoryO
         return (getOrganization(id, model)!=null);
     }
 
+    public int getStep()
+    {
+        return getSemanticObject().getIntProperty(swb_geoStep);
+    }
+
+    public void setStep(int value)
+    {
+        getSemanticObject().setIntProperty(swb_geoStep, value);
+    }
+
     public double getLatitude()
     {
         return getSemanticObject().getDoubleProperty(swb_latitude);
