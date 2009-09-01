@@ -127,7 +127,7 @@ public class ImageGallery extends GenericResource {
             out.println("<div style=\"width:"+base.getAttribute("imgwidth")+"px;\">");
             out.println("<div class=\"swb-galeria\">");
             out.println("<div style=\""+base.getAttribute("titlestyle","")+"\">"+base.getAttribute("title","")+"</div>");
-            out.println("<div id=\"imggallery_"+base.getId()+"\" style=\"position:relative; visibility:hidden\" />");
+            out.println("<div id=\"imggallery_"+base.getId()+"\" style=\"position:relative; visibility:hidden\"></div>");
             out.println("</div>");
             out.println("</div>");
         }catch(Exception e) {
