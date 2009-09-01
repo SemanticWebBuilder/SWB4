@@ -148,10 +148,14 @@ public class GMap extends org.semanticwb.model.base.GMapBase
             ret.append("        var map = new GMap2(document.getElementById(\"map_canvas\"));\n");
             ret.append("            map.addControl(new GSmallMapControl());\n");
             ret.append("            map.addControl(new GMapTypeControl());\n");
-            ret.append("        map.setCenter(new GLatLng("+value+", "+value2+"), "+step+");\n");
+            ret.append("        var center = new GLatLng("+value+", "+value2+");\n");
+            ret.append("        map.setCenter(center, "+step+");\n");
+
 
         // Add 10 markers to the map at random locations
-            ret.append("        map.openInfoWindow(map.getCenter(),\n");
+            ret.append("        var marker = new GMarker(center, {draggable: false});\n");
+            ret.append("        map.addOverlay(marker);\n");
+            ret.append("        marker.openInfoWindow(   \n");
             ret.append("        document.createTextNode(\""+nombre+"\"));\n");
             ret.append("      }\n");
             ret.append("    }\n");
