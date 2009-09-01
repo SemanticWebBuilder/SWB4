@@ -1,8 +1,9 @@
 package org.semanticwb.portal.community.base;
 
 
-public class ClasifiedBase extends org.semanticwb.portal.community.DirectoryObject implements org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.portal.community.Location
+public class ClasifiedBase extends org.semanticwb.portal.community.DirectoryObject implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_clsfPhoto=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#clsfPhoto");
     public static final org.semanticwb.platform.SemanticClass swbcomm_Clasified=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Clasified");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Clasified");
 
@@ -47,5 +48,15 @@ public class ClasifiedBase extends org.semanticwb.portal.community.DirectoryObje
     public static boolean hasClasified(String id, org.semanticwb.model.SWBModel model)
     {
         return (getClasified(id, model)!=null);
+    }
+
+    public String getClsfPhoto()
+    {
+        return getSemanticObject().getProperty(swbcomm_clsfPhoto);
+    }
+
+    public void setClsfPhoto(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_clsfPhoto, value);
     }
 }
