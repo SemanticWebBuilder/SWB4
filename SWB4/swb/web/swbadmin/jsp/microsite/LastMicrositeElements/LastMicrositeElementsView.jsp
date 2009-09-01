@@ -39,7 +39,7 @@
                     String title = element.getTitle();
 
             %>
-            <li><%=element.getCreator().getFullName()%>, <a href="#"><%=title%></a>
+            <li><%=element.getCreator().getFullName()%>, <a href="<%=element.getURL()%>"><%=title%></a>
 						(<%=created%>)</li>
                 <%            }
                 %>
