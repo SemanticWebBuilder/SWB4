@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class HotelBase extends org.semanticwb.portal.community.Organization implements org.semanticwb.model.Geolocalizable,org.semanticwb.portal.community.Addressable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public class HotelBase extends org.semanticwb.portal.community.Organization implements org.semanticwb.model.Geolocalizable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.portal.community.Addressable
 {
     public static final org.semanticwb.platform.SemanticClass swbcomm_Hotel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Hotel");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Hotel");
@@ -21,6 +21,12 @@ public class HotelBase extends org.semanticwb.portal.community.Organization impl
     {
         java.util.Iterator it=sclass.listInstances();
         return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Hotel>(it, true);
+    }
+
+    public static org.semanticwb.portal.community.Hotel createHotel(org.semanticwb.model.SWBModel model)
+    {
+        long id=model.getSemanticObject().getModel().getCounter(sclass);
+        return org.semanticwb.portal.community.Hotel.createHotel(String.valueOf(id), model);
     }
 
     public static org.semanticwb.portal.community.Hotel getHotel(String id, org.semanticwb.model.SWBModel model)

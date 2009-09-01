@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class RestaurantBase extends org.semanticwb.portal.community.Organization implements org.semanticwb.model.Geolocalizable,org.semanticwb.portal.community.Addressable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public class RestaurantBase extends org.semanticwb.portal.community.Organization implements org.semanticwb.model.Geolocalizable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.portal.community.Addressable
 {
     public static final org.semanticwb.platform.SemanticClass swbcomm_Restaurant=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Restaurant");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Restaurant");
@@ -21,6 +21,12 @@ public class RestaurantBase extends org.semanticwb.portal.community.Organization
     {
         java.util.Iterator it=sclass.listInstances();
         return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Restaurant>(it, true);
+    }
+
+    public static org.semanticwb.portal.community.Restaurant createRestaurant(org.semanticwb.model.SWBModel model)
+    {
+        long id=model.getSemanticObject().getModel().getCounter(sclass);
+        return org.semanticwb.portal.community.Restaurant.createRestaurant(String.valueOf(id), model);
     }
 
     public static org.semanticwb.portal.community.Restaurant getRestaurant(String id, org.semanticwb.model.SWBModel model)
