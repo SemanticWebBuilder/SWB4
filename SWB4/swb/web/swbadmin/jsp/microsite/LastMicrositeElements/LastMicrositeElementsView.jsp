@@ -1,19 +1,6 @@
 <%@page import="java.text.*,java.net.*,org.semanticwb.platform.SemanticObject,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*" %>
 <%
-            SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
-            int columnas = 1;
-            try
-            {
-                columnas = Integer.parseInt(paramRequest.getResourceBase().getAttribute("columns", "1"));
-            }
-            catch (Exception e)
-            {
-            }
-            if (columnas <= 0)
-            {
-                columnas = 1;
-            }
-
+            SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");            
             String defaultFormat = "dd/MM/yy HH:mm";
             SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
             ArrayList<MicroSiteElement> elements = (ArrayList<MicroSiteElement>) request.getAttribute("elements");
