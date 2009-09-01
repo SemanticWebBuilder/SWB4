@@ -1,13 +1,14 @@
 package org.semanticwb.model;
 
 import javax.servlet.http.HttpServletRequest;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
 
 public class GMap extends org.semanticwb.model.base.GMapBase 
 {
-    String key = "ABQIAAAAolpeBAG69pwV4I7Q2UbUGBRdUXnbHU0ecBZK5BHQa7lrdkbXwRRNn5td0NLbuw0n5q9nkcvGHq7FVg";
+    String key = SWBPlatform.getEnv("key/gmap","");
     public GMap(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
@@ -22,7 +23,7 @@ public class GMap extends org.semanticwb.model.base.GMapBase
         boolean IPHONE=false;
         boolean XHTML=false;
         boolean DOJO=false;
-        int step = obj.getIntProperty(prop3);
+        int step = obj.getIntProperty(prop3); if (0==step) step=10;
         if(type.equals("iphone"))IPHONE=true;
         else if(type.equals("xhtml"))XHTML=true;
         else if(type.equals("dojo"))DOJO=true;
