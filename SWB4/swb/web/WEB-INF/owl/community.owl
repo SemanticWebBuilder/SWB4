@@ -557,15 +557,15 @@
     <rdfs:domain rdf:resource="#ProductElement"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="dirPhoto">
+    <rdfs:label xml:lang="es">Imagen</rdfs:label>
+    <rdfs:label xml:lang="en">Image</rdfs:label>
     <rdfs:domain rdf:resource="#DirectoryObject"/>
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >photo</swb:propertyCodeName>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_clsfPhoto">
-        <swbxf:formElement>
-          <swbxf:FileUpload rdf:ID="FileUploadImage"/>
-        </swbxf:formElement>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FileUploadImage"/>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >30</swb:index>
       </swbxf:DisplayProperty>
