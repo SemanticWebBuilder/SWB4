@@ -128,6 +128,7 @@ SWBResourceURL url=paramRequest.getRenderUrl();
 SWBResourceURL urlExcel=paramRequest.getRenderUrl();
 url.setParameter("uri", sobj.getURI());
 %>
+   <div id="centerProfile">
         <%url.setParameter("act","add");%>
         <form action="<%=url.toString()%>">
             <%=paramRequest.getLocaleString("find")%>:<input type="text" name="txtFind"/><button type="submit"><%=paramRequest.getLocaleString("go")%></button>
@@ -140,7 +141,6 @@ url.setParameter("uri", sobj.getURI());
                 <a href="<%=urlExcel%>"><img width="21" height="21" src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/Excel-32.gif" border="0" align="absmiddle" alt="<%=paramRequest.getLocaleString("exportExcel")%>" TITLE="<%=paramRequest.getLocaleString("exportExcel")%>"></a>
             </p>
         </form>
-        
         <%
             //Empieza paginación
             SWBResourceURL urlPag=paramRequest.getRenderUrl();
@@ -236,7 +236,8 @@ url.setParameter("uri", sobj.getURI());
                 </div>
                 <%
                 }
-                %>              
+                %>
+           </div>
     <%
     }
  }
