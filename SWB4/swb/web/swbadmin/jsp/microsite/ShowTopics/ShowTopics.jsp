@@ -5,7 +5,7 @@
         <%
             //User user = (User) request.getAttribute("user");
             WebPage webpage = (WebPage) request.getAttribute("webpage");
-            WebPage topics = webpage.getWebSite().getWebPage("Temas");
+            WebPage topics = webpage.getWebSite().getWebPage("Intereses");
             Iterator<WebPage> pages = topics.listVisibleChilds("es");
             while (pages.hasNext())
             {
