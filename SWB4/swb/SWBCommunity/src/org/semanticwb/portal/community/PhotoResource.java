@@ -212,7 +212,8 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                             image = new File(realpath+filename);
                             File thumbnail = new File(realpath+"thumbn_"+filename);
                             currentFile.write(image);
-                            ImageResizer.resize(image, 140, true, thumbnail, "jpeg" );
+                            //ImageResizer.resize(image, 140, true, thumbnail, "jpeg" );
+                            ImageResizer.resizeCrop(image, 140, thumbnail, "jpeg");
                             
                             params.put("filename", path+filename);
                             params.put("thumbnail", path+"thumbn_"+filename);
