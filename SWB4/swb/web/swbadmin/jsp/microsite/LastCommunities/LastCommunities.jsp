@@ -10,15 +10,18 @@
             int i = 0;
             while (communities.hasNext())
             {
-                i++;
-                MicroSite comm = (MicroSite) communities.next();
 
+                MicroSite comm = (MicroSite) communities.next();
+                if (comm.isActive())
+                {
+                    i++;
         %>
         <li><a href="<%=comm.getUrl()%>"><%=comm.getTitle()%></a></li>
         <%
-                if (i == 5)
-                {
-                    break;
+                    if (i == 5)
+                    {
+                        break;
+                    }
                 }
 
             }
