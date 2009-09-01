@@ -1,6 +1,6 @@
 package org.semanticwb.model;
 
-public interface PFlowRefable extends org.semanticwb.model.GenericObject
+public interface PFlowRefable extends org.semanticwb.model.Referensable
 {
     public static final org.semanticwb.platform.SemanticClass swb_PFlowRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlowRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasPFlowRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasPFlowRef");

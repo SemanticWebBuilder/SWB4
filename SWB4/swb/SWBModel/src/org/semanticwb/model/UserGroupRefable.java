@@ -1,6 +1,6 @@
 package org.semanticwb.model;
 
-public interface UserGroupRefable extends org.semanticwb.model.GenericObject
+public interface UserGroupRefable extends org.semanticwb.model.Referensable
 {
     public static final org.semanticwb.platform.SemanticClass swb_UserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasUserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasUserGroupRef");
