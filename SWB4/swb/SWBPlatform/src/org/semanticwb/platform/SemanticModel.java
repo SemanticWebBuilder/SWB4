@@ -45,6 +45,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import org.semanticwb.Logger;
@@ -311,19 +312,30 @@ public class SemanticModel
 
     public Iterator<SemanticObject> listInstancesOfClass(SemanticClass cls, boolean subclasses)
     {
-        Iterator<SemanticObject>ret=null;
         Property rdf=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty();
-//        Iterator clsit=cls.listSubClasses();
-//        if(subclasses && clsit.hasNext())
-//        {
-//            ArrayList<Statement> arr=new ArrayList();
-//            StmtIterator stit=getRDFModel().listStatements(null, rdf, cls.getOntClass());
-//            //TODO
-//        }else
-//        {
-            StmtIterator stit=getRDFModel().listStatements(null, rdf, cls.getOntClass());
-            ret=new SemanticIterator(stit, true);
-//        }
+
+        StmtIterator stit=getRDFModel().listStatements(null, rdf, cls.getOntClass());
+        Iterator<SemanticObject> ret=new SemanticIterator(stit, true);
+
+        if(subclasses)
+        {
+            ArrayList arr=new ArrayList();
+            while(ret.hasNext())
+            {
+                arr.add(ret.next());
+            }
+            Iterator<SemanticClass> clsit=cls.listSubClasses(false);
+            while(clsit.hasNext())
+            {
+                SemanticClass scls=clsit.next();
+                Iterator sit=listInstancesOfClass(scls,false);
+                while(sit.hasNext())
+                {
+                    arr.add(sit.next());
+                }
+            }
+            ret=arr.iterator();
+        }
         return ret;
     }
     
