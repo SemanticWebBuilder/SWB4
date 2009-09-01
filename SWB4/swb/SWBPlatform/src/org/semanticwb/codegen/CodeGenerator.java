@@ -956,14 +956,57 @@ public class CodeGenerator
             SemanticClass range = tpp.getRangeClass();
             if (range != null)
             {
-
                 if (!staticClasses.contains(range))
                 {
-                    javaClassContent.append("    public static final org.semanticwb.platform.SemanticClass " + range.getPrefix() + "_" + toUpperCase(range.getClassCodeName()) + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + range.getURI() + "\");" + ENTER);
+                    boolean isInSuperInterface=false;
+                    for(SemanticClass cInterface : interfaces)
+                    {
+                        Iterator<SemanticProperty> propertiesInterface = cInterface.listProperties();
+                        while (propertiesInterface.hasNext())
+                        {
+                            SemanticProperty tppInterface = propertiesInterface.next();
+                            SemanticClass rangeInterface = tppInterface.getRangeClass();
+                            if(rangeInterface.equals(range))
+                            {
+                                isInSuperInterface=true;
+                                break;
+                            }
+                        }
+                        if(isInSuperInterface)
+                        {
+                            break;
+                        }
+                    }
+                    if(!isInSuperInterface)
+                    {
+                        javaClassContent.append("    public static final org.semanticwb.platform.SemanticClass " + range.getPrefix() + "_" + toUpperCase(range.getClassCodeName()) + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + range.getURI() + "\");" + ENTER);
+                    }
+                    
                     staticClasses.add(range);
                 }
             }
-            javaClassContent.append("    public static final org.semanticwb.platform.SemanticProperty " + tpp.getPrefix() + "_" + tpp.getName() + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(\"" + tpp.getURI() + "\");" + ENTER);
+            boolean isInSuperInterface=false;
+            for(SemanticClass cInterface : interfaces)
+            {
+                Iterator<SemanticProperty> propertiesInterface = cInterface.listProperties();
+                while (propertiesInterface.hasNext())
+                {
+                    SemanticProperty tppInterface = propertiesInterface.next();
+                    if(tppInterface.equals(tpp))
+                    {
+                        isInSuperInterface=true;
+                        break;
+                    }
+                }
+                if(isInSuperInterface)
+                {
+                    break;
+                }
+            }
+            if(!isInSuperInterface)
+            {
+                javaClassContent.append("    public static final org.semanticwb.platform.SemanticProperty " + tpp.getPrefix() + "_" + tpp.getName() + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(\"" + tpp.getURI() + "\");" + ENTER);
+            }
         }
 
         javaClassContent.append("    public static final org.semanticwb.platform.SemanticClass " + tpc.getPrefix() + "_" + toUpperCase(tpc.getClassCodeName()) + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + tpc.getURI() + "\");" + ENTER);
