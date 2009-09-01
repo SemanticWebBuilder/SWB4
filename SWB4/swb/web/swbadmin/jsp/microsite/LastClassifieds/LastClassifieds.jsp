@@ -7,12 +7,12 @@
             SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
             WebPage webpage = (WebPage) request.getAttribute("webpage");
             WebPage clasificados = webpage.getWebSite().getWebPage("Clasificados");
-            Iterator objects = SWBComparator.sortByCreated(DirectoryObject.listDirectoryObjects(webpage.getWebSite()), true);
+            GenericIterator<Clasified> itClass=new GenericIterator(webpage.getWebSite().getSemanticObject().getModel().listInstancesOfClass(Clasified.sclass,true));
+            Iterator objects = SWBComparator.sortByCreated(itClass, true);
             int count = 0;
             while (objects.hasNext())
             {
-                DirectoryObject obj = (DirectoryObject) objects.next();
-
+                Clasified obj = (Clasified) objects.next();
                 String created = "Sin fecha";
                 if (obj.getCreated() != null)
                 {
