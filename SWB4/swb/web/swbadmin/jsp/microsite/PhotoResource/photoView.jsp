@@ -19,8 +19,7 @@
 <%
     if (member.canAdd()) {
 %>
-<br/>
-<div id="panorama">
+    <br />
     <div class="editarInfo">
         <p><a href="<%=paramRequest.getRenderUrl().setParameter("act", "add").toString()%>">Agregar foto</a></p>
     </div>
@@ -41,15 +40,10 @@
 <%
         }
     }
-%>
-</div>
-<%  }%>
+  }%>
 
-<div id="panorama">
-<table border="0" width="90%">
-    <tr>
-    <td>
-        <div id="photoc_<%= base.getId()%>" class="miembros">
+<br /><br />
+<div id="entriesWrapper">
 <%
         Iterator<PhotoElement> it = PhotoElement.listPhotoElementByPhotoWebPage(wpage, wpage.getWebSite());
         int i = 0;
@@ -60,26 +54,25 @@
             {
                 SWBResourceURL viewurl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", photo.getURI());
 %>
-            <div style="float:left; margin-top:30px; margin-left:5px; margin-right:5px; text-align:center" class="moreUsers">
+            <div class="entry">
                 <a dojoType="dojox.image.Lightbox" title="<%= photo.getTitle()%>" href="<%= SWBPlatform.getWebWorkPath()+photo.getImageURL()%>">
                     <img id="img_<%=i+base.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+photo.getPhotoThumbnail()%>" alt="<%= photo.getTitle()%>" border="0" />
                 </a>
-                <a href="<%=viewurl%>">
-                    <p style="line-height:1px;">&nbsp;</p>
-                    <p style="line-height:2px;"><%= photo.getTitle()%></p>                    
-                    <p style="line-height:2px;"><%= photo.getDescription()%></p>
-                    <p style="line-height:2px;">Autor: <%= photo.getCreator().getFirstName()%></p>
-                    <p style="line-height:3px;">Fecha: <%= SWBUtils.TEXT.getStrDate(photo.getCreated(), lang, "dd/mm/yy") %> </p>
-                    <p style="line-height:2px;"><%= SWBUtils.TEXT.getTimeAgo(photo.getCreated(),user.getLanguage())%></p>
-                </a>
+                <div class="entryInfo">
+                    <a href="<%=viewurl%>">
+                        <p class="tituloNaranja"><%= photo.getTitle()%></p>
+                        <p><%= photo.getDescription()%></p>
+                        <p class="eventoInicio">Autor: <%= photo.getCreator().getFirstName()%></p>
+                        <p class="eventoInicio">Fecha: <%= SWBUtils.TEXT.getStrDate(photo.getCreated(), lang, "dd/mm/yy") %> </p>
+                        <p><%= SWBUtils.TEXT.getTimeAgo(photo.getCreated(),user.getLanguage())%></p>
+                    </a>
+                    <div class="clear">&nbsp;</div>
+                </div>
             </div>
 <%
                 i++;
             }
         }
 %>                
-        </div>
-    </td>
-    </tr>
-</table>
 </div>
+

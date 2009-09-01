@@ -7,7 +7,38 @@
     MicroSiteWebPageUtil wputil=MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
     Member member=Member.getMember(user,wpage);
 %>
-<table border="0" width="100%">
+
+<%
+    if(member.canAdd())
+    {
+%>
+    <br />
+    <div class="editarInfo">
+        <p><a href="<%=paramRequest.getRenderUrl().setParameter("act","add").toString()%>">Agregar Video</a></p>
+    </div>
+<%
+        if(wputil!=null && member.canView())
+        {
+            if(!wputil.isSubscribed(member))
+            {
+%>
+    <div class="editarInfo">
+        <p><a href="<%=paramRequest.getActionUrl().setParameter("act","subscribe").toString()%>">Suscribirse a este elemento</a></p>
+    </div>
+<%
+            }else
+            {
+%>
+    <div class="editarInfo">
+        <p><a href="<%=paramRequest.getActionUrl().setParameter("act","unsubscribe").toString()%>">Cancelar suscripción</a></p>
+    </div>
+<%
+            }
+        }
+    }%>
+
+<br /><br />
+<div id="entriesWrapper">
 <%
     Iterator<VideoElement> it=VideoElement.listVideoElementByWebPage(wpage,wpage.getWebSite());
     int i=0;
@@ -17,60 +48,31 @@
         SWBResourceURL viewurl=paramRequest.getRenderUrl().setParameter("act","detail").setParameter("uri",video.getURI());
         if(video.canView(member))
         {
-            
-            if(i%2==0)out.println("<tr>");
+            if(i%2==0)
+                out.println("<tr>");
 %>
-    <td width="50%" valign="top">
-      <table border="0" width="100%" cellspacing="10">
-        <tr><td valign="top" width="130">
+    <div class="entry">
         <a href="<%=viewurl%>">
-            <img src="<%=video.getPreview()%>" width="125">
+            <img src="<%=video.getPreview()%>" alt="<%= video.getTitle()%>" border="0" />
         </a>
-        </td><td valign="top" align="left"><small>
-        <b><%=video.getTitle()%></b> <BR>
-        <%=video.getDescription()%> <BR>
-        <%=video.getCreator().getFullName()%> <BR>
-        <%=SWBUtils.TEXT.getTimeAgo(video.getCreated(),user.getLanguage())%> <BR>
-        <%
-            DecimalFormat df=new DecimalFormat("#0.0#");
-            String rank=df.format(video.getRank());
-        %>
-        Calificación: <%=rank%> de 5<BR>
-       
-        <%=video.getViews()%> vistas<BR>
-        </small></td></tr>
-      </table>
-    </td>
-<%
-            if(i%2==1)out.println("</tr>");
-            i++;
-        }
-    }
-    if(i%2==1)out.println("<td></td></tr>");
-%>
-</table>
-<%
-    if(member.canAdd())
-    {
-%>
-<center>
-    <a href="<%=paramRequest.getRenderUrl().setParameter("act","add").toString()%>">Agregar Video</a>
-<%
-    if(wputil!=null && member.canView())
-    {
-        if(!wputil.isSubscribed(member))
-        {
-%>
-    <a href="<%=paramRequest.getActionUrl().setParameter("act","subscribe").toString()%>">Suscribirse a este elemento</a>
-<%
-        }else
-        {
-%>
-    <a href="<%=paramRequest.getActionUrl().setParameter("act","unsubscribe").toString()%>">Cancelar suscripción</a>
-<%
-        }
+        <div class="entryInfo">
+            <p><%=SWBUtils.TEXT.getTimeAgo(video.getCreated(),user.getLanguage())%></p>
+            <p class="tituloNaranja"><%=video.getTitle()%></p>
+            <p><%=video.getDescription()%></p>
+            <p><strong><%=video.getCreator().getFullName()%></strong></p>            
+            <p><%
+                DecimalFormat df=new DecimalFormat("#0.0#");
+                String rank=df.format(video.getRank());
+            %>
+            Calificación: <%=rank%> de 5</p>
+            <p><%=video.getViews()%> vistas</p>
+            <div class="clear">&nbsp;</div>
+        </div>
+    </div>
 
+<%
+
+        }
     }
 %>
-</center>
-<%  }%>
+</div>

@@ -30,64 +30,49 @@
 <%if (event.canModify(member)) {%>
     <div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act", "attend").setParameter("uri", event.getURI())%>">Asistir al evento</a></p></div>
 <%}%>
-<%if (event.canModify(member)) {%>
-    <div class="editarInfo"><p><a href="<%= back%>">Editar información</a></p></div>
-<%}%>
-<%if (event.canModify(member)) {%>
-    <div class="editarInfo"><p><a href="<%= paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", event.getURI())%>">Eliminar evento</a></p></div>
-<%}%>
-    <div class="editarInfo"><p><a href="<%= paramRequest.getRenderUrl()%>">Regresar</a></p></div>
+
+    <div class="editarInfo"><p><a href="<%= paramRequest.getRenderUrl()%>">Ver todos</a></p></div>
 </div>
 
-<div id="panorama">
-<table border="0" cellspacing="3">
-    <tr>
-        <td>
-            <a href="<%= SWBPlatform.getWebWorkPath()+event.getEventImage()%>" target="_self">
-            <img id="img_<%=event.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+event.getEventImage()%>" alt="<%=event.getTitle()%>" border="0" />
-            </a>
-        </td>
-        <td valign="top">
-            <div class="entryEvent">
-                <p style="line-height:1px;"><%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%></p>
-                <p style="line-height:1px;">&nbsp;</p>
-                <p class="tituloNaranja"><%= event.getTitle()%></p>
-                <p style="line-height:13px;"><%= event.getDescription()%></p>
-                <p style="line-height:1px;">&nbsp;</p>
-                <p style="line-height:13px;">Dirigido a: <strong><%= event.getAudienceType()%></strong></p>
-                <p style="line-height:13px;">Inicia:<strong><%= (event.getStartDate()==null?"":dateFormat.format(event.getStartDate()))%></strong> a las <strong><%= (event.getStartTime()==null?"":timeFormat.format(event.getStartTime()))%></strong></p>
-                <p style="line-height:13px;">Termina:<strong><%= (event.getEndDate()==null?"":dateFormat.format(event.getEndDate()))%></strong> a las <strong><%= (event.getEndTime()==null?"":timeFormat.format(event.getEndTime()))%></strong></p>
-                <p style="line-height:13px;">Lugar: <strong><%= event.getPlace()%></strong></p>
-                <p style="line-height:13px;">Asistentes:
-                <%
-                Iterator<User> users = event.listAttendants();
-                while (users.hasNext()) {
-                    User m = users.next();
-                    %>
-                    <%=m.getFullName()%>
-                    <%if(users.hasNext()) {
-                    %>,&nbsp;<%
-                    }
+<br/><br/>
+<div id="entriesWrapper">
+    <div class="entry">
+        <a href="<%= SWBPlatform.getWebWorkPath()+event.getEventImage()%>" target="_self">
+            <img id="img_<%=event.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+event.getEventImage()%>" alt="<%=event.getTitle()%>" border="0" width="380" height="100%" />
+        </a>
+        <div class="entryInfo">
+            <p><%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%></p>
+            <p class="tituloNaranja"><%= event.getTitle()%></p>
+            <p><%= event.getDescription()%></p>
+            <p>Dirigido a: <strong><%= event.getAudienceType()%></strong></p>
+            <p class="eventoInicio">Inicia:<strong><%= (event.getStartDate()==null?"":dateFormat.format(event.getStartDate()))%></strong> a las <strong><%= (event.getStartTime()==null?"":timeFormat.format(event.getStartTime()))%></strong></p>
+            <p class="eventoFinal">Termina:<strong><%= (event.getEndDate()==null?"":dateFormat.format(event.getEndDate()))%></strong> a las <strong><%= (event.getEndTime()==null?"":timeFormat.format(event.getEndTime()))%></strong></p>
+            <p>Lugar: <strong><%= event.getPlace()%></strong></p>
+            <p>Asistentes:
+            <%
+            Iterator<User> users = event.listAttendants();
+            while (users.hasNext()) {
+                User m = users.next();
+                %>
+                <%=m.getFullName()%>
+                <%if(users.hasNext()) {
+                %>,&nbsp;<%
                 }
-                %></p>
-                <p style="line-height:13px;"><%=event.getViews()%> vistas</p>
-            </div>
-        </td>
-    </tr>
-</table>
+            }
+            %></p>
+            <p style="line-height:13px;"><%=event.getViews()%> vistas</p>
+            <%if (event.canModify(member)) { %>
+                <div class="editarInfo"><p><a href="<%= back%>">Editar información</a></p></div>
+            <%
+            }
+            if (event.canModify(member)) { %>
+                <div class="editarInfo"><p><a href="<%= paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", event.getURI())%>">Eliminar</a></p></div>
+            <%
+            } %>
+            <div class="clear">&nbsp;</div>
+        </div>
+    </div>
 </div>
-<script type="text/javascript">
-    var img = document.getElementById('img_<%=event.getId()%>');
-    if( img.width>img.height && img.width>450) {
-        img.width = 350;
-        img.height = 270;
-    }else {
-        if(img.height>270) {
-            img.width = 270;
-            img.height = 350;
-        }
-    }
-</script>
 <%
             }
 %>
