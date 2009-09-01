@@ -47,22 +47,22 @@
 <div class="cajas">
     <ul>
         <%
-                    WebPage webpage = (WebPage) request.getAttribute("webpage");
-                    WebSite site = webpage.getWebSite();
-                    Iterator communities = sortByViews(MicroSite.listMicroSites(site), false);
-                    int i = 0;
-                    while (communities.hasNext())
-                    {
-                        i++;
-                        MicroSite comm = (MicroSite) communities.next();
+            WebPage webpage = (WebPage) request.getAttribute("webpage");
+            WebSite site = webpage.getWebSite();
+            Iterator communities = sortByViews(MicroSite.listMicroSites(site), false);
+            int i = 0;
+            while (communities.hasNext())
+            {
+                i++;
+                MicroSite comm = (MicroSite) communities.next();
         %>
         <li><a href="<%=comm.getUrl()%>"><%=comm.getTitle()%></a></li>
         <%
-        if (i == 5)
-        {
-            break;
-        }
-    }
+                if (i == 5)
+                {
+                    break;
+                }
+            }
 
         %>
     </ul>
