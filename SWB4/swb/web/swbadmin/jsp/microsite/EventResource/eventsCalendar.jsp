@@ -1,21 +1,21 @@
 <%@page contentType="text/html"%>
 <%@page import="java.util.Date, java.util.Calendar, java.util.GregorianCalendar, java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%
-            SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");            
-            User user = paramRequest.getUser();
-            WebPage wpage = paramRequest.getWebPage();
-            MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
-            Member member = Member.getMember(user, wpage);
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-            SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss a");
-            String year = request.getParameter("year");
-            String month = request.getParameter("month");
-            String day = request.getParameter("day");
-            Date current = new Date(System.currentTimeMillis());
+    SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
+    User user = paramRequest.getUser();
+    WebPage wpage = paramRequest.getWebPage();
+    MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
+    Member member = Member.getMember(user, wpage);
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+    SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss a");
+    String year = request.getParameter("year");
+    String month = request.getParameter("month");
+    String day = request.getParameter("day");
+    Date current = new Date(System.currentTimeMillis());
 
-            if(day != null && month != null && day != null) {
-                current = new Date(Integer.valueOf(year) - 1900, Integer.valueOf(month), Integer.valueOf(day));
-            }            
+    if(day != null && month != null && day != null) {
+        current = new Date(Integer.valueOf(year) - 1900, Integer.valueOf(month), Integer.valueOf(day));
+    }
 %>
 
 <script type="text/javascript">
@@ -34,7 +34,7 @@
 
         var tt = document.createElement('div');
         tt.setAttribute('id', ttid);
-	tt.setAttribute("style", "position: absolute;font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 12px;line-height: 3px;color: #000000;background-color: #FFFF99;padding-right: 5px;padding-left: 5px;position: absolute;border: 1px solid #AAAAAA;");
+	tt.setAttribute("style", "position: absolute;font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 12px; line-height:3px; padding-top:10px; color: #000000;background-color: #FFFF99;padding-right: 5px;padding-left: 5px;position: absolute;border: 1px solid #AAAAAA;");
 	tt.style.top = (coords.y)+'px';
 	tt.style.left = (coords.x+coords.w+2)+'px';
         tt.innerHTML = tip;
@@ -50,30 +50,29 @@
 </script>
 
 <br />
-<div id="panorama">
 <%  if (member.canAdd()) { %>
-    <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act", "add")%>">Agregar evento</a></p></div>
+<div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act", "add")%>">Agregar evento</a></p></div>
 <%  }
     if (wputil != null && member.canView()) {
 %>
-    <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act", "view")%>">Ver todos</a></p></div>
 <%      if (!wputil.isSubscribed(member)) { %>
-    <div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act", "subcribe")%>">Suscribirse</a></p></div>
+<div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act", "subcribe")%>">Suscribirse</a></p></div>
 <%
         }else {
 %>
-    <div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act", "unsubcribe")%>">Cancelar suscripción</a></p></div>
-<%      }
-   } %>
-</div>
+<div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act", "unsubcribe")%>">Cancelar suscripción</a></p></div>
+<%      } %>
+<div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act", "view")%>">Ver todos</a></p></div>
+<%  } %>
+
 <br/>
 <div id="panorama">
-    <form action="<%=paramRequest.getRenderUrl().setParameter("act", "calendar")%>" method="post">
+    <form id="calendarForm" action="<%=paramRequest.getRenderUrl().setParameter("act", "calendar")%>" method="post">
         <fieldset><legend>Elige una fecha</legend>
             <label for="year">Año:</label>
             <input type="text" style="width:70px;" regExp="\d{4}" dojoType="dijit.form.ValidationTextBox" name="year" id="year" value="<%=current.getYear() + 1900%>"/>
             <label for="month">Mes:</label>
-            <select dojoType="dijit.form.FilteringSelect" style="width:150px;" name ="month" id="month" value="<%=current.getMonth()%>">
+            <select  style="width:150px;" name ="month" id="month" value="<%=current.getMonth()%>">
                 <option value="0">Enero</option>
                 <option value="1">Febrero</option>
                 <option value="2">Marzo</option>
@@ -88,7 +87,7 @@
                 <option value="11">Diciembre</option>
             </select>
             <input type="hidden" name="day" id="day" value="1"/>
-            <input type="submit" dojoType="dijit.form.Button" label="Ir" value="Ir"/>
+            <input type="submit" id="calendarSubmit" label="Ir" value="Ir"/>
         </fieldset>
     </form>
             

@@ -13,17 +13,17 @@
 %>
 
 <br />
-<div id="panorama">    
-    <%if (anew.canModify(member)) {%>
-    <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", anew.getURI())%>">Editar Información</a></p></div>
-    <%}%>
-    <%if (anew.canModify(member)) {%>
-    <div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", anew.getURI())%>">Eliminar</a></p></div>
-    <%}%>
-    <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Ver todas</a></p></div>
-</div>
+<%if (anew.canModify(member)) {%>
+<div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", anew.getURI())%>">Editar Información</a></p></div>
+<%}%>
+<%if (anew.canModify(member)) {%>
+<div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", anew.getURI())%>">Eliminar</a></p></div>
+<%}%>
+<div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Ver todas</a></p></div>
 
-<%  if(anew!=null && anew.canView(member)) {
+
+<%
+    if(anew!=null && anew.canView(member)) {
         anew.incViews();
 %>
 <div id="detalleFoto">
