@@ -1,7 +1,5 @@
 package org.semanticwb.portal.community.base;
 
-import org.semanticwb.portal.community.Location;
-
 
 public class PersonBase extends org.semanticwb.portal.community.DirectoryObject implements org.semanticwb.model.Mapable,org.semanticwb.model.Descriptiveable,org.semanticwb.portal.community.Location,org.semanticwb.model.Traceable
 {
@@ -53,21 +51,21 @@ public class PersonBase extends org.semanticwb.portal.community.DirectoryObject 
 
     public double getLatitude()
     {
-        return getSemanticObject().getDoubleProperty(Location.swb_latitude);
+        return getSemanticObject().getDoubleProperty(swb_latitude);
     }
 
     public void setLatitude(double value)
     {
-        getSemanticObject().setDoubleProperty(Location.swb_latitude, value);
+        getSemanticObject().setDoubleProperty(swb_latitude, value);
     }
 
     public double getLongitude()
     {
-        return getSemanticObject().getDoubleProperty(Location.swb_longitude);
+        return getSemanticObject().getDoubleProperty(swb_longitude);
     }
 
     public void setLongitude(double value)
     {
-        getSemanticObject().setDoubleProperty(Location.swb_longitude, value);
+        getSemanticObject().setDoubleProperty(swb_longitude, value);
     }
 }
