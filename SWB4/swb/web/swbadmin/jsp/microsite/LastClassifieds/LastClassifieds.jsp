@@ -7,8 +7,8 @@
             SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
             WebPage webpage = (WebPage) request.getAttribute("webpage");
             WebPage clasificados = webpage.getWebSite().getWebPage("Clasificados");
-            GenericIterator<Clasified> itClass = new GenericIterator(webpage.getWebSite().getSemanticObject().getModel().listInstancesOfClass(Clasified.sclass, false));
-            Iterator objects = SWBComparator.sortByCreated(itClass, true);
+            GenericIterator<Clasified> itClass = new GenericIterator(webpage.getWebSite().getSemanticObject().getModel().listInstancesOfClass(Clasified.sclass, true));
+            Iterator objects = SWBComparator.sortByCreated(itClass, false);
             int count = 0;
             while (objects.hasNext())
             {
