@@ -11,41 +11,33 @@
     String uri = request.getParameter("uri");
     NewsElement anew = (NewsElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
 %>
+
 <br />
 <div id="panorama">    
     <%if (anew.canModify(member)) {%>
     <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", anew.getURI())%>">Editar Información</a></p></div>
     <%}%>
     <%if (anew.canModify(member)) {%>
-    <div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", anew.getURI())%>">Eliminar Noticia</a></p></div>
+    <div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", anew.getURI())%>">Eliminar</a></p></div>
     <%}%>
-    <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Regresar</a></p></div>
+    <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Ver todas</a></p></div>
 </div>
-<div class="entryNews">
+
 <%  if(anew!=null && anew.canView(member)) {
         anew.incViews();
 %>
-    <a href="<%= SWBPlatform.getWebWorkPath()+anew.getNewsImage()%>" target="_self">
-        <img id="img_<%=anew.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+anew.getNewsImage() %>" alt="<%= anew.getTitle() %>" border="0" />
-    </a>
-    <h3><%=anew.getTitle()%></h3>
-    <%=anew.getCitation()%>
-    <strong><%=dateFormat.format(anew.getCreated())%>.</strong>
-    <%=anew.getFullText()%>
-    <br />
+<div id="detalleFoto">
+    <div class="clear">&nbsp;</div>
+    <h2 class="tituloGrande"><%= anew.getTitle()%></h2>
+    <p class="tituloNaranja">Por: <%= anew.getAuthor()%>. <%= anew.getCitation()%></p>
+    <div id="imagenDetalle">
+        <img id="img_<%=anew.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+anew.getNewsImage() %>" alt="<%= anew.getTitle() %>" border="0" width="380" height="100%" />
+    </div>
+    <p class="fotoInfo">
+        Fecha: <%=dateFormat.format(anew.getCreated())%> | <span class="linkNaranja"><%= anew.getViews()%> Vistas</span>
+    </p>
+    <p class="descripcion" style="text-align:justify;"><%=anew.getFullText()%></p>
+</div>
 <%  }
     anew.renderGenericElements(request, out, paramRequest);
 %>
-</div>
-<script type="text/javascript">
-    var img = document.getElementById('img_<%=anew.getId()%>');
-    if( img.width>img.height && img.width>350) {
-        img.width = 350;
-        img.height = 270;
-    }else {
-        if(img.height>270) {
-            img.width = 270;
-            img.height = 350;
-        }
-    }
-</script>
