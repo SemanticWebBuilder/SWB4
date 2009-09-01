@@ -52,7 +52,6 @@ if(props2display!=null && semClass!=null){
 if (sobj != null) {
     if(action.equals("excel")){
         %>
-        <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="application/vnd.ms-excel"> 
         <table>
             <tr><td>
                 <table>
@@ -93,7 +92,6 @@ if (sobj != null) {
                                     Iterator <SemanticProperty> itObjProps=semObject.getSemanticClass().listProperties();
                                     while(itObjProps.hasNext()){
                                         SemanticProperty semProp=itObjProps.next();
-                                        System.out.println("property:"+semProp.getName());
                                         //if(aprops2display.contains(semProp))
                                         if(semProp.isDataTypeProperty())
                                         {
