@@ -8,7 +8,7 @@
     if(user.isRegistered()&&wpage.getLevel()==3)
         {
 %>
-<p align="right"><a href="<%=paramRequest.getRenderUrl().setParameter("act","add").setWindowState(SWBResourceURL.WinState_MAXIMIZED)%>">Crear Comunidad</a></p>
+<div class="editarInfo" style="float:right;"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act","add").setWindowState(SWBResourceURL.WinState_MAXIMIZED)%>">Crear Comunidad</a></p></div>
 <%
         }
 %>
