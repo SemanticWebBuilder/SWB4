@@ -25,7 +25,7 @@
                 }
                 String url = obj.getWebPage().getUrl();
         %>
-        <li><%=name%> agregó el anunció <a href="<%=url%>"><%=obj.getTitle()%></a>
+        <li><%=name%> agregó el anuncio <a href="<%=url%>"><%=obj.getTitle()%></a>
             (<%=created%>)</li>
             <%
                 count++;
