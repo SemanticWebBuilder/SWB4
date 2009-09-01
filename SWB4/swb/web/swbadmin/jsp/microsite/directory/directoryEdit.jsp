@@ -19,8 +19,10 @@
 <%@page import="org.semanticwb.platform.SemanticClass"%>
 <%@page import="org.semanticwb.portal.SWBFormMgr"%>
 <%@page import="org.semanticwb.portal.SWBFormButton"%>
+<%@page import="org.semanticwb.portal.community.*"%>
 
  <%
+        Resource base=paramRequest.getResourceBase();
         SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
         SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
         String lang="";
@@ -34,6 +36,19 @@
         url.setParameter("objInstUri", semObject.getURI());
         url.setAction(url.Action_EDIT);
         mgr.setAction(url.toString());
+
+        DirectoryObject dirObj=(DirectoryObject)semObject.createGenericInstance();
+        String dirPhoto=dirObj.getPhoto();
+
+        if(dirPhoto!=null){
+            String basepath = SWBPlatform.getWebWorkPath() + base.getWorkPath() + "/" + semObject.getId() + "/" + dirPhoto;
+            request.setAttribute("attach_1", basepath);
+            request.setAttribute("attachTarget_1", "blank");
+            request.setAttribute("attachCount", "1");
+            mgr.addHiddenParameter("dirPhotoHidden", dirPhoto);
+        }
+
+        request.setAttribute("formName", mgr.getFormName());
         mgr.addButton(SWBFormButton.newSaveButton());
         mgr.addButton(SWBFormButton.newBackButton());
     %>
