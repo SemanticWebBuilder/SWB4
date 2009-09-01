@@ -2660,6 +2660,18 @@
     <rdfs:domain rdf:resource="#VersionInfo"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="geoStep">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_geoStep">
+        <swbxf:propHidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swbxf:propHidden>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >step</swb:propertyCodeName>
+    <rdfs:domain rdf:resource="#Geolocalizable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#doDispatcher">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayObject"/>
@@ -3121,6 +3133,12 @@
     <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Super User Permission</swb:description>
   </swb:Permission>
+  <swbxf:FileUpload rdf:ID="FileUploadImage">
+    <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
+    >5000000</swbxf:fileMaxSize>
+    <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >jpg|png|gif|bmp|jpeg</swbxf:fileFilter>
+  </swbxf:FileUpload>
   <swb:FormElement rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#HtmlElement">
     <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
