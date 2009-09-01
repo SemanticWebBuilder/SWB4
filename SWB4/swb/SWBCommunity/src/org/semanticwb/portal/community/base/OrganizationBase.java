@@ -1,7 +1,9 @@
 package org.semanticwb.portal.community.base;
 
+import org.semanticwb.portal.community.Location;
 
-public class OrganizationBase extends org.semanticwb.portal.community.DirectoryObject implements org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.portal.community.Location
+
+public class OrganizationBase extends org.semanticwb.portal.community.DirectoryObject implements org.semanticwb.model.Mapable,org.semanticwb.model.Descriptiveable,org.semanticwb.portal.community.Location,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticClass swbcomm_Organization=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Organization");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Organization");
@@ -47,5 +49,25 @@ public class OrganizationBase extends org.semanticwb.portal.community.DirectoryO
     public static boolean hasOrganization(String id, org.semanticwb.model.SWBModel model)
     {
         return (getOrganization(id, model)!=null);
+    }
+
+    public double getLatitude()
+    {
+        return getSemanticObject().getDoubleProperty(Location.swb_latitude);
+    }
+
+    public void setLatitude(double value)
+    {
+        getSemanticObject().setDoubleProperty(Location.swb_latitude, value);
+    }
+
+    public double getLongitude()
+    {
+        return getSemanticObject().getDoubleProperty(Location.swb_longitude);
+    }
+
+    public void setLongitude(double value)
+    {
+        getSemanticObject().setDoubleProperty(Location.swb_longitude, value);
     }
 }
