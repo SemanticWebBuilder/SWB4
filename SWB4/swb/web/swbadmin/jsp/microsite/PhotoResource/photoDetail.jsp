@@ -17,40 +17,40 @@
             photo.incViews();  //Incrementar apariciones
 %>
 <br/>
-<div id="panorama">
-    <%if(photo.canModify(member)){%>
-    <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act","edit").setParameter("uri",photo.getURI())%>">Editar información</a></p></div>
-    <%}%>
-    <%if(photo.canModify(member)){%>
-    <div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act","remove").setParameter("uri",photo.getURI())%>">Eliminar foto</a></p></div>
-    <%}%>
-    <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Regresar</a></p></div>
-</div>
-<div id="panorama">
+<div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Ver todos</a></p></div>
+
+<br/><br/>
+<div class="entry">
+    <a href="<%= SWBPlatform.getWebWorkPath()+photo.getImageURL()%>" target="_self">
+        <img id="img_<%=photo.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+photo.getImageURL() %>" alt="<%= photo.getTitle() %>" border="0" />
+    </a>
+    <div class="entryInfo">
+        <p class="tituloNaranja"><%= photo.getTitle() %> </p>
+        <p><%= photo.getDescription() %> </p>
+        <p class="eventoInicio">Autor: <%= photo.getCreator().getFirstName() %> </p>
+        <p class="eventoInicio">Fecha: <%= SWBUtils.TEXT.getStrDate(photo.getCreated(), lang, "dd/mm/yy") %> </p>
+        <p><%= photo.getRank() %> </p>
+        <p><%= photo.getViews() %> vistas </p>
+        <%if(photo.canModify(member)){%>
+        <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act","edit").setParameter("uri",photo.getURI())%>">Editar información</a></p></div>
+        <%}%>
+        <%if(photo.canModify(member)){%>
+        <div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act","remove").setParameter("uri",photo.getURI())%>">Eliminar</a></p></div>
+        <%}%>
+        <div class="clear">&nbsp;</div>
+    </div>
+
     <table border="0">
-    <tr>
-        <td valign="top">
-            <a href="<%= SWBPlatform.getWebWorkPath()+photo.getImageURL()%>" target="_self">
-            <img id="img_<%=photo.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+photo.getImageURL() %>" alt="<%= photo.getTitle() %>" border="0" />
-            </a>
-        </td>
-        
-    </tr>
-    <tr><td>&nbsp;</td></tr>
     <tr>
         <td valign="top" align="left">
             <small>
-                <p style="line-height:3px;"><%= photo.getTitle() %> </p>                                
-                <p style="line-height:3px;"><%= photo.getDescription() %> </p>
-                <p style="line-height:3px;">Autor: <%= photo.getCreator().getFirstName() %> </p>
-                <p style="line-height:3px;">Fecha: <%= SWBUtils.TEXT.getStrDate(photo.getCreated(), lang, "dd/mm/yy") %> </p>
-                <p style="line-height:3px;"><%= photo.getRank() %> </p>
-                <p style="line-height:3px;"><%= photo.getViews() %> vistas </p>
+
             </small>
         </td>
     </tr>
   </table>
 </div>
+
 <script type="text/javascript">
     var img = document.getElementById('img_<%=photo.getId()%>');
     if( img.width>img.height && img.width>450) {
