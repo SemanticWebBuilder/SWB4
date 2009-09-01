@@ -48,7 +48,7 @@ if (null!=microsite){
 
     String perfil = wpage.getWebSite().getWebPage("perfil").getRealUrl()
 
-    Iterator<Member> lista = Member.listMemberByMicroSite(microsite, (SWBModel)wpage.getWebSite())
+    Iterator<Member> lista = microsite.listMembers()
     if (paramRequest.getCallMethod()==paramRequest.Call_STRATEGY && (!paramRequest.getArgument("virtualcontent").equals("true"))){
         println """<div id="contactos" class="miembros">
 <h2>Miembros de la comunidad</h2><div>
