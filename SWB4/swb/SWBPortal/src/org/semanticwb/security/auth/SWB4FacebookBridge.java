@@ -36,7 +36,8 @@ import org.semanticwb.servlet.internal.InternalServlet;
  *
  * @author serch
  */
-public class SWB4FacebookBridge extends ExtUserRepInt {
+public class SWB4FacebookBridge extends ExtUserRepInt
+{
     static Logger log = SWBUtils.getLogger(SWB4FacebookBridge.class);
     private UserRepository userRep;
     private Properties props;
