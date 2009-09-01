@@ -130,7 +130,7 @@
                 if(wp.getSemanticObject().getGenericInstance() instanceof MicroSite)
                 {
                     ms = (MicroSite)wp;
-                    Iterator<Member> itmms = ms.listMemberss();
+                    Iterator<Member> itmms = ms.listMembers();
                     ncol=0;
                     while (itmms.hasNext()) {
                         Member mms = itmms.next();
