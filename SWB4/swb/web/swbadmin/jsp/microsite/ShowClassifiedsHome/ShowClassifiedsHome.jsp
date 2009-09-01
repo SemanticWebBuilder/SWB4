@@ -20,23 +20,23 @@
     %>
     <ul>
         <li>
-            <h3><%=child.getTitle()%></h3>
+            <h3><a href="<%=child.getUrl()%>"><%=child.getTitle()%></a></h3>
         </li>
 
         <%
                 Iterator<WebPage> subpages = child.listVisibleChilds("es");
-                int i=0;
+                int i = 0;
                 while (subpages.hasNext())
                 {
                     WebPage sbpage = subpages.next();
         %>
-        <li><a href="#"><%=sbpage.getTitle()%></a></li>
+        <li><a href="<%=sbpage.getUrl()%>"><%=sbpage.getTitle()%></a></li>
         <%
-                i++;
-                if(i>=5)
-                {
-                    break;
-                }
+                    i++;
+                    if (i >= 5)
+                    {
+                        break;
+                    }
 
                 }
         %>
@@ -44,7 +44,7 @@
     <%
 
                 irow++;
-                if (rows == rows)
+                if (rows == irow)
                 {
     %>
 </div>
