@@ -65,7 +65,7 @@
                     if (canview)
                     {
                 %>
-                <a href="<%=element.getURL()%>"> <%=canview%>
+                <a href="<%=element.getURL()%>">
                     <%=title%>
                 </a>    
                 <%
