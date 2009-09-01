@@ -70,7 +70,8 @@ public class LastMicrositeElements extends GenericAdmResource
         prefixStatement.append(" PREFIX rdf: <" + SemanticVocabulary.RDF_URI + "> " + NL);
         prefixStatement.append(" PREFIX rdfs: <" + SemanticVocabulary.RDFS_URI + "> " + NL);
         //prefixStatement.append("SELECT ?x ?date WHERE {?x swb:created ?date . ?x rdf:type swbcomm:MicroSiteElement} ORDER BY DESC(?date) LIMIT " + limit);
-        prefixStatement.append("SELECT DISTINCT ?x ?date WHERE { ?x a swbcomm:MicroSiteElement . ?x swb:created ?date . FILTER(!regex(str(?x),\"^" + NewsElement.sclass.getURI() + "\")) } ORDER BY DESC(?date) LIMIT " + limit);
+        //prefixStatement.append("SELECT DISTINCT ?x ?date WHERE { ?x a swbcomm:MicroSiteElement . ?x swb:created ?date . FILTER(!regex(str(?x),\"^" + NewsElement.sclass.getURI() + "\")) } ORDER BY DESC(?date) LIMIT " + limit);
+        prefixStatement.append("SELECT DISTINCT ?x ?date WHERE { ?x a swbcomm:MicroSiteElement . ?x swb:created ?date } ORDER BY DESC(?date) LIMIT " + limit);
         QueryExecution qe = paramRequest.getWebPage().getSemanticObject().getModel().sparQLOntologyQuery(prefixStatement.toString());
         ResultSet rs = qe.execSelect();
         while (rs.hasNext())
