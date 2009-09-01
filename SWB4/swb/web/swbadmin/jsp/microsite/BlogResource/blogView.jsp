@@ -22,7 +22,7 @@
         {
             String srcLine=SWBPlatform.getWebWorkPath()+"/models/"+ paramRequest.getWebPage().getWebSiteId()  +"/css/solidLine.jpg";
             Member member = Member.getMember(user, wpage);
-            String defaultFormat = "dd 'de' MMMM  'del' yyyy 'a las' HH:mm";
+            String defaultFormat = "d 'de' MMMM  'del' yyyy 'a las' HH:mm";
             SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat,new Locale("es"));
             String created = iso8601dateFormat.format(blog.getCreated());
             String updated = iso8601dateFormat.format(blog.getUpdated());
