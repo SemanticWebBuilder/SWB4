@@ -23,65 +23,58 @@
     SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
     User user=paramRequest.getUser();
     WebPage wpp=paramRequest.getWebPage();
-    //MicroSiteWebPageUtil wputil=MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpp);
 
-        WebPage wpch = null;
-        WebPage wpgs = null;
+    WebPage wpch = null;
+    WebPage wpgs = null;
 
-        int numcomm = 0;
-        int nums = 0;
-        String nummsg = "";
-        int wplevel=wpp.getLevel();
+    int numcomm = 0;
+    int nums = 0;
+    String nummsg = "";
+    int wplevel=wpp.getLevel();
 
-            if(wplevel==3)
-                {
+    Iterator<WebPage> itwp = wpp.listChilds(user.getLanguage(), Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE);
+
+    if(wplevel==3)
+    {
 %>
-            <h2 class="tituloInteres">Comunidades de <%=wpp.getDisplayTitle(user.getLanguage())%></h2>
+        <h2 class="tituloInteres">Comunidades de <%=wpp.getDisplayTitle(user.getLanguage())%></h2>
+        <div id="gruposInteres">
+            <ul>
 <%
-                }
-%>
-
-<table width="100%">
-<%
-
-        Iterator<WebPage> itwp = wpp.listChilds(user.getLanguage(), Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE);
+        //Iterator<WebPage> itwp = wpp.listChilds(user.getLanguage(), Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE);
         while(itwp.hasNext())
         {
             wpch = itwp.next();
             if(wpch.isActive()&&!wpch.isDeleted())
             {
-                if(nums==0) {
 %>
-    <tr>
+                <li><a href="<%=wpch.getUrl()%>"><%=wpch.getDisplayTitle(user.getLanguage())%>&nbsp;</a></li>
 <%
-                }
+            }
+        }
+%>
+            </ul>
+        <div id="clear">&nbsp;</div>
+      </div>
+      <div id="bottomInteres">&nbsp;</div>
+<%
+    }
+    else if(wplevel<3)
+    {
+
+        //Iterator<WebPage> itwp = wpp.listChilds(user.getLanguage(), Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE);
+        while(itwp.hasNext())
+        {
+            wpch = itwp.next();
+            if(wpch.isActive()&&!wpch.isDeleted())
+            {
                 String cssClass1 = "class=\"groupInteres\"";
                 nums++;
 
 %>
-        <td style="vertical-align:top;">
+            <div class="groupInteres">
+            <h3 class="titulo"><a href="<%=wpch.getUrl()%>"><%=wpch.getDisplayTitle(user.getLanguage())%></a></h3>
 <%
-            if(wplevel==3)
-                {
-                    cssClass1 = "id=\"gruposInteres\"";
-                }
-%>
-            <div <%=cssClass1%>>
-<%
-
-            if(wplevel==3)
-                {
-%>
-                <ul>
-<%
-                }
-            if(wplevel<3)
-                {
-%>
-            <h3 class="titulo"><%=wpch.getDisplayTitle(user.getLanguage())%></h3>
-<%
-
-                
                 Iterator<WebPage> itwpch = wpch.listChilds(user.getLanguage(), Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE);
                 if(itwpch.hasNext())
                 {
@@ -101,72 +94,16 @@
 <%
                         }
                         numcomm=0;
-
                     }
-
 %>
             </ul>
 <%
                    }
-                    //out.println("<p class=\"vermas\"><a href=\""+wpch.getUrl()+"\">Ver todos</a></p>");
-                
-                }
-                else
-                {
-%>
-                <li><a href="<%=wpch.getUrl()%>"><%=wpch.getDisplayTitle(user.getLanguage())%>&nbsp;</a></li>
-<%
-
-                }
-
-            if(wplevel==3)
-                {
-%>
-                </ul>
-                <div id="clear">&nbsp;</div>
-<%
-                }
 %>
             </div>
 <%
-            if(wplevel==3)
-                {
-%>
-            <div id="bottomInteres">&nbsp;</div>
-<%
-                }
-%>
-                   </td> 
-<%
-                if(nums==3)
-                {
-%>
-   </tr>
-<%
-                    nums=0;
-                }
             }
-
         }
+     }
+%>
 
-                 if(nums<3)
-                {
-                    if(nums==2)
-                    {
-%>
-                        <td></td>
-<%
-                    }
-                    else if(nums==1)
-                    {
-%>
-                        <td></td><td></td>
-<%
-                    }
-%>
-   </tr>
-<%
-                }
-
-%>
-</table>
