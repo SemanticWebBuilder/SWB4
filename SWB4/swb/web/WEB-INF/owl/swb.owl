@@ -408,6 +408,10 @@
     <rdfs:subClassOf rdf:resource="#SWBClass"/>
     <rdf:type rdf:resource="#Class"/>
   </owl:Class>
+  <owl:Class rdf:ID="Geolocalizable">
+    <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+    <rdf:type rdf:resource="#Interface"/>
+  </owl:Class>
   <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DateElement">
     <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
     <rdf:type rdf:resource="#FormElement"/>
@@ -1865,6 +1869,8 @@
     </swb:displayProperty>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="latitude">
+    <rdfs:domain rdf:resource="#Geolocalizable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#double"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_latitude">
         <swbxf:formElement>
@@ -1881,13 +1887,6 @@
         >100</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#double"/>
-    <rdfs:domain>
-      <swb:Interface rdf:ID="Mapable">
-        <rdfs:subClassOf rdf:resource="#SWBInterface"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Interface>
-    </rdfs:domain>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="resourceCache">
     <swb:displayProperty>
@@ -2743,6 +2742,8 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="longitude">
+    <rdfs:domain rdf:resource="#Geolocalizable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#double"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_longitude">
         <swbxf:propHidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -2751,8 +2752,6 @@
         >110</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#double"/>
-    <rdfs:domain rdf:resource="#Mapable"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="versionFile">
     <rdfs:domain rdf:resource="#VersionInfo"/>

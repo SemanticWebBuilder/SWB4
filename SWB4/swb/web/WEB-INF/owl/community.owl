@@ -811,6 +811,11 @@
     <rdfs:subClassOf rdf:resource="#MicroSiteClass"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swbcomm:MicroSiteClass>
+  <swb:Interface rdf:ID="Addressable">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Geolocalizable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Interface>
   <swbcomm:MicroSiteClass rdf:ID="OrganizationComm">
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
     <rdfs:subClassOf rdf:resource="#Community"/>
@@ -827,11 +832,6 @@
     <rdfs:subClassOf rdf:resource="#CommunityResource"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:SemanticResource>
-  <swb:Interface rdf:ID="Location">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Mapable"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:Interface>
   <swbxf:HerarquicalNode rdf:ID="hn_MicroSiteTypes">
     <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >swbIconTemplates</swb:iconClass>
@@ -847,7 +847,7 @@
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swbcomm:MicroSiteClass>
   <swb:Class rdf:ID="Organization">
-    <rdfs:subClassOf rdf:resource="#Location"/>
+    <rdfs:subClassOf rdf:resource="#Addressable"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
     <rdfs:subClassOf rdf:resource="#DirectoryObject"/>
@@ -855,7 +855,7 @@
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
   <swb:Class rdf:ID="Person">
-    <rdfs:subClassOf rdf:resource="#Location"/>
+    <rdfs:subClassOf rdf:resource="#Addressable"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
     <rdfs:subClassOf rdf:resource="#DirectoryObject"/>
