@@ -104,7 +104,7 @@ Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().ge
                 if (null==usr_status) usr_status = ""
                 println """
 <img src="$img" width="150" height="150" alt="Foto de $nombre" />
-<div class="entryInfo"><p class="tituloNaranja"><a class="contactos_nombre" href="${perfil}?user=$uri" alt="Ir al perfil de $nombre" >$nombre</a></p>
+<div class="entryInfo"><p class="tituloNaranja"><a href="${perfil}?user=$uri" alt="Ir al perfil de $nombre" >$nombre</a></p>
 <p>Edad: $usr_age</p>
 <p>Sexo: $usr_sex</p>
 <p>Tipo: $usr_status</p>
