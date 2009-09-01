@@ -177,9 +177,10 @@ public class SWBFormMgr
         PropertyGroup grp=null;
         boolean hidden=false;
         boolean required=prop.isRequired();
+        DisplayProperty disp=null;
         if(obj!=null)
         {
-            DisplayProperty disp=new DisplayProperty(obj);       
+            disp=new DisplayProperty(obj);
             grp=disp.getGroup();
             hidden=disp.isHidden();
         }
@@ -216,6 +217,13 @@ public class SWBFormMgr
                 if(required)
                 {
                     addProp=true;
+                }
+            }else if(!filterRequired && m_mode.equals(MODE_CREATE))      //solo se agregan las requeridas
+            {
+                addProp=true;
+                if(prop.isDateTime() || (prop.isObjectProperty() && disp==null))
+                {
+                    addProp=false;
                 }
             }else
             {
