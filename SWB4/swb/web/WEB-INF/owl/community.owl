@@ -890,14 +890,16 @@
     >true</swb:autogenId>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </swbcomm:DirectoryClass>
-  <swbcomm:DirectoryClass rdf:ID="Hotel">
+  <swb:Class rdf:ID="Hotel">
+    <rdf:type rdf:resource="#DirectoryClass"/>
     <rdfs:subClassOf rdf:resource="#Organization"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swbcomm:DirectoryClass>
-  <swbcomm:DirectoryClass rdf:ID="ClasifiedRealState">
+  </swb:Class>
+  <swb:Class rdf:ID="ClasifiedRealState">
+    <rdf:type rdf:resource="#DirectoryClass"/>
     <rdfs:subClassOf rdf:resource="#Clasified"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swbcomm:DirectoryClass>
+  </swb:Class>
   <swbxf:HerarquicalNode rdf:ID="hn_MicroSiteTypes">
     <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >90</swb:index>
@@ -907,34 +909,40 @@
     <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >swbIconTemplates</swb:iconClass>
   </swbxf:HerarquicalNode>
-  <swbcomm:DirectoryClass rdf:ID="ClasifiedJob">
+  <swb:Class rdf:ID="ClasifiedJob">
+    <rdf:type rdf:resource="#DirectoryClass"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
     <rdfs:subClassOf rdf:resource="#Clasified"/>
-  </swbcomm:DirectoryClass>
+  </swb:Class>
   <swbxf:DisplayObject rdf:ID="do_MicrositeContainer">
     <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >swbIconWebSite</swb:iconClass>
   </swbxf:DisplayObject>
-  <swbcomm:DirectoryClass rdf:ID="ClasifiedService">
+  <swb:Class rdf:ID="ClasifiedService">
+    <rdf:type rdf:resource="#DirectoryClass"/>
     <rdfs:subClassOf rdf:resource="#Clasified"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swbcomm:DirectoryClass>
-  <swbcomm:DirectoryClass rdf:ID="ClasifiedCourse">
+  </swb:Class>
+  <swb:Class rdf:ID="ClasifiedCourse">
+    <rdf:type rdf:resource="#DirectoryClass"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
     <rdfs:subClassOf rdf:resource="#Clasified"/>
-  </swbcomm:DirectoryClass>
-  <swbcomm:DirectoryClass rdf:ID="AirPort">
+  </swb:Class>
+  <swb:Class rdf:ID="AirPort">
+    <rdf:type rdf:resource="#DirectoryClass"/>
     <rdfs:subClassOf rdf:resource="#Organization"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swbcomm:DirectoryClass>
-  <swbcomm:DirectoryClass rdf:ID="ClasifiedBuySell">
+  </swb:Class>
+  <swb:Class rdf:ID="ClasifiedBuySell">
+    <rdf:type rdf:resource="#DirectoryClass"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
     <rdfs:subClassOf rdf:resource="#Clasified"/>
-  </swbcomm:DirectoryClass>
-  <swbcomm:DirectoryClass rdf:ID="Restaurant">
+  </swb:Class>
+  <swb:Class rdf:ID="Restaurant">
+    <rdf:type rdf:resource="#DirectoryClass"/>
     <rdfs:subClassOf rdf:resource="#Organization"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swbcomm:DirectoryClass>
+  </swb:Class>
   <swbxf:HerarquicalNode rdf:ID="hn_CommUtils">
     <swbxf:heClass rdf:resource="#MicroSiteUtil"/>
     <swb:title xml:lang="en">Microsite Utils</swb:title>
@@ -972,10 +980,11 @@
     <swb:hasHerarquicalNode rdf:resource="#hn_MicroSiteTypes"/>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_UserGroups"/>
   </swb:Model>
-  <swbcomm:DirectoryClass rdf:ID="ClasifiedVehicle">
+  <swb:Class rdf:ID="ClasifiedVehicle">
+    <rdf:type rdf:resource="#DirectoryClass"/>
     <rdfs:subClassOf rdf:resource="#Clasified"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swbcomm:DirectoryClass>
+  </swb:Class>
   <swb:CodePackage rdf:ID="pkg">
     <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.portal.community</swb:package>
