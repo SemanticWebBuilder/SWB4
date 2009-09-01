@@ -19,7 +19,8 @@ public class GMap extends org.semanticwb.model.base.GMapBase
     {
         SemanticProperty prop2 = Geolocalizable.swb_longitude;
         SemanticProperty prop3 = Geolocalizable.swb_geoStep;
-        if(obj==null)obj=new SemanticObject();
+        String nombre = "";
+        if(obj==null)obj=new SemanticObject(); else nombre = obj.getDisplayName(lang);
         boolean IPHONE=false;
         boolean XHTML=false;
         boolean DOJO=false;
@@ -27,7 +28,7 @@ public class GMap extends org.semanticwb.model.base.GMapBase
         if(type.equals("iphone"))IPHONE=true;
         else if(type.equals("xhtml"))XHTML=true;
         else if(type.equals("dojo"))DOJO=true;
-        String nombre = ((obj==null || obj.getDisplayName(lang))==null?"":obj.getDisplayName(lang));
+
         StringBuffer ret=new StringBuffer();
         String name = prop.getName();
         String label = prop.getDisplayName(lang);
