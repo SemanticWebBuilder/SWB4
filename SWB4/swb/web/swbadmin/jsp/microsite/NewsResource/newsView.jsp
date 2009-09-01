@@ -10,6 +10,8 @@
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
 %>
 
+
+
 <%  if (member.canAdd()) {
 %>
 <div id="panorama">
@@ -29,9 +31,10 @@
 </div>
 <%  } %>
 
-<div id="panorama">
-<h1>Noticias</h1>
-<table>
+
+
+<br /><br />
+<div id="entriesWrapper">
 <%
     Iterator<NewsElement> eit = NewsElement.listNewsElementByNewsWebPage(wpage, wpage.getWebSite());
     while (eit.hasNext()) {
@@ -39,27 +42,26 @@
         if(anew.canView(member)) {
             SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", anew.getURI());
 %>
-        <tr>
-            <td valign="top">
-                <a href="<%= viewUrl%>">
-                    <img src="<%= SWBPlatform.getWebWorkPath()+anew.getNewsThumbnail() %>" alt="<%= anew.getTitle()%>" border="0" />
-                </a>
-            </td>
-            <td valign="top">
-                <p><%= anew.getTitle()%>&nbsp;(<%= anew.getCitation()%>)</p>
-                <p>Por:&nbsp;<%= anew.getAuthor()%> - <%=SWBUtils.TEXT.getTimeAgo(anew.getCreated(), user.getLanguage())%></p>
-                <p>
-                    <strong><%= dateFormat.format(anew.getCreated()) %></strong>&nbsp;
-                    <%= anew.getDescription()%>&nbsp;|&nbsp;
-                    <a href="<%=viewUrl%>">Ver m&aacute;s</a>
-                </p>                
-                <p>Puntuación:&nbsp;<%= anew.getRank()%></p>
-                <p><%= anew.getViews()%> vistas.</p>
-            </td>
-        </tr>
+
+<div class="entry">
+    <a href="<%= viewUrl%>">
+        <img src="<%= SWBPlatform.getWebWorkPath()+anew.getNewsThumbnail() %>" alt="<%= anew.getTitle()%>" border="0" />
+    </a>
+    <div class="entryInfo">
+        <p class="tituloNaranja"><%= anew.getTitle()%>&nbsp;(<%= anew.getCitation()%>)</p>
+        <p>Por:&nbsp;<strong><%= anew.getAuthor()%></strong></p>
+        <p class="eventoInicio">
+            <strong><%= dateFormat.format(anew.getCreated()) %></strong> - <%=SWBUtils.TEXT.getTimeAgo(anew.getCreated(), user.getLanguage())%></a>
+        </p>
+        <p><%= anew.getDescription()%>&nbsp;|&nbsp;<a href="<%=viewUrl%>">Ver m&aacute;s</p>
+        <p>Puntuación:&nbsp;<%= anew.getRank()%></p>
+        <p><%= anew.getViews()%> vistas.</p>
+        <div class="clear">&nbsp;</div>
+    </div>
+</div>
 <%
         }
     }
 %>
-</table>
+
 </div>
