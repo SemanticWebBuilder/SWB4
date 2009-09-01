@@ -128,7 +128,7 @@ SWBResourceURL url=paramRequest.getRenderUrl();
 SWBResourceURL urlExcel=paramRequest.getRenderUrl();
 url.setParameter("uri", sobj.getURI());
 %>
-   <div id="centerProfile">
+   <div id="entriesList">
         <%url.setParameter("act","add");%>
         <form action="<%=url.toString()%>">
             <%=paramRequest.getLocaleString("find")%>:<input type="text" name="txtFind"/><button type="submit"><%=paramRequest.getLocaleString("go")%></button>
@@ -150,7 +150,7 @@ url.setParameter("uri", sobj.getURI());
             }
             String strResTypes[] = getCatSortArray(itObjs, sobj, actualPage, request.getParameter("txtFind"), paramRequest, scope);
             String[] pageParams = strResTypes[strResTypes.length - 1].toString().split(":swbp4g1:");
-            
+
             int iIniPage = Integer.parseInt(pageParams[0]);
             int iFinPage = Integer.parseInt(pageParams[1]);
             int iTotPage = Integer.parseInt(pageParams[2]);
@@ -196,8 +196,7 @@ url.setParameter("uri", sobj.getURI());
                 urlEdit.setParameter("uri", ObjUri);
                 urlRemove.setParameter("uri", ObjUri);
                 %>
-                <div id="catalogo">
-                 <div class="entryCatalogo">
+                <div class="listEntry" onmouseover="this.className='listEntryHover'" onmouseout="this.className='listEntry'">
                 <%
                 HashMap map=new HashMap();
                 map.put("separator", "-");
@@ -212,9 +211,10 @@ url.setParameter("uri", sobj.getURI());
                    if(propValue!=null && !propValue.equals("null")){
                         if(semProp.getName().equals("dirPhoto"))
                         {%>
-                            <p><img src="<%=SWBPlatform.getWebWorkPath()%><%=base.getWorkPath()%>/<%=semObject.getId()%>/<%=propValue%>"width="90" height="90" ></p>
+                            <img src="<%=SWBPlatform.getWebWorkPath()%><%=base.getWorkPath()%>/<%=semObject.getId()%>/<%=propValue%>"width="90" height="90" >
                         <%}if(semProp.getName().equals("title")) {
                         %>
+                          <div class="listEntryInfo">
                           <p class="tituloNaranja"><%=propValue%></p>
                           <p><%=wpage.getPath(map)%></p>
                         <%
@@ -224,7 +224,7 @@ url.setParameter("uri", sobj.getURI());
                         <%}else if(semProp.getName().equals("tags")){
                         %>
                             <p>Palabras clave:<%=propValue%></p>
-                        <%}%>                       
+                        <%}%>
                     <%}
                 }
                 %>
@@ -232,8 +232,8 @@ url.setParameter("uri", sobj.getURI());
                   <div class="editarInfo"><p><a href="<%=urlEdit%>"><%=paramRequest.getLocaleString("editInfo")%></a></p></div>
                   <div class="editarInfo"><p><a href="<%=urlRemove.setAction(urlRemove.Action_REMOVE)%>"><%=paramRequest.getLocaleString("remove")%></a></p></div>
                   <div class="clear">&nbsp;</div>
+                  </div>
                  </div>
-                </div>
                 <%
                 }
                 %>
