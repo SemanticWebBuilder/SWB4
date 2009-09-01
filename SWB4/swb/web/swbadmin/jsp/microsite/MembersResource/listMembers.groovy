@@ -84,9 +84,8 @@ Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().ge
                     def sp = it
                     mapa.put(sp.getName(),sp)
                 }
-        println """<div id="cuerpo">
-<h1>Miembros de la comunidad</h1>
-<div>"""
+        println """<div id="entriesWrapper">
+<div class="entry">"""
         lista.each(){
             Member mem_curr = it
             User mem_usr = mem_curr.getUser()
@@ -104,14 +103,15 @@ Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().ge
                 def usr_status = mem_usr.getExtendedAttribute(mapa.get("userStatus"))
                 if (null==usr_status) usr_status = ""
                 println """
-<div><table cellspacing="4" border="0"><tr><td><img src="$img" width="150" height="150" alt="Foto de $nombre" /></td><td><a class="contactos_nombre" href="${perfil}?user=$uri" alt="Ir al perfil de $nombre" >$nombre</a><br />
-Edad: $usr_age<br />
-Sexo: $usr_sex<br />
-Tipo: $usr_status
-</td></tr></table></div>"""
+<img src="$img" width="150" height="150" alt="Foto de $nombre" />
+<div class="entryInfo"><p class="tituloNaranja"><a class="contactos_nombre" href="${perfil}?user=$uri" alt="Ir al perfil de $nombre" >$nombre</a></p>
+<p>Edad: $usr_age</p>
+<p>Sexo: $usr_sex</p>
+<p>Tipo: $usr_status</p>
+</div></div>"""
             }
         }
-        println """</div></div>"""
+        println """</div>"""
     }
 
 }
