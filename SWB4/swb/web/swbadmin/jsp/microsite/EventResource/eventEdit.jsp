@@ -67,19 +67,19 @@ Error: Elemento no encontrado...
                     <a href="<%= SWBPlatform.getWebWorkPath()+rec.getEventImage()%>" target="_self">
                         <img id="img_<%=rec.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+rec.getEventImage() %>" alt="<%= rec.getTitle() %>" border="0" />
                     </a><br />
-                    <input type="file" id="foto" name="foto" />
+                    <input type="file" id="foto" name="foto" size="60" />
                 </p>
                 <p>
                     <label for="event_title">Título del evento:&nbsp;</label><br />
-                    <input type="text" id="event_title" name="event_title" value="<%=(rec.getTitle()==null?"":rec.getTitle())%>"/>
+                    <input type="text" id="event_title" name="event_title" value="<%=(rec.getTitle()==null?"":rec.getTitle())%>" maxlength="50" size="60" />
                 </p>
                 <p>
                     <label for="event_description">Descripción del evento:&nbsp;</label><br />
-                    <textarea id="event_description" name="event_description" cols="30" rows="5"><%=(rec.getDescription()==null?"":rec.getDescription())%></textarea>
+                    <textarea id="event_description" name="event_description" cols="60" rows="5"><%=(rec.getDescription()==null?"":rec.getDescription())%></textarea>
                 </p>
                 <p>
                     <label for="event_audience">Dirigido a:&nbsp;</label><br />
-                    <input type="text" id="event_audience" name="event_audience" value="<%=(rec.getAudienceType()==null?"":rec.getAudienceType())%>"/>
+                    <input type="text" id="event_audience" name="event_audience" value="<%=(rec.getAudienceType()==null?"":rec.getAudienceType())%>" maxlength="50" size="60" />
                 </p>
                 <p>
                     <label for="event_startDate">Fecha de inicio:&nbsp;</label><br />
@@ -99,11 +99,11 @@ Error: Elemento no encontrado...
                 </p>
                 <p>
                     <label for="event_place">Lugar del evento:&nbsp;</label><br />
-                    <input type="text" id="event_place" name="event_place" value="<%=(rec.getPlace()==null?"":rec.getPlace())%>"/>
+                    <input type="text" id="event_place" name="event_place" value="<%=(rec.getPlace()==null?"":rec.getPlace())%>" maxlength="120" size="60" />
                 </p>
                 <p>
                     <label for="event_tags">Etiquetas:&nbsp;</label><br />
-                    <input type="text" id="event_tags" name="event_tags" value="<%=(rec.getTags()==null?"":rec.getTags())%>"/>
+                    <input type="text" id="event_tags" name="event_tags" value="<%=(rec.getTags()==null?"":rec.getTags())%>" maxlength="50" size="60" />
                 </p>
             </div>
         </fieldset>

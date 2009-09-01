@@ -64,31 +64,31 @@
             <div>
                 <p>
                     <label for="new_image">Imagen de la noticia:&nbsp;</label><br />
-                    <input type="file" id="foto" name="foto" />
+                    <input type="file" id="foto" name="foto" size="60" />
                 </p>
                 <p>
                     <label for="new_title">Título de la noticia:&nbsp;</label><br />
-                    <input type="text" id="new_title" name="new_title"/>
+                    <input type="text" id="new_title" name="new_title" maxlength="70" size="60" />
                 </p>
                 <p>
                     <label for="new_author">Autor de la noticia:&nbsp;</label><br />
-                    <input type="text" id="new_author" name="new_author"/>
+                    <input type="text" id="new_author" name="new_author" maxlength="50" size="60" />
                 </p>
                 <p>
                     <label for="new_abstract">Resumen de la noticia:&nbsp;</label><br />
-                    <textarea id="new_abstract" name="new_abstract" cols="30" rows="5"></textarea>
+                    <textarea id="new_abstract" name="new_abstract" cols="60" rows="2"></textarea>
                 </p>
                 <p>
                     <label for="new_fulltext">Texto completo:&nbsp;</label><br />
-                    <textarea id="new_fulltext" name="new_fulltext" cols="30" rows="5"></textarea>
+                    <textarea id="new_fulltext" name="new_fulltext" cols="60" rows="6"></textarea>
                 </p>
                 <p>
                     <label for="new_citation">Fuente:&nbsp;</label><br />
-                    <input type="text" id="new_citation" name="new_citation"/>
+                    <input type="text" id="new_citation" name="new_citation" maxlength="50" size="60" />
                 </p>
                 <p>
                     <label for="new_tags">Etiquetas:&nbsp;</label><br />
-                    <input type="text" id="new_tags" name="new_tags"/>
+                    <input type="text" id="new_tags" name="new_tags" maxlength="50" size="60" />
                 </p>
             </div>
         </fieldset>

@@ -50,19 +50,19 @@
             <div>
                 <p>
                     <label for="foto">Imagen del evento:&nbsp;</label><br />
-                    <input type="file" id="foto" name="foto" />
+                    <input type="file" id="foto" name="foto" size="60" />
                 </p>
                 <p>
                     <label for="event_title">Título del evento:&nbsp;</label><br />
-                    <input type="text" id="event_title" name="event_title"/>
+                    <input type="text" id="event_title" name="event_title" maxlength="50" size="60" />
                 </p>
                 <p>
                     <label for="event_description">Descripción del evento:&nbsp;</label><br />
-                    <textarea id="event_description" name="event_description" cols="30" rows="5"></textarea>
+                    <textarea id="event_description" name="event_description" cols="60" rows="2"></textarea>
                 </p>
                 <p>
                     <label for="event_audience">Dirigido a:&nbsp;</label><br />
-                    <input type="text" id="event_audience" name="event_audience" value="Todos"/>
+                    <input type="text" id="event_audience" name="event_audience" value="Todos" maxlength="50" size="60" />
                 </p>
                 <p>
                     <label for="event_startDate">Fecha de inicio:&nbsp;</label><br />
@@ -82,11 +82,11 @@
                 </p>
                 <p>
                     <label for="event_place">Lugar del evento:&nbsp;</label><br />
-                    <input type="text" id="event_place" name="event_place"/>
+                    <input type="text" id="event_place" name="event_place" maxlength="120" size="60" />
                 </p>
                 <p>
                     <label for="event_tags">Etiquetas:&nbsp;</label><br />
-                    <input type="text" id="event_tags" name="event_tags"/>
+                    <input type="text" id="event_tags" name="event_tags" maxlength="50" size="60" />
                 </p>
             </div>
         </fieldset>

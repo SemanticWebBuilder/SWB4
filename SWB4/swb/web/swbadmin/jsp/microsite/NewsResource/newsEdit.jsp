@@ -81,31 +81,31 @@ Error: Elemento no encontrado...
                 <a href="<%= SWBPlatform.getWebWorkPath()+rec.getNewsImage()%>" target="_self">
                     <img id="img_<%=rec.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+rec.getNewsImage() %>" alt="<%= rec.getTitle() %>" border="0" />
                 </a><br />
-                <input type="file" id="foto" name="foto" />
+                <input type="file" id="foto" name="foto" size="60" />
             </p>
             <p>
                 <label for="new_title">Título de la noticia:&nbsp;</label><br />
-                <input type="text" id="new_title" name="new_title" value="<%=(rec.getTitle()==null?"":rec.getTitle())%>"/>
+                <input type="text" id="new_title" name="new_title" value="<%=(rec.getTitle()==null?"":rec.getTitle())%>" maxlength="70" size="60" />
             </p>
             <p>
                 <label for="new_author">Autor de la noticia:&nbsp;</label><br />
-                <input type="text" id="new_author" name="new_author" value="<%=(rec.getAuthor()==null?"":rec.getAuthor())%>"/>
+                <input type="text" id="new_author" name="new_author" value="<%=(rec.getAuthor()==null?"":rec.getAuthor())%>" maxlength="50" size="60" />
             </p>
             <p>
                 <label for="new_abstract">Resumen de la noticia:&nbsp;</label><br />
-                <textarea id="new_abstract" name="new_abstract" cols="30" rows="5"><%=(rec.getDescription()==null?"":rec.getDescription())%></textarea>
+                <textarea id="new_abstract" name="new_abstract" cols="60" rows="2"><%=(rec.getDescription()==null?"":rec.getDescription())%></textarea>
             </p>
             <p>
                 <label for="new_fulltext">Texto completo:&nbsp;</label><br />
-                <textarea id="new_fulltext" name="new_fulltext" cols="30" rows="5"><%=(rec.getFullText()==null?"":rec.getFullText())%></textarea>
+                <textarea id="new_fulltext" name="new_fulltext" cols="60" rows="6"><%=(rec.getFullText()==null?"":rec.getFullText())%></textarea>
             </p>
             <p>
                 <label for="new_citation">Fuente:&nbsp;</label><br />
-                <input type="text" id="new_citation" name="new_citation" value="<%=(rec.getCitation()==null?"":rec.getCitation())%>"/>
+                <input type="text" id="new_citation" name="new_citation" value="<%=(rec.getCitation()==null?"":rec.getCitation())%>" maxlength="50" size="60" />
             </p>
             <p>
                 <label for="new_tags">Etiquetas:&nbsp;</label><br />
-                <input type="text" id="new_tags" name="new_tags" value="<%=(rec.getTags()==null?"":rec.getTags())%>"/>
+                <input type="text" id="new_tags" name="new_tags" value="<%=(rec.getTags()==null?"":rec.getTags())%>" maxlength="50" size="60" />
             </p>
         </div>
         </fieldset>
