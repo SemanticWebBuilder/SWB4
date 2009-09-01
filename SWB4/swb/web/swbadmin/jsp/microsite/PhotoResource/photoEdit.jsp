@@ -54,19 +54,19 @@ function validaForma()
             <div>
                 <p>
                     <label for="foto">Archivo:&nbsp;</label><br />
-                    <input id="foto" type="file" size="22" name="foto" />
+                    <input id="foto" type="file" size="22" name="foto" size="60" />
                 </p>
                 <p>
                     <label for="title">Título:&nbsp;</label><br />
-                    <input id="title" type="text" size="25" name="title" maxlength="200" value="<%= rec.getTitle()%>" />
+                    <input id="title" type="text" size="25" name="title" maxlength="50" value="<%= rec.getTitle()%>" size="60" />
                 </p>
                 <p>
                     <label for="description">Descripción</label><br />
-                    <textarea id="description" cols="30" rows="5" name="description"><%= rec.getDescription()%></textarea>
+                    <textarea id="description" cols="60" rows="5" name="description"><%= rec.getDescription()%></textarea>
                  </p>
                  <p>
                     <label for="tags">Etiquetas:&nbsp;</label><br />
-                    <input id="tags" type="text" size="22" name="tags" maxlength="2000" value="<%= rec.getTags()%>" />
+                    <input id="tags" type="text" size="22" name="tags" maxlength="50" value="<%= rec.getTags()%>" size="60" />
                 </p>
             </div>
         </fieldset>

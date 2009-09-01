@@ -11,14 +11,15 @@
     String uri = request.getParameter("uri");
     NewsElement anew = (NewsElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
 %>
-<div id="panorama">
-    <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Regresar</a></p></div>
+<br />
+<div id="panorama">    
     <%if (anew.canModify(member)) {%>
     <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", anew.getURI())%>">Editar Información</a></p></div>
     <%}%>
     <%if (anew.canModify(member)) {%>
     <div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", anew.getURI())%>">Eliminar Noticia</a></p></div>
     <%}%>
+    <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Regresar</a></p></div>
 </div>
 <div class="entryNews">
 <%  if(anew!=null && anew.canView(member)) {

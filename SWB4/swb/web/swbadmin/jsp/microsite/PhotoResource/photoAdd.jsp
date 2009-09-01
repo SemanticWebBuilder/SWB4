@@ -39,23 +39,23 @@ function validaForma()
 <form name="frmaddfoto" id="frmaddfoto" enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
     <div>
         <fieldset>
-            <legend>Agrega foto</legend>
+            <legend>Agregar foto</legend>
             <div>
                 <p>
                     <label for="foto">Archivo:&nbsp;</label><br />
-                    <input id="foto" type="file" size="22" name="foto" />
+                    <input id="foto" type="file" name="foto" size="60" />
                 </p>
                 <p>
                     <label for="title">Título:&nbsp;</label><br />
-                    <input id="title" type="text" size="25" name="title" maxlength="200" />
+                    <input id="title" type="text" name="title" maxlength="50" size="60" />
                 </p>
                 <p>
                     <label for="description">Descripción</label><br />
-                    <textarea id="description" cols="30" rows="5" name="description"></textarea>
+                    <textarea id="description" cols="60" rows="3" name="description"></textarea>
                  </p>
                  <p>
                     <label for="tags">Etiquetas:&nbsp;</label><br />
-                    <input id="tags" type="text" size="22" name="tags" maxlength="2000" />
+                    <input id="tags" type="text" name="tags" maxlength="50" size="60" />
                 </p>
             </div>
         </fieldset>
