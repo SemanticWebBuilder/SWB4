@@ -3087,10 +3087,6 @@
     <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:FormElement>
-  <swb:FormElement rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#Location">
-    <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:FormElement>
   <owl:AnnotationProperty rdf:ID="propertyCodeName">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
