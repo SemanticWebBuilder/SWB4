@@ -162,7 +162,7 @@ public class ImageGallery extends GenericResource {
     }
 
     public String getGalleryScript(String[] imgpath) {
-        return getGalleryScript(Integer.toString((int)Math.random()*100), 220, 170, false, 2500, 500, 420, 370, "Image gallery", "", imgpath);
+        return getGalleryScript(Integer.toString((int)Math.random()*100), 220, 170, false, 2500, 500, 420, 370, "", "", imgpath);
     }
 
     @Override
