@@ -15,8 +15,9 @@
     while(pages.hasNext())
     {
         WebPage child=pages.next();
-        String path="/models/"+ webpage.getWebSiteId() +"/css/iconos/lugares/"+child.getId()+".png";        
-        try
+        String path="/models/"+ webpage.getWebSiteId() +"/css/iconos/lugares/"+child.getId()+".png";     
+        path="/work"+path;                
+        /*try
         {
             InputStream in=SWBPlatform.getFileFromWorkPath(path);
             if(in==null)
@@ -32,9 +33,9 @@
         catch(Exception e)
         {
             path="/work/models/"+ webpage.getWebSiteId() +"/css/iconos/default.png";;            
-        }
+        }*/
         %>
-            <li><img src="<%=path%>" alt="<%=child.getTitle()%>"><a href="<%=child.getUrl()%>"><%=child.getTitle()%></a></li>
+            <li><img width="60" height="60" src="<%=path%>" alt="<%=child.getTitle()%>"><a href="<%=child.getUrl()%>"><%=child.getTitle()%></a></li>
         <%
         count++;
         if(count==8)
