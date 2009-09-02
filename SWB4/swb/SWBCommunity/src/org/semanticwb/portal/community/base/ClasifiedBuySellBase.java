@@ -1,8 +1,9 @@
 package org.semanticwb.portal.community.base;
 
 
-public class ClasifiedBuySellBase extends org.semanticwb.portal.community.Clasified implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public class ClasifiedBuySellBase extends org.semanticwb.portal.community.Clasified implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.portal.community.Contactable
 {
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_Price=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#Price");
     public static final org.semanticwb.platform.SemanticClass swbcomm_ClasifiedBuySell=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#ClasifiedBuySell");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#ClasifiedBuySell");
 
@@ -47,5 +48,15 @@ public class ClasifiedBuySellBase extends org.semanticwb.portal.community.Clasif
     public static boolean hasClasifiedBuySell(String id, org.semanticwb.model.SWBModel model)
     {
         return (getClasifiedBuySell(id, model)!=null);
+    }
+
+    public float getPrice()
+    {
+        return getSemanticObject().getFloatProperty(swbcomm_Price);
+    }
+
+    public void setPrice(float value)
+    {
+        getSemanticObject().setFloatProperty(swbcomm_Price, value);
     }
 }

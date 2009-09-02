@@ -4,8 +4,8 @@ package org.semanticwb.portal.community.base;
 public class MicroSiteElementBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Viewable,org.semanticwb.model.Traceable,org.semanticwb.model.Rankable
 {
     public static final org.semanticwb.platform.SemanticProperty swbcomm_visibility=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#visibility");
-    public static final org.semanticwb.platform.SemanticProperty swb_tags=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#tags");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_abused=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#abused");
+    public static final org.semanticwb.platform.SemanticProperty swb_tags=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#tags");
     public static final org.semanticwb.platform.SemanticClass swbcomm_Comment=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Comment");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_hasComment=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasComment");
     public static final org.semanticwb.platform.SemanticClass swbcomm_MicroSiteElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#MicroSiteElement");
@@ -78,16 +78,6 @@ public class MicroSiteElementBase extends org.semanticwb.model.SWBClass implemen
         getSemanticObject().setDoubleProperty(swb_rank, value);
     }
 
-    public String getTags()
-    {
-        return getSemanticObject().getProperty(swb_tags);
-    }
-
-    public void setTags(String value)
-    {
-        getSemanticObject().setProperty(swb_tags, value);
-    }
-
     public boolean isAbused()
     {
         return getSemanticObject().getBooleanProperty(swbcomm_abused);
@@ -96,6 +86,16 @@ public class MicroSiteElementBase extends org.semanticwb.model.SWBClass implemen
     public void setAbused(boolean value)
     {
         getSemanticObject().setBooleanProperty(swbcomm_abused, value);
+    }
+
+    public String getTags()
+    {
+        return getSemanticObject().getProperty(swb_tags);
+    }
+
+    public void setTags(String value)
+    {
+        getSemanticObject().setProperty(swb_tags, value);
     }
 
     public long getMaxViews()

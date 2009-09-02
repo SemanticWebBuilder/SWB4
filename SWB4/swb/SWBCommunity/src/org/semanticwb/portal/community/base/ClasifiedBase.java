@@ -1,8 +1,9 @@
 package org.semanticwb.portal.community.base;
 
 
-public class ClasifiedBase extends org.semanticwb.portal.community.DirectoryObject implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public class ClasifiedBase extends org.semanticwb.portal.community.DirectoryObject implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.portal.community.Contactable
 {
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_clasifiedOperationType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#clasifiedOperationType");
     public static final org.semanticwb.platform.SemanticClass swbcomm_Clasified=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Clasified");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Clasified");
 
@@ -47,5 +48,35 @@ public class ClasifiedBase extends org.semanticwb.portal.community.DirectoryObje
     public static boolean hasClasified(String id, org.semanticwb.model.SWBModel model)
     {
         return (getClasified(id, model)!=null);
+    }
+
+    public String getPhoneNumber()
+    {
+        return getSemanticObject().getProperty(swbcomm_phoneNumber);
+    }
+
+    public void setPhoneNumber(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_phoneNumber, value);
+    }
+
+    public String getOperationType()
+    {
+        return getSemanticObject().getProperty(swbcomm_clasifiedOperationType);
+    }
+
+    public void setOperationType(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_clasifiedOperationType, value);
+    }
+
+    public String getEmail()
+    {
+        return getSemanticObject().getProperty(swbcomm_email);
+    }
+
+    public void setEmail(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_email, value);
     }
 }
