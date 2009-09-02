@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
@@ -302,7 +303,84 @@ public class SWBFormMgr
         ret.append("	    </td></tr>\n");
         return ret.toString();
     }
-    
+
+    /**
+     * Regresa input del tipo hidden requeridos para el processForm
+     * @return
+     */
+    public String getFormHiddens()
+    {
+        StringBuffer ret=new StringBuffer();
+        if(m_obj!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_URI+"\" value=\""+m_obj.getURI()+"\"/>\n");
+        if(m_cls!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_CLS+"\" value=\""+m_cls.getURI()+"\"/>\n");
+        if(m_mode!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_MODE+"\" value=\""+m_mode+"\"/>\n");
+        if(m_ref!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_REF+"\" value=\""+m_ref.getURI()+"\"/>\n");
+        Iterator<Map.Entry<String,String>> hit=hidden.entrySet().iterator();
+        while(hit.hasNext())
+        {
+            Map.Entry entry=hit.next();
+            ret.append("    <input type=\"hidden\" name=\""+entry.getKey()+"\" value=\""+entry.getValue()+"\"/>\n");
+        }
+        return ret.toString();
+    }
+
+    /**
+     * Regresa lista de FormElements a renderear
+     * @return
+     */
+    public List<FormElement> getRenderElements()
+    {
+        boolean DOJO=false;
+        boolean IPHONE=false;
+        boolean XHTML=false;
+        if(m_type.equals(TYPE_XHTML))XHTML=true;
+        if(m_type.equals(TYPE_DOJO))DOJO=true;
+        if(m_type.equals(TYPE_IPHONE))IPHONE=true;
+
+        ArrayList arr=new ArrayList();
+
+        if(!m_mode.equals(MODE_CREATE))
+        {
+            Iterator<PropertyGroup> itgp=SWBComparator.sortSortableObject(groups.keySet().iterator());
+            while(itgp.hasNext())
+            {
+                PropertyGroup group=itgp.next();
+                Iterator<SemanticProperty> it=groups.get(group).iterator();
+                while(it.hasNext())
+                {
+                    SemanticProperty prop=it.next();
+                    FormElement ele=getFormElement(prop);
+                    arr.add(ele);
+                }
+            }
+        }else
+        {
+            Iterator<PropertyGroup> itgp=SWBComparator.sortSortableObject(groups.keySet().iterator());
+            while(itgp.hasNext())
+            {
+                PropertyGroup group=itgp.next();
+                Iterator<SemanticProperty> it=groups.get(group).iterator();
+                while(it.hasNext())
+                {
+                    SemanticProperty prop=it.next();
+                    FormElement ele=getFormElement(prop);
+                    if(DOJO && !m_cls.isAutogenId() && prop.equals(m_cls.getDisplayNameProperty()))
+                    {
+                        ele.setAttribute("onkeyup", "dojo.byId('swb_create_id').value=replaceChars4Id(this.textbox.value);dijit.byId('swb_create_id').validate()");
+                    }
+                    arr.add(ele);
+                }
+            }
+
+        }
+        return arr;
+    }
+
+    /**
+     * Genera HTML de la forma del tipo de objeto especificado en el constructor
+     * @param request
+     * @return
+     */
     public String renderForm(HttpServletRequest request)
     {
         boolean DOJO=false;
@@ -325,16 +403,7 @@ public class SWBFormMgr
         if(DOJO)ret.append("<form id=\""+frmname+"\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\""+m_action+"\""+onsubmit+" method=\""+m_method.toLowerCase()+"\">\n");
         else ret.append("<form id=\""+frmname+"\" class=\"swbform\" action=\""+m_action+"\""+onsubmit+" method=\""+m_method.toLowerCase()+"\">\n");
 
-        if(m_obj!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_URI+"\" value=\""+m_obj.getURI()+"\"/>\n");
-        if(m_cls!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_CLS+"\" value=\""+m_cls.getURI()+"\"/>\n");
-        if(m_mode!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_MODE+"\" value=\""+m_mode+"\"/>\n");
-        if(m_ref!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_REF+"\" value=\""+m_ref.getURI()+"\"/>\n");
-        Iterator<Map.Entry<String,String>> hit=hidden.entrySet().iterator();
-        while(hit.hasNext())
-        {
-            Map.Entry entry=hit.next();
-            ret.append("    <input type=\"hidden\" name=\""+entry.getKey()+"\" value=\""+entry.getValue()+"\"/>\n");
-        }
+        ret.append(getFormHiddens());
 
         if(!m_mode.equals(MODE_CREATE))
         {
