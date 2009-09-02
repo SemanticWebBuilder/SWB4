@@ -3,15 +3,20 @@
 <div class="cajas">
     <ul>
         <%
-            //User user = (User) request.getAttribute("user");
+            User user=(User)request.getAttribute("user");
+            String lang="es";
+            if(user.getLanguage()!=null)
+            {
+                lang=user.getLanguage();
+            }
             WebPage webpage = (WebPage) request.getAttribute("webpage");
             WebPage topics = webpage.getWebSite().getWebPage("Intereses");
-            Iterator<WebPage> pages = topics.listVisibleChilds("es");
+            Iterator<WebPage> pages = topics.listVisibleChilds(lang);
             while (pages.hasNext())
             {
                 int comunidades=0;
                 WebPage topic = pages.next();
-                Iterator<WebPage> childs=topic.listVisibleChilds("es");
+                Iterator<WebPage> childs=topic.listVisibleChilds(lang);
                 while(childs.hasNext())
                 {
                     comunidades++;
