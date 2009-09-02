@@ -45,6 +45,13 @@
                     }
 
                 }
+
+                if(subpages.hasNext())
+                {
+                    %>
+                    <li><a href="<%=child.getUrl()%>">...</a></li>
+                    <%
+                }
         %>
     </ul>
     <%
