@@ -75,8 +75,8 @@ public class Banner extends GenericAdmResource
                     String width = base.getAttribute("width", "").trim();
                     String height = base.getAttribute("height", "").trim();
 
-                    paramRequest.getArgument("width", width);
-                    paramRequest.getArgument("height", height);
+                    width=paramRequest.getArgument("width", width);
+                    height=paramRequest.getArgument("height", height);
 
                     if (url.toLowerCase().startsWith("mailto:") || url.toLowerCase().startsWith("javascript:")) {
                         wburl = url.replaceAll("\"", "&#34;");
