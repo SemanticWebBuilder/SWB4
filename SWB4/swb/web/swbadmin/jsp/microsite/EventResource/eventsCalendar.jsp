@@ -49,29 +49,13 @@
 
 </script>
 
-<br />
-<%  if (member.canAdd()) { %>
-<div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act", "add")%>">Agregar evento</a></p></div>
-<%  }
-    if (wputil != null && member.canView()) {
-%>
-<%      if (!wputil.isSubscribed(member)) { %>
-<div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act", "subcribe")%>">Suscribirse</a></p></div>
-<%
-        }else {
-%>
-<div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act", "unsubcribe")%>">Cancelar suscripción</a></p></div>
-<%      } %>
-<div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act", "view")%>">Ver todos</a></p></div>
-<%  } %>
-
+<div class="calendar">
 <br/>
-<div id="panorama">
     <form id="calendarForm" action="<%=paramRequest.getRenderUrl().setParameter("act", "calendar")%>" method="post">
         <fieldset><legend>Elige una fecha</legend>
-            <label for="year">Año:</label>
-            <input type="text" style="width:70px;" regExp="\d{4}" dojoType="dijit.form.ValidationTextBox" name="year" id="year" value="<%=current.getYear() + 1900%>"/>
-            <label for="month">Mes:</label>
+            <p><label for="year">Año:</label>
+            <input type="text" style="width:70px;" regExp="\d{4}" dojoType="dijit.form.ValidationTextBox" name="year" id="year" value="<%=current.getYear() + 1900%>"/></p>
+            <p><label for="month">Mes:</label>
             <select  style="width:150px;" name ="month" id="month" value="<%=current.getMonth()%>">
                 <option value="0">Enero</option>
                 <option value="1">Febrero</option>
@@ -85,12 +69,29 @@
                 <option value="9">Octubre</option>
                 <option value="10">Noviembre</option>
                 <option value="11">Diciembre</option>
-            </select>
+            </select></p>
             <input type="hidden" name="day" id="day" value="1"/>
-            <input type="submit" id="calendarSubmit" label="Ir" value="Ir"/>
+            <p><input type="submit" id="calendarSubmit" label="Ir" value="Ir"/></p>
         </fieldset>
     </form>
-            
+
+    <div class="addEventCalendar">
+    <%  if (member.canAdd()) { %>
+    <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act", "add")%>">Agregar evento</a></p></div>
+    <%  }
+        if (wputil != null && member.canView()) {
+    %>
+    <%      if (!wputil.isSubscribed(member)) { %>
+    <div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act", "subcribe")%>">Suscribirse</a></p></div>
+    <%
+            }else {
+    %>
+    <div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act", "unsubcribe")%>">Cancelar suscripción</a></p></div>
+    <%      } %>
+    <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act", "view")%>">Ver todos</a></p></div>
+    <%  } %>
+    </div>
+
     <%=renderCalendar(current, wpage, paramRequest)%>
 </div>
 <%!
@@ -126,7 +127,7 @@
         pml.setParameter("month", String.valueOf(month - 1));
         pml.setParameter("day", "1");
 
-        sbf.append("<div class=\"calendar\">\n" +
+        sbf.append("\n" +
                 "  <table>\n" +
                 "    <tr>\n" +
                 "      <td class=\"month-head\" colspan=\"7\">" +
@@ -209,7 +210,7 @@
         }
         sbf.append("</tr>\n");
         sbf.append("</table>\n");
-        sbf.append("</div>\n");
+        //sbf.append("</div>\n");
 
         return sbf.toString();
     }
