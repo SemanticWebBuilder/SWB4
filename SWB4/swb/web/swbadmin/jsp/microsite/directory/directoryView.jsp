@@ -4,8 +4,11 @@
 <%@page import="org.semanticwb.model.WebSite"%>
 <%@page import="org.semanticwb.model.Resource"%>
 <%@page import="org.semanticwb.model.User"%>
+<%@page import="org.semanticwb.SWBUtils"%>
 <%@page import="org.semanticwb.model.GenericIterator"%>
 <%@page import="java.util.Iterator"%>
+<%@page import="java.text.*"%>
+<%@page import="java.util.Date"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Vector"%>
 <%@page import="java.util.Arrays"%>
@@ -26,7 +29,9 @@ private final int I_INIT_PAGE = 1;
 
 <%
 Resource base=paramRequest.getResourceBase();
+User user=paramRequest.getUser();
 WebPage wpage=paramRequest.getWebPage();
+String perfilPath=wpage.getWebSite().getWebPage("perfil").getUrl();
 String action=paramRequest.getAction();
 String scope = (String) request.getAttribute("scope");
 Iterator<DirectoryObject> itObjs=(Iterator)request.getAttribute("itDirObjs");
@@ -36,7 +41,7 @@ SemanticClass semClass=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticC
 
 ArrayList aprops2display=new ArrayList();
 //String props2display=(String)request.getAttribute("props2display");
-String props2display="dirPhoto,title,description,tags";
+String props2display="dirPhoto,title,description,tags,creator,created";
 if(props2display!=null && semClass!=null){
     StringTokenizer strTokens=new StringTokenizer(props2display,",");
     while(strTokens.hasMoreTokens()){
@@ -205,25 +210,42 @@ url.setParameter("uri", sobj.getURI());
                 {
                    SemanticProperty semProp=itProps1.next();
                    SemanticProperty semProp1=semObject.getSemanticClass().getProperty(semProp.getName());
-                   String propValue=semObject.getProperty(semProp1);
-                   if(propValue!=null && !propValue.equals("null")){
-                        if(semProp.getName().equals("dirPhoto"))
-                        {%>
-                            <img src="<%=SWBPlatform.getWebWorkPath()%><%=base.getWorkPath()%>/<%=semObject.getId()%>/<%=propValue%>"width="90" height="90" >
-                        <%}if(semProp.getName().equals("title")) {
-                        %>
-                          <div class="listEntryInfo">
-                          <p class="tituloNaranja"><%=propValue%></p>
-                          <p><%=wpage.getPath(map)%></p>
-                        <%
-                        }else if(semProp.getName().equals("description")){
-                        %>
-                          <p><%=propValue%></p>
-                        <%}else if(semProp.getName().equals("tags")){
-                        %>
-                            <p>Palabras clave:<%=propValue%></p>
-                        <%}%>
-                    <%}
+                   if(semProp1.isDataTypeProperty()){
+                       String propValue=semObject.getProperty(semProp1);
+                       if(propValue!=null && !propValue.equals("null")){
+                            if(semProp.getName().equals("dirPhoto"))
+                            {%>
+                                <img src="<%=SWBPlatform.getWebWorkPath()%><%=base.getWorkPath()%>/<%=semObject.getId()%>/<%=propValue%>"width="90" height="90" >
+                            <%}if(semProp.getName().equals("title")) {
+                            %>
+                              <div class="listEntryInfo">
+                              <p class="tituloNaranja"><%=propValue%></p>
+                              <p><%=wpage.getPath(map)%></p>
+                            <%
+                            }else if(semProp.getName().equals("description")){
+                            %>
+                              <p><%=propValue%><br><br></p>
+                            <%}else if(semProp.getName().equals("tags")){
+                            %>
+                                <p>-Palabras clave:<%=propValue%></p>
+                            <%}else if(semProp.getName().equals("created")){
+                                SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
+                                Date date=new Date();
+                                date=formatoDelTexto.parse(propValue);
+                                propValue= SWBUtils.TEXT.getTimeAgo(date, user.getLanguage());
+                            %>
+                                <p>-creado:<%=propValue%></p>
+                            <%}
+                        }
+                    }else if(semProp1.getName().equals("creator")){
+                            SemanticObject semUser=semObject.getObjectProperty(DirectoryObject.swb_creator);
+                            if(semUser!=null){
+                                User userObj=(User)semUser.createGenericInstance();
+                                %>
+                                    <p>-Creado por:<a href="<%=perfilPath%>?user=<%=userObj.getEncodedURI()%>"><%=userObj.getFullName()%></a></p>
+                                <%
+                             }
+                    }
                 }
                 %>
                   <div class="vermasFloat"><p class="vermas"><a href="<%=urlDetail%>"><%=paramRequest.getLocaleString("seeMore")%></a></p></div>
