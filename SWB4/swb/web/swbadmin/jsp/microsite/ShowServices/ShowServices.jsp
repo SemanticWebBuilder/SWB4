@@ -78,22 +78,7 @@
                     break;
                 }
             }
-        %>
-        <!--
-        <li><a href="#">Galería de arte</a></li>
-        <li><a href="#">Plaza pública</a></li>
-        <li><a href="#">Clubes deportivos</a></li>
-        <li><a href="#">Negocios</a></li>
-        <li><a href="#">Playas</a></li>
-        <li><a href="#">Cines</a></li>
-        <li><a href="#">Industria</a></li>
-        <li><a href="#">Barrios</a></li>
-        <li><a href="#">Kioskos electrónicos</a></li>
-        <li><a href="#">Policía</a></li>
-        <li><a href="#">Transporte</a></li>
-        <li><a href="#">Bibliotecas</a></li>
-        <li><a href="#">Avenidas principales</a></li>
-        <li><a href="#">Iglesias</a></li> -->
+        %>        
     </ul>
     <div class="clear">&nbsp;</div>
 </div>
