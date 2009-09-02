@@ -1,14 +1,34 @@
 <%@page contentType="text/html"%>
-<%@page import="org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<%@page import="org.semanticwb.platform.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%
     SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
     User user=paramRequest.getUser();
     WebPage wpage=paramRequest.getWebPage();
 
-    if(user.isRegistered()&&wpage.getLevel()==3)
+    int nwp = 0;
+
+    Iterator<WebPage> itso = wpage.listChilds(user.getLanguage(),true,false,false,false);
+    if(itso.hasNext())
+    {
+        while(itso.hasNext())
         {
-%>
-<div class="editarInfo" style="float:right;"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act","add").setWindowState(SWBResourceURL.WinState_MAXIMIZED)%>">Crear Comunidad</a></p></div>
-<%
+            WebPage so = itso.next();
+            if(so.getSemanticObject().getGenericInstance() instanceof WebPage && !(so.getSemanticObject().getGenericInstance() instanceof MicroSite) )
+            {
+                nwp++;
+                break;
+            }
         }
+    }
+
+
+    if(user.isRegistered()&&nwp==0)
+    {
+        SWBResourceURL urlAdd = paramRequest.getRenderUrl();
+        urlAdd.setParameter("act", "add");
+        urlAdd.setWindowState(SWBResourceURL.WinState_NORMAL);
+%>
+<div class="editarInfo" style="float:right;"><p><a href="<%=urlAdd%>">Crear Comunidad</a></p></div>
+<%
+    }
 %>
