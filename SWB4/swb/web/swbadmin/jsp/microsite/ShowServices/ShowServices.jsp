@@ -1,4 +1,4 @@
-<%@page import="java.text.*,java.net.*,org.semanticwb.platform.SemanticObject,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*" %>
+<%@page import="java.io.*,java.text.*,java.net.*,org.semanticwb.platform.SemanticObject,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*" %>
 <div class="tabsTemas">
 <ul>
 <%
@@ -15,9 +15,31 @@
     while(pages.hasNext())
     {
         WebPage child=pages.next();
+        String path="/models/"+ webpage.getWebSiteId() +"/css/iconos/servicios/"+child.getId()+".png";
+        
+        try
+        {
+            InputStream in=SWBPlatform.getFileFromWorkPath(path);
+            if(in==null)
+            {
+                path="/work/models/"+ webpage.getWebSiteId() +"/css/iconos/default.png";;                
+            }
+            else
+            {
+                path="/work"+path;
+                
+            }
+
+        }
+        catch(Exception e)
+        {
+            path="/work/models/"+ webpage.getWebSiteId() +"/css/iconos/default.png";;
+            
+        }
         %>
-        <li><img src="/work/models/Ciudad_Digital/css/iconos/hotel.png" alt="<%=child.getTitle()%>"><a href="<%=child.getUrl()%>"><%=child.getTitle()%></a></li>
+            <li><img src="<%=path%>" alt="<%=child.getTitle()%>"><a href="<%=child.getUrl()%>"><%=child.getTitle()%></a></li>
         <%
+        
         count++;
         if(count==8)
         {
