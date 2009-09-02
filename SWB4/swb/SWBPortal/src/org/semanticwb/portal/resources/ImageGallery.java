@@ -84,13 +84,8 @@ public class ImageGallery extends GenericResource {
             String attval = base.getAttribute(attname);
             if(attval!=null && attname.startsWith("imggallery_" + base.getId())) {
                 imgpath.add(webWorkPath +"/"+attval);
-                /*out.append("['"+webWorkPath +"/"+attval+"','','']");
-                if(it.hasNext()) {
-                    out.append(", ");
-                }*/
             }
         }
-
         String[] ip = new String[imgpath.size()];
         imgpath.toArray(ip);
         out.print(getGalleryScript(ip));
@@ -121,21 +116,9 @@ public class ImageGallery extends GenericResource {
             //ID of main gallery container
             out.append("	wrapperid: 'imggallery_"+ base.getId()+"', ");
             //width/height of gallery in pixels. Should reflect dimensions of the images exactly 
-            /*out.append("	dimensions: ["+base.getAttribute("imgwidth","220")+", "+base.getAttribute("imgheight","150")+"], ");*/
-            out.append("	dimensions: ["+base.getAttribute("imgwidth","220")+", "+base.getAttribute("imgheight","100%")+"], ");
+            out.append("	dimensions: ["+base.getAttribute("imgwidth","220")+", "+base.getAttribute("imgheight","150")+"], ");
             out.append("\n	imagearray: [ ");
 
-            /*Iterator<String> it = base.getAttributeNames();
-            while(it.hasNext()) {
-                String attname = it.next();
-                String attval = base.getAttribute(attname);
-                if(attval!=null && attname.startsWith("imggallery_" + base.getId())) {
-                    out.append("['"+webWorkPath +"/"+attval+"','','']");
-                    if(it.hasNext()) {
-                        out.append(", ");
-                    }
-                }
-            }*/
             for(String img : imgpath) {
                 out.append("\n['"+img+"','hola','crayola'],");
             }
@@ -165,7 +148,8 @@ public class ImageGallery extends GenericResource {
             out.append("); ");
             out.append("</script> ");
 
-            out.append("<div style=\"width:"+base.getAttribute("imgwidth")+"px;\"> ");
+            /*out.append("<div style=\"width:"+base.getAttribute("imgwidth")+"px;\"> ");*/
+            out.append("<div> ");
             out.append("<div class=\"swb-galeria\"> ");
             out.append("<div style=\""+base.getAttribute("titlestyle","")+"\">"+base.getAttribute("title","")+"</div> ");
             out.append("<div id=\"imggallery_"+base.getId()+"\" style=\"position:relative; visibility:hidden\"></div> ");
