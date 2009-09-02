@@ -62,6 +62,7 @@ import org.semanticwb.portal.access.SWBAccessIncrement;
 import org.semanticwb.portal.access.SWBAccessLog;
 import org.semanticwb.portal.db.SWBDBAdmLog;
 import org.semanticwb.portal.indexer.SWBIndexMgr;
+import org.semanticwb.portal.resources.ImageGallery;
 import org.semanticwb.portal.util.ContentStyles;
 import org.semanticwb.util.JarFile;
 import org.semanticwb.util.db.GenericDB;
@@ -1004,6 +1005,11 @@ public class SWBPortal {
             } catch (IOException e) {
                 log.error(e);
             }
+        }
+
+        public static String getGalleryScript(String... imgurl) {
+            ImageGallery ig = new ImageGallery();
+            return ig.getGalleryScript(imgurl);
         }
     }
 
