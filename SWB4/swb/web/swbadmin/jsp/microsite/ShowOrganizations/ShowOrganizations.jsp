@@ -1,84 +1,63 @@
-<%@page import="java.io.*,java.text.*,java.net.*,org.semanticwb.platform.SemanticObject,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*" %>
-<div class="tabsTemas">
-<ul>
-<%
-    User user=(User)request.getAttribute("user");
-    String lang="es";
-    if(user.getLanguage()!=null)
-    {
-        lang=user.getLanguage();
-    }
-    WebPage webpage = (WebPage) request.getAttribute("webpage");
-    WebPage organizaciones = webpage.getWebSite().getWebPage("Organizaciones");
-    Iterator<WebPage> pages=organizaciones.listVisibleChilds(lang); // ordenados por nombre
-    int count=0;
-    while(pages.hasNext())
-    {
-        WebPage child=pages.next();
-        String path="/models/"+ webpage.getWebSiteId() +"/css/iconos/"+child.getId()+".png";
-        path="/work"+path;
-        /*try
-        {
-            InputStream in=SWBPlatform.getFileFromWorkPath(path);
-            if(in==null)
+<%@page import="java.text.*,java.net.*,org.semanticwb.platform.SemanticObject,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*" %>
+<div class="clasificadosIzquierda">
+
+    <%
+            User user = (User) request.getAttribute("user");
+            String lang = "es";
+            if (user.getLanguage() != null)
             {
-                path="/work/models/"+ webpage.getWebSiteId() +"/css/iconos/default.png";;
+                lang = user.getLanguage();
             }
-            else
+            WebPage webpage = (WebPage) request.getAttribute("webpage");
+            WebPage clasificados = webpage.getWebSite().getWebPage("Organizaciones");
+            Iterator<WebPage> nivel1 = clasificados.listVisibleChilds(lang);
+            int elements = 0;
+            while (nivel1.hasNext())
             {
-                path="/work"+path;
-
+                nivel1.next();
+                elements++;
             }
-
-        }
-        catch(Exception e)
-        {
-            path="/work/models/"+ webpage.getWebSiteId() +"/css/iconos/default.png";;
-        }*/
-        %>
-        <li><img src="<%=path%>" width="60" height="60" alt="<%=child.getTitle()%>"><a href="<%=child.getUrl()%>"><%=child.getTitle()%></a></li>
-        <%
-
-        count++;
-        if(count==8)
-        {
-            break;
-        }
-
-    }
-
-%>
-    </ul>
-    <div class="clear">&nbsp;</div>
-</div>
-<div class="ademas">
-    <div class="ademasHeader">
-        <%
-            if(pages.hasNext())
+            int rows = elements / 2;
+            nivel1 = clasificados.listVisibleChilds(lang);
+            int irow = 0;
+            while (nivel1.hasNext())
             {
-                %>
-                <p>Además...</p>
-                <%
-            }
-        %>
-        <a href="<%=organizaciones.getUrl()%>">ver listado completo</a></div>
-        <ul class="ademasContent">
+                WebPage child = nivel1.next();
+    %>
+    <ul>
+        <li>
+            <h3><a href="<%=child.getUrl()%>"><%=child.getTitle()%></a></h3>
+        </li>
+
         <%
-            count=0;
-            while(pages.hasNext())
-            {
-                WebPage child=pages.next();
-                %>
-                    <li><a href="<%=child.getUrl()%>"><%=child.getTitle()%></a></li>
-                <%
-                count++;
-                if(count==15)
+                Iterator<WebPage> subpages = child.listVisibleChilds(lang);
+                int i = 0;
+                while (subpages.hasNext())
                 {
-                    break;
+                    WebPage sbpage = subpages.next();
+        %>
+        <li><a href="<%=sbpage.getUrl()%>"><%=sbpage.getTitle()%></a></li>
+        <%
+                    i++;
+                    if (i >= 10)
+                    {
+                        break;
+                    }
+
                 }
-            }
         %>
     </ul>
-    <div class="clear">&nbsp;</div>
-</div>
+    <%
 
+                irow++;
+                if (rows == irow)
+                {
+    %>
+</div>
+<div class="clasificadosDerecha">
+    <%                }
+            }
+
+    %>
+</div>
+<div class="clear">&nbsp;</div>
