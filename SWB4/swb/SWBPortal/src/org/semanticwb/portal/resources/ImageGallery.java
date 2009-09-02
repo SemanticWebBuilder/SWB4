@@ -119,9 +119,6 @@ public class ImageGallery extends GenericResource {
             out.append("	dimensions: ["+base.getAttribute("imgwidth","220")+", "+base.getAttribute("imgheight","150")+"], ");
             out.append("\n	imagearray: [ ");
 
-            for(String img : imgpath) {
-                out.append("\n['"+img+"','hola','crayola'],");
-            }
             if(imgpath.length>0)
                 out.deleteCharAt(out.length()-1);
 
