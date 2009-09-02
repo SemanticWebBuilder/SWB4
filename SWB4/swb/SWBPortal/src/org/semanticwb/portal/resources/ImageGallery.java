@@ -152,10 +152,7 @@ public class ImageGallery extends GenericResource {
             out.append("<div id=\"imggallery_"+base.getId()+"\" style=\"position:relative; visibility:hidden\"></div> ");
             out.append("</div> ");
             out.append("</div>\n");
-
-            System.out.println("**************\n\n");
-            System.out.println(out);
-            System.out.println("**************");
+            
         }catch(Exception e) {
             log.error(e);
         }
