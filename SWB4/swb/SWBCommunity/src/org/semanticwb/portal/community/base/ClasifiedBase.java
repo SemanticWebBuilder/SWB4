@@ -70,6 +70,16 @@ public class ClasifiedBase extends org.semanticwb.portal.community.DirectoryObje
         getSemanticObject().setProperty(swbcomm_clasifiedOperationType, value);
     }
 
+    public String getName()
+    {
+        return getSemanticObject().getProperty(swbcomm_name);
+    }
+
+    public void setName(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_name, value);
+    }
+
     public String getEmail()
     {
         return getSemanticObject().getProperty(swbcomm_email);

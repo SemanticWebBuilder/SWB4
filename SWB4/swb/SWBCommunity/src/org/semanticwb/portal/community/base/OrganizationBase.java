@@ -119,6 +119,16 @@ public class OrganizationBase extends org.semanticwb.portal.community.DirectoryO
         getSemanticObject().setDoubleProperty(swb_longitude, value);
     }
 
+    public String getName()
+    {
+        return getSemanticObject().getProperty(swbcomm_name);
+    }
+
+    public void setName(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_name, value);
+    }
+
     public String getCity()
     {
         return getSemanticObject().getProperty(swbcomm_city);

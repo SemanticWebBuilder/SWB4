@@ -3,6 +3,12 @@ package org.semanticwb.portal.community.base;
 
 public class ClasifiedVehicleBase extends org.semanticwb.portal.community.ClasifiedBuySell implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.portal.community.Contactable
 {
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_vehicleColor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#vehicleColor");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_vehicleMileage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#vehicleMileage");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_vehicleYear=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#vehicleYear");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_vehicleModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#vehicleModel");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_vehicleBrand=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#vehicleBrand");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_vehicleType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#vehicleType");
     public static final org.semanticwb.platform.SemanticClass swbcomm_ClasifiedVehicle=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#ClasifiedVehicle");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#ClasifiedVehicle");
 
@@ -47,5 +53,65 @@ public class ClasifiedVehicleBase extends org.semanticwb.portal.community.Clasif
     public static boolean hasClasifiedVehicle(String id, org.semanticwb.model.SWBModel model)
     {
         return (getClasifiedVehicle(id, model)!=null);
+    }
+
+    public String getVehicleColor()
+    {
+        return getSemanticObject().getProperty(swbcomm_vehicleColor);
+    }
+
+    public void setVehicleColor(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_vehicleColor, value);
+    }
+
+    public float getVehicleMileage()
+    {
+        return getSemanticObject().getFloatProperty(swbcomm_vehicleMileage);
+    }
+
+    public void setVehicleMileage(float value)
+    {
+        getSemanticObject().setFloatProperty(swbcomm_vehicleMileage, value);
+    }
+
+    public int getVehicleYear()
+    {
+        return getSemanticObject().getIntProperty(swbcomm_vehicleYear);
+    }
+
+    public void setVehicleYear(int value)
+    {
+        getSemanticObject().setIntProperty(swbcomm_vehicleYear, value);
+    }
+
+    public String getVehicleModel()
+    {
+        return getSemanticObject().getProperty(swbcomm_vehicleModel);
+    }
+
+    public void setVehicleModel(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_vehicleModel, value);
+    }
+
+    public String getVehicleBrand()
+    {
+        return getSemanticObject().getProperty(swbcomm_vehicleBrand);
+    }
+
+    public void setVehicleBrand(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_vehicleBrand, value);
+    }
+
+    public int getVehicleType()
+    {
+        return getSemanticObject().getIntProperty(swbcomm_vehicleType);
+    }
+
+    public void setVehicleType(int value)
+    {
+        getSemanticObject().setIntProperty(swbcomm_vehicleType, value);
     }
 }

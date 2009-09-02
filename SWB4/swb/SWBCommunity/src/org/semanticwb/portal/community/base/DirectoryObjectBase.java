@@ -8,6 +8,7 @@ public class DirectoryObjectBase extends org.semanticwb.model.base.GenericObject
     public static final org.semanticwb.platform.SemanticProperty swbcomm_directoryResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#directoryResource");
     public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_hasDirProfileWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasDirProfileWebPage");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_dirHasExtraPhoto=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#dirHasExtraPhoto");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_dirWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#dirWebPage");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_hasDirTopicWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasDirTopicWebPage");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_dirPhoto=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#dirPhoto");
@@ -141,6 +142,33 @@ public class DirectoryObjectBase extends org.semanticwb.model.base.GenericObject
              ret=(org.semanticwb.model.WebPage)obj.createGenericInstance();
          }
          return ret;
+    }
+
+    public java.util.Iterator<String> listExtraPhotos()
+    {
+        java.util.ArrayList<String> values=new java.util.ArrayList<String>();
+        java.util.Iterator<org.semanticwb.platform.SemanticLiteral> it=getSemanticObject().listLiteralProperties(swbcomm_dirHasExtraPhoto);
+        while(it.hasNext())
+        {
+                org.semanticwb.platform.SemanticLiteral literal=it.next();
+                values.add(literal.getString());
+        }
+        return values.iterator();
+    }
+
+    public void addExtraPhoto(String extraphoto)
+    {
+        getSemanticObject().setProperty(swbcomm_dirHasExtraPhoto, extraphoto);
+    }
+
+    public void removeAllExtraPhoto()
+    {
+        getSemanticObject().removeProperty(swbcomm_dirHasExtraPhoto);
+    }
+
+    public void removeExtraPhoto(String extraphoto)
+    {
+        getSemanticObject().removeProperty(swbcomm_dirHasExtraPhoto,extraphoto);
     }
 
     public java.util.Date getCreated()
