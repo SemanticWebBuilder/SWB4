@@ -924,6 +924,13 @@
     <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >swbIconWebSite</swb:iconClass>
   </swbxf:DisplayObject>
+  <swb:Class rdf:ID="Comerce">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="#DirectoryClass"/>
+    <rdfs:subClassOf rdf:resource="#Organization"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
   <swb:Class rdf:ID="ClasifiedService">
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
@@ -937,6 +944,13 @@
     <rdf:type rdf:resource="#DirectoryClass"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
     <rdfs:subClassOf rdf:resource="#Clasified"/>
+  </swb:Class>
+  <swb:Class rdf:ID="Scholl">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="#DirectoryClass"/>
+    <rdfs:subClassOf rdf:resource="#Organization"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
   <swb:Class rdf:ID="AirPort">
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
