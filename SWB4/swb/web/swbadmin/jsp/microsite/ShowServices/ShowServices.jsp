@@ -15,7 +15,7 @@
     while(pages.hasNext())
     {
         WebPage child=pages.next();
-        String path="/models/"+ webpage.getWebSiteId() +"/css/iconos/servicios/"+child.getId()+".png";
+        String path="/models/"+ webpage.getWebSiteId() +"/css/iconos/"+child.getId()+".png";
         path="/work"+path;
         /*try
         {
