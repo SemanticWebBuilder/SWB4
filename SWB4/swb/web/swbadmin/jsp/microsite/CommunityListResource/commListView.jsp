@@ -61,16 +61,14 @@
     }
     else if(wplevel<3)
     {
-
-        //Iterator<WebPage> itwp = wpp.listChilds(user.getLanguage(), Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE);
         while(itwp.hasNext())
         {
-            wpch = itwp.next();
-            if(wpch.isActive()&&!wpch.isDeleted())
-            {
-                String cssClass1 = "class=\"groupInteres\"";
-                nums++;
 
+            wpch = itwp.next();
+            
+            if(wpch.isActive()&&!wpch.isDeleted()) 
+            {
+                nums++;
 %>
             <div class="groupInteres">
             <h3 class="titulo"><a href="<%=wpch.getUrl()%>"><%=wpch.getDisplayTitle(user.getLanguage())%></a></h3>
@@ -84,7 +82,7 @@
                     while(itwpch.hasNext())
                     {
                         wpgs = itwpch.next();
-                        if(wpgs.isActive()&&!wpgs.isDeleted())
+                        if(wpgs.isActive()&&!wpgs.isDeleted()&&!(wpgs.getSemanticObject().getGenericInstance() instanceof MicroSiteWebPageUtil))
                         {
                             numcomm= getExistingCommunities(wpgs,user);
                             nummsg = "";

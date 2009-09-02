@@ -23,9 +23,7 @@
     mgr.addButton(SWBFormButton.newSaveButton());
     mgr.addButton(SWBFormButton.newCancelButton().setAttribute("onclick", "window.location='"+paramRequest.getRenderUrl()+"';"));
     mgr.addHiddenParameter("act", "add");
-    //mgr.setFilterRequired(false);
     out.println(mgr.renderForm(request));
-
 %>
     </fieldset>
 </div>
