@@ -110,9 +110,22 @@ public class SWBASchedule extends GenericResource {
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setAction("update");
 
+        //out.println("<script type=\"javascript\">include('" + SWBPlatform.getContextPath() + "/swbadmin/js/schedule.js');</script>");
+
+
         log.debug("Action: " + action);
+
+//        out.println("<script type=\"text/javascript\">");
+//
+//        out.println("dojo.require(\"dijit._base.manager\");");
+//        out.println("dojo.require(\"dojox.form.TimeSpinner\");");
+//        out.println("dojo.require(\"dojo.parser\"); ");
+//
+//        out.println("</script>");
+
+
         out.println("<div class=\"swbform\">");
-        out.println("<form  action=\"" + url + "\"  id=\"" + id + "/calendar\" name=\"" + id + "/calendar\" method=\"post\" onsubmit=\"submitForm('" + id + "/calendar'); return false;\">"); //id=\"calendar\" name=\"calendar\" dojoType=\"dijit.form.Form\"
+        out.println("<form  action=\"" + url + "\"  id=\"" + id + "/calendar\" name=\"" + id + "/calendar\" method=\"post\" onsubmit=\"submitForm('" + id + "/calendar'); return false;\">"); //id=\"calendar\" name=\"calendar\" dojoType=\"dijit.form.Form\" 
         // Recurso de calendarización
 
         String createdate = "";
@@ -456,7 +469,7 @@ public class SWBASchedule extends GenericResource {
         out.println("        <tbody>");
         out.println("        <tr>");
         out.println("          <td width=20 ><input type=\"checkbox\" id=\"" + id + "/time\" name=\"" + id + "/time\" dojoType=\"dijit.form.CheckBox\" onClick=\"enableTime('" + id + "');\" " + hourc + "></td>");
-        out.println("          <td >" + paramRequest.getLocaleString("frmStartHour") + ":&nbsp;<input name=\"" + id + "/starthour\" id=\"" + id + "/starthour\" dojoType=\"dojox.form.TimeSpinner\" value=\"" + (starthour!=null&&starthour.trim().length() > 0 ? starthour : "00:00") + "\" hours=\"24\" smalldelta=\"10\" maxLength=\"10\" size=\"10\" " + hourcd + " style=\"width:100px;\" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + paramRequest.getLocaleString("frmEndHour") + ":&nbsp;<input name=\"" + id + "/endhour\" id=\"" + id + "/endhour\" dojoType=\"dojox.form.TimeSpinner\" value=\"" + (endhour!=null&&endhour.trim().length() > 0 ? endhour : "00:00") + "\"  hours=\"24\" smalldelta=\"10\"  maxLength=\"10\" size=\"10\" " + hourcd + " style=\"width:100px;\" /></td>");
+        out.println("          <td >" + paramRequest.getLocaleString("frmStartHour") + ":&nbsp;<input dojoType=\"dijit.form.TimeTextBox\" name=\"" + id + "/starthour\" id=\"" + id + "/starthour\"  value=\"" + (starthour!=null&&starthour.trim().length() > 0 ? "T"+starthour+":00" : "T00:00:00") + "\" " + hourcd + " constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + paramRequest.getLocaleString("frmEndHour") + ":&nbsp;<input dojoType=\"dijit.form.TimeTextBox\" name=\"" + id + "/endhour\" id=\"" + id + "/endhour\" value=\"" + (endhour!=null&&endhour.trim().length() > 0 ? "T"+endhour+":00" : "T00:00:00") + "\"  " + hourcd + " constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} /></td>"); //constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm:ss'}
         out.println("         </tr>");
         out.println("        </tbody>");
         out.println("      </table>");
@@ -989,11 +1002,11 @@ public class SWBASchedule extends GenericResource {
                 if (request.getParameter(id + "/time") != null) {
                     String starthour = request.getParameter(id + "/starthour");
                     log.debug("Hora inicial:" + starthour);
-                    starthour = starthour.substring(11, 16);
+                    starthour = starthour.substring(1, 6);
                     addElem(doc, interval, "starthour", starthour);
                     String endhour = request.getParameter(id + "/endhour");
                     log.debug("Hora final:" + endhour);
-                    endhour = endhour.substring(11, 16);
+                    endhour = endhour.substring(1, 6);
                     addElem(doc, interval, "endhour", endhour);
                 }
                 if (request.getParameter(id + "/periodicidad") != null) {
