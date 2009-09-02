@@ -47,6 +47,7 @@
                         Twitter twitter = new Twitter(userLogin, userPass);
                         Iterator<Status> itStatuses = (twitter.getFriendsTimeline()).iterator();
                         %>
+                        <div id="entriesTwitter">
                         <a href="http://twitter.com" target="_new"><img src="<%=imgPath%>twitter_logo.png" valign="top"/></a>
                         <a href="<%=url.toString()%>">Configurar</a>
                         <form action="<%=urlAction.toString()%>">
@@ -66,6 +67,9 @@
                             int max = Integer.parseInt(base.getAttribute("noMsg", "" + 10));
                             int cont = 0;
                             while (itStatuses.hasNext()) {
+                                %>
+                                <div class=twitEntry onMouseOver="this.className='twitEntryHover'" onmouseout="this.className='twitEntry'">
+                                <%
                                 Status twitt = itStatuses.next();
                                 String timeAgo = SWBUtils.TEXT.getTimeAgo(twitt.getCreatedAt(), "es");
                                 String poster = twitt.getUser().getScreenName();
@@ -77,16 +81,30 @@
                                     String strFound = itFounds.next();
                                     text = text.replaceAll("@" + strFound, "<a href=\"" + twitter.getBaseURL() + strFound + "\" target=\"_new\">" + "@" + strFound + "</a>");
                                 }
+                                itFounds = SWBUtils.TEXT.findInterStr(text, "#", " ");
+                                while (itFounds.hasNext()) {
+                                    String strFound = itFounds.next();
+                                    text = text.replaceAll("#" + strFound, "<a href=\"" + twitter.getBaseURL() + "/search?q=%23" +strFound + "\" target=\"_new\">" + "#" + strFound + "</a>");
+                                }
                         %>
-                                <p class="addOn">
-                                    <a href="<%=twitter.getBaseURL()%><%=poster%>" target="_new"><img src="<%=imgPath%>" valign="top" width="40" height="40"/> <%=poster%></a>  <%=text%><br><a href="<%=twitter.getBaseURL()%><%=poster%>/status/<%=twitt.getId()%>" target="_new"><%=timeAgo%></a><br/>
-                                </p>
+                                 <a href="<%=twitter.getBaseURL()%><%=poster%>" target="_new"><img src="<%=imgPath%>" valign="top" width="40" height="40"/></a>
+                                 <div class=twitEntryInfo>
+                                    <p><a id="aPoster" href="<%=twitter.getBaseURL()%>"><%=poster%></a>&nbsp;<%=text%><br><a href="<%=twitter.getBaseURL()%><%=poster%>/status/<%=twitt.getId()%>" target="_new" id="postTime"><%=timeAgo%></a></p>
+                                 </div>
+                                 <div class="clear">&nbsp;</div>
                         <%
                                 cont++;
                                 if (cont >= max) {
+                                    %></div><%
                                     break;
                                 }
+                                %>
+                                </div>
+                                <%
                             }
+                            %>
+                            </div>
+                          <%
                         } catch (Exception e) {
                             url.setAction("conf");
                         %>
