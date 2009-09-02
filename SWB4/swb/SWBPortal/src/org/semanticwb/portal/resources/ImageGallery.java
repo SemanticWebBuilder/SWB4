@@ -27,6 +27,7 @@ package org.semanticwb.portal.resources;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -74,66 +75,110 @@ public class ImageGallery extends GenericResource {
         response.setHeader("Pragma","no-cache"); //HTTP 1.0
         response.setDateHeader ("Expires", 0); //prevents caching at the proxy server
         PrintWriter out = response.getWriter();
-        
-        Resource base=getResourceBase();        
-        
+
+        Resource base = getResourceBase();
+        Iterator<String> it = base.getAttributeNames();
+        ArrayList<String> imgpath = new ArrayList<String>();
+        while(it.hasNext()) {
+            String attname = it.next();
+            String attval = base.getAttribute(attname);
+            if(attval!=null && attname.startsWith("imggallery_" + base.getId())) {
+                imgpath.add(webWorkPath +"/"+attval);
+                /*out.append("['"+webWorkPath +"/"+attval+"','','']");
+                if(it.hasNext()) {
+                    out.append(", ");
+                }*/
+            }
+        }
+
+        String[] ip = new String[imgpath.size()];
+        imgpath.toArray(ip);
+        out.print(getGalleryScript(ip));
+        out.flush();
+    }
+
+    public String getGalleryScript(String... imgpath) {
+        Resource base=getResourceBase();
+        StringBuilder out = new StringBuilder();
+
         try {
-            out.println("<script type=\"text/javascript\" src=\""+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/jquery-imagegallery.js\"></script>");
-            out.println("<script type=\"text/javascript\" src=\""+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/jquery-1.3.js\"></script>");
+            out.append("\n<script type=\"text/javascript\" src=\""+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/jquery-imagegallery.js\"></script>");
+            out.append("<script type=\"text/javascript\" src=\""+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/jquery-1.3.js\"></script>");
 
-            out.println("<script type=\"text/javascript\"> ");            
-            out.println("    simpleGallery_navpanel={ ");
-            out.println("        panel: {height:'45px', opacity:0.5, paddingTop:'5px', fontStyle:'bold 9px Verdana'}, //customize nav panel container ");
-            out.println("        images: [ '"+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/themes/control_rewind_blue.png', '"+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/themes/control_play_blue.png', '"+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/themes/control_fastforward_blue.png', '"+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/themes/control_pause_blue.png'], //nav panel images (in that order) ");
-            out.println("        imageSpacing: {offsetTop:[-3, 0, -3], spacing:10}, //top offset of left, play, and right images, PLUS spacing between the 3 images ");
-            out.println("        slideduration: 500 //duration of slide up animation to reveal panel ");
-            out.println("    }; ");
-            
-            out.println("   var mygallery=new simpleGallery({ ");
-            out.println("	wrapperid: 'imggallery_"+ base.getId()+"', //ID of main gallery container, ");
-            out.println("	dimensions: ["+base.getAttribute("imgwidth","220")+", "+base.getAttribute("imgheight","150")+"], //width/height of gallery in pixels. Should reflect dimensions of the images exactly ");
-            out.println("	imagearray: [ ");
+            out.append("<script type=\"text/javascript\"> ");
+            out.append("    simpleGallery_navpanel={ ");
+            //customize nav panel container 
+            out.append("        panel: {height:'45px', opacity:0.5, paddingTop:'5px', fontStyle:'bold 9px Verdana'}, ");
+            //nav panel images (in that order)
+            out.append("        images: [ '"+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/themes/control_rewind_blue.png', '"+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/themes/control_play_blue.png', '"+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/themes/control_fastforward_blue.png', '"+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/themes/control_pause_blue.png'], ");
+            //top offset of left, play, and right images, PLUS spacing between the 3 images
+            out.append("        imageSpacing: {offsetTop:[-3, 0, -3], spacing:10}, ");
+            //duration of slide up animation to reveal panel
+            out.append("        slideduration: 500 ");
+            out.append("    }; ");
 
-            Iterator<String> it = base.getAttributeNames();
+            out.append("   var mygallery=new simpleGallery( { ");
+            //ID of main gallery container
+            out.append("	wrapperid: 'imggallery_"+ base.getId()+"', ");
+            //width/height of gallery in pixels. Should reflect dimensions of the images exactly 
+            /*out.append("	dimensions: ["+base.getAttribute("imgwidth","220")+", "+base.getAttribute("imgheight","150")+"], ");*/
+            out.append("	dimensions: ["+base.getAttribute("imgwidth","220")+", "+base.getAttribute("imgheight","100%")+"], ");
+            out.append("\n	imagearray: [ ");
+
+            /*Iterator<String> it = base.getAttributeNames();
             while(it.hasNext()) {
                 String attname = it.next();
                 String attval = base.getAttribute(attname);
                 if(attval!=null && attname.startsWith("imggallery_" + base.getId())) {
-                    out.println("['"+webWorkPath +"/"+attval+"','','']");
+                    out.append("['"+webWorkPath +"/"+attval+"','','']");
                     if(it.hasNext()) {
-                        out.print(", ");
+                        out.append(", ");
                     }
                 }
+            }*/
+            for(String img : imgpath) {
+                out.append("\n['"+img+"','hola','crayola'],");
             }
-            
-            out.println("	], ");
-            out.println("	autoplay: "+base.getAttribute("autoplay","false")+", ");
-            out.println("	persist: false, ");
-            out.println("	pause: "+base.getAttribute("pause","2500")+", //pause between slides (milliseconds) ");
-            out.println("	fadeduration: "+base.getAttribute("fadetime","500")+", //transition duration (milliseconds) ");
-            out.println("	oninit:function(){ //event that fires when gallery has initialized/ ready to run ");
-            out.println("	}, ");
-            out.println("	onslide:function(curslide, i){ //event that fires after each slide is shown ");
-            out.println("		//curslide: returns DOM reference to current slide's DIV (ie: try alert(curslide.innerHTML) ");
-            out.println("		//i: integer reflecting current image within collection being shown (0=1st image, 1=2nd etc) ");
-            out.println("	} ");
-            out.println("        ,fullwidth:"+base.getAttribute("fullwidth","350")+" ");
-            out.println("        ,fullheight:"+base.getAttribute("fullheight","280")+" ");
-            out.println("        ,imageClosing: '"+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/themes/cancel.png'");
-            out.println("    } ");
-            out.println("); ");
-            out.println("</script> ");
-            
-            out.println("<div style=\"width:"+base.getAttribute("imgwidth")+"px;\">");
-            out.println("<div class=\"swb-galeria\">");
-            out.println("<div style=\""+base.getAttribute("titlestyle","")+"\">"+base.getAttribute("title","")+"</div>");
-            out.println("<div id=\"imggallery_"+base.getId()+"\" style=\"position:relative; visibility:hidden\"></div>");
-            out.println("</div>");
-            out.println("</div>");
+            if(imgpath.length>0)
+                out.deleteCharAt(out.length()-1);
+
+            out.append("\n	], ");
+            out.append("	autoplay: "+base.getAttribute("autoplay","false")+", ");
+            out.append("	persist: false, ");
+            //pause between slides (milliseconds)
+            out.append("	pause: "+base.getAttribute("pause","2500")+", ");
+            //transition duration (milliseconds)
+            out.append("	fadeduration: "+base.getAttribute("fadetime","500")+", ");
+            //event that fires when gallery has initialized/ ready to run
+            out.append("	oninit:function(){ ");
+            out.append("	}, ");
+            //event that fires after each slide is shown
+            //curslide: returns DOM reference to current slide's DIV (ie: try alert(curslide.innerHTML)
+            //i: integer reflecting current image within collection being shown (0=1st image, 1=2nd etc)
+            out.append("	onslide:function(curslide, i){ ");
+            out.append("	} ");
+            out.append("        ,fullwidth:"+base.getAttribute("fullwidth","380")+" ");
+            /*out.append("        ,fullheight:"+base.getAttribute("fullheight","280")+" ");*/
+            out.append("        ,fullheight:"+base.getAttribute("fullheight","100%")+" ");
+            out.append("        ,imageClosing: '"+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/themes/cancel.png'");
+            out.append("    } ");
+            out.append("); ");
+            out.append("</script> ");
+
+            out.append("<div style=\"width:"+base.getAttribute("imgwidth")+"px;\"> ");
+            out.append("<div class=\"swb-galeria\"> ");
+            out.append("<div style=\""+base.getAttribute("titlestyle","")+"\">"+base.getAttribute("title","")+"</div> ");
+            out.append("<div id=\"imggallery_"+base.getId()+"\" style=\"position:relative; visibility:hidden\"></div> ");
+            out.append("</div> ");
+            out.append("</div>\n");
+
+            System.out.println("**************\n\n");
+            System.out.println(out);
+            System.out.println("**************");
         }catch(Exception e) {
             log.error(e);
         }
-        out.flush();
+        return out.toString();
     }
     
     @Override
