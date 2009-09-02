@@ -203,15 +203,21 @@ simpleGallery.routines={
     layer.style.filter='alpha(opacity='+opacity+')';
     layer.style.opacity=opacity/100;
     document.body.appendChild(layer);
+
+    var foto=document.createElement('img');
+    foto.src=imgsrc;
+    //foto.width=width;
+    //foto.height=height;
+    foto.border='2px solid #FFFFFF';
+    foto.setAttribute('onclick', 'simpleGallery.routines.removeCoverDiv("cover01")');
     
-    var cwidth=width+50;
-    var cheight=height+50;
+    //var cwidth=width+50;
+    var cwidth=foto.width;
+    //var cheight=height+50;
+    var cheight=foto.height;
     var superlayer=document.createElement('div');
     superlayer.id='s_'+divid;
     superlayer.style.zIndex=1001;
-    //superlayer.style.backgroundColor=bgcolor;
-    //superlayer.style.filter='alpha(opacity='+opacity+')';    
-    //superlayer.style.opacity=opacity/100;
     superlayer.style.position='absolute';
     superlayer.style.styleFloat='left';
     superlayer.style.top='50%';
@@ -220,16 +226,10 @@ simpleGallery.routines={
     superlayer.style.marginTop=-cheight/2+'px';
     superlayer.style.width=cwidth+'px';
     superlayer.style.height=cheight+'px';
+    superlayer.onclick='function(){simpleGallery.routines.removeCoverDiv("cover01");}';
 
     superlayer.innerHTML='<input type="image" src="'+imgclosing+'" name="cancel" id="cancel" onclick="simpleGallery.routines.removeCoverDiv(\'cover01\');"/><br /><br />';
-    
-    var foto=document.createElement('img');
-    foto.src=imgsrc;
-    foto.width=width;
-    foto.height=height;
-    foto.border='2px solid #FFFFCC'
     superlayer.appendChild(foto);
-
     document.body.appendChild(superlayer);
   }
 }
