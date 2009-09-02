@@ -328,15 +328,8 @@ public class SWBFormMgr
      * Regresa lista de FormElements a renderear
      * @return
      */
-    public List<FormElement> getRenderElements()
+    public List<SemanticProperty> getProperties()
     {
-        boolean DOJO=false;
-        boolean IPHONE=false;
-        boolean XHTML=false;
-        if(m_type.equals(TYPE_XHTML))XHTML=true;
-        if(m_type.equals(TYPE_DOJO))DOJO=true;
-        if(m_type.equals(TYPE_IPHONE))IPHONE=true;
-
         ArrayList arr=new ArrayList();
 
         if(!m_mode.equals(MODE_CREATE))
@@ -349,8 +342,7 @@ public class SWBFormMgr
                 while(it.hasNext())
                 {
                     SemanticProperty prop=it.next();
-                    FormElement ele=getFormElement(prop);
-                    arr.add(ele);
+                    arr.add(prop);
                 }
             }
         }else
@@ -363,15 +355,9 @@ public class SWBFormMgr
                 while(it.hasNext())
                 {
                     SemanticProperty prop=it.next();
-                    FormElement ele=getFormElement(prop);
-                    if(DOJO && !m_cls.isAutogenId() && prop.equals(m_cls.getDisplayNameProperty()))
-                    {
-                        ele.setAttribute("onkeyup", "dojo.byId('swb_create_id').value=replaceChars4Id(this.textbox.value);dijit.byId('swb_create_id').validate()");
-                    }
-                    arr.add(ele);
+                    arr.add(prop);
                 }
             }
-
         }
         return arr;
     }
