@@ -202,13 +202,6 @@ public class ImageGallery extends GenericResource {
                 value = null!=fup.getValue("titlestyle") && !"".equals(fup.getValue("titlestyle").trim()) ? fup.getValue("titlestyle").trim() : null;
                 base.setAttribute("titlestyle", value);
 
-                Iterator<String> it = base.getAttributeNames();
-                while(it.hasNext()) {
-                    String attname = it.next();
-                    System.out.println("attribute  ["+attname+", "+base.getAttribute(attname)+"]");
-                }
-
-
                 int i = 1;
                 String fileInput, filename, removeChk;
                 do {
