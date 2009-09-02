@@ -1,26 +1,26 @@
-/**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
+/**
+* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+*
+* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+* del SemanticWebBuilder 4.0.
+*
+* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+* de la misma.
+*
+* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+* dirección electrónica:
 *  http://www.semanticwebbuilder.org
-**/ 
- 
+**/
+
 
 package org.semanticwb.portal.resources;
 
@@ -46,13 +46,13 @@ public class ImageGallery extends GenericResource {
     private WBAdmResourceUtils admResUtils=new WBAdmResourceUtils();
     private String workPath;
     private String webWorkPath;
-    
+
     private static int idx = 1;
-    
+
     @Override
     public void setResourceBase(Resource base)
     {
-        try 
+        try
         {
             super.setResourceBase(base);
             workPath = (String) SWBPlatform.getWorkPath() +  base.getWorkPath();
@@ -60,7 +60,7 @@ public class ImageGallery extends GenericResource {
         }
         catch(Exception e) { log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);  }
     }
-    
+
     /**
      * @param request
      * @param response
@@ -93,7 +93,7 @@ public class ImageGallery extends GenericResource {
     }
 
     public String getGalleryScript(String... imgpath) {
-        Resource base=getResourceBase();
+        //Resource base=getResourceBase();
         StringBuilder out = new StringBuilder();
 
         try {
@@ -102,7 +102,7 @@ public class ImageGallery extends GenericResource {
 
             out.append("<script type=\"text/javascript\"> ");
             out.append("    simpleGallery_navpanel={ ");
-            //customize nav panel container 
+            //customize nav panel container
             out.append("        panel: {height:'45px', opacity:0.5, paddingTop:'5px', fontStyle:'bold 9px Verdana'}, ");
             //nav panel images (in that order)
             out.append("        images: [ '"+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/themes/control_rewind_blue.png', '"+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/themes/control_play_blue.png', '"+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/themes/control_fastforward_blue.png', '"+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/themes/control_pause_blue.png'], ");
@@ -114,21 +114,29 @@ public class ImageGallery extends GenericResource {
 
             out.append("   var mygallery=new simpleGallery( { ");
             //ID of main gallery container
-            out.append("	wrapperid: 'imggallery_"+ base.getId()+"', ");
-            //width/height of gallery in pixels. Should reflect dimensions of the images exactly 
-            out.append("	dimensions: ["+base.getAttribute("imgwidth","220")+", "+base.getAttribute("imgheight","150")+"], ");
+            /*out.append("	wrapperid: 'imggallery_"+ base.getId()+"', ");*/
+            out.append("	wrapperid: 'imggallery_"+ "1"+"', ");
+            //width/height of gallery in pixels. Should reflect dimensions of the images exactly
+            /*out.append("	dimensions: ["+base.getAttribute("imgwidth","220")+", "+base.getAttribute("imgheight","220")+"], ");*/
+            out.append("	dimensions: [220, 170], ");
             out.append("\n	imagearray: [ ");
 
+            for(String img : imgpath) {
+                out.append("\n['"+img+"','alert(\"hola\")','alert(\"crayola\")'],");
+            }
             if(imgpath.length>0)
                 out.deleteCharAt(out.length()-1);
 
             out.append("\n	], ");
-            out.append("	autoplay: "+base.getAttribute("autoplay","false")+", ");
+            /*out.append("	autoplay: "+base.getAttribute("autoplay","false")+", ");*/
+            out.append("	autoplay: false, ");
             out.append("	persist: false, ");
             //pause between slides (milliseconds)
-            out.append("	pause: "+base.getAttribute("pause","2500")+", ");
+            /*out.append("	pause: "+base.getAttribute("pause","2500")+", ");*/
+            out.append("	pause: 2500, ");
             //transition duration (milliseconds)
-            out.append("	fadeduration: "+base.getAttribute("fadetime","500")+", ");
+            /*out.append("	fadeduration: "+base.getAttribute("fadetime","500")+", ");*/
+            out.append("	fadeduration: 500, ");
             //event that fires when gallery has initialized/ ready to run
             out.append("	oninit:function(){ ");
             out.append("	}, ");
@@ -137,9 +145,10 @@ public class ImageGallery extends GenericResource {
             //i: integer reflecting current image within collection being shown (0=1st image, 1=2nd etc)
             out.append("	onslide:function(curslide, i){ ");
             out.append("	} ");
-            out.append("        ,fullwidth:"+base.getAttribute("fullwidth","380")+" ");
-            /*out.append("        ,fullheight:"+base.getAttribute("fullheight","280")+" ");*/
-            out.append("        ,fullheight:"+base.getAttribute("fullheight","100%")+" ");
+            /*out.append("        ,fullwidth:"+base.getAttribute("fullwidth","380")+" ");*/
+            out.append("        ,fullwidth:380 ");
+            /*out.append("        ,fullheight:"+base.getAttribute("fullheight","270")+" ");*/
+            out.append("        ,fullheight:270 ");
             out.append("        ,imageClosing: '"+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/themes/cancel.png'");
             out.append("    } ");
             out.append("); ");
@@ -148,45 +157,46 @@ public class ImageGallery extends GenericResource {
             /*out.append("<div style=\"width:"+base.getAttribute("imgwidth")+"px;\"> ");*/
             out.append("<div> ");
             out.append("<div class=\"swb-galeria\"> ");
-            out.append("<div style=\""+base.getAttribute("titlestyle","")+"\">"+base.getAttribute("title","")+"</div> ");
-            out.append("<div id=\"imggallery_"+base.getId()+"\" style=\"position:relative; visibility:hidden\"></div> ");
+            /*out.append("<div style=\""+base.getAttribute("titlestyle","")+"\">"+base.getAttribute("title","")+"</div> ");*/
+            out.append("<div>"+"probando"+"</div> ");
+            /*out.append("<div id=\"imggallery_"+base.getId()+"\" style=\"position:relative; visibility:hidden\"></div> ");*/
+            out.append("<div id=\"imggallery_1\" style=\"position:relative; visibility:hidden\"></div> ");
             out.append("</div> ");
             out.append("</div>\n");
-            
         }catch(Exception e) {
             log.error(e);
         }
         return out.toString();
     }
-    
+
     @Override
-    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
-    {        
+    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
         response.setContentType("text/html;charset=iso-8859-1");
         PrintWriter out = response.getWriter();
 
         Resource base=getResourceBase();
-        
+
         String msg=paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_undefinedOperation");
         String action = null != request.getParameter("act") && !"".equals(request.getParameter("act").trim()) ? request.getParameter("act").trim() : paramRequest.getAction();
-        
+
         if(action.equals("add") || action.equals("edit")) {
             out.println(getForm(request, paramRequest));
         }else if(action.equals("update")) {
             FileUpload fup = new FileUpload();
             try {
                 fup.getFiles(request, response);
-                
+
                 String value = null!=fup.getValue("title") && !"".equals(fup.getValue("title").trim()) ? fup.getValue("title").trim() : null;
-                base.setAttribute("title", value);                
+                base.setAttribute("title", value);
                 value = null!=fup.getValue("imgwidth") && !"".equals(fup.getValue("imgwidth").trim()) ? fup.getValue("imgwidth").trim() : null;
                 base.setAttribute("imgwidth", value);
                 value = null!=fup.getValue("imgheight") && !"".equals(fup.getValue("imgheight").trim()) ? fup.getValue("imgheight").trim() : null;
-                base.setAttribute("imgheight", value);                
+                base.setAttribute("imgheight", value);
                 value = null!=fup.getValue("fullwidth") && !"".equals(fup.getValue("fullwidth").trim()) ? fup.getValue("fullwidth").trim() : null;
                 base.setAttribute("fullwidth", value);
                 value = null!=fup.getValue("fullheight") && !"".equals(fup.getValue("fullheight").trim()) ? fup.getValue("fullheight").trim() : null;
-                base.setAttribute("fullheight", value);                
+                base.setAttribute("fullheight", value);
                 value = null!=fup.getValue("autoplay") && !"".equals(fup.getValue("autoplay").trim()) ? fup.getValue("autoplay").trim() : null;
                 base.setAttribute("autoplay", value);
                 value = null!=fup.getValue("pause") && !"".equals(fup.getValue("pause").trim()) ? fup.getValue("pause").trim() : null;
@@ -195,22 +205,22 @@ public class ImageGallery extends GenericResource {
                 base.setAttribute("fadetime", value);
                 value = null!=fup.getValue("titlestyle") && !"".equals(fup.getValue("titlestyle").trim()) ? fup.getValue("titlestyle").trim() : null;
                 base.setAttribute("titlestyle", value);
-                
+
                 Iterator<String> it = base.getAttributeNames();
                 while(it.hasNext()) {
                     String attname = it.next();
                     System.out.println("attribute  ["+attname+", "+base.getAttribute(attname)+"]");
                 }
-                
-                
+
+
                 int i = 1;
                 String fileInput, filename, removeChk;
                 do {
                 //for(int j=0; j<15; j++) {
                     fileInput = "imggallery_" + base.getId() + "_" + i;
-                    removeChk = "remove_" + base.getId() + "_" + i;                                        
+                    removeChk = "remove_" + base.getId() + "_" + i;
                     value = null!=fup.getValue(removeChk) && !"".equals(fup.getValue(removeChk).trim()) ? fup.getValue(removeChk).trim() : "0";
-                    
+
                     if("1".equals(value) && base.getAttribute(fileInput)!=null) {
                         File imgFile = new File(workPath + "/" + base.getAttribute(fileInput).trim());
                         imgFile.delete();
@@ -238,36 +248,36 @@ public class ImageGallery extends GenericResource {
                     i++;
                 //}
                 } while(value!=null || base.getAttribute(fileInput)!=null);
-                
+
                 base.updateAttributesToDB();
-                
+
                 msg=paramRequest.getLocaleString("msgOkUpdateResource") +" "+ base.getId();
                 out.println("<script type=\"text/javascript\" language=\"JavaScript\">");
                 out.println("   alert('"+msg+"');");
                 out.println("   location='"+paramRequest.getRenderUrl().setAction("edit").toString()+"';");
                 out.println("</script>");
             }catch(Exception e) {
-                log.error(e); msg=paramRequest.getLocaleString("msgErrUpdateResource") +" "+ base.getId(); 
+                log.error(e); msg=paramRequest.getLocaleString("msgErrUpdateResource") +" "+ base.getId();
             }
         }
-        else if(action.equals("remove")) 
+        else if(action.equals("remove"))
         {
-            msg=admResUtils.removeResource(base);  
+            msg=admResUtils.removeResource(base);
             out.println(
                 "<script type=\"text/javascript\" language=\"JavaScript\">"+
                 "   alert('"+msg+"');"+
-                "</script>");             
+                "</script>");
         }
         out.flush();
     }
-    
+
     private String getForm(javax.servlet.http.HttpServletRequest request, SWBParamRequest paramRequest) {
         StringBuffer ret=new StringBuffer();
         Resource base=getResourceBase();
         try {
             SWBResourceURL url = paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN);
             url.setAction("update");
-            
+
             ret.append("<script type=\"text/javascript\">");
             ret.append("  dojo.require(\"dijit.form.NumberTextBox\");");
             ret.append("  dojo.require(\"dijit.form.Button\");");
@@ -313,7 +323,7 @@ public class ImageGallery extends GenericResource {
             ret.append("\n</div> ");
             ret.append("\n</td>  ");
             ret.append("\n</tr>  ");
-            
+
             ret.append("\n<tr>");
             ret.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_autoplay") + "</td>");
             ret.append("\n<td>");
@@ -387,7 +397,7 @@ public class ImageGallery extends GenericResource {
             ret.append("\n</tr>");
             ret.append("\n</table> ");
             ret.append("\n</fieldset> ");
-            
+
             ret.append("\n<fieldset> ");
             ret.append("\n<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\"> ");
             ret.append("\n <tr><td>");
@@ -396,11 +406,11 @@ public class ImageGallery extends GenericResource {
             ret.append("\n </td></tr>");
             ret.append("\n</table> ");
             ret.append("\n</fieldset> ");
-            
+
             ret.append("\n</form>  ");
             ret.append("\n* " + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_required"));
             ret.append("\n</div>  ");
-            
+
             ret.append("\n<script type=\"text/javascript\"> ");
             ret.append("\nfunction addRowToTable(tblId, filename, img, cellSufix) { ");
             ret.append("\n    var tbl = document.getElementById(tblId); ");
@@ -413,7 +423,7 @@ public class ImageGallery extends GenericResource {
             ret.append("\n    var folioCell = row.insertCell(0); ");
             ret.append("\n    folioCell.style.textAlign = 'right'; ");
             ret.append("\n    var folioTextNode = document.createTextNode(iteration); ");
-            ret.append("\n    folioCell.appendChild(folioTextNode); ");            
+            ret.append("\n    folioCell.appendChild(folioTextNode); ");
             ret.append("\n ");
             ret.append("\n    // cell check edit ");
             ret.append("\n    var editCheckCell = row.insertCell(1); ");
@@ -426,7 +436,7 @@ public class ImageGallery extends GenericResource {
             ret.append("\n    }else { ");
             ret.append("\n        editCheckInput.name = 'edit_"+base.getId()+"_'+iteration; ");
             ret.append("\n        editCheckInput.id = 'edit_"+base.getId()+"_'+iteration; ");
-            ret.append("\n    }");            
+            ret.append("\n    }");
             ret.append("\n    editCheckInput.alt = '"+paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_altEdit")+"'; ");
             ret.append("\n    editCheckInput.disabled = true; ");
             ret.append("\n    editCheckInput.onclick = function(){ ");
@@ -436,7 +446,7 @@ public class ImageGallery extends GenericResource {
             ret.append("\n            editCheckInput.disabled = true; ");
             ret.append("\n        } ");
             ret.append("\n    }; ");
-            ret.append("\n    editCheckCell.appendChild(editCheckInput); ");            
+            ret.append("\n    editCheckCell.appendChild(editCheckInput); ");
             ret.append("\n ");
             ret.append("\n    // cell check remove ");
             ret.append("\n    var removeCheckCell = row.insertCell(2); ");
@@ -458,7 +468,7 @@ public class ImageGallery extends GenericResource {
             ret.append("\n    } ");
             ret.append("\n    removeCheckInput.value = '1'; ");
             ret.append("\n    removeCheckCell.appendChild(removeCheckInput); ");
-            ret.append("\n ");                        
+            ret.append("\n ");
             ret.append("\n    // celda nombre de archivo ");
             ret.append("\n    var filenameCell = row.insertCell(3); ");
             ret.append("\n    if(filename) { ");
@@ -466,7 +476,7 @@ public class ImageGallery extends GenericResource {
             ret.append("\n        filenameCell.appendChild(fnTxt); ");
             ret.append("\n    } ");
             ret.append("\n    filenameCell.style.textAlign = 'left'; ");
-            ret.append("\n ");            
+            ret.append("\n ");
             ret.append("\n    var imgCell = row.insertCell(4); ");
             ret.append("\n    if(img) { ");
             ret.append("\n        imgCell.style.textAlign = 'center'; ");
@@ -483,7 +493,7 @@ public class ImageGallery extends GenericResource {
             ret.append("\n        imgCell.appendChild(fileInput); ");
             ret.append("\n    } ");
             ret.append("\n} ");
-            
+
             ret.append("\n ");
             ret.append("\nfunction removeRowFromTable(tblId) { ");
             ret.append("\n    var tbl = document.getElementById(tblId); ");
@@ -492,7 +502,7 @@ public class ImageGallery extends GenericResource {
             ret.append("\n        tbl.deleteRow(lastRow - 1); ");
             ret.append("\n    } ");
             ret.append("\n} ");
-            
+
             Iterator<String> it = base.getAttributeNames();
             while(it.hasNext()) {
                 String attname = it.next();
@@ -501,7 +511,7 @@ public class ImageGallery extends GenericResource {
                     ret.append("\naddRowToTable('igtbl_"+base.getId()+"', '"+base.getAttribute(attname)+"', '"+admResUtils.displayImage(base, base.getAttribute(attname), attname)+"', '"+attname.substring(11)+"'); ");
                 }
             }
-            
+
             ret.append("\n</script>");
             ret.append(getScript());
         }catch(Exception e) {
@@ -509,7 +519,7 @@ public class ImageGallery extends GenericResource {
         }
         return ret.toString();
     }
-    
+
     private String getScript() {
         StringBuffer ret = new StringBuffer();
         try {
@@ -526,7 +536,7 @@ public class ImageGallery extends GenericResource {
             ret.append(admResUtils.loadIsNumber(10));
             ret.append("\n</script>");
         }catch(Exception e) {
-            log.error(e); 
+            log.error(e);
         }
         return ret.toString();
     }
