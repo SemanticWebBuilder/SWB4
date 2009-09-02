@@ -1,26 +1,25 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 package org.semanticwb.resource.office.sem;
 
 import java.io.File;
@@ -126,13 +125,20 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
                     if (!entry.isDirectory())
                     {
                         InputStream inEntry = zip.getInputStream(entry);
-                        String file=entry.getName();
-                        int pos=file.lastIndexOf("/");
-                        if(pos!=-1)
+                        String file = entry.getName();
+                        if (inEntry == null)
                         {
-                            file=file.substring(pos+1);
+                            int pos = file.lastIndexOf("/");
+                            if (pos != -1)
+                            {
+                                file = file.substring(pos + 1);
+                            }
+                            SWBPlatform.writeFileToWorkPath(getResourceBase().getWorkPath() + "/" + file, inEntry, "");
                         }
-                        SWBPlatform.writeFileToWorkPath(getResourceBase().getWorkPath() + "/" + file, inEntry, "");
+                        else
+                        {
+                            log.error("No se puede sacar archivo de zip, para publicación de office entrada: "+entry.getName()+" tamaño: "+entry.getSize()+" archivo zip: "+zipFile.getAbsolutePath());
+                        }
                     }
                 }
                 zip.close();
@@ -152,7 +158,7 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
 
     }
 
-    public static void loadContent(InputStream in, String dir,String type)
+    public static void loadContent(InputStream in, String dir, String type)
     {
         File zipFile = null;
         try
@@ -173,18 +179,18 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
                         int pos=file.lastIndexOf("/");
                         if(pos!=-1)
                         {
-                            file=file.substring(pos+1);
+                        file=file.substring(pos+1);
                         }
                         SWBPlatform.writeFileToWorkPath(dir + "/" + entry.getName(), inEntry, "");*/
                         InputStream inEntry = zip.getInputStream(entry);
-                        String file=entry.getName();
-                        if(!type.equals("excel"))
+                        String file = entry.getName();
+                        if (!type.equals("excel"))
                         {
-                        int pos=file.lastIndexOf("/");
-                        if(pos!=-1)
-                        {
-                            file=file.substring(pos+1);
-                        }
+                            int pos = file.lastIndexOf("/");
+                            if (pos != -1)
+                            {
+                                file = file.substring(pos + 1);
+                            }
                         }
                         SWBPlatform.writeFileToWorkPath(dir + "/" + file, inEntry, "");
                     }
@@ -221,6 +227,6 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
                 }
             }
         }
-        return (org.semanticwb.resource.office.sem.OfficeResource)obj;
+        return (org.semanticwb.resource.office.sem.OfficeResource) obj;
     }
 }
