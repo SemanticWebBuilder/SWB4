@@ -16,8 +16,8 @@
     {
         WebPage child=pages.next();
         String path="/models/"+ webpage.getWebSiteId() +"/css/iconos/servicios/"+child.getId()+".png";
-        
-        try
+        path="/work"+path;
+        /*try
         {
             InputStream in=SWBPlatform.getFileFromWorkPath(path);
             if(in==null)
@@ -33,11 +33,10 @@
         }
         catch(Exception e)
         {
-            path="/work/models/"+ webpage.getWebSiteId() +"/css/iconos/default.png";;
-            
-        }
+            path="/work/models/"+ webpage.getWebSiteId() +"/css/iconos/default.png";;            
+        }*/
         %>
-            <li><img src="<%=path%>" alt="<%=child.getTitle()%>"><a href="<%=child.getUrl()%>"><%=child.getTitle()%></a></li>
+        <li><img src="<%=path%>" width="60" height="60" alt="<%=child.getTitle()%>"><a href="<%=child.getUrl()%>"><%=child.getTitle()%></a></li>
         <%
         
         count++;
