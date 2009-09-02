@@ -122,7 +122,7 @@ public class ImageGallery extends GenericResource {
             out.append("\n	imagearray: [ ");
 
             for(String img : imgpath) {
-                out.append("\n['"+img+"','alert(\"hola\")','alert(\"crayola\")'],");
+                out.append("\n['"+img+"','',''],");
             }
             if(imgpath.length>0)
                 out.deleteCharAt(out.length()-1);
