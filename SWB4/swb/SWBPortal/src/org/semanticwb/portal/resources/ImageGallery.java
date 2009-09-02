@@ -88,85 +88,81 @@ public class ImageGallery extends GenericResource {
         }
         String[] ip = new String[imgpath.size()];
         imgpath.toArray(ip);
-        out.print(getGalleryScript(ip));
+        String script = getGalleryScript(base.getId(), Integer.parseInt(base.getAttribute("imgwidth","220")), Integer.parseInt(base.getAttribute("imgheight","220")), Boolean.getBoolean(base.getAttribute("autoplay","false")), Integer.parseInt(base.getAttribute("pause","2500")), Integer.parseInt(base.getAttribute("fadetime","500")), Integer.parseInt(base.getAttribute("fullwidth","380")), Integer.parseInt(base.getAttribute("fullheight","270")), base.getAttribute("title",""), base.getAttribute("titlestyle",""), ip);
+        out.print(script);
         out.flush();
     }
 
-    public String getGalleryScript(String... imgpath) {
-        //Resource base=getResourceBase();
+    public String getGalleryScript(String oid, int tw, int th, boolean autoplay, int pause, int fadetime, int fullwidth, int fullheight, String title, String titlestyle, String[] imgpath) {
         StringBuilder out = new StringBuilder();
 
-        try {
-            out.append("\n<script type=\"text/javascript\" src=\""+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/jquery-imagegallery.js\"></script>");
-            out.append("<script type=\"text/javascript\" src=\""+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/jquery-1.3.js\"></script>");
+        out.append("\n<script type=\"text/javascript\" src=\""+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/jquery-imagegallery.js\"></script>");
+        out.append("<script type=\"text/javascript\" src=\""+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/jquery-1.3.js\"></script>");
 
-            out.append("<script type=\"text/javascript\"> ");
-            out.append("    simpleGallery_navpanel={ ");
-            //customize nav panel container
-            out.append("        panel: {height:'45px', opacity:0.5, paddingTop:'5px', fontStyle:'bold 9px Verdana'}, ");
-            //nav panel images (in that order)
-            out.append("        images: [ '"+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/themes/control_rewind_blue.png', '"+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/themes/control_play_blue.png', '"+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/themes/control_fastforward_blue.png', '"+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/themes/control_pause_blue.png'], ");
-            //top offset of left, play, and right images, PLUS spacing between the 3 images
-            out.append("        imageSpacing: {offsetTop:[-3, 0, -3], spacing:10}, ");
-            //duration of slide up animation to reveal panel
-            out.append("        slideduration: 500 ");
-            out.append("    }; ");
+        out.append("<script type=\"text/javascript\"> ");
+        out.append("    simpleGallery_navpanel={ ");
+        //customize nav panel container
+        out.append("        panel: {height:'45px', opacity:0.5, paddingTop:'5px', fontStyle:'bold 9px Verdana'}, ");
+        //nav panel images (in that order)
+        out.append("        images: [ '"+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/themes/control_rewind_blue.png', '"+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/themes/control_play_blue.png', '"+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/themes/control_fastforward_blue.png', '"+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/themes/control_pause_blue.png'], ");
+        //top offset of left, play, and right images, PLUS spacing between the 3 images
+        out.append("        imageSpacing: {offsetTop:[-3, 0, -3], spacing:10}, ");
+        //duration of slide up animation to reveal panel
+        out.append("        slideduration: 500 ");
+        out.append("    }; ");
 
-            out.append("   var mygallery=new simpleGallery( { ");
-            //ID of main gallery container
-            /*out.append("	wrapperid: 'imggallery_"+ base.getId()+"', ");*/
-            out.append("	wrapperid: 'imggallery_"+ "1"+"', ");
-            //width/height of gallery in pixels. Should reflect dimensions of the images exactly
-            /*out.append("	dimensions: ["+base.getAttribute("imgwidth","220")+", "+base.getAttribute("imgheight","220")+"], ");*/
-            out.append("	dimensions: [220, 170], ");
-            out.append("\n	imagearray: [ ");
+        out.append("   var mygallery=new simpleGallery( { ");
+        //ID of main gallery container
+        out.append("	wrapperid: 'imggallery_"+ oid +"', ");
+        //width/height of gallery in pixels. Should reflect dimensions of the images exactly
+        out.append("	dimensions: ["+ tw +", "+ th +"], ");
+        out.append("\n	imagearray: [ ");
 
-            for(String img : imgpath) {
-                out.append("\n['"+img+"','',''],");
-            }
-            if(imgpath.length>0)
-                out.deleteCharAt(out.length()-1);
-
-            out.append("\n	], ");
-            /*out.append("	autoplay: "+base.getAttribute("autoplay","false")+", ");*/
-            out.append("	autoplay: false, ");
-            out.append("	persist: false, ");
-            //pause between slides (milliseconds)
-            /*out.append("	pause: "+base.getAttribute("pause","2500")+", ");*/
-            out.append("	pause: 2500, ");
-            //transition duration (milliseconds)
-            /*out.append("	fadeduration: "+base.getAttribute("fadetime","500")+", ");*/
-            out.append("	fadeduration: 500, ");
-            //event that fires when gallery has initialized/ ready to run
-            out.append("	oninit:function(){ ");
-            out.append("	}, ");
-            //event that fires after each slide is shown
-            //curslide: returns DOM reference to current slide's DIV (ie: try alert(curslide.innerHTML)
-            //i: integer reflecting current image within collection being shown (0=1st image, 1=2nd etc)
-            out.append("	onslide:function(curslide, i){ ");
-            out.append("	} ");
-            /*out.append("        ,fullwidth:"+base.getAttribute("fullwidth","380")+" ");*/
-            out.append("        ,fullwidth:380 ");
-            /*out.append("        ,fullheight:"+base.getAttribute("fullheight","270")+" ");*/
-            out.append("        ,fullheight:270 ");
-            out.append("        ,imageClosing: '"+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/themes/cancel.png'");
-            out.append("    } ");
-            out.append("); ");
-            out.append("</script> ");
-
-            /*out.append("<div style=\"width:"+base.getAttribute("imgwidth")+"px;\"> ");*/
-            out.append("<div> ");
-            out.append("<div class=\"swb-galeria\"> ");
-            /*out.append("<div style=\""+base.getAttribute("titlestyle","")+"\">"+base.getAttribute("title","")+"</div> ");*/
-            out.append("<div>"+"probando"+"</div> ");
-            /*out.append("<div id=\"imggallery_"+base.getId()+"\" style=\"position:relative; visibility:hidden\"></div> ");*/
-            out.append("<div id=\"imggallery_1\" style=\"position:relative; visibility:hidden\"></div> ");
-            out.append("</div> ");
-            out.append("</div>\n");
-        }catch(Exception e) {
-            log.error(e);
+        for(String img : imgpath) {
+            out.append("\n['"+img+"','',''],");
         }
+        if(imgpath.length>0)
+            out.deleteCharAt(out.length()-1);
+
+        out.append("\n	], ");
+        out.append("	autoplay: "+ autoplay +", ");
+        out.append("	persist: false, ");
+        //pause between slides (milliseconds)
+        out.append("	pause: "+ pause +", ");
+        //transition duration (milliseconds)
+        out.append("	fadeduration: "+ fadetime +", ");
+        //event that fires when gallery has initialized/ ready to run
+        out.append("	oninit:function(){ ");
+        out.append("	}, ");
+        //event that fires after each slide is shown
+        //curslide: returns DOM reference to current slide's DIV (ie: try alert(curslide.innerHTML)
+        //i: integer reflecting current image within collection being shown (0=1st image, 1=2nd etc)
+        out.append("	onslide:function(curslide, i){ ");
+        out.append("	} ");
+        out.append("        ,fullwidth:"+ fullwidth +" ");
+        out.append("        ,fullheight:"+ fullheight +" ");
+        out.append("        ,imageClosing: '"+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/themes/cancel.png'");
+        out.append("    } ");
+        out.append("); ");
+        out.append("</script> ");
+
+        /*out.append("<div style=\"width:"+base.getAttribute("imgwidth")+"px;\"> ");*/
+        out.append("<div> ");
+        out.append("<div class=\"swb-galeria\"> ");
+        out.append("<div style=\""+ titlestyle +"\">"+ title +"</div> ");
+        out.append("<div id=\"imggallery_"+ oid +"\" style=\"position:relative; visibility:hidden\"></div> ");
+        out.append("</div> ");
+        out.append("</div>\n");
+
         return out.toString();
+    }
+
+    public String getGalleryScript(String divId, String title, String titlestyle, String[] imgpath) {
+        return getGalleryScript(divId, 220, 170, false, 2500, 500, 420, 370, title, titlestyle, imgpath);
+    }
+
+    public String getGalleryScript(String[] imgpath) {
+        return getGalleryScript(Integer.toString((int)Math.random()*100), 220, 170, false, 2500, 500, 420, 370, "Image gallery", "", imgpath);
     }
 
     @Override
