@@ -89,7 +89,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
                 log.event(e);
             }
         }else if(action.equals(response.Action_REMOVE)){
-            SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("objInstUri"));
+            SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
             semObject.remove();
             SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + response.getResourceBase().getWorkPath() + "/" + semObject.getId());
         }else if(action.equals(response.Action_ADD)){
