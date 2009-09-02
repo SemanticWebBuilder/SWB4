@@ -239,6 +239,9 @@ public class SWBARule extends GenericResource {
         if (tmsid == null) {
             tmsid = paramRequest.getWebPage().getWebSiteId();
         }
+
+        log.debug("tm:"+tmsid);
+
         comboAtt = null;
         vecOrderAtt = null;
         loadComboAttr(tmsid, rRule.getURI(), paramRequest);
@@ -504,17 +507,33 @@ public class SWBARule extends GenericResource {
                         hmOper.put("=", paramRequest.getLocaleString("msgSameAs"));
                         hmOper.put("!=", paramRequest.getLocaleString("msgNotEqual"));
                         hmAttr.put("Operador", hmOper);
-                        StringTokenizer st = new StringTokenizer(selectValues, "|");
-                        while (st.hasMoreTokens()) {
-                            String tok = st.nextToken();
-                            int ind = tok.indexOf(':');
-                            String idt = tok;
-                            String val = tok;
-                            if (ind > 0) {
-                                idt = tok.substring(0, ind);
-                                val = tok.substring(ind + 1);
+
+                        if(usrAtt.getName().equals("usrLanguage"))
+                        {
+                            Iterator<Language> itlang= ws.listLanguages();
+                            while (itlang.hasNext()) {
+                                Language lang = itlang.next();
+                                if (null!=lang) {
+                                    String strLang = lang.getDisplayTitle(user.getLanguage());
+                                    String strVal = lang.getId();
+                                    hmValues.put(strVal,strLang);
+                                }
                             }
-                            hmValues.put(idt, val);
+                        }
+                        else
+                        {
+                            StringTokenizer st = new StringTokenizer(selectValues, "|");
+                            while (st.hasMoreTokens()) {
+                                String tok = st.nextToken();
+                                int ind = tok.indexOf(':');
+                                String idt = tok;
+                                String val = tok;
+                                if (ind > 0) {
+                                    idt = tok.substring(0, ind);
+                                    val = tok.substring(ind + 1);
+                                }
+                                hmValues.put(idt, val);
+                            }
                         }
                         hmAttr.put("Valor", hmValues);
                         comboAtt.put(usrAtt.getName(), hmAttr);
