@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class ClasifiedRealStateBase extends org.semanticwb.portal.community.Clasified implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public class ClasifiedRealStateBase extends org.semanticwb.portal.community.ClasifiedBuySell implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Geolocalizable,org.semanticwb.model.Traceable,org.semanticwb.portal.community.Contactable,org.semanticwb.portal.community.Addressable
 {
     public static final org.semanticwb.platform.SemanticClass swbcomm_ClasifiedRealState=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#ClasifiedRealState");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#ClasifiedRealState");
@@ -47,5 +47,75 @@ public class ClasifiedRealStateBase extends org.semanticwb.portal.community.Clas
     public static boolean hasClasifiedRealState(String id, org.semanticwb.model.SWBModel model)
     {
         return (getClasifiedRealState(id, model)!=null);
+    }
+
+    public String getExtNumber()
+    {
+        return getSemanticObject().getProperty(swbcomm_extNumber);
+    }
+
+    public void setExtNumber(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_extNumber, value);
+    }
+
+    public int getStep()
+    {
+        return getSemanticObject().getIntProperty(swb_geoStep);
+    }
+
+    public void setStep(int value)
+    {
+        getSemanticObject().setIntProperty(swb_geoStep, value);
+    }
+
+    public String getIntNumber()
+    {
+        return getSemanticObject().getProperty(swbcomm_intNumber);
+    }
+
+    public void setIntNumber(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_intNumber, value);
+    }
+
+    public String getStreet()
+    {
+        return getSemanticObject().getProperty(swbcomm_street);
+    }
+
+    public void setStreet(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_street, value);
+    }
+
+    public double getLatitude()
+    {
+        return getSemanticObject().getDoubleProperty(swb_latitude);
+    }
+
+    public void setLatitude(double value)
+    {
+        getSemanticObject().setDoubleProperty(swb_latitude, value);
+    }
+
+    public double getLongitude()
+    {
+        return getSemanticObject().getDoubleProperty(swb_longitude);
+    }
+
+    public void setLongitude(double value)
+    {
+        getSemanticObject().setDoubleProperty(swb_longitude, value);
+    }
+
+    public String getCity()
+    {
+        return getSemanticObject().getProperty(swbcomm_city);
+    }
+
+    public void setCity(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_city, value);
     }
 }
