@@ -2,9 +2,15 @@
 <div class="tabsTemas">
 <ul>
 <%
+    User user=(User)request.getAttribute("user");
+    String lang="es";
+    if(user.getLanguage()!=null)
+    {
+        lang=user.getLanguage();
+    }
     WebPage webpage = (WebPage) request.getAttribute("webpage");
     WebPage sitios_de_Interes = webpage.getWebSite().getWebPage("Sitios_de_Interes");
-    Iterator<WebPage> pages=sitios_de_Interes.listVisibleChilds("es"); // ordenados por nombre
+    Iterator<WebPage> pages=sitios_de_Interes.listVisibleChilds(lang); // ordenados por nombre
     int count=0;
     while(pages.hasNext())
     {

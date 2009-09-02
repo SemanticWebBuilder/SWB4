@@ -2,9 +2,15 @@
 <div class="clasificadosIzquierda">
 
     <%
+            User user = (User) request.getAttribute("user");
+            String lang = "es";
+            if (user.getLanguage() != null)
+            {
+                lang = user.getLanguage();
+            }
             WebPage webpage = (WebPage) request.getAttribute("webpage");
             WebPage clasificados = webpage.getWebSite().getWebPage("Clasificados");
-            Iterator<WebPage> nivel1 = clasificados.listVisibleChilds("es");
+            Iterator<WebPage> nivel1 = clasificados.listVisibleChilds(lang);
             int elements = 0;
             while (nivel1.hasNext())
             {
@@ -12,7 +18,7 @@
                 elements++;
             }
             int rows = elements / 2;
-            nivel1 = clasificados.listVisibleChilds("es");
+            nivel1 = clasificados.listVisibleChilds(lang);
             int irow = 0;
             while (nivel1.hasNext())
             {
@@ -24,7 +30,7 @@
         </li>
 
         <%
-                Iterator<WebPage> subpages = child.listVisibleChilds("es");
+                Iterator<WebPage> subpages = child.listVisibleChilds(lang);
                 int i = 0;
                 while (subpages.hasNext())
                 {
