@@ -33,248 +33,146 @@ User user=paramRequest.getUser();
 WebPage wpage=paramRequest.getWebPage();
 String perfilPath=wpage.getWebSite().getWebPage("perfil").getUrl();
 String action=paramRequest.getAction();
-String scope = (String) request.getAttribute("scope");
 Iterator<DirectoryObject> itObjs=(Iterator)request.getAttribute("itDirObjs");
 
 SemanticObject sobj = (SemanticObject) request.getAttribute("sobj");
-SemanticClass semClass=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sobj.getURI());
-
-ArrayList aprops2display=new ArrayList();
-//String props2display=(String)request.getAttribute("props2display");
-String props2display="dirPhoto,title,description,tags,creator,created";
-if(props2display!=null && semClass!=null){
-    StringTokenizer strTokens=new StringTokenizer(props2display,",");
-    while(strTokens.hasMoreTokens()){
-        String token=strTokens.nextToken();
-        if(token==null) return;
-        SemanticProperty semProp=semClass.getProperty(token);
-        if(semProp!=null){
-            aprops2display.add(semProp);
-        }
-    }
-}
-
-if (sobj != null) {
-    if(action.equals("excel")){
-        %>
-        <table>
-            <tr><td>
-                <table>
-                    <tr><td>
-                        <table>
-                            <tr>
-                                <%
-                                Iterator<SemanticProperty> itProps=aprops2display.iterator();
-                                while(itProps.hasNext())
-                                {
-                                   SemanticProperty semProp=itProps.next();
-                                %>
-                                    <th><%=semProp.getDisplayName()%></th>
-                                <%
-                                }
-                                %>
-                            </tr>
-                            <%
-                            int actualPage = 1;
-                            String strResTypes[] = getCatSortArray(itObjs, sobj, actualPage, request.getParameter("txtFind"), paramRequest, scope);
-                            String[] pageParams = strResTypes[strResTypes.length - 1].toString().split(":swbp4g1:");
-                            int iIniPage = Integer.parseInt(pageParams[0]);
-                            int iFinPage = Integer.parseInt(pageParams[1]);
-                            int iTotPage = Integer.parseInt(pageParams[2]);
-                            if (iFinPage == strResTypes.length) {
-                                iFinPage = iFinPage - 1;
-                            }
-                            for (int i = iIniPage; i < strResTypes.length-1; i++)
-                            {
-                                try{
-                                    %>
-                                       <tr>
-                                    <%
-                                    String[] strFields = strResTypes[i].toString().split(":swbp4g1:");
-                                    String orderField = strFields[0];
-                                    String ObjUri = strFields[1];
-                                    SemanticObject semObject = SemanticObject.createSemanticObject(ObjUri);
-                                    Iterator <SemanticProperty> itObjProps=semObject.getSemanticClass().listProperties();
-                                    while(itObjProps.hasNext()){
-                                        SemanticProperty semProp=itObjProps.next();
-                                        //if(aprops2display.contains(semProp))
-                                        if(semProp.isDataTypeProperty())
-                                        {
-                                            String propValue=semObject.getProperty(semProp);
-                                        %>
-                                                 <td>
-                                                     <%if(propValue!=null && !propValue.equals("null")){%>
-                                                    <%=propValue%>
-                                                <%}%>
-                                                </td>
-                                        <%
-                                        }
-                                     }
-                                    %>
-                                         </tr>
-                                    <%
-                                    }catch(Exception e){
-                                        e.printStackTrace();
-                                    }
-                                  }
-                               %>
-                </table>
-             </td>
-           </tr>
-         </table>
-      </td>
-    </tr>
-</table>
-<%
-}else{
+if (sobj != null) {    
 SWBResourceURL url=paramRequest.getRenderUrl();
 SWBResourceURL urlExcel=paramRequest.getRenderUrl();
 url.setParameter("uri", sobj.getURI());
 %>
    <div id="entriesList">
         <%url.setParameter("act","add");%>
-        <form action="<%=url.toString()%>">
-            <%=paramRequest.getLocaleString("find")%>:<input type="text" name="txtFind"/><button type="submit"><%=paramRequest.getLocaleString("go")%></button>
-            <p align="right">
-                <a href="<%=url.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/nueva_version.gif" border="0" align="absmiddle" alt="<%=paramRequest.getLocaleString("addInstance")%>" TITLE="<%=paramRequest.getLocaleString("addInstance")%>"></a>
-                <%
-                    urlExcel.setAction("excel");
-                    url.setParameter("txtFind", request.getParameter("txtFind"));
-                %>
-                <a href="<%=urlExcel%>"><img width="21" height="21" src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/Excel-32.gif" border="0" align="absmiddle" alt="<%=paramRequest.getLocaleString("exportExcel")%>" TITLE="<%=paramRequest.getLocaleString("exportExcel")%>"></a>
-            </p>
-        </form>
+        <p align="right">
+            <a href="<%=url.toString()%>">Agregar elemento a directorio</a>
+        </p>
         <%
-            //Empieza paginación
-            SWBResourceURL urlPag=paramRequest.getRenderUrl();
-            int actualPage = 1;
-            if (request.getParameter("actualPage") != null) {
-                actualPage = Integer.parseInt(request.getParameter("actualPage"));
-            }
-            String strResTypes[] = getCatSortArray(itObjs, sobj, actualPage, request.getParameter("txtFind"), paramRequest, scope);
-            String[] pageParams = strResTypes[strResTypes.length - 1].toString().split(":swbp4g1:");
+        //Empieza paginación
+        SWBResourceURL urlPag=paramRequest.getRenderUrl();
+        int actualPage = 1;
+        if (request.getParameter("actualPage") != null) {
+            actualPage = Integer.parseInt(request.getParameter("actualPage"));
+        }
+        String strResTypes[] = getCatSortArray(itObjs, actualPage, request.getParameter("txtFind"));
+        String[] pageParams = strResTypes[strResTypes.length - 1].toString().split(":swbp4g1:");
 
-            int iIniPage = Integer.parseInt(pageParams[0]);
-            int iFinPage = Integer.parseInt(pageParams[1]);
-            int iTotPage = Integer.parseInt(pageParams[2]);
-            if (iFinPage == strResTypes.length) {
-                iFinPage = iFinPage - 1;
-            }
-            if (actualPage > 1) {
-                 int gotop = (actualPage - 1);
-                 urlPag.setParameter("actualPage", ""+gotop);
-                 out.println("<a class=\"link\" href=\""+urlPag.toString()+"\"><<</a>&nbsp;");
-            }
-            if(iTotPage>1){
-                for (int i = 1; i <= iTotPage; i++) {
-                    if (i == actualPage) {
-                        out.println(i);
-                    } else {
-                        urlPag.setParameter("actualPage", "" + i);
-                        out.println("<a href=\"" + urlPag.toString() + "\">" + i + "</a> \n");
-                    }
+        int iIniPage = Integer.parseInt(pageParams[0]);
+        int iFinPage = Integer.parseInt(pageParams[1]);
+        int iTotPage = Integer.parseInt(pageParams[2]);
+        if (iFinPage == strResTypes.length) {
+            iFinPage = iFinPage - 1;
+        }
+        if (actualPage > 1) {
+             int gotop = (actualPage - 1);
+             urlPag.setParameter("actualPage", ""+gotop);
+             out.println("<a class=\"link\" href=\""+urlPag.toString()+"\"><<</a>&nbsp;");
+        }
+        if(iTotPage>1){
+            for (int i = 1; i <= iTotPage; i++) {
+                if (i == actualPage) {
+                    out.println(i);
+                } else {
+                    urlPag.setParameter("actualPage", "" + i);
+                    out.println("<a href=\"" + urlPag.toString() + "\">" + i + "</a> \n");
                 }
             }
-            if (actualPage > 0 && (actualPage + 1 <= iTotPage)) {
-                 int gotop = (actualPage + 1);
-                 urlPag.setParameter("actualPage", ""+gotop);
-                 out.println("<a class=\"link\" href=\""+urlPag.toString()+"\">>></a>&nbsp;");
-            }
-            //Termina paginación
-             SWBResourceURL urlDetail=paramRequest.getRenderUrl();
-             SWBResourceURL urlEdit=paramRequest.getRenderUrl();
-             SWBResourceURL urlRemove=paramRequest.getRenderUrl();
+        }
+        if (actualPage > 0 && (actualPage + 1 <= iTotPage)) {
+             int gotop = (actualPage + 1);
+             urlPag.setParameter("actualPage", ""+gotop);
+             out.println("<a class=\"link\" href=\""+urlPag.toString()+"\">>></a>&nbsp;");
+        }
+        //Termina paginación
+         SWBResourceURL urlDetail=paramRequest.getRenderUrl();
+         SWBResourceURL urlEdit=paramRequest.getRenderUrl();
+         SWBResourceURL urlRemove=paramRequest.getRenderUrl();
 
-             urlDetail.setParameter("act", "detail");
-             urlEdit.setParameter("act", "edit");
-             urlRemove.setParameter("act", "detail");
+         urlDetail.setParameter("act", "detail");
+         urlEdit.setParameter("act", "edit");
+         urlRemove.setParameter("act", "detail");
 
-             for (int i = iIniPage; i < iFinPage; i++)
-             {
-                String[] strFields = strResTypes[i].toString().split(":swbp4g1:");
-                String orderField = strFields[0];
-                String ObjUri = strFields[1];
-                //url.setCallMethod(url.Call_CONTENT);
-                urlDetail.setParameter("uri", ObjUri);
-                urlEdit.setParameter("uri", ObjUri);
-                urlRemove.setParameter("uri", ObjUri);
-                %>
-                <div class="listEntry" onmouseover="this.className='listEntryHover'" onmouseout="this.className='listEntry'">
-                <%
-                HashMap map=new HashMap();
-                map.put("separator", "-");
-                SemanticObject semObject = SemanticObject.createSemanticObject(ObjUri);
-                //DirectoryObject dirObj=(DirectoryObject)sobj.createGenericInstance();
-                Iterator<SemanticProperty> itProps1=aprops2display.iterator();
-                while(itProps1.hasNext())
-                {
-                   SemanticProperty semProp=itProps1.next();
-                   SemanticProperty semProp1=semObject.getSemanticClass().getProperty(semProp.getName());
-                   if(semProp1.isDataTypeProperty()){
-                       String propValue=semObject.getProperty(semProp1);
-                       if(propValue!=null && !propValue.equals("null")){
-                            if(semProp.getName().equals("dirPhoto"))
-                            {%>
-                                <img src="<%=SWBPlatform.getWebWorkPath()%><%=base.getWorkPath()%>/<%=semObject.getId()%>/<%=propValue%>"width="90" height="90" >
-                            <%}if(semProp.getName().equals("title")) {
-                            %>
-                              <div class="listEntryInfo">
-                              <p class="tituloNaranja"><%=propValue%></p>
-                              <p><%=wpage.getPath(map)%></p>
-                            <%
-                            }else if(semProp.getName().equals("description")){
-                            %>
-                              <p><%=propValue%><br><br></p>
-                            <%}else if(semProp.getName().equals("tags")){
-                            %>
-                                <p>-Palabras clave:<%=propValue%></p>
-                            <%}else if(semProp.getName().equals("created")){
-                                SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
-                                Date date=new Date();
-                                date=formatoDelTexto.parse(propValue);
-                                propValue= SWBUtils.TEXT.getTimeAgo(date, user.getLanguage());
-                            %>
-                                <p>-creado:<%=propValue%></p>
-                            <%}
+         for (int i = iIniPage; i < iFinPage; i++)
+         {
+            String[] strFields = strResTypes[i].toString().split(":swbp4g1:");
+            String orderField = strFields[0];
+            String ObjUri = strFields[1];
+            //url.setCallMethod(url.Call_CONTENT);
+            urlDetail.setParameter("uri", ObjUri);
+            urlEdit.setParameter("uri", ObjUri);
+            urlRemove.setParameter("uri", ObjUri);
+            %>
+            <div class="listEntry" onmouseover="this.className='listEntryHover'" onmouseout="this.className='listEntry'">
+            <%
+            String img="", title="", description="", tags="", creator="", created="";
+            HashMap map=new HashMap();
+            map.put("separator", "-");
+            SemanticObject semObject = SemanticObject.createSemanticObject(ObjUri);
+            Iterator<SemanticProperty> ipsemProps=semObject.listProperties();
+            while(ipsemProps.hasNext())
+            {
+               SemanticProperty semProp=ipsemProps.next();
+               if(semProp.isDataTypeProperty()){
+                   String propValue=semObject.getProperty(semProp);
+                   if(propValue!=null && !propValue.equals("null")){
+                        if(semProp==DirectoryObject.swbcomm_dirPhoto)
+                        {
+                            img="<img src=\""+SWBPlatform.getWebWorkPath()+base.getWorkPath()+"/"+semObject.getId()+"/"+propValue+ "\" width=\"90\" height=\"90\">";
+                        }if(semProp==DirectoryObject.swb_title) {
+                             title=propValue;
+                        }else if(semProp==DirectoryObject.swb_description){
+                             description=propValue;
+                        }else if(semProp==DirectoryObject.swb_tags){
+                             tags=propValue;
+                        }else if(semProp==DirectoryObject.swb_created){
+                            SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
+                            Date date=new Date();
+                            date=formatoDelTexto.parse(propValue);
+                            propValue= SWBUtils.TEXT.getTimeAgo(date, user.getLanguage());
+                            created=propValue;
                         }
-                    }else if(semProp1.getName().equals("creator")){
-                            SemanticObject semUser=semObject.getObjectProperty(DirectoryObject.swb_creator);
-                            if(semUser!=null){
-                                User userObj=(User)semUser.createGenericInstance();
-                                %>
-                                    <p>-Creado por:<a href="<%=perfilPath%>?user=<%=userObj.getEncodedURI()%>"><%=userObj.getFullName()%></a></p>
-                                <%
-                             }
                     }
+                }else if(semProp==DirectoryObject.swb_creator){
+                        SemanticObject semUser=semObject.getObjectProperty(DirectoryObject.swb_creator);
+                        if(semUser!=null){
+                            User userObj=(User)semUser.createGenericInstance();
+                            creator="<a href=\""+perfilPath+"?user="+userObj.getEncodedURI()+"\">"+userObj.getFullName()+"</a>";
+                         }
                 }
-                %>
-                  <div class="vermasFloat"><p class="vermas"><a href="<%=urlDetail%>"><%=paramRequest.getLocaleString("seeMore")%></a></p></div>
-                  <div class="editarInfo"><p><a href="<%=urlEdit%>"><%=paramRequest.getLocaleString("editInfo")%></a></p></div>
-                  <div class="editarInfo"><p><a href="<%=urlRemove.setAction(urlRemove.Action_REMOVE)%>"><%=paramRequest.getLocaleString("remove")%></a></p></div>
-                  <div class="clear">&nbsp;</div>
-                  </div>
-                 </div>
-                <%
-                }
-                %>
-           </div>
-    <%
-    }
+            }
+            %>
+                <%=img%>
+              <div class="listEntryInfo">
+                    <p class="tituloNaranja">
+                        <%=title%>
+                    </p>
+                        <%=wpage.getPath(map)%>
+                    <p>
+                        <%=description%>
+                    </p><br/>
+                    <p>-Palabras clave:<%=tags%></p>
+                    <p>-Creado por:<%=creator%></p>
+                    <p>-creado:<%=created%></p>
+
+                    <div class="vermasFloat"><p class="vermas"><a href="<%=urlDetail%>"><%=paramRequest.getLocaleString("seeMore")%></a></p></div>
+                    <div class="editarInfo"><p><a href="<%=urlEdit%>"><%=paramRequest.getLocaleString("editInfo")%></a></p></div>
+                    <div class="editarInfo"><p><a href="<%=urlRemove.setAction(urlRemove.Action_REMOVE)%>"><%=paramRequest.getLocaleString("remove")%></a></p></div>
+                    <div class="clear">&nbsp;</div>
+              </div>
+             </div>
+            <%
+            }
+            %>
+      </div>
+<%
  }
 %>
 
-
 <%!
-private String[] getCatSortArray(Iterator<DirectoryObject> itSebObj, SemanticObject sobj, int actualPage, String txtFind, org.semanticwb.portal.api.SWBParamRequest paramRequest, String scope)
+private String[] getCatSortArray(Iterator<DirectoryObject> itSebObj, int actualPage, String txtFind)
 {
     String[] strArray=null;
     try{
         Vector vRO = new Vector();
-        //SemanticClass swbClass = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sobj.getURI());
-        //Iterator<SemanticObject> itSebObj=swbClass.listInstances();
-        //if(scope!=null && scope.equals("gl")) itSebObj = swbClass.listInstances();  //Para cuando se pide el objeto de global (todos los modelos)
-        //else if(scope!=null && scope.equals("ml")) itSebObj = paramRequest.getWebPage().getSemanticObject().getModel().listInstancesOfClass(swbClass);
-
         if(itSebObj!=null)
         {
             while (itSebObj.hasNext()) {
