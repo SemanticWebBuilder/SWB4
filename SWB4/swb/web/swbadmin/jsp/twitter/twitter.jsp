@@ -91,8 +91,7 @@
                                  <div class=twitEntryInfo>
                                     <p><a id="aPoster" href="<%=twitter.getBaseURL()%>"><%=poster%></a>&nbsp;<%=text%><br><a href="<%=twitter.getBaseURL()%><%=poster%>/status/<%=twitt.getId()%>" target="_new" id="postTime"><%=timeAgo%></a></p>
                                  </div>
-                                 <div class="clear">&nbsp;</div>
-                        <%
+                      <%
                                 cont++;
                                 if (cont >= max) {
                                     %></div><%
