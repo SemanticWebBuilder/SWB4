@@ -43,9 +43,10 @@ url.setParameter("uri", sobj.getURI());
 %>
    
        <%url.setParameter("act","add");%>
-       <div class="editarInfo">
-            <p align="right"><a href="<%=url.toString()%>">Agregar elemento</a></p>
-       </div><div class="clear">&nbsp;</div>
+       <div class="editarInfo1">
+            <p><a href="<%=url.toString()%>">Agregar elemento al directorio</a></p>
+       </div>
+       <div class="clear">&nbsp;</div>
  <div id="entriesList">
         <%
         //Empieza paginación
