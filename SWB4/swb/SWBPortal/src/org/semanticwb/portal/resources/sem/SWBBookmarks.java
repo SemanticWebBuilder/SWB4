@@ -471,7 +471,10 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         String path = SWBPlatform.getContextPath() + "/swbadmin/jsp/bookmarks/bookmarksView.jsp";
         User user = paramRequest.getUser();
         String showList = paramRequest.getArgument("showList", "false");
-        
+
+        if (user.getURI() == null)
+            return;
+
         String url = "";
         Resourceable rsa = paramRequest.getResourceBase().getResourceable();
         if (rsa != null && rsa instanceof WebPage) {
