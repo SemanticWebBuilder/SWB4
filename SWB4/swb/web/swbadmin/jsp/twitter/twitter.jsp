@@ -107,18 +107,20 @@
                         } catch (Exception e) {
                             url.setAction("conf");
                         %>
-                            No existe información para la cuenta de usuario proprcionada, o no se pudo autenticar el usuario en Twitter...
-                            <br/><a href="<%=url.toString()%>">Configurar</a>
+                            No existe información para la cuenta de usuario proporcionada, o no se pudo autenticar el usuario en Twitter...
+                            <br/>
+                         <% if(owner.getURI()!=null && owner.getURI().equals(user.getURI())){%>
+                            <a href="<%=url.toString()%>">Configurar</a>
+                         <%}%>
                         <%
                         }
                        }
                      }
-                } else if (owner.getURI().equals(user.getURI())) { //Forma para que el usuario proporcione login y password de twitter
+                } else if (owner.getURI()!=null && owner.getURI().equals(user.getURI())) { //Forma para que el usuario proporcione login y password de twitter
                     urlAction.setAction("saveUserData");
                     getForm(urlAction.toString(), out, "", "");
                 } else {%>
-                    <%=user.getFirstName()%><%=user.getLastName()%><br>
-                    No tiene una cuenta de twitter configuarada en este portal
+                         No tiene una cuenta de twitter configuarada en este portal
                     <%
                 }
 %>
