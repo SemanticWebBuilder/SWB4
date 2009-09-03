@@ -41,11 +41,12 @@ SWBResourceURL url=paramRequest.getRenderUrl();
 SWBResourceURL urlExcel=paramRequest.getRenderUrl();
 url.setParameter("uri", sobj.getURI());
 %>
-   <div id="entriesList">
-       <p align="right">
-        <a href="<%=url.toString()%>">Agregar elemento a directorio</a>
-       </p>
-        <%url.setParameter("act","add");%>
+   
+       <%url.setParameter("act","add");%>
+       <div class="editarInfo">
+            <p align="right"><a href="<%=url.toString()%>">Agregar elemento</a></p>
+       </div><div class="clear">&nbsp;</div>
+ <div id="entriesList">
         <%
         //Empieza paginación
         SWBResourceURL urlPag=paramRequest.getRenderUrl();
