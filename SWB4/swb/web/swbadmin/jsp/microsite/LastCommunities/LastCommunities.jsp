@@ -6,7 +6,7 @@
             //User user=(User)request.getAttribute("user");
             WebPage webpage = (WebPage) request.getAttribute("webpage");
             WebSite site = webpage.getWebSite();
-            Iterator communities = SWBComparator.sortByCreated(MicroSite.listMicroSites(site), true);
+            Iterator communities = SWBComparator.sortByCreated(MicroSite.listMicroSites(site), false);
             int i = 0;
             while (communities.hasNext())
             {
