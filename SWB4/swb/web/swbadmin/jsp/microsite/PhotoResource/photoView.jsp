@@ -61,7 +61,7 @@
                 </a>
                 <a href="<%=viewurl%>">
                 <p class="tituloFoto"><%= photo.getTitle()%></p>
-                <p class="autor-visitasFoto"><span class="autorFoto"><%= photo.getCreator().getFirstName()%></span>&nbsp;|&nbsp;<%= photo.getViews()%> visitas</p>
+                <p class="autor-visitasFoto"><span class="autorFoto"><%= photo.getCreator().getFirstName()%></span>&nbsp;|&nbsp;<%= photo.getViews()%> vistas</p>
                 </a>
             </div>
 <%
