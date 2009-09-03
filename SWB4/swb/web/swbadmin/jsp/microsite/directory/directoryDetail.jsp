@@ -68,6 +68,8 @@
     String imggalery=null;
     if(sImgs.length>0){
         imggalery=SWBPortal.UTIL.getGalleryScript(sImgs);
+    }else{
+        imggalery="<img src=\""+SWBPlatform.getContextPath()+"/swbadmin/images/noDisponible.gif\"/>";
     }
    
     String title=semObject.getProperty(dirObj.swb_title);
