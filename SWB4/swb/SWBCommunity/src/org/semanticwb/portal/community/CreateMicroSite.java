@@ -91,12 +91,15 @@ public class CreateMicroSite extends GenericResource
             ms.setTags(tags);
             ms.setActive(Boolean.TRUE);
 
-            SemanticObject sotype = ont.getSemanticObject(type);
-            MicroSiteType mstype = null;
-            if(sotype.getGenericInstance() instanceof MicroSiteType)
+            if(null!=type)
             {
-               mstype = (MicroSiteType)sotype.getGenericInstance();
-               ms.setType(mstype);
+                SemanticObject sotype = ont.getSemanticObject(type);
+                MicroSiteType mstype = null;
+                if(sotype.getGenericInstance() instanceof MicroSiteType)
+                {
+                   mstype = (MicroSiteType)sotype.getGenericInstance();
+                   ms.setType(mstype);
+                }
             }
 
             ms.setPrivate(bprivate);
