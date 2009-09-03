@@ -21,6 +21,7 @@
 *  http://www.semanticwebbuilder.org
 **/
 import org.semanticwb.model.User
+import org.semanticwb.SWBPlatform
 import org.semanticwb.model.WebPage
 import org.semanticwb.model.DisplayProperty
 import org.semanticwb.portal.api.SWBResourceURL
@@ -65,6 +66,16 @@ def usr_hobbies = user.getExtendedAttribute(mapa.get("userHobbies"))
 if (null==usr_hobbies) usr_hobbies = ""
 def usr_inciso = user.getExtendedAttribute(mapa.get("userInciso"))
 if (null==usr_inciso) usr_inciso = ""
+
+def latitude = user.getExtendedAttribute(mapa.get("latitude"))
+if (null==latitude) latitude = "22.99885"
+def longitude = user.getExtendedAttribute(mapa.get("longitude"))
+if (null==longitude) longitude = "-101.77734"
+def geoStep = user.getExtendedAttribute(mapa.get("geoStep"))
+if (null==geoStep) geoStep = "4"
+
+def key = SWBPlatform.getEnv("key/gmap","")
+
 def usr_doings = user.getExtendedAttribute(mapa.get("userDoings"))
 if (null==usr_doings) usr_doings = ""
 SemanticObject sobj=mapa.get("userDoings").getDisplayProperty()
@@ -195,6 +206,85 @@ action="$acc_url"   method="post">
                 <td><textarea name="userHobbies" rows="10" cols="50" dojoType="dijit.form.Textarea">$usr_hobbies</textarea></td></tr>
             <tr><td width="200px" align="right">Incisos &nbsp;</td>
                 <td><textarea name="userInciso" rows="10" cols="50" dojoType="dijit.form.Textarea">$usr_inciso</textarea></td></tr>
+            <tr><td width="200px" align="right">Ubicaci&oacute;n &nbsp;</td>
+                <td>
+
+<input type="text" size="60" id ="gmap_address" value="Introduce Calle, Colonia y Estado" onKeyPress="if (event.which==13) {search(); return false;} "/>
+<button onclick="search(); return false;"> buscar </button>
+<input type="hidden" id="latitude" name="latitude" value="$latitude"/>
+<input type="hidden" id="longitude" name="longitude" value="$longitude"/>
+<input type="hidden" id="geoStep" name="geoStep" value="$geoStep"/>
+<div id="map_canvas" style="width: 500px; height: 300px"></div>
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=$key"
+      type="text/javascript"></script>
+
+<script type="text/javascript" language="javascript">
+
+function initialize() {
+    if (GBrowserIsCompatible()) {
+        var map = new GMap2(document.getElementById("map_canvas"));
+        map.addControl(new GSmallMapControl());
+        map.addControl(new GMapTypeControl());
+        var center = new GLatLng($latitude, $longitude);
+        geocoder = new GClientGeocoder();
+        setUpMap(map, center, $geoStep);
+    }
+}
+
+function setUpMap(map, center, step){
+    map.setCenter(center, step);
+    var marker = new GMarker(center, {draggable: true});
+    map.addOverlay(marker);
+    GEvent.addListener(marker, "dragend", function() {
+        var point = marker.getPoint();
+        map.panTo(point);
+        document.getElementById("latitude").value = center.lat().toFixed(7);
+        document.getElementById("longitude").value = center.lng().toFixed(7);
+        document.getElementById("geoStep").value = map.getZoom();
+    });
+    GEvent.addListener(map, "moveend", function() {
+        map.clearOverlays();
+        var center = map.getCenter();
+        var marker = new GMarker(center, {draggable: true});
+        map.addOverlay(marker);
+        document.getElementById("latitude").value = center.lat().toFixed(7);
+        document.getElementById("longitude").value = center.lng().toFixed(7);
+        document.getElementById("geoStep").value = map.getZoom();
+        GEvent.addListener(marker, "dragend", function() {
+            var point = marker.getPoint();
+            map.panTo(point);
+            document.getElementById("latitude").value = center.lat().toFixed(7);
+            document.getElementById("longitude").value = center.lng().toFixed(7);
+            document.getElementById("geoStep").value = map.getZoom();
+    });
+    });
+}
+
+function search() {
+    var address = document.getElementById("gmap_address").value;
+    var map = new GMap2(document.getElementById("map_canvas"));
+    map.addControl(new GSmallMapControl());
+    map.addControl(new GMapTypeControl());
+    if (geocoder) {
+        geocoder.getLatLng(
+            address,
+            function(point) {
+                if (!point) {
+                    alert(address + " no encontrada");
+                } else {
+                    document.getElementById("latitude").value = point.lat().toFixed(7);
+                    document.getElementById("longitude").value = point.lng().toFixed(7);
+                    document.getElementById("geoStep").value = map.getZoom();
+                    map.clearOverlays();
+                    setUpMap(map, point, 14);
+                }
+            });
+    }
+}
+initialize();
+    </script>
+
+                </td></tr>
         </table>
     </fieldset>
 </form>
