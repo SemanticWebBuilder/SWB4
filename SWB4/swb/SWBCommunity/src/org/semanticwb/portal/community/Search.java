@@ -46,6 +46,7 @@ public class Search extends GenericAdmResource {
     public void setResourceBase(Resource base) throws SWBResourceException {
         super.setResourceBase(base);
         try {
+            //smodel = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
             smodel = base.getSemanticObject().getModel().getRDFOntModel();
             index = buildIndex();
         } catch (Exception e) {
@@ -109,6 +110,7 @@ public class Search extends GenericAdmResource {
 
         // ---- Create the access index
         index = larqBuilder.getIndex();
+        
         return index;
     }
 
@@ -124,12 +126,14 @@ public class Search extends GenericAdmResource {
                     "PREFIX pf:      <http://jena.hpl.hp.com/ARQ/property#>",
                     "PREFIX swb:     <http://www.semanticwebbuilder.org/swb4/ontology#>",
                     "PREFIX rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
+                    "PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>",
                     "PREFIX owl:     <http://www.w3.org/2002/07/owl#>",
                     "PREFIX swbcomm: <http://www.semanticwebbuilder.org/swb4/community#>",
-                    "SELECT ?obj {",
+                    "SELECT * WHERE {",
                     "    ?lit pf:textMatch '" + q + "'.",
-                    "    ?obj swb:title ?lit.",
-                    "    ?obj a swb:WebPage.",
+                    "    ?obj a swbcomm:Commerce.",
+                    "    OPTIONAL{?obj a swbcomm:Organization}.",
+                    "    ?obj swb:title ?lit",
                     "}"
                 });
 
