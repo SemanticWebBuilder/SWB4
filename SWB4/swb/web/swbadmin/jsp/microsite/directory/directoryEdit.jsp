@@ -42,10 +42,9 @@
         String dirPhoto=dirObj.getPhoto();
         if(dirPhoto!=null){
             String photo=basepath + dirPhoto;
-            request.setAttribute("elementId", "dirPhoto");
-            request.setAttribute("attach_1", photo);
-            request.setAttribute("attachTarget_1", "blank");
-            request.setAttribute("attachCount", "1");
+            request.setAttribute("attach_dirPhoto_1", photo);
+            request.setAttribute("attachTarget_dirPhoto_1", "blank");
+            request.setAttribute("attachCount_dirPhoto", "1");
             mgr.addHiddenParameter("dirPhotoHidden", dirPhoto);
         }
 
@@ -53,13 +52,13 @@
         Iterator<String> itPhotos=dirObj.listExtraPhotos();
         while(itPhotos.hasNext()){
             count++;
-            String photo=basepath + itPhotos.next();
-            request.setAttribute("elementId", "dirHasExtraPhoto");
-            request.setAttribute("attach_"+count, photo);
-            request.setAttribute("attachTarget_"+count, "blank");
+            String photo=itPhotos.next();
+            request.setAttribute("attach_dirHasExtraPhoto_"+count, basepath + photo);
+            request.setAttribute("attachTarget_dirHasExtraPhoto_"+count, "blank");
+            mgr.addHiddenParameter("dirHasExtraPhotoHidden", photo);
         }
         if (count > 0) {
-            request.setAttribute("attachCount", "" + count);
+            request.setAttribute("attachCount_dirHasExtraPhoto", "" + count);
         }
 
         request.setAttribute("formName", mgr.getFormName());
