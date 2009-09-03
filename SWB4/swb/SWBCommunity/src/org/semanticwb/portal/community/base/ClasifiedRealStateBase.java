@@ -1,8 +1,10 @@
 package org.semanticwb.portal.community.base;
 
 
-public class ClasifiedRealStateBase extends org.semanticwb.portal.community.ClasifiedBuySell implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Geolocalizable,org.semanticwb.model.Traceable,org.semanticwb.portal.community.Contactable,org.semanticwb.portal.community.Addressable
+public class ClasifiedRealStateBase extends org.semanticwb.portal.community.ClasifiedBuySell implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Geolocalizable,org.semanticwb.portal.community.Contactable,org.semanticwb.portal.community.Addressable
 {
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_surface=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#surface");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_yearBuilt=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#yearBuilt");
     public static final org.semanticwb.platform.SemanticClass swbcomm_ClasifiedRealState=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#ClasifiedRealState");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#ClasifiedRealState");
 
@@ -79,16 +81,6 @@ public class ClasifiedRealStateBase extends org.semanticwb.portal.community.Clas
         getSemanticObject().setProperty(swbcomm_intNumber, value);
     }
 
-    public String getStreet()
-    {
-        return getSemanticObject().getProperty(swbcomm_street);
-    }
-
-    public void setStreet(String value)
-    {
-        getSemanticObject().setProperty(swbcomm_street, value);
-    }
-
     public double getLatitude()
     {
         return getSemanticObject().getDoubleProperty(swb_latitude);
@@ -109,6 +101,26 @@ public class ClasifiedRealStateBase extends org.semanticwb.portal.community.Clas
         getSemanticObject().setDoubleProperty(swb_longitude, value);
     }
 
+    public String getStreetName()
+    {
+        return getSemanticObject().getProperty(swbcomm_streetName);
+    }
+
+    public void setStreetName(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_streetName, value);
+    }
+
+    public float getSurface()
+    {
+        return getSemanticObject().getFloatProperty(swbcomm_surface);
+    }
+
+    public void setSurface(float value)
+    {
+        getSemanticObject().setFloatProperty(swbcomm_surface, value);
+    }
+
     public String getCity()
     {
         return getSemanticObject().getProperty(swbcomm_city);
@@ -117,5 +129,15 @@ public class ClasifiedRealStateBase extends org.semanticwb.portal.community.Clas
     public void setCity(String value)
     {
         getSemanticObject().setProperty(swbcomm_city, value);
+    }
+
+    public int getYearBuilt()
+    {
+        return getSemanticObject().getIntProperty(swbcomm_yearBuilt);
+    }
+
+    public void setYearBuilt(int value)
+    {
+        getSemanticObject().setIntProperty(swbcomm_yearBuilt, value);
     }
 }

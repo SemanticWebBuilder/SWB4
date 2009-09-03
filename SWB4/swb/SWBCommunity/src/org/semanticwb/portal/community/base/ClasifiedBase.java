@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class ClasifiedBase extends org.semanticwb.portal.community.DirectoryObject implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.portal.community.Contactable
+public class ClasifiedBase extends org.semanticwb.portal.community.DirectoryObject implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.portal.community.Contactable
 {
     public static final org.semanticwb.platform.SemanticProperty swbcomm_clasifiedOperationType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#clasifiedOperationType");
     public static final org.semanticwb.platform.SemanticClass swbcomm_Clasified=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Clasified");
@@ -50,14 +50,24 @@ public class ClasifiedBase extends org.semanticwb.portal.community.DirectoryObje
         return (getClasified(id, model)!=null);
     }
 
-    public String getPhoneNumber()
+    public String getContactPhoneNumber()
     {
-        return getSemanticObject().getProperty(swbcomm_phoneNumber);
+        return getSemanticObject().getProperty(swbcomm_contactPhoneNumber);
     }
 
-    public void setPhoneNumber(String value)
+    public void setContactPhoneNumber(String value)
     {
-        getSemanticObject().setProperty(swbcomm_phoneNumber, value);
+        getSemanticObject().setProperty(swbcomm_contactPhoneNumber, value);
+    }
+
+    public String getContactName()
+    {
+        return getSemanticObject().getProperty(swbcomm_contactName);
+    }
+
+    public void setContactName(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_contactName, value);
     }
 
     public String getOperationType()
@@ -70,23 +80,13 @@ public class ClasifiedBase extends org.semanticwb.portal.community.DirectoryObje
         getSemanticObject().setProperty(swbcomm_clasifiedOperationType, value);
     }
 
-    public String getName()
+    public String getContactEmail()
     {
-        return getSemanticObject().getProperty(swbcomm_name);
+        return getSemanticObject().getProperty(swbcomm_contactEmail);
     }
 
-    public void setName(String value)
+    public void setContactEmail(String value)
     {
-        getSemanticObject().setProperty(swbcomm_name, value);
-    }
-
-    public String getEmail()
-    {
-        return getSemanticObject().getProperty(swbcomm_email);
-    }
-
-    public void setEmail(String value)
-    {
-        getSemanticObject().setProperty(swbcomm_email, value);
+        getSemanticObject().setProperty(swbcomm_contactEmail, value);
     }
 }
