@@ -210,36 +210,39 @@ public class AddRemoveMSTools extends GenericResource {
                 //Revisando miembros de la comunidad
 
                 String[] msmla = request.getParameterValues("memberlevelaccess");
-                for(int j=0;j<msmla.length;j++)
+                if(msmla!=null)
                 {
-                    StringTokenizer stoken = new StringTokenizer(msmla[j],"|");
-                    String usr_id = stoken.nextToken();
-                    int level = Integer.parseInt(stoken.nextToken());
-                    //System.out.println("User: "+usr_id+", access: "+level);
-
-                    User umember = user.getUserRepository().getUser(usr_id);
-                    
-                    Member member = Member.getMember(umember, wp);
-
-                    if(member.getAccessLevel()!=level)
+                    for(int j=0;j<msmla.length;j++)
                     {
-                        //System.out.println("User: "+umember.getFullName()+" nivel anterior: "+member.getAccessLevel()+" a nivel: "+level+", modificado.");
-                        if(level==Member.LEVEL_EDIT)
+                        StringTokenizer stoken = new StringTokenizer(msmla[j],"|");
+                        String usr_id = stoken.nextToken();
+                        int level = Integer.parseInt(stoken.nextToken());
+                        //System.out.println("User: "+usr_id+", access: "+level);
+
+                        User umember = user.getUserRepository().getUser(usr_id);
+
+                        Member member = Member.getMember(umember, wp);
+
+                        if(member.getAccessLevel()!=level)
                         {
-                            member.setAccessLevel(Member.LEVEL_EDIT);
+                            //System.out.println("User: "+umember.getFullName()+" nivel anterior: "+member.getAccessLevel()+" a nivel: "+level+", modificado.");
+                            if(level==Member.LEVEL_EDIT)
+                            {
+                                member.setAccessLevel(Member.LEVEL_EDIT);
+                            }
+                            else if(level==Member.LEVEL_ADMIN)
+                            {
+                                member.setAccessLevel(Member.LEVEL_ADMIN);
+                            }
+                            else if(level==0)
+                            {
+                                member.remove();
+                            }
                         }
-                        else if(level==Member.LEVEL_ADMIN)
-                        {
-                            member.setAccessLevel(Member.LEVEL_ADMIN);
-                        }
-                        else if(level==0)
-                        {
-                            member.remove();
-                        }
+
                     }
 
                 }
-
                 response.setRenderParameter("act", "view");
                 response.setCallMethod(SWBActionResponse.Call_STRATEGY);
                 response.setMode(SWBActionResponse.Mode_VIEW);
