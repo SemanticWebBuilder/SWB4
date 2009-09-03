@@ -403,12 +403,12 @@
     <swb:displayProperty rdf:resource="#dp_sportsFaciliies"/>
   </rdf:Description>
   <rdf:Description rdf:about="#dp_paymentType">
-    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneGlobal"/>
+    <swbxf:propSelectValues xml:lang="es">1:Efectivo|2:Tarjeta de crédito|3:PayPal|4:Depósito bancario|5:Transferencia electrónica</swbxf:propSelectValues>
     <rdfs:label xml:lang="es">Forma de pago</rdfs:label>
     <rdfs:label xml:lang="en">Payment type</rdfs:label>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayProperty"/>
     <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int">100</swb:index>
-    <swbxf:propSelectValues xml:lang="es">1:|Efectivo|2:Tarjeta de crédito|3:PayPal|4:Depósito bancario|5:Transferencia electrónica</swbxf:propSelectValues>
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneGlobal"/>
     <swbxf:propSelectValues xml:lang="en">1:Cash|2:Credit card|3:PayPal|4:Bank deposit|5:Electronic transfer</swbxf:propSelectValues>
   </rdf:Description>
   <rdf:Description rdf:about="#userStatus">
