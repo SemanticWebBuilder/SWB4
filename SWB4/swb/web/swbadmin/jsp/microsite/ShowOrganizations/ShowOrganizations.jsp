@@ -38,7 +38,7 @@
         <li><a href="<%=sbpage.getUrl()%>"><%=sbpage.getTitle()%></a></li>
         <%
                     i++;
-                    if (i >= 10)
+                    if (i >= 5)
                     {
                         break;
                     }
