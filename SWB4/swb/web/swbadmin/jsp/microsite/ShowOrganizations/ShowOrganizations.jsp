@@ -1,5 +1,5 @@
 <%@page import="java.text.*,java.net.*,org.semanticwb.platform.SemanticObject,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*" %>
-<div class="clasificadosIzquierda">
+<div class="organizacionesIzquierda">
     <%
             User user = (User) request.getAttribute("user");
             String lang = "es";
@@ -59,7 +59,7 @@
                 {
     %>
 </div>
-<div class="clasificadosDerecha">
+<div class="organizacionesDerecha">
     <%                }
             }
 
