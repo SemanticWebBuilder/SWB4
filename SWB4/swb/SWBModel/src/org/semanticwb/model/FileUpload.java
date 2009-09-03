@@ -91,27 +91,29 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
         }
         if (mode.equals("edit") || mode.equals("create")) {
             String attchMsg="";
-            if(request.getAttribute("attachCount")!=null &&  request.getAttribute("elementId")!=null && name!=null && request.getAttribute("elementId").equals(name)){
-                        attchMsg="Archivo(s) existentes:<br/>";
-                        int count=Integer.parseInt((String)request.getAttribute("attachCount"));
-                        for(int i=1;i<=count;i++){
-                            String fileName=(String)request.getAttribute("attach_"+i);
-                            int pos=fileName.lastIndexOf("/");
-                            if(pos>-1){
-                                fileName=fileName.substring(pos+1);
-                            }
-                            String target="";
-                            if(request.getAttribute("attachTarget_"+i)!=null){
-                                target=(String)request.getAttribute("attachTarget_"+i);
-                            }
-
-                            if(request.getAttribute("attachRemovePath_"+i)!=null){
-                                attchMsg+="<a href=\""+request.getAttribute("attachRemovePath_"+i)+"\">X</a> ";
-                            }
-                            attchMsg+=i+")<a href=\""+ request.getAttribute("attach_"+i) +"\" target=\""+target+"\">"+fileName+"</a>";
-                            attchMsg+="<br/>";
+                if(name!=null && request.getAttribute("attachCount_"+name)!=null)
+                {
+                    attchMsg="Archivo(s) existentes:<br/>";
+                    int count=Integer.parseInt((String)request.getAttribute("attachCount_"+name));
+                    for(int i=1;i<=count;i++){
+                        String fileName=(String)request.getAttribute("attach_"+name+"_"+i);
+                        int pos=fileName.lastIndexOf("/");
+                        if(pos>-1){
+                            fileName=fileName.substring(pos+1);
                         }
-            }
+                        String target="";
+                        if(request.getAttribute("attachTarget_"+name+"_"+i)!=null){
+                            target=(String)request.getAttribute("attachTarget_"+name+"_"+i);
+                        }
+
+                        if(request.getAttribute("attachRemovePath_"+name+"_"+i)!=null){
+                            attchMsg+="<a href=\""+request.getAttribute("attachRemovePath_"+name+"_"+i)+"\">X</a> ";
+                        }
+                        attchMsg+=i+")<a href=\""+ request.getAttribute("attach_"+name+"_"+i) +"\" target=\""+target+"\">"+fileName+"</a>";
+                        attchMsg+="<br/>";
+                    }
+                }
+          
             String formName=(String)request.getAttribute("formName");
             //Página ejemplo de implementación:http://blog.tremend.ro/2007/03/01/ajax-file-upload-monitoring-monitor-your-file-upload-with-dwr-and-commons-fileupload/
             //Fecha de implemetación:26/Febrero/2009
