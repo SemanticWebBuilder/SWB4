@@ -275,37 +275,39 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         } else if (action.equals("replyPost")) {
             SemanticObject soThread = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
             Thread thread = Thread.getThread(soThread.getId(), website);
-
-            SemanticObject soPost = null;
-            Post post = null;
-            if (request.getParameter("postUri") != null) {
-                soPost = SemanticObject.createSemanticObject(request.getParameter("postUri"));
-                post = Post.getPost(soPost.getId(), website);
-            }
-
-            SWBFormMgr mgr = new SWBFormMgr(Post.frm_Post, page.getSemanticObject(), null);
-            try
+            if(request.getParameter("pstBody")!=null && request.getParameter("pstBody").trim().length()>0)
             {
-                SemanticObject semObj = mgr.processForm(request);
-
-                Post newPost = Post.getPost(semObj.getId(), website);
-
-                newPost.setThread(thread);
-                if (post != null) {
-                    newPost.setParentPost(post);
+                SemanticObject soPost = null;
+                Post post = null;
+                if (request.getParameter("postUri") != null) {
+                    soPost = SemanticObject.createSemanticObject(request.getParameter("postUri"));
+                    post = Post.getPost(soPost.getId(), website);
                 }
 
-                processFiles(request, response, newPost.getSemanticObject());
+                SWBFormMgr mgr = new SWBFormMgr(Post.frm_Post, page.getSemanticObject(), null);
+                try
+                {
+                    SemanticObject semObj = mgr.processForm(request);
 
-                thread.setReplyCount(thread.getReplyCount() + 1);
-                thread.setLastPostDate(date);
-                if (user != null && user.isSigned()) {
-                    thread.setLastPostMember(user);
+                    Post newPost = Post.getPost(semObj.getId(), website);
+
+                    newPost.setThread(thread);
+                    if (post != null) {
+                        newPost.setParentPost(post);
+                    }
+
+                    processFiles(request, response, newPost.getSemanticObject());
+
+                    thread.setReplyCount(thread.getReplyCount() + 1);
+                    thread.setLastPostDate(date);
+                    if (user != null && user.isSigned()) {
+                        thread.setLastPostMember(user);
+                    }
+                }catch(FormValidateException e)
+                {
+                    //TODO:Validar
+                    log.error(e);
                 }
-            }catch(FormValidateException e)
-            {
-                //TODO:Validar
-                log.error(e);
             }
             response.setMode(response.Mode_VIEW);
             response.setAction("viewPost");
