@@ -23,6 +23,7 @@
 <%@page import="org.semanticwb.model.FormElement"%>
 <%@page import="org.semanticwb.portal.SWBFormButton"%>
 <%@page import="org.semanticwb.portal.community.*"%>
+<%@page import="org.semanticwb.portal.community.Restaurant"%>
 
 
 <%
@@ -64,7 +65,10 @@
         sImgs[cont]=path+photo;
     }
    
-    String imggalery=SWBPortal.UTIL.getGalleryScript(sImgs);
+    String imggalery=null;
+    if(sImgs.length>0){
+        imggalery=SWBPortal.UTIL.getGalleryScript(sImgs);
+    }
    
     String title=semObject.getProperty(dirObj.swb_title);
     String description=semObject.getProperty(dirObj.swb_description);
@@ -84,27 +88,73 @@
             mapa=mgr.renderElement(request, semProp.getName());
             break;
          }
-    }  
+    }
+    
+    String streetName=semObject.getProperty(Commerce.swbcomm_streetName);
+    String intNumber=semObject.getProperty(Commerce.swbcomm_intNumber);
+    String extNumber=semObject.getProperty(Commerce.swbcomm_extNumber);
+    String city=semObject.getProperty(Commerce.swbcomm_city);
+    /*----------  Personal Data ---------*/
+    String contactName=semObject.getProperty(Commerce.swbcomm_contactName);
+    String contactPhoneNumber=semObject.getProperty(Commerce.swbcomm_contactPhoneNumber);
+    String contactEmail=semObject.getProperty(Commerce.swbcomm_contactEmail);
+    String website=semObject.getProperty(Commerce.swbcomm_webSite);
+    /*---------- Facilities ------------*/
+    String paymentType=semObject.getProperty(Commerce.swbcomm_paymentType);
+    String impairedPeopleAccessible=semObject.getProperty(Commerce.swbcomm_impairedPeopleAccessible);
+    String parkingLot=semObject.getProperty(Commerce.swbcomm_parkingLot);
+    String elevator=semObject.getProperty(Commerce.swbcomm_elevator);
+    String foodCourt=semObject.getProperty(Commerce.swbcomm_foodCourt);
+    String serviceHours=semObject.getProperty(Commerce.swbcomm_serviceHours);
+
 %>
 
 <div id="contenidoDetalle">
-    <div class="detalle">
+     <div class="detalle">
         <div class="detalleImagen">
-         <%=imggalery%>
+         <%if(imggalery!=null){%><%=imggalery%><%}%>
         </div>
-        <div class="productInfo">
-            <p class="tituloNaranja"><%=title%></p>
-            <p><%=wpage.getPath(map)%></p>
-            <%if(tags!=null){%><p>Palabras clave:<strong><%=tags%></strong></p><%}%>
-            <%if(creator!=null){%><p>Creado por:<strong><%=creator%></strong></p><%}%>
-            <%if(created!=null){%><p>Fecha de publicación:<strong><%=created%></strong></p><%}%>
+            <div class="productInfo">
+                <p class="tituloNaranja"><%=title%></p>
+                <p><%=wpage.getPath(map)%></p>
+                <%if(tags!=null){%><p>Palabras clave:<strong><%=tags%></strong></p><%}%>
+                <!---localizable Data -->
+                <fieldset>
+                 <legend>Ubicación</legend>
+                <%if(streetName!=null){%><p>calle:<strong><%=streetName%></strong></p><%}%>
+                <%if(intNumber!=null){%><p>Número Interior:<strong><%=intNumber%></strong></p><%}%>
+                <%if(extNumber!=null){%><p>Número Exterior:<strong><%=extNumber%></strong></p><%}%>
+                <%if(city!=null){%><p>Ciudad:<strong><%=city%></strong></p><%}%>
+                <%if(creator!=null){%><p>Creado por:<strong><%=creator%></strong></p><%}%>
+                <%if(created!=null){%><p>Fecha de publicación:<strong><%=created%></strong></p><%}%>
+                </fieldset>
+                <!--User Data-->
+                 <fieldset>
+                 <legend>Datos de contacto</legend>
+                <%if(contactName!=null){%><p>Contacto:<strong><%=contactName%></strong></p><%}%>
+                <%if(contactPhoneNumber!=null){%><p>Télefono:<strong><%=contactPhoneNumber%></strong></p><%}%>
+                <%if(contactEmail!=null){%><p>correo electrónico:<strong><%=contactEmail%></strong></p><%}%>
+                <%if(website!=null){%><p>Página web:<strong><%=website%></strong></p><%}%>
+                </fieldset>
+                <!--Cuenta con-->
+                <fieldset>
+                 <legend>Extras</legend>
+                <%if(paymentType!=null){%><p>Forma de pago:<strong><%=paymentType%></strong></p><%}%>
+                <%if(impairedPeopleAccessible!=null){%><p>Habilitado para discapacitados:<strong><%=impairedPeopleAccessible%></strong></p><%}%>
+                <%if(parkingLot!=null){%><p>Estacionamiento:<strong><%=parkingLot%></strong></p><%}%>
+                <%if(elevator!=null){%><p>Elevador:<strong><%=elevator%></strong></p><%}%>
+                <%if(foodCourt!=null){%><p>Area de comida:<strong><%=foodCourt%></strong></p><%}%>
+                <%if(serviceHours!=null){%><p>Horario:<strong><%=serviceHours%></strong></p><%}%>
+                </fieldset>
          </div>
      </div>
      <div class="descripcion">
         <h3>Descripción</h3>
         <%if(description!=null){%><p><%=description%></p><%}%>
         <%if(mapa!=null){%><p><%=mapa%><%}%></p><br/>
-      </div>
+     </div>
+     
+
       <%
          SWBResourceURL url = paramRequest.getActionUrl();
          url.setParameter("uri", semObject.getURI());
