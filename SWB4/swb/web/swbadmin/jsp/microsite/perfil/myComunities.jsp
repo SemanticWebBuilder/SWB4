@@ -5,7 +5,12 @@
 <%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="java.util.*"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
-
+<%
+    if(request.getParameter("user")!=null)
+    {
+        return;
+    }
+%>
 <div id="contactos">
   <h2>Mis Subscripciones</h2>
   <ul>
