@@ -41,11 +41,9 @@ SWBResourceURL url=paramRequest.getRenderUrl();
 SWBResourceURL urlExcel=paramRequest.getRenderUrl();
 url.setParameter("uri", sobj.getURI());
 %>
+  <div class="editarInfo"><a href="<%=url.toString()%>">Agregar elemento a directorio</a></div>
    <div id="entriesList">
         <%url.setParameter("act","add");%>
-        <p align="right">
-            <a href="<%=url.toString()%>">Agregar elemento a directorio</a>
-        </p>
         <%
         //Empieza paginación
         SWBResourceURL urlPag=paramRequest.getRenderUrl();
@@ -91,21 +89,20 @@ url.setParameter("uri", sobj.getURI());
          urlEdit.setParameter("act", "edit");
          urlRemove.setParameter("act", "detail");
 
+         HashMap map=new HashMap();
+         map.put("separator", "-");
+         String img="", title="", description="", tags="", creator="", created="";
          for (int i = iIniPage; i < iFinPage; i++)
          {
             String[] strFields = strResTypes[i].toString().split(":swbp4g1:");
             String orderField = strFields[0];
             String ObjUri = strFields[1];
-            //url.setCallMethod(url.Call_CONTENT);
             urlDetail.setParameter("uri", ObjUri);
             urlEdit.setParameter("uri", ObjUri);
             urlRemove.setParameter("uri", ObjUri);
             %>
             <div class="listEntry" onmouseover="this.className='listEntryHover'" onmouseout="this.className='listEntry'">
             <%
-            String img="", title="", description="", tags="", creator="", created="";
-            HashMap map=new HashMap();
-            map.put("separator", "-");
             SemanticObject semObject = SemanticObject.createSemanticObject(ObjUri);
             Iterator<SemanticProperty> ipsemProps=semObject.listProperties();
             while(ipsemProps.hasNext())
@@ -153,7 +150,7 @@ url.setParameter("uri", sobj.getURI());
                     <p>-Creado por:<%=creator%></p>
                     <p>-creado:<%=created%></p>
 
-                    <div class="vermasFloat"><p class="vermas"><a href="<%=urlDetail%>"><%=paramRequest.getLocaleString("seeMore")%></a></p></div>
+                    <div class="vermasFloat"><p class="tituloNaranja"><p class="vermas"><a href="<%=urlDetail%>"><%=paramRequest.getLocaleString("seeMore")%></a></p></div>
                     <div class="editarInfo"><p><a href="<%=urlEdit%>"><%=paramRequest.getLocaleString("editInfo")%></a></p></div>
                     <div class="editarInfo"><p><a href="<%=urlRemove.setAction(urlRemove.Action_REMOVE)%>"><%=paramRequest.getLocaleString("remove")%></a></p></div>
                     <div class="clear">&nbsp;</div>
