@@ -46,7 +46,7 @@ public class Search extends GenericAdmResource {
     public void setResourceBase(Resource base) throws SWBResourceException {
         super.setResourceBase(base);
         try {
-            smodel = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
+            smodel = base.getSemanticObject().getModel().getRDFOntModel();
             index = buildIndex();
         } catch (Exception e) {
             log.error(e);
