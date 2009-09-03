@@ -91,7 +91,7 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
         }
         if (mode.equals("edit") || mode.equals("create")) {
             String attchMsg="";
-            if(request.getAttribute("attachCount")!=null){
+            if(request.getAttribute("attachCount")!=null &&  request.getAttribute("elementId")!=null && name!=null && request.getAttribute("elementId").equals(name)){
                         attchMsg="Archivo(s) existentes:<br/>";
                         int count=Integer.parseInt((String)request.getAttribute("attachCount"));
                         for(int i=1;i<=count;i++){
