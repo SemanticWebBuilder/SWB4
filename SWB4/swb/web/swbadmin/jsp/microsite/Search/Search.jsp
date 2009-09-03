@@ -14,11 +14,15 @@ if (paramRequest.getCallMethod() != paramRequest.Call_STRATEGY) {
             <input id="busqueda_input" type="text" name="q"/>
             <input id="busqueda_enviar" type="submit" value="Submit" name="button"/>
         </p>
-        <div>
-            <label for="busqueda_personas">Personas</label>
-            <input id="busqueda_personas" type="checkbox" checked="checked" name="personas"/>
-            <label for="busqueda_empresas">Empresas</label>
-            <input id="busqueda_empresas" type="checkbox" name="empresas"/>
+        <div>            
+            <input id="busqueda_comercios" type="checkbox" checked="checked" name="comercios"/>
+            <label for="busqueda_comercios">Comercios</label>
+            <input id="busqueda_organizaciones" type="checkbox" name="organizaciones"/>
+            <label for="busqueda_organizaciones">Organizaciones</label>
+            <input id="busqueda_persons" type="checkbox" name="personas"/>
+            <label for="busqueda_persons">Personas</label>
+            <input id="busqueda_clasificados" type="checkbox" name="clasificados"/>
+            <label for="busqueda_clasificados">Clasificados</label>
         </div>
     </form>
 </div>
@@ -28,4 +32,3 @@ if (paramRequest.getCallMethod() != paramRequest.Call_STRATEGY) {
                 System.out.println("Hay resultados");
             }
 %>
-
