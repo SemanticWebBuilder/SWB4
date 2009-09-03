@@ -1,4 +1,4 @@
-<%@page import="java.text.SimpleDateFormat, org.semanticwb.portal.resources.sem.BookmarkEntry, org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<%@page import="java.util.*,java.text.SimpleDateFormat, org.semanticwb.portal.resources.sem.BookmarkEntry, org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 
 <%
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
@@ -6,12 +6,29 @@
             SWBResourceURL aUrl = paramRequest.getActionUrl().setAction("ADDNEW");
             boolean showList = (Boolean) request.getAttribute("l");
             int maxBookmarks = 10;
+            boolean existe=false;
+            entries = (Iterator<BookmarkEntry>) request.getAttribute("entries");
+            ArrayList<BookmarkEntry> arrayEntries=new ArrayList<BookmarkEntry>();
+            while (entries.hasNext())
+            {
+                BookmarkEntry entry=entries.next();
+                arrayEntries.add(entry);
+                if(paramRequest.getWebPage().getUrl().equalsIgnoreCase(entry.getBookmarkURL()))
+                {
+                    existe=true;
+                }
+            }
+            
+            entries=arrayEntries.iterator();
+
 %>
 <div id="contactos">
     <h2>Mis Favoritos</h2>
     <%
     if (paramRequest.getUser().isSigned())
     {
+            if(!existe)
+            {
             %>
             <div class="editarInfo">
                 <p>
@@ -20,6 +37,7 @@
             </div>
             <div class="clear">&nbsp;</div>
             <%
+                        }
      }
             int bkCount = 0;
             if (entries != null && entries.hasNext() /*&& showList*/) {
