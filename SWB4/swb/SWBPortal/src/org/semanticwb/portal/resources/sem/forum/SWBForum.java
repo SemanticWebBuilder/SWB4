@@ -187,13 +187,13 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
             count++;
             Attachment attch = lAttchments.next();
             basepath = SWBPlatform.getWebWorkPath() + "/models/" + website.getId() + "/Resource/" + base.getId() + "/replies/" + post.getId() + "/" + attch.getFileName();
-            request.setAttribute("attach_" + count, basepath);
-            request.setAttribute("attachTarget_" + count, "blank");
+            request.setAttribute("attach_hasThAttachments_"+ count, basepath);
+            request.setAttribute("attachTarget_hasThAttachments_" +count, "blank");
             url.setParameter("removeAttach", attch.getURI());
-            request.setAttribute("attachRemovePath_" + count, url.toString());
+            request.setAttribute("attachRemovePath_hasThAttachments_" + count, url.toString());
         }
         if (count > 0) {
-            request.setAttribute("attachCount", "" + count);
+            request.setAttribute("attachCount_hasThAttachments", "" + count);
         }
         mgr.addButton(SWBFormButton.newSaveButton());
         mgr.addButton(SWBFormButton.newCancelButton());
@@ -228,13 +228,13 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
             count++;
             Attachment attch = lAttchments.next();
             basepath = SWBPlatform.getWebWorkPath() + "/models/" + website.getId() + "/Resource/" + base.getId() + "/threads/" + thread.getId() + "/" + attch.getFileName();
-            request.setAttribute("attach_" + count, basepath);
-            request.setAttribute("attachTarget_" + count, "blank");
+            request.setAttribute("attach_hasThAttachments_" + count, basepath);
+            request.setAttribute("attachTarget_hasThAttachments_" + count, "blank");
             url.setParameter("removeAttach", attch.getURI());
-            request.setAttribute("attachRemovePath_" + count, url.toString());
+            request.setAttribute("attachRemovePath_hasThAttachments_" + count, url.toString());
         }
         if (count > 0) {
-            request.setAttribute("attachCount", "" + count);
+            request.setAttribute("attachCount_hasThAttachments", "" + count);
         }
         mgr.addButton(SWBFormButton.newSaveButton());
         mgr.addButton(SWBFormButton.newCancelButton());
