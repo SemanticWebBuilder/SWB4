@@ -23,7 +23,6 @@
 <%@page import="org.semanticwb.model.FormElement"%>
 <%@page import="org.semanticwb.portal.SWBFormButton"%>
 <%@page import="org.semanticwb.portal.community.*"%>
-<%@page import="org.semanticwb.portal.community.Restaurant"%>
 
 
 <%
