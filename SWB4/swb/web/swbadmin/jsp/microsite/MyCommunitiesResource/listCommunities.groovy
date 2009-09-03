@@ -29,7 +29,6 @@ import org.semanticwb.portal.community.MicroSite
 import org.semanticwb.SWBPlatform
 
 
-
 def paramRequest=request.getAttribute("paramRequest")
 User user = paramRequest.getUser()
 WebPage wpage=paramRequest.getWebPage()
