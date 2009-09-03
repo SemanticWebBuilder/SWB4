@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class ClasifiedVehicleBase extends org.semanticwb.portal.community.ClasifiedBuySell implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.portal.community.Contactable
+public class ClasifiedVehicleBase extends org.semanticwb.portal.community.ClasifiedBuySell implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.portal.community.Contactable
 {
     public static final org.semanticwb.platform.SemanticProperty swbcomm_vehicleColor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#vehicleColor");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_vehicleMileage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#vehicleMileage");
@@ -55,22 +55,22 @@ public class ClasifiedVehicleBase extends org.semanticwb.portal.community.Clasif
         return (getClasifiedVehicle(id, model)!=null);
     }
 
-    public String getVehicleColor()
+    public String getColor()
     {
         return getSemanticObject().getProperty(swbcomm_vehicleColor);
     }
 
-    public void setVehicleColor(String value)
+    public void setColor(String value)
     {
         getSemanticObject().setProperty(swbcomm_vehicleColor, value);
     }
 
-    public float getVehicleMileage()
+    public float getMileage()
     {
         return getSemanticObject().getFloatProperty(swbcomm_vehicleMileage);
     }
 
-    public void setVehicleMileage(float value)
+    public void setMileage(float value)
     {
         getSemanticObject().setFloatProperty(swbcomm_vehicleMileage, value);
     }
@@ -85,22 +85,22 @@ public class ClasifiedVehicleBase extends org.semanticwb.portal.community.Clasif
         getSemanticObject().setIntProperty(swbcomm_vehicleYear, value);
     }
 
-    public String getVehicleModel()
+    public String getModel()
     {
         return getSemanticObject().getProperty(swbcomm_vehicleModel);
     }
 
-    public void setVehicleModel(String value)
+    public void setModel(String value)
     {
         getSemanticObject().setProperty(swbcomm_vehicleModel, value);
     }
 
-    public String getVehicleBrand()
+    public String getBrand()
     {
         return getSemanticObject().getProperty(swbcomm_vehicleBrand);
     }
 
-    public void setVehicleBrand(String value)
+    public void setBrand(String value)
     {
         getSemanticObject().setProperty(swbcomm_vehicleBrand, value);
     }

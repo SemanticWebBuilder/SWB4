@@ -1,8 +1,10 @@
 package org.semanticwb.portal.community.base;
 
 
-public class OrganizationBase extends org.semanticwb.portal.community.DirectoryObject implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Geolocalizable,org.semanticwb.portal.community.Contactable,org.semanticwb.model.Traceable,org.semanticwb.portal.community.Addressable
+public class OrganizationBase extends org.semanticwb.portal.community.DirectoryObject implements org.semanticwb.model.Geolocalizable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.portal.community.Contactable,org.semanticwb.portal.community.Addressable
 {
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_webSite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#webSite");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_serviceHours=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#serviceHours");
     public static final org.semanticwb.platform.SemanticClass swbcomm_Organization=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Organization");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Organization");
 
@@ -59,6 +61,26 @@ public class OrganizationBase extends org.semanticwb.portal.community.DirectoryO
         getSemanticObject().setProperty(swbcomm_extNumber, value);
     }
 
+    public String getContactPhoneNumber()
+    {
+        return getSemanticObject().getProperty(swbcomm_contactPhoneNumber);
+    }
+
+    public void setContactPhoneNumber(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_contactPhoneNumber, value);
+    }
+
+    public String getContactName()
+    {
+        return getSemanticObject().getProperty(swbcomm_contactName);
+    }
+
+    public void setContactName(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_contactName, value);
+    }
+
     public int getStep()
     {
         return getSemanticObject().getIntProperty(swb_geoStep);
@@ -67,6 +89,16 @@ public class OrganizationBase extends org.semanticwb.portal.community.DirectoryO
     public void setStep(int value)
     {
         getSemanticObject().setIntProperty(swb_geoStep, value);
+    }
+
+    public String getWebSite()
+    {
+        return getSemanticObject().getProperty(swbcomm_webSite);
+    }
+
+    public void setWebSite(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_webSite, value);
     }
 
     public String getIntNumber()
@@ -79,24 +111,14 @@ public class OrganizationBase extends org.semanticwb.portal.community.DirectoryO
         getSemanticObject().setProperty(swbcomm_intNumber, value);
     }
 
-    public String getStreet()
+    public String getServiceHours()
     {
-        return getSemanticObject().getProperty(swbcomm_street);
+        return getSemanticObject().getProperty(swbcomm_serviceHours);
     }
 
-    public void setStreet(String value)
+    public void setServiceHours(String value)
     {
-        getSemanticObject().setProperty(swbcomm_street, value);
-    }
-
-    public String getPhoneNumber()
-    {
-        return getSemanticObject().getProperty(swbcomm_phoneNumber);
-    }
-
-    public void setPhoneNumber(String value)
-    {
-        getSemanticObject().setProperty(swbcomm_phoneNumber, value);
+        getSemanticObject().setProperty(swbcomm_serviceHours, value);
     }
 
     public double getLatitude()
@@ -119,14 +141,14 @@ public class OrganizationBase extends org.semanticwb.portal.community.DirectoryO
         getSemanticObject().setDoubleProperty(swb_longitude, value);
     }
 
-    public String getName()
+    public String getStreetName()
     {
-        return getSemanticObject().getProperty(swbcomm_name);
+        return getSemanticObject().getProperty(swbcomm_streetName);
     }
 
-    public void setName(String value)
+    public void setStreetName(String value)
     {
-        getSemanticObject().setProperty(swbcomm_name, value);
+        getSemanticObject().setProperty(swbcomm_streetName, value);
     }
 
     public String getCity()
@@ -139,13 +161,13 @@ public class OrganizationBase extends org.semanticwb.portal.community.DirectoryO
         getSemanticObject().setProperty(swbcomm_city, value);
     }
 
-    public String getEmail()
+    public String getContactEmail()
     {
-        return getSemanticObject().getProperty(swbcomm_email);
+        return getSemanticObject().getProperty(swbcomm_contactEmail);
     }
 
-    public void setEmail(String value)
+    public void setContactEmail(String value)
     {
-        getSemanticObject().setProperty(swbcomm_email, value);
+        getSemanticObject().setProperty(swbcomm_contactEmail, value);
     }
 }

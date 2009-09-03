@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class PersonBase extends org.semanticwb.portal.community.DirectoryObject implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Geolocalizable,org.semanticwb.model.Traceable,org.semanticwb.portal.community.Addressable
+public class PersonBase extends org.semanticwb.portal.community.DirectoryObject implements org.semanticwb.model.Geolocalizable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.portal.community.Addressable
 {
     public static final org.semanticwb.platform.SemanticClass swbcomm_Person=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Person");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Person");
@@ -79,16 +79,6 @@ public class PersonBase extends org.semanticwb.portal.community.DirectoryObject 
         getSemanticObject().setProperty(swbcomm_intNumber, value);
     }
 
-    public String getStreet()
-    {
-        return getSemanticObject().getProperty(swbcomm_street);
-    }
-
-    public void setStreet(String value)
-    {
-        getSemanticObject().setProperty(swbcomm_street, value);
-    }
-
     public double getLatitude()
     {
         return getSemanticObject().getDoubleProperty(swb_latitude);
@@ -107,6 +97,16 @@ public class PersonBase extends org.semanticwb.portal.community.DirectoryObject 
     public void setLongitude(double value)
     {
         getSemanticObject().setDoubleProperty(swb_longitude, value);
+    }
+
+    public String getStreetName()
+    {
+        return getSemanticObject().getProperty(swbcomm_streetName);
+    }
+
+    public void setStreetName(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_streetName, value);
     }
 
     public String getCity()

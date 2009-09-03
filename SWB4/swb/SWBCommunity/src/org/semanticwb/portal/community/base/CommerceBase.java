@@ -1,8 +1,9 @@
 package org.semanticwb.portal.community.base;
 
 
-public class CommerceBase extends org.semanticwb.portal.community.Organization implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Geolocalizable,org.semanticwb.portal.community.FacilitiesEnable,org.semanticwb.portal.community.Contactable,org.semanticwb.model.Traceable,org.semanticwb.portal.community.Addressable
+public class CommerceBase extends org.semanticwb.portal.community.Organization implements org.semanticwb.model.Geolocalizable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.portal.community.FacilitiesEnable,org.semanticwb.portal.community.Contactable,org.semanticwb.portal.community.Addressable
 {
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_paymentType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#paymentType");
     public static final org.semanticwb.platform.SemanticClass swbcomm_Commerce=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Commerce");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Commerce");
 
@@ -47,5 +48,55 @@ public class CommerceBase extends org.semanticwb.portal.community.Organization i
     public static boolean hasCommerce(String id, org.semanticwb.model.SWBModel model)
     {
         return (getCommerce(id, model)!=null);
+    }
+
+    public int getPaymentType()
+    {
+        return getSemanticObject().getIntProperty(swbcomm_paymentType);
+    }
+
+    public void setPaymentType(int value)
+    {
+        getSemanticObject().setIntProperty(swbcomm_paymentType, value);
+    }
+
+    public boolean isFoodCourt()
+    {
+        return getSemanticObject().getBooleanProperty(swbcomm_foodCourt);
+    }
+
+    public void setFoodCourt(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swbcomm_foodCourt, value);
+    }
+
+    public boolean isElevator()
+    {
+        return getSemanticObject().getBooleanProperty(swbcomm_elevator);
+    }
+
+    public void setElevator(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swbcomm_elevator, value);
+    }
+
+    public boolean isParkingLot()
+    {
+        return getSemanticObject().getBooleanProperty(swbcomm_parkingLot);
+    }
+
+    public void setParkingLot(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swbcomm_parkingLot, value);
+    }
+
+    public boolean isImpairedPeopleAccessible()
+    {
+        return getSemanticObject().getBooleanProperty(swbcomm_impairedPeopleAccessible);
+    }
+
+    public void setImpairedPeopleAccessible(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swbcomm_impairedPeopleAccessible, value);
     }
 }

@@ -1,10 +1,15 @@
 package org.semanticwb.portal.community.base;
 
 
-public class ClasifiedJobBase extends org.semanticwb.portal.community.Clasified implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.portal.community.Contactable
+public class ClasifiedJobBase extends org.semanticwb.portal.community.Clasified implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.portal.community.Contactable
 {
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_maxRequiredAge=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#maxRequiredAge");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_experience=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#experience");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_salary=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#salary");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_jobType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#jobType");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_minRequiredAge=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#minRequiredAge");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_educationalLevel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#educationalLevel");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_acceptedDisability=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#acceptedDisability");
-    public static final org.semanticwb.platform.SemanticProperty swbcomm_requiredAge=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#requiredAge");
     public static final org.semanticwb.platform.SemanticClass swbcomm_JobArea=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#JobArea");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_jobArea=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#jobArea");
     public static final org.semanticwb.platform.SemanticClass swbcomm_ClasifiedJob=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#ClasifiedJob");
@@ -53,24 +58,74 @@ public class ClasifiedJobBase extends org.semanticwb.portal.community.Clasified 
         return (getClasifiedJob(id, model)!=null);
     }
 
-    public int getAcceptedDisability()
+    public int getMaxRequiredAge()
+    {
+        return getSemanticObject().getIntProperty(swbcomm_maxRequiredAge);
+    }
+
+    public void setMaxRequiredAge(int value)
+    {
+        getSemanticObject().setIntProperty(swbcomm_maxRequiredAge, value);
+    }
+
+    public int getExperience()
+    {
+        return getSemanticObject().getIntProperty(swbcomm_experience);
+    }
+
+    public void setExperience(int value)
+    {
+        getSemanticObject().setIntProperty(swbcomm_experience, value);
+    }
+
+    public float getSalary()
+    {
+        return getSemanticObject().getFloatProperty(swbcomm_salary);
+    }
+
+    public void setSalary(float value)
+    {
+        getSemanticObject().setFloatProperty(swbcomm_salary, value);
+    }
+
+    public int getJobType()
+    {
+        return getSemanticObject().getIntProperty(swbcomm_jobType);
+    }
+
+    public void setJobType(int value)
+    {
+        getSemanticObject().setIntProperty(swbcomm_jobType, value);
+    }
+
+    public int getMinRequiredAge()
+    {
+        return getSemanticObject().getIntProperty(swbcomm_minRequiredAge);
+    }
+
+    public void setMinRequiredAge(int value)
+    {
+        getSemanticObject().setIntProperty(swbcomm_minRequiredAge, value);
+    }
+
+    public int getEducationalLevel()
+    {
+        return getSemanticObject().getIntProperty(swbcomm_educationalLevel);
+    }
+
+    public void setEducationalLevel(int value)
+    {
+        getSemanticObject().setIntProperty(swbcomm_educationalLevel, value);
+    }
+
+    public int getAcceptedDissability()
     {
         return getSemanticObject().getIntProperty(swbcomm_acceptedDisability);
     }
 
-    public void setAcceptedDisability(int value)
+    public void setAcceptedDissability(int value)
     {
         getSemanticObject().setIntProperty(swbcomm_acceptedDisability, value);
-    }
-
-    public String getRequiredAge()
-    {
-        return getSemanticObject().getProperty(swbcomm_requiredAge);
-    }
-
-    public void setRequiredAge(String value)
-    {
-        getSemanticObject().setProperty(swbcomm_requiredAge, value);
     }
 
     public void setJobArea(org.semanticwb.portal.community.JobArea value)
