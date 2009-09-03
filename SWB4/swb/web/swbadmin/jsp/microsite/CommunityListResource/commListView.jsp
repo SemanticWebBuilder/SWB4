@@ -69,8 +69,7 @@
         {
 %>
             <ul>
-<%
-            //Iterator<WebPage> itwp = wpp.listChilds(user.getLanguage(), Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE);
+<%            
             while(itwp.hasNext())
             {
                 wpch = itwp.next();
@@ -98,7 +97,45 @@
       <div id="bottomInteres">&nbsp;</div>
 <%
     }
-    else if(wplevel<3)
+    else if(wplevel==2)
+    {
+        wpch=paramRequest.getWebPage();
+        %>
+        <div class="groupInteres">
+        <h3 class="titulo"><a href="<%=wpch.getUrl()%>"><%=wpch.getDisplayTitle(user.getLanguage())%></a></h3>
+        <%
+
+        Iterator<WebPage> itwpch = wpch.listChilds(user.getLanguage(), Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE);
+                if(itwpch.hasNext())
+                {
+%>
+            <ul>
+<%
+                    while(itwpch.hasNext())
+                    {
+                        wpgs = itwpch.next();
+
+                        if(!(wpgs instanceof MicroSite) && wpgs.isActive()&&!wpgs.isDeleted()&&!(wpgs.getSemanticObject().getGenericInstance() instanceof MicroSiteWebPageUtil))
+                        {
+                            numcomm= getExistingCommunities(wpgs,user);
+                            nummsg = "";
+                            if(numcomm>0)  nummsg = "("+numcomm+")";
+                            %>
+                                            <li><a href="<%=wpgs.getUrl()%>"><%=wpgs.getDisplayTitle(user.getLanguage())%>&nbsp;<%=nummsg%></a></li>
+                            <%
+                        }
+                        numcomm=0;
+
+                    }
+%>
+            </ul>
+<%
+                   }
+%>
+        </div>
+        <%
+    }
+    else if(wplevel==1)
     {
         while(itwp.hasNext())
         {
@@ -111,7 +148,7 @@
 %>
             <div class="groupInteres">
             <h3 class="titulo"><a href="<%=wpch.getUrl()%>"><%=wpch.getDisplayTitle(user.getLanguage())%></a></h3>
-<%
+<%                
                 Iterator<WebPage> itwpch = wpch.listChilds(user.getLanguage(), Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE);
                 if(itwpch.hasNext())
                 {
@@ -121,16 +158,18 @@
                     while(itwpch.hasNext())
                     {
                         wpgs = itwpch.next();
-                        if(wpgs.isActive()&&!wpgs.isDeleted()&&!(wpgs.getSemanticObject().getGenericInstance() instanceof MicroSiteWebPageUtil))
+                        
+                        if(!(wpgs instanceof MicroSite) && wpgs.isActive()&&!wpgs.isDeleted()&&!(wpgs.getSemanticObject().getGenericInstance() instanceof MicroSiteWebPageUtil))
                         {
                             numcomm= getExistingCommunities(wpgs,user);
                             nummsg = "";
                             if(numcomm>0)  nummsg = "("+numcomm+")";
-%>
-                <li><a href="<%=wpgs.getUrl()%>"><%=wpgs.getDisplayTitle(user.getLanguage())%>&nbsp;<%=nummsg%></a></li>
-<%
+                            %>
+                                            <li><a href="<%=wpgs.getUrl()%>"><%=wpgs.getDisplayTitle(user.getLanguage())%>&nbsp;<%=nummsg%></a></li>
+                            <%
                         }
                         numcomm=0;
+                        
                     }
 %>
             </ul>
