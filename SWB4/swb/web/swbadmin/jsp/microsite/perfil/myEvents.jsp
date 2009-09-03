@@ -33,7 +33,7 @@
                 }
                 while (it.hasNext()) {
                     EventElement event = it.next();
-                    SWBResourceURL viewurl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", event.getURI());
+                    String viewurl = event.getURL();
                     if (event.canView(member)) {
     %>
     <div class="entry">
