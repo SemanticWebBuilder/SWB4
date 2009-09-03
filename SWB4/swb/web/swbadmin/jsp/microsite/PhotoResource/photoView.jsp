@@ -43,7 +43,7 @@
   }%>
 
 <br /><br />
-<div id="entriesWrapper">
+<div class="listaFotos">
 <%
         Iterator<PhotoElement> it = PhotoElement.listPhotoElementByPhotoWebPage(wpage, wpage.getWebSite());
         int i = 0;
@@ -54,20 +54,14 @@
             {
                 SWBResourceURL viewurl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", photo.getURI());
 %>
-            <div class="entry">
+            <div class="entry_listadoFotos">
                 <a dojoType="dojox.image.Lightbox" title="<%= photo.getTitle()%>" href="<%= SWBPlatform.getWebWorkPath()+photo.getImageURL()%>">
                     <img id="img_<%=i+base.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+photo.getPhotoThumbnail()%>" alt="<%= photo.getTitle()%>" border="0" />
                 </a>
-                <div class="entryInfo">
-                    <a href="<%=viewurl%>">
-                        <p class="tituloNaranja"><%= photo.getTitle()%></p>
-                        <p><%= photo.getDescription()%></p>
-                        <p class="eventoInicio">Autor: <%= photo.getCreator().getFirstName()%></p>
-                        <p class="eventoInicio">Fecha: <%= SWBUtils.TEXT.getStrDate(photo.getCreated(), lang, "dd/mm/yy") %> </p>
-                        <p><%= SWBUtils.TEXT.getTimeAgo(photo.getCreated(),user.getLanguage())%></p>
-                    </a>
-                    <div class="clear">&nbsp;</div>
-                </div>
+                <p class="tituloFoto"><a href="<%=viewurl%>"><%= photo.getTitle()%></a></p>
+                <p class="tituloFoto"><a href="<%=viewurl%>"><%= photo.getCreator().getFirstName()%></a></p>
+                <p class="tituloFoto"><a href="<%=viewurl%>"><%= photo.getViews()%> vistas</a></p>
+                <div class="clear">&nbsp;</div>
             </div>
 <%
                 i++;
