@@ -20,7 +20,7 @@ import org.semanticwb.portal.api.SWBResourceException;
 
 /**
  *
- * @author jorge.jimenez
+ * @author Hasdai Pacheco {haxdai@gmail.com}
  */
 public class MyEvents extends GenericAdmResource {
 
