@@ -168,6 +168,16 @@ public class RegisterUser extends GenericResource
                             {
                             }
                         }
+                        if (sp.isDouble())
+                        {
+                            try
+                            {
+                                Double val = Double.valueOf(request.getParameter(sp.getName()));
+                                user.setExtendedAttribute(sp, val);
+                            } catch (Exception ne)
+                            {
+                            }
+                        }
 
                     }
                 }
