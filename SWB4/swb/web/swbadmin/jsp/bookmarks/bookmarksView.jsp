@@ -7,35 +7,39 @@
             boolean showList = (Boolean) request.getAttribute("l");
             int maxBookmarks = 10;
 %>
-<p class="addOn">Mis Favoritos</p>
-<div>
+<div class="contacto">
+    <h2>Mis Favoritos</h2>        
     <%
-    if (paramRequest.getUser().isSigned()) {
-    %>
-        <p>
-            <a href="<%=aUrl%>">Marcar p&aacute;gina</a>
-        </p>
-    <%
-    }
+            int bkCount = 0;
+            if (entries != null && entries.hasNext() /*&& showList*/) {
     %>
     <p>
-    <%
-        int bkCount = 0;
-        if (entries != null && entries.hasNext() /*&& showList*/) {
-    %>
-        <ul>
+    <ul>
         <%
             while (entries.hasNext() && bkCount < maxBookmarks) {
                 BookmarkEntry entry = entries.next();
         %>
-                <li><a href="<%=entry.getBookmarkURL()%>"><%=entry.getTitle()%></a>&nbsp;[<a href="<%=paramRequest.getActionUrl().setAction("DELETE").setParameter("id", entry.getId())%>">-</a>]</li>
+        <li style="list-style-type:none;">
+            <a class="contactos_nombre" href="<%=entry.getBookmarkURL()%>">
+                <img src="/work/models/Ciudad_Digital/css/boton_contacto.png"/><%=entry.getTitle()%>
+            </a>&nbsp;<!--a class="editarInfo" href="%=paramRequest.getActionUrl().setAction("DELETE").setParameter("id", entry.getId())%>">Eliminar</a-->
+        </li>
         <%
                 bkCount++;
             }
         %>
-        </ul>
-        <%
-        }
-        %>
+    </ul>
+</p>
+<%
+    }
+    if (paramRequest.getUser().isSigned()) {
+%>
+<div class="editarInfo" style="float:right;">
+    <p>
+        <a href="<%=aUrl%>">Marcar p&aacute;gina</a>
     </p>
+</div>
+<%
+        }
+%>
 </div>
