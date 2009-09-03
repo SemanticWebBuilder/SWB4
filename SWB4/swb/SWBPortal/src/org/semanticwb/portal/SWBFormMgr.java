@@ -544,6 +544,7 @@ public class SWBFormMgr
                 while(it.hasNext())
                 {
                     SemanticProperty prop=it.next();
+                    //System.out.println("ProcessElement:"+prop);
                     processElement(request, prop);
                 }
             }
