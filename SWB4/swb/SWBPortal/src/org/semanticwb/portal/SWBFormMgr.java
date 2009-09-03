@@ -222,7 +222,7 @@ public class SWBFormMgr
             }else if(!filterRequired && m_mode.equals(MODE_CREATE))      //solo se agregan las requeridas
             {
                 addProp=true;
-                if(prop.isDateTime() || (prop.isObjectProperty() && disp==null))
+                if(prop.isDateTime() || (prop.isObjectProperty() && (disp==null || disp.getFormElement()==null)))
                 {
                     addProp=false;
                 }
