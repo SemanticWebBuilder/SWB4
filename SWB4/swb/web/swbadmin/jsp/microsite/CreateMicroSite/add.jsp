@@ -16,7 +16,7 @@
     mgr.setAction(paramRequest.getActionUrl().toString());
     mgr.addProperty(Descriptiveable.swb_description);
     mgr.addProperty(WebPage.swb_tags);
-    mgr.addProperty(MicroSite.swbcomm_type);
+    //mgr.addProperty(MicroSite.swbcomm_type);
     mgr.addProperty(MicroSite.swbcomm_private);
     mgr.addProperty(MicroSite.swbcomm_moderate);
     mgr.addProperty(MicroSiteType.swbcomm_hasMicroSiteUtil);
