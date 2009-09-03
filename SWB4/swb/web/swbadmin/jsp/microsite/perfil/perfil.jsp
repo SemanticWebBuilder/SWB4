@@ -25,7 +25,7 @@ SWBResourceURL urlAction=paramRequest.getActionUrl();
 WebPage wpage=paramRequest.getWebPage();
 User owner=paramRequest.getUser();
 User user=owner;
-if(request.getParameter("user")!=null)
+if(request.getParameter("user")!=null && !request.getParameter("user").equals(user.getURI()))
 {
     SemanticObject semObj=SemanticObject.createSemanticObject(request.getParameter("user"));
     user=(User)semObj.createGenericInstance();
