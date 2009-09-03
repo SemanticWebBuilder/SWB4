@@ -8,8 +8,19 @@
             int maxBookmarks = 10;
 %>
 <div class="contacto">
-    <h2>Mis Favoritos</h2>        
+    <h2>Mis Favoritos</h2>
     <%
+    if (paramRequest.getUser().isSigned())
+    {
+            %>
+            <div class="editarInfo">
+                <p>
+                    <a href="<%=aUrl%>">Agregar p&aacute;gina </a>
+                </p>
+            </div>
+                    <br>
+            <%
+     }
             int bkCount = 0;
             if (entries != null && entries.hasNext() /*&& showList*/) {
     %>
@@ -21,7 +32,7 @@
         %>
         <li style="list-style-type:none;">
             <a class="contactos_nombre" href="<%=entry.getBookmarkURL()%>">
-                <img src="/work/models/Ciudad_Digital/css/boton_contacto.png"/><%=entry.getTitle()%>
+                <img alt=""  src="/work/models/Ciudad_Digital/css/boton_contacto.png"/><%=entry.getTitle()%>
             </a>&nbsp;<!--a class="editarInfo" href="%=paramRequest.getActionUrl().setAction("DELETE").setParameter("id", entry.getId())%>">Eliminar</a-->
         </li>
         <%
@@ -29,17 +40,12 @@
             }
         %>
     </ul>
-</p>
+    </p>
+
 <%
     }
-    if (paramRequest.getUser().isSigned()) {
-%>
-<div class="editarInfo" style="float:right;">
-    <p>
-        <a href="<%=aUrl%>">Marcar p&aacute;gina</a>
-    </p>
+            %>
 </div>
-<%
-        }
-%>
-</div>
+
+
+
