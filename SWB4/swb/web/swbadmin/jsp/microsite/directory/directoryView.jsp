@@ -94,9 +94,9 @@ url.setParameter("uri", sobj.getURI());
 
          HashMap map=new HashMap();
          map.put("separator", "-");
-         String img="", title="", description="", tags="", creator="", created="";
          for (int i = iIniPage; i < iFinPage; i++)
          {
+            String img="", title="", description="", tags="", creator="", created="";
             String[] strFields = strResTypes[i].toString().split(":swbp4g1:");
             String orderField = strFields[0];
             String ObjUri = strFields[1];
