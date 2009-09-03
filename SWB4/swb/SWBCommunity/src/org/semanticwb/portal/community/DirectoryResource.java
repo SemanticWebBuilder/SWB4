@@ -83,6 +83,8 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
                 
                 String dirPhoto=request.getParameter("dirPhotoHidden");
                 if(dirPhoto!=null) dirObj.setPhoto(dirPhoto);
+                String dirHasExtraPhotoHidden=request.getParameter("dirHasExtraPhotoHidden");
+                if(dirHasExtraPhotoHidden!=null) dirObj.addExtraPhoto(dirHasExtraPhotoHidden);
                 processFiles(request, response, dirObj.getSemanticObject(), dirPhoto);
             }catch(FormValidateException e)
             {
