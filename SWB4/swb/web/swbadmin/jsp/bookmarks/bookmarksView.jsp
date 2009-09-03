@@ -7,7 +7,7 @@
             boolean showList = (Boolean) request.getAttribute("l");
             int maxBookmarks = 10;
 %>
-<div class="contacto">
+<div id="contactos">
     <h2>Mis Favoritos</h2>
     <%
     if (paramRequest.getUser().isSigned())
@@ -18,34 +18,36 @@
                     <a href="<%=aUrl%>">Agregar p&aacute;gina </a>
                 </p>
             </div>
-                    <br>
+            <div class="clear">&nbsp;</div>
             <%
      }
             int bkCount = 0;
             if (entries != null && entries.hasNext() /*&& showList*/) {
     %>
-    <p>
     <ul>
         <%
             while (entries.hasNext() && bkCount < maxBookmarks) {
                 BookmarkEntry entry = entries.next();
         %>
-        <li style="list-style-type:none;">
+        <li>
             <a class="contactos_nombre" href="<%=entry.getBookmarkURL()%>">
-                <img alt=""  src="/work/models/Ciudad_Digital/css/boton_contacto.png"/><%=entry.getTitle()%>
-            </a>&nbsp;<!--a class="editarInfo" href="%=paramRequest.getActionUrl().setAction("DELETE").setParameter("id", entry.getId())%>">Eliminar</a-->
+                <img alt=""  src="/work/models/Ciudad_Digital/css/boton_contacto.png"/>
+            </a>
+                <a class="contactos_nombre" href="<%=entry.getBookmarkURL()%>">
+                <%=entry.getTitle()%>
+            </a>
+            <div class="editarInfo">
+                <p>
+                    <a href="<%=paramRequest.getActionUrl().setAction("DELETE").setParameter("id", entry.getId())%>">Eliminar</a>
+                </p>
+            </div>
         </li>
         <%
                 bkCount++;
             }
         %>
     </ul>
-    </p>
-
 <%
     }
             %>
 </div>
-
-
-
