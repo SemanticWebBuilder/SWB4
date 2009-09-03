@@ -35,6 +35,7 @@ def mapa = new HashMap()
 Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#_ExtendedAttributes").listProperties();
                 list.each{
                     def sp = it
+                    System.out.println("prop:"+sp.getName())
                     mapa.put(sp.getName(),sp)
                 }
 
@@ -68,6 +69,7 @@ def usr_inciso = user.getExtendedAttribute(mapa.get("userInciso"))
 if (null==usr_inciso) usr_inciso = ""
 
 def latitude = user.getExtendedAttribute(mapa.get("latitude"))
+System.out.println("userLAt:"+latitude)
 if (null==latitude) latitude = "22.99885"
 def longitude = user.getExtendedAttribute(mapa.get("longitude"))
 if (null==longitude) longitude = "-101.77734"
@@ -274,7 +276,7 @@ function search() {
                 } else {
                     document.getElementById("latitude").value = point.lat().toFixed(7);
                     document.getElementById("longitude").value = point.lng().toFixed(7);
-                    document.getElementById("geoStep").value = map.getZoom();
+                    document.getElementById("geoStep").value = 14;
                     map.clearOverlays();
                     setUpMap(map, point, 14);
                 }

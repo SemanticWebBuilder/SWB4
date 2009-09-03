@@ -160,38 +160,52 @@ else
                  }
              }
     %>
-            </div>
-            <div id="map_canvas" style="width: 500px; height: 300px"></div>
+            </div><div class="clear">&nbsp;</div><h2> Ubicaci&oacute;n de mis amigos</h2>
+            <div id="map_canvas" style="width: 480px; height: 300px; float: left"></div>
             <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<%=SWBPlatform.getEnv("key/gmap","")%>"
             type="text/javascript"></script>
     <script type="text/javascript">
+
+        function createMarker(map, point, name) {
+                var amigo = new GMarker(point);
+                GEvent.addListener(amigo, "click", function() {
+                    var myHtml = "<b>"+name+"</b>";
+                    map.openInfoWindowHtml(point, myHtml);
+                });
+                return amigo;
+            }
+
     function initialize() {
       if (GBrowserIsCompatible()) {
         var map = new GMap2(document.getElementById("map_canvas"));
             map.addControl(new GSmallMapControl());
             map.addControl(new GMapTypeControl());
         var center = new GLatLng(<%=userLoc.getLatitude()%>, <%=userLoc.getLongitude()%>);
-        map.setCenter(center, <%=userLoc.getStep()%>);
-        var marker = new GMarker(center, {draggable: false});
+        map.setCenter(center, <%=userLoc.getStep()-2%>);
+        var marker = new GMarker(center);
+        GEvent.addListener(marker, "click", function() {
+                var myHtml = "<b><%=userLoc.getName()%></b>";
+                map.openInfoWindowHtml(center, myHtml);
+            });
         map.addOverlay(marker);
-        marker.openInfoWindow(
-        document.createTextNode("<%=userLoc.getName()%>"));
+        
+
+        
+
         <%
         Iterator<GeoLocation> listit = lista.iterator();
         while (listit.hasNext()){
             GeoLocation actual = listit.next();
             %>
-            var point = new GLatLng(<%=actual.getLatitude()%>, <%=actual.getLongitude()%>);
-            var marker = new GMarker(point, {draggable: false});
-            map.addOverlay(marker);
-            marker.openInfoWindow(
-            document.createTextNode("<%=actual.getName()%>"));
+            var pointer = new GLatLng(<%=actual.getLatitude()%>, <%=actual.getLongitude()%>);
+            map.addOverlay(createMarker(map, pointer, '<%=actual.getName()%>'));
             <%
         }
         %>
       }
     }
 initialize();
+
     </script>
             <%
 
