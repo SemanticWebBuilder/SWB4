@@ -33,19 +33,33 @@
         mgr.setSubmitByAjax(false);
         mgr.setType(mgr.TYPE_DOJO);
         SWBResourceURL url = paramRequest.getActionUrl();
-        url.setParameter("objInstUri", semObject.getURI());
+        url.setParameter("uri", semObject.getURI());
         url.setAction(url.Action_EDIT);
         mgr.setAction(url.toString());
 
+        String basepath = SWBPlatform.getWebWorkPath() + base.getWorkPath() + "/" + semObject.getId() + "/";
         DirectoryObject dirObj=(DirectoryObject)semObject.createGenericInstance();
         String dirPhoto=dirObj.getPhoto();
-
         if(dirPhoto!=null){
-            String basepath = SWBPlatform.getWebWorkPath() + base.getWorkPath() + "/" + semObject.getId() + "/" + dirPhoto;
-            request.setAttribute("attach_1", basepath);
+            String photo=basepath + dirPhoto;
+            request.setAttribute("elementId", "dirPhoto");
+            request.setAttribute("attach_1", photo);
             request.setAttribute("attachTarget_1", "blank");
             request.setAttribute("attachCount", "1");
             mgr.addHiddenParameter("dirPhotoHidden", dirPhoto);
+        }
+
+        int count=0;
+        Iterator<String> itPhotos=dirObj.listExtraPhotos();
+        while(itPhotos.hasNext()){
+            count++;
+            String photo=basepath + itPhotos.next();
+            request.setAttribute("elementId", "dirHasExtraPhoto");
+            request.setAttribute("attach_"+count, photo);
+            request.setAttribute("attachTarget_"+count, "blank");
+        }
+        if (count > 0) {
+            request.setAttribute("attachCount", "" + count);
         }
 
         request.setAttribute("formName", mgr.getFormName());
