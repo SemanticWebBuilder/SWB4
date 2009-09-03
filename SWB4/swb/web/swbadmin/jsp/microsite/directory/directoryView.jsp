@@ -44,7 +44,13 @@ url.setParameter("uri", sobj.getURI());
    
        <%url.setParameter("act","add");%>
        <div class="editarInfo1">
-            <p><a href="<%=url.toString()%>">Agregar elemento al directorio</a></p>
+            <p>
+                <%if(user.isRegistered() && user.isSigned()){%>
+                    <a href="<%=url.toString()%>">Agregar elemento al directorio</a>
+               <%}else{%> 
+                    Registrese para publicar</a>
+               <%}%>
+            </p>
        </div>
        <div class="clear">&nbsp;</div>
  <div id="entriesList">
