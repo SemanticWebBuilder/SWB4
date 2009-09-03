@@ -165,6 +165,10 @@ public class ImageGallery extends GenericResource {
         return getGalleryScript(Integer.toString((int)Math.random()*100), 220, 170, false, 2500, 500, 420, 370, "", "", imgpath);
     }
 
+    public String getGalleryScript(int twidth, int theight, String[] imgpath) {
+        return getGalleryScript(Integer.toString((int)Math.random()*100), twidth, theight, false, 2500, 500, 420, 370, "", "", imgpath);
+    }
+
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
