@@ -115,9 +115,9 @@ if(request.getParameter("changePhoto")!=null && request.getParameter("changePhot
     if(!owner.getURI().equals(user.getURI())
             && Friendship.areFriends(owner, user, paramRequest.getWebPage().getWebSite())) areFriends=true;
 
-
     if(isStrategy)
     {
+
           if(areFriends){ //Si el usuario que esta en session(owner) es diferente que el que vino por parametro (user)
               urlAction.setAction("remFriendRelship");
               urlAction.setParameter("user", user.getURI());
@@ -174,7 +174,8 @@ if(request.getParameter("changePhoto")!=null && request.getParameter("changePhot
                             %>   
                             <div class="clear">&nbsp;</div>
                                 <h3><%=user.getFullName()%></h3>
-             <%
+             <%             
+             
                 if(owner==user || areFriends){ //Agregar datos privados (email, sexo, fotos, etc)
                     %>
                                 <table width="100%" border="0" cellspacing="10" cellpadding="0">
