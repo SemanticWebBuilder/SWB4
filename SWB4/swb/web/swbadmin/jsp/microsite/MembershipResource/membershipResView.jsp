@@ -45,7 +45,7 @@
 
 <%
 
-     if(member.getAccessLevel()==Member.LEVEL_OWNER&&user.isRegistered())
+     if(null!=member&&member.getAccessLevel()==Member.LEVEL_OWNER&&user.isRegistered())
      {
          SWBResourceURL urle = paramRequest.getRenderUrl();
          urle.setParameter("act", "edit");
