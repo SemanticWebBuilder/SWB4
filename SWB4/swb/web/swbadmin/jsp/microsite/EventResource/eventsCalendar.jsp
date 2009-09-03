@@ -10,11 +10,13 @@
     SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss a");
     String year = request.getParameter("year");
     String month = request.getParameter("month");
+    int imonth = 0;
     String day = request.getParameter("day");
     Date current = new Date(System.currentTimeMillis());
 
     if(day != null && month != null && day != null) {
         current = new Date(Integer.valueOf(year) - 1900, Integer.valueOf(month), Integer.valueOf(day));
+        imonth = Integer.parseInt(month);
     }
 %>
 
@@ -57,18 +59,18 @@
             <input type="text" style="width:70px;" regExp="\d{4}" dojoType="dijit.form.ValidationTextBox" name="year" id="year" value="<%=current.getYear() + 1900%>"/></p>
             <p><label for="month">Mes:</label>
             <select  style="width:150px;" name ="month" id="month" value="<%=current.getMonth()%>">
-                <option value="0">Enero</option>
-                <option value="1">Febrero</option>
-                <option value="2">Marzo</option>
-                <option value="3">Abril</option>
-                <option value="4">Mayo</option>
-                <option value="5">Junio</option>
-                <option value="6">Julio</option>
-                <option value="7">Agosto</option>
-                <option value="8">Septiembre</option>
-                <option value="9">Octubre</option>
-                <option value="10">Noviembre</option>
-                <option value="11">Diciembre</option>
+                <option value="0" <%= imonth==0?"selected=\"selected\"":""%>>Enero</option>
+                <option value="1" <%= imonth==1?"selected=\"selected\"":""%>>Febrero</option>
+                <option value="2" <%= imonth==2?"selected=\"selected\"":""%>>Marzo</option>
+                <option value="3" <%= imonth==3?"selected=\"selected\"":""%>>Abril</option>
+                <option value="4" <%= imonth==4?"selected=\"selected\"":""%>>Mayo</option>
+                <option value="5" <%= imonth==5?"selected=\"selected\"":""%>>Junio</option>
+                <option value="6" <%= imonth==6?"selected=\"selected\"":""%>>Julio</option>
+                <option value="7" <%= imonth==7?"selected=\"selected\"":""%>>Agosto</option>
+                <option value="8" <%= imonth==8?"selected=\"selected\"":""%>>Septiembre</option>
+                <option value="9" <%= imonth==9?"selected=\"selected\"":""%>>Octubre</option>
+                <option value="10" <%= imonth==10?"selected=\"selected\"":""%>>Noviembre</option>
+                <option value="11" <%= imonth==11?"selected=\"selected\"":""%>>Diciembre</option>
             </select></p>
             <input type="hidden" name="day" id="day" value="1"/>
             <p><input type="submit" id="calendarSubmit" label="Ir" value="Ir"/></p>
