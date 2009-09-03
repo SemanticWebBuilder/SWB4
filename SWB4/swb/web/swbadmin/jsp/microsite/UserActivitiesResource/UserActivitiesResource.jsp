@@ -1,5 +1,4 @@
 <%@page import="org.semanticwb.portal.community.utilresources.CommunityActivity,java.text.*,java.net.*,org.semanticwb.platform.SemanticObject,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*" %>
-
 <%
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             User user = paramRequest.getUser();
@@ -7,7 +6,7 @@
             Iterator<CommunityActivity> activities = (Iterator<CommunityActivity>) request.getAttribute("activities");
 %>
 <div id="contactos">
-    <h2>Actividades</h2>
+    <h2>Mis Actividades</h2>
     <ul>
         <%
 
@@ -31,8 +30,9 @@
                     if (mse != null && user != null && ms != null)
                     {
         %>
-        <li><a class="contactos_nombre" href="<%=mse.getURL()%>"><%=mse.getDisplayTitle(user.getLanguage())%></a>
-            <a class="contactos_nombre" href="#"><%=SWBUtils.TEXT.getTimeAgo(mse.getUpdated(), user.getLanguage())%></a></li>
+        <li><a class="contactos_nombre" href="<%=mse.getURL()%>"><img src="/work/models/Ciudad_Digital/css/boton_contacto.png" alt=""></a>
+            Se agregó <a class="contactos_nombre" href="<%=mse.getURL()%>"><%=mse.getDisplayTitle(user.getLanguage())%></a>
+            <%=SWBUtils.TEXT.getTimeAgo(mse.getUpdated(), user.getLanguage())%>.</li>
             <%
 
                         //out.println("("+mse.getSemanticObject().getSemanticClass().getDisplayName(user.getLanguage())+")</a>");
