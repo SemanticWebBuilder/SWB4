@@ -107,7 +107,7 @@ if(site.getPhoto()!=null)
         <div class="clear">&nbsp;</div>
         <div class="soria">
             <fieldset>
-        <legend>Im&aacute;gen comunidad</legend>
+        <legend>Imagen comunidad</legend>
 <form id="fupload" name="fupload" enctype="multipart/form-data" class="swbform" dojoType="dijit.form.Form" action="<%=urla%>" method="post" target="pictureTransferFrame" >
         <table>
             <tr><td width="200px" align="right"><label for="picture">Im&aacute;gen &nbsp;</label></td>
