@@ -15,7 +15,7 @@
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="org.semanticwb.platform.SemanticProperty"%>
-<%@page import="org.semanticwb.model.SWBModel"%>
+<%@page import="org.semanticwb.model.*"%>
 <%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="org.semanticwb.model.Descriptiveable"%>
 <%@page import="org.semanticwb.platform.SemanticClass"%>
@@ -26,71 +26,57 @@
 
 
 <%
+    HashMap map=new HashMap();
+    map.put("separator", "-");
+    WebPage wpage=paramRequest.getWebPage();
+    Resource base=paramRequest.getResourceBase();
+    String perfilPath=wpage.getWebSite().getWebPage("perfil").getUrl();
     SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
+    DirectoryObject dirObj=(DirectoryObject)semObject.createGenericInstance();
     SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_VIEW);
-
-    String title="", description="", tags="", gmap="";
+    String path=SWBPlatform.getWebWorkPath()+base.getWorkPath()+"/"+semObject.getId()+"/";
+    //Obtener valores de propiedades genericas
+    String dirPhoto=semObject.getProperty(dirObj.swbcomm_dirPhoto);
+    String title=semObject.getProperty(dirObj.swb_title);
+    String description=semObject.getProperty(dirObj.swb_description);
+    String tags=semObject.getProperty(dirObj.swb_tags);
+    String creator="";
+    SemanticObject semUser=semObject.getObjectProperty(DirectoryObject.swb_creator);
+    if(semUser!=null){
+        User userObj=(User)semUser.createGenericInstance();
+        creator="<a href=\""+perfilPath+"?user="+userObj.getEncodedURI()+"\">"+userObj.getFullName()+"</a>";
+    }
+    String created=semObject.getProperty(dirObj.swb_created);
+    String mapa=null;
     Iterator<SemanticProperty> itProps=semObject.listProperties();
     while(itProps.hasNext()){
-        SemanticProperty semProp=itProps.next();
-        System.out.println("semProp:"+semProp.getName());
-        if(semProp.equals(DirectoryObject.swb_title)) title=mgr.renderElement(request, semProp.getName());
-        else if(semProp.equals(DirectoryObject.swb_description)) description=mgr.renderElement(request, semProp.getName());
-        else if(semProp.equals("latitude")) gmap=mgr.renderElement(request, semProp.getName());
+         SemanticProperty semProp=itProps.next();
+         if(semProp==Geolocalizable.swb_latitude){
+            mapa=mgr.renderElement(request, semProp.getName());
+            break;
+         }
     }
-    SWBResourceURL url = paramRequest.getActionUrl();
-    url.setParameter("uri", semObject.getURI());
-    url.setAction(url.Action_REMOVE);
-    Resource base=paramRequest.getResourceBase();
-   %>
-   
-       <form method="post" action="<%=url%>">
-       <table>
+%>
 
-       <%
-            String path=SWBPlatform.getWorkPath()+base.getWorkPath()+"/"+semObject.getId();
-            System.out.println("path:"+path);
-            File file=new File(path);
-            File[] imgFiles=file.listFiles();
-            String[] sImgs=new String[imgFiles.length];
-            for(int i=0;i<imgFiles.length;i++){
-                System.out.println("entra:"+imgFiles[i].getName());
-                //if(imgFiles[i].isFile())
-                {
-                     sImgs[i]=SWBPlatform.getWebWorkPath()+base.getWorkPath()+"/"+semObject.getId()+"/"+imgFiles[i].getName();
-                     //System.out.println("text:"+sImgs[i]);
-                }
-            }
-            for(int i=0;i<sImgs.length;i++){
-                System.out.println("contenido:"+sImgs[i]);
-                %>
-                    <img src="<%=sImgs[i]%>">
-                <%
-            }
-            String imggalery=SWBPortal.UTIL.getGalleryScript(sImgs);
-       %>
-       <tr>
-           <td><%=imggalery%></td>
-       </tr>
-       <tr>
-           <td>Título</td> <td><%=title%></td>
-       </tr>
-       <tr>
-           <td>Descripción</td> <td><%=description%></td>
-       </tr>
-       <tr>
-            <td>Palabras clave</td> <td><%=tags%></td>
-       </tr>
-       <tr>
-           <td>gmap</td> <td><%=gmap%></td>
-       </tr>
-   <%
-        if(paramRequest.getAction().equals(paramRequest.Action_REMOVE))
-        {
-            %>
-               <tr><td colspan="2"><input type="submit" name="delete" value="Borrar"/></td></tr>
-            <%
-        }
-   %>
-   </table>
-    </form>
+<div id="contenidoDetalle">
+    <div class="detalle">
+        <div class="detalleImagen">
+         <img src="<%=path%><%=dirPhoto%>">
+        </div>
+        <div class="productInfo">
+            <p class="tituloNaranja"><%=title%></p>
+            <p><%=wpage.getPath(map)%></p>
+            <%if(tags!=null){%><p>Palabras clave:<strong><%=tags%></strong></p><%}%>
+            <%if(creator!=null){%><p>Creado por:<strong><%=creator%></strong></p><%}%>
+            <%if(created!=null){%><p>Fecha de publicación:<strong><%=created%></strong></p><%}%>
+         </div>
+     </div>
+     <div class="descripcion">
+        <h3>Descripción</h3>
+        <%if(description!=null){%><p><%=description%></p><%}%>
+        <%if(mapa!=null){%><p><%=mapa%><%}%></p><br/>
+      </div>
+</div>
+    
+   
+
