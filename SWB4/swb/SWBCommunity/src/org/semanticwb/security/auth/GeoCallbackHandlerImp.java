@@ -72,6 +72,8 @@ private static Logger log = SWBUtils.getLogger(GeoCallbackHandlerImp.class);
      */
     public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
         log.trace("Tipo de Autenticacion: " + authType);
+        log.trace("reqlat:"+request.getParameter("wb_lat"));
+        log.trace("reqlng:"+request.getParameter("wb_lng"));
         String login = request.getParameter("wb_username");
         String password = request.getParameter("wb_password");
         String lat = request.getParameter("wb_lat");
