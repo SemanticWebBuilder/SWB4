@@ -9,6 +9,8 @@
 
       //var LOADING_MSG="<BR/><center><img src='"+context+"/swbadmin/images/loading.gif'><center>";
 
+      dojo.require("dijit.layout.ContentPane");
+
       var act_item;
       var act_store;
       var act_treeNode;
