@@ -97,6 +97,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
         }else if(action.equals(response.Action_ADD)){
             SemanticClass cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(request.getParameter("uri"));
             SWBFormMgr mgr = new SWBFormMgr(cls, response.getWebPage().getWebSite().getSemanticObject(), null);
+            mgr.setFilterRequired(false);
             try
             {
                 SemanticObject sobj=mgr.processForm(request);
