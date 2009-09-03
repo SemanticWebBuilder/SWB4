@@ -93,10 +93,12 @@ url.setParameter("uri", sobj.getURI());
          urlEdit.setParameter("act", "edit");
          urlRemove.setParameter("act", "detail");
 
+         boolean exist=false;
          HashMap map=new HashMap();
          map.put("separator", "-");
          for (int i = iIniPage; i < iFinPage; i++)
          {
+            exist=true;
             String img="", title="", description="", tags="", creator="", created="";
             String[] strFields = strResTypes[i].toString().split(":swbp4g1:");
             String orderField = strFields[0];
@@ -141,7 +143,7 @@ url.setParameter("uri", sobj.getURI());
                 }
             }
             %>
-                <%=img%>
+              <%=img%>
               <div class="listEntryInfo">
                     <p class="tituloNaranja">
                         <%=title%>
@@ -161,6 +163,30 @@ url.setParameter("uri", sobj.getURI());
               </div>
              </div>
             <%
+            }
+            if(!exist){
+                %>
+                <div class="listEntry" onmouseover="this.className='listEntryHover'" onmouseout="this.className='listEntry'">
+                    <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/anunciate.gif">
+                    <div class="listEntryInfo">
+                        <p class="tituloNaranja">
+                            Título de tu anuncio
+                        </p>
+                            <%=wpage.getPath(map)%>
+                        <p>
+                            description de tu anuncio
+                        </p><br/>
+                        <p>-Palabras clave:</p>
+                        <p>-Creado por:Tu nombre aquí</p>
+                        <p>-creado:Fecha de creación de anuncio</p>
+
+                        <div class="vermasFloat"><p class="tituloNaranja"><p class="vermas"><%=paramRequest.getLocaleString("seeMore")%></p></div>
+                        <div class="editarInfo"><p><%=paramRequest.getLocaleString("editInfo")%></p></div>
+                        <div class="editarInfo"><p><%=paramRequest.getLocaleString("remove")%></p></div>
+                        <div class="clear">&nbsp;</div>
+                   </div>
+                </div>
+                <%
             }
             %>
       </div>
