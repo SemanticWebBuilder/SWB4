@@ -7,6 +7,25 @@
 <%@page import="org.semanticwb.platform.*"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
+<%!
+    class GeoLocation {
+        private double latitude;
+        private double longitude;
+        int step;
+        String name;
+        public GeoLocation(double latitude, double longitude, int step, String name)
+        {
+            this.latitude = latitude;
+            this.longitude = longitude;
+            this.step = step;
+            this.name = name;
+        }
+        public double getLatitude(){ return latitude;}
+        public double getLongitude(){ return longitude;}
+        public int getStep(){ return step;}
+        public String getName(){ return name;}
+    }
+%>
      <%
      String perfilPath=paramRequest.getWebPage().getWebSite().getWebPage("perfil").getUrl();
         String friendsPath=paramRequest.getWebPage().getWebSite().getWebPage("Amigos").getUrl();
@@ -18,6 +37,7 @@
             user=(User)semObj.createGenericInstance();
         }
         if(!user.isRegistered()) return;
+        List<GeoLocation> lista = new ArrayList<GeoLocation>();
         WebPage wpage=paramRequest.getWebPage();
         String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
         if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY)
@@ -83,7 +103,16 @@ else
             %>
             <div class="miembros">
             <%
-            
+            GeoLocation userLoc = null;
+            if (user.getSemanticObject().getDoubleProperty(Geolocalizable.swb_latitude)!=0D) {
+                 userLoc = new GeoLocation(
+                         user.getSemanticObject().getDoubleProperty(Geolocalizable.swb_latitude),
+                         user.getSemanticObject().getDoubleProperty(Geolocalizable.swb_longitude),
+                         user.getSemanticObject().getIntProperty(Geolocalizable.swb_geoStep),
+                         user.getFullName());
+                 } else {
+                 userLoc = new GeoLocation(22.99885, -101.77734,4,user.getFullName());
+                 }
             HashMap<String,SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
             Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#_ExtendedAttributes").listProperties();
             while(list.hasNext())
@@ -109,6 +138,13 @@ else
                          String usr_status = (String)friendUser.getExtendedAttribute(mapa.get("userStatus"));
                          if (null==usr_status) usr_status = "";
                          if(friendUser.getPhoto()!=null) photo=friendUser.getPhoto();
+                         if(friendUser.getSemanticObject().getDoubleProperty(Geolocalizable.swb_latitude)!=0D) {
+                             lista.add(new GeoLocation(
+                                     friendUser.getSemanticObject().getDoubleProperty(Geolocalizable.swb_latitude),
+                                     friendUser.getSemanticObject().getDoubleProperty(Geolocalizable.swb_longitude),
+                                     friendUser.getSemanticObject().getIntProperty(Geolocalizable.swb_geoStep),
+                                     friendUser.getFullName()));
+                         }
                          %>
                          
                         <div class="profilePic" onMouseOver="this.className='profilePicHover'" onMouseOut="this.className='profilePic'">
@@ -125,6 +161,38 @@ else
              }
     %>
             </div>
+            <div id="map_canvas" style="width: 500px; height: 300px"></div>
+            <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<%=SWBPlatform.getEnv("key/gmap","")%>"
+            type="text/javascript"></script>
+    <script type="text/javascript">
+    function initialize() {
+      if (GBrowserIsCompatible()) {
+        var map = new GMap2(document.getElementById("map_canvas"));
+            map.addControl(new GSmallMapControl());
+            map.addControl(new GMapTypeControl());
+        var center = new GLatLng(<%=userLoc.getLatitude()%>, <%=userLoc.getLongitude()%>);
+        map.setCenter(center, <%=userLoc.getStep()%>);
+        var marker = new GMarker(center, {draggable: false});
+        map.addOverlay(marker);
+        marker.openInfoWindow(
+        document.createTextNode("<%=userLoc.getName()%>"));
+        <%
+        Iterator<GeoLocation> listit = lista.iterator();
+        while (listit.hasNext()){
+            GeoLocation actual = listit.next();
+            %>
+            var point = new GLatLng(<%=actual.getLatitude()%>, <%=actual.getLongitude()%>);
+            var marker = new GMarker(point, {draggable: false});
+            map.addOverlay(marker);
+            marker.openInfoWindow(
+            document.createTextNode("<%=actual.getName()%>"));
+            <%
+        }
+        %>
+      }
+    }
+initialize();
+    </script>
             <%
 
 }
