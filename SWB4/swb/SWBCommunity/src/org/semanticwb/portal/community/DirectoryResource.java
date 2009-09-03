@@ -74,7 +74,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String action=response.getAction();
         if(action.equals(response.Action_EDIT)){
-            SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("objInstUri"));
+            SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
             SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
             try
             {
@@ -121,31 +121,36 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
                 if (!item.isFormField()) { //Es un campo de tipo file
                     //int fileSize = ((Long) item.getSize()).intValue();
                     String value = item.getName();
-                    value = value.replace("\\", "/");
-                    int pos = value.lastIndexOf("/");
-                    if (pos > -1) {
-                        value = value.substring(pos + 1);
-                    }
-                    File fichero = new File(basepath);
-                    if (!fichero.exists()) {
-                        fichero.mkdirs();
-                    }
-                    fichero = new File(basepath + value);
-
-                    DirectoryObject dirObj=(DirectoryObject)sobj.createGenericInstance();
-                    if(item.getFieldName().equals("dirPhoto")){
-                        dirObj.setPhoto(value);
-                        if(actualPhoto!=null){
-                            File file=new File(basepath+actualPhoto);
-                            file.delete();
+                    if(value!=null && value.trim().length()>0)
+                    {
+                        value = value.replace("\\", "/");
+                        int pos = value.lastIndexOf("/");
+                        if (pos > -1) {
+                            value = value.substring(pos + 1);
                         }
-                    }
+                        File fichero = new File(basepath);
+                        if (!fichero.exists()) {
+                            fichero.mkdirs();
+                        }
+                        fichero = new File(basepath + value);
 
-                    try {
-                        item.write(fichero);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        log.debug(e);
+                        DirectoryObject dirObj=(DirectoryObject)sobj.createGenericInstance();
+                        if(item.getFieldName().equals("dirPhoto")){
+                            dirObj.setPhoto(value);
+                            if(actualPhoto!=null){
+                                File file=new File(basepath+actualPhoto);
+                                file.delete();
+                            }
+                        }else if(item.getFieldName().equals("dirHasExtraPhoto")){
+                            dirObj.addExtraPhoto(value);
+                        }
+
+                        try {
+                            item.write(fichero);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            log.debug(e);
+                        }
                     }
                 }
             }
