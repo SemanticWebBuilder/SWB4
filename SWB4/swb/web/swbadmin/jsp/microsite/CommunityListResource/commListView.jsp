@@ -27,6 +27,26 @@
     WebPage wpch = null;
     WebPage wpgs = null;
 
+    int nwp = 0;
+
+    Iterator<WebPage> itso = wpp.listChilds(user.getLanguage(),true,false,false,false);
+    if(itso.hasNext())
+    {
+        while(itso.hasNext())
+        {
+            WebPage so = itso.next();
+            if(so.getSemanticObject().getGenericInstance() instanceof WebPage && !(so.getSemanticObject().getGenericInstance() instanceof MicroSite) )
+            {
+                nwp++;
+                break;
+            }
+        }
+    }
+
+
+
+
+
     int numcomm = 0;
     int nums = 0;
     String nummsg = "";
@@ -34,7 +54,7 @@
 
     Iterator<WebPage> itwp = wpp.listChilds(user.getLanguage(), Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE);
 
-    if(wplevel==3)
+    if(wplevel==3||nwp==0)
     {
 %>
         <h2 class="tituloInteres">Comunidades de <%=wpp.getDisplayTitle(user.getLanguage())%></h2>
