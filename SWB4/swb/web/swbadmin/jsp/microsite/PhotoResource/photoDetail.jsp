@@ -16,21 +16,24 @@
         {
             photo.incViews();  //Incrementar apariciones
 %>
+
 <br/>
 <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Ver todos</a></p></div>
 
 <br/><br/>
-<div class="entry">
-    <a href="<%= SWBPlatform.getWebWorkPath()+photo.getImageURL()%>" target="_self">
-        <img id="img_<%=photo.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+photo.getImageURL() %>" alt="<%= photo.getTitle() %>" border="0" />
-    </a>
-    <div class="entryInfo">
-        <p class="tituloNaranja"><%= photo.getTitle() %> </p>
-        <p><%= photo.getDescription() %> </p>
-        <p class="eventoInicio">Autor: <%= photo.getCreator().getFirstName() %> </p>
-        <p class="eventoInicio">Fecha: <%= SWBUtils.TEXT.getStrDate(photo.getCreated(), lang, "dd/mm/yy") %> </p>
-        <p><%= photo.getRank() %> </p>
-        <p><%= photo.getViews() %> vistas </p>
+<div id="detalleFoto">
+    <h2 class="tituloGrande"><%= photo.getTitle()%></h2>
+    <div id="imagenDetalle">
+        <a href="<%= SWBPlatform.getWebWorkPath()+photo.getImageURL()%>" target="_self">
+            <img id="img_<%=photo.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+photo.getImageURL() %>" alt="<%= photo.getTitle() %>" border="0" width="300" height="100%" />
+        </a>
+    </div>
+    
+    <div class="detalleFotoInfo">
+        <p class="tituloNaranja">Autor: <%= photo.getCreator().getFirstName()%></p>
+        <p class="fotoInfo">Fecha: <%= SWBUtils.TEXT.getStrDate(photo.getCreated(), lang, "dd/mm/yy")%>   | <span class="linkNaranja"><%= photo.getViews()%> Vistas</span></p>
+        <p class="descripcion"><%= photo.getDescription()%></p>  
+        <p class="descripcion"><%= photo.getRank()%> </p>
         <%if(photo.canModify(member)){%>
         <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act","edit").setParameter("uri",photo.getURI())%>">Editar información</a></p></div>
         <%}%>
@@ -39,16 +42,6 @@
         <%}%>
         <div class="clear">&nbsp;</div>
     </div>
-
-    <table border="0">
-    <tr>
-        <td valign="top" align="left">
-            <small>
-
-            </small>
-        </td>
-    </tr>
-  </table>
 </div>
 
 <script type="text/javascript">
