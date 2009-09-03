@@ -93,7 +93,7 @@ public class ImageGallery extends GenericResource {
         out.flush();
     }
 
-    public String getGalleryScript(String oid, int tw, int th, boolean autoplay, int pause, int fadetime, int fullwidth, int fullheight, String title, String titlestyle, String[] imgpath) {
+    public String getGalleryScript(String oid, int twidth, int theight, boolean autoplay, int pause, int fadetime, int fullwidth, int fullheight, String title, String titlestyle, String[] imgpath) {
         StringBuilder out = new StringBuilder();
 
         out.append("\n<script type=\"text/javascript\" src=\""+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/jquery-imagegallery.js\"></script>");
@@ -115,7 +115,7 @@ public class ImageGallery extends GenericResource {
         //ID of main gallery container
         out.append("	wrapperid: 'imggallery_"+ oid +"', ");
         //width/height of gallery in pixels. Should reflect dimensions of the images exactly
-        out.append("	dimensions: ["+ tw +", "+ th +"], ");
+        out.append("	dimensions: ["+ twidth +", "+ theight +"], ");
         out.append("\n	imagearray: [ ");
 
         for(String img : imgpath) {
@@ -165,8 +165,16 @@ public class ImageGallery extends GenericResource {
         return getGalleryScript(Integer.toString((int)Math.random()*100), 220, 170, false, 2500, 500, 420, 370, "", "", imgpath);
     }
 
+    public String getGalleryScript(boolean autoplay, String[] imgpath) {
+        return getGalleryScript(Integer.toString((int)Math.random()*100), 220, 170, autoplay, 2500, 500, 420, 370, "", "", imgpath);
+    }
+
     public String getGalleryScript(int twidth, int theight, String[] imgpath) {
         return getGalleryScript(Integer.toString((int)Math.random()*100), twidth, theight, false, 2500, 500, 420, 370, "", "", imgpath);
+    }
+
+    public String getGalleryScript(int twidth, int theight, boolean autoplay, String[] imgpath) {
+        return getGalleryScript(Integer.toString((int)Math.random()*100), twidth, theight, autoplay, 2500, 500, 420, 370, "", "", imgpath);
     }
 
     @Override
