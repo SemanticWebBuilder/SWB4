@@ -6,10 +6,11 @@
 package org.semanticwb.portal.community;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Iterator;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
@@ -25,47 +26,28 @@ import org.semanticwb.portal.community.utilresources.CommunityActivityUtil;
  */
 public class UserActivitiesResource extends GenericAdmResource {
 
+    private static Logger log = SWBUtils.getLogger(UserActivitiesResource.class);
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
 
         Resource base = getResourceBase();
         int numrec = Integer.parseInt(base.getAttribute("numrec","10"));
-        PrintWriter out = response.getWriter();
         User user = paramRequest.getUser();
-
         CommunityActivityUtil cau = new CommunityActivityUtil();
-        Iterator<CommunityActivity> itca = cau.getMemberActivities(user);
-        out.println("<div id=\"contactos\">");
-        out.println("<h2>Actividades</h2>");
-        out.println("<ul>");
-        CommunityActivity ca = null;
-        MicroSiteElement mse = null;
-        MicroSite ms = null;
-        if (itca.hasNext()) {
-            int num = 0;
-            while (itca.hasNext()) {
-                num++;
-                if (num > numrec) {
-                    break;
-                }
-                ca = itca.next();
-                user = ca.getUser();
-                mse = ca.getElement();
-                ms = ca.getCommunity();
-                if(mse!=null&&user!=null&&ms!=null)
-                {
-                    out.println("<li><a class=\"contactos_nombre\" href=\""+mse.getURL()+"\">" + mse.getDisplayTitle(user.getLanguage()) + "");
-                    out.println("("+mse.getSemanticObject().getSemanticClass().getDisplayName(user.getLanguage())+")</a>");
-                    out.println("<a class=\"contactos_nombre\" href=\"#\">"+SWBUtils.TEXT.getTimeAgo(mse.getUpdated(),user.getLanguage()) + "</a></li>");
-                }
-            }
-        } else {
-            out.println("<li>No hay actividades que reportar.</li>");
+        Iterator<CommunityActivity> activities = cau.getMemberActivities(user);
+        String path = "/swbadmin/jsp/microsite/UserActivitiesResource/UserActivitiesResource.jsp";
+        RequestDispatcher dis = request.getRequestDispatcher(path);
+        try
+        {
+            request.setAttribute("paramRequest", paramRequest);
+            request.setAttribute("numrec", numrec);
+            request.setAttribute("activities", activities);
+            dis.include(request, response);
         }
-        out.println("</ul>");
-        out.println("</div>");
-        
-
+        catch (Exception e)
+        {
+            log.error(e);
+        }
     }
 
 }
