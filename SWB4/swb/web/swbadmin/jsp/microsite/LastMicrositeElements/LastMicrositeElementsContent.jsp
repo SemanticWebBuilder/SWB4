@@ -104,7 +104,23 @@ if(paramRequest.getCallMethod()==paramRequest.Call_CONTENT)
                     %>
                       <td>
                       <div class="entry">
-                      <p><img src="<%=src%>" alt="<%=title%>" width="57" height="55" ></p>
+                      <p>
+                          <%
+                          if(canview)
+                          {
+                              %>
+                              <a href="<%=url%>"><img src="<%=src%>" alt="<%=title%>" width="50" height="55" ></a>
+                              <%
+                          }
+                          else
+                          {%>
+                              <img src="<%=src%>" alt="<%=title%>" width="57" height="55" >
+                              <%
+
+                          }
+                          %>
+
+                      </p>
                       <h3 class="titulo">
                           <%
                           if(canview)
