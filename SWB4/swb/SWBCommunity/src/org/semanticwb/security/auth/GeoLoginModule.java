@@ -191,7 +191,7 @@ public class GeoLoginModule implements LoginModule {
         if (!geoflag) {
             tmp.getSemanticObject().setDoubleProperty(Geolocalizable.swb_latitude, lat);
             tmp.getSemanticObject().setDoubleProperty(Geolocalizable.swb_longitude, lng);
-            tmp.getSemanticObject().setIntProperty(Geolocalizable.swb_geoStep, 13);
+            tmp.getSemanticObject().setIntProperty(Geolocalizable.swb_geoStep, 14);
         }
         return loginflag;
     }
