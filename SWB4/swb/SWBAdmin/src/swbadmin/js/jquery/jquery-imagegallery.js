@@ -209,7 +209,8 @@ simpleGallery.routines={
     //foto.width=width;
     //foto.height=height;
     foto.border='2px solid #FFFFFF';
-    foto.setAttribute('onclick', 'simpleGallery.routines.removeCoverDiv("cover01")');
+    //foto.setAttribute('onclick', 'simpleGallery.routines.removeCoverDiv("cover01")');
+    foto.onclick=function() {simpleGallery.routines.removeCoverDiv('cover01')};
     
     //var cwidth=width+50;
     var cwidth=foto.width;
