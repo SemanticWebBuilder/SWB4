@@ -37,6 +37,35 @@
     String path=SWBPlatform.getWebWorkPath()+base.getWorkPath()+"/"+semObject.getId()+"/";
     //Obtener valores de propiedades genericas
     String dirPhoto=semObject.getProperty(dirObj.swbcomm_dirPhoto);
+
+    String[] sImgs=null;
+    int cont=0;
+    Iterator<String> itExtraPhotos=dirObj.listExtraPhotos();
+    while(itExtraPhotos.hasNext()){
+        cont++;
+        itExtraPhotos.next();
+    }
+    boolean bprincipalPhoto=false;
+    if(dirPhoto!=null) {
+        cont++;
+        bprincipalPhoto=true;
+    }
+    sImgs=new String[cont];
+
+    cont=-1;
+    if(bprincipalPhoto) {
+        sImgs[0]=path+dirPhoto;
+        cont=0;
+    }
+    itExtraPhotos=dirObj.listExtraPhotos();
+    while(itExtraPhotos.hasNext()){
+        cont++;
+        String photo=itExtraPhotos.next();
+        sImgs[cont]=path+photo;
+    }
+   
+    String imggalery=SWBPortal.UTIL.getGalleryScript(sImgs);
+   
     String title=semObject.getProperty(dirObj.swb_title);
     String description=semObject.getProperty(dirObj.swb_description);
     String tags=semObject.getProperty(dirObj.swb_tags);
@@ -55,13 +84,13 @@
             mapa=mgr.renderElement(request, semProp.getName());
             break;
          }
-    }
+    }  
 %>
 
 <div id="contenidoDetalle">
     <div class="detalle">
         <div class="detalleImagen">
-         <img src="<%=path%><%=dirPhoto%>">
+         <%=imggalery%>
         </div>
         <div class="productInfo">
             <p class="tituloNaranja"><%=title%></p>
@@ -76,7 +105,22 @@
         <%if(description!=null){%><p><%=description%></p><%}%>
         <%if(mapa!=null){%><p><%=mapa%><%}%></p><br/>
       </div>
+      <%
+        if(paramRequest.getAction().equals(paramRequest.Action_REMOVE))
+        {
+            SWBResourceURL url = paramRequest.getActionUrl();
+            url.setParameter("uri", semObject.getURI());
+            url.setAction(url.Action_REMOVE);
+            %>
+             <form method="post" action="<%=url%>">
+               <table>
+                   <tr><td colspan="2"><input type="submit" name="delete" value="Borrar"/></td></tr>
+               </table>
+             </form>
+            <%
+        }
+      %>
 </div>
-    
+   
    
 
