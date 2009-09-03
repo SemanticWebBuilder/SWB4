@@ -27,17 +27,17 @@
     <%
     if (paramRequest.getUser().isSigned())
     {
-            if(!existe)
+            if(!existe && paramRequest.getCallMethod()!=paramRequest.Call_CONTENT)
             {
-            %>
-            <div class="editarInfo">
-                <p>
-                    <a href="<%=aUrl%>">Agregar p&aacute;gina </a>
-                </p>
-            </div>
-            <div class="clear">&nbsp;</div>
-            <%
-                        }
+                %>
+                <div class="editarInfo">
+                    <p>
+                        <a href="<%=aUrl%>">Agregar esta p&aacute;gina </a>
+                    </p>
+                </div>
+                <div class="clear">&nbsp;</div>
+                <%
+            }
      }
             int bkCount = 0;
             if (entries != null && entries.hasNext() /*&& showList*/) {
@@ -54,11 +54,18 @@
                 <a class="contactos_nombre" href="<%=entry.getBookmarkURL()%>">
                 <%=entry.getTitle()%>
             </a>
+            <%
+                if(paramRequest.getCallMethod()==paramRequest.Call_CONTENT)
+                {
+            %>
             <div class="editarInfo">
                 <p>
                     <a href="<%=paramRequest.getActionUrl().setAction("DELETE").setParameter("id", entry.getId())%>">Eliminar</a>
                 </p>
             </div>
+            <%
+                }
+            %>
         </li>
         <%
                 bkCount++;
