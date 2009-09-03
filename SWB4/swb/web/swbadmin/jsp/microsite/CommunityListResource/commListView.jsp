@@ -28,6 +28,7 @@
     WebPage wpgs = null;
 
     int nwp = 0;
+    int nms = 0;
 
     Iterator<WebPage> itso = wpp.listChilds(user.getLanguage(),true,false,false,false);
     if(itso.hasNext())
@@ -38,7 +39,11 @@
             if(so.getSemanticObject().getGenericInstance() instanceof WebPage && !(so.getSemanticObject().getGenericInstance() instanceof MicroSite) )
             {
                 nwp++;
-                break;
+                //break;
+            }
+            else
+            {
+                nms++;
             }
         }
     }
@@ -59,21 +64,35 @@
 %>
         <h2 class="tituloInteres">Comunidades de <%=wpp.getDisplayTitle(user.getLanguage())%></h2>
         <div id="gruposInteres">
+<%
+        if(nms>0)
+        {
+%>
             <ul>
 <%
-        //Iterator<WebPage> itwp = wpp.listChilds(user.getLanguage(), Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE);
-        while(itwp.hasNext())
-        {
-            wpch = itwp.next();
-            if(wpch.isActive()&&!wpch.isDeleted())
+            //Iterator<WebPage> itwp = wpp.listChilds(user.getLanguage(), Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE);
+            while(itwp.hasNext())
             {
+                wpch = itwp.next();
+                if(wpch.isActive()&&!wpch.isDeleted())
+                {
 %>
                 <li><a href="<%=wpch.getUrl()%>"><%=wpch.getDisplayTitle(user.getLanguage())%>&nbsp;</a></li>
 <%
+                }
             }
-        }
 %>
             </ul>
+<%
+        }
+        else
+        {
+            if(user.isRegistered())
+                out.println("No existen comunidades, aquí puedes crear tú comunidad.");
+            else
+                out.println("No existen comunidades, aquí puedes crear tú comunidad si eres usuario registrado.");
+        }
+%>
         <div id="clear">&nbsp;</div>
       </div>
       <div id="bottomInteres">&nbsp;</div>
