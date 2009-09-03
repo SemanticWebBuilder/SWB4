@@ -1,6 +1,7 @@
 <%@page contentType="text/html"%>
-<%@page import="org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<%@page import="org.semanticwb.platform.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%@page import="org.semanticwb.model.Resource" %>
+<%@page import="org.semanticwb.portal.SWBFormMgr"%>
 <%
     SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
     Resource base = paramRequest.getResourceBase();
@@ -58,10 +59,10 @@
                 <a dojoType="dojox.image.Lightbox" title="<%= photo.getTitle()%>" href="<%= SWBPlatform.getWebWorkPath()+photo.getImageURL()%>">
                     <img id="img_<%=i+base.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+photo.getPhotoThumbnail()%>" alt="<%= photo.getTitle()%>" border="0" />
                 </a>
-                <p class="tituloFoto"><a href="<%=viewurl%>"><%= photo.getTitle()%></a></p>
-                <p class="tituloFoto"><a href="<%=viewurl%>"><%= photo.getCreator().getFirstName()%></a></p>
-                <p class="tituloFoto"><a href="<%=viewurl%>"><%= photo.getViews()%> vistas</a></p>
-                <div class="clear">&nbsp;</div>
+                <a href="<%=viewurl%>">
+                <p class="tituloFoto"><%= photo.getTitle()%></p>
+                <p class="autor-visitasFoto"><span class="autorFoto"><%= photo.getCreator().getFirstName()%></span>&nbsp;|&nbsp;<%= photo.getViews()%> visitas</p>
+                </a>
             </div>
 <%
                 i++;
@@ -70,3 +71,24 @@
 %>                
 </div>
 
+<%
+
+/*it = PhotoElement.listPhotoElementByPhotoWebPage(wpage, wpage.getWebSite());
+PhotoElement photo = it.next();
+
+    String mapa=null;
+    SemanticObject semObject = photo.getSemanticObject();
+    SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_VIEW);
+    Iterator<SemanticProperty> itProps=semObject.listProperties();
+    System.out.println("afuera");
+    while(itProps.hasNext()){
+        System.out.println("entra");
+         SemanticProperty semProp=itProps.next();
+         if(semProp==Geolocalizable.swb_latitude){
+            mapa=mgr.renderElement(request, semProp.getName());
+            break;
+         }
+    }
+    out.print("<hr>");
+    out.print(mapa);*/
+%>
