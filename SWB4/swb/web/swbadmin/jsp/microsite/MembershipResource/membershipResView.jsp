@@ -28,14 +28,32 @@
 
     MicroSite site=MicroSite.getMicroSite(paramRequest.getWebPage());
 
+    String pathPhoto = "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
+
+    if(site.getPhoto()!=null)
+    {
+        pathPhoto=SWBPlatform.getContextPath()+SWBPlatform.getWebWorkPath()+site.getPhoto();
+    }
+
+
     Member member=getMember(user, site);
     if(wp.getSemanticObject().getGenericInstance() instanceof MicroSite)
     {
 %>
 <div id="leftProfile">
-    <p><img src="/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg" alt="Usuario" width="174" height="174" ></p>
-    <p class="addOn"><a href="#">Cambiar imagen</a></p>
+    <p><img src="<%=pathPhoto%>" alt="Imagen comunidad"  ></p>
+
 <%
+
+     if(member.getAccessLevel()==Member.LEVEL_OWNER&&user.isRegistered())
+     {
+         SWBResourceURL urle = paramRequest.getRenderUrl();
+         urle.setParameter("act", "edit");
+         //urle.setCallMethod(SWBResourceURL.Call_DIRECT);
+%>
+    <p class="addOn"><a href="<%=urle%>">Cambiar imagen</a></p>
+<%
+    }
         SWBResourceURL urla = paramRequest.getActionUrl();
 
 
