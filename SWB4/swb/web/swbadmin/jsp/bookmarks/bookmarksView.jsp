@@ -4,7 +4,7 @@
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             Iterator<BookmarkEntry> entries = (Iterator<BookmarkEntry>) request.getAttribute("entries");
             SWBResourceURL aUrl = paramRequest.getActionUrl().setAction("ADDNEW");
-            boolean showList = (Boolean) request.getAttribute("l");
+            //boolean showList = (Boolean) request.getAttribute("l");
             int maxBookmarks = 10;
             boolean existe=false;
             entries = (Iterator<BookmarkEntry>) request.getAttribute("entries");
