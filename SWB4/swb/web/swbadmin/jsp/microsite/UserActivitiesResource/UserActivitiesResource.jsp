@@ -2,6 +2,10 @@
 <%
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             User user = paramRequest.getUser();
+            if(request.getParameter("user")!=null)
+            {
+                return;
+            }
             int numrec = (Integer) request.getAttribute("numrec");
             Iterator<CommunityActivity> activities = (Iterator<CommunityActivity>) request.getAttribute("activities");
 %>
