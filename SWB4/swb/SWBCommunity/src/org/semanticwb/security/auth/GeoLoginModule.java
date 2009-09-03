@@ -95,6 +95,8 @@ public class GeoLoginModule implements LoginModule {
             credential = ((PasswordCallback) callbacks[1]).getPassword();
             ((PasswordCallback) callbacks[1]).clearPassword();
             website = ((TextInputCallback) callbacks[2]).getText();
+            log.debug("lat:"+((TextInputCallback) callbacks[3]).getText());
+            log.debug("lng:"+((TextInputCallback) callbacks[4]).getText());
             try {lat = Double.valueOf(((TextInputCallback) callbacks[3]).getText());} catch (Exception nex) {geoflag = true;}
             try {lng = Double.valueOf(((TextInputCallback) callbacks[4]).getText());} catch (Exception nex) {geoflag = true;}
         } catch (IOException ex)
@@ -184,9 +186,11 @@ public class GeoLoginModule implements LoginModule {
         {
             log.error("Can't set Signed status", ex);
         }
+        log.trace("GeoLoc:"+geoflag+":"+lat+";"+lng);
+
         if (!geoflag) {
             tmp.getSemanticObject().setDoubleProperty(Geolocalizable.swb_latitude, lat);
-            tmp.getSemanticObject().setDoubleProperty(Geolocalizable.swb_longitude, lat);
+            tmp.getSemanticObject().setDoubleProperty(Geolocalizable.swb_longitude, lng);
             tmp.getSemanticObject().setIntProperty(Geolocalizable.swb_geoStep, 13);
         }
         return loginflag;
