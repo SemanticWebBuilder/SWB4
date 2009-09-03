@@ -128,7 +128,7 @@ public class GMap extends org.semanticwb.model.base.GMapBase
             ret.append("                } else {\n");
             ret.append("                    document.getElementById(\"latitude\").value = point.lat().toFixed(7);\n");
             ret.append("                    document.getElementById(\"longitude\").value = point.lng().toFixed(7);\n");
-            ret.append("                    document.getElementById(\"geoStep\").value = map.getZoom();\n");
+            ret.append("                    document.getElementById(\"geoStep\").value = 14;\n");
             ret.append("                    map.clearOverlays();\n");
             ret.append("                    setUpMap(map, point, 14);\n");
             ret.append("                }\n");
