@@ -106,20 +106,26 @@
         <%if(mapa!=null){%><p><%=mapa%><%}%></p><br/>
       </div>
       <%
+         SWBResourceURL url = paramRequest.getActionUrl();
+         url.setParameter("uri", semObject.getURI());
+         url.setAction(url.Action_REMOVE);
+      %>
+      <form method="post" action="<%=url%>">
+        <table>
+          <tr>
+      <%
         if(paramRequest.getAction().equals(paramRequest.Action_REMOVE))
         {
-            SWBResourceURL url = paramRequest.getActionUrl();
-            url.setParameter("uri", semObject.getURI());
-            url.setAction(url.Action_REMOVE);
             %>
-             <form method="post" action="<%=url%>">
-               <table>
-                   <tr><td colspan="2"><input type="submit" name="delete" value="Borrar"/></td></tr>
-               </table>
-             </form>
+             
+                       <td><input type="submit" name="delete" value="Borrar"/></td>
             <%
         }
       %>
+             <td><input type="button" name="back" value="Regresar" onclick="history.go(-1)"/></td>
+           </tr>
+         </table>
+       </form>
 </div>
    
    
