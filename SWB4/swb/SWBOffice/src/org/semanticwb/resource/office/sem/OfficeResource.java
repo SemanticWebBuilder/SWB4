@@ -126,7 +126,7 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
                     {
                         InputStream inEntry = zip.getInputStream(entry);
                         String file = entry.getName();
-                        if (inEntry == null)
+                        if (inEntry != null)
                         {
                             int pos = file.lastIndexOf("/");
                             if (pos != -1)
