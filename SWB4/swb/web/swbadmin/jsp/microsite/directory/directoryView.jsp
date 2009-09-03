@@ -105,7 +105,7 @@ url.setParameter("uri", sobj.getURI());
          for (int i = iIniPage; i < iFinPage; i++)
          {
             exist=true;
-            String img="", title="", description="", tags="", creator="", created="";
+            String img="", title="", description="", tags="", price=null, creator="", created="";
             String[] strFields = strResTypes[i].toString().split(":swbp4g1:");
             String orderField = strFields[0];
             String ObjUri = strFields[1];
@@ -132,6 +132,8 @@ url.setParameter("uri", sobj.getURI());
                              description=propValue;
                         }else if(semProp==DirectoryObject.swb_tags){
                              tags=propValue;
+                        }else if(semProp==ClasifiedBuySell.swbcomm_Price){
+                             price=propValue;
                         }else if(semProp==DirectoryObject.swb_created){
                             SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
                             Date date=new Date();
@@ -158,9 +160,10 @@ url.setParameter("uri", sobj.getURI());
                     <p>
                         <%=description%>
                     </p><br/>
+                    <%if(price!=null && price.trim().length()>0 && !price.equals("null")){%><p class="tituloNaranja">-Precio:<%=price%></p><%}%>
                     <p>-Palabras clave:<%=tags%></p>
                     <p>-Creado por:<%=creator%></p>
-                    <p>-creado:<%=created%></p>
+                    <p>-Creado:<%=created%></p>
 
                     <div class="vermasFloat"><p class="tituloNaranja"><p class="vermas"><a href="<%=urlDetail%>"><%=paramRequest.getLocaleString("seeMore")%></a></p></div>
                     <div class="editarInfo"><p><a href="<%=urlEdit%>"><%=paramRequest.getLocaleString("editInfo")%></a></p></div>
