@@ -23,7 +23,7 @@
 <%@page import="org.semanticwb.portal.community.*"%>
 
 <%!
-private final int I_PAGE_SIZE = 5;
+private final int I_PAGE_SIZE = 20;
 private final int I_INIT_PAGE = 1;
 %>
 
