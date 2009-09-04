@@ -6,18 +6,16 @@
     User user = paramRequest.getUser();
     WebPage wpage = paramRequest.getWebPage();
     Member member = Member.getMember(user, wpage);
-
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-
-    String path = SWBPlatform.getWebWorkPath()+base.getWorkPath()+"/";
 %>
+
 <%
     String uri = request.getParameter("uri");
     EventElement rec = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
     if (rec == null) {
 %>
-Error: Elemento no encontrado...
+        Error: Elemento no encontrado...
 <%
         return;
     }
@@ -67,8 +65,8 @@ Error: Elemento no encontrado...
             <div>
                 <p>
                     <label for="foto">Imagen del evento:&nbsp;</label>
-                    <a href="<%= path+rec.getEventImage()%>" target="_self">
-                        <img id="img_<%=rec.getId()%>" src="<%= path+rec.getEventImage() %>" alt="<%= rec.getTitle() %>" border="0" />
+                    <a href="<%= SWBPlatform.getWebWorkPath()+rec.getEventImage()%>" target="_self">
+                        <img id="img_<%=rec.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+rec.getEventImage() %>" alt="<%= rec.getTitle() %>" border="0" />
                     </a><br />
                     <input type="file" id="foto" name="foto" size="60" />
                 </p>
