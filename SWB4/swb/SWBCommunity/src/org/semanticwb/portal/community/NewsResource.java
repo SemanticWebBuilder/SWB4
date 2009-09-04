@@ -199,11 +199,10 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
                             image = new File(realpath+filename);
                             File thumbnail = new File(realpath+"thumbn_"+filename);
                             currentFile.write(image);
-                            //ImageResizer.resize(image, 150, true, thumbnail, "jpeg" );
                             ImageResizer.resizeCrop(image, 150, thumbnail, "jpeg" );
 
-                            params.put("filename", path+filename);
-                            params.put("thumbnail", path+"thumbn_"+filename);
+                            params.put("filename", filename);
+                            params.put("thumbnail", "thumbn_"+filename);
                         }catch(StringIndexOutOfBoundsException iobe) {
                         }
                     }
