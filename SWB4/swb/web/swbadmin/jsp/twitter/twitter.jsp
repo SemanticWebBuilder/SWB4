@@ -49,7 +49,9 @@
                         %>
                         <div id="entriesTwitter">
                         <a href="http://twitter.com" target="_new"><img src="<%=imgPath%>twitter_logo.png" valign="top"/></a>
-                        <a href="<%=url.toString()%>">Configurar</a>
+                        <% if(owner.getURI()!=null && owner.getURI().equals(user.getURI())){%>
+                            <a href="<%=url.toString()%>">Configurar</a>
+                        <%}%>
                         <form action="<%=urlAction.toString()%>">
                             <table>
                                 <tr>
