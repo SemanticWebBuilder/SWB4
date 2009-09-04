@@ -18,33 +18,7 @@
 
 %>
 <script language="javascript" type="text/javascript" src="/swbadmin/js/upload.js"></script>
-<style type="text/css">
-#uploadStatus {
-    width: 230px;
-}
-
-#uploadProgressBar {
-    height: 2px;
-    border: 0px solid #BBB;
-    text-align: center;
-    float: left;
-}
-
-#uploadIndicator {
-    height: 1px;
-    position: relative;
-    margin: 0px;
-    padding: 1px;
-    background: #9DC0F4;
-    width: 0;
-    float: left;
-}
-
-#uploadPercentage {
-    width:5px;
-    float: right;
-}
-</style>
+<link rel="stylesheet" type="text/css" media="screen" href="/swbadmin/css/upload/upload.css"/>
 <script type="text/javascript">
     var uploads_in_progress = 0;
 
@@ -62,7 +36,7 @@
     			if(inp) {
     				inp.value = sid;
     			}
-    			pb.parentNode.style.display='none';
+    			//pb.parentNode.style.display='none';
     		},
     		onFailure: function(msg) {
     			pb.parentNode.style.display='none';
@@ -74,14 +48,14 @@
     }
 </script>
 <script type="text/javascript">
-           dojo.require("dojo.parser");
+           //dojo.require("dojo.parser");
            dojo.require("dijit.form.Form");
-           dojo.require("dojox.layout.ContentPane");
-           dojo.require("dijit.form.ValidationTextBox");
-           dojo.require("dijit.form.Button");
-           dojo.require("dijit.Dialog");
-           dojo.require("dijit.form.FilteringSelect");
-           dojo.require("dijit.form.Textarea");
+           //dojo.require("dojox.layout.ContentPane");
+           //dojo.require("dijit.form.ValidationTextBox");
+           //dojo.require("dijit.form.Button");
+           //dojo.require("dijit.Dialog");
+           //dojo.require("dijit.form.FilteringSelect");
+           //dojo.require("dijit.form.Textarea");
 
  function enviar(){
     var x=document.getElementById("fupload");
@@ -103,29 +77,31 @@ if(site.getPhoto()!=null)
 <div id="leftProfile">
 <p><img src="<%=pathPhoto%>" alt="Imagen comunidad" ></p>
 </div>
-<div id="centerProfile">
-        <div class="clear">&nbsp;</div>
-        <div class="soria">
-            <fieldset>
-        <legend>Imagen comunidad</legend>
+<div id="clear">&nbsp;</div>
+<div class="soria">
 <form id="fupload" name="fupload" enctype="multipart/form-data" class="swbform" dojoType="dijit.form.Form" action="<%=urla%>" method="post" target="pictureTransferFrame" >
+    <fieldset>
+        <legend>Imagen comunidad</legend>
         <table>
             <tr><td width="200px" align="right"><label for="picture">Im&aacute;gen &nbsp;</label></td>
                 <td><iframe id="pictureTransferFrame" name="pictureTransferFrame" src="" style="display:none" ></iframe>
                     <input type="file" name="picture" onchange="beginAsyncUpload(this,'picture');" />
-                   <div class="progresscontainer" style="display: none;"><div class="progressbar" id="picture_progress"></div></div>
+                    <br/><div style="width:200px; height: 2px; border: 0px solid #BBB; text-align: center; float: left;"><div id="picture_progress" style=" height: 1px; position: relative; margin: 0px; padding: 1px; background: #9DC0F4; width: 0; float: left;" ></div></div>
                 </td></tr>
-	</table>   
+            <tr><td colspan="2" align="center"><br/><br/>
+                                    <br>
+                                <div class="editarInfo">
+                                <p><a href="javascript:enviar();">Cambiar imagen</a></p>
+                                </div>
+                                <div class="editarInfo">
+                                <p><a href=":history.back();">Cancelar</a></p>
+                                </div>
+                                </td></tr>
+	</table>
+        </fieldset>
 </form>
-</fieldset>
     </div>
-<!-- br>
-<div class="editarInfo">
-<p><a href="javascript:enviar()">Guardar</a></p>
-</div>
-<div class="editarInfo">
-<p><a href="javascript:history.back();">Cancelar</a></p>
-</div -->
-</div>
+<br>
+
 
 
