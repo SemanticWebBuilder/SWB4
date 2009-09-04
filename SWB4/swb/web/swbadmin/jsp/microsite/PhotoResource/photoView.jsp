@@ -10,7 +10,7 @@
     MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
     Member member = Member.getMember(user, wpage);
 
-    String lang = user.getLanguage();
+    String path = SWBPlatform.getWebWorkPath()+base.getWorkPath()+"/";
 %>
 <script type="text/javascript">
   dojo.require("dojox.image.Lightbox");
@@ -56,13 +56,11 @@
                 SWBResourceURL viewurl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", photo.getURI());
 %>
             <div class="entry_listadoFotos">
-                <a dojoType="dojox.image.Lightbox" title="<%= photo.getTitle()%>" href="<%= SWBPlatform.getWebWorkPath()+photo.getImageURL()%>">
-                    <img id="img_<%=i+base.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+photo.getPhotoThumbnail()%>" alt="<%= photo.getTitle()%>" border="0" />
-                </a>
-                <a href="<%=viewurl%>">
-                <p class="tituloFoto"><%= photo.getTitle()%></p>
-                <p class="autor-visitasFoto"><span class="autorFoto"><%= photo.getCreator().getFirstName()%></span>&nbsp;|&nbsp;<%= photo.getViews()%> vistas</p>
-                </a>
+                <a dojoType="dojox.image.Lightbox" title="<%= photo.getTitle()%>" href="<%= path+photo.getImageURL()%>">
+                    <img id="img_<%=i+base.getId()%>" src="<%= path+photo.getPhotoThumbnail()%>" alt="<%= photo.getTitle()%>" border="0" />
+                </a>                
+                <p class="tituloFoto"><a href="<%=viewurl%>"><%= photo.getTitle()%></a></p>
+                <p class="autor-visitasFoto"><a href="<%=viewurl%>"><span class="autorFoto"><%= photo.getCreator().getFirstName()%></span>&nbsp;|&nbsp;<%= photo.getViews()%> vistas</a></p>
             </div>
 <%
                 i++;

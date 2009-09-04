@@ -7,6 +7,7 @@
     WebPage wpage=paramRequest.getWebPage();
     Member member=Member.getMember(user,wpage);
 
+    String path = SWBPlatform.getWebWorkPath()+base.getWorkPath()+"/";
     String lang = user.getLanguage();
 %>
 <%
@@ -24,8 +25,8 @@
 <div id="detalleFoto">
     <h2 class="tituloGrande"><%= photo.getTitle()%></h2>
     <div id="imagenDetalle">
-        <a href="<%= SWBPlatform.getWebWorkPath()+photo.getImageURL()%>" target="_self">
-            <img id="img_<%=photo.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+photo.getImageURL() %>" alt="<%= photo.getTitle() %>" border="0" width="300" height="100%" />
+        <a href="<%= path+photo.getImageURL()%>" target="_self">
+            <img id="img_<%=photo.getId()%>" src="<%= path+photo.getImageURL() %>" alt="<%= photo.getTitle() %>" border="0" width="300" height="100%" />
         </a>
     </div>
     
