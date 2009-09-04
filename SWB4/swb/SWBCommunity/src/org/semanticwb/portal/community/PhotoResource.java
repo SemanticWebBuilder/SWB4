@@ -57,7 +57,6 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        System.out.println("path="+SWBPlatform.getWebWorkPath()+getResourceBase().getWorkPath()+"/");
         String act=request.getParameter("act");
         if(act==null) {
             act = (String)request.getSession(true).getAttribute("act");
@@ -212,10 +211,11 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                             image = new File(realpath+filename);
                             File thumbnail = new File(realpath+"thumbn_"+filename);
                             currentFile.write(image);
+                            //ImageResizer.resize(image, 140, true, thumbnail, "jpeg" );
                             ImageResizer.resizeCrop(image, 180, thumbnail, "jpeg");
                             
-                            params.put("filename", filename);
-                            params.put("thumbnail", "thumbn_"+filename);
+                            params.put("filename", path+filename);
+                            params.put("thumbnail", path+"thumbn_"+filename);
                         }catch(StringIndexOutOfBoundsException iobe) {
                         }
                     }

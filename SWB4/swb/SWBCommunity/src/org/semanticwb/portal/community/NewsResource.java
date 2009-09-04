@@ -201,8 +201,8 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
                             currentFile.write(image);
                             ImageResizer.resizeCrop(image, 150, thumbnail, "jpeg" );
 
-                            params.put("filename", filename);
-                            params.put("thumbnail", "thumbn_"+filename);
+                            params.put("filename", path+filename);
+                            params.put("thumbnail", path+"thumbn_"+filename);
                         }catch(StringIndexOutOfBoundsException iobe) {
                         }
                     }
