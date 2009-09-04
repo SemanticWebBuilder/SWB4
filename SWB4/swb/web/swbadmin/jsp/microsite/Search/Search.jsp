@@ -1,12 +1,14 @@
-<%@page import="java.text.SimpleDateFormat, org.semanticwb.portal.resources.sem.BookmarkEntry, org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<%@page import="java.net.URLEncoder, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty, java.text.SimpleDateFormat, org.semanticwb.portal.resources.sem.BookmarkEntry, org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             Iterator<String> results = (Iterator<String>) request.getAttribute("results");
             String searchUrl = (String) request.getAttribute("rUrl");
+            SemanticProperty swb_title = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
+            SemanticProperty swb_description = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
 %>
 
 <%
-if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
+if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {    
 %>
 <div id="busqueda">
     <h2>B&uacute;squeda</h2>
@@ -29,10 +31,33 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
     </form>
 </div>
 <%
-} else if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
-    %>Hello<%
+} else if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {    
+    //int start = (Integer)request.getAttribute("s");
+    //System.out.println("start: "+ start);
+    System.out.println("start: " + request.getAttribute("s") + ", end: " + request.getAttribute("e") + ", total: " + request.getAttribute("t"));
     if(results != null && results.hasNext()){
-        System.out.println("Hay resultados");
+        %>
+        <div class="entriesList">
+        <%
+            while(results.hasNext()) {
+            String r = results.next();
+            SemanticObject obj = SemanticObject.createSemanticObject(r);
+            if (obj.instanceOf(Hotel.sclass)) {
+                Hotel c = (Hotel)obj.createGenericInstance();
+                %>
+                <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
+                    <div class="listEntryInfo">
+                        <p class="tituloNaranja"><%=c.getTitle()%></p>
+                        <a href ="<%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>">SSS</a>
+                    </div>
+                </div>
+                <%
+                //System.out.println(".-.-.-.-" + c.getTitle() + ": " + c.getTags());
+            }
+        }
+        %>
+        </div>
+        <%        
     }
 }
 %>
