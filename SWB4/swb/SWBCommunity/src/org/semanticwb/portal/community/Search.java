@@ -212,6 +212,7 @@ public class Search extends GenericAdmResource {
                     //"    OPTIONAL{?obj a swbcomm:Organization}.",
                     "    ?obj swb:title ?lit.",
                     "    OPTIONAL{?obj swb:description ?lit}.",
+                    "    OPTIONAL{?obj swb:tags ?lit}.",
                     "}"
                 });
 
