@@ -46,11 +46,21 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
                 Hotel c = (Hotel)obj.createGenericInstance();
                 %>
                 <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
+                    <%
+                    if(c.getPhoto() != null && !c.getPhoto().trim().equals("")) {
+                    %>
+                        <img height="90" width="90" src="<%=c.getPhoto()%>"/>
+                    <%
+                    }
+                    %>
                     <div class="listEntryInfo">
-                        <p class="tituloNaranja"><%=c.getTitle()%></p>
-                        <a href ="<%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>">SSS</a>
+                        <p class="tituloNaranja"><a href ="<%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>"><%=c.getTitle()%></a></p>
+                        <p> </p>
+                        <br/>
+                        <p>-Palabras clave:<%=c.getTags()%></p>
                     </div>
-                </div>
+                    <div class="clear"> </div>
+                </div>                
                 <%
                 //System.out.println(".-.-.-.-" + c.getTitle() + ": " + c.getTags());
             }
