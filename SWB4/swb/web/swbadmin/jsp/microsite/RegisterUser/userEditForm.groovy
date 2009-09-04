@@ -103,7 +103,7 @@ StringTokenizer st=new StringTokenizer(selectValues,"|");
                 }
                 
 
-def fb_app_key = "f5193e81d8840596eb930aee0768590d"
+def fb_app_key = "691414c29ca930cc6961213e3c5d34c7"
 
 println """
 <script language="javascript" type="text/javascript" src="/swbadmin/js/upload.js"></script>
@@ -351,7 +351,7 @@ function onConnected(sess){
            
 
 }
-    FB.init("$fb_app_key", "/scripts/xd_receiver.groovy" , {"ifUserConnected":onConnected, "doNotUseCachedConnectState":true});
+    FB.init("$fb_app_key", "/login" , {"ifUserConnected":onConnected, "doNotUseCachedConnectState":true});
 </script><form id="fbaddid" name="fbaddid" method="post" action="" target="pictureTransferFrame"><input type="hidden" id="fb_sess" name="fb_sess">
 <input type="hidden" id="fb_key" name="fb_key"><input type="hidden" id="fb_secret" name="fb_secret">
 <input type="hidden" id="fb_sig" name="fb_sig"></form>
