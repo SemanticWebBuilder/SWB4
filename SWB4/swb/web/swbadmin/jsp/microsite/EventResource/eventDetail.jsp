@@ -13,8 +13,6 @@
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");
 
-    String path = SWBPlatform.getWebWorkPath()+base.getWorkPath()+"/";
-
     if(event!=null && event.canView(member)) {
         event.incViews();
 %>
@@ -45,8 +43,8 @@
     <h2 class="tituloGrande"><%= event.getTitle()%></h2>
     <p class="tituloNaranja"><%= event.getAudienceType()%></p>
     <div id="imagenDetalle">
-        <a href="<%= path+event.getEventImage()%>" target="_self">
-            <img id="img_<%=event.getId()%>" src="<%= path+event.getEventImage()%>" alt="<%=event.getTitle()%>" border="0" width="380" height="100%" />
+        <a href="<%= SWBPlatform.getWebWorkPath()+event.getEventImage()%>" target="_self">
+            <img id="img_<%=event.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+event.getEventImage()%>" alt="<%=event.getTitle()%>" border="0" width="380" height="100%" />
         </a>
     </div>
     <p class="fotoInfo">Fecha: <%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%> | <span class="linkNaranja"><%= event.getViews()%> Vistas</span></p>

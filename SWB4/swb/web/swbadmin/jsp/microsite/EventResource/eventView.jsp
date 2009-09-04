@@ -2,16 +2,12 @@
 <%@page import="java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%
     SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
-    Resource base = paramRequest.getResourceBase();
     User user = paramRequest.getUser();
     WebPage wpage = paramRequest.getWebPage();
     MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
     Member member = Member.getMember(user, wpage);
-    
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");
-
-    String path = SWBPlatform.getWebWorkPath()+base.getWorkPath()+"/";
 %>
 
 <%
@@ -55,7 +51,7 @@
 %>
     <div class="entry">
         <a href="<%=viewurl%>">
-            <img src="<%= path+event.getEventThumbnail()%>" alt="<%= event.getTitle()%>" border="0" />
+            <img src="<%=SWBPlatform.getWebWorkPath()+event.getEventThumbnail()%>" alt="<%= event.getTitle()%>" border="0" />
         </a>
         <div class="entryInfo">            
             <p><%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%></p>

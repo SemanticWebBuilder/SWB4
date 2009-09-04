@@ -6,10 +6,8 @@
     User user = paramRequest.getUser();
     WebPage wpage = paramRequest.getWebPage();
     Member member = Member.getMember(user, wpage);
-
-    String path = SWBPlatform.getWebWorkPath()+base.getWorkPath()+"/";
-%>
-<%
+    %>
+    <%
     String uri = request.getParameter("uri");
     NewsElement rec = (NewsElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
     if (rec == null) {
@@ -78,8 +76,8 @@
         <div>
             <p>
                 <label for="new_image">Imagen de la noticia:&nbsp;</label>
-                <a href="<%= path+rec.getNewsImage()%>" target="_self">
-                    <img id="img_<%=rec.getId()%>" src="<%= path+rec.getNewsImage() %>" alt="<%= rec.getTitle() %>" border="0" />
+                <a href="<%= SWBPlatform.getWebWorkPath()+rec.getNewsImage()%>" target="_self">
+                    <img id="img_<%=rec.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+rec.getNewsImage() %>" alt="<%= rec.getTitle() %>" border="0" />
                 </a><br />
                 <input type="file" id="foto" name="foto" size="60" />
             </p>

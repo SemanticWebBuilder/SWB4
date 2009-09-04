@@ -2,20 +2,18 @@
 <%@page import="org.semanticwb.platform.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%
     SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
-    Resource base = paramRequest.getResourceBase();
     User user=paramRequest.getUser();
     WebPage wpage=paramRequest.getWebPage();
     Member member=Member.getMember(user,wpage);
 
-    String path = SWBPlatform.getWebWorkPath()+base.getWorkPath()+"/";
     String lang = user.getLanguage();
 %>
 <%
-        String uri=request.getParameter("uri");
-        PhotoElement photo=(PhotoElement)SemanticObject.createSemanticObject(uri).createGenericInstance();
-        if(member.canView() && photo!=null)
-        {
-            photo.incViews();  //Incrementar apariciones
+    String uri=request.getParameter("uri");
+    PhotoElement photo=(PhotoElement)SemanticObject.createSemanticObject(uri).createGenericInstance();
+    if(member.canView() && photo!=null)
+    {
+        photo.incViews();  //Incrementar apariciones
 %>
 
 <br/>
@@ -25,8 +23,8 @@
 <div id="detalleFoto">
     <h2 class="tituloGrande"><%= photo.getTitle()%></h2>
     <div id="imagenDetalle">
-        <a href="<%= path+photo.getImageURL()%>" target="_self">
-            <img id="img_<%=photo.getId()%>" src="<%= path+photo.getImageURL() %>" alt="<%= photo.getTitle() %>" border="0" width="300" height="100%" />
+        <a href="<%= SWBPlatform.getWebWorkPath()+photo.getImageURL()%>" target="_self">
+            <img id="img_<%=photo.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+photo.getImageURL() %>" alt="<%= photo.getTitle() %>" border="0" width="300" height="100%" />
         </a>
     </div>
     
@@ -58,7 +56,7 @@
     }
 </script>
 <%
-        }
+    }
 %>
 <%
     photo.renderGenericElements(request, out, paramRequest);

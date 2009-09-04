@@ -7,10 +7,7 @@
     WebPage wpage = paramRequest.getWebPage();
     MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
     Member member = Member.getMember(user, wpage);
-
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
-
-    String path = SWBPlatform.getWebWorkPath()+base.getWorkPath()+"/";
 %>
 
 
@@ -49,7 +46,7 @@
 
 <div class="entry">
     <a href="<%= viewUrl%>">
-        <img src="<%= path+anew.getNewsThumbnail() %>" alt="<%= anew.getTitle()%>" border="0" />
+        <img src="<%= SWBPlatform.getWebWorkPath()+anew.getNewsThumbnail() %>" alt="<%= anew.getTitle()%>" border="0" />
     </a>
     <div class="entryInfo">
         <p class="tituloNaranja"><%= anew.getTitle()%>&nbsp;(<%= anew.getCitation()%>)</p>

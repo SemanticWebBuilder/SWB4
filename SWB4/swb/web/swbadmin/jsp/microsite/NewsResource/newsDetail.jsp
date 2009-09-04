@@ -10,8 +10,6 @@
 
     String uri = request.getParameter("uri");
     NewsElement anew = (NewsElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
-
-    String path = SWBPlatform.getWebWorkPath()+base.getWorkPath()+"/";
 %>
 
 <br />
@@ -33,7 +31,7 @@
     <h2 class="tituloGrande"><%= anew.getTitle()%></h2>
     <p class="tituloNaranja">Por: <%= anew.getAuthor()%>. <%= anew.getCitation()%></p>
     <div id="imagenDetalle">
-        <img id="img_<%=anew.getId()%>" src="<%= path+anew.getNewsImage() %>" alt="<%= anew.getTitle() %>" border="0" width="380" height="100%" />
+        <img id="img_<%=anew.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+anew.getNewsImage() %>" alt="<%= anew.getTitle() %>" border="0" width="380" height="100%" />
     </div>
     <p class="fotoInfo">
         Fecha: <%=dateFormat.format(anew.getCreated())%> | <span class="linkNaranja"><%= anew.getViews()%> Vistas</span>
