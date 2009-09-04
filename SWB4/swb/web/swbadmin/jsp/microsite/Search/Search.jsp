@@ -2,17 +2,19 @@
 <%
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             Iterator<String> results = (Iterator<String>) request.getAttribute("results");
-            SWBResourceURL searchUrl = paramRequest.getActionUrl().setAction("search");
+            String searchUrl = (String) request.getAttribute("rUrl");
 %>
 
 <%
-if (paramRequest.getCallMethod() != paramRequest.Call_STRATEGY) {
+if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
 %>
 <div id="busqueda">
-    <form id="busqueda_form" action="<%=searchUrl%>" method="post">
+    <h2>B&uacute;squeda</h2>
+    <div class="clear">&nbsp;</div>
+    <form id="busqueda_form" action="<%=searchUrl%>" method="get">
         <p>
             <input id="busqueda_input" type="text" name="q"/>
-            <input id="busqueda_enviar" type="submit" value="Submit" name="button"/>
+            <input id="busqueda_enviar" type="submit"/>
         </p>
         <div>            
             <input id="busqueda_comercios" type="checkbox" checked="checked" name="comercios"/>
@@ -27,8 +29,10 @@ if (paramRequest.getCallMethod() != paramRequest.Call_STRATEGY) {
     </form>
 </div>
 <%
+} else if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
+    %>Hello<%
+    if(results != null && results.hasNext()){
+        System.out.println("Hay resultados");
+    }
 }
-            if(results != null && results.hasNext()){
-                System.out.println("Hay resultados");
-            }
 %>
