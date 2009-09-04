@@ -7,7 +7,10 @@
     WebPage wpage = paramRequest.getWebPage();
     MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
     Member member = Member.getMember(user, wpage);
+
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+
+    String path = SWBPlatform.getWebWorkPath()+base.getWorkPath()+"/";
 %>
 
 
@@ -46,15 +49,15 @@
 
 <div class="entry">
     <a href="<%= viewUrl%>">
-        <img src="<%= SWBPlatform.getWebWorkPath()+anew.getNewsThumbnail() %>" alt="<%= anew.getTitle()%>" border="0" />
+        <img src="<%= path+anew.getNewsThumbnail() %>" alt="<%= anew.getTitle()%>" border="0" />
     </a>
     <div class="entryInfo">
         <p class="tituloNaranja"><%= anew.getTitle()%>&nbsp;(<%= anew.getCitation()%>)</p>
         <p>Por:&nbsp;<strong><%= anew.getAuthor()%></strong></p>
         <p class="eventoInicio">
-            <strong><%= dateFormat.format(anew.getCreated()) %></strong> - <%=SWBUtils.TEXT.getTimeAgo(anew.getCreated(), user.getLanguage())%></a>
+            <strong><%= dateFormat.format(anew.getCreated()) %></strong> - <%=SWBUtils.TEXT.getTimeAgo(anew.getCreated(), user.getLanguage())%>
         </p>
-        <p><%= anew.getDescription()%>&nbsp;|&nbsp;<a href="<%=viewUrl%>">Ver m&aacute;s</p>
+        <p><%= anew.getDescription()%>&nbsp;|&nbsp;<a href="<%=viewUrl%>">Ver m&aacute;s</a></p>
         <p>Puntuación:&nbsp;<%= anew.getRank()%></p>
         <p><%= anew.getViews()%> vistas.</p>
         <div class="clear">&nbsp;</div>

@@ -1,23 +1,26 @@
 <%@page contentType="text/html"%>
 <%@page import="java.text.SimpleDateFormat, org.semanticwb.platform.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%
-            SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
-            Resource base = paramRequest.getResourceBase();
-            User user = paramRequest.getUser();
-            WebPage wpage = paramRequest.getWebPage();
-            Member member = Member.getMember(user, wpage);
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+    SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
+    Resource base = paramRequest.getResourceBase();
+    User user = paramRequest.getUser();
+    WebPage wpage = paramRequest.getWebPage();
+    Member member = Member.getMember(user, wpage);
+
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+
+    String path = SWBPlatform.getWebWorkPath()+base.getWorkPath()+"/";
 %>
 <%
-            String uri = request.getParameter("uri");
-            EventElement rec = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
-            if (rec == null) {
+    String uri = request.getParameter("uri");
+    EventElement rec = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
+    if (rec == null) {
 %>
 Error: Elemento no encontrado...
 <%
-                return;
-            }
+        return;
+    }
 %>
 <script type="text/javascript">
     dojo.require("dijit.form.TextBox");
@@ -64,8 +67,8 @@ Error: Elemento no encontrado...
             <div>
                 <p>
                     <label for="foto">Imagen del evento:&nbsp;</label>
-                    <a href="<%= SWBPlatform.getWebWorkPath()+rec.getEventImage()%>" target="_self">
-                        <img id="img_<%=rec.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+rec.getEventImage() %>" alt="<%= rec.getTitle() %>" border="0" />
+                    <a href="<%= path+rec.getEventImage()%>" target="_self">
+                        <img id="img_<%=rec.getId()%>" src="<%= path+rec.getEventImage() %>" alt="<%= rec.getTitle() %>" border="0" />
                     </a><br />
                     <input type="file" id="foto" name="foto" size="60" />
                 </p>
@@ -133,10 +136,8 @@ Error: Elemento no encontrado...
         <fieldset>
             <legend></legend>
             <div>
-            <p>
                 <div class="editarInfo"><p><a onclick="validaForma()" href="#">Enviar</a></p></div>
                 <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Cancelar</a></p></div>
-            </p>
             </div>
         </fieldset>
     </div>

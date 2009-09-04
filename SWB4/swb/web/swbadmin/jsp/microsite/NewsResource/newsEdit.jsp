@@ -1,23 +1,23 @@
 <%@page contentType="text/html"%>
 <%@page import="java.text.SimpleDateFormat, org.semanticwb.platform.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%
-            SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
-            Resource base = paramRequest.getResourceBase();
-            User user = paramRequest.getUser();
-            WebPage wpage = paramRequest.getWebPage();
-            Member member = Member.getMember(user, wpage);
+    SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
+    Resource base = paramRequest.getResourceBase();
+    User user = paramRequest.getUser();
+    WebPage wpage = paramRequest.getWebPage();
+    Member member = Member.getMember(user, wpage);
 
-            String path = SWBPlatform.getWebWorkPath() + base.getWorkPath() + "/";
+    String path = SWBPlatform.getWebWorkPath()+base.getWorkPath()+"/";
 %>
 <%
-            String uri = request.getParameter("uri");
-            NewsElement rec = (NewsElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
-            if (rec == null) {
+    String uri = request.getParameter("uri");
+    NewsElement rec = (NewsElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
+    if (rec == null) {
 %>
-Error: Elemento no encontrado...
+        Error: Elemento no encontrado...
 <%
-                return;
-            }
+        return;
+    }
 %>
 <script type="text/javascript">
     dojo.require("dijit.form.TextBox");
@@ -78,8 +78,8 @@ Error: Elemento no encontrado...
         <div>
             <p>
                 <label for="new_image">Imagen de la noticia:&nbsp;</label>
-                <a href="<%= SWBPlatform.getWebWorkPath()+rec.getNewsImage()%>" target="_self">
-                    <img id="img_<%=rec.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+rec.getNewsImage() %>" alt="<%= rec.getTitle() %>" border="0" />
+                <a href="<%= path+rec.getNewsImage()%>" target="_self">
+                    <img id="img_<%=rec.getId()%>" src="<%= path+rec.getNewsImage() %>" alt="<%= rec.getTitle() %>" border="0" />
                 </a><br />
                 <input type="file" id="foto" name="foto" size="60" />
             </p>
