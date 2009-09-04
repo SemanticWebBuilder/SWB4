@@ -22,9 +22,10 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.Resourceable;
+import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -78,17 +79,93 @@ public class Search extends GenericAdmResource {
     }
 
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
-        //int  page = 1;
-        //if (request.getParameter("p") != null) page = Integer.valueOf(request.getParameter("p"));
-
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String path = "/swbadmin/jsp/microsite/Search/Search.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
+        ArrayList<String> pageData = new ArrayList<String>();
+        int max = Integer.valueOf(getResourceBase().getAttribute("maxResults", "10"));
+        int page = 1;
+        int _start = 0;
+        int _end = 0;
+
+        //Get resource url
+        String url = "";
+        Resourceable rsa = getResourceBase().getResourceable();
+        if (rsa != null && rsa instanceof WebPage) {
+            url = ((WebPage) rsa).getUrl();
+        }
+
+        if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
+        //Assert query string
+        String q = request.getParameter("q");
+        if (q == null) q = "";        
+
+        //Get page number
+        if (request.getParameter("p") == null) {
+            solutions = null;
+            solutions = performQuery(q);
+        } else {
+            page = Integer.valueOf(request.getParameter("p"));
+        }
+
+        //Get pagination        
+        /*if (solutions != null && solutions.size() > 0) {
+            int step = max;
+            _start = step * (page - 1);
+            _end = _start + step - 1;
+            if (_end > solutions.size() - 1) {
+                _end = solutions.size() - 1;
+            }
+
+            //sbf.append("<tr><td>Mostrando resultados " + (_start + 1) + " - " + (_end + 1) + " de " + solutions.size() + "<br>" +
+            //      "          <hr color=\"#16458D\" width=\"100%\" size=\"1\" /><BR/></td></tr>\n");
+
+            for (int i = _start; i <= _end; i++) {
+                pageData.add(solutions.get(i));
+                System.out.println("---Paginado " + solutions.get(i));
+            }
+
+            //sbf.append("<tr><td align=\"center\" colspan=\"2\"><hr width=\"100%\" size=\"1\" /><br/>\n");
+            double pages = Math.ceil((double) solutions.size() / (double) step);
+            /*for (int i = 1; i <= pages; i++) {
+            _start = step * (i - 1);
+            if ((_start + step) - 1 > results.size() - 1) {
+            _end = results.size() - 1;
+            } else {
+            _end = (_start + step) - 1;
+            }
+            if (Integer.valueOf(page) == i) {
+            sbf.append("<span>" + i + "</span> ");
+            } else {
+            rUrl = paramRequest.getRenderUrl().setMode("PAGE");
+            rUrl.setParameter("p", String.valueOf(i));
+            sbf.append("<a href =\"" + rUrl + "\">" + i + "</a> ");
+            }
+            }
+
+            if (Integer.valueOf(page) < pages) {
+            rUrl = paramRequest.getRenderUrl().setMode("PAGE");
+            rUrl.setParameter("p", String.valueOf(Integer.valueOf(page) + 1));
+            sbf.append("<a href=" + rUrl + ">" + paramRequest.getLocaleString("lblNext") + "</a>\n");
+            }
+            sbf.append("</td></tr>");
+            }
+         System.out.println("start2: " + _start + ", end2: " + _end + ", total2: " + solutions.size());
+        }*/
+        }
+
         try {
+            //if (pageData != null && pageData.size() > 0) {
             if (solutions != null && solutions.size() > 0) {
                 request.setAttribute("results", solutions.iterator());
+                //System.out.println(":::::::Sending data");
+                //request.setAttribute("results", pageData.iterator());
+                //request.setAttribute("s", _start);
+                //request.setAttribute("e", _end);
+                //request.setAttribute("t", solutions.size());
             }
-            request.setAttribute("paramRequest", paramsRequest);
+            request.setAttribute("rUrl", url);
+            request.setAttribute("paramRequest", paramRequest);
             dis.include(request, response);
         } catch (Exception e) {
             log.error(e);
@@ -118,7 +195,7 @@ public class Search extends GenericAdmResource {
         ArrayList<String> res = new ArrayList<String>();
 
         //Assert query string
-        q = (q == null ? "" : q.trim());
+        if (q.trim().equals("")) return null;
 
         //Build query to return classes with literal values in their properties
         String queryString = StringUtils.join("\n", new String[]{
@@ -130,10 +207,11 @@ public class Search extends GenericAdmResource {
                     "PREFIX owl:     <http://www.w3.org/2002/07/owl#>",
                     "PREFIX swbcomm: <http://www.semanticwebbuilder.org/swb4/community#>",
                     "SELECT * WHERE {",
-                    "    ?lit pf:textMatch '" + q + "'.",
-                    "    ?obj a swbcomm:Commerce.",
-                    "    OPTIONAL{?obj a swbcomm:Organization}.",
-                    "    ?obj swb:title ?lit",
+                    "    ?lit pf:textMatch '" + q.trim() + "'.",
+                    "    ?obj a swbcomm:DirectoryObject.",
+                    //"    OPTIONAL{?obj a swbcomm:Organization}.",
+                    "    ?obj swb:title ?lit.",
+                    "    OPTIONAL{?obj swb:description ?lit}.",
                     "}"
                 });
 
@@ -154,7 +232,6 @@ public class Search extends GenericAdmResource {
             //Get next result set
             while (rs.hasNext()) {
 
-                System.out.println("...sol");
                 //Get next solution of the result set (var set)
                 QuerySolution qs = rs.nextSolution();
 
@@ -171,4 +248,56 @@ public class Search extends GenericAdmResource {
         qExec.close();
         return res;
     }
+
+    /*public ArrayList<String> getPage(ArrayList<String> results, int page, int total) {
+        ArrayList<String> r = new ArrayList<String>();
+
+        if (results != null && results.size() > 0) {
+                int step = total;
+                int _start = 0;
+                int _end = 0;
+
+                _start = step * (page - 1);
+                _end = _start + step - 1;
+                if (_end > results.size() - 1) {
+                    _end = results.size() - 1;
+                }
+
+                //System.out.println("page: " + page + ", start: " + _start + ", end: " + _end);
+
+                //sbf.append("<tr><td>Mostrando resultados " + (_start + 1) + " - " + (_end + 1) + " de " + solutions.size() + "<br>" +
+                  //      "          <hr color=\"#16458D\" width=\"100%\" size=\"1\" /><BR/></td></tr>\n");
+
+                for (int i = _start; i <= _end; i++) {
+                    r.add(results.get(i));
+                }
+
+                //sbf.append("<tr><td align=\"center\" colspan=\"2\"><hr width=\"100%\" size=\"1\" /><br/>\n");
+                double pages = Math.ceil((double) results.size() / (double) step);
+                for (int i = 1; i <= pages; i++) {
+                    _start = step * (i - 1);
+                    if ((_start + step) - 1 > results.size() - 1) {
+                        _end = results.size() - 1;
+                    } else {
+                        _end = (_start + step) - 1;
+                    }
+                    if (Integer.valueOf(page) == i) {
+                        sbf.append("<span>" + i + "</span> ");
+                    } else {
+                        rUrl = paramRequest.getRenderUrl().setMode("PAGE");
+                        rUrl.setParameter("p", String.valueOf(i));
+                        sbf.append("<a href =\"" + rUrl + "\">" + i + "</a> ");
+                    }
+                }
+
+                if (Integer.valueOf(page) < pages) {
+                    rUrl = paramRequest.getRenderUrl().setMode("PAGE");
+                    rUrl.setParameter("p", String.valueOf(Integer.valueOf(page) + 1));
+                    sbf.append("<a href=" + rUrl + ">" + paramRequest.getLocaleString("lblNext") + "</a>\n");
+                }
+                sbf.append("</td></tr>");
+            }
+
+        return r;
+    }*/
 }
