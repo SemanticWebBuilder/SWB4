@@ -18,7 +18,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
             <input id="busqueda_input" type="text" name="q"/>
             <input id="busqueda_enviar" type="submit"/>
         </p>
-        <div>            
+        <!--div>
             <input id="busqueda_comercios" type="checkbox" checked="checked" name="comercios"/>
             <label for="busqueda_comercios">Comercios</label>
             <input id="busqueda_organizaciones" type="checkbox" name="organizaciones"/>
@@ -27,7 +27,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
             <label for="busqueda_persons">Personas</label>
             <input id="busqueda_clasificados" type="checkbox" name="clasificados"/>
             <label for="busqueda_clasificados">Clasificados</label>
-        </div>
+        </div-->
     </form>
 </div>
 <%
@@ -41,15 +41,33 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
         <%
             while(results.hasNext()) {
             String r = results.next();
-            SemanticObject obj = SemanticObject.createSemanticObject(r);
+            SemanticObject obj = SemanticObject.createSemanticObject(r);            
             if (obj.instanceOf(Hotel.sclass)) {
                 Hotel c = (Hotel)obj.createGenericInstance();
+                String photo = SWBPlatform.getWebWorkPath()+c.getWorkPath()+"/"+obj.getId()+"/"+ obj.getProperty(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#dirPhoto"));
+                System.out.println("-----" + photo);
+                %>
+                <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
+                    
+                    
+                    <div class="listEntryInfo">
+                        <p class="tituloNaranja"><a href ="<%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>"><%=c.getTitle()%></a></p>
+                        <p> </p>
+                        <br/>
+                        <p>-Palabras clave:<%=c.getTags()%></p>
+                    </div>
+                    <div class="clear"> </div>
+                </div>
+                <%
+            }
+            else if (obj.instanceOf(Commerce.sclass)) {
+                Commerce c = (Commerce)obj.createGenericInstance();
                 %>
                 <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
                     <%
                     if(c.getPhoto() != null && !c.getPhoto().trim().equals("")) {
                     %>
-                        <img height="90" width="90" src="<%=c.getPhoto()%>"/>
+                        <img height="90" width="90" src="#"/>
                     <%
                     }
                     %>
@@ -60,9 +78,8 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
                         <p>-Palabras clave:<%=c.getTags()%></p>
                     </div>
                     <div class="clear"> </div>
-                </div>                
+                </div>
                 <%
-                //System.out.println(".-.-.-.-" + c.getTitle() + ": " + c.getTags());
             }
         }
         %>
