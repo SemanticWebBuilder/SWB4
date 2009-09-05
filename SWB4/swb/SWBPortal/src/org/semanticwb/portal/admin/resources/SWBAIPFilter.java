@@ -216,7 +216,7 @@ public class SWBAIPFilter extends GenericResource
       //http://www.semanticwebbuilder.org/swb4/ontology#User
         ret.append("<form id=\""+IPFilter.swb_IPFilter.getClassName()+"/create/"+got+"\" dojoType=\"dijit.form.Form\" class=\"swbform\" ");
         ret.append("action=\""+url+"\" ");
-        ret.append("onSubmit=\"submitForm('"+IPFilter.swb_IPFilter.getClassName()+"/create');return false;\" method=\"POST\">");
+        ret.append("onSubmit=\"submitForm('"+IPFilter.swb_IPFilter.getClassName()+"/create/"+got+"');return false;\" method=\"POST\">");
         ret.append("\t<fieldset>\n\t<table>\n\t\t<tr>\n\t\t\t<td align=\"right\">\n\t\t\t\t<label>"+paramRequest.getLocaleString("ipsite")+"</label>");
         ret.append("\n\t\t\t</td>\n\t\t\t<td>");
         Iterator<WebSite> itur = SWBContext.listWebSites();
