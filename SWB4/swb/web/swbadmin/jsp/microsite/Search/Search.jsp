@@ -5,6 +5,7 @@
             String searchUrl = (String) request.getAttribute("rUrl");
             SemanticProperty swb_title = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
             SemanticProperty swb_description = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
+            SemanticProperty swbcomm_dirPhoto = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#dirPhoto");
 %>
 
 <%
@@ -44,15 +45,23 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
             SemanticObject obj = SemanticObject.createSemanticObject(r);            
             if (obj.instanceOf(Hotel.sclass)) {
                 Hotel c = (Hotel)obj.createGenericInstance();
-                String photo = SWBPlatform.getWebWorkPath()+c.getWorkPath()+"/"+obj.getId()+"/"+ obj.getProperty(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#dirPhoto"));
-                System.out.println("-----" + photo);
+                //String photo = SWBPlatform.getWebWorkPath()+c.getDirectoryResource().getWorkPath()+"/"+obj.getId()+"/"+ obj.getProperty(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#dirPhoto"));
+                //System.out.println("-----" + photo);
                 %>
                 <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
-                    
-                    
+                    <%
+                    String photo = obj.getProperty(swbcomm_dirPhoto);
+                    if(photo != null && !photo.equals("null")) {
+                    %>
+                        <img height="90" width="90" src="<%=SWBPlatform.getWebWorkPath()+c.getDirectoryResource().getWorkPath()+"/"+obj.getId()+"/"+photo%>"/>
+                    <%
+                    }
+                    %>
                     <div class="listEntryInfo">
                         <p class="tituloNaranja"><a href ="<%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>"><%=c.getTitle()%></a></p>
-                        <p> </p>
+                        <p>
+                            <%=(c.getDescription()==null)?"":c.getDescription()%>
+                        </p>
                         <br/>
                         <p>-Palabras clave:<%=c.getTags()%></p>
                     </div>
@@ -65,15 +74,18 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
                 %>
                 <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
                     <%
-                    if(c.getPhoto() != null && !c.getPhoto().trim().equals("")) {
+                    String photo = obj.getProperty(swbcomm_dirPhoto);
+                    if(photo != null && !photo.equals("null")) {
                     %>
-                        <img height="90" width="90" src="#"/>
+                        <img height="90" width="90" src="<%=SWBPlatform.getWebWorkPath()+c.getDirectoryResource().getWorkPath()+"/"+obj.getId()+"/"+photo%>"/>
                     <%
                     }
                     %>
                     <div class="listEntryInfo">
                         <p class="tituloNaranja"><a href ="<%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>"><%=c.getTitle()%></a></p>
-                        <p> </p>
+                        <p>
+                            <%=(c.getDescription()==null)?"":c.getDescription()%>
+                        </p>
                         <br/>
                         <p>-Palabras clave:<%=c.getTags()%></p>
                     </div>
