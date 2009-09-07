@@ -209,7 +209,7 @@ public class Search extends GenericAdmResource {
                     "SELECT * WHERE {",
                     "    ?lit pf:textMatch '" + q.trim() + "'.",
                     "    ?obj a swbcomm:DirectoryObject.",
-                    //"    OPTIONAL{?obj a swbcomm:Organization}.",
+                    "    OPTIONAL{?obj a swb:WebPage}.",
                     "    ?obj swb:title ?lit.",
                     "    OPTIONAL{?obj swb:description ?lit}.",
                     "    OPTIONAL{?obj swb:tags ?lit}.",
