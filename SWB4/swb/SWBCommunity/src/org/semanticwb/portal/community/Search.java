@@ -17,10 +17,20 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.sparql.util.StringUtils;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.Token;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.snowball.SnowballAnalyzer;
+import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.store.LockObtainFailedException;
+import org.apache.lucene.store.RAMDirectory;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
@@ -42,6 +52,18 @@ public class Search extends GenericAdmResource {
     private IndexLARQ index;
     private Model smodel;
     private ArrayList<String> solutions = null;
+    private HashMap<String, String> langCodes;
+    private String[] stopWords = {"a", "ante", "bajo", "cabe", "con",
+        "contra", "de", "desde", "durante",
+        "en", "entre", "hacia", "hasta",
+        "mediante", "para", "por", "según",
+        "sin", "sobre", "tras", "el", "la",
+        "los", "las", "ellos", "ellas", "un",
+        "uno", "unos", "una", "unas", "y", "o",
+        "pero", "si", "no", "como", "que", "su",
+        "sus", "esto", "eso", "esta", "esa",
+        "esos", "esas", "del"
+    };
 
     @Override
     public void setResourceBase(Resource base) throws SWBResourceException {
@@ -50,6 +72,12 @@ public class Search extends GenericAdmResource {
             //smodel = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
             smodel = base.getSemanticObject().getModel().getRDFOntModel();
             index = buildIndex();
+            langCodes = new HashMap<String, String>();
+            langCodes.put("es", "Spanish");
+            langCodes.put("en", "English");
+            langCodes.put("de", "Dutch");
+            langCodes.put("pt", "Portuguese");
+            langCodes.put("ru", "Russian");
         } catch (Exception e) {
             log.error(e);
         }
@@ -58,11 +86,14 @@ public class Search extends GenericAdmResource {
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String action = response.getAction();
+        String lang = "es";
+        if (response.getUser() != null)
+            lang = response.getUser().getLanguage();
 
         if (action.equals("search")) {
             String q = request.getParameter("q");
             if (q != null && !q.trim().equals(""))
-            solutions = performQuery(q.trim());
+            solutions = performQuery(q.trim(), lang);
         } else {
             super.processAction(request, response);
         }
@@ -82,11 +113,14 @@ public class Search extends GenericAdmResource {
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String path = "/swbadmin/jsp/microsite/Search/Search.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
-        ArrayList<String> pageData = new ArrayList<String>();
-        int max = Integer.valueOf(getResourceBase().getAttribute("maxResults", "10"));
-        int page = 1;
-        int _start = 0;
-        int _end = 0;
+        String lang = "es";
+        //ArrayList<String> pageData = new ArrayList<String>();
+        //int max = Integer.valueOf(getResourceBase().getAttribute("maxResults", "10"));
+        //int page = 1;
+        //int _start = 0;
+        //int _end = 0;
+        if (paramRequest.getUser() != null)
+            lang = paramRequest.getUser().getLanguage();
 
         //Get resource url
         String url = "";
@@ -103,9 +137,7 @@ public class Search extends GenericAdmResource {
         //Get page number
         if (request.getParameter("p") == null) {
             solutions = null;
-            solutions = performQuery(q);
-        } else {
-            page = Integer.valueOf(request.getParameter("p"));
+            solutions = performQuery(q, lang);
         }
 
         //Get pagination        
@@ -175,9 +207,12 @@ public class Search extends GenericAdmResource {
     /**
      * Builds an index to perform searchs.
      */
-    public IndexLARQ buildIndex() {
+    public IndexLARQ buildIndex() throws CorruptIndexException, LockObtainFailedException, IOException {
+        RAMDirectory rd = new RAMDirectory();
+        IndexWriter writer = new IndexWriter(rd, new SnowballAnalyzer("Spanish"));
+
         // ---- Read and index all literal strings.
-        IndexBuilderString larqBuilder = new IndexBuilderString();
+        IndexBuilderString larqBuilder = new IndexBuilderString(writer);
 
         // ---- Alternatively build the index after the model has been created.
         larqBuilder.indexStatements(smodel.listStatements());
@@ -191,11 +226,18 @@ public class Search extends GenericAdmResource {
         return index;
     }
 
-    public ArrayList<String> performQuery(String q) {
+    public ArrayList<String> performQuery(String q, String lang) {
         ArrayList<String> res = new ArrayList<String>();
 
         //Assert query string
         if (q.trim().equals("")) return null;
+
+        String [] words = getSnowballForm(q, lang, stopWords).trim().split(" ");
+
+        q = "";
+        for (String s : words) {
+            q = q + "+" + s + " ";
+        }
 
         //Build query to return classes with literal values in their properties
         String queryString = StringUtils.join("\n", new String[]{
@@ -206,13 +248,16 @@ public class Search extends GenericAdmResource {
                     "PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>",
                     "PREFIX owl:     <http://www.w3.org/2002/07/owl#>",
                     "PREFIX swbcomm: <http://www.semanticwebbuilder.org/swb4/community#>",
-                    "SELECT * WHERE {",
+                    "SELECT DISTINCT ?obj WHERE {",
                     "    ?lit pf:textMatch '" + q.trim() + "'.",
                     "    ?obj a swbcomm:DirectoryObject.",
-                    "    OPTIONAL{?obj a swb:WebPage}.",
-                    "    ?obj swb:title ?lit.",
-                    "    OPTIONAL{?obj swb:description ?lit}.",
-                    "    OPTIONAL{?obj swb:tags ?lit}.",
+                    "    {?obj swb:title ?lit}",
+                    "    UNION {?obj swb:tags ?lit}",
+                    "    UNION {?obj swb:description ?lit}",
+                    //"    OPTIONAL{?obj a swb:WebPage}",
+                    //"    ?obj swb:title ?lit.",
+                    //"    OPTIONAL{{?obj swb:description ?lit} UNION {?obj swb:tags ?lit}}",
+                    //"    OPTIONAL{?obj swb:tags ?lit}",                    
                     "}"
                 });
 
@@ -301,4 +346,40 @@ public class Search extends GenericAdmResource {
 
         return r;
     }*/
+
+    /**
+     * Gets the snowball-ed form of an input text. Applies the snowball algorithm
+     * to each word in the text to get its root or stem.
+     *
+     * Obtiene el lexema o raiz de una palabra mediante el algoritmo de snowball.
+     * @param input Text to stem.
+     * @param language Language code for snowball analyzer.
+     * @param stopWords Stop words for snowball analyzer.
+     * @return Root of the input.
+     */
+    public String getSnowballForm(String input, String language, String [] stopWords) {
+        String res = "";
+        Analyzer SnballAnalyzer = null;
+
+        //Create snowball analyzer
+        if (stopWords != null && stopWords.length > 0)
+            SnballAnalyzer = new SnowballAnalyzer(langCodes.get(language), stopWords);
+        else
+            SnballAnalyzer = new SnowballAnalyzer(langCodes.get(language));
+
+        //Create token stream for prhase composition
+        TokenStream ts = SnballAnalyzer.tokenStream("sna", new StringReader(input));
+
+        //Build the result string with the analyzed tokens
+        try {
+            Token tk;
+            while ((tk = ts.next()) != null) {
+                res = res + tk.termText() + " ";
+            }
+            ts.close();
+        } catch (Exception ex) {
+            log.error(ex);
+        }
+        return res.trim();
+    }
 }
