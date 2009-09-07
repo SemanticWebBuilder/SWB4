@@ -151,10 +151,10 @@ public abstract class OfficeServlet extends XMLRPCServlet
             PrintWriter out = response.getWriter();
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>" + title + "</title>");
+            out.println("<title>" + title + " version "+ OfficeApplication.version +"</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>" + title + "</h1>");
+            out.println("<h1>" + title + " version "+ OfficeApplication.version +"</h1>");
             out.println("</body>");
             out.println("</html>");
             out.close();
