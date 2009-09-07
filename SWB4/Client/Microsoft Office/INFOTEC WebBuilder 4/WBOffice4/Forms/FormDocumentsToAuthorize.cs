@@ -152,5 +152,46 @@ namespace WBOffice4.Forms
                 }
             }
         }
+
+        private void toolStripButtonSee_Click(object sender, EventArgs e)
+        {
+            if (this.listViewFlows.SelectedItems.Count > 0)
+            {
+                FlowItem item = (FlowItem)this.listViewFlows.SelectedItems[0];
+                ResourceInfo resourceinfo = item.FlowContentInformation.resourceInfo;
+                ResourceRepositoryInfo info= OfficeApplication.OfficeDocumentProxy.getContentInfo(resourceinfo);
+                
+                String repository = "";
+                String name = null;
+                try
+                {                    
+                    name = OfficeApplication.OfficeDocumentProxy.createPreview(info.repository, info.id, info.version, info.type);
+                    String urlproxy = OfficeApplication.OfficeDocumentProxy.WebAddress.ToString();
+                    if (!urlproxy.EndsWith("/gtw"))
+                    {
+                        if (!urlproxy.EndsWith("/"))
+                        {
+                            urlproxy += "/";
+                        }
+                        if (!urlproxy.EndsWith("gtw"))
+                        {
+                            urlproxy += "gtw";
+                        }
+                    }
+                    Uri url = new Uri(urlproxy + "?contentId=" + info.id + "&versionName=" + info.version + "&repositoryName=" + repository + "&name=" + name + "&type=" + info.type);
+                    String title = OfficeApplication.OfficeDocumentProxy.getTitle(repository, info.id);
+                    FormPreview formPreview = new FormPreview(url, false, title);
+                    formPreview.ShowDialog(this);
+                }
+                finally
+                {
+                    if (name != null)
+                    {
+                        OfficeApplication.OfficeDocumentProxy.deletePreview(name);
+                    }
+                }
+
+            }
+        }
     }
 }

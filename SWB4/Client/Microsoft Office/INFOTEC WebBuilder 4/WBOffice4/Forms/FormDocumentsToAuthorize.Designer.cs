@@ -142,6 +142,7 @@
             this.toolStripButtonSee.Name = "toolStripButtonSee";
             this.toolStripButtonSee.Size = new System.Drawing.Size(23, 22);
             this.toolStripButtonSee.Text = "toolStripButton1";
+            this.toolStripButtonSee.Click += new System.EventHandler(this.toolStripButtonSee_Click);
             // 
             // toolStripSeparator1
             // 
