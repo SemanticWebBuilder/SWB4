@@ -24,6 +24,7 @@
 package org.semanticwb.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.StringTokenizer;
@@ -511,5 +512,45 @@ public class WebPage extends WebPageBase
             viewed = false;
         }
     }
-    
+
+    public String getContentsLastUpdate()
+    {
+        return getContentsLastUpdate(null,null);
+    }
+
+    public String getContentsLastUpdate(String lang, String format){
+        String ret = "";
+        java.sql.Timestamp auxt = null;
+        Iterator<Resource> it = listResources();
+        while (it.hasNext())
+        {
+            Resource recRes=it.next();
+            java.sql.Timestamp ts = (java.sql.Timestamp)recRes.getUpdated();
+                if (auxt == null || auxt.before(ts)) auxt = ts;
+        }
+        if (auxt != null)
+        {
+            if(lang==null)lang = "es";
+
+            if (getWebSite().getLanguage() != null)
+            {
+                lang = getWebSite().getLanguage().getId();
+            }
+            if(format==null)
+            {
+                ret = SWBUtils.TEXT.getStrDate(new Date(auxt.getTime()), lang);
+            }else
+            {
+                ret = SWBUtils.TEXT.getStrDate(new Date(auxt.getTime()), lang, format);
+            }
+        }
+        return ret;
+    }
+
+    public String getContentsLastUpdate(HashMap args)
+    {
+        String lang = (String) args.get("language");
+        String format = (String) args.get("format");
+        return getContentsLastUpdate(lang, format);
+    }
 }
