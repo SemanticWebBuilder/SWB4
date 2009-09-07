@@ -36,5 +36,10 @@ namespace WBOffice4.Interfaces
         public bool active;
         public String version;
         public PageInfo page;
+
+        public String contentid;
+        public String repository;
+        public String type;
+        public String lastversion;
     }
 }

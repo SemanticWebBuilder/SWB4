@@ -211,6 +211,7 @@ namespace WB4Office2007Library
         }
         protected override FileInfo SaveAsHtml(DirectoryInfo dir)
         {
+            SaveAs(dir, SaveDocument.Office2003);
             FileInfo docX = new FileInfo(presentation.FullName);
             FileInfo HTMLFile = new FileInfo(dir.FullName + Separator + this.FilePath.Name.Replace(docX.Extension, HtmlExtension));
             return this.SaveAsHtml(HTMLFile);
