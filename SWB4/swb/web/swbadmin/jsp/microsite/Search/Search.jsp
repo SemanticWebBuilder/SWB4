@@ -25,11 +25,14 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
 } else if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {    
     //int start = (Integer)request.getAttribute("s");
     //System.out.println("start: "+ start);
-    System.out.println("start: " + request.getAttribute("s") + ", end: " + request.getAttribute("e") + ", total: " + request.getAttribute("t"));
+    //System.out.println("start: " + request.getAttribute("s") + ", end: " + request.getAttribute("e") + ", total: " + request.getAttribute("t"));
     if(results != null && results.hasNext()){
         %>
         <h3>Resultados de la b&uacute;squeda <i><%=request.getParameter("q")%></i></h3>
         <br>
+        <p>
+            Mostrando resultados <b>XX</b> al <b>XX</b> de <b>XX</b>.
+        </p>
         <div class="entriesList">
         <%
             while(results.hasNext()) {
@@ -49,7 +52,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
                     <%
                     } else {
                         %>
-                            <img height="90" width="90" src="<%=SWBPlatform.getWebWorkPath()+c.getDirectoryResource().getWorkPath()+"/"+obj.getId()+"/"+photo%>"/>
+                            <img height="90" width="90" src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/noDisponible.gif"/>
                         <%
                     }
                     %>
@@ -74,6 +77,10 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
                     %>
                         <img height="90" width="90" src="<%=SWBPlatform.getWebWorkPath()+c.getDirectoryResource().getWorkPath()+"/"+obj.getId()+"/"+photo%>"/>
                     <%
+                    } else {
+                        %>
+                            <img height="90" width="90" src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/noDisponible.gif"/>
+                        <%
                     }
                     %>
                     <div class="listEntryInfo">
@@ -97,10 +104,41 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
                     %>
                         <img height="90" width="90" src="<%=SWBPlatform.getWebWorkPath()+c.getDirectoryResource().getWorkPath()+"/"+obj.getId()+"/"+photo%>"/>
                     <%
+                    } else {
+                        %>
+                            <img height="90" width="90" src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/noDisponible.gif"/>
+                        <%
                     }
                     %>
                     <div class="listEntryInfo">
                         <p class="tituloNaranja"><a href ="<%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>"><%=c.getTitle()%>&nbsp;(Escuela)</a></p>
+                        <p>
+                            <%=(c.getDescription()==null)?"":c.getDescription()%>
+                        </p>
+                        <br/>
+                        <!--p>-Palabras clave:%=c.getTags()%></p-->
+                    </div>
+                    <div class="clear"> </div>
+                </div>
+                <%
+            } else if (obj.instanceOf(Clasified.sclass)) {
+                Clasified c = (Clasified)obj.createGenericInstance();
+                %>
+                <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
+                    <%
+                    String photo = obj.getProperty(swbcomm_dirPhoto);
+                    if(photo != null && !photo.equals("null")) {
+                    %>
+                        <img height="90" width="90" src="<%=SWBPlatform.getWebWorkPath()+c.getDirectoryResource().getWorkPath()+"/"+obj.getId()+"/"+photo%>"/>
+                    <%
+                    } else {
+                        %>
+                            <img height="90" width="90" src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/noDisponible.gif"/>
+                        <%
+                    }
+                    %>
+                    <div class="listEntryInfo">
+                        <p class="tituloNaranja"><a href ="<%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>"><%=c.getTitle()%>&nbsp;(Clasificado)</a></p>
                         <p>
                             <%=(c.getDescription()==null)?"":c.getDescription()%>
                         </p>
