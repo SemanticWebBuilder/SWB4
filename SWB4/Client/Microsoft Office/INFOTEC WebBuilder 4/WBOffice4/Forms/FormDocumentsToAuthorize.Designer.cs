@@ -197,6 +197,7 @@
             this.radioButtonForAuthorize.TabIndex = 3;
             this.radioButtonForAuthorize.Text = "Por autorizar";
             this.radioButtonForAuthorize.UseVisualStyleBackColor = true;
+            this.radioButtonForAuthorize.CheckedChanged += new System.EventHandler(this.radioButtonForAuthorize_CheckedChanged);
             // 
             // radioButtonMyDocuments
             // 
@@ -219,6 +220,7 @@
             this.radioButtonAll.TabIndex = 1;
             this.radioButtonAll.Text = "Todos";
             this.radioButtonAll.UseVisualStyleBackColor = true;
+            this.radioButtonAll.CheckedChanged += new System.EventHandler(this.radioButtonAll_CheckedChanged);
             // 
             // comboBoxSites
             // 

@@ -159,13 +159,15 @@ namespace WBOffice4.Forms
             {
                 FlowItem item = (FlowItem)this.listViewFlows.SelectedItems[0];
                 ResourceInfo resourceinfo = item.FlowContentInformation.resourceInfo;
-                ResourceRepositoryInfo info= OfficeApplication.OfficeDocumentProxy.getContentInfo(resourceinfo);
-                
-                String repository = "";
+                String version = resourceinfo.version;
+                if (version.Equals("*"))
+                {
+                    version = resourceinfo.lastversion;
+                }
                 String name = null;
                 try
                 {                    
-                    name = OfficeApplication.OfficeDocumentProxy.createPreview(info.repository, info.id, info.version, info.type);
+                    name = OfficeApplication.OfficeDocumentProxy.createPreview(resourceinfo.repository, resourceinfo.contentid, version,resourceinfo.type);
                     String urlproxy = OfficeApplication.OfficeDocumentProxy.WebAddress.ToString();
                     if (!urlproxy.EndsWith("/gtw"))
                     {
@@ -178,8 +180,8 @@ namespace WBOffice4.Forms
                             urlproxy += "gtw";
                         }
                     }
-                    Uri url = new Uri(urlproxy + "?contentId=" + info.id + "&versionName=" + info.version + "&repositoryName=" + repository + "&name=" + name + "&type=" + info.type);
-                    String title = OfficeApplication.OfficeDocumentProxy.getTitle(repository, info.id);
+                    Uri url = new Uri(urlproxy + "?contentId=" + resourceinfo.contentid + "&versionName=" + version + "&repositoryName=" + resourceinfo.repository + "&name=" + name + "&type=" + resourceinfo.type);
+                    String title = OfficeApplication.OfficeDocumentProxy.getTitle(resourceinfo.repository, resourceinfo.contentid);
                     FormPreview formPreview = new FormPreview(url, false, title);
                     formPreview.ShowDialog(this);
                 }
@@ -192,6 +194,16 @@ namespace WBOffice4.Forms
                 }
 
             }
+        }
+
+        private void radioButtonForAuthorize_CheckedChanged(object sender, EventArgs e)
+        {
+            loadContents();
+        }
+
+        private void radioButtonAll_CheckedChanged(object sender, EventArgs e)
+        {
+            loadContents();
         }
     }
 }
