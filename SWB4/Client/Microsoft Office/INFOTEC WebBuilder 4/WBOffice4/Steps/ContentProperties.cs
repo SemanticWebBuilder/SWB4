@@ -73,11 +73,11 @@ namespace WBOffice4.Steps
                 MessageBox.Show(this, ue.Message, this.Wizard.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            this.Wizard.SetProgressBarInit(3, 1, "Preparando documento para publicar...");
+            this.Wizard.SetProgressBarInit(3, 1, "Preparando documento para guardar...");
             try
             {
                 zipFile = document.CreateZipFile();
-                this.Wizard.SetProgressBarInit(3, 2, "Publicando Documento...");
+                this.Wizard.SetProgressBarInit(3, 2, "Guardando documento en el sitio...");
                 IOfficeDocument openOfficeDocument = OfficeDocument.OfficeDocumentProxy;
                 openOfficeDocument.Attachments.Add(new Attachment(zipFile, zipFile.Name));
                 String name = document.FilePath.Name.Replace(document.DefaultExtension, document.PublicationExtension);
