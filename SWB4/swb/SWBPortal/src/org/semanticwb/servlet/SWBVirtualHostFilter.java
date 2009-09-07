@@ -45,6 +45,7 @@ import org.semanticwb.servlet.internal.Distributor;
 import org.semanticwb.servlet.internal.DistributorParams;
 import org.semanticwb.servlet.internal.EditFile;
 import org.semanticwb.servlet.internal.FrmProcess;
+import org.semanticwb.servlet.internal.GoogleSiteMap;
 import org.semanticwb.servlet.internal.InternalServlet;
 import org.semanticwb.servlet.internal.Login;
 import org.semanticwb.servlet.internal.Upload;
@@ -301,6 +302,9 @@ public class SWBVirtualHostFilter implements Filter
         log.event("SemanticWebBuilder started...");
         log.event("************************************");
 
+        InternalServlet googleMap = new GoogleSiteMap();
+        intServlets.put("sitemap.txt", googleMap);
+        googleMap.init(filterConfig.getServletContext());
 
     }
 
