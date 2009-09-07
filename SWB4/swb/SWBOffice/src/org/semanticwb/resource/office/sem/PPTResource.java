@@ -54,15 +54,16 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
     {
     }
 
-    protected void printDocument(PrintWriter out, String path, String workpath, String html, SWBParamRequest paramReq)
+    protected void printDocument(PrintWriter out, String path, String workpath, String html, SWBParamRequest paramReq,String resourcewebworkpath,String fileppt)
     {
         try
         {
             out.write("<iframe width='100%' height='500' frameborder=\"0\" scrolling=\"auto\" src=\"" + path + "\">" + paramReq.getLocaleString("frameNotsupport") + "</iframe><br>");
             if(this.isShowDownload())
             {
-
-                out.write("<p><a href=''>"+paramReq.getLocaleString("download")+"</a></p>");
+                //String fileppt=file.replaceAll(".ppt", "")
+                String pptpath=resourcewebworkpath+"/"+fileppt;
+                out.write("<p><a href=\""+ pptpath +"\">"+paramReq.getLocaleString("download")+"</a></p>");
             }
         }
         catch (Exception e)
@@ -83,6 +84,7 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
         {
             User user = paramRequest.getUser();
             String file = document.getContentFile(repositoryName, contentId, version, user);
+            String resourceWebWorkpath=SWBPlatform.getWebWorkPath();
             if (file != null)
             {
                 String path = SWBPlatform.getWebWorkPath();
@@ -90,15 +92,17 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
                 {
                     path = path.substring(0, path.length() - 1);
                     path += getResourceBase().getWorkPath() + "/" + "frame.html";
+                    resourceWebWorkpath+=getResourceBase().getWorkPath();
                 }
                 else
                 {
                     path += getResourceBase().getWorkPath() + "/" + "frame.html";
+                    resourceWebWorkpath+=getResourceBase().getWorkPath();
                 }
                 PrintWriter out = response.getWriter();
                 beforePrintDocument(out);
                 String workpath = SWBPlatform.getWebWorkPath() + getResourceBase().getWorkPath() + "/";
-                printDocument(out, path, workpath, "", paramRequest);
+                printDocument(out, path, workpath, "", paramRequest,resourceWebWorkpath,file);
                 afterPrintDocument(out);
                 out.close();
             }
