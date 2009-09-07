@@ -19,16 +19,6 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
             <input id="busqueda_input" type="text" name="q"/>
             <input id="busqueda_enviar" type="submit"/>
         </p>
-        <!--div>
-            <input id="busqueda_comercios" type="checkbox" checked="checked" name="comercios"/>
-            <label for="busqueda_comercios">Comercios</label>
-            <input id="busqueda_organizaciones" type="checkbox" name="organizaciones"/>
-            <label for="busqueda_organizaciones">Organizaciones</label>
-            <input id="busqueda_persons" type="checkbox" name="personas"/>
-            <label for="busqueda_persons">Personas</label>
-            <input id="busqueda_clasificados" type="checkbox" name="clasificados"/>
-            <label for="busqueda_clasificados">Clasificados</label>
-        </div-->
     </form>
 </div>
 <%
@@ -38,7 +28,8 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
     System.out.println("start: " + request.getAttribute("s") + ", end: " + request.getAttribute("e") + ", total: " + request.getAttribute("t"));
     if(results != null && results.hasNext()){
         %>
-        <h3>Resultados de la b&uacute;squeda</h3>
+        <h3>Resultados de la b&uacute;squeda <i><%=request.getParameter("q")%></i></h3>
+        <br>
         <div class="entriesList">
         <%
             while(results.hasNext()) {
@@ -56,6 +47,10 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
                     %>
                         <img height="90" width="90" src="<%=SWBPlatform.getWebWorkPath()+c.getDirectoryResource().getWorkPath()+"/"+obj.getId()+"/"+photo%>"/>
                     <%
+                    } else {
+                        %>
+                            <img height="90" width="90" src="<%=SWBPlatform.getWebWorkPath()+c.getDirectoryResource().getWorkPath()+"/"+obj.getId()+"/"+photo%>"/>
+                        <%
                     }
                     %>
                     <div class="listEntryInfo">
@@ -64,13 +59,12 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
                             <%=(c.getDescription()==null)?"":c.getDescription()%>
                         </p>
                         <br/>
-                        <p>-Palabras clave:<%=c.getTags()%></p>
+                        <!--p>-Palabras clave:%=c.getTags()%></p-->
                     </div>
                     <div class="clear"> </div>
                 </div>
                 <%
-            }
-            else if (obj.instanceOf(Commerce.sclass)) {
+            } else if (obj.instanceOf(Commerce.sclass)) {
                 Commerce c = (Commerce)obj.createGenericInstance();
                 %>
                 <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
@@ -88,7 +82,30 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
                             <%=(c.getDescription()==null)?"":c.getDescription()%>
                         </p>
                         <br/>
-                        <p>-Palabras clave:<%=c.getTags()%></p>
+                        <!--p>-Palabras clave:%=c.getTags()%></p-->
+                    </div>
+                    <div class="clear"> </div>
+                </div>
+                <%
+            } else if (obj.instanceOf(School.sclass)) {
+                School c = (School)obj.createGenericInstance();
+                %>
+                <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
+                    <%
+                    String photo = obj.getProperty(swbcomm_dirPhoto);
+                    if(photo != null && !photo.equals("null")) {
+                    %>
+                        <img height="90" width="90" src="<%=SWBPlatform.getWebWorkPath()+c.getDirectoryResource().getWorkPath()+"/"+obj.getId()+"/"+photo%>"/>
+                    <%
+                    }
+                    %>
+                    <div class="listEntryInfo">
+                        <p class="tituloNaranja"><a href ="<%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>"><%=c.getTitle()%>&nbsp;(Escuela)</a></p>
+                        <p>
+                            <%=(c.getDescription()==null)?"":c.getDescription()%>
+                        </p>
+                        <br/>
+                        <!--p>-Palabras clave:%=c.getTags()%></p-->
                     </div>
                     <div class="clear"> </div>
                 </div>
