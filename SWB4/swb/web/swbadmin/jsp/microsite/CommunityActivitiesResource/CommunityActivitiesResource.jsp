@@ -4,7 +4,7 @@
     <ul>
         <%
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
-
+            User visitor = paramRequest.getUser();
             int numrec = (Integer) request.getAttribute("numrec");
             WebPage wp = paramRequest.getWebPage();
             MicroSite ms = null;
@@ -39,20 +39,18 @@
         %>
         <li><a class="contactos_nombre" href="<%=mse.getURL()%>"><img src="/work/models/Ciudad_Digital/css/boton_contacto.png" alt=""></a>
             <%=user.getFullName()%> agregó <a class="contactos_nombre" href="<%=mse.getURL()%>"><%=mse.getDisplayTitle(user.getLanguage())%></a>
-            <%=SWBUtils.TEXT.getTimeAgo(mse.getUpdated(), user.getLanguage())%>.</li>
+            <%=SWBUtils.TEXT.getTimeAgo(mse.getUpdated(), visitor.getLanguage())%>.</li>
             <%
                     }
                 }
             }
             else
             {
-                %>
-                <li>No hay actividades.</li>
-                <%
-                
-            }
-
-
             %>
+        <li>No hay actividades.</li>
+        <%            }
+
+
+        %>
     </ul>
 </div>
