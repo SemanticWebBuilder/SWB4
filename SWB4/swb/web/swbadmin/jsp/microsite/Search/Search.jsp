@@ -38,6 +38,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
     System.out.println("start: " + request.getAttribute("s") + ", end: " + request.getAttribute("e") + ", total: " + request.getAttribute("t"));
     if(results != null && results.hasNext()){
         %>
+        <h3>Resultados de la b&uacute;squeda</h3>
         <div class="entriesList">
         <%
             while(results.hasNext()) {
@@ -58,7 +59,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
                     }
                     %>
                     <div class="listEntryInfo">
-                        <p class="tituloNaranja"><a href ="<%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>"><%=c.getTitle()%></a></p>
+                        <p class="tituloNaranja"><a href ="<%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>"><%=c.getTitle()%>&nbsp;(Hotel)</a></p>
                         <p>
                             <%=(c.getDescription()==null)?"":c.getDescription()%>
                         </p>
@@ -82,7 +83,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
                     }
                     %>
                     <div class="listEntryInfo">
-                        <p class="tituloNaranja"><a href ="<%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>"><%=c.getTitle()%></a></p>
+                        <p class="tituloNaranja"><a href ="<%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>"><%=c.getTitle()%>&nbsp;(Comercio)</a></p>
                         <p>
                             <%=(c.getDescription()==null)?"":c.getDescription()%>
                         </p>
