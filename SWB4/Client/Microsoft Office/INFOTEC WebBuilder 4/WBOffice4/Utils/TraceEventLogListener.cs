@@ -8,7 +8,7 @@ namespace WBOffice4.Utils
     {
         public static readonly String eventLogName = "SemanticWebBuilder 4.0";
         public static readonly String sourceEvent = "WBOffice4";
-        public static readonly EventLog log = new EventLog(eventLogName);
+        public static readonly EventLog log = new EventLog(eventLogName);        
         public TraceEventLogListener()
         {
             if (!EventLog.SourceExists(sourceEvent))

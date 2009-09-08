@@ -58,8 +58,16 @@ namespace XmlRpcLibrary
                     _types.Add(itf, proxyType);
                 }
             }
-            object ret = Activator.CreateInstance(proxyType);            
-            return ret;
+            try
+            {
+                object ret = Activator.CreateInstance(proxyType);
+                return ret;
+            }
+            catch (Exception e)
+            {
+                XmlRpcClient.WriteError(e);
+            }
+            return null;
         }
         static AssemblyBuilder BuildAssembly(Type itf,string assemblyName,string moduleName,string typeName)
         {

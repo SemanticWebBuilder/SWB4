@@ -51,10 +51,14 @@ namespace WBOffice4
         private static IOfficeDocument officedocument;
         private static IOfficeApplication officeApplication;
         public static readonly double m_version = 4.001;
-        protected OfficeApplication()
+        static OfficeApplication()
         {
             Debug.Listeners.Add(listener);
-            Trace.Listeners.Add(listener);          
+            Trace.Listeners.Add(listener);
+        }
+        protected OfficeApplication()
+        {
+                      
         }
         public static void WriteError(Exception e)
         {            
