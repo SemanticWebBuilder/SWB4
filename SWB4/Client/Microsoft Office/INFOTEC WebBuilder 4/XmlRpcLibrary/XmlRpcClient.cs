@@ -40,13 +40,24 @@ namespace XmlRpcLibrary
 {
     internal sealed class XmlRpcClient
     {
+        public static readonly XxmlRpcTraceEventLogListener listener = new XxmlRpcTraceEventLogListener();        
+        
         public static readonly String SUFIX_GATEWAY = "gtw";
         private static string iso8601dateFormat = "yyyy-MM-dd'T'HH:mm:ss";
         private static string boundary = "gc0p4Jq0M2Yt08jU534c0p";
         private XmlRpcClientConfig config;
+        static XmlRpcClient()
+        {
+            Debug.Listeners.Add(listener);
+            Trace.Listeners.Add(listener);
+        }
         public XmlRpcClient(XmlRpcClientConfig config)
         {
             this.config = config;
+        }
+        public static void WriteError(Exception e)
+        {
+            listener.WriteError(e);
         }
         public T Execute<T>(String methodName, Object[] parameters, ICollection<Attachment> attachments, ref HashSet<Part> responseParts)
         {
