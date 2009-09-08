@@ -126,7 +126,7 @@ public class Search extends GenericAdmResource {
         if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
             //Assert query string
             String q = request.getParameter("q");
-            if (q == null) q = "";
+            if (q == null) return;
 
             //Perform search query
             solutions = performQuery(q, lang);
@@ -145,7 +145,7 @@ public class Search extends GenericAdmResource {
     }
 
     /**
-     * Builds an index to perform searches.
+eso es facil     * Builds an index to perform searches.
      */
     public IndexLARQ buildIndex() throws CorruptIndexException, LockObtainFailedException, IOException {
         // ---- Create in-memory lucene directory
