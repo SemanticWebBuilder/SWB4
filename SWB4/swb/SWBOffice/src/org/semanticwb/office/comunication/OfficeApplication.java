@@ -776,6 +776,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                                 }
                                 catch (Exception e)
                                 {
+                                    log.error(e);
                                 }
                                 //flowContentInformation.resourceInfo.type
                                 OfficeDocument doc = new OfficeDocument();
@@ -861,8 +862,8 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                                 }
                                 catch (Exception e)
                                 {
-                                }
-                                //flowContentInformation.resourceInfo.type
+                                    log.error(e);
+                                }                                
                                 OfficeDocument doc = new OfficeDocument();
                                 doc.setUser(user);
                                 doc.setPassword(this.password);
@@ -934,8 +935,8 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                                 }
                                 catch (Exception e)
                                 {
-                                }
-                                //flowContentInformation.resourceInfo.type
+                                    log.error(e);
+                                }                                
                                 OfficeDocument doc = new OfficeDocument();
                                 doc.setUser(user);
                                 doc.setPassword(this.password);
