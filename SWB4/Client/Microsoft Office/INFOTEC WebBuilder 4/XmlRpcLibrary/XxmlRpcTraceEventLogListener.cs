@@ -6,11 +6,12 @@ namespace XmlRpcLibrary
 {
     public class XxmlRpcTraceEventLogListener : TraceListener
     {
-        public static readonly String eventLogName = "SemanticWebBuilder4.0";
-        public static readonly String sourceEvent = "XmlRpcLibrary";
+        public static readonly String eventLogName = "SemanticWebBuilder 4.0";
+        public static readonly String sourceEvent= "XmlRpcLibrary ";
         public static readonly EventLog log = new EventLog(eventLogName);
         public XxmlRpcTraceEventLogListener()
         {
+            //sourceEvent="XmlRpcLibrary " + GetType().Assembly.GetName().Version.ToString();
             if (!EventLog.SourceExists(sourceEvent))
             {
                 EventLog.CreateEventSource(sourceEvent, eventLogName);
