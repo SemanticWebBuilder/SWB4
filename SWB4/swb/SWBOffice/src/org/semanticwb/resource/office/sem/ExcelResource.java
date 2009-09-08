@@ -64,6 +64,7 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
 
     protected void printDocument(PrintWriter out, String path, String workpath, String html, SWBParamRequest paramReq)
     {
+        out.write("<div id=\""+ ExcelResource.class.getName() +"\">");
         try
         {
             out.write("<iframe width='100%' height='500' frameborder=\"0\" scrolling=\"auto\" src=\"" + path + "\">" + paramReq.getLocaleString("frameNotsupport") + "</iframe>");
@@ -72,6 +73,7 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
         {
             out.write("<iframe width='100%' height='500' frameborder=\"0\" scrolling=\"auto\" src=\"" + path + "\">This navigator does not support iframe</iframe>");
         }
+        out.write("</div>");
     }
 
 
