@@ -29,6 +29,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Diagnostics;
 using WBOffice4.Interfaces;
 
 namespace WBOffice4.Forms
@@ -54,37 +55,49 @@ namespace WBOffice4.Forms
         }
         private void loadContents()
         {
-            this.toolStripButtonSee.Enabled = false;
-            this.toolStripButtonAuthorize.Enabled = false;
-            this.toolStripButtonReject.Enabled = false;
-            this.listViewFlows.Items.Clear();
-            if(this.comboBoxSites.SelectedItem is WebSiteInfo)
+            try
             {
-                WebSiteInfo site=(WebSiteInfo)this.comboBoxSites.SelectedItem;
-                if (this.radioButtonAll.Checked)
+                this.Cursor = Cursors.WaitCursor;
+                this.toolStripButtonSee.Enabled = false;
+                this.toolStripButtonAuthorize.Enabled = false;
+                this.toolStripButtonReject.Enabled = false;
+                this.listViewFlows.Items.Clear();
+                if (this.comboBoxSites.SelectedItem is WebSiteInfo)
                 {
-                    foreach (FlowContentInformation info in OfficeApplication.OfficeApplicationProxy.getAllContents(site))
+                    WebSiteInfo site = (WebSiteInfo)this.comboBoxSites.SelectedItem;
+                    if (this.radioButtonAll.Checked)
                     {
-                        FlowItem item = new FlowItem(info);
-                        this.listViewFlows.Items.Add(item);
+                        foreach (FlowContentInformation info in OfficeApplication.OfficeApplicationProxy.getAllContents(site))
+                        {
+                            FlowItem item = new FlowItem(info);
+                            this.listViewFlows.Items.Add(item);
+                        }
+                    }
+                    else if (this.radioButtonMyDocuments.Checked)
+                    {
+                        foreach (FlowContentInformation info in OfficeApplication.OfficeApplicationProxy.getMyContents(site))
+                        {
+                            FlowItem item = new FlowItem(info);
+                            this.listViewFlows.Items.Add(item);
+                        }
+                    }
+                    else
+                    {
+                        foreach (FlowContentInformation info in OfficeApplication.OfficeApplicationProxy.getContentsForAuthorize(site))
+                        {
+                            FlowItem item = new FlowItem(info);
+                            this.listViewFlows.Items.Add(item);
+                        }
                     }
                 }
-                else if (this.radioButtonMyDocuments.Checked)
-                {
-                    foreach (FlowContentInformation info in OfficeApplication.OfficeApplicationProxy.getMyContents(site))
-                    {
-                        FlowItem item = new FlowItem(info);
-                        this.listViewFlows.Items.Add(item);
-                    }
-                }
-                else
-                {
-                    foreach (FlowContentInformation info in OfficeApplication.OfficeApplicationProxy.getContentsForAuthorize(site))
-                    {
-                        FlowItem item = new FlowItem(info);
-                        this.listViewFlows.Items.Add(item);
-                    }
-                }
+            }
+            catch(Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
             }
         }
 
