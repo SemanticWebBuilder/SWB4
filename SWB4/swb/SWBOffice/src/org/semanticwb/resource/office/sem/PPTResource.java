@@ -60,8 +60,7 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
         {
             out.write("<iframe width='100%' height='500' frameborder=\"0\" scrolling=\"auto\" src=\"" + path + "\">" + paramReq.getLocaleString("frameNotsupport") + "</iframe><br>");
             if(this.isShowDownload())
-            {
-                //String fileppt=file.replaceAll(".ppt", "")
+            {                
                 String pptpath=resourcewebworkpath+"/"+fileppt;
                 out.write("<p><a href=\""+ pptpath +"\">"+paramReq.getLocaleString("download")+"</a></p>");
             }
