@@ -440,19 +440,34 @@ namespace WBOffice4
         }
         public void Publish()
         {
-            if (OfficeApplication.TryLogOn() && SetupDocument() && IsPublished)
+            try
             {
-                FormPublishcontentToPage frm = new FormPublishcontentToPage(this);
-                frm.ShowDialog();
+                if (OfficeApplication.TryLogOn() && SetupDocument() && IsPublished)
+                {
+                    FormPublishcontentToPage frm = new FormPublishcontentToPage(this);
+                    frm.ShowDialog();
+                }
+            }
+            catch (Exception e)
+            {
+                OfficeApplication.WriteError(e);
             }
         }
         public void Publish(String title, String description)
         {
-            if (OfficeApplication.TryLogOn() && SetupDocument() && IsPublished)
+            try
             {
-                FormPublishcontentToPage frm = new FormPublishcontentToPage(this, title, description);
-                frm.ShowDialog();
+                if (OfficeApplication.TryLogOn() && SetupDocument() && IsPublished)
+                {
+                    FormPublishcontentToPage frm = new FormPublishcontentToPage(this, title, description);
+                    frm.ShowDialog();
+                }
             }
+            catch (Exception e)
+            {
+                OfficeApplication.WriteError(e);
+            }
+
         }
         public void Delete()
         {
@@ -494,48 +509,55 @@ namespace WBOffice4
         }
         public void SaveToSite()
         {
-            if (IsReadOnly)
+            try
             {
-                RtlAwareMessageBox.Show("El documento es de sólo lectura, por lo tanto no puede ser publicado", "Publicación de contenido", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                if (IsReadOnly)
+                {
+                    RtlAwareMessageBox.Show("El documento es de sólo lectura, por lo tanto no puede ser publicado", "Publicación de contenido", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                if (OfficeApplication.TryLogOn() && SetupDocument())
+                {
+                    if (IsNew)
+                    {
+                        SaveFileDialog dialog = new SaveFileDialog();
+                        dialog.Title = "Guardar Documento";
+                        dialog.CreatePrompt = true;
+                        dialog.CheckFileExists = false;
+                        dialog.CheckPathExists = true;
+                        dialog.OverwritePrompt = true;
+                        dialog.AddExtension = true;
+                        dialog.DefaultExt = DefaultExtension;
+                        dialog.Filter = DocumentFilter;
+                        DialogResult result = dialog.ShowDialog();
+                        if (result != DialogResult.OK)
+                        {
+                            return;
+                        }
+                        FileInfo file = new FileInfo(dialog.FileName);
+                        if (file.Exists)
+                        {
+                            file.Delete();
+                        }
+                        Save(file);
+                        new FormSaveContent(this).ShowDialog();
+                    }
+                    else if (!IsNew && this.IsPublished && OfficeApplication.OfficeDocumentProxy.exists(this.reporitoryID, this.contentID))
+                    {
+                        // update the content
+                        Save();
+                        UpdateContent();
+                    }
+                    else
+                    {
+                        Save();
+                        new FormSaveContent(this).ShowDialog();
+                    }
+                }
             }
-            if (OfficeApplication.TryLogOn() && SetupDocument())
+            catch (Exception e)
             {
-                if (IsNew)
-                {
-                    SaveFileDialog dialog = new SaveFileDialog();
-                    dialog.Title = "Guardar Documento";
-                    dialog.CreatePrompt = true;
-                    dialog.CheckFileExists = false;
-                    dialog.CheckPathExists = true;
-                    dialog.OverwritePrompt = true;
-                    dialog.AddExtension = true;
-                    dialog.DefaultExt = DefaultExtension;
-                    dialog.Filter = DocumentFilter;
-                    DialogResult result = dialog.ShowDialog();
-                    if (result != DialogResult.OK)
-                    {
-                        return;
-                    }
-                    FileInfo file = new FileInfo(dialog.FileName);
-                    if (file.Exists)
-                    {
-                        file.Delete();
-                    }
-                    Save(file);
-                    new FormSaveContent(this).ShowDialog();
-                }
-                else if (!IsNew && this.IsPublished && OfficeApplication.OfficeDocumentProxy.exists(this.reporitoryID, this.contentID))
-                {
-                    // update the content
-                    Save();
-                    UpdateContent();
-                }
-                else
-                {
-                    Save();
-                    new FormSaveContent(this).ShowDialog();
-                }
+                OfficeApplication.WriteError(e);
             }
         }
         internal static IOfficeDocument OfficeDocumentProxy
