@@ -1,15 +1,15 @@
 <%@page import="java.net.URLEncoder, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty, java.text.SimpleDateFormat, org.semanticwb.portal.resources.sem.BookmarkEntry, org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%
+    SemanticProperty swbcomm_dirPhoto = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#dirPhoto");
     SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
     Iterator<String> results = (Iterator<String>) request.getAttribute("results");
     String searchUrl = (String) request.getAttribute("rUrl");
-    SemanticProperty swbcomm_dirPhoto = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#dirPhoto");
     HashMap<String, String> map = new HashMap<String, String>();
     map.put("separator", "-");
 %>
 
 <%
-if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {    
+if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
 %>
     <div id="busqueda">
         <h2>B&uacute;squeda</h2>
