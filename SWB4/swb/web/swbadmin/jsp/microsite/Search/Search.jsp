@@ -61,6 +61,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
                         </p>
                         <br/>
                         <!--p>-Palabras clave:%=c.getTags()%></p-->
+                        <p class="vermas"><a href ="<%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>">Ver mas</a></p>
                     </div>
                     <div class="clear"> </div>
                 </div>
