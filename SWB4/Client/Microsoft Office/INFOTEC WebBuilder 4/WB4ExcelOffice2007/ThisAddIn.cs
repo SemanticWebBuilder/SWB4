@@ -40,14 +40,7 @@ namespace WB4ExcelOffice2007
             officeApplication = new ExcelApplication(this.Application);
             OfficeApplication.MenuListener = Globals.Ribbons.RibbonMenu;
         }
-        private void officeApplication_onActiveMenuForDocumentNotPublished()
-        {
-            
-        }
-        private void officeApplication_onActiveMenuForDocumentPublished()
-        {
-            
-        }
+        
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
         {
         }
