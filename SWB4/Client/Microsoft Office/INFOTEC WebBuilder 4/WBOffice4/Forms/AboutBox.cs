@@ -37,7 +37,7 @@ namespace WBOffice4.Forms
         public AboutBox()
         {
             InitializeComponent();
-            this.label1.Text += OfficeApplication.version.ToString();
+            this.label1.Text += OfficeApplication.m_version.ToString();
         }
 
         #region Assembly Attribute Accessors

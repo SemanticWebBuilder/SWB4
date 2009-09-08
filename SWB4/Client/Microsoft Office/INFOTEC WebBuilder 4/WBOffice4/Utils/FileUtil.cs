@@ -44,7 +44,7 @@ namespace WBOffice4.Utils
             }
             catch (DirectoryNotFoundException e)
             {
-                SwbEventLog.Log(e, EventLogEntryType.Warning);
+                OfficeApplication.WriteError(e);
             }
         }
         public static ICollection<FileInfo> GetFiles(DirectoryInfo dir)

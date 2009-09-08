@@ -476,17 +476,17 @@ namespace WBOffice4
                         catch (HttpException e)
                         {
                             RtlAwareMessageBox.Show(e.Message, "Borrar contenido", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            SwbEventLog.Log(e);
+                            OfficeApplication.WriteError(e);
                         }
                         catch (XmlRpcException e)
                         {
                             RtlAwareMessageBox.Show(e.Message, "Borrar contenido", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            SwbEventLog.Log(e);
+                            OfficeApplication.WriteError(e);
                         }
                         catch (WebException e)
                         {
                             RtlAwareMessageBox.Show(e.Message, "Borrar contenido", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            SwbEventLog.Log(e);
+                            OfficeApplication.WriteError(e);
                         }
                     }
                 }

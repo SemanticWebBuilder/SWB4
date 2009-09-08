@@ -350,7 +350,7 @@ namespace WBOffice4.Steps
                     }
                     catch (System.IO.IOException ioe)
                     {
-                        OfficeApplication.WriteError(e);
+                        OfficeApplication.WriteError(ioe);
                     }
                 }
             }

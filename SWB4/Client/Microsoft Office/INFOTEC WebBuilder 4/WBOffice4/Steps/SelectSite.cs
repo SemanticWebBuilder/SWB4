@@ -34,8 +34,8 @@ namespace WBOffice4.Steps
     public partial class SelectSite : TSWizards.BaseInteriorStep
     {
         public static readonly String WEB_PAGE = "WEB_PAGE";
-        protected String title;
-        protected String description;
+        protected String m_title;
+        protected String m_description;
         public SelectSite()
         {
             InitializeComponent();            
@@ -51,8 +51,8 @@ namespace WBOffice4.Steps
         {
 
             InitializeComponent();
-            this.title = title;
-            this.description = description;
+            this.m_title = title;
+            this.m_description = description;
             foreach (WebSiteInfo site in OfficeApplication.OfficeApplicationProxy.getSites())
             {
                 TreeNode siteNode=new TreeNode(site.title,1,1);
