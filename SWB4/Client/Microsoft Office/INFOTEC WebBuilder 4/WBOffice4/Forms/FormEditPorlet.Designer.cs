@@ -77,6 +77,7 @@
             this.textBoxTitle = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPageProperties = new System.Windows.Forms.TabPage();
+            this.propertyEditor1 = new Editor.PropertyEditor();
             this.tabPageCalendar = new System.Windows.Forms.TabPage();
             this.listViewCalendar = new System.Windows.Forms.ListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
@@ -94,13 +95,13 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonAddRule = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButtonActivate = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonDeleteRule = new System.Windows.Forms.ToolStripButton();
             this.tabPageTitles = new System.Windows.Forms.TabPage();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButtonActivate = new System.Windows.Forms.ToolStripButton();
-            this.propertyEditor1 = new Editor.PropertyEditor();
             this.titleEditor1 = new Editor.TitleEditor();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.labelPagAct = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.tabControlProperties.SuspendLayout();
             this.tabPageInformation.SuspendLayout();
@@ -120,7 +121,7 @@
             this.panel1.Controls.Add(this.buttonOK);
             this.panel1.Controls.Add(this.buttonCancel);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 273);
+            this.panel1.Location = new System.Drawing.Point(0, 327);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(443, 42);
             this.panel1.TabIndex = 1;
@@ -167,11 +168,12 @@
             this.tabControlProperties.Location = new System.Drawing.Point(0, 0);
             this.tabControlProperties.Name = "tabControlProperties";
             this.tabControlProperties.SelectedIndex = 0;
-            this.tabControlProperties.Size = new System.Drawing.Size(443, 273);
+            this.tabControlProperties.Size = new System.Drawing.Size(443, 327);
             this.tabControlProperties.TabIndex = 2;
             // 
             // tabPageInformation
             // 
+            this.tabPageInformation.Controls.Add(this.labelPagAct);
             this.tabPageInformation.Controls.Add(this.checkBoxActivePag);
             this.tabPageInformation.Controls.Add(this.buttonMove);
             this.tabPageInformation.Controls.Add(this.dateTimePickerEndDate);
@@ -192,7 +194,7 @@
             this.tabPageInformation.Location = new System.Drawing.Point(4, 22);
             this.tabPageInformation.Name = "tabPageInformation";
             this.tabPageInformation.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageInformation.Size = new System.Drawing.Size(435, 247);
+            this.tabPageInformation.Size = new System.Drawing.Size(435, 301);
             this.tabPageInformation.TabIndex = 0;
             this.tabPageInformation.Text = "Información";
             this.tabPageInformation.UseVisualStyleBackColor = true;
@@ -200,16 +202,15 @@
             // checkBoxActivePag
             // 
             this.checkBoxActivePag.AutoSize = true;
-            this.checkBoxActivePag.Location = new System.Drawing.Point(312, 130);
+            this.checkBoxActivePag.Location = new System.Drawing.Point(131, 270);
             this.checkBoxActivePag.Name = "checkBoxActivePag";
-            this.checkBoxActivePag.Size = new System.Drawing.Size(91, 17);
+            this.checkBoxActivePag.Size = new System.Drawing.Size(15, 14);
             this.checkBoxActivePag.TabIndex = 16;
-            this.checkBoxActivePag.Text = "Página activa";
             this.checkBoxActivePag.UseVisualStyleBackColor = true;
             // 
             // buttonMove
             // 
-            this.buttonMove.Location = new System.Drawing.Point(221, 124);
+            this.buttonMove.Location = new System.Drawing.Point(159, 263);
             this.buttonMove.Name = "buttonMove";
             this.buttonMove.Size = new System.Drawing.Size(75, 27);
             this.buttonMove.TabIndex = 15;
@@ -221,7 +222,7 @@
             // 
             this.dateTimePickerEndDate.CustomFormat = "dd/MM/yyyy";
             this.dateTimePickerEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePickerEndDate.Location = new System.Drawing.Point(281, 218);
+            this.dateTimePickerEndDate.Location = new System.Drawing.Point(281, 168);
             this.dateTimePickerEndDate.Name = "dateTimePickerEndDate";
             this.dateTimePickerEndDate.Size = new System.Drawing.Size(122, 20);
             this.dateTimePickerEndDate.TabIndex = 14;
@@ -229,7 +230,7 @@
             // checkBoxEndDate
             // 
             this.checkBoxEndDate.AutoSize = true;
-            this.checkBoxEndDate.Location = new System.Drawing.Point(131, 218);
+            this.checkBoxEndDate.Location = new System.Drawing.Point(131, 168);
             this.checkBoxEndDate.Name = "checkBoxEndDate";
             this.checkBoxEndDate.Size = new System.Drawing.Size(103, 17);
             this.checkBoxEndDate.TabIndex = 13;
@@ -239,7 +240,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(10, 218);
+            this.label7.Location = new System.Drawing.Point(10, 168);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(51, 13);
             this.label7.TabIndex = 12;
@@ -249,7 +250,7 @@
             // 
             this.comboBoxVersiones.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxVersiones.FormattingEnabled = true;
-            this.comboBoxVersiones.Location = new System.Drawing.Point(131, 185);
+            this.comboBoxVersiones.Location = new System.Drawing.Point(131, 135);
             this.comboBoxVersiones.Name = "comboBoxVersiones";
             this.comboBoxVersiones.Size = new System.Drawing.Size(272, 21);
             this.comboBoxVersiones.TabIndex = 11;
@@ -257,7 +258,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(8, 188);
+            this.label6.Location = new System.Drawing.Point(8, 138);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(91, 13);
             this.label6.TabIndex = 10;
@@ -266,7 +267,7 @@
             // checkBoxActive
             // 
             this.checkBoxActive.AutoSize = true;
-            this.checkBoxActive.Location = new System.Drawing.Point(131, 156);
+            this.checkBoxActive.Location = new System.Drawing.Point(131, 106);
             this.checkBoxActive.Name = "checkBoxActive";
             this.checkBoxActive.Size = new System.Drawing.Size(15, 14);
             this.checkBoxActive.TabIndex = 9;
@@ -275,25 +276,25 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(8, 156);
+            this.label4.Location = new System.Drawing.Point(8, 106);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(40, 13);
+            this.label4.Size = new System.Drawing.Size(90, 13);
             this.label4.TabIndex = 8;
-            this.label4.Text = "Activo:";
+            this.label4.Text = "Contenido activo:";
             // 
             // labelPage
             // 
-            this.labelPage.AutoSize = true;
-            this.labelPage.Location = new System.Drawing.Point(128, 131);
+            this.labelPage.AutoEllipsis = true;
+            this.labelPage.Location = new System.Drawing.Point(128, 232);
             this.labelPage.Name = "labelPage";
-            this.labelPage.Size = new System.Drawing.Size(78, 13);
+            this.labelPage.Size = new System.Drawing.Size(275, 13);
             this.labelPage.TabIndex = 7;
             this.labelPage.Text = "Sitio de prueba";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(8, 131);
+            this.label5.Location = new System.Drawing.Point(8, 232);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(43, 13);
             this.label5.TabIndex = 6;
@@ -301,17 +302,17 @@
             // 
             // labelSite
             // 
-            this.labelSite.AutoSize = true;
-            this.labelSite.Location = new System.Drawing.Point(128, 105);
+            this.labelSite.AutoEllipsis = true;
+            this.labelSite.Location = new System.Drawing.Point(128, 203);
             this.labelSite.Name = "labelSite";
-            this.labelSite.Size = new System.Drawing.Size(81, 13);
+            this.labelSite.Size = new System.Drawing.Size(275, 13);
             this.labelSite.TabIndex = 5;
             this.labelSite.Text = "Sitio de prueba ";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(8, 105);
+            this.label3.Location = new System.Drawing.Point(8, 203);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(30, 13);
             this.label3.TabIndex = 4;
@@ -346,9 +347,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(8, 16);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(38, 13);
+            this.label1.Size = new System.Drawing.Size(95, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Título:";
+            this.label1.Text = "Título por defecto:";
             // 
             // tabPageProperties
             // 
@@ -360,6 +361,16 @@
             this.tabPageProperties.TabIndex = 1;
             this.tabPageProperties.Text = "Propiedades de publicación";
             this.tabPageProperties.UseVisualStyleBackColor = true;
+            // 
+            // propertyEditor1
+            // 
+            this.propertyEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.propertyEditor1.Location = new System.Drawing.Point(3, 3);
+            this.propertyEditor1.Name = "propertyEditor1";
+            this.propertyEditor1.Properties = null;
+            this.propertyEditor1.Size = new System.Drawing.Size(429, 241);
+            this.propertyEditor1.TabIndex = 0;
+            this.propertyEditor1.Values = new string[0];
             // 
             // tabPageCalendar
             // 
@@ -490,7 +501,7 @@
             // toolStripContainer1.ContentPanel
             // 
             this.toolStripContainer1.ContentPanel.Controls.Add(this.toolStrip1);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(429, 27);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(429, 2);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Top;
             this.toolStripContainer1.LeftToolStripPanelVisible = false;
             this.toolStripContainer1.Location = new System.Drawing.Point(3, 3);
@@ -530,6 +541,23 @@
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
+            // toolStripButtonActivate
+            // 
+            this.toolStripButtonActivate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonActivate.Enabled = false;
+            this.toolStripButtonActivate.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonActivate.Image")));
+            this.toolStripButtonActivate.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonActivate.Name = "toolStripButtonActivate";
+            this.toolStripButtonActivate.Size = new System.Drawing.Size(45, 22);
+            this.toolStripButtonActivate.Text = "Activar";
+            this.toolStripButtonActivate.ToolTipText = "Activar o desactivar regla, rol o grupo";
+            this.toolStripButtonActivate.Click += new System.EventHandler(this.toolStripButtonActivate_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            // 
             // toolStripButtonDeleteRule
             // 
             this.toolStripButtonDeleteRule.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -551,33 +579,6 @@
             this.tabPageTitles.Text = "Títulos de la página";
             this.tabPageTitles.UseVisualStyleBackColor = true;
             // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
-            // 
-            // toolStripButtonActivate
-            // 
-            this.toolStripButtonActivate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButtonActivate.Enabled = false;
-            this.toolStripButtonActivate.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonActivate.Image")));
-            this.toolStripButtonActivate.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonActivate.Name = "toolStripButtonActivate";
-            this.toolStripButtonActivate.Size = new System.Drawing.Size(45, 22);
-            this.toolStripButtonActivate.Text = "Activar";
-            this.toolStripButtonActivate.ToolTipText = "Activar o desactivar regla, rol o grupo";
-            this.toolStripButtonActivate.Click += new System.EventHandler(this.toolStripButtonActivate_Click);
-            // 
-            // propertyEditor1
-            // 
-            this.propertyEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.propertyEditor1.Location = new System.Drawing.Point(3, 3);
-            this.propertyEditor1.Name = "propertyEditor1";
-            this.propertyEditor1.Properties = null;
-            this.propertyEditor1.Size = new System.Drawing.Size(429, 241);
-            this.propertyEditor1.TabIndex = 0;
-            this.propertyEditor1.Values = new string[0];
-            // 
             // titleEditor1
             // 
             this.titleEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -588,13 +589,22 @@
             this.titleEditor1.TabIndex = 0;
             this.titleEditor1.Titles = new string[0];
             // 
+            // labelPagAct
+            // 
+            this.labelPagAct.AutoSize = true;
+            this.labelPagAct.Location = new System.Drawing.Point(10, 270);
+            this.labelPagAct.Name = "labelPagAct";
+            this.labelPagAct.Size = new System.Drawing.Size(75, 13);
+            this.labelPagAct.TabIndex = 17;
+            this.labelPagAct.Text = "Página activa:";
+            // 
             // FormEditPorlet
             // 
             this.AcceptButton = this.buttonOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(443, 315);
+            this.ClientSize = new System.Drawing.Size(443, 369);
             this.Controls.Add(this.tabControlProperties);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -675,5 +685,6 @@
         private System.Windows.Forms.ToolStripButton toolStripButtonDeleteRule;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripButton toolStripButtonActivate;
+        private System.Windows.Forms.Label labelPagAct;
     }
 }
