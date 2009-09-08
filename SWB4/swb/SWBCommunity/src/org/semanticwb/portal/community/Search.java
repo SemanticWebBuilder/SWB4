@@ -145,7 +145,7 @@ public class Search extends GenericAdmResource {
     }
 
     /**
-eso es facil     * Builds an index to perform searches.
+     * Builds an index to perform searches.
      */
     public IndexLARQ buildIndex() throws CorruptIndexException, LockObtainFailedException, IOException {
         // ---- Create in-memory lucene directory
