@@ -58,7 +58,7 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
     {
         try
         {
-            out.write("<iframe width='100%' height='500' frameborder=\"0\" scrolling=\"auto\" src=\"" + path + "\">" + paramReq.getLocaleString("frameNotsupport") + "</iframe><br>");
+            out.write("<div id=\""+  PPTResource.class.getName() +"\"><iframe width='100%' height='500' frameborder=\"0\" scrolling=\"auto\" src=\"" + path + "\">" + paramReq.getLocaleString("frameNotsupport") + "</iframe><br>");
             if(this.isShowDownload())
             {                
                 String pptpath=resourcewebworkpath+"/"+fileppt;
@@ -67,7 +67,7 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
         }
         catch (Exception e)
         {
-            out.write("<iframe width='100%' height='500' frameborder=\"0\" scrolling=\"auto\" src=\"" + path + "\">This navigator does not support iframe</iframe>");
+            out.write("<iframe width='100%' height='500' frameborder=\"0\" scrolling=\"auto\" src=\"" + path + "\">This navigator does not support iframe</iframe></div>");
         }
     }
 
