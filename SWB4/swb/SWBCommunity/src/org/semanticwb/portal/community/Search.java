@@ -128,11 +128,8 @@ public class Search extends GenericAdmResource {
             String q = request.getParameter("q");
             if (q == null) q = "";
 
-            //Get page number
-            if (request.getParameter("p") == null) {
-                solutions = null;
-                solutions = performQuery(q, lang);
-            }
+            //Perform search query
+            solutions = performQuery(q, lang);
         }
 
         try {
@@ -148,7 +145,7 @@ public class Search extends GenericAdmResource {
     }
 
     /**
-     * Builds an index to perform searchs.
+     * Builds an index to perform searches.
      */
     public IndexLARQ buildIndex() throws CorruptIndexException, LockObtainFailedException, IOException {
         // ---- Create in-memory lucene directory
