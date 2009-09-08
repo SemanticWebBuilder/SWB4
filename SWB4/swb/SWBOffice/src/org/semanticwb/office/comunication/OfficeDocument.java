@@ -77,7 +77,6 @@ import org.semanticwb.office.interfaces.PageInfo;
 import org.semanticwb.office.interfaces.PropertyInfo;
 import org.semanticwb.office.interfaces.ResourceInfo;
 import org.semanticwb.office.interfaces.ElementInfo;
-import org.semanticwb.office.interfaces.ResourceRepositoryInfo;
 import org.semanticwb.office.interfaces.SiteInfo;
 import org.semanticwb.office.interfaces.Value;
 import org.semanticwb.office.interfaces.VersionInfo;
@@ -509,7 +508,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
-    private String getLastVersionOfcontent(Session session, String repositoryName, String contentId) throws Exception
+    public String getLastVersionOfcontent(Session session, String repositoryName, String contentId) throws Exception
     {
         String getLastVersionOfcontent = null;
         ArrayList<Version> versions = new ArrayList<Version>();
@@ -564,7 +563,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return getLastVersionOfcontent;
     }
 
-    private String getLastVersionOfcontent(String repositoryName, String contentId) throws Exception
+    public String getLastVersionOfcontent(String repositoryName, String contentId) throws Exception
     {
         Session session = null;
         try
@@ -2195,28 +2194,6 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
-    public ResourceRepositoryInfo getContentInfo(ResourceInfo resourceInfo) throws Exception
-    {
-        WebSite site = SWBContext.getWebSite(resourceInfo.page.site.id);
-        Resource resource = site.getResource(resourceInfo.id);
-        OfficeResource res = OfficeResource.getOfficeResource(resourceInfo.id, site);
-        res.setResourceBase(resource);
-        ResourceRepositoryInfo info = new ResourceRepositoryInfo();
-        info.id = resource.getId();
-        info.repository = res.getRepositoryName();
-        if (res.getVersionToShow().equals("*"))
-        {
-            info.version = getLastVersionOfcontent(info.repository, user);
-        }
-        else
-        {
-            info.version = res.getVersionToShow();
-        }
-        Session session = loader.openSession(info.repository, this.user, this.password);
-        String cm_type = loader.getOfficeManager(info.repository).getPropertyType();
-        Node nodeContent = session.getNodeByUUID(info.id);
-        info.type = nodeContent.getProperty(cm_type).getString();
-        return info;
-    }
+    
 }
 
