@@ -18,10 +18,10 @@ namespace XmlRpcLibrary
             myEventLogInstaller = new EventLogInstaller();
 
             // Set the source name of the event log.
-            myEventLogInstaller.Source = XxmlRpcTraceEventLogListener.sourceEvent;
+            myEventLogInstaller.Source = XmlRpcTraceEventLogListener.sourceEvent;
 
             // Set the event log that the source writes entries to.
-            myEventLogInstaller.Log = XxmlRpcTraceEventLogListener.eventLogName;
+            myEventLogInstaller.Log = XmlRpcTraceEventLogListener.eventLogName;
 
             // Add myEventLogInstaller to the Installer collection.
             Installers.Add(myEventLogInstaller);   

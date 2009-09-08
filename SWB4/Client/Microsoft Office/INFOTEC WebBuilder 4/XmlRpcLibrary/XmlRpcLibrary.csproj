@@ -79,7 +79,7 @@
     <Compile Include="XmlRpcInstallerEventLog.Designer.cs">
       <DependentUpon>XmlRpcInstallerEventLog.cs</DependentUpon>
     </Compile>
-    <Compile Include="XxmlRpcTraceEventLogListener.cs" />
+    <Compile Include="XmlRpcTraceEventLogListener.cs" />
     <Compile Include="Value.cs" />
     <Compile Include="WBFileUpload.cs" />
     <Compile Include="XmlRpcClient.cs" />
