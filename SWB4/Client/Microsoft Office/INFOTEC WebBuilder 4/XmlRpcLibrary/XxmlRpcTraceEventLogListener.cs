@@ -10,13 +10,17 @@ namespace XmlRpcLibrary
         public static readonly String sourceEvent= "XmlRpcLibrary ";
         public static readonly EventLog log = new EventLog(eventLogName);
         public XxmlRpcTraceEventLogListener()
-        {
-            //sourceEvent="XmlRpcLibrary " + GetType().Assembly.GetName().Version.ToString();
+        {            
             if (!EventLog.SourceExists(sourceEvent))
             {
                 EventLog.CreateEventSource(sourceEvent, eventLogName);
             }
             log.Source = sourceEvent;
+            string logname = EventLog.LogNameFromSourceName(sourceEvent, ".");
+            if (logname != null)
+            {
+                log.Log = logname;
+            }
         }
         public override void Write(string message)
         {
@@ -29,7 +33,7 @@ namespace XmlRpcLibrary
         }
         public void WriteError(Exception e)
         {
-            log.WriteEntry(e.Message + "\r\n"+e.StackTrace, EventLogEntryType.Error);
+            log.WriteEntry(e.Message + "\r\n\r\n" + e.StackTrace, EventLogEntryType.Error);
         }
         public void WriteWarning(string message)
         {
