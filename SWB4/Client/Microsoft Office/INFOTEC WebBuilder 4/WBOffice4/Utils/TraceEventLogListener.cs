@@ -16,6 +16,11 @@ namespace WBOffice4.Utils
                 EventLog.CreateEventSource(sourceEvent, eventLogName);
             }
             log.Source = sourceEvent;
+            string logname=EventLog.LogNameFromSourceName(sourceEvent,".");
+            if (logname != null)
+            {
+                log.Log = logname;
+            }
         }
         public override void Write(string message)
         {
@@ -28,7 +33,7 @@ namespace WBOffice4.Utils
         }
         public void WriteError(Exception e)
         {
-            log.WriteEntry(OfficeApplication.m_version + "\r\n" + e.Message + "\r\n" + e.StackTrace, EventLogEntryType.Error);
+            log.WriteEntry(OfficeApplication.m_version + "\r\n\r\n" + e.Message + "\r\n" + e.StackTrace, EventLogEntryType.Error);
         }
         public void WriteWarning(string message)
         {
