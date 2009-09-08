@@ -38,23 +38,7 @@ namespace XmlRpcLibrary
         public XmlRpcClientConfig(Uri serverUri)
         {
             this.ServerUri = serverUri;
-        }
-        /*public XmlRpcClientConfig(Uri serverUri, Uri proxyServer,int proxyPort) : this(serverUri)
-        {
-            this.ProxyServer = proxyServer;
-            this.ProxyPort = proxyPort;
-        }*/
-        /*public XmlRpcClientConfig(Uri serverUri, Uri proxyServer, int proxyPort, String userName,String password) : this(serverUri,proxyServer,proxyPort)            
-        {
-            this.UserName = userName;
-            this.Password = password;
-        }*/
-        /*public XmlRpcClientConfig(Uri serverUri, String userName, String password)
-            : this(serverUri)
-        {
-            this.UserName = userName;
-            this.Password = password;
-        }*/
+        }        
         public bool HasUserName
         {
             get
