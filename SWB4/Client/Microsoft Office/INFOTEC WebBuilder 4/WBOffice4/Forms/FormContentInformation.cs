@@ -283,6 +283,7 @@ namespace WBOffice4.Forms
                 }
                 catch (Exception ue)
                 {
+                    OfficeApplication.WriteError(ue);
                     MessageBox.Show(this, ue.Message, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     tabPageProperties.Focus();
                     return;
@@ -347,7 +348,7 @@ namespace WBOffice4.Forms
                         }
                         catch (Exception ue)
                         {
-                            Debug.WriteLine(ue.StackTrace);
+                            OfficeApplication.WriteError(ue);
                         }
                         finally
                         {
@@ -357,7 +358,7 @@ namespace WBOffice4.Forms
                 }
                 catch (Exception ue)
                 {
-                    Debug.WriteLine(ue.StackTrace);
+                    OfficeApplication.WriteError(ue);
                 }
             }
         }

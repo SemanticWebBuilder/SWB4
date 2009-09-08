@@ -164,7 +164,7 @@ namespace WBOffice4.Forms
                 }
                 catch (Exception ue)
                 {
-                    Debug.WriteLine(ue.StackTrace);
+                    OfficeApplication.WriteError(ue);
                 }
                 finally
                 {
@@ -176,7 +176,7 @@ namespace WBOffice4.Forms
                         }
                         catch (Exception ue)
                         {
-                            Debug.WriteLine(ue.StackTrace);
+                            OfficeApplication.WriteError(ue);
                         }
                     }
                 }
@@ -207,7 +207,7 @@ namespace WBOffice4.Forms
                         }
                         catch (Exception ue)
                         {
-                            Debug.WriteLine(ue.StackTrace);
+                            OfficeApplication.WriteError(ue);
                         }
                         finally
                         {
@@ -217,7 +217,7 @@ namespace WBOffice4.Forms
                 }
                 catch (Exception ue)
                 {
-                    Debug.WriteLine(ue.StackTrace);
+                    OfficeApplication.WriteError(ue);
                 }
             }
         }

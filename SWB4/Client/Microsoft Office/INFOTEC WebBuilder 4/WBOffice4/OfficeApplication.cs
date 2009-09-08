@@ -34,15 +34,17 @@ using WBOffice4.Interfaces;
 using System.Globalization;
 using System.Diagnostics;
 using System.Net;
-
+using WBOffice4.Utils;
 
 namespace WBOffice4
 {
 
-    //public delegate void ActiveMenuForDocumentPublished();
+    
     public abstract class OfficeApplication
     {
+        
         public static readonly String iso8601dateFormat = "{0:dd/MM/yyyy HH:mm:ss}";
+        public static readonly TraceEventLogListener listener = new TraceEventLogListener();
         private static UserInfo userInfo;
         private static Uri webAddress;
         private static IMenuListener _MenuListener;
@@ -51,8 +53,13 @@ namespace WBOffice4
         public static readonly double version = 4.001;
         protected OfficeApplication()
         {
-           
-        }        
+            Debug.Listeners.Add(listener);
+            Trace.Listeners.Add(listener);          
+        }
+        public static void WriteError(Exception e)
+        {            
+            listener.WriteError(e);
+        }
         internal static IOfficeDocument OfficeDocumentProxy
         {
             get
@@ -317,6 +324,7 @@ namespace WBOffice4
                 }               
                 catch (Exception e)
                 {
+                    OfficeApplication.WriteError(e);
                     MenuListener.LogOff();
                     RtlAwareMessageBox.Show(null, e.Message, "Iniciar sessión", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     tryLogOn = false;
@@ -348,7 +356,7 @@ namespace WBOffice4
             }
             catch (Exception err)
             {
-                Debug.WriteLine(err.Message);
+                OfficeApplication.WriteError(err);                
             }
 
         }

@@ -1531,7 +1531,7 @@ namespace WBOffice4.Forms
 						}
 						catch(Exception ue)
 						{
-							Debug.WriteLine(ue.Message); 							
+                            OfficeApplication.WriteError(ue);
 						}
 						try
 						{
@@ -1539,7 +1539,7 @@ namespace WBOffice4.Forms
 						}
 						catch(Exception ue)
 						{
-							Debug.WriteLine(ue.Message);
+                            OfficeApplication.WriteError(ue);
 						}
 					}
 				}
@@ -1560,7 +1560,7 @@ namespace WBOffice4.Forms
 						}
 						catch(Exception ue)
 						{
-							Debug.WriteLine(ue.Message);
+                            OfficeApplication.WriteError(ue);
 						}
 
 					}
@@ -1573,7 +1573,7 @@ namespace WBOffice4.Forms
 						}
 						catch(Exception ue)
 						{
-							Debug.WriteLine(ue.Message); 							
+                            OfficeApplication.WriteError(ue);
 						}
 						try
 						{
@@ -1582,7 +1582,7 @@ namespace WBOffice4.Forms
 						}
 						catch(Exception ue)
 						{
-							Debug.WriteLine(ue.Message);
+                            OfficeApplication.WriteError(ue);
 						}
 					}
 				}

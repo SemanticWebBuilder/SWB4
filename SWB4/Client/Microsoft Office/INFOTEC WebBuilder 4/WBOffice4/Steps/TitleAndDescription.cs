@@ -157,7 +157,7 @@ namespace WBOffice4.Steps
                 }
                 catch (Exception ue)
                 {
-                    Debug.WriteLine(ue.StackTrace);
+                    OfficeApplication.WriteError(ue);
                 }
                 ContentType contentType=(ContentType)this.ComboBoxType.SelectedItem;
                 String repositoryName = this.Wizard.Data[SelectCategory.REPOSITORY_ID].ToString();
