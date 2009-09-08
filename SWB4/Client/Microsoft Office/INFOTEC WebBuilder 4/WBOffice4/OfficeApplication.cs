@@ -50,7 +50,7 @@ namespace WBOffice4
         private static IMenuListener _MenuListener;
         private static IOfficeDocument officedocument;
         private static IOfficeApplication officeApplication;
-        public static readonly double version = 4.001;
+        public static readonly double m_version = 4.001;
         protected OfficeApplication()
         {
             Debug.Listeners.Add(listener);
@@ -66,7 +66,7 @@ namespace WBOffice4
             {
                 if (officedocument == null)
                 {
-                    if (OfficeApplicationProxy.isValidVersion(version))
+                    if (OfficeApplicationProxy.isValidVersion(m_version))
                     {
                         if (_MenuListener != null)
                         {
@@ -102,7 +102,7 @@ namespace WBOffice4
                         officeApplication.ProxyPort = int.Parse(configuration.ProxyPort,CultureInfo.InvariantCulture);
                         officeApplication.ProxyServer = new Uri(configuration.ProxyServer);
                     }
-                    if (!officeApplication.isValidVersion(version))
+                    if (!officeApplication.isValidVersion(m_version))
                     {
                         throw new WBAlertException("La versión entre el publicador y el servidor no son compatibles");
                     }
@@ -221,11 +221,11 @@ namespace WBOffice4
                 }
                 catch (FormatException fe)
                 {
-                    SwbEventLog.Log(fe);
+                    OfficeApplication.WriteError(fe);
                 }
                 catch (ApplicationException ap)
                 {
-                    SwbEventLog.Log(ap);
+                    OfficeApplication.WriteError(ap);
                 }                
             }
             return null;
@@ -274,7 +274,7 @@ namespace WBOffice4
             {
                 try
                 {
-                    OfficeApplicationProxy.isValidVersion(version);
+                    OfficeApplicationProxy.isValidVersion(m_version);
                     if (MenuListener != null)
                     {
                         MenuListener.LogOn();

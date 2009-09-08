@@ -1527,6 +1527,34 @@
     {
         "CustomAction"
         {
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_5F3F68E8504F4E978A3DE4262DC06E8B"
+            {
+            "Name" = "8:Primary output from WBOffice4 (Active)"
+            "Condition" = "8:"
+            "Object" = "8:_BF2F7743A8844266B1282C386E30D855"
+            "FileType" = "3:1"
+            "InstallAction" = "3:1"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_64D31059_7E2E_46C6_8D01_225A1690A04C"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:"
+            }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_67A54E40294E40FF800CE78E7E26BE84"
+            {
+            "Name" = "8:Primary output from XmlRpcLibrary (Active)"
+            "Condition" = "8:"
+            "Object" = "8:_59770DC95B8F4FBB9F5E79626A1DF8FE"
+            "FileType" = "3:1"
+            "InstallAction" = "3:1"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:2"
+            "Identifier" = "8:_8F39CE4A_C9A4_47FE_B896_C135BF5519F0"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:"
+            }
         }
         "DefaultFeature"
         {

@@ -34,7 +34,7 @@ namespace WBOffice4.Steps
     public partial class TitleAndDecriptionCratePage : TSWizards.BaseInteriorStep
     {
         public static readonly String TITLE = "TITLE";
-        public static readonly String DESCRIPTION = "DESCRIPTION";
+        public static readonly String STEP_DESCRIPTION = "DESCRIPTION";
         public TitleAndDecriptionCratePage()
         {
             InitializeComponent();
@@ -57,7 +57,7 @@ namespace WBOffice4.Steps
                 return;
             }
             this.Wizard.Data[TITLE] = this.textBoxTitle.Text;
-            this.Wizard.Data[DESCRIPTION] = this.textBoxDescription.Text;
+            this.Wizard.Data[STEP_DESCRIPTION] = this.textBoxDescription.Text;
         }
     }
 }

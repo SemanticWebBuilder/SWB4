@@ -57,10 +57,10 @@ namespace WBOffice4.Steps
                 String version = this.Wizard.Data[SelectVersionToOpen.VERSION].ToString();
                 string repositoryName = this.Wizard.Data[SelectVersionToPublish.REPOSITORY_ID_NAME].ToString();
                 string contentID = this.Wizard.Data[SelectVersionToPublish.CONTENT_ID_NAME].ToString();
-                if (title == null || description == null)
+                if (m_title == null || m_description == null)
                 {
-                    title = this.Wizard.Data[TitleAndDescription.TITLE].ToString();
-                    description = this.Wizard.Data[TitleAndDescription.DESCRIPTION].ToString();
+                    m_title = this.Wizard.Data[TitleAndDescription.TITLE].ToString();
+                    m_description = this.Wizard.Data[TitleAndDescription.DESCRIPTION].ToString();
                 }                
                 PropertyInfo[] properties = OfficeApplication.OfficeDocumentProxy.getResourceProperties(document.reporitoryID, document.contentID);
                 String[] values = null;
@@ -72,7 +72,7 @@ namespace WBOffice4.Steps
                 {
                     values = (String[])this.Wizard.Data[ViewProperties.VIEW_PROPERTIES_VALUES];
                 }
-                ResourceInfo portletInfo = OfficeApplication.OfficeDocumentProxy.publishToResourceContent(repositoryName, contentID, version, title, description, webpage,properties,values);
+                ResourceInfo portletInfo = OfficeApplication.OfficeDocumentProxy.publishToResourceContent(repositoryName, contentID, version, m_title, m_description, webpage,properties,values);
                 if (OfficeApplication.OfficeDocumentProxy.needsSendToPublish(portletInfo))
                 {
                     DialogResult res = MessageBox.Show(this, "Para activar el contenido, se necesita que sea autorizado primero\r\n¿Desea enviar el contenido a autorizar?", this.Wizard.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);

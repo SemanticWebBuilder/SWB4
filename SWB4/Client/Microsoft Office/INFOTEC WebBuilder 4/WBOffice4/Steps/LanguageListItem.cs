@@ -35,6 +35,7 @@ namespace WBOffice4.Steps
         public LanguageListItem(String id,String title)
         {
             this.Text = title;
+            this.title = title;
             this.id = id;
         }
         public String ID
@@ -44,5 +45,10 @@ namespace WBOffice4.Steps
                 return id;
             }
         }
+        public override string ToString()
+        {
+            return title.ToString();
+        }
+
     }
 }

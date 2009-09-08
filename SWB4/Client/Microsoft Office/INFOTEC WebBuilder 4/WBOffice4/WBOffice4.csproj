@@ -50,11 +50,13 @@
     <Reference Include="Microsoft.VisualStudio.TeamSystem.Data.UnitTesting, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -131,7 +133,6 @@
       <DependentUpon>SelectVersionToPublish.cs</DependentUpon>
     </Compile>
     <Compile Include="SWBConfiguration.cs" />
-    <Compile Include="SWBEventLog.cs" />
     <Compile Include="SWBURIConfiguration.cs" />
     <Compile Include="Forms\AboutBox.cs">
       <SubType>Form</SubType>
@@ -513,7 +514,15 @@
     <Compile Include="Steps\ViewProperties.Designer.cs">
       <DependentUpon>ViewProperties.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utils\DatabaseSetup.cs" />
+    <Compile Include="Utils\SBWInstallerEventLog.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Utils\SBWInstallerEventLog.Designer.cs">
+      <DependentUpon>SBWInstallerEventLog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utils\MultivalueEditor.cs" />
+    <Compile Include="Utils\TraceEventLogListener.cs" />
     <Compile Include="Utils\TypeFactory.cs" />
     <None Include="Resources\edit.png" />
   </ItemGroup>
@@ -547,6 +556,7 @@
   <ItemGroup>
     <None Include="Resources\icon_rechazar.png" />
     <None Include="Steps\app.config" />
+    <None Include="Utils\app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

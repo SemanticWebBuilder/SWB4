@@ -95,7 +95,7 @@ namespace WBOffice4
             }
             catch (KeyNotFoundException knfe)
             {
-                SwbEventLog.Log(knfe);
+                OfficeApplication.WriteError(knfe);
                 return "";
             }
 
