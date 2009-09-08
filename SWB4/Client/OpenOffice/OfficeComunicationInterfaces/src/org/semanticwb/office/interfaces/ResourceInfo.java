@@ -49,6 +49,11 @@ public class ResourceInfo {
     public boolean active;
     public String version;
     public PageInfo page;
+    public String contentid;
+    public String repository;
+    public String type;
+    public String lastversion;
+
     @Override
     public String toString()
     {
