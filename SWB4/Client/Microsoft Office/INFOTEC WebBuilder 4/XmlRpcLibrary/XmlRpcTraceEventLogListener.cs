@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
-namespace WBOffice4.Utils
+namespace XmlRpcLibrary
 {
-    public class TraceEventLogListener : TraceListener
+    public class XmlRpcTraceEventLogListener : TraceListener
     {
+        public static readonly XmlRpcTraceEventLogListener listener = new XmlRpcTraceEventLogListener();        
         public static readonly String eventLogName = "SemanticWebBuilder 4.0";
-        public static readonly String sourceEvent = "WBOffice4";
+        public static readonly String sourceEvent= "XmlRpcLibrary";
         public static readonly EventLog log = new EventLog(eventLogName);        
-        static TraceEventLogListener()
+        static XmlRpcTraceEventLogListener()
         {
             try
             {
@@ -19,7 +20,7 @@ namespace WBOffice4.Utils
                     {
                         EventLog.CreateEventSource(sourceEvent, eventLogName);
                     }
-                    catch (Exception e)
+                    catch(Exception e)
                     {
                         Debug.WriteLine(e.Message);
                         Debug.WriteLine(e.StackTrace);
@@ -31,29 +32,31 @@ namespace WBOffice4.Utils
                 {
                     log.Log = logname;
                 }
+                Debug.Listeners.Add(listener);
+                Trace.Listeners.Add(listener);
             }
-            catch (Exception e)
-            {
+            catch(Exception e) {
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.StackTrace);
             }
         }
+        public static void WriteError(Exception e)
+        {
+            log.WriteEntry(e.Message + "\r\n\r\n" + e.StackTrace, EventLogEntryType.Error);
+        }
         public override void Write(string message)
         {
-            log.WriteEntry(OfficeApplication.m_version+ "\r\n"+message, EventLogEntryType.Information);            
+            log.WriteEntry(message, EventLogEntryType.Information);            
         }
 
         public override void WriteLine(string message)
         {
-            log.WriteEntry(OfficeApplication.m_version + "\r\n" + message, EventLogEntryType.Information);
+            log.WriteEntry(message, EventLogEntryType.Information);
         }
-        public void WriteError(Exception e)
-        {
-            log.WriteEntry(OfficeApplication.m_version + "\r\n\r\n" + e.Message + "\r\n" + e.StackTrace, EventLogEntryType.Error);
-        }
+        
         public void WriteWarning(string message)
         {
-            log.WriteEntry(OfficeApplication.m_version + "\r\n" + message, EventLogEntryType.Error);
+            log.WriteEntry(message, EventLogEntryType.Error);
         }
     }
 }

@@ -35,7 +35,7 @@ namespace XmlRpcLibrary
 
     private static String CONTENT = "content";
     private static String FILENAME = "filename";
-    byte[] content = null;
+    //byte[] content = null;
 
     class CParameter
     {

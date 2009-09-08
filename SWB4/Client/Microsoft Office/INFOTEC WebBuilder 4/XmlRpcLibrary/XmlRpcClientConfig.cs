@@ -25,11 +25,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
 
 namespace XmlRpcLibrary
 {
     internal sealed class XmlRpcClientConfig
-    {        
+    {
+        
         public Uri ServerUri { get; set; }
         public String UserName { get; set; }
         public String Password { get; set; }
@@ -38,7 +40,9 @@ namespace XmlRpcLibrary
         public XmlRpcClientConfig(Uri serverUri)
         {
             this.ServerUri = serverUri;
-        }        
+        }
+        
+               
         public bool HasUserName
         {
             get

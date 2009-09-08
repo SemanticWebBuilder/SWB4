@@ -65,7 +65,7 @@ namespace XmlRpcLibrary
             }
             catch (Exception e)
             {
-                XmlRpcClient.WriteError(e);
+                XmlRpcTraceEventLogListener.WriteError(e);
             }
             return null;
         }

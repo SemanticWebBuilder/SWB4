@@ -92,12 +92,12 @@ namespace XmlRpcLibrary
             }
             catch (TargetInvocationException ex)
             {
-                XmlRpcClient.WriteError(ex);
+                XmlRpcTraceEventLogListener.WriteError(ex);
                 Exception e=ex.GetBaseException();
                 if(e is SocketException)
                 {
                     MessageBox.Show("Existe un error de comunicación con el publicador.\r\nPuede que el sistema este inestable debido a esta situación.\r\nCierre la aplicación y vuelva a intentar la operación.\r\nDetalle: " + e.Message, "Error de comunicación", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    XmlRpcClient.WriteError(e);
+                    XmlRpcTraceEventLogListener.WriteError(e);
                     throw e;
                 }
                 else
@@ -108,18 +108,18 @@ namespace XmlRpcLibrary
             }            
             catch (XmlRpcException webex)
             {
-                XmlRpcClient.WriteError(webex);
+                XmlRpcTraceEventLogListener.WriteError(webex);
                 throw webex;
             }
             catch (WebException webex)
             {
-                XmlRpcClient.WriteError(webex);
+                XmlRpcTraceEventLogListener.WriteError(webex);
                 throw webex;
             }
             
             catch (NullReferenceException webex)
             {
-                XmlRpcClient.WriteError(webex);
+                XmlRpcTraceEventLogListener.WriteError(webex);
                 throw webex;
             }   
             finally
