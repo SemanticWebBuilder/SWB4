@@ -93,7 +93,7 @@ namespace WBOffice4.Forms
             }
             catch(Exception e)
             {
-                Debug.WriteLine(e.Message);
+                OfficeApplication.WriteError(e);
             }
             finally
             {

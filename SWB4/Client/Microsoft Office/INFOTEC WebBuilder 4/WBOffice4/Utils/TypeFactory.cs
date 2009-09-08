@@ -93,7 +93,7 @@ namespace WBOffice4.Utils
                 }
                 catch(Exception e)
                 {
-                    Debug.WriteLine(e.StackTrace);
+                    OfficeApplication.WriteError(e);
                 }
             }
             else if(info.PropertyType.Name.Equals("Boolean",StringComparison.InvariantCultureIgnoreCase))
@@ -105,7 +105,7 @@ namespace WBOffice4.Utils
                 }
                 catch(Exception e)
                 {
-                    Debug.WriteLine(e.StackTrace);
+                    OfficeApplication.WriteError(e);
                 }
             }
             else

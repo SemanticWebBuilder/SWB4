@@ -350,7 +350,7 @@ namespace WBOffice4.Steps
                     }
                     catch (System.IO.IOException ioe)
                     {
-                        System.Console.WriteLine(ioe.Message);
+                        OfficeApplication.WriteError(e);
                     }
                 }
             }
@@ -415,6 +415,7 @@ namespace WBOffice4.Steps
                     }
                     catch (Exception err)
                     {
+                        OfficeApplication.WriteError(err);
                         MessageBox.Show(this, err.Message, "Crear folder", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
 
@@ -560,10 +561,6 @@ namespace WBOffice4.Steps
                 }
                 catch (Exception ex)
                 {
-                    /*throw new BuildException(string.Format(CultureInfo.InvariantCulture,
-                        "Directory '{0}' could not be created.", destFile.DirectoryName),
-                        Location, ex);*/
-
                     MessageBox.Show(ex.Message,this.Wizard.Text,MessageBoxButtons.OK,MessageBoxIcon.Error);
                 }
             }

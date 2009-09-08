@@ -70,6 +70,7 @@ namespace WBOffice4.Steps
             }
             catch (Exception ue)
             {
+                OfficeApplication.WriteError(ue);
                 MessageBox.Show(this, ue.Message, this.Wizard.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -99,6 +100,7 @@ namespace WBOffice4.Steps
             }
             catch (Exception ue)
             {
+                OfficeApplication.WriteError(ue);
                 MessageBox.Show(this, "Error al tratar de publicar un documento " + ue.Message, this.Wizard.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally

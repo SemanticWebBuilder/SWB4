@@ -35,6 +35,7 @@ namespace XmlRpcLibrary
 {
     public class XmlRpcClientProtocol : Component,  IXmlRpcProxy
     {
+        public static readonly XxmlRpcTraceEventLogListener listener = new XxmlRpcTraceEventLogListener();
         public Uri WebAddress { get; set; }
         public Uri ProxyServer { get; set; }
         public int ProxyPort { get; set; }
@@ -43,7 +44,12 @@ namespace XmlRpcLibrary
         ICollection<Attachment> _attachments = new List<Attachment>();
         public XmlRpcClientProtocol()
         {
-
+            Debug.Listeners.Add(listener);
+            Trace.Listeners.Add(listener);
+        }
+        public static void WriteError(Exception e)
+        {
+            listener.WriteError(e);
         }
         public ICollection<Attachment> Attachments 
         {
@@ -90,12 +96,12 @@ namespace XmlRpcLibrary
             }
             catch (TargetInvocationException ex)
             {
-                Debug.WriteLine(ex.StackTrace);
+                XmlRpcClientProtocol.WriteError(ex);
                 Exception e=ex.GetBaseException();
                 if(e is SocketException)
                 {
                     MessageBox.Show("Existe un error de comunicación con el publicador.\r\nPuede que el sistema este inestable debido a esta situación.\r\nCierre la aplicación y vuelva a intentar la operación.\r\nDetalle: " + e.Message, "Error de comunicación", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    Debug.WriteLine(e.StackTrace);
+                    XmlRpcClientProtocol.WriteError(e);
                     throw e;
                 }
                 else
@@ -106,18 +112,18 @@ namespace XmlRpcLibrary
             }            
             catch (XmlRpcException webex)
             {
-                Debug.WriteLine(webex.StackTrace);
+                XmlRpcClientProtocol.WriteError(webex);
                 throw webex;
             }
             catch (WebException webex)
             {
-                Debug.WriteLine(webex.StackTrace);
+                XmlRpcClientProtocol.WriteError(webex);
                 throw webex;
             }
             
             catch (NullReferenceException webex)
             {
-                Debug.WriteLine(webex.StackTrace);
+                XmlRpcClientProtocol.WriteError(webex);
                 throw webex;
             }   
             finally

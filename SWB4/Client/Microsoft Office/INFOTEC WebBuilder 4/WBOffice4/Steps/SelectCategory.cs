@@ -100,7 +100,7 @@ namespace WBOffice4.Steps
             }
             catch(Exception e)
             {
-                Debug.WriteLine(e.Message);
+                OfficeApplication.WriteError(e);                
             }
             if (this.treeView1.Nodes.Count > 0)
             {

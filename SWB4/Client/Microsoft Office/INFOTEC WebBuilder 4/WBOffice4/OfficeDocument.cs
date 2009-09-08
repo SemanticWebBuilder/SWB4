@@ -98,6 +98,7 @@ namespace WBOffice4
             }
             catch (Exception e)
             {
+                OfficeApplication.WriteError(e);
                 RtlAwareMessageBox.Show(null, e.Message, "Verificación de contenido", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 OfficeApplication.LogOff();
             }
@@ -234,7 +235,7 @@ namespace WBOffice4
                 }
                 catch (Exception e)
                 {
-                    Debug.WriteLine(e.Message);
+                    OfficeApplication.WriteError(e);                    
                 }
             }
             return null;
