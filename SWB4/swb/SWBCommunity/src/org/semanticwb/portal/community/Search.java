@@ -282,7 +282,7 @@ public class Search extends GenericAdmResource {
                 //If node is not null
                 if (x != null && x.isResource()) {
                     res.add(x.asNode().getURI());
-                    System.out.println("---Agregado " + x.toString());
+                    //System.out.println("---Agregado " + x.toString());
                 }
             }
         }
