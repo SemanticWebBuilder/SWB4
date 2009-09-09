@@ -308,9 +308,9 @@ public class Search extends GenericAdmResource {
         int offset = (page - 1) * max;
 
         for (int i = 0; i < max; i++) {
-            pageData.add(solutions.get(offset + i));
+            if ((offset + i) < solutions.size())
+                pageData.add(solutions.get(offset + i));
         }
-
         return pageData;
     }
 }
