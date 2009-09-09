@@ -82,39 +82,70 @@ public class Search extends GenericAdmResource {
     }
 
     @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        String action = response.getAction();
-        String lang = "es";
-        if (response.getUser() != null)
-            lang = response.getUser().getLanguage();
-
-        if (action.equals("search")) {
-            String q = request.getParameter("q");
-            if (q != null && !q.trim().equals(""))
-            solutions = performQuery(q.trim(), lang);
-        } else {
-            super.processAction(request, response);
-        }
-    }
-
-    @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String mode = paramRequest.getMode();
+        
         if (mode.equals(paramRequest.Mode_VIEW)) {
             doView(request, response, paramRequest);
+        } else if (mode.equals("slice")) {
+            doSlice(request, response, paramRequest);
         } else {
             super.processRequest(request, response, paramRequest);
         }
     }
 
-    @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    public void doSlice(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String path = "/swbadmin/jsp/microsite/Search/Search.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
+        ArrayList<String> pageData = null;
+
+        int page = 1;
+        if (request.getParameter("p") != null) {
+            page = Integer.valueOf(request.getParameter("p"));
+        }
+
+        int maxr = Integer.valueOf(getResourceBase().getAttribute("maxResults", "10"));
+
+        //Get resource url
+        String url = "";
+        Resourceable rsa = getResourceBase().getResourceable();
+        if (rsa != null && rsa instanceof WebPage) {
+            url = ((WebPage) rsa).getUrl();
+        }
+
+        if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
+            //Get slice for page
+            if (solutions != null && solutions.size() > 0)
+                pageData = getSlice(page, maxr);
+        }
+
+        try {
+            if (pageData != null && pageData.size() > 0) {
+                request.setAttribute("results", pageData);
+                request.setAttribute("t", solutions.size());
+            }
+            request.setAttribute("rUrl", url);
+            request.setAttribute("paramRequest", paramRequest);
+            dis.include(request, response);
+        } catch (Exception e) {
+            log.error(e);
+        }
+    }
+
+    @Override
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        int maxr = Integer.valueOf(getResourceBase().getAttribute("maxResults", "10"));
+        String path = "/swbadmin/jsp/microsite/Search/Search.jsp";
+        RequestDispatcher dis = request.getRequestDispatcher(path);
+        ArrayList<String> pageData = new ArrayList<String>();
         String lang = "es";
+        int page = 1;
         
         if (paramRequest.getUser() != null)
             lang = paramRequest.getUser().getLanguage();
+
+        if (request.getParameter("p") != null)
+            page = Integer.valueOf(request.getParameter("p"));
 
         //Get resource url
         String url = "";
@@ -130,11 +161,15 @@ public class Search extends GenericAdmResource {
 
             //Perform search query
             solutions = performQuery(q, lang);
+
+            if (solutions != null && solutions.size() > 0)
+                pageData = getSlice(page, maxr);
         }
 
         try {
-            if (solutions != null && solutions.size() > 0) {
-                request.setAttribute("results", solutions.iterator());
+            if (pageData != null && pageData.size() > 0) {
+                request.setAttribute("results", pageData);
+                request.setAttribute("t", solutions.size());
             }
             request.setAttribute("rUrl", url);
             request.setAttribute("paramRequest", paramRequest);
@@ -266,5 +301,16 @@ public class Search extends GenericAdmResource {
             log.error(ex);
         }
         return res.trim();
+    }
+
+    public ArrayList<String> getSlice (int page, int max) {
+        ArrayList<String> pageData = new ArrayList<String>();
+        int offset = (page - 1) * max;
+
+        for (int i = 0; i < max; i++) {
+            pageData.add(solutions.get(offset + i));
+        }
+
+        return pageData;
     }
 }
