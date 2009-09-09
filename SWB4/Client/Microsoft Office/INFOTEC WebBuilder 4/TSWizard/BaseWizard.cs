@@ -148,6 +148,7 @@ namespace TSWizards
 		/// </summary>
 		private void InitializeComponent()
 		{
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BaseWizard));
             this.wizardTop = new System.Windows.Forms.Panel();
             this.stepDescription = new System.Windows.Forms.Label();
             this.title = new System.Windows.Forms.Label();
@@ -175,193 +176,184 @@ namespace TSWizards
             // 
             // wizardTop
             // 
+            this.wizardTop.AccessibleDescription = null;
+            this.wizardTop.AccessibleName = null;
+            resources.ApplyResources(this.wizardTop, "wizardTop");
             this.wizardTop.BackColor = System.Drawing.Color.White;
+            this.wizardTop.BackgroundImage = null;
             this.wizardTop.Controls.Add(this.stepDescription);
             this.wizardTop.Controls.Add(this.title);
             this.wizardTop.Controls.Add(this.logo);
-            this.wizardTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.wizardTop.Location = new System.Drawing.Point(0, 0);
+            this.wizardTop.Font = null;
             this.wizardTop.Name = "wizardTop";
-            this.wizardTop.Size = new System.Drawing.Size(488, 64);
-            this.wizardTop.TabIndex = 0;
             // 
             // stepDescription
             // 
-            this.stepDescription.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.stepDescription.Location = new System.Drawing.Point(16, 24);
+            this.stepDescription.AccessibleDescription = null;
+            this.stepDescription.AccessibleName = null;
+            resources.ApplyResources(this.stepDescription, "stepDescription");
+            this.stepDescription.Font = null;
             this.stepDescription.Name = "stepDescription";
-            this.stepDescription.Size = new System.Drawing.Size(408, 32);
-            this.stepDescription.TabIndex = 4;
-            this.stepDescription.Text = "Step Description";
             // 
             // title
             // 
-            this.title.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.title.AutoSize = true;
-            this.title.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.title.Location = new System.Drawing.Point(8, 8);
+            this.title.AccessibleDescription = null;
+            this.title.AccessibleName = null;
+            resources.ApplyResources(this.title, "title");
             this.title.Name = "title";
-            this.title.Size = new System.Drawing.Size(62, 13);
-            this.title.TabIndex = 3;
-            this.title.Text = "Step Text";
             // 
             // logo
             // 
-            this.logo.Dock = System.Windows.Forms.DockStyle.Right;
-            this.logo.Location = new System.Drawing.Point(429, 0);
+            this.logo.AccessibleDescription = null;
+            this.logo.AccessibleName = null;
+            resources.ApplyResources(this.logo, "logo");
+            this.logo.BackgroundImage = null;
+            this.logo.Font = null;
+            this.logo.ImageLocation = null;
             this.logo.Name = "logo";
-            this.logo.Size = new System.Drawing.Size(59, 64);
-            this.logo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.logo.TabIndex = 2;
             this.logo.TabStop = false;
-            this.logo.Visible = false;
             // 
             // cancel
             // 
-            this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancel.AccessibleDescription = null;
+            this.cancel.AccessibleName = null;
+            resources.ApplyResources(this.cancel, "cancel");
+            this.cancel.BackgroundImage = null;
             this.cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancel.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.cancel.Location = new System.Drawing.Point(8, 8);
+            this.cancel.Font = null;
             this.cancel.Name = "cancel";
-            this.cancel.Size = new System.Drawing.Size(88, 23);
-            this.cancel.TabIndex = 3;
-            this.cancel.Text = "Cancel";
             this.cancel.Click += new System.EventHandler(this.cancel_Click);
             // 
             // back
             // 
-            this.back.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.back.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.back.Location = new System.Drawing.Point(296, 8);
+            this.back.AccessibleDescription = null;
+            this.back.AccessibleName = null;
+            resources.ApplyResources(this.back, "back");
+            this.back.BackgroundImage = null;
+            this.back.Font = null;
             this.back.Name = "back";
-            this.back.Size = new System.Drawing.Size(88, 23);
-            this.back.TabIndex = 4;
-            this.back.Text = "< Back";
             this.back.Click += new System.EventHandler(this.back_Click);
             // 
             // next
             // 
-            this.next.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.next.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.next.Location = new System.Drawing.Point(392, 8);
+            this.next.AccessibleDescription = null;
+            this.next.AccessibleName = null;
+            resources.ApplyResources(this.next, "next");
+            this.next.BackgroundImage = null;
+            this.next.Font = null;
             this.next.Name = "next";
-            this.next.Size = new System.Drawing.Size(88, 23);
-            this.next.TabIndex = 5;
-            this.next.Text = "Next >";
             this.next.Click += new System.EventHandler(this.next_Click);
             // 
             // bottomPanel
             // 
+            this.bottomPanel.AccessibleDescription = null;
+            this.bottomPanel.AccessibleName = null;
+            resources.ApplyResources(this.bottomPanel, "bottomPanel");
+            this.bottomPanel.BackgroundImage = null;
             this.bottomPanel.Controls.Add(this.bottomLine);
             this.bottomPanel.Controls.Add(this.cancel);
             this.bottomPanel.Controls.Add(this.back);
             this.bottomPanel.Controls.Add(this.next);
-            this.bottomPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.bottomPanel.Location = new System.Drawing.Point(0, 315);
+            this.bottomPanel.Font = null;
             this.bottomPanel.Name = "bottomPanel";
-            this.bottomPanel.Size = new System.Drawing.Size(488, 40);
-            this.bottomPanel.TabIndex = 8;
             // 
             // bottomLine
             // 
-            this.bottomLine.Dock = System.Windows.Forms.DockStyle.Top;
-            this.bottomLine.Location = new System.Drawing.Point(0, 0);
+            this.bottomLine.AccessibleDescription = null;
+            this.bottomLine.AccessibleName = null;
+            resources.ApplyResources(this.bottomLine, "bottomLine");
+            this.bottomLine.BackgroundImage = null;
+            this.bottomLine.Font = null;
             this.bottomLine.Name = "bottomLine";
-            this.bottomLine.Size = new System.Drawing.Size(488, 2);
-            this.bottomLine.TabIndex = 2;
-            this.bottomLine.Text = "lineFrame2";
             // 
             // sidePanel
             // 
+            this.sidePanel.AccessibleDescription = null;
+            this.sidePanel.AccessibleName = null;
+            resources.ApplyResources(this.sidePanel, "sidePanel");
             this.sidePanel.BackColor = System.Drawing.Color.White;
+            this.sidePanel.BackgroundImage = null;
             this.sidePanel.Controls.Add(this.sideLogo);
-            this.sidePanel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.sidePanel.Location = new System.Drawing.Point(0, 66);
+            this.sidePanel.Font = null;
             this.sidePanel.Name = "sidePanel";
-            this.sidePanel.Size = new System.Drawing.Size(164, 249);
-            this.sidePanel.TabIndex = 9;
-            this.sidePanel.Visible = false;
             // 
             // sideLogo
             // 
+            this.sideLogo.AccessibleDescription = null;
+            this.sideLogo.AccessibleName = null;
+            resources.ApplyResources(this.sideLogo, "sideLogo");
+            this.sideLogo.BackgroundImage = null;
             this.sideLogo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.sideLogo.Location = new System.Drawing.Point(88, 16);
+            this.sideLogo.Font = null;
+            this.sideLogo.ImageLocation = null;
             this.sideLogo.Name = "sideLogo";
-            this.sideLogo.Size = new System.Drawing.Size(61, 61);
-            this.sideLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.sideLogo.TabIndex = 9;
             this.sideLogo.TabStop = false;
-            this.sideLogo.Visible = false;
             // 
             // panelStep
             // 
+            this.panelStep.AccessibleDescription = null;
+            this.panelStep.AccessibleName = null;
+            resources.ApplyResources(this.panelStep, "panelStep");
+            this.panelStep.BackgroundImage = null;
             this.panelStep.Controls.Add(this.panel1);
-            this.panelStep.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelStep.Location = new System.Drawing.Point(164, 66);
+            this.panelStep.Font = null;
             this.panelStep.Name = "panelStep";
-            this.panelStep.Padding = new System.Windows.Forms.Padding(8);
-            this.panelStep.Size = new System.Drawing.Size(324, 249);
-            this.panelStep.TabIndex = 10;
             // 
             // panel1
             // 
+            this.panel1.AccessibleDescription = null;
+            this.panel1.AccessibleName = null;
+            resources.ApplyResources(this.panel1, "panel1");
+            this.panel1.BackgroundImage = null;
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.progressBar1);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(8, 210);
+            this.panel1.Font = null;
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(308, 31);
-            this.panel1.TabIndex = 0;
-            this.panel1.Visible = false;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(0, 5);
+            this.label1.AccessibleDescription = null;
+            this.label1.AccessibleName = null;
+            resources.ApplyResources(this.label1, "label1");
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(0, 15);
-            this.label1.TabIndex = 1;
             // 
             // progressBar1
             // 
-            this.progressBar1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.progressBar1.Location = new System.Drawing.Point(0, 20);
+            this.progressBar1.AccessibleDescription = null;
+            this.progressBar1.AccessibleName = null;
+            resources.ApplyResources(this.progressBar1, "progressBar1");
+            this.progressBar1.BackgroundImage = null;
+            this.progressBar1.Font = null;
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(308, 11);
-            this.progressBar1.TabIndex = 0;
-            this.progressBar1.Visible = false;
             // 
             // topLine
             // 
-            this.topLine.Dock = System.Windows.Forms.DockStyle.Top;
-            this.topLine.Location = new System.Drawing.Point(0, 64);
+            this.topLine.AccessibleDescription = null;
+            this.topLine.AccessibleName = null;
+            resources.ApplyResources(this.topLine, "topLine");
+            this.topLine.BackgroundImage = null;
+            this.topLine.Font = null;
             this.topLine.Name = "topLine";
-            this.topLine.Size = new System.Drawing.Size(488, 2);
-            this.topLine.TabIndex = 1;
-            this.topLine.Text = "lineFrame1";
             // 
             // BaseWizard
             // 
             this.AcceptButton = this.next;
-            this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+            this.AccessibleDescription = null;
+            this.AccessibleName = null;
+            resources.ApplyResources(this, "$this");
+            this.BackgroundImage = null;
             this.CancelButton = this.cancel;
-            this.ClientSize = new System.Drawing.Size(488, 355);
             this.Controls.Add(this.panelStep);
             this.Controls.Add(this.sidePanel);
             this.Controls.Add(this.bottomPanel);
             this.Controls.Add(this.topLine);
             this.Controls.Add(this.wizardTop);
+            this.Font = null;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = null;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(304, 232);
             this.Name = "BaseWizard";
-            this.Text = "Wizard Title";
             this.wizardTop.ResumeLayout(false);
             this.wizardTop.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.logo)).EndInit();
@@ -1227,15 +1219,17 @@ namespace TSWizards
 		/// <param name="bFinish">True if we should set the next button up for a finish</param>
 		protected void SetFinish( bool finish )
 		{
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BaseWizard));
             cancel.Enabled = true;
 			if( finish )
 			{
-				next.Text = "Finish";
+                this.next.Text = resources.GetString("next.Finish");//next.Text = "Finish";
                 cancel.Enabled = false;
 			}
 			else
 			{
-				next.Text = "Next >";
+				//next.Text = "Next >";
+                this.next.Text=resources.GetString("next.Text"); //.ApplyResources(this.next, "next");
 			}
 		}
 		#endregion

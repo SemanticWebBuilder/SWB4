@@ -35,7 +35,7 @@ using System.Globalization;
 using System.Diagnostics;
 using System.Net;
 using WBOffice4.Utils;
-
+using System.Threading;
 namespace WBOffice4
 {
 
@@ -53,6 +53,15 @@ namespace WBOffice4
         public static readonly double m_version = 4.001;
         static OfficeApplication()
         {
+            try
+            {
+                Thread.CurrentThread.CurrentUICulture = new CultureInfo("es");
+            }
+            catch (Exception e)
+            {
+                OfficeApplication.WriteError(e);
+                //MessageBox.Show(e.Message + "\r\n" + e.StackTrace);
+            }
             Debug.Listeners.Add(listener);
             Trace.Listeners.Add(listener);
         }
