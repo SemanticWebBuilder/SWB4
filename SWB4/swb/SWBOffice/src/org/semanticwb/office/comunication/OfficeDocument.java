@@ -2198,7 +2198,6 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             i++;
         }
     }
-
     
 }
 
