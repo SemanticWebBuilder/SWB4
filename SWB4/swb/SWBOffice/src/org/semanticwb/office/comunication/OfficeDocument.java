@@ -2189,7 +2189,12 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         int i = 0;
         for (LanguageInfo lang : languages)
         {
-            page.setTitle(values[i], lang.id);
+            String value=values[i];
+            if(value!=null && value.equals(""))
+            {
+                value=null;
+            }
+            page.setTitle(value, lang.id);
             i++;
         }
     }
