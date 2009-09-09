@@ -118,16 +118,3 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
     }
 }
 %>
-
-<%!
-private ArrayList<String> getSlice (ArrayList<String> rSet, int page, int max) {
-        ArrayList<String> pageData = new ArrayList<String>();
-        int offset = (page - 1) * max;
-
-        for (int i = 0; i < max; i++) {
-            pageData.add(rSet.get(offset + i));
-        }
-
-        return pageData;
-    }
-%>
