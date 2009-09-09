@@ -57,7 +57,7 @@ public class TematicIndexXSL extends GenericAdmResource
     javax.xml.transform.Templates tpl; 
     String workpath = "/work";
     String webpath = (String) SWBPlatform.getContextPath();
-    String path =  webpath +"swbadmin/xsl/TematicIndexXSL/";
+    String path =  webpath +"/swbadmin/xsl/TematicIndexXSL/";
 
     /**
      * Crea un nuevo objeto IndiceTematicoXSL.
