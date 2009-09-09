@@ -34,38 +34,15 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
 
         int start = (pageNumber - 1) * maxr;
         int end = start + maxr - 1;
-        if (end > total - 1)
-            end = total - 1;
+        if (end > total - 1) end = total - 1;
 
         String sliceUrl = paramRequest.getRenderUrl().setMode("slice") + "?q=" + request.getParameter("q");
-
-        System.out.println("....... "+maxr+", page: "+pageNumber+"total: "+total+", end: "+end);
     %>
         <h3>Resultados de la b&uacute;squeda <i><%=request.getParameter("q")%></i></h3>
         <br>
         <p>
             Mostrando resultados <b><%=start+1%></b> al <b><%=end+1%></b> de <b><%=total%></b>.
-            <br>
-            <%
-            double pages = Math.ceil((double) total / (double) maxr);
-                for (int i = 1; i <= pages; i++) {
-                    start = maxr * (i - 1);
-                    if ((start + maxr) - 1 > total - 1) {
-                        end = total - 1;
-                    } else {
-                        end = (start + maxr) - 1;
-                    }
-                    if (pageNumber == i) {
-                        %>
-                        <span><%=i%></span>
-                        <%
-                    } else {
-                        %>
-                        <a href="<%=sliceUrl + "&p=" + i%>"><%=i%></a>
-                        <%
-                    }
-                }
-            %>
+            <br>            
         </p>
         <div class="entriesList">
         <%
@@ -104,7 +81,29 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
                 </div>
                 <%
             }
-        %>
+            %>
+            <p align="center">
+            <%
+                double pages = Math.ceil((double) total / (double) maxr);
+                    for (int i = 1; i <= pages; i++) {
+                        start = maxr * (i - 1);
+                        if ((start + maxr) - 1 > total - 1) {
+                            end = total - 1;
+                        } else {
+                            end = (start + maxr) - 1;
+                        }
+                        if (pageNumber == i) {
+                            %>
+                            <span><%=i%></span>
+                            <%
+                        } else {
+                            %>
+                            <a href="<%=sliceUrl + "&p=" + i%>"><%=i%></a>
+                            <%
+                        }
+                    }
+            %>
+            </p>
         </div>
         <%
     } else {
