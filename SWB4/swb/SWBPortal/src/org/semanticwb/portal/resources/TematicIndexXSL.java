@@ -93,7 +93,7 @@ public class TematicIndexXSL extends GenericAdmResource
         if(tpl==null)
         {
             try { 
-                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getAdminFileStream("/swbadmin/xsl/TematicIndexXSL/IndiceTematicoXSL.xslt"));
+                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getAdminFileStream("/swbadmin/xsl/TematicIndexXSL/indiceTematicoXSL.xslt"));
             }
             catch(Exception e) { log.error("Error while loading default resource template: "+base.getId(), e); }
         }
