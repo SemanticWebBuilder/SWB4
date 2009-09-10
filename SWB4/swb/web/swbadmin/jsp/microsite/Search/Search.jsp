@@ -52,6 +52,16 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
                 <%
                     String r = it.next();
                     SemanticObject obj = SemanticObject.createSemanticObject(r);
+                    if (obj.instanceOf(WebPage.sclass)) {
+                        WebPage wp = (WebPage) obj.createGenericInstance();
+                        %>
+                        <div class="listEntryInfo">                            
+                            <p class="tituloNaranja"><a href="<%=wp.getUrl()%>"><%=wp.getTitle()%>(WebPage)</a></p>
+                            <p class="vermas"><a href ="<%=wp.getUrl()%>">Ir a</a></p>
+                        </div>
+                        <div class="clear"> </div>
+                        <%
+                    } else if (obj.instanceOf(DirectoryObject.sclass)) {
                     DirectoryObject c = (DirectoryObject) obj.createGenericInstance();
                     //Hotel c = (Hotel)obj.createGenericInstance();
                     String photo = obj.getProperty(swbcomm_dirPhoto);
@@ -78,6 +88,9 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
                         <p class="vermas"><a href ="<%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>">Ver mas</a></p>
                     </div>
                     <div class="clear"> </div>
+                    <%
+                    }
+                    %>
                 </div>
                 <%
             }
