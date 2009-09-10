@@ -215,13 +215,13 @@ public class Search extends GenericAdmResource {
         larqBuilder.closeWriter();
 
         // ---- Create the access index
-        index = larqBuilder.getIndex();        
+        index = larqBuilder.getIndex();
         return index;
     }
 
     /**
      * Execute a SparQl query to find directory objects. Uses LARQ to perform
-     * an open text search to a snow-balled terms index.
+     * a free-text search into a snow-balled terms index.
      * @param q Query string.
      * @param lang Language for snowball analyzer.
      * @return list of URIs matching the query.
