@@ -56,7 +56,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
                         WebPage wp = (WebPage) obj.createGenericInstance();
                         %>
                         <div class="listEntryInfo">                            
-                            <p class="tituloNaranja"><a href="<%=wp.getUrl()%>"><%=wp.getTitle()%>(WebPage)</a></p>
+                            <p class="tituloNaranja"><a href="<%=wp.getUrl()%>"><%=wp.getTitle()%>&nbsp;(WebPage)</a></p>
                             <p class="vermas"><a href ="<%=wp.getUrl()%>">Ir a</a></p>
                         </div>
                         <div class="clear"> </div>
