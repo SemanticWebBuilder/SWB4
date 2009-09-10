@@ -2,23 +2,21 @@ package org.semanticwb.portal.community;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Iterator;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.GenericIterator;
-import org.semanticwb.model.SWBComparator;
-import org.semanticwb.model.Traceable;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
-import org.semanticwb.portal.api.SWBResourceURL;
 
 
 public class MicroSiteElement 
         extends org.semanticwb.portal.community.base.MicroSiteElementBase {
     
-    
+    private static Logger log = SWBUtils.getLogger(MicroSiteElement.class);
     public static int VIS_ALL=0;
     public static int VIS_MEMBERS_ONLY=1;
     public static int VIS_FRIENDS=2;
@@ -28,11 +26,6 @@ public class MicroSiteElement
     private long timer;                     //valores de sincronizacion de views, hits
     private static long time;               //tiempo en milisegundos por cada actualizacion
     private boolean viewed = false;
-//    private final String fullStarPath = "/swbadmin/resources/ranking/fullstar.png";
-//    private final String halfStarPath = "/swbadmin/resources/ranking/halfstar.png";
-//    private final String emptyStarPath = "/swbadmin/resources/ranking/emptystar.png";
-    private static final int COMMENTS_IN_PAGE = 5;
-    private static final int PAGE_INDEXES_TO_SHOW = 5;
 
     
     static {
@@ -201,390 +194,29 @@ public class MicroSiteElement
      * @throws java.io.IOException
      */
     public void renderGenericElements(HttpServletRequest request,
-            Writer out, SWBParamRequest paramRequest)
+            HttpServletResponse response, SWBParamRequest paramRequest)
             throws SWBResourceException, IOException {
+        
 
-        WebPage page = paramRequest.getWebPage();
-        Member mem = Member.getMember(paramRequest.getUser(), page);
-        String suri = request.getParameter("uri");
-        StringBuilder sb = new StringBuilder(500);
-        String tmpUrl = "";
-        String abusedDesc = this.isAbused() ? "Inapropiado" : "Apropiado";
-        int rank = 0;
-        long pageNumber = 0;
-        boolean showComments = false;
-
-        try {
-            pageNumber = Long.parseLong(request.getParameter("pn"));
-            showComments = true;
-        } catch (Exception e) {
-            pageNumber = 1;
+        String path="/swbadmin/jsp/microsite/RenderGenericElements/RenderGenericElements.jsp";
+        RequestDispatcher dis = request.getRequestDispatcher(path);
+        try
+        {
+            request.setAttribute("paramRequest", paramRequest);
+            request.setAttribute("MicroSiteElement", this);
+            dis.include(request, response);
         }
-
-        if (suri == null && this != null) {
-            suri = this.getURI();
+        catch (Exception e)
+        {
+            log.error(e);
         }
-        tmpUrl = "uri=\"+escape('" + suri + "')";
-        rank = (int) Math.round(Math.floor(this.getRank()));
-        SWBResourceURL url = paramRequest.getActionUrl();
-        url.setAction("vote");
-        url.setMode(paramRequest.getMode());
-        url.setCallMethod(SWBResourceURL.Call_DIRECT);
-        sb.append("\n<link rel='stylesheet' type='text/css' href='"
-                + SWBPlatform.getContextPath()
-                + "/swbadmin/jsp/microsite/css/ciudad_digital.css' />");
-        sb.append("\n<script type=\"text/javascript\" src=\""
-                + SWBPlatform.getContextPath()
-                + "/swbadmin/js/dojo/dojo/dojo.js\" djConfig=\"parseOnLoad: true, isDebug: false\"></script>");
-
-        sb.append("\n<link rel='stylesheet' type='text/css' media='all' href='"
-                + SWBPlatform.getContextPath()
-                + "/swbadmin/js/dojo/dojox/form/resources/Rating.css' />");
-        sb.append("\n<script type=\"text/javascript\">");
-         // scan page for widgets and instantiate them
-        sb.append("\n  dojo.require(\"dojo.parser\");");
-        sb.append("\n  dojo.require(\"dojox.form.Rating\");");
-        sb.append("\n</script>");
-
-        sb.append("\n<script language=\"javascript\" type=\"text/javascript\">");
-        sb.append("  //dojo.require(\"dojo.parser\");");
-        sb.append("\nvar request = false;");
-        sb.append("\ntry {");
-        sb.append("\n  request = new XMLHttpRequest();");
-        sb.append("\n} " +
-                "catch (trymicrosoft) {");
-        sb.append("\n  try {");
-        sb.append("\n    request = new ActiveXObject(\"Msxml2.XMLHTTP\");");
-        sb.append("\n  } catch (othermicrosoft) {");
-        sb.append("\n    try {");
-        sb.append("\n      request = new ActiveXObject(\"Microsoft.XMLHTTP\");");
-        sb.append("\n    } catch (failed) {");
-        sb.append("\n      request = false;");
-        sb.append("\n    }");
-        sb.append("\n  }");
-        sb.append("\n}");
-        sb.append("\nif (!request)");
-        sb.append("\n  alert(\"Error al inicializar XMLHttpRequest!\");");
-        sb.append("\nvar invoke = true;");
-        sb.append("\nvar count = 0;");
-        sb.append("\n\nfunction vote(val) {");
-        sb.append("\n    if (!invoke) return;");
-        sb.append("\n    //alert('En funcion para votar');");
-        sb.append("\n    var url = \"" + url + "?act=vote&value=\"+escape(val)+\"&" + tmpUrl + ";");
-        sb.append("\n    request.open(\"GET\", url, true);");
-        sb.append("\n    request.onreadystatechange = ranked;");
-        sb.append("\n    request.send(null);");
-        sb.append("\n}");
-        sb.append("\n\nfunction ranked() {");
-        sb.append("\n  var response = request.responseText;");
-        sb.append("\n  if (count == 0) {");
-        sb.append("\n    if(request.readyState!=4) return;");
-        sb.append("\n    if(request.status==200) {");
-        sb.append("\n      if ('Not OK'!=response && ''!=response) {");
-        sb.append("\n          var ranking = Math.floor(response.split('|')[0]);");
-        sb.append("\n          var votes = response.split('|')[1];");
-        sb.append("\n          document.getElementById(\"reviews\").innerHTML = votes;");
-        sb.append("\n          invoke = false;");
-        sb.append("\n      } else {");
-        sb.append("\n          alert('Lo sentimos, ha ocurrido un problema al contabilizar la calificación!');");
-        sb.append("\n      } ");
-        sb.append("\n      count++;");
-        sb.append("\n    } ");
-        sb.append("\n  } ");
-        sb.append("\n}");
-
-        url.setAction("abuseReport");
-        sb.append("\nvar invokeAbused = true;");
-        sb.append("\n\nfunction changeAbusedState() {");
-        sb.append("\n    if (!invokeAbused) return;");
-        sb.append("\n    var url = \"" + url + "?act=abuseReport&" + tmpUrl + ";" +
-                  "\n    request.open(\"GET\", url, true);");
-        sb.append("\n    request.onreadystatechange = abusedStateChanged;");
-        sb.append("\n    request.send(null);");
-        sb.append("\n}");
-        sb.append("\n\nfunction abusedStateChanged() {");
-        sb.append("\n  if (request.readyState != 4) return;");
-        sb.append("\n  if (request.status == 200) {");
-        sb.append("\n    var response = request.responseText;");
-        sb.append("\n    if ('' != response && 'Not OK' != response) {");
-        sb.append("\n      var etiqueta = document.getElementById(\"abused\").innerHTML;");
-//        sb.append("\n      alert('response:'+response+', etiqueta:'+etiqueta);");
-        sb.append("\n      if (response == 'true') {");
-        sb.append("\n        document.getElementById(\"abused\").innerHTML = 'Inapropiado';");
-        sb.append("\n      } else {");
-        sb.append("\n        document.getElementById(\"abused\").innerHTML = 'Apropiado';");
-        sb.append("\n      } ");
-        sb.append("\n      invokeAbused = false;");
-        sb.append("\n    }");
-        sb.append("\n  }");
-        sb.append("\n}");
-        sb.append("\n\nfunction addComment() {");
-        sb.append("\n    document.getElementById(\"addComment\").style.display=\"inline\";");
-        sb.append("\n}");
-        sb.append("\nfunction showComments() {");
-        sb.append("\n    var x = document.getElementById(\"commentsList\").style.display;");
-        sb.append("\n    if (x == 'none') {");
-        sb.append("\n      document.getElementById(\"commentsList\").style.display=\"inline\";");
-        sb.append("\n      document.getElementById(\"ctrlComments\").innerHTML=\"[-]\";");
-        sb.append("\n    } else {");
-        sb.append("\n      document.getElementById(\"commentsList\").style.display=\"none\";");
-        sb.append("\n      document.getElementById(\"ctrlComments\").innerHTML=\"[+]\";");
-        sb.append("\n    }");
-        sb.append("\n}");
-
-        sb.append("\n\nvar invokeSpam = true;");
-        sb.append("\nvar spamId = 0;");
-        sb.append("\n\nfunction spam(commentId) {");
-        sb.append("\n    spamId = commentId;");
-        sb.append("\n    if (!invokeSpam) return;");
-        sb.append("\n    var url = \"" + url + "?act=spamReport&commentId=\"+commentId+\"&" + tmpUrl + ";" +
-                  "\n    request.open(\"GET\", url, true);");
-        sb.append("\n    request.onreadystatechange = spamStateChanged;");
-        sb.append("\n    request.send(null);");
-        sb.append("\n}");
-        sb.append("\n\nfunction spamStateChanged() {");
-        sb.append("\n  if (request.readyState != 4) return;");
-        sb.append("\n  if (request.status == 200) {");
-        sb.append("\n    var response = request.responseText;");
-        sb.append("\n    if ('' != response && 'Not OK' != response) {");
-        sb.append("\n      var etiqueta = document.getElementById(\"spamMark\"+spamId).innerHTML;");
-//        sb.append("\n      alert('response:'+response+', comentario:'+spamId+', etiqueta act:'+etiqueta);");
-        sb.append("\n      if (response == 'false') {");
-        sb.append("\n        document.getElementById(\"spamMark\"+spamId).innerHTML = 'Marcar como spam';");
-        sb.append("\n      } else {");
-        sb.append("\n        document.getElementById(\"spamMark\"+spamId).innerHTML = 'Es spam';");
-        sb.append("\n      } ");
-        sb.append("\n      invokeSpam = false;");
-        sb.append("\n    }");
-        sb.append("\n  }");
-        sb.append("\n  invokeSpam = true;");
-        sb.append("\n}");
-        sb.append("\n</script>\n");
-
-        sb.append("\n<div class=\"common_funcs\">");
-        sb.append("\n  <span style=\"float:left; width:200px;\">");
-        sb.append("\n      <div class=\"rank_label\">Calificar:</div>");
-        if (mem.canView()) {
-            sb.append("\n      <div class=\"rank_stars\" dojoType=\"dojox.form.Rating\" numStars=\"5\" value=\"" + rank + "\">"
-                    + "\n        <script type=\"dojo/event\" event=\"onChange\">vote(this.value);</script></div>");
-        } else {
-            sb.append("\n      <div class=\"rank_stars\" dojoType=\"dojox.form.Rating\" numStars=\"5\" value=\"" + rank + "\">"
-                    + "\n        <script type=\"dojo/event\" event=\"_onMouse\">return;</script>"
-                    + "\n        <script type=\"dojo/event\" event=\"onStarClick\">return;</script></div>");
-        }
-        sb.append("\n  </span>");
-        sb.append("\n  <div class=\"rec_votes\">");
-        sb.append("\n    <div class=\"rec_votes_num\" id=\"reviews\">" + this.getReviews() + "</div>");
-        sb.append("\n    <div class=\"rec_votes_label\"> votos</div>");
-        sb.append("\n  </div>");
-        if (mem.canView()) {
-            sb.append("\n  <span class=\"abused\"><a href=\"javascript:changeAbusedState();\">P&uacute;blicamente</a>");
-        } else {
-            sb.append("\n  <span class=\"abused\">P&uacute;blicamente");
-        }
-        sb.append("\n     <span id=\"abused\">" + abusedDesc + "</span></span>");
-        sb.append("\n</div><br/><br/>");
-        sb.append("\n<div class=\"comments_head\">");
-        sb.append("\n  <span class=\"comments_title_link\">"
-                + "<a href=\"javascript:showComments();\" id=\"ctrlComments\">"
-                + "[-]</a></span>");
-        sb.append("\n  <span class=\"comments_title\">Comentarios</span>");
-        //sb.append("\n  <div>&nbsp;</div>");
-        url.setAction("addComment");
-        url.setCallMethod(SWBResourceURL.Call_CONTENT);
-        if (mem.canView()) {
-            sb.append("\n  <span class=\"comments_write\"><a href=\"javascript:addComment();\">Escribir comentario</a></span>");
-        } else {
-            sb.append("\n  <span class=\"comments_write\">&nbsp;</span>");
-        }
-        sb.append("\n</div>");
-        if (mem.canView()) {
-            sb.append("\n<div id=\"addComment\">");
-            sb.append("\n  <br/>Comentario");
-            sb.append("\n  <form name=\"addCommentForm\" action=\"" + url + "\">");
-            sb.append("\n    <input type=\"hidden\" name=\"uri\" value=\"" + suri + "\">");
-            sb.append("\n    <input type=\"hidden\" name=\"act\" value=\"addComment\">");
-            sb.append("\n    <textarea name=\"comentario\" cols=\"40\" rows=\"4\"></textarea>");
-            sb.append("\n    <input type=\"submit\" value=\"Publicar comentario\">");
-            sb.append("\n  </form>");
-            sb.append("\n</div>");
-        }
-        sb.append("\n<div class=\"clearL\"></div>");
-        sb.append(renderListComments(this, mem, pageNumber,
-                  paramRequest.getRenderUrl(), suri));
-        sb.append("\n<div class=\"clearL\"></div>");
-        out.write(sb.toString());
-    }
-
-    /**
-     * Genera listado de comentarios asociados a este <code>MicroSiteElement</code>
-     * @param mse elemento al que est&aacute;n asociados los comentarios
-     * @param mem <code>Member</code> que realiza la consulta
-     * @param page n&uacute;mero de la p&aacute;gina de comentarios a desplegar
-     * @param url la utilizada en las ligas del paginado de comentarios
-     * @param uri correspondiente al elemento de micrositio en cuesti&oacute;n
-     * @param showComments indica si mostrar el listado de comentarios al cargar la p&aacute;gina
-     * @return los datos de los comentarios correspondientes a la p&aacute;gina seleccionada
-     */
-    private String renderListComments(MicroSiteElement mse, Member mem,
-            long page, SWBResourceURL url, String uri) {
-
-        //System.out.println("En renderListComments");
-        StringBuilder ret = new StringBuilder(800);
-        long totalPages = totalPagesNumber(mse);
-
-//        ret.append("\n<table width=\"450\"><tr><td>");
-        ret.append("\n<div>");
-        ret.append("\n  <div id=\"commentsList\">");
-        ret.append(getCommentsByPage(mse, page, mem));
-
-        if (totalPages > 1) {
-            ret.append("\n    <div class=\"clearL\"></div>");
-            ret.append("\n    <div id=\"commentsIndex\">");
-            ret.append("\n      <div class=\"commentsIndexContainer\">");
-            url.setCallMethod(SWBResourceURL.Call_CONTENT);
-            url.setParameter("act", "detail");
-            //TODO: colocar el uri codificado para que sea un parametro valido
-            url.setParameter("uri", uri);
-            if (page > 1) {
-                ret.append("\n        <span class=\"commentPageLink\"><a href=\""
-                        + url.toString() + "&pn=" + (page - 1)
-                        + "\" title=\"P&aacute;gina anterior\">&lt;&lt;</a></span>");
-            }
-            long ini = 1L;
-            long fin = MicroSiteElement.PAGE_INDEXES_TO_SHOW;
-            long dif = 0;
-            if ((totalPages < MicroSiteElement.PAGE_INDEXES_TO_SHOW)) {
-                fin = totalPages;
-            }
-            if (totalPages > MicroSiteElement.PAGE_INDEXES_TO_SHOW && page > 1) {
-                dif = page - 1;
-                if (totalPages >= (MicroSiteElement.PAGE_INDEXES_TO_SHOW + dif)) {
-                    fin = MicroSiteElement.PAGE_INDEXES_TO_SHOW + dif;
-                    ini = 1 + dif;
-                } else {
-                    fin = totalPages;
-                    ini = totalPages - MicroSiteElement.PAGE_INDEXES_TO_SHOW + 1;
-                }
-            }
-
-            for (long i = ini; i <= fin; i++) {
-                if (i != page) {
-                    ret.append("\n        <span class=\"commentPageLink\"><a href=\""
-                            + url.toString() + "&pn=" + i + "\">"
-                            + String.valueOf(i) + "</a></span>");
-                } else {
-                    ret.append("\n        <span class=\"currentPage\">" + String.valueOf(i)
-                               + "</span>");
-                }
-            }
-            if (page < totalPages) {
-                ret.append("\n        <span class=\"commentPageLink\"><a href=\""
-                        + url.toString() + "&pn=" + (page + 1)
-                        + "\" title=\"P&aacute;gina siguiente\">&gt;&gt;</a></span>");
-            }
-            ret.append("\n      </div>");
-            ret.append("\n    </div>");
-        }
-
-        ret.append("\n  </div>\n</div>");
-//        ret.append("\n  </td>\n</tr>\n</table>\n");
-        return ret.toString();
     }
 
     public String getURL()
     {
         return "#";
     }
-
-    /**
-     * Calcula el n&uacute;mero total de p&aacute;ginas a desplegar
-     * @param mse
-     * @return
-     */
-    private long totalPagesNumber(MicroSiteElement mse) {
-
-        //System.out.println("Cuenta los elementos para determinar las paginas.");
-        long totalPages = 1L;
-        long comments = 0L;
-        GenericIterator<Comment> iterator = mse.listComments();
-
-        while (iterator.hasNext()) {
-            iterator.next();
-            comments++;
-        }
-        if (comments > MicroSiteElement.COMMENTS_IN_PAGE) {
-            totalPages = comments / MicroSiteElement.COMMENTS_IN_PAGE;
-            if (comments % MicroSiteElement.COMMENTS_IN_PAGE > 0) {
-                totalPages++;
-            }
-        }
-
-        //System.out.println("Ya sabe cuantas paginas:" + totalPages);
-        return totalPages;
-    }
-
-    private String getCommentsByPage(MicroSiteElement mse, long page, Member mem) {
-
-        //System.out.println("En getCommentsByPage");
-        Iterator iterator = mse.listComments();
-        StringBuilder ret = new StringBuilder(400);
-        int ordinal = 0;
-        long firstInPage = ((page - 1) * MicroSiteElement.COMMENTS_IN_PAGE) + 1;
-        long lastInPage = page * MicroSiteElement.COMMENTS_IN_PAGE;
-
-        iterator = SWBComparator.sortByCreated(iterator, false);
-
-        while (iterator.hasNext()) {
-            Comment comment = (Comment) iterator.next();
-            ordinal++;
-
-            //System.out.println("Pasa por comentario: " + ordinal);
-            if (ordinal < firstInPage) {
-                continue;
-            } else if (ordinal > lastInPage) {
-                break;
-            }
-
-            String spamMark = (comment.isSpam() ? "Es spam" : "Marcar como spam");
-            ret.append("\n    <div id=\"comment" + comment.getId() + "\" class=\"comment-entry\">");
-            ret.append("\n      <div class=\"comment-head\">");
-            ret.append("\n        <div class=\"comment-info\">");
-            ret.append("\n          " + ordinal + ". ");
-            try {
-                if (comment.getCreator().getPhoto()!=null) {
-                    ret.append("<img src=\"" + SWBPlatform.getWebWorkPath() + comment.getCreator().getPhoto() + "\" alt=\"foto\" width=\"50px\" height=\"50px\" border=\"0\">&nbsp;");
-                }
-            } catch (NullPointerException npe) {}
-            ret.append("<span class=\"comment-auth\">");
-            try {
-                if (!comment.getCreator().getFullName().equalsIgnoreCase("")) {
-                    ret.append(comment.getCreator().getFullName());
-                } else {
-                    ret.append("Desconocido");
-                }
-            } catch (NullPointerException npe) {
-                ret.append("Desconocido");
-            }
-            ret.append("</span>\n        </div>");
-            ret.append("\n        <span class=\"comment-time\"> ("
-                    + SWBUtils.TEXT.getTimeAgo(comment.getCreated(), mem.getUser().getLanguage()) + ")</span>");
-            if (mem.canView()) {
-                ret.append("\n        <span class=\"comment-spam\"><a href=\"javascript:spam("
-                        + comment.getId() + ");\" id=\"spamMark"+ comment.getId() + "\">" + spamMark + "</a></span>");
-            } else if (comment.isSpam()) {
-                ret.append("\n        <span class=\"comment-spam\">" + spamMark + "</span>");
-            }
-            ret.append("\n      </div>");
-            ret.append("\n      <div id=\"comment_body_" + comment.getId() + "\">");
-            ret.append("\n        <div class=\"comment-body\">");
-            ret.append("\n          <div>" + comment.getDescription() + "</div>");
-            ret.append("\n        </div>");
-            ret.append("\n      </div>");
-            ret.append("\n    </div>");
-        }
-        return ret.toString();
-    }
+    
     public WebPage getWebPage()
     {
         return null;
