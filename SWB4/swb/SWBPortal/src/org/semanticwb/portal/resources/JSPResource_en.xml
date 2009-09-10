@@ -12,8 +12,12 @@
 		<admdbconnmgr defconn="true"/>     
         <fieldset>
     		<input type="CHECKBOX" name="forward" label="Include / Forward:" value="1" />
-        	<input type="TEXT" name="jsppath" label="JSP path:" size="50" jspatron="[\w\/\-]+(\.jsp)" />
-            <input type="TEXT" name="jspactpath" label="ProcesAction JSP path:" size="50" jspatron="[\w\/\-]+(\.jsp)" />
+        	<input type="TEXT" name="jsppath" label="JSP path:" size="50"
+                   jspatron="[\w\/\-]+(\.jsp)$"
+                   invalidMessage="File's extension must be: jsp" />
+            <input type="TEXT" name="jspactpath" label="ProcesAction JSP path:"
+                   size="50" jspatron="[\w\/\-]+(\.jsp)$"
+                   invalidMessage="File's extension must be: jsp" />
         </fieldset>
         <fieldset>
             <input type="SUBMIT" name="btnSave"  value="Save"/>
