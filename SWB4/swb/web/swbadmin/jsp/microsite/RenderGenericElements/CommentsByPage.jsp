@@ -10,8 +10,7 @@
         Member mem = Member.getMember(paramRequest.getUser(), webPage);
         long lpage=(Long)request.getAttribute("suri");
         
-        Iterator iterator = mse.listComments();
-        //StringBuilder ret = new StringBuilder(400);
+        Iterator iterator = mse.listComments();        
         int ordinal = 0;        
         long firstInPage = ((lpage - 1) * COMMENTS_IN_PAGE) + 1;
         long lastInPage = lpage * COMMENTS_IN_PAGE;
