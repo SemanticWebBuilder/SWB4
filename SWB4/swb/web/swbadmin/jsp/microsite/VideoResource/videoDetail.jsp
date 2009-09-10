@@ -36,5 +36,6 @@
 <%
 rec.renderGenericElements(request, response, paramRequest);
 %>
+<br>
 <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Regresar</a></p></div>
 
