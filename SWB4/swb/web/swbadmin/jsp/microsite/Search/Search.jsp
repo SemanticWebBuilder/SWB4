@@ -58,7 +58,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
                         WebPage wp = (WebPage) obj.createGenericInstance();
                         %>
                         <div class="listEntryInfo">                            
-                            <p class="tituloNaranja"><a href="<%=wp.getUrl()%>"><%=wp.getTitle()%>&nbsp;(WebPage)</a></p>
+                            <p class="tituloNaranja"><%=wp.getTitle()%>&nbsp;(WebPage)</p>
                             <p class="vermas"><a href ="<%=wp.getUrl()%>">Ir a</a></p>
                         </div>
                         <div class="clear"> </div>
@@ -78,7 +78,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
                         }
                         %>
                         <div class="listEntryInfo">
-                            <p class="tituloNaranja"><a href ="<%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>"><%=c.getTitle()%>&nbsp;(<%=obj.getSemanticClass().getDisplayName("es")%>)</a></p>
+                            <p class="tituloNaranja"><!--a href ="%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>"--><%=c.getTitle()%>&nbsp;(<%=obj.getSemanticClass().getDisplayName("es")%>)<!--/a--></p>
                             <p>
                                 <%=c.getWebPage().getPath(map)%>
                             </p>
@@ -100,6 +100,11 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
             <div class ="listEntry"></div>
             <p align="center">
             <%
+                if (pageNumber - 1 >= 1) {
+                    %>
+                    <a href="<%=sliceUrl + "&p=" + (pageNumber - 1)%>">&lt;&nbsp;</a>
+                    <%
+                }
                 double pages = Math.ceil((double) total / (double) maxr);
                     for (int i = 1; i <= pages; i++) {
                         start = maxr * (i - 1);
@@ -110,7 +115,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
                         }
                         if (pageNumber == i) {
                             %>
-                            <span><%=i%></span>
+                            <span><font size="2.8"><b><%=i%></b></font></span>
                             <%
                         } else {
                             %>
@@ -118,6 +123,11 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
                             <%
                         }
                     }
+                if (pageNumber + 1 <= pages) {
+                    %>
+                    <a href="<%=sliceUrl + "&p=" + (pageNumber + 1)%>">&nbsp;&gt;</a>
+                    <%
+                }
             %>
             </p>
         </div>
