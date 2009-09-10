@@ -51,16 +51,22 @@
             PhotoElement photo = it.next();
             if(photo.canView(member))
             {
+                SWBResourceURL urlDetail = paramRequest.getRenderUrl();
+                        urlDetail.setParameter("act", "detail");
+                        urlDetail.setParameter("uri", photo.getURI());
+                        String created = SWBUtils.TEXT.getTimeAgo(photo.getCreated(), user.getLanguage());
                 SWBResourceURL viewurl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", photo.getURI());
 %>
             <div class="entry_listadoFotos">
                 <a dojoType="dojox.image.Lightbox" title="<%= photo.getTitle()%>" href="<%= SWBPlatform.getWebWorkPath()+photo.getImageURL()%>">
                     <img id="img_<%=i+base.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+photo.getPhotoThumbnail()%>" alt="<%= photo.getTitle()%>" border="0" />
                 </a>
-                <a href="<%=viewurl%>">
+                <a href="<%=viewurl%>"></a>
                 <p class="tituloFoto"><%= photo.getTitle()%></p>
+                <p class="tituloFoto"><%= created%></p>
                 <p class="autor-visitasFoto"><span class="autorFoto"><%= photo.getCreator().getFirstName()%></span>&nbsp;|&nbsp;<%= photo.getViews()%> vistas</p>
-                </a>
+                <div class="vermasFloat"><p class="vermas"><a href="<%=urlDetail%>">Ver más</a></p></div>
+                
             </div>
 <%
                 i++;
