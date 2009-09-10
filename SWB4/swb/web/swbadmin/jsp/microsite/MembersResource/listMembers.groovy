@@ -66,7 +66,7 @@ if (null!=microsite){
                 def img = SWBPlatform.getWebWorkPath()+mem_usr.getPhoto()
                 def alt=mem_usr.getFullName()
                 if (null==img) img = "/swbadmin/images/defaultPhoto.jpg"
-                println """<div class="moreUser"><a href="${perfil}?user=$uri" alt="Ir al perfil de $nombre"><img alt="$alt"  src="$img" width="39" height="39"  /></a></div>"""
+                println """<div class="moreUser"><a href="${perfil}?user=$uri" alt="Ir al perfil de $nombre"><img  title="$alt" alt="$alt"  src="$img" width="39" height="39"  /></a></div>"""
             }
         }
 
