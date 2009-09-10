@@ -101,6 +101,6 @@ if(email!=null)
 
     
 <%
-post.renderGenericElements(request, out, paramRequest);
+post.renderGenericElements(request, response, paramRequest);
 %>
 

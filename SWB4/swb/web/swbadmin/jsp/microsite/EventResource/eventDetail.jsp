@@ -81,7 +81,7 @@
 <br/><br/>
 <%
     }
-    event.renderGenericElements(request, out, paramRequest);
+    event.renderGenericElements(request, response, paramRequest);
     }
 %>
 
