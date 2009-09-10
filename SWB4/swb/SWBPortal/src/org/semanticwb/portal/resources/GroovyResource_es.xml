@@ -12,8 +12,12 @@
 		<admdbconnmgr defconn="true"/>      
         <fieldset>
             <input type="CHECKBOX" name="forward" label="Include / Forward:" value="1" />
-            <input type="TEXT" name="jsppath" label="Ruta del archivo Groovy:" size="50" jspatron="[\w\/\-]+(\.groovy)$" />
-            <input type="TEXT" name="jspactpath" label="Ruta del ProcesAction :" size="50" jspatron="[\w\/\-]+(\.groovy)$" />
+            <input type="TEXT" name="jsppath" label="Ruta del archivo Groovy:"
+                   size="50" jspatron="[\w\/\-]+(\.groovy)$"
+                   invalidMessage="El archivo debe tener extensión: groovy" />
+            <input type="TEXT" name="jspactpath" label="Ruta del ProcesAction :"
+                   size="50" jspatron="[\w\/\-]+(\.groovy)$"
+                   invalidMessage="El archivo debe tener extensión: groovy" />
         </fieldset>
         <fieldset>
             <input type="SUBMIT" name="btnSave"  value="Guardar"/>
