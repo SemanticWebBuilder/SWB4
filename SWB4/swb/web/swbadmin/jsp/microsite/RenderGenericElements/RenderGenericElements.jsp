@@ -59,7 +59,7 @@ var count = 0;
 function vote(val) {
     if (!invoke) return;
     //alert('En funcion para votar');
-    var url = "/swb/Ciudad_Digital/prueba_de_comunidad_Blog/_aid/59/_mto/3/_act/vote?act=vote&value="+escape(val)+"&uri="+escape('http://www.Ciudad_Digital.swb#swbcomm_PostElement:17');
+    var url = '<%=url%>?act=vote&value='+escape(val)+'&<%=tmpUrl%>';
     request.open("GET", url, true);
     request.onreadystatechange = ranked;
     request.send(null);
@@ -85,8 +85,8 @@ function ranked() {
 var invokeAbused = true;
 
 function changeAbusedState() {
-    if (!invokeAbused) return;
-    var url = "/swb/Ciudad_Digital/prueba_de_comunidad_Blog/_aid/59/_mto/3/_act/abuseReport?act=abuseReport&uri="+escape('http://www.Ciudad_Digital.swb#swbcomm_PostElement:17');
+    if (!invokeAbused) return;   
+    var url = '<%=url%>?act=abuseReport&<%=tmpUrl%>';
     request.open("GET", url, true);
     request.onreadystatechange = abusedStateChanged;
     request.send(null);
@@ -127,8 +127,8 @@ var spamId = 0;
 
 function spam(commentId) {
     spamId = commentId;
-    if (!invokeSpam) return;
-    var url = "/swb/Ciudad_Digital/prueba_de_comunidad_Blog/_aid/59/_mto/3/_act/abuseReport?act=spamReport&commentId="+commentId+"&uri="+escape('http://www.Ciudad_Digital.swb#swbcomm_PostElement:17');
+    if (!invokeSpam) return;    
+    var url = '<%=url%>?act=spamReport&commentId='+commentId+'&<%=tmpUrl%>';
     request.open("GET", url, true);
     request.onreadystatechange = spamStateChanged;
     request.send(null);
