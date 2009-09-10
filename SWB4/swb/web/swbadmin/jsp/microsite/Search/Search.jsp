@@ -82,6 +82,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
                 <%
             }
             %>
+            <div class ="listEntry"></div>
             <p align="center">
             <%
                 double pages = Math.ceil((double) total / (double) maxr);
