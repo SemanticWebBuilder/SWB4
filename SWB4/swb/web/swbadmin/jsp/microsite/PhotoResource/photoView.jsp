@@ -51,6 +51,7 @@
             PhotoElement photo = it.next();
             if(photo.canView(member))
             {
+                String postAuthor = photo.getCreator().getFullName();
                 SWBResourceURL urlDetail = paramRequest.getRenderUrl();
                         urlDetail.setParameter("act", "detail");
                         urlDetail.setParameter("uri", photo.getURI());
@@ -63,6 +64,7 @@
                 </a>
                 <a href="<%=viewurl%>"></a>
                 <p class="tituloFoto"><%= photo.getTitle()%></p>
+                <p class="tituloFoto"><%=postAuthor%></p>
                 <p class="tituloFoto"><%= created%></p>
                 <p class="autor-visitasFoto"><span class="autorFoto"><%= photo.getCreator().getFirstName()%></span>&nbsp;|&nbsp;<%= photo.getViews()%> vistas</p>
                 <div class="vermasFloat"><p class="vermas"><a href="<%=urlDetail%>">Ver más</a></p></div>
