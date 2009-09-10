@@ -47,7 +47,7 @@
             <span class="comment-auth">
             <%
             try {
-                if (!comment.getCreator().getFullName().equalsIgnoreCase("")) {
+                if (!comment.getCreator().getFullName().equals("")) {
                     %>
                     <%=comment.getCreator().getFullName()%>
                     <%
