@@ -62,33 +62,33 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
                         <div class="clear"> </div>
                         <%
                     } else if (obj.instanceOf(DirectoryObject.sclass)) {
-                    DirectoryObject c = (DirectoryObject) obj.createGenericInstance();
-                    //Hotel c = (Hotel)obj.createGenericInstance();
-                    String photo = obj.getProperty(swbcomm_dirPhoto);
-                    if(photo != null && !photo.equals("null")) {
-                    %>
-                        <img height="90" width="90" src="<%=SWBPlatform.getWebWorkPath()+c.getDirectoryResource().getWorkPath()+"/"+obj.getId()+"/"+photo%>"/>
-                    <%
-                    } else {
-                    %>
-                        <img height="90" width="90" src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/noDisponible.gif"/>
-                    <%
-                    }
-                    %>
-                    <div class="listEntryInfo">
-                        <p class="tituloNaranja"><a href ="<%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>"><%=c.getTitle()%>&nbsp;(<%=obj.getSemanticClass().getDisplayName("es")%>)</a></p>
-                        <p>
-                            <%=c.getWebPage().getPath(map)%>
-                        </p>
-                        <p>
-                            <%=(c.getDescription()==null)?"":c.getDescription()%>
-                        </p>
-                        <br/>
-                        <!--p>-Palabras clave:%=c.getTags()%></p-->
-                        <p class="vermas"><a href ="<%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>">Ver mas</a></p>
-                    </div>
-                    <div class="clear"> </div>
-                    <%
+                        DirectoryObject c = (DirectoryObject) obj.createGenericInstance();
+                        //Hotel c = (Hotel)obj.createGenericInstance();
+                        String photo = obj.getProperty(swbcomm_dirPhoto);
+                        if(photo != null && !photo.equals("null")) {
+                        %>
+                            <img height="90" width="90" src="<%=SWBPlatform.getWebWorkPath()+c.getDirectoryResource().getWorkPath()+"/"+obj.getId()+"/"+photo%>"/>
+                        <%
+                        } else {
+                        %>
+                            <img height="90" width="90" src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/noDisponible.gif"/>
+                        <%
+                        }
+                        %>
+                        <div class="listEntryInfo">
+                            <p class="tituloNaranja"><a href ="<%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>"><%=c.getTitle()%>&nbsp;(<%=obj.getSemanticClass().getDisplayName("es")%>)</a></p>
+                            <p>
+                                <%=c.getWebPage().getPath(map)%>
+                            </p>
+                            <p>
+                                <%=(c.getDescription()==null)?"":c.getDescription()%>
+                            </p>
+                            <br/>
+                            <!--p>-Palabras clave:%=c.getTags()%></p-->
+                            <p class="vermas"><a href ="<%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>">Ver mas</a></p>
+                        </div>
+                        <div class="clear"> </div>
+                        <%
                     }
                     %>
                 </div>
