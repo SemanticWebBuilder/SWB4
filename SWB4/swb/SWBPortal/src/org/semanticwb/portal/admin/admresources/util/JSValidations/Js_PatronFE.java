@@ -97,7 +97,7 @@ public class Js_PatronFE extends WBJsValidationsFEAbs {
 //                strb.append("document."+formfeName + ".");
 //            strb.append(field + ".value;");
             strb.append("document.getElementById(\""+field+"\").value;");
-            strb.append("var patron="+patron+";");
+            strb.append("var patron=/"+patron+"/;");
             strb.append("\n   if (pCaracter.length>0) ");
             strb.append("     { ");
             strb.append("\n      if (!patron.test(pCaracter)) ");

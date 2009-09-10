@@ -5,8 +5,8 @@
         <admdbconnmgr defconn="true"/>                      
         <fieldset>
             <input type="CHECKBOX" name="forward" label="Include / Forward:" value="1" />
-            <input type="TEXT" name="jsppath" label="Ruta del archivo en Python:" size="50" />
-            <input type="TEXT" name="jspactpath" label="Ruta del ProcesAction:" size="50" />
+            <input type="TEXT" name="jsppath" label="Ruta del archivo en Python:" size="50" jspatron="[\w\/\-]+(\.py)" />
+            <input type="TEXT" name="jspactpath" label="Ruta del ProcesAction:" size="50" jspatron="[\w\/\-]+(\.py)" />
         </fieldset>
         <fieldset>
             <input type="SUBMIT" name="btnSave"  value="Guardar"/>
