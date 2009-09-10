@@ -6,6 +6,7 @@
     String searchUrl = (String) request.getAttribute("rUrl");
     HashMap<String, String> map = new HashMap<String, String>();
     map.put("separator", "-");
+    System.out.println("..........0.........");
 %>
 
 <%
@@ -23,7 +24,9 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
     </div>
 <%
 } else if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
-    Iterator<String> it = results.iterator();
+    Iterator<String> it = null;
+    if (results != null) it = results.iterator();
+    
     if(results != null && it.hasNext()){
         int total = (Integer) request.getAttribute("t");
         int maxr = Integer.valueOf(paramRequest.getResourceBase().getAttribute("maxResults", "10"));
@@ -47,10 +50,12 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
         <div class="entriesList">
         <%
             while(it.hasNext()) {
+                System.out.println("..........1---.........");
         %>
                 <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
                 <%
                     String r = it.next();
+                    System.out.println("..........2.........");
                     SemanticObject obj = SemanticObject.createSemanticObject(r);
                     if (obj.instanceOf(WebPage.sclass)) {
                         WebPage wp = (WebPage) obj.createGenericInstance();
