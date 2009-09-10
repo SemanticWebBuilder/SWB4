@@ -59,5 +59,5 @@
     }
 %>
 <%
-    photo.renderGenericElements(request, out, paramRequest);
+    photo.renderGenericElements(request, response, paramRequest);
 %>

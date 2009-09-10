@@ -39,5 +39,5 @@
     <p class="descripcion" style="text-align:justify;"><%=anew.getFullText()%></p>
 </div>
 <%  }
-    anew.renderGenericElements(request, out, paramRequest);
+    anew.renderGenericElements(request, response, paramRequest);
 %>
