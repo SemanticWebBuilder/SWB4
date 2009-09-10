@@ -12,8 +12,8 @@
 		<admdbconnmgr defconn="true"/>     
         <fieldset>
     		<input type="CHECKBOX" name="forward" label="Include / Forward:" value="1" />
-        	<input type="TEXT" name="jsppath" label="PHP file path:" size="50" jspatron="/.php$/" />
-            <input type="TEXT" name="jspactpath" label="ProcesAction PHP path:" size="50" jspatron="/.php$/" />
+        	<input type="TEXT" name="jsppath" label="PHP file path:" size="50" jspatron="[\w\/\-]+(\.php)$" />
+            <input type="TEXT" name="jspactpath" label="ProcesAction PHP path:" size="50" jspatron="[\w\/\-]+(\.php)$" />
         </fieldset>
         <fieldset>
             <input type="SUBMIT" name="btnSave"  value="Save"/>

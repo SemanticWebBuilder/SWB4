@@ -12,8 +12,8 @@
 		<admdbconnmgr defconn="true"/>     
         <fieldset>
     		<input type="CHECKBOX" name="forward" label="Include / Forward:" value="1" />
-        	<input type="TEXT" name="jsppath" label="Python file path:" size="50" jspatron="/.py$/" />
-            <input type="TEXT" name="jspactpath" label="ProcesAction file path:" size="50" jspatron="/.py$/" />
+        	<input type="TEXT" name="jsppath" label="Python file path:" size="50" jspatron="[\w\/\-]+(\.py)" />
+            <input type="TEXT" name="jspactpath" label="ProcesAction file path:" size="50" jspatron="[\w\/\-]+(\.py)" />
         </fieldset>
         <fieldset>
             <input type="SUBMIT" name="btnSave"  value="Save"/>
