@@ -1,8 +1,8 @@
 <%@page contentType="text/html"%>
 <%@page import="java.text.*,org.semanticwb.platform.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
-<script type="text/javascript">
-  dojo.require("dojox.image.Lightbox");
-  dojo.require("dojo.parser");
+<script type="text/javascript" charset="utf-8">
+  dojo.require("dojox.image.Lightbox");  
+  //dojo.require("dojo.parser");
 </script>
 <%
     SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
@@ -30,7 +30,7 @@
     <h2 class="tituloGrande"><%= photo.getTitle()%></h2>
     <div class="entry_listadoFotos">
         <!-- <a dojoType="dojox.image.Lightbox" title="<%= photo.getTitle()%>" href="<%= SWBPlatform.getWebWorkPath()+photo.getImageURL()%>"> -->
-        <a href="<%= SWBPlatform.getWebWorkPath()+photo.getImageURL() %>" target="_self">
+        <a href="<%= SWBPlatform.getWebWorkPath()+photo.getImageURL() %>" title="<%=photo.getTitle()%>">
             <img id="img_<%=photo.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+photo.getImageURL() %>" alt="<%= photo.getTitle() %>" border="0" width="300" height="100%" />
             </a>
         <!-- </a>                  -->
