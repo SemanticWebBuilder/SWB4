@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="java.text.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<%@page import="org.semanticwb.portal.lib.*,java.text.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
  
 <script language="Javascript" type="text/javascript">
         function validateremove(url, title,uri)
@@ -14,6 +14,10 @@
 
 <%
     SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
+    if(paramRequest==null)
+        {
+        return;
+        }
     User user=paramRequest.getUser();
     WebPage wpage=paramRequest.getWebPage();
     PostElement post=(PostElement)request.getAttribute("post");
