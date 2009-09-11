@@ -3,6 +3,10 @@
 <%
         MicroSiteElement mse=(MicroSiteElement)request.getAttribute("MicroSiteElement");
         SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
+        if(paramRequest==null)
+            {
+            return;
+            }
         WebPage webPage  = paramRequest.getWebPage();
         Member mem = Member.getMember(paramRequest.getUser(), webPage);
         String suri = request.getParameter("uri");        
@@ -154,7 +158,7 @@ function spamStateChanged() {
     
 <div class="common_funcs">
     <span style="float:left; width:200px;"> 
-        <div class="rank_label">Calificar  aaaaa:</div>
+        <div class="rank_label">Calificar:</div>
         <%
         if (mem.canView())
         {
