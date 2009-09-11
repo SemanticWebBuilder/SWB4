@@ -204,6 +204,7 @@ function spamStateChanged() {
          <%
         if (mem.canView() && !mse.isAbused()) {
             %>
+            <div class="clearL"></div>
             <div id="markop">
             <div class="editarInfo"><p><a href="javascript:changeAbusedState();">Marcar inapropiado</a></p></div>
             </div>
@@ -225,7 +226,9 @@ function spamStateChanged() {
             {
             %>
             <!-- <span class="comments_write"> -->
-                 <div class="editarInfo"><p><a href="javascript:addComment()">Escribir comentario</a></p></div>                 
+            <div class="clearL"></div>
+            <div class="clearL"></div>
+            <div class="editarInfo"><p><a href="javascript:addComment()">Escribir comentario</a></p></div>
             <!-- </span>  -->
             <%
             
