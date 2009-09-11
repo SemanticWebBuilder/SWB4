@@ -32,7 +32,7 @@
             <div id="comment<%=comment.getId()%>" class="comment-entry">
             <div class="comment-head">
             <div class="comment-info">
-            <%=ordinal%>.
+            <%-- <%=ordinal%>. --%>
             <%
             
             try {
@@ -82,9 +82,9 @@
             }
             %>
             </div>
-            <div id="comment_body_<%=comment.getId()%>">");
+            <div id="comment_body_<%=comment.getId()%>">
             <div class="comment-body">
-            <div><%=comment.getDescription()%></div>");
+            <div><%=comment.getDescription()%></div>
             </div>
             </div>
             </div>
