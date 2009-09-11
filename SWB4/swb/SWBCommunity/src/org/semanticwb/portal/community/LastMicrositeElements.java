@@ -91,7 +91,7 @@ public class LastMicrositeElements extends GenericAdmResource
             MicroSiteElement element=new MicroSiteElement(obj);
             elements.add(element);
         }
-        Iterator itElements=SWBComparator.sortByCreated(elements.iterator(), true);
+        Iterator itElements=SWBComparator.sortByCreated(elements.iterator(), false);
         elements = new ArrayList<MicroSiteElement>();
         int i=0;
         while(itElements.hasNext())
