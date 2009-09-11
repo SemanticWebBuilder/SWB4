@@ -105,6 +105,9 @@ if(email!=null)
 
     
 <%
-post.renderGenericElements(request, response, paramRequest);
+SWBResponse res=new SWBResponse(response);
+post.renderGenericElements(request, res, paramRequest);
+out.write(res.toString());
 %>
+
 

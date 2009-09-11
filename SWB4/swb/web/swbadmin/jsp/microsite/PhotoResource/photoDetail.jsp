@@ -1,5 +1,5 @@
 <%@page contentType="text/html"%>
-<%@page import="java.text.*,org.semanticwb.platform.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<%@page import="org.semanticwb.portal.lib.*,java.text.*,org.semanticwb.platform.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <script type="text/javascript" charset="utf-8">
   dojo.require("dojox.image.Lightbox");  
   //dojo.require("dojo.parser");
@@ -70,6 +70,8 @@
  <div class="clear">&nbsp;</div>
 <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Regresar</a></p></div>
 <%
-    photo.renderGenericElements(request, response, paramRequest);
+    SWBResponse res=new SWBResponse(response);
+photo.renderGenericElements(request, res, paramRequest);
+out.write(res.toString());
 %>
 
