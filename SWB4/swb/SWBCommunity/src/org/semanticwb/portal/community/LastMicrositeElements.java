@@ -88,7 +88,7 @@ public class LastMicrositeElements extends GenericAdmResource
         while(oelements.hasNext())
         {
             SemanticObject obj=oelements.next();
-            MicroSiteElement element=new MicroSiteElement(obj);
+            MicroSiteElement element=(MicroSiteElement) obj.createGenericInstance();
             elements.add(element);
         }
         Iterator itElements=SWBComparator.sortByCreated(elements.iterator(), false);
