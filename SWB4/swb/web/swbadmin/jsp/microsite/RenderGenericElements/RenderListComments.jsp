@@ -37,7 +37,7 @@
 %>
 <div>
     <div id="commentsList">        
-        <jsp:include flush="true" page="CommentsByPage" />
+        <jsp:include flush="true" page="CommentsByPage.jsp" />
         <%
 
             if (totalPages > 1)
