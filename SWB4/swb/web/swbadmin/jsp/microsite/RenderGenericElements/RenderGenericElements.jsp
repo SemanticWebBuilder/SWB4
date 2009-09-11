@@ -205,7 +205,7 @@ function spamStateChanged() {
         if (mem.canView() && !mse.isAbused()) {
             %>
             <div id="markop">
-            <div class="editarInfo"><p><a href="javascript:changeAbusedState();">Marcar como contenido inapropiado</a></p></div>
+            <div class="editarInfo"><p><a href="javascript:changeAbusedState();">Marcar inapropiado</a></p></div>
             </div>
             <%
         }
