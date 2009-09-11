@@ -34,7 +34,7 @@
         %>
         <link rel='stylesheet' type='text/css' href="<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/microsite/css/ciudad_digital.css" />
         <script type="text/javascript" src="<%=SWBPlatform.getContextPath()%>/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: false"></script>
-        <link rel='stylesheet' type='text/css' media='all' href='"<%=SWBPlatform.getContextPath()%>/swbadmin/js/dojo/dojox/form/resources/Rating.css' />
+        <link rel='stylesheet' type='text/css' media='all' href="<%=SWBPlatform.getContextPath()%>/swbadmin/js/dojo/dojox/form/resources/Rating.css" />
         <script type="text/javascript">
   dojo.require("dojo.parser");
   dojo.require("dojox.form.Rating");
