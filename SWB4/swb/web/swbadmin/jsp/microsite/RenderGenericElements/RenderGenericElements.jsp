@@ -9,9 +9,7 @@
         }
         WebPage webPage  = paramRequest.getWebPage();
         Member mem = Member.getMember(paramRequest.getUser(), webPage);
-        String suri = request.getParameter("uri");
-        //suri=URLEncoder.encode(suri);
-        //String tmpUrl = "";
+        String suri = request.getParameter("uri");        
         String abusedDesc = mse.isAbused() ? "Inapropiado" : "Apropiado";
         int rank = 0;
         long pageNumber = 0;
@@ -64,7 +62,9 @@ var count = 0;
 function vote(val) {
     if (!invoke) return;
     //alert('En funcion para votar');
-    var url = '<%=url%>?act=vote&value='+escape(val)+'&uri=<%=suri%>';
+    var uri='<%=suri%>';
+    uri=escape(uri);
+    var url = '<%=url%>?act=vote&value='+escape(val)+'&uri='+uri;
     request.open("GET", url, true);
     request.onreadystatechange = ranked;
     request.send(null);
@@ -90,8 +90,10 @@ function ranked() {
 var invokeAbused = true;
 
 function changeAbusedState() {
-    if (!invokeAbused) return;   
-    var url = '<%=url%>?act=abuseReport&uri=<%=suri%>';
+    if (!invokeAbused) return;
+    var uri='<%=suri%>';
+    uri=escape(uri);
+    var url = '<%=url%>?act=abuseReport&uri='+uri;
     request.open("GET", url, true);
     request.onreadystatechange = abusedStateChanged;
     request.send(null);
@@ -112,7 +114,10 @@ function abusedStateChanged() {
     }
   }
 }
-
+function sendComment()
+{
+    document.addCommentForm.submit();
+}
 function addComment() {
     document.getElementById("addComment").style.display="inline";
 }
@@ -132,8 +137,10 @@ var spamId = 0;
 
 function spam(commentId) {
     spamId = commentId;
-    if (!invokeSpam) return;    
-    var url = '<%=url%>?act=spamReport&commentId='+commentId+'&uri=<%=suri%>';
+    if (!invokeSpam) return;
+    var uri='<%=suri%>';
+    uri=escape(uri);
+    var url = '<%=url%>?act=spamReport&commentId='+commentId+'&uri='+uri;
     request.open("GET", url, true);
     request.onreadystatechange = spamStateChanged;
     request.send(null);
@@ -216,7 +223,7 @@ function spamStateChanged() {
             {
             %>
             <span class="comments_write">
-                <a href="javascript:addComment();">Escribir comentario</a>
+                 <div class="editarInfo"><p><a href="javascript:addComment()">Escribir comentario</a></p></div>
             </span> 
             <%
             
@@ -238,9 +245,9 @@ function spamStateChanged() {
             <form name="addCommentForm" action="<%=url%>">
             <input type="hidden" name="uri" value="<%=suri%>">
             <input type="hidden" name="act" value="addComment">
-            <textarea name="comentario" cols="40" rows="4"></textarea>
-            <input type="submit" value="Publicar comentario">
-            </form>
+            <textarea name="comentario" cols="40" rows="4"></textarea>            
+            </form>            
+            <div class="editarInfo"><p><a href="javascript:sendComment()">Publicar comentario</a></p></div>
             </div>
             <%
             
