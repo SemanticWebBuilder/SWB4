@@ -1,5 +1,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.net.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<%!
+    private static final String VER_COMENTARIOS="Ver comentarios";
+    private static final String OCULTAR_COMENTARIOS="Ocultar comentarios";
+%>
 <%
         MicroSiteElement mse=(MicroSiteElement)request.getAttribute("MicroSiteElement");
         SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
@@ -130,12 +134,14 @@ function showComments() {
     var x = document.getElementById("commentsList").style.display;
     if (x == 'none') {
       document.getElementById("commentsList").style.display="inline";
-      document.getElementById("ctrlComments").innerHTML="[-]";
+      document.getElementById("ctrlComments").innerHTML="<%=OCULTAR_COMENTARIOS%>";
     } else {
       document.getElementById("commentsList").style.display="none";
-      document.getElementById("ctrlComments").innerHTML="[+]";
+      document.getElementById("ctrlComments").innerHTML="<%=VER_COMENTARIOS%>";
     }
 }
+
+
 
 var invokeSpam = true;
 var spamId = 0;
@@ -213,11 +219,14 @@ function spamStateChanged() {
         %>
         </div><br/><br/>
         <div class="comments_head">
-        <span class="comments_title_link"> 
-            <a href="javascript:showComments();" id="ctrlComments">[-]</a>
-        </span> 
+        
         <span class="comments_title">
         Comentarios
+        </span>
+            <div class="clearL"></div>
+            <span class="comments_title_link">
+            <div class="editarInfo"><p><a id="ctrlComments" href="javascript:showComments();"><%=OCULTAR_COMENTARIOS%></a></p></div>
+            <!-- <a href="javascript:showComments();" id="ctrlComments"><%=OCULTAR_COMENTARIOS%></a> -->
         </span> 
         <%
         url.setAction("addComment");
