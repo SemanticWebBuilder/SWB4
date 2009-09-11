@@ -107,6 +107,11 @@ function abusedStateChanged() {
       var etiqueta = document.getElementById("abused").innerHTML;
       if (response == 'true') {
         document.getElementById("abused").innerHTML = 'Inapropiado';
+        var divmarkup=document.getElementById("markop");
+        if(divmarkup)
+        {
+            divmarkup.style.display='none';
+        }
       } else {
         document.getElementById("abused").innerHTML = 'Apropiado';
       }
@@ -190,24 +195,21 @@ function spamStateChanged() {
         <div class="rec_votes_num" id="reviews"><%=mse.getReviews()%></div>
         <div class="rec_votes_label"> votos</div>
         </div>
-        <%
-       
-        if (mem.canView()) {
-            %>
-            <span class="abused"> 
-                <a href="javascript:changeAbusedState();">P&uacute;blicamente</a>
-            <%
-            
-        } else {
-            %>
-            <span class="abused">
+        <span class="abused">
                 P&uacute;blicamente
+        
+         <span id="abused">
+         <%=abusedDesc%>
+         </span></span>
+         <%
+        if (mem.canView() && !mse.isAbused()) {
+            %>
+            <div id="markop">
+            <div class="editarInfo"><p><a href="javascript:changeAbusedState();">Marcar como contenido inapropiado</a></p></div>
+            </div>
             <%
         }
         %>
-         <span id="abused">
-         <%=abusedDesc%>
-         </span></span> 
         </div><br/><br/>
         <div class="comments_head">
         <span class="comments_title_link"> 
