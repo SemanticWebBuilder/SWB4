@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<%@page import="java.net.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%
         MicroSiteElement mse=(MicroSiteElement)request.getAttribute("MicroSiteElement");
         SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
@@ -9,8 +9,9 @@
         }
         WebPage webPage  = paramRequest.getWebPage();
         Member mem = Member.getMember(paramRequest.getUser(), webPage);
-        String suri = request.getParameter("uri");        
-        String tmpUrl = "";
+        String suri = request.getParameter("uri");
+        //suri=URLEncoder.encode(suri);
+        //String tmpUrl = "";
         String abusedDesc = mse.isAbused() ? "Inapropiado" : "Apropiado";
         int rank = 0;
         long pageNumber = 0;
@@ -26,7 +27,7 @@
         if (suri == null && this != null) {
             suri = mse.getURI();
         }
-        tmpUrl = "uri=\"+escape('" + suri + "')";
+        //tmpUrl = "uri=\"+escape('" + suri + "')";
         rank = (int) Math.round(Math.floor(mse.getRank()));
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setAction("vote");
@@ -63,7 +64,7 @@ var count = 0;
 function vote(val) {
     if (!invoke) return;
     //alert('En funcion para votar');
-    var url = '<%=url%>?act=vote&value='+escape(val)+'&<%=tmpUrl%>';
+    var url = '<%=url%>?act=vote&value='+escape(val)+'&uri=<%=suri%>';
     request.open("GET", url, true);
     request.onreadystatechange = ranked;
     request.send(null);
@@ -90,7 +91,7 @@ var invokeAbused = true;
 
 function changeAbusedState() {
     if (!invokeAbused) return;   
-    var url = '<%=url%>?act=abuseReport&<%=tmpUrl%>';
+    var url = '<%=url%>?act=abuseReport&uri=<%=suri%>';
     request.open("GET", url, true);
     request.onreadystatechange = abusedStateChanged;
     request.send(null);
@@ -132,7 +133,7 @@ var spamId = 0;
 function spam(commentId) {
     spamId = commentId;
     if (!invokeSpam) return;    
-    var url = '<%=url%>?act=spamReport&commentId='+commentId+'&<%=tmpUrl%>';
+    var url = '<%=url%>?act=spamReport&commentId='+commentId+'&uri=<%=suri%>';
     request.open("GET", url, true);
     request.onreadystatechange = spamStateChanged;
     request.send(null);
