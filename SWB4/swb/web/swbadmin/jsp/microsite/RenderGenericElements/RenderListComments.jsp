@@ -26,18 +26,17 @@
         }
         return totalPages;
     }
-
 %>
 <%
             MicroSiteElement mse = (MicroSiteElement) request.getAttribute("MicroSiteElement");
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             SWBResourceURL url = paramRequest.getRenderUrl();
-            String uri = (String) request.getAttribute("paramRequest");
-            long lpage = (Long) request.getAttribute("suri");
+            String uri = (String) request.getAttribute("suri");
+            long lpage = (Long) request.getAttribute("page");
             long totalPages = totalPagesNumber(mse);
 %>
 <div>
-    <div id="commentsList">
+    <div id="commentsList">        
         <jsp:include flush="true" page="CommentsByPage" />
         <%
 
