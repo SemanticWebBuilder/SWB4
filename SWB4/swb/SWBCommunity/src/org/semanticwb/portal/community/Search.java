@@ -317,7 +317,7 @@ public class Search extends GenericAdmResource {
         try {
             Token tk;
             while ((tk = ts.next()) != null) {
-                res = res + tk.termText() + " ";
+                res = res + new String(tk.termBuffer(), 0, tk.termLength()) + " ";//tk.termText() + " ";
             }
             ts.close();
         } catch (Exception ex) {
