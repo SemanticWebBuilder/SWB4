@@ -171,7 +171,7 @@ function spamStateChanged() {
         if (mem.canView())
         {
             %>
-            <div class="rank_stars" dojoType="dojox.form.Rating" numStars="5" value="<%=rank%>">"
+            <div class="rank_stars" dojoType="dojox.form.Rating" numStars="5" value="<%=rank%>">
             <script type="dojo/event" event="onChange">vote(this.value);</script></div>
             <%
             
@@ -222,9 +222,9 @@ function spamStateChanged() {
         if (mem.canView())
             {
             %>
-            <span class="comments_write">
-                 <div class="editarInfo"><p><a href="javascript:addComment()">Escribir comentario</a></p></div>
-            </span> 
+            <!-- <span class="comments_write"> -->
+                 <div class="editarInfo"><p><a href="javascript:addComment()">Escribir comentario</a></p></div>                 
+            <!-- </span>  -->
             <%
             
         } else {
@@ -236,7 +236,7 @@ function spamStateChanged() {
             
         }
         %>
-        </div>
+        </div> 
         <%
         if (mem.canView()) {
             %>
@@ -252,8 +252,6 @@ function spamStateChanged() {
             <%
             
         }
-        
-
         %>
         <div class="clearL"></div>
         <%
