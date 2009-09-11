@@ -63,15 +63,19 @@
                     Desconocido
                     <%
             }
-            %>
+            %>            
             </span>        </div>
-            <span class="comment-time"><%=SWBUtils.TEXT.getTimeAgo(comment.getCreated(), mem.getUser().getLanguage())%></span>
+             <span class="comment-time">
+            <%=SWBUtils.TEXT.getTimeAgo(comment.getCreated(), mem.getUser().getLanguage())%>
+            </span>
             <%
             
             
             if (mem.canView()) {
                 %>
-                <span class="comment-spam"><a href="javascript:spam(<%=comment.getId()%>)" id="spamMark<%=comment.getId()%>"><%=spamMark%></a></span>
+                <!-- <span class="comment-spam"> -->                
+                    <div class="editarInfo"><p><a href="javascript:spam(<%=comment.getId()%>)" id="spamMark<%=comment.getId()%>"><%=spamMark%></a></p></div>
+                <!-- </span> -->
                 <%
                 
             } else if (comment.isSpam()) {
