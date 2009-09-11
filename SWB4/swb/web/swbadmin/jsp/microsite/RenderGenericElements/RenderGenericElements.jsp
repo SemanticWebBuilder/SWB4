@@ -4,9 +4,9 @@
         MicroSiteElement mse=(MicroSiteElement)request.getAttribute("MicroSiteElement");
         SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
         if(paramRequest==null)
-            {
+        {
             return;
-            }
+        }
         WebPage webPage  = paramRequest.getWebPage();
         Member mem = Member.getMember(paramRequest.getUser(), webPage);
         String suri = request.getParameter("uri");        
