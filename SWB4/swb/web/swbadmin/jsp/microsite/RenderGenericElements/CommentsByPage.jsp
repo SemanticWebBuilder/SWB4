@@ -8,7 +8,7 @@
         SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
         WebPage webPage  = paramRequest.getWebPage();
         Member mem = Member.getMember(paramRequest.getUser(), webPage);
-        long lpage=(Long)request.getAttribute("suri");
+        long lpage=(Long)request.getAttribute("page");
         
         Iterator iterator = mse.listComments();        
         int ordinal = 0;        
