@@ -151,9 +151,10 @@ function spamStateChanged() {
   invokeSpam = true;
 }
 </script>
+    
 <div class="common_funcs">
-    <!-- <span style="float:left; width:200px;"> -->
-        <div class="rank_label">Calificar:</div>
+    <span style="float:left; width:200px;"> 
+        <div class="rank_label">Calificar  aaaaa:</div>
         <%
         if (mem.canView())
         {
@@ -172,7 +173,7 @@ function spamStateChanged() {
             
         }
         %>
-        <!-- </span> -->
+        </span> 
         <div class="rec_votes">
         <div class="rec_votes_num" id="reviews"><%=mse.getReviews()%></div>
         <div class="rec_votes_label"> votos</div>
@@ -181,45 +182,44 @@ function spamStateChanged() {
        
         if (mem.canView()) {
             %>
-            <!--<span class="abused"> -->
+            <span class="abused"> 
                 <a href="javascript:changeAbusedState();">P&uacute;blicamente</a>
             <%
             
         } else {
             %>
-            <!-- <span class="abused"> -->
+            <span class="abused">
                 P&uacute;blicamente
             <%
         }
         %>
-         <!-- <span id="abused"> -->
+         <span id="abused">
          <%=abusedDesc%>
-         <!-- </span></span> -->
+         </span></span> 
         </div><br/><br/>
         <div class="comments_head">
-        <!-- <span class="comments_title_link"> -->
+        <span class="comments_title_link"> 
             <a href="javascript:showComments();" id="ctrlComments">[-]</a>
-        <!-- </span> -->
-        <!-- <span class="comments_title"> -->
+        </span> 
+        <span class="comments_title">
         Comentarios
-        <!-- </span> -->
+        </span> 
         <%
         url.setAction("addComment");
         url.setCallMethod(SWBResourceURL.Call_CONTENT);
         if (mem.canView())
             {
             %>
-            <!-- <span class="comments_write">
+            <span class="comments_write">
                 <a href="javascript:addComment();">Escribir comentario</a>
-            </span> -->
+            </span> 
             <%
             
         } else {
             %>
-            <!-- <span class="comments_write"> -->
+            <span class="comments_write">
                 &nbsp;
-            <!-- </span> -->
-
+            </span>
             <%
             
         }
@@ -247,7 +247,7 @@ function spamStateChanged() {
         <%
         request.setAttribute("page",pageNumber);
         request.setAttribute("suri",suri);
-        %>
+        %>        
         <jsp:include flush="true" page="RenderListComments.jsp"></jsp:include>
         <%
         
