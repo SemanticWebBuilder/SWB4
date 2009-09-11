@@ -1,6 +1,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
-<%!    private static final int COMMENTS_IN_PAGE = 5;
+<%!
+
+    private static final int COMMENTS_IN_PAGE = 5;
     private static final int PAGE_INDEXES_TO_SHOW = 5;
 
     private long totalPagesNumber(MicroSiteElement mse)
@@ -82,7 +84,7 @@
 
                 for (long i = ini; i <= fin; i++)
                 {
-                    if (i != page)
+                    if (i != lpage)
                     {
                 %>
                 <span class="commentPageLink"><a href="<%=url.toString()%>&pn=<%=i%>"><%=String.valueOf(i)%></a></span>
