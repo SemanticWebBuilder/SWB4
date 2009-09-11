@@ -1,5 +1,5 @@
 <%@page contentType="text/html"%>
-<%@page import="org.semanticwb.platform.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<%@page import="org.semanticwb.portal.lib.*,org.semanticwb.platform.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%
     SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
     User user=paramRequest.getUser();
@@ -34,7 +34,9 @@
 %>        
 
 <%
-rec.renderGenericElements(request, response, paramRequest);
+SWBResponse res=new SWBResponse(response);
+rec.renderGenericElements(request, res, paramRequest);
+out.write(res.toString());
 %>
 <br>
 <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Regresar</a></p></div>

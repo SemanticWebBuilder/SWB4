@@ -1,5 +1,5 @@
 <%@page contentType="text/html"%>
-<%@page import="java.text.SimpleDateFormat, org.semanticwb.platform.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<%@page import="org.semanticwb.portal.lib.*,java.text.SimpleDateFormat, org.semanticwb.platform.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%
     SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
     Resource base = paramRequest.getResourceBase();
@@ -39,5 +39,7 @@
     <p class="descripcion" style="text-align:justify;"><%=anew.getFullText()%></p>
 </div>
 <%  }
-    anew.renderGenericElements(request, response, paramRequest);
+    SWBResponse res=new SWBResponse(response);
+anew.renderGenericElements(request, res, paramRequest);
+out.write(res.toString());
 %>
