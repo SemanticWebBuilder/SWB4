@@ -22,19 +22,17 @@
  **/
 package org.semanticwb.portal.community;
 
-import com.hp.hpl.jena.query.QueryExecution;
-import com.hp.hpl.jena.query.QuerySolution;
-import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.rdf.model.Resource;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.SWBComparator;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
-import org.semanticwb.platform.SemanticVocabulary;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -64,7 +62,7 @@ public class LastMicrositeElements extends GenericAdmResource
 
         }
         ArrayList<MicroSiteElement> elements = new ArrayList<MicroSiteElement>();
-        StringBuilder prefixStatement = new StringBuilder();
+        /*StringBuilder prefixStatement = new StringBuilder();
         prefixStatement.append(" PREFIX swb: <http://www.semanticwebbuilder.org/swb4/ontology#>" + NL);
         prefixStatement.append(" PREFIX swbcomm: <http://www.semanticwebbuilder.org/swb4/community#>" + NL);
         prefixStatement.append(" PREFIX rdf: <" + SemanticVocabulary.RDF_URI + "> " + NL);
@@ -84,7 +82,29 @@ public class LastMicrositeElements extends GenericAdmResource
                 MicroSiteElement element = (MicroSiteElement) obj.createGenericInstance();
                 elements.add(element);
             }
+        }*/
+        WebSite site=paramRequest.getWebPage().getWebSite();
+        Iterator<SemanticObject> oelements=site.getSemanticObject().getModel().listInstancesOfClass(MicroSiteElement.sclass, true);
+        while(oelements.hasNext())
+        {
+            SemanticObject obj=oelements.next();
+            MicroSiteElement element=new MicroSiteElement(obj);
+            elements.add(element);
         }
+        Iterator itElements=SWBComparator.sortByCreated(elements.iterator(), true);
+        elements = new ArrayList<MicroSiteElement>();
+        int i=0;
+        while(itElements.hasNext())
+        {
+            MicroSiteElement element=(MicroSiteElement)itElements.next();
+            elements.add(element);
+            i++;
+            if(i==limit)
+            {
+                break;
+            }
+        }
+
         String path = "/swbadmin/jsp/microsite/LastMicrositeElements/LastMicrositeElementsView.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
         try
