@@ -85,7 +85,7 @@ public class Search extends GenericAdmResource {
         super.setResourceBase(base);
         try {
             smodel = base.getSemanticObject().getModel().getRDFOntModel();
-            index = buildIndex();
+            buildIndex();
             langCodes = new HashMap<String, String>();
             langCodes.put("es", "Spanish");
             langCodes.put("en", "English");
@@ -198,7 +198,7 @@ public class Search extends GenericAdmResource {
     /**
      * Builds an index to perform searches.
      */
-    public IndexLARQ buildIndex() throws CorruptIndexException, LockObtainFailedException, IOException {
+    public void buildIndex() throws CorruptIndexException, LockObtainFailedException, IOException {
         // ---- Create in-memory lucene directory
         RAMDirectory rd = new RAMDirectory();
 
@@ -216,7 +216,6 @@ public class Search extends GenericAdmResource {
 
         // ---- Create the access index
         index = larqBuilder.getIndex();
-        return index;
     }
 
     /**
