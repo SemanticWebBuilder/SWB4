@@ -29,11 +29,15 @@ package org.semanticwb.portal.integration.lucene;
  * Created on 23 de mayo de 2006, 05:53 PM
  */
 
+import com.hp.hpl.jena.query.larq.IndexBuilderString;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
@@ -60,7 +64,9 @@ import org.semanticwb.model.Language;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
+import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.api.SWBParamRequestImp;
 import org.semanticwb.portal.api.SWBResource;
 import org.semanticwb.portal.indexer.SWBIndexObj;
@@ -81,6 +87,8 @@ public class SWBLuceneIndexer extends SWBIndexer
     private static Logger log=SWBUtils.getLogger(SWBLuceneIndexer.class);
 
     public static final String ATT_INT_CATEGORY="intCategory";
+
+    SimpleDateFormat df=new SimpleDateFormat("yyyyMMddHHmmss");
     
     String indexPath;
     IndexWriter writer;
@@ -90,6 +98,11 @@ public class SWBLuceneIndexer extends SWBIndexer
     /** Creates a new instance of WBLuceneIndexer */
     public SWBLuceneIndexer() {
         
+    }
+
+    private String getDate(Date date)
+    {
+        return df.format(date);
     }
     
     public void init() {
@@ -173,7 +186,57 @@ public class SWBLuceneIndexer extends SWBIndexer
     {
         if(txt==null)return null;
         return "X"+txt.replaceAll("_","UnDeR").replaceAll(" ","X X")+"X";
-    }            
+    }
+
+    protected void writeObject(SemanticObject obj)
+    {
+        close_searcher();
+        try {
+            if(writer==null) {
+                writer = new IndexWriter(indexPath, analyzer, false);
+            }
+
+            IndexBuilderString larqBuilder = new IndexBuilderString(writer);
+            larqBuilder.indexStatements(obj.getRDFResource().listProperties());
+            larqBuilder.closeWriter();
+
+            Document doc = new Document();
+            if(obj.getURI()!=null)doc.add(new Field("uri",obj.getURI(),Field.Store.YES, Field.Index.UN_TOKENIZED));
+            Iterator<SemanticProperty> it=obj.getSemanticClass().listProperties();
+            while(it.hasNext())
+            {
+                SemanticProperty prop=it.next();
+                if(prop.isString())
+                {
+                    String str=obj.getProperty(prop);
+                    if(str!=null)doc.add(new Field(prop.getName(),str,Field.Store.NO, Field.Index.TOKENIZED));
+                }
+                if(prop.isDateTime() && prop.getName().equals("created"))
+                {
+                    Date date=obj.getDateTimeProperty(prop);
+                    if(date!=null)doc.add(new Field("created",getDate(date),Field.Store.YES, Field.Index.NO));
+                }
+                if(prop.isInverseHeraquicalRelation())
+                {
+                    //TODO:
+                }
+            }
+            
+            String clss=obj.getSemanticClass().getName();
+            Iterator<SemanticClass> itc=obj.getSemanticClass().listSuperClasses();
+            while(itc.hasNext())
+            {
+                SemanticClass cls=itc.next();
+                clss+=" "+cls.getName();
+            }
+            if(clss!=null)doc.add(new Field("types",clss,Field.Store.NO, Field.Index.TOKENIZED));
+
+            writer.addDocument(doc);
+
+        } catch (Exception e) {
+            log.error("Error indexing object:"+obj,e);
+        }
+    }
     
     protected void writeObject(SWBIndexObj obj) {
         //System.out.println("writeObject:"+obj.getId());
@@ -472,8 +535,11 @@ public class SWBLuceneIndexer extends SWBIndexer
             if(IndexReader.indexExists(indexPath)) 
             {
                 IndexReader reader = IndexReader.open(indexPath);
-                
-                if(obj.TYPE_TOPIC.equals(obj.getType()) && obj.getTopicID()!=null)
+
+                if(obj.isSemantic())
+                {
+                    reader.deleteDocuments(new Term("uri", obj.getSemanticObject().getURI()));
+                }else if(obj.TYPE_TOPIC.equals(obj.getType()) && obj.getTopicID()!=null)
                 {
                     TermDocs docs = reader.termDocs(new Term(ATT_TOPIC, obj.getTopicID()));
                     while (docs.next())
