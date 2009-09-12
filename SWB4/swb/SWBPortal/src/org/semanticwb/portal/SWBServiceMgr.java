@@ -249,6 +249,15 @@ public class SWBServiceMgr implements SemanticObserver {
                         }
                     }
                 }
+
+                //Indexar semanticObjects
+                {
+                    SWBIndexer indexer=SWBPortal.getIndexMgr().getDefaultIndexer();
+                    indexer.removeSemanticObject(obj);
+                    indexer.indexSemanticObject(obj);
+                }
+
+
             }
         }catch(Exception e){log.error(e);}
     }

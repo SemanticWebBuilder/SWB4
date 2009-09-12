@@ -48,6 +48,7 @@ import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticLiteral;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.SWBResource;
 
 /**
@@ -113,6 +114,9 @@ public abstract class SWBIndexer
                 if(obj.is4Remove())
                 {
                     removeObj(obj);
+                }else if(obj.isSemantic())
+                {
+                    writeObject(obj.getSemanticObject());
                 }else
                 {
                     parseObject(obj);
@@ -138,6 +142,7 @@ public abstract class SWBIndexer
     protected abstract void createIndex();
     protected abstract void parseObject(SWBIndexObj obj);
     protected abstract void writeObject(SWBIndexObj obj);
+    protected abstract void writeObject(SemanticObject obj);
     
     protected abstract SWBIndexObjList searchObj(String queryString, SWBIndexObj obj, User user, int page, int pindex);
     protected abstract void removeAll(String topicmapid);
@@ -293,7 +298,13 @@ public abstract class SWBIndexer
         }
         obj.setTitle(file.getName());
         list.add(obj);
-    }  
+    }
+
+    public void indexSemanticObject(SemanticObject sobj) throws IOException
+    {
+        SWBIndexObj obj=new SWBIndexObj(sobj);
+        list.add(obj);
+    }
     
     public void removeFile(File file)
     {
@@ -302,6 +313,16 @@ public abstract class SWBIndexer
             SWBIndexObj obj=new SWBIndexObj();
             obj.setType(SWBIndexObj.TYPE_FILE);
             obj.setId(file.getCanonicalPath());
+            obj.set4Remove(true);
+            list.add(obj);
+        }catch(Exception e){log.error(e);}
+    }
+
+    public void removeSemanticObject(SemanticObject sobj)
+    {
+        try
+        {
+            SWBIndexObj obj=new SWBIndexObj(sobj);
             obj.set4Remove(true);
             list.add(obj);
         }catch(Exception e){log.error(e);}
