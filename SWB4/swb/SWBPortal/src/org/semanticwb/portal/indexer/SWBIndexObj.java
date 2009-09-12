@@ -30,6 +30,8 @@
 
 package org.semanticwb.portal.indexer;
 
+import org.semanticwb.platform.SemanticObject;
+
 /**
  *
  * @author Javier Solis Gonzalez
@@ -62,12 +64,30 @@ public class SWBIndexObj
     private int pindex;
     
     private boolean remove=false;
+    private boolean semantic=false;
+
+    private SemanticObject sobj=null;
     
     /** Creates a new instance of WBIndexObj */
     public SWBIndexObj()
     {
     }
-    
+
+    /** Creates a new instance of WBIndexObj */
+    public SWBIndexObj(SemanticObject sobj)
+    {
+        semantic=true;
+        this.sobj=sobj;
+    }
+
+    public boolean isSemantic() {
+        return semantic;
+    }
+
+    public SemanticObject getSemanticObject()
+    {
+        return sobj;
+    }
     /**
      * Getter for property url.
      * @return Value of property url.
