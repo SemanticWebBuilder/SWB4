@@ -5,10 +5,12 @@
 package org.semanticwb.portal.social.google.youtube;
 
 import com.google.gdata.client.youtube.YouTubeService;
+import com.google.gdata.data.PlainTextConstruct;
+import com.google.gdata.data.youtube.CommentEntry;
+import com.google.gdata.data.youtube.ComplaintEntry;
 import com.google.gdata.data.youtube.VideoEntry;
-import com.google.gdata.data.youtube.VideoFeed;
+import com.google.gdata.util.AuthenticationException;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.URL;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.portal.api.GenericAdmResource;
+import org.semanticwb.portal.api.GenericResource;
+import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
@@ -24,7 +27,7 @@ import org.semanticwb.portal.api.SWBResourceException;
  *
  * @author jorge.jimenez
  */
-public class YouTubeResource extends GenericAdmResource {
+public class YouTubeResource extends GenericResource {
 
     private static Logger log = SWBUtils.getLogger(YouTubeResource.class);
     String USERNAME = "george24Infotec@gmail.com";
@@ -35,50 +38,70 @@ public class YouTubeResource extends GenericAdmResource {
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-
-        RequestDispatcher dis = request.getRequestDispatcher(SWBPlatform.getContextPath()+"/swbadmin/jsp/youtube/youtube.jsp");
-        try {
-            request.setAttribute("paramRequest", paramRequest);
-            dis.include(request, response);
-        } catch (Exception e) {
-            log.error(e);
+        if (USERNAME == null || PASSWORD == null || DEVELOPERKEY == null) {
+            return;
         }
-
-//        if (USERNAME == null || USERNAME == null || DEVELOPERKEY == null) {
-//            return;
-//        }
-//
-//        YouTubeService service = new YouTubeService("SEMANTICWEBBUILDER", DEVELOPERKEY);
-//
-//        try {
-//            service.setUserCredentials(USERNAME, PASSWORD);
-//        } catch (AuthenticationException e) {
-//            System.out.println("Invalid login credentials jorge.");
-//        }
-//
-//        getAllFeeds(service,response.getWriter());
+        YouTubeService service = getYouTubeService();
+        if (service != null) {
+            RequestDispatcher dis = request.getRequestDispatcher(SWBPlatform.getContextPath() + "/swbadmin/jsp/youtube/youtube.jsp");
+            try {
+                request.setAttribute("paramRequest", paramRequest);
+                request.setAttribute("service", service);
+                dis.include(request, response);
+            } catch (Exception e) {
+                log.error(e);
+            }
+        }
     }
 
-    public String getAllFeeds(YouTubeService service, PrintWriter out) {
-        System.out.println("entra a getAllFeeds");
-        try {
-            //String feedUrl = "http://gdata.youtube.com/feeds/api/users/GoogleDevelopers/uploads";
-            String feedUrl = GENERICFEEDURL + "semanticweb1" + FEEDUPLOADS;
-            VideoFeed videoFeed = service.getFeed(new URL(feedUrl), VideoFeed.class);
-            for (VideoEntry entry : videoFeed.getEntries()) {
-                System.out.println("Title: " + entry.getTitle().getPlainText());
-                System.out.println(entry.getMediaGroup().getDescription().getPlainTextContent());
-                System.out.println("entry.getVersionId():"+entry.getVersionId());
-                System.out.println("id:"+entry.getId());
-                out.println("<object width=\"425\" height=\"355\">");
-                out.println("<param name=\"movie\" value=\"http://www.youtube.com/v/fs20OP-2bAc&rel=1&color1=0x2b405b&color2=0x6b8ab6&border=1\"></param>");
-                out.println("<param name=\"wmode\" value=\"transparent\"></param>");
-                out.println("<embed src=\"http://www.youtube.com/v/fs20OP-2bAc&rel=1&color1=0x2b405b&color2=0x6b8ab6&border=1\" type=\"application/x-shockwave-flash\" wmode=\"transparent\" width=\"425\" height=\"355\"></embed>");
-                out.println("</object>");
+    @Override
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+        YouTubeService service = getYouTubeService();
+        if(service==null) return;
+        String action = response.getAction();
+        String entryUrl=request.getParameter("entryUrl");
+        try{
+            VideoEntry videoEntry = service.getEntry(new URL(entryUrl), VideoEntry.class);
+            if (action.equals("comment")) { //Comenta un video
+                String comment=request.getParameter("comment");
+                if(comment!=null && comment.trim().length()>0)
+                {
+                    CommentEntry newComment = new CommentEntry();
+                    newComment.setContent(new PlainTextConstruct(comment));
+                    service.insert(new URL(videoEntry.getComments().getFeedLink().getHref()), newComment);
+                }
+            } else if (action.equals("spam")) { //Asigna el status de video no apropiado
+                String complaintUrl = videoEntry.getComplaintsLink().getHref();
+                ComplaintEntry complaintEntry = new ComplaintEntry();
+                String comment=request.getParameter("comment");
+                if(comment!=null && comment.trim().length()>0)
+                {
+                    complaintEntry.setComment(comment);
+                }
+                service.insert(new URL(complaintUrl), complaintEntry);
+            } else if (action.equals("favorite")) { //asigna como favorito el video al usuario autenticado
+                System.out.println("pone favorito");
+                String feedUrl = "http://gdata.youtube.com/feeds/api/users/default/favorites";
+                service.insert(new URL(feedUrl), videoEntry);
+            } else if (action.equals("unfavorite")) { //Elimina de la lista de favoritos de un usuario autenticado
+                videoEntry.delete();
+            } else if (action.equals("delete")) { //Elimina el video de la lista de un usuario autenticado
+                videoEntry.delete();
             }
-        } catch (Exception e) {
+            response.setAction(response.Mode_VIEW);
+        }catch(Exception e){
             e.printStackTrace();
+            log.error(e);
         }
-        return null;
+    }
+
+    private YouTubeService getYouTubeService() {
+        YouTubeService service = new YouTubeService("SEMANTICWEBBUILDER", DEVELOPERKEY);
+        try {
+            service.setUserCredentials(USERNAME, PASSWORD);
+        } catch (AuthenticationException e) {
+            log.error("Invalid login credentials:", e);
+        }
+        return service;
     }
 }
