@@ -92,6 +92,8 @@ public class SWBLuceneIndexer extends SWBIndexer
     
     String indexPath;
     IndexWriter writer;
+    IndexBuilderString larqBuilder;
+
     Searcher searcher;
     Analyzer analyzer;
     
@@ -123,12 +125,14 @@ public class SWBLuceneIndexer extends SWBIndexer
         try {
             if(writer==null) {
                 writer = new IndexWriter(indexPath, analyzer, false);
+                larqBuilder = new IndexBuilderString(writer);
             }
             
             super._run();
             
             if(writer==null) {
                 writer = new IndexWriter(indexPath, analyzer, false);
+                larqBuilder = new IndexBuilderString(writer);
             }
             
             writer.optimize();
@@ -137,7 +141,8 @@ public class SWBLuceneIndexer extends SWBIndexer
         } finally {
             if(writer!=null) {
                 try {
-                    writer.close();
+                    larqBuilder.closeWriter();
+                    //writer.close();
                 } catch (Exception e){log.error("Error closing indexer...",e);}
                 writer=null;
             }
@@ -153,11 +158,13 @@ public class SWBLuceneIndexer extends SWBIndexer
             File file=new File(indexPath);
             file.mkdirs();
             writer = new IndexWriter(indexPath, analyzer, true);
+            larqBuilder = new IndexBuilderString(writer);
         }catch(Exception e){log.error(e);}
         finally {
             if(writer!=null) {
                 try {
-                    writer.close();
+                    larqBuilder.closeWriter();
+                    //writer.close();
                 }catch(Exception e){log.error(e);}
             }
             writer=null;
@@ -176,7 +183,8 @@ public class SWBLuceneIndexer extends SWBIndexer
     private void close_writer() {
         if(writer!=null) {
             try {
-                writer.close();
+                larqBuilder.closeWriter();
+                //writer.close();
                 writer=null;
             }catch(Exception e){log.error(e);}
         }
@@ -194,11 +202,10 @@ public class SWBLuceneIndexer extends SWBIndexer
         try {
             if(writer==null) {
                 writer = new IndexWriter(indexPath, analyzer, false);
+                larqBuilder = new IndexBuilderString(writer);
             }
 
-            IndexBuilderString larqBuilder = new IndexBuilderString(writer);
             larqBuilder.indexStatements(obj.getRDFResource().listProperties());
-            larqBuilder.closeWriter();
 
             Document doc = new Document();
             if(obj.getURI()!=null)doc.add(new Field("uri",obj.getURI(),Field.Store.YES, Field.Index.UN_TOKENIZED));
@@ -244,6 +251,7 @@ public class SWBLuceneIndexer extends SWBIndexer
         try {
             if(writer==null) {
                 writer = new IndexWriter(indexPath, analyzer, false);
+                larqBuilder = new IndexBuilderString(writer);
             }
             
             Document doc = new Document();
@@ -603,16 +611,23 @@ public class SWBLuceneIndexer extends SWBIndexer
             try {
                 writer = new IndexWriter(indexPath, analyzer, false);
                 writer.optimize();
+                larqBuilder = new IndexBuilderString(writer);
             }catch(Exception e){log.error(e);}
             finally {
                 if(writer!=null) {
                     try {
-                        writer.close();
+                        larqBuilder.closeWriter();
+                        //writer.close();
                     }catch(Exception e){log.error(e);}
                 }
                 writer=null;
             }
         }
+    }
+
+    public String getIndexPath()
+    {
+        return indexPath;
     }
     
 }
