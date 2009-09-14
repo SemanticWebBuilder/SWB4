@@ -748,6 +748,7 @@ public class SWBATMAdmin extends GenericResource
                                             } else
                                             {
                                                 //Eliminar titulos
+                                                System.out.println("Eliminar Titulos...");
                                                 auxtopic.setTitle(null);
                                                 Iterator<Language> langit=auxtopic.getWebSite().listLanguages();
                                                 while(langit.hasNext())
@@ -773,6 +774,7 @@ public class SWBATMAdmin extends GenericResource
                                 {
                                     if(auxname!=null)
                                     {
+                                        System.out.println("setTitle:"+auxname);
                                         auxtopic.setTitle(auxname);    
                                     }
                                     auxname=aux.substring(2);
@@ -782,6 +784,7 @@ public class SWBATMAdmin extends GenericResource
                                     if(lang.startsWith("IDM_WB"))lang=lang.substring(6);
                                     if(lang.length()>0)
                                     {
+                                        System.out.println("setTitle:"+auxname+" lang:"+lang);
                                         auxtopic.setTitle(auxname, lang);
                                         auxname=null;
                                     }
@@ -798,10 +801,6 @@ public class SWBATMAdmin extends GenericResource
                                     //System.out.println(aux.substring(2));
                                      */
                                 }
-                            }
-                            if(auxname!=null)
-                            {
-                                auxtopic.setTitle(auxname);
                             }
 
                             if (assoc && (!isnew))
@@ -878,6 +877,11 @@ public class SWBATMAdmin extends GenericResource
                                 }
                             }
                         }
+                        if(auxname!=null)
+                        {
+                            System.out.println("setTitle:"+auxname+" fin");
+                            auxtopic.setTitle(auxname);
+                        }                        
                     }
                 } catch (Exception ex)
                 {
