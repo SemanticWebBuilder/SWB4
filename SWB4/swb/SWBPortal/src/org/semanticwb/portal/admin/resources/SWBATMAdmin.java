@@ -30,6 +30,7 @@
 
 package org.semanticwb.portal.admin.resources;
 
+import com.hp.hpl.jena.rdf.model.Statement;
 import java.io.*;
 import javax.servlet.http.*;
 import javax.servlet.*;
@@ -272,7 +273,15 @@ public class SWBATMAdmin extends GenericResource
                     Element elm = (Element) lista.item(i);
                     String title= elm.getAttribute("value");
                     String scope= elm.getAttribute("scope");
-                    nuevo.setTitle(title, scope);
+                    System.out.println("ut: title:"+title+" scope:"+scope);
+                    if(scope!=null && !scope.equals("IDM_WB"))
+                    {
+                        if(scope.startsWith("IDM_WB"))scope=scope.substring(6);
+                        nuevo.setTitle(title, scope);
+                    }else
+                    {
+                        nuevo.setTitle(title);
+                    }
                     //TODO:
                     /*
                     ArrayList variants = new ArrayList();
@@ -442,7 +451,17 @@ public class SWBATMAdmin extends GenericResource
                         ptr.print("a:" + (t1.isActive()?1:0) + "\n");
                         ptr.print("r:" + (t1.isDeleted()?1:0) + "\n");
 
-                        ptr.print("n:" + t1.getTitle() + "\n");
+                        Iterator<Statement> stit=t1.getSemanticObject().getRDFResource().listProperties(Descriptiveable.swb_title.getRDFProperty());
+                        while(stit.hasNext())
+                        {
+                            Statement st=stit.next();
+                            String title=st.getString();
+                            String lang=st.getLanguage();
+                            ptr.print("n:" + title + "\n");
+                            if(lang!=null)ptr.print("s:IDM_WB" + lang + "\n");
+                        }
+
+                        //ptr.print("n:" + t1.getTitle() + "\n");
                         //TODO
                         /*
                         Iterator na = t1.getBaseNames().iterator();
@@ -735,6 +754,7 @@ public class SWBATMAdmin extends GenericResource
                                                 {
                                                     auxtopic.setTitle(null,langit.next().getId());
                                                 }
+                                                auxtopic.getSemanticObject().removeProperty(Descriptiveable.swb_title);
                                                 if (type > 1)
                                                 {
                                                     auxtopic.removeParent();
@@ -760,8 +780,11 @@ public class SWBATMAdmin extends GenericResource
                                 {
                                     String lang=aux.substring(2);
                                     if(lang.startsWith("IDM_WB"))lang=lang.substring(6);
-                                    auxtopic.setTitle(auxname, lang);
-                                    auxname=null;
+                                    if(lang.length()>0)
+                                    {
+                                        auxtopic.setTitle(auxname, lang);
+                                        auxname=null;
+                                    }
                                 } else if (aux.startsWith("v:") && !bad)
                                 {
                                     //TODO:
