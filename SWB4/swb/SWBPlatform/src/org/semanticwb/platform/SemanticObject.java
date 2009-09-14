@@ -683,13 +683,13 @@ public class SemanticObject
             Object obj=literal.getValue();
             String lang=literal.getLanguage();
             Statement stm = null;
-            if(lang!=null)
-            {
+//            if(lang!=null)
+//            {
                 stm=getLocaleStatement(prop,lang);
-            }else
-            {
-                stm = m_res.getProperty(prop.getRDFProperty());
-            }
+//            }else
+//            {
+//                stm = m_res.getProperty(prop.getRDFProperty());  //trae la primera que encuentre sin importar el idioma
+//            }
             if (stm != null)
             {
                 if(obj instanceof String)
@@ -1136,7 +1136,7 @@ public class SemanticObject
         {
             Statement staux = stit.nextStatement();
             String lg = staux.getLanguage();
-            if(lg.length()==0)lg=null;
+            if(lg!=null && lg.length()==0)lg=null;
             //System.out.println("-->"+lang+" "+lg+" "+staux);
             if ((lang==null && lg==null) || (lg != null && lg.equals(lang)))
             {
