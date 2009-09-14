@@ -445,6 +445,11 @@ public abstract class SWBIndexer
         }
         return ret;
     }
+
+    public String getIndexPath()
+    {
+        return null;
+    }
     
     protected static boolean validate(SWBIndexObj obj, User user)
     {
