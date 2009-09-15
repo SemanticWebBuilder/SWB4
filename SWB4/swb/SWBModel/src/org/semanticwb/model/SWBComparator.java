@@ -169,6 +169,16 @@ public class SWBComparator implements Comparator
 
     }
 
+    public static Iterator sortByDisplayName(Iterator it, String lang)
+    {
+        TreeSet set=new TreeSet(new SWBComparator(lang));
+        while(it.hasNext())
+        {
+            set.add(it.next());
+        }
+        return set.iterator();
+    }
+
     public static Iterator sortByCreated(Iterator it)
     {
         return sortByCreated(it,true);
