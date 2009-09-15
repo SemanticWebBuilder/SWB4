@@ -153,7 +153,7 @@ public class SWBLuceneIndexer extends SWBIndexer
         close_searcher();
         close_writer();
         
-        IndexWriter writer=null;
+        writer=null;
         try {
             File file=new File(indexPath);
             file.mkdirs();
@@ -337,7 +337,7 @@ public class SWBLuceneIndexer extends SWBIndexer
                         obj.setData(sdata);
                     }
                 }else if(sext.toLowerCase().trim().equals("ppt")){ // powerpoint file type
-                    sdata=docExtracSrv.pptExtractor(file);
+                    sdata=DocumentExtractorSrv.pptExtractor(file);
                     if(sdata!=null && sdata.trim().length()>0){
                         obj.setData(sdata);
                     }
@@ -547,7 +547,7 @@ public class SWBLuceneIndexer extends SWBIndexer
                 if(obj.isSemantic())
                 {
                     reader.deleteDocuments(new Term("uri", obj.getSemanticObject().getURI()));
-                }else if(obj.TYPE_TOPIC.equals(obj.getType()) && obj.getTopicID()!=null)
+                }else if(SWBIndexObj.TYPE_TOPIC.equals(obj.getType()) && obj.getTopicID()!=null)
                 {
                     TermDocs docs = reader.termDocs(new Term(ATT_TOPIC, obj.getTopicID()));
                     while (docs.next())
@@ -566,7 +566,7 @@ public class SWBLuceneIndexer extends SWBIndexer
                             }
                         }
                     }
-                }else if(obj.TYPE_CONTENT.equals(obj.getType()) && obj.getResId()!=null)
+                }else if(SWBIndexObj.TYPE_CONTENT.equals(obj.getType()) && obj.getResId()!=null)
                 {
                     TermDocs docs = reader.termDocs(new Term(ATT_RESID, obj.getResId()));
                     while (docs.next())
@@ -625,6 +625,7 @@ public class SWBLuceneIndexer extends SWBIndexer
         }
     }
 
+    @Override
     public String getIndexPath()
     {
         return indexPath;
