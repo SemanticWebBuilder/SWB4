@@ -18,6 +18,14 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
             <p>
                 <input id="busqueda_input" type="text" name="q"/>
                 <input id="busqueda_enviar" type="submit"/>
+                <select name="what">
+                    <option selected value="Todo">Todo</option>
+                    <option value="Organization">Organizaciones</option>
+                    <option value="Commerce">Comercios</option>
+                    <option value="Clasified">Clasificados</option>
+                    <option value="PointOfInterest">Sitios de Inter&eacute;s</option>
+                    <option value="Person">Personas</option>
+                </select>
             </p>
         </form>
     </div>
