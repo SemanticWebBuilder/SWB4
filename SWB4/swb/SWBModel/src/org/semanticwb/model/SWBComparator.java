@@ -124,13 +124,18 @@ public class SWBComparator implements Comparator
 */
     public static Iterator sortSermanticObjects(Iterator it)
     {
+        return sortSermanticObjectsSet(it).iterator();
+    }
+
+    public static Set sortSermanticObjectsSet(Iterator it)
+    {
         TreeSet set=new TreeSet(new SWBComparator());
         while(it.hasNext())
         {
             Object obj=it.next();
             if(obj!=null)set.add(obj);
         }
-        return set.iterator();
+        return set;
     }
 
     public static Iterator<SemanticProperty> sortSermanticProperties(Iterator<SemanticProperty> it)
@@ -149,8 +154,12 @@ public class SWBComparator implements Comparator
         return set.iterator();
     }
 
-
     public static Iterator sortSortableObject(Iterator it)
+    {
+        return sortSortableObjectSet(it).iterator();
+    }
+
+    public static Set sortSortableObjectSet(Iterator it)
     {
         TreeSet set=new TreeSet(new Comparator()
         {
@@ -165,18 +174,22 @@ public class SWBComparator implements Comparator
         {
             set.add(it.next());
         }
-        return set.iterator();
-
+        return set;
     }
 
     public static Iterator sortByDisplayName(Iterator it, String lang)
+    {
+        return sortByDisplayNameSet(it, lang).iterator();
+    }
+
+    public static Set sortByDisplayNameSet(Iterator it, String lang)
     {
         TreeSet set=new TreeSet(new SWBComparator(lang));
         while(it.hasNext())
         {
             set.add(it.next());
         }
-        return set.iterator();
+        return set;
     }
 
     public static Iterator sortByCreated(Iterator it)
@@ -184,7 +197,17 @@ public class SWBComparator implements Comparator
         return sortByCreated(it,true);
     }
 
+    public static Set sortByCreatedSet(Iterator it)
+    {
+        return sortByCreatedSet(it,true);
+    }
+
     public static Iterator sortByCreated(Iterator it, boolean ascendente)
+    {
+        return sortByCreatedSet(it, ascendente).iterator();
+    }
+
+    public static Set sortByCreatedSet(Iterator it, boolean ascendente)
     {
         TreeSet set=null;
         if(ascendente)
@@ -216,9 +239,8 @@ public class SWBComparator implements Comparator
         {
             set.add(it.next());
         }
-        return set.iterator();
+        return set;
     }
-
 
     public int compareSortable(Object o1, Object o2)
     {
