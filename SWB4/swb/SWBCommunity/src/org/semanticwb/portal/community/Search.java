@@ -28,7 +28,6 @@ import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.query.larq.IndexBuilderString;
 import com.hp.hpl.jena.query.larq.IndexLARQ;
 import com.hp.hpl.jena.query.larq.LARQ;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -45,11 +44,7 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.Token;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.snowball.SnowballAnalyzer;
-import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.store.LockObtainFailedException;
-import org.apache.lucene.store.RAMDirectory;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
@@ -87,7 +82,7 @@ public class Search extends GenericAdmResource {
         super.setResourceBase(base);
         try {
             smodel = base.getSemanticObject().getModel().getRDFOntModel();
-            buildIndex();
+            //buildIndex();
             langCodes = new HashMap<String, String>();
             langCodes.put("es", "Spanish");
             langCodes.put("en", "English");
@@ -151,11 +146,7 @@ public class Search extends GenericAdmResource {
     }
 
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-
-        String indexpath=SWBPortal.getIndexMgr().getDefaultIndexer().getIndexPath();
-        IndexReader reader=IndexReader.open(indexpath);
-
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {       
         int maxr = Integer.valueOf(getResourceBase().getAttribute("maxResults", "10"));
         String path = "/swbadmin/jsp/microsite/Search/Search.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
@@ -181,8 +172,17 @@ public class Search extends GenericAdmResource {
             String q = request.getParameter("q");
             if (q == null) return;
 
+            String wh = "";
+            if (!request.getParameter("what").equals("Todo")) {
+                wh = request.getParameter("what");
+            }
+
             //Perform search query
-            solutions = performQuery(q, lang);
+            String indexpath = SWBPortal.getIndexMgr().getDefaultIndexer().getIndexPath();
+            IndexReader reader = IndexReader.open(indexpath);
+            index = new IndexLARQ(reader);
+
+            solutions = performQuery(q, lang, wh);
 
             if (solutions != null && solutions.size() > 0)
                 pageData = getSlice(page, maxr);
@@ -204,25 +204,25 @@ public class Search extends GenericAdmResource {
     /**
      * Builds an index to perform searches.
      */
-    public void buildIndex() throws CorruptIndexException, LockObtainFailedException, IOException {
-        // ---- Create in-memory lucene directory
-        RAMDirectory rd = new RAMDirectory();
-
-        // ---- Create new indexwriter with snowball analyzer
-        IndexWriter writer = new IndexWriter(rd, new SnowballAnalyzer("Spanish"));
-
-        // ---- Read and index all literal strings.
-        IndexBuilderString larqBuilder = new IndexBuilderString(writer);
-
-        // ---- Alternatively build the index after the model has been created.
-        larqBuilder.indexStatements(smodel.listStatements());
-
-        // ---- Finish indexing
-        larqBuilder.closeWriter();
-
-        // ---- Create the access index
-        index = larqBuilder.getIndex();
-    }
+//    public void buildIndex() throws CorruptIndexException, LockObtainFailedException, IOException {
+//        // ---- Create in-memory lucene directory
+//        RAMDirectory rd = new RAMDirectory();
+//
+//        // ---- Create new indexwriter with snowball analyzer
+//        IndexWriter writer = new IndexWriter(rd, new SnowballAnalyzer("Spanish"));
+//
+//        // ---- Read and index all literal strings.
+//        IndexBuilderString larqBuilder = new IndexBuilderString(writer);
+//
+//        // ---- Alternatively build the index after the model has been created.
+//        larqBuilder.indexStatements(smodel.listStatements());
+//
+//        // ---- Finish indexing
+//        larqBuilder.closeWriter();
+//
+//        // ---- Create the access index
+//        index = larqBuilder.getIndex();
+//    }
 
     /**
      * Execute a SparQl query to find directory objects. Uses LARQ to perform
@@ -231,12 +231,18 @@ public class Search extends GenericAdmResource {
      * @param lang Language for snowball analyzer.
      * @return list of URIs matching the query.
      */
-    public ArrayList<String> performQuery(String q, String lang) {
+    public ArrayList<String> performQuery(String q, String lang, String what) {
         ArrayList<String> res = new ArrayList<String>();
 
         //Assert query string
         if (q.trim().equals("")) return null;
 
+        //Get what to search
+        String wh = "    {?obj a swbcomm:DirectoryObject}";
+        if(what != null && !what.equals("")) {
+            wh = "{?obj a swbcomm:" + what + "}";
+        }
+        
         String [] words = getSnowballForm(q, lang, stopWords).trim().split(" ");
 
         q = "";
@@ -255,7 +261,7 @@ public class Search extends GenericAdmResource {
                     "PREFIX swbcomm: <http://www.semanticwebbuilder.org/swb4/community#>",
                     "SELECT DISTINCT ?obj WHERE {",
                     "    ?lit pf:textMatch '" + q.trim() + "'.",
-                    "    {?obj a swbcomm:DirectoryObject}",
+                    wh,//"    {?obj a swbcomm:DirectoryObject}",
                     "    UNION {?obj a swb:WebPage}.",
                     "    {?obj swb:title ?lit}",
                     "    UNION {?obj swb:tags ?lit}",
@@ -263,9 +269,9 @@ public class Search extends GenericAdmResource {
                     "}"
                 });
 
-//        System.out.println("....................");
-//        System.out.println(queryString);
-//        System.out.println("....................");
+        System.out.println("....................");
+        System.out.println(queryString);
+        System.out.println("....................");
 
         // Make globally available
         LARQ.setDefaultIndex(index);
@@ -293,6 +299,7 @@ public class Search extends GenericAdmResource {
             }
         }
         qExec.close();
+        index.close();
         return res;
     }
 
