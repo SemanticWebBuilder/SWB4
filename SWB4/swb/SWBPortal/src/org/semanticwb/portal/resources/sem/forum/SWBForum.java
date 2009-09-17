@@ -52,6 +52,11 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.servlet.internal.UploadFormElement;
 
+/**
+* @author : Jorge Alberto Jiménez
+* @version 1.0
+*/
+
 public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWBForumBase
 {
 
