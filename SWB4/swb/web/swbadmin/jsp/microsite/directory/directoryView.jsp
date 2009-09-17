@@ -108,17 +108,18 @@ url.setParameter("uri", sobj.getURI());
         </p>
         <%
         //Termina paginación
-        //Comienza ordenamiento
+        //Comienza criterios de busqueda y ordenamiento
         SWBResourceURL urlOrder=paramRequest.getRenderUrl();
         String dirPhotoCheck="";
         if(request.getParameter("dirPhoto")!=null) dirPhotoCheck="checked";
-        %>
-
-            <p align="right"><a href="<%=urlOrder.setParameter("orderBy", "title")%>">Por Nombre</a> | <a href="<%=urlOrder.setParameter("orderBy", "date")%>">por fecha</a></p>
-        <!--Termina ordenamiento-->
+        %>            
         <form action="<%=urlOrder.setAction("filter")%>" method="post">
-        <p>Solo anuncios con foto  <input type="checkbox" name="dirPhoto" <%=dirPhotoCheck%>></p>
+        <table align="center">
+        <tr><td><b>Buscar con los siguientes criterios:</b></td></tr>
+        <tr><td>
+        Solo anuncios con foto  </td><td><input type="checkbox" name="dirPhoto" <%=dirPhotoCheck%>></td>
         <input type="hidden" name="swbdirParam_dirPhoto" value="1">
+        </tr>
         <%
         SWBFormMgr mgr = new SWBFormMgr(cls, wpage.getSemanticObject(), null);
         mgr.setFilterRequired(false);
@@ -127,10 +128,10 @@ url.setParameter("uri", sobj.getURI());
              SemanticProperty semProp1=itProps.next();
              if(semProp1.isBoolean()){
                 %>
-                <p>
-                    <%=semProp1.getDisplayName(user.getLanguage())%>  <%=mgr.renderElement(request, semProp1,mgr.MODE_CREATE)%>
+                <tr><td>
+                <%=semProp1.getDisplayName(user.getLanguage())%>  </td><td><%=mgr.renderElement(request, semProp1,mgr.MODE_CREATE)%></td>
                     <input type="hidden" name="swbdirParam_<%=semProp1.getName()%>" value="1">
-                </p>
+                </tr>
                 <%
               }
              FormElement element=mgr.getFormElement(semProp1);
@@ -138,16 +139,20 @@ url.setParameter("uri", sobj.getURI());
                 if(element.getId().indexOf("selectOne")>-1){
                     mgr.setType(mgr.TYPE_XHTML);
                     %>
-                    <p><%=mgr.renderElement(request, semProp1,mgr.MODE_CREATE)%></p>
+                     <tr><td><%=semProp1.getDisplayName(user.getLanguage())%></td><td><%=mgr.renderElement(request, semProp1,mgr.MODE_CREATE)%></td>
                     <input type="hidden" name="swbdirParam_<%=semProp1.getName()%>" value="1">
+                    </tr>
                    <%
                    continue;
                 }
              }
         }
         %>
-        <p><input type="submit" value="Buscar"></p>
+        <tr><td colspan="2" align="center"><input type="submit" value="Buscar"></td></tr>
+        </table>
         </form>
+        <p align="right"><a href="<%=urlOrder.setParameter("orderBy", "title")%>">Por Nombre</a> | <a href="<%=urlOrder.setParameter("orderBy", "date")%>">por fecha</a></p>
+        <!--Termina ordenamiento-->
         <%
         //Terminan Filtros de busqueda
          SWBResourceURL urlDetail=paramRequest.getRenderUrl();
