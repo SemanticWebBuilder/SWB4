@@ -146,7 +146,7 @@ public class SecurityQuestion extends org.semanticwb.model.base.SecurityQuestion
             }
         }else
         {
-            if(selectValues!=null)
+            if(selectValues!=null && (!"".equals(selectValues.trim())))
             {
                 String value=obj.getProperty(prop);
                 ret.append("<select name=\"").append(name).append("\" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\"").append(imsg).append("\">");
