@@ -1108,18 +1108,31 @@ public class SemanticObject
         ret=(SemanticObject)aux;
         if(ret==null)
         {
-            Statement stm = m_res.getProperty(prop.getRDFProperty());
-            if (stm != null)
+
+            if (!prop.hasInverse())
             {
-                try
+                Statement stm = m_res.getProperty(prop.getRDFProperty());
+                if (stm != null)
                 {
-                    ret = SemanticObject.createSemanticObject(stm.getResource());
-                }
-                catch (Exception e)
-                {
-                    log.error(e);
+                    try
+                    {
+                        ret = SemanticObject.createSemanticObject(stm.getResource());
+                    }
+                    catch (Exception e)
+                    {
+                        log.error(e);
+                    }
                 }
             }
+            else
+            {
+                Iterator<SemanticObject> it = new SemanticIterator(getModel().getRDFModel().listStatements(null, prop.getInverse().getRDFProperty(), getRDFResource()), true);
+                if(it.hasNext())
+                {
+                    ret=it.next();
+                }
+            }
+
             setPropertyValueCache(prop, null, ret);
         }
         return ret;
