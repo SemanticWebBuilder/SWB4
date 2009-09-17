@@ -19,6 +19,11 @@ import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.servlet.internal.UploadFormElement;
 
+/**
+* @author : Jorge Alberto Jiménez
+* @version 1.0
+*/
+
 public class DirectoryResource extends org.semanticwb.portal.community.base.DirectoryResourceBase 
 {
 
@@ -72,47 +77,72 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+        Resource base=response.getResourceBase();
         String action=response.getAction();
-        if(action.equals(response.Action_EDIT)){
-            SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
-            SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
-            try
-            {
-                DirectoryObject dirObj=(DirectoryObject)semObject.createGenericInstance();
-                mgr.processForm(request);
-                
-                String dirPhoto=request.getParameter("dirPhotoHidden");
-                if(dirPhoto!=null) dirObj.setPhoto(dirPhoto);
-                String dirHasExtraPhotoHidden=request.getParameter("dirHasExtraPhotoHidden");
-                if(dirHasExtraPhotoHidden!=null) dirObj.addExtraPhoto(dirHasExtraPhotoHidden);
-                processFiles(request, response, dirObj.getSemanticObject(), dirPhoto);
-            }catch(FormValidateException e)
-            {
-                log.event(e);
+        try{
+            if(action.equals(response.Action_EDIT)){
+                SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
+                SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
+                try
+                {
+                    DirectoryObject dirObj=(DirectoryObject)semObject.createGenericInstance();
+                    mgr.processForm(request);
+
+                    String dirPhoto=request.getParameter("dirPhotoHidden");
+                    if(dirPhoto!=null) dirObj.setPhoto(dirPhoto);
+                    String dirHasExtraPhotoHidden=request.getParameter("dirHasExtraPhotoHidden");
+                    if(dirHasExtraPhotoHidden!=null) dirObj.addExtraPhoto(dirHasExtraPhotoHidden);
+                    processFiles(request, response, dirObj.getSemanticObject(), dirPhoto);
+                }catch(FormValidateException e)
+                {
+                    log.event(e);
+                }
+            }else if(action.equals(response.Action_REMOVE)){
+                SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
+                semObject.remove();
+                SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + base.getWorkPath() + "/" + semObject.getId());
+            }else if(action.equals(response.Action_ADD)){
+                SemanticClass cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(request.getParameter("uri"));
+                SWBFormMgr mgr = new SWBFormMgr(cls, response.getWebPage().getWebSite().getSemanticObject(), null);
+                mgr.setFilterRequired(false);
+                try
+                {
+                    SemanticObject sobj=mgr.processForm(request);
+                    DirectoryObject dirObj=(DirectoryObject)sobj.createGenericInstance();
+                    dirObj.setDirectoryResource(this);
+                    dirObj.setWebPage(response.getWebPage());
+                    processFiles(request, response, dirObj.getSemanticObject(), null);
+                }catch(FormValidateException e)
+                {
+                    log.event(e);
+                }
+            }else if (action.equals("removeAttach")) {
+                if (request.getParameter("removeAttach") != null) {
+                    SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
+                    DirectoryObject dirObj=(DirectoryObject)semObject.createGenericInstance();
+                    System.out.println("photo 2 remove:"+request.getParameter("removeAttach"));
+                    Iterator<String> itEPhotos=dirObj.listExtraPhotos();
+                    while(itEPhotos.hasNext()){
+                        System.out.println("EPhoto:"+itEPhotos.next());
+                    }
+                    dirObj.removeExtraPhoto(request.getParameter("removeAttach"));
+                    File file = new File(SWBPlatform.getWorkPath() + base.getWorkPath() + "/" + semObject.getId() + "/" + request.getParameter("removeAttach"));
+                    System.out.println("file 2 delete:"+file.getAbsolutePath());
+                    file.delete();
+                }
+            } if(action.equals("admin_update")) {
+                String editaccess = request.getParameter("editar");
+                if(editaccess!=null)
+                {
+                    base.setAttribute("editRole", editaccess);
+                    base.updateAttributesToDB();
+                }
             }
-        }else if(action.equals(response.Action_REMOVE)){
-            SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
-            semObject.remove();
-            SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + response.getResourceBase().getWorkPath() + "/" + semObject.getId());
-        }else if(action.equals(response.Action_ADD)){
-            SemanticClass cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(request.getParameter("uri"));
-            SWBFormMgr mgr = new SWBFormMgr(cls, response.getWebPage().getWebSite().getSemanticObject(), null);
-            mgr.setFilterRequired(false);
-            try
-            {
-                SemanticObject sobj=mgr.processForm(request);
-                DirectoryObject dirObj=(DirectoryObject)sobj.createGenericInstance();
-                dirObj.setDirectoryResource(this);
-                dirObj.setWebPage(response.getWebPage());
-                processFiles(request, response, dirObj.getSemanticObject(), null);
-            }catch(FormValidateException e)
-            {
-                log.event(e);
-            }
+        }catch(Exception e){
+            log.error(e);
         }
         response.setMode(response.Mode_VIEW);
     }
-
 
     private void processFiles(HttpServletRequest request, SWBActionResponse response, SemanticObject sobj, String actualPhoto) {
         Resource base = response.getResourceBase();
@@ -160,5 +190,4 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             request.getSession().setAttribute(UploadFormElement.FILES_UPLOADED, null);
         }
     }
-
 }
