@@ -67,10 +67,10 @@
     String imggalery=null;
     if(sImgs.length>0){
         imggalery=SWBPortal.UTIL.getGalleryScript(sImgs);
+        //imggalery="<img src=\""+SWBPlatform.getContextPath()+"/swbadmin/images/noDisponible.gif\"/>";
     }else{
         imggalery="<img src=\""+SWBPlatform.getContextPath()+"/swbadmin/images/noDisponible.gif\"/>";
     }
-   
     String title=semObject.getProperty(dirObj.swb_title);
     String description=semObject.getProperty(dirObj.swb_description);
     String tags=semObject.getProperty(dirObj.swb_tags);
@@ -90,7 +90,6 @@
             break;
          }
     }
-    
     String streetName=semObject.getProperty(Commerce.swbcomm_streetName);
     String intNumber=semObject.getProperty(Commerce.swbcomm_intNumber);
     String extNumber=semObject.getProperty(Commerce.swbcomm_extNumber);
@@ -107,15 +106,14 @@
     String elevator=semObject.getProperty(Commerce.swbcomm_elevator);
     String foodCourt=semObject.getProperty(Commerce.swbcomm_foodCourt);
     String serviceHours=semObject.getProperty(Commerce.swbcomm_serviceHours);
-
 %>
 
 <div id="contenidoDetalle">
      <div class="detalle">
-        <div class="detalleImagen">
+        <div class="detalleImagen" style="float:left">
          <%if(imggalery!=null){%><%=imggalery%><%}%>
         </div>
-            <div class="productInfo">
+            <div class="productInfo" style="float:left; margin-left: 25px;">
                 <p class="tituloNaranja"><%=title%></p>
                 <p><%=wpage.getPath(map)%></p>
                 <%if(tags!=null){%><p>Palabras clave:<strong><%=tags%></strong></p><%}%>
@@ -141,10 +139,46 @@
                 <fieldset>
                  <legend>Extras</legend>
                 <%if(paymentType!=null){%><p>Forma de pago:<strong><%=paymentType%></strong></p><%}%>
-                <%if(impairedPeopleAccessible!=null){%><p>Habilitado para discapacitados:<strong><%=impairedPeopleAccessible%></strong></p><%}%>
-                <%if(parkingLot!=null){%><p>Estacionamiento:<strong><%=parkingLot%></strong></p><%}%>
-                <%if(elevator!=null){%><p>Elevador:<strong><%=elevator%></strong></p><%}%>
-                <%if(foodCourt!=null){%><p>Area de comida:<strong><%=foodCourt%></strong></p><%}%>
+                <%
+                if(impairedPeopleAccessible!=null)
+                {
+                    String sPeopleAccessible="";
+                    if(impairedPeopleAccessible.equals("true")) sPeopleAccessible="Si";else sPeopleAccessible="No";
+                    %>
+                        <p>Habilitado para discapacitados:<strong><%=sPeopleAccessible%></strong></p>
+                    <%
+                 }
+                %>
+                <%
+                if(parkingLot!=null)
+                {
+                    String sparkingLot="";
+                    if(parkingLot.equals("true")) sparkingLot="Si";else sparkingLot="No";
+                %>
+                    <p>Estacionamiento:<strong><%=sparkingLot%></strong></p>
+                <%
+                }
+                %>
+                <%
+                if(elevator!=null)
+                {
+                    String selevator="";
+                    if(elevator.equals("true")) selevator="Si";else selevator="No";
+                %>
+                    <p>Elevador:<strong><%=selevator%></strong></p>
+                <%
+                }
+                %>
+                <%
+                if(foodCourt!=null)
+                {
+                    String sfoodCourt="";
+                    if(foodCourt.equals("true")) sfoodCourt="Si";else sfoodCourt="No";
+                %>
+                    <p>Area de comida:<strong><%=sfoodCourt%></strong></p>
+                <%
+                 }
+                %>
                 <%if(serviceHours!=null){%><p>Horario:<strong><%=serviceHours%></strong></p><%}%>
                 </fieldset>
          </div>
@@ -155,7 +189,6 @@
         <%if(mapa!=null){%><p><%=mapa%><%}%></p><br/>
      </div>
      
-
       <%
          SWBResourceURL url = paramRequest.getActionUrl();
          url.setParameter("uri", semObject.getURI());
@@ -178,6 +211,5 @@
          </table>
        </form>
 </div>
-   
    
 
