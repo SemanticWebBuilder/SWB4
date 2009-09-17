@@ -76,18 +76,21 @@ public class SecurityQuestion extends org.semanticwb.model.base.SecurityQuestion
         String pmsg=null;
         String imsg=null;
         String selectValues=null;
-//        System.out.println("name:"+name);
-//        System.out.println("label:"+label);
-//        System.out.println("sobj:"+sobj);
-//        System.out.println("m_obj:"+obj.getModel().getName());
-//        System.out.println("prop:"+prop);
-//        System.out.println("DC:"+prop.getURI());
+        System.out.println("name:"+name);
+        System.out.println("label:"+label);
+        System.out.println("sobj:"+sobj);
+        System.out.println("m_obj:"+obj.getModel().getName());
+        System.out.println("prop:"+prop);
+        System.out.println("DC:"+prop.getURI());
         if(sobj!=null)
         {
             DisplayProperty dobj=new DisplayProperty(sobj);
             pmsg=dobj.getPromptMessage();
             imsg=dobj.getInvalidMessage();
-            selectValues= SWBContext.getUserRepository(getModel().getName()).getUserRepSecurityQuestionList();
+            System.out.println("model: "+obj.getModel());
+            System.out.println("model.name: "+obj.getModel().getName());
+            System.out.println("userRep: "+SWBContext.getUserRepository(obj.getModel().getName()));
+            selectValues= SWBContext.getUserRepository(obj.getModel().getName()).getUserRepSecurityQuestionList();
                     //dobj.getSelectValues(lang); //TODO:
         }
 
