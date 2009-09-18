@@ -114,16 +114,16 @@ body {
 	color:#990000;
 }
 /*------------------- Menu ---------*/
-/*------------------- Encuesta  ----*/
 
-#swb-encuesta {
+/*------------------- Encuesta  ----*/
+.swb-encuesta {
 	width: 11.23em;
 	border:#336699 solid .06em;
 	font-family:Arial;
 	font-size:1em;
 }
-#swb-encuesta h1{
-	background-color: #336699;
+.swb-encuesta h1{
+	background: url(bg_titulos.gif) #336699 repeat-x;
 	margin: 0 0 0.63em 0;
 	padding: 0;
 	line-height:1.56em;
@@ -133,31 +133,189 @@ body {
 	text-align: center;
 	text-transform: capitalize;
 }
-#swb-encuesta label{
+.swb-encuesta h2{
+	font-size:0.8em;
+	font-weight: bold;
+	color: #336699;
+	text-align: center;
+}
+.swb-encuesta label{
 	/* margin-top:.63;  Activar para */
 	/* display: block;   espaciar opciones*/
 	padding-left:1.25em;
 	font-size: 0.75em;
 	color:#336699;
+        text-align:left;
 }
 .swb-encuesta-boton {
-	/* class en codigo para funcionar en IE y FFox*/
 	background-color:#336699;
 	color:#FFFFFF;
 	margin: 0.3em 1.25em 0.3em 1.25em;
 	font-size:.75em;
 }
-#swb-encuesta p{
+.swb-encuesta p{
 	line-height:0em;
 	text-align:center;
 	font-size: 0.75em;
 }
-#swb-encuesta a{
+.swb-encuesta ul{
+	padding-left:1.25em;
+	font-size: 0.75em;
+	color:#336699;
+	font-weight:normal;
+}
+.swb-encuesta a{
+	text-align: center;
+	font-size: 0.75em;
+	color:#336699;
+	font-weight:normal;
 	text-decoration:none;
+}
+/* horizontal */
+.swb-resultado-h {
+	border:#336699 solid .06em;
+	font-family:Arial;
+	font-size:1em;
+}
+.swb-resultado-h h1{
+	background: url(bg_titulos.gif) #336699 repeat-x;
+	margin: 0 0 0.63em 0;
+	padding: 0;
+	line-height:1.56em;
+	font-size:0.88em;
+	font-weight: bold;
+	color: #FFFFFF;
+	text-align: center;
+	text-transform: capitalize;
+}
+.swb-resultado-h caption{
+	font-size:0.8em;
+	font-weight: bold;
+	color: #336699;
+	text-align: center;
+	margin-bottom:10px;
+}
+.swb-resultado-h table{
+	width:100%;
+}
+.swb-resultado-h tr{
+	margin:10px 0px 10px 0px;
+}
+.swb-resultado-h th{
+	display:none;
+}
+.swb-resultado-h tfoot{
+	font-size:0.8em;
+	font-weight: bold;
+	color: #336699;
+	text-align: center;
+}
+.swb-resultado-h span{
+}
+.swb-res-opciones-h{
+	width:20%;
+	font-size:12px;
+	color:#336699;
+	text-align:right;
+	font-weight:bold;
+}
+.swb-res-porciento-h{
+	padding:7px 3px 7px 0px;
+}
+.swb-res-porciento-si-h{
+	background: #6699CC;
+	font-size:12px;
+	text-align:right;
+	color: #003366;
+	height:20px;
+	width:30px;
+	padding-top:5px
+}
+.swb-res-porciento-no-h{
+	border:#336699 solid 1px;
+	background: #DBDBDB;
+}
+.swb-res-votos-h{
+	width:20%;
+	font-size:12px;
 	color:#336699;
 }
+/* vertical */
+.swb-resultado-v {
+	border:#336699 solid .06em;
+	font-family:Arial;
+	font-size:1em;
+}
+.swb-resultado-v h1{
+	background: url(bg_titulos.gif) #336699 repeat-x;
+	margin: 0 0 0.63em 0;
+	padding: 0;
+	line-height:1.56em;
+	font-size:0.88em;
+	font-weight: bold;
+	color: #FFFFFF;
+	text-align: center;
+	text-transform: capitalize;
+}
+.swb-resultado-v caption{
+	font-size:0.8em;
+	font-weight: bold;
+	text-align: center;
+	color: #336699;
+	margin-bottom:10px;
 
+}
+.swb-resultado-v table{
+	width:100%;
+}
+.swb-resultado-v td{
+	margin:10px;
+}
+.swb-resultado-v th{
+	display:none;
+}
+.swb-resultado-v tfoot{
+	font-size:0.8em;
+	font-weight: bold;
+	color: #336699;
+	text-align: center;
+}
+.swb-resultado-v span{
+}
+.swb-res-opciones-v{
+	font-size:12px;
+	color:#336699;
+	text-align:center;
+	font-weight:bold;
+	padding-top:10px;
+}
+.swb-res-porciento-v{
+	margin:0px;
+	padding:0px;
+	vertical-align:bottom;
+	background: #DBDBDB;
+	border:#336699 solid 1px;
+}
+.swb-res-porciento-si-v{
+	background: #6699CC;
+	font-size:12px;
+	text-align:center;
+	color: #003366;
+	width: 100%;
+	font-weight:bold;
+}
+.swb-res-porciento-no-v{
+	vertical-align:bottom;
+}
+.swb-res-votos-v{
+	width:20%;
+	font-size:12px;
+	color:#336699;
+	text-align:center;
+	font-weight:bold;
+}
 /*------------------- Encuesta  ----*/
+
 /*------------------- Recomendar  ----*/
 #swb-recomendar {
 	width: 21.33em;
