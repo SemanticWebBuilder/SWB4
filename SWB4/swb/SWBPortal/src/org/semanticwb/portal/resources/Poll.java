@@ -493,7 +493,7 @@ public class Poll extends GenericResource {
                 ret.append("<html> \n");
                 ret.append("<head> \n");
                 ret.append("<title>" + paramRequest.getLocaleString("usrmsg_Encuesta_getResultEnc_title") + "</title> \n");
-                ret.append("<link rel='stylesheet' type='text/css' media='all' href=\""+request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath()+"/swbadmin/css/swb_portal.css"+"\" \n />");
+                ret.append("<link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\""+request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath()+"/swbadmin/css/swb_portal.css"+"\" \n />");
                 ret.append("</head> \n");
                 ret.append("<body leftmargin=\"0\" topmargin=\"0\" marginwidth=\"0\" marginheight=\"0\"");
                 if (!"".equals(base.getAttribute("textcolorres", "").trim())) {
