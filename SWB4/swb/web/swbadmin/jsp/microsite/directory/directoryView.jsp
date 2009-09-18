@@ -4,10 +4,8 @@
 <%@page import="org.semanticwb.SWBUtils"%>
 <%@page import="java.util.*"%>
 <%@page import="java.text.*"%>
-<%@page import="org.semanticwb.platform.SemanticObject"%>
+<%@page import="org.semanticwb.platform.*"%>
 <%@page import="org.semanticwb.SWBPlatform"%>
-<%@page import="org.semanticwb.platform.SemanticProperty"%>
-<%@page import="org.semanticwb.platform.SemanticClass"%>
 <%@page import="org.semanticwb.portal.community.*"%>
 <%@page import="org.semanticwb.portal.SWBFormMgr"%>
 
@@ -48,7 +46,72 @@ url.setParameter("uri", sobj.getURI());
         if (request.getParameter("actualPage") != null) {
             actualPage = Integer.parseInt(request.getParameter("actualPage"));
         }
-
+        //Leer parametros que se envían para filtrado
+         String sparams="";
+         HashMap hdirParams=new HashMap();
+         Map mParams=request.getParameterMap();
+         Iterator itParams=mParams.keySet().iterator();
+         while(itParams.hasNext()){
+             String pname=(String)itParams.next();
+             sparams+="&"+pname+"="+request.getParameter(pname);
+             if(pname.startsWith("swbdirParam_"))
+             {
+                 String param=pname.substring(12);
+                 if(request.getParameter(param)!=null){
+                     hdirParams.put(param, request.getParameter(param));
+                 }
+             }
+         }
+         //System.out.println("PARAMS SIZE:"+hdirParams.size());
+         //Termina leida de parametros para filtrar
+         ArrayList<DirectoryObject> alFilterTmp=new ArrayList();
+         if(hdirParams.size()>0) {//Se desea filtrar información en los resultados
+            while(itObjs.hasNext())
+            {
+                ArrayList alFilter=new ArrayList();
+                DirectoryObject dirObj=(DirectoryObject)itObjs.next();
+                SemanticObject semObject = dirObj.getSemanticObject();
+                SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_VIEW);
+                Iterator<SemanticProperty> ipsemProps=semObject.listProperties();
+                while(ipsemProps.hasNext())
+                {
+                   SemanticProperty semProp=ipsemProps.next();
+                   if(semProp.isDataTypeProperty()){
+                       String propValue=semObject.getProperty(semProp);
+                       if(propValue!=null && !propValue.equals("null")){
+                            if(hdirParams.containsKey(semProp.getName())) //Filtrado
+                            {
+                                if(semProp.getName().equals("dirPhoto")) //La foto x ser de tipo text,no se puede controlar dinamicamente
+                                {
+                                    alFilter.add(semProp.getName());
+                                }else if(semProp.isBoolean() && propValue.equals("true")){
+                                     //System.out.println("***Boolean-->semProp:"+semProp+",valor:"+propValue);
+                                     alFilter.add(semProp.getName());
+                                }else {
+                                     FormElement element=mgr.getFormElement(semProp);
+                                     if(element!=null && element.getId()!=null){
+                                        if(element.getId().indexOf("selectOne")>-1){
+                                            if(request.getParameter(semProp.getName())!=null && request.getParameter(semProp.getName()).equals(propValue)){
+                                                //System.out.println("***selectOne-->semProp:"+semProp+",valor:"+propValue);
+                                                alFilter.add(semProp.getName());
+                                            }
+                                        }
+                                     }
+                                }
+                            }
+                        }
+                    }
+                }
+                if(alFilter.size()==hdirParams.size()) //Si el elemento cumple con todos los filtros, se agrega a los elementos a listar
+                {
+                    alFilterTmp.add(dirObj);
+                }
+             }
+         }else sparams="";
+         if(alFilterTmp.size()>0){ //Si se encontraron elementos para listar en el resultado de la busqueda por filtro, seran los tomados al final
+             itObjs=alFilterTmp.iterator();
+         }
+         //Comienza ordenamiento de elementos, por defecto se ordena por título del elemento del directorio
         Set setResult=null;
         SemanticProperty semPropOrder=DirectoryObject.swb_title;
         if(request.getParameter("orderBy")!=null && request.getParameter("orderBy").equals("date"))
@@ -58,7 +121,7 @@ url.setParameter("uri", sobj.getURI());
         }else {
             setResult=SWBComparator.sortByDisplayNameSet(itObjs, user.getLanguage());
         }
-
+        //Ya sabiendo cuantos y cuales son los elementos a listar (ya que puede ser una busqueda filtrada), se página
         String pagination = getPageRange(setResult.size(), actualPage);
         int iIniPage = 0;
         int iFinPage = 0;
@@ -72,7 +135,7 @@ url.setParameter("uri", sobj.getURI());
             else if(contTokens==2) iFinPage=Integer.parseInt(token);
             else if(contTokens==3) iTotPage=Integer.parseInt(token);
         }
-        
+
         %>
         <p align="center">
         <%
@@ -82,7 +145,7 @@ url.setParameter("uri", sobj.getURI());
              urlPag.setParameter("actualPage", ""+gotop);
 
              %>
-                <a class="link" href="<%=urlPag%>"><<</a>&nbsp;
+                <a class="link" href="<%=urlPag%><%=sparams%>"><<</a>&nbsp;
              <%
         }
         if(iTotPage>1){
@@ -92,7 +155,7 @@ url.setParameter("uri", sobj.getURI());
                 } else {
                     urlPag.setParameter("actualPage", "" + i);
                     %>
-                        <a href="<%=urlPag%>"><%=i%></a>
+                        <a href="<%=urlPag%><%=sparams%>"><%=i%></a>
                     <%
                 }
             }
@@ -101,18 +164,18 @@ url.setParameter("uri", sobj.getURI());
              int gotop = (actualPage + 1);
              urlPag.setParameter("actualPage", ""+gotop);
              %>
-                <a class="link" href="<%=urlPag%>">>></a>&nbsp;
+                <a class="link" href="<%=urlPag%><%=sparams%>">>></a>&nbsp;
              <%
         }
         if(iTotPage>1)%>)
         </p>
         <%
         //Termina paginación
-        //Comienza criterios de busqueda y ordenamiento
+        //Comienza criterios de busqueda y ordenamiento (x los elementos que el usuario puede filtrar en sus busquedas, dependiendo del tipo de objeto)
         SWBResourceURL urlOrder=paramRequest.getRenderUrl();
         String dirPhotoCheck="";
         if(request.getParameter("dirPhoto")!=null) dirPhotoCheck="checked";
-        %>            
+        %>
         <form action="<%=urlOrder.setAction("filter")%>" method="post">
         <table align="center">
         <tr><td><b>Buscar con los siguientes criterios:</b></td></tr>
@@ -152,9 +215,9 @@ url.setParameter("uri", sobj.getURI());
         </table>
         </form>
         <p align="right"><a href="<%=urlOrder.setParameter("orderBy", "title")%>">Por Nombre</a> | <a href="<%=urlOrder.setParameter("orderBy", "date")%>">por fecha</a></p>
-        <!--Termina ordenamiento-->
+        <!--Termina desplagado de criterios (filtros) de busqueda-->
         <%
-        //Terminan Filtros de busqueda
+         //Comienza Desplegado de elementos filtrados (si aplica) y ordenados
          SWBResourceURL urlDetail=paramRequest.getRenderUrl();
          SWBResourceURL urlEdit=paramRequest.getRenderUrl();
          SWBResourceURL urlRemove=paramRequest.getRenderUrl();
@@ -163,23 +226,6 @@ url.setParameter("uri", sobj.getURI());
          urlEdit.setParameter("act", "edit");
          urlRemove.setParameter("act", "detail");
 
-         //Leer parametros que se envían para filtrado
-         HashMap hdirParams=new HashMap();
-         Map mParams=request.getParameterMap();
-         Iterator itParams=mParams.keySet().iterator();
-         while(itParams.hasNext()){
-             String pname=(String)itParams.next();
-             if(pname.startsWith("swbdirParam_"))
-             {
-                 String param=pname.substring(12);
-                 if(request.getParameter(param)!=null){
-                     hdirParams.put(param, request.getParameter(param));
-                 }
-             }
-         }
-         //System.out.println("PARAMS SIZE:"+hdirParams.size());
-         //Termina leida de parametros para filtrar
-        
          int cont=0;
          boolean exist=false;
          HashMap map=new HashMap();
@@ -187,7 +233,6 @@ url.setParameter("uri", sobj.getURI());
          Iterator itResult=setResult.iterator();
          while(itResult.hasNext())
          {
-            ArrayList alFilter=new ArrayList();
             cont++;
             DirectoryObject dirObj=(DirectoryObject)itResult.next();
             if(cont<=iIniPage) continue;
@@ -199,7 +244,6 @@ url.setParameter("uri", sobj.getURI());
             urlRemove.setParameter("uri", dirObj.getURI());
             User userObj=null;
             SemanticObject semObject = dirObj.getSemanticObject();
-            mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_VIEW);
             Iterator<SemanticProperty> ipsemProps=semObject.listProperties();
             while(ipsemProps.hasNext())
             {
@@ -207,26 +251,6 @@ url.setParameter("uri", sobj.getURI());
                if(semProp.isDataTypeProperty()){
                    String propValue=semObject.getProperty(semProp);
                    if(propValue!=null && !propValue.equals("null")){
-                        if(hdirParams.containsKey(semProp.getName())) //Filtrado
-                        {
-                            if(semProp.getName().equals("dirPhoto")) //La foto x ser de tipo text,no se puede controlar dinamicamente
-                            {
-                                alFilter.add(semProp.getName());
-                            }else if(semProp.isBoolean() && propValue.equals("true")){
-                                 //System.out.println("***Boolean-->semProp:"+semProp+",valor:"+propValue);
-                                 alFilter.add(semProp.getName());
-                            }else {
-                                 FormElement element=mgr.getFormElement(semProp);
-                                 if(element!=null && element.getId()!=null){
-                                    if(element.getId().indexOf("selectOne")>-1){
-                                        if(request.getParameter(semProp.getName())!=null && request.getParameter(semProp.getName()).equals(propValue)){
-                                            //System.out.println("***selectOne-->semProp:"+semProp+",valor:"+propValue);
-                                            alFilter.add(semProp.getName());
-                                        }
-                                    }
-                                 }
-                            }
-                        }
                         if(semProp==DirectoryObject.swbcomm_dirPhoto)
                         {
                             img="<img src=\""+SWBPlatform.getWebWorkPath()+base.getWorkPath()+"/"+semObject.getId()+"/"+propValue+ "\" width=\"90\" height=\"90\">";
@@ -254,8 +278,6 @@ url.setParameter("uri", sobj.getURI());
                          }
                 }
             }
-            if(alFilter.size()==hdirParams.size())
-            {
             %>
               <div class="listEntry" onmouseover="this.className='listEntryHover'" onmouseout="this.className='listEntry'">
               <%if(!img.equals("")){%><%=img%><%}else{%><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/noDisponible.gif"/><%}%>
@@ -287,7 +309,6 @@ url.setParameter("uri", sobj.getURI());
               </div>
              </div>
             <%
-             }  
             }
             if(!exist){
                 %>
@@ -320,6 +341,7 @@ url.setParameter("uri", sobj.getURI());
 %>
 
 <%!
+    //Función utilizada para manejo de paginación
     private String getPageRange(int iSize, int iPageNum) {
         int iTotPage = 0;
         int iPage = 1;
