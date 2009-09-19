@@ -136,7 +136,6 @@ public class Poll extends GenericResource {
                         out.println("<div class=\"swb-encuesta\">");
                     }
 
-
                     if( base.getAttribute("header")!=null ) {
                         String style = "";
                         if( base.getAttribute("headerStyle")!=null ) {
@@ -177,28 +176,19 @@ public class Poll extends GenericResource {
                         out.println("<p>");
                         out.println("<a href=\"javascript:;\" onclick=\"javascript:abreResultados(\'" + url.toString(true) + "\')\">" + base.getAttribute("msg_viewresults",paramRequest.getLocaleString("msg_viewresults")) + "</a>");
                         out.println("</p>");
-                        
-                        if("1".equals(base.getAttribute("wherelinks", "").trim()) || "3".equals(base.getAttribute("wherelinks", "").trim())) {
-                            out.println(getLinks(dom.getElementsByTagName("link"), paramRequest.getLocaleString("usrmsg_Encuesta_doView_relatedLink")));
-                        }
-                        
-                        out.println("<input type=\"hidden\" name=\"NombreCookie\" value=\"VotosEncuesta"+ base.getId() +"\"/>");
-                        out.println("</form>");
                     }else {
                         out.println("<p>");
                         out.println("<a href=\"javascript:;\" onclick=\"getHtml('"+url+"','"+poll+base.getId()+"'); expande();\">" + base.getAttribute("msg_viewresults",paramRequest.getLocaleString("msg_viewresults")) + "</a>");
                         out.println("<div id=\""+poll+base.getId()+"\"> ");
                         out.println("</div>");
                         out.println("</p>");
-                        
-                        if("1".equals(base.getAttribute("wherelinks", "").trim()) || "3".equals(base.getAttribute("wherelinks", "").trim())) {
-                            out.println(getLinks(dom.getElementsByTagName("link"), paramRequest.getLocaleString("usrmsg_Encuesta_doView_relatedLink")));
-                        }
-
-                        out.println("<input type=\"hidden\" name=\"NombreCookie\" value=\"VotosEncuesta"+ base.getId() +"\"/>");
-                        out.println("</form>");
-                        out.println("</div>");
                     }
+                    if("1".equals(base.getAttribute("wherelinks", "").trim()) || "3".equals(base.getAttribute("wherelinks", "").trim())) {
+                        out.println(getLinks(dom.getElementsByTagName("link"), paramRequest.getLocaleString("usrmsg_Encuesta_doView_relatedLink")));
+                    }
+                    out.println("<input type=\"hidden\" name=\"NombreCookie\" value=\"VotosEncuesta"+ base.getId() +"\"/>");
+                    out.println("</form>");
+                    out.println("</div>");
 
                     StringBuilder win = new StringBuilder();
                     win.append("menubar="+ base.getAttribute("menubar", "no"));
@@ -614,22 +604,20 @@ public class Poll extends GenericResource {
                     ret.append("<tr><td>" + paramRequest.getLocaleString("usrmsg_Encuesta_getResultEnc_noVotes") +"</td></tr> \n");
                 }
                 ret.append("</table> \n");
-
-                ret.append("<table> \n");
-                ret.append("<tr><td align=\"center\"> \n");
-                if("2".equals(base.getAttribute("wherelinks", "").trim()) || "3".equals(base.getAttribute("wherelinks", "").trim())) {
-                    ret.append("<br /> \n"+getLinks(dom.getElementsByTagName("link"), paramRequest.getLocaleString("usrmsg_Encuesta_doView_relatedLink"))+" \n");
-                }
-                ret.append("</td></tr> \n");
-                                
-                if(display){
-                    ret.append("<tr><td align=\"center\"><a href=\"javascript:window.close();\">" + base.getAttribute("msg_closewin",paramRequest.getLocaleString("msg_closewin")) + "</a></td></tr> \n");
-                }else {
-                    ret.append("<tr><td align=\"center\"><a href=\"javascript:;\" onmousedown=\"collapse();\">" + base.getAttribute("msg_closewin",paramRequest.getLocaleString("msg_closewin")) + "</a></td></tr> \n");
-                }
-                ret.append("</table> \n");
                 ret.append("</div> \n");
-                
+
+                ret.append("<div class=\"swb-resultado-h\"> \n");
+                    if("2".equals(base.getAttribute("wherelinks", "").trim()) || "3".equals(base.getAttribute("wherelinks", "").trim())) {
+                        ret.append(getLinks(dom.getElementsByTagName("link"), paramRequest.getLocaleString("usrmsg_Encuesta_doView_relatedLink"))+" \n");
+                    }
+
+                    if(display){
+                        ret.append("<br/><a href=\"javascript:window.close();\">" + base.getAttribute("msg_closewin",paramRequest.getLocaleString("msg_closewin")) + "</a> \n");
+                    }else {
+                        ret.append("<br/><a href=\"javascript:;\" onmousedown=\"collapse();\">" + base.getAttribute("msg_closewin",paramRequest.getLocaleString("msg_closewin")) + "</a> \n");
+                    }
+                ret.append("</div> \n");
+                                
                 if(display){
                     ret.append("</body> \n");
                     ret.append("</html> \n");
@@ -1466,210 +1454,6 @@ public class Poll extends GenericResource {
             ret.append("</script>");
         }
         catch(Exception e) {  log.error(e); }
-        return ret.toString();
-    }
-
-    private String getStyle() {
-        StringBuffer ret = new StringBuffer();
-        ret.append("\n");
-        ret.append("<style type=\"text/css\"> \n");
-        ret.append(".swb-encuesta { \n");
-        ret.append("	width: 11.23em; \n");
-        ret.append("	border:#336699 solid .06em; \n");
-        ret.append("	font-family:Arial; \n");
-        ret.append("	font-size:1em; \n");
-        ret.append("} \n");
-        ret.append(".swb-encuesta h1{ \n");
-        ret.append("	background: url(bg_titulos.gif) #336699 repeat-x; \n");
-        ret.append("	margin: 0 0 0.63em 0; \n");
-        ret.append("	padding: 0; \n");
-        ret.append("	line-height:1.56em; \n");
-        ret.append("	font-size:0.88em; \n");
-        ret.append("	font-weight: bold; \n");
-        ret.append("	color: #FFFFFF; \n");
-        ret.append("	text-align: center; \n");
-        ret.append("	text-transform: capitalize; \n");
-        ret.append("} \n");
-        ret.append(".swb-encuesta h2{ \n");
-        ret.append("	font-size:0.8em; \n");
-        ret.append("	font-weight: bold; \n");
-        ret.append("	color: #336699; \n");
-        ret.append("	text-align: center; \n");
-        ret.append("} \n");
-        ret.append(".swb-encuesta label{ \n");
-        ret.append("	/* margin-top:.63;  Activar para */ \n");
-        ret.append("	/* display: block;   espaciar opciones*/ \n");
-        ret.append("	padding-left:1.25em; \n");
-        ret.append("	font-size: 0.75em; \n");
-        ret.append("	color:#336699; \n");
-        ret.append("} \n");
-        ret.append(".swb-encuesta-boton { \n");
-        ret.append("	background-color:#336699; \n");
-        ret.append("	color:#FFFFFF; \n");
-        ret.append("	margin: 0.3em 1.25em 0.3em 1.25em; \n");
-        ret.append("	font-size:.75em; \n");
-        ret.append("} \n");
-        ret.append(".swb-encuesta p{ \n");
-        ret.append("	line-height:0em; \n");
-        ret.append("	text-align:center; \n");
-        ret.append("	font-size: 0.75em; \n");
-        ret.append("} \n");
-        ret.append(".swb-encuesta ul{ \n");
-        ret.append("	padding-left:1.25em; \n");
-        ret.append("	font-size: 0.75em; \n");
-        ret.append("	color:#336699; \n");
-        ret.append("	font-weight:normal; \n");
-        ret.append("} \n");
-        ret.append(".swb-encuesta a{ \n");
-        ret.append("	text-align: center; \n");
-        ret.append("	font-size: 0.75em; \n");
-        ret.append("	color:#336699; \n");
-        ret.append("	font-weight:normal; \n");
-        ret.append("	text-decoration:none; \n");
-        ret.append("} \n");
-        ret.append("/* horizontal */ \n");
-        ret.append(".swb-resultado-h { \n");
-        ret.append("	border:#336699 solid .06em; \n");
-        ret.append("	font-family:Arial; \n");
-        ret.append("	font-size:1em; \n");
-        ret.append("} \n");
-        ret.append(".swb-resultado-h h1{ \n");
-        ret.append("	background: url(bg_titulos.gif) #336699 repeat-x; \n");
-        ret.append("	margin: 0 0 0.63em 0; \n");
-        ret.append("	padding: 0; \n");
-        ret.append("	line-height:1.56em; \n");
-        ret.append("	font-size:0.88em; \n");
-        ret.append("	font-weight: bold; \n");
-        ret.append("	color: #FFFFFF; \n");
-        ret.append("	text-align: center; \n");
-        ret.append("	text-transform: capitalize; \n");
-        ret.append("} \n");
-        ret.append(".swb-resultado-h caption{ \n");
-        ret.append("	font-size:0.8em; \n");
-        ret.append("	font-weight: bold; \n");
-        ret.append("	color: #336699; \n");
-        ret.append("	text-align: center; \n");
-        ret.append("	margin-bottom:10px; \n");
-        ret.append("} \n");
-        ret.append(".swb-resultado-h table{ \n");
-        ret.append("	width:100%; \n");
-        ret.append("} \n");
-        ret.append(".swb-resultado-h tr{ \n");
-        ret.append("	margin:10px 0px 10px 0px; \n");
-        ret.append("} \n");
-        ret.append(".swb-resultado-h th{ \n");
-        ret.append("	display:none; \n");
-        ret.append("} \n");
-        ret.append(".swb-resultado-h tfoot{ \n");
-        ret.append("	font-size:0.8em; \n");
-        ret.append("	font-weight: bold; \n");
-        ret.append("	color: #336699; \n");
-        ret.append("	text-align: center; \n");
-        ret.append("} \n");
-        ret.append(".swb-resultado-h span{ \n");
-        ret.append("} \n");
-        ret.append(".swb-res-opciones-h{ \n");
-        ret.append("	width:20%; \n");
-        ret.append("	font-size:12px; \n");
-        ret.append("	color:#336699; \n");
-        ret.append("	text-align:right; \n");
-        ret.append("	font-weight:bold; \n");
-        ret.append("} \n");
-        ret.append(".swb-res-porciento-h{ \n");
-        ret.append("	padding:7px 3px 7px 0px; \n");
-        ret.append("} \n");
-        ret.append(".swb-res-porciento-si-h{ \n");
-        ret.append("	background: #6699CC; \n");
-        ret.append("	font-size:12px; \n");
-        ret.append("	text-align:right; \n");
-        ret.append("	color: #003366; \n");
-        ret.append("	height:20px; \n");
-        ret.append("	width:30px; \n");
-        ret.append("	padding-top:5px \n");
-        ret.append("} \n");
-        ret.append(".swb-res-porciento-no-h{ \n");
-        ret.append("	border:#336699 solid 1px; \n");
-        ret.append("	background: #DBDBDB; \n");
-        ret.append("} \n");
-        ret.append(".swb-res-votos-h{ \n");
-        ret.append("	width:20%; \n");
-        ret.append("	font-size:12px; \n");
-        ret.append("	color:#336699; \n");
-        ret.append("} \n");
-        ret.append("/* vertical */ \n");
-        ret.append(".swb-resultado-v { \n");
-        ret.append("	border:#336699 solid .06em; \n");
-        ret.append("	font-family:Arial; \n");
-        ret.append("	font-size:1em; \n");
-        ret.append("} \n");
-        ret.append(".swb-resultado-v h1{ \n");
-        ret.append("	background: url(bg_titulos.gif) #336699 repeat-x; \n");
-        ret.append("	margin: 0 0 0.63em 0; \n");
-        ret.append("	padding: 0; \n");
-        ret.append("	line-height:1.56em; \n");
-        ret.append("	font-size:0.88em; \n");
-        ret.append("	font-weight: bold; \n");
-        ret.append("	color: #FFFFFF; \n");
-        ret.append("	text-align: center; \n");
-        ret.append("	text-transform: capitalize; \n");
-        ret.append("} \n");
-        ret.append(".swb-resultado-v caption{ \n");
-        ret.append("	font-size:0.8em; \n");
-        ret.append("	font-weight: bold; \n");
-        ret.append("	text-align: center; \n");
-        ret.append("	color: #336699; \n");
-        ret.append("	margin-bottom:10px; \n");
-        ret.append("} \n");
-        ret.append(".swb-resultado-v table{ \n");
-        ret.append("	width:100%; \n");
-        ret.append("} \n");
-        ret.append(".swb-resultado-v td{ \n");
-        ret.append("	margin:10px; \n");
-        ret.append("} \n");
-        ret.append(".swb-resultado-v th{ \n");
-        ret.append("	display:none; \n");
-        ret.append("} \n");
-        ret.append(".swb-resultado-v tfoot{ \n");
-        ret.append("	font-size:0.8em; \n");
-        ret.append("	font-weight: bold; \n");
-        ret.append("	color: #336699; \n");
-        ret.append("	text-align: center; \n");
-        ret.append("} \n");
-        ret.append(".swb-resultado-v span{ \n");
-        ret.append("} \n");
-        ret.append(".swb-res-opciones-v{ \n");
-        ret.append("	font-size:12px; \n");
-        ret.append("	color:#336699; \n");
-        ret.append("	text-align:center; \n");
-        ret.append("	font-weight:bold; \n");
-        ret.append("	padding-top:10px; \n");
-        ret.append("} \n");
-        ret.append(".swb-res-porciento-v{ \n");
-        ret.append("	margin:0px; \n");
-        ret.append("	padding:0px; \n");
-        ret.append("	vertical-align:bottom; \n");
-        ret.append("	background: #DBDBDB; \n");
-        ret.append("	border:#336699 solid 1px; \n");
-        ret.append("} \n");
-        ret.append(".swb-res-porciento-si-v{ \n");
-        ret.append("	background: #6699CC; \n");
-        ret.append("	font-size:12px; \n");
-        ret.append("	text-align:center; \n");
-        ret.append("	color: #003366; \n");
-        ret.append("	width: 100%; \n");
-        ret.append("	font-weight:bold; \n");
-        ret.append("} \n");
-        ret.append(".swb-res-porciento-no-v{ \n");
-        ret.append("	vertical-align:bottom; \n");
-        ret.append("} \n");
-        ret.append(".swb-res-votos-v{ \n");
-        ret.append("	width:20%; \n");
-        ret.append("	font-size:12px; \n");
-        ret.append("	color:#336699; \n");
-        ret.append("	text-align:center; \n");
-        ret.append("	font-weight:bold; \n");
-        ret.append("} \n");
-        ret.append("</style> \n");
         return ret.toString();
     }
 }
