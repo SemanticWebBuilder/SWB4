@@ -164,12 +164,16 @@ body {
 	color:#336699;
 	font-weight:normal;
 }
-.swb-encuesta a{
+.swb-encuesta a, .swb-resultado-h a, .swb-resultado-v a{
 	text-align: center;
 	font-size: 0.75em;
+        margin-top: 0.5em;
 	color:#336699;
 	font-weight:normal;
 	text-decoration:none;
+}
+.swb-resultado-h , .swb-resultado-v {
+        text-align: center;
 }
 /* horizontal */
 .swb-resultado-h {
@@ -554,13 +558,13 @@ body {
 
 
 /*------------------- PROMO        ----*/
-#swb-promo {
+.swb-promo {
 	width: 21.3em;
 	min-height: 12em;
 	border: #336699 solid .06em;
 	padding: .6em .6em .6em .6em;
 }
-#swb-promo h1{
+.swb-promo h1{
 	font-family:Arial;
 	font-size: 1em;
 	font-weight: bold;
@@ -569,14 +573,14 @@ body {
 	margin: 0;
 	padding:0;
 }
-#swb-promo h2{
+.swb-promo h2{
 	font-family:Arial;
 	font-size: .75em;
 	font-weight: bold;
 	color: #336699;
 	text-align:center;
 }
-#swb-promo img{
+.swb-promo img{
 	width: 120px;
 	height: 100px;
 	border: #999999 solid 1px;
@@ -584,7 +588,7 @@ body {
 	display:block;
 	float: left;
 }
-#swb-promo h6{
+.swb-promo h6{
     background-color: #999999;
 	width:120px;
 	border:#999999 solid 1px;
@@ -597,36 +601,36 @@ body {
 	clear:left;
 	margin: 0em .3em 1em .5em;
 }
-#swb-promo p{
+.swb-promo p{
 	font-family:Arial;
 	font-size: .75em;
 	color: #336699;
 	text-align:justify;
 }
-#swb-promo ul {
+.swb-promo ul {
 	padding: 0;
 	margin: 0;
 	font-family:Arial;
 	font-size: 0.75em;
 	margin-left: 13em;
 }
-#swb-promo li{
+.swb-promo li{
 	list-style:url(bullet-mas1.gif);
 	color:#336699;
 }
-#swb-promo li a:link{
+.swb-promo li a:link{
 	list-style:url(bullet-mas1.gif);
 	color:#336699;
 }
-#swb-promo li a:visited{
+.swb-promo li a:visited{
 	list-style:url(bullet-mas1.gif);
 	color: #336699;
 }
-#swb-promo li a:hover{
+.swb-promo li a:hover{
 	list-style:url(bullet-mas2.gif);
 	color: #99ccff;
 }
-#swb-promo li a:active{
+.swb-promo li a:active{
 	list-style:url(bullet-mas3.gif);
 	color:#FFFFFF;
 }
