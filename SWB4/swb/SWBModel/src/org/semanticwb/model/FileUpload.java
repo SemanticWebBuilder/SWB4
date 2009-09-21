@@ -28,6 +28,10 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
+/**
+ * Displays a fileupload form element (used when property is modeled at this form in an ontology)
+ * @author jorge.jimenez
+ */
 public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
 
     public FileUpload(org.semanticwb.platform.SemanticObject base) {
