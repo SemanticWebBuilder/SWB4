@@ -30,7 +30,13 @@ import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 
-
+/**
+ * Wrapper to event properties. Uset in the events manager resource.
+ * Wrapper para las propiedades de un evento. Usada por el recurso administrador
+ * de eventos.
+ * 
+ * @author Hasdai Pacheco {haxdai@gmail.com}
+ */
 public class EventElement extends org.semanticwb.portal.community.base.EventElementBase 
 {
     public EventElement(org.semanticwb.platform.SemanticObject base)
@@ -38,6 +44,18 @@ public class EventElement extends org.semanticwb.portal.community.base.EventElem
         super(base);
     }
 
+    /**
+     * Gets an iterator tho the user's events carried out in the given date.
+     * Obtiene un iterador a los eventos del usuario a llevarse a cabo en la
+     * fecha dada.
+     * @param user User to get events for. Propietario de los eventos.
+     * @param date Date of the event. Fecha de los eventos.
+     * @param wpage WebPage of the events manager resource. WebPage del recurso
+     * administrador de eventos.
+     * @param model Model to use. Modelo a usar.
+     * @return Iterator to the user's event list. Iterador a la lista de eventos
+     * del usuario.
+     */
     public static Iterator<EventElement> listEventElementsByDate(User user, Date date, WebPage wpage, SWBModel model) {
         Iterator<EventElement> evs;        
         if (user == null) {
@@ -60,6 +78,13 @@ public class EventElement extends org.semanticwb.portal.community.base.EventElem
         return res.iterator();        
     }    
 
+    /**
+     * Chacks wheter date1 and date2 are equal.
+     * @param date1
+     * @param date2
+     * @return true if year, month and day of date1 are equal to year, month
+     * and day of date2.
+     */
     public static boolean isEqual(Date date1, Date date2) {
         return (date1.getYear() == date2.getYear() && date1.getMonth() == date2.getMonth() && date1.getDate() == date2.getDate());
     }
@@ -72,6 +97,7 @@ public class EventElement extends org.semanticwb.portal.community.base.EventElem
         url+="?act=detail&uri="+URLEncoder.encode(this.getURI());
         return url;
     }
+    
     @Override
     public WebPage getWebPage()
     {
