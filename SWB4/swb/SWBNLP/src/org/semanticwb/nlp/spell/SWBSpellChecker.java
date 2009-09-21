@@ -34,8 +34,8 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
 /**
- * Wrapper for Lucene @link{SpellChecker} class.
- * Envoltorio para la clase @link{SpellChecker} de Lucene.
+ * <p lang="en">Wrapper for Lucene {@link SpellChecker} class.</p>
+ * <p lang="es"> Envoltorio para la clase {@link SpellChecker} de Lucene.</p>
  * 
  * @author Hasdai Pacheco {haxdai@gmail.com}
  */
@@ -52,29 +52,36 @@ public class SWBSpellChecker {
     private static Logger log = SWBUtils.getLogger(SWBSpellChecker.class);
 
     /**
-     * Creates a new instance of a SWBSpellChecker. Builds a Lucene SpellChecker
-     * using a Directory containing the displayName of Semantic classes and properties.
+     * Creates a new instance of a {@link SWBSpellChecker}.
+     * Builds a Lucene {@code SpellChecker} using a {@link Directory}
+     * containing the display name of Semantic Classes and Semantic Properties.
+     * <p>
+     * Crea una nueva instancia de {@link SWBSpellChecker}.
+     * Construye un corrector ortográfico a partir de un Directorio de Lucene
+     * que contiene los display names de las clases y propiedades semánticas.
      *
-     * Crea una nueva instancia de SWBSpellChecker. Construye un corrector
-     * ortográfico de Lucene a partir de un Directorio de Lucene que contiene los
-     * displayNames de las clases y propiedades semánticas.
-     *
-     * @param directoryPath path of the Lucene Directory to extract words from.
-     * @param fieldName name of the field to take words from.
+     * @param directoryPath path of the Lucene {@link Directory} to extract
+     *                      words from. Ruta del directorio de Lucene del cual
+     *                      se extraerán las palabras.
+     * 
+     * @param fieldName     name of the Lucene field to take words from. Nombre
+     *                      del campo de interés en el directorio.
      */
     public SWBSpellChecker(String directoryPath, String fieldName) {
         indexSpellDir(directoryPath, fieldName);
     }
 
     /**
-     * Creates a new instance of a SWBSpellChecker. Builds a Lucene SpellChecker
-     * using a text file containing the displayName of Semantic classes and properties.
+     * Creates a new instance of a {@link SWBSpellChecker}.
+     * Builds a Lucene {@link SpellChecker} using a text file containing the 
+     * display name of Semantic Classes and Semantic Properties.
+     * <p>
+     * Crea una nueva instancia de un {@link SWBSpellChecker}.
+     * Construye un corrector ortográfico a partir de un archivo de texto que
+     * contiene los display names de las clases y propiedades semánticas.
      *
-     * Crea una nueva instancia de SWBSpellChecker. Construye un corrector
-     * ortográfico de Lucene a partir de un archivo de texto que contiene los
-     * displayNames de las clases y propiedades semánticas.
-     *
-     * @param txtDictFilePath path of the text file to extract words from.
+     * @param txtDictFilePath path of the text file to extract words from. Ruta
+     * del archivo de texto que contiene el vocabulario.
      */
     public SWBSpellChecker(String txtDictFilePath) {
         File f = new File(txtDictFilePath);
@@ -85,11 +92,19 @@ public class SWBSpellChecker {
     }
 
     /**
-     * Creates and indexes a new Directory for spell checking. This method uses
-     * an existing Lucene Directory to create the spelling dictionary.
-     * @param dirPath Path of the original index directory.
-     * @param fieldName Name of the field which new spell dictionary and index
-     * directory will have.
+     * Creates and indexes a new {@link Directory} for spell checking.
+     * Uses an existing Lucene {@link Directory} to create the spelling
+     * index.
+     * <p>
+     * Crea e indexa un nuevo directorio de Lucene para efectuar la corrección
+     * ortográfica. Usa un directorio existente para crear los índices de
+     * corrección.
+     *
+     * @param dirPath   path of the original index directory. Ruta al directorio
+     *                  de índices original.
+     * 
+     * @param fieldName name of the field in the spell index directory. Nombre
+     *                  del nuevo campo en el directorio de índices de corrección.
      */
     public void indexSpellDir(String dirPath, String fieldName) {
         try {
@@ -103,11 +118,18 @@ public class SWBSpellChecker {
     }
 
     /**
-     * Creates and indexes a new Directory for spell checking. This method uses
-     * an existing text file to create the spelling dictionary.
-     * @param txtDictFile Path of the text file containing the spelling dictionary.
+     * Creates and indexes a new {@link Directory} for spell checking.
+     * This method uses an existing text file to create the spell dictionary.
+     * <p>
+     * Crea e indexa un nuevo directorio de Lucene para efectuar la corrección
+     * ortográfica. Usa un archivo de texto existente para crear los índices de
+     * corrección.
+     *
+     * @param txtDictFile   path of the text file containing the spelling dictionary.
+     *                      ruta del archivo de texto que contiene el diccionario
+     *                      de corrección.
      */
-    private void indexSpellTextFile(File txtDictFile) {
+    public void indexSpellTextFile(File txtDictFile) {
          try {
             spellDir = new RAMDirectory();
             checker = new SpellChecker(spellDir);
@@ -118,23 +140,36 @@ public class SWBSpellChecker {
     }
 
     /**
-     * Gets the current number of suggestions to obtain from the SpellChecker.
+     * Gets the number of suggestions to obtain from the {@link SWBSpellChecker}.
+     * <p>
+     * Obtiene el número de sugerencias a obtener de la corrección ortográfica.
      */
     public int getNumSug() {
         return numSug;
     }
 
     /**
-     * Sets the number of suggestions to obtain from the SpellChecker.
+     * Sets the number of suggestions to obtain from the {@link SWBSpellChecker}.
+     * <p>
+     * Establece el número de sugerencias a obtener de la corrección ortográfica.
+     *
+     * @param numSug number of suggestions. Número de sugerencias.
+     *
      */
     public void setNumSug(int numSug) {
         this.numSug = numSug;
     }    
 
     /**
-     * Gets a set of words similar to the given input.
-     * @param word Wort to have spell check done on.
-     * @return Set of words similar to the input string.
+     * Gets a set of words similar to the given {@code input}.
+     * <p>
+     * Obtiene un conjunto de palabras similares a la cadena de entrada.
+     * 
+     * @param word  word to have spell check done on. Palabra sobre la que se
+     *              realizará la corrección ortográfica.
+     * 
+     * @return      Set of words similar to the {@code input} string. Conjunto de
+     *              palabras similares a la cadena de entrada.
      */
     public String[] suggestSimilar(String word) {
         if (checker != null) {
