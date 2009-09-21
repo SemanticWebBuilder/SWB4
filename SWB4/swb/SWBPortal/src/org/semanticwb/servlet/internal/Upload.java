@@ -44,7 +44,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.util.MultipartInputStream;
 
 /**
- *
+ * Uploads file via ajax
  * @author jorge.jimenez
  */
 public class Upload implements InternalServlet
