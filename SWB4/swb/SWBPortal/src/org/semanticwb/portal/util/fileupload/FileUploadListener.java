@@ -27,6 +27,7 @@ import com.missiondata.fileupload.OutputStreamListener;
 
 /**
  * Originally from carsonm: http://blogs.missiondata.com/java/28/file-upload-progress-with-ajax-and-java-and-prototype/
+ * @author (integrated by) Jorge Jiménez
  */
 public class FileUploadListener implements OutputStreamListener {
     private FileUploadStats fileUploadStats = new FileUploadStats();
