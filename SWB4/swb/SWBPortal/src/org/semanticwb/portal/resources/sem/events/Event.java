@@ -23,7 +23,10 @@
  
 package org.semanticwb.portal.resources.sem.events;
 
-
+/**
+ * Event Object used in the resource Events
+ * @author jorge.jimenez
+ */
 public class Event extends org.semanticwb.portal.resources.sem.events.base.EventBase 
 {
     public Event(org.semanticwb.platform.SemanticObject base)
