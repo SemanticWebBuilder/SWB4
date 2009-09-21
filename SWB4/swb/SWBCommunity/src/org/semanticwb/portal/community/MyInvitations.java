@@ -18,8 +18,9 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
 /**
- *
+ * Displays my invitations to other users to be my friends (to the current user session)
  * @author jorge.jimenez
+ * @version 1.0
  */
 public class MyInvitations extends GenericResource {
 
