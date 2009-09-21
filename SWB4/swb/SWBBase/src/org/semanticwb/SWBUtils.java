@@ -103,7 +103,8 @@ import org.w3c.dom.NodeList;
 //import sun.misc.BASE64Encoder;
 
 /**
- *
+ * Clase que contiene utilerias para manejo de log de errores, texto, base de datos, IO, Zip, Email, Xml, Colecciones y encriptaciones
+ * Class that contains utils for management of errors, text, database, IO, Zip files, emails, Xml, Xslt , Dom, Collections and encriptions
  * @author  Javier Solis Gonzalez (jsolis@infotec.com.mx)
  */
 public class SWBUtils {
@@ -1481,7 +1482,7 @@ public class SWBUtils {
         }
 
         /**
-         * 
+         * Zips a directory
          * @param directory
          * @param base
          * @param zos
@@ -1512,7 +1513,7 @@ public class SWBUtils {
         }
 
         /**
-         * 
+         * Adds files to existing zip
          * @param zipFile
          * @param files
          * @Autor:Jorge Jiménez
@@ -1576,6 +1577,7 @@ public class SWBUtils {
         }
 
         /**
+         * Unzip a file to specific directory
          * @param zip
          * @Autor:Jorge Jiménez
          * @param extractTo
@@ -1586,6 +1588,7 @@ public class SWBUtils {
         }
 
         /**
+         * Unzip a file to specific directory with the option of parse files that ends with specifed extensions
          * @param zip
          * @Autor:Jorge Jiménez
          * @param extractTo
@@ -1634,6 +1637,7 @@ public class SWBUtils {
             archive.close();
         }
 
+
         public static final Iterator<ZipEntry> readZip(String zipName) {
             ArrayList itFiles = new ArrayList();
             ZipFile zf = null;
@@ -1661,6 +1665,13 @@ public class SWBUtils {
             return itFiles.iterator();
         }
 
+        /**
+         * returns the content of specific file in a zip
+         * @param zipName
+         * @Autor:Jorge Jiménez
+         * @param file2Read
+         * @throws java.io.IOException
+         */
         public static final String readFileFromZipAsString(String zipName, String file2Read) {
             String content = null;
             try {
@@ -1826,7 +1837,13 @@ public class SWBUtils {
             return null;
         }
 
-
+        /**
+         * Sends an email in background
+         * @param toEmail
+         * @param subject
+         * @param body
+         * @throws java.net.SocketException
+         */
         public static void sendBGEmail(String toEmail, String subject, String body) throws java.net.SocketException{
              ArrayList acol=new ArrayList();
              if(toEmail!=null && toEmail.indexOf(";")>0)
