@@ -40,8 +40,10 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
 /**
- *
+ * Utils to find in ms documents (word, excel, power point, pdf) via poi api
  * @author jorge.jimenez
+ * @since version 3.0
+ *
  */
 public class DocumentExtractorSrv implements HSSFListener
 {
