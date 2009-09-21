@@ -15,7 +15,8 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
 /**
- *
+ * Resource that manage the integration between google Blogger and semanticwebbuilder (blogger java api)
+ * and returns the user blogger blogs and post 
  * @author jorge.jimenez
  */
 public class BloggerResource  extends GenericResource {
