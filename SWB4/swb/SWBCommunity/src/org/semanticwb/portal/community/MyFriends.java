@@ -18,8 +18,9 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
 /**
- *
+ * Displays my friends (to the current session user)
  * @author jorge.jimenez
+ * @version 1.0
  */
 public class MyFriends extends GenericResource {
 
