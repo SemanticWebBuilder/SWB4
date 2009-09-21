@@ -30,9 +30,6 @@ package org.semanticwb.nlp.analysis;
 // $ANTLR 3.1.2 /home/hasdai/Documentos/INFOTEC/SimpleLexer.g 2009-07-14 17:20:36
 
 import org.antlr.runtime.*;
-import java.util.Stack;
-import java.util.List;
-import java.util.ArrayList;
 
 public class SimpleLexer extends Lexer {
     public static final int MODO=16;
