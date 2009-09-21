@@ -23,9 +23,17 @@
  
 package org.semanticwb.portal.resources.sem;
 
-
+/**
+ * Wrapper for a bookmark entry object.
+ * Envoltorio para una entrada de favoritos.
+ * 
+ * @author Hasdai Pacheco {haxdai@gmail.com}
+ */
 public class BookmarkEntry extends org.semanticwb.portal.resources.sem.base.BookmarkEntryBase 
 {
+    /**
+     * Constructor.
+     */
     public BookmarkEntry(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
