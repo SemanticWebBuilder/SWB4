@@ -43,7 +43,8 @@ import org.semanticwb.portal.api.SWBResourceException;
 import twitter4j.Twitter;
 
 /**
- *
+ * Resource that manage the integration between twitter and semanticwebbuilder (twitter java api)
+ * and returns the user twitts and also can publish new twitts to twitter
  * @author Jorge Jiménez
  */
 public class TwitterResource extends GenericAdmResource {
