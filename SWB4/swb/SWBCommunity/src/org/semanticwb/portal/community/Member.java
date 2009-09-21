@@ -31,7 +31,7 @@ public class Member extends org.semanticwb.portal.community.base.MemberBase
                 while(it.hasNext())
                 {
                     Member mem=it.next();
-                    if(mem.getMicroSite().equals(page))
+                    if(mem.getMicroSite()!=null && mem.getMicroSite().equals(page))
                     {
                        ret=mem;
                     }
