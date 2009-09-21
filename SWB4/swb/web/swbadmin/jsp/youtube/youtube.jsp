@@ -16,13 +16,39 @@
 <%@page import="java.net.URL"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 
-<div class="miembros">
 <%
 String action=paramRequest.getAction();
 SWBResourceURL url=paramRequest.getRenderUrl();
 SWBResourceURL urlAction=paramRequest.getActionUrl();
 YouTubeService service = (YouTubeService)request.getAttribute("service");
-if(action.equals("comment") || action.equals("spam")){
+if(action.equals("uploadVideo")){
+    urlAction.setAction("setPlayList");
+    String videoId=request.getParameter("videoId");
+    String tokenUrl=request.getParameter("tokenUrl");
+    String token=request.getParameter("token");
+    if(tokenUrl!=null && token!=null){
+ %>
+    <form action="<%=tokenUrl%>?nexturl=<%=urlAction%>" method ="post" enctype="multipart/form-data">
+        <ul>
+        <input type="file" name="file"/>
+        <input type="hidden" name="token" value="<%=token%>"/>
+        <input type="submit" value="subir a youtube" />
+        </ul>
+    </form>
+ <%
+    }
+}else if(action.equals("newVideo")){    
+%>
+    <form action="<%=urlAction.setAction("uploadVideo")%>">
+        <ul>
+            <li>Título:<input type="text" name="title"></li>
+            <li>Descripción:<input type="text" name="description"></li>
+            <li>Palabras clave:<input type="text" name="keywords"></li>
+            <li><input type="submit" value="enviar"></li>
+        </ul>
+    </form>
+<%
+}else if(action.equals("comment") || action.equals("spam")){
     String entryUrl=request.getParameter("entryUrl");
     urlAction.setAction(action);
     urlAction.setParameter("entryUrl", entryUrl);
@@ -68,10 +94,13 @@ if(action.equals("comment") || action.equals("spam")){
             <%urlAction.setAction("delete");%><a href="<%=urlAction%>">eliminar</a>
             <%
              //Recuperar los comentarios de un video
+            int cont=0;
             String commentUrl = entry.getComments().getFeedLink().getHref();
             CommentFeed commentFeed = service.getFeed(new URL(commentUrl), CommentFeed.class);
             for(CommentEntry comment : commentFeed.getEntries()) {
+              cont++;
               %><p><%=comment.getPlainTextContent()%></p><%
+              if(cont>=5) break;
             }
             %>
         </div>
@@ -79,13 +108,21 @@ if(action.equals("comment") || action.equals("spam")){
     }
    }catch(Exception e){e.printStackTrace();}
 }else {
+%>
+ <div class="miembros">
+     <%url.setAction("newVideo");%>
+     <p><a href="<%=url%>">nuevo video</a></p>
+<%
 try{
      String feedUrl = "http://gdata.youtube.com/feeds/api/users/default/favorites";
      VideoFeed videoFeed = service.getFeed(new URL(feedUrl), VideoFeed.class);
      for(VideoEntry entry : videoFeed.getEntries()) {
-     String videoId=entry.getHtmlLink().getHref();
-     int pos=videoId.indexOf("v=");
-     if(pos>-1) videoId=videoId.substring(pos+2);
+        String videoId=entry.getHtmlLink().getHref();
+        int pos=videoId.indexOf("v=");
+        if(pos>-1) videoId=videoId.substring(pos+2);
+        String sid=entry.getId();
+        pos=-1;pos=sid.indexOf("favorite:");
+        if(pos>-1) sid=sid.substring(pos+9);
      %>
             <div class="moreUser">
                 <object width="225" height="155">
@@ -101,15 +138,17 @@ try{
                 <%url.setParameter("entryUrl", "http://gdata.youtube.com/feeds/api/videos/"+videoId);url.setAction("detail");%><p><a href="<%=url%>">detalle</a> |
                 <%url.setAction("comment");%><a href="<%=url%>">comentar</a> |
                 <%url.setAction("spam");%><a href="<%=url%>">spam</a> |
-                <%urlAction.setParameter("entryUrl", "http://gdata.youtube.com/feeds/api/videos/"+videoId);urlAction.setAction("favorite");%><a href="<%=urlAction%>">favorito</a> |
-                <%urlAction.setParameter("entryUrl", "http://gdata.youtube.com/feeds/api/users/default/favorites/"+videoId);urlAction.setAction("unfavorite");%><a href="<%=urlAction%>">Eliminar de los favoritos</a>
+                <%urlAction.setParameter("entryUrl", "http://gdata.youtube.com/feeds/api/users/default/favorites/"+sid);urlAction.setAction("unfavorite");%><a href="<%=urlAction%>">Eliminar de los favoritos</a> |
                 <%urlAction.setParameter("entryUrl", "http://gdata.youtube.com/feeds/api/videos/"+videoId);urlAction.setAction("delete");%><a href="<%=urlAction%>">eliminar</a>
                 <%
                  //Recuperar los comentarios de un video
+                int cont=0;
                 String commentUrl = entry.getComments().getFeedLink().getHref();
                 CommentFeed commentFeed = service.getFeed(new URL(commentUrl), CommentFeed.class);
                 for(CommentEntry comment : commentFeed.getEntries()) {
+                  cont++;
                   %><p><%=comment.getPlainTextContent()%></p><%
+                  if(cont>=5) break;
                 }
                 %>
             </div>
@@ -117,8 +156,10 @@ try{
     }
 }catch(Exception e){e.printStackTrace();}
 %>
-<a href="<%=url.setAction("showAll")%>">Ver todos</a>
+</div>
+ <div class="miembros">
+  <p><a href="<%=url.setAction("showAll")%>">Ver todos</a></p>
+ </div>
 <%
 }
 %>
-</div>
