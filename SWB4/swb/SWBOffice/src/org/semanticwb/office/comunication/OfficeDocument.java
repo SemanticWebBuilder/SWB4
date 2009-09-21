@@ -133,16 +133,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         getOfficeTypes[1] = EXCEL_RESOURCE_TYPE;
         getOfficeTypes[2] = PPT_RESOURCE_TYPE;
         return getOfficeTypes;
-    }
-    public void migrateResource(Resource resource)
-    {
-        String workpath=resource.getWorkPath();
-        File work=new File(workpath);
-        if(work.isDirectory())
-        {
-            //lastversion=resource.get
-        }
-    }
+    }    
     public String save(String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file, PropertyInfo[] properties, String[] values,InputStream in) throws Exception
     {
         Session session = null;
