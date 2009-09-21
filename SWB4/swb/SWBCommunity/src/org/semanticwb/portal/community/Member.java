@@ -1,5 +1,6 @@
 package org.semanticwb.portal.community;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
@@ -22,6 +23,7 @@ public class Member extends org.semanticwb.portal.community.base.MemberBase
 
     public static Member getMember(User user, WebPage page)
     {
+        ArrayList<Member> membersToRemove=new ArrayList<Member>();
         Member ret=null;
         if(page instanceof MicroSite)
         {
@@ -35,7 +37,15 @@ public class Member extends org.semanticwb.portal.community.base.MemberBase
                     {
                        ret=mem;
                     }
+                    if(mem.getMicroSite()==null)
+                    {
+                        membersToRemove.add(mem);
+                    }
                 }
+            }
+            for(Member member : membersToRemove)
+            {
+                member.remove();
             }
             if(ret==null)
             {
