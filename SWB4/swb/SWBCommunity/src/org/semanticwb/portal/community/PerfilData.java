@@ -18,8 +18,9 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
 /**
- *
+ * Displays de user's perfil data (to the current user session)
  * @author jorge.jimenez
+ * @version 1.0
  */
 public class PerfilData extends GenericResource {
 
