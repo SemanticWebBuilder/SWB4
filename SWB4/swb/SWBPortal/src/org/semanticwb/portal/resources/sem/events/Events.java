@@ -33,6 +33,10 @@ import org.semanticwb.portal.SWBFormButton;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
 
+/**
+ * Object that manage events
+ * @author jorge.jimenez
+ */
 public class Events extends org.semanticwb.portal.resources.sem.events.base.EventsBase 
 {
 
