@@ -53,6 +53,7 @@ import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.servlet.internal.UploadFormElement;
 
 /**
+* Resource that manage a forum
 * @author : Jorge Alberto Jiménez
 * @version 1.0
 */
