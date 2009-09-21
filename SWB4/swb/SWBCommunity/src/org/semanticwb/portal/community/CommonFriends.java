@@ -16,6 +16,8 @@ import org.semanticwb.portal.api.SWBResourceException;
 /**
  * Object that displays the commond friends between the user that is in session an other user
  * @author jorge.jimenez
+ * @version 1.0
+ * @since August 2009
  */
 public class CommonFriends extends GenericResource {
 
