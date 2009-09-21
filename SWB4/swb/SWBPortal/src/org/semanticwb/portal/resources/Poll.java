@@ -205,7 +205,6 @@ public class Poll extends GenericResource {
 
                     out.println("<script type=\"text/javascript\">");
                     out.println("dojo.require(\"dojo.fx\");");
-                    out.println("dojo.addOnLoad(collapse());");
 
                     out.println("\nfunction buscaCookie(forma) {");
                     out.println("    var numcom = getCookie(forma.NombreCookie.value); ");
