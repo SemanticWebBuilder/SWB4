@@ -52,7 +52,11 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
 /**
+ * Recurso para consulta en lenguaje natural acotado a la base de datos de
+ * Jena. Utiliza un traductor de lenguaje natural a SparQl.
  *
+ * Resource to query the jena database using restricted natural language. Uses
+ * a natural language to SparQl translator.
  * @author Hasdai Pacheco {haxdai(at)gmail.com}
  */
 public class SWBADBNatural extends GenericResource {
