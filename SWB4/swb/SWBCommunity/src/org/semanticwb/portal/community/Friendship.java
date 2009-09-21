@@ -4,7 +4,11 @@ import java.util.Iterator;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 
-
+/**
+ * Object that manages relationship between users (creates, removes, etc relationships)
+ * @author jorge.jimenez
+ * @version 1.0
+ */
 public class Friendship extends org.semanticwb.portal.community.base.FriendshipBase 
 {
     public Friendship(org.semanticwb.platform.SemanticObject base)
