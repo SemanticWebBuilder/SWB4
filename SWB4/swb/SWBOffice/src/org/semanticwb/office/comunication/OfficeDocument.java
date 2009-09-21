@@ -133,8 +133,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         getOfficeTypes[2] = PPT_RESOURCE_TYPE;
         return getOfficeTypes;
     }
-
-    public String save(String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file, PropertyInfo[] properties, String[] values) throws Exception
+    public String save(String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file, PropertyInfo[] properties, String[] values,InputStream in) throws Exception
     {
         Session session = null;
         Node categoryNode = null;
@@ -182,8 +181,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     resNode.setProperty("jcr:encoding", "");
                     resNode.setProperty(cm_file, file);
                     String cm_user = loader.getOfficeManager(repositoryName).getUserType();
-                    resNode.setProperty(cm_user, this.user);
-                    InputStream in = new ByteArrayInputStream(part.getContent());
+                    resNode.setProperty(cm_user, this.user);                    
                     resNode.setProperty(JCR_DATA, in);
                     in.close();
                     resNode.setProperty(JCR_LASTMODIFIED, lastModified);
@@ -234,6 +232,16 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 session.logout();
             }
         }
+    }
+
+    public String save(String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file, PropertyInfo[] properties, String[] values) throws Exception
+    {        
+        for (Part part : requestParts)
+        {
+            InputStream in = new ByteArrayInputStream(part.getContent());
+            return save(title, description, repositoryName, categoryID, type, nodeType, file, properties, values, in);
+        }
+        return null;
     }
 
     public int getNumberOfVersions(String repositoryName, String contentId) throws Exception
