@@ -20,8 +20,9 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
 /**
- *
+ * Displays the persons (requesters)that want to be my friends (to the user that is in session)
  * @author jorge.jimenez
+ * @version 1.0
  */
 public class MyFriendRequest extends GenericResource {
 
