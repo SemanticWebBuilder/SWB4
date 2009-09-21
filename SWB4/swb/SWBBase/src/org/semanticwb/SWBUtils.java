@@ -105,7 +105,8 @@ import org.w3c.dom.NodeList;
 /**
  * Clase que contiene utilerias para manejo de log de errores, texto, base de datos, IO, Zip, Email, Xml, Colecciones y encriptaciones
  * Class that contains utils for management of errors, text, database, IO, Zip files, emails, Xml, Xslt , Dom, Collections and encriptions
- * @author  Javier Solis Gonzalez (jsolis@infotec.com.mx)
+ * @author  Javier Solis Gonzalez (jsolis@infotec.com.mx), Jorge Jiménez (george24@infotec.com.mx)
+ * @version 1.0
  */
 public class SWBUtils {
 
