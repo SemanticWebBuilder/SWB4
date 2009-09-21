@@ -39,6 +39,7 @@ import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
 
 /**
+* Object that manage any semanticObject, creates a catalog or directory of the object
 * @autor:Jorge Jiménez
 */
 public class Directory extends org.semanticwb.portal.resources.sem.directory.base.DirectoryBase {
