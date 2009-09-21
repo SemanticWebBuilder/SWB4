@@ -56,6 +56,7 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
 /**
+ * Search resource for communities. Recurso para búsqueda en comunidades.
  * @author Hasdai Pacheco {haxdai@gmail.com}
  */
 public class Search extends GenericAdmResource {
@@ -226,10 +227,14 @@ public class Search extends GenericAdmResource {
 
     /**
      * Execute a SparQl query to find directory objects. Uses LARQ to perform
-     * a free-text search into a snow-balled terms index.
-     * @param q Query string.
-     * @param lang Language for snowball analyzer.
-     * @return list of URIs matching the query.
+     * a free-text search into a snow-balled terms index. Ejecuta una consulta
+     * en SparQl para buscar DirectoryObjects. Usa LARQ para realizar una
+     * búsqueda a texto abierto sobre un indide de lucene.
+     * @param q Query string. Cadena de consulta.
+     * @param lang Language for snowball analyzer. Idioma del analizador de
+     * snowball.
+     * @return list of URIs matching the query. Lista de URIs que satisfacen
+     * los criterios de búsqueda.
      */
     public ArrayList<String> performQuery(String q, String lang, String what) {
         ArrayList<String> res = new ArrayList<String>();
