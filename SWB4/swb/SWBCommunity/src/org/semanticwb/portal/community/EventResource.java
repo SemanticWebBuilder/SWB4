@@ -48,15 +48,25 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.portal.community.utilresources.ImageResizer;
 
- /** @author Hasdai Pacheco {haxdai@gmail.com} */
+ /** @author Hasdai Pacheco {haxdai@gmail.com} 
+  * Events manager resource. Recurso administrador de eventos.
+  */
 public class EventResource extends org.semanticwb.portal.community.base.EventResourceBase {
     private static Logger log = SWBUtils.getLogger(EventResource.class);
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
 
+    /**
+     * Empty constructor.
+     * Constructor vacío.
+     */
     public EventResource() {
     }
 
+    /**
+     * Default constructor.
+     * Constructor por defecto.
+     */
     public EventResource(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
