@@ -19,12 +19,7 @@
 * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
 * dirección electrónica: 
 *  http://www.semanticwebbuilder.org
-**/ 
- 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+**/
 
 package org.semanticwb.nlp;
 
