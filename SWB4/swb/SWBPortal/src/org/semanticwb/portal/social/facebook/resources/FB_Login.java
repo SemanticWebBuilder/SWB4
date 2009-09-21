@@ -44,8 +44,9 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
 /**
- *
+ * Resource that manage the integration between facebook and semanticwebbuilder (facebook java api)
  * @author Jorge Jiménez
+ *
  */
 public class FB_Login extends GenericAdmResource {
 
