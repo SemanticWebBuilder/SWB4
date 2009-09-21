@@ -49,7 +49,7 @@ import org.semanticwb.portal.util.fileupload.UploadStatus;
 
 
 /**
- *
+ * Uploads file via ajax (dwr)
  * @author jorge.jimenez
  */
 public class UploadFormElement implements InternalServlet {
