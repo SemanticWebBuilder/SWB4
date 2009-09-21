@@ -23,7 +23,7 @@
  
 /*
  * XformsMgr.java
- *
+ * Xforms Manager in semanticwebbuilder
  * Created on 1 de julio de 2008, 05:23 PM
  */
 
