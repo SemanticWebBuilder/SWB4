@@ -19,12 +19,7 @@
 * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
 * dirección electrónica: 
 *  http://www.semanticwebbuilder.org
-**/ 
- 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+**/
 
 package org.semanticwb.nlp.translation;
 
@@ -43,8 +38,9 @@ import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticProperty;
 
 /**
- *
- * @author hasdai
+ * A natural language to SparQl query translator. Using this class is not 
+ * recommended because the class is experimental. Use SWBSparqlTranslator instead.
+ * @author Hasdai Pacheco {haxdai@gmail.com}
  */
 public class Translator {
 
