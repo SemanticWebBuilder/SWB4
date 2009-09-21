@@ -70,7 +70,8 @@ import org.semanticwb.util.db.GenericDB;
 /**
  * Clase que contiene utilerias para manejo de portal (SemanticWebBuilder)
  * Class that contains utils for management of portal (SemanticWebBuilder)
- *
+ * javier Solís, Jorge jiménez
+ * @version 1.0
  */
 public class SWBPortal {
 
@@ -399,6 +400,9 @@ public class SWBPortal {
         return f.getInputStream();
     }
 
+    /**
+     * @return an ArrayList with all languages available in all sites
+     */
     public static ArrayList getAppLanguages() {
         ArrayList languages = new ArrayList();
         Iterator<WebSite> it = SWBContext.listWebSites();
