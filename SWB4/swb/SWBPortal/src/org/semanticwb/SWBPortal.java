@@ -67,6 +67,11 @@ import org.semanticwb.portal.util.ContentStyles;
 import org.semanticwb.util.JarFile;
 import org.semanticwb.util.db.GenericDB;
 
+/**
+ * Clase que contiene utilerias para manejo de portal (SemanticWebBuilder)
+ * Class that contains utils for management of portal (SemanticWebBuilder)
+ *
+ */
 public class SWBPortal {
 
     private static Logger log = SWBUtils.getLogger(SWBPortal.class);
@@ -451,8 +456,10 @@ public class SWBPortal {
         }
 
         /**
+         * replace tags and values in Html (parser)
          * @param datos
          * @param ruta
+         * @Autor Jorge Jiménez
          * @return  */
         public static String parseHTML(String datos, String ruta, int pages) {
             hAnchors = new HashMap();
@@ -564,6 +571,11 @@ public class SWBPortal {
             return ret.toString();
         }
 
+        /**
+         * Finds filename in string (relative paths)
+         * @param value
+         * @return
+         */
         private static String findFileName(String value) {
             String out = "";
             if (value.startsWith("../")) {
@@ -597,6 +609,13 @@ public class SWBPortal {
             return value;
         }
 
+        /**
+         * Finds anchors in string
+         * @param content
+         * @param ancla
+         * @param pages
+         * @return
+         */
         private static int findAnchorInContent(String content, String ancla, int pages) {
             ancla = ancla.substring(1);
             Integer page = (Integer) hAnchors.get(ancla);
@@ -689,6 +708,13 @@ public class SWBPortal {
             return false;
         }
 
+        /**
+         * Finds images in a javascript
+         * @param value
+         * @param ext
+         * @param ruta
+         * @return
+         */
         private static String findImagesInScript(String value, String ext, String ruta) {
             StringBuffer aux = new StringBuffer(value.length());
             int off = 0;
@@ -803,8 +829,10 @@ public class SWBPortal {
         }
 
         /**
+         * Finds attaches in a string
          * @param datos
          * @param ruta
+         * @return a string with sttaches
          */
         public static String FindAttaches(String datos) {
             HtmlTag tag = new HtmlTag();
