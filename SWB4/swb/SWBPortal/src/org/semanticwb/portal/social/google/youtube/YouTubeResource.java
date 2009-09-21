@@ -13,12 +13,15 @@ import com.google.gdata.data.media.mediarss.MediaTitle;
 import com.google.gdata.data.youtube.CommentEntry;
 import com.google.gdata.data.youtube.ComplaintEntry;
 import com.google.gdata.data.youtube.FormUploadToken;
+import com.google.gdata.data.youtube.PlaylistEntry;
+import com.google.gdata.data.youtube.PlaylistFeed;
 import com.google.gdata.data.youtube.VideoEntry;
 import com.google.gdata.data.youtube.YouTubeMediaGroup;
 import com.google.gdata.data.youtube.YouTubeNamespace;
 import com.google.gdata.util.AuthenticationException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.StringTokenizer;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +34,8 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
 /**
- *
+ * Resource that manage the integration between youtube and semanticwebbuilder (youtube java api)
+ * and returns the user youtube videos, also the user can upload new videos, mark as favorites, etc
  * @author jorge.jimenez
  */
 public class YouTubeResource extends GenericResource {
@@ -68,9 +72,9 @@ public class YouTubeResource extends GenericResource {
         String action = response.getAction();
         String entryUrl=request.getParameter("entryUrl");
         try{
-            System.out.println("entra a processAction-1:"+action);
             if(action.equals("uploadVideo"))
             {
+                System.out.println("entra a processA-1");
                 VideoEntry newEntry = new VideoEntry();
                 newEntry.setLocation("Mexico");
                 YouTubeMediaGroup mg = newEntry.getOrCreateMediaGroup();
@@ -78,12 +82,11 @@ public class YouTubeResource extends GenericResource {
                 //(de las del archivo de la mencionada url, ej. Autos) y sería con la que se subieran los nuevos videos y de esta manera
                 //ya no le mostraría un combo con todas las categorias para que el usuario final escogiera, porque en realidad en una comunidad se deberian
                 //de subir videos con una cierta categoria solamente, que sería que tuviera relación con el tipo de comunidad en la que se esta.
-                String category=request.getParameter("category");
-                if(category!=null && category.trim().length()>0)
-                {
-                    mg.addCategory(new MediaCategory(YouTubeNamespace.CATEGORY_SCHEME, request.getParameter("category")));
-                    mg.addCategory(new MediaCategory(YouTubeNamespace.DEVELOPER_TAG_SCHEME, "xyzzy"));
-                }
+                //***El título, la categoria y por lo menos un keyword son requeridos.
+
+                mg.addCategory(new MediaCategory(YouTubeNamespace.CATEGORY_SCHEME, "Autos"));
+                mg.addCategory(new MediaCategory(YouTubeNamespace.DEVELOPER_TAG_SCHEME, "xyzzy"));
+                
                 String title=request.getParameter("title");
                 if(title!=null && title.trim().length()>0)
                 {
@@ -94,7 +97,15 @@ public class YouTubeResource extends GenericResource {
                 if(keywords!=null && keywords.trim().length()>0)
                 {
                     mg.setKeywords(new MediaKeywords());
-                    mg.getKeywords().addKeyword(keywords);
+                    if(keywords.indexOf(",")>-1){
+                        StringTokenizer strTokens=new StringTokenizer(keywords,",");
+                        while(strTokens.hasMoreTokens()){
+                            String token=strTokens.nextToken();
+                            mg.getKeywords().addKeyword(token);
+                        }
+                    }else{
+                        mg.getKeywords().addKeyword(keywords);
+                    }
                 }
                 String description=request.getParameter("description");
                 if(description!=null && description.trim().length()>0)
@@ -105,6 +116,17 @@ public class YouTubeResource extends GenericResource {
                 //mg.setPrivate(false);
                 URL uploadUrl = new URL("http://gdata.youtube.com/action/GetUploadToken");
                 FormUploadToken token = service.getFormUploadToken(uploadUrl, newEntry);
+
+                //Creo que primero se debe de enviar el video y despues ya se puede colocar en una lista de reproducción especifica
+                //con el parametro nextUrl puedo hacer que proceso esto despues de la forma de la subida del archivo a youtube
+//                System.out.println("newEntry:"+newEntry);
+//                String feedUrl = "http://gdata.youtube.com/feeds/api/playlists/D2C26D097ECEAB44?v=2";
+//                PlaylistEntry playlistEntry = new PlaylistEntry(newEntry);
+//                System.out.println("playlistEntry:"+playlistEntry);
+//                service.insert(new URL(feedUrl), playlistEntry);
+
+                System.out.println("newEntry.getId():"+newEntry.getId());
+                response.setRenderParameter("videoId", newEntry.getId());
                 response.setRenderParameter("tokenUrl", token.getUrl());
                 response.setRenderParameter("token", token.getToken());
             }else {
