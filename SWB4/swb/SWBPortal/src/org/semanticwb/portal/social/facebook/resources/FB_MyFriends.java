@@ -52,8 +52,10 @@ import org.w3c.dom.NodeList;
 
 
 /**
- *
+ * Resource that manage the integration between facebook and semanticwebbuilder (facebook java api)
+ * and returns the user facebook friends (that is in the facebook session)
  * @author Jorge Jiménez
+ *
  */
 public class FB_MyFriends extends GenericResource {
 
