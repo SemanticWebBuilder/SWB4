@@ -33,14 +33,18 @@ public class Member extends org.semanticwb.portal.community.base.MemberBase
                 while(it.hasNext())
                 {
                     Member mem=it.next();
-                    if(mem.getMicroSite()!=null && mem.getMicroSite().equals(page))
-                    {
-                       ret=mem;
-                    }
                     if(mem.getMicroSite()==null)
                     {
                         membersToRemove.add(mem);
                     }
+                    else
+                    {
+                        if(mem.getMicroSite().equals(page))
+                        {
+                           ret=mem;
+                        }
+                    }
+                    
                 }
             }
             for(Member member : membersToRemove)
