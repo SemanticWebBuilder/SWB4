@@ -23,7 +23,7 @@
  
 /*
  * ElementsProp.java
- *
+ * Utility class for xforms manager
  * Created on 9 de julio de 2008, 11:49 AM
  */
 
