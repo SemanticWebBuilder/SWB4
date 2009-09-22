@@ -92,6 +92,7 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.repository.OfficeManager;
 import org.semanticwb.repository.RepositoryManagerLoader;
+import org.semanticwb.repository.SWBRepositoryManager;
 import org.semanticwb.repository.WorkspaceNotFoudException;
 import org.semanticwb.repository.office.OfficeContent;
 import org.semanticwb.resource.office.sem.ExcelResource;
@@ -100,6 +101,9 @@ import org.semanticwb.resource.office.sem.PPTResource;
 import org.semanticwb.resource.office.sem.WordResource;
 import org.semanticwb.xmlrpc.Part;
 import org.semanticwb.xmlrpc.XmlRpcObject;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 /**
  *
@@ -108,8 +112,9 @@ import org.semanticwb.xmlrpc.XmlRpcObject;
 public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 {
 
+    private static final String categoryBydefault = "Contenidos migrados";
+    private static final String descriptionByDefault = "Contenidos migrados de versión 3.2";
     private final SemanticClass cm_content = OfficeContent.swboffice_OfficeContent;
-    
     private static final SemanticProperty prop_content = OfficeResource.swboffice_content;
     private static final SemanticClass swb_office = org.semanticwb.repository.office.OfficeDocument.swboffice_OfficeDocument;
     private static final SemanticProperty PROP_JCR_DATA = org.semanticwb.repository.office.OfficeDocument.jcr_data;
@@ -143,18 +148,76 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return getOfficeTypes;
     }
 
-    public Resource migrateWordResource(String siteid, String webpageId, String resourceid, String version, String title, String description, String repositoryName, String categoryID, String type, PropertyInfo[] viewProperties, String[] viewValues,String user,String password,String file) throws Exception
+    public Resource migrateWordResource(String siteid, String webpageId, String resourceid, String version, String title, String description, PropertyInfo[] viewProperties, String[] viewValues, String user, String password, String file) throws Exception
     {
-        return migrateResource(siteid, webpageId, resourceid, version, title, description, repositoryName, categoryID, "WORD", viewProperties, viewValues, user, password, file);
+        return migrateResource(siteid, webpageId, resourceid, version, title, description, "WORD", viewProperties, viewValues, user, password, file);
     }
-    public Resource migrateExcelResource(String siteid, String webpageId, String resourceid, String version, String title, String description, String repositoryName, String categoryID, String type, PropertyInfo[] viewProperties, String[] viewValues,String user,String password,String file) throws Exception
+
+    public Resource migrateExcelResource(String siteid, String webpageId, String resourceid, String version, String title, String description, PropertyInfo[] viewProperties, String[] viewValues, String user, String password, String file) throws Exception
     {
-        return migrateResource(siteid, webpageId, resourceid, version, title, description, repositoryName, categoryID, "EXCEL", viewProperties, viewValues, user, password, file);
+        return migrateResource(siteid, webpageId, resourceid, version, title, description, "EXCEL", viewProperties, viewValues, user, password, file);
     }
-    public Resource migratePPTResource(String siteid, String webpageId, String resourceid, String version, String title, String description, String repositoryName, String categoryID, String type, PropertyInfo[] viewProperties, String[] viewValues,String user,String password,String file) throws Exception
+
+    public Resource migratePPTResource(String siteid, String webpageId, String resourceid, String version, String title, String description, PropertyInfo[] viewProperties, String[] viewValues, String user, String password, String file) throws Exception
     {
-        return migrateResource(siteid, webpageId, resourceid, version, title, description, repositoryName, categoryID, "PPT", viewProperties, viewValues, user, password, file);
+        return migrateResource(siteid, webpageId, resourceid, version, title, description, "PPT", viewProperties, viewValues, user, password, file);
     }
+
+    private void addPropertyInfoFromOldVersion(String name, Document doc, SemanticProperty prop, ArrayList<PropertyInfo> props)
+    {
+        NodeList nodes = doc.getElementsByTagName(name);
+        for (int i = 0; i < nodes.getLength(); i++)
+        {
+            Element element = (Element) nodes.item(i);
+            if (element.getFirstChild() != null && element.getFirstChild().getTextContent() != null)
+            {
+                String value = element.getFirstChild().getTextContent();
+                PropertyInfo info = new PropertyInfo();
+                if (prop.isString())
+                {
+                    info.type = "String";
+                }
+                else if (prop.isBoolean())
+                {
+                    info.type = "Boolean";
+                }
+                else if (prop.isInt())
+                {
+                    info.type = "Integer";
+                }
+                info.isRequired = prop.isRequired();
+                info.values = new Value[1];
+                info.values[0] = new Value();
+                info.values[0].key = value;
+                info.values[1].title=prop.getDisplayName();
+                info.id = prop.getPrefix() + ":" + prop.getName();
+            }
+        }
+    }
+
+    public PropertyInfo[] getViewPropertiesWord(String xml)
+    {
+        ArrayList<PropertyInfo> props = new ArrayList<PropertyInfo>();
+        Document doc = SWBUtils.XML.xmlToDom(xml);
+        addPropertyInfoFromOldVersion("position", doc, WordResource.swboffice_position, props);
+        addPropertyInfoFromOldVersion("txtant", doc, WordResource.swboffice_txtant, props);
+        addPropertyInfoFromOldVersion("txtsig", doc, WordResource.swboffice_txtsig, props);
+        addPropertyInfoFromOldVersion("tfont", doc, WordResource.swboffice_tfont, props);
+        addPropertyInfoFromOldVersion("npages", doc, WordResource.swboffice_npages, props);
+        // texto predefinido
+        addPropertyInfoFromOldVersion("tpred", doc, WordResource.swboffice_tpred, props);
+        addPropertyInfoFromOldVersion("pages", doc, WordResource.swboffice_pages, props);
+        return props.toArray(new PropertyInfo[props.size()]);
+    }
+
+    public PropertyInfo[] getViewPropertiesPPT(String xml)
+    {
+        ArrayList<PropertyInfo> props = new ArrayList<PropertyInfo>();
+        Document doc = SWBUtils.XML.xmlToDom(xml);
+        addPropertyInfoFromOldVersion("link", doc, PPTResource.swboffice_showDownload, props);
+        return props.toArray(new PropertyInfo[props.size()]);
+    }
+
     /**
      * 
      * @param siteid
@@ -174,17 +237,35 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @return
      * @throws Exception
      */
-
-    private Resource migrateResource(String siteid, String webpageId, String resourceid, String version, String title, String description, String repositoryName, String categoryID, String type, PropertyInfo[] viewProperties, String[] viewValues,String user,String password,String file) throws Exception
+    private Resource migrateResource(String siteid, String webpageId, String resourceid, String version, String title, String description, String type, PropertyInfo[] viewProperties, String[] viewValues, String user, String password, String file) throws Exception
     {
-        String nodeType=cm_content.getPrefix() + ":" + cm_content.getName();
-        this.user=user;
-        this.password=password;
+        SWBRepositoryManager manager = new SWBRepositoryManager();
+        String repositoryName = siteid + "_rep@" + manager.getName(); // se almacena en el repositorio del sitio
+        OfficeApplication officeApplication = new OfficeApplication();
+        officeApplication.setUser(user);
+        officeApplication.setPassword(password);
+        String categoryId = officeApplication.createCategory(repositoryName, categoryBydefault, descriptionByDefault);
+        return migrateResource(siteid, webpageId, resourceid, version, title, description, repositoryName, categoryId, type, viewProperties, viewValues, user, password, file);
+    }
+
+    private Resource migrateResource(String siteid, String webpageId, String resourceid, String version, String title, String description, String repositoryName, String categoryID, String type, PropertyInfo[] viewProperties, String[] viewValues, String user, String password, String file) throws Exception
+    {
+        String nodeType = cm_content.getPrefix() + ":" + cm_content.getName();
+        this.user = user;
+        this.password = password;
         // guarda en repositorio y publica
         WebSite site = WebSite.getWebSite(siteid);
+        if (site == null)
+        {
+            throw new Exception("The site " + siteid + " was not found");
+        }
         WebPage page = site.getWebPage(webpageId);
-        PropertyInfo[] contentProperties=new PropertyInfo[0];
-        String[] contentValues=new String[0];
+        if (page == null)
+        {
+            throw new Exception("The page " + webpageId + " was not found");
+        }
+        PropertyInfo[] contentProperties = new PropertyInfo[0];
+        String[] contentValues = new String[0];
         String contentid = migrateResourceToRepository(resourceid, version, title, description, repositoryName, categoryID, type, nodeType, file, contentProperties, contentValues);
         WebPageInfo info = new WebPageInfo();
         info.id = page.getId();
@@ -203,7 +284,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         info.childs = childs;
         // mantiene el id original
         // ciudado el contenido original ya no se puede publicar igual, pero se agrega funcionlidad para modalidad restauración
-        ResourceInfo res = this.publishToResourceContent(resourceid,repositoryName, contentid, "*", title, description, info, viewProperties, viewValues);
+        ResourceInfo res = this.publishToResourceContent(resourceid, repositoryName, contentid, "*", title, description, info, viewProperties, viewValues);
         return Resource.getResource(res.id, site);
     }
 
@@ -1072,7 +1153,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
-    public ResourceInfo publishToResourceContent(String id,String repositoryName, String contentId, String version, String title, String description, WebPageInfo webpage, PropertyInfo[] properties, String[] values) throws Exception
+    public ResourceInfo publishToResourceContent(String id, String repositoryName, String contentId, String version, String title, String description, WebPageInfo webpage, PropertyInfo[] properties, String[] values) throws Exception
     {
         WebSite site = SWBContext.getWebSite(webpage.siteID);
         WebPage page = site.getWebPage(webpage.id);
@@ -1238,10 +1319,11 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
         }
     }
+
     public ResourceInfo publishToResourceContent(String repositoryName, String contentId, String version, String title, String description, WebPageInfo webpage, PropertyInfo[] properties, String[] values) throws Exception
     {
         String id = UUID.randomUUID().toString();
-        return publishToResourceContent(id,repositoryName, contentId, version, title, description, webpage, properties, values);
+        return publishToResourceContent(id, repositoryName, contentId, version, title, description, webpage, properties, values);
     }
 
     public void setResourceProperties(ResourceInfo resourceInfo, PropertyInfo propertyInfo, String value) throws Exception
