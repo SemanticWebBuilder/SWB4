@@ -35,6 +35,8 @@ import org.semanticwb.model.WebPage;
  * <p>
  * Wrapper para las propiedades de un evento. Usada por el recurso administrador
  * de eventos.
+ *
+ * @see EventResource
  * 
  * @author Hasdai Pacheco {haxdai@gmail.com}
  */
@@ -46,7 +48,7 @@ public class EventElement extends org.semanticwb.portal.community.base.EventElem
     }
 
     /**
-     * Gets an iterator tho the user's events carried out in the given date.
+     * Gets an iterator tho the user's events carried out at the given date.
      * <p>
      * Obtiene un iterador a los eventos del usuario a llevarse a cabo en la
      * fecha dada.
