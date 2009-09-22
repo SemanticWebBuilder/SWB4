@@ -40,6 +40,19 @@ import org.semanticwb.portal.api.*;
 import org.semanticwb.portal.util.FileUpload;
 import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
 
+/**
+ * ImageGallery se encarga de desplegar y administrar una colección de imágenes
+ * dispuestas en un carrusel.
+ * <p>
+ * Cada imagen en el carrusel puede ser seleccionada para verse en detalle a tamaño real.
+ *
+ * ImageGallery is in charge to unfold and to administer image collection disposes in a round robin.
+ * <p> 
+ * Every image in the round robin can be selected for detail in real size.
+ * 
+ * @author : Carlos Ramos Inchaustegui
+ * @version 1.0
+ */
 
 public class ImageGallery extends GenericResource {
     private static Logger log = SWBUtils.getLogger(ImageGallery.class);
@@ -61,13 +74,6 @@ public class ImageGallery extends GenericResource {
         catch(Exception e) { log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);  }
     }
 
-    /**
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws AFException
-     * @throws IOException
-     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html;charset=iso-8859-1");

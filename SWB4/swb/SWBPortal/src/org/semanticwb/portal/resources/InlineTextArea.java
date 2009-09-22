@@ -48,8 +48,15 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 
 /**
+ * InlineTextArea se encarga de desplegar y administrar un texto est�tico, este texto
+ * se agrega en la administraci�n del recurso, acepta tags de html para cambiar su
+ * aspecto.
  *
- * @author carlos.ramos
+ * InlineTextArea is in charge to unfold and to administer a static text, this text
+ * it is added in the administration of the resource, accepts tags of HTML to change his
+ * aspect.
+ *
+ * @author Carlos Ramos Inchaustegui
  */
 public class InlineTextArea extends GenericResource {
     private static Logger log = SWBUtils.getLogger(Banner.class);

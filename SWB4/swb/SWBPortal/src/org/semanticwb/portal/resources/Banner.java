@@ -46,10 +46,11 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBResourceException;
 
 
-/** Objeto que se encarga de desplegar y administrar un banner bajo ciertos
+/**
+ * Banner se encarga de desplegar y administrar un banner bajo ciertos
  * criterios(configuraci�n de recurso).
  *
- * Object that is in charge to unfold and to administer a banner under certain 
+ * Banner is in charge to unfold and to administer a banner under certain
  * criteria (resource configuration).
  *
  * @author : Jorge Alberto Jim�nez

@@ -37,18 +37,17 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 
-/** Esta clase se encarga de desplegar y administrar un texto promocional con una
+/**
+ * Promo se encarga de desplegar y administrar un texto promocional con una
  * imagen opcional bajo ciertos criterios(configuraci�n de recurso). Es un recurso
  * que viene de la versi�n 2 de WebBuilder y puede ser instalado como recurso de
  * estrategia o recurso de contenido.
  *
- * This class displays and administrate a promocional text with an optional image
+ * Promo displays and administrate a promocional text with an optional image
  * under criteria like configuration. This resource comes from WebBuilder 2 and can
  * be installed as content resource or a strategy resource.
  *
  * @Autor:Jorge Jiménez
- * 
- * @modified by Carlos Ramos (CIRI)
  */
 
 public class Promo extends GenericAdmResource {

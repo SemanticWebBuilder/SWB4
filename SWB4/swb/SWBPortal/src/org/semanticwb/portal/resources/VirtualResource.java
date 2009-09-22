@@ -38,13 +38,14 @@ import org.semanticwb.portal.api.SWBParamRequestImp;
 import org.semanticwb.portal.api.SWBResource;
 import org.semanticwb.portal.api.SWBResourceException;
 
-/** Esta clase muestra el contenido de cualquier recurso de WebBuilder, recibe el
+/**
+ * VirtualResource muestra el contenido de cualquier recurso de WebBuilder, recibe el
  * identificador del recurso a desplegar.
  *
- * This class displays the content of any WebBuilder resource, receives the id
+ * VirtualResource displays the content of any WebBuilder resource, receives the id
  * resource to show.
+ *
  * @author Javier Solis Gonzalez
- * @since : January 24th 2005, 19:27
  */
 public class VirtualResource extends GenericAdmResource
 { 

@@ -43,16 +43,16 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Document;
 
-/** Esta clase se encarga de desplegar los lenguajes disponibles en WebBuilder bajo ciertos
+/**
+ * Language se encarga de desplegar los lenguajes disponibles en WebBuilder bajo ciertos
  * criterios (configuraci�n de recurso) para actulizar el lenguaje del usuario final. Puede ser un
  * recurso de estrategia o de contenido.
  *
- * This class displays all available languages on WebBuilder under criteria like
+ * Language displays all available languages on WebBuilder under criteria like
  * resource configuration. In addition can update language for user. this resource
  * could be installed as a content resource or a strategy resource.
  *
  * @author : Vanessa Arredondo Nunez
- * @version 1.0
  */
 public class Language extends GenericAdmResource
 {
