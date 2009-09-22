@@ -22,11 +22,11 @@
             <input type="TEXT" name="width" label="Ancho de la viñeta (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"  />
             <input type="TEXT" name="height" label="Alto de la viñeta (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"  />
 
-            <input type="TEXT" name="titleStyle" label="Estilo del título:" size="80" value="font-size: 20px;text-align:center" />
-            <input type="TEXT" name="subtitleStyle" label="Estilo del subtítulo:" size="80" value="font-size: 16px;text-align:center" />
-            <input type="TEXT" name="textStyle" label="Estilo del texto:" size="80" value="font-size: 14px" />
-            <input type="TEXT" name="captionStyle" label="Estilo del pie:" size="80" value="font-size: 12px;font-weight:bold" />
-            <input type="TEXT" name="moreStyle" label="Estilo de la liga:" size="80" value="font-size:12px;font-weight:bold" />
+            <input type="TEXT" name="titleStyle" label="Estilo del título:" size="80" />
+            <input type="TEXT" name="subtitleStyle" label="Estilo del subtítulo:" size="80" />
+            <input type="TEXT" name="textStyle" label="Estilo del texto:" size="80" />
+            <input type="TEXT" name="captionStyle" label="Estilo del pie:" size="80" />
+            <input type="TEXT" name="moreStyle" label="Estilo de la liga:" size="80" />
             <statictext name="txtUline">Subrayar el texto de la liga:</statictext>
             <input type="RADIO" name="uline" label="Sí" value="1"/>
             <input type="RADIO" name="uline" label="No" value="0"/>
