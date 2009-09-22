@@ -42,10 +42,11 @@ import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.*;
 
 /**
- *
- * @author Hasdai Pacheco {haxdai@gmail.com}
  * A Bookmarks manager resource. The bookmarks are sorted in groups.
+ * <p>
  * Recurso de administración de favoritos. Los favoritos se almacenan en grupos.
+ * 
+ * @author Hasdai Pacheco {haxdai@gmail.com}
  */
 public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBookmarksBase {
 
@@ -83,6 +84,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
 
     /**
      * Empty constructor.
+     * <p>
      * Constructor vacío.
      */
     public SWBBookmarks() {
@@ -90,6 +92,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
 
     /**
      * Default constructor.
+     * <p>
      * Constructor por defecto.
      */
     public SWBBookmarks(org.semanticwb.platform.SemanticObject base) {
@@ -507,8 +510,14 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
 
     /**
      * Creates a unique ID for HTML elements using the resource base ID.
-     * @param postfix local ID for an HTML element.
-     * @return unique global ID for an HTML element.
+     * <p>
+     * Crea un ID único para elementos HTML usando el ID del recurso.
+     *
+     * @param postfix   local ID for an HTML element. ID local para el elemento
+     *                  HTML.
+     *
+     * @return          unique global ID for an HTML element. ID único para el
+     *                  elemento HTML.
      */
     private String createId(String postfix) {
         return getResourceBase().getId() + "/" + postfix;
@@ -756,6 +765,11 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
 
     /**
      * Gets an iterator to the user's Bookmarks.
+     * <p>
+     * Devuelve un iterador a los favoritos del usuario.
+     *
+     * @param user owner of the bookmarks. Propietario de los favoritos.
+     *
      * @throws SWBResourceException
      */
     public Iterator<BookmarkEntry> listAllEntriesByUser(User user) throws SWBResourceException {
@@ -769,13 +783,16 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
 
     /**
      * Method to render the list of entries of the given group.
+     * <p>
      * Método para construir una lista de favoritos pertenecientes a un grupo dado.
-     * @param groupId ID of the group to list entries from. ID del grupo del que
-     * se listarán las entradas.
-     * @param sortType Type of sorting (date, name, tags). Tipo de ordenamiento
-     * de la lista (por fecha, por tags, por nombre).
-     * @return HTML code for the list of entries. Código HTML de la lista de
-     * favoritos.
+     *
+     * @param groupId   ID of the group to list entries from. ID del grupo del
+     *                  que se listarán las entradas.
+     * @param sortType  Type of sorting (date, name, tags). Tipo de ordenamiento
+     *                  de la lista (por fecha, por tags, por nombre).
+     * @return          HTML code for the list of entries. Código HTML de la
+     *                  lista de favoritos.
+     * 
      * @throws SWBResourceException
      */
     public String renderEntriesByUserGroup(String groupId, int sortType, SWBParamRequest paramRequest) throws SWBResourceException {
@@ -830,15 +847,18 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
 
     /**
      * Method to render the list of entries of the given group.
+     * <p>
      * Método para construir una lista de favoritos pertenecientes a un grupo dado.
-     * @param groupId ID of the group to list entries from. ID del grupo del que
-     * se listarán las entradas.
-     * @param showInfo wether to show bookmark's extended info. Indica si se
-     * debe mostrar toda la información de cada entrada.
-     * @param sortType Type of sorting (date, name, tags). Tipo de ordenamiento
-     * de la lista (por fecha, por tags, por nombre).
-     * @return HTML code for the list of entries. Código HTML de la lista de
-     * favoritos.
+     *
+     * @param groupId   ID of the group to list entries from. ID del grupo del
+     *                  que se listarán las entradas.
+     * @param showInfo  wether to show bookmark's extended info. Indica si se
+     *                  debe mostrar toda la información de cada entrada.
+     * @param sortType  type of sorting (date, name, tags). Tipo de ordenamiento
+     *                  de la lista (por fecha, por tags, por nombre).
+     * @return          HTML code for the list of entries. Código HTML de la
+     *                  lista de favoritos.
+     * 
      * @throws SWBResourceException
      */
     public String renderEntriesByUserGroup(String groupId, boolean showInfo, int sortType, SWBParamRequest paramRequest) throws SWBResourceException {
@@ -958,13 +978,16 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
     }
 
     /**
-     * Creates a bookmarks group for the given user. Crea un grupo de favoritos
-     * para el usuario especificado.
-     * @param model Model to create group. Modelo para crear el grupo.
-     * @param user The owner of the group. El propietario del grupo.
-     * @param groupTitle Title for the new bookmarks group. Título del nuevo
-     * grupo de favoritos.
-     * @return Bookmarks group. Grupo de favoritos.
+     * Creates a bookmarks group for the given user. 
+     * <p>
+     * Crea un grupo de favoritos para el usuario especificado.
+     *
+     * @param model         model to create group. Modelo para crear el grupo.
+     * @param user          the owner of the group. El propietario del grupo.
+     * @param groupTitle    title for the new bookmarks group. Título del nuevo
+     *                      grupo de favoritos.
+     * 
+     * @return              {@link BookmarksGroup}. Grupo de favoritos.
      */
     public BookmarkGroup createUserBookmarkGroup(WebSite model, User user, String groupTitle) {
         BookmarkGroup res = null;
@@ -977,14 +1000,18 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
     }
 
     /**
-     * Gets a bookmarks group with the specified owner and title. Obtiene un
-     * grupo de favoritos con el título y propietario especificados.
-     * @param user Owner of the bookmarks group. Propietario del grupo de
-     * favoritos.
-     * @param title Title of the bookmarks group. Título del grupo de favoritos.
-     * @return BookmarkGroup or null if user does not have a Bookmarks Group
-     * with the specified title. Grupo de marcdores o null si el usuario no posee
-     * un grupo con el título especificado.
+     * Gets a bookmarks group with the specified owner and title.
+     * <p>
+     * Obtiene un grupo de favoritos con el título y propietario especificados.
+     *
+     * @param user  owner of the bookmarks group. Propietario del grupo de
+     *              favoritos.
+     * @param title title of the bookmarks group. Título del grupo de favoritos.
+     *
+     * @return      {@link BookmarkGroup} or {@code null} if user does not have a
+     *              Bookmarks Group with the specified title. Grupo de marcadores
+     *              o {@code null} si el usuario no posee un grupo con el título
+     *              especificado.
      */
     public BookmarkGroup getUserBookmarkGroupByName(User user, String title) {
         if (user.isSigned()) {
@@ -1000,15 +1027,19 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
     }
 
     /**
-     * Gets a bookmarks group with the specified owner and ID. Obtiene un
-     * grupo de favoritos con el identificador y propietario especificados.
-     * @param user Owner of the bookmarks group. Propietario del grupo de
-     * favoritos.
-     * @param gId ID of the desired Bookmarks Group. ID del grupo de favoritos
-     * deseado.
-     * @return Bookmarks Group or null if the user does not have a group with the
-     * given ID. Grupo de marcadores o null si el usuario no posee un grupo con
-     * el ID especificado.
+     * Gets a bookmarks group with the specified owner and ID.
+     * <p>
+     * Obtiene un grupo de favoritos con el identificador y propietario
+     * especificados.
+     * 
+     * @param user  owner of the bookmarks group. Propietario del grupo de
+     *              favoritos.
+     * @param gId   ID of the desired Bookmarks Group. ID del grupo de favoritos
+     *              deseado.
+     * @return      {@link BookmarksGroup} or {@code null} if the user does not
+     *              have a group with the given ID. Grupo de marcadores o
+     *              {@code null} si el usuario no posee un grupo con el ID
+     *              especificado.
      */
     public BookmarkGroup getUserBookmarkGroupById(User user, String gId) {
         if (user.isSigned()) {
@@ -1023,10 +1054,15 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
     }
 
     /**
-     * Gets a list of the user's Bookmarks Groups. Obtiene una lista con los
-     * grupos de favoritos de un usuario.
-     * @param user User to get Bookmarks groups from. Usuario del cual se
-     * obtendrá la lista de grupos de favoritos.
+     * Gets a list of the user's Bookmarks Groups. 
+     * <p>
+     * Obtiene una lista con los grupos de favoritos de un usuario.
+     *
+     * @param user  user to get Bookmarks groups from. Usuario del cual se
+     *              obtendrá la lista de grupos de favoritos.
+     *
+     * @return      list of {@link BookmarkGroup} objects. Lista de grupos de
+     *              marcadores.
      */
     public ArrayList<BookmarkGroup> getUserBookmarkGroups(User user) {
         ArrayList<BookmarkGroup> groups = new ArrayList<BookmarkGroup>();
@@ -1044,10 +1080,12 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
     }
 
     /**
-     * Creates navigation menu for Bookmarks administration. Crea un menú de
-     * navegación para la administración de favoritos.
-     * @return HTML String for the navigation menu. Código HTML del menú de
-     * navegación.
+     * Creates navigation menu for Bookmarks administration. 
+     * <p>
+     * Crea un menú de navegación para la administración de favoritos.
+     *
+     * @return  HTML String for the navigation menu. Código HTML del menú de
+     *          navegación.
      * @throws org.semanticwb.portal.api.SWBResourceException
      */
     public String renderMenu(SWBParamRequest paramRequest) throws SWBResourceException {
@@ -1193,20 +1231,30 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
     }
 
     /**
-     * Strips all HTML tags from the input string. Elimina los tags de HTML de
-     * la cadena proporcionada.
+     * Strips all HTML tags from the input string. 
+     * <p>
+     * Elimina los tags de HTML de la cadena proporcionada.
+     *
+     * @param input string to strip tags from. Cadena de la cual se eliminarán
+     *              las etiquetas.
+     *
+     * @return      string without HTML tags. Cadena sin etiquetas HTML.
      */
     public String stripHtmlTags(String input) {
         return input.replaceAll("<(.|\n)+?>", "");
     }
 
     /**
-     * Updates the tags of an user bookmark. Actualiza los tags de un favorito.
-     * @param user Owner of the bookmark. Propietario del favorito.
-     * @param eId Bookmark ID. Identificador del favorito.
-     * @param oldTags Old Tags. Etiquetas antiguas.
-     * @param newTags New Tags. Etiquetas nuevas.
-     * @param model Model to use (generally a WebSite). Modelo a usar (generalmente un WebSite).
+     * Updates the tags of an user bookmark.
+     * <p>
+     * Actualiza los tags de un favorito.
+     * 
+     * @param user      owner of the bookmark. Propietario del favorito.
+     * @param eId       bookmark ID. Identificador del favorito.
+     * @param oldTags   old Tags. Etiquetas antiguas.
+     * @param newTags   new Tags. Etiquetas nuevas.
+     * @param model     model to use (generally a WebSite). Modelo a usar
+     *                  (generalmente un WebSite).
      */
     public void updateTags(User user, String eId, String oldTags, String newTags, WebSite model) {
         BookmarkGroup generalGp = getUserBookmarkGroupByName(user, "general");
@@ -1266,13 +1314,17 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
     }
 
     /**
-     * Checks wheter a bookmark entry exists. Verifica si existe una entrada de
-     * favoritos.
-     * @param user Owner of the bookmark. Propietario del favorito.
-     * @param title Title of the bookmark. Título del favorito.
-     * @param url URL of the bookmark. URL del favorito.
-     * @return true if a bookmark with the given URL exists for the user. true
-     * si el usuario posee un favorito con la URL especificada.
+     * Checks wheter a bookmark entry exists. 
+     * <p>
+     * Verifica si existe una entrada de favoritos.
+     *
+     * @param user  owner of the bookmark. Propietario del favorito.
+     * @param title title of the bookmark. Título del favorito.
+     * @param url   URL of the bookmark. URL del favorito.
+     *
+     * @return      {@code true} if a bookmark with the given URL exists for
+     *              the user. {@code true} si el usuario posee un favorito con
+     *              la URL especificada.
      * @throws SWBResourceException
      */
     public boolean entryExists(User user, String title, String url) throws SWBResourceException {
