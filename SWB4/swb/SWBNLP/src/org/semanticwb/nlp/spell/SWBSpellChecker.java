@@ -39,6 +39,8 @@ import org.semanticwb.SWBUtils;
  * <p>
  * Corrector ortográfico para algunos recursos de SemanticWebBuilder. Esta clase
  * es un envoltorio para la clase {@link SpellChecker} de Lucene.
+ *
+ * @see org.apache.lucene.search.spell.SpellChecker
  * 
  * @author Hasdai Pacheco {haxdai@gmail.com}
  */
@@ -171,8 +173,9 @@ public class SWBSpellChecker {
      * @param word  word to have spell check done on. Palabra sobre la que se
      *              realizará la corrección ortográfica.
      * 
-     * @return      Set of words similar to the {@code input} string. Conjunto de
-     *              palabras similares a la cadena de entrada.
+     * @return      Set of words similar to the {@code input} string or null if
+     *              no similar words exist. Conjunto de palabras similares a la
+     *              cadena de entrada o null si no existen palabras similares.
      */
     public String[] suggestSimilar(String word) {
         if (checker != null) {
