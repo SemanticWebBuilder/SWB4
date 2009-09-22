@@ -111,6 +111,9 @@ import org.w3c.dom.NodeList;
  */
 public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 {
+    private static final String MIGRATE_WBRESOURCESCONTENT = "com.infotec.wb.resources.Content";
+    private static final String MIGRATE_WBRESOURCESEXCELCONTENT = "com.infotec.wb.resources.ExcelContent";
+    private static final String MIGRATE_WBRESOURCESPPTCONTENT = "com.infotec.wb.resources.PPTContent";
 
     private static final String categoryBydefault = "Contenidos migrados";
     private static final String descriptionByDefault = "Contenidos migrados de versión 3.2";
@@ -148,19 +151,100 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return getOfficeTypes;
     }
 
-    public Resource migrateWordResource(String siteid, String webpageId, String resourceid, String version, String title, String description, PropertyInfo[] viewProperties, String[] viewValues, String user, String password, String file) throws Exception
+    public Resource migrateResource(String xml, String className, String siteid, String webpageId, String resourceid, String version, String title, String description, String user, String password, String file) throws Exception
+    {
+        if (className.equals(MIGRATE_WBRESOURCESEXCELCONTENT))
+        {
+            PropertyInfo[] viewProperties = new PropertyInfo[0];
+            String[] viewValues = new String[0];
+            return migrateExcelResource(siteid, webpageId, resourceid, version, title, description, viewProperties, viewValues, user, password, file);
+        }
+        else if (className.equals(MIGRATE_WBRESOURCESPPTCONTENT))
+        {
+            PropertyInfo[] viewProperties = getViewPropertiesPPT(xml);
+            String[] viewValues = getStringViewPropertiesPPT(xml);
+            return migratePPTResource(siteid, webpageId, resourceid, version, title, description, viewProperties, viewValues, user, password, file);
+        }
+        else if (className.equals(MIGRATE_WBRESOURCESCONTENT))
+        {
+            PropertyInfo[] viewProperties = getViewPropertiesWord(xml);
+            String[] viewValues = getStringViewPropertiesWord(xml);
+            return migrateWordResource(siteid, webpageId, resourceid, version, title, description, viewProperties, viewValues, user, password, file);
+        }
+        else
+        {
+            throw new Exception("The resource is not a office resource");
+        }
+    }
+
+    private Resource migrateWordResource(String siteid, String webpageId, String resourceid, String version, String title, String description, PropertyInfo[] viewProperties, String[] viewValues, String user, String password, String file) throws Exception
     {
         return migrateResource(siteid, webpageId, resourceid, version, title, description, "WORD", viewProperties, viewValues, user, password, file);
     }
 
-    public Resource migrateExcelResource(String siteid, String webpageId, String resourceid, String version, String title, String description, PropertyInfo[] viewProperties, String[] viewValues, String user, String password, String file) throws Exception
+    private Resource migrateExcelResource(String siteid, String webpageId, String resourceid, String version, String title, String description, PropertyInfo[] viewProperties, String[] viewValues, String user, String password, String file) throws Exception
     {
         return migrateResource(siteid, webpageId, resourceid, version, title, description, "EXCEL", viewProperties, viewValues, user, password, file);
     }
 
-    public Resource migratePPTResource(String siteid, String webpageId, String resourceid, String version, String title, String description, PropertyInfo[] viewProperties, String[] viewValues, String user, String password, String file) throws Exception
+    
+
+    private Resource migratePPTResource(String siteid, String webpageId, String resourceid, String version, String title, String description, PropertyInfo[] viewProperties, String[] viewValues, String user, String password, String file) throws Exception
     {
         return migrateResource(siteid, webpageId, resourceid, version, title, description, "PPT", viewProperties, viewValues, user, password, file);
+    }
+
+    public boolean isOfficeDocument(String className, String workpath, String contentid, String file, String version)
+    {
+        if (className.equals(MIGRATE_WBRESOURCESEXCELCONTENT))
+        {
+            return true;
+        }
+        if (className.equals(MIGRATE_WBRESOURCESPPTCONTENT))
+        {
+            return true;
+        }
+        if (className.equals(MIGRATE_WBRESOURCESCONTENT))
+        {
+            File ofile = new File(workpath + "/" + version + "/" + file);
+            if (ofile.exists())
+            {
+                int pos = file.lastIndexOf(".");
+                if (pos != -1)
+                {
+                    String wordfile = file.substring(0, pos) + ".doc";
+                    File oword = new File(workpath + "/" + version + "/" + wordfile);
+                    File xmlfile = new File(workpath + "/" + version + "/" + "/filelist.xml");
+                    if (oword.exists() && xmlfile.exists())
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+
+    private void addValuesFromOldVersion(String name, Document doc, SemanticProperty prop, ArrayList<String> values)
+    {
+        NodeList nodes = doc.getElementsByTagName(name);
+        for (int i = 0; i < nodes.getLength(); i++)
+        {
+            Element element = (Element) nodes.item(i);
+            if (element.getFirstChild() != null && element.getFirstChild().getTextContent() != null)
+            {
+                String value = element.getFirstChild().getTextContent();
+                if (value != null)
+                {
+                    values.add(value);
+                }
+            }
+        }
     }
 
     private void addPropertyInfoFromOldVersion(String name, Document doc, SemanticProperty prop, ArrayList<PropertyInfo> props)
@@ -172,30 +256,33 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             if (element.getFirstChild() != null && element.getFirstChild().getTextContent() != null)
             {
                 String value = element.getFirstChild().getTextContent();
-                PropertyInfo info = new PropertyInfo();
-                if (prop.isString())
+                if (value != null)
                 {
-                    info.type = "String";
+                    PropertyInfo info = new PropertyInfo();
+                    if (prop.isString())
+                    {
+                        info.type = "String";
+                    }
+                    else if (prop.isBoolean())
+                    {
+                        info.type = "Boolean";
+                    }
+                    else if (prop.isInt())
+                    {
+                        info.type = "Integer";
+                    }
+                    info.isRequired = prop.isRequired();
+                    /*info.values = new Value[1];
+                    info.values[0] = new Value();
+                    info.values[0].key = value;
+                    info.values[1].title = prop.getDisplayName();*/
+                    info.id = prop.getPrefix() + ":" + prop.getName();
                 }
-                else if (prop.isBoolean())
-                {
-                    info.type = "Boolean";
-                }
-                else if (prop.isInt())
-                {
-                    info.type = "Integer";
-                }
-                info.isRequired = prop.isRequired();
-                info.values = new Value[1];
-                info.values[0] = new Value();
-                info.values[0].key = value;
-                info.values[1].title=prop.getDisplayName();
-                info.id = prop.getPrefix() + ":" + prop.getName();
             }
         }
     }
 
-    public PropertyInfo[] getViewPropertiesWord(String xml)
+    private PropertyInfo[] getViewPropertiesWord(String xml)
     {
         ArrayList<PropertyInfo> props = new ArrayList<PropertyInfo>();
         Document doc = SWBUtils.XML.xmlToDom(xml);
@@ -210,7 +297,30 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return props.toArray(new PropertyInfo[props.size()]);
     }
 
-    public PropertyInfo[] getViewPropertiesPPT(String xml)
+    private String[] getStringViewPropertiesWord(String xml)
+    {
+        ArrayList<String> props = new ArrayList<String>();
+        Document doc = SWBUtils.XML.xmlToDom(xml);
+        addValuesFromOldVersion("position", doc, WordResource.swboffice_position, props);
+        addValuesFromOldVersion("txtant", doc, WordResource.swboffice_txtant, props);
+        addValuesFromOldVersion("txtsig", doc, WordResource.swboffice_txtsig, props);
+        addValuesFromOldVersion("tfont", doc, WordResource.swboffice_tfont, props);
+        addValuesFromOldVersion("npages", doc, WordResource.swboffice_npages, props);
+        // texto predefinido
+        addValuesFromOldVersion("tpred", doc, WordResource.swboffice_tpred, props);
+        addValuesFromOldVersion("pages", doc, WordResource.swboffice_pages, props);
+        return props.toArray(new String[props.size()]);
+    }
+
+    private String[] getStringViewPropertiesPPT(String xml)
+    {
+        ArrayList<String> props = new ArrayList<String>();
+        Document doc = SWBUtils.XML.xmlToDom(xml);
+        addValuesFromOldVersion("link", doc, PPTResource.swboffice_showDownload, props);
+        return props.toArray(new String[props.size()]);
+    }
+
+    private PropertyInfo[] getViewPropertiesPPT(String xml)
     {
         ArrayList<PropertyInfo> props = new ArrayList<PropertyInfo>();
         Document doc = SWBUtils.XML.xmlToDom(xml);
