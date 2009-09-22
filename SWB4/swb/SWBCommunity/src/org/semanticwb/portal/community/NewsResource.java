@@ -20,9 +20,7 @@
  * dirección electrónica:
  *  http://www.semanticwebbuilder.org
  **/
-
 package org.semanticwb.portal.community;
-
 
 import java.io.File;
 import java.io.IOException;
@@ -48,6 +46,7 @@ import org.semanticwb.portal.api.*;
 import org.semanticwb.portal.community.utilresources.ImageResizer;
 
 public class NewsResource extends org.semanticwb.portal.community.base.NewsResourceBase {
+
     private static Logger log = SWBUtils.getLogger(NewsResource.class);
 
     public NewsResource() {
@@ -58,8 +57,7 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
     }
 
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String action = request.getParameter("act");
         action = (action == null ? "view" : action);
 
@@ -90,9 +88,9 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
             return;                                       //si el usuario no pertenece a la red sale;
         }
 
-        if(action==null) {
-            HashMap<String,String> params = upload(request);
-            if(mem.canAdd() && params.containsValue("add")) {
+        if (action == null) {
+            HashMap<String, String> params = upload(request);
+            if (mem.canAdd() && params.containsValue("add")) {
                 NewsElement rec = NewsElement.createNewsElement(getResourceBase().getWebSite());
                 rec.setNewsImage(params.get("filename"));
                 rec.setNewsThumbnail(params.get("thumbnail"));
@@ -111,16 +109,16 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
                     response.setRenderParameter("act", "add");
                     response.setRenderParameter("err", "true");
                 }
-            }
-            else if(params.containsValue("edit"))
-            {
+            } else if (params.containsValue("edit")) {
                 String uri = params.get("uri");
                 NewsElement rec = (NewsElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
-                if(rec != null && rec.canModify(mem)) {
-                    if(params.containsKey("filename"))
+                if (rec != null && rec.canModify(mem)) {
+                    if (params.containsKey("filename")) {
                         rec.setNewsImage(params.get("filename"));
-                    if(params.containsKey("thumbnail"))
+                    }
+                    if (params.containsKey("thumbnail")) {
                         rec.setNewsThumbnail(params.get("thumbnail"));
+                    }
                     rec.setTitle(params.get("new_title"));
                     rec.setAuthor(params.get("new_author"));
                     rec.setDescription(params.get("new_abstract"));
@@ -130,9 +128,7 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
                     rec.setNewsWebPage(page);
                 }
             }
-        }
-        else if (action.equals("remove"))
-        {
+        } else if (action.equals("remove")) {
             //Get news object
             String uri = request.getParameter("uri");
             NewsElement rec = (NewsElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
@@ -146,69 +142,71 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
         }
     }
 
-    private HashMap<String,String> upload(HttpServletRequest request) {
-        final String realpath = SWBPlatform.getWorkPath()+getResourceBase().getWorkPath()+"/";
-        final String path = getResourceBase().getWorkPath()+"/";
-        
-        HashMap<String,String> params = new HashMap<String,String>();
+    private HashMap<String, String> upload(HttpServletRequest request) {
+        final String realpath = SWBPlatform.getWorkPath() + getResourceBase().getWorkPath() + "/";
+        final String path = getResourceBase().getWorkPath() + "/";
+
+        HashMap<String, String> params = new HashMap<String, String>();
         try {
             boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-            if(isMultipart) {
-                File tmpwrk = new File(SWBPlatform.getWorkPath()+"/tmp");
+            if (isMultipart) {
+                File tmpwrk = new File(SWBPlatform.getWorkPath() + "/tmp");
                 if (!tmpwrk.exists()) {
                     tmpwrk.mkdirs();
                 }
-                FileItemFactory factory = new DiskFileItemFactory(1*1024*1024, tmpwrk);
+                FileItemFactory factory = new DiskFileItemFactory(1 * 1024 * 1024, tmpwrk);
                 ServletFileUpload upload = new ServletFileUpload(factory);
                 ProgressListener progressListener = new ProgressListener() {
+
                     private long kBytes = -1;
+
                     public void update(long pBytesRead, long pContentLength, int pItems) {
                         long mBytes = pBytesRead / 10000;
                         if (kBytes == mBytes) {
-                        return;
+                            return;
                         }
                         kBytes = mBytes;
-                        int percent = (int)(pBytesRead * 100 / pContentLength);
+                        int percent = (int) (pBytesRead * 100 / pContentLength);
                     }
                 };
                 upload.setProgressListener(progressListener);
                 List items = upload.parseRequest(request); /* FileItem */
                 FileItem currentFile = null;
                 Iterator iter = items.iterator();
-                while(iter.hasNext()) {
+                while (iter.hasNext()) {
                     FileItem item = (FileItem) iter.next();
 
-                    if(item.isFormField()) {
+                    if (item.isFormField()) {
                         String name = item.getFieldName();
                         String value = item.getString();
                         params.put(name, value);
-                    }else {
+                    } else {
                         currentFile = item;
                         File file = new File(path);
-                        if(!file.exists()) {
+                        if (!file.exists()) {
                             file.mkdirs();
                         }
                         try {
                             long serial = (new Date()).getTime();
-                            String filename = serial+"_"+currentFile.getFieldName()+currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
+                            String filename = serial + "_" + currentFile.getFieldName() + currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
 
                             File image = new File(realpath);
-                            if(!image.exists()) {
+                            if (!image.exists()) {
                                 image.mkdir();
                             }
-                            image = new File(realpath+filename);
-                            File thumbnail = new File(realpath+"thumbn_"+filename);
+                            image = new File(realpath + filename);
+                            File thumbnail = new File(realpath + "thumbn_" + filename);
                             currentFile.write(image);
-                            ImageResizer.resizeCrop(image, 150, thumbnail, "jpeg" );
+                            ImageResizer.resizeCrop(image, 150, thumbnail, "jpeg");
 
-                            params.put("filename", path+filename);
-                            params.put("thumbnail", path+"thumbn_"+filename);
-                        }catch(StringIndexOutOfBoundsException iobe) {
+                            params.put("filename", path + filename);
+                            params.put("thumbnail", path + "thumbn_" + filename);
+                        } catch (StringIndexOutOfBoundsException iobe) {
                         }
                     }
                 }
             }
-        }catch(Exception ex)  {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return params;
