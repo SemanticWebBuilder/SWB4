@@ -62,7 +62,8 @@ public class EventElement extends org.semanticwb.portal.community.base.EventElem
      *              eventos del usuario.
      */
     public static Iterator<EventElement> listEventElementsByDate(User user, Date date, WebPage wpage, SWBModel model) {
-        Iterator<EventElement> evs;        
+        Iterator<EventElement> evs;
+
         if (user == null) {
              evs = listEventElementByEventWebPage(wpage, model);
         } else {
