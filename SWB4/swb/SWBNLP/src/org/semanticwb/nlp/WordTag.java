@@ -213,7 +213,7 @@ public class WordTag {
      * Establece el display name del objeto asociado al {@link WordTag}.
      *
      * @param   display name of the object associated to the {@link WordTag}.
-     *          display name del objeto asociado con el {@link WordTag}.
+     *          Display name del objeto asociado con el {@link WordTag}.
      */
     public void setDisplayName(String display) {
         this.displayName = display;
