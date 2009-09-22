@@ -174,6 +174,7 @@ public class Word {
 
     /**
      * Gets the {@link WordTag} of this Word.
+     * <p>
      * Obtiene el {@link WordTag} de la palabra.
      */
     public WordTag getTag() {
@@ -182,6 +183,7 @@ public class Word {
 
     /**
      * Sets the {@link WordTag} of this Word.
+     * <p>
      * Establece el {@link WordTag} de la palabra.
      */
     public void setTag(WordTag tag) {
@@ -190,6 +192,7 @@ public class Word {
 
     /**
      * Gets the language of this Word.
+     * <p>
      * Obtiene el idioma de la palabra.
      */
     public String getLanguage() {
@@ -198,6 +201,7 @@ public class Word {
 
     /**
      * Sets the language for this Word.
+     * <p>
      * Establece el idioma de la palabra.
      */
     public void setLanguage(String newLang) {
