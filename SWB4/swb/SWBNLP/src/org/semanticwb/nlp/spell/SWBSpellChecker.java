@@ -34,8 +34,11 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
 /**
- * <p lang="en">Wrapper for Lucene {@link SpellChecker} class.</p>
- * <p lang="es"> Envoltorio para la clase {@link SpellChecker} de Lucene.</p>
+ * Spell checker for SemanticWebBuilder resources. This class is a wrapper for
+ * Lucene {@link SpellChecker} class.
+ * <p>
+ * Corrector ortográfico para algunos recursos de SemanticWebBuilder. Esta clase
+ * es un envoltorio para la clase {@link SpellChecker} de Lucene.
  * 
  * @author Hasdai Pacheco {haxdai@gmail.com}
  */
