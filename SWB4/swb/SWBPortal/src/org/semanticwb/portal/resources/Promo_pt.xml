@@ -22,11 +22,11 @@
             <input type="TEXT" name="width" label="Largura (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"  />
             <input type="TEXT" name="height" label="Altura (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"  />
 
-            <input type="TEXT" name="titleStyle" label="Título Estilo:" size="80" value="font-size: 20px;text-align:center" />
-            <input type="TEXT" name="subtitleStyle" label="Legenda Estilo:" size="80" value="font-size: 16px;text-align:center" />
-            <input type="TEXT" name="textStyle" label="Texto Estilo:" size="80" value="font-size: 14px" />
-            <input type="TEXT" name="captionStyle" label="Estilo Footer imagem:" size="80" value="font-size: 12px;font-weight:bold" />
-            <input type="TEXT" name="moreStyle" label="Estilo Liga:" size="80" value="font-size:12px;font-weight:bold" />
+            <input type="TEXT" name="titleStyle" label="Título Estilo:" size="80" />
+            <input type="TEXT" name="subtitleStyle" label="Legenda Estilo:" size="80" />
+            <input type="TEXT" name="textStyle" label="Texto Estilo:" size="80" />
+            <input type="TEXT" name="captionStyle" label="Estilo Footer imagem:" size="80" />
+            <input type="TEXT" name="moreStyle" label="Estilo Liga:" size="80" />
             <statictext name="txtUline">Sublinhar o texto da liga:</statictext>
             <input type="RADIO" name="uline" label="Se" value="1"/>
             <input type="RADIO" name="uline" label="Não" value="0"/>

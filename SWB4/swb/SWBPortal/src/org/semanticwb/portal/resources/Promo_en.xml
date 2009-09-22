@@ -22,11 +22,11 @@
             <input type="TEXT" name="width" label="Width of the vignette (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"  />
             <input type="TEXT" name="height" label="Height of the vignette (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"  />
 
-            <input type="TEXT" name="titleStyle" label="Style of the title:" size="80" value="font-size: 20px;text-align:center" />
-            <input type="TEXT" name="subtitleStyle" label="Style of the subtitle:" size="80" value="font-size: 16px;text-align:center" />
-            <input type="TEXT" name="textStyle" label="Style of the text:" size="80" value="font-size: 14px" />
-            <input type="TEXT" name="captionStyle" label="Style of the caption:" size="80" value="font-size: 12px;font-weight:bold" />
-            <input type="TEXT" name="moreStyle" label="Style of the link:" size="80" value="font-size:12px;font-weight:bold" />
+            <input type="TEXT" name="titleStyle" label="Style of the title:" size="80" />
+            <input type="TEXT" name="subtitleStyle" label="Style of the subtitle:" size="80" />
+            <input type="TEXT" name="textStyle" label="Style of the text:" size="80" />
+            <input type="TEXT" name="captionStyle" label="Style of the caption:" size="80" />
+            <input type="TEXT" name="moreStyle" label="Style of the link:" size="80" />
             <statictext name="txtUline">Underline text link:</statictext>
             <input type="RADIO" name="uline" label="Yes" value="1"/>
             <input type="RADIO" name="uline" label="No" value="0"/>
