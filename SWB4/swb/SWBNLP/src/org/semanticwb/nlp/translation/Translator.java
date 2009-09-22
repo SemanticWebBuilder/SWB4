@@ -41,7 +41,7 @@ import org.semanticwb.platform.SemanticProperty;
  * A natural language to SparQl query translator. Using this class is not 
  * recommended because the class is experimental. Use SWBSparqlTranslator instead.
  * @author Hasdai Pacheco {haxdai@gmail.com}
- */
+ *
 public class Translator {
 
     //Word Dictionary
@@ -59,7 +59,7 @@ public class Translator {
      * Creates a new instance of a Natural Language to SparQL Translator with
      * the given dictionary.
      * @param lx Dictionary for the Translator to use.
-     */
+     *
     public Translator(SWBLexicon lx) {
         lex = lx;
     }
@@ -68,7 +68,7 @@ public class Translator {
      * Transforms a Natural Language query to a SparQL query.
      * @param sent Rescticted-Natural Language sentence for the query.
      * @return SparQL query sentence.
-     */
+     *
     public String translateSentence(String sent) throws CorruptIndexException, IOException {
         CommonTree sTree = null;
         errCode = 0;
@@ -104,7 +104,7 @@ public class Translator {
      * Gets the error code of the translation process.
      * @return 0 if no errors occured, 1 if AST was not generated and 2 if
      * translation was not accomplished.
-     */
+     *
     public int getErrCode() {
         return errCode;
     }
@@ -199,7 +199,7 @@ public class Translator {
      * Fixes compound names in the AST. Merges all name children of a COMPNAME
      * node in the AST.
      * @param tree AST to fix.
-     */
+     *
     private void fixTree(CommonTree tree) {
         List<CommonTree> child;
 
@@ -237,7 +237,7 @@ public class Translator {
      * Prints the given AST with indentation.
      * @param root AST to print.
      * @param indent indentation string
-     */
+     *
     private void Traverse(CommonTree root, String indent) {
         System.out.println(indent + root.getText());
         List<CommonTree> chil = null;
@@ -357,4 +357,4 @@ public class Translator {
         }
         return res;
     }
-}
+}*/
