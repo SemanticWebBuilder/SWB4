@@ -104,7 +104,7 @@ public class WordTag {
     }
 
     /**
-     * Gets the range class name of this tag.
+     * Gets the range class name of this {@link WordTag}.
      * <p>
      * Obtiene el nombre del rango de la etiqueta.
      *
@@ -115,19 +115,21 @@ public class WordTag {
     }
 
     /**
-     * Sets the range class name of this tag.
+     * Sets the range class name of this {@link WordTag}.
      * <p>
      * Establece el nombre del rango de la etiqueta.
-     * @param rangeName New range class name. Nuevo nombre de la clase rango.
+     *
+     * @param rangeName new range class name. Nuevo nombre de la clase rango.
      */
     public void setRangeClassId(String rangeName) {
         this.rangeName = rangeName;
     }
 
     /**
-     * Sets the class ID of this tag.
+     * Sets the class ID of this {@link WordTag}.
      * <p>
      * Establece el ID de la clase de la etiqueta.
+     *
      * @param oId new ID. Nuevo identificador de la clase.
      */
     public void setObjId(String oId) {
@@ -135,7 +137,7 @@ public class WordTag {
     }
 
     /**
-     * Gets the class ID of this tag.
+     * Gets the class ID of this {@link WordTag}.
      * <p>
      * Obtiene el ID de la clase de la etiqueta.
      *
@@ -173,7 +175,9 @@ public class WordTag {
     /**
      * Sets the label of this {@link WordTag}.
      * <p>
-     * Establece el nombre de la etiqueta del {@link WordTag}
+     * Establece la etiqueta del {@link WordTag}
+     *
+     * @param t new label for the {@link WordTag}. Nueva etiqueta para el {@link WordTag}.
      */
     public void setTagLabel(String t)
     {
@@ -184,6 +188,8 @@ public class WordTag {
      * Sets the type of this {@link WordTag}.
      * <p>
      * Establece el tipo de clase en el {@link WordTag}.
+     *
+     * @param tt {@link WordTag} type. Tipo de la clase asociada con la etiqueta.
      */
     public void setType(String tt)
     {
@@ -205,6 +211,9 @@ public class WordTag {
      * Sets the display name of this {@link WordTag}.
      * <p>
      * Establece el display name del objeto asociado al {@link WordTag}.
+     *
+     * @param   display name of the object associated to the {@link WordTag}.
+     *          display name del objeto asociado con el {@link WordTag}.
      */
     public void setDisplayName(String display) {
         this.displayName = display;
