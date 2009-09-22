@@ -24,28 +24,30 @@
 package org.semanticwb.nlp;
 
 /**
- * En procesamiento del lenguaje natural, durante el análisis, se asocia una
- * etiqueta a las palabras (POS Tag) que indica su función dentro de una oración.
- * La etiqueta generalmente incorpora información léxica y morfológica adicional
- * útil para tareas de desambiguación.
- *
- * (Información específica de SemanticWebBuilder) La etiqueta de cada palabra se
- * compone de su función sintáctica (OBJ, PREC, PRED, etc.), el tipo de clase
- * que representa la palabra en la ontología (swb:WebPage, swbx:Form, etc), el
- * nombre de la clase asociada a la palabra, su id y su rango (en caso de
- * tratarse de una propiedad de tipo ObjectProperty).
- *
+ * Word tag similar to a POS Tag. Etiqueta para una palabra similar a un POS tag.
+ * <p>
  * In the analysis stage of natural language processing, a tag (POS tag) is
  * associated to words, which marks the word's function in the sentence.
- * Generally the tag encodes additional lexical and morfo information, useful
- * for disambiguation tasks.
- *
+ * Generally the tag encodes additional lexical and morfological information,
+ * useful for disambiguation tasks.
+ *<p>
  * (Specific SemanticWebBuilder information) The tag for each {@link Word} is
- * formed with its sintactic function (OBJ, PREC, PRED, etc.), the class type
- * of the associated object in the ontology (swb:WebPage, swbx:Form, etc.), the
- * name of the class associated to the word, its ID and range (if it is an
- * ObjectProperty).
- * 
+ * composed by its sintactic function ({@code OBJ}, {@code PREC}, {@code PRED},
+ * etc.), the class type of the associated object in the ontology (swb:{@link WebPage},
+ * swbx:Form, etc.), the name of the {@link SemanticClass} associated to the word,
+ * its ID and range (if it is an {@link ObjectProperty}).
+ * <p>
+ * En procesamiento del lenguaje natural, durante el análisis, se asocia una
+ * etiqueta a las palabras (POS Tag) que indica su función dentro de una oración.
+ * La etiqueta generalmente incorpora información léxica y morfológica útil para
+ * tareas de desambiguación.
+ * <p>
+ * (Información específica de SemanticWebBuilder) La etiqueta de cada palabra se
+ * compone de su función sintáctica ({@code OBJ}, {@code PREC}, {@code PRED},
+ * etc.), el tipo de clase que representa la palabra en la ontología (swb:{@link WebPage},
+ * swbx:Form, etc.), el nombre de la clase semántica asociada a la palabra, su
+ * id y su rango (en caso de tratarse de una propiedad de tipo {@link ObjectProperty}).
+ *
  * @author Hasdai Pacheco {haxdai@gmail.com}
  */
 public class WordTag {
@@ -75,19 +77,23 @@ public class WordTag {
     /**
      * Creates a new instance of a {@link WordTag} with the given label, TagType,
      * class name, class id and range class name.
-     *
+     * <p>
      * Crea una nueva instancia de un {@link WordTag} con la forma léxica, tipo,
      * nombre de clase, id de clase y rango especificados.
-     * @param label Tag for the {@link Word}. Etiqueta de la palabra.
-     * @param typ Class type of the object in the ontology associated to the word.
-     * Tipo de dato en la ontología para el objeto asociado a la palabra.
-     * @param cName Class name of the object in the ontology associated to the word.
-     * Nombre del objeto en la ontología asociado a la palabra.
-     * @param cId ID of the object in the ontology associated to the word.
-     * Identificador del objeto en la ontología asociado a la palabra.
-     * @param rang
+     *
+     * @param label     tag for the {@link Word}. Etiqueta de la palabra.
+     * @param typ       class type of the object in the ontology associated to
+     *                  the word. Tipo de dato en la ontología para el objeto
+     *                  asociado a la palabra.
+     * @param cName     class name of the object in the ontology associated to
+     *                  the word. Nombre del objeto en la ontología asociado a
+     *                  la palabra.
+     * @param cId       ID of the object in the ontology associated to the word.
+     *                  Identificador del objeto en la ontología asociado a la palabra.
+     * @param rang      name of the range class of the object associated to the
+     *                  word. Nombre de la clase rango asociada a la palabra.
      */
-    public WordTag(String label, String display, String typ, String cName, String cId, String rang)
+    public WordTag (String label, String display, String typ, String cName, String cId, String rang)
     {
         lbl = label;
         displayName = display;
@@ -98,15 +104,19 @@ public class WordTag {
     }
 
     /**
-     * Gets the range class name of the tag.
+     * Gets the range class name of this tag.
+     * <p>
      * Obtiene el nombre del rango de la etiqueta.
+     *
+     * @return name of the range class in this tag.
      */
     public String getRangeClassId() {
         return rangeName;
     }
 
     /**
-     * Sets the range class name of the tag.
+     * Sets the range class name of this tag.
+     * <p>
      * Establece el nombre del rango de la etiqueta.
      * @param rangeName New range class name. Nuevo nombre de la clase rango.
      */
@@ -115,25 +125,33 @@ public class WordTag {
     }
 
     /**
-     * Sets the class ID of the tag.
+     * Sets the class ID of this tag.
+     * <p>
      * Establece el ID de la clase de la etiqueta.
-     * @param oId
+     * @param oId new ID. Nuevo identificador de la clase.
      */
     public void setObjId(String oId) {
         this.oId = oId;
     }
 
     /**
-     * Gets the class ID of the tag.
+     * Gets the class ID of this tag.
+     * <p>
      * Obtiene el ID de la clase de la etiqueta.
+     *
+     * @return  ID of the object associated to this tag. ID del objeto asociado
+     *          a la etiqueta.
      */
     public String getObjId() {
         return oId;
     }
 
     /**
-     * Gets the label of the current {@link WordTag}.
+     * Gets the label of this {@link WordTag}.
+     * <p>
      * Obtiene la etiqueta de la palabra en el {@link WordTag}.
+     *
+     * @return word tag label. Texto de la etiqueta.
      */
     public String getTag()
     {
@@ -141,8 +159,11 @@ public class WordTag {
     }
 
     /**
-     * Gets the type of the current {@link WordTag}.
-     * Obtiene el tipo de clase en el {@link WordTag}.
+     * Gets the type of this {@link WordTag}.
+     * <p>
+     * Obtiene el tipo de clase del {@link WordTag}.
+     *
+     * @return tag type. Tipo de la clase asociada a la etiqueta.
      */
     public String getType()
     {
@@ -150,7 +171,8 @@ public class WordTag {
     }
 
     /**
-     * Sets the label of the current {@link WordTag}.
+     * Sets the label of this {@link WordTag}.
+     * <p>
      * Establece el nombre de la etiqueta del {@link WordTag}
      */
     public void setTagLabel(String t)
@@ -159,7 +181,8 @@ public class WordTag {
     }
 
     /**
-     * Sets the type of the current {@link WordTag}.
+     * Sets the type of this {@link WordTag}.
+     * <p>
      * Establece el tipo de clase en el {@link WordTag}.
      */
     public void setType(String tt)
@@ -168,26 +191,30 @@ public class WordTag {
     }
 
     /**
-     * Gets the displayName of the current {@link WordTag}.
-     * Obtiene el displayName del {@link WordTag}.
+     * Gets the display name of this {@link WordTag}.
+     * Obtiene el display name del objeto asociado al {@link WordTag}.
+     *
+     * @return  display name of the object associated to the {@link WordTag}.
+     *          Display name del objeto asociado al {@link WordTag}.
      */
     public String getDisplayName() {
         return displayName;
     }
 
     /**
-     * Sets the displayName of the current {@link WordTag}.
-     * Establece el displayName en el {@link WordTag}.
+     * Sets the display name of this {@link WordTag}.
+     * <p>
+     * Establece el display name del objeto asociado al {@link WordTag}.
      */
     public void setDisplayName(String display) {
         this.displayName = display;
     }
-    
-    public String getWClassName() {
+
+    /*public String getWClassName() {
         return name;
     }
-
+    
     public void setWClassName(String newName) {
         this.name = newName;
-    }
+    }*/
 }
