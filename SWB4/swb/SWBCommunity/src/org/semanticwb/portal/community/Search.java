@@ -56,7 +56,12 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
 /**
- * Search resource for communities. Recurso para búsqueda en comunidades.
+ * Search resource for communities. Searchs for {@link DirectoryObject}s and
+ * {@link WebPage}s in the jena database by executing a LARQ query.
+ * <p>
+ * Recurso para búsqueda en comunidades. Busca {@link DirectoryObject}s y
+ * {@link WebPage}s en la base de datos de jena ejecutando una consulta con LARQ.
+ * 
  * @author Hasdai Pacheco {haxdai@gmail.com}
  */
 public class Search extends GenericAdmResource {
@@ -107,7 +112,7 @@ public class Search extends GenericAdmResource {
             super.processRequest(request, response, paramRequest);
         }
     }
-
+   
     public void doSlice(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String path = "/swbadmin/jsp/microsite/Search/Search.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
@@ -227,14 +232,16 @@ public class Search extends GenericAdmResource {
 
     /**
      * Execute a SparQl query to find directory objects. Uses LARQ to perform
-     * a free-text search into a snow-balled terms index. Ejecuta una consulta
-     * en SparQl para buscar DirectoryObjects. Usa LARQ para realizar una
-     * búsqueda a texto abierto sobre un indide de lucene.
-     * @param q Query string. Cadena de consulta.
-     * @param lang Language for snowball analyzer. Idioma del analizador de
-     * snowball.
-     * @return list of URIs matching the query. Lista de URIs que satisfacen
-     * los criterios de búsqueda.
+     * a free-text search into a snow-balled terms index.
+     * <p>
+     * Ejecuta una consulta en SparQl para buscar DirectoryObjects. Usa LARQ
+     * para realizar una búsqueda a texto abierto sobre un indide de lucene.
+     * 
+     * @param q     query string. Cadena de consulta.
+     * @param lang  language for snowball analyzer. Idioma del analizador
+     *              snowball.
+     * @return      list of URIs matching the query. Lista de URIs que satisfacen
+     *              los criterios de búsqueda.
      */
     public ArrayList<String> performQuery(String q, String lang, String what) {
         ArrayList<String> res = new ArrayList<String>();
@@ -311,12 +318,16 @@ public class Search extends GenericAdmResource {
     /**
      * Gets the snowball-ed form of an input text. Applies the snowball algorithm
      * to each word in the text to get its root or stem.
+     * <p>
+     * Obtiene el lexema o raiz de un conjunto de palabras mediante el algoritmo
+     * de snowball.
      *
-     * Obtiene el lexema o raiz de una palabra mediante el algoritmo de snowball.
-     * @param input Text to stem.
-     * @param language Language code for snowball analyzer.
-     * @param stopWords Stop words for snowball analyzer.
-     * @return Root of the input.
+     * @param input     text to stem. Texto a procesar
+     * @param language  language code for snowball analyzer. Código del lenguaje
+     *                  para el analizador snowball.
+     * @param stopWords stop words for snowball analyzer. Palabras a omitir en
+     *                  el análisis.
+     * @return          root of the input. Cadena con las raíces de las palabras.
      */
     public String getSnowballForm(String input, String language, String [] stopWords) {
         String res = "";
@@ -345,10 +356,17 @@ public class Search extends GenericAdmResource {
     }
 
     /**
-     * Used for paging. Gets a slice of information from the search results.
-     * @param page Number of slice to get (page).
-     * @param max Elements per slice.
-     * @return Set of max elements corresponding to slice page.
+     * Gets a slide of information from the search results. Used for paging.
+     * <p>
+     * Obtiene un fragmento de información de los resultados de búsqueda. Usado
+     * para paginación.
+     * 
+     * @param page  number of slice to get (page). Número de la página a obtener.
+     * @param max   elements per slice. Elementos por página.
+     *
+     * @return      set of <b>max</b> elements corresponding to slice <b>page</b>.
+     *              Conjunto de <b>max</b> elementos pertenecientes a la página
+     *              <b>page</b>.
      */
     public ArrayList<String> getSlice (int page, int max) {
         ArrayList<String> pageData = new ArrayList<String>();
