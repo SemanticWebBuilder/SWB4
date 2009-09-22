@@ -272,7 +272,7 @@ public class SWBLexicon {
      *
      * @param label     name of the class to get tag for. Nombre de la clase a
      *                  etiquetar.
-     * @return WordTag  object with the tag and type for the given class name.
+     * @return          object with the tag and type for the given class name.
      *                  Etiqueta compuesta para el nombre de clase proporcionado.
      */
     public WordTag getObjWordTag(String label) {
@@ -305,7 +305,7 @@ public class SWBLexicon {
      *
      * @param label     name of the property to get tag for. Nombre de la propiedad
      *                  a etiquetar.
-     * @return WordTag  object with the tag and type for the given property name.
+     * @return          object with the tag and type for the given property name.
      *                  Etiqueta compuesta para el nombre de propiedad 
      *                  proporcionado.
      */
@@ -320,7 +320,7 @@ public class SWBLexicon {
     }
 
     /**
-     * Gets the snowball-ed form of an input text. Applies the snowball algorithm
+     * Gets the snowballed form of an input text. Applies the snowball algorithm
      * to each word in the text to get its root or stem.
      * <p>
      * Obtiene el lexema o raiz de una palabra mediante el algoritmo de snowball.
@@ -352,8 +352,8 @@ public class SWBLexicon {
     }
 
     /**
-     * Gets the path to the text file containing the list of display names for
-     * spell checking.
+     * Gets the path to the text file containing the list of words (display names)
+     * for spell checking.
      * <p>
      * Obtiene la ruta al archivo de texto que contiene la lista de palabras
      * para la corrección ortográfica.
@@ -393,10 +393,10 @@ public class SWBLexicon {
     }
 
     /**
-     * Returns an iterator to the list of lexemes for the SemanticClases in the
+     * Gets an iterator to the list of lexemes for the SemanticClases in the
      * Lexicon.
      * <p>
-     * Devuelve un iterador a las formas léxicas de una clase semántica en el
+     * Devuelve un iterador a las formas léxicas de las clases semánticas en el
      * diccionario.
      */
     public Iterator<String> listClassNames() {
@@ -411,11 +411,11 @@ public class SWBLexicon {
     }
 
     /**
-     * Returns an iterator to the list of lexemes for the SemanticProperties in
+     * Gets an iterator to the list of lexemes for the SemanticProperties in
      * the Lexicon.
      * <p>
-     * Devuelve un iterador a las formas léxicas de una propiedad semántica en el
-     * diccionario.
+     * Devuelve un iterador a las formas léxicas de las propiedades semánticas
+     * en el diccionario.
      */
     public Iterator<String> listPropertyNames() {
         List res = new ArrayList();
