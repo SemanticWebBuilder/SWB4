@@ -27,7 +27,15 @@ package org.semanticwb.nlp.analysis;
 import org.antlr.runtime.*;
 
 /**
- * ANTLR generated lexer for english to SparQl translation.
+ * antlr generated lexer for english to SparQl translation. Most of the code for
+ * this class and nested classes was generated automatically by antlr. Visit
+ * http://www.antlr.org for details about each undocumented class element.
+ * <p>
+ * Analizador léxico generado por antlr para la traducción del inglés a SparQl.
+ * La mayoría del código de esta clase y las clases anidadas fue generado
+ * automáticamente por antlr. Visite http://www.antlr.org para obtener detalles
+ * acerca de los elementos de esta clase que no están documentados.
+ * 
  * @author Hasdai Pacheco {haxdai@gmail.com}
  */
 public class EnglishLexer extends Lexer {
