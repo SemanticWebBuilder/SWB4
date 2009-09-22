@@ -36,8 +36,10 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
 /**
- * Resource to manage user events. Recurso para administrar los eventos de un
- * usuario.
+ * Resource to manage user events.
+ * <p>
+ * Recurso para administrar los eventos de un usuario.
+ * 
  * @author Hasdai Pacheco {haxdai@gmail.com}
  */
 public class MyEvents extends GenericAdmResource {
