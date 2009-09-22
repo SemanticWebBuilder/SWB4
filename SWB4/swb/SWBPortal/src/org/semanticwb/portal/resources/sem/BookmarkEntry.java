@@ -25,6 +25,7 @@ package org.semanticwb.portal.resources.sem;
 
 /**
  * Wrapper for a bookmark entry object.
+ * <p>
  * Envoltorio para una entrada de favoritos.
  * 
  * @author Hasdai Pacheco {haxdai@gmail.com}
