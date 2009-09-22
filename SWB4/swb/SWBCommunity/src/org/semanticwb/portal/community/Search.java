@@ -356,7 +356,7 @@ public class Search extends GenericAdmResource {
     }
 
     /**
-     * Gets a slide of information from the search results. Used for paging.
+     * Gets a slice of information from the search results. Used for paging.
      * <p>
      * Obtiene un fragmento de información de los resultados de búsqueda. Usado
      * para paginación.
