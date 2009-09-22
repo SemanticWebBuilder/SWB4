@@ -27,6 +27,7 @@ import java.util.Iterator;
 
 /**
  * Group of bookmarks. Composed by a set of bookmark entries.
+ * <p>
  * Grupo de favoritos. Compuesto por un conjunto de entradas de favoritos.
  * @author Hasdai Pacheco {haxdai@gmail.com}
  */
@@ -62,10 +63,15 @@ public class BookmarkGroup extends org.semanticwb.portal.resources.sem.base.Book
 
     /**
      * Gets a BookmarkEntry object with the given id.
+     * <p>
      * Obtiene un BookmarkEntry con el id especificado.
-     * @param id ID of the BookmarkEntry to search for. ID de la entrada requerida.
-     * @return BookmarkEntry with ID equals to id or null if BookmarkEntry does not
-     * exist. BookmarkEntry con ID igual a id o nulo si no existe.
+     *
+     * @param id    ID of the BookmarkEntry to search for. ID de la entrada
+     *              requerida.
+     *
+     * @return      BookmarkEntry with ID equals to id or null if BookmarkEntry
+     *              does not exist. BookmarkEntry con ID igual a id o nulo si no
+     *              existe.
      */
     public BookmarkEntry getEntryById(String id) {
         Iterator<BookmarkEntry> entries = listEntrys();
