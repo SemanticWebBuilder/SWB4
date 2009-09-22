@@ -39,13 +39,14 @@ import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
-/** Objeto que se encarga de desplegar y administrar un contenido de tipo remoto en un frame independiente
+/**
+ * IFrameContent se encarga de desplegar y administrar un contenido de tipo remoto en un frame independiente
  * bajo ciertos criterios (configuraci�n de recurso).
  *
- * Object that is in charge to unfold and to administer a content of remote type in
+ * IFrameContent is in charge to unfold and to administer a content of remote type in
  * independent frame under certain criteria (resource configuration). 
  *
- * @author : Vanessa Arredondo N��ez
+ * @author : Vanessa Arredondo Nunez
  * @version 1.0
  */
 

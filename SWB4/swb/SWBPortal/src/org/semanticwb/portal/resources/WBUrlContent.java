@@ -45,6 +45,14 @@ import org.semanticwb.portal.admin.admresources.util.XmlBundle;
 
 import com.arthurdo.parser.*;
 
+/**
+ * WBUrlContent recupera el contenido de una página web externa y la incrusta como contenido local.
+ *
+ * WBUrl retrieve a external web page and embeded it like local content.
+ *
+ * @Autor:  Jorge Jimenez
+ */
+
 public class WBUrlContent extends GenericAdmResource {
     private static Logger log = SWBUtils.getLogger(WBUrlContent.class);
     

@@ -42,11 +42,12 @@ import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.*;
         
 
-/** Esta clase muestra el mapa del sitio de acuerdo a un determinado TopicMap.
+/**
+ * WBSiteMap muestra el mapa del sitio de acuerdo a un determinado TopicMap.
  *
- * This class displays a map site according with TopicMap.
- * @since : October 23th 2002, 19:11
- * @author : Infotec
+ * WBSiteMap displays a map site according with TopicMap.
+ *
+ * @author : Carlos Ramos Inchaustegui
  */
 public class WBSiteMap extends GenericAdmResource
 {
@@ -59,9 +60,6 @@ public class WBSiteMap extends GenericAdmResource
     public WBSiteMap() {
     }
 
-    /**
-     * @param base
-     */    
     @Override
     public void setResourceBase(Resource base)
     {
@@ -72,14 +70,7 @@ public class WBSiteMap extends GenericAdmResource
             log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);
         }
     }
-    
-    /**
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws SWBResourceException
-     * @throws IOException
-     */    
+     
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if(paramRequest.getMode().equalsIgnoreCase("Json")) {
@@ -196,14 +187,7 @@ public class WBSiteMap extends GenericAdmResource
         }
         return json.toString();
     }
-        
-    /**
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws AFException
-     * @throws IOException
-     */    
+   
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html;charset=iso-8859-1");
@@ -407,7 +391,6 @@ public class WBSiteMap extends GenericAdmResource
                     html.append("</a>");
                 }
 
-                //if(tpsite!=null && this.level>0 && opened) {
                 if(opened) {
                     html.append(addChild(request, tmit, tmhome, tpid, params, 1, language));
                 }
@@ -456,14 +439,6 @@ public class WBSiteMap extends GenericAdmResource
                     opened=true;
                 }
 
-                /*html.append("<div class=\"swb-mapa\" id=\"tree_"+website+"\" style=\"");
-                if(width!=null) {
-                    html.append("width:"+width+";");
-                }
-                if(height!=null) {
-                    html.append("height:"+height+";");
-                }
-                html.append("\" >");*/
                 if(title!=null) {
                     html.append("<h1>mapa de sitio</h1>");
                 }

@@ -42,10 +42,11 @@ import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
-/** Recurso de tipo contenido para incluir y tranformar un XML del tipo RSS Resource
+/**
+ * RSSResource es un recurso de tipo contenido para incluir y tranformar un XML del tipo RSS Resource
  * como recurso.
  *
- * Resource of content type to include and to tranform to XML of RSS Resource type
+ * RSSResource is a resource of content type to include and to tranform to XML of RSS Resource type
  * like resource.
  *
  * @author Javier Solis Gonzalez

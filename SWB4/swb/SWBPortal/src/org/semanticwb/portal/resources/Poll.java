@@ -48,12 +48,13 @@ import org.semanticwb.portal.api.*;
 import org.semanticwb.portal.util.FileUpload;
 
 /**
- * Objeto que se encarga de desplegar y administrar una encuesta de opinion bajo
+ * Poll se encarga de desplegar y administrar una encuesta de opinion bajo
  * ciertos criterios(configuraci?n de recurso).
  *
- * Object that is in charge to unfold and to administer a survey of opinion under
+ * Poll is in charge to unfold and to administer a survey of opinion under
  * certain criteria (resource configuration).
- * @modified by :Carlos Ramos (CIRI)
+ * 
+ * @author  Jorge Sandoval Jimenez
  */
 
 public class Poll extends GenericResource {

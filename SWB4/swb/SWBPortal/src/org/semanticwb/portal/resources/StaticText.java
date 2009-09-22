@@ -42,20 +42,19 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 
 
-/** Objeto que se encarga de desplegar y administrar un texto est�tico, este texto
+/**
+ * StaticText se encarga de desplegar y administrar un texto est�tico, este texto
  * se agrega en la administraci�n del recurso, acepta tags de html para cambiar su
  * aspecto.
  *
- * Object that is in charge to unfold and to administer a static text, this text
+ * StaticText is in charge to unfold and to administer a static text, this text
  * it is added in the administration of the resource, accepts tags of HTML to change his
  * aspect.
- * @modified Carlos Ramos
+ *
+ * @author Javier Solis
  */
 
 public class StaticText extends GenericAdmResource {
-
-    
-
     /** Obtiene la vista del recurso.
      *
      * @param request El servlet container crea un objeto HttpServletRequest y
