@@ -45,16 +45,18 @@ import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticProperty;
 
 /**
- * A lexicon is a list of tagged words. For Semantic WebBuilder, the lexical form
- * of a word is the display name (in a specific language) for Semantic Classes
- * and Semantic Properties. For the analysis purpose, Class names and Propery
- * names are stored in separated sets.
- *
- * Un SWBLexicon (diccionario) es una lista de palabras etiquetadas. Para Semantic
- * WebBuilder, la forma lexica de las palabras es el displayName (para un idioma
- * especifico) de las clases y propiedades semanticas. Para propósitos del
- * analisis, los nombres de las clases y de las propiedades se almacenan en
- * conjuntos separados.
+ * Simple Lexicon. Diccionario simple.
+ * <p>
+ * A {@link SWBLexicon} is a list of tagged {@link word}s. For
+ * SemanticWebBuilder, the lexical form of a word is the display name (in a
+ * specific language) for Semantic Classes and Semantic Properties. For the
+ * analysis purpose, class names and propery names are stored in separated sets.
+ *<p>
+ * Un {@link SWBLexicon} (diccionario) es una lista de palabras etiquetadas.
+ * Para SemanticWebBuilder, la forma lexica de las palabras es el display name
+ * (para un idioma especifico) de las clases y propiedades semanticas. Para
+ * propósitos del análisis, los nombres de las clases y de las propiedades se
+ * almacenan en conjuntos separados.
  *
  * @author Hasdai Pacheco {haxdai@gmail.com}
  */
@@ -85,18 +87,20 @@ public class SWBLexicon {
     };
 
     /**
-     * Creates a new SWBLexicon given the user's language. This method traverses the
-     * SemanticVocabulary and retrieves the displayName of all Semantic Classes and
-     * Semantic Properties, then adds each of the names to the corresponding set.
-     *
-     * Crea un nuevo diccionario para el lenguaje de usuario proporcionado. Este
-     * metodo recorre el vocabulario semantico y recupera los displayNames de
-     * las clases y propiedades semanticas, despues agrega los nombres al conjunto
+     * Creates a new {@link SWBLexicon} given the {@link User}'s language. This
+     * method traverses the {@link SemanticVocabulary} and retrieves the display
+     * name of all the cemantic classes and semantic properties, then adds each
+     * of the names to the corresponding set.
+     * <p>
+     * Crea un nuevo diccionario para el lenguaje proporcionado. Este método
+     * recorre el vocabulario semantico y recupera los display names de las
+     * clases y propiedades semanticas, despues agrega los nombres al conjunto
      * correspondiente.
      *
-     * @param lang language for the new SWBLexicon. Idioma del nuevo diccionario.
-     * @param prexs comma-separated prefixes to filter SemanticClasses. Prefijos
-     * para el filtrado de clases semánticas separados por comas.
+     * @param lang  language for the new {@link SWBLexicon}. Idioma del nuevo
+     *              diccionario.
+     * @param prexs comma-separated prefixes to filter Semantic classes. Prefijos
+     *              para el filtrado de clases semánticas (separados por comas).
      */
     public SWBLexicon(String lang, String prexs) {
         language = lang;
@@ -182,15 +186,17 @@ public class SWBLexicon {
     }
 
     /**
-     * Adds an entry to the lexicon. Creates a WordTag with the information
-     * retrieved from a SemanticClass. The lexical form of the word
-     * entry is the displayName of the associated SemanticClass.
+     * Adds an entry to the {@link SWBLexicon}. Creates a {@link WordTag} with
+     * the information retrieved from a {@link SemanticClass}. The lexical form
+     * of the {@link Word} entry is the display name of the associated
+     * {@link SemanticClass}.
+     * <p>
+     * Agrega una entrada al diccionario. Crea un {@link WordTag} con la
+     * informacion de una clase semantica. La forma lexica de la palabra
+     * agregada es el display name de la clase semantica asociada.
      *
-     * Agrega una entrada al diccionario. Crea un WordTag con la informacion de
-     * una clase semantica. La forma lexica de la palabra agregada es el
-     * displayName de la clase semantica asociada.
-     * @param o SemanticClass to extract information from. Clase semantica para
-     * la cual se creara una entrada.
+     * @param o {@link SemanticClass} to extract information from. Clase
+     *          semantica para la cual se creará una entrada en el diccionario.
      */
     public void addWord(SemanticClass o) {
         String oName = o.getDisplayName(language);
@@ -209,15 +215,17 @@ public class SWBLexicon {
     }
 
     /**
-     * Adds an entry to the lexicon. Creates a WordTag with the information
-     * retrieved from a SemanticProperty. The lexical form of the word entry is
-     * the displayName of the associated SemanticProperty.
-     *
-     * Agrega una entrada al diccionario. Crea un WordTag con la informacion de
-     * una propiedad semantica. La forma lexica de la palabra agregada es el
-     * displayName de la propiedad semantica asociada.
-     * @param p SemanticProperty to extract information from. Propiedad semantica
-     * para la cual se creara una entrada.
+     * Adds an entry to the {@link SWBLexicon}. Creates a {@link WordTag} with
+     * the information retrieved from a {@link SemanticProperty}. The lexical
+     * form of the word entry is the display name of the associated
+     * {@link SemanticProperty}.
+     * <p>
+     * Agrega una entrada al diccionario. Crea un {@link WordTag} con la
+     * informacion de una propiedad semantica. La forma léxica de la palabra
+     * agregada es el display name de la propiedad semántica asociada.
+     * 
+     * @param p {@link SemanticProperty} to extract information from. Propiedad
+     *          semantica para la cual se creará una entrada en el diccionario.
      */
     public void addWord(SemanticProperty p) {
         String pName = p.getDisplayName(language);
@@ -244,21 +252,28 @@ public class SWBLexicon {
     }
 
     /**
-     * Gets the language of the SWBLexicon.
+     * Gets the language of the {@link SWBLexicon}.
+     * <p>
      * Obtiene el idioma del diccionario.
+     *
+     * @return language code of the {@link SWBLexicon}. Código del lenguaje del
+     *                  {@link SWBLexicon}.
      */
     public String getLanguage() {
         return language;
     }
 
     /**
-     * Gets the tag for the specified lexical form (name of a class). It searches
-     * only in the classes set.
-     *
+     * Gets the {@link WordTag} for the specified lexical form (name of a
+     * class). It searches only in the classes set.
+     * <p>
      * Obtiene una etiqueta compuesta para la forma lexica especificada (nombre
      * de una clase semantica). Busca solo en el conjunto de clases.
-     * @param label name of the class to get tag for.
-     * @return WordTag object with the tag and type for the given class name.
+     *
+     * @param label     name of the class to get tag for. Nombre de la clase a
+     *                  etiquetar.
+     * @return WordTag  object with the tag and type for the given class name.
+     *                  Etiqueta compuesta para el nombre de clase proporcionado.
      */
     public WordTag getObjWordTag(String label) {
         WordTag wt = null;
@@ -271,21 +286,28 @@ public class SWBLexicon {
     }
 
     /**
-     * Gets the prefixes string of the SWBLexicon (for a SparQl query).
+     * Gets the prefixes string of the {@link SWBLexicon} (for a SparQl query).
+     *  <p>
      * Obtiene la lista de prefijos del diccionario (para una consulta SparQl).
+     *
+     * @return prefix string. Cadena de prefijos.
      */
     public String getPrefixString() {
         return prefixString;
     }
 
     /**
-     * Gets the tag for the specified lexical form (name of a property). It
-     * searches only in the properties set.
+     * Gets the {@link WordTag} for the specified lexical form (name of a
+     * property). It searches only in the properties set.
+     * <p>
+     * Obtiene una etiqueta compuesta para la forma lexica especificada (nombre
+     * de una propiedad semantica). Busca solo en el conjunto de propiedades.
      *
-     * Obtiene una etiqueta compuesta para la forma lexica especificada (nombre de
-     * una propiedad semantica). Busca solo en el conjunto de propiedades.
-     * @param label name of the property to get tag for.
-     * @return WordTag object with the tag and type for the given property name.
+     * @param label     name of the property to get tag for. Nombre de la propiedad
+     *                  a etiquetar.
+     * @return WordTag  object with the tag and type for the given property name.
+     *                  Etiqueta compuesta para el nombre de propiedad 
+     *                  proporcionado.
      */
     public WordTag getPropWordTag(String label) {
         WordTag wt = null;
@@ -300,10 +322,12 @@ public class SWBLexicon {
     /**
      * Gets the snowball-ed form of an input text. Applies the snowball algorithm
      * to each word in the text to get its root or stem.
-     *
+     * <p>
      * Obtiene el lexema o raiz de una palabra mediante el algoritmo de snowball.
-     * @param input Text to stem.
-     * @return Root of the input.
+     *
+     * @param input Text to stem. Texto a procesar.
+     *
+     * @return Root of the input. Raíz de la palabra.
      */
     public String getSnowballForm(String input) {
         String res = "";
@@ -328,22 +352,30 @@ public class SWBLexicon {
     }
 
     /**
-     * Gets the path to the text file containing the list of displayNames for
+     * Gets the path to the text file containing the list of display names for
      * spell checking.
+     * <p>
+     * Obtiene la ruta al archivo de texto que contiene la lista de palabras
+     * para la corrección ortográfica.
+     *
+     * @return path to the words text file. Ruta al archivo de texto de palabras.
      */
     public String getSpellDictPath() {
         return spellDictPath;
     }
 
     /**
-     * Gets the tag for the specified lexical form. It searches in both, classes
-     * and properties sets in order to find a tag.
-     *
+     * Gets the {@link WordTag} for the specified lexical form. It searches in
+     * both, classes and properties sets in order to find a tag.
+     * <p>
      * Obtiene una etiqueta compuesta para la forma lexica especificada. Busca
      * tanto en el conjunto de clases como en el de propiedades para encontrar
      * la etiqueta.
-     * @param label lexical form of the word to tag. Forma lexica a etiquetar.
-     * @return WordTag object with the tag and type for the word label.
+     *
+     * @param   label lexical form of the word to tag. Forma lexica a etiquetar.
+     *
+     * @return  {@link WordTag} with the tag and type for the word label.
+     *          Etiqueta compuesta para la forma léxica proporcionada.
      */
     public WordTag getWordTag(String label) {
         WordTag wt = null;
@@ -363,6 +395,9 @@ public class SWBLexicon {
     /**
      * Returns an iterator to the list of lexemes for the SemanticClases in the
      * Lexicon.
+     * <p>
+     * Devuelve un iterador a las formas léxicas de una clase semántica en el
+     * diccionario.
      */
     public Iterator<String> listClassNames() {
         List res = new ArrayList();
@@ -378,6 +413,9 @@ public class SWBLexicon {
     /**
      * Returns an iterator to the list of lexemes for the SemanticProperties in
      * the Lexicon.
+     * <p>
+     * Devuelve un iterador a las formas léxicas de una propiedad semántica en el
+     * diccionario.
      */
     public Iterator<String> listPropertyNames() {
         List res = new ArrayList();
