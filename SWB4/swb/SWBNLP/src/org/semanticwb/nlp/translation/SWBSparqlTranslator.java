@@ -43,9 +43,9 @@ import org.semanticwb.platform.SemanticProperty;
  * A natural language to SparQl query translator. Uses the Abstract Sintax Tree
  * (AST) of a sentence obtained with the antlr generated parser ({@link ComplexParser})
  * in order to build a structured SparQl query.
- *
- * Un traductor de consultas en lenguaje natural a consultas SparQl. Usa el √°rbol
- * de sintaxis abstracta (AST) de una oraci√≥n obtenido con el analizador generado
+ * <p>
+ * Un traductor de consultas en lenguaje natural a consultas SparQl. Usa el árbol
+ * de sintaxis abstracta (AST) de una oración obtenido con el analizador generado
  * por antlr ({@link ComplexParser}) para construir una consulta SparQl
  * estructurada.
  *
@@ -66,9 +66,13 @@ public class SWBSparqlTranslator {
     private String subject = "";
 
     /**
-     * Creates a new instance of SWBSparqlTranslator with the given SWBLexicon.
-     * Crea un SWBSparqlTranslator con el diccionario especificado.
-     * @param dict SWBLexicon for the new translator. Diccionario para el traductor.
+     * Creates a new instance of {@link SWBSparqlTranslator} with the given
+     * {@link SWBLexicon}.
+     * <p>
+     * Crea un {@link SWBSparqlTranslator} con el {@link SWBLexicon} especificado.
+     *
+     * @param dict  {@link SWBLexicon} for the new translator. Diccionario para
+     *              el traductor.
      */
     public SWBSparqlTranslator(SWBLexicon dict) {
         lex = dict;
@@ -77,7 +81,12 @@ public class SWBSparqlTranslator {
 
     /**
      * Wheter the query has graph patterns.
-     * @return true if query has patterns, false otherwise.
+     * <p>
+     * Verifica si la consulta SparQl tiene patrones de grafo.
+     *
+     * @return  {@code true} if query has patterns, {@code false} otherwise.
+     *          {@code true} si la consulta tiene al menos un patrón,
+     *          {@code false} en caso contrario.
      */
     public boolean isEmptyQuery() {
         return emptyQuery;
@@ -86,17 +95,32 @@ public class SWBSparqlTranslator {
     /**
      * Gets the main subject of the query, that is, the object that contains
      * properties.
+     * <p>
+     * Extrae el sujeto principal de la consulta, es decir, el objeto del cual
+     * se solicitan propiedades.
+     *
+     * @return main sobject in the sentence. Sujeto principal de la oración.
      */
     public String getSubject() {
         return subject;
     }
 
     /**
-     * Gets the range class (as a SemanticClass) of an object property.
-     * Obtiene el rango (como clase semántica) de una propiedad de tipo objeto.
-     * @param propertyName name of the property to assert.
-     * @param className name of the SemanticClass with the specified property.
-     * @return a SemanticClass which is the range class of the object property. Null otherwise.
+     * Try to get the range class (as a {@link SemanticClass}) of an ObjectType
+     * property.
+     * <p>
+     * Obtiene el rango (como clase semántica) de una propiedad semántica de
+     * tipo ObjectType.
+     * 
+     * @param propertyName  name of the property to check. Nombre de la propiedad
+     *                      a verificar.
+     * @param className     name of the {@link SemanticClass} with the specified
+     *                      property. Nombre de la clase semántica que contiene
+     *                      la propiedad.
+     * @return              a {@link SemanticClass} which is the range class of
+     *                      the property, {@code null} otherwise. Un objeto
+     *                      {@link SemanticClass} que es el rango de la propiedad
+     *                      o {@code null} si la propiedad no tiene clase rango.
      */
     public SemanticClass assertPropertyRangeClass(String propertyName, String className) {
         String name = lex.getObjWordTag(className).getObjId();
@@ -132,9 +156,11 @@ public class SWBSparqlTranslator {
     }
 
     /**
-     * Gets the type (prefix + name) of the range class for an object property.
+     * Gets the type (prefix + name) of the range class for an ObjectType property.
+     * <p>
      * Obtiene el tipo (prefijo + nombre) de la clase rango para una propiedad
-     * de tipo objeto.
+     * de tipo ObjectType.
+     * 
      * @param propertyName name of the property to assert.
      * @param className name of the SemanticClass with the specified property.
      * @return prefix + name of the property, empty String if propertyName is
@@ -184,14 +210,21 @@ public class SWBSparqlTranslator {
     }
 
     /**
-     * Validates if propertyName is a property of className in the
-     * SemanticVocabulary.
-     * Valida si propertyName es una propiedad de className dentro del
+     * Validates if <b>propertyName</b> is a property of <b>className</b> in the
+     * {@link SemanticVocabulary}.
+     * <p>
+     * Valida si <b>propertyName</b> es una propiedad de <b>className</b> dentro del
      * vocabulario semántico.
-     * @param propertyName name of the property to get type for.
-     * @param className name of the class which contains the propertyName.
-     * @return the RDF type of propertyName if it's a propery of className,
-     * empty String otherwise.
+     * 
+     * @param propertyName  name of the property to check. Nombre de la propiedad
+     *                      a verificar.
+     * @param className     name of the class which contains the propertyName.
+     *                      Nombre de la clase que debería contener la propiedad.
+     * @return              the RDF type of the property if it's a propery of 
+     *                      <b>className</b>, empty string otherwise. Tipo RDF
+     *                      de la propiedad siempre que ésta pertenezca a la
+     *                      clase especificada, en otro caso devuelve una cadena
+     *                      vacía.
      */
     private String assertPropertyType(String propertyName, String className) {
         String res = "";
@@ -226,9 +259,15 @@ public class SWBSparqlTranslator {
 
     /**
      * Gets a suggested query string correcting spelling errors.
-     * @param sent Original mispelled query.
-     * @return Query String without spelling errors or the same string if there
-     * is not suggestion.
+     * <p>
+     * Sugiere una consulta corrigiendo los errores ortográficos.
+     *
+     * @param sent      original mispelled query. Consulta original con errores.
+     * 
+     * @return Query    query string without spelling errors or the input query
+     *                  if there are not suggestions. Consulta sin errores
+     *                  ortográficos o la consulta de entrada en caso de no
+     *                  haber sugerencias.
      */
     public String didYouMean(String sent) {
         String res = "";
@@ -276,8 +315,12 @@ public class SWBSparqlTranslator {
     }
 
     /**
-     * Fixes node names in the AST. Removes brackets in NAME nodes.
-     * @param tree AST to fix.
+     * Fixes node names in the AST. Removes brackets in 'NAME' nodes.
+     * <p>
+     * Corrige los nombres de los nodos en el AST. Elimina los corchetes en los
+     * nodos 'NAME'.
+     *
+     * @param tree AST to fix. AST a corregir.
      */
     private void fixNames(CommonTree tree) {
         //If the node is the root of a NAME
@@ -297,6 +340,8 @@ public class SWBSparqlTranslator {
 
     /**
      * Gets the code of the last error occured.
+     * <p>
+     * Obtiene el código del último error ocurrido.
      */
     public int getErrCode() {
         return errCode;
@@ -304,6 +349,8 @@ public class SWBSparqlTranslator {
 
     /**
      * Gets the error log generated in a parsing process.
+     * <p>
+     * Obtiene la bitácora de errores generada en el proceso de análisis.
      */
     public String getErrors() {
         return eLog;
@@ -314,10 +361,21 @@ public class SWBSparqlTranslator {
      * child is a MODTO node, an '*' is added to the varList of the SELECT clause
      * for the query. Otherwise, varList consists of the names of all child
      * nodes of PREDE.
-     * @param root the PREDE node.
-     * @param parent name of the parent object of PREDE node.
-     * @return a SparQL query fragment, specifically a varList for the SelecQuery
-     * production of the SparQL query language grammar.
+     * <p>
+     * Transforma un nodo PREDE en un fragmento de consulta SparQl. Si el primer
+     * hijo del nodo PREDE es un nodo MODTO, se agrega un '*' a la lista de
+     * variables de la consulta en la clausula SELECT. En otro caso, la lista de
+     * variables se forma de los nombres de todos los hijos del nodo PREDE.
+     *
+     * @param root      the PREDE node. El nodo PREDE.
+     * @param parent    name of the parent object of PREDE node. Nombre del nodo
+     *                  padre del nodo PREDE.
+     *
+     * @return          a SparQL query fragment, specifically a 'varList' for the
+     *                  SelectQuery production of the SparQL query language
+     *                  grammar. Un fragmento de consulta SparQl, específicamente
+     *                  el 'varList' de variables resultado de la regla de producción
+     *                  'SelectQuery' en la gramática de SparQl.
      */
     private String getVarList(CommonTree root, String parent) {
         String res = "";
@@ -337,11 +395,19 @@ public class SWBSparqlTranslator {
 
     /**
      * Transforms an AST node into a SparQL query fragment.
-     * Transforma un AST en un fragmento de la consulta SparQl.
-     * @param root AST node to transform.
-     * @param parent name of the parent object of the node (for searching properties).
-     * @param parentLabel name of the parent object of the node (for ataching properties).
-     * @return a SparQL query fragment for the AST node.
+     * <p>
+     * Transforma un nodo del AST en un fragmento de consulta SparQl.
+     *
+     * @param root          AST node to transform. Nodo del AST a transformar.
+     * @param parent        name of the parent object of the node (for searching
+     *                      properties). Nombre del padre del nodo analizado
+     *                      (necesario para buscar propiedades en el AST).
+     * @param parentLabel   name of the parent object of the node (for attaching
+     *                      properties). Texto en el padre del nodo analizado
+     *                      (para agregar propiedades al varList).
+     * 
+     * @return              a SparQL query fragment for the AST node. Un
+     *                      fragmento de consulta SparQl para el nodo del AST.
      */
     private String processNode(CommonTree root, String parent, String parentLabel) {
         String res = "";
@@ -410,13 +476,16 @@ public class SWBSparqlTranslator {
 
     /**
      * Transforms a SELECT node in the AST to a SparQL query fragment.
+     * <p>
      * Transforma un nodo SELECT en el AST en un fragmento de la consulta SparQl.
-     * @param root SELECT node to transform. Nodo SELECT a transformar.
-     * @param hasPrecon wheter or not the AST has a PRECON node.
-     * Indica si el AST contiene una preposición CON.
-     * @param hasPrede wheter or not the AST has a PREDE node.
-     * Indica si el AST contiene una preposición DE.
-     * @return String of a SparQL query fragment. Fragmento de consulta SparQl.
+     *
+     * @param root          SELECT node to transform. Nodo SELECT a transformar.
+     * @param hasPrecon     wheter or not the AST has a PRECON node.
+     *                      Indica si el AST contiene una preposición CON.
+     * @param               hasPrede wheter or not the AST has a PREDE node.
+     *                      Indica si el AST contiene una preposición DE.
+     * @return              String of a SparQL query fragment. Fragmento de
+     *                      consulta SparQl.
      */
     private String processSelectQuery(CommonTree root, boolean hasPrecon, boolean hasPrede, boolean subjectRequired) {
         String limitoff = "";
@@ -476,11 +545,24 @@ public class SWBSparqlTranslator {
      * Transforms an ASIGN, COMPL, COMPG, COMPLE or COMPGE node into a SparQL
      * query fragment. The last four nodes generate a FILTER clause in the
      * resulting fragment.
-     * @param root one of the above nodes.
-     * @param parent name of the parent object of the statement node (for searching).
-     * @param parentLabel name of the parent object of the statement node (for attaching).
-     * @return a SparQL query fragment, specifically a triple for an ASIGN node
-     * or a triple and a FILTER clause for the node.
+     * <p>
+     * Transforma un nodo ASIGN, COMPL, COMPG, COMPLE o COMPGE en un fragmento
+     * de consulta SparQl. Los últimos cuatro nodos generan la clausula FILTER
+     * en el fragmento resultante.
+     *
+     * @param root          one of the above nodes. Uno de los nodos mencionados
+     *                      anteriormente.
+     * @param parent        name of the parent object of the statement node 
+     *                      (for searching). Nombre del nodo padre del nodo
+     *                      analizado.
+     * @param parentLabel   text of the parent object of the statement node
+     *                      (for attaching). Texto del nodo padre del nodo
+     *                      analizado.
+     * @return              a SparQL query fragment, specifically a triple for
+     *                      an ASIGN node or a triple and a FILTER clause for
+     *                      the node. Un fragmento de consulta SparQl,
+     *                      específicamente un patrón de tripla para un nodo
+     *                      ASIGN o una tripla y una clausula FILTER.
      */
     private String processStatement(CommonTree root, String parent, String parentLabel) {
         String res = "";
@@ -550,11 +632,13 @@ public class SWBSparqlTranslator {
 
     /**
      * Starts deep parsing of the AST.
+     * <p>
      * Inicia el análisis a profundidad del AST.
-     * @param root root node to start parsing (usually child of SELECT node).
-     * Nodo raíz (usualmente hijo del nodo SELECT) para el análisis.
-     * @return String with a SParQL query fragment.
-     * Cadena con un fragmento de consulta SparQl.
+     *
+     * @param root  root node to start parsing (usually child of SELECT node).
+     *              Nodo raíz (usualmente hijo del nodo SELECT) para el análisis.
+     * 
+     * @return      SparQl query fragment. Fragmento de consulta SparQl.
      */
     private String startParsing(CommonTree root) {
         String res = "";
@@ -572,15 +656,15 @@ public class SWBSparqlTranslator {
      * Transforms a Natural Language query to a SparQL query. Using an antlr
      * (http://www.antlr.org) parser, this method builds an AST
      * (Abstract Sintax Tree) and traverses it to generate the SparQL query.
-     *
+     * <p>
      * Transforma una consulta en lenguaje natural a una consulta en SparQl.
      * Usando un analizador generado por antlr (http://www.antlr.org), el método
      * construye un AST (Árbol de sintáxis abstracta) y lo recorre para generar
      * la consulta SparQl.
      *
-     * @param sent Rescticted-Natural Language sentence for the query.
-     * Oración en lenguaje natural restringido para la consulta.
-     * @return SparQL query sentence. Sentencia de la consulta SparQl.
+     * @param sent  Rescticted natural language sentence for the query.
+     *              Oración en lenguaje natural restringido para la consulta.
+     * @return      SparQl query sentence. Sentencia de la consulta SparQl.
      */
     public String translateSentence(String sent, boolean sRequired) {
         String res = "";
@@ -613,8 +697,11 @@ public class SWBSparqlTranslator {
 
     /**
      * Prints the given AST with indentation.
-     * @param root AST to print.
-     * @param indent indentation string.
+     * <p>
+     * Imprime un AST con indentación.
+     *
+     * @param root      AST to print. AST a imprimir.
+     * @param indent    indentation string. Cadena de indentado.
      */
     private void traverseAST(CommonTree root, String indent) {
         System.out.println(indent + root.getText());
@@ -633,10 +720,21 @@ public class SWBSparqlTranslator {
     /**
      * Gets a custom lexer for a specific language. To add support for more
      * languages you should create a 'Lang'Lexer class (where lang stands for
-     * your language name) and add astatement to this method to return such lexer.
-     * @param langCode code of the language to create a lexer for.
-     * @param input ANTLRStringStream to analyze.
-     * @return Specific lexer for the given language.
+     * your language name) and add astatement to this method to return an
+     * instance of such lexer.
+     * <p>
+     * Obtiene un analizador léxico específico para un lenguaje. Para agregar
+     * soporte a más lenguajes, debe crearse una clase 'Lang'Lexer (donde 'Lang'
+     * debe sustituirse por el nombre del lenguaje) y agregar una instrucción
+     * a este método para devolver una instancia de dicha clase.
+     *
+     * @param langCode  code of the language to create a lexer for. Código de
+     *                  lenguaje del analizador léxico.
+     * @param input     {@link ANTLRStringStream} to analyze.
+     *                  {@link ANTLRStringStream} a analizar.
+     *
+     * @return          Specific lexer for the given language. Analizador Léxico
+     *                  para el idioma especificado.
      */
     public Lexer getLocaleLexer(String langCode, ANTLRStringStream input) {
         if (langCode.equals("es")) {
