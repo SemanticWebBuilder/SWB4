@@ -47,7 +47,7 @@ import org.semanticwb.platform.SemanticProperty;
 /**
  * Simple Lexicon. Diccionario simple.
  * <p>
- * A {@link SWBLexicon} is a list of tagged {@link word}s. For
+ * A {@link SWBLexicon} is a list of tagged {@link Word}s. For
  * SemanticWebBuilder, the lexical form of a word is the display name (in a
  * specific language) for Semantic Classes and Semantic Properties. For the
  * analysis purpose, class names and propery names are stored in separated sets.
