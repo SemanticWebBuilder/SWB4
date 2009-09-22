@@ -48,16 +48,22 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.portal.community.utilresources.ImageResizer;
 
- /** @author Hasdai Pacheco {haxdai@gmail.com} 
-  * Events manager resource. Recurso administrador de eventos.
-  */
+/** @author Hasdai Pacheco {haxdai@gmail.com}
+ *  @author Carlos Ramos
+ *
+ * Events manager resource.
+ * <p>
+ * Recurso administrador de eventos.
+ */
 public class EventResource extends org.semanticwb.portal.community.base.EventResourceBase {
+
     private static Logger log = SWBUtils.getLogger(EventResource.class);
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
 
     /**
      * Empty constructor.
+     * <p>
      * Constructor vacío.
      */
     public EventResource() {
@@ -65,6 +71,7 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
 
     /**
      * Default constructor.
+     * <p>
      * Constructor por defecto.
      */
     public EventResource(org.semanticwb.platform.SemanticObject base) {
@@ -73,7 +80,7 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        final String path="/../swbadmin/jsp/microsite/EventResource/noevent.jpg";
+        final String path = "/../swbadmin/jsp/microsite/EventResource/noevent.jpg";
         String action = request.getParameter("act");
         WebPage page = response.getWebPage();
         Member mem = Member.getMember(response.getUser(), page);
@@ -81,35 +88,37 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
             return;                                       //si el usuario no pertenece a la red sale;
         }
 
-        if(action==null) {
-            HashMap<String,String> params = upload(request);
-            if(mem.canAdd() && params.containsValue("add")) {
+        if (action == null) {
+            HashMap<String, String> params = upload(request);
+            if (mem.canAdd() && params.containsValue("add")) {
                 EventElement rec = EventElement.createEventElement(getResourceBase().getWebSite());
-                if(params.containsKey("filename"))
+                if (params.containsKey("filename")) {
                     rec.setEventImage(params.get("filename"));
-                else
+                } else {
                     rec.setEventImage(path);
-                if(params.containsKey("thumbnail"))
+                }
+                if (params.containsKey("thumbnail")) {
                     rec.setEventThumbnail(params.get("thumbnail"));
-                else
+                } else {
                     rec.setEventThumbnail(path);
+                }
                 rec.setTitle(params.get("event_title"));
                 rec.setDescription(params.get("event_description"));
                 rec.setAudienceType(params.get("event_audience"));
                 try {
                     String startDate = params.get("event_startDate");
-                    startDate = (startDate==null?"":startDate);
+                    startDate = (startDate == null ? "" : startDate);
                     String endDate = params.get("event_endDate");
-                    endDate = (endDate==null?"":endDate);
+                    endDate = (endDate == null ? "" : endDate);
                     String startTime = params.get("event_startTime");
-                    startTime = (startTime==null?"":startTime.replace("T", "").trim());
+                    startTime = (startTime == null ? "" : startTime.replace("T", "").trim());
                     String endTime = params.get("event_endTime");
-                    endTime = (endTime==null?"":endTime.replace("T", "").trim());
+                    endTime = (endTime == null ? "" : endTime.replace("T", "").trim());
                     rec.setStartDate(dateFormat.parse(startDate.trim()));
                     rec.setEndDate(dateFormat.parse(endDate.trim()));
                     rec.setStartTime(new Timestamp(timeFormat.parse(startTime).getTime()));
                     rec.setEndTime(new Timestamp(timeFormat.parse(endTime).getTime()));
-                }catch (Exception e) {
+                } catch (Exception e) {
                     log.error(e);
                 }
                 rec.setPlace(params.get("event_place"));
@@ -123,33 +132,33 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                     response.setRenderParameter("act", "add");
                     response.setRenderParameter("err", "true");
                 }
-            }
-            else if(params.containsValue("edit"))
-            {
+            } else if (params.containsValue("edit")) {
                 String uri = params.get("uri");
                 EventElement rec = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
-                if(rec != null && rec.canModify(mem)) {
-                    if(params.get("filename")!=null)
+                if (rec != null && rec.canModify(mem)) {
+                    if (params.get("filename") != null) {
                         rec.setEventImage(params.get("filename"));
-                    if(params.get("thumbnail")!=null)
+                    }
+                    if (params.get("thumbnail") != null) {
                         rec.setEventThumbnail(params.get("thumbnail"));
+                    }
                     rec.setTitle(params.get("event_title"));
                     rec.setDescription(params.get("event_description"));
                     rec.setAudienceType(params.get("event_audience"));
                     try {
                         String startDate = params.get("event_startDate");
-                        startDate = (startDate==null?"":startDate);
+                        startDate = (startDate == null ? "" : startDate);
                         String endDate = params.get("event_endDate");
-                        endDate = (endDate==null?"":endDate);
+                        endDate = (endDate == null ? "" : endDate);
                         String startTime = params.get("event_startTime");
-                        startTime = (startTime==null?"":startTime.replace("T", "").trim());
+                        startTime = (startTime == null ? "" : startTime.replace("T", "").trim());
                         String endTime = params.get("event_endTime");
-                        endTime = (endTime==null?"":endTime.replace("T", "").trim());
+                        endTime = (endTime == null ? "" : endTime.replace("T", "").trim());
                         rec.setStartDate(dateFormat.parse(startDate.trim()));
                         rec.setEndDate(dateFormat.parse(endDate.trim()));
                         rec.setStartTime(new Timestamp(timeFormat.parse(startTime).getTime()));
                         rec.setEndTime(new Timestamp(timeFormat.parse(endTime).getTime()));
-                    }catch (Exception e) {
+                    } catch (Exception e) {
                         log.error(e);
                     }
                     rec.setPlace(params.get("event_place"));
@@ -157,7 +166,7 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                     rec.setEventWebPage(page);
                 }
             }
-        }else if (action.equals("remove")) {
+        } else if (action.equals("remove")) {
             //Get event object
             String uri = request.getParameter("uri");
             EventElement rec = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
@@ -181,7 +190,9 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                         found = true;
                     }
                 }
-                if (!found) rec.addAttendant(response.getUser());
+                if (!found) {
+                    rec.addAttendant(response.getUser());
+                }
             }
             response.setRenderParameter("uri", uri);
             response.setRenderParameter("act", "detail");
@@ -190,80 +201,83 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
         }
     }
 
-    private HashMap<String,String> upload(HttpServletRequest request) {
-        final String realpath = SWBPlatform.getWorkPath()+getResourceBase().getWorkPath()+"/";
-        final String path = getResourceBase().getWorkPath()+"/";
-        
-        HashMap<String,String> params = new HashMap<String,String>();
+    private HashMap<String, String> upload(HttpServletRequest request) {
+        final String realpath = SWBPlatform.getWorkPath() + getResourceBase().getWorkPath() + "/";
+        final String path = getResourceBase().getWorkPath() + "/";
+
+        HashMap<String, String> params = new HashMap<String, String>();
         try {
             boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-            if(isMultipart) {
-                File tmpwrk = new File(SWBPlatform.getWorkPath()+"/tmp");
+            if (isMultipart) {
+                File tmpwrk = new File(SWBPlatform.getWorkPath() + "/tmp");
                 if (!tmpwrk.exists()) {
                     tmpwrk.mkdirs();
                 }
-                FileItemFactory factory = new DiskFileItemFactory(1*1024*1024, tmpwrk);
+                FileItemFactory factory = new DiskFileItemFactory(1 * 1024 * 1024, tmpwrk);
                 ServletFileUpload upload = new ServletFileUpload(factory);
                 ProgressListener progressListener = new ProgressListener() {
+
                     private long kBytes = -1;
+
                     public void update(long pBytesRead, long pContentLength, int pItems) {
                         long mBytes = pBytesRead / 10000;
                         if (kBytes == mBytes) {
-                        return;
+                            return;
                         }
                         kBytes = mBytes;
-                        int percent = (int)(pBytesRead * 100 / pContentLength);
+                        int percent = (int) (pBytesRead * 100 / pContentLength);
                     }
                 };
                 upload.setProgressListener(progressListener);
                 List items = upload.parseRequest(request); /* FileItem */
                 FileItem currentFile = null;
                 Iterator iter = items.iterator();
-                while(iter.hasNext()) {
+                while (iter.hasNext()) {
                     FileItem item = (FileItem) iter.next();
 
-                    if(item.isFormField()) {
+                    if (item.isFormField()) {
                         String name = item.getFieldName();
                         String value = item.getString();
                         params.put(name, value);
-                    }else {
+                    } else {
                         currentFile = item;
                         File file = new File(path);
-                        if(!file.exists()) {
+                        if (!file.exists()) {
                             file.mkdirs();
                         }
 
                         try {
                             long serial = (new Date()).getTime();
-                            String filename = serial+"_"+currentFile.getFieldName()+currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
-                            
+                            String filename = serial + "_" + currentFile.getFieldName() + currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
+
                             File image = new File(realpath);
-                            if(!image.exists()) {
+                            if (!image.exists()) {
                                 image.mkdir();
                             }
-                            image = new File(realpath+filename);
-                            File thumbnail = new File(realpath+"thumbn_"+filename);
+                            image = new File(realpath + filename);
+                            File thumbnail = new File(realpath + "thumbn_" + filename);
                             currentFile.write(image);
                             //ImageResizer.resize(image, 150, true, thumbnail, "jpeg" );
-                            ImageResizer.resizeCrop(image, 150, thumbnail, "jpeg" );
-                            params.put("filename", path+filename);
-                            params.put("thumbnail", path+"thumbn_"+filename);
-                        }catch(StringIndexOutOfBoundsException iobe) {
+                            ImageResizer.resizeCrop(image, 150, thumbnail, "jpeg");
+                            params.put("filename", path + filename);
+                            params.put("thumbnail", path + "thumbn_" + filename);
+                        } catch (StringIndexOutOfBoundsException iobe) {
                         }
                     }
                 }
             }
-        }catch(Exception ex)  {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return params;
     }
 
-
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String action = request.getParameter("act");
-        if (action == null) action = "view";
+        if (action == null) {
+            action = "view";
+        }
 
         String path = "/swbadmin/jsp/microsite/EventResource/eventView.jsp";
         if (action.equals("calendar")) {
