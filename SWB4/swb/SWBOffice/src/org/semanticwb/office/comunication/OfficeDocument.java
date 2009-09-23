@@ -151,25 +151,25 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return getOfficeTypes;
     }
 
-    public Resource migrateResource(String xml, String className, String siteid, String webpageId, String resourceid, String version, String title, String description, String user, String password, String file) throws Exception
+    public Resource migrateResource(String xml, String className, String siteid, String webpageId, String resourceid, String version, String title, String description, String file) throws Exception
     {
         if (className.equals(MIGRATE_WBRESOURCESEXCELCONTENT))
         {
             PropertyInfo[] viewProperties = new PropertyInfo[0];
             String[] viewValues = new String[0];
-            return migrateExcelResource(siteid, webpageId, resourceid, version, title, description, viewProperties, viewValues, user, password, file);
+            return migrateExcelResource(siteid, webpageId, resourceid, version, title, description, viewProperties, viewValues, file);
         }
         else if (className.equals(MIGRATE_WBRESOURCESPPTCONTENT))
         {
             PropertyInfo[] viewProperties = getViewPropertiesPPT(xml);
             String[] viewValues = getStringViewPropertiesPPT(xml);
-            return migratePPTResource(siteid, webpageId, resourceid, version, title, description, viewProperties, viewValues, user, password, file);
+            return migratePPTResource(siteid, webpageId, resourceid, version, title, description, viewProperties, viewValues,file);
         }
         else if (className.equals(MIGRATE_WBRESOURCESCONTENT))
         {
             PropertyInfo[] viewProperties = getViewPropertiesWord(xml);
             String[] viewValues = getStringViewPropertiesWord(xml);
-            return migrateWordResource(siteid, webpageId, resourceid, version, title, description, viewProperties, viewValues, user, password, file);
+            return migrateWordResource(siteid, webpageId, resourceid, version, title, description, viewProperties, viewValues, file);
         }
         else
         {
@@ -177,21 +177,21 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
-    private Resource migrateWordResource(String siteid, String webpageId, String resourceid, String version, String title, String description, PropertyInfo[] viewProperties, String[] viewValues, String user, String password, String file) throws Exception
+    private Resource migrateWordResource(String siteid, String webpageId, String resourceid, String version, String title, String description, PropertyInfo[] viewProperties, String[] viewValues, String file) throws Exception
     {
-        return migrateResource(siteid, webpageId, resourceid, version, title, description, "WORD", viewProperties, viewValues, user, password, file);
+        return migrateResource(siteid, webpageId, resourceid, version, title, description, "WORD", viewProperties, viewValues, file);
     }
 
-    private Resource migrateExcelResource(String siteid, String webpageId, String resourceid, String version, String title, String description, PropertyInfo[] viewProperties, String[] viewValues, String user, String password, String file) throws Exception
+    private Resource migrateExcelResource(String siteid, String webpageId, String resourceid, String version, String title, String description, PropertyInfo[] viewProperties, String[] viewValues, String file) throws Exception
     {
-        return migrateResource(siteid, webpageId, resourceid, version, title, description, "EXCEL", viewProperties, viewValues, user, password, file);
+        return migrateResource(siteid, webpageId, resourceid, version, title, description, "EXCEL", viewProperties, viewValues, file);
     }
 
     
 
-    private Resource migratePPTResource(String siteid, String webpageId, String resourceid, String version, String title, String description, PropertyInfo[] viewProperties, String[] viewValues, String user, String password, String file) throws Exception
+    private Resource migratePPTResource(String siteid, String webpageId, String resourceid, String version, String title, String description, PropertyInfo[] viewProperties, String[] viewValues, String file) throws Exception
     {
-        return migrateResource(siteid, webpageId, resourceid, version, title, description, "PPT", viewProperties, viewValues, user, password, file);
+        return migrateResource(siteid, webpageId, resourceid, version, title, description, "PPT", viewProperties, viewValues, file);
     }
 
     public boolean isOfficeDocument(String className, String workpath, String contentid, String file, String version)
@@ -236,9 +236,9 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         for (int i = 0; i < nodes.getLength(); i++)
         {
             Element element = (Element) nodes.item(i);
-            if (element.getFirstChild() != null && element.getFirstChild().getTextContent() != null)
+            if (element.getFirstChild() != null && element.getFirstChild().getNodeValue() != null)
             {
-                String value = element.getFirstChild().getTextContent();
+                String value = element.getFirstChild().getNodeValue();
                 if (value != null)
                 {
                     values.add(value);
@@ -253,9 +253,9 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         for (int i = 0; i < nodes.getLength(); i++)
         {
             Element element = (Element) nodes.item(i);
-            if (element.getFirstChild() != null && element.getFirstChild().getTextContent() != null)
+            if (element.getFirstChild() != null && element.getFirstChild().getNodeValue() != null)
             {
-                String value = element.getFirstChild().getTextContent();
+                String value = element.getFirstChild().getNodeValue();
                 if (value != null)
                 {
                     PropertyInfo info = new PropertyInfo();
@@ -347,22 +347,20 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @return
      * @throws Exception
      */
-    private Resource migrateResource(String siteid, String webpageId, String resourceid, String version, String title, String description, String type, PropertyInfo[] viewProperties, String[] viewValues, String user, String password, String file) throws Exception
+    private Resource migrateResource(String siteid, String webpageId, String resourceid, String version, String title, String description, String type, PropertyInfo[] viewProperties, String[] viewValues, String file) throws Exception
     {
         SWBRepositoryManager manager = new SWBRepositoryManager();
         String repositoryName = siteid + "_rep@" + manager.getName(); // se almacena en el repositorio del sitio
         OfficeApplication officeApplication = new OfficeApplication();
-        officeApplication.setUser(user);
-        officeApplication.setPassword(password);
+        officeApplication.setUser(this.user);
+        officeApplication.setPassword(this.password);
         String categoryId = officeApplication.createCategory(repositoryName, categoryBydefault, descriptionByDefault);
-        return migrateResource(siteid, webpageId, resourceid, version, title, description, repositoryName, categoryId, type, viewProperties, viewValues, user, password, file);
+        return migrateResource(siteid, webpageId, resourceid, version, title, description, repositoryName, categoryId, type, viewProperties, viewValues, file);
     }
 
-    private Resource migrateResource(String siteid, String webpageId, String resourceid, String version, String title, String description, String repositoryName, String categoryID, String type, PropertyInfo[] viewProperties, String[] viewValues, String user, String password, String file) throws Exception
+    private Resource migrateResource(String siteid, String webpageId, String resourceid, String version, String title, String description, String repositoryName, String categoryID, String type, PropertyInfo[] viewProperties, String[] viewValues, String file) throws Exception
     {
-        String nodeType = cm_content.getPrefix() + ":" + cm_content.getName();
-        this.user = user;
-        this.password = password;
+        String nodeType = cm_content.getPrefix() + ":" + cm_content.getName();        
         // guarda en repositorio y publica
         WebSite site = WebSite.getWebSite(siteid);
         if (site == null)
