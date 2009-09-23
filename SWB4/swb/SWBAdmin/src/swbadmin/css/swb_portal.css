@@ -948,3 +948,74 @@ div.sitesectiontree ul.treeres {
 .clearNosp{clear: both; height: 1px;}
 
 /*------Termina Foro---*/
+/*------RelatedTopics---*/
+.swb-relTopic {
+	border:#336699 solid .0em;
+	font-family:Arial;
+	font-size:1em;
+	color:#336699;
+	font-weight:bold;
+}
+.swb-relTopic a{
+	font-weight:normal;
+}
+.swb-relTopic fieldset{
+	margin-left:1em;
+	margin-right:1em;
+	margin-bottom:1em;
+	background: #FFF;
+	border-top:#336699 solid 0.06em;
+	border-left:#336699 solid 0.06em;
+	border-bottom:#336699 solid 0.2em;
+	border-right:#336699 solid 0.2em;
+}
+.swb-relTopic legend{
+	padding: .3em .6em .3em .6em;
+	margin-left:2em;
+	margin-bottom:1em;
+	font-size:.75em;
+	font-weight:bold;
+	color: #FFFFFF;
+	border:#336699 solid 0.06em;
+	background: #6699cc;
+}
+.swb-relTopic ul{
+	margin: 0em 0em 0em 1em;
+	padding: 0.31em 0em 0em 0.31em;
+	list-style:none;
+	list-style-position:inside;
+}
+.swb-relTopic ul li{
+
+}
+.swb-relTopic li {
+	padding: 0.31em 0.31em 0.31em 0.31em;
+	font-size: 0.75em;
+}
+.swb-relTopic li ul li {
+	padding: 0.31em 0.31em 0.31em 0.31em;
+	font-size: 1em;
+}
+.swb-relTopic li a:link{
+	color: #336699;
+	text-decoration:none;
+}
+.swb-relTopic li a:visited{
+	color: #336699;
+	text-decoration:none;
+}
+.swb-relTopic li a:hover{
+	color: #99ccff;
+	text-decoration:none;
+}
+.swb-relTopic li a:active{
+	color: #FFFFFF;
+	text-decoration:none;
+}
+.swb-relTopic-col1{
+	float:left;
+}
+.swb-relTopic-col2{
+	float:left;
+}
+/*------Termina RelatedTopics---*/
