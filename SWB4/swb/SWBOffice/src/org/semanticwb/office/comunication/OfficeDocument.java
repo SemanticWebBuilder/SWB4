@@ -206,15 +206,15 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
         if (className.equals(MIGRATE_WBRESOURCESCONTENT))
         {
-            File ofile = new File(workpath + "/" + version + "/" + file);
+            File ofile = new File(workpath + "/" + version + "/" + file);            
             if (ofile.exists())
             {
                 int pos = file.lastIndexOf(".");
                 if (pos != -1)
                 {
                     String wordfile = file.substring(0, pos) + ".doc";
-                    File oword = new File(workpath + "/" + version + "/" + wordfile);
-                    File xmlfile = new File(workpath + "/" + version + "/" + "/filelist.xml");
+                    File oword = new File(workpath + "/" + version + "/" + wordfile);                    
+                    File xmlfile = new File(workpath + "/" + version + "/" + "/filelist.xml");                    
                     if (oword.exists() && xmlfile.exists())
                     {
                         return true;
