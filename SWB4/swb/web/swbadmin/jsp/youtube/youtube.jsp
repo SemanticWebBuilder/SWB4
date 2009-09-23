@@ -24,11 +24,13 @@ YouTubeService service = (YouTubeService)request.getAttribute("service");
 if(action.equals("uploadVideo")){
     urlAction.setAction("setPlayList");
     String videoId=request.getParameter("videoId");
+    System.out.println("videoId en jsp:"+videoId);
+    urlAction.setParameter("entryUrl", "http://gdata.youtube.com/feeds/api/videos/"+videoId);
     String tokenUrl=request.getParameter("tokenUrl");
     String token=request.getParameter("token");
     if(tokenUrl!=null && token!=null){
  %>
-    <form action="<%=tokenUrl%>?nexturl=<%=urlAction%>" method ="post" enctype="multipart/form-data">
+    <form action="<%=tokenUrl%>?nexturl=http://localhost:8080<%=urlAction%>" method ="post" enctype="multipart/form-data">
         <ul>
         <input type="file" name="file"/>
         <input type="hidden" name="token" value="<%=token%>"/>
@@ -72,9 +74,14 @@ if(action.equals("uploadVideo")){
      String feedUrl = "http://gdata.youtube.com/feeds/api/playlists/D2C26D097ECEAB44?v=2";
      PlaylistFeed feed = service.getFeed(new URL(feedUrl), PlaylistFeed.class);
      for(PlaylistEntry entry : feed.getEntries()) {
+         //System.out.println("entry:"+entry.getId());
      String videoId=entry.getHtmlLink().getHref();
+     //System.out.println("videoId:"+videoId);
      int pos=videoId.indexOf("v=");
      if(pos>-1) videoId=videoId.substring(pos+2);
+     pos=videoId.indexOf("&");
+     if(pos>-1) videoId=videoId.substring(0,pos);
+     //System.out.println("youtube videoId:"+videoId);
      %>
         <div class="moreUser">
             <object width="225" height="155">
@@ -107,13 +114,22 @@ if(action.equals("uploadVideo")){
 <%
     }
    }catch(Exception e){e.printStackTrace();}
-}else {
+}else {   
 %>
  <div class="miembros">
      <%url.setAction("newVideo");%>
      <p><a href="<%=url%>">nuevo video</a></p>
 <%
 try{
+    
+     //TODO(Tengo que barrerme aqui todos lo videos (ids regresados por youtube) que tengo en el Resource.getData()
+     //y agregarlos a la Lista de reproducción que le corresponda, si lo hace bien, eliminar los mismos del mismo Resource.getData()
+     //String entryUrl="http://gdata.youtube.com/feeds/api/videos/kfBFXro7njM";
+     //VideoEntry videoEntry = service.getEntry(new URL(entryUrl), VideoEntry.class);
+     //String feedUrl = "http://gdata.youtube.com/feeds/api/playlists/D2C26D097ECEAB44?v=2";
+     //PlaylistEntry playlistEntry = new PlaylistEntry(videoEntry);
+     //service.insert(new URL(feedUrl), playlistEntry);
+
      String feedUrl = "http://gdata.youtube.com/feeds/api/users/default/favorites";
      VideoFeed videoFeed = service.getFeed(new URL(feedUrl), VideoFeed.class);
      for(VideoEntry entry : videoFeed.getEntries()) {
