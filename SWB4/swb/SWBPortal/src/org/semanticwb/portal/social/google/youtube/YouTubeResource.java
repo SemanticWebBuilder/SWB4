@@ -13,14 +13,13 @@ import com.google.gdata.data.media.mediarss.MediaTitle;
 import com.google.gdata.data.youtube.CommentEntry;
 import com.google.gdata.data.youtube.ComplaintEntry;
 import com.google.gdata.data.youtube.FormUploadToken;
-import com.google.gdata.data.youtube.PlaylistEntry;
-import com.google.gdata.data.youtube.PlaylistFeed;
 import com.google.gdata.data.youtube.VideoEntry;
 import com.google.gdata.data.youtube.YouTubeMediaGroup;
 import com.google.gdata.data.youtube.YouTubeNamespace;
 import com.google.gdata.util.AuthenticationException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Enumeration;
 import java.util.StringTokenizer;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
@@ -78,15 +77,15 @@ public class YouTubeResource extends GenericResource {
                 VideoEntry newEntry = new VideoEntry();
                 newEntry.setLocation("Mexico");
                 YouTubeMediaGroup mg = newEntry.getOrCreateMediaGroup();
-                //http://gdata.youtube.com/schemas/2007/categories.cat-->pienso que a una cirta comunidad se le debería asignar una categoria en especifico
-                //(de las del archivo de la mencionada url, ej. Autos) y sería con la que se subieran los nuevos videos y de esta manera
-                //ya no le mostraría un combo con todas las categorias para que el usuario final escogiera, porque en realidad en una comunidad se deberian
-                //de subir videos con una cierta categoria solamente, que sería que tuviera relación con el tipo de comunidad en la que se esta.
-                //***El título, la categoria y por lo menos un keyword son requeridos.
+                //http://gdata.youtube.com/schemas/2007/categories.cat-->pienso que a una cirta comunidad se le deberÃ­a asignar una categoria en especifico
+                //(de las del archivo de la mencionada url, ej. Autos) y serÃ­a con la que se subieran los nuevos videos y de esta manera
+                //ya no le mostrarÃ­a un combo con todas las categorias para que el usuario final escogiera, porque en realidad en una comunidad se deberian
+                //de subir videos con una cierta categoria solamente, que serÃ­a que tuviera relaciÃ³n con el tipo de comunidad en la que se esta.
+                //***El tÃ­tulo, la categoria y por lo menos un keyword son requeridos.
 
                 mg.addCategory(new MediaCategory(YouTubeNamespace.CATEGORY_SCHEME, "Autos"));
                 mg.addCategory(new MediaCategory(YouTubeNamespace.DEVELOPER_TAG_SCHEME, "xyzzy"));
-                
+
                 String title=request.getParameter("title");
                 if(title!=null && title.trim().length()>0)
                 {
@@ -117,18 +116,34 @@ public class YouTubeResource extends GenericResource {
                 URL uploadUrl = new URL("http://gdata.youtube.com/action/GetUploadToken");
                 FormUploadToken token = service.getFormUploadToken(uploadUrl, newEntry);
 
-                //Creo que primero se debe de enviar el video y despues ya se puede colocar en una lista de reproducción especifica
-                //con el parametro nextUrl puedo hacer que proceso esto despues de la forma de la subida del archivo a youtube
-//                System.out.println("newEntry:"+newEntry);
-//                String feedUrl = "http://gdata.youtube.com/feeds/api/playlists/D2C26D097ECEAB44?v=2";
-//                PlaylistEntry playlistEntry = new PlaylistEntry(newEntry);
-//                System.out.println("playlistEntry:"+playlistEntry);
-//                service.insert(new URL(feedUrl), playlistEntry);
-
-                System.out.println("newEntry.getId():"+newEntry.getId());
+                System.out.println("pross acc video que envia:"+newEntry.getId());
+                //System.out.println("pross acc video que envia link:"+newEntry.getHtmlLink().getHref());
                 response.setRenderParameter("videoId", newEntry.getId());
                 response.setRenderParameter("tokenUrl", token.getUrl());
                 response.setRenderParameter("token", token.getToken());
+            }else if(action.equals("setPlayList")){
+                 Enumeration enParams=request.getParameterNames();
+                 while(enParams.hasMoreElements()){
+                     String pname=(String)enParams.nextElement();
+                     System.out.println("parametro:"+pname+",value:"+request.getParameter(pname));
+                 }
+                 System.out.println("entra a setPlayList:"+entryUrl);
+                 if(request.getParameter("id")!=null){
+                     //SoluciÃ³n a realizar (TODO)
+                     //Lo que se hace es que cuando se sube un video a youtube, youtube genera en ese momento (no antes) un
+                     //id para el video subido, sin embargo, aun no se puede utilizar ese id, ya que aun (en ese momento) el
+                     //video aun se encuentra en proceso de ser aceptado, es por ello que aqui(en este if) no se puede agregar
+                     //el video subido a la lista de reproducciÃ³n que le toca a la secciÃ³n que se encuentra actualmente
+                     //(secciÃ³n a la que pertenece la comunidad en la que se este), es por ello que tengo que guardar ese id en algÃºn
+                     //lugar y despues asignarlo a dicha lista de reproducciÃ³n que le toque.
+                     //Piendo que pudiera asignarse a la secciÃ³n con el Resource.setData(), sin embargo aqui ya PUDIERA existir datos
+                     //del usuario y password de twitter, por lo que habria que TALVEZ reestructurar el setData de la pÃ¡gina para que
+                     //guardara estos ids que se vayan generando en youtube.
+                     //Ademas lo tengo que hacer porque tambien tengo de alguna manera que guardar el id de la Lista de ReproducciÃ³n que
+                     //se genere para la secciÃ³n en la que este en el momento y tambiÃ©n la Categoria para la misma
+                     //(por defecto estoy poniendo ahorita para pruebas la de "Autos"),y estaria
+                     //bien que fuera de la misma forma (PIENSO YO).
+                 }
             }else {
                 VideoEntry videoEntry = service.getEntry(new URL(entryUrl), VideoEntry.class);
                 if (action.equals("comment")) { //Comenta un video
