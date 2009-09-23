@@ -2,51 +2,37 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:output method="html" encoding="ISO-8859-1"/>
 <xsl:template match="/reltopics">
-<LINK href="{@path}images/RelatedTopics.css" rel="stylesheet" type="text/css"></LINK>
-<DIV class="rtp_box">
-<TABLE border="0" cellpadding="0" cellspacing="2" width="100%" >
-<TR>
+<div class="swb-relTopic">
+<fieldset>
+	 <legend>Temas Relacionados</legend>
 <xsl:for-each select="padre">
 	<xsl:if test="count(hijo) &gt; 0">
-	<TD valign="top">
-		<xsl:if test="count(@icon) &gt; 0">
-			<!-- Cuando viene el atributo de ICON en el XML en el PADRE -->	
-			<IMG border="0" src="{@icon}" ></IMG>
-		</xsl:if>
-		<P class="rtp_title"><xsl:value-of select="@nombre"/></P>
+            <xsl:if test="position()  mod 2 = 1"><xsl:text disable-output-escaping="yes">
+	 &lt;div class="swb-relTopic-col1"&gt;</xsl:text>
+             </xsl:if>
+             <xsl:if test="position()  mod 2 = 0"><xsl:text disable-output-escaping="yes">
+                 &lt;div class="swb-relTopic-col2"&gt;</xsl:text>
+             </xsl:if>
+ 		    <ul>
+ 			 <li><xsl:value-of select="@nombre"/>
+ 			   <ul>
 		<xsl:for-each select="hijo">		
 			<xsl:choose>
 				<xsl:when test="@target ='1'">
-					<A href="{@url}" target="_newrtp" class="rtp_link">
-					<xsl:choose>
-						<xsl:when test="count(@icon) &gt; 0">
-							<!-- Cuando viene el atributo de ICON en el XML en el HIJO -->	
-							<IMG border="0" src="{@icon}"></IMG>
-						</xsl:when>
-						<xsl:otherwise>- </xsl:otherwise>
-					</xsl:choose>
-					<xsl:value-of select="@nombre" />
-					</A><BR/>
+                                        <li><a href="{@url}" target="_newrtp"><xsl:value-of select="@nombre" /></a></li>
 				</xsl:when>
 				<xsl:otherwise>
-					<A href="{@url}" class="rtp_link">
-					<xsl:choose>
-						<xsl:when test="count(@icon) &gt; 0">
-							<!-- Cuando viene el atributo de ICON en el XML en el HIJO -->	
-							<IMG border="0" src="{@icon}"></IMG>
-						</xsl:when>
-						<xsl:otherwise>- </xsl:otherwise>
-					</xsl:choose>
-					<xsl:value-of select="@nombre" />
-					</A><BR/>
+					<li><a href="{@url}"><xsl:value-of select="@nombre" /></a></li>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:for-each>
-	 </TD>
+                        </ul>
+                    </li>
+                    </ul>
+  		<xsl:text disable-output-escaping="yes">&lt;/div&gt;</xsl:text>
 	</xsl:if>
 </xsl:for-each>		
-</TR>
-</TABLE>
-</DIV>
+</fieldset>
+</div>
 </xsl:template>
 </xsl:stylesheet>
