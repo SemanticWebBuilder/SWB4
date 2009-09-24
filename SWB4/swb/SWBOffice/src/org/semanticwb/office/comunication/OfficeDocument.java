@@ -418,8 +418,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 
     public static File zipResourceDirectory(String id, String workpath, String version) throws IOException
     {
-        File directory = new File(workpath + "/" + version);
-        System.out.println(directory.getAbsolutePath());
+        File directory = new File(workpath + "/" + version);        
         String pathZip = workpath + "/" + id + ".zip";
         File ozipfile=new File(pathZip);
         if(ozipfile.exists())
@@ -465,8 +464,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     continue;
                 }
                 //if we reached here, the File object f was not  a directory
-                //create a FileInputStream on top of f
-                System.out.println("adding : "+f.getAbsolutePath());
+                //create a FileInputStream on top of f                
                 FileInputStream fis = new FileInputStream(f);
                 //create a new zip entry
                 ZipEntry anEntry = new ZipEntry(f.getName());
