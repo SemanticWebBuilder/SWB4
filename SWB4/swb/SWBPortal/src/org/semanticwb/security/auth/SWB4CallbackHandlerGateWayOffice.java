@@ -82,7 +82,8 @@ public final class SWB4CallbackHandlerGateWayOffice implements CallbackHandler
             else if (callbacks[i] instanceof TextInputCallback)
             {
                 TextInputCallback textInputCallback = (TextInputCallback) callbacks[i];
-                textInputCallback.setText(SWBContext.getAdminWebSite().getId());
+                //textInputCallback.setText(SWBContext.getAdminWebSite().getId());
+                textInputCallback.setText(SWBContext.WEBSITE_ADMIN);
             }
         }
     }
