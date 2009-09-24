@@ -280,7 +280,7 @@ url.setParameter("uri", sobj.getURI());
             }
             %>
               <div class="listEntry" onmouseover="this.className='listEntryHover'" onmouseout="this.className='listEntry'">
-              <%if(!img.equals("")){%><%=img%><%}else{%><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/noDisponible.gif"/><%}%>
+              <%if(!img.equals("")){%><%=img%><%}else{%><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/noDisponible.gif" /><%}%>
               <div class="listEntryInfo">
                     <p class="tituloNaranja">
                         <%=title%>
