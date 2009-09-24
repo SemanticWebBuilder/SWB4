@@ -187,18 +187,18 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 
     private Resource migrateWordResource(File workpath,String siteid, String webpageId, String resourceid, String version, String title, String description, PropertyInfo[] viewProperties, String[] viewValues, String file) throws Exception
     {
+        file=file.replaceAll(".html", ".doc");
         return migrateResource(workpath,siteid, webpageId, resourceid, version, title, description, "WORD", viewProperties, viewValues, file);
     }
 
     private Resource migrateExcelResource(File workpath,String siteid, String webpageId, String resourceid, String version, String title, String description, PropertyInfo[] viewProperties, String[] viewValues, String file) throws Exception
     {
+        file=file.replaceAll(".html", ".xls");
         return migrateResource(workpath,siteid, webpageId, resourceid, version, title, description, "EXCEL", viewProperties, viewValues, file);
     }
-
-    
-
     private Resource migratePPTResource(File workpath,String siteid, String webpageId, String resourceid, String version, String title, String description, PropertyInfo[] viewProperties, String[] viewValues, String file) throws Exception
     {
+        file=file.replaceAll(".html", ".ppt");
         return migrateResource(workpath,siteid, webpageId, resourceid, version, title, description, "PPT", viewProperties, viewValues, file);
     }
 
@@ -420,7 +420,12 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     {
         File directory = new File(workpath + "/" + version);
         System.out.println(directory.getAbsolutePath());
-        String pathZip = workpath + "/" + id + ".zip";        
+        String pathZip = workpath + "/" + id + ".zip";
+        File ozipfile=new File(pathZip);
+        if(ozipfile.exists())
+        {
+            ozipfile.delete();
+        }
         try
         {
             FileOutputStream out = new FileOutputStream(pathZip);
@@ -464,7 +469,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 System.out.println("adding : "+f.getAbsolutePath());
                 FileInputStream fis = new FileInputStream(f);
                 //create a new zip entry
-                ZipEntry anEntry = new ZipEntry(f.getPath());
+                ZipEntry anEntry = new ZipEntry(f.getName());
                 //place the zip entry in the ZipOutputStream object
                 zos.putNextEntry(anEntry);
                 //now write the content of the file to the ZipOutputStream
