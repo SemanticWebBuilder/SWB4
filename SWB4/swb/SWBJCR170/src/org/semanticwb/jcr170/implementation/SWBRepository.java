@@ -237,7 +237,7 @@ public final class SWBRepository implements Repository
         boolean trusted=false;
         try
         {
-            trusted=Boolean.parseBoolean(SWBPlatform.getEnv("swb/repositoryTrusted", "false"));
+            trusted=Boolean.parseBoolean(SWBPlatform.getEnv("swbrep/repositoryTrusted", "false"));
         }
         catch(Exception e)
         {
