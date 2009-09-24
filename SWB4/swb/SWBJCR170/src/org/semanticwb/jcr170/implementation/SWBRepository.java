@@ -41,6 +41,8 @@ import javax.jcr.SimpleCredentials;
 import javax.security.auth.Subject;
 import javax.security.auth.login.LoginContext;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.UserRepository;
@@ -232,10 +234,21 @@ public final class SWBRepository implements Repository
 
     private Principal authenticate(String pUserName, String pPassword)
     {
-        UserRepository ur = SWBContext.getAdminWebSite().getUserRepository();
-        //String context = ur.getProperty(UserRepository.SWBUR_LoginContext);
-        //MAPS74 cambiando propiedades a semantic prop
-        String context = ur.getLoginContext();
+        boolean trusted=false;
+        try
+        {
+            trusted=Boolean.parseBoolean(SWBPlatform.getEnv("swb/repositoryTrusted", "false"));
+        }
+        catch(Exception e)
+        {
+            log.error(e);
+        }
+        if(trusted)
+        {
+            return new TrustedPrincipal(pUserName);
+        }
+        UserRepository ur = SWBContext.getAdminRepository();        
+        String context = ur.getLoginContext();        
         Subject subject = new Subject();
         LoginContext lc;
         try
