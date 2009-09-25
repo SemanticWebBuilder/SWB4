@@ -507,6 +507,25 @@ namespace WBOffice4
                 }
             }
         }
+        private bool isOldVersion()
+        {
+            if (this.CustomProperties.ContainsKey("content") && this.CustomProperties.ContainsKey("topicid") && this.CustomProperties.ContainsKey("topicmap"))
+            {
+                String contentid = this.CustomProperties["content"];
+                String topicid = this.CustomProperties["topicid"];
+                String topicmap = this.CustomProperties["topicmap"];
+                if (contentid == null || topicmap == null || topicid == null)
+                {
+                    return false;
+                }
+                if (contentid.Equals("") || topicmap.Equals("") || topicid.Equals(""))
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
         public void SaveToSite()
         {
             try
@@ -518,6 +537,40 @@ namespace WBOffice4
                 }
                 if (OfficeApplication.TryLogOn() && SetupDocument())
                 {
+                    if (isOldVersion())
+                    {
+                        DialogResult res=RtlAwareMessageBox.Show("El documento esta publicado en una versión anterior, ¿Desea que se verifique si existe en el sitio?", "Publicación de contenido", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                        if (res == DialogResult.Yes)
+                        {
+                            String contentid = this.CustomProperties["content"];
+                            String topicid = this.CustomProperties["topicid"];
+                            String topicmap = this.CustomProperties["topicmap"];
+                            ContentInfo info = OfficeApplication.OfficeDocumentProxy.existContentOldVersion(contentid, topicmap, topicid);
+                            if(info!=null)
+                            {
+                                res=RtlAwareMessageBox.Show("El documento se encuentra en el sitio, ¿Desea convertir el documento a versión 4?", "Publicación de contenido", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                                if (res == DialogResult.Yes)
+                                {
+                                    CleanContentProperties();
+                                    SaveContentProperties(info.id,info.respositoryName);
+                                    this.Save();
+                                    RtlAwareMessageBox.Show("El documento se ha convertido a versión 4, puede continuar", "Publicación de contenido", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                }
+                                if (res == DialogResult.Cancel)
+                                {
+                                    return;
+                                }
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                        if (res == DialogResult.Cancel)
+                        {
+                            return;
+                        }
+                    }
                     if (IsNew)
                     {
                         SaveFileDialog dialog = new SaveFileDialog();
@@ -584,7 +637,7 @@ namespace WBOffice4
                 FormContentInformation formContentInformation = new FormContentInformation(reporitoryID, contentID, this);
                 formContentInformation.ShowDialog();
             }
-        }
+        }        
         public void DeleteAsociation()
         {
 

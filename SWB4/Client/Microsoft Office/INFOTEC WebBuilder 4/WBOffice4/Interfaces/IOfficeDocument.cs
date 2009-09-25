@@ -207,6 +207,9 @@ namespace WBOffice4.Interfaces
 
         [XmlRpcMethod("OfficeDocument.setTitlesOfWebPage")]
         void setTitlesOfWebPage(PageInfo webPageInfo,LanguageInfo[] languages,String[] values);
+
+        [XmlRpcMethod("OfficeDocument.existContentOldVersion")]
+        ContentInfo existContentOldVersion(String contentid, String topicmap, String topicid);
                 
     }
 }

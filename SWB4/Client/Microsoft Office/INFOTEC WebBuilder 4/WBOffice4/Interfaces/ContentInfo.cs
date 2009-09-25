@@ -36,5 +36,6 @@ namespace WBOffice4.Interfaces
         public String categoryId;
         public String categoryTitle;
         public DateTime created;
+        public String respositoryName;
     }
 }
