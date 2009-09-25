@@ -214,7 +214,9 @@ public interface IOfficeDocument
 
     @XmlRpcMethod(methodName = "OfficeDocument.setTitlesOfWebPage")
     public void setTitlesOfWebPage(PageInfo webPageInfo,LanguageInfo[] languages,String[] values) throws Exception;
-    
+
+    @XmlRpcMethod(methodName = "OfficeDocument.existContentOldVersion")
+    public ContentInfo existContentOldVersion(String contentid,String topicmap,String topicid) throws Exception;
 }
 
 
