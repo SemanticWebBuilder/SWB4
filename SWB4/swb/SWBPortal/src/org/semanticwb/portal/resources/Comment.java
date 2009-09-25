@@ -62,36 +62,50 @@ import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
 import org.semanticwb.portal.api.SWBResourceException;
 
 
-/** 
- * Muestra los elementos seleccionados en la administraci&oacute;n de este recurso 
- * a fin de que los usuarios finales puedan enviar comentarios a una cuenta de 
- * correo en espec&iacute;fico.
+/**
+ * Presenta la interfaz para el env&iacute;o de comentarios al sitio en la categor&iacute;a
+ * seleccionada por el usuario. Este recurso cuenta con facilidades de administraci&oacute;n
+ * que permiten indicar categor&iacute;as de comentarios y destinatarios a cada categor&iacute;a,
+ * as&iacute; como el estilo del mecanismo que presenta la interfaz de captura del comentario.
  *
- * Shows the items selected in this resource administration so that final users
- * send commentaries to a specific e-mail account.
+ * Displays the interface needed to send comments of a selected category. This resource's
+ * administration screen allows the creation of comment categories and a recipient for each
+ * category; likewise it allows the selection of characteristics to present the link to the
+ * capture interface
  *
- * @author : Vanessa Arredondo N��ez
+ * @author : Vanessa Arredondo N&uacute;&ntilde;ez
  * @version 1.0
  */
 public class Comment extends GenericResource {
     
-    
-    private static Logger log = SWBUtils.getLogger(Comment.class);
-    javax.xml.transform.Templates tpl; 
-    String name = getClass().getName().substring(
-            getClass().getName().lastIndexOf(".") + 1);
-    String webWorkPath = "/work";
-    String path = SWBPlatform.getContextPath() + "/swbadmin/xsl/" + name + "/";
+
+    /**
+     * Contiene la definici&oacute;n del layout para la interfaz de captura de comentarios.
+     * <p>Contains the layout definition for the commentaries capture interface.</p>
+     */
+    javax.xml.transform.Templates tpl = null;
+
 
     /** Creates a new instance of Comment */
     public Comment() {
     }
     
     /**
-     * @param base
-     */       
+     * Fija la plantilla del layout para la interfaz de captura de comentarios y
+     * la mantiene en memoria.<p>Sets this resource layout template for the commentaries
+     * capture interface and keeps it in memory.</p>
+     * @param base el objeto base para la creaci&oacute;n de este recurso.
+     *            <p>the base object for this resource's creation.</p>
+     */
     @Override
     public void setResourceBase(Resource base) {
+
+        String name = getClass().getName().substring(
+                      getClass().getName().lastIndexOf(".") + 1);
+        String webWorkPath = "/work";
+        String path = SWBPlatform.getContextPath() + "/swbadmin/xsl/" + name + "/";
+        Logger log = SWBUtils.getLogger(Comment.class);
+
         try {
             super.setResourceBase(base);
             webWorkPath = SWBPlatform.getWebWorkPath() + base.getWorkPath();
@@ -125,22 +139,28 @@ public class Comment extends GenericResource {
     /**
      * Obtiene los datos de la configuraci&oacute;n del recurso, sin tomar en
      * cuenta aquellos para el env&iacute;o del correo y genera un objeto
-     * <b>Document</b> con ellos.
-     * @param request
-     * @param response
-     * @param reqParams
-     * @return <b>Document</b>
-     * @throws SWBResourceException
+     * <code>Document</code> con ellos. <p>Gets this resource's configuration data (whithout
+     * those to send e-mails) and generates a <code>Document</code> object with it</p>
+     * @param request la petici&oacute;n HTTP generada por el usuario. <p>the user's HTTP request</p>
+     * @param response la respuesta hacia el usuario.<p>the response to the user</p>
+     * @param reqParams el objeto generado por SWB y asociado a la petici&oacute;n
+     *        del usuario.<p>the object gnerated by SWB and asociated to the user's request</p>
+     * @return <b>Document</b> estructura de la interfaz de captura de comentarios.
+     *                     <p>the commentaries' capture interface structure</p>
+     * @throws SWBResourceException si no existe el archivo de mensajes del idioma utilizado.
+     *         <p>if there is no file message of the corresponding language.</p>
      * @throws IOException
      */
     public Document getDom(HttpServletRequest request,
             HttpServletResponse response, SWBParamRequest reqParams)
             throws SWBResourceException, IOException {
         
+        String webWorkPath = "/work";
         String action = ((null != request.getParameter("com_act"))
                          && (!"".equals(request.getParameter("com_act").trim()))
                          ? request.getParameter("com_act").trim()
                          : "com_step2");
+        Logger log = SWBUtils.getLogger(Comment.class);
         Resource base = getResourceBase();
         
         try {
@@ -299,7 +319,9 @@ public class Comment extends GenericResource {
                 root.appendChild(emn);
             }
             return dom;
-        } catch (Exception e) {
+        } catch (SWBResourceException swbre) {
+            throw swbre;
+        } catch (org.semanticwb.SWBException e) {
             log.error("Error while generating the comments form in resource "
                     + base.getResourceType().getResourceClassName()
                     + " with identifier " + base.getId() + " - "
@@ -309,19 +331,24 @@ public class Comment extends GenericResource {
     }
 
     /**
-     * Obtiene los todos los datos de la configuraci&oacute;n del recurso
-     * y genera un objeto <b>Document</b> con ellos.
-     * @param request
-     * @param response
-     * @param reqParams
-     * @return <b>Document</b>
-     * @throws SWBResourceException
-     * @throws IOException
+     * Obtiene todos los datos de la configuraci&oacute;n del recurso y genera
+     * un objeto <b>Document</b> con ellos.<p>Gets all the
+     * configuration data for this resource and generates a <b>Document</b> object
+     * with it.</p>
+     * @param request la petici&oacute;n HTTP generada por el usuario. <p>the user's HTTP request</p>
+     * @param response la respuesta hacia el usuario.<p>the response to the user</p>
+     * @param reqParams el objeto generado por SWB y asociado a la petici&oacute;n
+     *        del usuario.<p>the object gnerated by SWB and asociated to the user's request</p>
+     * @return <b>Document</b> informaci&oacute;n de un comentario para su env&iacute;o.
+     *                     <p>the commentaries' data to send</p>
+     * @throws SWBResourceException si el nombre del remitente, su correo y mensaje
+     *         son nulos. <p>if sender's name, e-mail account and message is null.</p>
      */    
     public Document getDomEmail(HttpServletRequest request, 
             HttpServletResponse response, SWBParamRequest reqParams)
-            throws SWBResourceException, IOException {
+            throws SWBResourceException {
         
+        Logger log = SWBUtils.getLogger(Comment.class);
         Resource base = getResourceBase();
         
         try {
@@ -543,53 +570,67 @@ public class Comment extends GenericResource {
     }         
 
     /**
-     * Obtiene el objeto <b>Document</b> con los datos del recurso capturados en
-     * la administraci&oacute;n del mismo para convertirlo a HTML y mostrarlo 
-     * en el navegador.
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws IOException
-     */    
+     * Muestra la estructura de datos generada por <code>getDom()</code>.
+     * Shows the data structure generated by <code>getDom()</code>.
+     * @param request la petici&oacute;n HTTP generada por el usuario. <p>the user's HTTP request</p>
+     * @param response la respuesta hacia el usuario.<p>the response to the user</p>
+     * @param paramsRequest el objeto generado por SWB y asociado a la petici&oacute;n
+     *        del usuario.<p>the object gnerated by SWB and asociated to the user's request</p>
+     * @throws IOException al obtener el <code>Writer</code> del <code>response</code> correspondiente.
+     *         when getting the corresponding <code>response</code>'s <code>Writer</code>.
+     * @throws SWBResourceException si se produce en <code>getDom</code>.
+     *         <p>if <code>getDom</code> propagates this exception</p>.
+     */
     @Override
     public void doXML(HttpServletRequest request, HttpServletResponse response,
-            SWBParamRequest paramsRequest) throws IOException {
+            SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         
+        Logger log = SWBUtils.getLogger(Comment.class);
         try {
             org.w3c.dom.Document dom = getDom(request, response, paramsRequest);
             
             if (dom != null) {
                 response.getWriter().println(SWBUtils.XML.domToXml(dom));
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             log.error(e);
+            throw e;
         }
     }    
     
     /**
-     * Muestra la vista del recurso en base al valor recibido del par&aacute;metro 
-     * com_act en el objeto request.
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws IOException
+     * Muestra la liga o la pantalla de captura de comentarios en base al valor
+     * del par&aacute;metro <code>com_act</code> en el <code>request</code> del usuario.
+     * <p>Shows the commentaries' capture link or screen depending on the
+     * <code>com_act</code> parameter's value through the
+     * user's request.</p>
+     * @param request la petici&oacute;n HTTP generada por el usuario. <p>the user's HTTP request</p>
+     * @param response la respuesta hacia el usuario.<p>the response to the user</p>
+     * @param reqParams el objeto generado por SWB y asociado a la petici&oacute;n
+     *        del usuario.<p>the object gnerated by SWB and asociated to the user's request</p>
+     * @throws IOException al obtener el <code>Writer</code> del <code>response</code> correspondiente.
+     *         when getting the corresponding <code>response</code>'s <code>Writer</code>.
+     * @throws SWBResourceException si no existe el archivo de mensajes del idioma utilizado.
+     *         <p>if there is no file message of the corresponding language.</p>
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
-            SWBParamRequest reqParams) throws IOException {
+            SWBParamRequest reqParams) throws IOException, SWBResourceException {
+
         StringBuffer ret = new StringBuffer(600);
+        String webWorkPath = "/work";
         Resource base = getResourceBase();
         String action = (null != request.getParameter("com_act")
                 && !"".equals(request.getParameter("com_act").trim())
                 ? request.getParameter("com_act").trim()
                 : "com_step1");
+        Logger log = SWBUtils.getLogger(Comment.class);
         
         if ("com_step1".equals(action)) {
             // Objeto (imagen/botón) para invocar la nueva ventana con formulario
             StringBuilder windowProps = new StringBuilder(200);
             StringBuilder link = new StringBuilder(350);
             
-            try {
                 windowProps.append("menubar="
                         + base.getAttribute("menubar", "no").trim());
                 windowProps.append(",toolbar="
@@ -661,12 +702,6 @@ public class Comment extends GenericResource {
                     }
                     ret.append("</a>");
                 }
-            } catch (Exception e) {
-                log.error("Error while showing form caller in resource "
-                        + base.getResourceType().getResourceClassName()
-                        + " with identifier " + base.getId() + " - "
-                        + base.getTitle(), e);
-            }
         } else {
             try {
                 Document dom = getDom(request, response, reqParams);
@@ -719,8 +754,8 @@ public class Comment extends GenericResource {
                         }
                     }
                 }
-            } catch (Exception e) {
-                log.error(e);
+            } catch (javax.xml.transform.TransformerException te) {
+                log.error(te);
             }
         }
         
@@ -732,11 +767,16 @@ public class Comment extends GenericResource {
     /**
      * Muestra la vista para los datos de administraci&oacute;n de este recurso
      * y realiza las operaciones de almacenamiento de informaci&oacute;n necesarias.
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * <p>Shows the data administration screen for this resource and performs the
+     * data store operations needed.</p>
+     * @param request la petici&oacute;n HTTP generada por el usuario. <p>the user's HTTP request</p>
+     * @param response la respuesta hacia el usuario.<p>the response to the user</p>
+     * @param paramsRequest el objeto generado por SWB y asociado a la petici&oacute;n
+     *        del usuario.<p>the object gnerated by SWB and asociated to the user's request</p>
+     * @throws IOException al obtener el <code>Writer</code> del <code>response</code> correspondiente.
+     *         when getting the corresponding <code>response</code>'s <code>Writer</code>.
+     * @throws SWBResourceException si no existe el archivo de mensajes del idioma utilizado.
+     *         <p>if there is no file message of the corresponding language.</p>
      */    
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response,
@@ -750,6 +790,7 @@ public class Comment extends GenericResource {
                 ? request.getParameter("act").trim()
                 : paramsRequest.getAction());
         WBAdmResourceUtils admResUtils = new WBAdmResourceUtils();
+        Logger log = SWBUtils.getLogger(Comment.class);
         
         if (action.equals("add") || action.equals("edit")) {
             ret.append(getForm(request, paramsRequest));
@@ -1016,13 +1057,21 @@ public class Comment extends GenericResource {
 
     /**
      * Fija un atributo en el objeto base con el nombre indicado.
-     * Si el atributo no existe en el objeto fup o su valor es <code>null</code>,
-     * el atributo att se elimina de base.
-     * @param base Resource en el que se fijar&aacute; el atributo.
-     * @param fup Objeto del cual se obtiene el valor del atributo.
-     * @param att Contiene el nombre del atributo a fijar en base.
-     */  
+     * Si el atributo no existe en el objeto <code>fup</code> o su valor es <code>null</code>,
+     * el atributo <code>att</code> se elimina de <code>base</code>.
+     * <p>Sets a property in this object's resource base with the specified name.
+     * If the indicated attribute does not exist in <code>fup</code>, or its value
+     * is <code>null</code>, the attribute is eliminated.</p>
+     * @param base <code>Resource</code> en el que se fijar&aacute; el atributo.
+     *        <code>Resource</code> in which the attribute is going to be set.
+     * @param fup objeto del cual se obtiene el valor del atributo.
+     *        object from which the attribute's value is gotten.
+     * @param att contiene el nombre del atributo a fijar en <code>base</code>.
+     *        contains the attribute's name.
+     */
     protected void setAttribute(Resource base, FileUpload fup, String att) {
+
+        Logger log = SWBUtils.getLogger(Comment.class);
         try {
             if (null != fup.getValue(att)
                     && !"".equals(fup.getValue(att).trim())) {
@@ -1040,13 +1089,24 @@ public class Comment extends GenericResource {
      * Fija un atributo en el objeto base con el nombre y el valor indicados.
      * Si el atributo no existe en el objeto fup o tiene otro valor al indicado,
      * el atributo att se elimina de base.
-     * @param base Resource en el que se fijar&aacute; el atributo.
-     * @param fup Objeto del cual se verifica el valor del atributo.
-     * @param att Contiene el nombre del atributo a fijar en base.
-     * @param value Contiene el valor del atributo a fijar en base.
+     * <p>Sets a property in <code>base</code> with the indicated name and value.
+     * If the indicated attribute does not exist in <code>fup</code> or has another
+     * value than the specified as an argument, the attribute <code>att</code> is
+     * eliminated from <code>base</code>.</p>
+     * @param base <code>Resource</code> en el que se fijar&aacute; el atributo.
+     *        <p><code>Resource</code> in which the attribute is going to be set.</p>
+     * @param fup objeto del cual se verifica el valor del atributo.
+     *        <p>contains the value of the attribute to be set.</p>
+     * @param att contiene el nombre del atributo a fijar en base.
+     *        <p>contains the name of the attribute to be set.</p>
+     * @param value contiene el valor del atributo a fijar en base.
+     *        <p>value to set in the attribute, validated against the value for the
+     *        attribute in <code>fup</code>.</p>
      */  
     protected void setAttribute(Resource base, FileUpload fup, String att,
                                 String value) {
+
+        Logger log = SWBUtils.getLogger(Comment.class);
         try {
             if (null != fup.getValue(att)
                     && value.equals(fup.getValue(att).trim())) {
@@ -1062,11 +1122,13 @@ public class Comment extends GenericResource {
     
     /**
      * Elimina del dom recibido todos los elementos correspondientes al nodeType
-     * y name especificados.
-     * @param dom <b>Document</b> del que se eliminar&aacute;n los nodos.
-     * @param nodeType Tipo de nodos a eliminar.
-     * @param name Nombre de los nodos a eliminar.
-     */       
+     * y name especificados. <p>Removes from <code>dom</code> all the elements whose
+     * name matches the value of <code>name</code>.</p>
+     * @param dom <code>Document</code> del que se eliminar&aacute;n los nodos.
+     *        <p><code>Document</code> from which the nodes are going to be removed.</p>
+     * @param nodeType tipo de nodos a eliminar. <p>node type to eliminate.</p>
+     * @param name nombre de los nodos a eliminar. <p>node name to search for elimination.</p>
+     */
     protected void removeAllNodes(Document dom, short nodeType, String name) {
         NodeList list = dom.getElementsByTagName(name);
         
@@ -1085,17 +1147,25 @@ public class Comment extends GenericResource {
     /**
      * Arma una cadena que contiene el c&oacute;digo HTML para mostrar la forma de los 
      * datos presentados por la pantalla de administraci&oacute;n del recurso.
-     * @param request objeto de la petici&oacute;n de HTTP
-     * @param paramsRequest objeto con las relaciones necesarias para la 
-     * interacci&oacute;n con mas objetos de WebBuilder.
-     * @return <b>String</b>
+     * <p>Gets the HTML code for this resource's administration screen.</p>
+     * @param request la petici&oacute;n HTTP generada por el usuario. <p>the user's HTTP request</p>
+     * @param paramsRequest el objeto generado por SWB y asociado a la petici&oacute;n
+     *        del usuario.<p>the object gnerated by SWB and asociated to the user's request</p>
+     * @return el c&oacute;digo HTML a mostrar.
+     *         <p>the HTML code to show in the browser.</p>
      */       
     private String getForm(HttpServletRequest request, 
                            SWBParamRequest paramsRequest) {
         
+        String name = getClass().getName().substring(
+                      getClass().getName().lastIndexOf(".") + 1);
+        String webWorkPath = "/work";
+        String path = SWBPlatform.getContextPath() + "/swbadmin/xsl/" + name + "/";
         WBAdmResourceUtils admResUtils = new WBAdmResourceUtils();
         StringBuffer ret = new StringBuffer(1000);
         Resource base = getResourceBase();
+        Logger log = SWBUtils.getLogger(Comment.class);
+
         try {
             SWBResourceURL url = paramsRequest.getRenderUrl().setAction("update");
             ret.append("<div class=\"swbform\">");
@@ -1488,11 +1558,16 @@ public class Comment extends GenericResource {
     }
         
     /**
-     * Agrupa los datos del area, responsable y cuenta de correo por cada 
-     * comentario contenido en el <b>Document</b> recibido.
-     * @param dom <b>Document</b> con los datos a extraer
-     * @return <b>ArrayList</b> con objetos <b>TypeComment</b>
-     */     
+     * Agrupa los datos del &aacute;rea, responsable y cuenta de correo por cada
+     * comentario contenido en <code>dom</code>.
+     * <p>Parses <code>dom</code> looking for the following data: area, recipient
+     * and e-mail account; of each commentary.</p>
+     * @param dom <code>Document</code> con los datos a extraer <p>data to parse</p>
+     * @return <code>ArrayList</code> con objetos <code>TypeComment</code> que
+     *         almacenan los datos del &aacute;rea, responsable y cuenta de correo
+     *         <p>with <code>TypeComment</code> objects which contain area, recipient
+     * and e-mail account information.</p>
+     */
     private ArrayList getTypesComment(Document dom) {
         ArrayList<TypeComment> list = new ArrayList<TypeComment>();
         
@@ -1555,17 +1630,22 @@ public class Comment extends GenericResource {
     }
     
     /**
-     * Crea un objeto String que contiene el c&oacute;digo de JavaScript necesario para
-     * validar los datos capturados en la forma presentada.
-     * @param request
-     * @param paramsRequest
-     * @return <b>String</b> contiene el c&oacute;digo de JavaScript
+     * Obtiene el c&oacute;digo de JavaScript necesario para validar los datos
+     * capturados en la forma presentada por <code>getForm()</code>. <p>Gets the
+     * JavaScript code which performs the validations asociated with the code
+     * generated by <code>getForm()</code>.</p>
+     * @param request la petici&oacute;n HTTP generada por el usuario. <p>the user's HTTP request</p>
+     * @param paramsRequest el objeto generado por SWB y asociado a la petici&oacute;n
+     *        del usuario.<p>the object gnerated by SWB and asociated to the user's request</p>
+     * @return <b>String</b> contiene el c&oacute;digo de JavaScript a ejecutar
+     *         <p>JavaScript code to execute.</p>
      */
     private String getScript(HttpServletRequest request,
             SWBParamRequest paramsRequest) {
         
         StringBuffer ret = new StringBuffer("");
         WBAdmResourceUtils admResUtils = new WBAdmResourceUtils();
+        Logger log = SWBUtils.getLogger(Comment.class);
         
         try {
             ret.append("\n<script>");
@@ -1713,12 +1793,15 @@ public class Comment extends GenericResource {
     }
 
     /**
-     * Agrega un nodo al parent especificado en el doc recibido.
-     * @param doc <b>Document</b> al que se desea agregar el nodo.
-     * @param parent elemento al que se desea agregar el nodo.
-     * @param elemName nombre del elemento a agregar.
-     * @param elemValue valor del elemento a agregar.
-     */      
+     * Agrega un nodo al <code>parent</code> especificado en el <code>doc</code> recibido.
+     * <p>Inserts a node to the specified <code>parent</code> in <code>doc</code></p>
+     * @param doc <b>Document</b> al que se desea agregar el nodo. <p><b>Document</b>
+     *            to which the new node is going to be added.</p>
+     * @param parent elemento que será el padre del nuevo nodo. <p>new node's
+     *            parent element </p>
+     * @param elemName nombre del elemento a agregar. <p>new element's name</p>
+     * @param elemValue valor del elemento a agregar. <p>new element's value</p>
+     */
     private void addElem(Document doc, Element parent, String elemName,
             String elemValue) {
         Element elem = doc.createElement(elemName);
@@ -1727,11 +1810,13 @@ public class Comment extends GenericResource {
     }
     
     /**
-     * Agrega la informaci&oacute;n enviada por correo al archivo log de este
-     * recurso.
+     * Agrega la informaci&oacute;n enviada por correo, al archivo log de este
+     * recurso. <p>Adds to this resource's log the commentaries' data set by mail.</p>
      * @param dom <code>Document</code> que contiene los datos enviados por correo.
-     * @param user <code>User</code> que identifica al usuario que ejecuta la 
-     *             acci&oacute;n de env&iacute;o de comentario sobre el recurso
+     *            <p>comment's data sent by mail</p>
+     * @param user objeto <code>User</code> que identifica al usuario que ejecuta la
+     *            acci&oacute;n de env&iacute;o de comentario sobre el recurso
+     *            <p>user who executes the action of sending the comment</p>
      */
     protected void feedCommentLog(Document dom, User user) throws IOException {
         
@@ -1823,10 +1908,10 @@ class TypeComment {
     /**
      * Creates a new instance of TypeComment
      *
-     * @param comentario
-     * @param area
-     * @param responsable
-     * @param email
+     * @param comentario cuerpo del comentario. <p>commentary's text</p>
+     * @param area &aacute;rea a la que pertenece el destinatario. <p>recipient's area</p>
+     * @param responsable destinatario. <p>recipient</p>
+     * @param email cuenta de correo del destinatario. <p>recipient's e-mail account</p>
      */
     public TypeComment(String comentario, String area, String responsable,
             String email) {
@@ -1837,64 +1922,69 @@ class TypeComment {
     }
 
     /** 
-     * Getter for property comentario.
-     * @return <b>String</b> Value of property comentario.
+     * Obtiene el texto del comentario. <p>Gets the commentary's text.</p>
+     * @return <code>String</code> el texto del comentario. <p>commentary's text.</p>
      */
     public String getComentario() {
         return this.comentario;
     }
     
     /** 
-     * Setter for property comentario.
-     * @param comentario New value of property comentario.
+     * Fija el texto del comentario. <p>Sets the commentary's text.</p>
+     * @param comentario texto a enviar como comentario. <p>text to send as a 
+     * comment.</p>
      */
     public void setComentario(String comentario) {
         this.comentario = comentario;
     }
     
     /**
-     * Getter for property area.
-     * @return <b>String</b> Value of property area.
+     * Obtiene el nombre del &aacute;rea del destinatario. <p>Gets the recipient's area.</p>
+     * @return <code>String</code> nombre del &aacute;rea del destinatario. <p>recipient's
+     * area's name.</p>
      */
     public String getArea() {
         return this.area;
     }
     
     /** 
-     * Setter for property area.
-     * @param area New value of property area.
+     * Fija una nueva &aacute;rea del destinatario. <p>Sets the recipient's area.</p>
+     * @param area nuevo nombre del &aacute;rea del destinatario. <p>new recipient's
+     * area's name.</p>
      */
     public void setArea(String area) {
         this.area = area;
     }
     
     /** 
-     * Getter for property responsable.
-     * @return <b>String</b> Value of property responsable.
+     * Obtiene el nombre del destinatario del comentario. <p>Gets the recipient's name</p>
+     * @return <code>String</code> nombre del destinatario del comentario. <p>recipient's name.</p>
      */
     public String getResponsable() {
         return this.responsable;
     }
     
     /** 
-     * Setter for property responsable.
-     * @param responsable New value of property responsable.
+     * Fija un nuevo nombre del destinatario. <p>Sets the recipient's name.</p>
+     * @param responsable nuevo nombre del destinatario. <p>new recipient's name.</p>
      */
     public void setResponsable(String responsable) {
         this.responsable = responsable;
     }
     
     /** 
-     * Getter for property email.
-     * @return <b>String</b> Value of property email.
+     * Obtiene cuenta de correo del destinatario. <p>Gets the recipient's e-mail account.</p>
+     * @return <code>String</code> cuenta de correo del destinatario. <p>recipient's
+     * e-mail account.</p>
      */
     public String getEmail() {
         return this.email;
     }
     
     /** 
-     * Setter for property email.
-     * @param email New value of property email.
+     * Fija una nueva cuenta de correo del destinatario. <p>Sets a new recipient's e-mail account.</p>
+     * @param email nueva cuenta de correo del destinatario. <p>new recipient's
+     * e-mail account.</p>
      */
     public void setEmail(String email) {
         this.email = email;

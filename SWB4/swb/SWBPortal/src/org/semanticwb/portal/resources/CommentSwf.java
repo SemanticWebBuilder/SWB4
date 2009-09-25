@@ -71,8 +71,6 @@ import org.semanticwb.portal.util.FileUpload;
 public class CommentSwf extends Comment {
     
     
-    private static Logger log = SWBUtils.getLogger(Comment.class);
-    
     /**
      * Creates a new instance of ComentSwf
      */
@@ -80,25 +78,34 @@ public class CommentSwf extends Comment {
     }
 
     /**
-     * Obtiene los datos de la configuraci&oacute;n del recurso, sin tomar en
-     * cuenta aquellos para el env&iacute;o del correo y genera un objeto
-     * <b>Document</b> con ellos.
-     * @param request
-     * @param response
-     * @param reqParams
-     * @return <b>Document</b>
-     * @throws AFException
+     * Obtiene los datos de la configuraci&oacute;n del recurso y genera un objeto
+     * <code>Document</code> con ellos. <p>Gets this resource's configuration
+     * data and generates a <code>Document</code> object with it</p>
+     * @param request la petici&oacute;n HTTP generada por el usuario. <p>the user's HTTP request</p>
+     * @param response la respuesta hacia el usuario.<p>the response to the user</p>
+     * @param reqParams el objeto generado por SWB y asociado a la petici&oacute;n
+     *        del usuario.<p>the object gnerated by SWB and asociated to the user's request</p>
+     * @return <b>Document</b> estructura en datos de la interfaz de captura de comentarios.
+     *                     <p>the commentaries' capture interface data structure</p>
+     * @throws SWBResourceException si se produce en <code>getDomEmail</code>.
+     *         <p>if <code>getDomEmail</code> propagates this exception</p>.
      * @throws IOException
      */       
     @Override
     public Document getDom(HttpServletRequest request,
             HttpServletResponse response, SWBParamRequest reqParams)
             throws SWBResourceException, IOException {
+
         Resource base = getResourceBase();
+        String webWorkPath = "/work";
+        String name = getClass().getName().substring(
+                      getClass().getName().lastIndexOf(".") + 1);
+        String path = SWBPlatform.getContextPath() + "/swbadmin/xsl/" + name + "/";
         String action = (null != request.getParameter("com_act") 
                          && !"".equals(request.getParameter("com_act").trim())
                          ? request.getParameter("com_act").trim()
                          : "com_step2");
+        Logger log = SWBUtils.getLogger(Comment.class);
         
         try {
             String lang = reqParams.getUser().getLanguage();
@@ -138,8 +145,7 @@ public class CommentSwf extends Comment {
                         strSwfvar += "&" + ndlSwfvar.item(i).getChildNodes(
                                 ).item(0).getNodeValue();
                     }
-                    //if (user.isLoged())  // TODO ver. 4
-                    {
+                    if (user.isSigned()) {
                         strSwfvar += "&txtFromName=";
                         strSwfvar += ("1".equals(base.getAttribute("firstname", "0").trim())
                                 && (null != user.getFirstName()
@@ -182,11 +188,17 @@ public class CommentSwf extends Comment {
     /**
      * Muestra la vista para los datos de administraci&oacute;n de este recurso
      * y realiza las operaciones de almacenamiento de informaci&oacute;n necesarias.
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * <p>Shows the data administration screen for this resource and performs the
+     * data store operations needed.</p>
+     * @param request la petici&oacute;n HTTP generada por el usuario. <p>the user's HTTP request</p>
+     * @param response la respuesta hacia el usuario.<p>the response to the user</p>
+     * @param paramsRequest el objeto generado por SWB y asociado a la petici&oacute;n
+     *        del usuario.<p>the object gnerated by SWB and asociated to the user's request</p>
+     * @throws SWBResourceException si no existe el archivo de mensajes del idioma utilizado.
+     *         <p>if there is no file message of the corresponding language.</p>
+     * @throws IOException si no se pueden extraer los datos del request a trav&eacute;s
+     *         del {@link org.semanticwb.portal.util.FileUpload FileUpload} utilizado para ello.
+     *         <p>if request data cannot be extracted through the FileUpload object used.</p>
      */
     @Override
     public void doAdmin(HttpServletRequest request, 
@@ -201,6 +213,11 @@ public class CommentSwf extends Comment {
                          && !"".equals(request.getParameter("act").trim())
                          ? request.getParameter("act").trim()
                          : paramsRequest.getAction());
+        String webWorkPath = "/work";
+        String name = getClass().getName().substring(
+                      getClass().getName().lastIndexOf(".") + 1);
+        String path = SWBPlatform.getContextPath() + "/swbadmin/xsl/" + name + "/";
+        Logger log = SWBUtils.getLogger(Comment.class);
         
         if (action.equals("add") || action.equals("edit")) {
             ret.append(getForm(request, paramsRequest));
@@ -370,7 +387,9 @@ public class CommentSwf extends Comment {
                         + "';\n"
                         + "</script>\n");
                 }
-            } catch (Exception e) {
+            } catch (SWBResourceException swbe) {
+                throw swbe;
+            } catch (org.semanticwb.SWBException e) {
                 log.error(e);
                 msg = paramsRequest.getLocaleString("msgErrUpdateResource") 
                         + " " + base.getId();
@@ -390,17 +409,24 @@ public class CommentSwf extends Comment {
     /**
      * Arma una cadena que contiene el c&oacute;digo HTML para mostrar la forma de los 
      * datos presentados por la pantalla de administraci&oacute;n del recurso.
-     * @param request objeto de la petici&oacute;n de HTTP
-     * @param paramsRequest objeto con las relaciones necesarias para la 
-     * interacci&oacute;n con mas objetos de WebBuilder.
-     * @return <b>String</b>
+     * <p>Gets the HTML code for this resource's administration screen.</p>
+     * @param request la petici&oacute;n HTTP generada por el usuario. <p>the user's HTTP request</p>
+     * @param paramsRequest el objeto generado por SWB y asociado a la petici&oacute;n
+     *        del usuario.<p>the object gnerated by SWB and asociated to the user's request</p>
+     * @return el c&oacute;digo HTML a mostrar.
+     *         <p>the HTML code to show in the browser.</p>
      */
     private String getForm(HttpServletRequest request,
             SWBParamRequest paramsRequest) {
         
         StringBuffer ret = new StringBuffer("");
+        String webWorkPath = "/work";
+        String name = getClass().getName().substring(
+                      getClass().getName().lastIndexOf(".") + 1);
+        String path = SWBPlatform.getContextPath() + "/swbadmin/xsl/" + name + "/";
         WBAdmResourceUtils admResUtils = new WBAdmResourceUtils();
         Resource base = getResourceBase();
+        Logger log = SWBUtils.getLogger(Comment.class);
         
         try {
             SWBResourceURL url = paramsRequest.getRenderUrl().setAction("update");
@@ -731,17 +757,22 @@ public class CommentSwf extends Comment {
     }
 
     /**
-     * Crea un objeto String que contiene el c&oacute;digo de JavaScript necesario para
-     * validar los datos capturados en la forma presentada.
-     * @param request
-     * @param paramsRequest
-     * @return <b>String</b> contiene el c&oacute;digo de JavaScript
+     * Obtiene el c&oacute;digo de JavaScript necesario para validar los datos
+     * capturados en la forma presentada por <code>getForm()</code>. <p>Gets the
+     * JavaScript code which performs the validations asociated with the code
+     * generated by <code>getForm()</code>.</p>
+     * @param request la petici&oacute;n HTTP generada por el usuario. <p>the user's HTTP request</p>
+     * @param paramsRequest el objeto generado por SWB y asociado a la petici&oacute;n
+     *        del usuario.<p>the object gnerated by SWB and asociated to the user's request</p>
+     * @return <b>String</b> contiene el c&oacute;digo de JavaScript a ejecutar
+     *         <p>JavaScript code to execute.</p>
      */       
     private String getScript(HttpServletRequest request,
             SWBParamRequest paramsRequest) {
         
         StringBuffer ret = new StringBuffer("");
         WBAdmResourceUtils admResUtils = new WBAdmResourceUtils();
+        Logger log = SWBUtils.getLogger(Comment.class);
         
         try {
             ret.append("\n<script>");
