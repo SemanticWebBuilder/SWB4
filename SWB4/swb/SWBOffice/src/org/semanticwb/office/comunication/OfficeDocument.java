@@ -75,6 +75,7 @@ import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.office.interfaces.CalendarInfo;
 import org.semanticwb.office.interfaces.CategoryInfo;
+import org.semanticwb.office.interfaces.ContentInfo;
 import org.semanticwb.office.interfaces.IOfficeDocument;
 import org.semanticwb.office.interfaces.LanguageInfo;
 import org.semanticwb.office.interfaces.PFlow;
@@ -2572,6 +2573,31 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             page.setTitle(value, lang.id);
             i++;
         }
+    }
+    public ContentInfo existContentOldVersion(String contentid,String topicmap,String topicid) throws Exception
+    {
+        WebSite site=WebSite.getWebSite(topicmap);
+        if(site!=null)
+        {
+            WebPage page=WebPage.getWebPage(topicid, site);
+            if(page!=null)
+            {
+                GenericIterator<Resource> resources=page.listResources();
+                while(resources.hasNext())
+                {
+                    Resource res=resources.next();
+                    if(res.getId().equals(contentid))
+                    {
+                        OfficeResource resource = OfficeResource.getOfficeResource(contentid, site);
+                        ContentInfo info=new ContentInfo();
+                        info.id=resource.getContent();
+                        info.respositoryName=resource.getRepositoryName();
+                        return info;
+                    }
+                }
+            }
+        }
+        return null;
     }
 }
 
