@@ -390,13 +390,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         info.siteID = site.getId();
         info.description = page.getDescription();
         info.url = page.getUrl();
-        int childs = 0;
-        GenericIterator<WebPage> childWebPages = page.listChilds();
-        while (childWebPages.hasNext())
-        {
-            childWebPages.next();
-            childs++;
-        }
+        int childs = 0;        
         info.childs = childs;
         // mantiene el id original
         // ciudado el contenido original ya no se puede publicar igual, pero se agrega funcionlidad para modalidad restauración
@@ -1421,6 +1415,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
             try
             {
+                System.out.println("Agregando recurso "+id);
                 page.addResource(resource);
             }
             catch (Exception e)
