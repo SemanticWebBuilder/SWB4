@@ -151,7 +151,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return getOfficeTypes;
     }
 
-    public Resource migrateResource(File workpath,String xml, String className, String siteid, String webpageId, String resourceid, String version, String title, String description, String file) throws Exception
+    public Resource migrateResource(String webworkpath,File workpath,String xml, String className, String siteid, String webpageId, String resourceid, String version, String title, String description, String file) throws Exception
     {
         if(!workpath.exists())
         {
@@ -165,19 +165,19 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         {
             PropertyInfo[] viewProperties = new PropertyInfo[0];
             String[] viewValues = new String[0];
-            return migrateExcelResource(workpath,siteid, webpageId, resourceid, version, title, description, viewProperties, viewValues, file);
+            return migrateExcelResource(webworkpath,workpath,siteid, webpageId, resourceid, version, title, description, viewProperties, viewValues, file);
         }
         else if (className.equals(MIGRATE_WBRESOURCESPPTCONTENT))
         {
             PropertyInfo[] viewProperties = getViewPropertiesPPT(xml);
             String[] viewValues = getStringViewPropertiesPPT(xml);
-            return migratePPTResource(workpath,siteid, webpageId, resourceid, version, title, description, viewProperties, viewValues,file);
+            return migratePPTResource(webworkpath,workpath,siteid, webpageId, resourceid, version, title, description, viewProperties, viewValues,file);
         }
         else if (className.equals(MIGRATE_WBRESOURCESCONTENT))
         {
             PropertyInfo[] viewProperties = getViewPropertiesWord(xml);
             String[] viewValues = getStringViewPropertiesWord(xml);
-            return migrateWordResource(workpath,siteid, webpageId, resourceid, version, title, description, viewProperties, viewValues, file);
+            return migrateWordResource(webworkpath,workpath,siteid, webpageId, resourceid, version, title, description, viewProperties, viewValues, file);
         }
         else
         {
@@ -185,21 +185,21 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
-    private Resource migrateWordResource(File workpath,String siteid, String webpageId, String resourceid, String version, String title, String description, PropertyInfo[] viewProperties, String[] viewValues, String file) throws Exception
+    private Resource migrateWordResource(String webworkpath, File workpath,String siteid, String webpageId, String resourceid, String version, String title, String description, PropertyInfo[] viewProperties, String[] viewValues, String file) throws Exception
     {
         file=file.replaceAll(".html", ".doc");
-        return migrateResource(workpath,siteid, webpageId, resourceid, version, title, description, "WORD", viewProperties, viewValues, file);
+        return migrateResource(webworkpath,workpath,siteid, webpageId, resourceid, version, title, description, "WORD", viewProperties, viewValues, file);
     }
 
-    private Resource migrateExcelResource(File workpath,String siteid, String webpageId, String resourceid, String version, String title, String description, PropertyInfo[] viewProperties, String[] viewValues, String file) throws Exception
+    private Resource migrateExcelResource(String webworkpath,File workpath,String siteid, String webpageId, String resourceid, String version, String title, String description, PropertyInfo[] viewProperties, String[] viewValues, String file) throws Exception
     {
         file=file.replaceAll(".html", ".xls");
-        return migrateResource(workpath,siteid, webpageId, resourceid, version, title, description, "EXCEL", viewProperties, viewValues, file);
+        return migrateResource(webworkpath,workpath,siteid, webpageId, resourceid, version, title, description, "EXCEL", viewProperties, viewValues, file);
     }
-    private Resource migratePPTResource(File workpath,String siteid, String webpageId, String resourceid, String version, String title, String description, PropertyInfo[] viewProperties, String[] viewValues, String file) throws Exception
+    private Resource migratePPTResource(String webworkpath,File workpath,String siteid, String webpageId, String resourceid, String version, String title, String description, PropertyInfo[] viewProperties, String[] viewValues, String file) throws Exception
     {
         file=file.replaceAll(".html", ".ppt");
-        return migrateResource(workpath,siteid, webpageId, resourceid, version, title, description, "PPT", viewProperties, viewValues, file);
+        return migrateResource(webworkpath,workpath,siteid, webpageId, resourceid, version, title, description, "PPT", viewProperties, viewValues, file);
     }
 
     public boolean isOfficeDocument(String className, String workpath, String contentid, String file, String version)
@@ -355,7 +355,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @return
      * @throws Exception
      */
-    private Resource migrateResource(File workpath,String siteid, String webpageId, String resourceid, String version, String title, String description, String type, PropertyInfo[] viewProperties, String[] viewValues, String file) throws Exception
+    private Resource migrateResource(String webworkpath,File workpath,String siteid, String webpageId, String resourceid, String version, String title, String description, String type, PropertyInfo[] viewProperties, String[] viewValues, String file) throws Exception
     {
         SWBRepositoryManager manager = new SWBRepositoryManager();
         String repositoryName = siteid + "_rep@" + manager.getName(); // se almacena en el repositorio del sitio
@@ -363,10 +363,10 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         officeApplication.setUser(this.user);
         officeApplication.setPassword(this.password);
         String categoryId = officeApplication.createCategory(repositoryName, categoryBydefault, descriptionByDefault);
-        return migrateResource(workpath,siteid, webpageId, resourceid, version, title, description, repositoryName, categoryId, type, viewProperties, viewValues, file);
+        return migrateResource(webworkpath,workpath,siteid, webpageId, resourceid, version, title, description, repositoryName, categoryId, type, viewProperties, viewValues, file);
     }
 
-    private Resource migrateResource(File workpath,String siteid, String webpageId, String resourceid, String version, String title, String description, String repositoryName, String categoryID, String type, PropertyInfo[] viewProperties, String[] viewValues, String file) throws Exception
+    private Resource migrateResource(String webworkpath,File workpath,String siteid, String webpageId, String resourceid, String version, String title, String description, String repositoryName, String categoryID, String type, PropertyInfo[] viewProperties, String[] viewValues, String file) throws Exception
     {
         String nodeType = cm_content.getPrefix() + ":" + cm_content.getName();        
         // guarda en repositorio y publica
@@ -382,7 +382,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
         PropertyInfo[] contentProperties = new PropertyInfo[0];
         String[] contentValues = new String[0];
-        String contentid = migrateResourceToRepository(workpath,resourceid, version, title, description, repositoryName, categoryID, type, nodeType, file, contentProperties, contentValues);
+        String contentid = migrateResourceToRepository(webworkpath,siteid,workpath,resourceid, version, title, description, repositoryName, categoryID, type, nodeType, file, contentProperties, contentValues);
         WebPageInfo info = new WebPageInfo();
         info.id = page.getId();
         info.active = page.isActive();
@@ -404,9 +404,11 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return Resource.getResource(res.id, site);
     }
 
-    private String migrateResourceToRepository(File workpath,String resourceid,String version, String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file, PropertyInfo[] properties, String[] values) throws Exception
+    private String migrateResourceToRepository(String webworkpath,String siteid,File workpath,String resourceid,String version, String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file, PropertyInfo[] properties, String[] values) throws Exception
     {
-        File fileZip = zipResourceDirectory(resourceid, workpath.getAbsolutePath(), version);
+        String sourcepath=webworkpath;
+        String targetpath="";
+        File fileZip = zipResourceDirectory(resourceid, workpath.getAbsolutePath(), version,sourcepath, targetpath);
         FileInputStream in = new FileInputStream(fileZip);
         String contentid = save(title, description, repositoryName, categoryID, type, nodeType, file, properties, values, in,fileZip.getName());
         if (fileZip.exists())
@@ -416,7 +418,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return contentid;
     }
 
-    public static File zipResourceDirectory(String id, String workpath, String version) throws IOException
+    public static File zipResourceDirectory(String id, String workpath, String version,String sourcePath,String targetPath) throws IOException
     {
         File directory = new File(workpath + "/" + version);        
         String pathZip = workpath + "/" + id + ".zip";
@@ -429,7 +431,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         {
             FileOutputStream out = new FileOutputStream(pathZip);
             ZipOutputStream sos = new ZipOutputStream(out);
-            zipDir(directory.getAbsolutePath(), sos);
+            zipDir(directory.getAbsolutePath(), sos,sourcePath,targetPath);
             sos.close();
             File filezip = new File(pathZip);
             return filezip;
@@ -440,7 +442,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
-    public static void zipDir(String dir2zip, ZipOutputStream zos)
+    public static void zipDir(String dir2zip, ZipOutputStream zos,String sourcePath,String targetPath)
     {
         try
         {
@@ -459,13 +461,25 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     //if the File object is a directory, call this
                     //function again to add its content recursively
                     String filePath = f.getPath();
-                    zipDir(filePath, zos);
+                    zipDir(filePath, zos,sourcePath,targetPath);
                     //loop again
                     continue;
                 }
+                InputStream fis=null;
+                if(f.getName().endsWith(".htm") || f.getName().endsWith(".html") || f.getName().endsWith(".html.orig") || f.getName().endsWith(".htm.orig"))
+                {
+                    FileInputStream source=new FileInputStream(f);
+                    String content = SWBUtils.IO.readInputStream(source);
+                    content = content.replaceAll(sourcePath, targetPath);
+                    fis=new java.io.ByteArrayInputStream(content.getBytes());
+                }
+                else
+                {
+                    fis = new FileInputStream(f);
+                }
                 //if we reached here, the File object f was not  a directory
                 //create a FileInputStream on top of f                
-                FileInputStream fis = new FileInputStream(f);
+                
                 //create a new zip entry
                 ZipEntry anEntry = new ZipEntry(f.getName());
                 //place the zip entry in the ZipOutputStream object
