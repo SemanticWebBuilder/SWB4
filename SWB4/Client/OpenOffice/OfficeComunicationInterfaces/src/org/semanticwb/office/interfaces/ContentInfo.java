@@ -41,6 +41,7 @@ public class ContentInfo {
     public String categoryId;
     public String categoryTitle;
     public Date created;
+    public String respositoryName;
 
     @Override
     public boolean equals(Object obj)
