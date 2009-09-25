@@ -1414,8 +1414,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 i++;
             }
             try
-            {
-                System.out.println("Agregando recurso "+id);
+            {                
                 page.addResource(resource);
             }
             catch (Exception e)
