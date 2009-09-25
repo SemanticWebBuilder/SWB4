@@ -539,7 +539,7 @@ namespace WBOffice4
                 {
                     if (isOldVersion())
                     {
-                        DialogResult res=RtlAwareMessageBox.Show("El documento esta publicado en una versión anterior, ¿Desea que se verifique si existe en el sitio?", "Publicación de contenido", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                        DialogResult res=RtlAwareMessageBox.Show("El documento esta publicado en una versión anterior, ¿Desea que se verifique si existe en el sitio actual?", "Publicación de contenido", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
                         if (res == DialogResult.Yes)
                         {
                             String contentid = this.CustomProperties["content"];
@@ -554,7 +554,7 @@ namespace WBOffice4
                                     CleanContentProperties();
                                     SaveContentProperties(info.id,info.respositoryName);
                                     this.Save();
-                                    RtlAwareMessageBox.Show("El documento se ha convertido a versión 4, puede continuar", "Publicación de contenido", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    RtlAwareMessageBox.Show("¡El documento se ha convertido a versión 4, puede continuar!", "Publicación de contenido", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                 }
                                 if (res == DialogResult.Cancel)
                                 {
@@ -563,6 +563,11 @@ namespace WBOffice4
                             }
                             else
                             {
+                                res = RtlAwareMessageBox.Show("El documento no existe en el sitio actual, por lo cuál no se puede convertir, ¿Desea continuar?", "Publicación de contenido", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                                if (res == DialogResult.No)
+                                {
+                                    return;
+                                }
 
                             }
                         }
