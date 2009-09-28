@@ -1,32 +1,32 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package org.semanticwb.openoffice;
 
+import com.sun.star.awt.MessageBoxButtons;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -49,6 +49,7 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPage;
+import org.semanticwb.office.interfaces.ContentInfo;
 import org.semanticwb.openoffice.interfaces.IOpenOfficeDocument;
 import org.semanticwb.openoffice.ui.dialogs.DialogContentInformation;
 import org.semanticwb.openoffice.ui.dialogs.DialogDocumentsAuthorize;
@@ -634,7 +635,10 @@ public abstract class OfficeDocument
             wiz.show();
         }
     }
-
+    private void cleanContentProperties()
+    {
+        this.deleteAssociation(false);
+    }
     public final void saveToSite()
     {
         if (isReadOnly())
@@ -645,6 +649,52 @@ public abstract class OfficeDocument
         {
             if (OfficeApplication.tryLogin() && setupDocument())
             {
+                if (isOldVersion())
+                {
+                    int res = JOptionPane.showConfirmDialog(null,"El documento esta publicado en una versión anterior, ¿Desea que se verifique si existe en el sitio actual?", "Publicación de contenido", JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE);
+                    if (res == JOptionPane.YES_OPTION)
+                    {
+                        String contentid = this.getCustomProperties().get("content");
+                        String topicid = this.getCustomProperties().get("topicid");
+                        String topicmap = this.getCustomProperties().get("topicmap");
+                        try
+                        {
+                            ContentInfo info = OfficeApplication.getOfficeDocumentProxy().existContentOldVersion(contentid, topicmap, topicid);
+                            if (info != null)
+                            {
+                                res = JOptionPane.showConfirmDialog(null,"El documento se encuentra en el sitio, ¿Desea convertir el documento a versión 4?", "Publicación de contenido", JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE);
+                                if (res == JOptionPane.YES_OPTION)
+                                {
+                                    cleanContentProperties();
+                                    saveContentId(info.id, info.respositoryName);
+                                    this.save();
+                                    JOptionPane.showMessageDialog(null,"¡El documento se ha convertido a versión 4, puede continuar!", "Publicación de contenido", JOptionPane.OK_OPTION | JOptionPane.QUESTION_MESSAGE);
+                                }
+                                if (res == JOptionPane.CANCEL_OPTION)
+                                {
+                                    return;
+                                }
+                            }
+                            else
+                            {
+                                res = JOptionPane.showConfirmDialog(null,"El documento no existe en el sitio actual, por lo cuál no se puede convertir, ¿Desea continuar?", "Publicación de contenido", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                                if (res == JOptionPane.NO_OPTION)
+                                {
+                                    return;
+                                }
+
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            ErrorLog.log(e);
+                        }
+                    }
+                    if (res == JOptionPane.CANCEL_OPTION)
+                    {
+                        return;
+                    }
+                }
                 boolean canbepublished = false;
                 if (isNewDocument())
                 {
@@ -784,5 +834,26 @@ public abstract class OfficeDocument
             Wizard wiz = WizardPage.createWizard("Asistente de inserción de liga de página", clazz, resultProducer);
             wiz.show();
         }
+    }
+
+    private boolean isOldVersion()
+    {
+        Map<String,String> properties=this.getCustomProperties();
+        if (properties.containsKey("content") && properties.containsKey("topicid") && properties.containsKey("topicmap"))
+        {
+            String contentid = this.getCustomProperties().get("content");
+            String topicid = this.getCustomProperties().get("topicid");
+            String topicmap = this.getCustomProperties().get("topicmap");
+            if (contentid == null || topicmap == null || topicid == null)
+            {
+                return false;
+            }
+            if (contentid.equals("") || topicmap.equals("") || topicid.equals(""))
+            {
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
 }
