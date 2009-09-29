@@ -242,7 +242,7 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
 //            ret.append("  <td class=\"cmntimg\" width=\"30\" height=\"30\">\n");
 //            ret.append("  <img src=\""+SWBPlatform.getContextPath()+"/swbadmin/icons/status_online.png\" alt=\"user comment\" />\n");
 //            ret.append("  </td>\n");
-            ret.append("  <td colspan=2 class=\"cmnt\">"+(ordinal++)+". <strong>"+(comment.getCreator().getFullName().equalsIgnoreCase("")?"Desconocido":comment.getCreator().getFullName())+" "+paramRequest.getLocaleString("writeAtLabel")+"</strong> "+sdf.format(comment.getCreated())+"<br />"+comment.getComment()+"</td>\n");
+            ret.append("  <td colspan=2 class=\"cmnt\">"+(ordinal++)+". <strong>"+(comment.getCreator()!=null?"Desconocido":comment.getCreator().getFullName())+" "+paramRequest.getLocaleString("writeAtLabel")+"</strong> "+sdf.format(comment.getCreated())+"<br />"+comment.getComment()+"</td>\n");
             ret.append("</tr>\n");
         }
 
