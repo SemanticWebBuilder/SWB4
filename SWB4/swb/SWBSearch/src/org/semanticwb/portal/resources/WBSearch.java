@@ -197,7 +197,7 @@ public class WBSearch extends GenericAdmResource
                             addElem(doc, eobj, "objType", obj.getType());
                             addElem(doc, eobj, "objCategory", obj.getCategory());
                             addElem(doc, eobj, "objTopicid", obj.getTopicID());
-                            addElem(doc, eobj, "objSummary", obj.getSummary());
+                            addElem(doc, eobj, "objSummary", SWBUtils.TEXT.encodeExtendedCharacters(obj.getSummary()));
                             addElem(doc, eobj, "objUrl", obj.getUrl());
                             addElem(doc, eobj, "objScore", (int)(obj.getScore()*100) + "%");
                             if(obj.getTopicMapID()!=null && obj.getTopicID()!=null){
