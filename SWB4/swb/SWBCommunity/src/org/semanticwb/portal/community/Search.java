@@ -40,18 +40,17 @@ import java.util.HashMap;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import jena.query;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.Token;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.snowball.SnowballAnalyzer;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.QueryFilter;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
@@ -291,28 +290,26 @@ public class Search extends GenericAdmResource {
 
             //Create boolean query
             BooleanQuery bq = new BooleanQuery();
-            bq.add(q, Occur.MUST);
+            bq.add(q, Occur.SHOULD);
             bq.add(q2, Occur.SHOULD);
             bq.add(q3, Occur.SHOULD);
 
             //Add queries to search for a specific type
+            Hits hits = null;
+
+            //Add queries to search for a specific type
             if (!what.equals("")) {
-                //Create query for 'types' field (search for WebPages)
+                //Create query for 'types' field (what to search for)
                 qp = new QueryParser("types", new LocaleAnalyzer());
-                org.apache.lucene.search.Query q4 = qp.parse("WebPage");
-
-                //Create query for 'types' field (what to search for?)
-                org.apache.lucene.search.Query q5 = qp.parse(what);
-
-                bq.add(q4, Occur.SHOULD);
-                bq.add(q5, Occur.MUST);
+                org.apache.lucene.search.Query q4 = qp.parse(what);
+                
+                hits = searcher.search(bq, new QueryFilter(q4));
+            } else {
+                hits = searcher.search(bq);
             }
             //System.out.println("[Searching for \"" + query +"\" in \"" + fName + "\"] -> " + q.toString());
 
-            //Get search results
-            Hits hits = searcher.search(bq);
             //System.out.println("..."+hits.length() + " hits");
-
             for (int i =0; i<hits.length(); i++) {
                 Document doc = hits.doc(i);
                 res.add(doc.get("uri"));
