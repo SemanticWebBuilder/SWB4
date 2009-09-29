@@ -84,6 +84,7 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
                 this.jPassword.requestFocus();
             }
         }
+        //this.().setDefaultButton(this.jButtonAccept);
     }
 
     /** This method is called from within the constructor to
@@ -169,7 +170,7 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
         });
 
         jButtonAccept.setBackground(new java.awt.Color(51, 102, 153));
-        jButtonAccept.setFont(new java.awt.Font("Tahoma", 0, 14));
+        jButtonAccept.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButtonAccept.setText("Aceptar");
         jButtonAccept.setBorder(null);
         jButtonAccept.setBorderPainted(false);
@@ -363,7 +364,7 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
     }//GEN-LAST:event_formFocusGained
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonAccept;
+    public javax.swing.JButton jButtonAccept;
     private javax.swing.JButton jButtonAvanced;
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JButton jButtonDelete;

@@ -53,9 +53,11 @@ public class DialogLogin extends javax.swing.JDialog implements ImageObserver
         initComponents();
         this.setIconImage(ImageLoader.images.get("semius").getImage());
         this.setModal(true);
-        this.add(new BackGroundImagePanel(this),BorderLayout.CENTER);
+        BackGroundImagePanel bg=new BackGroundImagePanel(this);
+        this.add(bg,BorderLayout.CENTER);
         this.setSize(505, 335);
         setLocationRelativeTo(null);
+        this.getRootPane().setDefaultButton(bg.jButtonAccept);
 
     }
 
