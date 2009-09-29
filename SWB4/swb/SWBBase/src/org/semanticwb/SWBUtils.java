@@ -960,7 +960,7 @@ public class SWBUtils {
             for(int x = 0; x < str.length(); x++)
             {
                 char ch = str.charAt(x);
-                if (ch > 255) {
+                if (ch > 127) {
                     ret.append("&#" + (int)ch + ";");
                 } else {
                     ret.append(ch);
