@@ -43,27 +43,41 @@ import org.semanticwb.portal.api.SWBResourceURL;
 
 
 /**
- * Muestra al usuario las facilidades para editar el codigo, en Python, de un archivo 
- * que se ejecutar&aacute; cuando se muestre en el navegador la secci&oacut;n con que
- * se relaciona este recurso.
- * @author jose.jimenez
+ * Muestra las facilidades para editar el codigo en Python que se ejecutar&aacute;
+ * cuando se muestre en el navegador la secci&oacute;n con que se relaciona este
+ * recurso. Este recurso no es un compilador.
+ * <p>Shows the interface to edit Python code that will be executed when the
+ * web page associated to this resource is shown. This resource is not a compiler.</p>
  */
 public class PythonEditor extends GenericAdmResource {
 
-    /** Objeto encargado de crear mensajes en los archivos log de SWB */
-    private static final Logger log = SWBUtils.getLogger(PythonEditor.class);
-
-    /** Constante que define la acci&oacute;n para guardar el contenido del archivo Python*/
-    private static final String ACTION_SAVE = "savecode";
 
     /**
-     * Muestra la vista de edicion del c&oacute;digo en Python del archivo relacionado a la secci&oacute;n
-     * en que se da de alta este recurso.
-     * @param request
-     * @param response
-     * @param paramReq
-     * @throws java.io.IOException
-     * @throws org.semanticwb.portal.api.SWBResourceException
+     * objeto encargado de crear mensajes en los archivos log de SemanticWebBuilder (SWB).
+     * <p>object that creates messages in SWB's log file.</p>
+     */
+    private static final Logger log = SWBUtils.getLogger(PythonEditor.class);
+
+    /**
+     * Constante que define la acci&oacute;n para guardar el c&oacute;digo en un
+     * archivo. <p>defines de action to store the edited code in a file.</p>
+     */
+    private static final String ACTION_SAVE = "savecode";
+
+    
+    /**
+     * Muestra la vista de edici&oacute;n del c&oacute;digo, almecenado en el
+     * archivo relacionado a la secci&oacute;n en que se da de alta este recurso.
+     * <p>Shows the edition view of the code stored in a file related to the section
+     * this resource is associated to.</p>
+     * @param request la petici&oacute;n HTTP generada por el usuario. <p>the user's HTTP request</p>
+     * @param response la respuesta hacia el usuario.<p>the response to the user</p>
+     * @param paramReq el objeto generado por SWB y asociado a la petici&oacute;n
+     *        del usuario.<p>the object gnerated by SWB and asociated to the user's request</p>
+     * @throws java.io.IOException al obtener el <code>Writer</code> del <code>response</code> correspondiente.
+     *         when getting the corresponding <code>response</code>'s <code>Writer</code>.
+     * @throws org.semanticwb.portal.api.SWBResourceException si no existe el archivo de mensajes del idioma utilizado.
+     *         <p>if there is no file message of the corresponding language.</p>
      */
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response,
@@ -181,14 +195,20 @@ public class PythonEditor extends GenericAdmResource {
     }
 
     /**
-     * Almacena el c&oacute;digo capturado en el editor en un archivo de file system
+     * Almacena el c&oacute;digo capturado en el editor en un archivo f&iacute;sico
      * cuya ruta est&aacute; definida por el directorio de trabajo del recurso
-     * y el nombre es tomado del c&oacute;digo capturado respetando la extensi&oacute;n
-     * <quote>.py</quote>.
-     * @param request
-     * @param response
+     * y el nombre es generado aleatoriamente respetando la extensi&oacute;n <quote>.php</quote>.
+     * <p>Stores the code, typed in in the editor, in a file which path is defined
+     * by this resource's work directory and its name is a randomly generated
+     * string with the extension <quote>.php</quote></p>
+     * @param request la petici&oacute;n HTTP generada por el usuario. <p>the
+     *                user's HTTP request</p>
+     * @param response la respuesta a la acci&oacute;n solicitada por el usuario
+     *        <p>the response to the action requested by the user.</p>
      * @throws org.semanticwb.portal.api.SWBResourceException
-     * @throws java.io.IOException
+     * @throws java.io.IOException si hay alg&uacute;n problema mientras se escribe el
+     *         c&oacute;digo en el archivo.
+     *         <p>if there is a problem while writing the code in the file.</p>
      */
     @Override
     public void processAction(HttpServletRequest request,
@@ -248,11 +268,15 @@ public class PythonEditor extends GenericAdmResource {
 
     /**
      * Realiza la llamada a ejecuci&oacute;n del c&oacute;digo capturado en el editor.
-     * @param request
-     * @param response
-     * @param paramsRequest
+     * <p>Performs the execution call of the code typed in in the editor.</p>
+     * @param request la petici&oacute;n HTTP generada por el usuario. <p>the user's HTTP request</p>
+     * @param response la respuesta hacia el usuario.<p>the response to the user</p>
+     * @param paramsRequest el objeto generado por SWB y asociado a la petici&oacute;n
+     *        del usuario.<p>the object gnerated by SWB and asociated to the user's request</p>
      * @throws org.semanticwb.portal.api.SWBResourceException
-     * @throws java.io.IOException
+     * @throws java.io.IOException si este recurso no tiene asociado el archivo
+     *         que se crea cuando se edita el c&oacute;digo. <p>if this resource
+     *         has no file, which is created after editing code, associated</p>
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
@@ -275,10 +299,14 @@ public class PythonEditor extends GenericAdmResource {
     }
 
     /**
-     * Extrae de la cadena recibida, el nombre de la clase utilizado despu&eacute;s de
-     * la palabra <quote>class</quote>.
+     * Extrae de {@code code}, el nombre de la clase utilizado despu&eacute;s de
+     * la palabra <quote>class</quote>. <p>Extracts the word
+     * following <quote>class</quote> in {@code code}.</p>
      * @param code cadena a analizar para extraer el nombre de la clase
-     * @return la palabra siguiente a <quote>class</quote>, detectada en la cadena recibida.
+     *        <p>the string to parse and to extract the class name.</p>
+     * @return la palabra siguiente a <quote>class</quote>, detectada en la 
+     *         cadena recibida. <p>the word following <quote>class</quote>,
+     *         detected in {@code code}</p>
      */
     private String getClassNameFromCode(String code) {
         
