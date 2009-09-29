@@ -40,11 +40,18 @@ import java.util.HashMap;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import jena.query;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.Token;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.snowball.SnowballAnalyzer;
+import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.search.BooleanClause.Occur;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Hits;
+import org.apache.lucene.search.IndexSearcher;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
@@ -54,6 +61,7 @@ import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
+import org.semanticwb.portal.integration.lucene.analyzer.LocaleAnalyzer;
 
 /**
  * Search resource for communities. Searchs for {@link DirectoryObject}s and
@@ -152,17 +160,24 @@ public class Search extends GenericAdmResource {
     }
 
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {       
-        int maxr = Integer.valueOf(getResourceBase().getAttribute("maxResults", "10"));
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        ArrayList<String> pageData = new ArrayList<String>();
+
+        //Define path to the results view jsp
         String path = "/swbadmin/jsp/microsite/Search/Search.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
-        ArrayList<String> pageData = new ArrayList<String>();
-        String lang = "es";
-        int page = 1;
-        
-        if (paramRequest.getUser() != null)
-            lang = paramRequest.getUser().getLanguage();
 
+        //Get number of results to show from the resource base configuration
+        int maxr = Integer.valueOf(getResourceBase().getAttribute("maxResults", "10"));
+        int page = 1;
+
+        //---- Get user language (if any). Uncomment this lines if you are to
+        //---- execute a search using LARQ.
+        /*String lang = "es";
+        if (paramRequest.getUser() != null)
+            lang = paramRequest.getUser().getLanguage();*/
+
+        //Get page number
         if (request.getParameter("p") != null)
             page = Integer.valueOf(request.getParameter("p"));
 
@@ -173,23 +188,29 @@ public class Search extends GenericAdmResource {
             url = ((WebPage) rsa).getUrl();
         }
 
+        //If resource is called as content
         if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
+
             //Assert query string
             String q = request.getParameter("q");
             if (q == null) return;
 
+            //Get what to search
             String wh = "";
-            if (!request.getParameter("what").equals("Todo")) {
+            if (request.getParameter("what") != null && !request.getParameter("what").equals("Todo")) {
                 wh = request.getParameter("what");
             }
 
-            //Perform search query
-            String indexpath = SWBPortal.getIndexMgr().getDefaultIndexer().getIndexPath();
-            IndexReader reader = IndexReader.open(indexpath);
-            index = new IndexLARQ(reader);
+            // ---- Perform search query using LARQ
+            //String indexpath = SWBPortal.getIndexMgr().getDefaultIndexer().getIndexPath();
+            //IndexReader reader = IndexReader.open(indexpath);
+            //index = new IndexLARQ(reader);
+            //solutions = performQuery(q, lang, wh);
 
-            solutions = performQuery(q, lang, wh);
+            // ---- Perform search query using lucene index
+            solutions = performQuery(q, wh);
 
+            //Get page of results
             if (solutions != null && solutions.size() > 0)
                 pageData = getSlice(page, maxr);
         }
@@ -207,7 +228,7 @@ public class Search extends GenericAdmResource {
         }
     }
 
-    /**
+    /*
      * Builds an index to perform searches.
      */
 //    public void buildIndex() throws CorruptIndexException, LockObtainFailedException, IOException {
@@ -230,8 +251,81 @@ public class Search extends GenericAdmResource {
 //        index = larqBuilder.getIndex();
 //    }
 
+
     /**
-     * Execute a SparQl query to find directory objects. Uses LARQ to perform
+     * Executes a free-text lucene search query. Search for words in <b>title</b>,
+     * <b>description</b> and <b>tags</b> fields in the index. Additionally,
+     * searches the field <b>types</b> only for Web Pages and types defined by
+     * <b>what</b> argument.
+     * <p>
+     * Ejecuta una búsqueda a texto abierto con lucene. Busca coincidencias con
+     * las palabras en los campos <b>title</b>, <b>description</b> y <b>tags</b>
+     * del índice de documentos. Adicionalmente busca en el campo <b>types</b>
+     * las palabras WebPage y el tipo definido en el argumento <b>what</b>.
+     *
+     * @param   query the query. La consulta.
+     * @param   what types to search for (WebPage, Clasified, etc.). Tipos de
+     *          objeto a buscar (WebPage, Clasified, etc.).
+     * @return  set of URIs of the objects that match the search criteria.
+     *          Conjunto de URIs de los objetos que cumplen con los criterios de
+     *          búsqueda.
+     */
+    public ArrayList<String> performQuery(String query, String what) {
+        ArrayList<String> res = new ArrayList<String>();
+        String indexPath = SWBPortal.getIndexMgr().getDefaultIndexer().getIndexPath();
+
+        try {
+            IndexSearcher searcher = new IndexSearcher(indexPath);
+
+            //Create query for 'title' field
+            QueryParser qp = new QueryParser("title", new LocaleAnalyzer());
+            org.apache.lucene.search.Query q = qp.parse(query);
+
+            //Create query for 'description' field
+            qp = new QueryParser("description", new LocaleAnalyzer());
+            org.apache.lucene.search.Query q2 = qp.parse(query);
+
+            //Create query for 'tags' field
+            qp = new QueryParser("tags", new LocaleAnalyzer());
+            org.apache.lucene.search.Query q3 = qp.parse(query);
+
+            //Create boolean query
+            BooleanQuery bq = new BooleanQuery();
+            bq.add(q, Occur.MUST);
+            bq.add(q2, Occur.SHOULD);
+            bq.add(q3, Occur.SHOULD);
+
+            //Add queries to search for a specific type
+            if (!what.equals("")) {
+                //Create query for 'types' field (search for WebPages)
+                qp = new QueryParser("types", new LocaleAnalyzer());
+                org.apache.lucene.search.Query q4 = qp.parse("WebPage");
+
+                //Create query for 'types' field (what to search for?)
+                org.apache.lucene.search.Query q5 = qp.parse(what);
+
+                bq.add(q4, Occur.SHOULD);
+                bq.add(q5, Occur.MUST);
+            }
+            //System.out.println("[Searching for \"" + query +"\" in \"" + fName + "\"] -> " + q.toString());
+
+            //Get search results
+            Hits hits = searcher.search(bq);
+            //System.out.println("..."+hits.length() + " hits");
+
+            for (int i =0; i<hits.length(); i++) {
+                Document doc = hits.doc(i);
+                res.add(doc.get("uri"));
+            }
+        } catch (Exception ex) {
+            log.error(ex);
+        }
+
+        return res;
+    }
+
+    /**
+     * Executes a SparQl query to find directory objects. Uses LARQ to perform
      * a free-text search into a snow-balled terms index.
      * <p>
      * Ejecuta una consulta en SparQl para buscar DirectoryObjects. Usa LARQ
@@ -281,9 +375,9 @@ public class Search extends GenericAdmResource {
                     "}"
                 });
 
-        System.out.println("....................");
-        System.out.println(queryString);
-        System.out.println("....................");
+        //        System.out.println("....................");
+        //        System.out.println(queryString);
+        //        System.out.println("....................");
 
         // Make globally available
         LARQ.setDefaultIndex(index);
