@@ -52,12 +52,12 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripButtonViewContent = new System.Windows.Forms.ToolStripButton();
             this.listView1 = new System.Windows.Forms.ListView();
             this.columnHeader5 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader6 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader7 = new System.Windows.Forms.ColumnHeader();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButtonViewContent = new System.Windows.Forms.ToolStripButton();
             this.panel1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -74,6 +74,28 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(472, 26);
             this.panel1.TabIndex = 2;
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButtonViewContent});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(472, 25);
+            this.toolStrip1.TabIndex = 0;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // toolStripButtonViewContent
+            // 
+            this.toolStripButtonViewContent.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonViewContent.Image = global::WBOffice4.Properties.Resources.see;
+            this.toolStripButtonViewContent.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonViewContent.Name = "toolStripButtonViewContent";
+            this.toolStripButtonViewContent.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonViewContent.Text = "toolStripButton1";
+            this.toolStripButtonViewContent.ToolTipText = "Ver contenido";
+            this.toolStripButtonViewContent.Click += new System.EventHandler(this.toolStripButtonViewContent_Click);
             // 
             // listView1
             // 
@@ -107,28 +129,6 @@
             this.columnHeader7.Text = "Creador";
             this.columnHeader7.Width = 150;
             // 
-            // toolStrip1
-            // 
-            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonViewContent});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(472, 25);
-            this.toolStrip1.TabIndex = 0;
-            this.toolStrip1.Text = "toolStrip1";
-            // 
-            // toolStripButtonViewContent
-            // 
-            this.toolStripButtonViewContent.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonViewContent.Image = global::WBOffice4.Properties.Resources.see;
-            this.toolStripButtonViewContent.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonViewContent.Name = "toolStripButtonViewContent";
-            this.toolStripButtonViewContent.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonViewContent.Text = "toolStripButton1";
-            this.toolStripButtonViewContent.ToolTipText = "Ver contenido";
-            this.toolStripButtonViewContent.Click += new System.EventHandler(this.toolStripButtonViewContent_Click);
-            // 
             // SelectVersionToOpen
             // 
             this.Controls.Add(this.listView1);
@@ -137,7 +137,7 @@
             this.NextStep = "Step3";
             this.PreviousStep = "Step2";
             this.StepDescription = "Seleccione una versión de contenido";
-            this.StepTitle = "Selección de Versión";
+            this.StepTitle = "Seleccione una versión a abrir";
             this.ShowStep += new TSWizards.ShowStepEventHandler(this.SelectVersionToOpen_ShowStep);
             this.ValidateStep += new System.ComponentModel.CancelEventHandler(this.SelectVersionToOpen_ValidateStep);
             this.Controls.SetChildIndex(this.panel1, 0);

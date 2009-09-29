@@ -61,6 +61,10 @@
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
+            // Description
+            // 
+            this.Description.Text = "Seleccione la versión a publicar";
+            // 
             // panel1
             // 
             this.panel1.Controls.Add(this.radioButtonOneVersion);
@@ -133,6 +137,8 @@
             this.Controls.Add(this.listViewVersions);
             this.Controls.Add(this.panel1);
             this.Name = "SelectVersionToPublish";
+            this.StepDescription = "Seleccione la versión a publicar";
+            this.StepTitle = "Seleccione la versión a publicar";
             this.ShowStep += new TSWizards.ShowStepEventHandler(this.SelectVersionToPublish_ShowStep);
             this.ValidateStep += new System.ComponentModel.CancelEventHandler(this.SelectVersionToPublish_ValidateStep);
             this.Controls.SetChildIndex(this.panel1, 0);
