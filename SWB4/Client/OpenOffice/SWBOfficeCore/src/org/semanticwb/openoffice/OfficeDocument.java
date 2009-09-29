@@ -387,11 +387,59 @@ public abstract class OfficeDocument
     {
         if (OfficeApplication.tryLogin())
         {
+            if (isOldVersion())
+            {
+                int res = JOptionPane.showConfirmDialog(null, "El documento esta publicado en una versión anterior, ¿Desea que se verifique si existe en el sitio actual?", "Publicación de contenido", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (res == JOptionPane.YES_OPTION)
+                {
+                    String contentid = this.getCustomProperties().get("content");
+                    String topicid = this.getCustomProperties().get("topicid");
+                    String topicmap = this.getCustomProperties().get("topicmap");
+                    try
+                    {
+                        ContentInfo info = OfficeApplication.getOfficeDocumentProxy().existContentOldVersion(contentid, topicmap, topicid);
+                        if (info != null)
+                        {
+                            res = JOptionPane.showConfirmDialog(null, "El documento se encuentra en el sitio, ¿Desea convertir el documento a versión 4?", "Publicación de contenido", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+                            if (res == JOptionPane.YES_OPTION)
+                            {
+                                cleanContentProperties();
+                                saveContentId(info.id, info.respositoryName);                                
+                                JOptionPane.showMessageDialog(null, "¡El documento se ha convertido a versión 4, puede continuar!", "Publicación de contenido", JOptionPane.OK_OPTION | JOptionPane.QUESTION_MESSAGE);
+                            }
+                            if (res == JOptionPane.CANCEL_OPTION)
+                            {
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            res = JOptionPane.showConfirmDialog(null, "El documento no existe en el sitio actual, por lo cuál no se puede convertir, ¿Desea continuar?", "Publicación de contenido", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                            if (res == JOptionPane.NO_OPTION)
+                            {
+                                return;
+                            }
+
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        ErrorLog.log(e);
+                    }
+                }
+                if (res == JOptionPane.CANCEL_OPTION)
+                {
+                    return;
+                }
+                saveToSite();
+                return;
+            }
             Map<String, String> properties = this.getCustomProperties();
             String contentId = properties.get(CONTENT_ID_NAME);
             String rep = properties.get(WORKSPACE_ID_NAME);
             if (contentId == null || rep == null)
             {
+
                 deleteAssociation(false);
                 int resp = JOptionPane.showConfirmDialog(null, "El contenido no ha sido publicado.\r\n¿Desea publicar el contenido?", "Mostrar información del contenido", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (resp == JOptionPane.YES_OPTION)
@@ -635,10 +683,12 @@ public abstract class OfficeDocument
             wiz.show();
         }
     }
+
     private void cleanContentProperties()
     {
         this.deleteAssociation(false);
     }
+
     public final void saveToSite()
     {
         if (isReadOnly())
@@ -651,7 +701,7 @@ public abstract class OfficeDocument
             {
                 if (isOldVersion())
                 {
-                    int res = JOptionPane.showConfirmDialog(null,"El documento esta publicado en una versión anterior, ¿Desea que se verifique si existe en el sitio actual?", "Publicación de contenido", JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE);
+                    int res = JOptionPane.showConfirmDialog(null, "El documento esta publicado en una versión anterior, ¿Desea que se verifique si existe en el sitio actual?", "Publicación de contenido", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
                     if (res == JOptionPane.YES_OPTION)
                     {
                         String contentid = this.getCustomProperties().get("content");
@@ -662,13 +712,12 @@ public abstract class OfficeDocument
                             ContentInfo info = OfficeApplication.getOfficeDocumentProxy().existContentOldVersion(contentid, topicmap, topicid);
                             if (info != null)
                             {
-                                res = JOptionPane.showConfirmDialog(null,"El documento se encuentra en el sitio, ¿Desea convertir el documento a versión 4?", "Publicación de contenido", JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE);
+                                res = JOptionPane.showConfirmDialog(null, "El documento se encuentra en el sitio, ¿Desea convertir el documento a versión 4?", "Publicación de contenido", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
                                 if (res == JOptionPane.YES_OPTION)
                                 {
                                     cleanContentProperties();
-                                    saveContentId(info.id, info.respositoryName);
-                                    this.save();
-                                    JOptionPane.showMessageDialog(null,"¡El documento se ha convertido a versión 4, puede continuar!", "Publicación de contenido", JOptionPane.OK_OPTION | JOptionPane.QUESTION_MESSAGE);
+                                    saveContentId(info.id, info.respositoryName);                                    
+                                    JOptionPane.showMessageDialog(null, "¡El documento se ha convertido a versión 4, puede continuar!", "Publicación de contenido", JOptionPane.OK_OPTION | JOptionPane.QUESTION_MESSAGE);
                                 }
                                 if (res == JOptionPane.CANCEL_OPTION)
                                 {
@@ -677,7 +726,7 @@ public abstract class OfficeDocument
                             }
                             else
                             {
-                                res = JOptionPane.showConfirmDialog(null,"El documento no existe en el sitio actual, por lo cuál no se puede convertir, ¿Desea continuar?", "Publicación de contenido", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                                res = JOptionPane.showConfirmDialog(null, "El documento no existe en el sitio actual, por lo cuál no se puede convertir, ¿Desea continuar?", "Publicación de contenido", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                                 if (res == JOptionPane.NO_OPTION)
                                 {
                                     return;
@@ -838,7 +887,7 @@ public abstract class OfficeDocument
 
     private boolean isOldVersion()
     {
-        Map<String,String> properties=this.getCustomProperties();
+        Map<String, String> properties = this.getCustomProperties();
         if (properties.containsKey("content") && properties.containsKey("topicid") && properties.containsKey("topicmap"))
         {
             String contentid = this.getCustomProperties().get("content");
