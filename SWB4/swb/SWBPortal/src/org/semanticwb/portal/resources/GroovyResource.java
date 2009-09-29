@@ -21,20 +21,15 @@
 *  http://www.semanticwebbuilder.org
 **/ 
  
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package org.semanticwb.portal.resources;
 
 
 /**
- * Permite ejecutar un archivo con codigo en groovy, dando la ruta del archivo
+ * Permite ejecutar un archivo con codigo en Groovy, dando la ruta del archivo
  * a ejecutar dentro del sitio, pudiendose presentar como contenido o como un
  * recurso.
  *
- * Allows to execute a file with code in groovy, giving the file path to execute
+ * Allows to execute a file with code in Groovy, giving the file path to execute
  * within the site, showing it as a content or as a resource.
  *
  * @author jose.jimenez
