@@ -57,6 +57,10 @@
             this.Creator = new System.Windows.Forms.ColumnHeader();
             this.SuspendLayout();
             // 
+            // Description
+            // 
+            this.Description.Text = "Resumen";
+            // 
             // listViewVersions
             // 
             this.listViewVersions.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -94,6 +98,7 @@
             this.IsFinished = true;
             this.Name = "SummaryNew";
             this.NextStep = "FINISHED";
+            this.StepDescription = "Resumen";
             this.ShowStep += new TSWizards.ShowStepEventHandler(this.SummaryNew_ShowStep);
             this.Controls.SetChildIndex(this.Description, 0);
             this.Controls.SetChildIndex(this.listViewVersions, 0);
