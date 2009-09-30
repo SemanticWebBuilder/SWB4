@@ -941,6 +941,11 @@ public class SWBATMAdmin extends GenericResource
         return regresa;
     }    
     
+    /**
+     *
+     * @param id
+     * @return
+     */
     public Document getError(int id)
     {
         Document dom = null;

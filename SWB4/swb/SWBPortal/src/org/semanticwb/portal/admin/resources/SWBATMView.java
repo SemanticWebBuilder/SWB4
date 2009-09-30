@@ -229,9 +229,9 @@ public class SWBATMView extends SWBATMAdmin
      * @param request
      * @param response
      * @param paramsRequest
-     * @throws AFException
      * @throws IOException
      */    
+    @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
     {
         PrintWriter out=response.getWriter();

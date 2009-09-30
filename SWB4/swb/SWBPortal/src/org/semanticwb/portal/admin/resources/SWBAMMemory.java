@@ -128,6 +128,14 @@ public class SWBAMMemory extends GenericResource {
         }
     }
     
+    /**
+     *
+     * @param request
+     * @param response
+     * @param paramsRequest
+     * @throws SWBResourceException
+     * @throws IOException
+     */
     public void getData(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramsRequest)
             throws SWBResourceException, IOException {

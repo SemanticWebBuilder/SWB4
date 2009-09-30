@@ -1410,6 +1410,12 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
         }
     }
 
+    /**
+     *
+     * @param dateTime
+     * @param lang
+     * @return
+     */
     public String getDateFormat(long dateTime, String lang) {
         if (null == lang) {
             lang = "es";
@@ -1419,6 +1425,12 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
         return df.format(new Date(dateTime));
     }
 
+    /**
+     *
+     * @param obj
+     * @param lang
+     * @return
+     */
     public String getDisplaySemObj(SemanticObject obj, String lang) {
         String ret = obj.getRDFName();
         try {
@@ -1429,6 +1441,12 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
         return ret;
     }
 
+    /**
+     *
+     * @param obj
+     * @param prop
+     * @return
+     */
     public String getValueSemProp(SemanticObject obj, SemanticProperty prop) {
         String ret = "";
         try {
@@ -1455,6 +1473,14 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
         return ret;
     }
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @param paramRequest
+     * @throws SWBResourceException
+     * @throws IOException
+     */
     public void doFormID(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
@@ -1498,6 +1524,14 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
         }
     }
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @param paramRequest
+     * @throws SWBResourceException
+     * @throws IOException
+     */
     public void doAction(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");

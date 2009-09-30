@@ -701,7 +701,7 @@ public class SWBImportWebSite extends GenericResource {
             out.println("</td><td>");
             out.println("<select name=\"wsrepository\">");
             out.println("<option value=\"0\">" + paramRequest.getLocaleLogString("Exclusive") + "</option>");
-            Iterator<UserRepository> itUsrReps = SWBContext.listUserRepositorys();
+            Iterator<UserRepository> itUsrReps = SWBContext.listUserRepositories();
             while (itUsrReps.hasNext()) {
                 UserRepository usrRep = itUsrReps.next();
                 out.println("<option value=\"" + usrRep.getId() + "\">" + usrRep.getDisplayTitle(lang) + "</option>");

@@ -63,10 +63,22 @@ public class SWBATree extends GenericResource
     boolean agzip=true;
 
     //TODO:Provicional hasta que este AdmFilterMgr
+    /**
+     *
+     */
     public static final int NO_ACCESS = 0;
+    /**
+     *
+     */
     public static final int PARCIAL_ACCESS = 1;
+    /**
+     *
+     */
     public static final int FULL_ACCESS = 2;
     //public static final String WBGLOBAL="WBGlobal";
+    /**
+     *
+     */
     public static final String WBADMIN="WBAdmin";
 
     /** Creates a new instance of WBTree */
@@ -97,7 +109,6 @@ public class SWBATree extends GenericResource
      * @param request
      * @param response
      * @param paramRequest
-     * @throws AFException
      * @throws IOException
      */
     @Override
@@ -567,6 +578,7 @@ public class SWBATree extends GenericResource
      * @param tm
      * @param root
      * @param access
+     * @param loadChild
      * @param isFilter
      */
     protected void addTopicMap(User user, WebSite tm, Element root, int access, boolean loadChild, boolean isFilter)
@@ -926,7 +938,7 @@ public class SWBATree extends GenericResource
      * @param request
      * @param response
      * @param paramRequest
-     * @throws AFException
+     * @throws SWBResourceException
      * @throws IOException
      */
     public void doGateway(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -1003,7 +1015,6 @@ public class SWBATree extends GenericResource
      * @param request
      * @param response
      * @param paramRequest
-     * @throws AFException
      * @throws IOException
      */
     @Override

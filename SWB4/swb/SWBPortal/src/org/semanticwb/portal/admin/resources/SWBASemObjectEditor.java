@@ -426,6 +426,12 @@ public class SWBASemObjectEditor extends GenericResource {
         }
     }
 
+    /**
+     *
+     * @param dateTime
+     * @param lang
+     * @return
+     */
     public String getDateFormat(long dateTime, String lang) {
         if (null == lang) {
             lang = "es";
@@ -440,6 +446,11 @@ public class SWBASemObjectEditor extends GenericResource {
 //        String id = request.getParameter("suri");
 //
 //    }
+    /**
+     *
+     * @param obj
+     * @return
+     */
     public String getDisplaySemObj(SemanticObject obj) {
         String ret = obj.getRDFName();
         try {
@@ -450,6 +461,14 @@ public class SWBASemObjectEditor extends GenericResource {
         return ret;
     }
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @param paramRequest
+     * @throws SWBResourceException
+     * @throws IOException
+     */
     public void doFormID(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         User user = paramRequest.getUser();

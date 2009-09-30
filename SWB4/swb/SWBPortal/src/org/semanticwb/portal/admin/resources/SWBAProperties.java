@@ -56,7 +56,6 @@ public class SWBAProperties extends GenericResource {
     
     /**
      * Init the resource
-     * @throws AFException an exception of type AFException
      */    
     @Override
     public void init() throws SWBResourceException {
@@ -72,7 +71,6 @@ public class SWBAProperties extends GenericResource {
     
     /** Init the resource base configuration
      * @param base a resource in the data base
-     * @throws AFException an exception of type AFException
      */    
     @Override
     public void setResourceBase(Resource base) throws SWBResourceException
@@ -110,7 +108,6 @@ public class SWBAProperties extends GenericResource {
      /** Requested action of the WBAProperties resource
      * @param request input parameters
      * @param response an answer to the request and a list of objects (topic, user, action, ...)
-     * @throws AFException an AF Exception
      * @throws IOException an IO Exception
      */  
     @Override
@@ -177,7 +174,6 @@ public class SWBAProperties extends GenericResource {
      * @param request input parameters
      * @param response an answer to the request
      * @param paramRequest a list of objects (topic, user, action, ...)
-     * @throws AFException an AF Exception
      * @throws IOException an IO Exception
      */   
     @Override
@@ -277,7 +273,6 @@ public class SWBAProperties extends GenericResource {
      * @param request input parameters
      * @param response an answer to the request
      * @param paramRequest a list of objects (topic, user, action, ...)
-     * @throws AFException an AF Exception
      * @throws IOException an IO Exception
      */
     @Override
@@ -399,7 +394,6 @@ public class SWBAProperties extends GenericResource {
      * @param request input parameters
      * @param response an answer to the request
      * @param paramRequest a list of objects (topic, user, action, ...)
-     * @throws AFException an AF Exception
      * @throws IOException an IO Exception
      */   
     @Override

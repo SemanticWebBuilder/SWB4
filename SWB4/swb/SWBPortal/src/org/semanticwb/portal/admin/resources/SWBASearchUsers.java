@@ -50,6 +50,9 @@ public class SWBASearchUsers extends GenericResource
     private Logger log = SWBUtils.getLogger(SWBASearchUsers.class);
     private int pagezise = 10;
 
+    /**
+     *
+     */
     public SWBASearchUsers()
     {
     }
@@ -62,7 +65,7 @@ public class SWBASearchUsers extends GenericResource
         SWBResourceURL url = paramRequest.getRenderUrl();
         User user = paramRequest.getUser();
         url.setMode("search");
-        Iterator<UserRepository> itur = SWBContext.listUserRepositorys();
+        Iterator<UserRepository> itur = SWBContext.listUserRepositories();
         ret.append("<script type=\"text/javascript\">\n" +
                 "           dojo.require(\"dojo.parser\");\n" +
                 "                   dojo.require(\"dijit.layout.ContentPane\");\n" +
@@ -147,6 +150,14 @@ public class SWBASearchUsers extends GenericResource
         response.getWriter().write(ret.toString());
     }
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @param paramRequest
+     * @throws SWBResourceException
+     * @throws IOException
+     */
     public void doSearch(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)
             throws SWBResourceException, IOException
     {
@@ -217,6 +228,14 @@ public class SWBASearchUsers extends GenericResource
         response.getWriter().write(ret.toString());
     }
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @param paramRequest
+     * @throws SWBResourceException
+     * @throws IOException
+     */
     public void doJsonData(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         response.setContentType("text/html;charset=ISO-8859-1");
@@ -268,6 +287,14 @@ public class SWBASearchUsers extends GenericResource
         response.getOutputStream().println(jobj.toString());
     }
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @param paramRequest
+     * @throws SWBResourceException
+     * @throws IOException
+     */
     public void doRoles(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)
             throws SWBResourceException, IOException
     {
@@ -286,6 +313,14 @@ public class SWBASearchUsers extends GenericResource
         response.getWriter().write(ret.toString());
     }
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @param paramRequest
+     * @throws SWBResourceException
+     * @throws IOException
+     */
     public void doGroups(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)
             throws SWBResourceException, IOException
     {

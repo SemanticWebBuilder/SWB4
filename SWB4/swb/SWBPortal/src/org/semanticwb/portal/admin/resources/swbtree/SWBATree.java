@@ -218,7 +218,7 @@ public class SWBATree extends GenericResource
     public void addUserReps(JSONArray arr, SWBParamRequest paramRequest)  throws JSONException
     {
         //System.out.println("addWebSites");
-        Iterator<UserRepository> it=SWBComparator.sortSermanticObjects(paramRequest.getUser().getLanguage(), SWBContext.listUserRepositorys());
+        Iterator<UserRepository> it=SWBComparator.sortSermanticObjects(paramRequest.getUser().getLanguage(), SWBContext.listUserRepositories());
         while(it.hasNext())
         {
             UserRepository rep=it.next();

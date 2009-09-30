@@ -45,14 +45,13 @@ public class SWBATrash extends GenericResource {
     private Logger log=SWBUtils.getLogger(SWBATrash.class);
     private boolean debugvar=true;
     
-    /** Creates a new instance of WBATrash */
+    /** Creates a new instance of SWBATrash */
     public SWBATrash() { }
 
     /** Admin view of a WBATrash resource
      * @param request parameters
      * @param response answer to the request
      * @param paramRequest list of objects
-     * @throws AFException an AF Exception
      * @throws IOException an IO Exception
      */
     @Override
@@ -98,7 +97,6 @@ public class SWBATrash extends GenericResource {
      * @param request parameters
      * @param response answer to the request
      * @param paramRequest list of objects
-     * @throws AFException an AF Exception
      * @throws IOException an IO Exception
      */
     @Override
@@ -586,7 +584,6 @@ public class SWBATrash extends GenericResource {
     /** Recover or Eliminate an WB objects like topic, topicmpas, contents, resources.
      * @param request parameters
      * @param response answer to the request
-     * @throws AFException an AF Exception
      * @throws IOException an IO Exception
      */
     @Override
