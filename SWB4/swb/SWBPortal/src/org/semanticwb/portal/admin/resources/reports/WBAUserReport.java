@@ -343,7 +343,7 @@ public class WBAUserReport extends GenericResource {
                 out.println("<tr>");
                 out.println("<td>" + paramsRequest.getLocaleString("repository") + ":</td>");
                 out.println("<td colspan=\"2\"><select id=\"wb_repository\" name=\"wb_repository\" onchange=\"postHtml('"+url+"'+'?repository='+this.value,'slave');\">");
-                Iterator<UserRepository> itur = SWBContext.listUserRepositorys();
+                Iterator<UserRepository> itur = SWBContext.listUserRepositories();
                 while(itur.hasNext()) {
                     UserRepository ur = itur.next();
                     out.println("<option value=\""+ ur.getId() + "\"");

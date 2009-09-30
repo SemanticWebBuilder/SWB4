@@ -129,7 +129,7 @@ public class WBALoginReport extends GenericResource {
 
         try{
             // Evaluates if there are repositories
-            Iterator<UserRepository> it_repository = SWBContext.listUserRepositorys();
+            Iterator<UserRepository> it_repository = SWBContext.listUserRepositories();
             while(it_repository.hasNext()) {
                 UserRepository ur_repository = it_repository.next();
                 // Get access level of this user on this topicmap and if level is greater than "0" then user have access
