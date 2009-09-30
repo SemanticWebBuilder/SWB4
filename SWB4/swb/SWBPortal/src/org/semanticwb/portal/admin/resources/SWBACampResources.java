@@ -20,11 +20,6 @@
 * dirección electrónica: 
 *  http://www.semanticwebbuilder.org
 **/ 
- 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package org.semanticwb.portal.admin.resources;
 
@@ -47,21 +42,22 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 
 /**
+ * Shows a list of Resources asociated to a specific Campain
  *
  * @author juan.fernandez
  */
 public class SWBACampResources extends GenericResource {
 
     private static int page_elements = 20;
-    /** Creates a new instance of SWBACampPortlets */
+
+    /** Creates a new instance of SWBACampResources */
     public SWBACampResources() {
     }
 
-    /** User view for the WBACampResources resource
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws AFException
+    /** User view for the SWBACampResources resource, show a list of resources asociated to a specific campain.
+     * @param request, parameters, input data
+     * @param response, an answer to user request
+     * @param paramRequest, a list of objects (WebPage, User, Action, ...)
      * @throws IOException
      */    
     @Override

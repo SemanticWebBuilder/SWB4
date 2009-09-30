@@ -61,15 +61,15 @@ import java.sql.*;
 public class SWBADBPool extends GenericResource {
     
     
-    /** Creates a new instance of WBADBQuery */
+    /** Creates a new instance of SWBADBPool */
     public SWBADBPool() {
     }
         
-    /**
-     * @param request
-     * @param response
-     * @throws SWBResourceException
-     * @throws IOException
+    /** Process the user request action
+     * @param request, parameters, input data
+     * @param response, an answer to the user request, a list of objects (Action, user, WebPage, ...)
+     * @throws SWBResourceException, a Resource Exception
+     * @throws IOException, an In Out Exception
      */    
     @Override
     public void processAction(HttpServletRequest request,
@@ -93,11 +93,12 @@ public class SWBADBPool extends GenericResource {
     }
     
     /**
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Show the user view of the connection pool
+     * @param request, parameters, input data
+     * @param response, an answer to the user request
+     * @param paramsRequest, a list of objects (Action, user, WebPage, ...)
+     * @throws SWBResourceException, a Resource Exception
+     * @throws IOException, an In Out Exception
      */    
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
@@ -297,6 +298,14 @@ public class SWBADBPool extends GenericResource {
     }
     
 
+    /**
+     * Gets the data used into the chart
+     * @param request, parameters, input data
+     * @param response, an answer to the user request
+     * @param paramsRequest, a list of objects (Action, user, WebPage, ...)
+     * @throws SWBResourceException, a Resource Exception
+     * @throws IOException, an In Out Exception
+     */
     public void getData(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramsRequest)
             throws SWBResourceException, IOException {
@@ -349,6 +358,15 @@ public class SWBADBPool extends GenericResource {
         out.println("zoom=true");
     }
     
+    /**
+     * Gets the data used into the chart
+     *
+     * @param request, parameters, input data
+     * @param response, an answer to the user request
+     * @param paramsRequest, a list of objects (Action, user, WebPage, ...)
+     * @throws SWBResourceException, a Resource Exception
+     * @throws IOException, an In Out Exception
+     */
     public void getData2(HttpServletRequest request,
             HttpServletResponse response, SWBParamRequest paramsRequest)
             throws SWBResourceException, IOException {
@@ -396,6 +414,14 @@ public class SWBADBPool extends GenericResource {
         out.println("zoom=true");
     }    
     
+    /**
+     * Gets the data used into the chart
+     * @param request, parameters, input data
+     * @param response, an answer to the user request
+     * @param paramsRequest, a list of objects (Action, user, WebPage, ...)
+     * @throws SWBResourceException, a Resource Exception
+     * @throws IOException, an In Out Exception
+     */
     public void hitsTime(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramsRequest)
             throws SWBResourceException, IOException {
@@ -438,11 +464,12 @@ public class SWBADBPool extends GenericResource {
     
     
     /**
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Process the user request mode to show
+     * @param request, parameters, input data
+     * @param response, an answer to the user request
+     * @param paramsRequest, a list of objects (Action, user, WebPage, ...)
+     * @throws SWBResourceException, a Resource Exception
+     * @throws IOException, an In Out Exception
      */    
     @Override
     public void processRequest(HttpServletRequest request,

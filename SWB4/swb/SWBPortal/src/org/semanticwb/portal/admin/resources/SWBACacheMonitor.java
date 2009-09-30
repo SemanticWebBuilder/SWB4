@@ -58,11 +58,11 @@ public class SWBACacheMonitor extends GenericResource {
     }
     
     /** User view of the WBACacheMonitor resource
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * @param request, input parameters
+     * @param response, output info
+     * @param paramsRequest, a list of objects (topic, user, action, ...)
+     * @throws SWBResourceException, a Resource Exception
+     * @throws IOException, In Out Exception
      */    
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
@@ -98,6 +98,14 @@ public class SWBACacheMonitor extends GenericResource {
         out.println("</div>");
     }
     
+    /**
+     * Get Data used in chart
+     * @param request, input parameters
+     * @param response, output data, answer to request
+     * @param paramsRequest, a list of objects (topic, user, action, ...)
+     * @throws SWBResourceException, a Resource Exception
+     * @throws IOException, In Out Exception
+     */
     public void getData(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramsRequest)
             throws SWBResourceException, IOException {

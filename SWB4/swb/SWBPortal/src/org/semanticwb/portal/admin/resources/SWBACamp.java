@@ -52,18 +52,18 @@ import org.semanticwb.portal.api.SWBResourceException;
  */
 public class SWBACamp extends GenericResource {
 
-    public String strRscType=SWBACamp.class.getName();
+
+    String strRscType=SWBACamp.class.getName();
     private Logger log=SWBUtils.getLogger(SWBACamp.class);
     Resource base=null;
  /** Creates a new instance of SWBACamp */
     public SWBACamp() {
     }
     
-    /** User View of WBAGrpTemplates Resource
+    /** User View of SWBACamp Resource
      * @param request parameters
      * @param response answer to the request
      * @param paramRequest a list of objects (user, topic, action, ...)
-     * @throws AFException an AF Exception
      * @throws IOException an IO Exception
      */
     @Override
@@ -139,11 +139,10 @@ public class SWBACamp extends GenericResource {
     }
 
     
-    /** Edition view of WBACamp Resource
+    /** Edition view of SWBACamp Resource
      * @param request parameters
      * @param response answer to the request
      * @param paramRequest a list of objects (user, topic, action, ...)
-     * @throws AFException an AF Exception
      * @throws IOException an IO Exception
      */
     @Override
@@ -295,7 +294,6 @@ public class SWBACamp extends GenericResource {
     /** Add and Update action of WBAGrpTemplates information
      * @param request parameters
      * @param response answer to the request
-     * @throws AFException an AF Exception
      * @throws IOException an IO Exception
      */
     @Override

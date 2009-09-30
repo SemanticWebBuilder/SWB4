@@ -53,15 +53,13 @@ public class SWBAListAllUsers extends GenericResource {
     /** User view of the WBAListAllUsers resource
      * @param request the input parameters
      * @param response the response to the request
-     * @param paramsRequest a list of objects (topic, user, action, ...)
-     * @throws AFException an exception of type AFException
      * @throws IOException an exception of type IOException
      */    
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
     
         PrintWriter out = response.getWriter();
-        Iterator<UserRepository> iteRep = SWBContext.listUserRepositorys();//DBUser.getInstance().getRepositories();
+        Iterator<UserRepository> iteRep = SWBContext.listUserRepositories();//DBUser.getInstance().getRepositories();
         out.println("<div class=\"swbform\">");
         out.println("<fieldset>");
         out.println("<table width=98% cellpadding=10 cellspacing=0 border=0>");
