@@ -20,13 +20,13 @@ public class DisplayPropertyBase extends org.semanticwb.model.SWBClass implement
         super(base);
     }
 
-    public static java.util.Iterator<org.semanticwb.model.DisplayProperty> listDisplayPropertys(org.semanticwb.model.SWBModel model)
+    public static java.util.Iterator<org.semanticwb.model.DisplayProperty> listDisplayProperties(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.DisplayProperty>(it, true);
     }
 
-    public static java.util.Iterator<org.semanticwb.model.DisplayProperty> listDisplayPropertys()
+    public static java.util.Iterator<org.semanticwb.model.DisplayProperty> listDisplayProperties()
     {
         java.util.Iterator it=sclass.listInstances();
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.DisplayProperty>(it, true);

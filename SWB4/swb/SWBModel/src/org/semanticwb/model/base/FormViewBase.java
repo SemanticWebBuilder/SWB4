@@ -74,7 +74,7 @@ public class FormViewBase extends org.semanticwb.model.SWBClass implements org.s
         getSemanticObject().setProperty(swb_title, title, lang);
     }
 
-    public org.semanticwb.platform.SemanticIterator<org.semanticwb.platform.SemanticObject> listCreatePropertys()
+    public org.semanticwb.platform.SemanticIterator<org.semanticwb.platform.SemanticObject> listCreateProperties()
     {
         com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getRDFResource().listProperties(swbxf_hasCreateProperty.getRDFProperty());
         return new org.semanticwb.platform.SemanticIterator<org.semanticwb.platform.SemanticObject>(stit);
@@ -102,7 +102,7 @@ public class FormViewBase extends org.semanticwb.model.SWBClass implements org.s
          return ret;
     }
 
-    public org.semanticwb.platform.SemanticIterator<org.semanticwb.platform.SemanticObject> listViewPropertys()
+    public org.semanticwb.platform.SemanticIterator<org.semanticwb.platform.SemanticObject> listViewProperties()
     {
         com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getRDFResource().listProperties(swbxf_hasViewProperty.getRDFProperty());
         return new org.semanticwb.platform.SemanticIterator<org.semanticwb.platform.SemanticObject>(stit);
@@ -164,7 +164,7 @@ public class FormViewBase extends org.semanticwb.model.SWBClass implements org.s
          return ret;
     }
 
-    public org.semanticwb.platform.SemanticIterator<org.semanticwb.platform.SemanticObject> listEditPropertys()
+    public org.semanticwb.platform.SemanticIterator<org.semanticwb.platform.SemanticObject> listEditProperties()
     {
         com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getRDFResource().listProperties(swbxf_hasEditProperty.getRDFProperty());
         return new org.semanticwb.platform.SemanticIterator<org.semanticwb.platform.SemanticObject>(stit);
