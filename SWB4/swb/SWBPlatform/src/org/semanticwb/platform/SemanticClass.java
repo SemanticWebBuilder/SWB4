@@ -148,6 +148,7 @@ public class SemanticClass
      */
     public String getClassName()
     {
+        //TODO: Revisar
         if(m_className==null)
         {
             SemanticClass cls=this;
@@ -155,7 +156,7 @@ public class SemanticClass
             {
                 if(cls.isSWB())
                 {
-                    m_className=getCodePackage()+"."+getClassCodeName();
+                    m_className=cls.getCodePackage()+"."+cls.getClassCodeName();
                     break;
                 }else
                 {
@@ -449,10 +450,13 @@ public class SemanticClass
     {
         try
         {
+            //System.out.println(getURI());
+            //System.out.println(getClassName());
             return (GenericObject)getConstructor().newInstance(obj);
         }
         catch(Exception ie)
         {
+            ie.printStackTrace();
             throw new AssertionError(ie.getMessage());
         }
     }
