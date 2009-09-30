@@ -44,6 +44,7 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
+import java.io.File;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -93,6 +94,13 @@ public class SemanticModel
             m_ont.add(model);
         }
         m_ont.addSubModel(m_model,true);
+    }
+    public void addOntolgy(File file)
+    {
+        String swbowl="file:"+file.getAbsolutePath();
+        Model model=SWBPlatform.getSemanticMgr().loadRDFFileModel(swbowl);
+        m_ont.add(model);
+
     }
 
     /**
