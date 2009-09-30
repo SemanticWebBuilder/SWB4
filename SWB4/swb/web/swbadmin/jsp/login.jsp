@@ -9,7 +9,7 @@
 <%
     response.setHeader("Cache-Control", "no-cache");
     response.setHeader("Pragma", "no-cache");
-    User user=SWBPortal.getSessionUser();
+    User user=SWBContext.getSessionUser();
     String lang="es";
     if(user!=null)lang=user.getLanguage();
     String username=request.getParameter("wb_username");
