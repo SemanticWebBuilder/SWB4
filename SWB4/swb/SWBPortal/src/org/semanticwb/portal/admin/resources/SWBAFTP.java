@@ -56,7 +56,7 @@ import org.semanticwb.portal.api.GenericResource;
  */
 public class SWBAFTP extends GenericResource{
     private Logger log = SWBUtils.getLogger(SWBAFTP.class);
-    /** Creates a new instance of WBAFTP */
+    /** Creates a new instance of SWBAFTP */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if(paramRequest.getMode().equals("gateway"))
@@ -76,11 +76,11 @@ public class SWBAFTP extends GenericResource{
         
     }
     /**
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws AFException
-     * @throws IOException
+     * @param request, parameters, input data
+     * @param response, an answer to the user request
+     * @param paramsRequest, a list of objects (Action, user, WebPage, ...)
+     * @throws SWBResourceException, a Resource Exception
+     * @throws IOException, an In Out Exception
      */    
     public void doDownload(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -121,11 +121,11 @@ public class SWBAFTP extends GenericResource{
         }
     }
     /**
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws AFException
-     * @throws IOException
+     * @param request, parameters, input data
+     * @param response, an answer to the user request
+     * @param paramsRequest, a list of objects (Action, user, WebPage, ...)
+     * @throws SWBResourceException, a Resource Exception
+     * @throws IOException, an In Out Exception
      */    
     public void doUpload(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -159,11 +159,11 @@ public class SWBAFTP extends GenericResource{
         }
     }
     /**
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws AFException
-     * @throws IOException
+     * @param request, parameters, input data
+     * @param response, an answer to the user request
+     * @param paramsRequest, a list of objects (Action, user, WebPage, ...)
+     * @throws SWBResourceException, a Resource Exception
+     * @throws IOException, an In Out Exception
      */    
     public void doGateway(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -587,11 +587,11 @@ public class SWBAFTP extends GenericResource{
     }
 
     /**
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws AFException
-     * @throws IOException
+     * @param request, parameters, input data
+     * @param response, an answer to the user request
+     * @param paramsRequest, a list of objects (Action, user, WebPage, ...)
+     * @throws SWBResourceException, a Resource Exception
+     * @throws IOException, an In Out Exception
      */    
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {

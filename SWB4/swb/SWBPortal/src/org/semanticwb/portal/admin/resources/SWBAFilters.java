@@ -87,7 +87,6 @@ public class SWBAFilters extends SWBATree {
      * @param request
      * @param response
      * @param paramRequest
-     * @throws AFException
      * @throws IOException
      */
     @Override
@@ -546,7 +545,7 @@ public class SWBAFilters extends SWBATree {
      * @param request
      * @param response
      * @param paramRequest
-     * @throws AFException
+     * @throws SWBResourceException
      * @throws IOException
      */
     @Override
@@ -771,13 +770,13 @@ public class SWBAFilters extends SWBATree {
         return docres;
     }
 
-    /**
-     * @param cmd
-     * @param src
-     * @param user
-     * @param request
-     * @param response
-     * @return
+    /** Add or update the filter resource configuration
+     * @param cmd, text command action to do
+     * @param src, source document that hold the resource configuration
+     * @param user, a session User
+     * @param request, parameters, input data
+     * @param response, an anwer to the user request
+     * @return return an updated dom document
      */
     public Document updateFilter(String cmd, Document src, User user, HttpServletRequest request, HttpServletResponse response) {
         if (src.getElementsByTagName("filter").getLength() > 0) {
@@ -791,12 +790,12 @@ public class SWBAFilters extends SWBATree {
         return null;
     }
 
-    /**
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws AFException
-     * @throws IOException
+    /** User View of the SWBAFilters Resource; it shows a resource filter configuration,
+     * configure in wich webpage it shows, in the Semantic WebBuilder application
+     * @param request, parameters, input data
+     * @param response, an answer to the user request
+     * @param paramsRequest, a list of objects (Action, user, WebPage, ...)
+     * @throws SWBResourceException, a Resource Exc
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -1070,6 +1069,10 @@ public class SWBAFilters extends SWBATree {
         }
     }
 
+    /**
+     * Loads semantic objects related to the user access level.
+     * @param user, a session User
+     */
     public void loadSemClass(User user) {
         if (hmclass == null) {
             hmclass = new HashMap();
@@ -1081,6 +1084,11 @@ public class SWBAFilters extends SWBATree {
         }
     }
 
+    /**
+     * Get true if a Semantic objects have Herarquical Nodes
+     * @param obj, semantic object to eval
+     * @return boolean, true if semantic object have Herarquical nodes or False.
+     */
     public boolean hasHerarquicalNodes(SemanticObject obj) {
         boolean ret = false;
         Iterator<SemanticObject> it = obj.getSemanticClass().listHerarquicalNodes();
@@ -1090,6 +1098,11 @@ public class SWBAFilters extends SWBATree {
         return ret;
     }
 
+    /**
+     * Add Herarquical nodes, depends on user and semantic object
+     * @param user, a session User
+     * @param obj, a semantic object to eval
+     */
     public void addHerarquicalNodes(User user, SemanticObject obj) //, Element ele)
     {
         Iterator<SemanticObject> it = SWBComparator.sortSortableObject(obj.getSemanticClass().listHerarquicalNodes());
@@ -1099,6 +1112,13 @@ public class SWBAFilters extends SWBATree {
         }
     }
 
+    /**
+     * Add herarquical nodes to a semantic object
+     * @param user, a session User
+     * @param node, a Herarquical node
+     * @param obj, a semantic object to eval
+     * @param addChilds, if want to add a semantic object childs
+     */
     public void addHerarquicalNode(User user, HerarquicalNode node, SemanticObject obj, boolean addChilds) //, Element ele)
     {
         SemanticClass cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(node.getHClass().getURI());
@@ -1127,11 +1147,24 @@ public class SWBAFilters extends SWBATree {
 
     }
 
+    /**
+     * Add related semantic objects, depends on the session user
+     * @param user, a session User
+     * @param obj, a selected semantic object
+     * @param addChilds, if wanto to add semantic object childs
+     */
     public void addSemanticObject(User user, SemanticObject obj, boolean addChilds)//, Element ele)
     {
         addSemanticObject(user, obj, addChilds, false);//, ele);
     }
 
+    /**
+     * Add related semantic objects, depends on the user access
+     * @param user, selected user
+     * @param obj, an eval of semantic object
+     * @param addChilds, if want to add semantic object childs
+     * @param addDummy, if want to add a dummy
+     */
     public void addSemanticObject(User user, SemanticObject obj, boolean addChilds, boolean addDummy)//, Element ele)
     {
         boolean hasChilds = false;
@@ -1158,6 +1191,12 @@ public class SWBAFilters extends SWBATree {
         }
     }
 
+    /**
+     *  Add server to dom document
+     * @param user, used to eval access to each element tree
+     * @param res, element of the tree
+     * @param isFilter, to eval if have filter or not
+     */
     @Override
     protected void addServer(User user, Element res, boolean isFilter) {
         int access = 2; //AdmFilterMgr.getInstance().haveAccess2Server(user);
@@ -1190,6 +1229,15 @@ public class SWBAFilters extends SWBATree {
         }
     }
 
+     /**
+     *  Add web site to dom document
+     * @param user, used to eval access to each element tree
+     * @param tm,
+     * @param root, first element of the tree
+     * @param access, level of the user access
+     * @param loadChild, for load root childs element
+     * @param isFilter, to eval if have filter or not
+     */
     @Override
     protected void addTopicMap(User user, WebSite tm, Element root, int access, boolean loadChild, boolean isFilter) {
         if (access != FULL_ACCESS) {
@@ -1257,6 +1305,11 @@ public class SWBAFilters extends SWBATree {
         }
     }
 
+    /**
+     *  Add web pages to dom document
+     * @param user, used to eval access to each element tree
+     * @param res, element of the tree
+     */
     @Override
     protected void addTopic(User user, WebPage tp, Element res) {
         //WebSite tma=SWBContext.getAdminWebSite();

@@ -65,7 +65,7 @@ public class SWBACreateUser extends GenericResource {
         ret.append("\t<fieldset>\n\t<table>\n\t\t<tr>\n\t\t\t<td align=\"right\">\n\t\t\t\t<label>").
                 append(paramRequest.getLocaleString("userRep")).append("</label>");
         ret.append("\n\t\t\t</td>\n\t\t\t<td>");
-        Iterator<UserRepository> itur = SWBContext.listUserRepositorys();
+        Iterator<UserRepository> itur = SWBContext.listUserRepositories();
         ret.append("\n\t\t\t\t<select dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" name=\"userRepository\" id=\"userRepository\" >");
         while (itur.hasNext())
         {

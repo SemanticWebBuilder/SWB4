@@ -207,7 +207,15 @@ public class SWBAIndexer extends GenericResource {
 
     }
 
-     public void doStatus(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    /**
+     *
+     * @param request
+     * @param response
+     * @param paramRequest
+     * @throws SWBResourceException
+     * @throws IOException
+     */
+    public void doStatus(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         HashMap hmtmind = new HashMap();
         SWBIndexer ind = SWBPortal.getIndexMgr().getDefaultIndexer();
@@ -223,7 +231,12 @@ public class SWBAIndexer extends GenericResource {
 
     }
 
-    public HashMap loadHMINDTM(String indexName) {
+     /**
+      *
+      * @param indexName
+      * @return
+      */
+     public HashMap loadHMINDTM(String indexName) {
         base = getResourceBase();
         HashMap hm_ret = new HashMap();
         String ind_tms = base.getAttribute("index" + indexName, "");

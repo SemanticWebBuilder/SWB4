@@ -54,7 +54,7 @@ public class GoogleSiteMap implements InternalServlet {
                 continue;
             }
 
-            Iterator<Dns> ht =  map.listDnss();
+            Iterator<Dns> ht =  map.listDnses();
             String hn = host;
             if (ht.hasNext()) {
                 Dns dns = ht.next();

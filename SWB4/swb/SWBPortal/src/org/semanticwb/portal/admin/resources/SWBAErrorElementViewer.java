@@ -49,7 +49,7 @@ import org.semanticwb.portal.api.SWBResourceURL;
  * error seleccionando con la posibilidad de enviar el error por correo
  * electronico.
  *
- * It shows the error list generated on WebBuilder. It show the detail of the error
+ * It shows the error list generated on Semantic WebBuilder. It show the detail of the error
  * selected with the posibility to send an email of the error.
  * @author Juan Antonio Fernandez Arias
  */
@@ -60,12 +60,12 @@ public class SWBAErrorElementViewer extends GenericResource{
     }
 
     /** User View of the SWBAErrorElementViewer Resource; it shows an error list generated from the resources
-     * in the WebBuilder application
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws AFException
-     * @throws IOException
+     * in the Semantic WebBuilder application
+     * @param request, parameters, input data
+     * @param response, an answer to the user request
+     * @param paramsRequest, a list of objects (Action, user, WebPage, ...)
+     * @throws SWBResourceException, a Resource Exception
+     * @throws IOException, an In Out Exception
      */    
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -313,6 +313,12 @@ public class SWBAErrorElementViewer extends GenericResource{
         }   
     }
     
+    /**
+     * Get the position of the Error Element
+     * @param hmErr, list of Error Elements
+     * @param err_id, Error Element Id
+     * @return The position of the Error Element
+     */
     public int getErrPos(Vector hmErr, long err_id)
     {
         int pos=0;
@@ -332,6 +338,12 @@ public class SWBAErrorElementViewer extends GenericResource{
         return pos;
     }
     
+    /**
+     * Gets the Error Element Id
+     * @param hmErr, a list of ErrorElement
+     * @param pos, positon of the Error Element
+     * @return the Error Element Id
+     */
     public long getErrID(Vector hmErr, int pos)
     {
         long ret=0;

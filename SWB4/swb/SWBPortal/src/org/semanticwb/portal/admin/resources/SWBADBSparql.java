@@ -20,11 +20,6 @@
 * dirección electrónica: 
 *  http://www.semanticwebbuilder.org
 **/ 
- 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package org.semanticwb.portal.admin.resources;
 
@@ -46,25 +41,29 @@ import org.semanticwb.SWBPlatform;
 
 
 /**
- *
+ * Resource to perform a SPARQL query
  * @author juan.fernandez
  */
 public class SWBADBSparql extends GenericResource {
 
     private Logger log=SWBUtils.getLogger(SWBADBSparql.class);
-    static public final String NL = System.getProperty("line.separator") ; 
+    /**
+     *
+     */
+    static public final String NL = System.getProperty("line.separator") ;
     
-    /** Creates a new instance of WBADBQuery */
+    /** Creates a new instance of SWBADBSparql */
     public SWBADBSparql()
     {
     }
 
     /**
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws AFException
-     * @throws IOException
+     * Shows a form to place a SparQL query and get the result of this request
+     * @param request, parameters, input data
+     * @param response, an answer to the user request
+     * @param paramsRequest, a list of objects (Action, user, WebPage, ...)
+     * @throws SWBResourceException, a Resource Exception
+     * @throws IOException, an In Out Exception
      */    
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {

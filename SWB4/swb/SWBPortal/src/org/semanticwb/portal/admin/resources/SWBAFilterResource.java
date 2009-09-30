@@ -61,7 +61,6 @@ public class SWBAFilterResource extends SWBATree {
      * @param request
      * @param response
      * @param paramRequest
-     * @throws AFException
      * @throws IOException
      */
     @Override
@@ -77,7 +76,7 @@ public class SWBAFilterResource extends SWBATree {
      * @param request
      * @param response
      * @param paramRequest
-     * @throws AFException
+     * @throws SWBResourceException
      * @throws IOException
      */
     @Override
@@ -230,6 +229,7 @@ public class SWBAFilterResource extends SWBATree {
      * @param src
      * @return
      */
+    @Override
     public Document initTree(User user, Document src) {
         Document doc = super.initTree(user, src, true);
         RevisaNodo(doc.getFirstChild());
@@ -240,10 +240,11 @@ public class SWBAFilterResource extends SWBATree {
      * @param e
      * @return
      */
+    @SuppressWarnings({"static-access", "static-access"})
     public boolean isNameValid(Element e) {
 
-        for (int i = 0; i < this.namevalids.length; i++) {
-            if (e.getNodeName().equals(this.namevalids[i])) {
+        for (int i = 0; i < SWBAFilterResource.namevalids.length; i++) {
+            if (e.getNodeName().equals(SWBAFilterResource.namevalids[i])) {
                 return true;
             }
         }
@@ -254,6 +255,7 @@ public class SWBAFilterResource extends SWBATree {
      * @param path
      * @return
      */
+    @SuppressWarnings({"static-access", "static-access"})
     public boolean isValid(String path) {
         if (path == null) {
             return true;
@@ -261,8 +263,8 @@ public class SWBAFilterResource extends SWBATree {
         StringTokenizer st = new StringTokenizer(path, ".");
         if (st.countTokens() > 0) {
             String pathinit = st.nextToken();
-            for (int i = 0; i < this.pathValids.length; i++) {
-                if (pathinit.equals(this.pathValids[i])) {
+            for (int i = 0; i < SWBAFilterResource.pathValids.length; i++) {
+                if (pathinit.equals(SWBAFilterResource.pathValids[i])) {
                     return true;
                 }
             }
@@ -353,9 +355,9 @@ public class SWBAFilterResource extends SWBATree {
      * @param request
      * @param response
      * @param paramRequest
-     * @throws AFException
      * @throws IOException
      */
+    @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
@@ -371,7 +373,6 @@ public class SWBAFilterResource extends SWBATree {
     /**
      * @param request
      * @param response
-     * @throws AFException
      * @throws IOException
      */
     @Override

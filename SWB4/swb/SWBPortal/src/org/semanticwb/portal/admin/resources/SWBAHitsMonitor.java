@@ -315,7 +315,15 @@ public class SWBAHitsMonitor extends GenericResource {
         }
     }       
     
-    public void hitsMonitor(HttpServletRequest request, 
+    /**
+     *
+     * @param request
+     * @param response
+     * @param paramsRequest
+     * @throws SWBResourceException
+     * @throws IOException
+     */
+    public void hitsMonitor(HttpServletRequest request,
             HttpServletResponse response, SWBParamRequest paramsRequest)
             throws SWBResourceException, IOException {
         
@@ -359,6 +367,14 @@ public class SWBAHitsMonitor extends GenericResource {
         out.println("vzoom=true");
     }
     
+    /**
+     *
+     * @param request
+     * @param response
+     * @param paramsRequest
+     * @throws SWBResourceException
+     * @throws IOException
+     */
     public void hitsTime(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramsRequest)
             throws SWBResourceException, IOException {
@@ -398,6 +414,14 @@ public class SWBAHitsMonitor extends GenericResource {
         out.println("zoom=true");
     }
     
+    /**
+     *
+     * @param request
+     * @param response
+     * @param paramsRequest
+     * @throws SWBResourceException
+     * @throws IOException
+     */
     public void hitsXSec(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramsRequest) 
             throws SWBResourceException, IOException {
