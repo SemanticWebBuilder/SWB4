@@ -12,13 +12,13 @@ public class SWBClassBase extends org.semanticwb.model.base.GenericObjectBase
         super(base);
     }
 
-    public static java.util.Iterator<org.semanticwb.model.SWBClass> listSWBClasss(org.semanticwb.model.SWBModel model)
+    public static java.util.Iterator<org.semanticwb.model.SWBClass> listSWBClasses(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.SWBClass>(it, true);
     }
 
-    public static java.util.Iterator<org.semanticwb.model.SWBClass> listSWBClasss()
+    public static java.util.Iterator<org.semanticwb.model.SWBClass> listSWBClasses()
     {
         java.util.Iterator it=sclass.listInstances();
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.SWBClass>(it, true);

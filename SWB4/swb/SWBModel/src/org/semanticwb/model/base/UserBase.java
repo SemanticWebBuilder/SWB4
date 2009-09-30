@@ -1,8 +1,10 @@
 package org.semanticwb.model.base;
 
 
-public class UserBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Expirable,org.semanticwb.model.Traceable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Roleable,org.semanticwb.model.Activeable
+public class UserBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Roleable,org.semanticwb.model.Expirable,org.semanticwb.model.Activeable,org.semanticwb.model.Referensable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupable
 {
+    public static final org.semanticwb.platform.SemanticClass swb_Country=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Country");
+    public static final org.semanticwb.platform.SemanticProperty swb_usrCountry=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrCountry");
     public static final org.semanticwb.platform.SemanticClass swb_UserFavorite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserFavorite");
     public static final org.semanticwb.platform.SemanticProperty swb_userFavorite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userFavorite");
     public static final org.semanticwb.platform.SemanticProperty swb_usrLastName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrLastName");
@@ -65,6 +67,39 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
     public static boolean hasUser(String id, org.semanticwb.model.SWBModel model)
     {
         return (getUser(id, model)!=null);
+    }
+
+    public void setCountry(org.semanticwb.model.Country value)
+    {
+        getSemanticObject().setObjectProperty(swb_usrCountry, value.getSemanticObject());
+    }
+
+    public void removeCountry()
+    {
+        getSemanticObject().removeProperty(swb_usrCountry);
+    }
+
+   public static java.util.Iterator<org.semanticwb.model.User> listUserByCountry(org.semanticwb.model.Country usrcountry,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.User> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_usrCountry, usrcountry.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.model.User> listUserByCountry(org.semanticwb.model.Country usrcountry)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.User> it=new org.semanticwb.model.GenericIterator(usrcountry.getSemanticObject().getModel().listSubjects(swb_usrCountry,usrcountry.getSemanticObject()));
+       return it;
+   }
+
+    public org.semanticwb.model.Country getCountry()
+    {
+         org.semanticwb.model.Country ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_usrCountry);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.Country)obj.createGenericInstance();
+         }
+         return ret;
     }
 
     public void setUserFavorite(org.semanticwb.model.UserFavorite value)

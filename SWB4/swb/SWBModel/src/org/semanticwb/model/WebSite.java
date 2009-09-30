@@ -69,7 +69,7 @@ public class WebSite extends WebSiteBase
     public Dns getDefaultDns()
     {
         Dns dns=null;
-        Iterator<Dns> it=listDnss();
+        Iterator<Dns> it=listDnses();
         while(it.hasNext())
         {
             Dns d=it.next();

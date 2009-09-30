@@ -57,9 +57,9 @@ public class FormView extends FormViewBase
     {
         HashMap<SemanticProperty,String> map=new HashMap();
         Iterator<SemanticObject> it=null;
-        if(mode.equals(MODE_CREATE))it=listCreatePropertys();
-        if(mode.equals(MODE_VIEW))it=listViewPropertys();
-        if(mode.equals(MODE_EDIT))it=listEditPropertys();
+        if(mode.equals(MODE_CREATE))it=listCreateProperties();
+        if(mode.equals(MODE_VIEW))it=listViewProperties();
+        if(mode.equals(MODE_EDIT))it=listEditProperties();
         if(it!=null)
         {
             while(it.hasNext())
