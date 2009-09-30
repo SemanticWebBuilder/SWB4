@@ -95,13 +95,7 @@ public class SemanticModel
         }
         m_ont.addSubModel(m_model,true);
     }
-    public void addOntolgy(File file)
-    {
-        String swbowl="file:"+file.getAbsolutePath();
-        Model model=SWBPlatform.getSemanticMgr().loadRDFFileModel(swbowl);
-        m_ont.add(model);
-
-    }
+    
 
     /**
      * Define si el modelo loggeara los cambios hechos por el usuario
