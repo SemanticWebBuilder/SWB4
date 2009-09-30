@@ -6,7 +6,7 @@
     public String getUserLanguage()
     {
         String lang="es";
-        User user=SWBPortal.getSessionUser();
+        User user=SWBContext.getSessionUser();
         if(user!=null)lang=user.getLanguage();
         return lang;
     }
@@ -136,7 +136,7 @@
 
     public void addFavorites(JSONArray arr, String lang)  throws JSONException
     {
-        User user=SWBPortal.getSessionUser();
+        User user=SWBContext.getSessionUser();
         //System.out.println("user uri:"+user.getURI());
         if(user!=null && user.getURI()!=null)
         {
@@ -364,7 +364,7 @@
         }
         menus.put(getMenuSeparator());
 
-        User user=SWBPortal.getSessionUser();
+        User user=SWBContext.getSessionUser();
         boolean isfavo=user.hasFavorite(obj);
         if(!isfavo)
         {
@@ -559,7 +559,7 @@
         //menu favoritos
         if(!virtual)
         {
-            User user=SWBPortal.getSessionUser();
+            User user=SWBContext.getSessionUser();
             boolean isfavo=user.hasFavorite(obj);
             if(!isfavo)
             {

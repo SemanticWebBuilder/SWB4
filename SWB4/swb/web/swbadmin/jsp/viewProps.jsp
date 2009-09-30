@@ -12,7 +12,7 @@
 <%
     response.setHeader("Cache-Control", "no-cache");
     response.setHeader("Pragma", "no-cache");
-    User user=SWBPortal.getSessionUser(SWBContext.USERREPOSITORY_ADMIN);
+    User user=SWBContext.getSessionUser(SWBContext.USERREPOSITORY_ADMIN);
     if(user==null || !user.isSigned())
     {
         out.println("<div dojoType=\"dijit.layout.ContentPane\" postCreate=\"showDialog('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/login.jsp','Login');\" />");
