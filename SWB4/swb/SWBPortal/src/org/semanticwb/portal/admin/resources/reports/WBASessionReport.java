@@ -137,7 +137,7 @@ public class WBASessionReport extends GenericResource {
 
         try {
             // Evaluates if there are repository
-            Iterator<UserRepository> repositories = SWBContext.listUserRepositorys();
+            Iterator<UserRepository> repositories = SWBContext.listUserRepositories();
             while(repositories.hasNext()) {
                 UserRepository repository = repositories.next();
                 // Get access level of this user on this topicmap and if level is greater than "0" then user have access

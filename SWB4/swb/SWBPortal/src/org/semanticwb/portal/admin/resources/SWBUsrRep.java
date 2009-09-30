@@ -155,7 +155,7 @@ public class SWBUsrRep extends GenericResource {
             out.println("<div class=\"swbform\">");
             out.println("<table width=\"75%\">");
             urlAction.setAction("saveUsrRep");
-            Iterator<UserRepository> itws = SWBContext.listUserRepositorys();
+            Iterator<UserRepository> itws = SWBContext.listUserRepositories();
             while (itws.hasNext()) {
                 UserRepository ws = itws.next();
                 out.println("<tr><td>");
