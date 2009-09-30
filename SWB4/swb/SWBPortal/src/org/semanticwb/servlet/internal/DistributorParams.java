@@ -100,6 +100,13 @@ public class DistributorParams
     private boolean onlyContent=false;
     private String lang=null;
     private String device=null;
+
+    /** Creates a new instance of DistributorParams */
+    public DistributorParams(HttpServletRequest request, String uri, String lang)
+    {
+        this.lang=lang;
+        init(request,uri);
+    }
     
     /** Creates a new instance of DistributorParams */
     public DistributorParams(HttpServletRequest request, String uri)
@@ -161,7 +168,7 @@ public class DistributorParams
         {
             user=_getUser(request,webpage.getWebSite());
         }
-        SWBPortal.setSessionUser(user);
+        SWBContext.setSessionUser(user);
         //System.out.println("user"+user);
         queryString=_getQueryString(request);
         //System.out.println("queryString:"+queryString);

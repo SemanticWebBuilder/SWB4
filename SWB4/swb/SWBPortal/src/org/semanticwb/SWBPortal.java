@@ -33,7 +33,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.Principal;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -50,7 +49,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.model.*;
-import org.semanticwb.platform.SessionUser;
 import org.semanticwb.portal.PFlowManager;
 import org.semanticwb.portal.SWBMessageCenter;
 import org.semanticwb.portal.SWBMonitor;
@@ -90,7 +88,6 @@ public class SWBPortal {
     private static SWBAccessLog acclog = null;
     private static SWBAccessIncrement accInc = null;
     private static SWBIndexMgr indmgr = null;
-    private static HashMap<String, SessionUser> m_sessions;
 
     static public synchronized SWBPortal createInstance() {
         if (instance == null) {
@@ -224,8 +221,6 @@ public class SWBPortal {
         } catch (SQLException e) {
             log.error(e);
         }
-
-        m_sessions = new HashMap();
 
         usrMgr = new SWBUserMgr();
         usrMgr.init();
@@ -419,39 +414,6 @@ public class SWBPortal {
         return languages;
     }
 
-    public static void setSessionUser(User user) {
-        if (user != null) {
-            SessionUser sess = m_sessions.get(Thread.currentThread().getName());
-            if (sess == null) {
-                m_sessions.put(Thread.currentThread().getName(), new SessionUser(user, user.getUserRepository().getId()));
-            } else {
-                sess.setUser(user, user.getUserRepository().getId());
-            }
-        }
-    }
-
-    public static User getSessionUser() {
-        return getSessionUser(null);
-    }
-
-    public static User getSessionUser(String usrrep) {
-        Principal user = null;
-        SessionUser sess = m_sessions.get(Thread.currentThread().getName());
-        if (sess != null) {
-            user = sess.getUser(usrrep);
-        }
-        return (User) user;
-    }
-
-    public static long getSessionUserID() {
-        long ret = 0;
-        Principal user = null;
-        SessionUser sess = m_sessions.get(Thread.currentThread().getName());
-        if (sess != null) {
-            ret = sess.geRequestID();
-        }
-        return ret;
-    }
 
     public static class UTIL {
 
