@@ -109,7 +109,7 @@
     public void addUserReps(JSONArray arr, String lang)  throws JSONException
     {
         //System.out.println("addWebSites");
-        Iterator<UserRepository> it=SWBComparator.sortSermanticObjects(lang, SWBContext.listUserRepositorys());
+        Iterator<UserRepository> it=SWBComparator.sortSermanticObjects(lang, SWBContext.listUserRepositories());
         while(it.hasNext())
         {
             UserRepository rep=it.next();
