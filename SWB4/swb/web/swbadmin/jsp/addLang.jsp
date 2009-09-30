@@ -12,7 +12,7 @@
     }
 %>
 <%
-    User user=SWBPortal.getSessionUser();
+    User user=SWBContext.getSessionUser();
     String lang="es";
     if(user!=null)lang=user.getLanguage();
     response.setHeader("Cache-Control", "no-cache");
