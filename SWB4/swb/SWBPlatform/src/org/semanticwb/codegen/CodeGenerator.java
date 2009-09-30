@@ -966,7 +966,7 @@ public class CodeGenerator
                         {
                             SemanticProperty tppInterface = propertiesInterface.next();
                             SemanticClass rangeInterface = tppInterface.getRangeClass();
-                            if(rangeInterface.equals(range))
+                            if(rangeInterface!=null && rangeInterface.equals(range))
                             {
                                 isInSuperInterface=true;
                                 break;
