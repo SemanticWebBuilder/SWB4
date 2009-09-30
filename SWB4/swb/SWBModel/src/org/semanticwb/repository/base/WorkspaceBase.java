@@ -1,33 +1,8 @@
-/**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
 package org.semanticwb.repository.base;
 
 
 public class WorkspaceBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Descriptiveable
 {
-    public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
-    public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
     public static final org.semanticwb.platform.SemanticClass nt_BaseNode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#base");
     public static final org.semanticwb.platform.SemanticProperty jcr_root=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#root");
     public static final org.semanticwb.platform.SemanticClass nt_Unstructured=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#unstructured");
@@ -93,9 +68,9 @@ public class WorkspaceBase extends org.semanticwb.model.SWBModel implements org.
         return getSemanticObject().getProperty(swb_title);
     }
 
-    public void setTitle(String title)
+    public void setTitle(String value)
     {
-        getSemanticObject().setProperty(swb_title, title);
+        getSemanticObject().setProperty(swb_title, value);
     }
 
     public String getTitle(String lang)
@@ -118,9 +93,9 @@ public class WorkspaceBase extends org.semanticwb.model.SWBModel implements org.
         return getSemanticObject().getProperty(swb_description);
     }
 
-    public void setDescription(String description)
+    public void setDescription(String value)
     {
-        getSemanticObject().setProperty(swb_description, description);
+        getSemanticObject().setProperty(swb_description, value);
     }
 
     public String getDescription(String lang)
@@ -138,15 +113,27 @@ public class WorkspaceBase extends org.semanticwb.model.SWBModel implements org.
         getSemanticObject().setProperty(swb_description, description, lang);
     }
 
-    public void setRoot(org.semanticwb.repository.BaseNode basenode)
+    public void setRoot(org.semanticwb.repository.BaseNode value)
     {
-        getSemanticObject().setObjectProperty(jcr_root, basenode.getSemanticObject());
+        getSemanticObject().setObjectProperty(jcr_root, value.getSemanticObject());
     }
 
     public void removeRoot()
     {
         getSemanticObject().removeProperty(jcr_root);
     }
+
+   public static java.util.Iterator<org.semanticwb.repository.Workspace> listWorkspaceByRoot(org.semanticwb.repository.BaseNode root,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.repository.Workspace> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(jcr_root, root.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.repository.Workspace> listWorkspaceByRoot(org.semanticwb.repository.BaseNode root)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.repository.Workspace> it=new org.semanticwb.model.GenericIterator(root.getSemanticObject().getModel().listSubjects(jcr_root,root.getSemanticObject()));
+       return it;
+   }
 
     public org.semanticwb.repository.BaseNode getRoot()
     {
@@ -157,6 +144,30 @@ public class WorkspaceBase extends org.semanticwb.model.SWBModel implements org.
              ret=(org.semanticwb.repository.BaseNode)obj.createGenericInstance();
          }
          return ret;
+    }
+
+    public org.semanticwb.repository.BaseNode getBaseNode(String id)
+    {
+        return org.semanticwb.repository.BaseNode.getBaseNode(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.repository.BaseNode> listBaseNodes()
+    {
+        return org.semanticwb.repository.BaseNode.listBaseNodes(this);
+    }
+
+    public org.semanticwb.repository.BaseNode createBaseNode(String id)
+    {
+        return org.semanticwb.repository.BaseNode.createBaseNode(id,this);
+    }
+
+    public void removeBaseNode(String id)
+    {
+        org.semanticwb.repository.BaseNode.removeBaseNode(id, this);
+    }
+    public boolean hasBaseNode(String id)
+    {
+        return org.semanticwb.repository.BaseNode.hasBaseNode(id, this);
     }
 
     public org.semanticwb.repository.Unstructured getUnstructured(String id)
@@ -187,29 +198,5 @@ public class WorkspaceBase extends org.semanticwb.model.SWBModel implements org.
     public boolean hasUnstructured(String id)
     {
         return org.semanticwb.repository.Unstructured.hasUnstructured(id, this);
-    }
-
-    public org.semanticwb.repository.BaseNode getBaseNode(String id)
-    {
-        return org.semanticwb.repository.BaseNode.getBaseNode(id, this);
-    }
-
-    public java.util.Iterator<org.semanticwb.repository.BaseNode> listBaseNodes()
-    {
-        return org.semanticwb.repository.BaseNode.listBaseNodes(this);
-    }
-
-    public org.semanticwb.repository.BaseNode createBaseNode(String id)
-    {
-        return org.semanticwb.repository.BaseNode.createBaseNode(id,this);
-    }
-
-    public void removeBaseNode(String id)
-    {
-        org.semanticwb.repository.BaseNode.removeBaseNode(id, this);
-    }
-    public boolean hasBaseNode(String id)
-    {
-        return org.semanticwb.repository.BaseNode.hasBaseNode(id, this);
     }
 }

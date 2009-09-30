@@ -1,35 +1,10 @@
-/**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
 package org.semanticwb.repository.base;
 
 
-public class VersionBase extends org.semanticwb.repository.BaseNode implements org.semanticwb.repository.Referenceable,org.semanticwb.repository.Traceable
+public class VersionBase extends org.semanticwb.repository.BaseNode implements org.semanticwb.repository.Traceable,org.semanticwb.repository.Referenceable
 {
-    public static final org.semanticwb.platform.SemanticProperty jcr_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#created");
     public static final org.semanticwb.platform.SemanticClass nt_Version=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#version");
     public static final org.semanticwb.platform.SemanticProperty jcr_successors=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#successors");
-    public static final org.semanticwb.platform.SemanticProperty jcr_uuid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#uuid");
     public static final org.semanticwb.platform.SemanticProperty jcr_predecessors=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#predecessors");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#version");
 
@@ -75,20 +50,32 @@ public class VersionBase extends org.semanticwb.repository.BaseNode implements o
         return getSemanticObject().getDateProperty(jcr_created);
     }
 
-    public void setCreated(java.util.Date created)
+    public void setCreated(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(jcr_created, created);
+        getSemanticObject().setDateProperty(jcr_created, value);
     }
 
-    public void setSuccessors(org.semanticwb.repository.Version version)
+    public void setSuccessors(org.semanticwb.repository.Version value)
     {
-        getSemanticObject().setObjectProperty(jcr_successors, version.getSemanticObject());
+        getSemanticObject().setObjectProperty(jcr_successors, value.getSemanticObject());
     }
 
     public void removeSuccessors()
     {
         getSemanticObject().removeProperty(jcr_successors);
     }
+
+   public static java.util.Iterator<org.semanticwb.repository.Version> listVersionBySuccessors(org.semanticwb.repository.Version successors,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.repository.Version> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(jcr_successors, successors.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.repository.Version> listVersionBySuccessors(org.semanticwb.repository.Version successors)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.repository.Version> it=new org.semanticwb.model.GenericIterator(successors.getSemanticObject().getModel().listSubjects(jcr_successors,successors.getSemanticObject()));
+       return it;
+   }
 
     public org.semanticwb.repository.Version getSuccessors()
     {
@@ -106,20 +93,32 @@ public class VersionBase extends org.semanticwb.repository.BaseNode implements o
         return getSemanticObject().getProperty(jcr_uuid);
     }
 
-    public void setUuid(String uuid)
+    public void setUuid(String value)
     {
-        getSemanticObject().setProperty(jcr_uuid, uuid);
+        getSemanticObject().setProperty(jcr_uuid, value);
     }
 
-    public void setPredecessors(org.semanticwb.repository.Version version)
+    public void setPredecessors(org.semanticwb.repository.Version value)
     {
-        getSemanticObject().setObjectProperty(jcr_predecessors, version.getSemanticObject());
+        getSemanticObject().setObjectProperty(jcr_predecessors, value.getSemanticObject());
     }
 
     public void removePredecessors()
     {
         getSemanticObject().removeProperty(jcr_predecessors);
     }
+
+   public static java.util.Iterator<org.semanticwb.repository.Version> listVersionByPredecessors(org.semanticwb.repository.Version predecessors,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.repository.Version> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(jcr_predecessors, predecessors.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.repository.Version> listVersionByPredecessors(org.semanticwb.repository.Version predecessors)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.repository.Version> it=new org.semanticwb.model.GenericIterator(predecessors.getSemanticObject().getModel().listSubjects(jcr_predecessors,predecessors.getSemanticObject()));
+       return it;
+   }
 
     public org.semanticwb.repository.Version getPredecessors()
     {

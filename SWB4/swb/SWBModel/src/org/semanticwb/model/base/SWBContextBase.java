@@ -38,7 +38,7 @@ public class SWBContextBase
         return org.semanticwb.model.UserRepository.getUserRepository(name);
     }
 
-    public static java.util.Iterator<org.semanticwb.model.UserRepository> listUserRepositorys()
+    public static java.util.Iterator<org.semanticwb.model.UserRepository> listUserRepositories()
     {
         return (java.util.Iterator<org.semanticwb.model.UserRepository>)swb_UserRepository.listGenericInstances();
     }
