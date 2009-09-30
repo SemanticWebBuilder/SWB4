@@ -26,7 +26,7 @@
 
     //TODO:
     //User user=SWBContext.getDefaultRepository().getUserByLogin("admin");
-    User user=SWBPortal.getSessionUser();
+    User user=SWBContext.getSessionUser();
 
     if(obj!=null && act!=null && user!=null && user.getURI()!=null)
     {
