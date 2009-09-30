@@ -2223,7 +2223,7 @@ public class MainSurvey extends GenericResource
                         tm =topic.getWebSite();
                         thome=tm.getHomePage();
                         
-                        Iterator<Dns> ehtdns1 =topic.getWebSite().listDnss();
+                        Iterator<Dns> ehtdns1 =topic.getWebSite().listDnses();
                         while(ehtdns1.hasNext())
                         {
                             Dns objRecDns=ehtdns1.next();
@@ -2239,7 +2239,7 @@ public class MainSurvey extends GenericResource
                         }
                         if(dns==null)
                         {
-                            ehtdns1 =SWBContext.getGlobalWebSite().listDnss();
+                            ehtdns1 =SWBContext.getGlobalWebSite().listDnses();
                             while(ehtdns1.hasNext())
                             {
                                 Dns objRecDns=ehtdns1.next();
