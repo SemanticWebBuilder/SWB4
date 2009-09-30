@@ -24,8 +24,8 @@
 %>
 
 <%
-        WebSite site = paramRequest.getTopic().getWebSite();
-        WebPage topic=paramRequest.getTopic();
+        WebSite site = paramRequest.getWebPage().getWebSite();
+        WebPage topic=paramRequest.getWebPage();
         String action = paramRequest.getAction();
         Resource base = paramRequest.getResourceBase();
         SWBResourceURL url = paramRequest.getRenderUrl();
