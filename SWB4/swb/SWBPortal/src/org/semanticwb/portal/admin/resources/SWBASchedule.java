@@ -52,8 +52,12 @@ public class SWBASchedule extends GenericResource {
 
     /** Nombre del recurso */
     private Logger log = SWBUtils.getLogger(SWBASchedule.class);
+    /**
+     *
+     */
     public String strRscType;
 
+    @Override
     public void init() {
         try {
             strRscType = getResourceBase().getResourceType().getTitle();
@@ -67,7 +71,6 @@ public class SWBASchedule extends GenericResource {
      * @param request
      * @param response
      * @param paramRequest
-     * @throws AFException
      * @throws IOException
      */
     @Override
@@ -855,7 +858,6 @@ public class SWBASchedule extends GenericResource {
      *
      * @param request
      * @param response
-     * @throws AFException
      * @throws IOException
      */
     @Override
@@ -1168,6 +1170,12 @@ public class SWBASchedule extends GenericResource {
         parent.appendChild(elem);
     }
 
+    /**
+     *
+     * @param obj
+     * @param lang
+     * @return
+     */
     public String getDisplaySemObj(SemanticObject obj, String lang) {
         String ret = obj.getRDFName();
         try {
@@ -1178,6 +1186,12 @@ public class SWBASchedule extends GenericResource {
         return ret;
     }
 
+    /**
+     *
+     * @param obj
+     * @param prop
+     * @return
+     */
     public String getValueSemProp(SemanticObject obj, SemanticProperty prop) {
         String ret = "";
         try {

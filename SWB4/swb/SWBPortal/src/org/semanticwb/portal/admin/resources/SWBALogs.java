@@ -73,7 +73,6 @@ public class SWBALogs extends GenericResource {
      * @param request parameters
      * @param response answer to the request
      * @param paramRequest list of objects
-     * @throws AFException an AF Exception
      * @throws IOException an IO Exception
      */
     @Override
@@ -333,7 +332,6 @@ public class SWBALogs extends GenericResource {
      * @param request parameters
      * @param response answer to the request
      * @param paramRequest a list of objects (user, topic, action, ...)
-     * @throws AFException an AF Exception
      * @throws IOException an IO Exception
      */
     @Override
@@ -639,7 +637,7 @@ public class SWBALogs extends GenericResource {
      * @param request parameters
      * @param response answer to the request
      * @param paramRequest list of objects
-     * @throws AFException an AF Exception
+     * @throws SWBResourceException
      * @throws IOException an IO Exception
      */
     public void doExcel(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -778,7 +776,6 @@ public class SWBALogs extends GenericResource {
      * @param request parameters
      * @param response answer to the request
      * @param paramRequest list of objects
-     * @throws AFException an AF Exception
      * @throws IOException an IO Exception
      */
     @Override
@@ -925,7 +922,6 @@ public class SWBALogs extends GenericResource {
     /** Add and Update of WBALogs properties
      * @param request parameters
      * @param response answer to the request
-     * @throws AFException an AF Exception
      * @throws IOException an IO Exception
      */
     @Override
@@ -1000,7 +996,6 @@ public class SWBALogs extends GenericResource {
      * @param request parameters
      * @param response answer to the request
      * @param paramRequest list of objects
-     * @throws AFException an AF Exception
      * @throws IOException an IO Exception
      */
     @Override

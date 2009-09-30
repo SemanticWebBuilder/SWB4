@@ -71,11 +71,23 @@ public class SWBATreeDBQuery extends GenericResource
     boolean agzip=true;
     HashMap hmoper=null;
     //public static final String WBGLOBAL="WBGlobal";
+    /**
+     *
+     */
     public static final String WBADMIN=SWBContext.WEBSITE_ADMIN;
 
     //TODO:Provicional hasta que este AdmFilterMgr
+    /**
+     *
+     */
     public static final int NO_ACCESS = 0;
+    /**
+     *
+     */
     public static final int PARCIAL_ACCESS = 1;
+    /**
+     *
+     */
     public static final int FULL_ACCESS = 2;
 
     
@@ -110,7 +122,6 @@ public class SWBATreeDBQuery extends GenericResource
      * @param request
      * @param response
      * @param paramRequest
-     * @throws AFException
      * @throws IOException
      */
     @Override
@@ -319,7 +330,6 @@ public class SWBATreeDBQuery extends GenericResource
      *
      * @param user
      * @param res
-     * @param isFilter
      */
     protected void addServer(User user, Element res)
     {
@@ -357,7 +367,7 @@ public class SWBATreeDBQuery extends GenericResource
     /**
      *
      * @param user
-     * @param tm
+     * @param dbcon
      * @param root
      * @param access
      */
@@ -369,10 +379,10 @@ public class SWBATreeDBQuery extends GenericResource
     /**
      *
      * @param user
-     * @param tm
+     * @param dbcon
      * @param root
      * @param access
-     * @param isFilter
+     * @param loadChild
      */
     protected void addPoolConn(User user, String dbcon, Element root, int access, boolean loadChild)
     {
@@ -448,8 +458,9 @@ public class SWBATreeDBQuery extends GenericResource
     /**
      *
      * @param user
-     * @param tp
+     * @param tablename 
      * @param res
+     * @param dbcon
      */
     protected void addTable(User user, String tablename, Element res, String dbcon)
     {
@@ -543,9 +554,10 @@ public class SWBATreeDBQuery extends GenericResource
     /**
      *
      * @param user
-     * @param tm
-     * @param rec
+     * @param columnname 
      * @param res
+     * @param dbcon
+     * @param tablename
      */
     protected void addColumn(User user, String columnname, Element res, String dbcon, String tablename)
     {
@@ -611,8 +623,8 @@ public class SWBATreeDBQuery extends GenericResource
     /**
      *
      * @param user
-     * @param tm
-     * @param rec
+     * @param propname 
+     * @param valor
      * @param res
      */
     protected void addProperties(User user, String propname, Element res, String valor)
@@ -765,7 +777,7 @@ public class SWBATreeDBQuery extends GenericResource
      * @param request
      * @param response
      * @param paramRequest
-     * @throws AFException
+     * @throws SWBResourceException
      * @throws IOException
      */
     public void doGateway(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -846,7 +858,6 @@ public class SWBATreeDBQuery extends GenericResource
      * @param request
      * @param response
      * @param paramRequest
-     * @throws AFException
      * @throws IOException
      */
     @Override

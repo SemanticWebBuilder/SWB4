@@ -21,10 +21,6 @@
 *  http://www.semanticwebbuilder.org
 **/ 
  
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.semanticwb.portal.admin.resources;
 
 import java.io.IOException;
@@ -42,6 +38,7 @@ import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
 
 /**
+ * This resource add and show Contents related to a WebPage
  *
  * @author juan.fernandez
  */
@@ -52,11 +49,21 @@ public class SWBAWebPageContents extends GenericResource {
     String distributor = SWBPlatform.getEnv("wb/distributor");
     String Mode_Action = "paction";
 
-    /** Creates a new instance of TopicContents */
+    /** Creates a new instance of SWBAWebPageContents */
     public SWBAWebPageContents() {
     }
+
     static String MODE_IdREQUEST = "FORMID";
 
+    /**
+     * User view of the resource, this call to a doEdit() mode.
+     *
+     * @param request , this holds the parameters
+     * @param response , an answer to the user request
+     * @param paramRequest , a list of objects like user, webpage, Resource, ...
+     * @throws SWBResourceException, a Resource Exception
+     * @throws IOException, an In Out Exception
+     **/
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
@@ -66,6 +73,15 @@ public class SWBAWebPageContents extends GenericResource {
         doEdit(request, response, paramRequest);
     }
 
+    /**
+     * User edit view of the resource, this show a list of contents related to a webpage, user can add, remove, activate, deactivate contents.
+     *
+     * @param request , this holds the parameters
+     * @param response , an answer to the user request
+     * @param paramRequest , a list of objects like user, webpage, Resource, ...
+     * @throws SWBResourceException, a Resource Exception
+     * @throws IOException, an In Out Exception
+     **/
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
@@ -849,6 +865,14 @@ public class SWBAWebPageContents extends GenericResource {
         }
     }
 
+    /**
+     * Shows the preview of the content
+     * @param request , this holds the parameters
+     * @param response , an answer to the user request
+     * @param paramRequest , a list of objects like user, webpage, Resource, ...
+     * @throws SWBResourceException, a Resource Exception
+     * @throws IOException, an In Out Exception
+     */
     public void doPreview(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String id = request.getParameter("sval");
         PrintWriter out = response.getWriter();
@@ -864,6 +888,14 @@ public class SWBAWebPageContents extends GenericResource {
         out.println("</fieldset>");
     }
 
+    /**
+     * Show the list of the pflows to select one and send the element to the selected publish flow
+     * @param request , this holds the parameters, an input data
+     * @param response , an answer to the user request
+     * @param paramRequest , a list of objects like user, webpage, Resource, ...
+     * @throws SWBResourceException, a Resource Exception
+     * @throws IOException, an In Out Exception
+     */
     public void doPFlowMessage(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String id = request.getParameter("suri"); // id recurso
         String resid = request.getParameter("sval"); // id recurso
@@ -927,6 +959,13 @@ public class SWBAWebPageContents extends GenericResource {
         out.println("</div>");
     }
 
+    /**
+     * Do a specific action like add, remove, send to a publish flow, delete the reference between WebPage and Content
+     * @param request , this holds the parameters
+     * @param response , an answer to the user request, and a list of objects like user, webpage, Resource, ...
+     * @throws SWBResourceException, a Resource Exception
+     * @throws IOException, an In Out Exception
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String id = request.getParameter("suri");
@@ -1065,6 +1104,14 @@ public class SWBAWebPageContents extends GenericResource {
         }
     }
 
+    /**
+     * Do an update, update status, active or unactive action of a Content element requested by the user
+     * @param request , this holds the parameters
+     * @param response , an answer to the user request
+     * @param paramRequest , a list of objects like user, webpage, Resource, ...
+     * @throws SWBResourceException, a Resource Exception
+     * @throws IOException, an In Out Exception
+     */
     public void doAction(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
@@ -1240,6 +1287,12 @@ public class SWBAWebPageContents extends GenericResource {
         }
     }
 
+    /**
+     * Gets a date format based on the language parameter
+     * @param dateTime, a date time in milliseconds
+     * @param lang, explicit language
+     * @return a string of the date time in a selected language
+     */
     public String getDateFormat(long dateTime, String lang) {
         if (null == lang) {
             lang = "es";
@@ -1249,6 +1302,12 @@ public class SWBAWebPageContents extends GenericResource {
         return df.format(new Date(dateTime));
     }
 
+    /**
+     * Gets the string of display name property of a semantic object
+     * @param obj, semantic object
+     * @param lang, explicit language
+     * @return a string value of the DisplayName property
+     */
     public String getDisplaySemObj(SemanticObject obj, String lang) {
         String ret = obj.getRDFName();
         try {
@@ -1259,6 +1318,12 @@ public class SWBAWebPageContents extends GenericResource {
         return ret;
     }
 
+    /**
+     * Gets the property value, it depends on the property type.
+     * @param obj, semantic object
+     * @param prop, property to eval
+     * @return get the corresponding property value
+     */
     public String getValueSemProp(SemanticObject obj, SemanticProperty prop) {
         String ret = "";
         try {
@@ -1288,6 +1353,15 @@ public class SWBAWebPageContents extends GenericResource {
         }
         return ret;
     }
+
+     /**
+     * Process the mode request by the session user
+     * @param request , this holds the parameters
+     * @param response , an answer to the user request
+     * @param paramRequest , a list of objects like user, webpage, Resource, ...
+     * @throws SWBResourceException, a Resource Exception
+     * @throws IOException, an In Out Exception
+     */
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {

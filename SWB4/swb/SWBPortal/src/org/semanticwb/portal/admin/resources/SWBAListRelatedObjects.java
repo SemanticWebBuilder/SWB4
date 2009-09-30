@@ -236,6 +236,12 @@ public class SWBAListRelatedObjects extends GenericResource {
 
     }
 
+    /**
+     *
+     * @param obj
+     * @param prop
+     * @return
+     */
     public String getValueSemProp(SemanticObject obj, SemanticProperty prop) {
         String ret = "";
         try {

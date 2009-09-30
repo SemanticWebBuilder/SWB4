@@ -77,7 +77,6 @@ public class SWBAWorkflow extends GenericResource
      * @param request
      * @param response
      * @param paramRequest
-     * @throws AFException
      * @throws IOException
      */
     @Override
@@ -647,7 +646,7 @@ public class SWBAWorkflow extends GenericResource
      * @param request
      * @param response
      * @param paramRequest
-     * @throws AFException
+     * @throws SWBResourceException
      * @throws IOException
      */
     public void doGateway(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -817,6 +816,15 @@ public class SWBAWorkflow extends GenericResource
         }
     }
 
+    /**
+     *
+     * @param tm
+     * @param xml
+     * @param userid
+     * @return
+     * @throws SWBResourceException
+     * @throws Exception
+     */
     public WorkflowResponse updatePflow(String tm, Document xml, String userid) throws SWBResourceException, Exception
     {
         //regreso inicial WorkflowResponse
