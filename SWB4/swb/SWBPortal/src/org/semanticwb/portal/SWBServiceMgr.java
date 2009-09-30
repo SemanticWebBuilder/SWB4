@@ -38,6 +38,7 @@ import org.semanticwb.model.Resource;
 import org.semanticwb.model.ResourceSubType;
 import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.Resourceable;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.Traceable;
@@ -65,7 +66,7 @@ public class SWBServiceMgr implements SemanticObserver {
 
     public void notify(SemanticObject obj, Object prop, String action)
     {
-        User usr = SWBPortal.getSessionUser();
+        User usr = SWBContext.getSessionUser();
         log.trace("obj:" + obj + " prop:" + prop + " action:" + action + " " + usr);
         //System.out.println("obj:" + obj + " prop:" + prop + " action:" + action + " " + usr);
         if(obj.getModel().isTraceable())SWBPortal.getDBAdmLog().saveAdmLog(usr, obj, prop, action);

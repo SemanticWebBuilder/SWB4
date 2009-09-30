@@ -245,7 +245,7 @@ public class SWBATree extends GenericResource
 
     public void addFavorites(JSONArray arr, SWBParamRequest paramRequest)  throws JSONException
     {
-        User user=SWBPortal.getSessionUser();
+        User user=SWBContext.getSessionUser();
         //System.out.println("user uri:"+user.getURI());
         if(user!=null && user.getURI()!=null)
         {
@@ -464,7 +464,7 @@ public class SWBATree extends GenericResource
         }
         menus.put(TreeUtils.getMenuSeparator());
 
-        User user=SWBPortal.getSessionUser();
+        User user=SWBContext.getSessionUser();
         boolean isfavo=user.hasFavorite(obj);
         if(!isfavo)
         {
@@ -619,7 +619,7 @@ public class SWBATree extends GenericResource
         menus.put(TreeUtils.getMenuSeparator());
 
         //menu favoritos
-        User user=SWBPortal.getSessionUser();
+        User user=SWBContext.getSessionUser();
         boolean isfavo=user.hasFavorite(obj);
         if(!isfavo)
         {

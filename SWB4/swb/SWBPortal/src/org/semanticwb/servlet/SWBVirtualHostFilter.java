@@ -61,6 +61,7 @@ public class SWBVirtualHostFilter implements Filter
     static Logger log = SWBUtils.getLogger(SWBVirtualHostFilter.class);
     private SWBPlatform swbPlatform = null;
     private HashMap<String, InternalServlet> intServlets = new HashMap();
+    private InternalServlet dist=null;
     private Login loginInternalServlet = new Login();
     // The filter configuration object we are associated with.  If
     // this value is null, this filter instance is not currently
@@ -86,6 +87,7 @@ public class SWBVirtualHostFilter implements Filter
         log.trace("VirtualHostFilter:doFilter()");
 
         boolean catchErrors = true;
+        String lang=null;
 
         if (fistCall)
         {
@@ -131,6 +133,13 @@ public class SWBVirtualHostFilter implements Filter
             serv = null;
             isjsp = true;
         }
+        
+        //verifica lenguaje en URI
+        if(iserv!=null && iserv.length()==2)
+        {
+            serv=dist;
+            if(!iserv.equals("wb"))lang=iserv;
+        }
 
 //        String real=WBVirtualHostMgr.getInstance().getVirtualHost(path,host);
 //        
@@ -154,7 +163,7 @@ public class SWBVirtualHostFilter implements Filter
                     DistributorParams dparams = null;
                     if (!(serv instanceof Admin))
                     {
-                        dparams = new DistributorParams(_request, auri);
+                        dparams = new DistributorParams(_request, auri,lang);
                     }
                     if (catchErrors && serv instanceof Distributor)
                     {
@@ -201,7 +210,7 @@ public class SWBVirtualHostFilter implements Filter
                     {
                         user = SWBPortal.getUserMgr().getUser(_request, SWBContext.getGlobalWebSite());
                     }
-                    SWBPortal.setSessionUser(user);
+                    SWBContext.setSessionUser(user);
                 }
                 chain.doFilter(request, response);
             }
@@ -259,6 +268,7 @@ public class SWBVirtualHostFilter implements Filter
         intServlets.put("wb", serv);
         intServlets.put("wb2", serv);
         serv.init(filterConfig.getServletContext());
+        dist=serv;
 
         InternalServlet login = new Login();
         intServlets.put("login", login);
