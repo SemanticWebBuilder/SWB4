@@ -9,7 +9,7 @@
     public String getUserLanguage()
     {
         String lang="es";
-        User user=SWBPortal.getSessionUser();
+        User user=SWBContext.getSessionUser();
         if(user!=null)lang=user.getLanguage();
         return lang;
     }

@@ -6,7 +6,7 @@
     SemanticObject obj=SemanticObject.createSemanticObject(uri);
     if(obj!=null)
     {
-        User user=SWBPortal.getSessionUser();
+        User user=SWBContext.getSessionUser();
         out.println("<div class=\"applet\">");
         SWBAEditor.getTemplateApplet(new java.io.PrintWriter(out), obj.getModel().getName(), obj.getId(), 1, user);
         out.println("</div>");

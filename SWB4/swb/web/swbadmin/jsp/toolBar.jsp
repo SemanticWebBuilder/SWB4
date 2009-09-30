@@ -49,7 +49,7 @@
 %>
 <%
     String lang="es";
-    User user=SWBPortal.getSessionUser();
+    User user=SWBContext.getSessionUser();
     if(user!=null)lang=user.getLanguage();
     response.setHeader("Cache-Control", "no-cache"); 
     response.setHeader("Pragma", "no-cache");
