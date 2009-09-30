@@ -53,7 +53,7 @@
     
     <ul id="userreps" title="Sitios">
 <%
-    Iterator<UserRepository> usrreps=SWBContext.listUserRepositorys();
+    Iterator<UserRepository> usrreps=SWBContext.listUserRepositories();
     while(usrreps.hasNext())
     {
         UserRepository urep=usrreps.next();
