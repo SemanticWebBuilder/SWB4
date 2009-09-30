@@ -23,7 +23,9 @@
  
 package org.semanticwb.model;
 
+import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import org.semanticwb.Logger;
@@ -34,6 +36,7 @@ import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticVocabulary;
+import org.semanticwb.platform.SessionUser;
 
 public class SWBContext extends SWBContextBase
 {
@@ -44,6 +47,8 @@ public class SWBContext extends SWBContextBase
     public static String WEBSITE_GLOBAL="SWBGlobal";
     public static String USERREPOSITORY_DEFAULT="urswb";
     public static String USERREPOSITORY_ADMIN="uradm";
+
+    private static HashMap<String, SessionUser> m_sessions;
 
     private static ArrayList<String> filtered=new ArrayList();
     
@@ -63,6 +68,8 @@ public class SWBContext extends SWBContextBase
         filtered.add(WEBSITE_ADMIN);
         filtered.add(WEBSITE_ONTEDITOR);
         //filtered.add(WEBSITE_GLOBAL);
+
+        m_sessions = new HashMap();
     }
     
     public static WebSite getAdminWebSite()
@@ -137,6 +144,41 @@ public class SWBContext extends SWBContextBase
         }
         return arr.iterator();
     }
+
+    public static void setSessionUser(User user) {
+        if (user != null) {
+            SessionUser sess = m_sessions.get(Thread.currentThread().getName());
+            if (sess == null) {
+                m_sessions.put(Thread.currentThread().getName(), new SessionUser(user, user.getUserRepository().getId()));
+            } else {
+                sess.setUser(user, user.getUserRepository().getId());
+            }
+        }
+    }
+
+    public static User getSessionUser() {
+        return getSessionUser(null);
+    }
+
+    public static User getSessionUser(String usrrep) {
+        Principal user = null;
+        SessionUser sess = m_sessions.get(Thread.currentThread().getName());
+        if (sess != null) {
+            user = sess.getUser(usrrep);
+        }
+        return (User) user;
+    }
+
+    public static long getSessionUserID() {
+        long ret = 0;
+        Principal user = null;
+        SessionUser sess = m_sessions.get(Thread.currentThread().getName());
+        if (sess != null) {
+            ret = sess.geRequestID();
+        }
+        return ret;
+    }
+
 
     /**
      *

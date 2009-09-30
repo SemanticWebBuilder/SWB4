@@ -41,7 +41,7 @@ public class Dns extends DnsBase
     public void setDefault(boolean dnsDefault) 
     {
         super.setDefault(dnsDefault);
-        Iterator<Dns> it=getWebSite().listDnss();
+        Iterator<Dns> it=getWebSite().listDnses();
         while(it.hasNext())
         {
             Dns d=it.next();
@@ -55,7 +55,7 @@ public class Dns extends DnsBase
     synchronized public static void refresh()
     {
         names=new HashMap();
-        Iterator<Dns> it=listDnss();
+        Iterator<Dns> it=listDnses();
         while(it.hasNext())
         {
             Dns dns=it.next();

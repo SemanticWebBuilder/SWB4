@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable,org.semanticwb.model.Traceable,org.semanticwb.model.Localeable,org.semanticwb.model.Indexable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable
+public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Trashable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Activeable,org.semanticwb.model.Localeable,org.semanticwb.model.Traceable,org.semanticwb.model.Indexable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticClass swb_UserRepository=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserRepository");
     public static final org.semanticwb.platform.SemanticProperty swb_userRepository=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepository");
@@ -25,6 +25,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
     public static final org.semanticwb.platform.SemanticClass swb_PFlowRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlowRef");
     public static final org.semanticwb.platform.SemanticClass swb_Permission=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Permission");
     public static final org.semanticwb.platform.SemanticClass swb_Template=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Template");
+    public static final org.semanticwb.platform.SemanticClass swb_Country=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Country");
     public static final org.semanticwb.platform.SemanticClass swb_PFlow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlow");
     public static final org.semanticwb.platform.SemanticClass swb_ResourceFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceFilter");
     public static final org.semanticwb.platform.SemanticClass swb_TemplateRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#TemplateRef");
@@ -556,9 +557,9 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
         return org.semanticwb.model.Dns.getDns(id, this);
     }
 
-    public java.util.Iterator<org.semanticwb.model.Dns> listDnss()
+    public java.util.Iterator<org.semanticwb.model.Dns> listDnses()
     {
-        return org.semanticwb.model.Dns.listDnss(this);
+        return org.semanticwb.model.Dns.listDnses(this);
     }
 
     public org.semanticwb.model.Dns createDns(String id)
@@ -897,6 +898,30 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
     public boolean hasTemplate(String id)
     {
         return org.semanticwb.model.Template.hasTemplate(id, this);
+    }
+
+    public org.semanticwb.model.Country getCountry(String id)
+    {
+        return org.semanticwb.model.Country.getCountry(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.model.Country> listCountries()
+    {
+        return org.semanticwb.model.Country.listCountries(this);
+    }
+
+    public org.semanticwb.model.Country createCountry(String id)
+    {
+        return org.semanticwb.model.Country.createCountry(id,this);
+    }
+
+    public void removeCountry(String id)
+    {
+        org.semanticwb.model.Country.removeCountry(id, this);
+    }
+    public boolean hasCountry(String id)
+    {
+        return org.semanticwb.model.Country.hasCountry(id, this);
     }
 
     public org.semanticwb.model.PFlow getPFlow(String id)

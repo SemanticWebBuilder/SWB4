@@ -80,19 +80,41 @@ public class WebPage extends WebPageBase
      */
     public String getRealUrl()
     {
+        //TODO:
+        User user=SWBContext.getSessionUser(getWebSite().getUserRepository().getId());
+        if(user!=null)return getRealUrl(user.getLanguage());
+        return getRealUrl(null);
+    }
+
+    /**  Regresa el Url de la pagina
+     *  Ejemplo: /wb2/jei/home
+     * @return String
+     */
+    public String getRealUrl(String lang)
+    {
         if(realurl==null)
         {
-            realurl=SWBPlatform.getContextPath() + "/" + SWBPlatform.getEnv("swb/distributor","swb") + "/" + getWebSiteId() + "/" + getId();
+            realurl="/" + getWebSiteId() + "/" + getId();
         }
-        return realurl;
+        return SWBPlatform.getContextPath() + "/" + (lang==null?SWBPlatform.getEnv("swb/distributor","swb"):lang) + realurl;
     }    
+
+    /**
+     * Regresa el Url de la pagina
+     * Ejemplo: /swb/jei/home
+     * @return String
+     */
+    public String getUrl()
+    {
+        return getUrl((String)null);
+    }
     
     /**  
      * Regresa el Url de la pagina
      * Ejemplo: /swb/jei/home
      * @return String
      */
-    public String getUrl()
+    public String getUrl(String lang)
     {
         String url=getWebPageURL();
         if(url!=null)
