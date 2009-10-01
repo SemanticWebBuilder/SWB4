@@ -1,0 +1,185 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:wnet="http://www.semanticwebbuilder.org/swb4/wnet#"
+    xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
+  xml:base="http://www.semanticwebbuilder.org/swb4/wnet">
+  <owl:Ontology rdf:about="">
+    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Created with TopBraid Composer</owl:versionInfo>
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
+  </owl:Ontology>
+  <owl:Class rdf:ID="VerbWordSense">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="WordSense"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="LexicalContext">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+  </owl:Class>
+  <owl:Class rdf:about="#WordSense">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="SynSet"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:ID="VerbSynSet">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#SynSet"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="AdjectiveWordSense">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:subClassOf rdf:resource="#WordSense"/>
+  </owl:Class>
+  <owl:Class rdf:ID="AdverbSynSet">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#SynSet"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="AdjectiveSynSet">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#SynSet"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="AdverbWordSense">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:subClassOf rdf:resource="#WordSense"/>
+  </owl:Class>
+  <owl:Class rdf:ID="NounSynSet">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#SynSet"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="NounWordSense">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:subClassOf rdf:resource="#WordSense"/>
+  </owl:Class>
+  <owl:Class rdf:about="#SynSet">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+  </owl:Class>
+  <owl:ObjectProperty rdf:ID="attribute">
+    <rdfs:range rdf:resource="#AdjectiveSynSet"/>
+    <rdfs:domain rdf:resource="#NounSynSet"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="holonymOf">
+    <rdfs:domain rdf:resource="#NounSynSet"/>
+    <rdfs:range rdf:resource="#NounSynSet"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="derivationallyRelated">
+    <rdfs:domain rdf:resource="#WordSense"/>
+    <rdfs:range rdf:resource="#WordSense"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="classifiedBy">
+    <rdfs:domain rdf:resource="#SynSet"/>
+    <rdfs:range rdf:resource="#NounSynSet"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="classifies">
+    <rdfs:range rdf:resource="#SynSet"/>
+    <rdfs:domain rdf:resource="#NounSynSet"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="antonymOf">
+    <rdfs:domain rdf:resource="#WordSense"/>
+    <rdfs:range rdf:resource="#WordSense"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="classifiedByTopic">
+    <rdfs:domain rdf:resource="#SynSet"/>
+    <rdfs:range rdf:resource="#NounSynSet"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="classifiedByRegion">
+    <rdfs:domain rdf:resource="#SynSet"/>
+    <rdfs:range rdf:resource="#NounSynSet"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="lexicalContext">
+    <rdfs:range rdf:resource="#LexicalContext"/>
+    <rdfs:domain rdf:resource="#WordSense"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="containsWordSense">
+    <rdfs:domain rdf:resource="#SynSet"/>
+    <rdfs:range rdf:resource="#WordSense"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="inSynset">
+    <rdfs:range rdf:resource="#SynSet"/>
+    <rdfs:domain rdf:resource="#WordSense"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="word">
+    <rdfs:range>
+      <swb:Class rdf:ID="Word">
+        <owl:disjointWith rdf:resource="#WordSense"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <swb:classCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Word</swb:classCodeName>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+        <owl:disjointWith rdf:resource="#SynSet"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:domain rdf:resource="#WordSense"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="participleOf">
+    <rdfs:range rdf:resource="#WordSense"/>
+    <rdfs:domain rdf:resource="#AdjectiveWordSense"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="classifiedByUsage">
+    <rdfs:domain rdf:resource="#SynSet"/>
+    <rdfs:range rdf:resource="#NounSynSet"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="sense">
+    <rdfs:domain rdf:resource="#Word"/>
+    <rdfs:range rdf:resource="#WordSense"/>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:ID="lexicalForm">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Word"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="restrictionPattern">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#WordSense"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="tagCount">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#WordSense"/>
+  </owl:DatatypeProperty>
+  <swb:CodePackage rdf:ID="pkg">
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >wnet</swb:prefix>
+    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.nlp.wordnet</swb:package>
+  </swb:CodePackage>
+</rdf:RDF>
+
+<!-- Created with TopBraid Composer -->
