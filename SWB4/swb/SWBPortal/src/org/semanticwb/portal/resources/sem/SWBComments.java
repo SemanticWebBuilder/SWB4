@@ -69,7 +69,7 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
             }
         }else {
             super.processAction(request, response);
-        }        
+        }
     }
 
     @Override
