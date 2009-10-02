@@ -58,9 +58,6 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
                 WebSite model = response.getWebPage().getWebSite();
                 Comment comment = Comment.createComment(model);
                 comment.setComment(request.getParameter("cmnt_comment"));
-                //comment.setCreated(new Date());
-                //User user = response.getUser();
-                //comment.setCreator(response.getUser());
                 addComment(comment);
                 request.getSession(true).removeAttribute("cs");
             }else {
@@ -115,27 +112,22 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
 
         ret.append("function doApply() {\n");
         ret.append("    var msgs = new Array();");
-        ret.append("    if(isEmpty('cmnt_name')) {\n");
+        /*ret.append("    if(isEmpty('cmnt_name')) {\n");
         ret.append("        msgs.push('Ingresa tu nombre.');\n");
-        ret.append("    }\n");
-        ret.append("    if(!isValidEmail(dojo.byId('cmnt_email').value)) {\n");
+        ret.append("    }\n");*/
+        /*ret.append("    if(!isValidEmail(dojo.byId('cmnt_email').value)) {\n");
         ret.append("        msgs.push('Ingresa un correo electrónico válida.');\n");
-        ret.append("    }\n");
+        ret.append("    }\n");*/
         ret.append("    if(isEmpty('cmnt_comment')) {\n");
         ret.append("        msgs.push('Tienes que ingresar un comentario u opinión.');\n");
         ret.append("    }\n");
         ret.append("    if(isEmpty('cmnt_seccode')) {");
-        ret.append("        msgs.push('Para poder agregar tu comentario es necesario que ingreses el código mostrado.\\nEn caso de no ser claro cambialo haciendo clic en \"Generar otro código\".');");
+        ret.append("        msgs.push('Para poder agregar tu comentario es necesario que ingreses el código de la imagen.\\nEn caso de no ser claro puedes cambiarlo haciendo clic en <<Cambiar imagen>>.');");
         ret.append("    }");
 
         ret.append("    if(msgs.length > 0) {\n");
-        ret.append("        dojo.byId('cmnt_msg').innerHTML = msgs.join('<br />');\n");
-        ret.append("        dojo.byId('cmnt_msg').style.backgroundColor = '#F89C9E';\n");
-        ret.append("        dojo.byId('cmnt_msg').style.color = '#FF0000';\n");
-        ret.append("        dojo.byId('cmnt_msg').style.fontSize = '12px';\n");
-        ret.append("        dojo.byId('cmnt_msg').style.textAlign = 'justify';\n");
+        ret.append("          alert(msgs.join('<br />'));");
         ret.append("    }else {\n");
-        ret.append("        dojo.byId('cmnt_msg').innerHTML = '';\n");
         ret.append("        dojo.byId('cmnt_send').form.submit();\n");
         ret.append("    }\n");
         ret.append("}\n");
@@ -150,80 +142,38 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
 
         ret.append("</script>\n");
         
-        ret.append("<table width=\"99%\" class=\"cmnts\" border=0 cellpadding=\"0\" cellspacing=\"0\">\n");
         ret.append(renderListComments(paramRequest));
-
-        if(securCodeCreated!=null && !securCodeCreated.equalsIgnoreCase(securCodeSent)) {
-            ret.append("<tr><td class=\"espcmnt\" height=\"30\" colspan=\"2\">\n");
-            ret.append("<div id=\"cmnt_msg\" style=\"background-color:#F89C9E; color:#333333; font-size:12px; text-align:center\">");
-            ret.append(paramRequest.getLocaleString("msgWrongCode"));
-            ret.append("</div>");
-            ret.append("</td></tr>");
-            request.getSession(true).removeAttribute("cs");
-        }else {
-            ret.append("<tr><td class=\"cmnt\" height=\"10\" colspan=\"2\"><div id=\"cmnt_msg\"></div></td></tr>\n");
-        }
-        
-        ret.append("<tr>\n");
-        ret.append("<td colspan=\"2\" class=\"creacmnt\">\n");
-        ret.append("<h4>"+paramRequest.getLocaleString("add")+"</h4>\n");
-        ret.append("<form name=\"cmnt\" id=\"cmnt\" target=\"\" action=\""+rUrl+"\" method=\"post\">\n");
-        ret.append("	<table border=\"0\" width=\"100%\">\n");
-        ret.append("      <tr class=\"f\">\n");
-        ret.append("        <td width=\"50%\">\n");
-        // Fullname
-        ret.append("            <p>\n");
-        ret.append("            <label for=\"cmnt_name\">"+paramRequest.getLocaleString("nameLabel")+":</label><br/>\n");
         User user = paramRequest.getUser();
+        ret.append("<div class=\"swb-comenta\">");
+        ret.append("<h1>"+paramRequest.getLocaleString("add")+"</h1>");
+        ret.append("<form name=\"cmnt\" id=\"cmnt\" action=\""+rUrl+"\" method=\"post\">\n");
         if(user.isSigned()) {
-            ret.append("            <input type=\"text\" id=\"cmnt_name\" name=\"cmnt_name\" value=\""+user.getFullName()+"\" size=\"34\" />\n");
-        }else {
-            ret.append("            <input type=\"text\" id=\"cmnt_name\" name=\"cmnt_name\" value=\""+name+"\" size=\"34\" />\n");
+            ret.append("<div class=\"swb-comenta-nombre\">");
+            ret.append("  <label for=\"cmnt_name\">"+paramRequest.getLocaleString("nameLabel")+":</label>");
+            ret.append("  <input type=\"text\" id=\"cmnt_name\" name=\"cmnt_name\" value=\""+user.getFullName()+"\" size=\"34\" />");
+            ret.append("</div>");
+            ret.append("<div class=\"swb-comenta-correo\">");
+            ret.append("  <label for=\"cmnt_email\">"+paramRequest.getLocaleString("emailLabel")+":</label>");
+            ret.append("  <input type=\"text\" id=\"cmnt_email\" name=\"cmnt_email\" value=\""+user.getEmail()+"\" size=\"34\" />");
+            ret.append("</div>");
         }
-        ret.append("            </p>\n");
-        // Email
-        ret.append("            <p>\n");
-        ret.append("            <label for=\"email\">"+paramRequest.getLocaleString("emailLabel")+":</label><br/>\n");
-        if(user.isSigned()) {
-            ret.append("            <input type=\"text\" id=\"cmnt_email\" name=\"cmnt_email\" value=\""+user.getEmail()+"\" size=\"34\" />\n");
-        }else {
-            ret.append("            <input type=\"text\" id=\"cmnt_email\" name=\"cmnt_email\" value=\""+email+"\" size=\"34\" />\n");
-        }
-        ret.append("            </p>\n");
-        //Comment
-        ret.append("            <p>\n");
-        ret.append("            <label for=\"comment\">"+paramRequest.getLocaleString("comment")+":</label><br/>\n");
-        ret.append("            <textarea id=\"cmnt_comment\" name=\"cmnt_comment\" cols=\"32\" rows=\"3\" >"+comment+"</textarea>\n");
-        ret.append("            </p>\n");
-        ret.append("        </td>\n");
-        ret.append("        <td width=\"50%\">\n");
-        ret.append("            <p style=\"text-align:justify\">\n");
-        ret.append(paramRequest.getLocaleString("msgSpam"));
-        ret.append("            </p>\n");
-        ret.append("            <span>\n");
-        ret.append("            <div style=\"text-align:right\">\n");
-        ret.append("                <input type=\"button\" value=\""+paramRequest.getLocaleString("anotherCode")+"\" onClick=\"changeSecureCodeImage('imgseccode');\"/>\n");
-        ret.append("            </div>\n");
-        ret.append("            <div id=\"cntseccode\" style=\"text-align:center\">\n");
-        ret.append("                <img src=\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/securecode.jsp\" id=\"imgseccode\" width=\"155\" height=\"65\" />\n");
-        ret.append("            </div>\n");        
-        ret.append("            </span>\n");
-        ret.append("            <p>\n");
-        ret.append("                <input type=\"text\" id=\"cmnt_seccode\" name=\"cmnt_seccode\" size=\"45\" />\n");
-        ret.append("            </p>\n");
-        ret.append("        </td>\n");
-        ret.append("      </tr>\n");
-        ret.append("      <tr>\n");
-        ret.append("        <td colspan=\"2\">\n");
-        ret.append("        <p>"+paramRequest.getLocaleString("msgEditorial")+"</p>\n");
-        ret.append("        <p><input type=\"button\" id=\"cmnt_send\" name=\"cmnt_send\" value=\""+paramRequest.getLocaleString("publish")+"\" onClick=\"doApply();\" /></p>\n");
-        ret.append("        </td>\n");
-        ret.append("      </tr>\n");
-        ret.append("    </table>\n");
-        ret.append("</form>\n");
-        ret.append("</td></tr>\n");
-        ret.append("</table>\n");
-        
+        ret.append("<div class=\"swb-comenta-comenta\">");
+        ret.append("  <label for=\"comment\">"+paramRequest.getLocaleString("comment")+":</label>");
+        ret.append("  <textarea id=\"cmnt_comment\" name=\"cmnt_comment\" cols=\"32\" rows=\"3\" >"+comment+"</textarea>");
+        ret.append("</div>");
+        ret.append("<div class=\"swb-comenta-imagen\">");
+        ret.append("  <img src=\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/securecode.jsp\" id=\"imgseccode\" width=\"155\" height=\"65\" />");
+        ret.append("  <a href=\"#\" onclick=\"changeSecureCodeImage('imgseccode');\">"+paramRequest.getLocaleString("anotherCode")+"</a>");
+        ret.append("</div>");
+        ret.append("<div class=\"swb-comenta-captcha\">");
+        ret.append("  <label for=\"cmnt_seccode\">El texto de la imagen es:</label>");
+        ret.append("  <input type=\"text\" id=\"cmnt_seccode\" name=\"cmnt_seccode\" size=\"45\" />");
+        ret.append("</div>");
+        ret.append("<div class=\"swb-comenta-boton\">");
+        ret.append("  <input type=\"button\" id=\"cmnt_send\" name=\"cmnt_send\" value=\""+paramRequest.getLocaleString("publish")+"\" onClick=\"doApply();\" />");
+        ret.append("</div>");
+        ret.append("</form>");
+        ret.append("</div>");
         out.println(ret.toString());
         out.flush();
         out.close();
@@ -236,17 +186,16 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
         int ordinal = 1;
 
         Iterator<Comment> itComments = listComments();
+        if(itComments.hasNext()) {
+            ret.append("<div class=\"swb-comenta-lista\"><ul>");
+        }
         while(itComments.hasNext()) {
             Comment comment = itComments.next();
-            ret.append("<tr>\n");
-//            ret.append("  <td class=\"cmntimg\" width=\"30\" height=\"30\">\n");
-//            ret.append("  <img src=\""+SWBPlatform.getContextPath()+"/swbadmin/icons/status_online.png\" alt=\"user comment\" />\n");
-//            ret.append("  </td>\n");
-            ret.append("  <td colspan=2 class=\"cmnt\">"+(ordinal++)+". <strong>"+(comment.getCreator()==null?"Desconocido":comment.getCreator().getFullName())+" "+paramRequest.getLocaleString("writeAtLabel")+"</strong> "+sdf.format(comment.getCreated())+"<br />"+comment.getComment()+"</td>\n");
-            ret.append("</tr>\n");
+            ret.append("<li>"+(ordinal++)+". <strong>"+(comment.getCreator()==null?"Anonimo":comment.getCreator().getFullName())+" "+paramRequest.getLocaleString("writeAtLabel")+"</strong> "+sdf.format(comment.getCreated())+"<br />"+comment.getComment()+"</li>");
         }
-
-
+        if(itComments.hasNext()) {
+            ret.append("</ul></div>");
+        }
         return ret.toString();
     }
 
