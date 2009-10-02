@@ -1093,4 +1093,36 @@ div.sitesectiontree ul.treeres {
 	color:#FFFFFF;
 	font-weight:bold;
 }
+
+.swb-comenta-lista h1{
+	font-family:Georgia, "Times New Roman", Times, serif;
+	font-size:16px;
+	text-transform:capitalize;
+	padding:30px 0px 10px 10px;
+	margin-bottom:20px;
+	display:block;
+	border-top: dashed #efefef 1px;
+	border-bottom:solid #CCCCCC 1px;
+	color:#333;
+}
+.swb-comenta-lista li {
+	list-style:none;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size:12px;
+	color:#999999;
+	margin-bottom:20px;
+	padding-bottom:10px;
+	border-bottom:solid #CCCCCC 1px;
+}
+.swb-comenta-lista span{
+	font-size:15px;
+	font-weight:bold;
+	color:#6f131c;
+}
+.swb-comenta-lista p{
+	margin:0;
+	margin-top:5px;
+	font-size:14px;
+	color:#333333;
+}
 /*------Termina SWBComments---*/
