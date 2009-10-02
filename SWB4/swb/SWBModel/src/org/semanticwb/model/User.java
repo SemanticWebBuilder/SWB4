@@ -430,6 +430,35 @@ public class User extends UserBase implements Principal
                 }
             }
         }
+        if (ret && obj instanceof Roleable)
+        {
+            Iterator<Role> it = ((Roleable) obj).listRoles();
+            while (it.hasNext())
+            {
+                Role ref = it.next();
+                //System.out.println("ref:"+ref+" role:"+ref.getRole());
+                if (!hasRole(ref))
+                {
+                    ret = false;
+                    //System.out.println("hasRole:false");
+                    break;
+                }
+            }
+        }
+        if (ret && obj instanceof UserGroupable)
+        {
+            Iterator<UserGroup> it = ((UserGroupable) obj).listUserGroups();
+            while (it.hasNext())
+            {
+                UserGroup usrgrp = it.next();
+                //System.out.println("ref:"+ref+" role:"+ref.getRole());
+                if (!hasUserGroup(usrgrp))
+                {
+                    ret = false;
+                    break;
+                }
+            }
+        }
         //System.out.println("User:"+this+" haveAccess:"+obj+" "+ret);
         return ret;
     }
