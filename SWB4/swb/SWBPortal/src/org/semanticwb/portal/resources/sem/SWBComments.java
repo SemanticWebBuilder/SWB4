@@ -90,27 +90,27 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
         String securCodeSent = request.getParameter("cmnt_seccode");
         String securCodeCreated = (String)request.getSession(true).getAttribute("cs");
         
-        ret.append("<script type=\"text/javascript\">\n");
+        ret.append("<script type=\"text/javascript\">");
 
-        ret.append("function isEmpty(objid) {\n");
-        ret.append("    var obj = dojo.byId(objid);\n");
-        ret.append("    if (obj==null || obj.value=='' || !isNaN(obj.value) || obj.value.charAt(0) == ' ') {\n");
-        ret.append("        return true;\n");
-        ret.append("    }else {\n");
-        ret.append("        return false;\n");
-        ret.append("    }\n");
-        ret.append("}\n");
+        ret.append("function isEmpty(objid) { ");
+        ret.append("    var obj = dojo.byId(objid); ");
+        ret.append("    if (obj==null || obj.value=='' || !isNaN(obj.value) || obj.value.charAt(0) == ' ') { ");
+        ret.append("        return true; ");
+        ret.append("    }else { ");
+        ret.append("        return false; ");
+        ret.append("    } ");
+        ret.append("} ");
 
 
-        ret.append("function isValidEmail(strEmail) {\n");
-        ret.append("    emailRegExp = /^[^@]+@[^@]+.[a-z]{2,}$/i; \n");
-        ret.append("    if(strEmail.search(emailRegExp) == -1) {\n");        
-        ret.append("        return false;\n");
-        ret.append("    }\n");
-        ret.append("    return true; \n");
-        ret.append("}\n");
+        ret.append("function isValidEmail(strEmail) { ");
+        ret.append("    emailRegExp = /^[^@]+@[^@]+.[a-z]{2,}$/i; ");
+        ret.append("    if(strEmail.search(emailRegExp) == -1) { ");
+        ret.append("        return false; ");
+        ret.append("    } ");
+        ret.append("    return true; ");
+        ret.append("} ");
 
-        ret.append("function doApply() {\n");
+        ret.append("function doApply() { ");
         ret.append("    var msgs = new Array();");
         /*ret.append("    if(isEmpty('cmnt_name')) {\n");
         ret.append("        msgs.push('Ingresa tu nombre.');\n");
@@ -118,29 +118,29 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
         /*ret.append("    if(!isValidEmail(dojo.byId('cmnt_email').value)) {\n");
         ret.append("        msgs.push('Ingresa un correo electrónico válida.');\n");
         ret.append("    }\n");*/
-        ret.append("    if(isEmpty('cmnt_comment')) {\n");
-        ret.append("        msgs.push('Tienes que ingresar un comentario u opinión.');\n");
-        ret.append("    }\n");
-        ret.append("    if(isEmpty('cmnt_seccode')) {");
-        ret.append("        msgs.push('Para poder agregar tu comentario es necesario que ingreses el código de la imagen.\\nEn caso de no ser claro puedes cambiarlo haciendo clic en <<Cambiar imagen>>.');");
+        ret.append("    if(isEmpty('cmnt_comment')) { ");
+        ret.append("        msgs.push('Tienes que ingresar un comentario u opinión.'); ");
+        ret.append("    } ");
+        ret.append("    if(isEmpty('cmnt_seccode')) { ");
+        ret.append("        msgs.push('Para poder agregar tu comentario es necesario que ingreses el código de la imagen.\\nEn caso de no ser claro puedes cambiarlo haciendo clic en <<Cambiar imagen>>.'); ");
         ret.append("    }");
 
-        ret.append("    if(msgs.length > 0) {\n");
-        ret.append("          alert(msgs.join('<br />'));");
-        ret.append("    }else {\n");
-        ret.append("        dojo.byId('cmnt_send').form.submit();\n");
-        ret.append("    }\n");
-        ret.append("}\n");
+        ret.append("    if(msgs.length > 0) { ");
+        ret.append("          alert(msgs.join('\\n'));");
+        ret.append("    }else { ");
+        ret.append("        dojo.byId('cmnt_send').form.submit(); ");
+        ret.append("    } ");
+        ret.append("} ");
 
-        ret.append("function changeSecureCodeImage(imgid) {\n");
-        ret.append("    var img = dojo.byId(imgid);\n");
-        ret.append("    if(img) {\n");
-        ret.append("        var rn = Math.floor(Math.random()*99999);\n");
-        ret.append("        img.src = '"+SWBPlatform.getContextPath()+"/swbadmin/jsp/securecode.jsp?nc='+rn;\n");
-        ret.append("    }\n");
-        ret.append("}\n");
+        ret.append("function changeSecureCodeImage(imgid) { ");
+        ret.append("    var img = dojo.byId(imgid); ");
+        ret.append("    if(img) { ");
+        ret.append("        var rn = Math.floor(Math.random()*99999); ");
+        ret.append("        img.src = '"+SWBPlatform.getContextPath()+"/swbadmin/jsp/securecode.jsp?nc='+rn; ");
+        ret.append("    } ");
+        ret.append("} ");
 
-        ret.append("</script>\n");
+        ret.append("</script> ");
         
         ret.append(renderListComments(paramRequest));
         User user = paramRequest.getUser();
