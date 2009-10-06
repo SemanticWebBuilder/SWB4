@@ -263,8 +263,8 @@ public class SWBUtils {
         private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'.'SSS");
         //version 1.3
 
-        public static String CHARSET_ISO8859_1="ISO8859_1";
-        public static String CHARSET_UTF8="UTF8";
+        public static final String CHARSET_ISO8859_1="ISO8859_1";
+        public static final String CHARSET_UTF8="UTF8";
 
         private static String defencoding=null;
 
