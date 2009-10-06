@@ -1654,7 +1654,7 @@ public class SWBUtils {
                     }
                 }
             } catch (Exception ex) {
-                log.equals(ex);
+                log.error(ex); //MAPS74
             } finally {
                 if (zf != null) {
                     try {
