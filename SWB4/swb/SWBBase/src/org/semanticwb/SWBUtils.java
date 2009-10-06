@@ -1522,7 +1522,7 @@ public class SWBUtils {
          */
         public static void addFilesToExistingZip(File zipFile, File[] files) throws IOException {
             // get a temp file
-            File tempFile = File.createTempFile(zipFile.getName(), null);
+            File tempFile = File.createTempFile(zipFile.getName(), null, zipFile.getParentFile()); //MAPS74 En Solaris no se vale renombrar un archivo hacia /var/tmp
             // delete it, otherwise you cannot rename your existing zip to it.
             tempFile.delete();
 
