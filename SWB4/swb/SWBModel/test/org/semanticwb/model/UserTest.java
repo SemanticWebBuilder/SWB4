@@ -331,7 +331,7 @@ public class UserTest {
 
     @Test
     public void fixPasswords(){
-        Iterator<UserRepository> iur = SWBContext.listUserRepositorys();
+        Iterator<UserRepository> iur = SWBContext.listUserRepositories();
         while(iur.hasNext()){
             UserRepository ur = iur.next();
             Iterator<User> itus = ur.listUsers();
