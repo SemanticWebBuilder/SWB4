@@ -130,7 +130,6 @@ public class WBMenuNivel extends GenericAdmResource
         try
         {
             WebSite tm = paramRequest.getWebPage().getWebSite();
-            org.semanticwb.model.Language lang=tm.getLanguage(user.getLanguage());            
             WebPage tpid = null;
             
             if (paramRequest.getArguments().get("topic") != null)
@@ -151,7 +150,7 @@ public class WBMenuNivel extends GenericAdmResource
             
             Element baseele = dom.createElement("basetopic");
             baseele.setAttribute("id", basetp.getId());
-            baseele.setAttribute("name", basetp.getDisplayName(lang.getId()));
+            baseele.setAttribute("name", basetp.getDisplayName(user.getLanguage()));
             baseele.setAttribute("path", basetp.getUrl());
             baseele.setAttribute("level",Integer.toString(basetp.getLevel()));
             if(basetp.equals(tpid)) {
@@ -164,7 +163,7 @@ public class WBMenuNivel extends GenericAdmResource
             
             Element topicCurrent = dom.createElement("currenttopic");
             topicCurrent.setAttribute("id", tpid.getId());
-            topicCurrent.setAttribute("name", tpid.getDisplayTitle(lang.getId()));
+            topicCurrent.setAttribute("name", tpid.getDisplayName(user.getLanguage()));
             topicCurrent.setAttribute("path", tpid.getUrl());
             topicCurrent.setAttribute("level",Integer.toString(tpid.getLevel()));
             el.appendChild(topicCurrent);
@@ -174,7 +173,7 @@ public class WBMenuNivel extends GenericAdmResource
             {
                 Element epadre = dom.createElement("parent");
                 epadre.setAttribute("id", padre.getId());
-                epadre.setAttribute("name", padre.getDisplayTitle(lang.getId()));
+                epadre.setAttribute("name", padre.getDisplayName(user.getLanguage()));
                 epadre.setAttribute("path", padre.getUrl());
                 epadre.setAttribute("level",Integer.toString(padre.getLevel()));
                 el.appendChild(epadre);
@@ -186,7 +185,7 @@ public class WBMenuNivel extends GenericAdmResource
             //if(padre!=null) tmpTopic = padre;
             
             int nivel = 1;
-            Iterator <WebPage> itehermanos=tmpTopic.listChilds();
+            Iterator <WebPage> itehermanos=tmpTopic.listVisibleChilds(paramRequest.getUser().getLanguage());
             while(itehermanos.hasNext())
             {
                 WebPage tphermano=itehermanos.next();
@@ -194,7 +193,7 @@ public class WBMenuNivel extends GenericAdmResource
                 {
                     Element ehermano = dom.createElement("brother");
                     ehermano.setAttribute("id", tphermano.getId());
-                    ehermano.setAttribute("name", tphermano.getDisplayTitle(lang.getId()));
+                    ehermano.setAttribute("name", tphermano.getDisplayName(user.getLanguage()));
                     ehermano.setAttribute("path", tphermano.getUrl());
                     ehermano.setAttribute("level", Integer.toString(tphermano.getLevel()));
                     ehermano.setAttribute("nivel", Integer.toString(nivel));                    
@@ -209,7 +208,7 @@ public class WBMenuNivel extends GenericAdmResource
                     
                     ehermanos.appendChild(ehermano);
                     
-                    Iterator <WebPage> hijos = tphermano.listChilds();
+                    Iterator <WebPage> hijos = tphermano.listVisibleChilds(user.getLanguage());
                     while (hijos.hasNext())
                     {
                         WebPage hijo = hijos.next();
@@ -217,7 +216,7 @@ public class WBMenuNivel extends GenericAdmResource
                         {
                             Element ehijo = dom.createElement("child");
                             ehijo.setAttribute("id", hijo.getId());
-                            ehijo.setAttribute("name", hijo.getDisplayTitle(lang.getId()));
+                            ehijo.setAttribute("name", hijo.getDisplayName(user.getLanguage()));
                             ehijo.setAttribute("path", hijo.getUrl());
                             ehijo.setAttribute("level", Integer.toString(hijo.getLevel()));
                             ehijo.setAttribute("nivel", Integer.toString(nivel+1));
@@ -230,7 +229,7 @@ public class WBMenuNivel extends GenericAdmResource
                             ehijo.setAttribute("caracter", Integer.toString(ancho*(nivel+1)));
                             ehermano.appendChild(ehijo);
                             if((nivel+1)<=niveles){
-                                addChild(dom, ehijo, hijo, nivel+2,niveles, user, lang, tpid);
+                                addChild(dom, ehijo, hijo, nivel+2,niveles, user, tpid);
                             }
                         }
                     }
@@ -245,11 +244,11 @@ public class WBMenuNivel extends GenericAdmResource
         return null;
     }
     
-    public void addChild(Document dom, Element nodo, WebPage topic, int actual, int nivel, User user, org.semanticwb.model.Language lang, WebPage currenttopic)
+    public void addChild(Document dom, Element nodo, WebPage topic, int actual, int nivel, User user, WebPage currenttopic)
     {
         if(nivel>=actual)
         {
-            Iterator <WebPage> hijos = topic.listChilds();
+            Iterator <WebPage> hijos = topic.listVisibleChilds(user.getLanguage());
             while (hijos.hasNext())
             {
                 WebPage hijo = hijos.next();
@@ -257,7 +256,7 @@ public class WBMenuNivel extends GenericAdmResource
                 {
                     Element ehijo = dom.createElement("child");
                     ehijo.setAttribute("id", hijo.getId());
-                    ehijo.setAttribute("name", hijo.getDisplayTitle(lang.getTitle(lang.getId())));
+                    ehijo.setAttribute("name", hijo.getDisplayName(user.getLanguage()));
                     ehijo.setAttribute("path", hijo.getUrl());
                     ehijo.setAttribute("level", Integer.toString(hijo.getLevel()));
                     ehijo.setAttribute("nivel", Integer.toString(actual));
@@ -269,7 +268,7 @@ public class WBMenuNivel extends GenericAdmResource
                         ehijo.setAttribute("current", "0");
                     }
                     nodo.appendChild(ehijo);
-                    addChild(dom, ehijo, hijo, actual+1, nivel, user, lang, currenttopic);
+                    addChild(dom, ehijo, hijo, actual+1, nivel, user, currenttopic);
                 }
             }
         }
