@@ -436,7 +436,7 @@ public class User extends UserBase implements Principal
             while (it.hasNext())
             {
                 Role ref = it.next();
-                //System.out.println("ref:"+ref+" role:"+ref.getRole());
+                //System.out.println("role:"+ref);
                 if (!hasRole(ref))
                 {
                     ret = false;
@@ -451,7 +451,7 @@ public class User extends UserBase implements Principal
             while (it.hasNext())
             {
                 UserGroup usrgrp = it.next();
-                //System.out.println("ref:"+ref+" role:"+ref.getRole());
+                //System.out.println("role:"+usrgrp);
                 if (!hasUserGroup(usrgrp))
                 {
                     ret = false;
