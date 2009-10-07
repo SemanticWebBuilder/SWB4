@@ -662,6 +662,11 @@ public class DesktopGeneratorCodeView extends FrameView
     }//GEN-LAST:event_jButtonSelectDirActionPerformed
     private void generateCode()
     {
+        if(this.jTextField1.getText().isEmpty())
+        {
+            JOptionPane.showMessageDialog(this.getFrame(), "!Debe indicar una ubicación para generar proyecto!", "Guardar proyecto", JOptionPane.OK_OPTION  | JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         jTextArea1.setText("Generando código\r\n");
         
         System.setOut(new MyPrintStream());
@@ -853,6 +858,11 @@ public class DesktopGeneratorCodeView extends FrameView
 
     private void createProyect(boolean saveas)
     {
+        if(this.jTextField1.getText().isEmpty())
+        {
+            JOptionPane.showMessageDialog(this.getFrame(), "!Debe indicar una ubicación para generar proyecto!", "Guardar proyecto", JOptionPane.OK_OPTION  | JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         File file = null;
         if (project == null && !saveas)
         {
