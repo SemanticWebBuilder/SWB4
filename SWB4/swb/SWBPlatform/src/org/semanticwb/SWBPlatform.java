@@ -304,7 +304,7 @@ public class SWBPlatform
 
     static public synchronized SWBPlatform createInstance(ServletContext servletContext)
     {
-        new Exception().printStackTrace();
+        //new Exception().printStackTrace();
         return createInstance(servletContext, null);
     }
     /** Create Instance.
