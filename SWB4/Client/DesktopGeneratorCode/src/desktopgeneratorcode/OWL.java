@@ -186,7 +186,14 @@ public class OWL
 
     public String getLocation()
     {
-        return location.getAbsolutePath();
+        try
+        {
+            return location.getCanonicalPath();
+        }
+        catch(Exception e)
+        {
+            return location.getAbsolutePath();
+        }
     }
 
     public String getName()

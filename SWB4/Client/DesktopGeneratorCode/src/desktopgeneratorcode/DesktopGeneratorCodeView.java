@@ -18,7 +18,6 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.net.URI;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Properties;
@@ -715,7 +714,25 @@ public class DesktopGeneratorCodeView extends FrameView
     {//GEN-HEADEREND:event_jButtonGenerateActionPerformed
         generateCode();
     }//GEN-LAST:event_jButtonGenerateActionPerformed
-    private void readProjectOWLS(byte[] cont) throws Exception
+    private void readBaseReferencesToProjectOWLS(byte[] cont,File basepath) throws Exception
+    {
+        HashSet<OWL> owlstoread = new HashSet<OWL>();
+        Properties props = new Properties();
+        props.loadFromXML(new ByteArrayInputStream(cont));
+        for (Object key : props.keySet())
+        {
+            String value = props.getProperty(key.toString());
+            File path=new File(basepath,value);            
+            if(!path.exists())
+            {
+                path=new File(key.toString());
+            }
+            OWL owl = new OWL(path);
+            owlstoread.add(owl);
+        }
+        this.dc.setOWLBaseProyect(owlstoread.toArray(new OWL[owlstoread.size()]));
+    }
+    private void readProjectOWLS(byte[] cont,File basepath) throws Exception
     {
         owls = new HashSet<OWL>();
         Properties props = new Properties();
@@ -723,22 +740,41 @@ public class DesktopGeneratorCodeView extends FrameView
         for (Object key : props.keySet())
         {
             String value = props.getProperty(key.toString());
-            OWL owl = new OWL(new File(value));
+            File path=new File(basepath,value);
+            if(!path.exists())
+            {
+                path=new File(key.toString());
+            }
+            OWL owl = new OWL(path);
             owls.add(owl);
         }
         loadOWL();
     }
 
-    private byte[] createProjectOWLS(URI basepath) throws Exception
+    private byte[] createBaseReferencesToProjectOWLS(File basepath) throws Exception
+    {
+        Properties properties = new Properties();
+        for (OWL owl : this.dc.getOWLBaseProyect())
+        {
+            String key = owl.getLocation();
+            String value = owl.getLocation();
+            File owllocation=new File(value);
+            value=RelativePath.getRelativePath(basepath, owllocation);
+            properties.setProperty(key, value);
+        }
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        properties.storeToXML(out, "Archivos base del proyecto");
+        return out.toByteArray();
+    }
+    private byte[] createProjectOWLS(File basepath) throws Exception
     {
         Properties properties = new Properties();
         for (OWL owl : owls)
         {
             String key = owl.getLocation();
             String value = owl.getLocation();
-            URI owllocation=new File(value).toURI().normalize();
-            URI rel=basepath.relativize(owllocation);
-            System.out.println(rel);
+            File owllocation=new File(value);
+            value=RelativePath.getRelativePath(basepath, owllocation);
             properties.setProperty(key, value);
         }
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -811,36 +847,9 @@ public class DesktopGeneratorCodeView extends FrameView
         }
     }
 
-    private void readBaseReferencesToProjectOWLS(byte[] cont) throws Exception
-    {
-        HashSet<OWL> owlstoread = new HashSet<OWL>();
-        Properties props = new Properties();
-        props.loadFromXML(new ByteArrayInputStream(cont));
-        for (Object key : props.keySet())
-        {
-            String value = props.getProperty(key.toString());
-            OWL owl = new OWL(new File(value));
-            owlstoread.add(owl);
-        }
-        this.dc.setOWLBaseProyect(owlstoread.toArray(new OWL[owlstoread.size()]));
-    }
+    
 
-    private byte[] createBaseReferencesToProjectOWLS(URI basepath) throws Exception
-    {
-        Properties properties = new Properties();
-        for (OWL owl : this.dc.getOWLBaseProyect())
-        {
-            String key = owl.getLocation();
-            String value = owl.getLocation();
-            URI owllocation=new File(value).toURI().normalize();
-            URI rel=basepath.relativize(owllocation);
-            System.out.println(rel);
-            properties.setProperty(key, value);
-        }
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        properties.storeToXML(out, "Archivos base del proyecto");
-        return out.toByteArray();
-    }
+    
 
     private void createProyect(boolean saveas)
     {
@@ -897,14 +906,13 @@ public class DesktopGeneratorCodeView extends FrameView
         try
         {
             ZipOutputStream out = new ZipOutputStream(new FileOutputStream(file));
-            out.putNextEntry(new ZipEntry("base.properties"));
-            URI basepath=file.toURI().normalize();
-            byte[] cont = this.createBaseReferencesToProjectOWLS(basepath);
+            out.putNextEntry(new ZipEntry("base.properties"));            
+            byte[] cont = this.createBaseReferencesToProjectOWLS(file);
             out.write(cont, 0, cont.length);
             out.closeEntry();
 
             out.putNextEntry(new ZipEntry("owls.properties"));
-            cont = this.createProjectOWLS(basepath);
+            cont = this.createProjectOWLS(file);
             out.write(cont, 0, cont.length);
 
 
@@ -1024,7 +1032,7 @@ public class DesktopGeneratorCodeView extends FrameView
                         {
                             out.write(buf, 0, len);
                         }
-                        readBaseReferencesToProjectOWLS(out.toByteArray());
+                        readBaseReferencesToProjectOWLS(out.toByteArray(),file.getParentFile());
 
                     }
                     if (entry.getName().equals("owls.properties"))
@@ -1037,7 +1045,7 @@ public class DesktopGeneratorCodeView extends FrameView
                         {
                             out.write(buf, 0, len);
                         }
-                        readProjectOWLS(out.toByteArray());
+                        readProjectOWLS(out.toByteArray(),file.getParentFile());
 
                     }
                     if (entry.getName().equals("namespaces.properties"))
