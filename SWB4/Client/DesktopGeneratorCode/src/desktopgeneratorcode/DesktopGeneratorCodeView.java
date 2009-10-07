@@ -46,22 +46,27 @@ public class DesktopGeneratorCodeView extends FrameView
     private JFileChooser filechooser = new JFileChooser();
     DialogConfiguration dc = new DialogConfiguration(this.getFrame(), filechooser);
     File project;
+
     class MyPrintStream extends PrintStream
-    {        
+    {
+
         public MyPrintStream()
         {
             super(new MyOut());
         }
     }
+
     class MyOut extends OutputStream
     {
 
         @Override
         public void write(int b) throws IOException
         {
-            jTextArea1.append(new String(new char[]{(char)b}));
+            jTextArea1.append(new String(new char[]
+                    {
+                        (char) b
+                    }));
         }
-
     }
 
     public DesktopGeneratorCodeView(SingleFrameApplication app)
@@ -662,13 +667,18 @@ public class DesktopGeneratorCodeView extends FrameView
     }//GEN-LAST:event_jButtonSelectDirActionPerformed
     private void generateCode()
     {
-        if(this.jTextField1.getText().isEmpty())
+        if (this.jTextField1.getText().isEmpty())
         {
-            JOptionPane.showMessageDialog(this.getFrame(), "!Debe indicar una ubicación para generar proyecto!", "Guardar proyecto", JOptionPane.OK_OPTION  | JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this.getFrame(), "!Debe indicar una ubicación para generar proyecto!", "Guardar proyecto", JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (!this.jTextArea1.getText().isEmpty())
+        {
+            JOptionPane.showMessageDialog(this.getFrame(), "!Debe corregir primero los errores de la consola de salida!", "Guardar proyecto", JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             return;
         }
         jTextArea1.setText("Generando código\r\n");
-        
+
         System.setOut(new MyPrintStream());
         System.setErr(new MyPrintStream());
 
@@ -682,7 +692,7 @@ public class DesktopGeneratorCodeView extends FrameView
         }
         DefaultTableModel model = (DefaultTableModel) this.jTable1.getModel();
         int rows = model.getRowCount();
-        
+
         this.progressBar.setVisible(true);
         this.progressBar.setMaximum(rows);
         this.progressBar.setMinimum(0);
@@ -710,7 +720,7 @@ public class DesktopGeneratorCodeView extends FrameView
                     e.printStackTrace();
                 }
             }
-            this.progressBar.setValue(this.progressBar.getValue()+1);
+            this.progressBar.setValue(this.progressBar.getValue() + 1);
         }
         jTextArea1.append("\r\nCódigo generado\r\n");
         this.progressBar.setVisible(false);
@@ -719,7 +729,7 @@ public class DesktopGeneratorCodeView extends FrameView
     {//GEN-HEADEREND:event_jButtonGenerateActionPerformed
         generateCode();
     }//GEN-LAST:event_jButtonGenerateActionPerformed
-    private void readBaseReferencesToProjectOWLS(byte[] cont,File basepath) throws Exception
+    private void readBaseReferencesToProjectOWLS(byte[] cont, File basepath) throws Exception
     {
         HashSet<OWL> owlstoread = new HashSet<OWL>();
         Properties props = new Properties();
@@ -727,17 +737,18 @@ public class DesktopGeneratorCodeView extends FrameView
         for (Object key : props.keySet())
         {
             String value = props.getProperty(key.toString());
-            File path=new File(basepath,value);            
-            if(!path.exists())
+            File path = new File(basepath, value);
+            if (!path.exists())
             {
-                path=new File(key.toString());
+                path = new File(key.toString());
             }
             OWL owl = new OWL(path);
             owlstoread.add(owl);
         }
         this.dc.setOWLBaseProyect(owlstoread.toArray(new OWL[owlstoread.size()]));
     }
-    private void readProjectOWLS(byte[] cont,File basepath) throws Exception
+
+    private void readProjectOWLS(byte[] cont, File basepath) throws Exception
     {
         owls = new HashSet<OWL>();
         Properties props = new Properties();
@@ -745,10 +756,10 @@ public class DesktopGeneratorCodeView extends FrameView
         for (Object key : props.keySet())
         {
             String value = props.getProperty(key.toString());
-            File path=new File(basepath,value);
-            if(!path.exists())
+            File path = new File(basepath, value);
+            if (!path.exists())
             {
-                path=new File(key.toString());
+                path = new File(key.toString());
             }
             OWL owl = new OWL(path);
             owls.add(owl);
@@ -763,14 +774,15 @@ public class DesktopGeneratorCodeView extends FrameView
         {
             String key = owl.getLocation();
             String value = owl.getLocation();
-            File owllocation=new File(value);
-            value=RelativePath.getRelativePath(basepath, owllocation);
+            File owllocation = new File(value);
+            value = RelativePath.getRelativePath(basepath, owllocation);
             properties.setProperty(key, value);
         }
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         properties.storeToXML(out, "Archivos base del proyecto");
         return out.toByteArray();
     }
+
     private byte[] createProjectOWLS(File basepath) throws Exception
     {
         Properties properties = new Properties();
@@ -778,8 +790,8 @@ public class DesktopGeneratorCodeView extends FrameView
         {
             String key = owl.getLocation();
             String value = owl.getLocation();
-            File owllocation=new File(value);
-            value=RelativePath.getRelativePath(basepath, owllocation);
+            File owllocation = new File(value);
+            value = RelativePath.getRelativePath(basepath, owllocation);
             properties.setProperty(key, value);
         }
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -852,15 +864,16 @@ public class DesktopGeneratorCodeView extends FrameView
         }
     }
 
-    
-
-    
-
     private void createProyect(boolean saveas)
     {
-        if(this.jTextField1.getText().isEmpty())
+        if (this.jTextField1.getText().isEmpty())
         {
-            JOptionPane.showMessageDialog(this.getFrame(), "!Debe indicar una ubicación para generar proyecto!", "Guardar proyecto", JOptionPane.OK_OPTION  | JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this.getFrame(), "!Debe indicar una ubicación para generar proyecto!", "Guardar proyecto", JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (!this.jTextArea1.getText().isEmpty())
+        {
+            JOptionPane.showMessageDialog(this.getFrame(), "!Debe corregir primero los errores de la consola de salida!", "Guardar proyecto", JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             return;
         }
         File file = null;
@@ -916,7 +929,7 @@ public class DesktopGeneratorCodeView extends FrameView
         try
         {
             ZipOutputStream out = new ZipOutputStream(new FileOutputStream(file));
-            out.putNextEntry(new ZipEntry("base.properties"));            
+            out.putNextEntry(new ZipEntry("base.properties"));
             byte[] cont = this.createBaseReferencesToProjectOWLS(file);
             out.write(cont, 0, cont.length);
             out.closeEntry();
@@ -986,7 +999,6 @@ public class DesktopGeneratorCodeView extends FrameView
 
     private void jMenuToolsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuToolsActionPerformed
     {//GEN-HEADEREND:event_jMenuToolsActionPerformed
-        
     }//GEN-LAST:event_jMenuToolsActionPerformed
     private void openProyect()
     {
@@ -1042,7 +1054,7 @@ public class DesktopGeneratorCodeView extends FrameView
                         {
                             out.write(buf, 0, len);
                         }
-                        readBaseReferencesToProjectOWLS(out.toByteArray(),file.getParentFile());
+                        readBaseReferencesToProjectOWLS(out.toByteArray(), file.getParentFile());
 
                     }
                     if (entry.getName().equals("owls.properties"))
@@ -1055,7 +1067,7 @@ public class DesktopGeneratorCodeView extends FrameView
                         {
                             out.write(buf, 0, len);
                         }
-                        readProjectOWLS(out.toByteArray(),file.getParentFile());
+                        readProjectOWLS(out.toByteArray(), file.getParentFile());
 
                     }
                     if (entry.getName().equals("namespaces.properties"))
