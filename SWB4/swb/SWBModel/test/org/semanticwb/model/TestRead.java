@@ -114,7 +114,7 @@ public class TestRead {
         {
             FormView view=it.next();
             System.out.println("View:"+view.getId());
-            Iterator<SemanticObject> itp=view.listCreatePropertys();
+            Iterator<SemanticObject> itp=view.listCreateProperties();
             while(itp.hasNext())
             {
                 SemanticObject obj=itp.next();
