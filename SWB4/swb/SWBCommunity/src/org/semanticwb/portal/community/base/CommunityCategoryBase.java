@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class CommunityCategoryBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.model.Expirable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Viewable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Trashable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Indexable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Resourceable,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Rankable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.PFlowRefable
+public class CommunityCategoryBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.RuleRefable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Viewable,org.semanticwb.model.Activeable,org.semanticwb.model.Hiddenable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable,org.semanticwb.model.Indexable,org.semanticwb.model.Rankable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Resourceable,org.semanticwb.model.Filterable,org.semanticwb.model.Expirable
 {
     public static final org.semanticwb.platform.SemanticClass swbcomm_CommunityCategory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#CommunityCategory");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#CommunityCategory");
@@ -11,13 +11,13 @@ public class CommunityCategoryBase extends org.semanticwb.model.WebPage implemen
         super(base);
     }
 
-    public static java.util.Iterator<org.semanticwb.portal.community.CommunityCategory> listCommunityCategorys(org.semanticwb.model.SWBModel model)
+    public static java.util.Iterator<org.semanticwb.portal.community.CommunityCategory> listCommunityCategories(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
         return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.CommunityCategory>(it, true);
     }
 
-    public static java.util.Iterator<org.semanticwb.portal.community.CommunityCategory> listCommunityCategorys()
+    public static java.util.Iterator<org.semanticwb.portal.community.CommunityCategory> listCommunityCategories()
     {
         java.util.Iterator it=sclass.listInstances();
         return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.CommunityCategory>(it, true);

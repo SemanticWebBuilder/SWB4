@@ -122,7 +122,7 @@ public class MemberBase extends org.semanticwb.model.SWBClass
          return ret;
     }
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteWebPageUtil> listSubscriptionss()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteWebPageUtil> listSubscriptionses()
     {
         return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteWebPageUtil>(getSemanticObject().listObjectProperties(swbcomm_hasSubscriptions));
     }

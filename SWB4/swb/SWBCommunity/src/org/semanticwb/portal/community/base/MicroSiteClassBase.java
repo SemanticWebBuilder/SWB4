@@ -11,13 +11,13 @@ public class MicroSiteClassBase extends org.semanticwb.model.SWBClass
         super(base);
     }
 
-    public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteClass> listMicroSiteClasss(org.semanticwb.model.SWBModel model)
+    public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteClass> listMicroSiteClasses(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
         return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteClass>(it, true);
     }
 
-    public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteClass> listMicroSiteClasss()
+    public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteClass> listMicroSiteClasses()
     {
         java.util.Iterator it=sclass.listInstances();
         return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteClass>(it, true);
