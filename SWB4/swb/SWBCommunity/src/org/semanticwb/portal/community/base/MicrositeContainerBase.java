@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class MicrositeContainerBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.Localeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Indexable
+public class MicrositeContainerBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Indexable,org.semanticwb.model.Trashable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.Localeable
 {
     public static final org.semanticwb.platform.SemanticClass swbcomm_OrganizationComm=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#OrganizationComm");
     public static final org.semanticwb.platform.SemanticClass swbcomm_MicroSite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#MicroSite");
@@ -249,9 +249,9 @@ public class MicrositeContainerBase extends org.semanticwb.model.WebSite impleme
         return org.semanticwb.portal.community.Community.getCommunity(id, this);
     }
 
-    public java.util.Iterator<org.semanticwb.portal.community.Community> listCommunitys()
+    public java.util.Iterator<org.semanticwb.portal.community.Community> listCommunities()
     {
-        return org.semanticwb.portal.community.Community.listCommunitys(this);
+        return org.semanticwb.portal.community.Community.listCommunities(this);
     }
 
     public org.semanticwb.portal.community.Community createCommunity(String id)

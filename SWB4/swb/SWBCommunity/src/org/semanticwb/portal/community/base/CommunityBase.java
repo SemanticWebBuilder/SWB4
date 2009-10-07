@@ -11,13 +11,13 @@ public class CommunityBase extends org.semanticwb.portal.community.MicroSiteClas
         super(base);
     }
 
-    public static java.util.Iterator<org.semanticwb.portal.community.Community> listCommunitys(org.semanticwb.model.SWBModel model)
+    public static java.util.Iterator<org.semanticwb.portal.community.Community> listCommunities(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
         return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Community>(it, true);
     }
 
-    public static java.util.Iterator<org.semanticwb.portal.community.Community> listCommunitys()
+    public static java.util.Iterator<org.semanticwb.portal.community.Community> listCommunities()
     {
         java.util.Iterator it=sclass.listInstances();
         return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Community>(it, true);

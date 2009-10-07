@@ -17,7 +17,7 @@ public class NewsResourceBase extends org.semanticwb.portal.community.CommunityR
     }
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#NewsResource");
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.NewsElement> listNewss()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.NewsElement> listNewses()
     {
         return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.NewsElement>(getSemanticObject().listObjectProperties(swbcomm_hasNews));
     }
