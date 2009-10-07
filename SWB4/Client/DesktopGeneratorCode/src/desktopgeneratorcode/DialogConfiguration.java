@@ -88,23 +88,22 @@ public class DialogConfiguration extends javax.swing.JDialog
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jPanel1 = new javax.swing.JPanel();
+        jPanelButtons = new javax.swing.JPanel();
         jButtonCancel = new javax.swing.JButton();
         jButtonSave = new javax.swing.JButton();
         jToolBar1 = new javax.swing.JToolBar();
         jButtonAdd = new javax.swing.JButton();
         jButtonRemove = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
+        jPanelCenter = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
-        jPanel3 = new javax.swing.JPanel();
+        jPanelOWLS = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel5 = new javax.swing.JPanel();
+        jPanelCommons = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jPanel6 = new javax.swing.JPanel();
+        jPanelProyect = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
-        jPanel7 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -131,8 +130,8 @@ public class DialogConfiguration extends javax.swing.JDialog
         setName("Form"); // NOI18N
         setResizable(false);
 
-        jPanel1.setName("jPanel1"); // NOI18N
-        jPanel1.setPreferredSize(new java.awt.Dimension(400, 40));
+        jPanelButtons.setName("jPanelButtons"); // NOI18N
+        jPanelButtons.setPreferredSize(new java.awt.Dimension(400, 40));
 
         jButtonCancel.setText(resourceMap.getString("jButtonCancel.text")); // NOI18N
         jButtonCancel.setName("jButtonCancel"); // NOI18N
@@ -150,28 +149,28 @@ public class DialogConfiguration extends javax.swing.JDialog
             }
         });
 
-        org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
+        org.jdesktop.layout.GroupLayout jPanelButtonsLayout = new org.jdesktop.layout.GroupLayout(jPanelButtons);
+        jPanelButtons.setLayout(jPanelButtonsLayout);
+        jPanelButtonsLayout.setHorizontalGroup(
+            jPanelButtonsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanelButtonsLayout.createSequentialGroup()
                 .addContainerGap(237, Short.MAX_VALUE)
                 .add(jButtonSave)
                 .add(18, 18, 18)
                 .add(jButtonCancel)
                 .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel1Layout.createSequentialGroup()
+        jPanelButtonsLayout.setVerticalGroup(
+            jPanelButtonsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanelButtonsLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                .add(jPanelButtonsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jButtonSave)
                     .add(jButtonCancel))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel1, java.awt.BorderLayout.SOUTH);
+        getContentPane().add(jPanelButtons, java.awt.BorderLayout.SOUTH);
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
@@ -201,19 +200,19 @@ public class DialogConfiguration extends javax.swing.JDialog
 
         getContentPane().add(jToolBar1, java.awt.BorderLayout.NORTH);
 
-        jPanel2.setName("jPanel2"); // NOI18N
-        jPanel2.setLayout(new java.awt.BorderLayout());
+        jPanelCenter.setName("jPanelCenter"); // NOI18N
+        jPanelCenter.setLayout(new java.awt.BorderLayout());
 
         jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         jSplitPane1.setName("jSplitPane1"); // NOI18N
 
-        jPanel3.setName("jPanel3"); // NOI18N
-        jPanel3.setLayout(new java.awt.BorderLayout());
+        jPanelOWLS.setName("jPanelOWLS"); // NOI18N
+        jPanelOWLS.setLayout(new java.awt.BorderLayout());
 
         jTabbedPane1.setName("jTabbedPane1"); // NOI18N
 
-        jPanel5.setName("jPanel5"); // NOI18N
-        jPanel5.setLayout(new java.awt.BorderLayout());
+        jPanelCommons.setName("jPanelCommons"); // NOI18N
+        jPanelCommons.setLayout(new java.awt.BorderLayout());
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
@@ -240,12 +239,12 @@ public class DialogConfiguration extends javax.swing.JDialog
         jTable1.getColumnModel().getColumn(0).setHeaderValue(resourceMap.getString("jTable1.columnModel.title0")); // NOI18N
         jTable1.getColumnModel().getColumn(1).setHeaderValue(resourceMap.getString("jTable1.columnModel.title1")); // NOI18N
 
-        jPanel5.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+        jPanelCommons.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
-        jTabbedPane1.addTab(resourceMap.getString("jPanel5.TabConstraints.tabTitle"), jPanel5); // NOI18N
+        jTabbedPane1.addTab(resourceMap.getString("jPanelCommons.TabConstraints.tabTitle"), jPanelCommons); // NOI18N
 
-        jPanel6.setName("jPanel6"); // NOI18N
-        jPanel6.setLayout(new java.awt.BorderLayout());
+        jPanelProyect.setName("jPanelProyect"); // NOI18N
+        jPanelProyect.setLayout(new java.awt.BorderLayout());
 
         jScrollPane3.setName("jScrollPane3"); // NOI18N
 
@@ -271,28 +270,13 @@ public class DialogConfiguration extends javax.swing.JDialog
         jTable2.getColumnModel().getColumn(0).setHeaderValue(resourceMap.getString("jTable1.columnModel.title0")); // NOI18N
         jTable2.getColumnModel().getColumn(1).setHeaderValue(resourceMap.getString("jTable1.columnModel.title1")); // NOI18N
 
-        jPanel6.add(jScrollPane3, java.awt.BorderLayout.CENTER);
+        jPanelProyect.add(jScrollPane3, java.awt.BorderLayout.CENTER);
 
-        jTabbedPane1.addTab(resourceMap.getString("jPanel6.TabConstraints.tabTitle"), jPanel6); // NOI18N
+        jTabbedPane1.addTab(resourceMap.getString("jPanelProyect.TabConstraints.tabTitle"), jPanelProyect); // NOI18N
 
-        jPanel7.setName("jPanel7"); // NOI18N
+        jPanelOWLS.add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
-        org.jdesktop.layout.GroupLayout jPanel7Layout = new org.jdesktop.layout.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 404, Short.MAX_VALUE)
-        );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 59, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab(resourceMap.getString("jPanel7.TabConstraints.tabTitle"), jPanel7); // NOI18N
-
-        jPanel3.add(jTabbedPane1, java.awt.BorderLayout.CENTER);
-
-        jSplitPane1.setTopComponent(jPanel3);
+        jSplitPane1.setTopComponent(jPanelOWLS);
 
         jPanel4.setMinimumSize(new java.awt.Dimension(23, 100));
         jPanel4.setName("jPanel4"); // NOI18N
@@ -312,9 +296,9 @@ public class DialogConfiguration extends javax.swing.JDialog
 
         jSplitPane1.setRightComponent(jPanel4);
 
-        jPanel2.add(jSplitPane1, java.awt.BorderLayout.CENTER);
+        jPanelCenter.add(jSplitPane1, java.awt.BorderLayout.CENTER);
 
-        getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
+        getContentPane().add(jPanelCenter, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -497,13 +481,12 @@ public class DialogConfiguration extends javax.swing.JDialog
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanelButtons;
+    private javax.swing.JPanel jPanelCenter;
+    private javax.swing.JPanel jPanelCommons;
+    private javax.swing.JPanel jPanelOWLS;
+    private javax.swing.JPanel jPanelProyect;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
