@@ -79,7 +79,7 @@ public class SWBLexicon {
     private HashMap<String, String> langCodes;
     private List prefixes = new ArrayList();
     private List namespaces = new ArrayList();
-    private String[] stopWords = {"a", "ante", "bajo", "cabe", "con",
+    public static String[] stopWords = {"a", "ante", "bajo", "cabe", "con",
         "contra", "de", "desde", "durante",
         "en", "entre", "hacia", "hasta",
         "mediante", "para", "por", "según",
@@ -404,10 +404,6 @@ public class SWBLexicon {
      */
     public String getSpellDictPath() {
         return spellDictPath;
-    }
-
-    public String[] getStopWords () {
-        return stopWords;
     }
 
     /**
