@@ -29,6 +29,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.Writer;
+import java.util.logging.Level;
 import org.apache.lucene.analysis.Analyzer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -135,6 +136,7 @@ public class SWBLexicon {
             Iterator<SemanticClass> its = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
             while (its.hasNext()) {
                 SemanticClass sc = its.next();
+                sc.getSemanticObject().getDisplayName();
                 if (preflist == null || (preflist != null && preflist.contains(sc.getPrefix()))) {
                     //System.out.println("Agregando " + sc.getDisplayName(lang));
                     addWord(sc);
@@ -203,8 +205,9 @@ public class SWBLexicon {
      *          semantica para la cual se creará una entrada en el diccionario.
      */
     public void addWord(SemanticClass o) {
+        String lng = langCodes.get(language);
         String oName = o.getDisplayName(language);
-        WordTag wt = objHash.get(getSnowballForm(oName));
+        WordTag wt = objHash.get(getSnowballForm(oName, lng, stopWords));
 
         if (wt == null) {
             if (outr != null) {
@@ -214,7 +217,7 @@ public class SWBLexicon {
                     log.error(ex);
                 }
             }
-            objHash.put(getSnowballForm(oName), new WordTag("OBJ", oName, o.getPrefix() + ":" + o.getName(), o.getClassName(), o.getClassId(), ""));
+            objHash.put(getSnowballForm(oName, lng, stopWords), new WordTag("OBJ", oName, o.getPrefix() + ":" + o.getName(), o.getClassName(), o.getClassId(), ""));
         }
     }
 
@@ -232,8 +235,9 @@ public class SWBLexicon {
      *          semantica para la cual se creará una entrada en el diccionario.
      */
     public void addWord(SemanticProperty p) {
+        String lng = langCodes.get(language);
         String pName = p.getDisplayName(language);
-        WordTag wt = propHash.get(getSnowballForm(pName));
+        WordTag wt = propHash.get(getSnowballForm(pName, lng, stopWords));
 
         if (wt == null) {
             if (outr != null) {
@@ -248,9 +252,9 @@ public class SWBLexicon {
             if (p.isObjectProperty()) {
                 //Attempt to get range class object
                 SemanticClass rg = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(p.getRangeClass().getURI());
-                propHash.put(getSnowballForm(pName), new WordTag("PRO", pName, p.getPrefix() + ":" + p.getName(), p.getName(), p.getPropId(), rg.getClassId()));
+                propHash.put(getSnowballForm(pName, lng, stopWords), new WordTag("PRO", pName, p.getPrefix() + ":" + p.getName(), p.getName(), p.getPropId(), rg.getClassId()));
             } else {
-                propHash.put(getSnowballForm(pName), new WordTag("PRO", pName, p.getPrefix() + ":" + p.getName(), p.getName(), p.getPropId(), ""));
+                propHash.put(getSnowballForm(pName, lng, stopWords), new WordTag("PRO", pName, p.getPrefix() + ":" + p.getName(), p.getName(), p.getPropId(), ""));
             }
         }
     }
@@ -268,6 +272,34 @@ public class SWBLexicon {
     }
 
     /**
+     * Gets the language name to be used in a {@link SnowballAnalyzer} according
+     * to the language code used in Semantic WebBuilder.
+     * <p>
+     * Obtiene el nombre dle idioma a usarse en un {@link SnowballAnalyzer} de
+     * acuerdo al código del idioma usado en Semantic WebBuilder.
+     *
+     * @return language name for use in a {@link SnowballAnalyzer}. Nombre del
+     *          idioma para usarse en un {@link SnowballAnalyzer}.
+     */
+    public String getLanguageName () {
+        return langCodes.get(language);
+    }
+
+    /**
+     * Adds a language name to the lexicon's language code mappings.
+     * <p>
+     * Agrega un nombre de idioma al mapa de códigos de idioma del diccionario.
+     *
+     * @param shortName code of the language (as used in Semantic WebBuilder).
+     *                  Código del idioma (como se usa en Semantic WebBuilder).
+     * @param langCode  code name for use in a {@link SnowballAnalyzer}. Nombre
+     *                  del idioma para usarse en un {@link SnowballAnalyzer}.
+     */
+    public void addLanguageName (String shortName, String langCode) {
+        langCodes.put(shortName, langCode);
+    }
+
+    /**
      * Gets the {@link WordTag} for the specified lexical form (name of a
      * class). It searches only in the classes set.
      * <p>
@@ -281,8 +313,9 @@ public class SWBLexicon {
      */
     public WordTag getObjWordTag(String label) {
         WordTag wt = null;
+        String lng = langCodes.get(language);
 
-        wt = objHash.get(getSnowballForm(label));
+        wt = objHash.get(getSnowballForm(label, lng, stopWords));
         if (wt != null) {
             return wt;
         }
@@ -315,7 +348,9 @@ public class SWBLexicon {
      */
     public WordTag getPropWordTag(String label) {
         WordTag wt = null;
-        wt = propHash.get(getSnowballForm(label));
+        String lng = langCodes.get(language);
+        
+        wt = propHash.get(getSnowballForm(label, lng, stopWords));
 
         if (wt != null) {
             return wt;
@@ -330,28 +365,31 @@ public class SWBLexicon {
      * Obtiene el lexema o raiz de una palabra mediante el algoritmo de snowball.
      *
      * @param input Text to stem. Texto a procesar.
+     * @param language of the smowball analyzer. Idioma del analizador.
+     * @param stopwords stop words for the analyzer. Palabras ignoradas en el análisis.
      *
      * @return Root of the input. Raíz de la palabra.
      */
-    public String getSnowballForm(String input) {
+    public static String getSnowballForm(String input, String language, String []stopwords) {
         String res = "";
         
         //Create snowball analyzer
-        Analyzer SnballAnalyzer = new SnowballAnalyzer(langCodes.get(language), stopWords);
+        Analyzer SnballAnalyzer = new SnowballAnalyzer(language, stopwords);
 
         //Create token stream for prhase composition
         TokenStream ts = SnballAnalyzer.tokenStream("sna", new StringReader(input));
 
         //Build the result string with the analyzed tokens
+        Token tk;
         try {
-            Token tk;
             while ((tk = ts.next()) != null) {
-                res = res + new String(tk.termBuffer(), 0, tk.termLength()) + " ";//res = res + tk.termText() + " ";
+                res = res + new String(tk.termBuffer(), 0, tk.termLength()) + " "; //res = res + tk.termText() + " ";
             }
             ts.close();
-        } catch (Exception ex) {
-            log.error(ex);
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(SWBLexicon.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         return res.trim();
     }
 
@@ -366,6 +404,10 @@ public class SWBLexicon {
      */
     public String getSpellDictPath() {
         return spellDictPath;
+    }
+
+    public String[] getStopWords () {
+        return stopWords;
     }
 
     /**
@@ -383,13 +425,14 @@ public class SWBLexicon {
      */
     public WordTag getWordTag(String label) {
         WordTag wt = null;
+        String lng = langCodes.get(language);
 
-        wt = objHash.get(getSnowballForm(label));
+        wt = objHash.get(getSnowballForm(label, lng, stopWords));
         if (wt != null) {
             return wt;
         }
 
-        wt = propHash.get(getSnowballForm(label));
+        wt = propHash.get(getSnowballForm(label, lng, stopWords));
         if (wt != null) {
             return wt;
         }
@@ -432,6 +475,15 @@ public class SWBLexicon {
         return res.iterator();
     }
 
+    /**
+     * Get an iterator to the list of words (display names of semantic classes
+     * and properties) in the lexicon.
+     * <p>
+     * Obtiene un iterador a la lista de palabras (display names de las clases
+     * y propiedades) en el diccionario.
+     * 
+     * @return iterador a la lista de palabras. Iterator to the word list.
+     */
     public Iterator<String> listWords () {
         Set<String> res = new TreeSet<String>();
 
