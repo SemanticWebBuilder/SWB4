@@ -124,6 +124,7 @@ public class SWBSparqlTranslator {
      */
     public SemanticClass assertPropertyRangeClass(String propertyName, String className) {
         String name = lex.getObjWordTag(className).getObjId();
+        String lng = lex.getLanguageName();
         boolean found = false;
 
         SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(name);
@@ -132,7 +133,7 @@ public class SWBSparqlTranslator {
             while (sit.hasNext() && !found) {
                 SemanticProperty sp = sit.next();
 
-                if (lex.getSnowballForm(sp.getDisplayName(lex.getLanguage())).equalsIgnoreCase(lex.getSnowballForm(propertyName))) {
+                if (SWBLexicon.getSnowballForm(sp.getDisplayName(lex.getLanguage()), lng, lex.getStopWords()).equalsIgnoreCase(SWBLexicon.getSnowballForm(propertyName, lng, lex.getStopWords()))) {
                     found = true;
                     if (sp.isObjectProperty()) {
                         SemanticClass rg = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sp.getRangeClass().getURI());
@@ -169,6 +170,7 @@ public class SWBSparqlTranslator {
     public String assertPropertyRangeType(String propertyName, String className) {
         String res = "";
         String name = lex.getObjWordTag(className).getObjId();
+        String lng = lex.getLanguageName();
         boolean found = false;
         SemanticProperty sp = null;
         Iterator<SemanticProperty> sit;
@@ -178,7 +180,7 @@ public class SWBSparqlTranslator {
             sit = sc.listProperties();
             while (sit.hasNext() && !found) {
                 sp = sit.next();
-                if (lex.getSnowballForm(sp.getDisplayName(lex.getLanguage())).equalsIgnoreCase(lex.getSnowballForm(propertyName))) {
+                if (SWBLexicon.getSnowballForm(sp.getDisplayName(lex.getLanguage()), lng, lex.getStopWords()).equalsIgnoreCase(SWBLexicon.getSnowballForm(propertyName, lng, lex.getStopWords()))) {
                     found = true;
                     if (sp.isObjectProperty()) {
                         StringBuffer bf = new StringBuffer();
@@ -229,6 +231,7 @@ public class SWBSparqlTranslator {
     private String assertPropertyType(String propertyName, String className) {
         String res = "";
         String name = lex.getObjWordTag(className).getObjId();
+        String lng = lex.getLanguageName();
         boolean found = false;
         SemanticProperty sp = null;
         Iterator<SemanticProperty> sit;
@@ -238,7 +241,7 @@ public class SWBSparqlTranslator {
             sit = sc.listProperties();
             while (sit.hasNext() && !found) {
                 sp = sit.next();
-                if (lex.getSnowballForm(sp.getDisplayName(lex.getLanguage())).equalsIgnoreCase(lex.getSnowballForm(propertyName))) {
+                if (SWBLexicon.getSnowballForm(sp.getDisplayName(lex.getLanguage()), lng, lex.getStopWords()).equalsIgnoreCase(SWBLexicon.getSnowballForm(propertyName, lng, lex.getStopWords()))) {
                     res = res + sp.getPrefix() + ":" + sp.getName();
                     found = true;
                 }
