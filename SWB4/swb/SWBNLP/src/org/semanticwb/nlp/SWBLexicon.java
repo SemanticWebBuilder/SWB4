@@ -35,14 +35,18 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import org.apache.lucene.analysis.Token;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.snowball.SnowballAnalyzer;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticProperty;
+import org.semanticwb.platform.SemanticVocabulary;
 
 /**
  * Simple Lexicon. Diccionario simple.
@@ -342,7 +346,7 @@ public class SWBLexicon {
         try {
             Token tk;
             while ((tk = ts.next()) != null) {
-                res = res + tk.termText() + " ";
+                res = res + new String(tk.termBuffer(), 0, tk.termLength()) + " ";//res = res + tk.termText() + " ";
             }
             ts.close();
         } catch (Exception ex) {
@@ -425,6 +429,14 @@ public class SWBLexicon {
             WordTag wt = (WordTag) it.next();
             res.add(wt.getDisplayName());
         }
+        return res.iterator();
+    }
+
+    public Iterator<String> listWords () {
+        Set<String> res = new TreeSet<String>();
+
+        res.addAll(objHash.keySet());
+        res.addAll(propHash.keySet());
         return res.iterator();
     }
 }
