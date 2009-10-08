@@ -133,7 +133,7 @@ public class SWBSparqlTranslator {
             while (sit.hasNext() && !found) {
                 SemanticProperty sp = sit.next();
 
-                if (SWBLexicon.getSnowballForm(sp.getDisplayName(lex.getLanguage()), lng, lex.getStopWords()).equalsIgnoreCase(SWBLexicon.getSnowballForm(propertyName, lng, lex.getStopWords()))) {
+                if (SWBLexicon.getSnowballForm(sp.getDisplayName(lex.getLanguage()), lng, SWBLexicon.stopWords).equalsIgnoreCase(SWBLexicon.getSnowballForm(propertyName, lng, SWBLexicon.stopWords))) {
                     found = true;
                     if (sp.isObjectProperty()) {
                         SemanticClass rg = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sp.getRangeClass().getURI());
@@ -180,7 +180,7 @@ public class SWBSparqlTranslator {
             sit = sc.listProperties();
             while (sit.hasNext() && !found) {
                 sp = sit.next();
-                if (SWBLexicon.getSnowballForm(sp.getDisplayName(lex.getLanguage()), lng, lex.getStopWords()).equalsIgnoreCase(SWBLexicon.getSnowballForm(propertyName, lng, lex.getStopWords()))) {
+                if (SWBLexicon.getSnowballForm(sp.getDisplayName(lex.getLanguage()), lng, SWBLexicon.stopWords).equalsIgnoreCase(SWBLexicon.getSnowballForm(propertyName, lng, SWBLexicon.stopWords))) {
                     found = true;
                     if (sp.isObjectProperty()) {
                         StringBuffer bf = new StringBuffer();
@@ -241,7 +241,7 @@ public class SWBSparqlTranslator {
             sit = sc.listProperties();
             while (sit.hasNext() && !found) {
                 sp = sit.next();
-                if (SWBLexicon.getSnowballForm(sp.getDisplayName(lex.getLanguage()), lng, lex.getStopWords()).equalsIgnoreCase(SWBLexicon.getSnowballForm(propertyName, lng, lex.getStopWords()))) {
+                if (SWBLexicon.getSnowballForm(sp.getDisplayName(lex.getLanguage()), lng, SWBLexicon.stopWords).equalsIgnoreCase(SWBLexicon.getSnowballForm(propertyName, lng, SWBLexicon.stopWords))) {
                     res = res + sp.getPrefix() + ":" + sp.getName();
                     found = true;
                 }
