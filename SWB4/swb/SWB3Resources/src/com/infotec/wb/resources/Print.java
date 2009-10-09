@@ -82,8 +82,8 @@ public class Print extends GenericResource
         try
         {
             super.setResourceBase(base);
-            workPath = (String)SWBPlatform.getWorkPath() +  base.getWorkPath();
-            webWorkPath = (String) SWBPlatform.getWebWorkPath() +  base.getWorkPath();
+            workPath = (String)SWBPortal.getWorkPath() +  base.getWorkPath();
+            webWorkPath = (String) SWBPortal.getWebWorkPath() +  base.getWorkPath();
         }
         catch(Exception e) { log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);  }
     }

@@ -76,7 +76,7 @@ public class WBMenuNivel extends GenericAdmResource
         try
         {
             super.setResourceBase(base);
-            webWorkPath = (String) SWBPlatform.getWebWorkPath() +  base.getWorkPath();
+            webWorkPath = (String) SWBPortal.getWebWorkPath() +  base.getWorkPath();
         }
         catch(Exception e)
         { log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);  }
@@ -84,7 +84,7 @@ public class WBMenuNivel extends GenericAdmResource
         {
             try
             {
-                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPlatform.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
+                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
                 path=webWorkPath + "/";
             }
             catch(Exception e)

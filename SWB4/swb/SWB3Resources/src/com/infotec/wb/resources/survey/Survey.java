@@ -35,6 +35,7 @@ import java.io.*;
 
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
@@ -177,7 +178,7 @@ public class Survey
                             tempS=fUpload.getFileName("ftemplate");
                             tempS = tempS.substring(tempS.lastIndexOf("\\")+1,tempS.length());
 
-                            String RutaGuardaTemplate = SWBPlatform.getWorkPath()+base.getWorkPath();
+                            String RutaGuardaTemplate = SWBPortal.getWorkPath()+base.getWorkPath();
                             File f=new File(RutaGuardaTemplate);
                             if(!f.exists())
                                 f.mkdirs();
@@ -280,7 +281,7 @@ public class Survey
                     tempS = tempS.substring(tempS.lastIndexOf("\\")+1,tempS.length());
                     String Otype=base.getResourceType().getId();
                     //RecResourceType recobj = DBResourceType.getInstance().getResourceType(paramsRequest.getTopic().getMap().getId(),Otype);
-                    String RutaGuardaTemplate = SWBPlatform.getWorkPath()+base.getWorkPath(); //WBUtils.getInstance().getWorkPath()+"/sites/"+paramsRequest.getTopic().getMap().getId()+"/resources/"+recobj.getName()+"/";
+                    String RutaGuardaTemplate = SWBPortal.getWorkPath()+base.getWorkPath(); //WBUtils.getInstance().getWorkPath()+"/sites/"+paramsRequest.getTopic().getMap().getId()+"/resources/"+recobj.getName()+"/";
                     File f=new File(RutaGuardaTemplate);
                     if(!f.exists())
                         f.mkdirs();

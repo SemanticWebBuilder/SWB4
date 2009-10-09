@@ -34,6 +34,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
 import org.semanticwb.portal.api.GenericAdmResource;
@@ -60,7 +61,7 @@ public class ChangePassword extends GenericAdmResource
         User user = paramRequest.getUser();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try {
-            Templates templates = SWBUtils.XML.loadTemplateXSLT(SWBPlatform.getFileFromWorkPath(getResourceBase().getWorkPath() + "/" + getResourceBase().getAttribute("template")));
+            Templates templates = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(getResourceBase().getWorkPath() + "/" + getResourceBase().getAttribute("template")));
             Document document = SWBUtils.XML.getNewDocument();
             Element euser = document.createElement("USER");
             document.appendChild(euser);

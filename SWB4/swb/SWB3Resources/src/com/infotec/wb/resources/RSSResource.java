@@ -82,7 +82,7 @@ public class RSSResource extends GenericAdmResource
         {
             System.out.println("******************************* por el primer if");
             try { 
-                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPlatform.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim())); 
+                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
             }catch(Exception e) { 
                 log.error("Error while loading resource template: "+base.getId() +"-"+ base.getTitle(), e);
             }

@@ -86,7 +86,7 @@ public class DataBaseResource extends GenericResource
         try 
         { 
             super.setResourceBase(base); 
-            webWorkPath = (String) SWBPlatform.getWebWorkPath() +  base.getWorkPath();
+            webWorkPath = (String) SWBPortal.getWebWorkPath() +  base.getWorkPath();
         }
         catch(Exception e) { log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(),e);  }
         String queryType=base.getAttribute("queryType","");
@@ -97,9 +97,9 @@ public class DataBaseResource extends GenericResource
             {
                 try 
                 {
-                    tpl = SWBUtils.XML.loadTemplateXSLT(SWBPlatform.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("filex")));
+                    tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("filex")));
                     //tpl = SWBUtils.XML.loadTemplateXSLT(SWBUtils.IO.getStreamFromString(SWBUtils.IO.getFileFromPath(base.getWorkPath() +"/"+ base.getAttribute("filex"))));
-                    base.setAttribute("path", SWBPlatform.getWebWorkPath() +  base.getWorkPath() + "/");
+                    base.setAttribute("path", SWBPortal.getWebWorkPath() +  base.getWorkPath() + "/");
                 }
                 catch(Exception e) 
                 { 
@@ -125,8 +125,8 @@ public class DataBaseResource extends GenericResource
 
                 try 
                 { 
-                    tpl = SWBUtils.XML.loadTemplateXSLT(SWBPlatform.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
-                    base.setAttribute("path",  SWBPlatform.getWebWorkPath() +  base.getWorkPath() + "/");
+                    tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
+                    base.setAttribute("path",  SWBPortal.getWebWorkPath() +  base.getWorkPath() + "/");
                 }
                 catch(Exception e) { log.error("Error while loading resource: "+base.getId() +"-"+ base.getTitle(),e); }
             }      
@@ -137,7 +137,7 @@ public class DataBaseResource extends GenericResource
             }
             if ("search".equals(queryType) && !"".equals(base.getAttribute("tplq", ""))) {
                 try {
-                    tplq = SWBUtils.XML.loadTemplateXSLT(SWBPlatform.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("tplq").trim()));
+                    tplq = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("tplq").trim()));
                 }catch(Exception e) { 
                     log.error("Error while loading default resource query template : "+base.getId() +"-"+ base.getTitle(),e);
                 }
@@ -283,7 +283,7 @@ public class DataBaseResource extends GenericResource
                     String value = acquireValue(requestparams, "nofilex");
                     if ("1".equals(value) && !"".equals(base.getAttribute("filex", "").trim()))
                     {
-                        SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + base.getWorkPath() + "/" + base.getAttribute("filex").trim());
+                        SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + base.getWorkPath() + "/" + base.getAttribute("filex").trim());
                         base.removeAttribute("filex");                        
                         redirect=true;
                     }
@@ -321,7 +321,7 @@ public class DataBaseResource extends GenericResource
                     value = acquireValue(requestparams, "notemplate");
                     if ("1".equals(value) && !"".equals(base.getAttribute("template", "").trim()))
                     {
-                        SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + base.getWorkPath() + "/" + base.getAttribute("template").trim());
+                        SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + base.getWorkPath() + "/" + base.getAttribute("template").trim());
                         base.removeAttribute("template");    
                         redirect=true;
                     }
@@ -350,7 +350,7 @@ public class DataBaseResource extends GenericResource
                     if ("search".equals(queryType)) {
                         value = acquireValue(requestparams, "notplq");
                         if ("1".equals(value) && !"".equals(base.getAttribute("tplq", "").trim())) {
-                            SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + base.getWorkPath() + "/" + base.getAttribute("tplq").trim());
+                            SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + base.getWorkPath() + "/" + base.getAttribute("tplq").trim());
                             base.removeAttribute("tplq");    
                             redirect=true;
                         }
@@ -1119,7 +1119,7 @@ public class DataBaseResource extends GenericResource
                 {
                     ret.append("<tr><td></td> \n");
                     ret.append("<td class=\"valores\">"+ paramRequest.getLocaleString("msgDefaultTemplate") +" ");
-                    ret.append("<a href=\""+ SWBPlatform.getWorkPath() + "swbadmin/xsl/DataBaseResource/DataBaseResource_"+base.getAttribute("queryType","")+".xslt\">DataBaseResource_"+base.getAttribute("queryType","")+".xslt</a>");
+                    ret.append("<a href=\""+ SWBPortal.getWorkPath() + "swbadmin/xsl/DataBaseResource/DataBaseResource_"+base.getAttribute("queryType","")+".xslt\">DataBaseResource_"+base.getAttribute("queryType","")+".xslt</a>");
                     ret.append("</td></tr> \n");
                 }
                 if ("search".equals(base.getAttribute("queryType"))) {
@@ -1142,7 +1142,7 @@ public class DataBaseResource extends GenericResource
                     else {
                         ret.append("<tr><td></td> \n");
                         ret.append("<td class=\"valores\">"+ paramRequest.getLocaleString("msgDefaultTemplate") +" ");
-                        ret.append("<a href=\""+ SWBPlatform.getWorkPath() + "swbadmin/xsl/DataBaseResource/DataBaseResource_query.xslt\">DataBaseResource_query.xslt</a>");
+                        ret.append("<a href=\""+ SWBPortal.getWorkPath() + "swbadmin/xsl/DataBaseResource/DataBaseResource_query.xslt\">DataBaseResource_query.xslt</a>");
                         ret.append("</td></tr> \n");
                     }
                 }
@@ -1371,7 +1371,7 @@ public class DataBaseResource extends GenericResource
                                         int size = in.available();
                                         if (size > 0 && !fileName.equals("") && !ext.equals("")) 
                                         {
-                                            String pathFile = SWBPlatform.getWorkPath() +
+                                            String pathFile = SWBPortal.getWorkPath() +
                                             base.getWorkPath() + "/images/" + fileName + "." + ext;
                                             File filex = new File(pathFile);
                                             if (filex.exists()) 
@@ -1399,7 +1399,7 @@ public class DataBaseResource extends GenericResource
                                                 if (arguments.containsKey(columnName))
                                                     ext = (String)arguments.get(columnName);
                                             }
-                                            String pathFile = SWBPlatform.getWorkPath() +
+                                            String pathFile = SWBPortal.getWorkPath() +
                                             base.getWorkPath() + "/images/" + fileName + "." + ext;
                                             File filex = new File(pathFile);
                                             if (filex.exists()) 
@@ -2612,7 +2612,7 @@ public class DataBaseResource extends GenericResource
 		String tbl = base.getAttribute("table");
 		String insertdef = base.getAttribute("filex");
 		try {
-			SWBPlatform.getFileFromWorkPath(insertdef + "." + lang);
+			SWBPortal.getFileFromWorkPath(insertdef + "." + lang);
 			flag = true;
 		}catch(Exception e) {
 			flag = false;
@@ -2631,7 +2631,7 @@ public class DataBaseResource extends GenericResource
 					session.setAttribute("init"+key, "");
 				}
 			}
-			Document doc = SWBUtils.XML.xmlToDom(SWBPlatform.getFileFromWorkPath(base.getWorkPath() + "/" + fileName));
+			Document doc = SWBUtils.XML.xmlToDom(SWBPortal.getFileFromWorkPath(base.getWorkPath() + "/" + fileName));
 			docResult = SWBUtils.XML.getNewDocument();
 			FormScanner FScan = new FormScanner(doc, docResult, category);
 			FScan.visitDocument();
@@ -2654,7 +2654,7 @@ public class DataBaseResource extends GenericResource
 		String tbl = base.getAttribute("table");
 		String insertdef = base.getAttribute("filex");
 		try {
-			SWBPlatform.getFileFromWorkPath(insertdef + "." + lang);
+			SWBPortal.getFileFromWorkPath(insertdef + "." + lang);
 			flag = true;
 		}catch(Exception e) {
 			flag = false;
@@ -2673,7 +2673,7 @@ public class DataBaseResource extends GenericResource
 					session.setAttribute("init"+key, "");
 				}
 			}
-			Document doc = SWBUtils.XML.xmlToDom(SWBPlatform.getFileFromWorkPath(base.getWorkPath() + "/" + fileName));
+			Document doc = SWBUtils.XML.xmlToDom(SWBPortal.getFileFromWorkPath(base.getWorkPath() + "/" + fileName));
 			docResult = SWBUtils.XML.getNewDocument();
 			FormScanner FScan = new FormScanner(doc, docResult, category);
 			FScan.visitDocument();

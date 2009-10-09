@@ -83,8 +83,8 @@ public class Language extends GenericAdmResource
         {
             try 
             { 
-                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPlatform.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim())); 
-                path=SWBPlatform.getWebWorkPath() +  base.getWorkPath() + "/";
+                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
+                path=SWBPortal.getWebWorkPath() +  base.getWorkPath() + "/";
             }
             catch(Exception e) { log.error("Error while loading resource template: "+base.getId(), e); }
         }
