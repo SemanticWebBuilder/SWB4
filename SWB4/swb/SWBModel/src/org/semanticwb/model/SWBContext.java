@@ -48,7 +48,7 @@ public class SWBContext extends SWBContextBase
     public static String USERREPOSITORY_DEFAULT="urswb";
     public static String USERREPOSITORY_ADMIN="uradm";
 
-    private static HashMap<String, SessionUser> m_sessions;
+    private static HashMap<String, SessionUser> m_sessions=new HashMap();
 
     private static ArrayList<String> filtered=new ArrayList();
     
@@ -61,15 +61,18 @@ public class SWBContext extends SWBContextBase
         }
         return instance;
     }
-    
-    private SWBContext()
+
+    static
     {
         log.event("Initializing SemanticWebBuilder Context...");
         filtered.add(WEBSITE_ADMIN);
         filtered.add(WEBSITE_ONTEDITOR);
         //filtered.add(WEBSITE_GLOBAL);
-
-        m_sessions = new HashMap();
+    }
+    
+    private SWBContext()
+    {
+        
     }
     
     public static WebSite getAdminWebSite()
