@@ -181,7 +181,7 @@ public class SWBAEditor extends GenericResource
         if("Template".equalsIgnoreCase(type))
         {
             Template template=SWBPortal.getTemplateMgr().getTemplateImp(SWBContext.getWebSite(tm).getTemplate(id));
-            webpath=SWBPlatform.getWebWorkPath()+template.getWorkPath();
+            webpath=SWBPortal.getWebWorkPath()+template.getWorkPath();
             workpath=template.getWorkPath();
             if(sver==null)ver=template.getLastVersion().getVersionNumber();
             else ver=Integer.parseInt(sver);     
@@ -974,7 +974,7 @@ public class SWBAEditor extends GenericResource
         out.println("<param name=\"id\" value=\""+templateid+"\">");
 
         Template tpl=SWBContext.getWebSite(topicmapid).getTemplate(templateid);
-        out.println("<param name=\"document\" value=\""+SWBPlatform.getWebWorkPath()+tpl.getWorkPath()+"/"+version+"/"+URLEncoder.encode(tpl.getFileName(version))+"\">");
+        out.println("<param name=\"document\" value=\""+SWBPortal.getWebWorkPath()+tpl.getWorkPath()+"/"+version+"/"+URLEncoder.encode(tpl.getFileName(version))+"\">");
         out.println("<param name=\"filename\" value=\""+tpl.getFileName(version)+"\">");
         out.println("<param name=\"ver\" value=\""+version+"\">");
         out.println("<param name=\"locale\" value=\""+user.getLanguage()+"\">");

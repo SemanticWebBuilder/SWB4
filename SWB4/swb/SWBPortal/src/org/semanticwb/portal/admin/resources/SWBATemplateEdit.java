@@ -164,7 +164,7 @@ public class SWBATemplateEdit extends GenericResource {
                                 out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/activa.gif\" border=\"0\" alt=\""+paramRequest.getLocaleString("msgActualVersion")+"\">");
                             }
 
-                            out.println("<a href=\"#\" onclick=\"window.open('" + SWBPlatform.getWebWorkPath() + tmpl.getWorkPath() + "/" + vio.getVersionNumber() + "/" + tmpl.getFileName(vio.getVersionNumber()) + "','Preview','scrollbars, resizable, width=550, height=550');\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\""+paramRequest.getLocaleString("msgPreview")+"\"></a>"); //submitUrl('" + urlec + "',this); return false;
+                            out.println("<a href=\"#\" onclick=\"window.open('" + SWBPortal.getWebWorkPath() + tmpl.getWorkPath() + "/" + vio.getVersionNumber() + "/" + tmpl.getFileName(vio.getVersionNumber()) + "','Preview','scrollbars, resizable, width=550, height=550');\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\""+paramRequest.getLocaleString("msgPreview")+"\"></a>"); //submitUrl('" + urlec + "',this); return false;
 
                             SWBResourceURL urlr = paramRequest.getActionUrl();
                             urlr.setParameter("suri", id);
@@ -407,10 +407,10 @@ public class SWBATemplateEdit extends GenericResource {
 
                     nvinf.setProperty(VersionInfo.swb_versionFile, vi.getVersionFile());
 
-                    String rutaFS_source_path = SWBPlatform.getWorkPath() + tmpl.getWorkPath() + "/" + request.getParameter("vnum") + "/";
-                    String rutaFS_target_path = SWBPlatform.getWorkPath() + tmpl.getWorkPath() + "/" + vnum + "/";
-                    String rutaWeb_source_path = SWBPlatform.getWebWorkPath() + tmpl.getWorkPath() + "/" + request.getParameter("vnum");
-                    String rutaWeb_target_path = SWBPlatform.getWebWorkPath() + tmpl.getWorkPath() + "/" + vnum;
+                    String rutaFS_source_path = SWBPortal.getWorkPath() + tmpl.getWorkPath() + "/" + request.getParameter("vnum") + "/";
+                    String rutaFS_target_path = SWBPortal.getWorkPath() + tmpl.getWorkPath() + "/" + vnum + "/";
+                    String rutaWeb_source_path = SWBPortal.getWebWorkPath() + tmpl.getWorkPath() + "/" + request.getParameter("vnum");
+                    String rutaWeb_target_path = SWBPortal.getWebWorkPath() + tmpl.getWorkPath() + "/" + vnum;
 
 //                    System.out.println("Ruta FS Source:"+rutaFS_source_path);
 //                    System.out.println("Ruta FS Target:"+rutaFS_target_path);
@@ -422,13 +422,13 @@ public class SWBATemplateEdit extends GenericResource {
                     }
                 } else {
                     String defaultTPL = Template.DEFAUL_HTML;
-                    String rutaFS_target_path = SWBPlatform.getWorkPath() + tmpl.getWorkPath() + "/" + vnum + "/";
+                    String rutaFS_target_path = SWBPortal.getWorkPath() + tmpl.getWorkPath() + "/" + vnum + "/";
                     File f = new File(rutaFS_target_path);
                     if (!f.exists()) {
                         f.mkdirs();
                     }
 
-                    File ftmpl = new File(SWBPlatform.getWorkPath() + tmpl.getWorkPath() + "/" + vnum + "/template.html");
+                    File ftmpl = new File(SWBPortal.getWorkPath() + tmpl.getWorkPath() + "/" + vnum + "/template.html");
                     Writer output = new BufferedWriter(new FileWriter(ftmpl));
                     try {
                         output.write(defaultTPL);
@@ -520,7 +520,7 @@ public class SWBATemplateEdit extends GenericResource {
                     }
                     int vnumdel = vio.getVersionNumber();
                     Template tmpl = (Template) go;
-                    String rutaFS_source_path = SWBPlatform.getWorkPath() + tmpl.getWorkPath() + "/" + vnumdel;
+                    String rutaFS_source_path = SWBPortal.getWorkPath() + tmpl.getWorkPath() + "/" + vnumdel;
                     if (SWBUtils.IO.removeDirectory(rutaFS_source_path)) {
                         //System.out.println("Remove OK");
                     }
@@ -546,7 +546,7 @@ public class SWBATemplateEdit extends GenericResource {
 
             while (temp != null) {
                 temp2 = temp;
-                String rutaFS_source_path = SWBPlatform.getWorkPath() + tmpl.getWorkPath() + "/" + temp2.getVersionNumber();
+                String rutaFS_source_path = SWBPortal.getWorkPath() + tmpl.getWorkPath() + "/" + temp2.getVersionNumber();
                 if (SWBUtils.IO.removeDirectory(rutaFS_source_path)) {
                     //System.out.println("Remove back OK by Reset Version: " + temp2.getVersionNumber());
                 }
@@ -563,7 +563,7 @@ public class SWBATemplateEdit extends GenericResource {
             while (temp != null) {
                 temp2 = temp;
                 temp = temp.getNextVersion();
-                String rutaFS_source_path = SWBPlatform.getWorkPath() + tmpl.getWorkPath() + "/" + temp2.getVersionNumber();
+                String rutaFS_source_path = SWBPortal.getWorkPath() + tmpl.getWorkPath() + "/" + temp2.getVersionNumber();
                 if (SWBUtils.IO.removeDirectory(rutaFS_source_path)) {
                     //System.out.println("Remove next OK by Reset Version: " + temp2.getVersionNumber());
                 }
@@ -578,10 +578,10 @@ public class SWBATemplateEdit extends GenericResource {
 
             int va_num = va.getVersionNumber();
             if (va_num != 1) {
-                String rutaFS_source_path = SWBPlatform.getWorkPath() + tmpl.getWorkPath() + "/" + va_num + "/";
-                String rutaFS_target_path = SWBPlatform.getWorkPath() + tmpl.getWorkPath() + "/1/";
-                String rutaWeb_source_path = SWBPlatform.getWebWorkPath() + tmpl.getWorkPath() + "/" + va_num;
-                String rutaWeb_target_path = SWBPlatform.getWebWorkPath() + tmpl.getWorkPath() + "/1";
+                String rutaFS_source_path = SWBPortal.getWorkPath() + tmpl.getWorkPath() + "/" + va_num + "/";
+                String rutaFS_target_path = SWBPortal.getWorkPath() + tmpl.getWorkPath() + "/1/";
+                String rutaWeb_source_path = SWBPortal.getWebWorkPath() + tmpl.getWorkPath() + "/" + va_num;
+                String rutaWeb_target_path = SWBPortal.getWebWorkPath() + tmpl.getWorkPath() + "/1";
 
                 if (SWBUtils.IO.copyStructure(rutaFS_source_path, rutaFS_target_path, true, rutaWeb_source_path, rutaWeb_target_path)) {
                     //System.out.println("Copied actual to 1 OK by Reset Version");

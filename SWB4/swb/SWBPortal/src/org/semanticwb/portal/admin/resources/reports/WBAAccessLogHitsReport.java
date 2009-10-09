@@ -53,6 +53,7 @@ import org.w3c.dom.Element;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.semanticwb.SWBPortal;
 
 public class WBAAccessLogHitsReport extends GenericResource {
     private static Logger log = SWBUtils.getLogger(WBAAccessLogHitsReport.class);
@@ -1092,7 +1093,7 @@ public class WBAAccessLogHitsReport extends GenericResource {
 
         String accessLogPath = SWBPlatform.getEnv("swb/accessLog");
         String period = SWBPlatform.getEnv("swb/accessLogPeriod");
-        String path = SWBPlatform.getWorkPath();
+        String path = SWBPortal.getWorkPath();
         String siteId = request.getParameter("siteid");
 
         GregorianCalendar cal = new GregorianCalendar();

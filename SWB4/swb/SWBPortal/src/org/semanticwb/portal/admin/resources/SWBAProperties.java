@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.SWBProperties;
 import org.semanticwb.model.*;
@@ -82,7 +83,7 @@ public class SWBAProperties extends GenericResource {
         if(fileSelected==null)return;
         if(fileSelected.equals("web.properties"))
         {
-            prop = (SWBProperties) SWBPlatform.getWebProperties();
+            prop = (SWBProperties) SWBPortal.getWebProperties();
 //        }else if(fileSelected.equals("workflow.properties"))
 //        {
 //            prop = com.infotec.workflow.manager.ProcessManagerConfig.getInstance().getProperties();

@@ -52,6 +52,7 @@ import org.w3c.dom.Element;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.semanticwb.SWBPortal;
 
 public class WBAAccessLoginReport extends GenericResource {
 
@@ -793,8 +794,8 @@ public class WBAAccessLoginReport extends GenericResource {
         ArrayList files = new ArrayList();
 
         String accessLogPath = SWBPlatform.getEnv("swb/accessLog");
-        String period = SWBPlatform.getEnv("swb/accessLogPeriod");
-        String path = SWBPlatform.getWorkPath();
+        String period = SWBPortal.getEnv("swb/accessLogPeriod");
+        String path = SWBPortal.getWorkPath();
         String repId = request.getParameter("repid");
 
         GregorianCalendar cal = new GregorianCalendar();

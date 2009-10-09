@@ -39,6 +39,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
@@ -382,10 +383,10 @@ public class SWBAResourceVersion extends GenericResource {
                 SWBResource tmpl = (SWBResource) go;
                 if (request.getParameter("vnum") != null) {
                     // copiar archivos
-                    String rutaFS_source_path = SWBPlatform.getWorkPath() + tmpl.getResourceBase().getWorkPath() + "/" + request.getParameter("vnum") + "/";
-                    String rutaFS_target_path = SWBPlatform.getWorkPath() + tmpl.getResourceBase().getWorkPath() + "/" + vnum + "/";
-                    String rutaWeb_source_path = SWBPlatform.getWebWorkPath() + tmpl.getResourceBase().getWorkPath() + "/" + request.getParameter("vnum");
-                    String rutaWeb_target_path = SWBPlatform.getWebWorkPath() + tmpl.getResourceBase().getWorkPath() + "/" + vnum;
+                    String rutaFS_source_path = SWBPortal.getWorkPath() + tmpl.getResourceBase().getWorkPath() + "/" + request.getParameter("vnum") + "/";
+                    String rutaFS_target_path = SWBPortal.getWorkPath() + tmpl.getResourceBase().getWorkPath() + "/" + vnum + "/";
+                    String rutaWeb_source_path = SWBPortal.getWebWorkPath() + tmpl.getResourceBase().getWorkPath() + "/" + request.getParameter("vnum");
+                    String rutaWeb_target_path = SWBPortal.getWebWorkPath() + tmpl.getResourceBase().getWorkPath() + "/" + vnum;
 
                     if (SWBUtils.IO.copyStructure(rutaFS_source_path, rutaFS_target_path, true, rutaWeb_source_path, rutaWeb_target_path)) {
                         //System.out.println("Copied OK");
@@ -403,13 +404,13 @@ public class SWBAResourceVersion extends GenericResource {
                     vswres.setLastVersion(vi);
 
 
-                    String rutaFS_target_path = SWBPlatform.getWorkPath() + swres.getResourceBase().getWorkPath() + "/" + vnum + "/";
+                    String rutaFS_target_path = SWBPortal.getWorkPath() + swres.getResourceBase().getWorkPath() + "/" + vnum + "/";
                     File f = new File(rutaFS_target_path);
                     if (!f.exists()) {
                         f.mkdirs();
                     }
 
-                    File ftmpl = new File(SWBPlatform.getWorkPath() + swres.getResourceBase().getWorkPath() + "/" + vnum + "/index.html");
+                    File ftmpl = new File(SWBPortal.getWorkPath() + swres.getResourceBase().getWorkPath() + "/" + vnum + "/index.html");
                     Writer output = new BufferedWriter(new FileWriter(ftmpl));
                     try {
                         output.write(" ");
@@ -506,7 +507,7 @@ public class SWBAResourceVersion extends GenericResource {
                     }
                     int vnumdel = vio.getVersionNumber();
                     SWBResource tmpl = (SWBResource) go;
-                    String rutaFS_source_path = SWBPlatform.getWorkPath() + tmpl.getResourceBase().getWorkPath() + "/" + vnumdel;
+                    String rutaFS_source_path = SWBPortal.getWorkPath() + tmpl.getResourceBase().getWorkPath() + "/" + vnumdel;
                     if (SWBUtils.IO.removeDirectory(rutaFS_source_path)) {
                         //System.out.println("Remove OK");
                     }
@@ -541,7 +542,7 @@ public class SWBAResourceVersion extends GenericResource {
             while (temp != null) {
                 //System.out.println("version anterior != null ("+temp.getVersionNumber()+")");
                 temp2 = temp;
-                String rutaFS_source_path = SWBPlatform.getWorkPath() + wres.getResourceBase().getWorkPath() + "/" + temp2.getVersionNumber();
+                String rutaFS_source_path = SWBPortal.getWorkPath() + wres.getResourceBase().getWorkPath() + "/" + temp2.getVersionNumber();
                 if (SWBUtils.IO.removeDirectory(rutaFS_source_path)) {
                     //System.out.println("Remove back OK by Reset Version: " + temp2.getVersionNumber());
                 }
@@ -558,7 +559,7 @@ public class SWBAResourceVersion extends GenericResource {
             while (temp != null) {
                 temp2 = temp;
                 temp = temp.getNextVersion();
-                String rutaFS_source_path = SWBPlatform.getWorkPath() + wres.getResourceBase().getWorkPath() + "/" + temp2.getVersionNumber();
+                String rutaFS_source_path = SWBPortal.getWorkPath() + wres.getResourceBase().getWorkPath() + "/" + temp2.getVersionNumber();
                 if (SWBUtils.IO.removeDirectory(rutaFS_source_path)) {
                     //System.out.println("Remove next OK by Reset Version: " + temp2.getVersionNumber());
                 }
@@ -574,10 +575,10 @@ public class SWBAResourceVersion extends GenericResource {
             int va_num = va.getVersionNumber();
             //System.out.println("Version actual num: "+va_num);
             if (va_num != 1) {
-                String rutaFS_source_path = SWBPlatform.getWorkPath() + wres.getResourceBase().getWorkPath() + "/" + va_num + "/";
-                String rutaFS_target_path = SWBPlatform.getWorkPath() + wres.getResourceBase().getWorkPath() + "/1/";
-                String rutaWeb_source_path = SWBPlatform.getWebWorkPath() + wres.getResourceBase().getWorkPath() + "/" + va_num;
-                String rutaWeb_target_path = SWBPlatform.getWebWorkPath() + wres.getResourceBase().getWorkPath() + "/1";
+                String rutaFS_source_path = SWBPortal.getWorkPath() + wres.getResourceBase().getWorkPath() + "/" + va_num + "/";
+                String rutaFS_target_path = SWBPortal.getWorkPath() + wres.getResourceBase().getWorkPath() + "/1/";
+                String rutaWeb_source_path = SWBPortal.getWebWorkPath() + wres.getResourceBase().getWorkPath() + "/" + va_num;
+                String rutaWeb_target_path = SWBPortal.getWebWorkPath() + wres.getResourceBase().getWorkPath() + "/1";
 
                 if (SWBUtils.IO.copyStructure(rutaFS_source_path, rutaFS_target_path, true, rutaWeb_source_path, rutaWeb_target_path)) {
                     //System.out.println("Copied actual to 1 OK by Reset Version");
