@@ -86,7 +86,7 @@ public class SparqlQueryResource extends GenericAdmResource {
                 tpl = SWBUtils.XML.loadTemplateXSLT(
                         SWBUtils.IO.getStreamFromString(
                         SWBUtils.IO.getFileFromPath(base.getWorkPath() + "/" + base.getAttribute("template").trim())));
-                path = SWBPlatform.getWebWorkPath() + base.getWorkPath() + "/";
+                path = SWBPortal.getWebWorkPath() + base.getWorkPath() + "/";
             } catch (Exception e) {
                 log.error("Error while loading resource template: " + base.getId(), e);
             }

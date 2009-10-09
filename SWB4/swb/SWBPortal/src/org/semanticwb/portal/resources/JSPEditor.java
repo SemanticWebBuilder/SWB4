@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.portal.api.GenericAdmResource;
@@ -90,7 +91,7 @@ public class JSPEditor extends GenericAdmResource {
         String code = "";
         String resourcePath = base.getWorkPath();
         String fileName = base.getAttribute("fileName");
-        File pathToRead = new File(SWBPlatform.getWorkPath() + resourcePath);
+        File pathToRead = new File(SWBPortal.getWorkPath() + resourcePath);
         PrintWriter out = response.getWriter();
         SWBResourceURL url = paramReq.getActionUrl().setMode(
                 SWBResourceURL.Mode_ADMIN);
@@ -107,7 +108,7 @@ public class JSPEditor extends GenericAdmResource {
             if (!pathToRead.exists()) {
                 empty = true;
                 pathToRead.mkdirs();
-                pathToRead = new File(SWBPlatform.getWorkPath() + resourcePath
+                pathToRead = new File(SWBPortal.getWorkPath() + resourcePath
                         + "/index.html");
                 if (!pathToRead.exists()) {
                     pathToRead.createNewFile();
@@ -115,12 +116,12 @@ public class JSPEditor extends GenericAdmResource {
             }
             //lectura del archivo que contiene el codigo
             if (fileName != null) {
-                pathToRead = new File(SWBPlatform.getWorkPath() + resourcePath
+                pathToRead = new File(SWBPortal.getWorkPath() + resourcePath
                         + "/" + fileName);
                 resourcePath = resourcePath + "/" + fileName;
                 if (pathToRead.canRead()) {
                     code = SWBUtils.IO.readInputStream(
-                            SWBPlatform.getFileFromWorkPath(resourcePath));
+                            SWBPortal.getFileFromWorkPath(resourcePath));
                 } else {
                     log.debug("Cannot read file " + pathToRead.toString()
                             + " in JSPEditor");
@@ -219,7 +220,7 @@ public class JSPEditor extends GenericAdmResource {
         Resource base = getResourceBase();
         String code = null;
         String fileName = base.getAttribute("fileName");
-        String resourcePath = SWBPlatform.getWorkPath() + base.getWorkPath();
+        String resourcePath = SWBPortal.getWorkPath() + base.getWorkPath();
         File pathToWrite = new File(resourcePath);
 
         code = request.getParameter("JSPEditor" + base.getId());

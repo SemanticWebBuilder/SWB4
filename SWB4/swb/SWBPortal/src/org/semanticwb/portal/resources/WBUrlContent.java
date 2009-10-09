@@ -44,6 +44,7 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.admin.admresources.util.XmlBundle;
 
 import com.arthurdo.parser.*;
+import org.semanticwb.SWBPortal;
 
 /**
  * WBUrlContent recupera el contenido de una página web externa y la incrusta como contenido local.
@@ -76,12 +77,12 @@ public class WBUrlContent extends GenericAdmResource {
                     nameClass=this.getClass().getName().substring(pos+1);
                 }
                 try {
-                    fptr =  new FileInputStream(SWBPlatform.getWorkPath()+"/sites/"+base.getWebSiteId()+"/config/resources/"+nameClass+".properties");
+                    fptr =  new FileInputStream(SWBPortal.getWorkPath()+"/sites/"+base.getWebSiteId()+"/config/resources/"+nameClass+".properties");
                 }catch(Exception e) {
                 }
                 if(fptr==null) { //busca en raiz de work/config
                     try {
-                        fptr = new FileInputStream(SWBPlatform.getWorkPath()+"/work/config/resources/"+nameClass+".properties");
+                        fptr = new FileInputStream(SWBPortal.getWorkPath()+"/work/config/resources/"+nameClass+".properties");
                     }catch(Exception e) {
                     }
                 }

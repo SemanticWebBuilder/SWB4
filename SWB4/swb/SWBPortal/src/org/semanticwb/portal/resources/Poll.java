@@ -36,6 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
@@ -81,8 +82,8 @@ public class Poll extends GenericResource {
             super.setResourceBase(base);
             hashSec = new HashMap();
             hashPrim = new HashMap();
-            workPath = (String) SWBPlatform.getWorkPath() +  base;
-            webWorkPath = (String) SWBPlatform.getWebWorkPath() +  base.getWorkPath();
+            workPath = (String) SWBPortal.getWorkPath() +  base;
+            webWorkPath = (String) SWBPortal.getWebWorkPath() +  base.getWorkPath();
             restype= base.getResourceType().getResourceClassName();
         }
         catch(Exception e) { log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);  }

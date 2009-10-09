@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.portal.api.*;
@@ -68,8 +69,8 @@ public class ImageGallery extends GenericResource {
         try
         {
             super.setResourceBase(base);
-            workPath = (String) SWBPlatform.getWorkPath() +  base.getWorkPath();
-            webWorkPath = (String) SWBPlatform.getWebWorkPath() +  base.getWorkPath();
+            workPath = (String) SWBPortal.getWorkPath() +  base.getWorkPath();
+            webWorkPath = (String) SWBPortal.getWebWorkPath() +  base.getWorkPath();
         }
         catch(Exception e) { log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);  }
     }

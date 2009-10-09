@@ -41,6 +41,7 @@ import java.io.IOException;
 import java.util.StringTokenizer;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
@@ -262,7 +263,7 @@ public class CommentSwf extends Comment {
                          : "0");
                 if ("1".equals(value)
                         && !"".equals(base.getAttribute("img", "").trim())) {
-                    SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath()
+                    SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath()
                                                 + base.getWorkPath() + "/"
                                                 + base.getAttribute("img").trim());
                     base.removeAttribute("img");                        

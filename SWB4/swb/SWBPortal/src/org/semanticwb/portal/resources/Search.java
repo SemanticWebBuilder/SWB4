@@ -88,8 +88,8 @@ public class Search extends GenericAdmResource
         {
             try 
             { 
-                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPlatform.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim())); 
-                path= SWBPlatform.getWebWorkPath() +  base.getWorkPath() + "/";
+                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
+                path= SWBPortal.getWebWorkPath() +  base.getWorkPath() + "/";
             } 
             catch(Exception e) { log.error("Error while loading resource template: "+base.getId(), e); }
         }
@@ -134,7 +134,7 @@ public class Search extends GenericAdmResource
                 search.setAttribute("words", q);
                 search.setAttribute("wordsEnc", java.net.URLEncoder.encode(q));
                 //search.setAttribute("path",AFUtils.getInstance().getWebPath()+AFUtils.getInstance().getEnv("wb/distributor")+"/"+tm.getId()+"/");
-                search.setAttribute("work", SWBPlatform.getWebWorkPath());
+                search.setAttribute("work", SWBPortal.getWebWorkPath());
                 search.setAttribute("url", paramRequest.getWebPage().getUrl());
 
                 StringTokenizer st = new StringTokenizer(q, " ");

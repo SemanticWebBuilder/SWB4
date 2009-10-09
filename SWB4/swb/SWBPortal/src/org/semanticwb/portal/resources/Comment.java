@@ -108,7 +108,7 @@ public class Comment extends GenericResource {
 
         try {
             super.setResourceBase(base);
-            webWorkPath = SWBPlatform.getWebWorkPath() + base.getWorkPath();
+            webWorkPath = SWBPortal.getWebWorkPath() + base.getWorkPath();
         } catch (Exception e) {
             log.error("Error while setting resource base: " + base.getId() 
                     + "-" + base.getTitle(), e);
@@ -832,7 +832,7 @@ public class Comment extends GenericResource {
                 
                 if ("1".equals(value)
                         && !"".equals(base.getAttribute("img", "").trim())) {
-                    SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath()
+                    SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath()
                             + base.getWorkPath() + "/"
                             + base.getAttribute("img").trim());
                     base.removeAttribute("img");
@@ -869,7 +869,7 @@ public class Comment extends GenericResource {
                          : "0");
                 if ("1".equals(value)
                         && !"".equals(base.getAttribute("imgenviar", "").trim())) {
-                    SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath()
+                    SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath()
                             + base.getWorkPath() + "/"
                             + base.getAttribute("imgenviar").trim());
                     base.removeAttribute("imgenviar");
@@ -905,7 +905,7 @@ public class Comment extends GenericResource {
                          : "0");
                 if ("1".equals(value)
                         && !"".equals(base.getAttribute("imglimpiar", "").trim())) {
-                    SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath()
+                    SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath()
                             + base.getWorkPath() + "/"
                             + base.getAttribute("imglimpiar").trim());
                     base.removeAttribute("imglimpiar");                        
@@ -1821,7 +1821,7 @@ public class Comment extends GenericResource {
     protected void feedCommentLog(Document dom, User user) throws IOException {
         
         Resource base = getResourceBase();
-        String logPath = SWBPlatform.getWorkPath() + base.getWorkPath() 
+        String logPath = SWBPortal.getWorkPath() + base.getWorkPath()
                 + "/Comment.log";
         StringBuilder toLog = new StringBuilder(500);
         Date now = new Date();
@@ -1874,7 +1874,7 @@ public class Comment extends GenericResource {
                 ? nl.item(0).getFirstChild().getNodeValue() : ""));
         toLog.append("\n");
 
-        File file = new File(SWBPlatform.getWorkPath() + base.getWorkPath());
+        File file = new File(SWBPortal.getWorkPath() + base.getWorkPath());
         if (!file.exists()) {
             file.mkdirs();
         }
