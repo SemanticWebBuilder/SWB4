@@ -37,6 +37,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.WebPage;
@@ -372,7 +373,7 @@ function votedPage(){
                 boolean isMultipart = ServletFileUpload.isMultipartContent(request);
                 HashMap<String,String> params = new HashMap<String,String>();
                 // Create a factory for disk-based file items
-                File tmpwrk = new File(SWBPlatform.getWorkPath()+"/tmp");
+                File tmpwrk = new File(SWBPortal.getWorkPath()+"/tmp");
                 if (!tmpwrk.exists()) tmpwrk.mkdirs();
                 FileItemFactory factory = new DiskFileItemFactory(1*1024*1024,tmpwrk);
                 // Create a new file upload handler
@@ -415,12 +416,12 @@ function votedPage(){
                     }
                 }
                 request.getSession(true).setAttribute(currentFile.getFieldName(), per);
-                String path = SWBPlatform.getWorkPath()+getResourceBase().getWorkPath();
+                String path = SWBPortal.getWorkPath()+getResourceBase().getWorkPath();
                 File file = new File(path);
                 if (!file.exists()) file.mkdirs();
                 String name = currentFile.getFieldName()+currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
                 currentFile.write(new File(path+"/"+name));
-                path = SWBPlatform.getWebWorkPath()+getResourceBase().getWorkPath();
+                path = SWBPortal.getWebWorkPath()+getResourceBase().getWorkPath();
                 if (currentFile.getFieldName().equals("fullStar"))
                 {
                     setFullStar(path+"/"+name);

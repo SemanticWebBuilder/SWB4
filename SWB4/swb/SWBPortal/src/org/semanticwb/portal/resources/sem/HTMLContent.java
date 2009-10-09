@@ -38,6 +38,7 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
@@ -98,13 +99,13 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         int versionNumber = vi.getVersionNumber();
         String fileName = vi.getVersionFile();
 
-        String resourceWorkPath = SWBPlatform.getWorkPath()
+        String resourceWorkPath = SWBPortal.getWorkPath()
                 + resource.getWorkPath() + "/" + versionNumber + "/" + fileName;
 
 
         String fileContent = SWBUtils.IO.getFileFromPath(resourceWorkPath);
         fileContent=SWBUtils.TEXT.replaceAll(fileContent,"<workpath/>"
-            ,SWBPlatform.getWebWorkPath() + resource.getWorkPath() + "/" + versionNumber + "/");
+            ,SWBPortal.getWebWorkPath() + resource.getWorkPath() + "/" + versionNumber + "/");
 
         //Paginación (Jorge Jiménez-10/Julio/2009)
         if(paramRequest.getLocaleString("txtant")!=null) stxtant=paramRequest.getLocaleString("txtant");
@@ -163,14 +164,14 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                 //Cuando se carga el archivo normalmente
                 if (tmpPath == null || "".equals(tmpPath)) {
                     content = SWBUtils.IO.readInputStream(
-                            SWBPlatform.getFileFromWorkPath(pathToRead.toString()));
+                            SWBPortal.getFileFromWorkPath(pathToRead.toString()));
                     //Se sustituye el tag insertado por el metodo saveContent en lugar de la ruta logica del archivo
                     content = SWBUtils.TEXT.replaceAll(content, "<workpath/>",
-                            SWBPlatform.getWebWorkPath() + resource.getWorkPath()
+                            SWBPortal.getWebWorkPath() + resource.getWorkPath()
                             + "/" + (versionNumber) + "/");
                 } else { //cuando se carga el archivo temporal
                     content = SWBUtils.IO.readInputStream(
-                            SWBPlatform.getFileFromWorkPath(tmpPath + "index.html"));
+                            SWBPortal.getFileFromWorkPath(tmpPath + "index.html"));
                 }
             } catch (Exception e) {
                 content = "Error al leer el archivo";
@@ -240,13 +241,13 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         boolean textSaved = false;
         int versionNumber = Integer.parseInt(request.getParameter("numversion"));   //version.getVersionNumber();
         int versionToDelete = versionNumber;
-        String directoryToRemove = SWBPlatform.getWorkPath()
+        String directoryToRemove = SWBPortal.getWorkPath()
                 + resource.getWorkPath() + "/"
                 + (versionToDelete > 1 ? versionToDelete : 1) + "/tmp";
-        String directoryToCreate = SWBPlatform.getWorkPath()
+        String directoryToCreate = SWBPortal.getWorkPath()
                 + resource.getWorkPath() + "/" + (versionNumber) + "/"
                 + HTMLContent.FOLDER;
-        String workingDirectory = SWBPlatform.getWebWorkPath()
+        String workingDirectory = SWBPortal.getWebWorkPath()
                                   + resource.getWorkPath();
         String message = null;
 
@@ -254,8 +255,8 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
             try {
                 //Quito de una de las dos rutas el directorio -work-, ya que
                 //las dos lo tienen.
-                File filePath = new File(SWBPlatform.getWorkPath().substring(0,
-                        SWBPlatform.getWorkPath().lastIndexOf("/") + 1)
+                File filePath = new File(SWBPortal.getWorkPath().substring(0,
+                        SWBPortal.getWorkPath().lastIndexOf("/") + 1)
                         + contentPath);
                 if (!filePath.exists()) {
                     filePath.mkdirs();
@@ -264,8 +265,8 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                 if (!filePath.exists()) {
                     filePath.mkdirs();
                 }
-                File file = new File(SWBPlatform.getWorkPath().substring(0,
-                        SWBPlatform.getWorkPath().lastIndexOf("/") + 1)
+                File file = new File(SWBPortal.getWorkPath().substring(0,
+                        SWBPortal.getWorkPath().lastIndexOf("/") + 1)
                         + contentPath + "/index.html");
                 filename = file.getName();
                 FileWriter writer = new FileWriter(file);
@@ -279,7 +280,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                             String attachedFilePath = textToSave.substring(index,
                                                       quoteIndex);
                             //Ruta fisica del archivo a copiar
-                            String s = SWBPlatform.getWorkPath()
+                            String s = SWBPortal.getWorkPath()
                                     + attachedFilePath.substring(
                                             attachedFilePath.indexOf("work") + 4);
                             String fileName = s.substring(s.lastIndexOf("/") + 1);
@@ -366,7 +367,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         if (values != null && !values.isEmpty()) {
             numversion = Integer.parseInt(((String) values.get(0)).trim());
         }
-        portletWorkPath = SWBPlatform.getWorkPath()
+        portletWorkPath = SWBPortal.getWorkPath()
                 + resource.getWorkPath() + "/" + numversion + "/tmp/";
 
         File file = new File(portletWorkPath);
@@ -417,7 +418,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                     SWBUtils.IO.copy(portletWorkPath + filename,
                             portletWorkPath + "index.html", true,
                             localRelativePath,
-                            SWBPlatform.getWebWorkPath() + resource.getWorkPath()
+                            SWBPortal.getWebWorkPath() + resource.getWorkPath()
                                 + "/" + numversion + "/tmp/" + HTMLContent.FOLDER);
                 } else {
                     SWBUtils.IO.copy(portletWorkPath + filename,

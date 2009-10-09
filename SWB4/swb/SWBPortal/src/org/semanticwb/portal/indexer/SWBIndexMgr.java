@@ -38,6 +38,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.SWBAppObject;
 import org.semanticwb.model.SWBContext;
@@ -63,7 +64,7 @@ public class SWBIndexMgr implements SWBAppObject
     public SWBIndexMgr()
     {
         this.lastupdate = new Timestamp(new java.util.Date().getTime());
-        if(!SWBPlatform.isClient())
+        if(!SWBPortal.isClient())
         {
             log.event("Initializing SWBIndexMgr");
         }else
@@ -81,7 +82,7 @@ public class SWBIndexMgr implements SWBAppObject
     
     public void init()
     {
-        if(SWBPlatform.isClient())return;
+        if(SWBPortal.isClient())return;
         
         prop=SWBUtils.TEXT.getPropertyFile("/indexer.properties");
         Enumeration propNames = prop.propertyNames();
