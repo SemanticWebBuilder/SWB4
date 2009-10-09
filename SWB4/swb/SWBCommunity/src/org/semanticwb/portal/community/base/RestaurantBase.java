@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class RestaurantBase extends org.semanticwb.portal.community.Commerce implements org.semanticwb.model.Descriptiveable,org.semanticwb.portal.community.Addressable,org.semanticwb.model.Traceable,org.semanticwb.portal.community.Contactable,org.semanticwb.portal.community.FacilitiesEnable,org.semanticwb.model.Geolocalizable
+public class RestaurantBase extends org.semanticwb.portal.community.Commerce implements org.semanticwb.portal.community.FacilitiesEnable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.portal.community.Addressable,org.semanticwb.portal.community.Contactable,org.semanticwb.model.Geolocalizable
 {
     public static final org.semanticwb.platform.SemanticClass swbcomm_Restaurant=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Restaurant");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Restaurant");
