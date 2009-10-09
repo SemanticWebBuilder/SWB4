@@ -34,6 +34,7 @@ import java.util.zip.ZipFile;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
 import org.semanticwb.office.comunication.OfficeDocument;
@@ -87,8 +88,8 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
             if (in != null)
             {
                 String name = UUID.randomUUID().toString() + ".zip";
-                SWBPlatform.writeFileToWorkPath(getResourceBase().getWorkPath() + "/" + name, in, "");
-                zipFile = new File(SWBPlatform.getWorkPath() + getResourceBase().getWorkPath() + "/" + name);
+                SWBPortal.writeFileToWorkPath(getResourceBase().getWorkPath() + "/" + name, in, "");
+                zipFile = new File(SWBPortal.getWorkPath() + getResourceBase().getWorkPath() + "/" + name);
                 ZipFile zip = new ZipFile(zipFile);
                 Enumeration entries = zip.entries();
                 while (entries.hasMoreElements())
@@ -103,7 +104,7 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
                         {
                             file=file.substring(pos+1);
                         }*/
-                        SWBPlatform.writeFileToWorkPath(getResourceBase().getWorkPath() + "/" + file, inEntry, "");
+                        SWBPortal.writeFileToWorkPath(getResourceBase().getWorkPath() + "/" + file, inEntry, "");
                     }
                 }
                 zip.close();
@@ -140,7 +141,7 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
             {
 
                 file = file.replace(".xls", ".html");
-                String path = SWBPlatform.getWebWorkPath();
+                String path = SWBPortal.getWebWorkPath();
                 if (path.endsWith("/"))
                 {
                     path = path.substring(0, path.length() - 1);
@@ -152,7 +153,7 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
                 }
                 PrintWriter out = response.getWriter();
                 beforePrintDocument(out);
-                String workpath = SWBPlatform.getWebWorkPath() + getResourceBase().getWorkPath() + "/";
+                String workpath = SWBPortal.getWebWorkPath() + getResourceBase().getWorkPath() + "/";
                 printDocument(out, path, workpath, "", paramRequest);
                 afterPrintDocument(out);
                 out.close();
