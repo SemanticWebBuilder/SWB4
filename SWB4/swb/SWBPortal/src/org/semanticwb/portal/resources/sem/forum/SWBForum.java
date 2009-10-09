@@ -36,6 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItem;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.GenericIterator;
@@ -192,7 +193,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         while (lAttchments.hasNext()) {
             count++;
             Attachment attch = lAttchments.next();
-            basepath = SWBPlatform.getWebWorkPath() + "/models/" + website.getId() + "/Resource/" + base.getId() + "/replies/" + post.getId() + "/" + attch.getFileName();
+            basepath = SWBPortal.getWebWorkPath() + "/models/" + website.getId() + "/Resource/" + base.getId() + "/replies/" + post.getId() + "/" + attch.getFileName();
             request.setAttribute("attach_hasThAttachments_"+ count, basepath);
             request.setAttribute("attachTarget_hasThAttachments_" +count, "blank");
             url.setParameter("removeAttach", attch.getURI());
@@ -233,7 +234,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         while (lAttchments.hasNext()) {
             count++;
             Attachment attch = lAttchments.next();
-            basepath = SWBPlatform.getWebWorkPath() + "/models/" + website.getId() + "/Resource/" + base.getId() + "/threads/" + thread.getId() + "/" + attch.getFileName();
+            basepath = SWBPortal.getWebWorkPath() + "/models/" + website.getId() + "/Resource/" + base.getId() + "/threads/" + thread.getId() + "/" + attch.getFileName();
             request.setAttribute("attach_hasThAttachments_" + count, basepath);
             request.setAttribute("attachTarget_hasThAttachments_" + count, "blank");
             url.setParameter("removeAttach", attch.getURI());
@@ -345,10 +346,10 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
             GenericIterator<Post> itPost=thread.listPosts();
             while(itPost.hasNext()){
                 Post post=itPost.next();
-                SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + base.getWorkPath() + "/replies/" + post.getId() + "/");
+                SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + base.getWorkPath() + "/replies/" + post.getId() + "/");
             }
             //Elimina filesystem de thread
-            SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + base.getWorkPath() + "/threads/" + thread.getId() + "/");
+            SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + base.getWorkPath() + "/threads/" + thread.getId() + "/");
             semObject.remove();
             //Redirecciona
             response.setMode(response.Mode_VIEW);
@@ -364,7 +365,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
             }
             semObject.remove();
 
-            SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + base.getWorkPath() + "/replies/" + Post2remove.getId() + "/");
+            SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + base.getWorkPath() + "/replies/" + Post2remove.getId() + "/");
             
             //Resta el post al contador del thread
             SemanticObject soThread = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
@@ -430,7 +431,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
                     Attachment attch = lAttchments.next();
                     if(attch.getURI().equals(attachUri)){
                         try{
-                            File file = new File(SWBPlatform.getWorkPath() + base.getWorkPath() + "/"+attachType+"/" + semObject.getId() + "/" + attch.getFileName());
+                            File file = new File(SWBPortal.getWorkPath() + base.getWorkPath() + "/"+attachType+"/" + semObject.getId() + "/" + attch.getFileName());
                             file.delete();
                             attch.remove();
                         }catch(Exception e){
@@ -462,9 +463,9 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         WebSite website = response.getWebPage().getWebSite();
         String basepath=null;
         if(sobj.instanceOf(Thread.sclass)){
-            basepath = SWBPlatform.getWorkPath() + base.getWorkPath() + "/threads/" + sobj.getId() + "/";
+            basepath = SWBPortal.getWorkPath() + base.getWorkPath() + "/threads/" + sobj.getId() + "/";
         }else if(sobj.instanceOf(Post.sclass)){
-            basepath = SWBPlatform.getWorkPath() + base.getWorkPath() + "/replies/" + sobj.getId() + "/";
+            basepath = SWBPortal.getWorkPath() + base.getWorkPath() + "/replies/" + sobj.getId() + "/";
         }
         if (request.getSession().getAttribute(UploadFormElement.FILES_UPLOADED) != null) {
             Iterator itfilesUploaded = ((List) request.getSession().getAttribute(UploadFormElement.FILES_UPLOADED)).iterator();

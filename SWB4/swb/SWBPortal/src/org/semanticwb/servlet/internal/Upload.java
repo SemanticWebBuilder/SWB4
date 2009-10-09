@@ -40,6 +40,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.util.MultipartInputStream;
 
@@ -271,7 +272,7 @@ class UploadFile
         }
         if (name.equals("relpath"))
         {
-            path = SWBPlatform.getWorkPath() + st.toString();
+            path = SWBPortal.getWorkPath() + st.toString();
             path = path.replace('\\', '/');
             if (!path.endsWith("/")) path += "/";
         }

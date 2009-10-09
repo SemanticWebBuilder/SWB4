@@ -59,7 +59,7 @@ public class SWBVirtualHostFilter implements Filter
 {
 
     static Logger log = SWBUtils.getLogger(SWBVirtualHostFilter.class);
-    private SWBPlatform swbPlatform = null;
+    private SWBPortal swbPortal = null;
     private HashMap<String, InternalServlet> intServlets = new HashMap();
     private InternalServlet dist=null;
     private Login loginInternalServlet = new Login();
@@ -91,7 +91,7 @@ public class SWBVirtualHostFilter implements Filter
 
         if (fistCall)
         {
-            swbPlatform.setContextPath(_request.getContextPath());
+            swbPortal.setContextPath(_request.getContextPath());
             fistCall = false;
         }
 
@@ -260,7 +260,7 @@ public class SWBVirtualHostFilter implements Filter
             log.event("Initializing VirtualHostFilter...");
             String prefix = filterConfig.getServletContext().getRealPath("/");
             SWBUtils.createInstance(prefix);
-            swbPlatform = SWBPlatform.createInstance(filterConfig.getServletContext(), this);
+            swbPortal = SWBPortal.createInstance(filterConfig.getServletContext(),this);
         }
 
         InternalServlet serv = new Distributor();
@@ -338,13 +338,13 @@ public class SWBVirtualHostFilter implements Filter
     private boolean validateDB(HttpServletResponse response) throws IOException
     {
         boolean ret = true;
-        if (!SWBPlatform.haveDB())
+        if (!SWBPortal.haveDB())
         {
             log.debug("SendError 500: Default SemanticWebBuilder database not found...");
             response.sendError(500, "Default WebBuilder database not found...");
             ret = false;
         }
-        if (!SWBPlatform.haveDBTables())
+        if (!SWBPortal.haveDBTables())
         {
             log.debug("SendError 500: Default SemanticWebBuilder database tables not found...");
             response.sendError(500, "Default WebBuilder database tables not found...");
@@ -364,7 +364,7 @@ public class SWBVirtualHostFilter implements Filter
             //msg = WBUtils.getInstance().getFileFromWorkPath2(path);
             msg = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/work/" + path);
             //msg = WBUtils.getInstance().parseHTML(msg, WBUtils.getInstance().getWebWorkPath() + "/config/images/");
-            msg = SWBPortal.UTIL.parseHTML(msg, SWBPlatform.getWebWorkPath() + "/config/images/");
+            msg = SWBPortal.UTIL.parseHTML(msg, SWBPortal.getWebWorkPath() + "/config/images/");
         }
         catch (Exception e)
         {

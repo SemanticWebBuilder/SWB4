@@ -314,7 +314,7 @@ public class ContentUtils {
                 InputStream file = null;
                 try {
                     try {
-                        String path = SWBPlatform.getWorkPath() + "/models/" + base.getWebSiteId() + "/config/resources/" + className + ".properties";
+                        String path = SWBPortal.getWorkPath() + "/models/" + base.getWebSiteId() + "/config/resources/" + className + ".properties";
                         fptr = new FileInputStream(path);
                         file = new FileInputStream(path);
                     } catch (Exception e) {
@@ -322,7 +322,7 @@ public class ContentUtils {
                     }
                     if (fptr == null) { //busca en raiz de work/config
                         try {
-                            String path = SWBPlatform.getWorkPath() + "/config/resources/" + className + ".properties";
+                            String path = SWBPortal.getWorkPath() + "/config/resources/" + className + ".properties";
                             fptr = new FileInputStream(path);
                             file = new FileInputStream(path);
                         } catch (Exception e) {

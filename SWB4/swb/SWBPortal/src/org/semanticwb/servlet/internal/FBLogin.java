@@ -229,23 +229,23 @@ public class FBLogin implements InternalServlet
         {
 
 
-            String rutaSite = SWBPlatform.getWorkPath() + ruta;
+            String rutaSite = SWBPortal.getWorkPath() + ruta;
 
             try
             {
                 rutaSite = "/" + distributorParams.getWebPage().getWebSite().getId() + ruta;
                 login =
-                        SWBPlatform.readFileFromWorkPath(rutaSite);
+                        SWBPortal.readFileFromWorkPath(rutaSite);
                 login =
-                        SWBPortal.UTIL.parseHTML(login, SWBPlatform.getWebWorkPath() + "/" + distributorParams.getWebPage().getWebSite().getId() + "/config/images/");
+                        SWBPortal.UTIL.parseHTML(login, SWBPortal.getWebWorkPath() + "/" + distributorParams.getWebPage().getWebSite().getId() + "/config/images/");
             } catch (Exception ignored)
             {
             }
             if (null == login || "".equals(login))
             {
-                login = SWBPlatform.readFileFromWorkPath(ruta);
+                login = SWBPortal.readFileFromWorkPath(ruta);
                 login =
-                        SWBPortal.UTIL.parseHTML(login, SWBPlatform.getWebWorkPath() + "/config/images/");
+                        SWBPortal.UTIL.parseHTML(login, SWBPortal.getWebWorkPath() + "/config/images/");
             }
 
             login = login.replaceFirst("<SWBVERSION>", SWBPlatform.getVersion());

@@ -26,6 +26,7 @@ package org.semanticwb.security.auth;
 import java.util.Properties;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
@@ -60,8 +61,8 @@ public class SWB4FacebookBridge extends ExtUserRepInt
         {
             Class clase = Class.forName(loginClass);
             InternalServlet fblogin = (InternalServlet)clase.getConstructors()[0].newInstance();
-            ((SWBVirtualHostFilter)SWBPlatform.getVirtualHostFilter()).addMapping("fblogin", fblogin);
-            fblogin.init(SWBPlatform.getServletContext());
+            ((SWBVirtualHostFilter)SWBPortal.getVirtualHostFilter()).addMapping("fblogin", fblogin);
+            fblogin.init(SWBPortal.getServletContext());
         } catch (Exception ex)
         {
             log.error(ex);
