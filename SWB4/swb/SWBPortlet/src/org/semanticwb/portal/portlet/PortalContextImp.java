@@ -32,7 +32,8 @@ package org.semanticwb.portal.portlet;
 import java.util.Vector;
 import javax.portlet.*;
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.SWBUtils;
+import org.semanticwb.SWBPortal;
+
 
 
 /**
@@ -77,7 +78,7 @@ public class PortalContextImp implements PortalContext
    */
   public java.util.Enumeration getPropertyNames()
   {
-      return SWBPlatform.getWebProperties().keys();
+      return SWBPortal.getWebProperties().keys();
   }
 
 
