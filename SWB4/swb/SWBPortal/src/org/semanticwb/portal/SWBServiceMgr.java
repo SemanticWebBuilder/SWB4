@@ -81,7 +81,7 @@ public class SWBServiceMgr implements SemanticObserver {
                     updateTraceable(obj,usr);
                     if(obj.instanceOf(SWBModel.sclass))
                     {
-                        java.io.File dir=new java.io.File(SWBPlatform.getWorkPath() + "/models/"+ obj.getId());
+                        java.io.File dir=new java.io.File(SWBPortal.getWorkPath() + "/models/"+ obj.getId());
                         dir.mkdirs();
                     }
                     if(obj.instanceOf(WebSite.sclass))
@@ -101,9 +101,9 @@ public class SWBServiceMgr implements SemanticObserver {
 //                            lang.setTitle(langNext.getTitle());
 //                            lang.setDescription(langNext.getDescription());
 //                        }
-                        java.io.File dir=new java.io.File(SWBPlatform.getWorkPath() + "/models/"+ obj.getId() + "/Template");
+                        java.io.File dir=new java.io.File(SWBPortal.getWorkPath() + "/models/"+ obj.getId() + "/Template");
                         dir.mkdirs();
-                        dir=new java.io.File(SWBPlatform.getWorkPath() + "/models/" + obj.getId() + "/Resource");
+                        dir=new java.io.File(SWBPortal.getWorkPath() + "/models/" + obj.getId() + "/Resource");
                         dir.mkdirs();
                         //
                     }
@@ -119,7 +119,7 @@ public class SWBServiceMgr implements SemanticObserver {
                         String txt=Template.DEFAUL_HTML;
                         try
                         {
-                            SWBPlatform.writeFileToWorkPath(tpl.getWorkPath()+"/1/"+"template.html", SWBUtils.IO.getStreamFromString(txt), usr.getURI());
+                            SWBPortal.writeFileToWorkPath(tpl.getWorkPath()+"/1/"+"template.html", SWBUtils.IO.getStreamFromString(txt), usr.getURI());
                         }catch(Exception e){log.error(e);}
                     }
                     if(obj.instanceOf(Dns.sclass))
@@ -130,13 +130,13 @@ public class SWBServiceMgr implements SemanticObserver {
                 {
                     if (obj.instanceOf(SWBModel.sclass)) //Removes website
                     {
-                        SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + "/models/"+obj.getId());
+                        SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + "/models/"+obj.getId());
                     } else if (obj.instanceOf(Template.sclass)) // Removes Template
                     {
-                        SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + obj.getWorkPath());
+                        SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + obj.getWorkPath());
                     } else if (obj.instanceOf(Resource.sclass)) // Removes Resource
                     {
-                        SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + obj.getWorkPath());
+                        SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + obj.getWorkPath());
                     }
                     if(obj.instanceOf(Dns.sclass))
                     {
