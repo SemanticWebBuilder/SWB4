@@ -94,7 +94,7 @@ public class GateWayOffice implements InternalServlet
     private void showExcelContent(PrintWriter out, String file, String dir, String contentId, String repositoryName) throws IOException
     {
         file = file.replace(".xls", ".html");
-        String path = SWBPlatform.getWebWorkPath();
+        String path = SWBPortal.getWebWorkPath();
         if (path.endsWith("/"))
         {
             path = path.substring(0, path.length() - 1);
@@ -119,7 +119,7 @@ public class GateWayOffice implements InternalServlet
 
     private void showPPTContent(PrintWriter out, String file, String dir, String contentId, String repositoryName) throws IOException
     {
-        String path = SWBPlatform.getWebWorkPath();
+        String path = SWBPortal.getWebWorkPath();
         if (path.endsWith("/"))
         {
             path = path.substring(0, path.length() - 1);
@@ -144,7 +144,7 @@ public class GateWayOffice implements InternalServlet
     private void showWordContent(PrintWriter out, String file, String dir, String contentId, String repositoryName) throws IOException
     {
         file = file.replace(".doc", ".html");
-        String path = SWBPlatform.getWorkPath() + dir + "\\" + file;
+        String path = SWBPortal.getWorkPath() + dir + "\\" + file;
         StringBuffer html = new StringBuffer();
         File filecontent = new File(path);
         if (filecontent.exists())
@@ -164,7 +164,7 @@ public class GateWayOffice implements InternalServlet
                 dir += "/";
             }
 
-            String workpath = SWBPlatform.getWebWorkPath() + dir;
+            String workpath = SWBPortal.getWebWorkPath() + dir;
             String htmlOut = SWBPortal.UTIL.parseHTML(html.toString(), workpath);
 
             out.write(htmlOut);
