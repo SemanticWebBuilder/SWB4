@@ -45,6 +45,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Descriptiveable;
 import org.semanticwb.model.SWBContext;
@@ -69,8 +70,8 @@ import org.w3c.dom.NodeList;
 public class SWBModelAdmin extends GenericResource {
 
     private static Logger log = SWBUtils.getLogger(SWBImportWebSite.class);
-    String PATH = SWBPlatform.getWorkPath() + "/";
-    String WEBPATH = SWBPlatform.getWebWorkPath() + "/sitetemplates/";
+    String PATH = SWBPortal.getWorkPath() + "/";
+    String WEBPATH = SWBPortal.getWebWorkPath() + "/sitetemplates/";
     String MODELS = PATH + "models/";
     String ZIPDIRECTORY = PATH + "sitetemplates/";
 
@@ -100,7 +101,7 @@ public class SWBModelAdmin extends GenericResource {
             SWBResourceURL url = paramRequest.getRenderUrl();
             SWBResourceURL urlAction = paramRequest.getActionUrl();
             StringBuffer strbf = new StringBuffer();
-            File file = new File(SWBPlatform.getWorkPath() + "/sitetemplates/");
+            File file = new File(SWBPortal.getWorkPath() + "/sitetemplates/");
             File[] files = file.listFiles();
             urlAction.setAction("upload");
             //out.println("<iframe id=\"templates\">");
@@ -340,7 +341,7 @@ public class SWBModelAdmin extends GenericResource {
             try {
                 String uri = request.getParameter("wsid");
                 WebSite site = SWBContext.getWebSite(uri);
-                String path = SWBPlatform.getWorkPath() + "/";
+                String path = SWBPortal.getWorkPath() + "/";
                 String modelspath = path + "models/";
                 String zipdirectory = path + "sitetemplates/";
                 String zipFile = zipdirectory + site.getId() + ".zip";

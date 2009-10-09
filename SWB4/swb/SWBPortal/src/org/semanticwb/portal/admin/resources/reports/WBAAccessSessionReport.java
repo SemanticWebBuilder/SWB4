@@ -50,6 +50,7 @@ import org.w3c.dom.Element;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.semanticwb.SWBPortal;
 
 public class WBAAccessSessionReport extends GenericResource {
 
@@ -790,9 +791,9 @@ public class WBAAccessSessionReport extends GenericResource {
     public Iterator<String> getFileNames(HttpServletRequest request) {
         ArrayList files = new ArrayList();
 
-        String accessLogPath = SWBPlatform.getEnv("swb/accessLog");
-        String period = SWBPlatform.getEnv("swb/accessLogPeriod");
-        String path = SWBPlatform.getWorkPath();
+        String accessLogPath = SWBPortal.getEnv("swb/accessLog");
+        String period = SWBPortal.getEnv("swb/accessLogPeriod");
+        String path = SWBPortal.getWorkPath();
         String repId = request.getParameter("repid");
 
         GregorianCalendar cal = new GregorianCalendar();

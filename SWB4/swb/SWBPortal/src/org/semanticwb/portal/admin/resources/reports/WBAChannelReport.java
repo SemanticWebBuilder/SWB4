@@ -41,6 +41,7 @@ import java.util.*;
 
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.WebSite;
@@ -703,7 +704,7 @@ public class WBAChannelReport extends GenericResource {
                             }
                         }
                         if (eliminar) {
-                            File frem = new File(SWBPlatform.getWorkPath()+"/logs/reports/" + key + ".xls");
+                            File frem = new File(SWBPortal.getWorkPath()+"/logs/reports/" + key + ".xls");
                             if (frem.exists()) {
                                 eliminar = frem.delete();
                             }
@@ -744,7 +745,7 @@ public class WBAChannelReport extends GenericResource {
                 ext = filename.substring(pos);
             }
             String sfile = key + ext;
-            File file = new File(SWBPlatform.getWorkPath() + "/logs/reports/" + sfile);
+            File file = new File(SWBPortal.getWorkPath() + "/logs/reports/" + sfile);
             response.setContentLength((int) file.length());
             response.setHeader("Content-Disposition", "attachment; filename=\"" + filename + "\";");
             if (file.exists()) {
@@ -1026,7 +1027,7 @@ class ReportMgr {
                     status = "Reading Logs";
                     Iterator<String[]> iter = getReportResults();
                     status = "Processing Logs";
-                    File reportdir = new File(SWBPlatform.getWorkPath() + "/logs/reports/");
+                    File reportdir = new File(SWBPortal.getWorkPath() + "/logs/reports/");
                     if (!reportdir.exists()) {
                         reportdir.mkdirs();
                     }
@@ -1036,7 +1037,7 @@ class ReportMgr {
                         filename = "CReport";
                     }
 
-                    PrintWriter out = new PrintWriter(new FileOutputStream(SWBPlatform.getWorkPath() + "/logs/reports/" + filename + ".xls"));
+                    PrintWriter out = new PrintWriter(new FileOutputStream(SWBPortal.getWorkPath() + "/logs/reports/" + filename + ".xls"));
                     out.println("<table border=1>");
                     out.println("<tr ><td colspan=7 align=center bgcolor=\"gray\"><b>Channel Report - "+websiteId+"</b></td></tr>");
                     out.println("<tr ><td bgcolor=\"gray\">");
