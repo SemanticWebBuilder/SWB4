@@ -1,13 +1,13 @@
 package org.semanticwb.portal.community.base;
 
 
-public class EventElementBase extends org.semanticwb.portal.community.MicroSiteElement implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Rankable,org.semanticwb.model.Viewable
+public class EventElementBase extends org.semanticwb.portal.community.MicroSiteElement implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Viewable,org.semanticwb.model.Rankable
 {
     public static final org.semanticwb.platform.SemanticProperty swbcomm_endTime=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#endTime");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_eventThumbnail=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#eventThumbnail");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_audienceType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#audienceType");
-    public static final org.semanticwb.platform.SemanticProperty swbcomm_latitude=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#latitude");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_endDate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#endDate");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_latitude=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#latitude");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_startDate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#startDate");
     public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_eventWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#eventWebPage");
@@ -93,16 +93,6 @@ public class EventElementBase extends org.semanticwb.portal.community.MicroSiteE
         getSemanticObject().setProperty(swbcomm_audienceType, value);
     }
 
-    public String getLatitude()
-    {
-        return getSemanticObject().getProperty(swbcomm_latitude);
-    }
-
-    public void setLatitude(String value)
-    {
-        getSemanticObject().setProperty(swbcomm_latitude, value);
-    }
-
     public java.util.Date getEndDate()
     {
         return getSemanticObject().getDateProperty(swbcomm_endDate);
@@ -111,6 +101,16 @@ public class EventElementBase extends org.semanticwb.portal.community.MicroSiteE
     public void setEndDate(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swbcomm_endDate, value);
+    }
+
+    public String getLatitude()
+    {
+        return getSemanticObject().getProperty(swbcomm_latitude);
+    }
+
+    public void setLatitude(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_latitude, value);
     }
 
     public java.util.Date getStartDate()
