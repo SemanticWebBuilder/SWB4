@@ -48,6 +48,7 @@ import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.ResourceType;
@@ -665,7 +666,7 @@ public class BlogResource extends GenericResource
         else
         {
             try{
-                styleStream = SWBPlatform.getFileFromWorkPath(base.getWorkPath() + "/" + base.getAttribute("templateblog").trim());
+                styleStream = SWBPortal.getFileFromWorkPath(base.getWorkPath() + "/" + base.getAttribute("templateblog").trim());
             }
             catch(Exception e){ log.error(e);}
         }
@@ -698,7 +699,7 @@ public class BlogResource extends GenericResource
         {
             try
             {
-                styleStream = SWBPlatform.getFileFromWorkPath(base.getWorkPath() + "/" + base.getAttribute("templatecomments").trim());
+                styleStream = SWBPortal.getFileFromWorkPath(base.getWorkPath() + "/" + base.getAttribute("templatecomments").trim());
             }
             catch(Exception e){ log.error(e);}
         }
@@ -1729,7 +1730,7 @@ public class BlogResource extends GenericResource
         try{
             this.getResourceBase().setAttribute("templateblog", "blog.xsl");
             this.getResourceBase().updateAttributesToDB();
-            SWBPlatform.writeFileToWorkPath(this.getResourceBase().getWorkPath() + "/blog.xsl", in, response.getUser().getId());
+            SWBPortal.writeFileToWorkPath(this.getResourceBase().getWorkPath() + "/blog.xsl", in, response.getUser().getId());
         }
         catch(Exception e){log.error(e);}
         
@@ -1744,7 +1745,7 @@ public class BlogResource extends GenericResource
         {
             this.getResourceBase().setAttribute("templatecomments", "comments.xsl");
             this.getResourceBase().updateAttributesToDB();
-            SWBPlatform.writeFileToWorkPath(this.getResourceBase().getWorkPath() + "/comments.xsl", in, response.getUser().getId());
+            SWBPortal.writeFileToWorkPath(this.getResourceBase().getWorkPath() + "/comments.xsl", in, response.getUser().getId());
         }
         catch(Exception e){log.error(e);}
         
@@ -1940,20 +1941,20 @@ public class BlogResource extends GenericResource
     private String getDeleteImagePath(SWBParamRequest paramRequest)
     {
         InputStream indeleteblog = BlogResource.class.getResourceAsStream(DELETE_FILE);
-        String pathDeleteBlog = SWBPlatform.getWebWorkPath() + this.getResourceBase().getWorkPath() + "/" + DELETE_FILE;
+        String pathDeleteBlog = SWBPortal.getWebWorkPath() + this.getResourceBase().getWorkPath() + "/" + DELETE_FILE;
         try
         {
-            InputStream in = SWBPlatform.getFileFromWorkPath(this.getResourceBase().getWorkPath() + "/" + DELETE_FILE);
+            InputStream in = SWBPortal.getFileFromWorkPath(this.getResourceBase().getWorkPath() + "/" + DELETE_FILE);
             if ( in == null )
             {
-                SWBPlatform.writeFileToWorkPath(this.getResourceBase().getWorkPath() + "/" + DELETE_FILE, indeleteblog, paramRequest.getUser().getId());
+                SWBPortal.writeFileToWorkPath(this.getResourceBase().getWorkPath() + "/" + DELETE_FILE, indeleteblog, paramRequest.getUser().getId());
             }
         }
         catch ( SWBException afe )
         {
             try
             {
-                SWBPlatform.writeFileToWorkPath(this.getResourceBase().getWorkPath() + "/" + DELETE_FILE, indeleteblog, paramRequest.getUser().getId());
+                SWBPortal.writeFileToWorkPath(this.getResourceBase().getWorkPath() + "/" + DELETE_FILE, indeleteblog, paramRequest.getUser().getId());
             }
             catch ( SWBException afe2 )
             {
@@ -1965,20 +1966,20 @@ public class BlogResource extends GenericResource
     private String getAddImagePath(SWBParamRequest paramRequest)
     {
         InputStream indeleteblog = BlogResource.class.getResourceAsStream(ADD_FILE);
-        String pathDeleteBlog = SWBPlatform.getWebWorkPath() + this.getResourceBase().getWorkPath() + "/" + ADD_FILE;
+        String pathDeleteBlog = SWBPortal.getWebWorkPath() + this.getResourceBase().getWorkPath() + "/" + ADD_FILE;
         try
         {
-            InputStream in = SWBPlatform.getFileFromWorkPath(this.getResourceBase().getWorkPath() + "/" + ADD_FILE);
+            InputStream in = SWBPortal.getFileFromWorkPath(this.getResourceBase().getWorkPath() + "/" + ADD_FILE);
             if ( in == null )
             {
-                SWBPlatform.writeFileToWorkPath(this.getResourceBase().getWorkPath() + "/" + ADD_FILE, indeleteblog, paramRequest.getUser().getId());
+                SWBPortal.writeFileToWorkPath(this.getResourceBase().getWorkPath() + "/" + ADD_FILE, indeleteblog, paramRequest.getUser().getId());
             }
         }
         catch ( SWBException afe )
         {
             try
             {
-                SWBPlatform.writeFileToWorkPath(this.getResourceBase().getWorkPath() + "/" + ADD_FILE, indeleteblog, paramRequest.getUser().getId());
+                SWBPortal.writeFileToWorkPath(this.getResourceBase().getWorkPath() + "/" + ADD_FILE, indeleteblog, paramRequest.getUser().getId());
             }
             catch ( SWBException afe2 )
             {
@@ -1991,20 +1992,20 @@ public class BlogResource extends GenericResource
     private String getEditImagePath(SWBParamRequest paramRequest)
     {
         InputStream indeleteblog = BlogResource.class.getResourceAsStream(EDIT_FILE);
-        String pathDeleteBlog = SWBPlatform.getWebWorkPath() + this.getResourceBase().getWorkPath() + "/" + EDIT_FILE;
+        String pathDeleteBlog = SWBPortal.getWebWorkPath() + this.getResourceBase().getWorkPath() + "/" + EDIT_FILE;
         try
         {
-            InputStream in = SWBPlatform.getFileFromWorkPath(this.getResourceBase().getWorkPath() + "/" + EDIT_FILE);
+            InputStream in = SWBPortal.getFileFromWorkPath(this.getResourceBase().getWorkPath() + "/" + EDIT_FILE);
             if ( in == null )
             {
-                SWBPlatform.writeFileToWorkPath(this.getResourceBase().getWorkPath() + "/" + EDIT_FILE, indeleteblog, paramRequest.getUser().getId());
+                SWBPortal.writeFileToWorkPath(this.getResourceBase().getWorkPath() + "/" + EDIT_FILE, indeleteblog, paramRequest.getUser().getId());
             }
         }
         catch ( SWBException afe )
         {
             try
             {
-                SWBPlatform.writeFileToWorkPath(this.getResourceBase().getWorkPath() + "/" + EDIT_FILE, indeleteblog, paramRequest.getUser().getId());
+                SWBPortal.writeFileToWorkPath(this.getResourceBase().getWorkPath() + "/" + EDIT_FILE, indeleteblog, paramRequest.getUser().getId());
             }
             catch ( SWBException afe2 )
             {
@@ -2038,7 +2039,7 @@ public class BlogResource extends GenericResource
                 }
                 else
                 {
-                    styleStream = SWBPlatform.getFileFromWorkPath(this.getResourceBase().getWorkPath() + "/" + this.getResourceBase().getAttribute("templateblog").trim());
+                    styleStream = SWBPortal.getFileFromWorkPath(this.getResourceBase().getWorkPath() + "/" + this.getResourceBase().getAttribute("templateblog").trim());
                 }
                 Templates templates = SWBUtils.XML.loadTemplateXSLT(styleStream);
                 DOMOutputter Domout = new DOMOutputter();
@@ -2254,7 +2255,7 @@ public class BlogResource extends GenericResource
                 {
                     try
                     {
-                        styleStream = SWBPlatform.getFileFromWorkPath(this.getResourceBase().getWorkPath() + "/" + this.getResourceBase().getAttribute("templatecomments").trim());
+                        styleStream = SWBPortal.getFileFromWorkPath(this.getResourceBase().getWorkPath() + "/" + this.getResourceBase().getAttribute("templatecomments").trim());
                     }
                     catch(SWBException e){log.error(e);}
                 }
