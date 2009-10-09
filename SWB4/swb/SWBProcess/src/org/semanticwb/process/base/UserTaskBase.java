@@ -1,7 +1,7 @@
 package org.semanticwb.process.base;
 
 
-public class UserTaskBase extends org.semanticwb.process.Task implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Roleable,org.semanticwb.model.Traceable
+public class UserTaskBase extends org.semanticwb.process.Task implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Traceable,org.semanticwb.model.Roleable
 {
     public static final org.semanticwb.platform.SemanticClass swbxf_FormView=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormView");
     public static final org.semanticwb.platform.SemanticProperty swbps_processFormView=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#processFormView");

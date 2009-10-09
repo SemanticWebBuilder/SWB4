@@ -1,7 +1,7 @@
 package org.semanticwb.process.base;
 
 
-public class ActivityInstanceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.process.ProcessTraceable
+public class ActivityInstanceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.process.ProcessTraceable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticClass swbps_TaskInstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#TaskInstance");
     public static final org.semanticwb.platform.SemanticProperty swbps_hasTaskinstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#hasTaskinstance");
