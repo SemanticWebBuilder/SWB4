@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.portal.api.GenericAdmResource;
@@ -63,7 +64,7 @@ public class Promo extends GenericAdmResource {
         //System.out.println("setResourceBase");
         try {
             super.setResourceBase(base);
-            webWorkPath = (String) SWBPlatform.getWebWorkPath() +  base.getWorkPath();
+            webWorkPath = (String) SWBPortal.getWebWorkPath() +  base.getWorkPath();
         }catch(Exception e) {
             log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);  
         }

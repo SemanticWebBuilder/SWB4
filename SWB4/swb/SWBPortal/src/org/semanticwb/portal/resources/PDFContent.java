@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.portal.api.GenericAdmResource;
@@ -66,7 +67,7 @@ public class PDFContent extends GenericAdmResource {
         if(faux==null) {
             return;
         }
-        String pdf = SWBPlatform.getWorkPath() + base.getWorkPath() + "/"+ faux.trim();
+        String pdf = SWBPortal.getWorkPath() + base.getWorkPath() + "/"+ faux.trim();
     }
 
     /**
@@ -88,7 +89,7 @@ public class PDFContent extends GenericAdmResource {
                 if("center".equalsIgnoreCase(align)) {
                     ret.append("<p align=\"center\">");
                 }
-                ret.append("<iframe id=\"WBIFrame_"+base.getId()+"\" src=\""+ SWBPlatform.getWebWorkPath() + base.getWorkPath() +"/"+ base.getAttribute("archive").trim() + "\"");
+                ret.append("<iframe id=\"WBIFrame_"+base.getId()+"\" src=\""+ SWBPortal.getWebWorkPath() + base.getWorkPath() +"/"+ base.getAttribute("archive").trim() + "\"");
                 ret.append(" width=\""+base.getAttribute("width", "100%")+"\"");
                 ret.append(" height=\""+base.getAttribute("height", "100%")+"\"");
                 ret.append(" marginwidth=\""+base.getAttribute("marginwidth", "0")+"\"");

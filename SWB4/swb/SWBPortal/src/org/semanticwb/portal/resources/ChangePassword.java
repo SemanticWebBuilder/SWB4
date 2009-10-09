@@ -61,7 +61,7 @@ public class ChangePassword extends GenericAdmResource {
         {
             try
             {
-                template = SWBUtils.XML.loadTemplateXSLT(SWBPlatform.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
+                template = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
                 path = SWBPlatform.getContextPath()+"swbadmin/xsl/ChangePassword/";
             }catch(Exception e) {
                 log.error("Error while loading resource template: "+base.getId(), e);

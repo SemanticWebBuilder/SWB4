@@ -69,7 +69,7 @@ public class Language extends GenericAdmResource
         {
             try 
             {
-                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPlatform.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
+                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
                 //path=SWBPlatform.getWebWorkPath() +  base.getWorkPath() + "/";
                 path = SWBPlatform.getContextPath()+"swbadmin/xsl/Language/";
             }catch(Exception e) {

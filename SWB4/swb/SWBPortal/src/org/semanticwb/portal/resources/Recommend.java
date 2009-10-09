@@ -116,14 +116,14 @@ public class Recommend extends GenericAdmResource {
     public void setResourceBase(Resource base) {
         try {
             super.setResourceBase(base);
-            webWorkPath = (String) SWBPlatform.getWebWorkPath() + base.getWorkPath();
+            webWorkPath = (String) SWBPortal.getWebWorkPath() + base.getWorkPath();
         } catch (Exception e) {
             log.error("Error while setting resource base: " + base.getId() + "-" + base.getTitle(), e);
         }
         if (!"".equals(base.getAttribute("template", "").trim())) {
             try {
                 tpl = SWBUtils.XML.loadTemplateXSLT(
-                        SWBPlatform.getFileFromWorkPath(base.getWorkPath() + "/" + base.getAttribute("template").trim()));
+                        SWBPortal.getFileFromWorkPath(base.getWorkPath() + "/" + base.getAttribute("template").trim()));
                 path = webWorkPath + "/";
             } catch (Exception e) {
                 log.error("Error while loading resource template: " + base.getId(), e);
@@ -757,7 +757,7 @@ public class Recommend extends GenericAdmResource {
     protected void feedRecommendLog(Document dom, User user) throws IOException {
 
         Resource base = getResourceBase();
-        String logPath = SWBPlatform.getWorkPath() + base.getWorkPath() + "/Recommend.log";
+        String logPath = SWBPortal.getWorkPath() + base.getWorkPath() + "/Recommend.log";
         StringBuilder toLog = new StringBuilder(500);
         Date now = new Date();
         NodeList nl = null;
@@ -805,7 +805,7 @@ public class Recommend extends GenericAdmResource {
                 ? nl.item(0).getFirstChild().getNodeValue() : ""));
         toLog.append("\n");
 
-        File file = new File(SWBPlatform.getWorkPath() + base.getWorkPath());
+        File file = new File(SWBPortal.getWorkPath() + base.getWorkPath());
         if (!file.exists()) {
             file.mkdirs();
         }

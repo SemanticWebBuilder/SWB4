@@ -32,6 +32,7 @@ import org.semanticwb.Logger;
 import java.io.IOException;
 import java.io.PrintWriter;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.portal.api.SWBActionResponse;
@@ -85,8 +86,8 @@ public class Window extends GenericAdmResource {
     public void setResourceBase(Resource base) {
         try {
             super.setResourceBase(base);
-            workPath = SWBPlatform.getWorkPath() + base.getWorkPath();
-            webWorkPath = SWBPlatform.getWebWorkPath() + base.getWorkPath();
+            workPath = SWBPortal.getWorkPath() + base.getWorkPath();
+            webWorkPath = SWBPortal.getWebWorkPath() + base.getWorkPath();
         } catch (Exception e) {
             log.error("Error while setting resource base: " + base.getId() 
                     + "-" + base.getTitle(), e);

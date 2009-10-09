@@ -118,10 +118,10 @@ public class StaticText extends GenericAdmResource {
         str=SWBUtils.TEXT.replaceAll(str, "{user.login}", paramRequest.getUser().getLogin());
         str=SWBUtils.TEXT.replaceAll(str, "{user.email}", paramRequest.getUser().getEmail());
         str=SWBUtils.TEXT.replaceAll(str, "{user.language}", paramRequest.getUser().getLanguage());
-        str=SWBUtils.TEXT.replaceAll(str, "{webpath}", SWBPlatform.getContextPath());
+        str=SWBUtils.TEXT.replaceAll(str, "{webpath}", SWBPortal.getContextPath());
         str=SWBUtils.TEXT.replaceAll(str, "{distpath}", SWBPortal.getDistributorPath());
-        str=SWBUtils.TEXT.replaceAll(str, "{webworkpath}", SWBPlatform.getWebWorkPath());
-        str=SWBUtils.TEXT.replaceAll(str, "{workpath}", SWBPlatform.getWorkPath());
+        str=SWBUtils.TEXT.replaceAll(str, "{webworkpath}", SWBPortal.getWebWorkPath());
+        str=SWBUtils.TEXT.replaceAll(str, "{workpath}", SWBPortal.getWorkPath());
         return str;
     }
     

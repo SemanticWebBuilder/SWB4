@@ -72,7 +72,7 @@ public class WBMenuMap extends GenericAdmResource
         try
         {
             super.setResourceBase(base);
-            webWorkPath = (String) SWBPlatform.getWebWorkPath() +  base.getWorkPath();
+            webWorkPath = (String) SWBPortal.getWebWorkPath() +  base.getWorkPath();
         }catch(Exception e)
         {
             log.debug("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);
@@ -83,7 +83,7 @@ public class WBMenuMap extends GenericAdmResource
             //System.out.println("loading template...");
             try
             {
-                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPlatform.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
+                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
                 path=webWorkPath + "/";
             }catch(Exception e)
             {
