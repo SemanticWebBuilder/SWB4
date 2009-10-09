@@ -52,9 +52,9 @@ import org.semanticwb.portal.util.WBFileUpload;
 public class WBAdmResourceUtils {
 
     private static Logger log = SWBUtils.getLogger(WBAdmResourceUtils.class);
-    private String webWorkPath = SWBPlatform.getWebWorkPath();
-    private String workPath = SWBPlatform.getWorkPath();
-    private String webPath = SWBPlatform.getContextPath();
+    private String webWorkPath = SWBPortal.getWebWorkPath();
+    private String workPath = SWBPortal.getWorkPath();
+    private String webPath = SWBPortal.getContextPath();
 
     public boolean xmlVerifierDefault(String xml) {
         boolean bOk = false;
