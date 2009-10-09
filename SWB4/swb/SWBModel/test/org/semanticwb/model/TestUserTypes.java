@@ -38,7 +38,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.SWBUtils;
 
 /**
  *
@@ -48,7 +48,15 @@ public class TestUserTypes {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        SWBPlatform.createInstance(null);
+        String base=SWBUtils.getApplicationPath();
+        SWBPlatform.createInstance();
+        SWBPlatform.getSemanticMgr().initializeDB();
+        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/swb.owl");
+        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/swb_rep.owl");
+        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/office.owl");
+        SWBPlatform.getSemanticMgr().loadBaseVocabulary();
+        SWBPlatform.getSemanticMgr().loadDBModels();
+        SWBPlatform.getSemanticMgr().getOntology().rebind();
     }
 
     @AfterClass
