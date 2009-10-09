@@ -112,7 +112,7 @@ public class SWBLuceneIndexer extends SWBIndexer
         analyzer=new LocaleAnalyzer();
         
         log.info("Initializing WBLuceneIndexer");
-        indexPath=SWBPlatform.getWorkPath()+"/index/"+getName();
+        indexPath=SWBPortal.getWorkPath()+"/index/"+getName();
         File file=new File(indexPath);
         if(!file.exists()) {
             createIndex();
@@ -448,7 +448,6 @@ public class SWBLuceneIndexer extends SWBIndexer
         }catch(Exception e){log.error(e);}
         return list;
     }
-    
     
     protected SWBIndexObjList searchObj(String queryString, SWBIndexObj obj, User user, int page, int pindex)
     {

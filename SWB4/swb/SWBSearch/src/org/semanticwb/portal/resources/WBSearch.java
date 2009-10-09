@@ -67,7 +67,7 @@ public class WBSearch extends GenericAdmResource
     /** Creates a new instance of FullTextSearch */
     public WBSearch() 
     {
-        client=SWBPlatform.isClient();
+        client=SWBPortal.isClient();
     }
     
     
@@ -88,8 +88,8 @@ public class WBSearch extends GenericAdmResource
         if (!client) {
             if(!"".equals(base.getAttribute("template","").trim())) {
                 try {
-                    tpl = SWBUtils.XML.loadTemplateXSLT(SWBPlatform.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
-                    path= SWBPlatform.getWebWorkPath() +  base.getWorkPath() + "/";
+                    tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
+                    path= SWBPortal.getWebWorkPath() +  base.getWorkPath() + "/";
                 }
                 catch(Exception e)
                 {
@@ -147,7 +147,7 @@ public class WBSearch extends GenericAdmResource
             if (q != null && q.trim().length()>0) {
                 search.setAttribute("words", q);
                 search.setAttribute("wordsEnc", java.net.URLEncoder.encode(q));
-                search.setAttribute("work", SWBPlatform.getWebWorkPath());
+                search.setAttribute("work", SWBPortal.getWebWorkPath());
                 search.setAttribute("url", reqParams.getWebPage().getUrl());
                 
                 String smap=reqParams.getResourceBase().getAttribute("amaps","0");
