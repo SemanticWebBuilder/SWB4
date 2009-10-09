@@ -82,7 +82,7 @@ public class EditFile implements InternalServlet {
                 if(pathType.equals("def")){
                         content=SWBUtils.IO.readInputStream(SWBPortal.getAdminFileStream(path));
                 }else if(pathType.equals("res")){
-                        content=SWBUtils.IO.readInputStream(SWBPlatform.getFileFromWorkPath(path));
+                        content=SWBUtils.IO.readInputStream(SWBPortal.getFileFromWorkPath(path));
                 }else {
                     FileInputStream fileInput=new FileInputStream(path);
                     content=SWBUtils.IO.readInputStream(fileInput);
@@ -127,7 +127,7 @@ public class EditFile implements InternalServlet {
                 out.println("</body> \n");
                 out.println("</html> \n");
             } else {
-                File file=new File(SWBPlatform.getWorkPath()+path);
+                File file=new File(SWBPortal.getWorkPath()+path);
                 FileOutputStream output = new FileOutputStream(file);
                 output.write(newcontent.getBytes());
                 output.flush();

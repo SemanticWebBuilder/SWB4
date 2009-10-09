@@ -160,7 +160,7 @@ public class Wiki extends GenericResource {
         String topic = paramsRequest.getWebPage().getId();
         String ret = null;
         try {
-            ret = SWBPlatform.readFileFromWorkPath(paramsRequest.getResourceBase().getWorkPath() + "/" + topic);
+            ret = SWBPortal.readFileFromWorkPath(paramsRequest.getResourceBase().getWorkPath() + "/" + topic);
         } catch (Exception noe) {
         }
 
@@ -178,7 +178,7 @@ public class Wiki extends GenericResource {
                 synchronized (this) {
                     String path = paramsRequest.getResourceBase().getWorkPath();
                     String backfile = "/old/" + topic + "." + df.format(new Date());
-                    SWBPlatform.writeFileToWorkPath(path + backfile, SWBUtils.IO.getStreamFromString(data), userid);
+                    SWBPortal.writeFileToWorkPath(path + backfile, SWBUtils.IO.getStreamFromString(data), userid);
 
                     header.insert(0, "#previous:" + backfile + "\n");
                     header.insert(0, "#user:" + paramsRequest.getUser().getId() + "\n");
@@ -197,7 +197,7 @@ public class Wiki extends GenericResource {
         try {
             SWBPortal.getResourceMgr().getResourceCacheMgr().removeResource(paramsRequest.getResourceBase());
             String path = paramsRequest.getResourceBase().getWorkPath() + "/" + topic;
-            SWBPlatform.writeFileToWorkPath(path, SWBUtils.IO.getStreamFromString(content), userid);
+            SWBPortal.writeFileToWorkPath(path, SWBUtils.IO.getStreamFromString(content), userid);
         } catch (Exception noe) {
         }
     }

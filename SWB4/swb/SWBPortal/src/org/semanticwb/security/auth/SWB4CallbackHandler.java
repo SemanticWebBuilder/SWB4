@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.servlet.internal.DistributorParams;
 
@@ -52,7 +53,7 @@ public abstract class SWB4CallbackHandler implements CallbackHandler {
         this.request = null;
         this.response = null;
         this.website = null;
-        this.authType = (String) SWBPlatform.getServletContext().getAttribute("authType");
+        this.authType = (String) SWBPortal.getServletContext().getAttribute("authType");
     }
 
     /**

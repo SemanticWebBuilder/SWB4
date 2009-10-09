@@ -17,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 
 /**
@@ -38,7 +39,7 @@ public class SWB4CallbackHandlerFaceBook extends SWB4CallbackHandler
         log.trace("Simple CallbackHandler");
         this.request = null;
         this.response = null;
-        this.authType = (String) SWBPlatform.getServletContext().getAttribute("authType");
+        this.authType = (String) SWBPortal.getServletContext().getAttribute("authType");
         this.website = null;
     }
 
