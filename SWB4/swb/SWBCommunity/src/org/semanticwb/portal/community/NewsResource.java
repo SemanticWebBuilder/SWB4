@@ -39,6 +39,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticObject;
@@ -143,14 +144,14 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
     }
 
     private HashMap<String, String> upload(HttpServletRequest request) {
-        final String realpath = SWBPlatform.getWorkPath() + getResourceBase().getWorkPath() + "/";
+        final String realpath = SWBPortal.getWorkPath() + getResourceBase().getWorkPath() + "/";
         final String path = getResourceBase().getWorkPath() + "/";
 
         HashMap<String, String> params = new HashMap<String, String>();
         try {
             boolean isMultipart = ServletFileUpload.isMultipartContent(request);
             if (isMultipart) {
-                File tmpwrk = new File(SWBPlatform.getWorkPath() + "/tmp");
+                File tmpwrk = new File(SWBPortal.getWorkPath() + "/tmp");
                 if (!tmpwrk.exists()) {
                     tmpwrk.mkdirs();
                 }

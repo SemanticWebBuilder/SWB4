@@ -66,7 +66,7 @@ public class MostrarPanorama extends GenericAdmResource
             {
                 SWBResource sWBResource = (SWBResource)resources.next();                
                 Resource resource=sWBResource.getResourceBase();
-                webWorkPath = (String) SWBPlatform.getWebWorkPath() + resource.getWorkPath();
+                webWorkPath = (String) SWBPortal.getWebWorkPath() + resource.getWorkPath();
                 if (resource.isActive())
                 {
                     Promo o_promo = new Promo();
@@ -163,7 +163,7 @@ public class MostrarPanorama extends GenericAdmResource
                 }
                 if (i_partes > 0)
                 {
-                    webWorkPath = (String) SWBPlatform.getWebWorkPath() + this.getResourceBase().getWorkPath();
+                    webWorkPath = (String) SWBPortal.getWebWorkPath() + this.getResourceBase().getWorkPath();
                     out.write("<div id=\"paginador\">" + NL);
                     String siguiente = this.getResourceBase().getAttribute("siguiente");
                     String anterior = this.getResourceBase().getAttribute("anterior");

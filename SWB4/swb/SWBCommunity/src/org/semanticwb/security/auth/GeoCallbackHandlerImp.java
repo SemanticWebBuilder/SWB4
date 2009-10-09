@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 
 /**
@@ -51,7 +52,7 @@ private static Logger log = SWBUtils.getLogger(GeoCallbackHandlerImp.class);
         log.trace("Simple CallbackHandler");
         this.request = null;
         this.response = null;
-        this.authType = (String) SWBPlatform.getServletContext().getAttribute("authType");
+        this.authType = (String) SWBPortal.getServletContext().getAttribute("authType");
         this.website = null;
     }
 

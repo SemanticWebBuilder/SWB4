@@ -10,6 +10,7 @@ import javax.servlet.http.*;
 import org.apache.commons.fileupload.FileItem;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.Resource;
@@ -101,7 +102,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             }else if(action.equals(response.Action_REMOVE)){
                 SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
                 semObject.remove();
-                SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + base.getWorkPath() + "/" + semObject.getId());
+                SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + base.getWorkPath() + "/" + semObject.getId());
             }else if(action.equals(response.Action_ADD)){
                 SemanticClass cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(request.getParameter("uri"));
                 SWBFormMgr mgr = new SWBFormMgr(cls, response.getWebPage().getWebSite().getSemanticObject(), null);
@@ -127,7 +128,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
                         System.out.println("EPhoto:"+itEPhotos.next());
                     }
                     dirObj.removeExtraPhoto(request.getParameter("removeAttach"));
-                    File file = new File(SWBPlatform.getWorkPath() + base.getWorkPath() + "/" + semObject.getId() + "/" + request.getParameter("removeAttach"));
+                    File file = new File(SWBPortal.getWorkPath() + base.getWorkPath() + "/" + semObject.getId() + "/" + request.getParameter("removeAttach"));
                     System.out.println("file 2 delete:"+file.getAbsolutePath());
                     file.delete();
                 }
@@ -147,7 +148,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
 
     private void processFiles(HttpServletRequest request, SWBActionResponse response, SemanticObject sobj, String actualPhoto) {
         Resource base = response.getResourceBase();
-        String basepath= SWBPlatform.getWorkPath() + base.getWorkPath() + "/" +sobj.getId() + "/";
+        String basepath= SWBPortal.getWorkPath() + base.getWorkPath() + "/" +sobj.getId() + "/";
         if (request.getSession().getAttribute(UploadFormElement.FILES_UPLOADED) != null) {
             Iterator itfilesUploaded = ((List) request.getSession().getAttribute(UploadFormElement.FILES_UPLOADED)).iterator();
             while (itfilesUploaded.hasNext()) {

@@ -205,7 +205,7 @@ public class RegisterUser extends GenericResource
                 boolean isMultipart = ServletFileUpload.isMultipartContent(request);
                 HashMap<String, String> params = new HashMap<String, String>();
                 // Create a factory for disk-based file items
-                File tmpwrk = new File(SWBPlatform.getWorkPath() + "/tmp");
+                File tmpwrk = new File(SWBPortal.getWorkPath() + "/tmp");
                 if (!tmpwrk.exists())
                 {
                     tmpwrk.mkdirs();
@@ -260,7 +260,7 @@ public class RegisterUser extends GenericResource
                 }
                 request.getSession(true).setAttribute(currentFile.getFieldName(), per);
 
-                String path = SWBPlatform.getWorkPath() + user.getWorkPath();
+                String path = SWBPortal.getWorkPath() + user.getWorkPath();
                 File file = new File(path);
                 if (!file.exists())
                 {
