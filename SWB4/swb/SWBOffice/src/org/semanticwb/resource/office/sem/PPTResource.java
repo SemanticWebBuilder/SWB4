@@ -28,6 +28,7 @@ import java.io.PrintWriter;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
 import org.semanticwb.office.comunication.OfficeDocument;
@@ -83,10 +84,10 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
         {
             User user = paramRequest.getUser();
             String file = document.getContentFile(repositoryName, contentId, version, user);
-            String resourceWebWorkpath=SWBPlatform.getWebWorkPath();
+            String resourceWebWorkpath=SWBPortal.getWebWorkPath();
             if (file != null)
             {
-                String path = SWBPlatform.getWebWorkPath();
+                String path = SWBPortal.getWebWorkPath();
                 if (path.endsWith("/"))
                 {
                     path = path.substring(0, path.length() - 1);
@@ -100,7 +101,7 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
                 }
                 PrintWriter out = response.getWriter();
                 beforePrintDocument(out);
-                String workpath = SWBPlatform.getWebWorkPath() + getResourceBase().getWorkPath() + "/";
+                String workpath = SWBPortal.getWebWorkPath() + getResourceBase().getWorkPath() + "/";
                 printDocument(out, path, workpath, "", paramRequest,resourceWebWorkpath,file);
                 afterPrintDocument(out);
                 out.close();

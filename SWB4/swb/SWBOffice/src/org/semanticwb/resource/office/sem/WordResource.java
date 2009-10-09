@@ -91,7 +91,7 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
             String file = document.getContentFile(repositoryName, contentId, version, user);
             if (file != null) {
                 file = file.replace(".doc", ".html");
-                String path = SWBPlatform.getWorkPath();
+                String path = SWBPortal.getWorkPath();
                 if (path.endsWith("/")) {
                     path = path.substring(0, path.length() - 1);
                     path += getResourceBase().getWorkPath() + "/" + file;
@@ -101,7 +101,7 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
 
                 File filecontent = new File(path);
                 if (filecontent.exists()) {
-                    String workpath = SWBPlatform.getWebWorkPath() + getResourceBase().getWorkPath() + "/";
+                    String workpath = SWBPortal.getWebWorkPath() + getResourceBase().getWorkPath() + "/";
                     StringBuffer html = new StringBuffer();
                     try {
                         FileInputStream in = new FileInputStream(path);
