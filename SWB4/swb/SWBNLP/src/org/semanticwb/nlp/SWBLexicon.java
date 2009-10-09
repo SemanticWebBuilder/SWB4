@@ -109,8 +109,8 @@ public class SWBLexicon {
      */
     public SWBLexicon(String lang, String prexs) {
         language = lang;
-        spellDictPath = SWBPlatform.getWorkPath() + "/index/spell_" +
-                language + ".txt";
+        spellDictPath = SWBPlatform.createInstance().getPlatformWorkPath() + "/index/spell_" +
+                language + ".txt"; //MAPS74 - Este proyecto es una dependencia de Portal
 
         if (!prexs.trim().equals("")) {
             preflist = new ArrayList<String>(Arrays.asList(prexs.split(",")));
