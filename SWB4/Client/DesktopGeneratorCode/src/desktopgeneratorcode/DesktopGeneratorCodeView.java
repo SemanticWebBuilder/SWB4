@@ -682,14 +682,60 @@ public class DesktopGeneratorCodeView extends FrameView
         System.setOut(new MyPrintStream());
         System.setErr(new MyPrintStream());
 
+        SWBPlatform.createInstance();
 
-        SWBPlatform.createInstance(null);
 
         File directory = new File(this.jTextField1.getText());
         if (!directory.exists())
         {
             directory.mkdirs();
         }
+        for (OWL owl : this.dc.getOWLBaseCommons())
+        {
+            File file = new File(owl.getLocation());
+            if (!file.exists())
+            {
+                System.out.println("The file " + file.getAbsolutePath() + " was not found");
+                return;
+            }
+        }
+        for (OWL owl : this.dc.getOWLBaseProyect())
+        {
+            File file = new File(owl.getLocation());
+            if (!file.exists())
+            {
+                System.out.println("The file " + file.getAbsolutePath() + " was not found");
+                return;
+            }
+        }
+        for (OWL owl : owls)
+        {
+            File file = new File(owl.getLocation());
+            if (!file.exists())
+            {
+                System.out.println("The file " + file.getAbsolutePath() + " was not found");
+                return;
+            }
+        }
+
+        for (OWL owl : this.dc.getOWLBaseCommons())
+        {
+            SWBPlatform.getSemanticMgr().addBaseOntology(owl.getLocation());
+        }
+        for (OWL owl : this.dc.getOWLBaseProyect())
+        {
+            SWBPlatform.getSemanticMgr().addBaseOntology(owl.getLocation());
+        }
+        for (OWL owl : owls)
+        {
+            SWBPlatform.getSemanticMgr().addBaseOntology(owl.getLocation());
+        }
+
+
+        SWBPlatform.getSemanticMgr().loadBaseVocabulary();
+        SWBPlatform.getSemanticMgr().getOntology().rebind();
+
+
         DefaultTableModel model = (DefaultTableModel) this.jTable1.getModel();
         int rows = model.getRowCount();
 
