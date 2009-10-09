@@ -25,14 +25,20 @@ package org.semanticwb;
 
 import com.arthurdo.parser.HtmlStreamTokenizer;
 import com.arthurdo.parser.HtmlTag;
+import com.hp.hpl.jena.rdf.model.Model;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -41,14 +47,20 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import javax.servlet.Filter;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.base.db.DBConnectionPool;
 import org.semanticwb.model.*;
+import org.semanticwb.platform.SemanticMgr;
+import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.portal.PFlowManager;
 import org.semanticwb.portal.SWBMessageCenter;
 import org.semanticwb.portal.SWBMonitor;
@@ -71,7 +83,20 @@ import org.semanticwb.util.db.GenericDB;
  * javier Solís, Jorge jiménez
  * @version 1.0
  */
-public class SWBPortal {
+public class SWBPortal
+{
+    private static Properties props=null;
+    private String contextPath="/";
+    private static String webWorkPath = "";
+    private static String workPath = "";
+    private static ServletContext servletContext=null;
+    private static Filter virtualHostFilter=null;
+
+    private static boolean haveDB=false;
+    private static boolean haveDBTables=false;
+    private static boolean useDB=true;
+
+    private static boolean client=false;
 
     private static Logger log = SWBUtils.getLogger(SWBPortal.class);
     private static SWBPortal instance = null;
@@ -89,12 +114,42 @@ public class SWBPortal {
     private static SWBAccessIncrement accInc = null;
     private static SWBIndexMgr indmgr = null;
 
-    static public synchronized SWBPortal createInstance() {
-        if (instance == null) {
+    static public synchronized SWBPortal createInstance(ServletContext servletContext)
+    {
+        //new Exception().printStackTrace();
+        return createInstance(servletContext, null);
+    }
+
+    /** Create Instance.
+     * @param servletContext
+     * @return  SWBContext*/
+    static public synchronized SWBPortal createInstance(ServletContext servletContext, Filter filter)
+    {
+        if (instance == null)
+        {
+            SWBPortal.virtualHostFilter=filter;
             instance = new SWBPortal();
+            SWBPortal.servletContext=servletContext;
+
         }
         return instance;
     }
+
+//    private void createInstance(String clsname)
+//    {
+//        try
+//        {
+//            Class cls = Class.forName(clsname);
+//            Method createInstance = cls.getMethod("createInstance", (Class[])null);
+//            createInstance.invoke(null, (Object[])null);
+//        }catch(ClassNotFoundException e)
+//        {
+//            log.warn(clsname+" not found...");
+//        }catch(Exception e)
+//        {
+//            log.error("Error initializing "+clsname+"..",e);
+//        }
+//    }
 
     private SWBPortal() {
         log.event("Initializing SemanticWebBuilder Portal...");
@@ -102,7 +157,161 @@ public class SWBPortal {
     }
     //Initialize context
 
-    private void init() {
+    private void init() 
+    {
+        props=SWBUtils.TEXT.getPropertyFile("/web.properties");
+
+        workPath = getEnv("swb/workPath");
+
+        SWBUtils.EMAIL.setSMTPServer(getEnv("swb/smtpServer"));
+        SWBUtils.EMAIL.setSMTPUser(getEnv("swb/smtpUser"));
+        SWBUtils.EMAIL.setSMTPPassword(getEnv("swb/smtpPassword"));
+        SWBUtils.EMAIL.setAdminEmail(getEnv("af/adminEmail"));
+
+        try {
+            //TODO:revisar sincronizacion
+            //if (confCS.equalsIgnoreCase("Client")) remoteWorkPath = (String) AFUtils.getInstance().getEnv("swb/remoteWorkPath");
+
+            workPath = (String) getEnv("swb/workPath","/work");
+            if (workPath.startsWith("file:"))
+            {
+                workPath = (new File(workPath.substring(5))).toString();
+            } else if (workPath.startsWith("http://"))
+            {
+                workPath = (URLEncoder.encode(workPath));
+            } else {
+                workPath = SWBUtils.getApplicationPath()+workPath;
+            }
+        } catch (Exception e) {
+            log.error("Can't read the context path...",e);
+            workPath = "";
+        }
+        //System.out.println("workPath:"+workPath);
+
+        //Insercion de parametros a Platform
+        SWBPlatform platform=SWBPlatform.createInstance();
+        platform.setPlatformWorkPath(workPath);
+        platform.setStatementsCache(getEnv("swb/ts_statementsCache","false").equals("false"));
+        String persistType=getEnv("swb/triplepersist",SWBPlatform.PRESIST_TYPE_DEFAULT);
+        platform.setPersistenceType(persistType);
+        platform.setAdminDev(getEnv("swb/adminDev", "false").equalsIgnoreCase("true"));
+        platform.setAdminFile(getEnv("swb/adminFile", "/swbadmin/rdf/SWBAdmin.nt"));
+        platform.setOntEditFile(getEnv("swb/ontEditFile", "/swbadmin/rdf/SWBOntEdit.nt"));
+        platform.setProperties(props);
+
+        try
+        {
+            //Runtime.getRuntime().gc();
+//            long inimem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+
+            Connection con=SWBUtils.DB.getDefaultConnection();
+            if(con!=null)
+            {
+                log.info("-->Database: "+SWBUtils.DB.getDatabaseName());
+                haveDB=true;
+                //Si no existen las tablas, se crean automaticamente
+//                PreparedStatement sr=con.prepareStatement("select * from swb_counter");
+//                try
+//                {
+//                    ResultSet rs=sr.executeQuery();
+//                    if(rs!=null)
+//                    {
+                        haveDBTables=true;
+//                        rs.close();
+//                    }
+//                }catch(Exception noe){log.debug("Table swbcounter not found...",noe);}
+//                sr.close();
+                con.close();
+            }
+
+            if(!haveDB())
+            {
+                log.warn("-->Default SemanticWebBuilder database not found...");
+                return;
+            }
+            if(!haveDBTables())
+            {
+                log.warn("-->Default SemanticWebBuilder database tables not found...");
+                return;
+            }
+
+            try
+            {
+                System.setProperty("sun.net.client.defaultConnectTimeout", getEnv("swb/defaultConnectTimeout","5000"));
+                System.setProperty("sun.net.client.defaultReadTimeout", getEnv("swb/defaultReadTimeout","30000"));
+            }catch(Exception e)
+            {
+                log.error("Error seting defaultConnectTimeout, defaultReadTimeout");
+            }
+
+            //TODO: agregar modelos
+            //semanticMgr.init(this);
+
+//            Timestamp initime = null;
+//            util.log(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "log_WBLoader_Init_InstanceConfiguration") + util.getEnv("wb/clientServer"), true);
+//            cpus = getNumProcessors();
+//            util.log(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "log_WBLoader_Init_ProcessorNumber") + cpus, true);
+//            util.log("IP:\t\t\t"+java.net.InetAddress.getLocalHost(),true);
+//
+//            try
+//            {
+//                UpdateVersion updater = new UpdateVersion(version);
+//                updater.update();
+//            } catch (Exception e)
+//            {
+//                AFUtils.log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_WBLoader_Init_versioneerror"), true);
+//            }
+//
+            if (!"ignore".equals(getEnv("swb/security.auth.login.config","ignore"))) {
+                System.setProperty("java.security.auth.login.config",SWBUtils.getApplicationPath()+"/WEB-INF/classes"+getEnv("swb/security.auth.login.config","/wb_jaas.config"));
+                log.info("-->Login Config:"+System.getProperty("java.security.auth.login.config"));
+            }
+//            String dbsync = util.getEnv("wb/DBSync","false");
+
+//            if (wbutil.isClient() || dbsync.trim().equalsIgnoreCase("true"))
+//            {
+//                initime = DBDbSync.getInstance().getLastUpdate();
+//                objs.add(DBDbSync.getInstance());
+//            }
+//
+//            //if admin
+//            if (!wbutil.isClient())
+//            {
+//                objs.add(DBResHits.getInstance());
+//                objs.add(DBAdmLog.getInstance());
+//                objs.add(WBAccessLog.getInstance());
+//                objs.add(WBIndexMgr.getInstance());
+//                //objs.add(WBFileReplicatorSrv.getInstance());
+//            } else
+//            {
+//                util.log("remoteWorkPath --> " + wbutil.getRemoteWorkPath(), true);
+//            }
+//
+//            if (wbutil.isClient() || dbsync.trim().equalsIgnoreCase("true"))
+//            {
+//                timer = WBDBSyncTimer.getInstance();
+//                timer.init();
+//                objs.add(timer);
+//            }
+//
+            //cargando clases de startup.properties
+            SWBStartup startup = new SWBStartup(new ArrayList()); //objs);
+            startup.load("startup.properties");
+//
+//            Runtime.getRuntime().gc();
+//            util.log(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "log_WBLoader_Init_totalMemory") + Runtime.getRuntime().totalMemory(), true);
+//            util.log(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "log_WBLoader_Init_FreeMemory") + "\t\t" + Runtime.getRuntime().freeMemory(), true);
+//            util.log(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "log_WBLoader_Init_MemoryUsed") + "\t\t" + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()), true);
+//            util.log(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "log_WBLoader_Init_MemoryUsedbyWb") + "\t" + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() - inimem), true);
+//
+//            util.log(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "log_WBLoader_Init_WbInicializing"), true);
+        } catch (Throwable e)
+        {
+            log.error("Error loading SemanticWebBuilder Instance...", e);
+        }
+
+        loadSemanticModels();
+
         WebSite site = SWBContext.getAdminWebSite();
         if (site == null) {
             log.event("Creating Admin WebSite...");
@@ -321,8 +530,342 @@ public class SWBPortal {
 //            dns.setWebPage(home);
 //        }
 //    }
+
+
+    public void loadSemanticModels()
+    {
+        log.event("Loading SemanticModels...");
+
+        String owlPath=getEnv("swb/ontologyFiles","/WEB-INF/owl/swb.owl");
+
+        SWBPlatform.getSemanticMgr().initializeDB();
+
+        //Load Ontology from file
+        StringTokenizer st=new StringTokenizer(owlPath,",;");
+        while(st.hasMoreTokens())
+        {
+            String file=st.nextToken();
+            String swbowl="file:"+SWBUtils.getApplicationPath()+file;
+            SemanticModel model=SWBPlatform.getSemanticMgr().addBaseOntology(swbowl);
+            log.debug("Loading Model:"+model.getName());
+        }
+
+        SWBPlatform.getSemanticMgr().loadBaseVocabulary();
+
+
+//        ontoModel.loadImports();
+//        ontoModel.getDocumentManager().addAltEntry(source,"file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/swb.owl" );
+//        ontoModel.read(source);
+
+//        Reasoner reasoner = ReasonerRegistry.getOWLReasoner();
+//        reasoner = reasoner.bindSchema(swbSquema);
+//        InfModel infmodel = ModelFactory.createInfModel(reasoner, adminModel);
+        //adminModel.createResource("http://www.sep.gob.mx/site/WBAdmin",ontoModel.getResource("http://www.semanticwebbuilder.org/swb4/ontology#WebSite"));
+        //adminModel.createResource(ontoModel.getResource("http://www.semanticwebbuilder.org/swb4/ontology#WebPage"));
+
+        //debugClasses(ontoModel);
+        //debugModel(ontoModel);
+
+        //load SWBSystem Model
+//        log.debug("Loading DBModel:"+"SWBSystem");
+//        m_system=new SemanticModel("SWBSystem",loadRDFDBModel("SWBSystem"));
+////        debugModel(m_system);
+//        if(SWBPlatform.isUseDB())m_ontology.addSubModel(m_system,false);
+
+        SWBPlatform.getSemanticMgr().loadDBModels();
+
+        if(getEnv("swb/addModel_DBPedia","false").equals("true"))
+        {
+            SWBPlatform.getSemanticMgr().loadRemoteModel("DBPedia", "http://dbpedia.org/sparql", "http://dbpedia.org/resource/",false);
+        }
+//        if(SWBPlatform.getEnv("swb/addOnt_DBPedia","false").equals("true"))
+//        {
+//            loadRemoteModel("Books", "http://www.sparql.org/books", "http://example.org/book/",false);
+//        }
+
+        SWBPlatform.getSemanticMgr().getOntology().rebind();
+    }
+
+
+
+    /*
+     * Regresa ContextPath
+     * Ejemplo:
+     * "/swb" o "/"
+     */
+    /**
+     *
+     * @return
+     */
+    public static String getContextPath() {
+        if(instance!=null)
+        {
+            return instance.contextPath;
+        }
+        return "";
+    }
+
+    /*
+     * Asignar ContextPath
+     * Ejemplo: "/swb" o "/"
+     * @param contextPath String
+     */
+    /**
+     *
+     * @param contextPath
+     */
+    public void setContextPath(String contextPath)
+    {
+        log.event("ContextPath:"+contextPath);
+        this.contextPath = contextPath;
+
+        try {
+            if (contextPath.endsWith("/")) {
+                webWorkPath = contextPath +getEnv("swb/webWorkPath").substring(1);
+            } else {
+                webWorkPath = contextPath + getEnv("swb/webWorkPath");
+            }
+        } catch (Exception e) {
+            log.error("Can't read the context path...", e);
+            webWorkPath = "";
+        }
+        SWBPlatform.createInstance().setContextPath(contextPath);
+    }
+
+    /**
+     * Regresa ruta del directorio de trabajo
+     * Ejemplo: /opt/swb/work
+     * @return String con la ruta del directorio de trabajo
+     */
+    public static String getWorkPath()
+    {
+        return workPath;
+    }
+
+    /**
+     * Regresa ruta web del directorio work
+     * Ejemplo: /[context]/work
+     * @return String con la ruta web del directorio work
+     */
+    public static String getWebWorkPath()
+    {
+        return webWorkPath;
+    }
+
+    /** Obtiene valor de variable de ambiente declarada en web.xml o web.properties.
+     * @param name String nombre de la variable
+     * @return
+     */
+    public static String getEnv(String name)
+    {
+        return getEnv(name, null);
+    }
+
+    /** Obtiene valor de variable de ambiente declarada en web.xml o web.properties.
+     * @param name String nombre de la variable
+     * @param defect String valor por defecto
+     * @return
+     */
+    public static String getEnv(String name, String defect)
+    {
+        String obj = null;
+
+        obj=System.getProperty("swb.web."+name);
+        if(obj!=null)return obj;
+        if(props!=null)
+        {
+            obj = props.getProperty(name);
+        }
+        if (obj == null) return defect;
+        return obj;
+    }
+
+    public static ServletContext getServletContext()
+    {
+        return servletContext;
+    }
+
+    public static Filter getVirtualHostFilter()
+    {
+        return virtualHostFilter;
+    }
+
+    public static Properties getWebProperties()
+    {
+        return props;
+    }
+
+    /**
+     * Getter for property haveDB.
+     * @return Value of property haveDB.
+     */
+    public static boolean haveDB()
+    {
+        return haveDB;
+    }
+
+    /**
+     * Getter for property haveDBTables.
+     * @return Value of property haveDBTables.
+     */
+    public static boolean haveDBTables()
+    {
+        return haveDBTables;
+    }
+
+    public static boolean isUseDB()
+    {
+        return useDB;
+    }
+
+    public static void setUseDB(boolean useDB)
+    {
+        SWBPortal.useDB = useDB;
+    }
+
+    public static void removeFileFromWorkPath(String path)
+    {
+        //TOTO:Impementar Replicacion de archivos
+        File file=new File(getWorkPath() + path);
+        file.delete();
+    }
+
+    /**
+     * @param path
+     * @throws AFException
+     * @return  */
+    public static InputStream getFileFromWorkPath(String path) throws SWBException {
+        InputStream ret = null;
+        //TOTO:Impementar Replicacion de archivos
+        try {
+//            String confCS = (String) getEnv("swb/clientServer");
+//
+//            if(confCS.equalsIgnoreCase("ClientFR")) {
+//                try {
+//                    ret = new FileInputStream(getWorkPath() + path);
+//                }catch(FileNotFoundException fnfe) {
+//                    //ret=getFileFromAdminWorkPath(path);
+//                    DownloadDirectory downdir=new DownloadDirectory(AFUtils.getEnv("wb/serverURL"),getWorkPath(),"workpath");
+//                    downdir.download(path);
+//                    ret = new FileInputStream(getWorkPath() + path);
+//                }
+//            }else if(confCS.equalsIgnoreCase("Client")) {
+//                ret=getFileFromAdminWorkPath(path);
+//            } else {
+                ret = new FileInputStream(getWorkPath() + path);
+//            }
+        } catch (Exception e) {
+            throw new SWBException(e.getMessage(), e);
+        }
+        return ret;
+    }
+
+      //TOTO:Impementar Replicacion de archivos
+//    public InputStream getFileFromAdminWorkPath(String path) throws MalformedURLException, IOException {
+//        InputStream ret = null;
+//        //String str = getRemoteWorkPath() + path;
+//        String servlet=DownloadDirectory.SERVDWN;
+//        String str = getEnv("swb/serverURL")+servlet+ "?workpath=" + path;
+//
+//        str = str.substring(0, str.lastIndexOf("/") + 1) + com.infotec.appfw.util.URLEncoder.encode(str.substring(str.lastIndexOf("/") + 1));
+//        ret = new java.net.URL(str).openStream();
+//        return ret;
+//    }
+
+    public static void writeFileToWorkPath(String path, InputStream in, String userid) throws SWBException {
+        //System.out.println("writeFileToWorkPath:"+path);
+        //TOTO:Impementar Replicacion de archivos
+        try {
+//            String confCS = (String) AFUtils.getInstance().getEnv("wb/clientServer");
+//
+//            //System.out.println("clientServer:"+confCS);
+//            if(confCS.equalsIgnoreCase("ClientFR")||confCS.equalsIgnoreCase("Client")) {
+//                String str = AFUtils.getEnv("wb/serverURL")+DownloadDirectory.SERVUP;
+//                URL url=new URL(str);
+//                //System.out.println("url:"+url);
+//                URLConnection urlconn=url.openConnection();
+//                //if(jsess!=null)urlconn.setRequestProperty("Cookie", "JSESSIONID="+jsess);
+//                urlconn.setRequestProperty("type","workpath");
+//                urlconn.setRequestProperty("path",path);
+//                urlconn.setRequestProperty("user",userid);
+//                urlconn.setDoOutput(true);
+//                AFUtils.copyStream(in,urlconn.getOutputStream());
+//                //System.out.println("copyStream");
+//                String ret=AFUtils.getInstance().readInputStream(urlconn.getInputStream());
+//                //System.out.println("ret:"+ret);
+//            }else {
+                File file=new File(getWorkPath() + path);
+                file.getParentFile().mkdirs();
+                FileOutputStream out=new FileOutputStream(file);
+                SWBUtils.IO.copyStream(in,out);
+//            }
+        } catch (Exception e) {
+            throw new SWBException(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * @param path
+     * @throws AFException
+     * @return  */
+    public static String readFileFromWorkPath(String path) throws IOException, SWBException {
+        return SWBUtils.IO.readInputStream(getFileFromWorkPath(path));
+    }
+
+    /**
+     * @param path
+     * @param encode
+     * @throws AFException
+     * @return  */
+    public static InputStreamReader getFileFromWorkPath(String path, String encode) throws SWBException {
+        InputStreamReader ret = null;
+        try {
+            ret = new InputStreamReader(getFileFromWorkPath(path), encode);
+        } catch (Exception e) {
+            throw new SWBException(e.getMessage(),e);
+        }
+        return ret;
+    }
+
+    /**
+     * @param path
+     * @param encode
+     * @throws AFException
+     * @return  */
+    public static String readFileFromWorkPath(String path, String encode) throws SWBException {
+        StringBuffer ret = new StringBuffer(SWBUtils.IO.getBufferSize());
+        try {
+            InputStreamReader file = getFileFromWorkPath(path, encode);
+            char[] bfile = new char[SWBUtils.IO.getBufferSize()];
+            int x;
+            while ((x = file.read(bfile, 0, SWBUtils.IO.getBufferSize())) > -1) {
+                ret.append(bfile, 0, x);
+            }
+            file.close();
+        } catch (Exception e) {
+            throw new SWBException(e.getMessage(), e);
+        }
+        return ret.toString();
+    }
+
+//    /** Getter for property remoteWorkPath.
+//     * @return Value of property remoteWorkPath.
+//     */
+//    public String getRemoteWorkPath() {
+//        return remoteWorkPath;
+//    }
+
+    //TODO:validar client
+    /** La instancia de WB esta configurada como cliente?.
+     * @return Value of property client.
+     */
+    public static boolean isClient()
+    {
+        return client;
+    }
+
     public static String getDistributorPath() {
-        return SWBPlatform.getContextPath() + "/" + SWBPlatform.getEnv("swb/distributor", "swb");
+        return getContextPath() + "/" + getEnv("swb/distributor", "swb");
     }
 
     public static SWBUserMgr getUserMgr() {
