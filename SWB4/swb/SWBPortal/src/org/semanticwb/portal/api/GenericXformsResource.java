@@ -43,6 +43,7 @@ import java.util.*;
 import javax.servlet.ServletInputStream;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.util.XmlBundle;
 import org.semanticwb.model.Resource;
@@ -400,12 +401,12 @@ public class GenericXformsResource extends GenericResource {
                         //byte[] decodedData = Base64.decode(node.getFirstChild().getNodeValue());
                         String decodedData = SWBUtils.TEXT.decodeBase64(node.getFirstChild().getNodeValue());
                         if (decodedData != null) {
-                            File file = new File(SWBPlatform.getWorkPath() + resource.getWorkPath());
+                            File file = new File(SWBPortal.getWorkPath() + resource.getWorkPath());
                             if (!file.exists()) {
                                 file.mkdirs();
                             }
                             try {
-                                FileOutputStream fos = new FileOutputStream(SWBPlatform.getWorkPath() + resource.getWorkPath() + "/" + fileName);
+                                FileOutputStream fos = new FileOutputStream(SWBPortal.getWorkPath() + resource.getWorkPath() + "/" + fileName);
                                 fos.write(decodedData.getBytes());
                                 fos.close();
                             } catch (Exception e) {
