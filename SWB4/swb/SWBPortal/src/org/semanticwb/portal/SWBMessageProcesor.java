@@ -84,27 +84,27 @@ public class SWBMessageProcesor extends TimerTask
                     //System.out.println("popMessage:"+str);
                     if(ini.equals("log"))
                     {
-                        if (!SWBPlatform.isClient())
+                        if (!SWBPortal.isClient())
                         {
                             SWBPortal.getAccessLog().updateRes(str.substring(4));
                         }
                         SWBPortal.getAccessIncrement().log(str.substring(4));
                     } else if(ini.equals("hit"))
                     {
-                        if (!SWBPlatform.isClient())
+                        if (!SWBPortal.isClient())
                         {
                             SWBPortal.getAccessLog().hitLog(str.substring(4));
                         }
                         SWBPortal.getAccessIncrement().logHit(str.substring(4));
                     } else if(ini.equals("ses"))
                     {
-                        if (!SWBPlatform.isClient())
+                        if (!SWBPortal.isClient())
                         {
                             SWBPortal.getAccessLog().updateSess(str.substring(4));
                         }
                     } else if(ini.equals("lgn"))
                     {
-                        if (!SWBPlatform.isClient())
+                        if (!SWBPortal.isClient())
                         {
                             SWBPortal.getAccessLog().updateLogin(str.substring(4));
                         }

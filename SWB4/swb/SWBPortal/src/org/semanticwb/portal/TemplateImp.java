@@ -85,9 +85,9 @@ public class TemplateImp extends Template
         objects.put("distpath", SWBPortal.getDistributorPath());
         objects.put("if:user", SWBIFMethod.class);
         
-        webPath = SWBPlatform.getWebWorkPath()+super.getWorkPath();
+        webPath = SWBPortal.getWebWorkPath()+super.getWorkPath();
         actPath = webPath+ "/" + getActualVersion().getVersionNumber() + "/";
-        workPath = SWBPlatform.getWorkPath()+super.getWorkPath();
+        workPath = SWBPortal.getWorkPath()+super.getWorkPath();
         actWorkPath=workPath + "/" + getActualVersion().getVersionNumber();
         actRelWorkPath=super.getWorkPath()+ "/" + getActualVersion().getVersionNumber();
 
@@ -193,9 +193,9 @@ public class TemplateImp extends Template
             //FileInputStream in= new FileInputStream(AFUtils.getInstance().getWorkPath()+"/templates/"+recTemplate.getId()+"/"+recTemplate.getActualversion()+"/"+filename);
             HtmlStreamTokenizer tok = null;
             if (filename.startsWith("/"))
-                tok = new HtmlStreamTokenizer(SWBPlatform.getFileFromWorkPath(filename));
+                tok = new HtmlStreamTokenizer(SWBPortal.getFileFromWorkPath(filename));
             else
-                tok = new HtmlStreamTokenizer(SWBPlatform.getFileFromWorkPath(actRelWorkPath + "/" + filename));
+                tok = new HtmlStreamTokenizer(SWBPortal.getFileFromWorkPath(actRelWorkPath + "/" + filename));
             StringBuffer auxpart = new StringBuffer();
             HtmlTag opentag=null;                       //tag inicial
             boolean textpart = false;
