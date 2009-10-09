@@ -33,6 +33,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.repository.RepositoryManagerLoader;
 import org.semanticwb.resource.office.sem.OfficeResource;
@@ -168,7 +169,7 @@ public abstract class OfficeServlet extends XMLRPCServlet
             {
                 InputStream in = doc.getContent(repositoryName, contentId, versionName);
                 String name=UUID.randomUUID().toString();
-                String dir=SWBPlatform.getWorkPath()+"/"+name;
+                String dir=SWBPortal.getWorkPath()+"/"+name;
                 OfficeResource.loadContent(in, dir,type);
                 String file = doc.getContentFile(repositoryName, contentId, versionName);
                 if (file != null)
