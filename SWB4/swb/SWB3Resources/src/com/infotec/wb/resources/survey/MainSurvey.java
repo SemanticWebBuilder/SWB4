@@ -267,7 +267,7 @@ public class MainSurvey extends GenericResource
         {
             super.setResourceBase(base);
             webpath = (String)SWBPlatform.getContextPath();
-            workpath = (String)SWBPlatform.getWebWorkPath() + base.getWorkPath();
+            workpath = (String)SWBPortal.getWebWorkPath() + base.getWorkPath();
         }
         catch(Exception e)
         {
@@ -3412,7 +3412,7 @@ public class MainSurvey extends GenericResource
                     log.error(paramsRequest.getLocaleString("usrmsg_MainSurvey_getAdmHtml_msgAdministradorId")+": "+user.getId()+" "+paramsRequest.getLocaleString("usrmsg_MainSurvey_getAdmHtml_msgEliminoContenidoId")+": "+base.getId());
                     // seccion para eliminar el template del formulario
                     String RutaBorrar = "";
-                    RutaBorrar = SWBPlatform.getWorkPath()+base.getWorkPath();
+                    RutaBorrar = SWBPortal.getWorkPath()+base.getWorkPath();
                     if(!SWBUtils.IO.removeDirectory(RutaBorrar))
                     {log.error(paramsRequest.getLocaleString("usrmsg_MainSurvey_getAdmHtml_logNoPudoBorrarTemplateFormulario"));}
                     
@@ -4312,7 +4312,7 @@ public class MainSurvey extends GenericResource
                 
                 // seccion para eliminar el template del formulario
                 String RutaBorrar = "";
-                RutaBorrar = SWBPlatform.getWorkPath()+base.getWorkPath();
+                RutaBorrar = SWBPortal.getWorkPath()+base.getWorkPath();
                 if(!SWBUtils.IO.removeDirectory(RutaBorrar))
                 {log.error("Error while trying to remove resource work directory. Formulario resource.");}
                 

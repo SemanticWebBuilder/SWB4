@@ -141,8 +141,8 @@ public class Login extends GenericAdmResource
         }
         if (!"".equals(base.getAttribute("XSLT", "").trim())) {
             try {
-                templates = SWBUtils.XML.loadTemplateXSLT(SWBPlatform.getFileFromWorkPath(base.getWorkPath() + "/" + base.getAttribute("XSLT").trim()));
-                path = SWBPlatform.getWebWorkPath() + base.getWorkPath() + "/";
+                templates = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() + "/" + base.getAttribute("XSLT").trim()));
+                path = SWBPortal.getWebWorkPath() + base.getWorkPath() + "/";
             }
             catch (Exception e) {
                 log.error("Error while loading resource template: " + base.getId(), e);

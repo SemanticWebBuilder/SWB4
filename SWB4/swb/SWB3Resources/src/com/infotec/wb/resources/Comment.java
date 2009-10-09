@@ -89,7 +89,7 @@ public class Comment extends GenericResource {
     public void setResourceBase(Resource base) {
         try {
             super.setResourceBase(base);
-            webWorkPath = SWBPlatform.getWebWorkPath() + base.getWorkPath();
+            webWorkPath = SWBPortal.getWebWorkPath() + base.getWorkPath();
         } catch (Exception e) {
             log.error("Error while setting resource base: " + base.getId() + "-" + base.getTitle(), e);
         }
@@ -551,7 +551,7 @@ public class Comment extends GenericResource {
                 }
                 value = null != fup.getValue("noimg") && !"".equals(fup.getValue("noimg").trim()) ? fup.getValue("noimg").trim() : "0";
                 if ("1".equals(value) && !"".equals(base.getAttribute("img", "").trim())) {
-                    SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + base.getWorkPath() + "/" + base.getAttribute("img").trim());
+                    SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + base.getWorkPath() + "/" + base.getAttribute("img").trim());
                     base.removeAttribute("img");
                 } else {
                     value = null != fup.getFileName("img") && !"".equals(fup.getFileName("img").trim()) ? fup.getFileName("img").trim() : null;
@@ -574,7 +574,7 @@ public class Comment extends GenericResource {
 
                 value = null != fup.getValue("noimgenviar") && !"".equals(fup.getValue("noimgenviar").trim()) ? fup.getValue("noimgenviar").trim() : "0";
                 if ("1".equals(value) && !"".equals(base.getAttribute("imgenviar", "").trim())) {
-                    SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + base.getWorkPath() + "/" + base.getAttribute("imgenviar").trim());
+                    SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + base.getWorkPath() + "/" + base.getAttribute("imgenviar").trim());
                     base.removeAttribute("imgenviar");
                 } else {
                     value = null != fup.getFileName("imgenviar") && !"".equals(fup.getFileName("imgenviar").trim()) ? fup.getFileName("imgenviar").trim() : null;
@@ -597,7 +597,7 @@ public class Comment extends GenericResource {
 
                 value = null != fup.getValue("noimglimpiar") && !"".equals(fup.getValue("noimglimpiar").trim()) ? fup.getValue("noimglimpiar").trim() : "0";
                 if ("1".equals(value) && !"".equals(base.getAttribute("imglimpiar", "").trim())) {
-                    SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + base.getWorkPath() + "/" + base.getAttribute("imglimpiar").trim());
+                    SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + base.getWorkPath() + "/" + base.getAttribute("imglimpiar").trim());
                     base.removeAttribute("imglimpiar");                        
                 } else {
                     value = null != fup.getFileName("imglimpiar") && !"".equals(fup.getFileName("imglimpiar").trim()) ? fup.getFileName("imglimpiar").trim() : null;

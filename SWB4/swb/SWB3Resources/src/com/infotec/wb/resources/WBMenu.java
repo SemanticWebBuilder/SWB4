@@ -76,14 +76,14 @@ public class WBMenu extends GenericAdmResource
         try 
         {
             super.setResourceBase(base);
-            webWorkPath = (String) SWBPlatform.getWebWorkPath() +  base.getWorkPath();
+            webWorkPath = (String) SWBPortal.getWebWorkPath() +  base.getWorkPath();
         }
         catch(Exception e) { log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);  }
         if(!"".equals(base.getAttribute("template","").trim()))
         {
             try 
             { 
-                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPlatform.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim())); 
+                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
                 path=webWorkPath + "/";
             }
             catch(Exception e) { log.error("Error while loading resource template: "+base.getId(), e); }

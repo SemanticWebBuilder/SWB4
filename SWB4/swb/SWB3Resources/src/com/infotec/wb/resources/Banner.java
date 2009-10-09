@@ -38,6 +38,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -88,12 +89,12 @@ public class Banner extends GenericAdmResource
                                 ret.append(" height=\"" + height + "\"");
                             }
                             ret.append(">\n");
-                            ret.append("<param name=movie value=\"" + SWBPlatform.getWebWorkPath() + base.getWorkPath() + "/" + img + "\" />\n");
+                            ret.append("<param name=movie value=\"" + SWBPortal.getWebWorkPath() + base.getWorkPath() + "/" + img + "\" />\n");
                             ret.append("<param name=\"quality\" value=\"high\" />\n");
                             ret.append("<param name=\"wmode\" value=\"transparent\" /> \n");
                             ret.append("<param name=\"FlashVars\" value=\"liga=" + wburl + "\" />\n");
                             ret.append("<embed id=\"" + img + "\" name=\"" + img + "\" src=\"");
-                            ret.append(SWBPlatform.getWebWorkPath() + base.getWorkPath() + "/" + img + "\"");
+                            ret.append(SWBPortal.getWebWorkPath() + base.getWorkPath() + "/" + img + "\"");
                             ret.append(" quality=\"high\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\" ");
                             if (!width.equals("")) {
                                 ret.append(" width=\"" + width + "\"");
@@ -117,7 +118,7 @@ public class Banner extends GenericAdmResource
                                 }
                             }
                             ret.append("<img src=\"");
-                            ret.append(SWBPlatform.getWebWorkPath() + base.getWorkPath() + "/" + img + "\"");
+                            ret.append(SWBPortal.getWebWorkPath() + base.getWorkPath() + "/" + img + "\"");
                             if (paramRequest.getArguments().containsKey("border")) {
                                 ret.append(" border=\"" + (String) paramRequest.getArguments().get("border") + "\"");
                             } else {
