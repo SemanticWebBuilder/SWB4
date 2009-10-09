@@ -55,7 +55,7 @@ public class Driver_MsSQL_SWB extends Driver_MsSQL
 		m_dbcon = dbcon;
 		try {
              Properties defaultSQL = SQLCache.loadSQLFile(DEFAULT_SQL, null, ID_SQL_TYPE);
-             if(SWBPlatform.getEnv("swb/ts_statementsCache","false").equals("false"))
+             if(SWBPlatform.createInstance().getStatementsCache())
              {
                 m_sql = new SQLCache_SWB(SQL_FILE, defaultSQL, dbcon, ID_SQL_TYPE);
              }else
