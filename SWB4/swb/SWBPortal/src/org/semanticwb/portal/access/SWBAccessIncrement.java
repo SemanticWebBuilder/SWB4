@@ -32,6 +32,7 @@ package org.semanticwb.portal.access;
 import java.util.StringTokenizer;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.SWBAppObject;
 import org.semanticwb.model.Resource;
@@ -108,7 +109,7 @@ public class SWBAccessIncrement implements SWBAppObject
                 try
                 {
                     WebPage rec=SWBContext.getWebSite(map).getWebPage(topic);
-                    if(rec.incViews() && !SWBPlatform.isClient()) rec.updateViews();
+                    if(rec.incViews() && !SWBPortal.isClient()) rec.updateViews();
                 } catch (Exception e)
                 {
                     log.error("Error to increment views of WebPage:"+topic,e);
@@ -127,7 +128,7 @@ public class SWBAccessIncrement implements SWBAppObject
                         {
                             recr = SWBContext.getWebSite(map).getResource(resid);
                         }
-                        if (recr!=null && recr.incViews() && !SWBPlatform.isClient())recr.updateViews();
+                        if (recr!=null && recr.incViews() && !SWBPortal.isClient())recr.updateViews();
                     } catch (Exception e)
                     {
                         log.error("Error to increment access of Resource:"+resid,e);
@@ -178,7 +179,7 @@ public class SWBAccessIncrement implements SWBAppObject
                         {
                             recr = SWBContext.getWebSite(map).getResource(resid);
                         }                        
-                        if (recr!=null && recr.incHits() && !SWBPlatform.isClient()) recr.updateViews();
+                        if (recr!=null && recr.incHits() && !SWBPortal.isClient()) recr.updateViews();
                     } catch (Exception e)
                     {
                         log.error("Error to increment Resource Hits:"+resid,e);

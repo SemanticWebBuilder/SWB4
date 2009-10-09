@@ -35,6 +35,7 @@ import java.io.*;
 import java.text.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.SWBAppObject;
 import org.semanticwb.model.Resource;
@@ -176,7 +177,7 @@ public class SWBAccessLog implements SWBAppObject
                 workp = SWBPlatform.getEnv("swb/accessLog","/logs/swb_log").substring(5);
             }
         } else {
-            workp = SWBPlatform.getWorkPath() + SWBPlatform.getEnv("swb/accessLog");
+            workp = SWBPortal.getWorkPath() + SWBPlatform.getEnv("swb/accessLog");
         }
 
         try

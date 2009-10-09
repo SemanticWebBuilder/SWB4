@@ -31,6 +31,7 @@ import java.sql.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.*;
 import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
@@ -254,7 +255,7 @@ public class AdmDBConnMgr {
                                 root.appendChild(child);
                             }
                             if (hparams.get("wbNoFile_" + pname) != null && hparams.get("wbfile_" + pname) != null) {
-                                admResUtils.removeFileFromFS(SWBPlatform.getWorkPath() + base.getWorkPath() + "/" + hparams.get("wbfile_" + pname));
+                                admResUtils.removeFileFromFS(SWBPortal.getWorkPath() + base.getWorkPath() + "/" + hparams.get("wbfile_" + pname));
                             }
                         } else if (!pname.startsWith("wbfile_") && !pname.startsWith("wbNoFile_") && !pname.startsWith("wbReplacefile_")) {
                             child = dom.createElement(pname);
@@ -264,7 +265,7 @@ public class AdmDBConnMgr {
                             String hiddenFile = (String) hparams.get(pname); //archivo anterior
                             String field=pname.substring(14);  //valor de campo de archivo anterior
                             if(afiles.get(field)!=null){
-                                admResUtils.removeFileFromFS(SWBPlatform.getWorkPath() + base.getWorkPath() + "/" + hiddenFile);
+                                admResUtils.removeFileFromFS(SWBPortal.getWorkPath() + base.getWorkPath() + "/" + hiddenFile);
                             }
                         }
                     }
