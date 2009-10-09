@@ -30,7 +30,6 @@ package org.semanticwb.platform;
 
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.rdf.model.Statement;
-import java.util.ArrayList;
 import java.util.Iterator;
 import org.semanticwb.*;
 
@@ -78,6 +77,7 @@ public class SemanticClassIterator<T extends SemanticClass> implements Iterator
         }else
         {
             OntClass ocls=(OntClass)obj;
+            //System.out.println(ocls+" "+ocls.getURI()+ocls.getLocalName());
             cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(ocls.getURI());
         }            
         return cls;
