@@ -28,6 +28,7 @@ package org.semanticwb.portal.admin.admresources;
 import org.semanticwb.portal.admin.admresources.lib.WBJsInputFEAbs;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
@@ -249,7 +250,7 @@ public class FileFE extends WBJsInputFEAbs
                     else xml+="Archivo: ";
                     if(filename.endsWith(".html") || filename.endsWith(".htm") || filename.endsWith(".xml") || filename.endsWith(".xsl") || filename.endsWith(".xslt") || filename.endsWith(".jsp")){
                         xml+="<A href=\""+ SWBPlatform.getContextPath()+"/editfile?file="+ base.getWorkPath() + "/" + filename + "&pathType=res&resUri="+base.getEncodedURI()+"\">"+filename+"</A>";
-                    }else xml+="<A href=\""+ SWBPlatform.getWebWorkPath() + base.getWorkPath() +"/"+ filename +"\">"+filename+"</A>";
+                    }else xml+="<A href=\""+ SWBPortal.getWebWorkPath() + base.getWorkPath() +"/"+ filename +"\">"+filename+"</A>";
                     Element root = dom.createElement("wbmsg");
                     root.appendChild(dom.createTextNode(xml));
                     dom.appendChild(root);
