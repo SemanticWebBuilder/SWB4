@@ -112,7 +112,7 @@ public class SWBUtils {
 
     private static Logger log = getLogger(SWBUtils.class);
     static private SWBUtils instance;
-    private static String applicationPath = "";
+    private static String applicationPath = SWBUtils.class.getResource("/").toString();
     private static int bufferSize = 8192;
     private static boolean initLogger = false;
     private static Locale locale = Locale.ENGLISH;
