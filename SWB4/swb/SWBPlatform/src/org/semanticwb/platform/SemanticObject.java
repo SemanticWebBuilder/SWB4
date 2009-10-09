@@ -780,7 +780,7 @@ public class SemanticObject
                         {
                             workPath += "/" + value;
                         }
-                        SWBPlatform.removeFileFromWorkPath(workPath);
+                        SWBPlatform.createInstance().removeFileFromPlatformWorkPath(workPath);
                     }
                 }
             }catch(Exception e){log.error(e);}
@@ -1646,7 +1646,7 @@ public class SemanticObject
             workPath += "/" + name;
         }
         setProperty(prop, name);
-        SWBPlatform.writeFileToWorkPath(workPath, value, "");
+        SWBPlatform.createInstance().writeFileToPlatformWorkPath(workPath, value);
         return this;
     }
 
@@ -1658,7 +1658,7 @@ public class SemanticObject
         {
             workPath += "/" + value;
         }
-        return SWBPlatform.getFileFromWorkPath(workPath);
+        return SWBPlatform.createInstance().getFileFromPlatformWorkPath(workPath);
     }
 
     /**

@@ -28,13 +28,11 @@
 
 package org.semanticwb.platform;
 
-import org.semanticwb.SWBPlatform;
-
 /**
  *
  * @author Jei
  */
 public interface SWBInstanceObject 
 {
-    public void init(SWBPlatform context);
+    public void init();
 }

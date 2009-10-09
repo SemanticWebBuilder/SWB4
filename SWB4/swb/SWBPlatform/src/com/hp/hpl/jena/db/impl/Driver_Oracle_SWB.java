@@ -67,7 +67,7 @@ public class Driver_Oracle_SWB extends Driver_Oracle
 		}
 
         try {
-            if(SWBPlatform.getEnv("swb/ts_statementsCache","false").equals("false"))
+            if(SWBPlatform.createInstance().getStatementsCache())
             {
                 m_sql = new SQLCache_SWB(SQL_FILE, null, dbcon, ID_SQL_TYPE);
             }else
