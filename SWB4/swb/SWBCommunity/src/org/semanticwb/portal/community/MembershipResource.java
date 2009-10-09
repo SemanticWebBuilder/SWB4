@@ -43,6 +43,7 @@ import org.apache.commons.fileupload.ProgressListener;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.portal.community.utilresources.ImageResizer;
 
 public class MembershipResource extends org.semanticwb.portal.community.base.MembershipResourceBase 
@@ -143,7 +144,7 @@ public class MembershipResource extends org.semanticwb.portal.community.base.Mem
                     boolean isMultipart = ServletFileUpload.isMultipartContent(request);
                     HashMap<String, String> params = new HashMap<String, String>();
                     // Create a factory for disk-based file items
-                    File tmpwrk = new File(SWBPlatform.getWorkPath() + "/tmp");
+                    File tmpwrk = new File(SWBPortal.getWorkPath() + "/tmp");
                     if (!tmpwrk.exists())
                     {
                         tmpwrk.mkdirs();
@@ -198,7 +199,7 @@ public class MembershipResource extends org.semanticwb.portal.community.base.Mem
                     }
                     request.getSession(true).setAttribute(currentFile.getFieldName(), per);
 
-                    String path = SWBPlatform.getWorkPath() + page.getWorkPath();
+                    String path = SWBPortal.getWorkPath() + page.getWorkPath();
                     File file = new File(path);
                     if (!file.exists())
                     {

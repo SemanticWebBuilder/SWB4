@@ -20,6 +20,7 @@ import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.servlet.internal.UploadFormElement;
 import org.apache.commons.fileupload.FileItem;
+import org.semanticwb.SWBPortal;
 
 public class ProductResource extends org.semanticwb.portal.community.base.ProductResourceBase {
 
@@ -108,7 +109,7 @@ public class ProductResource extends org.semanticwb.portal.community.base.Produc
             if (rec != null && rec.canModify(mem)) {
                 rec.remove();                                       //elimina el registro
                  //Elimina filesystem de thread
-                SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + base.getWorkPath() + "/products/" + rec.getId() + "/");
+                SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + base.getWorkPath() + "/products/" + rec.getId() + "/");
             }
         }
     }
@@ -122,7 +123,7 @@ public class ProductResource extends org.semanticwb.portal.community.base.Produc
         WebSite website = page.getWebSite();
         String basepath=null;
         if(sobj.instanceOf(ProductElement.sclass)){
-            basepath = SWBPlatform.getWorkPath() + base.getWorkPath() + "/products/" + sobj.getId() + "/";
+            basepath = SWBPortal.getWorkPath() + base.getWorkPath() + "/products/" + sobj.getId() + "/";
         }
         if (request.getSession().getAttribute(UploadFormElement.FILES_UPLOADED) != null) {
             Iterator itfilesUploaded = ((List) request.getSession().getAttribute(UploadFormElement.FILES_UPLOADED)).iterator();
