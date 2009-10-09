@@ -189,6 +189,7 @@ public class SemanticVocabulary
     
     public SemanticClass getSemanticClass(String uri)
     {
+        if(uri==null)return null;
         SemanticClass cls=classes.get(uri);
         if(cls==null)
         {
