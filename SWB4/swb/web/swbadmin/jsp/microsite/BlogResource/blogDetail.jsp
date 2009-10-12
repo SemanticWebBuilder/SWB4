@@ -29,7 +29,7 @@
         <%
         return;
     }
-    String srcLine=SWBPlatform.getWebWorkPath()+"/models/"+ paramRequest.getWebPage().getWebSiteId()  +"/css/solidLine.jpg";
+    String srcLine=SWBPortal.getWebWorkPath()+"/models/"+ paramRequest.getWebPage().getWebSiteId()  +"/css/solidLine.jpg";
 
     String updated = SWBUtils.TEXT.getTimeAgo(post.getUpdated(), user.getLanguage());
     String postAuthor = post.getCreator().getFirstName();
@@ -68,7 +68,7 @@ if(email!=null)
     else
         {
         %>
-        <p id="author">Escrito por: <%=postAuthor%></p> , <%=updated%>, visitas: <%=post.getViews()%> , calificación: <%=post.getRank()%></p>
+        <p id="author">Escrito por: <%=postAuthor%> , <%=updated%>, visitas: <%=post.getViews()%> , calificación: <%=post.getRank()%></p>
         
         <%
         }

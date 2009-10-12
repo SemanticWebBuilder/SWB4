@@ -38,7 +38,7 @@
             try {
                 if (comment.getCreator().getPhoto()!=null) {
                     %>
-                    <img src="<%=SWBPlatform.getWebWorkPath()%><%=comment.getCreator().getPhoto()%>" alt="foto" width="50px" height="50px" border="0">&nbsp;
+                    <img src="<%=SWBPortal.getWebWorkPath()%><%=comment.getCreator().getPhoto()%>" alt="foto" width="50px" height="50px" border="0">&nbsp;
                     <%
                 }
             } catch (NullPointerException npe) {}

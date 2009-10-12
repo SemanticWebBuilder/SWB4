@@ -34,7 +34,7 @@
     SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
     DirectoryObject dirObj=(DirectoryObject)semObject.createGenericInstance();
     SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_VIEW);
-    String path=SWBPlatform.getWebWorkPath()+base.getWorkPath()+"/"+semObject.getId()+"/";
+    String path=SWBPortal.getWebWorkPath()+base.getWorkPath()+"/"+semObject.getId()+"/";
     //Obtener valores de propiedades genericas
     String dirPhoto=semObject.getProperty(dirObj.swbcomm_dirPhoto);
 

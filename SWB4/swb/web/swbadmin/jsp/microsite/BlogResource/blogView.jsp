@@ -20,13 +20,13 @@
             {
                 lang = user.getLanguage();
             }
-            String pathIamge = SWBPlatform.getWebWorkPath();
+            String pathIamge = SWBPortal.getWebWorkPath();
 
             WebPage wpage = paramRequest.getWebPage();
             Blog blog = (Blog) request.getAttribute("blog");
             if (blog != null)
             {
-                String srcLine = SWBPlatform.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/solidLine.jpg";
+                String srcLine = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/solidLine.jpg";
                 Member member = Member.getMember(user, wpage);
                 String defaultFormat = "d 'de' MMMM  'del' yyyy 'a las' HH:mm";
                 SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat, new Locale(lang));
