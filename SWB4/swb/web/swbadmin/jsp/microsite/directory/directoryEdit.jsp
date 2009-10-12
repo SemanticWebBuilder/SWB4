@@ -12,7 +12,7 @@
 <%@page import="java.util.StringTokenizer"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
-<%@page import="org.semanticwb.SWBPlatform"%>
+<%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="org.semanticwb.platform.SemanticProperty"%>
 <%@page import="org.semanticwb.model.SWBModel"%>
 <%@page import="org.semanticwb.model.Descriptiveable"%>
@@ -37,7 +37,7 @@
         url.setAction(url.Action_EDIT);
         mgr.setAction(url.toString());
 
-        String basepath = SWBPlatform.getWebWorkPath() + base.getWorkPath() + "/" + semObject.getId() + "/";
+        String basepath = SWBPortal.getWebWorkPath() + base.getWorkPath() + "/" + semObject.getId() + "/";
         DirectoryObject dirObj=(DirectoryObject)semObject.createGenericInstance();
         String dirPhoto=dirObj.getPhoto();
         if(dirPhoto!=null){

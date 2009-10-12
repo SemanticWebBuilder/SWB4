@@ -3,6 +3,7 @@
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page import="org.semanticwb.portal.community.*"%>
 <%@page import="java.util.*"%>
+<%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="org.semanticwb.SWBPlatform"%>
 
 <%
@@ -67,7 +68,7 @@
                 if(commonfriend.getLastName()!=null) lastName=commonfriend.getLastName();
                   %>
                     <div class="moreUser">
-                        <a href="<%=wsite.getWebPage("perfil").getUrl()%>?user=<%=commonfriend.getEncodedURI()%>"><img src="<%=SWBPlatform.getWebWorkPath()+photo%>" <%=imgSize%> title="<%=firstName%> <%=lastName%>">
+                        <a href="<%=wsite.getWebPage("perfil").getUrl()%>?user=<%=commonfriend.getEncodedURI()%>"><img src="<%=SWBPortal.getWebWorkPath()+photo%>" <%=imgSize%> title="<%=firstName%> <%=lastName%>">
                     <%if(!isStrategy){%>
                         <br>
                         <%=firstName%>
