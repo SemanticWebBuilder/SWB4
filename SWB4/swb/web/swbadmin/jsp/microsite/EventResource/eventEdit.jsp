@@ -65,8 +65,8 @@
             <div>
                 <p>
                     <label for="foto">Imagen del evento:&nbsp;</label>
-                    <a href="<%= SWBPlatform.getWebWorkPath()+rec.getEventImage()%>" target="_self">
-                        <img id="img_<%=rec.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+rec.getEventImage() %>" alt="<%= rec.getTitle() %>" border="0" />
+                    <a href="<%= SWBPortal.getWebWorkPath()+rec.getEventImage()%>" target="_self">
+                        <img id="img_<%=rec.getId()%>" src="<%= SWBPortal.getWebWorkPath()+rec.getEventImage() %>" alt="<%= rec.getTitle() %>" border="0" />
                     </a><br />
                     <input type="file" id="foto" name="foto" size="60" />
                 </p>

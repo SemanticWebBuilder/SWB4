@@ -78,7 +78,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
                         String photo = obj.getProperty(swbcomm_dirPhoto);
                         if(photo != null && !photo.equals("null")) {
                         %>
-                            <img height="90" width="90" src="<%=SWBPlatform.getWebWorkPath()+c.getDirectoryResource().getWorkPath()+"/"+obj.getId()+"/"+photo%>"/>
+                            <img height="90" width="90" src="<%=SWBPortal.getWebWorkPath()+c.getDirectoryResource().getWorkPath()+"/"+obj.getId()+"/"+photo%>"/>
                         <%
                         } else {
                         %>

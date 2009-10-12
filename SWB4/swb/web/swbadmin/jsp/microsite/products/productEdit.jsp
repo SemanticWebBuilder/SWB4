@@ -39,7 +39,7 @@
         String bigPhoto=rec.getSmallPhoto();
 
         if(smallPhoto!=null){
-            String basepath = SWBPlatform.getWebWorkPath() + "/models/" + website.getId() + "/Resource/" + base.getId() + "/products/" + semObject.getId() + "/" + smallPhoto;
+            String basepath = SWBPortal.getWebWorkPath() + "/models/" + website.getId() + "/Resource/" + base.getId() + "/products/" + semObject.getId() + "/" + smallPhoto;
             request.setAttribute("attach_1", basepath);
             request.setAttribute("attachTarget_1", "blank");
             request.setAttribute("attachCount", "1");

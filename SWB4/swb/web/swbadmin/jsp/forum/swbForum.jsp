@@ -16,6 +16,7 @@
 <%@page import="org.semanticwb.portal.resources.sem.forum.Attachment"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page import="org.semanticwb.SWBPlatform"%>
+<%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="org.semanticwb.model.SWBModel"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page import="org.semanticwb.portal.SWBFormButton"%>
@@ -112,7 +113,7 @@ a:hover {text-decoration: underline;}
                     if (post.getCreator() != null) {
                         userPost = post.getCreator();
                         postCreator = post.getCreator().getFullName();
-                        if(post.getCreator().getPhoto()!=null) photo=SWBPlatform.getWebWorkPath()+post.getCreator().getPhoto();
+                        if(post.getCreator().getPhoto()!=null) photo=SWBPortal.getWebWorkPath()+post.getCreator().getPhoto();
                     }
                     String rowClass = "pluginRow2";
                     if (!cambiaColor) {

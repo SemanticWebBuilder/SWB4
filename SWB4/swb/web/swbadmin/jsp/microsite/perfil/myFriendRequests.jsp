@@ -2,6 +2,7 @@
 <%@page import="org.semanticwb.model.User"%>
 <%@page import="org.semanticwb.portal.community.*"%>
 <%@page import="org.semanticwb.model.*"%>
+<%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="java.util.*"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
@@ -52,7 +53,7 @@
                     User userRequested = friendshipProspect.getFriendShipRequested();
                     if (userRequested.getPhoto() != null)
                     {
-                        photo = SWBPlatform.getWebWorkPath() + userRequested.getPhoto();
+                        photo = SWBPortal.getWebWorkPath() + userRequested.getPhoto();
                     }
                     urlAction.setParameter("user", userRequested.getURI());
                     if (!isStrategy)

@@ -5,6 +5,7 @@
 <%@page import="java.util.*"%>
 <%@page import="java.text.*"%>
 <%@page import="org.semanticwb.platform.*"%>
+<%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="org.semanticwb.portal.community.*"%>
 <%@page import="org.semanticwb.portal.SWBFormMgr"%>
@@ -172,7 +173,7 @@ url.setParameter("uri", sobj.getURI());
         <%
         //Termina paginación
         //Comienza criterios de busqueda y ordenamiento (x los elementos que el usuario puede filtrar en sus busquedas, dependiendo del tipo de objeto)
-        SWBResourceURL urlOrder=paramRequest.getRenderUrl();
+        SWBResourceURL urlOrder = paramRequest.getRenderUrl();
         String dirPhotoCheck="";
         if(request.getParameter("dirPhoto")!=null) dirPhotoCheck="checked";
         %>
@@ -253,7 +254,7 @@ url.setParameter("uri", sobj.getURI());
                    if(propValue!=null && !propValue.equals("null")){
                         if(semProp==DirectoryObject.swbcomm_dirPhoto)
                         {
-                            img="<img src=\""+SWBPlatform.getWebWorkPath()+base.getWorkPath()+"/"+semObject.getId()+"/"+propValue+ "\" width=\"90\" height=\"90\">";
+                            img="<img src=\""+SWBPortal.getWebWorkPath()+base.getWorkPath()+"/"+semObject.getId()+"/"+propValue+ "\" width=\"90\" height=\"90\">";
                         }if(semProp==DirectoryObject.swb_title) {
                              title=propValue;
                         }else if(semProp==DirectoryObject.swb_description){

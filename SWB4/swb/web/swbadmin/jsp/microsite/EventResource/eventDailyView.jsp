@@ -48,7 +48,7 @@
 %>
     <div class="entry">
         <a href="<%=viewUrl%>">
-            <img src="<%= SWBPlatform.getWebWorkPath()+event.getEventThumbnail()%>" alt="<%=event.getDescription()%>" border="0" />
+            <img src="<%= SWBPortal.getWebWorkPath()+event.getEventThumbnail()%>" alt="<%=event.getDescription()%>" border="0" />
         </a>
         <div class="entryInfo">
             <p class="tituloNaranja"><%= event.getTitle()%></p>

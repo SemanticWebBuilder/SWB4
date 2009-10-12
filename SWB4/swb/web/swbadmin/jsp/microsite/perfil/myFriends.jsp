@@ -3,6 +3,7 @@
 <%@page import="org.semanticwb.portal.community.*"%>
 <%@page import="org.semanticwb.model.WebPage"%>
 <%@page import="java.util.*"%>
+<%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="org.semanticwb.platform.*"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
@@ -70,7 +71,7 @@
                          if(friendUser.getPhoto()!=null) photo=friendUser.getPhoto();                         
                          %>
                             <div class="moreUser">
-                            <a href="<%=perfilPath%>?user=<%=friendUser.getEncodedURI()%>"><img alt="Foto de <%=friendUser.getFullName()%>" src="<%=SWBPlatform.getWebWorkPath()+photo%>" <%=imgSize%> title="<%=friendUser.getFullName()%>">
+                            <a href="<%=perfilPath%>?user=<%=friendUser.getEncodedURI()%>"><img alt="Foto de <%=friendUser.getFullName()%>" src="<%=SWBPortal.getWebWorkPath()+photo%>" <%=imgSize%> title="<%=friendUser.getFullName()%>">
                             <%if(!isStrategy){%>
                                 <br>
                                 <%=firstName%>
@@ -148,7 +149,7 @@ else
                          %>
                          
                         <div class="profilePic" onMouseOver="this.className='profilePicHover'" onMouseOut="this.className='profilePic'">
-                    <img src="<%=SWBPlatform.getWebWorkPath()+photo%>" width="150" height="150" alt="Foto de <%=friendUser.getFullName()%>" />
+                    <img src="<%=SWBPortal.getWebWorkPath()+photo%>" width="150" height="150" alt="Foto de <%=friendUser.getFullName()%>" />
                     <p><a class="contactos_nombre" href="/swb/Ciudad_Digital/perfil?user=http%3A%2F%2Fuser.Ciudad_Digital.swb%23swb_User%3A5"><%=friendUser.getFullName()%></a></p>
                     <p>Edad: <%=usr_age%></p>
                     <p>Sexo: <%=usr_sex%></p>

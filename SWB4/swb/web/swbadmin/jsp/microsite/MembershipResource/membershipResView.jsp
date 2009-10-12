@@ -32,7 +32,7 @@
 
     if(site.getPhoto()!=null)
     {
-        pathPhoto=SWBPlatform.getContextPath()+SWBPlatform.getWebWorkPath()+site.getPhoto();
+        pathPhoto=SWBPortal.getContextPath()+SWBPortal.getWebWorkPath()+site.getPhoto();
     }
 
 
