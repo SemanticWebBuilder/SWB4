@@ -65,7 +65,7 @@
             Proceso Instance:<%=pi.getId()%> status:<%=pi.getStatus()%><br/>
 <%
 
-            Iterator<TaskInstance> utkit=SWBProcessMgr.getTaskInstances(pi, user).iterator();
+            Iterator<TaskInstance> utkit=SWBProcessMgr.getUserTaskInstances(pi, user).iterator();
             while(utkit.hasNext())
             {
                 TaskInstance tkinst =  utkit.next();

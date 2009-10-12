@@ -46,7 +46,7 @@
 
 <div class="entry">
     <a href="<%= viewUrl%>">
-        <img src="<%= SWBPlatform.getWebWorkPath()+anew.getNewsThumbnail() %>" alt="<%= anew.getTitle()%>" border="0" />
+        <img src="<%= SWBPortal.getWebWorkPath()+anew.getNewsThumbnail() %>" alt="<%= anew.getTitle()%>" border="0" />
     </a>
     <div class="entryInfo">
         <p class="tituloNaranja"><%= anew.getTitle()%>&nbsp;(<%= anew.getCitation()%>)</p>

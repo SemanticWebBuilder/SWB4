@@ -38,7 +38,7 @@
     %>
     <div class="entry">
         <a href="<%=viewurl%>">
-            <img src="<%=SWBPlatform.getWebWorkPath() + event.getEventThumbnail()%>" alt="<%= event.getTitle()%>" border="0" />
+            <img src="<%=SWBPortal.getWebWorkPath() + event.getEventThumbnail()%>" alt="<%= event.getTitle()%>" border="0" />
         </a>
         <div class="entryInfo">
             <p><%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%></p>

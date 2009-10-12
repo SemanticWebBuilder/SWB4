@@ -16,7 +16,7 @@
         if(rec!=null)
         {
             SWBResourceURL viewurl=paramRequest.getRenderUrl().setParameter("act","detail").setParameter("uri",rec.getURI());
-            String basepath = SWBPlatform.getWebWorkPath() + "/models/" + website.getId() + "/Resource/" + base.getId() + "/products/" + rec.getId() + "/";
+            String basepath = SWBPortal.getWebWorkPath() + "/models/" + website.getId() + "/Resource/" + base.getId() + "/products/" + rec.getId() + "/";
 %>
       <table border="0" width="100%" cellspacing="10">
         <tr><td valign="top">

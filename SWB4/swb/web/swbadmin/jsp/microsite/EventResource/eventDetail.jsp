@@ -43,8 +43,8 @@
     <h2 class="tituloGrande"><%= event.getTitle()%></h2>
     <p class="tituloNaranja"><%= event.getAudienceType()%></p>
     <div id="imagenDetalle">
-        <a href="<%= SWBPlatform.getWebWorkPath()+event.getEventImage()%>" target="_self">
-            <img id="img_<%=event.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+event.getEventImage()%>" alt="<%=event.getTitle()%>" border="0" width="380" height="100%" />
+        <a href="<%= SWBPortal.getWebWorkPath()+event.getEventImage()%>" target="_self">
+            <img id="img_<%=event.getId()%>" src="<%= SWBPortal.getWebWorkPath()+event.getEventImage()%>" alt="<%=event.getTitle()%>" border="0" width="380" height="100%" />
         </a>
     </div>
     <p class="fotoInfo">Fecha: <%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%> | <span class="linkNaranja"><%= event.getViews()%> Vistas</span></p>

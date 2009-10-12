@@ -59,8 +59,8 @@
                 SWBResourceURL viewurl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", photo.getURI());
 %>
             <div class="entry_listadoFotos">
-                <a dojoType="dojox.image.Lightbox" title="<%= photo.getTitle()%>" href="<%= SWBPlatform.getWebWorkPath()+photo.getImageURL()%>">
-                    <img id="img_<%=i+base.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+photo.getPhotoThumbnail()%>" alt="<%= photo.getTitle()%>" border="0" />
+                <a dojoType="dojox.image.Lightbox" title="<%= photo.getTitle()%>" href="<%= SWBPortal.getWebWorkPath()+photo.getImageURL()%>">
+                    <img id="img_<%=i+base.getId()%>" src="<%= SWBPortal.getWebWorkPath()+photo.getPhotoThumbnail()%>" alt="<%= photo.getTitle()%>" border="0" />
                 </a>
                 <a href="<%=viewurl%>"></a>
                 <p class="tituloFoto"><%= photo.getTitle()%></p>

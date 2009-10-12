@@ -5,6 +5,7 @@
 <%@page import="java.util.*"%>
 <%@page import="org.semanticwb.model.*"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
+<%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="org.semanticwb.platform.*"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
@@ -25,7 +26,7 @@ String registryPath=base.getAttribute("registryPath","");
 String attributes=base.getAttribute("attributes","");
 
  String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
- if(user.getPhoto()!=null) photo=SWBPlatform.getWebWorkPath()+user.getPhoto();
+ if(user.getPhoto()!=null) photo=SWBPortal.getWebWorkPath()+user.getPhoto();
  %>
  <img src="<%=photo%>" width="150" height="150" alt="<%=user.getFullName()%>" valign="top"/><br>
  <%if(owner.equals(user)){%>

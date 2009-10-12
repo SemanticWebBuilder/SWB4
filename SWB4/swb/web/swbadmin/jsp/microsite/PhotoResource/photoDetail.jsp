@@ -29,9 +29,9 @@
 <div id="detalleFoto">
     <h2 class="tituloGrande"><%= photo.getTitle()%></h2>
     <div class="entry_listadoFotos">
-        <!-- <a dojoType="dojox.image.Lightbox" title="<%= photo.getTitle()%>" href="<%= SWBPlatform.getWebWorkPath()+photo.getImageURL()%>"> -->
-        <a href="<%= SWBPlatform.getWebWorkPath()+photo.getImageURL() %>" title="<%=photo.getTitle()%>">
-            <img id="img_<%=photo.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+photo.getImageURL() %>" alt="<%= photo.getTitle() %>" border="0" width="300" height="100%" />
+        <!-- <a dojoType="dojox.image.Lightbox" title="<%= photo.getTitle()%>" href="<%= SWBPortal.getWebWorkPath()+photo.getImageURL()%>"> -->
+        <a href="<%= SWBPortal.getWebWorkPath()+photo.getImageURL() %>" title="<%=photo.getTitle()%>">
+            <img id="img_<%=photo.getId()%>" src="<%= SWBPortal.getWebWorkPath()+photo.getImageURL() %>" alt="<%= photo.getTitle() %>" border="0" width="300" height="100%" />
             </a>
         <!-- </a>                  -->
     </div>

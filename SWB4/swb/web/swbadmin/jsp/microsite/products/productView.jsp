@@ -21,7 +21,7 @@
         if(product.canView(member))
         {
             if(i%2==0)out.println("<tr>");
-            String basepath = SWBPlatform.getWebWorkPath() + "/models/" + website.getId() + "/Resource/" + base.getId() + "/products/" + product.getId() + "/";
+            String basepath = SWBPortal.getWebWorkPath() + "/models/" + website.getId() + "/Resource/" + base.getId() + "/products/" + product.getId() + "/";
 %>
     <td width="50%" valign="top">
       <table border="0" width="100%" cellspacing="10">

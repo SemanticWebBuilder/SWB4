@@ -76,8 +76,8 @@
         <div>
             <p>
                 <label for="new_image">Imagen de la noticia:&nbsp;</label>
-                <a href="<%= SWBPlatform.getWebWorkPath()+rec.getNewsImage()%>" target="_self">
-                    <img id="img_<%=rec.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+rec.getNewsImage() %>" alt="<%= rec.getTitle() %>" border="0" />
+                <a href="<%= SWBPortal.getWebWorkPath()+rec.getNewsImage()%>" target="_self">
+                    <img id="img_<%=rec.getId()%>" src="<%= SWBPortal.getWebWorkPath()+rec.getNewsImage() %>" alt="<%= rec.getTitle() %>" border="0" />
                 </a><br />
                 <input type="file" id="foto" name="foto" size="60" />
             </p>

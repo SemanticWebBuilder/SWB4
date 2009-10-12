@@ -5,6 +5,7 @@
         <%@page import="java.util.*"%>
         <%@page import="org.semanticwb.platform.SemanticObject"%>
         <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
+        <%@page import="org.semanticwb.SWBPortal"%>
         <%@page import="org.semanticwb.SWBPlatform"%>
         <%@page import="org.semanticwb.model.*"%>
 
@@ -34,7 +35,7 @@
             %>
                 <td>
                     <div class="moreUser">
-                        <p class="titulo"><a href="<%=perfilPath%>?user=<%=userprosp.getEncodedURI()%>"><img src="<%=SWBPlatform.getWebWorkPath()+photo%>" valign="top" width="80" height="70"/><br><%=userprosp.getFullName()%></a></p>
+                        <p class="titulo"><a href="<%=perfilPath%>?user=<%=userprosp.getEncodedURI()%>"><img src="<%=SWBPortal.getWebWorkPath()+photo%>" valign="top" width="80" height="70"/><br><%=userprosp.getFullName()%></a></p>
                     </div>
                </td>
             <%
