@@ -1,4 +1,4 @@
-<%@page import="java.net.URLEncoder, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty, java.text.SimpleDateFormat, org.semanticwb.portal.resources.sem.BookmarkEntry, org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<%@page import="java.net.URLEncoder, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticClass, org.semanticwb.platform.SemanticProperty, java.text.SimpleDateFormat, org.semanticwb.portal.resources.sem.BookmarkEntry, org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%
     SemanticProperty swbcomm_dirPhoto = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#dirPhoto");
     SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
@@ -79,23 +79,64 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
                         String photo = obj.getProperty(swbcomm_dirPhoto);
                         if(photo != null && !photo.equals("null")) {
                         %>
-                            <img height="90" width="90" src="<%=SWBPortal.getWebWorkPath()+c.getDirectoryResource().getWorkPath()+"/"+obj.getId()+"/"+photo%>">
+                            <img height="95" width="95" src="<%=SWBPortal.getWebWorkPath()+c.getDirectoryResource().getWorkPath()+"/"+obj.getId()+"/"+photo%>">
                         <%
                         } else {
                         %>
-                            <img height="90" width="90" src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/noDisponible.gif">
+                            <img height="95" width="95" src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/noDisponible.gif">
                         <%
                         }
                         %>
                         <div class="listEntryInfo">
                             <p class="tituloNaranja"><!--a href ="%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>"--><%=c.getTitle()%>&nbsp;(<%=obj.getSemanticClass().getDisplayName("es")%>)<!--/a--></p>
+                            <!--p>
+                                <!--%=c.getWebPage().getPath(map)%>
+                            </p-->
                             <p>
-                                <%=c.getWebPage().getPath(map)%>
+                                <b><%=(c.getDescription()==null)?"":c.getDescription()%></b>
                             </p>
-                            <p>
-                                <%=(c.getDescription()==null)?"":c.getDescription()%>
-                            </p>
-                            <br>
+                            <%
+                            if (obj.instanceOf(Addressable.swbcomm_Addressable)) {
+                                SemanticClass obclass = obj.getSemanticClass();
+                                String streetName = obj.getProperty(obclass.getProperty("streetName"));
+                                String extNumber = obj.getProperty(obclass.getProperty("extNumber"));
+                                String intNumber = obj.getProperty(obclass.getProperty("intNumber"));
+                                String cityCouncil = obj.getProperty(obclass.getProperty("cityCouncil"));
+                                String city = obj.getProperty(obclass.getProperty("city"));
+                                String state = obj.getProperty(obclass.getProperty("state"));
+
+                                String street = (streetName!=null?streetName:"") + (extNumber!=null?" " + extNumber:"") +
+                                        (intNumber!=null?" int. " + intNumber:"");
+                                %>
+                                <p>
+                                    <%=(street==null)?"":street%>
+                                </p>
+                                <p>
+                                    <%=(cityCouncil==null)?"":cityCouncil%>
+                                </p>
+                                <p>
+                                    <%=(city==null)?"":city%>
+                                </p>
+                                <p>
+                                    <%=(state==null)?"":state%>
+                                </p>
+                                <%
+                            }
+                        
+                            if (obj.instanceOf(Contactable.swbcomm_Contactable)) {
+                                SemanticClass obclass = obj.getSemanticClass();
+                                String email = obj.getProperty(obclass.getProperty("contactEmail"));
+                                String phone = obj.getProperty(obclass.getProperty("contactPhoneNumber"));
+                                %>
+                                <p>
+                                    <%=(phone==null)?"":phone%>
+                                </p>
+                                <p>
+                                    <%=(email==null)?"":email%>
+                                </p>
+                                <%
+                            }
+                            %>
                             <!--p>-Palabras clave:%=c.getTags()%></p-->
                             <p class="vermas"><a href ="<%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>">Ver mas</a></p>
                         </div>
