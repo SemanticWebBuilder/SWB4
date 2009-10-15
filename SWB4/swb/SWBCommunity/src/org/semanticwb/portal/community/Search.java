@@ -196,7 +196,7 @@ public class Search extends GenericAdmResource {
 
             //Get what to search
             String wh = "";
-            if (request.getParameter("what") != null && !request.getParameter("what").equals("Todo")) {
+            if (request.getParameter("what") != null && !request.getParameter("what").trim().equals("")) {
                 wh = request.getParameter("what");
             }
 
