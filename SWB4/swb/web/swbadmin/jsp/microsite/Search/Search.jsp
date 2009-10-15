@@ -58,10 +58,11 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
         <div class="entriesList">
         <%
             while(it.hasNext()) {
+                String r = it.next();
+                if (r == null || r.equals("null")) continue;
         %>
                 <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
                 <%
-                    String r = it.next();
                     SemanticObject obj = SemanticObject.createSemanticObject(r);
                     if (obj.instanceOf(WebPage.sclass)) {
                         WebPage wp = (WebPage) obj.createGenericInstance();
@@ -78,11 +79,11 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
                         String photo = obj.getProperty(swbcomm_dirPhoto);
                         if(photo != null && !photo.equals("null")) {
                         %>
-                            <img height="90" width="90" src="<%=SWBPortal.getWebWorkPath()+c.getDirectoryResource().getWorkPath()+"/"+obj.getId()+"/"+photo%>"/>
+                            <img height="90" width="90" src="<%=SWBPortal.getWebWorkPath()+c.getDirectoryResource().getWorkPath()+"/"+obj.getId()+"/"+photo%>">
                         <%
                         } else {
                         %>
-                            <img height="90" width="90" src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/noDisponible.gif"/>
+                            <img height="90" width="90" src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/noDisponible.gif">
                         <%
                         }
                         %>
@@ -94,7 +95,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
                             <p>
                                 <%=(c.getDescription()==null)?"":c.getDescription()%>
                             </p>
-                            <br/>
+                            <br>
                             <!--p>-Palabras clave:%=c.getTags()%></p-->
                             <p class="vermas"><a href ="<%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>">Ver mas</a></p>
                         </div>
@@ -103,10 +104,11 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
                     }
                     %>
                 </div>
+                <div class="listEntry"> </div>
                 <%
             }
             %>
-            <div class ="listEntry"></div>
+            </div>
             <p align="center">
             <%
                 if (pageNumber - 1 >= 1) {
@@ -138,8 +140,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
                     <%
                 }
             %>
-            </p>
-        </div>
+            </p>        
         <%
     } else {
     %>
