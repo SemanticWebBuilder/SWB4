@@ -302,17 +302,27 @@ public class Search extends GenericAdmResource {
                 //Create query for 'types' field (what to search for)
                 qp = new QueryParser("types", new LocaleAnalyzer());
                 org.apache.lucene.search.Query q4 = qp.parse(what);
-                
+
+                //System.out.println("---->Searching for: " + bq.toString() + " with filter " + q4.toString());
                 hits = searcher.search(bq, new QueryFilter(q4));
             } else {
+                //System.out.println("---->Searching for: " + bq.toString() + " without filter");
                 hits = searcher.search(bq);
             }
             //System.out.println("[Searching for \"" + query +"\" in \"" + fName + "\"] -> " + q.toString());
 
-            //System.out.println("..."+hits.length() + " hits");
             for (int i =0; i<hits.length(); i++) {
                 Document doc = hits.doc(i);
-                res.add(doc.get("uri"));
+                String uri = doc.get("uri");
+                /*System.out.println("...Document ...");
+                Iterator<Field> fds = doc.getFields().iterator();
+                while (fds.hasNext()) {
+                    Field f = fds.next();
+                    System.out.println(".." + f.name() + "=" + f.stringValue());
+                }*/
+                if (uri != null && !uri.equals("null")) {
+                    res.add(uri);
+                }
             }
         } catch (Exception ex) {
             log.error(ex);
