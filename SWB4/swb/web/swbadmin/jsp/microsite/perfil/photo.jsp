@@ -25,7 +25,7 @@ Resource base=paramRequest.getResourceBase();
 String registryPath=base.getAttribute("registryPath","");
 String attributes=base.getAttribute("attributes","");
 
- String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
+ String photo=SWBPortal.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
  if(user.getPhoto()!=null) photo=SWBPortal.getWebWorkPath()+user.getPhoto();
  %>
  <img src="<%=photo%>" width="150" height="150" alt="<%=user.getFullName()%>" valign="top"/><br>
