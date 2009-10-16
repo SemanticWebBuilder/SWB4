@@ -26,7 +26,7 @@ import org.semanticwb.model.User
 import org.semanticwb.model.WebPage
 import org.semanticwb.portal.community.Member
 import org.semanticwb.portal.community.MicroSite
-import org.semanticwb.SWBPlatform
+import org.semanticwb.SWBPortal
 
 
 def paramRequest=request.getAttribute("paramRequest")
@@ -50,7 +50,7 @@ lista.each(){
     if (null!=mem_mcs){
         def titulo = mem_mcs.getDisplayName()
         def url = mem_mcs.getUrl()
-        def urlimg=SWBPlatform.getWebWorkPath()+"/models/"+ paramRequest.getWebPage().getWebSiteId()  +"/css/boton_contacto.png"
+        def urlimg=SWBPortal.getWebWorkPath()+"/models/"+ paramRequest.getWebPage().getWebSiteId()  +"/css/boton_contacto.png"
         println """<li><a class="contactos_nombre" href="${url}"><img src="${urlimg}" alt="Ir a Nombre de la empresa"></a><a class="contactos_nombre" href="${url}">$titulo</a></li>"""
     }
 }
