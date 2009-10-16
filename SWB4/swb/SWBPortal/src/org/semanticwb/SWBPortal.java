@@ -583,6 +583,8 @@ public class SWBPortal
 //            loadRemoteModel("Books", "http://www.sparql.org/books", "http://example.org/book/",false);
 //        }
 
+        //TODO agregar RDFa
+
         SWBPlatform.getSemanticMgr().getOntology().rebind();
     }
 
