@@ -1,7 +1,7 @@
 <%@page import="java.text.*,java.net.*,org.semanticwb.platform.SemanticObject,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*" %>
 <%
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
-            String webpath = SWBPlatform.getContextPath() + "/swbadmin/jsp/microsite/LastMicrositeElements/";
+            String webpath = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/LastMicrositeElements/";
             String defaultFormat = "dd/MM/yyyy HH:mm";
             SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
             ArrayList<MicroSiteElement> elements = (ArrayList<MicroSiteElement>) request.getAttribute("elements");
