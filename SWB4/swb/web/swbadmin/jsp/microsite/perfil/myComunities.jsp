@@ -2,7 +2,7 @@
 <%@page import="org.semanticwb.model.User"%>
 <%@page import="org.semanticwb.portal.community.*"%>
 <%@page import="org.semanticwb.model.*"%>
-<%@page import="org.semanticwb.SWBPlatform"%>
+<%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="java.util.*"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%
