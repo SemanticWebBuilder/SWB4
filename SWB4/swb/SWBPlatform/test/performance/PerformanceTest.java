@@ -38,8 +38,6 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.platform.SemanticClass;
-import org.semanticwb.platform.SemanticModel;
-import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.platform.SemanticVocabulary;
@@ -59,7 +57,15 @@ public class PerformanceTest
     @BeforeClass
     public static void setUpClass() throws Exception
     {
-        SWBPlatform.createInstance(null);
+        String base=SWBUtils.getApplicationPath();
+        SWBPlatform.createInstance();
+        SWBPlatform.getSemanticMgr().initializeDB();
+        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/swb.owl");
+        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/swb_rep.owl");
+        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/office.owl");
+        SWBPlatform.getSemanticMgr().loadBaseVocabulary();
+        SWBPlatform.getSemanticMgr().loadDBModels();
+        SWBPlatform.getSemanticMgr().getOntology().rebind();
     }
 
     @AfterClass
