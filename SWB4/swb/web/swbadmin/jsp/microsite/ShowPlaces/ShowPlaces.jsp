@@ -19,7 +19,7 @@
         path="/work"+path;                
         /*try
         {
-            InputStream in=SWBPlatform.getFileFromWorkPath(path);
+            InputStream in=SWBPortal.getFileFromWorkPath(path);
             if(in==null)
             {
                 path="/work/models/"+ webpage.getWebSiteId() +"/css/iconos/default.png";;                
