@@ -4,7 +4,6 @@
 <%@page import="org.semanticwb.portal.community.*"%>
 <%@page import="java.util.*"%>
 <%@page import="org.semanticwb.SWBPortal"%>
-<%@page import="org.semanticwb.SWBPlatform"%>
 
 <%
         WebPage wpage=paramRequest.getWebPage();
@@ -57,7 +56,7 @@
                 isStrategy=true;
                 imgSize="width=\"39\" height=\"39\"";
             }
-            String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
+            String photo=SWBPortal.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
             String firstName="", lastName="";
             int contTot=0;
             Iterator <User>itCommonFriends=acommonFriends.iterator();

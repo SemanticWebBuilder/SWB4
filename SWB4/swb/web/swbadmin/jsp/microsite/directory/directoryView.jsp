@@ -7,6 +7,7 @@
 <%@page import="org.semanticwb.platform.*"%>
 <%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="org.semanticwb.SWBPlatform"%>
+<%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="org.semanticwb.portal.community.*"%>
 <%@page import="org.semanticwb.portal.SWBFormMgr"%>
 
@@ -281,7 +282,7 @@ url.setParameter("uri", sobj.getURI());
             }
             %>
               <div class="listEntry" onmouseover="this.className='listEntryHover'" onmouseout="this.className='listEntry'">
-              <%if(!img.equals("")){%><%=img%><%}else{%><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/noDisponible.gif" /><%}%>
+              <%if(!img.equals("")){%><%=img%><%}else{%><img src="<%=SWBPortal.getContextPath()%>/swbadmin/images/noDisponible.gif" /><%}%>
               <div class="listEntryInfo">
                     <p class="tituloNaranja">
                         <%=title%>
@@ -314,7 +315,7 @@ url.setParameter("uri", sobj.getURI());
             if(!exist){
                 %>
                 <div class="listEntry" onmouseover="this.className='listEntryHover'" onmouseout="this.className='listEntry'">
-                    <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/anunciate.gif">
+                    <img src="<%=SWBPortal.getContextPath()%>/swbadmin/images/anunciate.gif">
                     <div class="listEntryInfo">
                         <p class="tituloNaranja">
                             Título de tu anuncio

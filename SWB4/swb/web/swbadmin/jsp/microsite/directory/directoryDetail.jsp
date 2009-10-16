@@ -13,7 +13,7 @@
 <%@page import="java.util.StringTokenizer"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
-<%@page import="org.semanticwb.SWBPlatform"%>
+<%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="org.semanticwb.platform.SemanticProperty"%>
 <%@page import="org.semanticwb.model.*"%>
 <%@page import="org.semanticwb.SWBPortal"%>
@@ -67,9 +67,9 @@
     String imggalery=null;
     if(sImgs.length>0){
         imggalery=SWBPortal.UTIL.getGalleryScript(sImgs);
-        //imggalery="<img src=\""+SWBPlatform.getContextPath()+"/swbadmin/images/noDisponible.gif\"/>";
+        //imggalery="<img src=\""+SWBPortal.getContextPath()+"/swbadmin/images/noDisponible.gif\"/>";
     }else{
-        imggalery="<img src=\""+SWBPlatform.getContextPath()+"/swbadmin/images/noDisponible.gif\"/>";
+        imggalery="<img src=\""+SWBPortal.getContextPath()+"/swbadmin/images/noDisponible.gif\"/>";
     }
     String title=semObject.getProperty(dirObj.swb_title);
     String description=semObject.getProperty(dirObj.swb_description);
