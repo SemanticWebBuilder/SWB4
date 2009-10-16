@@ -22,6 +22,7 @@
 **/
 import org.semanticwb.model.User
 import org.semanticwb.SWBPlatform
+import org.semanticwb.SWBPortal
 import org.semanticwb.model.WebPage
 import org.semanticwb.model.DisplayProperty
 import org.semanticwb.portal.api.SWBResourceURL
@@ -76,7 +77,7 @@ if (null==longitude) longitude = "-101.77734"
 def geoStep = user.getExtendedAttribute(mapa.get("geoStep"))
 if (null==geoStep) geoStep = "4"
 
-def key = SWBPlatform.getEnv("key/gmap","")
+def key = SWBPortal.getEnv("key/gmap","")
 
 def usr_doings = user.getExtendedAttribute(mapa.get("userDoings"))
 if (null==usr_doings) usr_doings = ""
