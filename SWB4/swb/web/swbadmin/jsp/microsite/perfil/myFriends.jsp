@@ -4,7 +4,6 @@
 <%@page import="org.semanticwb.model.WebPage"%>
 <%@page import="java.util.*"%>
 <%@page import="org.semanticwb.SWBPortal"%>
-<%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="org.semanticwb.platform.*"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
@@ -40,7 +39,7 @@
         if(!user.isRegistered()) return;
         List<GeoLocation> lista = new ArrayList<GeoLocation>();
         WebPage wpage=paramRequest.getWebPage();
-        String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
+        String photo=SWBPortal.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
         if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY)
         {
         String imgSize="width=\"80\" height=\"70\"";
@@ -163,7 +162,7 @@ else
     %>
             </div><div class="clear">&nbsp;</div><h2> Ubicaci&oacute;n de mis amigos</h2>
             <div id="map_canvas" style="width: 480px; height: 300px; float: left"></div>
-            <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<%=SWBPlatform.getEnv("key/gmap","")%>"
+            <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<%=SWBPortal.getEnv("key/gmap","")%>"
             type="text/javascript"></script>
     <script type="text/javascript">
 

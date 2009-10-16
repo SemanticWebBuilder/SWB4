@@ -3,7 +3,6 @@
 <%@page import="org.semanticwb.portal.community.*"%>
 <%@page import="org.semanticwb.model.*"%>
 <%@page import="org.semanticwb.SWBPortal"%>
-<%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="java.util.*"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
@@ -27,7 +26,7 @@
 
             String perfilPath = paramRequest.getWebPage().getWebSite().getWebPage("perfil").getUrl();
             String requesterPath = paramRequest.getWebPage().getWebSite().getWebPage("mis_invitaciones").getUrl();
-            String photo = SWBPlatform.getContextPath() + "/swbadmin/images/defaultPhoto.jpg";
+            String photo = SWBPortal.getContextPath() + "/swbadmin/images/defaultPhoto.jpg";
             boolean isStrategy = false;
             if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY)
             {

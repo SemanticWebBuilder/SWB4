@@ -6,7 +6,6 @@
         <%@page import="org.semanticwb.platform.SemanticObject"%>
         <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
         <%@page import="org.semanticwb.SWBPortal"%>
-        <%@page import="org.semanticwb.SWBPlatform"%>
         <%@page import="org.semanticwb.model.*"%>
 
         <div class="miembros">
@@ -17,7 +16,7 @@
         String perfilPath=paramRequest.getWebPage().getWebSite().getWebPage("perfil").getUrl();
 
         SWBResourceURL urlAction=paramRequest.getActionUrl();
-        String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
+        String photo=SWBPortal.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
 
         boolean flag=false;
         int cont=0;
