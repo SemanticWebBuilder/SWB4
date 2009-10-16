@@ -236,6 +236,39 @@ public class SemanticMgr implements SWBInstanceObject
         return model;
     }
 
+
+    /**
+     * Read remote RDFa Model from webpage
+     * @param url = url of remote HTML webpage
+     * @return RDF Model
+     */
+    public Model loadRDFaRemoteModel(String url)
+    {
+        return loadRDFaRemoteModel(url, "HTML");
+    }
+    /**
+     * Read remote RDFa Model from webpage
+     * @param url = url of remote webpage
+     * @param lang = "HTML" or "XHTML", default HTML
+     * @return RDF Model
+     */
+    public Model loadRDFaRemoteModel(String url, String lang)
+    {
+        Model model=null;
+        try
+        {
+            Class.forName("net.rootdev.javardfa.RDFaReader");
+            model = ModelFactory.createDefaultModel();
+            if(lang==null)lang="HTML";
+            model.read(url, lang);
+            log.info("-->Loading Remote RDFa Model:"+url);
+        }catch(Exception e)
+        {
+            log.warn("-->Can´t create remote RDFa model:"+url);
+        }
+        return model;
+    }
+
     public SemanticModel loadRemoteModel(String name, String uri, String baseNS, boolean add2Ontology)
     {
         SemanticModel m=null;
@@ -251,6 +284,26 @@ public class SemanticMgr implements SWBInstanceObject
             m_imodels.put(m.getRDFModel(), m);
             //System.out.println("addModel:"+name+" hash:"+m.getRDFModel().toString());
             if(add2Ontology)m_ontology.addSubModel(m,false);
+        }
+        return m;
+    }
+
+    public SemanticModel loadRemoteRDFaModel(String name, String url, String lang, boolean add2Ontology)
+    {
+        SemanticModel m=null;
+        Model model=loadRDFaRemoteModel(url,lang);
+        if(model!=null)
+        {
+            m=new SemanticModel(name, model);
+            //TODO
+//            m.setNameSpace(baseNS);
+//            //TODO:notify this
+//            m_models.put(name, m);
+//            m_nsmodels.put(baseNS, m);
+//            log.debug("Add NS:"+baseNS+" "+m.getName());
+//            m_imodels.put(m.getRDFModel(), m);
+//            //System.out.println("addModel:"+name+" hash:"+m.getRDFModel().toString());
+//            if(add2Ontology)m_ontology.addSubModel(m,false);
         }
         return m;
     }
