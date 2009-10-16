@@ -4,7 +4,7 @@
 <%@page import="org.semanticwb.model.WebPage"%>
 <%@page import="java.util.*"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
-<%@page import="org.semanticwb.SWBPlatform"%>
+<%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="org.semanticwb.platform.*"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%
