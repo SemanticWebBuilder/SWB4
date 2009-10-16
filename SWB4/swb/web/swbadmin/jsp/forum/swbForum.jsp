@@ -15,6 +15,7 @@
 <%@page import="org.semanticwb.portal.resources.sem.forum.Post"%>
 <%@page import="org.semanticwb.portal.resources.sem.forum.Attachment"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
+<%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="org.semanticwb.model.SWBModel"%>
