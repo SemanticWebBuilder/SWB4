@@ -26,7 +26,7 @@ import org.semanticwb.servlet.internal.UploadFormElement;
 * @version 1.0
 */
 
-public class DirectoryResource extends org.semanticwb.portal.community.base.DirectoryResourceBase 
+public class DirectoryResource extends org.semanticwb.portal.community.base.DirectoryResourceBase
 {
 
     private static Logger log = SWBUtils.getLogger(ProductResource.class);
@@ -44,14 +44,16 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         if(paramRequest.getAction().equals("excel")) response.setContentType("application/vnd.ms-excel");
-        
+
         String act = request.getParameter("act");
         if (act == null) {
             act = "view";
         }
 
         String path = "/swbadmin/jsp/microsite/directory/directoryView.jsp";
-        if (act.equals("add") && getAddJsp()==null) {
+        if(act.equals("view") && getListJsp()!=null) {
+            path = getListJsp();
+        }else if (act.equals("add") && getAddJsp()==null) {
             path = "/swbadmin/jsp/microsite/directory/directoryAdd.jsp";
         }else if (act.equals("add") && getAddJsp()!=null) {
             path = getAddJsp();
