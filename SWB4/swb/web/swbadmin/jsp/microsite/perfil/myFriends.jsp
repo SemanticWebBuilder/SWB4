@@ -176,39 +176,38 @@ else
             }
 
     function initialize() {
-      if (GBrowserIsCompatible()) {
-        var map = new GMap2(document.getElementById("map_canvas"));
-            map.addControl(new GSmallMapControl());
-            map.addControl(new GMapTypeControl());
-        var center = new GLatLng(<%=userLoc.getLatitude()%>, <%=userLoc.getLongitude()%>);
-        map.setCenter(center, <%=userLoc.getStep()-2%>);
-        var marker = new GMarker(center);
-        GEvent.addListener(marker, "click", function() {
-                var myHtml = "<b><%=userLoc.getName()%></b>";
-                map.openInfoWindowHtml(center, myHtml);
-            });
-        map.addOverlay(marker);
-        
-
-        
-
-        <%
-        Iterator<GeoLocation> listit = lista.iterator();
-        while (listit.hasNext()){
-            GeoLocation actual = listit.next();
-            %>
-            var pointer = new GLatLng(<%=actual.getLatitude()%>, <%=actual.getLongitude()%>);
-            map.addOverlay(createMarker(map, pointer, '<%=actual.getName()%>'));
+        if (GBrowserIsCompatible()) {
+            var map = new GMap2(document.getElementById("map_canvas"));
+                map.addControl(new GSmallMapControl());
+                map.addControl(new GMapTypeControl());
+            var bounds = new GLatLngBounds();
+            /*var center = new GLatLng(%=userLoc.getLatitude()%>, %=userLoc.getLongitude()%>);
+            map.setCenter(center, %=userLoc.getStep()-2%>);
+            var marker = new GMarker(center);
+            GEvent.addListener(marker, "click", function() {
+                    var myHtml = "<b>%=userLoc.getName()%></b>";
+                    map.openInfoWindowHtml(center, myHtml);
+                });
+            map.addOverlay(marker);*/
             <%
-        }
+            Iterator<GeoLocation> listit = lista.iterator();
+            while (listit.hasNext()){
+                GeoLocation actual = listit.next();
+                %>
+                var pointer = new GLatLng(<%=actual.getLatitude()%>, <%=actual.getLongitude()%>);
+                bounds.extend(pointer);
+                map.addOverlay(createMarker(map, pointer, '<%=actual.getName()%>'));
+                <%
+            }
         %>
-      }
+            map.setCenter(bounds.getCenter());
+            map.setZoom(map.getBoundsZoomLevel(bounds));
+        }
     }
-initialize();
+    initialize();
 
     </script>
             <%
-
 }
 %>
              
