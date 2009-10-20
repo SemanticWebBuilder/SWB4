@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class ClasifiedRealStateBase extends org.semanticwb.portal.community.ClasifiedBuySell implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.portal.community.Addressable,org.semanticwb.portal.community.Contactable,org.semanticwb.model.Geolocalizable
+public class ClasifiedRealStateBase extends org.semanticwb.portal.community.ClasifiedBuySell implements org.semanticwb.model.Traceable,org.semanticwb.portal.community.Addressable,org.semanticwb.model.Geolocalizable,org.semanticwb.model.Descriptiveable,org.semanticwb.portal.community.Contactable
 {
     public static final org.semanticwb.platform.SemanticProperty swbcomm_surface=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#surface");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_yearBuilt=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#yearBuilt");
@@ -81,6 +81,16 @@ public class ClasifiedRealStateBase extends org.semanticwb.portal.community.Clas
         getSemanticObject().setProperty(swbcomm_intNumber, value);
     }
 
+    public String getState()
+    {
+        return getSemanticObject().getProperty(swbcomm_state);
+    }
+
+    public void setState(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_state, value);
+    }
+
     public double getLatitude()
     {
         return getSemanticObject().getDoubleProperty(swb_latitude);
@@ -109,6 +119,16 @@ public class ClasifiedRealStateBase extends org.semanticwb.portal.community.Clas
     public void setStreetName(String value)
     {
         getSemanticObject().setProperty(swbcomm_streetName, value);
+    }
+
+    public String getCityCouncil()
+    {
+        return getSemanticObject().getProperty(swbcomm_cityCouncil);
+    }
+
+    public void setCityCouncil(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_cityCouncil, value);
     }
 
     public int getSurface()
