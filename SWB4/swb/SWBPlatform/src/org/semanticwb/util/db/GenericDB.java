@@ -69,7 +69,7 @@ public class GenericDB {
     //static final String SQL_TINYINT = "TINYINT";
     static final String SQL_SMALLINT = "SMALLINT";
     static final String SQL_INTEGER = "INTEGER";
-    //static final String SQL_BIGINT = "BIGINT";
+    static final String SQL_BIGINT = "BIGINT";
     //static final String SQL_REAL = "REAL";
     static final String SQL_FLOAT = "FLOAT";
     static final String SQL_DOUBLE = "DOUBLE";
@@ -786,7 +786,7 @@ public class GenericDB {
         hmSQLType = new HashMap();
 
         //hmSQLType.put(SQL_ARRAY, Integer.toString(java.sql.Types.ARRAY));
-        //hmSQLType.put(SQL_BIGINT, Integer.toString(java.sql.Types.BIGINT));
+        hmSQLType.put(SQL_BIGINT, Integer.toString(java.sql.Types.BIGINT));
         //hmSQLType.put(SQL_BINARY, Integer.toString(java.sql.Types.BINARY));
         hmSQLType.put(SQL_BIT, Integer.toString(java.sql.Types.BIT));
         hmSQLType.put(SQL_BLOB, Integer.toString(java.sql.Types.BLOB));
