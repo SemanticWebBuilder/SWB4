@@ -452,7 +452,7 @@ public class MainSurvey extends GenericResource
                     // Displays the survey and check if exists a responseid
                     if(s_responseid == null)
                     {
-                        if(!user.getId().substring(0,1).equals("0"))
+                        if(null!=user && !user.getId().substring(0,1).equals("0"))
                         {
                             // Gets a pending survey from this user
                             l_responseid = util.getPendingSurvey(user.getId(),base,objSur);
