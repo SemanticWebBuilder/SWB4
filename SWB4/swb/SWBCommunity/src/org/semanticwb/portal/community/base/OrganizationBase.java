@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class OrganizationBase extends org.semanticwb.portal.community.DirectoryObject implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.portal.community.Addressable,org.semanticwb.portal.community.Contactable,org.semanticwb.model.Geolocalizable
+public class OrganizationBase extends org.semanticwb.portal.community.DirectoryObject implements org.semanticwb.model.Traceable,org.semanticwb.portal.community.Addressable,org.semanticwb.model.Geolocalizable,org.semanticwb.model.Descriptiveable,org.semanticwb.portal.community.Contactable
 {
     public static final org.semanticwb.platform.SemanticProperty swbcomm_webSite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#webSite");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_serviceHours=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#serviceHours");
@@ -121,6 +121,16 @@ public class OrganizationBase extends org.semanticwb.portal.community.DirectoryO
         getSemanticObject().setProperty(swbcomm_serviceHours, value);
     }
 
+    public String getState()
+    {
+        return getSemanticObject().getProperty(swbcomm_state);
+    }
+
+    public void setState(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_state, value);
+    }
+
     public double getLatitude()
     {
         return getSemanticObject().getDoubleProperty(swb_latitude);
@@ -149,6 +159,16 @@ public class OrganizationBase extends org.semanticwb.portal.community.DirectoryO
     public void setStreetName(String value)
     {
         getSemanticObject().setProperty(swbcomm_streetName, value);
+    }
+
+    public String getCityCouncil()
+    {
+        return getSemanticObject().getProperty(swbcomm_cityCouncil);
+    }
+
+    public void setCityCouncil(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_cityCouncil, value);
     }
 
     public String getCity()
