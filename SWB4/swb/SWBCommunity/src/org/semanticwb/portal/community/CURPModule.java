@@ -22,7 +22,7 @@ public class CURPModule extends org.semanticwb.portal.community.base.CURPModuleB
                         "MORELOS", "NAYARIT", "NUEVO LEON", "OAXACA", "PUEBLA",
                         "QUERETARO", "QUINTANA ROO", "SAN LUIS POTOSI",
                         "SINALOA", "SONORA", "TABASCO", "TAMAULIPAS", "TLAXCALA",
-                        "VERACRUZ", "YUCATANs", "ZACATECAS"};
+                        "VERACRUZ", "YUCATAN", "ZACATECAS"};
 
         for (int i = 0; i < st.length; i++) {
             String string = st[i];
