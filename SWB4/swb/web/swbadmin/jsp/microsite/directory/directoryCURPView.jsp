@@ -15,6 +15,49 @@ private final int I_PAGE_SIZE = 20;
 <script type="text/javascript">
     dojo.require("dijit.form.FilteringSelect");
     dojo.require("dijit.form.Button");
+
+    //HashMap de estados y municipios
+    var statesHM = {
+	Set : function(foo,bar) {this[foo] = bar;},
+	Get : function(foo) {return this[foo];}
+    }
+
+   <%
+    //Agregar municipios del DF
+    Iterator<String> sname = CURPModule.listCouncils("distrito federal");
+    String keyVal = "";
+    while (sname.hasNext()) {
+        String n = sname.next();
+        keyVal += n;
+        if (sname.hasNext()) {
+           keyVal += "|";
+        }
+    }
+    %>statesHM.Set('DISTRITO FEDERAL', new String('<%=keyVal%>'));<%
+
+    //Agregar municipios de Morelos
+    sname = CURPModule.listCouncils("morelos");
+    keyVal = "";
+    while (sname.hasNext()) {
+        String n = sname.next();
+        keyVal += n;
+        if (sname.hasNext()) {
+           keyVal += "|";
+        }
+    }
+    %>statesHM.Set('MORELOS', new String('<%=keyVal%>'));<%
+%>
+
+    function updateChild(child, key) {
+        var inner = statesHM.Get(key).split("|");
+        var res = "";
+
+        for (i = 0; i < inner.length; i++) {
+            res += "<option value=\"" + inner[i] + "\">" + inner[i] + "</option>\n";
+        }
+        //alert(res);
+        dojo.byId(child).innerHTML = res;
+    }
 </script>
 
 <%
@@ -33,7 +76,7 @@ private final int I_PAGE_SIZE = 20;
 <form action="/es/renapo3/Busqueda">
     <fieldset>
         <legend>Busqueda por municipio</legend>
-        <select class="soria" dojoType="dijit.form.FilteringSelect" id="state" name="state" onchange="alert(document.getElementById('state').value)">
+        <select class="soria" id="state" name="state" onchange="updateChild('q', dojo.byId('state').value)">
             <%
                 Iterator<String> sit = CURPModule.listStates();
                 while (sit.hasNext()) {
@@ -42,16 +85,8 @@ private final int I_PAGE_SIZE = 20;
                 }
             %>
     </select>
-    <select class="soria" dojoType="dijit.form.FilteringSelect" name="q">
-        <%
-            Iterator<String> cit = CURPModule.listCouncils("distrito federal");
-            while (cit.hasNext()) {
-                String name = cit.next();
-                %><option value="<%=name%>"><%=name%></option><%
-            }
-        %>
-    </select>
-        <button dojoType="dijit.form.Button"type="submit" value="Buscar">Buscar</button>
+    <select class="soria" id="q" name="q"></select>
+        <button type="submit" value="Buscar">Buscar</button>
     </fieldset>
 </form>
 <div class="editarInfo1">
