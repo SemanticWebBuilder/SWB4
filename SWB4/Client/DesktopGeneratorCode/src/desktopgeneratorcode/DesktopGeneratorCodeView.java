@@ -672,11 +672,11 @@ public class DesktopGeneratorCodeView extends FrameView
             JOptionPane.showMessageDialog(this.getFrame(), "!Debe indicar una ubicación para generar proyecto!", "Guardar proyecto", JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             return;
         }
-        if (!this.jTextArea1.getText().isEmpty())
+        /*if (!this.jTextArea1.getText().isEmpty())
         {
             JOptionPane.showMessageDialog(this.getFrame(), "!Debe corregir primero los errores de la consola de salida!", "Guardar proyecto", JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             return;
-        }
+        }*/
         jTextArea1.setText("Generando código\r\n");
 
         System.setOut(new MyPrintStream());
