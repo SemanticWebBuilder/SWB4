@@ -24,27 +24,13 @@ private final int I_PAGE_SIZE = 20;
 
    <%
     //Agregar municipios del DF
-    Iterator<String> sname = CURPModule.listCouncils("distrito federal");
-    String keyVal = "";
-    while (sname.hasNext()) {
-        String n = sname.next();
-        keyVal += n;
-        if (sname.hasNext()) {
-           keyVal += "|";
-        }
-    }
+    String keyVal = CURPModule.getCouncilString("distrito federal");
+    if (keyVal == null) keyVal = "-------------";
     %>statesHM.Set('DISTRITO FEDERAL', new String('<%=keyVal%>'));<%
 
     //Agregar municipios de Morelos
-    sname = CURPModule.listCouncils("morelos");
-    keyVal = "";
-    while (sname.hasNext()) {
-        String n = sname.next();
-        keyVal += n;
-        if (sname.hasNext()) {
-           keyVal += "|";
-        }
-    }
+    keyVal = CURPModule.getCouncilString("morelos");
+    if (keyVal == null) keyVal = "-------------";
     %>statesHM.Set('MORELOS', new String('<%=keyVal%>'));<%
 %>
 
@@ -55,8 +41,8 @@ private final int I_PAGE_SIZE = 20;
         for (i = 0; i < inner.length; i++) {
             res += "<option value=\"" + inner[i] + "\">" + inner[i] + "</option>\n";
         }
-        //alert(res);
-        dojo.byId(child).innerHTML = res;
+        //alert();
+        dojo.byId(child).innerHTML = "<select name=\"q\">" + res + "</select>";
     }
 </script>
 
@@ -76,7 +62,7 @@ private final int I_PAGE_SIZE = 20;
 <form action="/es/renapo3/Busqueda">
     <fieldset class="busquedaFieldSet">
         <legend>Busqueda por municipio</legend>
-        <select id="state" onchange="updateChild('q', dojo.byId('state').value)">
+        <select id="state" onchange="updateChild('q_container', dojo.byId('state').value)">
             <%
                 Iterator<String> sit = CURPModule.listStates();
                 while (sit.hasNext()) {
@@ -85,7 +71,9 @@ private final int I_PAGE_SIZE = 20;
                 }
             %>
     </select>
-    <select id="q" name="q"></select>
+    <div id="q_container" style="display:inline">
+        <select id="q" name="q"></select>
+    </div>
         <button type="submit" value="Buscar">Buscar</button>
     </fieldset>
 </form>
