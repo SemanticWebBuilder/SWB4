@@ -86,7 +86,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
         <script type="text/javascript">
             dojo.require("dojo.fx");
             dojo.require("dijit.ColorPalette");
-            dojo.require("dijit.form.Button");
+            dojo.require("dijit.form.Button");            
 
             function expande(oId) {
                     var anim1 = dojo.fx.wipeIn( {node:oId, duration:500 });
