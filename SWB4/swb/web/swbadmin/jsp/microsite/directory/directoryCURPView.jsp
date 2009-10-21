@@ -74,7 +74,7 @@ private final int I_PAGE_SIZE = 20;
         url.setParameter("act", "add");
 %>
 <form action="/es/renapo3/Busqueda">
-    <fieldset>
+    <fieldset class="busquedaFieldSet">
         <legend>Busqueda por municipio</legend>
         <select id="state" name="state" onchange="updateChild('q', dojo.byId('state').value)">
             <%
