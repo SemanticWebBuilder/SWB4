@@ -193,14 +193,14 @@
          url.setAction(url.Action_REMOVE);
       %>
       <form method="post" action="<%=url%>">
-        <table>
+        <table class="tablaMapa">
           <tr>
       <%
         if(paramRequest.getAction().equals(paramRequest.Action_REMOVE))
         {
             %>
 
-                       <td><input type="submit" name="delete" value="Borrar"/></td>
+                       <td><input type="submit" name="delete" value="Borrar" /></td>
             <%
         }
       %>
