@@ -619,7 +619,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
         catch (ItemNotFoundException infe)
         {
-            throw new Exception("El contenido no se encontró en el repositorio.", infe);
+            throw new Exception(CONTENT_NOT_FOUND, infe);
         }
         finally
         {
@@ -682,7 +682,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
         catch (ItemNotFoundException infe)
         {
-            throw new Exception("El contenido no se encontró en el repositorio.", infe);
+            throw new Exception(CONTENT_NOT_FOUND, infe);
         }
         finally
         {
@@ -779,7 +779,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
         catch (ItemNotFoundException infe)
         {
-            throw new Exception("El contenido no se encontró en el repositorio.", infe);
+            throw new Exception(CONTENT_NOT_FOUND, infe);
         }
         finally
         {
@@ -2171,7 +2171,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
         catch (ItemNotFoundException infe)
         {
-            throw new Exception("El contenido no se encontró en el repositorio.", infe);
+            throw new Exception(CONTENT_NOT_FOUND, infe);
         }
         finally
         {
@@ -2202,7 +2202,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
         catch (ItemNotFoundException infe)
         {
-            throw new Exception("El contenido no se encontró en el repositorio.", infe);
+            throw new Exception(CONTENT_NOT_FOUND, infe);
         }
         finally
         {
@@ -2224,7 +2224,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
         catch (ItemNotFoundException infe)
         {
-            throw new Exception("El contenido no se encontró en el repositorio.", infe);
+            throw new Exception(CONTENT_NOT_FOUND, infe);
         }
         finally
         {
@@ -2246,7 +2246,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
         catch (ItemNotFoundException infe)
         {
-            throw new Exception("El contenido no se encontró en el repositorio.", infe);
+            throw new Exception(CONTENT_NOT_FOUND, infe);
         }
         finally
         {
