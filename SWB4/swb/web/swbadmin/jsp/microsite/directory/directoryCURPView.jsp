@@ -76,7 +76,7 @@ private final int I_PAGE_SIZE = 20;
 <form action="/es/renapo3/Busqueda">
     <fieldset>
         <legend>Busqueda por municipio</legend>
-        <select class="soria" id="state" name="state" onchange="updateChild('q', dojo.byId('state').value)">
+        <select id="state" name="state" onchange="updateChild('q', dojo.byId('state').value)">
             <%
                 Iterator<String> sit = CURPModule.listStates();
                 while (sit.hasNext()) {
@@ -85,7 +85,7 @@ private final int I_PAGE_SIZE = 20;
                 }
             %>
     </select>
-    <select class="soria" id="q" name="q"></select>
+    <select id="q" name="q"></select>
         <button type="submit" value="Buscar">Buscar</button>
     </fieldset>
 </form>
