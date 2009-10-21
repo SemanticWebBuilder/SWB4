@@ -76,7 +76,7 @@ private final int I_PAGE_SIZE = 20;
 <form action="/es/renapo3/Busqueda">
     <fieldset class="busquedaFieldSet">
         <legend>Busqueda por municipio</legend>
-        <select id="state" name="state" onchange="updateChild('q', dojo.byId('state').value)">
+        <select id="state" onchange="updateChild('q', dojo.byId('state').value)">
             <%
                 Iterator<String> sit = CURPModule.listStates();
                 while (sit.hasNext()) {
