@@ -33,7 +33,7 @@
 
     out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" style_=\"border:0px; width:100%; height:100%\" id=\""+id+"/tab2\" _tabPosition=\"bottom\" nested_=\"true\" _selectedChild=\"btab1\" onButtonClick_=\"alert('click');\" onLoad_=\"alert('Hola');\">");
 
-    Iterator<ObjectBehavior> obit=SWBComparator.sortSermanticObjects(ObjectBehavior.listObjectBehaviors(adm));
+    Iterator<ObjectBehavior> obit=SWBComparator.sortSermanticObjects(ObjectBehavior.ClassMgr.listObjectBehaviors(adm));
     //Iterator<ObjectBehavior> obit=SWBComparator.sortSermanticObjects(new GenericIterator(ObjectBehavior.swbxf_ObjectBehavior, obj.getModel().listInstancesOfClass(ObjectBehavior.swbxf_ObjectBehavior)));
     while(obit.hasNext())
     {
@@ -77,7 +77,7 @@
                     if(obj.instanceOf(scls))
                     {
                         addDiv=true;
-                    }else if(obj.instanceOf(Resource.sclass))
+                    }else if(obj.instanceOf(Resource.ClassMgr.sclass))
                     {
                         Resource res=(Resource)obj.getGenericInstance();
                         SWBResource swbres=SWBPortal.getResourceMgr().getResource(res);
