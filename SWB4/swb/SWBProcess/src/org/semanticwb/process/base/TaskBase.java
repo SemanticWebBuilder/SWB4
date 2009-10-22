@@ -1,142 +1,117 @@
 package org.semanticwb.process.base;
 
 
-public class TaskBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Traceable,org.semanticwb.model.Roleable
+public class TaskBase extends org.semanticwb.process.Activity implements org.semanticwb.model.Roleable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Traceable,org.semanticwb.model.Ruleable
 {
-    public static final org.semanticwb.platform.SemanticProperty swbps_taskExecutions=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#taskExecutions");
-    public static final org.semanticwb.platform.SemanticProperty swbps_keepOpen=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#keepOpen");
-    public static final org.semanticwb.platform.SemanticClass swbps_Task=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Task");
-    public static final org.semanticwb.platform.SemanticProperty swbps_hasTaskDependence=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#hasTaskDependence");
-    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Task");
+    public static class ClassMgr
+    {
+       public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
+       public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
+       public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
+       public static final org.semanticwb.platform.SemanticClass swb_UserGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroup");
+       public static final org.semanticwb.platform.SemanticProperty swb_hasUserGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasUserGroup");
+       public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
+       public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
+       public static final org.semanticwb.platform.SemanticClass swbps_Activity=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Activity");
+       public static final org.semanticwb.platform.SemanticProperty swbps_hasDependence=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#hasDependence");
+       public static final org.semanticwb.platform.SemanticClass swb_Rule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Rule");
+       public static final org.semanticwb.platform.SemanticProperty swb_hasRule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasRule");
+       public static final org.semanticwb.platform.SemanticProperty swbps_executions=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#executions");
+       public static final org.semanticwb.platform.SemanticProperty swb_valid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#valid");
+       public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
+       public static final org.semanticwb.platform.SemanticProperty swbps_keepOpen=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#keepOpen");
+       public static final org.semanticwb.platform.SemanticClass swb_Role=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Role");
+       public static final org.semanticwb.platform.SemanticProperty swb_hasRole=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasRole");
+       public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
+       public static final org.semanticwb.platform.SemanticClass swbps_Task=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Task");
+       public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Task");
+
+       public static java.util.Iterator<org.semanticwb.process.Task> listTasks(org.semanticwb.model.SWBModel model)
+       {
+           java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
+           return new org.semanticwb.model.GenericIterator<org.semanticwb.process.Task>(it, true);
+       }
+
+       public static java.util.Iterator<org.semanticwb.process.Task> listTasks()
+       {
+           java.util.Iterator it=sclass.listInstances();
+           return new org.semanticwb.model.GenericIterator<org.semanticwb.process.Task>(it, true);
+       }
+
+       public static org.semanticwb.process.Task createTask(org.semanticwb.model.SWBModel model)
+       {
+           long id=model.getSemanticObject().getModel().getCounter(sclass);
+           return org.semanticwb.process.Task.ClassMgr.createTask(String.valueOf(id), model);
+       }
+
+       public static org.semanticwb.process.Task getTask(String id, org.semanticwb.model.SWBModel model)
+       {
+           return (org.semanticwb.process.Task)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+       }
+
+       public static org.semanticwb.process.Task createTask(String id, org.semanticwb.model.SWBModel model)
+       {
+           return (org.semanticwb.process.Task)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+       }
+
+       public static void removeTask(String id, org.semanticwb.model.SWBModel model)
+       {
+           model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
+       }
+
+       public static boolean hasTask(String id, org.semanticwb.model.SWBModel model)
+       {
+           return (getTask(id, model)!=null);
+       }
+    }
 
     public TaskBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
-    public static java.util.Iterator<org.semanticwb.process.Task> listTasks(org.semanticwb.model.SWBModel model)
-    {
-        java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.Task>(it, true);
-    }
-
-    public static java.util.Iterator<org.semanticwb.process.Task> listTasks()
-    {
-        java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.Task>(it, true);
-    }
-
-    public static org.semanticwb.process.Task createTask(org.semanticwb.model.SWBModel model)
-    {
-        long id=model.getSemanticObject().getModel().getCounter(sclass);
-        return org.semanticwb.process.Task.createTask(String.valueOf(id), model);
-    }
-
-    public static org.semanticwb.process.Task getTask(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.process.Task)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
-    public static org.semanticwb.process.Task createTask(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.process.Task)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
-    }
-
-    public static void removeTask(String id, org.semanticwb.model.SWBModel model)
-    {
-        model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
-    }
-
-    public static boolean hasTask(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (getTask(id, model)!=null);
-    }
-
-    public java.util.Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(swb_created);
-    }
-
-    public void setCreated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_created, value);
-    }
-
-    public void setModifiedBy(org.semanticwb.model.User value)
-    {
-        getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
-    }
-
-    public void removeModifiedBy()
-    {
-        getSemanticObject().removeProperty(swb_modifiedBy);
-    }
-
-   public static java.util.Iterator<org.semanticwb.process.Task> listTaskByModifiedBy(org.semanticwb.model.User modifiedby,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.Task> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_modifiedBy, modifiedby.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.process.Task> listTaskByModifiedBy(org.semanticwb.model.User modifiedby)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.Task> it=new org.semanticwb.model.GenericIterator(modifiedby.getSemanticObject().getModel().listSubjects(swb_modifiedBy,modifiedby.getSemanticObject()));
-       return it;
-   }
-
-    public org.semanticwb.model.User getModifiedBy()
-    {
-         org.semanticwb.model.User ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.User)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup> listUserGroups()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup>(getSemanticObject().listObjectProperties(swb_hasUserGroup));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup>(getSemanticObject().listObjectProperties(ClassMgr.swb_hasUserGroup));
     }
 
     public boolean hasUserGroup(org.semanticwb.model.UserGroup usergroup)
     {
         if(usergroup==null)return false;
-        return getSemanticObject().hasObjectProperty(swb_hasUserGroup,usergroup.getSemanticObject());
+        return getSemanticObject().hasObjectProperty(ClassMgr.swb_hasUserGroup,usergroup.getSemanticObject());
     }
 
     public void addUserGroup(org.semanticwb.model.UserGroup value)
     {
-        getSemanticObject().addObjectProperty(swb_hasUserGroup, value.getSemanticObject());
+        getSemanticObject().addObjectProperty(ClassMgr.swb_hasUserGroup, value.getSemanticObject());
     }
 
     public void removeAllUserGroup()
     {
-        getSemanticObject().removeProperty(swb_hasUserGroup);
+        getSemanticObject().removeProperty(ClassMgr.swb_hasUserGroup);
     }
 
     public void removeUserGroup(org.semanticwb.model.UserGroup usergroup)
     {
-        getSemanticObject().removeObjectProperty(swb_hasUserGroup,usergroup.getSemanticObject());
+        getSemanticObject().removeObjectProperty(ClassMgr.swb_hasUserGroup,usergroup.getSemanticObject());
     }
 
    public static java.util.Iterator<org.semanticwb.process.Task> listTaskByUserGroup(org.semanticwb.model.UserGroup hasusergroup,org.semanticwb.model.SWBModel model)
    {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.Task> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_hasUserGroup, hasusergroup.getSemanticObject()));
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.Task> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(ClassMgr.swb_hasUserGroup, hasusergroup.getSemanticObject()));
        return it;
    }
 
    public static java.util.Iterator<org.semanticwb.process.Task> listTaskByUserGroup(org.semanticwb.model.UserGroup hasusergroup)
    {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.Task> it=new org.semanticwb.model.GenericIterator(hasusergroup.getSemanticObject().getModel().listSubjects(swb_hasUserGroup,hasusergroup.getSemanticObject()));
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.Task> it=new org.semanticwb.model.GenericIterator(hasusergroup.getSemanticObject().getModel().listSubjects(ClassMgr.swb_hasUserGroup,hasusergroup.getSemanticObject()));
        return it;
    }
 
     public org.semanticwb.model.UserGroup getUserGroup()
     {
          org.semanticwb.model.UserGroup ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasUserGroup);
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(ClassMgr.swb_hasUserGroup);
          if(obj!=null)
          {
              ret=(org.semanticwb.model.UserGroup)obj.createGenericInstance();
@@ -144,213 +119,110 @@ public class TaskBase extends org.semanticwb.model.SWBClass implements org.seman
          return ret;
     }
 
-    public String getTitle()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.Rule> listRules()
     {
-        return getSemanticObject().getProperty(swb_title);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Rule>(getSemanticObject().listObjectProperties(ClassMgr.swb_hasRule));
     }
 
-    public void setTitle(String value)
+    public boolean hasRule(org.semanticwb.model.Rule rule)
     {
-        getSemanticObject().setProperty(swb_title, value);
+        if(rule==null)return false;
+        return getSemanticObject().hasObjectProperty(ClassMgr.swb_hasRule,rule.getSemanticObject());
     }
 
-    public String getTitle(String lang)
+    public void addRule(org.semanticwb.model.Rule value)
     {
-        return getSemanticObject().getProperty(swb_title, null, lang);
+        getSemanticObject().addObjectProperty(ClassMgr.swb_hasRule, value.getSemanticObject());
     }
 
-    public String getDisplayTitle(String lang)
+    public void removeAllRule()
     {
-        return getSemanticObject().getLocaleProperty(swb_title, lang);
+        getSemanticObject().removeProperty(ClassMgr.swb_hasRule);
     }
 
-    public void setTitle(String title, String lang)
+    public void removeRule(org.semanticwb.model.Rule rule)
     {
-        getSemanticObject().setProperty(swb_title, title, lang);
+        getSemanticObject().removeObjectProperty(ClassMgr.swb_hasRule,rule.getSemanticObject());
     }
 
-    public java.util.Date getUpdated()
-    {
-        return getSemanticObject().getDateProperty(swb_updated);
-    }
-
-    public void setUpdated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_updated, value);
-    }
-
-    public int getExecutions()
-    {
-        return getSemanticObject().getIntProperty(swbps_taskExecutions);
-    }
-
-    public void setExecutions(int value)
-    {
-        getSemanticObject().setIntProperty(swbps_taskExecutions, value);
-    }
-
-    public void setCreator(org.semanticwb.model.User value)
-    {
-        getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
-    }
-
-    public void removeCreator()
-    {
-        getSemanticObject().removeProperty(swb_creator);
-    }
-
-   public static java.util.Iterator<org.semanticwb.process.Task> listTaskByCreator(org.semanticwb.model.User creator,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.process.Task> listTaskByRule(org.semanticwb.model.Rule hasrule,org.semanticwb.model.SWBModel model)
    {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.Task> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_creator, creator.getSemanticObject()));
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.Task> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(ClassMgr.swb_hasRule, hasrule.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.process.Task> listTaskByCreator(org.semanticwb.model.User creator)
+   public static java.util.Iterator<org.semanticwb.process.Task> listTaskByRule(org.semanticwb.model.Rule hasrule)
    {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.Task> it=new org.semanticwb.model.GenericIterator(creator.getSemanticObject().getModel().listSubjects(swb_creator,creator.getSemanticObject()));
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.Task> it=new org.semanticwb.model.GenericIterator(hasrule.getSemanticObject().getModel().listSubjects(ClassMgr.swb_hasRule,hasrule.getSemanticObject()));
        return it;
    }
 
-    public org.semanticwb.model.User getCreator()
+    public org.semanticwb.model.Rule getRule()
     {
-         org.semanticwb.model.User ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
+         org.semanticwb.model.Rule ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(ClassMgr.swb_hasRule);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+             ret=(org.semanticwb.model.Rule)obj.createGenericInstance();
          }
          return ret;
     }
 
     public boolean isKeepOpen()
     {
-        return getSemanticObject().getBooleanProperty(swbps_keepOpen);
+        return getSemanticObject().getBooleanProperty(ClassMgr.swbps_keepOpen);
     }
 
     public void setKeepOpen(boolean value)
     {
-        getSemanticObject().setBooleanProperty(swbps_keepOpen, value);
+        getSemanticObject().setBooleanProperty(ClassMgr.swbps_keepOpen, value);
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Role> listRoles()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Role>(getSemanticObject().listObjectProperties(swb_hasRole));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Role>(getSemanticObject().listObjectProperties(ClassMgr.swb_hasRole));
     }
 
     public boolean hasRole(org.semanticwb.model.Role role)
     {
         if(role==null)return false;
-        return getSemanticObject().hasObjectProperty(swb_hasRole,role.getSemanticObject());
+        return getSemanticObject().hasObjectProperty(ClassMgr.swb_hasRole,role.getSemanticObject());
     }
 
     public void addRole(org.semanticwb.model.Role value)
     {
-        getSemanticObject().addObjectProperty(swb_hasRole, value.getSemanticObject());
+        getSemanticObject().addObjectProperty(ClassMgr.swb_hasRole, value.getSemanticObject());
     }
 
     public void removeAllRole()
     {
-        getSemanticObject().removeProperty(swb_hasRole);
+        getSemanticObject().removeProperty(ClassMgr.swb_hasRole);
     }
 
     public void removeRole(org.semanticwb.model.Role role)
     {
-        getSemanticObject().removeObjectProperty(swb_hasRole,role.getSemanticObject());
+        getSemanticObject().removeObjectProperty(ClassMgr.swb_hasRole,role.getSemanticObject());
     }
 
    public static java.util.Iterator<org.semanticwb.process.Task> listTaskByRole(org.semanticwb.model.Role hasrole,org.semanticwb.model.SWBModel model)
    {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.Task> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_hasRole, hasrole.getSemanticObject()));
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.Task> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(ClassMgr.swb_hasRole, hasrole.getSemanticObject()));
        return it;
    }
 
    public static java.util.Iterator<org.semanticwb.process.Task> listTaskByRole(org.semanticwb.model.Role hasrole)
    {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.Task> it=new org.semanticwb.model.GenericIterator(hasrole.getSemanticObject().getModel().listSubjects(swb_hasRole,hasrole.getSemanticObject()));
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.Task> it=new org.semanticwb.model.GenericIterator(hasrole.getSemanticObject().getModel().listSubjects(ClassMgr.swb_hasRole,hasrole.getSemanticObject()));
        return it;
    }
 
     public org.semanticwb.model.Role getRole()
     {
          org.semanticwb.model.Role ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasRole);
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(ClassMgr.swb_hasRole);
          if(obj!=null)
          {
              ret=(org.semanticwb.model.Role)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
-    public String getDescription()
-    {
-        return getSemanticObject().getProperty(swb_description);
-    }
-
-    public void setDescription(String value)
-    {
-        getSemanticObject().setProperty(swb_description, value);
-    }
-
-    public String getDescription(String lang)
-    {
-        return getSemanticObject().getProperty(swb_description, null, lang);
-    }
-
-    public String getDisplayDescription(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(swb_description, lang);
-    }
-
-    public void setDescription(String description, String lang)
-    {
-        getSemanticObject().setProperty(swb_description, description, lang);
-    }
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.process.Task> listDependences()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.Task>(getSemanticObject().listObjectProperties(swbps_hasTaskDependence));
-    }
-
-    public boolean hasDependence(org.semanticwb.process.Task task)
-    {
-        if(task==null)return false;
-        return getSemanticObject().hasObjectProperty(swbps_hasTaskDependence,task.getSemanticObject());
-    }
-
-    public void addDependence(org.semanticwb.process.Task value)
-    {
-        getSemanticObject().addObjectProperty(swbps_hasTaskDependence, value.getSemanticObject());
-    }
-
-    public void removeAllDependence()
-    {
-        getSemanticObject().removeProperty(swbps_hasTaskDependence);
-    }
-
-    public void removeDependence(org.semanticwb.process.Task task)
-    {
-        getSemanticObject().removeObjectProperty(swbps_hasTaskDependence,task.getSemanticObject());
-    }
-
-   public static java.util.Iterator<org.semanticwb.process.Task> listTaskByDependence(org.semanticwb.process.Task hastaskdependence,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.Task> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbps_hasTaskDependence, hastaskdependence.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.process.Task> listTaskByDependence(org.semanticwb.process.Task hastaskdependence)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.Task> it=new org.semanticwb.model.GenericIterator(hastaskdependence.getSemanticObject().getModel().listSubjects(swbps_hasTaskDependence,hastaskdependence.getSemanticObject()));
-       return it;
-   }
-
-    public org.semanticwb.process.Task getDependence()
-    {
-         org.semanticwb.process.Task ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbps_hasTaskDependence);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.process.Task)obj.createGenericInstance();
          }
          return ret;
     }
