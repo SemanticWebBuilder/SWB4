@@ -238,7 +238,7 @@
         jobj.putOpt("menus", menus);
         String url=SWBPlatform.getContextPath();
         //TODO:Separar en controller
-        if(cls.equals(Language.sclass))
+        if(cls.equals(Language.ClassMgr.sclass))
         {
             url+="/swbadmin/jsp/addLang.jsp";
         }else
@@ -400,7 +400,7 @@
                     {
                         SemanticObject ch=it2.next();
                         boolean add=true;
-                        if(ch.instanceOf(Resource.sclass))
+                        if(ch.instanceOf(Resource.ClassMgr.sclass))
                         {
                             Resource res=(Resource)ch.createGenericInstance();
                             if(res.getResourceSubType()!=null)add=false;
@@ -455,7 +455,7 @@
         
         //TODO:validar treeController
         //System.out.println("type:"+type);
-        if(cls.equals(ResourceType.sclass))
+        if(cls.equals(ResourceType.ClassMgr.sclass))
         {
             addResourceType(arr,obj,addChilds,addDummy,lang);
             return;
@@ -497,7 +497,7 @@
         jobj.putOpt("menus", menus);
 
         //TODO:separar treeController
-        if(!cls.equals(WebSite.sclass) && !virtual)
+        if(!cls.equals(WebSite.ClassMgr.sclass) && !virtual)
         {
             //menus creacion
             Iterator<SemanticProperty> pit=cls.listHerarquicalProperties();
@@ -520,7 +520,7 @@
             }
         }
 
-        if(obj.instanceOf(WebPage.sclass))
+        if(obj.instanceOf(WebPage.ClassMgr.sclass))
         {
             WebPage page=(WebPage)obj.createGenericInstance();
             menus.put(getMenuItem(getLocaleString("preview",lang), getLocaleString("icon_preview",null), getAction("showPreviewURL",page.getUrl(),null)));
@@ -592,7 +592,7 @@
             {
                 addHerarquicalNodes(childs, obj,lang);
 
-                boolean isWebPage=obj.instanceOf(WebPage.sclass);
+                boolean isWebPage=obj.instanceOf(WebPage.ClassMgr.sclass);
 
                 Iterator<SemanticObject> it=obj.listHerarquicalChilds();
                 if(addChilds)
@@ -600,7 +600,7 @@
                     Iterator<SemanticObject> it2=null;
                     if(isWebPage)
                     {
-                        it2=SWBComparator.sortSermanticObjects(lang,it,obj.listObjectProperties(WebPage.swb_hasWebPageVirtualChild));
+                        it2=SWBComparator.sortSermanticObjects(lang,it,obj.listObjectProperties(WebPage.ClassMgr.swb_hasWebPageVirtualChild));
                     }else
                     {
                         it2=SWBComparator.sortSermanticObjects(lang,it);
@@ -611,7 +611,7 @@
                         SemanticObject vp=null;
                         if(isWebPage)
                         {
-                            SemanticObject p=ch.getObjectProperty(WebPage.swb_webPageParent);
+                            SemanticObject p=ch.getObjectProperty(WebPage.ClassMgr.swb_webPageParent);
                             //System.out.println("ch:"+ch+" p:"+p+"="+obj);
                             if(obj!=p)vp=obj;
                         }
@@ -625,7 +625,7 @@
                         hasChilds=true;
                     }else if(isWebPage)
                     {
-                        hasChilds=obj.listObjectProperties(WebPage.swb_hasWebPageVirtualChild).hasNext();
+                        hasChilds=obj.listObjectProperties(WebPage.ClassMgr.swb_hasWebPageVirtualChild).hasNext();
                     }
 
                 }

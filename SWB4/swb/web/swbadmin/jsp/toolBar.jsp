@@ -27,7 +27,7 @@
                 }else
                 {
                     //System.out.println("mnu:"+child.getClass());
-                    if(child.getSemanticObject().instanceOf(MenuItem.sclass))
+                    if(child.getSemanticObject().instanceOf(MenuItem.ClassMgr.sclass))
                     {
                         String show=((MenuItem)child.getSemanticObject().createGenericInstance()).getShowAs();
                         if(show!=null && show.equals("DIALOG"))

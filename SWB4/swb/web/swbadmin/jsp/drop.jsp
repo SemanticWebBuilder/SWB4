@@ -101,9 +101,9 @@
     //System.out.println("suri;"+obj+" newp:"+newp+" oldp:"+oldp+" copy:"+copy);
 
 
-    if(copy && obj.instanceOf(WebPage.sclass))
+    if(copy && obj.instanceOf(WebPage.ClassMgr.sclass))
     {
-        obj.addObjectProperty(WebPage.swb_hasWebPageVirtualParent, newp);
+        obj.addObjectProperty(WebPage.ClassMgr.swb_hasWebPageVirtualParent, newp);
         out.println("Referencia creada...");
         out.println("<script type=\"text/javascript\">reloadTreeNodeByURI('"+newp.getURI()+"');</script>");
         return;
