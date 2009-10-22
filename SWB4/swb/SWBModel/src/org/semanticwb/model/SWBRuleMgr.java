@@ -83,7 +83,7 @@ public class SWBRuleMgr
     
     public void init()
     {
-        Iterator<Rule> it = Rule.listRules();
+        Iterator<Rule> it = Rule.ClassMgr.listRules();
         while (it.hasNext())
         {
             Rule rule = it.next();
