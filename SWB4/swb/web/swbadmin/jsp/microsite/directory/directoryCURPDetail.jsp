@@ -91,7 +91,9 @@
     String streetName=semObject.getProperty(Commerce.swbcomm_streetName);
     String intNumber=semObject.getProperty(Commerce.swbcomm_intNumber);
     String extNumber=semObject.getProperty(Commerce.swbcomm_extNumber);
+    String council=semObject.getProperty(Commerce.swbcomm_cityCouncil);
     String city=semObject.getProperty(Commerce.swbcomm_city);
+    String state=semObject.getProperty(Commerce.swbcomm_state);
     /*----------  Personal Data ---------*/
     String contactName=semObject.getProperty(Commerce.swbcomm_contactName);
     String contactPhoneNumber=semObject.getProperty(Commerce.swbcomm_contactPhoneNumber);
@@ -118,12 +120,12 @@
                 <!---localizable Data -->
                 <fieldset>
                  <legend>Ubicación</legend>
-                <%if(streetName!=null){%><p>calle:<strong><%=streetName%></strong></p><%}%>
+                <%if(streetName!=null){%><p>Calle:<strong><%=streetName%></strong></p><%}%>
                 <%if(intNumber!=null){%><p>Número Interior:<strong><%=intNumber%></strong></p><%}%>
                 <%if(extNumber!=null){%><p>Número Exterior:<strong><%=extNumber%></strong></p><%}%>
+                <%if(council!=null){%><p>Municipio/Delegaci&oacute;n:<strong><%=council%></strong></p><%}%>
                 <%if(city!=null){%><p>Ciudad:<strong><%=city%></strong></p><%}%>
-                <%if(creator!=null){%><p>Creado por:<strong><%=creator%></strong></p><%}%>
-                <%if(created!=null){%><p>Fecha de publicación:<strong><%=created%></strong></p><%}%>
+                <%if(state!=null){%><p>Estado:<strong><%=state%></strong></p><%}%>
                 </fieldset>
                 <!--User Data-->
                  <fieldset>
@@ -136,6 +138,8 @@
                 <!--Cuenta con-->
                 <fieldset>
                  <legend>Extras</legend>
+                 <%if(creator!=null){%><p>Creado por:<strong><%=creator%></strong></p><%}%>
+                <%if(created!=null){%><p>Fecha de publicación:<strong><%=created%></strong></p><%}%>
                 <%if(paymentType!=null){%><p>Forma de pago:<strong><%=paymentType%></strong></p><%}%>
                 <%
                 if(impairedPeopleAccessible!=null)
