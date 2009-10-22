@@ -117,7 +117,7 @@
                 <%if(tags!=null){%><p>Palabras clave:<strong><%=tags%></strong></p><%}%>
                 <!---localizable Data -->
                 <fieldset>
-                 <legend>Ubicación&</legend>
+                 <legend>Ubicación</legend>
                 <%if(streetName!=null){%><p>calle:<strong><%=streetName%></strong></p><%}%>
                 <%if(intNumber!=null){%><p>Número Interior:<strong><%=intNumber%></strong></p><%}%>
                 <%if(extNumber!=null){%><p>Número Exterior:<strong><%=extNumber%></strong></p><%}%>
