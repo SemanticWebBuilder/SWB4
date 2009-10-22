@@ -242,14 +242,14 @@ public class SWBAWebPageAssociation extends GenericResource {
                 WebPage wpso = (WebPage) so.getGenericInstance();
                 WebSite ws = wpso.getWebSite();
 
-                Association assoc = Association.createAssociation(ws);
+                Association assoc = Association.ClassMgr.createAssociation(ws);
                 assoc.setType((Topic)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(selType));
 
-                AssMember amember1 = AssMember.createAssMember(ws);
+                AssMember amember1 = AssMember.ClassMgr.createAssMember(ws);
                 amember1.setMember((Topic)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri));
                 amember1.setRole((Topic)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(selRole));
 
-                AssMember amember2 = AssMember.createAssMember(ws);
+                AssMember amember2 = AssMember.ClassMgr.createAssMember(ws);
                 amember2.setMember((Topic)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(selMember));
                 amember2.setRole((Topic)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(selMemberRole));
 

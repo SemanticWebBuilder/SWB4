@@ -243,7 +243,7 @@ public class SWBAFilters extends SWBATree {
             classele.setAttribute("icon", "sitev");
 
 
-            Iterator<ObjectBehavior> obit = SWBComparator.sortSermanticObjects(ObjectBehavior.swbxf_ObjectBehavior.listGenericInstances(true));
+            Iterator<ObjectBehavior> obit = SWBComparator.sortSermanticObjects(ObjectBehavior.ClassMgr.swbxf_ObjectBehavior.listGenericInstances(true));
             while (obit.hasNext()) {
                 ObjectBehavior ob = obit.next();
                 if (!ob.isVisible()) {
@@ -637,7 +637,7 @@ public class SWBAFilters extends SWBATree {
                 }
                 String name = efilter.getAttribute("name");
                 UserRepository aws = SWBContext.getAdminRepository();
-                AdminFilter filter = AdminFilter.createAdminFilter(aws);
+                AdminFilter filter = AdminFilter.ClassMgr.createAdminFilter(aws);
                 filter.setTitle(name);
                 filter.setDescription(description);
 
@@ -691,7 +691,7 @@ public class SWBAFilters extends SWBATree {
                 }
                 String name = efilter.getAttribute("name");
                 //AdminFilter filter=AdminFilter.getAdminFilter(efilter.getAttribute("id"),efilter.getAttribute("topicmap"));
-                AdminFilter filter = AdminFilter.getAdminFilter(efilter.getAttribute("id"), aws);
+                AdminFilter filter = AdminFilter.ClassMgr.getAdminFilter(efilter.getAttribute("id"), aws);
                 filter.setTitle(name);
                 filter.setDescription(description);
                 //filter.setTopicMapId(efilter.getAttribute("topicmap"));
@@ -741,7 +741,7 @@ public class SWBAFilters extends SWBATree {
                 Element eid = (Element) src.getElementsByTagName("id").item(0);
                 Text etext = (Text) eid.getFirstChild();
                 String id = etext.getNodeValue();
-                AdminFilter filter = AdminFilter.getAdminFilter(id, map);
+                AdminFilter filter = AdminFilter.ClassMgr.getAdminFilter(id, map);
                 Document exmlfilter = SWBUtils.XML.xmlToDom(filter.getXml());
                 Node node = docres.importNode(exmlfilter.getFirstChild(), true);
                 res.appendChild(node);
@@ -866,7 +866,7 @@ public class SWBAFilters extends SWBATree {
 //
 //            }
             String id = request.getParameter("id");
-            AdminFilter filter = AdminFilter.getAdminFilter(id, map);
+            AdminFilter filter = AdminFilter.ClassMgr.getAdminFilter(id, map);
             filter.remove();
             act = "view";
         } else if (act.equals("add")) {
@@ -1021,7 +1021,7 @@ public class SWBAFilters extends SWBATree {
 //            String rowColor="";
 //            boolean cambiaColor = true;
 
-            Iterator<AdminFilter> filters = AdminFilter.listAdminFilters(map);
+            Iterator<AdminFilter> filters = AdminFilter.ClassMgr.listAdminFilters(map);
             while (filters.hasNext()) {
                 AdminFilter filter = filters.next();
 

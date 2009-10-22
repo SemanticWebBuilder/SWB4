@@ -2136,7 +2136,7 @@ public class BlogResource extends GenericResource
 
                     String uid = userid.substring(0,userid.indexOf("_"));
                     String repid = userid.substring(userid.indexOf("_")+1);
-                    User recuser =UserRepository.getUserRepository(repid).getUser(uid);
+                    User recuser =UserRepository.ClassMgr.getUserRepository(repid).getUser(uid);
 
                     //System.out.println("getComments: recuser: "+recuser);
 
@@ -2170,7 +2170,7 @@ public class BlogResource extends GenericResource
 
                     String uid = userid.substring(0,userid.indexOf("_"));
                     String repid = userid.substring(userid.indexOf("_")+1);
-                    User recuser =UserRepository.getUserRepository(repid).getUser(uid);
+                    User recuser =UserRepository.ClassMgr.getUserRepository(repid).getUser(uid);
 
                     StringBuffer name = new StringBuffer("");
                     if ( recuser == null )

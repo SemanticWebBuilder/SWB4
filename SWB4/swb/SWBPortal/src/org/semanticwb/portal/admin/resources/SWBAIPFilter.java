@@ -138,7 +138,7 @@ public class SWBAIPFilter extends GenericResource
                 "                var Global_suri =''; \n" +
                 "                var model =''; \n" +
                 "        </script>\n");
-        ret.append("<form id=\"" + IPFilter.swb_IPFilter.getClassName() + "/create\" dojoType=\"dijit.form.Form\" class=\"swbform\" ");
+        ret.append("<form id=\"" + IPFilter.ClassMgr.swb_IPFilter.getClassName() + "/create\" dojoType=\"dijit.form.Form\" class=\"swbform\" ");
         ret.append("onSubmit=\"return false;\" method=\"POST\">");
         ret.append("\t<fieldset>\n\t<label for=\"Sitios\">"+paramRequest.getLocaleString("ipsite")+"</label>");
         Iterator<WebSite> itur = SWBContext.listWebSites();
@@ -214,9 +214,9 @@ public class SWBAIPFilter extends GenericResource
 //        "                   dojo.require(\"dijit.form.CheckBox\");\n"+
 //        "        </script>\n");
       //http://www.semanticwebbuilder.org/swb4/ontology#User
-        ret.append("<form id=\""+IPFilter.swb_IPFilter.getClassName()+"/create/"+got+"\" dojoType=\"dijit.form.Form\" class=\"swbform\" ");
+        ret.append("<form id=\""+IPFilter.ClassMgr.swb_IPFilter.getClassName()+"/create/"+got+"\" dojoType=\"dijit.form.Form\" class=\"swbform\" ");
         ret.append("action=\""+url+"\" ");
-        ret.append("onSubmit=\"submitForm('"+IPFilter.swb_IPFilter.getClassName()+"/create/"+got+"');return false;\" method=\"POST\">");
+        ret.append("onSubmit=\"submitForm('"+IPFilter.ClassMgr.swb_IPFilter.getClassName()+"/create/"+got+"');return false;\" method=\"POST\">");
         ret.append("\t<fieldset>\n\t<table>\n\t\t<tr>\n\t\t\t<td align=\"right\">\n\t\t\t\t<label>"+paramRequest.getLocaleString("ipsite")+"</label>");
         ret.append("\n\t\t\t</td>\n\t\t\t<td>");
         Iterator<WebSite> itur = SWBContext.listWebSites();

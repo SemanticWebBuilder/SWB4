@@ -860,12 +860,12 @@ public class SWBATMAdmin extends GenericResource
                                             Association as=tm.createAssociation();
                                             as.setType(tm.getWebPage(assTypeId));
                                             
-                                            AssMember me = AssMember.createAssMember(tm);
+                                            AssMember me = AssMember.ClassMgr.createAssMember(tm);
                                             as.addMember(me);
                                             me.setMember(mem[0]);
                                             me.setRole(tm.getWebPage(assRole[0]));
 
-                                            me = AssMember.createAssMember(tm);
+                                            me = AssMember.ClassMgr.createAssMember(tm);
                                             as.addMember(me);
                                             me.setMember(mem[1]);
                                             me.setRole(tm.getWebPage(assRole[1]));

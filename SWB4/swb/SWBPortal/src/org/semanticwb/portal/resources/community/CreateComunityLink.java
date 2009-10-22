@@ -58,7 +58,7 @@ public class CreateComunityLink extends GenericAdmResource{
             if(base.getAttribute("selecttype")!=null) {
                 params+="&selecttype=" + base.getAttribute("selecttype");
             }
-            WebPage comunityContainer=WebPage.getWebPage(CommunityConfiguration.COMMUNITY_CONTAINER_ID, paramRequest.getWebPage().getWebSite());
+            WebPage comunityContainer=WebPage.ClassMgr.getWebPage(CommunityConfiguration.COMMUNITY_CONTAINER_ID, paramRequest.getWebPage().getWebSite());
             out.print("<a href=\""+comunityContainer.getUrl() + params +"\" class=\"categoria\"><span class=\"listadocompleto\">Crear una comunidad</span></a>");
         }
     }

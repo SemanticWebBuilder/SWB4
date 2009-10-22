@@ -743,7 +743,7 @@ public class PFlowManager
             if (iresw.equals(typeresource) && resource.getWebSite().getId().equals(eres.getAttribute("topicmap")))
             {
                 int version = (int) Double.parseDouble(workflow.getAttribute("version"));
-                PFlowInstance instance = PFlowInstance.createPFlowInstance(resource.getWebSite());
+                PFlowInstance instance = PFlowInstance.ClassMgr.createPFlowInstance(resource.getWebSite());
                 instance.setPflow(pflow);
                 resource.setPflowInstance(instance);
                 instance.setPfinstResource(resource);

@@ -538,7 +538,7 @@ public class SWBARule extends GenericResource {
                         hmAttr.put("Valor", hmValues);
                         comboAtt.put(usrAtt.getName(), hmAttr);
                         vecOrderAtt.add(numero++, usrAtt.getName());
-                    } else if (!usrAtt.equals(User.swb_usrPassword)){
+                    } else if (!usrAtt.equals(User.ClassMgr.swb_usrPassword)){
                         if (usrAtt.isDataTypeProperty()) {
                             log.debug("DP: DataTypeProperty");
                             if (usrAtt.isInt()||usrAtt.isFloat()||usrAtt.isLong()) {
