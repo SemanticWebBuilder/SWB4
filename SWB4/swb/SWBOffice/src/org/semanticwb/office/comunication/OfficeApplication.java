@@ -1020,7 +1020,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                 ElementInfo info = new ElementInfo();
                 info.id = rule.getId();
                 info.title = rule.getTitle();
-                info.type = Rule.sclass.getName();
+                info.type = Rule.ClassMgr.sclass.getName();
                 rules.add(info);
             }
         }
@@ -1032,7 +1032,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                 ElementInfo info = new ElementInfo();
                 info.id = role.getId();
                 info.title = role.getTitle();
-                info.type = Role.sclass.getName();
+                info.type = Role.ClassMgr.sclass.getName();
                 rules.add(info);
             }
         }
@@ -1045,7 +1045,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                 ElementInfo info = new ElementInfo();
                 info.id = role.getId();
                 info.title = role.getTitle();
-                info.type = UserGroup.sclass.getName();
+                info.type = UserGroup.ClassMgr.sclass.getName();
                 rules.add(info);
             }
         }
