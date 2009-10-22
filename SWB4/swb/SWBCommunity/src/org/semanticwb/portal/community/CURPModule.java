@@ -44,6 +44,25 @@ public class CURPModule extends org.semanticwb.portal.community.base.CURPModuleB
                 "JESUS MARIA|PABELLON DE ARTEAGA|RINCON DE ROMOS|" +
                 "SAN FRANCISCO DE LOS ROMO|SAN JOSE DE GARCIA|TEPEZALA";
         councils.put("AGUASCALIENTES", s_councils);
+
+        s_councils = "ENSENADA|MEXICALI|PLAYAS DE ROSARITO|TECATE|TIJUANA";
+        councils.put("BAJA CALIFORNIA", s_councils);
+
+        s_councils = "COMONDU|LA PAZ|LORETO|LOS CABOS|MULEGE";
+        councils.put("BAJA CALIFORNIA SUR", s_councils);
+
+        s_councils = "CALAKMUL|CALKINI|CAMPECHE|CANDELARIA|CARMEN|CHAMPOTON|" +
+                "ESCARCEGA|HECELCHAKAN|HOPELCHEN|PALIZADA|TENABO";
+        councils.put("CAMPECHE", s_councils);
+
+        s_councils = "ABASOLO|ACU&Ntilde;A|ALLENDE|ARTEAGA|CANDELA|" +
+                "CASTA&Ntilde;OS|CUATROCIENEGAS|ESCOBEDO|FRANCISCO I. MADERO|" +
+                "FRONTERA|GENERAL CEPEDA|GUERRERO|HIDALGO|JIMENEZ|JUAREZ|" +
+                "LA MADRID|MATAMOROS|MONCLOVA|MORELOS|MUZQUIZ|NADADORES|" +
+                "NAVA|OCAMPO|PARRAS|PIEDRAS NEGRAS|PROGRESO|RAMOS ARIZPE|" +
+                "SABINAS|SACRAMENTO|SALTILLO|SAN BUENAVENTURA|SAN JUAN DE SABINAS|" +
+                "SAN PEDRO|SIERRA MOJADA|TORREON|VIESCA|VILLA UNION|ZARAGOZA";
+        councils.put("COAHUILA", s_councils);
         
         s_councils = "ALVARO OBREGON|AZCAPOTZALCO|BENITO JUAREZ|COYOACAN|" +
                 "CUAJIMALPA|CUAUHTEMOC|GUSTAVO A. MADERO|IZTACALCO|" +
@@ -61,9 +80,6 @@ public class CURPModule extends org.semanticwb.portal.community.base.CURPModuleB
                 "ZACATEPEC DE HIDALGO|ZACUALPAN DE AMILPAS";
         councils.put("MORELOS", s_councils);
 
-        s_councils = "ENSENADA|MEXICALI|PLAYAS DE ROSARITO|TECATE|TIJUANA";
-        councils.put("BAJA CALIFORNIA", s_councils);
-        
         return new TreeMap(councils);
     }
 
