@@ -549,7 +549,7 @@ public class CodeGenerator
         javaClassContent.append("public class " + toUpperCase(tpc.getClassCodeName()) + "Base extends " + exts + " " + getInterfacesAsString(tpc, false) + "" + ENTER);
         javaClassContent.append("{" + ENTER);
         HashSet<SemanticClass> staticClasses = new HashSet<SemanticClass>();
-        HashSet<SemanticClass> staticProperties = new HashSet<SemanticClass>();
+        HashSet<SemanticProperty> staticProperties = new HashSet<SemanticProperty>();
         Iterator<SemanticProperty> properties = tpc.listProperties();
         while (properties.hasNext())
         {
@@ -666,7 +666,7 @@ public class CodeGenerator
         javaClassContent.append("public class " + toUpperCase(tpc.getClassCodeName()) + "Base extends " + exts + " " + getInterfacesAsString(tpc, false) + "" + ENTER);
         javaClassContent.append("{" + ENTER);
         HashSet<SemanticClass> staticClasses = new HashSet<SemanticClass>();
-        HashSet<SemanticClass> staticProperties = new HashSet<SemanticClass>();
+        HashSet<SemanticProperty> staticProperties = new HashSet<SemanticProperty>();
         Iterator<SemanticProperty> properties = tpc.listProperties();
         HashSet<SemanticClass> interfaces = getInterfaces(tpc);
         while (properties.hasNext())
@@ -958,52 +958,52 @@ public class CodeGenerator
             {
                 if (!staticClasses.contains(range))
                 {
-                    boolean isInSuperInterface=false;
-                    for(SemanticClass cInterface : interfaces)
+                    boolean isInSuperInterface = false;
+                    for (SemanticClass cInterface : interfaces)
                     {
                         Iterator<SemanticProperty> propertiesInterface = cInterface.listProperties();
                         while (propertiesInterface.hasNext())
                         {
                             SemanticProperty tppInterface = propertiesInterface.next();
                             SemanticClass rangeInterface = tppInterface.getRangeClass();
-                            if(rangeInterface!=null && rangeInterface.equals(range))
+                            if (rangeInterface != null && rangeInterface.equals(range))
                             {
-                                isInSuperInterface=true;
+                                isInSuperInterface = true;
                                 break;
                             }
                         }
-                        if(isInSuperInterface)
+                        if (isInSuperInterface)
                         {
                             break;
                         }
                     }
-                    if(!isInSuperInterface)
+                    if (!isInSuperInterface)
                     {
                         javaClassContent.append("    public static final org.semanticwb.platform.SemanticClass " + range.getPrefix() + "_" + toUpperCase(range.getClassCodeName()) + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + range.getURI() + "\");" + ENTER);
                     }
-                    
+
                     staticClasses.add(range);
                 }
             }
-            boolean isInSuperInterface=false;
-            for(SemanticClass cInterface : interfaces)
+            boolean isInSuperInterface = false;
+            for (SemanticClass cInterface : interfaces)
             {
                 Iterator<SemanticProperty> propertiesInterface = cInterface.listProperties();
                 while (propertiesInterface.hasNext())
                 {
                     SemanticProperty tppInterface = propertiesInterface.next();
-                    if(tppInterface.equals(tpp))
+                    if (tppInterface.equals(tpp))
                     {
-                        isInSuperInterface=true;
+                        isInSuperInterface = true;
                         break;
                     }
                 }
-                if(isInSuperInterface)
+                if (isInSuperInterface)
                 {
                     break;
                 }
             }
-            if(!isInSuperInterface)
+            if (!isInSuperInterface)
             {
                 javaClassContent.append("    public static final org.semanticwb.platform.SemanticProperty " + tpp.getPrefix() + "_" + tpp.getName() + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(\"" + tpp.getURI() + "\");" + ENTER);
             }
@@ -1047,7 +1047,7 @@ public class CodeGenerator
             }
             if (!isInClass)
             {
-                
+
                 if (tpp.isObjectProperty())
                 {
                     String valueToReturn = null;
@@ -1200,38 +1200,40 @@ public class CodeGenerator
             }
         }
     }
+
     private String getNameInPlural(String name)
     {
-        if(name.endsWith("y") && !(name.endsWith("ay") ||  name.endsWith("ey") ||  name.endsWith("iy") ||  name.endsWith("oy") ||  name.endsWith("uy")))
+        if (name.endsWith("y") && !(name.endsWith("ay") || name.endsWith("ey") || name.endsWith("iy") || name.endsWith("oy") || name.endsWith("uy")))
         {
-            name=name.substring(0,name.length()-1);
-            name+="ies";
+            name = name.substring(0, name.length() - 1);
+            name += "ies";
         }
-        else if(name.endsWith("s") ||  name.endsWith("z") ||  name.endsWith("x") ||  name.endsWith("ch") ||  name.endsWith("sh"))
+        else if (name.endsWith("s") || name.endsWith("z") || name.endsWith("x") || name.endsWith("ch") || name.endsWith("sh"))
         {
-            name+="es";
+            name += "es";
         }
-        else if(name.endsWith("is"))
+        else if (name.endsWith("is"))
         {
-            name=name.substring(0,name.length()-2);
-            name+="es";
+            name = name.substring(0, name.length() - 2);
+            name += "es";
         }
         /*else if(name.endsWith("f"))
         {
-            name=name.substring(0,name.length()-1);
-            name+="ves";
+        name=name.substring(0,name.length()-1);
+        name+="ves";
         }*/
-        else if(name.endsWith("fe"))
+        else if (name.endsWith("fe"))
         {
-            name=name.substring(0,name.length()-2);
-            name+="ves";
+            name = name.substring(0, name.length() - 2);
+            name += "ves";
         }
         else
         {
-            name+="s";
+            name += "s";
         }
         return name;
     }
+
     private void insertPropertiesToModel(SemanticClass tpcls, StringBuilder javaClassContent)
     {
 
