@@ -39,8 +39,8 @@ public class Workspace extends WorkspaceBase
     {
 
         log.debug("Creating workspace..." + id + " ...");
-        org.semanticwb.repository.Workspace ws=WorkspaceBase.createWorkspace(id, namespace);
-        Unstructured root = Unstructured.createUnstructured(ws);
+        org.semanticwb.repository.Workspace ws=WorkspaceBase.ClassMgr.createWorkspace(id, namespace);
+        Unstructured root = Unstructured.ClassMgr.createUnstructured(ws);
         log.debug("Creating root node...");
         root.setName("jcr:root");
         root.setPath("/");        
