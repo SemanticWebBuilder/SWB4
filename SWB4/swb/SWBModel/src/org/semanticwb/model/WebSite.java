@@ -57,7 +57,7 @@ public class WebSite extends WebSiteBase
         if (null != dns)
         {
             //TODO: cachar DNS
-            Iterator<SemanticObject> it = getSemanticObject().getModel().listSubjects(Dns.swb_dns, dns);
+            Iterator<SemanticObject> it = getSemanticObject().getModel().listSubjects(Dns.ClassMgr.swb_dns, dns);
             if (it.hasNext())
             {
                 ret = (Dns) it.next().createGenericInstance();
