@@ -76,7 +76,7 @@
                         font-family: Verdana, "Times New Roman", serif;
                     }
 
-                    fieldset
+                    .post fieldset
                     {
                         border-style: solid;
                         border-color: silver;
@@ -89,7 +89,7 @@
                         text-align:justify;
                     }
 
-                    a
+                    .post a
                     {
                         font-weight:lighter;
                         color:teal;
@@ -113,8 +113,8 @@
                 </script>
 
                 <xsl:for-each select="comments">
-                    <span class="titleBlog" style="margin:2em;"><xsl:value-of select='@name' /><br/><span style="margin:2em;"><a><xsl:attribute name="href"><xsl:value-of select='@url' /></xsl:attribute>Ver todas las entradas</a></span></span>
-                    <fieldset> 
+                    <span class="titleBlog" style="margin:2em;"><xsl:value-of select='@name' /><br/><span style="margin:2em;"><a class="post"><xsl:attribute name="href"><xsl:value-of select='@url' /></xsl:attribute>Ver todas las entradas</a></span></span>
+                    <fieldset class="post">
                         <span class="postTitle" ><xsl:value-of select='@title' /></span><br/><br/>
                         <span class="postAutor" >Entrada publicada por <span style="color:black;font-weight:bold;"><xsl:value-of select='@author' /></span></span><br/>
                         <span class="postDate" ><xsl:value-of select='@date' /></span><br/>
@@ -122,14 +122,14 @@
                     </fieldset>
                 </xsl:for-each>
                 <xsl:for-each select="comments/comment">
-                <fieldset style="background-color:#F2F2F2">
+                <fieldset class="post" style="background-color:#F2F2F2">
                     <span class="commentUser">Comentario publicado por <span style="color:black;font-weight:bold;"><xsl:value-of select='@user' /></span></span><br/>
                     <span class="commentDate"><xsl:value-of select='@date' /></span><br/>
                     <p class="commentText"><xsl:value-of select='.' /></p>
                 </fieldset>
                 </xsl:for-each>                   
                 <xsl:if test="/comments/@viewall != ''">
-                    <span style="margin:2em;"><a name="viewallcomments" >
+                    <span style="margin:2em;"><a class="post" name="viewallcomments" >
                                 <xsl:attribute name="href"><xsl:value-of select='/comments/@viewall' /></xsl:attribute>
                                 Ver todos los comentarios
                     </a></span>
@@ -143,7 +143,7 @@
                             <xsl:attribute name="value"><xsl:value-of select='@postid' /></xsl:attribute>
                         </input>    
                     </xsl:for-each>                    
-                    <fieldset>
+                    <fieldset class="post">
                         <legend>Nuevo comentario</legend>
                             <textarea id="comment" rows="10" cols="50" name="comment"></textarea><br/>
                             <button type="button" onClick="javascript:EnviaComentarioPost(this.form);" name="save">Agregar</button>
