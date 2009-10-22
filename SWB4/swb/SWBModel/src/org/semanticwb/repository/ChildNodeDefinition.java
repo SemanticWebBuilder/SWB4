@@ -1,6 +1,6 @@
 package org.semanticwb.repository;
 
-public interface ChildNodeDefinition extends org.semanticwb.repository.Nameable,org.semanticwb.repository.CommonPropertiesforDefinition
+public interface ChildNodeDefinition extends org.semanticwb.repository.CommonPropertiesforDefinition,org.semanticwb.repository.Nameable
 {
     public static final org.semanticwb.platform.SemanticProperty jcr_defaultPrimaryType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#defaultPrimaryType");
     public static final org.semanticwb.platform.SemanticProperty jcr_sameNameSiblings=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#sameNameSiblings");
