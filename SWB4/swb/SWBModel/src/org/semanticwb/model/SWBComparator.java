@@ -73,8 +73,8 @@ public class SWBComparator implements Comparator
                 return compareSortable(obj1, obj2);
             }
 
-            if(cls1!=null && cls1.hasProperty(WebPage.ClassMgr.swb_webPageSortName.getName()))name1=sobj1.getProperty(WebPage.swb_webPageSortName);
-            if(cls2!=null && cls2.hasProperty(WebPage.ClassMgr.swb_webPageSortName.getName()))name2=sobj2.getProperty(WebPage.swb_webPageSortName);
+            if(cls1!=null && cls1.hasProperty(WebPage.ClassMgr.swb_webPageSortName.getName()))name1=sobj1.getProperty(WebPage.ClassMgr.swb_webPageSortName);
+            if(cls2!=null && cls2.hasProperty(WebPage.ClassMgr.swb_webPageSortName.getName()))name2=sobj2.getProperty(WebPage.ClassMgr.swb_webPageSortName);
             //System.out.println("name1:"+name1+" name2:"+name2);
         }
 
