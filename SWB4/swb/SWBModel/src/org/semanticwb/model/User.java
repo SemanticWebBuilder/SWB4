@@ -373,7 +373,7 @@ public class User extends UserBase implements Principal
         UserFavorite fav = getUserFavorite();
         if (fav != null)
         {
-            ret = fav.getSemanticObject().hasObjectProperty(fav.ClassMgr.swb_usrfHasObject, obj);
+            ret = fav.getSemanticObject().hasObjectProperty(UserFavorite.ClassMgr.swb_usrfHasObject, obj);
         }
         return ret;
     }
