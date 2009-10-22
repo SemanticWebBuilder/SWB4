@@ -1,6 +1,7 @@
 package org.semanticwb.portal.community;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 
@@ -32,40 +33,36 @@ public class CURPModule extends org.semanticwb.portal.community.base.CURPModuleB
         return states.iterator();
     }
 
-    public static Iterator<String> listCouncils (String state) {
+    public static HashMap<String, String> getCouncilsMap () {
         //TODO: cambiar código por código para obtener la lista del catálogo
-        ArrayList<String> councils = new ArrayList<String>();
 
-        if (state.equalsIgnoreCase("distrito federal")) {
-            String [] c = {"ALVARO OBREGON", "AZCAPOTZALCO", "BENITO JUAREZ",
-                           "COYOACAN", "CUAJIMALPA", "CUAUHTEMOC",
-                           "GUSTAVO A. MADERO", "IZTACALCO", "IZTAPALAPA",
-                           "MAGDALENA CONTRERAS", "MIGUEL HIDALGO", "MILPA ALTA",
-                           "TLAHUAC", "TLALPAN", "VENUSTIANO CARRANZA", "XOCHIMILCO"};
+        HashMap<String, String> councils = new HashMap<String, String>();
 
-            for (int i = 0; i < c.length; i++) {
-                String string = c[i];
-                councils.add(string);
-            }
-        } else if (state.equalsIgnoreCase("morelos")) {
-            String [] c = {"AMACUZAC", "ATLATLAHUCAN", "AXOCHIAPAN", "AYALA",
-                           "COATLAN DEL RIO", "CUAUTLA", "CUERNAVACA",
-                           "EMILIANO ZAPATA", "HIUITZILAC", "JANTETELCO",
-                           "JIUTEPEC", "JOJUTLA", "JONACATEPEC", "MAZATEPEC",
-                           "MIACATLAN", "OCUITUCO", "PUENTE DE IXTLA", "TEMIXCO",
-                           "TEMOAC", "TEPALCINGO", "TEPOZTLAN", "TETECALA",
-                           "TETELA DEL VOLCAN", "TLALNEPANTLA", "TLALTIZAPAN",
-                           "TLALQUILTENANGO", "TLAYACAPAN", "TOTOLAPAN", 
-                           "XOCHITEPEC", "YAUTEPEC", "YECAPIXTLA",
-                           "ZACATEPEC DE HIDALGO", "ZACUALPAN DE AMILPAS"};
-            for (int i = 0; i < c.length; i++) {
-                String string = c[i];
-                councils.add(string);
-            }
-        } else {
-            return null;
-        }
-        return councils.iterator();
+        String s_councils = "AGUASCALIENTES|ASIENTOS|CALVILLO|COSIO|EL LLANO|" +
+                "JESUS MARIA|PABELLON DE ARTEAGA|RINCON DE ROMOS|" +
+                "SAN FRANCISCO DE LOS ROMO|SAN JOSE DE GARCIA|TEPEZALA";
+        councils.put("AGUASCALIENTES", s_councils);
+        
+        s_councils = "ALVARO OBREGON|AZCAPOTZALCO|BENITO JUAREZ|COYOACAN|" +
+                "CUAJIMALPA|CUAUHTEMOC|GUSTAVO A. MADERO|IZTACALCO|" +
+                "IZTAPALAPA|MAGDALENA CONTRERAS|MIGUEL HIDALGO|" +
+                "MILPA ALTA|TLAHUAC|TLALPAN|VENUSTIANO CARRANZA|" +
+                "XOCHIMILCO";
+        councils.put("DISTRITO FEDERAL", s_councils);
+
+        s_councils = "AMACUZAC|ATLATLAHUCAN|AXOCHIAPAN|AYALA|COATLAN DEL RIO|" +
+                "CUAUTLA|CUERNAVACA|EMILIANO ZAPATA|HIUITZILAC|JANTETELCO|" +
+                "JIUTEPEC|JOJUTLA|JONACATEPEC|MAZATEPEC|MIACATLAN|OCUITUCO|" +
+                "PUENTE DE IXTLA|TEMIXCO|TEMOAC|TEPALCINGO|TEPOZTLAN|TETECALA|" +
+                "TETELA DEL VOLCAN|TLALNEPANTLA|TLALTIZAPAN|TLALQUILTENANGO|" +
+                "TLAYACAPAN|TOTOLAPAN|XOCHITEPEC|YAUTEPEC|YECAPIXTLA|" +
+                "ZACATEPEC DE HIDALGO|ZACUALPAN DE AMILPAS";
+        councils.put("MORELOS", s_councils);
+
+        s_councils = "ENSENADA|MEXICALI|PLAYAS DE ROSARITO|TECATE|TIJUANA";
+        councils.put("BAJA CALIFORNIA", s_councils);
+        
+        return councils;
     }
 
     public String getAddressString() {
@@ -81,14 +78,10 @@ public class CURPModule extends org.semanticwb.portal.community.base.CURPModuleB
         if (extNumber == null || extNumber.equals("null")) {
             extNumber = "";
         } else {
-            extNumber = " exterior " + extNumber;
+            extNumber = " exterior " + extNumber + ",<br>";
         }
         String council = getCityCouncil();
-        if (council == null || council.equals("null")) {
-            council = "";
-        } else {
-            council = ", " + council;
-        }
+        if (council == null || council.equals("null")) council = "";
         String city = getCity();
         if (city == null || city.equals("null")) {
             city = "";
