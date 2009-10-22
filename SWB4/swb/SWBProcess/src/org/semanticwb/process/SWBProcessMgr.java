@@ -27,7 +27,7 @@ public class SWBProcessMgr
         Iterator<ProcessInstance> it=ProcessInstance.listProcessInstanceByProcessType(process, site);
         while (it.hasNext()) {
             ProcessInstance processInstance = it.next();
-            if(processInstance.getStatus()==Process.STATUS_PROCESSING)
+            if(processInstance.getStatus()==Activity.STATUS_PROCESSING)
             {
                 ret.add(processInstance);
             }
@@ -39,7 +39,7 @@ public class SWBProcessMgr
     {
         ProcessInstance pinst=site.createProcessInstance();
         pinst.setProcessType(process);
-        pinst.setStatus(Process.STATUS_PROCESSING);
+        pinst.setStatus(Process.STATUS_INIT);
 
         Iterator<SemanticObject> it=process.listProcessClasses();
         while(it.hasNext())
@@ -56,19 +56,17 @@ public class SWBProcessMgr
         while (actit.hasNext())
         {
             Activity activity = actit.next();
-            ActivityInstance actins=site.createActivityInstance();
-            pinst.addActivityInstance(actins);
-            actins.setActivityType(activity);
-            actins.setStatus(Process.STATUS_INIT);
-
-            Iterator<Task> tskit=activity.listTasks();
-            while (tskit.hasNext())
+            if(activity instanceof Process)
             {
-                Task task = tskit.next();
+                ProcessInstance ins=createProcessInstance(site,(Process)activity);
+                pinst.addActivityInstance(ins);
+            }else if(activity instanceof Task)
+            {
+                Task task = (Task)activity;
                 TaskInstance taskins=site.createTaskInstance();
-                actins.addTaskinstance(taskins);
+                pinst.addActivityInstance(taskins);
                 taskins.setTaskType(task);
-                taskins.setStatus(Process.STATUS_INIT);
+                taskins.setStatus(Activity.STATUS_INIT);
             }
         }
         return pinst;
@@ -80,63 +78,46 @@ public class SWBProcessMgr
         Iterator<ActivityInstance> it=pinst.listActivityInstances();
         while(it.hasNext())
         {
-            ActivityInstance act=it.next();
-            if(act.getStatus()==Process.STATUS_INIT && canStartActivityInstance(act))
+            ActivityInstance actins=it.next();
+            if(actins instanceof ProcessInstance)
             {
-                act.setStatus(Process.STATUS_PROCESSING);
-            }
-            if(act.getStatus()==Process.STATUS_PROCESSING)
+                List aux=getUserTaskInstances((ProcessInstance)actins, user);
+                ret.addAll(aux);
+            }else if(actins instanceof TaskInstance)
             {
-                Iterator<TaskInstance> itt=act.listTaskinstances();
-                while (itt.hasNext())
+                TaskInstance taskInstance = (TaskInstance)actins;
+                if(taskInstance.getStatus()==Process.STATUS_INIT && canStartActivityInstance(taskInstance))
                 {
-                    TaskInstance taskInstance = itt.next();
-                    if(taskInstance.getStatus()==Process.STATUS_INIT && canStartTaskInstance(taskInstance))
-                    {
-                        taskInstance.setStatus(Process.STATUS_PROCESSING);
-                    }
-                    if(taskInstance.getStatus()==Process.STATUS_PROCESSING)
-                    {
-                        if(user.haveAccess(taskInstance.getTaskType()))ret.add(taskInstance);
-                    }
+                    taskInstance.setStatus(Process.STATUS_PROCESSING);
+                }
+                if(taskInstance.getStatus()==Process.STATUS_PROCESSING)
+                {
+                    if(user.haveAccess(taskInstance.getTaskType()))ret.add(taskInstance);
                 }
             }
         }
         return ret;
     }
     
-    public static boolean canStartTaskInstance(TaskInstance taskInstance)
-    {
-        boolean ret=true;
-        Task task=taskInstance.getTaskType();
-        Iterator<Task> it = task.listDependences();
-        while (it.hasNext()) {
-            Task task1 = it.next();
-            Iterator<TaskInstance> tiit=taskInstance.getActivityInstance().listTaskinstances();
-            while (tiit.hasNext()) {
-                TaskInstance taskInstance1 = tiit.next();
-                if(taskInstance1.getTaskType().equals(task1))
-                {
-                    if(taskInstance1.getStatus()<Process.STATUS_CLOSED)ret=false;
-                }
-            }
-        }
-        return ret;
-    }
-
     public static boolean canStartActivityInstance(ActivityInstance instance)
     {
         boolean ret=true;
-        Activity act=instance.getActivityType();
-        Iterator<Activity> it = act.listDependences();
-        while (it.hasNext()) {
+        Activity activity=instance.getActivityType();
+        Iterator<Activity> it = activity.listDependences();
+        while (it.hasNext())
+        {
             Activity act1 = it.next();
-            Iterator<ActivityInstance> tiit=instance.getProcessInstance().listActivityInstances();
-            while (tiit.hasNext()) {
-                ActivityInstance instance1 = tiit.next();
-                if(instance1.getActivityType().equals(act1))
+            ProcessInstance proins=instance.getProcessInstance();
+            if(proins!=null)
+            {
+                Iterator<ActivityInstance> tiit=proins.listActivityInstances();
+                while (tiit.hasNext())
                 {
-                    if(instance1.getStatus()<Process.STATUS_CLOSED)ret=false;
+                    ActivityInstance instance1 = tiit.next();
+                    if(instance1.getActivityType().equals(act1))
+                    {
+                        if(instance1.getStatus()<Process.STATUS_CLOSED)ret=false;
+                    }
                 }
             }
         }

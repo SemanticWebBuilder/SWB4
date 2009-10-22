@@ -15,14 +15,13 @@ public class TaskInstance extends org.semanticwb.process.base.TaskInstanceBase
     {
         if(getTaskType().isKeepOpen())
         {
-            setStatus(Process.STATUS_OPEN);
+            setStatus(Activity.STATUS_OPEN);
         }else
         {
-            setStatus(Process.STATUS_CLOSED);
+            setStatus(Activity.STATUS_CLOSED);
         }
         setEnded(new Date());
         setEndedby(user);
-
-        getActivityInstance().checkStatus(user);
+        getProcessInstance().checkStatus(user);
     }
 }
