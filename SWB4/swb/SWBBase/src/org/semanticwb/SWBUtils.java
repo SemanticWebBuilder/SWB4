@@ -955,16 +955,24 @@ public class SWBUtils {
             return p;
         }
 
+        /**
+         * Reemplaza caracteres superiores al 127 por &#[NUM];
+         * @param str
+         * @return string codificado, si el parametro es nulo, regresa cadena vacia.
+         */
         public static String encodeExtendedCharacters(String str)
         {
             StringBuffer ret = new StringBuffer();
-            for(int x = 0; x < str.length(); x++)
+            if(str!=null)
             {
-                char ch = str.charAt(x);
-                if (ch > 127) {
-                    ret.append("&#" + (int)ch + ";");
-                } else {
-                    ret.append(ch);
+                for(int x = 0; x < str.length(); x++)
+                {
+                    char ch = str.charAt(x);
+                    if (ch > 127) {
+                        ret.append("&#" + (int)ch + ";");
+                    } else {
+                        ret.append(ch);
+                    }
                 }
             }
             return ret.toString();
