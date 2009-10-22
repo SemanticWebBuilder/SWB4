@@ -3,6 +3,8 @@ package org.semanticwb.portal.community;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeMap;
 
 
 public class CURPModule extends org.semanticwb.portal.community.base.CURPModuleBase
@@ -33,7 +35,7 @@ public class CURPModule extends org.semanticwb.portal.community.base.CURPModuleB
         return states.iterator();
     }
 
-    public static HashMap<String, String> getCouncilsMap () {
+    public static Map<String, String> getCouncilsMap () {
         //TODO: cambiar código por código para obtener la lista del catálogo
 
         HashMap<String, String> councils = new HashMap<String, String>();
@@ -62,7 +64,7 @@ public class CURPModule extends org.semanticwb.portal.community.base.CURPModuleB
         s_councils = "ENSENADA|MEXICALI|PLAYAS DE ROSARITO|TECATE|TIJUANA";
         councils.put("BAJA CALIFORNIA", s_councils);
         
-        return councils;
+        return new TreeMap(councils);
     }
 
     public String getAddressString() {
