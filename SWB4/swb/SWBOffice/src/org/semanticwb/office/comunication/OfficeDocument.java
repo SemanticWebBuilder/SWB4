@@ -121,9 +121,9 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     private final SemanticClass cm_content = OfficeContent.swboffice_OfficeContent;
     private static final SemanticProperty prop_content = OfficeResource.swboffice_content;
     private static final SemanticClass swb_office = org.semanticwb.repository.office.OfficeDocument.swboffice_OfficeDocument;
-    private static final SemanticProperty PROP_JCR_DATA = org.semanticwb.repository.office.OfficeDocument.jcr_data;
+    private static final SemanticProperty PROP_JCR_DATA = org.semanticwb.repository.office.OfficeDocument.ClassMgr.jcr_data;
     private static final String JCR_DATA = PROP_JCR_DATA.getPrefix() + ":" + PROP_JCR_DATA.getName();
-    private static final SemanticProperty PROP_JCR_LASTMODIFIED = org.semanticwb.repository.office.OfficeDocument.jcr_lastModified;
+    private static final SemanticProperty PROP_JCR_LASTMODIFIED = org.semanticwb.repository.office.OfficeDocument.ClassMgr.jcr_lastModified;
     private static final String JCR_LASTMODIFIED = PROP_JCR_LASTMODIFIED.getPrefix() + ":" + PROP_JCR_LASTMODIFIED.getName();
     private static final SemanticProperty PROP_LASTMODIFIED = org.semanticwb.repository.office.OfficeContent.swboffice_lastModified;
     private static final String LASTMODIFIED = PROP_LASTMODIFIED.getPrefix() + ":" + PROP_LASTMODIFIED.getName();
@@ -372,7 +372,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     {
         String nodeType = cm_content.getPrefix() + ":" + cm_content.getName();
         // guarda en repositorio y publica
-        WebSite site = WebSite.getWebSite(siteid);
+        WebSite site = WebSite.ClassMgr.getWebSite(siteid);
         if (site == null)
         {
             throw new Exception("The site " + siteid + " was not found");
@@ -397,7 +397,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         // mantiene el id original
         // ciudado el contenido original ya no se puede publicar igual, pero se agrega funcionlidad para modalidad restauración
         ResourceInfo res = this.publishToResourceContent(resourceid, repositoryName, contentid, "*", title, description, info, viewProperties, viewValues);
-        return Resource.getResource(res.id, site);
+        return Resource.ClassMgr.getResource(res.id, site);
     }
 
     private String migrateResourceToRepository(String webworkpath, String siteid, File workpath, String resourceid, String version, String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file, PropertyInfo[] properties, String[] values) throws Exception
@@ -2102,7 +2102,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
         if (!exists)
         {
-            CalendarRef ref = CalendarRef.createCalendarRef(site);
+            CalendarRef ref = CalendarRef.ClassMgr.createCalendarRef(site);
             ref.setCalendar(cal);
             ref.setActive(true);
             resource.addCalendarRef(ref);
@@ -2367,7 +2367,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 rinfo.id = rule.getId();
                 rinfo.title = rule.getTitle();
                 rinfo.active = ref.isActive();
-                rinfo.type = Rule.sclass.getName();
+                rinfo.type = Rule.ClassMgr.sclass.getName();
                 rules.add(rinfo);
             }
         }
@@ -2381,7 +2381,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 rinfo.id = role.getId();
                 rinfo.title = role.getTitle();
                 rinfo.active = ref.isActive();
-                rinfo.type = Role.sclass.getName();
+                rinfo.type = Role.ClassMgr.sclass.getName();
                 rules.add(rinfo);
             }
         }
@@ -2395,7 +2395,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 rinfo.id = userGroupRef.getId();
                 rinfo.title = userGroupRef.getTitle();
                 rinfo.active = ref.isActive();
-                rinfo.type = Role.sclass.getName();
+                rinfo.type = Role.ClassMgr.sclass.getName();
                 rules.add(rinfo);
             }
         }
@@ -2405,8 +2405,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     public void addElementToResource(ResourceInfo info, ElementInfo ruleInfo) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
-        Resource resource = Resource.getResource(info.id, site);
-        if (ruleInfo.type.equals(Rule.sclass.getName()))
+        Resource resource = Resource.ClassMgr.getResource(info.id, site);
+        if (ruleInfo.type.equals(Rule.ClassMgr.sclass.getName()))
         {
             GenericIterator<RuleRef> refs = resource.listRuleRefs();
             boolean exists = false;
@@ -2423,13 +2423,13 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
             if (!exists)
             {
-                RuleRef ref = RuleRef.createRuleRef(site);
+                RuleRef ref = RuleRef.ClassMgr.createRuleRef(site);
                 ref.setActive(ruleInfo.active);
-                ref.setRule(Rule.getRule(ruleInfo.id, site));
+                ref.setRule(Rule.ClassMgr.getRule(ruleInfo.id, site));
                 resource.addRuleRef(ref);
             }
         }
-        if (ruleInfo.type.equals(Role.sclass.getName()))
+        if (ruleInfo.type.equals(Role.ClassMgr.sclass.getName()))
         {
             GenericIterator<RoleRef> refs = resource.listRoleRefs();
             boolean exists = false;
@@ -2446,13 +2446,13 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
             if (!exists)
             {
-                RoleRef ref = RoleRef.createRoleRef(site);
+                RoleRef ref = RoleRef.ClassMgr.createRoleRef(site);
                 ref.setActive(ruleInfo.active);
                 ref.setRole(site.getUserRepository().getRole(ruleInfo.id));
                 resource.addRoleRef(ref);
             }
         }
-        if (ruleInfo.type.equals(UserGroup.sclass.getName()))
+        if (ruleInfo.type.equals(UserGroup.ClassMgr.sclass.getName()))
         {
             GenericIterator<UserGroupRef> refs = resource.listUserGroupRefs();
             boolean exists = false;
@@ -2469,7 +2469,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
             if (!exists)
             {
-                UserGroupRef ref = UserGroupRef.createUserGroupRef(site);
+                UserGroupRef ref = UserGroupRef.ClassMgr.createUserGroupRef(site);
                 ref.setActive(ruleInfo.active);
                 ref.setUserGroup(site.getUserRepository().getUserGroup(ruleInfo.id));
                 resource.addUserGroupRef(ref);
@@ -2482,7 +2482,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
         Resource resource = site.getResource(info.id);
-        if (ruleInfo.type.equals(Rule.sclass.getName()))
+        if (ruleInfo.type.equals(Rule.ClassMgr.sclass.getName()))
         {
             GenericIterator<RuleRef> refs = resource.listRuleRefs();
             while (refs.hasNext())
@@ -2496,7 +2496,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 }
             }
         }
-        if (ruleInfo.type.equals(Role.sclass.getName()))
+        if (ruleInfo.type.equals(Role.ClassMgr.sclass.getName()))
         {
             GenericIterator<RoleRef> refs = resource.listRoleRefs();
             while (refs.hasNext())
@@ -2510,7 +2510,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 }
             }
         }
-        if (ruleInfo.type.equals(UserGroup.sclass.getName()))
+        if (ruleInfo.type.equals(UserGroup.ClassMgr.sclass.getName()))
         {
             GenericIterator<UserGroupRef> refs = resource.listUserGroupRefs();
             while (refs.hasNext())
@@ -2539,7 +2539,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     public LanguageInfo[] getLanguages(SiteInfo site) throws Exception
     {
         ArrayList<LanguageInfo> languages = new ArrayList<LanguageInfo>();
-        WebSite osite = WebSite.getWebSite(site.id);
+        WebSite osite = WebSite.ClassMgr.getWebSite(site.id);
         Iterator<Language> itlenguages = osite.listLanguages();
         while (itlenguages.hasNext())
         {
@@ -2554,14 +2554,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 
     public String getTitleOfWebPage(PageInfo webPageInfo, LanguageInfo laguage) throws Exception
     {
-        WebSite osite = WebSite.getWebSite(webPageInfo.site.id);
+        WebSite osite = WebSite.ClassMgr.getWebSite(webPageInfo.site.id);
         WebPage page = osite.getWebPage(webPageInfo.id);
         return page.getTitle(laguage.id);
     }
 
     public void setTitlesOfWebPage(PageInfo webPageInfo, LanguageInfo[] languages, String[] values) throws Exception
     {
-        WebSite osite = WebSite.getWebSite(webPageInfo.site.id);
+        WebSite osite = WebSite.ClassMgr.getWebSite(webPageInfo.site.id);
         WebPage page = osite.getWebPage(webPageInfo.id);
         int i = 0;
         for (LanguageInfo lang : languages)
@@ -2578,10 +2578,10 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 
     public ContentInfo existContentOldVersion(String contentid, String topicmap, String topicid) throws Exception
     {
-        WebSite site = WebSite.getWebSite(topicmap);
+        WebSite site = WebSite.ClassMgr.getWebSite(topicmap);
         if (site != null)
         {
-            WebPage page = WebPage.getWebPage(topicid, site);
+            WebPage page = WebPage.ClassMgr.getWebPage(topicid, site);
             if (page != null)
             {
                 GenericIterator<Resource> resources = page.listResources();
