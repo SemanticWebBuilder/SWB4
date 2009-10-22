@@ -196,12 +196,12 @@ public class WBSiteMap extends GenericAdmResource
         Resource base=getResourceBase();
         
         if(paramRequest.getCallMethod()==paramRequest.Call_STRATEGY) {
-            String surl="";
+            String surl = paramRequest.getWebPage().getUrl() + "/../";
 
             if(!"".equals(base.getAttribute("url", "").trim())) {
-                surl=base.getAttribute("url").trim();
+                surl += base.getAttribute("url").trim();
             }else {
-                surl=paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW).toString();
+                surl += paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW).toString();
             }
             
             if( base.getAttribute("img")!=null ) {
@@ -210,11 +210,11 @@ public class WBSiteMap extends GenericAdmResource
                 if(!"".equals(base.getAttribute("alt", "").trim())) {
                     out.println(" alt=\"" + base.getAttribute("alt").trim() + "\"");
                 }
-                out.println(" border=0></a>");
+                out.println(" border=\"0\"></a>");
             }else if( base.getAttribute("btntexto")!=null ) {
-                out.println("<form name=frmWBSiteMap method=POST action=\"" + surl + "\">");
-                out.println("<input type=submit name=btnWBSiteMap value=");
-                out.println("\"" + base.getAttribute("btntexto").trim().replaceAll("\"","&#34;") + "\"");
+                out.println("<form name=\"frmWBSiteMap\" method=\"post\" action=\"" + surl + "\">");
+                out.println("<input type=\"submit\" name=\"btnWBSiteMap\" value=\"");
+                out.println(base.getAttribute("btntexto").trim().replaceAll("\"","&#34;") + "\"");
                 if( base.getAttribute("blnstyle")!=null ) {
                     out.println(" style=\"" + base.getAttribute("blnstyle").trim().replaceAll("\"","&#34;") + "\"");
                 }
