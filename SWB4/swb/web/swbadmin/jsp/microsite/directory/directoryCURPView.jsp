@@ -1,6 +1,7 @@
 <%@page import="java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="org.semanticwb.model.*"%>
+<%@page import="java.util.HashMap"%>
 <%@page import="org.semanticwb.SWBUtils"%>
 <%@page import="org.semanticwb.platform.*"%>
 <%@page import="org.semanticwb.SWBPortal"%>
@@ -23,15 +24,14 @@ private final int I_PAGE_SIZE = 20;
     }
 
    <%
-    //Agregar municipios del DF
-    String keyVal = CURPModule.getCouncilString("distrito federal");
-    if (keyVal == null) keyVal = "-------------";
-    %>statesHM.Set('DISTRITO FEDERAL', new String('<%=keyVal%>'));<%
 
-    //Agregar municipios de Morelos
-    keyVal = CURPModule.getCouncilString("morelos");
-    if (keyVal == null) keyVal = "-------------";
-    %>statesHM.Set('MORELOS', new String('<%=keyVal%>'));<%
+    //Agregar municipios
+    HashMap<String, String> cMap = CURPModule.getCouncilsMap();
+    Iterator<String> keys = cMap.keySet().iterator();
+    while (keys.hasNext()) {
+        String key = keys.next();
+        %>statesHM.Set('<%=key%>', new String('<%=cMap.get(key)%>'));<%
+    }            
 %>
 
     function updateChild(child, key) {
@@ -64,12 +64,12 @@ private final int I_PAGE_SIZE = 20;
         <legend>Busqueda por municipio</legend>
         <select id="state" onchange="updateChild('q_container', dojo.byId('state').value)">
             <%
-                Iterator<String> sit = CURPModule.listStates();
-                while (sit.hasNext()) {
-                    String name = sit.next();
-                    %><option value="<%=name%>"><%=name%></option><%
-                }
-            %>
+                keys = cMap.keySet().iterator();
+                    while (keys.hasNext()) {
+                        String key = keys.next();
+                        %><option value="<%=key%>"><%=key%></option><%
+                    }
+                %>
     </select>
     <div id="q_container" style="display:inline">
         <select id="q" name="q"></select>
