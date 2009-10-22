@@ -220,7 +220,7 @@ public class BaseNode extends BaseNodeBase
     }*/
     public boolean isVersionHistoryNode()
     {
-        return isNodeType(VersionHistory.nt_VersionHistory);
+        return isNodeType(VersionHistory.ClassMgr.nt_VersionHistory);
     }
 
     @Override
@@ -237,7 +237,7 @@ public class BaseNode extends BaseNodeBase
 
     public boolean isVersionNode()
     {
-        return isNodeType(Version.nt_Version);
+        return isNodeType(Version.ClassMgr.nt_Version);
     }
 
     private void unLock() throws SWBException
@@ -723,9 +723,9 @@ public class BaseNode extends BaseNodeBase
 
     private final void addPrimaryType(SemanticClass clazz)
     {
-        if (getPropertyInternal(jcr_primaryType, null) == null)
+        if (getPropertyInternal(ClassMgr.jcr_primaryType, null) == null)
         {
-            setPropertyInternal(jcr_primaryType, clazz.getPrefix() + ":" + clazz.getName());
+            setPropertyInternal(ClassMgr.jcr_primaryType, clazz.getPrefix() + ":" + clazz.getName());
         }
     }
 
@@ -1060,7 +1060,7 @@ public class BaseNode extends BaseNodeBase
 
     private boolean isFrozenNode()
     {
-        return isNodeType(FrozenNode.nt_FrozenNode);
+        return isNodeType(FrozenNode.ClassMgr.nt_FrozenNode);
     }
 
     private void doCopy(BaseNode targetNode, BaseNode destNode) throws SWBException
@@ -1159,9 +1159,9 @@ public class BaseNode extends BaseNodeBase
 
     private void initializeFrozenProperties(SemanticObject frozenNode) throws SWBException
     {
-        SemanticProperty jcr_frozenUuid = FrozenNode.jcr_frozenUuid;
-        SemanticProperty jcr_frozenPrimaryType = FrozenNode.jcr_frozenPrimaryType;
-        SemanticProperty frozenMixinTypes = FrozenNode.jcr_frozenMixinTypes;
+        SemanticProperty jcr_frozenUuid = FrozenNode.ClassMgr.jcr_frozenUuid;
+        SemanticProperty jcr_frozenPrimaryType = FrozenNode.ClassMgr.jcr_frozenPrimaryType;
+        SemanticProperty frozenMixinTypes = FrozenNode.ClassMgr.jcr_frozenMixinTypes;
         String uudi = this.getUUID();
         frozenNode.setProperty(jcr_frozenUuid, uudi);
         frozenNode.setProperty(jcr_frozenPrimaryType, this.getPrimaryType());
@@ -1181,9 +1181,9 @@ public class BaseNode extends BaseNodeBase
     {
         if (historyNode.isVersionHistoryNode())
         {
-            BaseNode ntVersion = historyNode.createNodeBase(JCR_ROOTVERSION, Version.nt_Version);
-            BaseNode versionLabels = historyNode.createNodeBase(JCR_VERSIONLABELS_NAME, VersionLabels.nt_VersionLabels);
-            BaseNode ntFrozenNode = ntVersion.createNodeBase(JCR_FROZENNODE_NAME, FrozenNode.nt_FrozenNode);
+            BaseNode ntVersion = historyNode.createNodeBase(JCR_ROOTVERSION, Version.ClassMgr.nt_Version);
+            BaseNode versionLabels = historyNode.createNodeBase(JCR_VERSIONLABELS_NAME, VersionLabels.ClassMgr.nt_VersionLabels);
+            BaseNode ntFrozenNode = ntVersion.createNodeBase(JCR_FROZENNODE_NAME, FrozenNode.ClassMgr.nt_FrozenNode);
             initializeFrozenProperties(ntFrozenNode.getSemanticObject());
             this.getSemanticObject().setObjectProperty(Versionable.jcr_baseVersion, ntVersion.getSemanticObject());
         }
@@ -1195,7 +1195,7 @@ public class BaseNode extends BaseNodeBase
         {
             SemanticProperty property = Versionable.jcr_versionHistory;
             String path = this.getPath() + "/" + property.getPrefix() + ":" + property.getName();
-            BaseNode historyNode = addNodeToProperty(property, VersionHistory.nt_VersionHistory, "jcr:versionHistory", path);
+            BaseNode historyNode = addNodeToProperty(property, VersionHistory.ClassMgr.nt_VersionHistory, "jcr:versionHistory", path);
             historyNode.setPropertyInternal(Referenceable.jcr_uuid, UUID.randomUUID().toString());
             addRootNodeToHistory(historyNode);
         }
@@ -1204,7 +1204,7 @@ public class BaseNode extends BaseNodeBase
     public BaseNode[] getBaseSuccessors() throws SWBException
     {
         ArrayList<BaseNode> successors = new ArrayList<BaseNode>();
-        Iterator<SemanticObject> objs = this.getSemanticObject().listObjectProperties(Version.jcr_successors);
+        Iterator<SemanticObject> objs = this.getSemanticObject().listObjectProperties(Version.ClassMgr.jcr_successors);
         while (objs.hasNext())
         {
             successors.add(new BaseNode(objs.next()));
@@ -1215,7 +1215,7 @@ public class BaseNode extends BaseNodeBase
     public BaseNode[] getBasePredecessors() throws SWBException
     {
         ArrayList<BaseNode> predecessors = new ArrayList<BaseNode>();
-        Iterator<SemanticObject> objs = this.getSemanticObject().listObjectProperties(Version.jcr_predecessors);
+        Iterator<SemanticObject> objs = this.getSemanticObject().listObjectProperties(Version.ClassMgr.jcr_predecessors);
         while (objs.hasNext())
         {
             predecessors.add(new BaseNode(objs.next()));
@@ -1359,14 +1359,14 @@ public class BaseNode extends BaseNodeBase
                         log.error(nfe);
                     }
                 }
-                BaseNode ntVersion = versionHistory.createNodeBase(nextVersion, Version.nt_Version);
+                BaseNode ntVersion = versionHistory.createNodeBase(nextVersion, Version.ClassMgr.nt_Version);
                 // TODO: DEBE AGREGAR REFERENCIA A LAS PREDECEDORAS, PERO FALTA METODO PARA AGREGAR
                 for (BaseNode predecessor : predecessors)
                 {
-                    predecessor.getSemanticObject().addObjectProperty(Version.jcr_successors, ntVersion.getSemanticObject());
-                    ntVersion.getSemanticObject().addObjectProperty(Version.jcr_predecessors, predecessor.getSemanticObject());
+                    predecessor.getSemanticObject().addObjectProperty(Version.ClassMgr.jcr_successors, ntVersion.getSemanticObject());
+                    ntVersion.getSemanticObject().addObjectProperty(Version.ClassMgr.jcr_predecessors, predecessor.getSemanticObject());
                 }
-                BaseNode ntFrozenNode = ntVersion.createNodeBase(JCR_FROZENNODE_NAME, FrozenNode.nt_FrozenNode);
+                BaseNode ntFrozenNode = ntVersion.createNodeBase(JCR_FROZENNODE_NAME, FrozenNode.ClassMgr.nt_FrozenNode);
                 doCopyToFrozenNode(ntFrozenNode);
                 addVersionToHistoryNode = ntVersion;
                 //update the BaseVersion of this node
@@ -1393,7 +1393,7 @@ public class BaseNode extends BaseNodeBase
     public final void addMixin(String mixinName) throws SWBException
     {
         SemanticClass clazz = getSemanticClass(mixinName);
-        SemanticProperty property = jcr_mixinTypes;
+        SemanticProperty property = ClassMgr.jcr_mixinTypes;
         setPropertyInternal(property, mixinName);
         this.getSemanticObject().addSemanticClass(clazz);
         addVersionableUuid();
@@ -1644,7 +1644,7 @@ public class BaseNode extends BaseNodeBase
 
     private void addVersionableUuid() throws SWBException
     {
-        SemanticProperty property = VersionHistory.jcr_versionableUuid;
+        SemanticProperty property = VersionHistory.ClassMgr.jcr_versionableUuid;
         String value = getPropertyInternal(property, null);
         if (value == null)
         {
@@ -1847,7 +1847,7 @@ public class BaseNode extends BaseNodeBase
 
     public static Hashtable<String, String> listUris()
     {
-        Iterator<SemanticClass> tpcit = nt_BaseNode.listSubClasses();
+        Iterator<SemanticClass> tpcit = ClassMgr.nt_BaseNode.listSubClasses();
         while (tpcit.hasNext())
         {
             SemanticClass tpc = tpcit.next();
@@ -1929,7 +1929,7 @@ public class BaseNode extends BaseNodeBase
         }
         catch (Throwable e)
         {
-            org.semanticwb.platform.SemanticObject obj = getSemanticObject().getObjectProperty(swbrep_parentNode);
+            org.semanticwb.platform.SemanticObject obj = getSemanticObject().getObjectProperty(ClassMgr.swbrep_parentNode);
             if (obj != null)
             {
                 return new BaseNode(obj);
