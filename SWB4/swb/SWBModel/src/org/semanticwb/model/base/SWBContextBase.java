@@ -14,7 +14,7 @@ public class SWBContextBase
 
     public static org.semanticwb.model.WebSite getWebSite(String name)
     {
-        return org.semanticwb.model.WebSite.getWebSite(name);
+        return org.semanticwb.model.WebSite.ClassMgr.getWebSite(name);
     }
 
     public static java.util.Iterator<org.semanticwb.model.WebSite> listWebSites()
@@ -24,18 +24,18 @@ public class SWBContextBase
 
     public static void removeWebSite(String name)
     {
-        org.semanticwb.model.WebSite.removeWebSite(name);
+        org.semanticwb.model.WebSite.ClassMgr.removeWebSite(name);
     }
 
     public static org.semanticwb.model.WebSite createWebSite(String name, String namespace)
     {
-       return org.semanticwb.model.WebSite.createWebSite(name, namespace);
+       return org.semanticwb.model.WebSite.ClassMgr.createWebSite(name, namespace);
     }
     public static final SemanticClass swb_UserRepository=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserRepository");
 
     public static org.semanticwb.model.UserRepository getUserRepository(String name)
     {
-        return org.semanticwb.model.UserRepository.getUserRepository(name);
+        return org.semanticwb.model.UserRepository.ClassMgr.getUserRepository(name);
     }
 
     public static java.util.Iterator<org.semanticwb.model.UserRepository> listUserRepositories()
@@ -45,32 +45,11 @@ public class SWBContextBase
 
     public static void removeUserRepository(String name)
     {
-        org.semanticwb.model.UserRepository.removeUserRepository(name);
+        org.semanticwb.model.UserRepository.ClassMgr.removeUserRepository(name);
     }
 
     public static org.semanticwb.model.UserRepository createUserRepository(String name, String namespace)
     {
-       return org.semanticwb.model.UserRepository.createUserRepository(name, namespace);
-    }
-    public static final SemanticClass swbrep_Workspace=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/repository#Workspace");
-
-    public static org.semanticwb.repository.Workspace getWorkspace(String name)
-    {
-        return org.semanticwb.repository.Workspace.getWorkspace(name);
-    }
-
-    public static java.util.Iterator<org.semanticwb.repository.Workspace> listWorkspaces()
-    {
-        return (java.util.Iterator<org.semanticwb.repository.Workspace>)swbrep_Workspace.listGenericInstances();
-    }
-
-    public static void removeWorkspace(String name)
-    {
-        org.semanticwb.repository.Workspace.removeWorkspace(name);
-    }
-
-    public static org.semanticwb.repository.Workspace createWorkspace(String name, String namespace)
-    {
-       return org.semanticwb.repository.Workspace.createWorkspace(name, namespace);
+       return org.semanticwb.model.UserRepository.ClassMgr.createUserRepository(name, namespace);
     }
 }
