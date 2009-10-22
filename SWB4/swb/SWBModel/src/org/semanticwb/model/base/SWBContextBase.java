@@ -52,4 +52,25 @@ public class SWBContextBase
     {
        return org.semanticwb.model.UserRepository.ClassMgr.createUserRepository(name, namespace);
     }
+    public static final SemanticClass swbrep_Workspace=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/repository#Workspace");
+
+    public static org.semanticwb.repository.Workspace getWorkspace(String name)
+    {
+        return org.semanticwb.repository.Workspace.ClassMgr.getWorkspace(name);
+    }
+
+    public static java.util.Iterator<org.semanticwb.repository.Workspace> listWorkspaces()
+    {
+        return (java.util.Iterator<org.semanticwb.repository.Workspace>)swbrep_Workspace.listGenericInstances();
+    }
+
+    public static void removeWorkspace(String name)
+    {
+        org.semanticwb.repository.Workspace.ClassMgr.removeWorkspace(name);
+    }
+
+    public static org.semanticwb.repository.Workspace createWorkspace(String name, String namespace)
+    {
+       return org.semanticwb.repository.Workspace.ClassMgr.createWorkspace(name, namespace);
+    }
 }

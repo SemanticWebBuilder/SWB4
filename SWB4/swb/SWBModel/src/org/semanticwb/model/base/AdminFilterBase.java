@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class AdminFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable,org.semanticwb.model.XMLable
+public class AdminFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.XMLable
 {
     public static class ClassMgr
     {
