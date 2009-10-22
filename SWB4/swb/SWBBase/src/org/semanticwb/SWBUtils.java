@@ -260,9 +260,6 @@ public class SWBUtils {
      */
     public static class TEXT {
 
-        private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'.'SSS");
-        //version 1.3
-
         public static final String CHARSET_ISO8859_1="ISO8859_1";
         public static final String CHARSET_UTF8="UTF8";
 
@@ -394,11 +391,15 @@ public class SWBUtils {
             return str;
         }
 
-        public static String iso8601DateFormat(Date date) {
+        public static String iso8601DateFormat(Date date) 
+        {
+            SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'.'SSS");
             return iso8601dateFormat.format(date);
         }
 
-        public static Date iso8601DateParse(String date) throws ParseException {
+        public static Date iso8601DateParse(String date) throws ParseException
+        {
+            SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'.'SSS");
             return iso8601dateFormat.parse(date);
         }
 
