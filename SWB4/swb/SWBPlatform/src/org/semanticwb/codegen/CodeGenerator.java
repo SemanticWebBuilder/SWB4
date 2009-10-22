@@ -47,7 +47,7 @@ import org.semanticwb.platform.SemanticMgr;
 public class CodeGenerator
 {
 
-    private static final String GLOBAL_CLASS_NAME = "Global";
+    private static final String GLOBAL_CLASS_NAME = "ClassMgr";
     private static final String CLOSE_BLOCK = "    }";
     private static final String END_OF_METHOD = "();";
     private static final String ENTER = "\r\n";
