@@ -2,6 +2,7 @@
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="org.semanticwb.model.*"%>
 <%@page import="java.util.HashMap"%>
+<%@page import="java.util.Map"%>
 <%@page import="org.semanticwb.SWBUtils"%>
 <%@page import="org.semanticwb.platform.*"%>
 <%@page import="org.semanticwb.SWBPortal"%>
@@ -16,7 +17,9 @@ private final int I_PAGE_SIZE = 20;
 <script type="text/javascript">
     dojo.require("dijit.form.FilteringSelect");
     dojo.require("dijit.form.Button");
+</script>
 
+<script type="text/javascript">
     //HashMap de estados y municipios
     var statesHM = {
 	Set : function(foo,bar) {this[foo] = bar;},
@@ -26,12 +29,13 @@ private final int I_PAGE_SIZE = 20;
    <%
 
     //Agregar municipios
-    HashMap<String, String> cMap = CURPModule.getCouncilsMap();
+    Map<String, String> cMap = CURPModule.getCouncilsMap();
     Iterator<String> keys = cMap.keySet().iterator();
     while (keys.hasNext()) {
         String key = keys.next();
         %>statesHM.Set('<%=key%>', new String('<%=cMap.get(key)%>'));<%
-    }            
+    }
+    String first = ((String)cMap.keySet().toArray()[0]).trim();
 %>
 
     function updateChild(child, key) {
@@ -41,7 +45,7 @@ private final int I_PAGE_SIZE = 20;
         for (i = 0; i < inner.length; i++) {
             res += "<option value=\"" + inner[i] + "\">" + inner[i] + "</option>\n";
         }
-        //alert();
+        //alert(res);
         dojo.byId(child).innerHTML = "<select name=\"q\">" + res + "</select>";
     }
 </script>
@@ -77,6 +81,9 @@ private final int I_PAGE_SIZE = 20;
         <button type="submit" value="Buscar">Buscar</button>
     </fieldset>
 </form>
+    <script type="text/javascript">
+        updateChild('q_container', '<%=first%>');
+    </script>
 <div class="editarInfo1">
     <p>
         <%
