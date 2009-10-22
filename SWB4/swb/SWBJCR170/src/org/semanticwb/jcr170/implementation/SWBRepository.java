@@ -98,7 +98,7 @@ public final class SWBRepository implements Repository
                 Workspace ws=SWBContext.getWorkspace(name);
                 if(ws.getRoot()==null)
                 {
-                    Unstructured root = Unstructured.createUnstructured(ws);
+                    Unstructured root = Unstructured.ClassMgr.createUnstructured(ws);
                     root.setName("jcr:root");
                     root.setPath("/");
                     ws.setRoot(root);
@@ -131,7 +131,7 @@ public final class SWBRepository implements Repository
                 Workspace ws = SWBContext.getWorkspace(name);
                 if(ws.getRoot()==null)
                 {
-                    Unstructured root = Unstructured.createUnstructured(ws);
+                    Unstructured root = Unstructured.ClassMgr.createUnstructured(ws);
                     root.setName("jcr:root");
                     root.setPath("/");
                     ws.setRoot(root);
