@@ -139,7 +139,7 @@ public class SWBOfficeManager implements OfficeManager
             while (models.hasNext())
             {
                 SWBModel model = models.next();
-                if (model.getSemanticObject().getSemanticClass().equals(Workspace.sclass) || model.getSemanticObject().getSemanticClass().isSubClass(Workspace.sclass))
+                if (model.getSemanticObject().getSemanticClass().equals(Workspace.ClassMgr.sclass) || model.getSemanticObject().getSemanticClass().isSubClass(Workspace.ClassMgr.sclass))
                 {
 
                     String name = model.getId() + "@" + manager.getName();
