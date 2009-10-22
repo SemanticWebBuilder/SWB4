@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class ResourceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Campable,org.semanticwb.model.Traceable,org.semanticwb.model.Indexable,org.semanticwb.model.Activeable,org.semanticwb.model.RoleRefable,org.semanticwb.model.XMLConfable,org.semanticwb.model.Localeable,org.semanticwb.model.Viewable,org.semanticwb.model.Hitable,org.semanticwb.model.Priorityable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Deviceable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Trashable,org.semanticwb.model.Sortable,org.semanticwb.model.Expirable,org.semanticwb.model.XMLable
+public class ResourceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.RoleRefable,org.semanticwb.model.XMLConfable,org.semanticwb.model.Campable,org.semanticwb.model.Sortable,org.semanticwb.model.Activeable,org.semanticwb.model.Localeable,org.semanticwb.model.Expirable,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Indexable,org.semanticwb.model.Viewable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Priorityable,org.semanticwb.model.Trashable,org.semanticwb.model.Hitable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Deviceable,org.semanticwb.model.XMLable,org.semanticwb.model.CalendarRefable
 {
     public static class ClassMgr
     {
@@ -13,8 +13,8 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
        public static final org.semanticwb.platform.SemanticProperty swb_xml=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#xml");
        public static final org.semanticwb.platform.SemanticProperty swb_xmlConf=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#xmlConf");
        public static final org.semanticwb.platform.SemanticProperty swb_tags=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#tags");
-       public static final org.semanticwb.platform.SemanticProperty swb_deleted=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#deleted");
        public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
+       public static final org.semanticwb.platform.SemanticProperty swb_deleted=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#deleted");
        public static final org.semanticwb.platform.SemanticClass swb_ResourceFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceFilter");
        public static final org.semanticwb.platform.SemanticProperty swb_resourceFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#resourceFilter");
        public static final org.semanticwb.platform.SemanticProperty swb_valid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#valid");
@@ -231,16 +231,6 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
         getSemanticObject().setProperty(ClassMgr.swb_tags, value);
     }
 
-    public boolean isDeleted()
-    {
-        return getSemanticObject().getBooleanProperty(ClassMgr.swb_deleted);
-    }
-
-    public void setDeleted(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(ClassMgr.swb_deleted, value);
-    }
-
     public boolean isActive()
     {
         return getSemanticObject().getBooleanProperty(ClassMgr.swb_active);
@@ -249,6 +239,16 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
     public void setActive(boolean value)
     {
         getSemanticObject().setBooleanProperty(ClassMgr.swb_active, value);
+    }
+
+    public boolean isDeleted()
+    {
+        return getSemanticObject().getBooleanProperty(ClassMgr.swb_deleted);
+    }
+
+    public void setDeleted(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(ClassMgr.swb_deleted, value);
     }
 
     public void setResourceFilter(org.semanticwb.model.ResourceFilter value)

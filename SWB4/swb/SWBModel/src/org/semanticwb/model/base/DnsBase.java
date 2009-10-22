@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class DnsBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.WebPageable
+public class DnsBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.WebPageable,org.semanticwb.model.Traceable
 {
     public static class ClassMgr
     {

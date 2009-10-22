@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class TopicBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Indexable
+public class TopicBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Indexable
 {
     public static class ClassMgr
     {
