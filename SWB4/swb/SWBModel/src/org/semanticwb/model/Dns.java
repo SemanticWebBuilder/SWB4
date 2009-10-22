@@ -55,7 +55,7 @@ public class Dns extends DnsBase
     synchronized public static void refresh()
     {
         names=new HashMap();
-        Iterator<Dns> it=listDnses();
+        Iterator<Dns> it=ClassMgr.listDnses();
         while(it.hasNext())
         {
             Dns dns=it.next();
