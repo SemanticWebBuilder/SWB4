@@ -175,7 +175,7 @@ public class SWBAWebPageContents extends GenericResource {
             out.println("</th>");
             inheritHeader.append("</th>");
             String propname = "";
-            sptemp = hmprop.get(Resource.swb_resourceType);
+            sptemp = hmprop.get(Resource.ClassMgr.swb_resourceType);
             if (sptemp != null) {
                 propname = sptemp.getName();
                 try {
@@ -366,8 +366,8 @@ public class SWBAWebPageContents extends GenericResource {
                 urlchoose.setParameter("act", "edit");
                 out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sobj.getDisplayName() + "');return false;\">" + stitle + "</a>");
                 out.println("</td>");
-                if (hmprop.get(Resource.swb_resourceType) != null) {
-                    semprop = (SemanticProperty) hmprop.get(Resource.swb_resourceType);
+                if (hmprop.get(Resource.ClassMgr.swb_resourceType) != null) {
+                    semprop = (SemanticProperty) hmprop.get(Resource.ClassMgr.swb_resourceType);
                     out.println("<td>");
                     out.println(sobj.getObjectProperty(semprop).getDisplayName(user.getLanguage()));
                     out.println("</td>");
@@ -523,7 +523,7 @@ public class SWBAWebPageContents extends GenericResource {
 
         } else if (action.equals("choose")) { //lista de instancias de tipo propiedad existentes para selecionar
             SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(idp);
-            idptype = Resource.swb_resourceType.getURI();
+            idptype = Resource.ClassMgr.swb_resourceType.getURI();
             if (idptype != null) {
                 prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(idptype);
             }
@@ -557,7 +557,7 @@ public class SWBAWebPageContents extends GenericResource {
             HashMap<String, SemanticObject> hmSystem = new HashMap();
             while (itgso.hasNext()) {
                 SemanticObject sobj = itgso.next();
-                int mode = sobj.getIntProperty(ResourceType.swb_resourceMode);
+                int mode = sobj.getIntProperty(ResourceType.ClassMgr.swb_resourceMode);
                 if (mode == 1)//tipo contenido
                 {
                     hmContent.put(sobj.getId(), sobj);
@@ -675,7 +675,7 @@ public class SWBAWebPageContents extends GenericResource {
                 log.debug("before:");
                 int mode = 0;
                 try {
-                    mode = sobj.getIntProperty(ResourceType.swb_resourceMode);
+                    mode = sobj.getIntProperty(ResourceType.ClassMgr.swb_resourceMode);
                 } catch (Exception e) {
                     mode = 0;
                 }
@@ -822,7 +822,7 @@ public class SWBAWebPageContents extends GenericResource {
             obj = ont.getSemanticObject(id);
             cls = obj.getSemanticClass();
             SemanticObject so = ont.getSemanticObject(sobj);
-            SWBFormMgr fmgr = new SWBFormMgr(Resource.swb_Resource, obj, null);
+            SWBFormMgr fmgr = new SWBFormMgr(Resource.ClassMgr.swb_Resource, obj, null);
             fmgr.setLang(user.getLanguage());
             fmgr.setAction(urlPA.toString());
             fmgr.setSubmitByAjax(true);
@@ -993,12 +993,12 @@ public class SWBAWebPageContents extends GenericResource {
             SemanticObject wpage = null;
             wpage = ont.getSemanticObject(id);
 
-            SWBFormMgr fmgr = new SWBFormMgr(Resource.swb_Resource, wpage, null);
+            SWBFormMgr fmgr = new SWBFormMgr(Resource.ClassMgr.swb_Resource, wpage, null);
             try {
                 SemanticObject nso = fmgr.processForm(request);
 
                 SemanticObject ptype = ont.getSemanticObject(sobj);
-                nso.setObjectProperty(Resource.swb_resourceType, ptype);
+                nso.setObjectProperty(Resource.ClassMgr.swb_resourceType, ptype);
 
                 if (prop.getName().startsWith("has")) {
                     obj.addObjectProperty(prop, nso);

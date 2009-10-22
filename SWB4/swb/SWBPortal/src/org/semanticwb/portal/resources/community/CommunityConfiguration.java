@@ -252,7 +252,7 @@ public class CommunityConfiguration extends GenericResource
             }
             else
             {
-                foro = WebPage.createWebPage(FORO_RESOURCE_TYPE_ID + UUID.randomUUID().toString(), site);
+                foro = WebPage.ClassMgr.createWebPage(FORO_RESOURCE_TYPE_ID + UUID.randomUUID().toString(), site);
                 foro.setParent(parent);
                 foro.setActive(true);
                 foro.setHidden(true);
@@ -289,7 +289,7 @@ public class CommunityConfiguration extends GenericResource
             }
             else
             {
-                wiki = WebPage.createWebPage(WIKI_RESOURCE_TYPE_ID + UUID.randomUUID().toString(), site);
+                wiki = WebPage.ClassMgr.createWebPage(WIKI_RESOURCE_TYPE_ID + UUID.randomUUID().toString(), site);
                 wiki.setTitle("Wiki de " + title);
                 wiki.setParent(parent);
                 wiki.setHidden(true);
@@ -325,7 +325,7 @@ public class CommunityConfiguration extends GenericResource
             }
             else
             {
-                blog = WebPage.createWebPage(BLOG_RESOURCE_TYPE_ID + UUID.randomUUID().toString(), site);
+                blog = WebPage.ClassMgr.createWebPage(BLOG_RESOURCE_TYPE_ID + UUID.randomUUID().toString(), site);
                 blog.setParent(parent);
                 blog.setTitle("Blog de " + title);
                 blog.setHidden(true);
@@ -377,7 +377,7 @@ public class CommunityConfiguration extends GenericResource
             }
             else
             {
-                googlegadget = WebPage.createWebPage(GOOGLE_RESOURCE_TYPE_ID + UUID.randomUUID().toString(), site);
+                googlegadget = WebPage.ClassMgr.createWebPage(GOOGLE_RESOURCE_TYPE_ID + UUID.randomUUID().toString(), site);
                 googlegadget.setParent(parent);
                 googlegadget.setTitle("Gadget de " + title);
                 googlegadget.setHidden(true);

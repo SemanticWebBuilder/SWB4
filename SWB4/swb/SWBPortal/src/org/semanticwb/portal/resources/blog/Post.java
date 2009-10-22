@@ -76,7 +76,7 @@ public class Post
                 String userid = rs.getString("userid");
                 String uid = userid.substring(0,userid.indexOf("_"));
                 String repid = userid.substring(userid.indexOf("_")+1);
-                User recuser =UserRepository.getUserRepository(repid).getUser(uid);
+                User recuser =UserRepository.ClassMgr.getUserRepository(repid).getUser(uid);
                 //System.out.println("userrep -> "+recuser);
                 StringBuffer name = new StringBuffer("");
                 if ( recuser == null )

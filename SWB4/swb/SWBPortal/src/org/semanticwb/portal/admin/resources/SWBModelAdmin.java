@@ -382,7 +382,7 @@ public class SWBModelAdmin extends GenericResource {
                     strbr.append("<title>" + site.getTitle() + "</title>\n");
                     strbr.append("<description>" + site.getDescription() + "</description>\n");
                     //--------------Generación de submodelos------------------------------------------------
-                    Iterator<SemanticObject> sitSubModels = site.getSemanticObject().listObjectProperties(site.swb_hasSubModel);
+                    Iterator<SemanticObject> sitSubModels = site.getSemanticObject().listObjectProperties(WebSite.ClassMgr.swb_hasSubModel);
                     while (sitSubModels.hasNext()) {
                         SemanticObject sObj = sitSubModels.next();
                         File fileSubModel = new File(zipdirectory + "/" + sObj.getId() + ".nt");

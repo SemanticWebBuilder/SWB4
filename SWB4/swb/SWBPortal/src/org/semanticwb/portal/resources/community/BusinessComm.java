@@ -53,7 +53,7 @@ public class BusinessComm extends GenericResource
         if (usr != null && usr.isSigned()) {
             String bcomm=usr.getProperty("BusinessComm");
             if(bcomm==null || bcomm.trim().length()==0){ //El usuario esta registrado pero no tiene comunidad, puede crearla (presentar boton)
-                WebPage comunityContainer=WebPage.getWebPage(CommunityConfiguration.COMMUNITY_CONTAINER_ID, paramRequest.getWebPage().getWebSite());
+                WebPage comunityContainer=WebPage.ClassMgr.getWebPage(CommunityConfiguration.COMMUNITY_CONTAINER_ID, paramRequest.getWebPage().getWebSite());
                 String params="?modeswbcreatecommunity=true" +
                 "&swbtp="+ paramRequest.getWebPage().getId() +
                 "&selecttype=o";

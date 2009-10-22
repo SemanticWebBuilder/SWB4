@@ -61,7 +61,7 @@ public class GenericSemResource extends GenericResource implements org.semanticw
         this.m_obj=obj;
         try
         {
-            Iterator<SemanticObject> it=obj.getModel().listSubjects(Resource.swb_resourceData, obj);
+            Iterator<SemanticObject> it=obj.getModel().listSubjects(Resource.ClassMgr.swb_resourceData, obj);
             while(it.hasNext())
             {
                 setResourceBase((Resource)it.next().createGenericInstance());
