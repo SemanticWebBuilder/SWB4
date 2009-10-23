@@ -92,7 +92,7 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
         if (action == null) {
             HashMap<String, String> params = upload(request);
             if (mem.canAdd() && params.containsValue("add")) {
-                EventElement rec = EventElement.createEventElement(getResourceBase().getWebSite());
+                EventElement rec = EventElement.ClassMgr.createEventElement(getResourceBase().getWebSite());
                 if (params.containsKey("filename")) {
                     rec.setEventImage(params.get("filename"));
                 } else {

@@ -46,7 +46,7 @@ public class PortalUsers extends GenericResource {
             SemanticObject semObj=SemanticObject.createSemanticObject(request.getParameter("user"));
             User user=(User)semObj.createGenericInstance();
             if(!FriendshipProspect.findFriendProspectedByRequester(owner, user, website)){
-                FriendshipProspect newFriendShip=FriendshipProspect.createFriendshipProspect(website);
+                FriendshipProspect newFriendShip=FriendshipProspect.ClassMgr.createFriendshipProspect(website);
                 newFriendShip.setFriendShipRequester(owner);
                 newFriendShip.setFriendShipRequested(user);
             }

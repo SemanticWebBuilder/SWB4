@@ -91,7 +91,7 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
         if(action==null) {
             HashMap<String,String> params = upload(request);
             if(mem.canAdd() && params.containsValue("add")) {
-                PhotoElement rec = PhotoElement.createPhotoElement(getResourceBase().getWebSite());
+                PhotoElement rec = PhotoElement.ClassMgr.createPhotoElement(getResourceBase().getWebSite());
                 if(params.containsKey("filename"))
                     rec.setImageURL(params.get("filename"));
                 else
@@ -143,7 +143,7 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
             HashMap<String,String> params = upload(request);
 
             WebPage page = paramRequest.getWebPage();
-            PhotoElement rec = PhotoElement.createPhotoElement(getResourceBase().getWebSite());
+            PhotoElement rec = PhotoElement.ClassMgr.createPhotoElement(getResourceBase().getWebSite());
             rec.setImageURL(params.get("filename"));
 
 

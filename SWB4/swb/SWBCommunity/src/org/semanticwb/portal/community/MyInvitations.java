@@ -44,7 +44,7 @@ public class MyInvitations extends GenericResource {
             String userProsp = request.getParameter("user");
             SemanticObject semObj = SemanticObject.createSemanticObject(userProsp);
             User user2Friend = (User) semObj.createGenericInstance();
-            Friendship newFriendShip = Friendship.createFriendship(website);
+            Friendship newFriendShip = Friendship.ClassMgr.createFriendship(website);
             newFriendShip.addFriend(user);
             newFriendShip.addFriend(user2Friend);
             FriendshipProspect.removeFriendshipProspectByRequested(user, user2Friend, website);

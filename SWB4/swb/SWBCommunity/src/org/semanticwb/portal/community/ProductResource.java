@@ -71,11 +71,11 @@ public class ProductResource extends org.semanticwb.portal.community.base.Produc
         }
         String action = request.getParameter("act");
         if ("add".equals(action) && mem.canAdd()) {
-            SWBFormMgr mgr = new SWBFormMgr(ProductElement.swbcomm_ProductElement, website.getSemanticObject(), null);
+            SWBFormMgr mgr = new SWBFormMgr(ProductElement.ClassMgr.swbcomm_ProductElement, website.getSemanticObject(), null);
             try {
                 SemanticObject semObj = mgr.processForm(request);
                 ProductElement th = (ProductElement) semObj.createGenericInstance();
-                ProductElement productElement = ProductElement.getProductElement(th.getId(), website);
+                ProductElement productElement = ProductElement.ClassMgr.getProductElement(th.getId(), website);
                 productElement.setWebPage(page);
                 response.setRenderParameter("act", "edit");
                 response.setRenderParameter("uri", productElement.getURI());
@@ -122,7 +122,7 @@ public class ProductResource extends org.semanticwb.portal.community.base.Produc
         WebPage page=response.getWebPage();
         WebSite website = page.getWebSite();
         String basepath=null;
-        if(sobj.instanceOf(ProductElement.sclass)){
+        if(sobj.instanceOf(ProductElement.ClassMgr.sclass)){
             basepath = SWBPortal.getWorkPath() + base.getWorkPath() + "/products/" + sobj.getId() + "/";
         }
         if (request.getSession().getAttribute(UploadFormElement.FILES_UPLOADED) != null) {
@@ -142,7 +142,7 @@ public class ProductResource extends org.semanticwb.portal.community.base.Produc
                         fichero.mkdirs();
                     }
                     fichero = new File(basepath + value);
-                    if(sobj.instanceOf(ProductElement.sclass)){
+                    if(sobj.instanceOf(ProductElement.ClassMgr.sclass)){
                         ProductElement productElement=(ProductElement)sobj.createGenericInstance();
                         if(item.getFieldName().equals("smallPhoto")){
                             productElement.setSmallPhoto(value);

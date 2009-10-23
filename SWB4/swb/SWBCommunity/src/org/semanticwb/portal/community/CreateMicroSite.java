@@ -84,7 +84,7 @@ public class CreateMicroSite extends GenericResource
             //System.out.println("description:"+description);
             //System.out.println("utils:"+utils+", size:"+utils.length);
 
-            MicroSite ms = MicroSite.createMicroSite(id,model);
+            MicroSite ms = MicroSite.ClassMgr.createMicroSite(id,model);
             ms.setParent(page);
             ms.setTitle(title);
             ms.setDescription(description);
@@ -136,7 +136,7 @@ public class CreateMicroSite extends GenericResource
                     if(sowpu!=null && sowpu instanceof MicroSiteUtil )
                     {
                         MicroSiteUtil msu = (MicroSiteUtil)sowpu;
-                        MicroSiteWebPageUtil mswpu = MicroSiteWebPageUtil.createMicroSiteWebPageUtil(ms.getId()+"_"+msu.getId(), model);
+                        MicroSiteWebPageUtil mswpu = MicroSiteWebPageUtil.ClassMgr.createMicroSiteWebPageUtil(ms.getId()+"_"+msu.getId(), model);
                         
                         mswpu.setTitle(msu.getTitle());
                         
@@ -154,7 +154,7 @@ public class CreateMicroSite extends GenericResource
 
             // Suscribo al creador de la nueva comunidad a esta.
 
-            Member member=Member.createMember(page.getWebSite());
+            Member member=Member.ClassMgr.createMember(page.getWebSite());
             member.setAccessLevel(Member.LEVEL_OWNER); //Member.LEVEL_EDIT
             member.setUser(user);
             member.setMicroSite(ms);

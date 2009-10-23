@@ -135,7 +135,7 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
             MicroSiteElement mse = (MicroSiteElement) gen;
             if (mse.canComment(mem) && desc.length() > 0) 
             {
-                Comment comment=Comment.createComment(response.getWebPage().getWebSite());
+                Comment comment=Comment.ClassMgr.createComment(response.getWebPage().getWebSite());
                 comment.setDescription(desc);
                 mse.addComment(comment);
             }
