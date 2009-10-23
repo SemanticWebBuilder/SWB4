@@ -3,7 +3,11 @@ package org.semanticwb.portal.community.base;
 
 public class ChatResourceBase extends org.semanticwb.portal.community.CommunityResource 
 {
-    public static final org.semanticwb.platform.SemanticClass swbcomm_ChatResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#ChatResource");
+    public static class ClassMgr
+    {
+       public static final org.semanticwb.platform.SemanticClass swbcomm_ChatResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#ChatResource");
+       public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#ChatResource");
+    }
 
     public ChatResourceBase()
     {
@@ -13,5 +17,4 @@ public class ChatResourceBase extends org.semanticwb.portal.community.CommunityR
     {
         super(base);
     }
-    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#ChatResource");
 }

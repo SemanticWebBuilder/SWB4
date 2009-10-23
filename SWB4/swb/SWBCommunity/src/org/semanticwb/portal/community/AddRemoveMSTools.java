@@ -183,7 +183,7 @@ public class AddRemoveMSTools extends GenericResource {
                             if(sowpu!=null && sowpu instanceof MicroSiteUtil )
                             {
                                 MicroSiteUtil msu = (MicroSiteUtil)sowpu;
-                                MicroSiteWebPageUtil mswpu = MicroSiteWebPageUtil.createMicroSiteWebPageUtil(ms.getId()+"_"+msu.getId(), model);
+                                MicroSiteWebPageUtil mswpu = MicroSiteWebPageUtil.ClassMgr.createMicroSiteWebPageUtil(ms.getId()+"_"+msu.getId(), model);
 
                                 mswpu.setTitle(msu.getTitle());
 
