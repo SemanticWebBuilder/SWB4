@@ -332,7 +332,7 @@ private final int I_PAGE_SIZE = 20;
             if (semProp.isDataTypeProperty()) {
                 String propValue = semObject.getProperty(semProp);
                 if (propValue != null && !propValue.equals("null")) {
-                    if (semProp == DirectoryObject.swbcomm_dirPhoto) {
+                    if (semProp == DirectoryObject.ClassMgr.swbcomm_dirPhoto) {
                         img = "<img src=\"" + SWBPortal.getWebWorkPath() + base.getWorkPath() + "/" + semObject.getId() + "/" + propValue + "\" width=\"95\" height=\"95\">";
                     }
                     if (semProp == DirectoryObject.swb_title) {
@@ -345,13 +345,13 @@ private final int I_PAGE_SIZE = 20;
                         intnumber = propValue;
                     }else if(semProp==CURPModule.swbcomm_extNumber){
                         extnumber = propValue;
-                    }else if(semProp==CURPModule.swbcomm_cityCouncil){
+                    }else if(semProp==CURPModule.ClassMgr.swbcomm_cityCouncil){
                         council = propValue;
                     }else if(semProp==CURPModule.swbcomm_city){
                         city = propValue;
                     }else if(semProp==CURPModule.swbcomm_state){
                         state = propValue;
-                    }else if(semProp==CURPModule.swbcomm_serviceHours){
+                    }else if(semProp==CURPModule.ClassMgr.swbcomm_serviceHours){
                         schedule = propValue;
                     }else if(semProp==CURPModule.swbcomm_contactName){
                         contact = propValue;
