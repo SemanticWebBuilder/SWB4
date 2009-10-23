@@ -158,7 +158,7 @@ public class SWBServiceMgr implements SemanticObserver {
                             ((SWBResource)cls2.newInstance()).uninstall((ResourceType)obj.createGenericInstance());
                         }catch(Exception e){log.error(e);}
                     }
-
+                    SWBPortal.getIndexMgr().getDefaultIndexer().removeSemanticObject(obj);
                 }
             } else if (prop instanceof SemanticProperty)
             {
