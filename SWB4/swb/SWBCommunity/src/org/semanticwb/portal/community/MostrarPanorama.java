@@ -55,8 +55,8 @@ public class MostrarPanorama extends GenericAdmResource
         String webWorkPath = null;
         String type = this.getResourceBase().getAttribute("type", "Promo");
         String subtype = this.getResourceBase().getAttribute("subtype", "promohome");
-        ResourceType promo = ResourceType.getResourceType(type, paramRequest.getWebPage().getWebSite());
-        ResourceSubType subresource = ResourceSubType.getResourceSubType(subtype, paramRequest.getWebPage().getWebSite());
+        ResourceType promo = ResourceType.ClassMgr.getResourceType(type, paramRequest.getWebPage().getWebSite());
+        ResourceSubType subresource = ResourceSubType.ClassMgr.getResourceSubType(subtype, paramRequest.getWebPage().getWebSite());
 
         if (subresource != null && promo != null)
         {

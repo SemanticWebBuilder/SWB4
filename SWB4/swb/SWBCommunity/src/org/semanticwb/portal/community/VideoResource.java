@@ -100,7 +100,7 @@ public class VideoResource extends org.semanticwb.portal.community.base.VideoRes
         if("add".equals(action) && mem.canAdd())
         {
             String code=request.getParameter("video_code");
-            VideoElement rec=VideoElement.createVideoElement(getResourceBase().getWebSite());
+            VideoElement rec=VideoElement.ClassMgr.createVideoElement(getResourceBase().getWebSite());
             rec.setCode(code);
             rec.setPreview(getPreview(code));
             rec.setWebPage(page);

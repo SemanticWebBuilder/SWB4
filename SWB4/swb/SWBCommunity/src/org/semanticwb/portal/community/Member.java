@@ -53,7 +53,7 @@ public class Member extends org.semanticwb.portal.community.base.MemberBase
             }
             if(ret==null)
             {
-                ret=new Member(new SemanticObject(page.getSemanticObject().getModel(),Member.sclass));
+                ret=new Member(new SemanticObject(page.getSemanticObject().getModel(),Member.ClassMgr.sclass));
                 ret.setMicroSite((MicroSite)page);
                 ret.setUser(user);
                 //TODO: Comentar esto cuando se tengan miembros

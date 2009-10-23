@@ -92,7 +92,7 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
         if (action == null) {
             HashMap<String, String> params = upload(request);
             if (mem.canAdd() && params.containsValue("add")) {
-                NewsElement rec = NewsElement.createNewsElement(getResourceBase().getWebSite());
+                NewsElement rec = NewsElement.ClassMgr.createNewsElement(getResourceBase().getWebSite());
                 rec.setNewsImage(params.get("filename"));
                 rec.setNewsThumbnail(params.get("thumbnail"));
                 rec.setTitle(params.get("new_title"));

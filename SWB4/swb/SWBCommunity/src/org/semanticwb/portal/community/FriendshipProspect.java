@@ -19,7 +19,7 @@ public class FriendshipProspect extends org.semanticwb.portal.community.base.Fri
 
     public static boolean createFriendshipProspect(User resquester, User requested, SWBModel model) {
         try{
-            FriendshipProspect newFriendShip=FriendshipProspect.createFriendshipProspect(model);
+            FriendshipProspect newFriendShip=FriendshipProspect.ClassMgr.createFriendshipProspect(model);
             newFriendShip.setFriendShipRequester(resquester);
             newFriendShip.setFriendShipRequested(requested);
             return true;
