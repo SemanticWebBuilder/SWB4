@@ -106,7 +106,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
                     var o = dojo.byId(oId);
                     if(o.style.display=='block' || o.style.display==''){
                             collapse(oId);
-                    }else {
+                    } else {
                             expande(oId);
                 }
             }
@@ -176,14 +176,14 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
         while(it.hasNext()) {
             SemanticObject obj = it.next();
             if (obj == null) continue;
-            if (obj != null && obj.instanceOf(DirectoryObject.sclass)) {
+            if (obj != null && obj.instanceOf(DirectoryObject.ClassMgr.sclass)) {
                 %>
                 <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
                 <%
                         DirectoryObject c = (DirectoryObject) obj.createGenericInstance();
                         String title = obj.getProperty(DirectoryObject.swb_title);
                         String photo = obj.getProperty(swbcomm_dirPhoto);
-                        String schedule = obj.getProperty(CURPModule.swbcomm_serviceHours);
+                        String schedule = obj.getProperty(CURPModule.ClassMgr.swbcomm_serviceHours);
                         String contact = obj.getProperty(CURPModule.swbcomm_contactName);
                         String tel = obj.getProperty(CURPModule.swbcomm_contactPhoneNumber);
                         if (title == null || title.equals("null")) title = "";
@@ -272,7 +272,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
         </p><%
     }
     %>
-    <form action="/es/renapo3/ModulosCurp">
+    <form action="/ModulosCurp">
         <input type="submit" value="Regresar"/>
     </form>
     <%
