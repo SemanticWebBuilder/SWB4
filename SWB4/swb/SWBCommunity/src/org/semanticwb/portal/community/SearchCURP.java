@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.search.BooleanClause.Occur;
+import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.CachingWrapperFilter;
 import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
@@ -73,17 +75,21 @@ public class SearchCURP extends GenericAdmResource {
         }
 
         if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
-            //Assert query string
-            String q = request.getParameter("q");
-            if (q == null) return;
+            //Assert council string
+            String council = request.getParameter("q");
+            if (council == null) return;
+
+            String state = request.getParameter("state");
+            if (state == null) return;
             //---- if you want to perform search using LARQ
             //String indexpath = SWBPortal.getIndexMgr().getDefaultIndexer().getIndexPath();
             //IndexReader reader = IndexReader.open(indexpath);
             //index = new IndexLARQ(reader);
             //solutions = performQuery(q, lang);
 
+            System.out.println("State: " + state + " Council: " + council);
             //---- if you want to perform search using lucene index
-            solutions = performQuery(q);
+            solutions = performQuery(state, council);
 
             if (solutions != null && solutions.size() > 0)
                 pageData = getSlice(page, maxr, sort);
@@ -155,20 +161,27 @@ public class SearchCURP extends GenericAdmResource {
         return pageData;
     }
 
-    public ArrayList<SemanticObject> performQuery(String query) throws CorruptIndexException, IOException {
+    public ArrayList<SemanticObject> performQuery(String state, String council) throws CorruptIndexException, IOException {
         ArrayList<SemanticObject> res = new ArrayList<SemanticObject>();
         String indexPath = SWBPortal.getIndexMgr().getDefaultIndexer().getIndexPath();
         try {
             IndexSearcher searcher = new IndexSearcher(indexPath);
 
             QueryParser qp = new QueryParser("cityCouncil", new LocaleAnalyzer());
-            org.apache.lucene.search.Query q = qp.parse(query);
+            org.apache.lucene.search.Query q = qp.parse(council);
+
+            qp = new QueryParser("state", new LocaleAnalyzer());
+            org.apache.lucene.search.Query q2 = qp.parse(state);
 
             qp = new QueryParser("types", new LocaleAnalyzer());
-            org.apache.lucene.search.Query q2 = qp.parse("CURPModule");
+            org.apache.lucene.search.Query q3 = qp.parse("CURPModule");
 
-            CachingWrapperFilter filter = new CachingWrapperFilter(new QueryWrapperFilter(q2));
-            Hits hits = searcher.search(q, filter);
+            BooleanQuery bq = new BooleanQuery();
+            bq.add(q, Occur.MUST);
+            bq.add(q2, Occur.MUST);
+
+            CachingWrapperFilter filter = new CachingWrapperFilter(new QueryWrapperFilter(q3));
+            Hits hits = searcher.search(bq, filter);
 
             for (int i =0; i<hits.length(); i++) {
                 Document doc = hits.doc(i);
