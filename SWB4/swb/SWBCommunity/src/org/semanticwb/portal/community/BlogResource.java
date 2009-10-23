@@ -29,7 +29,7 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
 
     private Blog createBlog(String title, String description, WebSite site, WebPage page, User user)
     {
-        Blog blog = Blog.createBlog(site);
+        Blog blog = Blog.ClassMgr.createBlog(site);
         blog.setWebPage(page);
         blog.setTitle(title);
         blog.setDescription(description);
@@ -93,7 +93,7 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
 
     private void addPost(String title, String description, String content, User user, Blog blog, int level)
     {
-        PostElement rec = PostElement.createPostElement(getResourceBase().getWebSite());
+        PostElement rec = PostElement.ClassMgr.createPostElement(getResourceBase().getWebSite());
         rec.setTitle(title);
         rec.setDescription(description);
         Date date = new Date(System.currentTimeMillis());
