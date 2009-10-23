@@ -118,14 +118,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     private static final String MIGRATE_WBRESOURCESPPTCONTENT = "com.infotec.wb.resources.PPTContent";
     private static final String categoryBydefault = "Contenidos migrados";
     private static final String descriptionByDefault = "Contenidos migrados de versión 3.2";
-    private final SemanticClass cm_content = OfficeContent.swboffice_OfficeContent;
-    private static final SemanticProperty prop_content = OfficeResource.swboffice_content;
-    private static final SemanticClass swb_office = org.semanticwb.repository.office.OfficeDocument.swboffice_OfficeDocument;
+    private final SemanticClass cm_content = OfficeContent.ClassMgr.swboffice_OfficeContent;
+    private static final SemanticProperty prop_content = OfficeResource.ClassMgr.swboffice_content;
+    private static final SemanticClass swb_office = org.semanticwb.repository.office.OfficeDocument.ClassMgr.swboffice_OfficeDocument;
     private static final SemanticProperty PROP_JCR_DATA = org.semanticwb.repository.office.OfficeDocument.ClassMgr.jcr_data;
     private static final String JCR_DATA = PROP_JCR_DATA.getPrefix() + ":" + PROP_JCR_DATA.getName();
     private static final SemanticProperty PROP_JCR_LASTMODIFIED = org.semanticwb.repository.office.OfficeDocument.ClassMgr.jcr_lastModified;
     private static final String JCR_LASTMODIFIED = PROP_JCR_LASTMODIFIED.getPrefix() + ":" + PROP_JCR_LASTMODIFIED.getName();
-    private static final SemanticProperty PROP_LASTMODIFIED = org.semanticwb.repository.office.OfficeContent.swboffice_lastModified;
+    private static final SemanticProperty PROP_LASTMODIFIED = org.semanticwb.repository.office.OfficeContent.ClassMgr.swboffice_lastModified;
     private static final String LASTMODIFIED = PROP_LASTMODIFIED.getPrefix() + ":" + PROP_LASTMODIFIED.getName();
     public static final String JCR_CONTENT = "jcr:content";
     private static final String JCR_FROZEN_NODE = "jcr:frozenNode";
@@ -296,14 +296,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     {
         ArrayList<PropertyInfo> props = new ArrayList<PropertyInfo>();
         Document doc = SWBUtils.XML.xmlToDom(xml);
-        addPropertyInfoFromOldVersion("position", doc, WordResource.swboffice_position, props);
-        addPropertyInfoFromOldVersion("txtant", doc, WordResource.swboffice_txtant, props);
-        addPropertyInfoFromOldVersion("txtsig", doc, WordResource.swboffice_txtsig, props);
-        addPropertyInfoFromOldVersion("tfont", doc, WordResource.swboffice_tfont, props);
-        addPropertyInfoFromOldVersion("npages", doc, WordResource.swboffice_npages, props);
+        addPropertyInfoFromOldVersion("position", doc, WordResource.ClassMgr.swboffice_position, props);
+        addPropertyInfoFromOldVersion("txtant", doc, WordResource.ClassMgr.swboffice_txtant, props);
+        addPropertyInfoFromOldVersion("txtsig", doc, WordResource.ClassMgr.swboffice_txtsig, props);
+        addPropertyInfoFromOldVersion("tfont", doc, WordResource.ClassMgr.swboffice_tfont, props);
+        addPropertyInfoFromOldVersion("npages", doc, WordResource.ClassMgr.swboffice_npages, props);
         // texto predefinido
-        addPropertyInfoFromOldVersion("tpred", doc, WordResource.swboffice_tpred, props);
-        addPropertyInfoFromOldVersion("pages", doc, WordResource.swboffice_pages, props);
+        addPropertyInfoFromOldVersion("tpred", doc, WordResource.ClassMgr.swboffice_tpred, props);
+        addPropertyInfoFromOldVersion("pages", doc, WordResource.ClassMgr.swboffice_pages, props);
         return props.toArray(new PropertyInfo[props.size()]);
     }
 
@@ -311,14 +311,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     {
         ArrayList<String> props = new ArrayList<String>();
         Document doc = SWBUtils.XML.xmlToDom(xml);
-        addValuesFromOldVersion("position", doc, WordResource.swboffice_position, props);
-        addValuesFromOldVersion("txtant", doc, WordResource.swboffice_txtant, props);
-        addValuesFromOldVersion("txtsig", doc, WordResource.swboffice_txtsig, props);
-        addValuesFromOldVersion("tfont", doc, WordResource.swboffice_tfont, props);
-        addValuesFromOldVersion("npages", doc, WordResource.swboffice_npages, props);
+        addValuesFromOldVersion("position", doc, WordResource.ClassMgr.swboffice_position, props);
+        addValuesFromOldVersion("txtant", doc, WordResource.ClassMgr.swboffice_txtant, props);
+        addValuesFromOldVersion("txtsig", doc, WordResource.ClassMgr.swboffice_txtsig, props);
+        addValuesFromOldVersion("tfont", doc, WordResource.ClassMgr.swboffice_tfont, props);
+        addValuesFromOldVersion("npages", doc, WordResource.ClassMgr.swboffice_npages, props);
         // texto predefinido
-        addValuesFromOldVersion("tpred", doc, WordResource.swboffice_tpred, props);
-        addValuesFromOldVersion("pages", doc, WordResource.swboffice_pages, props);
+        addValuesFromOldVersion("tpred", doc, WordResource.ClassMgr.swboffice_tpred, props);
+        addValuesFromOldVersion("pages", doc, WordResource.ClassMgr.swboffice_pages, props);
         return props.toArray(new String[props.size()]);
     }
 
@@ -326,7 +326,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     {
         ArrayList<String> props = new ArrayList<String>();
         Document doc = SWBUtils.XML.xmlToDom(xml);
-        addValuesFromOldVersion("link", doc, PPTResource.swboffice_showDownload, props);
+        addValuesFromOldVersion("link", doc, PPTResource.ClassMgr.swboffice_showDownload, props);
         return props.toArray(new String[props.size()]);
     }
 
@@ -334,7 +334,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     {
         ArrayList<PropertyInfo> props = new ArrayList<PropertyInfo>();
         Document doc = SWBUtils.XML.xmlToDom(xml);
-        addPropertyInfoFromOldVersion("link", doc, PPTResource.swboffice_showDownload, props);
+        addPropertyInfoFromOldVersion("link", doc, PPTResource.ClassMgr.swboffice_showDownload, props);
         return props.toArray(new PropertyInfo[props.size()]);
     }
 
@@ -666,7 +666,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     while (it.hasNext())
                     {
                         SemanticObject obj = it.next();
-                        if (obj.getSemanticClass().isSubClass(OfficeResource.sclass) || obj.getSemanticClass().equals(OfficeResource.sclass))
+                        if (obj.getSemanticClass().isSubClass(OfficeResource.ClassMgr.sclass) || obj.getSemanticClass().equals(OfficeResource.ClassMgr.sclass))
                         {
                             OfficeResource officeResource = OfficeResource.getOfficeResource(obj.getId(), site);
                             if (officeResource.getRepositoryName() != null && officeResource.getRepositoryName().equals(repositoryName) && officeResource.getVersionToShow().equals("*"))
@@ -764,7 +764,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     while (it.hasNext())
                     {
                         SemanticObject obj = it.next();
-                        if (obj.getSemanticClass().isSubClass(OfficeResource.sclass) || obj.getSemanticClass().equals(OfficeResource.sclass))
+                        if (obj.getSemanticClass().isSubClass(OfficeResource.ClassMgr.sclass) || obj.getSemanticClass().equals(OfficeResource.ClassMgr.sclass))
                         {
                             OfficeResource officeResource = OfficeResource.getOfficeResource(obj.getId(), site);
                             if (officeResource.getRepositoryName() != null && officeResource.getRepositoryName().equals(repositoryName))
@@ -853,7 +853,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 while (it.hasNext())
                 {
                     SemanticObject obj = it.next();
-                    if (obj.getSemanticClass().isSubClass(OfficeResource.sclass) || obj.getSemanticClass().equals(OfficeResource.sclass))
+                    if (obj.getSemanticClass().isSubClass(OfficeResource.ClassMgr.sclass) || obj.getSemanticClass().equals(OfficeResource.ClassMgr.sclass))
                     {
                         OfficeResource officeResource = OfficeResource.getOfficeResource(obj.getId(), site);
                         site.removeResource(officeResource.getId());
@@ -987,7 +987,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         while (itSubjects.hasNext())
                         {
                             SemanticObject obj = itSubjects.next();
-                            if (obj.getSemanticClass().isSubClass(OfficeResource.sclass) || obj.getSemanticClass().equals(OfficeResource.sclass))
+                            if (obj.getSemanticClass().isSubClass(OfficeResource.ClassMgr.sclass) || obj.getSemanticClass().equals(OfficeResource.ClassMgr.sclass))
                             {
                                 OfficeResource officeResource = OfficeResource.getOfficeResource(obj.getId(), site);
                                 if (officeResource.getRepositoryName() != null && officeResource.getRepositoryName().equals(repositoryName) && officeResource.getVersionToShow() != null)
@@ -1205,7 +1205,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             while (it.hasNext())
             {
                 SemanticObject obj = it.next();
-                if (obj.getSemanticClass().isSubClass(OfficeResource.sclass) || obj.getSemanticClass().equals(OfficeResource.sclass))
+                if (obj.getSemanticClass().isSubClass(OfficeResource.ClassMgr.sclass) || obj.getSemanticClass().equals(OfficeResource.ClassMgr.sclass))
                 {
                     OfficeResource officeResource = OfficeResource.getOfficeResource(obj.getId(), site);
                     if (officeResource.getRepositoryName() != null && officeResource.getRepositoryName().equals(repositoryName))
@@ -1608,17 +1608,17 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         if (contentType.equalsIgnoreCase("excel"))
         {
             officeResource = new ExcelResource();
-            clazz = ExcelResource.sclass;
+            clazz = ExcelResource.ClassMgr.sclass;
         }
         else if (contentType.equalsIgnoreCase("ppt"))
         {
             officeResource = new PPTResource();
-            clazz = PPTResource.sclass;
+            clazz = PPTResource.ClassMgr.sclass;
         }
         else
         {
             officeResource = new WordResource();
-            clazz = WordResource.sclass;
+            clazz = WordResource.ClassMgr.sclass;
         }
         if (properties.length == values.length)
         {
@@ -1688,15 +1688,15 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         SemanticClass clazz = null;
         if (type.equalsIgnoreCase("excel"))
         {
-            clazz = ExcelResource.sclass;
+            clazz = ExcelResource.ClassMgr.sclass;
         }
         else if (type.equalsIgnoreCase("ppt"))
         {
-            clazz = PPTResource.sclass;
+            clazz = PPTResource.ClassMgr.sclass;
         }
         else
         {
-            clazz = WordResource.sclass;
+            clazz = WordResource.ClassMgr.sclass;
         }
         Iterator<SemanticProperty> propertiesClazz = clazz.listProperties();
         while (propertiesClazz.hasNext())
