@@ -33,7 +33,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
