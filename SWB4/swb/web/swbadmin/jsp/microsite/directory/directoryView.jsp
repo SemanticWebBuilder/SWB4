@@ -253,16 +253,16 @@ url.setParameter("uri", sobj.getURI());
                if(semProp.isDataTypeProperty()){
                    String propValue=semObject.getProperty(semProp);
                    if(propValue!=null && !propValue.equals("null")){
-                        if(semProp==DirectoryObject.swbcomm_dirPhoto)
+                        if(semProp==DirectoryObject.ClassMgr.swbcomm_dirPhoto)
                         {
                             img="<img src=\""+SWBPortal.getWebWorkPath()+base.getWorkPath()+"/"+semObject.getId()+"/"+propValue+ "\" width=\"90\" height=\"90\">";
                         }if(semProp==DirectoryObject.swb_title) {
                              title=propValue;
                         }else if(semProp==DirectoryObject.swb_description){
                              description=propValue;
-                        }else if(semProp==DirectoryObject.swb_tags){
+                        }else if(semProp==DirectoryObject.ClassMgr.swb_tags){
                              tags=propValue;
-                        }else if(semProp==ClasifiedBuySell.swbcomm_Price){
+                        }else if(semProp==ClasifiedBuySell.ClassMgr.swbcomm_Price){
                              price=propValue;
                         }else if(semProp==DirectoryObject.swb_created){
                             SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
