@@ -215,16 +215,16 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
 
     public static org.semanticwb.resource.office.sem.OfficeResource getOfficeResource(String id, org.semanticwb.model.SWBModel model)
     {
-        GenericObject obj = model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+        GenericObject obj = model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id, ClassMgr.sclass), ClassMgr.sclass);
         if (obj == null)
         {
-            obj = model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id, WordResource.sclass), WordResource.sclass);
+            obj = model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id, WordResource.ClassMgr.sclass), WordResource.ClassMgr.sclass);
             if (obj == null)
             {
-                obj = model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id, ExcelResource.sclass), ExcelResource.sclass);
+                obj = model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id, ExcelResource.ClassMgr.sclass), ExcelResource.ClassMgr.sclass);
                 if (obj == null)
                 {
-                    obj = model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id, PPTResource.sclass), PPTResource.sclass);
+                    obj = model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id, PPTResource.ClassMgr.sclass), PPTResource.ClassMgr.sclass);
                 }
             }
         }

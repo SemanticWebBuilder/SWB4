@@ -1,35 +1,16 @@
-/**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
 package org.semanticwb.resource.office.sem.base;
 
 
 public class OfficeResourceBase extends org.semanticwb.portal.api.GenericSemResource 
 {
-    public static final org.semanticwb.platform.SemanticProperty swboffice_content=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#content");
-    public static final org.semanticwb.platform.SemanticProperty swboffice_versionToShow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#versionToShow");
-    public static final org.semanticwb.platform.SemanticProperty swboffice_repositoryName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#repositoryName");
-    public static final org.semanticwb.platform.SemanticClass swboffice_OfficeResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/office#OfficeResource");
+    public static class ClassMgr
+    {
+       public static final org.semanticwb.platform.SemanticProperty swboffice_content=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#content");
+       public static final org.semanticwb.platform.SemanticProperty swboffice_versionToShow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#versionToShow");
+       public static final org.semanticwb.platform.SemanticProperty swboffice_repositoryName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#repositoryName");
+       public static final org.semanticwb.platform.SemanticClass swboffice_OfficeResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/office#OfficeResource");
+       public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/office#OfficeResource");
+    }
 
     public OfficeResourceBase()
     {
@@ -39,35 +20,34 @@ public class OfficeResourceBase extends org.semanticwb.portal.api.GenericSemReso
     {
         super(base);
     }
-    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/office#OfficeResource");
 
     public String getContent()
     {
-        return getSemanticObject().getProperty(swboffice_content);
+        return getSemanticObject().getProperty(ClassMgr.swboffice_content);
     }
 
-    public void setContent(String content)
+    public void setContent(String value)
     {
-        getSemanticObject().setProperty(swboffice_content, content);
+        getSemanticObject().setProperty(ClassMgr.swboffice_content, value);
     }
 
     public String getVersionToShow()
     {
-        return getSemanticObject().getProperty(swboffice_versionToShow);
+        return getSemanticObject().getProperty(ClassMgr.swboffice_versionToShow);
     }
 
-    public void setVersionToShow(String versionToShow)
+    public void setVersionToShow(String value)
     {
-        getSemanticObject().setProperty(swboffice_versionToShow, versionToShow);
+        getSemanticObject().setProperty(ClassMgr.swboffice_versionToShow, value);
     }
 
     public String getRepositoryName()
     {
-        return getSemanticObject().getProperty(swboffice_repositoryName);
+        return getSemanticObject().getProperty(ClassMgr.swboffice_repositoryName);
     }
 
-    public void setRepositoryName(String repositoryName)
+    public void setRepositoryName(String value)
     {
-        getSemanticObject().setProperty(swboffice_repositoryName, repositoryName);
+        getSemanticObject().setProperty(ClassMgr.swboffice_repositoryName, value);
     }
 }
