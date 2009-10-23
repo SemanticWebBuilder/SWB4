@@ -19,7 +19,7 @@ public class CodeGeneratorOffice {
 
     public static void main(String []args)
     {
-        new CodeGeneratorBase().codeGen(args);
+        new CodeGeneratorOffice().codeGen(args);
     }
 
     public void codeGen(String []args)
