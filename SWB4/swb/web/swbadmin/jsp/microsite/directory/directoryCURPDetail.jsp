@@ -34,7 +34,7 @@
     SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_VIEW);
     String path=SWBPortal.getWebWorkPath()+base.getWorkPath()+"/"+semObject.getId()+"/";
     //Obtener valores de propiedades genericas
-    String dirPhoto=semObject.getProperty(dirObj.swbcomm_dirPhoto);
+    String dirPhoto=semObject.getProperty(DirectoryObject.ClassMgr.swbcomm_dirPhoto);
 
     String[] sImgs=null;
     int cont=0;
@@ -71,7 +71,7 @@
     }
     String title=semObject.getProperty(dirObj.swb_title);
     String description=semObject.getProperty(dirObj.swb_description);
-    String tags=semObject.getProperty(dirObj.swb_tags);
+    String tags=semObject.getProperty(DirectoryObject.ClassMgr.swb_tags);
     String creator="";
     SemanticObject semUser=semObject.getObjectProperty(DirectoryObject.swb_creator);
     if(semUser!=null){
@@ -98,14 +98,14 @@
     String contactName=semObject.getProperty(Commerce.swbcomm_contactName);
     String contactPhoneNumber=semObject.getProperty(Commerce.swbcomm_contactPhoneNumber);
     String contactEmail=semObject.getProperty(Commerce.swbcomm_contactEmail);
-    String website=semObject.getProperty(Commerce.swbcomm_webSite);
+    String website=semObject.getProperty(Commerce.ClassMgr.swbcomm_webSite);
     /*---------- Facilities ------------*/
-    String paymentType=semObject.getProperty(Commerce.swbcomm_paymentType);
+    String paymentType=semObject.getProperty(Commerce.ClassMgr.swbcomm_paymentType);
     String impairedPeopleAccessible=semObject.getProperty(Commerce.swbcomm_impairedPeopleAccessible);
     String parkingLot=semObject.getProperty(Commerce.swbcomm_parkingLot);
     String elevator=semObject.getProperty(Commerce.swbcomm_elevator);
     String foodCourt=semObject.getProperty(Commerce.swbcomm_foodCourt);
-    String serviceHours=semObject.getProperty(Commerce.swbcomm_serviceHours);
+    String serviceHours=semObject.getProperty(Commerce.ClassMgr.swbcomm_serviceHours);
 %>
 
 <div id="contenidoDetalle">
@@ -115,7 +115,6 @@
         </div>
             <div class="productInfo">
                 <p class="tituloNaranja"><%=title%></p>
-                <p><%=wpage.getPath(map)%></p>
                 <%if(tags!=null){%><p>Palabras clave:<strong><%=tags%></strong></p><%}%>
                 <!---localizable Data -->
                 <fieldset>
