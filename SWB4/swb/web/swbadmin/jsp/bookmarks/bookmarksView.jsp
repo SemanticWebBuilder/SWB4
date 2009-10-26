@@ -8,19 +8,21 @@
             int maxBookmarks = 10;
             boolean existe=false;
             entries = (Iterator<BookmarkEntry>) request.getAttribute("entries");
-            ArrayList<BookmarkEntry> arrayEntries=new ArrayList<BookmarkEntry>();
-            while (entries.hasNext())
-            {
-                BookmarkEntry entry=entries.next();
-                arrayEntries.add(entry);
-                if(paramRequest.getWebPage().getUrl().equalsIgnoreCase(entry.getBookmarkURL()))
-                {
-                    existe=true;
-                }
-            }
-            
-            entries=arrayEntries.iterator();
 
+            ArrayList<BookmarkEntry> arrayEntries=new ArrayList<BookmarkEntry>();
+            if (entries != null && entries.hasNext()) {
+                while (entries.hasNext())
+                {
+                    BookmarkEntry entry=entries.next();
+                    arrayEntries.add(entry);
+                    if(paramRequest.getWebPage().getUrl().equalsIgnoreCase(entry.getBookmarkURL()))
+                    {
+                        existe=true;
+                    }
+                }
+
+                entries=arrayEntries.iterator();
+            }
 %>
 <div id="contactos">
     <h2>Mis Favoritos</h2>
