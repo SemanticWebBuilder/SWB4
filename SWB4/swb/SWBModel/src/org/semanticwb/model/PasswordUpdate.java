@@ -92,10 +92,10 @@ public class PasswordUpdate extends PasswordUpdateBase
 
         if (pmsg == null)
         {
-            pmsg = "Captura " + label + ".";
+            pmsg = "Captura " + label + " y confirmala.";
             if (lang.equals("en"))
             {
-                pmsg = "Enter " + label + ".";
+                pmsg = "Enter " + label + " and confirm it.";
             }
         }
 
@@ -107,10 +107,11 @@ public class PasswordUpdate extends PasswordUpdateBase
         }
         if (mode.equals("edit") || mode.equals("create"))
         {
+            String localValue = mode.equals("create")?"":passphrase;
             ret = "<input name=\"" + name + "\" type=\"password\" " + " dojoType=\"dijit.form.ValidationTextBox\"" + " required=\"" + required + "\"" //                    + " propercase=\"true\""
-                    + " promptMessage=\"" + pmsg + "\"" + " invalidMessage=\"" + imsg + "\"" + " trim=\"true\"" + " value=\"" + passphrase + "\"" + ">";
+                    + " promptMessage=\"" + pmsg + "\"" + " invalidMessage=\"" + imsg + "\"" + " trim=\"true\"" + " value=\"" + localValue + "\"" + ">";
             ret += "<br/><input name=\"pwd_verify\" type=\"password\" " + " dojoType=\"dijit.form.ValidationTextBox\"" + " required=\"" + required + "\"" //                    + " propercase=\"true\""
-                    + " promptMessage=\"" + pmsg + "\"" + " invalidMessage=\"" + imsg + "\"" + " trim=\"true\"" + " value=\"" + passphrase + "\"" + ">";
+                    + " promptMessage=\"" + pmsg + "\"" + " invalidMessage=\"" + imsg + "\"" + " trim=\"true\"" + " value=\"" + localValue + "\"" + ">";
         } else if (mode.equals("view"))
         {
             ret = "<span _id=\"" + name + "\" name=\"" + name + "\">" + value + "</span>";
