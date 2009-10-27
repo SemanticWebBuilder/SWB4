@@ -35,7 +35,7 @@ public class SWBProcessMgr
         return ret;
     }
 
-    public static ProcessInstance createProcessInstance(ProcessSite site, Process process)
+    public static ProcessInstance createSubProcessInstance(ProcessSite site, Process process)
     {
         ProcessInstance pinst=site.createProcessInstance();
         pinst.setProcessType(process);
@@ -58,7 +58,7 @@ public class SWBProcessMgr
             Activity activity = actit.next();
             if(activity instanceof Process)
             {
-                ProcessInstance ins=createProcessInstance(site,(Process)activity);
+                ProcessInstance ins=createSubProcessInstance(site,(Process)activity);
                 pinst.addActivityInstance(ins);
             }else if(activity instanceof Task)
             {
@@ -72,6 +72,13 @@ public class SWBProcessMgr
         return pinst;
     }
 
+    public static ProcessInstance createProcessInstance(ProcessSite site, Process process)
+    {
+        ProcessInstance pi=createSubProcessInstance(site, process);
+        pi.setStatus(Process.STATUS_PROCESSING);
+        return pi;
+    }
+
     public static List<TaskInstance> getUserTaskInstances(ProcessInstance pinst, User user)
     {
         ArrayList ret=new ArrayList();
@@ -81,8 +88,16 @@ public class SWBProcessMgr
             ActivityInstance actins=it.next();
             if(actins instanceof ProcessInstance)
             {
-                List aux=getUserTaskInstances((ProcessInstance)actins, user);
-                ret.addAll(aux);
+                ProcessInstance processInstance=(ProcessInstance)actins;
+                if(processInstance.getStatus()==Process.STATUS_INIT && canStartActivityInstance(processInstance))
+                {
+                    processInstance.setStatus(Process.STATUS_PROCESSING);
+                }
+                if(processInstance.getStatus()==Process.STATUS_PROCESSING)
+                {
+                    List aux=getUserTaskInstances((ProcessInstance)actins, user);
+                    ret.addAll(aux);
+                }
             }else if(actins instanceof TaskInstance)
             {
                 TaskInstance taskInstance = (TaskInstance)actins;
@@ -107,7 +122,7 @@ public class SWBProcessMgr
         while (it.hasNext())
         {
             Activity act1 = it.next();
-            ProcessInstance proins=instance.getProcessInstance();
+            ProcessInstance proins=instance.getParentProcessInstance();
             if(proins!=null)
             {
                 Iterator<ActivityInstance> tiit=proins.listActivityInstances();
