@@ -77,52 +77,199 @@ import org.semanticwb.portal.util.ContentStyles;
 import org.semanticwb.util.JarFile;
 import org.semanticwb.util.db.GenericDB;
 
+
 /**
- * Clase que contiene utilerias para manejo de portal (SemanticWebBuilder)
- * Class that contains utils for management of portal (SemanticWebBuilder)
- * javier Solís, Jorge jiménez
+ * Executes initialization operations for the environment necesary to provide
+ * Portal services, so users, templates, publication flows, resources, services,
+ * indexes, and access and data bases can be managed.
+ * <p>Realiza operaciones de inicializaci&oacute;n del ambiente necesario para proporcionar
+ * servicios de Portal, a fin de poder administrar usuarios, plantillas, flujos de
+ * publicaci&oacute;n, recursos, servicios, indizado, así como de bitácoras de acceso
+ * y de base de datos.</p>
+ * @author Javier Sol&iacute;s
+ * @author Jorge Jim&eacute;nez
  * @version 1.0
  */
 public class SWBPortal
 {
+
+
+    /**
+     * Holds the names and values for the variables declared in {@literal web.properties} file.
+     * <p>Almacena los nombres y valores de las variables declaradas en el archivo {@literal web.properties}.</p>
+     */
     private static Properties props=null;
+
+    /**
+     * Stores the context path's value configured for this portal instance.
+     * <p>Almacena el valor de la ruta de contexto configurada para esta instancia de portal.</p>
+     */
     private String contextPath="/";
+
+    /**
+     * Stores the work directory's web path value
+     * <p>Almacena el valor de la ruta web del directorio de trabajo</p>
+     */
     private static String webWorkPath = "";
+
+    /**
+     * Stores the work directory's physical path.
+     * <p>Almacena la ruta f&iacute;sica del directorio de trabajo.</p>
+     */
     private static String workPath = "";
+    
+    /**
+     * Holds a reference to the {@code ServletContext} used by this web application.
+     * <p>Mantiene una referencia hacia el objeto {@code ServletContext} utilizado
+     * por esta aplicaci&oacute;n.</p>
+     */
     private static ServletContext servletContext=null;
+
+    /**
+     * Holds a reference to the {@code Filter} used by this web application.
+     * <p>Mantiene una referencia hacia el objeto {@code Filter} utilizado 
+     * por esta aplicaci&oacute;n.</p>
+     */
     private static Filter virtualHostFilter=null;
 
+    /**
+     * Indicates whether this instance of portal has an existing database related to it.
+     * <p>Indica si esta instancia de portal tiene relacionada una base de datos existente.</p>
+     */
     private static boolean haveDB=false;
+
+    /**
+     * Indicates whether the database related to this portal instance has the
+     * necessary tables to work with. <p>Indica si la base de datos relacionada
+     * a esta instancia de portal tiene las tablas necesarias para trabajar.</p>
+     */
     private static boolean haveDBTables=false;
+
+    /**
+     * Indicates whether or not to use a database.
+     * <p>Indica si usar o no una base de datos.</p>
+     */
     private static boolean useDB=true;
 
+    /**
+     * Indicates if this portal instance is client of another one.
+     * <p>Indica si esta instancia de portal es o no cliente de otra.</p>
+     */
     private static boolean client=false;
 
+    /**
+     * Creates the messages to the log files.
+     * <p>Crea los mensajes hacia los archivos de bit&aacute;cora.</p>
+     */
     private static Logger log = SWBUtils.getLogger(SWBPortal.class);
+
+    /**
+     * Holds the only one instance of this object in the application.
+     * <p>Mantiene la &uacute;nica instancia de este objeto en la aplicaci&oacute;n</p>
+     */
     private static SWBPortal instance = null;
+
+    /**
+     * Contains all the anchors found in the HTML code analized.
+     * <p>Contiene todas las anclas encontradas en el c&oacute;digo HTML analizado.</p>
+     */
     private static HashMap hAnchors = null;
+
+    /**
+     * Contains the names and content of all files within SWBAdmin.jar and dojo.jar files.
+     * <p>Contiene los nombres y el contenido de todos los archivos dentro de los
+     * archivos SWBAdmin.jar y dojo.jar.</p>
+     */
     private static HashMap admFiles = new HashMap();
+
+    /**
+     * Is the manager for the user objects in this portal.
+     * <p>Es el administrador de los objetos de usuarios en este portal.</p>
+     */
     private static SWBUserMgr usrMgr;
+
+    /**
+     * Is the manager for the publication flows in this portal.
+     * <p>Es el administrador de los flujos de publicaci&oacute;n en este portal.</p>
+     */
     private static PFlowManager pflowMgr;
+
+    /**
+     * Is the monitor in this portal.
+     * <p>Es el monitor en este portal.</p>
+     */
     private static SWBMonitor monitor = null;
+
+    /**
+     * Is the manager for the resource objects in this portal.
+     * <p>Es el administrador de los objetos de recursos en este portal.</p>
+     */
     private static SWBResourceMgr resmgr = null;
+
+    /**
+     * Is the manager for the template objects in this portal.
+     * <p>Es el administrador de los objetos de plantillas en este portal.</p>
+     */
     private static SWBTemplateMgr templatemgr = null;
+
+    /**
+     * Is the manager for the service objects in this portal.
+     * <p>Es el administrador de los objetos de servicios en este portal.</p>
+     */
     private static SWBServiceMgr servicemgr = null;
+
+    /**
+     * Is the manager for the database log objects in this portal.
+     * <p>Es el administrador de los objetos de bit&aacute;coras de base de datos en este portal.</p>
+     */
     private static SWBDBAdmLog admlog = null;
+
+    /**
+     * Is the message center in this portal.
+     * <p>Es el centro de mensajes en este portal.</p>
+     */
     private static SWBMessageCenter msgcenter = null;
+
+    /**
+     * Is the manager for the access logs in this portal.
+     * <p>Es el administrador de las bit&aacute;coras de acceso en este portal.</p>
+     */
     private static SWBAccessLog acclog = null;
+
+    /**
+     * Is the manager for the access increment object in this portal.
+     * <p>Es el administrador del incremento de accesos a objetos en este portal.</p>
+     */
     private static SWBAccessIncrement accInc = null;
+
+    /**
+     * Is the manager for the index objects in this portal.
+     * <p>Es el administrador de los objetos de indizado en este portal.</p>
+     */
     private static SWBIndexMgr indmgr = null;
 
+
+    /**
+     * Creates an object of this class, calling method {@code createInstance(ServletContext, Filter) with
+     * {@code Filter}'s value equal to {@code null}.
+     * <p>Crea un objeto de esta clase, llamando al m&eacute;todo {@code createInstance(ServletContext, Filter)
+     * con el valor de {@code Filter} igual a {@code null}.</p>
+     * @param servletContext the {@code ServletContex} agregated to the new instance
+     * @return SWBPortal     the new instance of this component
+     */
     static public synchronized SWBPortal createInstance(ServletContext servletContext)
     {
         //new Exception().printStackTrace();
         return createInstance(servletContext, null);
     }
 
-    /** Create Instance.
-     * @param servletContext
-     * @return  SWBContext*/
+    /**
+     * Creates an object of this class with the {@code ServletContext} and {@code Filter} indicated.
+     * <p>Crea un objeto de esta clase con el {@code ServletContext} y {@code Filter} indicados.</p>
+     * @param servletContext the {@code ServletContex} agregated to the new instance
+     * @param filter         the {@code Filter} assigned to the new instance's virtual host filter
+     * @return SWBPortal     the new instance of this component
+     */
     static public synchronized SWBPortal createInstance(ServletContext servletContext, Filter filter)
     {
         if (instance == null)
@@ -151,12 +298,57 @@ public class SWBPortal
 //        }
 //    }
 
+    /**
+     * Constructor that initializes the environment of its new instance by calling method {@code init()}
+     * <p>Constructor que inicia el ambiente de su nueva instancia llamando al m&eacute;todo {@code init()}</p>
+     */
     private SWBPortal() {
         log.event("Initializing SemanticWebBuilder Portal...");
         init();
     }
-    //Initialize context
 
+    /**
+     * Prepares the environment necessary to provide site and content management services.
+     * This involves the following operations:<ul>
+     * <li>configuring the values for workpath and SMTPServer environment variables,
+     * and some other variables from SWBPlatform</li>
+     * <li>verifing the existence of the database and its tables</li>
+     * <li>loading of classes indicated in startup.properties file</li>
+     * <li>executing method {@code loadSemanticModels}</li>
+     * <li>creating the administration site, if it does not exist yet</li>
+     * <li>creating the onthology editor site, if it does not exist yet</li>
+     * <li>creating the administration user repository, if it does not exist yet</li>
+     * <li>creating the global site, if it does not exist yet</li>
+     * <li>creating the default user repository, if it does not exist yet</li>
+     * <li>creating the log tables</li>
+     * <li>initializing the objects: {@code SWBUserMgr}, {@code SWBMonitor}, {@code SWBResourceMgr},
+     * {@code PFlowManager}, {@code SWBTemplateMgr}, {@code SWBServiceMgr}, {@code SWBDBAdmLog},
+     * {@code SWBMessageCenter}, {@code SWBAccessLog}, {@code SWBAccessIncrement} and {@code SWBIndexMgr},
+     * wich can be accesed directly from this class, and {@code RuleMgr}</li>
+     * <li>loading of files in SWBAdmin.jar and dojo.jar</li>
+     * </ul>
+     * <p>Prepara el ambiente necesario para proveer servicios de administraci&oacute;n
+     * de sitios y contenido. Esto involucra las siguientes operaciones: <ul>
+     *
+     * <li>configurar valores de variables de ambiente de SWBPortal y {@link SWBPlatform}
+     * como: la ruta del directorio de trabajo o el dominio de servidor SMTP</li>
+     * <li>verificar la existencia de una base de datos y sus tablas</li>
+     * <li>cargar las clases indicadas en el archivo startup.properties</li>
+     * <li>executar el m&eacute;todo {@code loadSemanticModels}</li>
+     * <li>crear el sitio de administraci&oacute;n, si a&uacute;n no existe</li>
+     * <li>crear el sitio de edici&oacute;n de ontolog&iacute;as, si a&uacute;n no existe</li>
+     * <li>crear el repositorio de usuarios del sitio de administraci&oacute;n, si a&uacute;n no existe</li>
+     * <li>crear el sitio global, si a&uacute;n no existe</li>
+     * <li>crear el repositorio de usuarios por defecto, si a&uacute;n no existe</li>
+     * <li>crear las tablas de base de datos para la bit&aacute;cora</li>
+     * <li>inicializar los objetos: {@code SWBUserMgr}, {@code SWBMonitor}, {@code SWBResourceMgr},
+     * {@code PFlowManager}, {@code SWBTemplateMgr}, {@code SWBServiceMgr}, {@code SWBDBAdmLog},
+     * {@code SWBMessageCenter}, {@code SWBAccessLog}, {@code SWBAccessIncrement} y {@code SWBIndexMgr},
+     * que se pueden acceder directamente de esta clase, y {@code RuleMgr}</li>
+     * <li>cargar los archivos contenidos en SWBAdmin.jar y dojo.jar</li>
+     * </ul>
+     * </p>
+     */
     private void init() 
     {
         props=SWBUtils.TEXT.getPropertyFile("/web.properties");
@@ -531,7 +723,11 @@ public class SWBPortal
 //        }
 //    }
 
-
+    /**
+     * Loads the model discribed by each onthology indicated in {@code swb/ontologyFiles}
+     * environment variable. <p>Carga el modelo descrito para cada ontolog&iacute;a
+     * indicada en {@code swb/ontologyFiles}.</p>
+     */
     public void loadSemanticModels()
     {
         log.event("Loading SemanticModels...");
@@ -588,16 +784,12 @@ public class SWBPortal
         SWBPlatform.getSemanticMgr().getOntology().rebind();
     }
 
-
-
-    /*
-     * Regresa ContextPath
-     * Ejemplo:
-     * "/swb" o "/"
-     */
     /**
-     *
-     * @return
+     * Gets the context path for this resource's instance. For example: {@literal /swb}, or {@literal /} if
+     * the context is the root context.
+     * <p>Obtiene la ruta del contexto para esta instancia de portal. <br/>Por ejemplo:
+     * {@literal /swb}, o {@literal /} si es el contexto ra&iacute;z</p>
+     * @return the string representing the context path for this resource's instance.
      */
     public static String getContextPath() {
         if(instance!=null)
@@ -613,8 +805,11 @@ public class SWBPortal
      * @param contextPath String
      */
     /**
-     *
-     * @param contextPath
+     * Sets the value for this portal instance's context path.
+     * <p>Fija el valor de la ruta del contexto de esta instancia de portal</p>
+     * @param contextPath the string representing the new path for the portal context.
+     *        If the string ends with a {@literal /}, the value stored won't contain it.
+     *        This is: <br/>value received {@literal /swb/} -> value stored {@literal /swb}
      */
     public void setContextPath(String contextPath)
     {
@@ -635,9 +830,10 @@ public class SWBPortal
     }
 
     /**
-     * Regresa ruta del directorio de trabajo
-     * Ejemplo: /opt/swb/work
-     * @return String con la ruta del directorio de trabajo
+     * Gets this portal work directory's physical path. For example:<br/>/opt/swb/work
+     * <p>Obtiene la ruta f&iacute;sica del directorio de trabajo del portal
+     * Ejemplo: /opt/swb/work</p>
+     * @return a string representing the work directory's physical path
      */
     public static String getWorkPath()
     {
@@ -645,28 +841,42 @@ public class SWBPortal
     }
 
     /**
-     * Regresa ruta web del directorio work
-     * Ejemplo: /[context]/work
-     * @return String con la ruta web del directorio work
+     * Gets the web path for this portal <strong>work</strong> directory. <br/>For example: /[context]/work
+     * <p>Obtiene ruta web del directorio de trabajo del portal
+     * Ejemplo: /[context]/work </p>
+     * @return a string representing the work directory's web path
      */
     public static String getWebWorkPath()
     {
         return webWorkPath;
     }
 
-    /** Obtiene valor de variable de ambiente declarada en web.xml o web.properties.
-     * @param name String nombre de la variable
-     * @return
+    /**
+     * Retrieves the value of the environment variable whose name matches {@code name}.
+     * The variable to look for might be declared into either web.xml or web.properties files.
+     * <p>Obtiene el valor de una variable de ambiente cuyo nombre coincida con el valor
+     * contenido en {@code name}. La variable a buscar puede estar declarada en los archivos
+     * web.xml o web.properties.</p>
+     * @param name a string representing the environment variable's name to find
+     * @return a string representing the environment variable's value. In case the
+     *         indicated variable is not found, {@code null} will be returned.
      */
     public static String getEnv(String name)
     {
         return getEnv(name, null);
     }
 
-    /** Obtiene valor de variable de ambiente declarada en web.xml o web.properties.
-     * @param name String nombre de la variable
-     * @param defect String valor por defecto
-     * @return
+    /**
+     * Retrieves the environment variable's value whose name matches the value of
+     * {@code name}, or returns the value of {@code defect}. The searched variable
+     * might be declared in web.xml or web.properties files.
+     * <p>Obtiene el valor de la variable de ambiente cuyo nombre coincida con el valor
+     * contenido en {@code name}, o devuelve el valor de {@code defect}. La variable 
+     * a buscar puede estar declarada en los archivos web.xml o web.properties.</p>
+     * @param name un string que indica el nombre de la variable a buscar
+     * @param defect un string con el valor a devolder por defecto, en caso de no encontrar la variable.
+     * @return un string con el valor de la variable indicada por {@code name}, si existe,
+     * en caso contrario devuelve el valor de {@code defect}.
      */
     public static String getEnv(String name, String defect)
     {
@@ -682,24 +892,41 @@ public class SWBPortal
         return obj;
     }
 
+    /**
+     * Gets a reference to the servletContext associated to this object
+     * <p>Obtiene el servletContext asociado a este recurso.</p>
+     * @return the servletContext used in this object's creation
+     */
     public static ServletContext getServletContext()
     {
         return servletContext;
     }
 
+    /**
+     * Gets a reference to the filter associated to this resource.
+     * <p>Obtiene el filter asociado a este recurso.</p>
+     * @return the filter used in this object creation, {@code null} if no filter 
+     *         was specified.
+     */
     public static Filter getVirtualHostFilter()
     {
         return virtualHostFilter;
     }
 
+    /**
+     * Gets a reference to the object holding the properties declared in {@literal web.properties} file.
+     * <p>Obtiene la referencia a todas las propiedades declaradas en el archivo web.properties.</p>
+     * @return the properties object wich stores the configured properties in {@literal web.properties} file.
+     */
     public static Properties getWebProperties()
     {
         return props;
     }
 
     /**
-     * Getter for property haveDB.
-     * @return Value of property haveDB.
+     * Indicates if this instance of portal has a database related to it.
+     * <p>Indica si esta instancia de portal tiene relacionada una base de datos.</p>
+     * @return the boolean indicating if a database existis for this instance of portal.
      */
     public static boolean haveDB()
     {
@@ -707,24 +934,42 @@ public class SWBPortal
     }
 
     /**
-     * Getter for property haveDBTables.
-     * @return Value of property haveDBTables.
+     * Indicates if this instance of portal has database tables to work with.
+     * <p>Indica si esta instancia de portal tiene las tablas de base de datos
+     * necesarias para trabajar.</p>
+     * @return the boolean indicating if this instance of portal has database tables to work with.
      */
     public static boolean haveDBTables()
     {
         return haveDBTables;
     }
 
+    /**
+     * Indicates if this instance of portal is working with a database.
+     * <p>Indica si esta instancia de portal est&aacute; trabajanso con una base de datos.</p>
+     * @return the boolean indicating if this instance of portal is working with a database.
+     */
     public static boolean isUseDB()
     {
         return useDB;
     }
 
+    /**
+     * Modifies the indicator of this instance of portal to work with a database.
+     * <p>Modifica el indicador de esta instancia de portal para trabajar con una base de datos.</p>
+     * @param useDB a boolean that indicates to this instance of portal if it has to use a database.
+     */
     public static void setUseDB(boolean useDB)
     {
         SWBPortal.useDB = useDB;
     }
 
+    /**
+     * Deletes a file whose representing path is within the work directory of this 
+     * portal's instance. <p>Elimina un archivo cuya ruta se encuentra dentro del
+     * directorio de trabajo de esta instancia de portal.</p>
+     * @param path the string representing the file to delete, which has to be within the work directory.
+     */
     public static void removeFileFromWorkPath(String path)
     {
         //TOTO:Impementar Replicacion de archivos
@@ -733,9 +978,15 @@ public class SWBPortal
     }
 
     /**
-     * @param path
-     * @throws AFException
-     * @return  */
+     * Reads a file whose path is located within this portal's work directory.
+     * <p>Lee un archivo cuya ruta est&aacute; ubicada dentro del directorio de
+     * trabajo de este portal.</p>
+     * @param path the string representing the file's path to read, which has to
+     *             be within the work directory.
+     * @throws SWBException if the file path indicated cannot be located within the
+     *         work directory or is equal to {@code null}
+     * @return an inputStream with the indicated file's content
+     */
     public static InputStream getFileFromWorkPath(String path) throws SWBException {
         InputStream ret = null;
         //TOTO:Impementar Replicacion de archivos
@@ -774,6 +1025,14 @@ public class SWBPortal
 //        return ret;
 //    }
 
+    /**
+     * Creates a file to the path and with the content indicated.
+     * <p>Crea un archivo en la ruta y con el contenido indicados.</p>
+     * @param path a string representing the path within the work directory to create the file
+     * @param in   an input stream with the new file's content
+     * @param userid a string with the user id, wich is used if the file repository is shared among several clients
+     * @throws org.semanticwb.SWBException if the path specified cannot be created or is {@code null}
+     */
     public static void writeFileToWorkPath(String path, InputStream in, String userid) throws SWBException {
         //System.out.println("writeFileToWorkPath:"+path);
         //TOTO:Impementar Replicacion de archivos
@@ -807,18 +1066,30 @@ public class SWBPortal
     }
 
     /**
-     * @param path
-     * @throws AFException
-     * @return  */
+     * Reads a file whose path exists within the work directory and puts its content into a string.
+     * <p>Lee un archivo cuya ruta existe dentro del directorio de trabajo ({@literal work})
+     * y coloca su contenido en una string.</p>
+     * @param path the string representing the file's path within the work directory
+     * @return a stream with the indicated file's content
+     * @throws IOException if the file specified cannot be read.
+     * @throws SWBException
+     */
     public static String readFileFromWorkPath(String path) throws IOException, SWBException {
         return SWBUtils.IO.readInputStream(getFileFromWorkPath(path));
     }
 
     /**
-     * @param path
-     * @param encode
-     * @throws AFException
-     * @return  */
+     * Reads a file whose path is located within this portal's work directory using a
+     * specified character code. It uses the method {@code getFileFromWorkPath(String)}'s services.
+     * <p>Lee un archivo cuya ruta se ubica dentro del directorio de trabajo ({@code work})
+     * de este portal utilizando el c&oacute;digo de caracteres especificado.
+     * Utiliza los servicios del m&eacute;todo {@code getFileFromWorkPath(String)}.</p>
+     * @param path a string representing the file's path to read, which has to be
+     *             within the work directory.
+     * @param encode a string representing the character code to use while reading the file's content.
+     * @return a stream with the indicated file's content
+     * @throws org.semanticwb.SWBException if there's a problem while reading the file's content.
+     */
     public static InputStreamReader getFileFromWorkPath(String path, String encode) throws SWBException {
         InputStreamReader ret = null;
         try {
@@ -830,10 +1101,14 @@ public class SWBPortal
     }
 
     /**
-     * @param path
-     * @param encode
-     * @throws AFException
-     * @return  */
+     * Reads a file whose path exists within the work directory and puts the file's
+     * content into a string. <p>Lee un archivo cuya ruta existe dentro del directorio {@code work}
+     * y coloca el contenido del archivo en una string.</p>
+     * @param path the string representing the file's path within the work directory
+     * @param encode a string representing the character code to use while reading the file's content.
+     * @return a string representing the specified file's content
+     * @throws SWBException if there's a problem while reading the file's content.
+     */
     public static String readFileFromWorkPath(String path, String encode) throws SWBException {
         StringBuffer ret = new StringBuffer(SWBUtils.IO.getBufferSize());
         try {
@@ -858,62 +1133,136 @@ public class SWBPortal
 //    }
 
     //TODO:validar client
-    /** La instancia de WB esta configurada como cliente?.
-     * @return Value of property client.
+    /**
+     * Indicates if the SemanticWebBuilder instance is configured as a client.
+     * <p>Indica si esta instancia de SemanticWebBuilder (SWB) est&aacute;
+     * configurada como cliente.</p>
+     * @return a boolean that indicates if the SWB instance is configured as a client.
      */
     public static boolean isClient()
     {
         return client;
     }
 
+    /**
+     * Gets the distributor path in this instance of SWB.
+     * <p>Obtiene la ruta del distribuidor de esta instancia de SWB</p>
+     * @return a string representing the distributor path within the context of this instance of SWB.
+     */
     public static String getDistributorPath() {
         return getContextPath() + "/" + getEnv("swb/distributor", "swb");
     }
 
+    /**
+     * Gets a reference to the user manager for this instance of SWB.
+     * <p>Obtiene una referencia al administrador de usuarios de esta instancia de SWB</p>
+     * @return a SWBUserMgr object for this instance of SWB
+     */
     public static SWBUserMgr getUserMgr() {
         return usrMgr;
     }
 
+    /**
+     * Gets a reference to the monitor for this instance of SWB.
+     * <p>Obtiene una referencia al monitor de esta instancia de SWB</p>
+     * @return a SWBMonitor object for this instance of SWB.
+     */
     public static SWBMonitor getMonitor() {
         return monitor;
     }
 
+    /**
+     * Gets a reference to the resource manager for this instance of SWB.
+     * <p>Obtiene una referencia al administrador de recursos de esta instancia de SWB</p>
+     * @return a SWBResourceMgr object for this instance of SWB.
+     */
     public static SWBResourceMgr getResourceMgr() {
         return resmgr;
     }
 
+    /**
+     * Gets a reference to the template manager for this instance of SWB.
+     * <p>Obtiene una referencia al administrador de plantillas de esta instancia de SWB</p>
+     * @return a SWBTemplateMgr object for this instance of SWB.
+     */
     public static SWBTemplateMgr getTemplateMgr() {
         return templatemgr;
     }
 
+    /**
+     * Gets a reference to the service manager for this instance of SWB.
+     * <p>Obtiene una referencia al administrador de servicios de esta instancia de SWB</p>
+     * @return a SWBServiceMgr object for this instance of SWB.
+     */
     public static SWBServiceMgr getServiceMgr() {
         return servicemgr;
     }
 
+    /**
+     * Gets a reference to the database administration log for this instance of SWB.
+     * <p>Obtiene una referencia a la bit&aacute;cora de administraci&oacute;n de
+     * base de datos de esta instancia de SWB</p>
+     * @return a SWBDBAdmLog object for this instance of SWB.
+     */
     public static SWBDBAdmLog getDBAdmLog() {
         return admlog;
     }
 
+    /**
+     * Gets a reference to the message center for this instance of SWB.
+     * <p>Obtiene una referencia al centro de mensajes de esta instancia de SWB</p>
+     * @return a SWBMessageCenter object for this instance of SWB.
+     */
     public static SWBMessageCenter getMessageCenter() {
         return msgcenter;
     }
 
+    /**
+     * Gets a reference to the access log for this instance of SWB.
+     * <p>Obtiene una referencia a la bit&aacute;cora de accesos de esta instancia de SWB</p>
+     * @return a SWBAccessLog object for this instance of SWB.
+     */
     public static SWBAccessLog getAccessLog() {
         return acclog;
     }
 
+    /**
+     * Gets a reference to the publication flow manager for this instance of SWB.
+     * <p>Obtiene una referencia al administrador de flujos de publicaci&oacute;n
+     * de esta instancia de SWB</p>
+     * @return a PFlowManager object for this instance of SWB.
+     */
     public static PFlowManager getPFlowManager() {
         return pflowMgr;
     }
 
+    /**
+     * Gets a reference to the access incrementor for this instance of SWB.
+     * <p>Obtiene una referencia al incrementador de accesos de esta instancia de SWB</p>
+     * @return a SWBAccessIncrement object for this instance of SWB.
+     */
     public static SWBAccessIncrement getAccessIncrement() {
         return accInc;
     }
 
+    /**
+     * Gets a reference to the index manager for this instance of SWB.
+     * <p>Obtiene una referencia al administrador de &iacute;ndices de esta instancia de SWB.</p>
+     * @return a SWBIndexMgr object for this instance of SWB.
+     */
     public static SWBIndexMgr getIndexMgr() {
         return indmgr;
     }
 
+    /**
+     * Gets a file from the .jar files loaded at initialization of SWB. The requested
+     * file's path has to be within the structure directory of SWBAdmin.jar or dojo.jar.
+     * <p>Extrae un archivo de los archivos .jar cargados en la inicializaci&oacute;n de
+     * SWB. La ruta de archivo solicitada debe existir en la estructura de directorios
+     * de SWBAdmin.jar o dojo.jar.</p>
+     * @param path a string representing an existing path within SWBAdmin.jar or dojo.jar files.
+     * @return a jarFile object with the specified file's content.
+     */
     public static JarFile getAdminFile(String path) {
         JarFile f = new JarFile(path);
         if (!f.exists()) {
@@ -929,6 +1278,15 @@ public class SWBPortal
         return f;
     }
 
+    /**
+     * Gets a file from the .jar files loaded at initialization of SWB. The requested
+     * file's path has to be within the structure directory of SWBAdmin.jar or dojo.jar.
+     * <p>Extrae un archivo de los archivo .jar cargados al inicializar SWB.
+     * La ruta de archivo solicitada debe existir en la estructura de directorios de
+     * SWBAdmin.jar o dojo.jar.</p>
+     * @param path a string representing an existing path within SWBAdmin.jar or dojo.jar files.
+     * @return an input stream with the specified file's content.
+     */
     public static InputStream getAdminFileStream(String path) {
         JarFile f = (JarFile) admFiles.get(path);
         if (f == null) {
@@ -941,7 +1299,9 @@ public class SWBPortal
     }
 
     /**
-     * @return an ArrayList with all languages available in all sites
+     * Retrieves all languages from all sites in this instance of SWB.
+     * <p>Obtiene todos los lenguajes de todos los sitios en esta instancia de SWB</p>
+     * @return an arrayList with all languages available in all sites
      */
     public static ArrayList getAppLanguages() {
         ArrayList languages = new ArrayList();
@@ -959,20 +1319,68 @@ public class SWBPortal
         return languages;
     }
 
-
+    /**
+     * Combines general usefull operations for the portal platform, such as:
+     * relative path replacement within HTML code, search of anchors in HTML code,
+     * captcha like image generation, HTML in-code referenced file listing.
+     * <p>Conjunta operaciones &uacute;tiles a nivel general para la plataforma de
+     * portal, como: sustituci&oacute;n de rutas locales en c&oacute;digo HTML,
+     * b&uacute;squeda de anclas en HTML, generaci&oacute;n de im&aacute;genes tipo
+     * captcha, listado de archivos referenciados por c&oacute;digo HTML.</p>
+     */
     public static class UTIL {
 
+
+        /**
+         * a string that contains all characters in the english alphabet and the 10 digits. <p>
+         * una string que contiene todos los caracteres del alfabeto ingl&eacute;s
+         * y los 10 d&iacute;gitos del sistema decimal.</p>
+         * Used to generate strings with characters selected randomly.
+         */
+        private final static String ALPHABETH = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+
+
+        /**
+         * Looks for relative paths in the attributes of HTML tags and replaces
+         * their values with {@code ruta}, the content will be displayed in one single page.
+         * The HTML tags and elements evaluated are the same as for the {@code parseHTML(String, String, int)} method.
+         * <p>Busca rutas relativas en los atributos de tags de HTML y remplaza
+         * sus valores con {@code ruta}, el contenido se desplegar&aacute; en una sola
+         * p&aacute;gina. Los tags y atributos de HTML a evaluar son los mismos que
+         * para el m&eacute;todo {@code parseHTML(String, String, int)}.</p>
+         * @param datos the string with the HTML code to parse.
+         * @param ruta the string with the new path to write to {@code datos}.
+         * @return a string with the HTML code with relative paths modified.
+         */
         public static String parseHTML(String datos, String ruta) {
             return parseHTML(datos, ruta, 0);
         }
 
         /**
-         * replace tags and values in Html (parser)
-         * @param datos
-         * @param ruta
-         * @Autor Jorge Jiménez
-         * @return  */
+         * Looks for relative paths in the attributes of HTML tags and replaces
+         * their values with {@code ruta}, indicating the number of {@code pages} into which the content is divided.
+         * The HTML tags it evaluates are: {@code img}, {@code applet}, {@code script}, {@code table},
+         * {@code tr}, {@code td}, {@code body}, {@code form}, {@code input}, {@code a}, {@code area}
+         * {@code meta}, {@code bca}, {@code link}, {@code param}, {@code embed}, {@code iframe} and {@code frame} and
+         * the attributes it evaluates are: {@code src}, {@code href}, {@code background}, {@code codebase}, {@code value},
+         * {@code onmouseover}, {@code onload}, {@code onmouseout} and {@code onclick}.
+         * <p>Busca rutas de archivo relativas en los atributos de tags de HTML y
+         * remplaza sus valores con la recibida en {@code ruta}, indicando el n&uacute;mero
+         * de p&aacute;ginas (con {@code pages}) en que se divide el contenido.
+         * Los tags de HTML a evaluar son: {@code img}, {@code applet}, {@code script},
+         * {@code table}, {@code tr}, {@code td}, {@code body}, {@code form}, {@code input},
+         * {@code a}, {@code area}, {@code meta}, {@code bca}, {@code link}, {@code param},
+         * {@code embed}, {@code iframe} y {@code frame}; los atributos que eval&uacute;a son:
+         * {@code src}, {@code href}, {@code background}, {@code codebase}, {@code value},
+         * {@code onmouseover}, {@code onload}, {@code onmouseout} y {@code onclick}</p>
+         * @param datos the string with the HTML code to parse.
+         * @param ruta the string with the new path to write to {@code datos}.
+         * @param pages the number of pages which the content is divided into.
+         * @return a string with the HTML code with relative paths modified.
+         * @author Jorge Jim&eacute;nez
+         */
         public static String parseHTML(String datos, String ruta, int pages) {
+
             hAnchors = new HashMap();
             //detección de si el contenido es de word
             boolean iswordcontent = false;
@@ -1083,9 +1491,11 @@ public class SWBPortal
         }
 
         /**
-         * Finds filename in string (relative paths)
-         * @param value
-         * @return
+         * Retrieves a file name from a string representing a relative path.
+         * <p>Obtiene un nombre de archivo de una string que representa una ruta relativa.</p>
+         * @param value a string representing a relative path.
+         * @return a string with the file name found. If no file name is found
+         *         {@code value} is returned intact.
          */
         private static String findFileName(String value) {
             String out = "";
@@ -1109,6 +1519,16 @@ public class SWBPortal
             return value;
         }
 
+        /**
+         * Eliminates a leading substring from a string. For example: <br/>
+         * if {@code value = "../images/favicon.ico"} <br/>
+         * and {@code takeOff = ".."} <br/>
+         * {@code takeOffString(value, takeOff) = "/images/favicon.ico"}
+         * <p>Elimina una subcadena precedente de una string, como se ejemplifica arriba.</p>
+         * @param value the string that contains the substring to eliminate
+         * @param takeOff the substring to eliminate
+         * @return the string whithout {@code takeOff}
+         */
         public static String takeOffString(String value, String takeOff) {
             int pos = -1;
             do {
@@ -1121,11 +1541,12 @@ public class SWBPortal
         }
 
         /**
-         * Finds anchors in string
-         * @param content
-         * @param ancla
-         * @param pages
-         * @return
+         * Finds the number page in which an anchor name exists in {@code content}.
+         * <p>Encuentra el n&uacute;mero de p&aacute;gina en que un ancla existe en {@code content}.</p>
+         * @param content the string in which the anchor name will be searched
+         * @param ancla the string to search in {@code content}
+         * @param pages the number of pages {@code content} is divided into
+         * @return the page number in which {@code ancla} was found
          */
         private static int findAnchorInContent(String content, String ancla, int pages) {
             ancla = ancla.substring(1);
@@ -1143,8 +1564,15 @@ public class SWBPortal
         }
 
         /**
-         * @param datos
-         * @param ruta
+         * Indicates if an anchor name exists in the page indicated by {@code page}
+         * within the content of {@code datos}. <p>Indica si un nombre de ancla existe
+         * en la p&aacute;gina del n&uacute;mero indicado por {@code page}, dentro
+         * del contenido de {@code datos}.</p>
+         * @param datos the string in which the anchor name will be searched
+         * @param ancla the string representing the anchor name to search in {@code datos}
+         * @param page the page number that is going to be analized
+         * @param itpages the total number of pages in {@code datos}
+         * @return a boolean indicating whether the anchor was found or not
          */
         public static boolean findAnchorInContentPage(String datos, String ancla, int page, int itpages) {
             HtmlTag tag = new HtmlTag();
@@ -1199,7 +1627,7 @@ public class SWBPortal
                                     while (en.hasMoreElements()) {
                                         name = (String) en.nextElement();
                                         value = tag.getParam(name);
-                                        if (name.toLowerCase().equals("name") && value.equals(ancla)) { //emcontrado
+                                        if (name.toLowerCase().equals("name") && value.equals(ancla)) { //encontrado
                                             hAnchors.put(value, new Integer(page));
                                             return true;
                                         } else if (name.toLowerCase().equals("name") && value.startsWith("_")) { //es una ancla, guardarla en hash de anclas
@@ -1220,11 +1648,15 @@ public class SWBPortal
         }
 
         /**
-         * Finds images in a javascript
-         * @param value
-         * @param ext
-         * @param ruta
-         * @return
+         * Finds file paths in a string and replaces them with the path indicated in {@code ruta}.
+         * It searches for the file paths whose file extension equals {@code ext}.
+         * <p>Encuentra rutas de arhcivos en una string y las remplaza con la ruta indicada
+         * en {@code ruta}. Busca las rutas de los archivos cuya extensi&oacute; equivale a {@code ext}.</p>
+         * @param value the string containing the text to look into
+         * @param ext the string representing the file extension to look for
+         * @param ruta the string with the new path that will replace the found ones
+         * @return a string like {@code value} but with the file paths replaced with {@code ruta}
+         *         for the file paths containing the file extension {@code ext}
          */
         private static String findImagesInScript(String value, String ext, String ruta) {
             StringBuffer aux = new StringBuffer(value.length());
@@ -1253,9 +1685,25 @@ public class SWBPortal
         }
 
         /**
-         * @param datos
-         * @param ruta
-         * @return  */
+         * Looks for relative paths in the attributes of HTML tags and replaces
+         * their values with {@code ruta}.
+         * The HTML tags it evaluates are: {@code img}, {@code applet}, {@code script}, {@code table},
+         * {@code td}, {@code body}, {@code form}, {@code input}, {@code a},
+         * {@code meta}, {@code bca}, {@code link}, {@code param}, {@code embed}, {@code iframe} and {@code frame} and
+         * the attributes it evaluates are: {@code src}, {@code href}, {@code background}, {@code codebase}, {@code value},
+         * {@code onmouseover}, {@code onload}, {@code onmouseout} and {@code onclick}.
+         * <p>Busca rutas relativas en los atributos de los tags de HTML y remplaza
+         * sus valores por el de {@code ruta}. Los tags de HTML que eval&uacute;a son:
+         * {@code img}, {@code applet}, {@code script}, {@code table}, {@code td},
+         * {@code body}, {@code form}, {@code input}, {@code a}, {@code meta}, {@code bca},
+         * {@code link}, {@code param}, {@code embed}, {@code iframe} y {@code frame}
+         * y los atributos que eval&uacute;a son: {@code src}, {@code href}, {@code background},
+         * {@code codebase}, {@code value}, {@code onmouseover}, {@code onload},
+         * {@code onmouseout} and {@code onclick}.</p>
+         * @param datos the string containing the HTML code to parse
+         * @param ruta the string representing the replacing path
+         * @return a string with the HTML code with relative paths modified.
+         */
         public static String parseXsl(String datos, String ruta) {
             HtmlTag tag = new HtmlTag();
             int pos = -1;
@@ -1340,10 +1788,19 @@ public class SWBPortal
         }
 
         /**
-         * Finds attaches in a string
-         * @param datos
-         * @param ruta
-         * @return a string with sttaches
+         * Detects the relative file paths included in {@code datos} and returns them in 
+         * a semicolon separated string. The file paths are searched for in the following tags:
+         * {@code img}, {@code applet}, {@code script}, {@code td}, {@code table}, {@code body}, {@code input},
+         * {@code a}, {@code area}, {@code link}, {@code param}, {@code embed} and in the attributes:
+         * {@code src}, {@code href}, {@code background}, {@code codebase}, {@code value} and {@code onmouseover}.
+         * <p>Detecta las rutas relativas inclu&iacute;das en {@code datos} y las
+         * devuelve en una string separada por punto y comas (;). Las rutas de archivo
+         * son buscadas en los siguientes tags: {@code img}, {@code applet}, {@code script},
+         * {@code td}, {@code table}, {@code body}, {@code input}, {@code a}, {@code area}, {@code link},
+         * {@code param}, {@code embed}; y en los atributos: {@code src}, {@code href},
+         * {@code background}, {@code codebase}, {@code value} and {@code onmouseover}.</p>
+         * @param datos the string representing the HTML code to analize.
+         * @return a semicolon separated string with the file paths retrieved
          */
         public static String FindAttaches(String datos) {
             HtmlTag tag = new HtmlTag();
@@ -1441,6 +1898,20 @@ public class SWBPortal
             return ret.toString();
         }
 
+        /**
+         * Finds a file path in a string whose file extension equals {@code ext}.
+         * If there's no file path in {@code value} with the specified extension,
+         * or if {@code value} starts with {@literal /} or {@literal http}, then
+         * {@code value} is returned intact. <p>Encuentra una ruta de archivo cuya
+         * extensi&oacute;n equivalga a {@code ext}. Si {@code value} no contiene
+         * una ruta con la extensi&oacute;n de archivo especificada o si {@code value}
+         * inicia con {@literal /} o {@literal http}, entonces el valor de {@code value}
+         * regresa intacto.</p>
+         * @param value a string that might contain a file path
+         * @param ext a string representing a file extension to look for
+         * @param ruta a string that is not used in this method, so don't bother
+         * @return a string with the local file path found with extension {@code ext}
+         */
         private static String findImageInScript1(String value, String ext, String ruta) {
             int f = value.indexOf(ext);
             int i = value.lastIndexOf("'", f);
@@ -1455,8 +1926,16 @@ public class SWBPortal
             }
             return value;
         }
-        private final static String ALPHABETH = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
+        /**
+         * Generates a string of {@code size} characters selected in a random basis.
+         * <p>Genera una string con {@code size} caracteres seleccionados en orden aleatorio.</p>
+         * @param size the number of characters the resulting string will contain
+         * @return a string with {@code size} characters selected in a random basis.
+         *         If {@code size} equals zero the returning string will be empty,
+         *         and if {@code size} is less than zero an exception will be thrown.
+         * @throws NegativeArraySizeException if the {@code size} argument is less than zero.
+         */
         private String getRandString(int size) {
             StringBuilder sb = new StringBuilder(size);
             for (int i = 0; i < size; i++) {
@@ -1465,6 +1944,24 @@ public class SWBPortal
             return sb.toString();
         }
 
+        /**
+         * Generates an image representing a string and embeds it in a {@code HttpServletResponse}.
+         * The represented string can be provided by the {@code cad} argument or if
+         * this argument is {@code null} the string is randomly generated. Additionally,
+         * a request attribute with name {@code swb_valCad} is generated and its value
+         * is equal to the string represented in the image embedded in the HTTP response.
+         * <p>Genera una imagen representando una string y la incrusta en una {@code HttpServletResponse}.
+         *  La string representada puede ser proporcionada mediante el argumento {@code cad}, o
+         * si este argumento es {@code null} la string se genera aleatoriamente. Adicionalmente,
+         * genera un atributo de petici&oacute;n -en {@code request}- con nombre
+         * {@code swb_valCad} y con valor igual a la string representada por la imagen.</p>
+         * @param request a HTTP request to respond
+         * @param response the HTTP response that will contain the generated image
+         * @param size the number of characters the generated string will contain, if {@code cad} is {@code null}
+         * @param cad the string to represent in an image
+         * @throws javax.servlet.ServletException
+         * @throws java.io.IOException
+         */
         public void sendValidateImage(HttpServletRequest request, HttpServletResponse response, int size, String cad) throws ServletException, IOException {
             String cadena = null;
             if (null == cad) {
@@ -1507,6 +2004,27 @@ public class SWBPortal
             }
         }
 
+        /**
+         * Generates an image representing a string and embeds it in a {@code HttpServletResponse}.
+         * The represented string can be provided by the {@code cad} argument or if
+         * this argument is {@code null} the string is randomly generated. Additionally,
+         * a request attribute with name determined by the {@code attributeName} argument
+         * is generated and its value is equal to the string represented in the image
+         * embedded in the HTTP response. <p>Genera una imagen que representa una string
+         * y la inserta en una {@code HttpServletResponse}. La string representada
+         * puede ser proporcionada mediante el argumento {@code cad} o si este argumento
+         * es {@code null} los caracteres que conforman la string son seleccionados
+         * aleatoriamente. Adicionalmente, genera un atributo de petici&oacute;n
+         * en {@code request} con el nombre determinado por el argumento
+         * {@code attributeName} y su valor es igual a la cadena representada en la imagen.</p>
+         * @param request a HTTP request to respond
+         * @param response the HTTP response that will contain the generated image
+         * @param attributeName a string with the name the request attribute is going to be
+         * @param size the number of characters the generated string will contain, if {@code cad} is {@code null}
+         * @param cad the string to represent in an image
+         * @throws javax.servlet.ServletException
+         * @throws java.io.IOException
+         */
         public void sendValidateImage(HttpServletRequest request, HttpServletResponse response, String attributeName, int size, String cad) throws ServletException, IOException {
             final int width = 150;
             final int height = 60;
@@ -1553,8 +2071,20 @@ public class SWBPortal
     }
 
     /**
-     * Remueve estilos del contenido, como parte del cambio de los mismos de acuerdo a
-     * archivo de configuración Content.properties en el servidor
+     * Removes from the HTML code in {@code content}, the heading and body tags and
+     * replaces the existing styles. The CSS styles in {@code content} are replaced
+     * with those belonging to the set of name equal to {@code tmid} whose detail
+     * is contained in {@code hTMhStyleObjs}. <p>Elimina del c&oacute;digo HTML en
+     * {@code content}, los tags de encabezado y cuerpo del documento y remplaza
+     * los estilos existentes. Los estilos CSS en {@code content} se remplazan con
+     * los que pertenecen al conjunto de nombre igual a {@code tmid} cuyo detalle
+     * lo contiene {@code hTMhStyleObjs}.</p>
+     * @param content a string with the HTML code to modify
+     * @param tmid a string representing the name of the style set to use
+     * @param hTMhStyleObjs the set of CSS styles available
+     * @return a string similar to content but without the heading and body tags
+     *         and the styles modified according to the arguments received. If
+     *         {@code content} equals {@code null}, the returned value is an empty string.
      */
     public static String removeStylesOutDivs(String content, String tmid, HashMap hTMhStyleObjs)
     {
@@ -1679,7 +2209,17 @@ public class SWBPortal
     }
 
     /**
-     * Parsea el contenido, de acuerdo a los tipos indicados en los objetos de estilo
+     * Modifies some CSS styles in {@code styles} for those specified in
+     * {@code hTMhStyleObjs} whose identifier equals {@code tmid}. <p>Modifica
+     * algunos estilos CSS en {@code styles} por los que est&aacute;n especificados
+     * en {@code hTMhStyleObjs} cuyo identificador lo define {@code tmid}.</p>
+     * @param styles a string containing the CSS styles to modify
+     * @param tmid a string representing the identifier for the style set to use
+     * @param hTMhStyleObjs a hash map containing the set of styles available
+     * @return a string with the CSS style code in {@code styles} but whith the CSS styles modified.
+     *         The styles modified will be those defined for the font type used in {@literal <p>},
+     *         {@literal <li>} and {@literal <div>} HTML tags according to the styles
+     *         contained in {@code hTMhStyleObjs}.
      */
     private static String parseStyles2(String styles, String tmid, HashMap hTMhStyleObjs)
     {
@@ -1709,24 +2249,38 @@ public class SWBPortal
     }
 
     /**
-     * Parsea el contenido, de acuerdo a los tipos indicados en los objetos de estilo
+     * Replaces from {@code content} the styles defined for the {@literal <p>},
+     * {@literal <li>} and {@literal <div>} HTML tags with those specified in {@code hTMhStyleObjs}.
+     * <p>Remplaza de {@code content} los estilos definidos para los tags de HTML: {@literal <p>},
+     * {@literal <li>} and {@literal <div>} con los especificados en {@code hTMhStyleObjs}.</p>
+     * @param content the string representing the CSS styles to be modified
+     * @param tmid a string representing the set of styles in {@code hTMhStyleObjs} to use
+     * @param hTMhStyleObjs a hash map containing the set of styles available
+     * @return a string similar to {@code content} but with some styles modified.
+     *         The styles modified will be those defined in {@code content} for the {@literal <p>},
+     *         {@literal <li>} and {@literal <div>} HTML tags according to the styles
+     *         contained in {@code hTMhStyleObjs}.
      */
-    private static String parseStyles(String content,String tmid, HashMap hTMhStyleObjs)
-    {
-        HashMap hStyleObjs=(HashMap)hTMhStyleObjs.get(tmid);
-        if(hStyleObjs!=null && hStyleObjs.size()>0){ //encontro estilos
-            Iterator iStyles=hStyleObjs.keySet().iterator();
-            while(iStyles.hasNext()){
-                String styleName=(String)iStyles.next();
-                if(styleName!=null && styleName.trim().length()>0){
-                    ContentStyles contentStyle=(ContentStyles)hStyleObjs.get(styleName);
-                    if(contentStyle.getName()!=null && (contentStyle.getFont()!=null || contentStyle.getSize()!=null || contentStyle.getColor()!=null))
-                    {
-                        String sname=styleName;             //contentStyle.getName(); //cambio para soportar multiples nombres
-                        if(!sname.equals("h1") && !sname.equals("h2") && !sname.equals("h3")) {
-                            sname="p."+sname+", li."+sname+", div."+sname;
+    private static String parseStyles(String content, String tmid, HashMap hTMhStyleObjs) {
+
+        HashMap hStyleObjs = (HashMap) hTMhStyleObjs.get(tmid);
+        if (hStyleObjs != null && hStyleObjs.size() > 0) { //encontro estilos
+            Iterator iStyles = hStyleObjs.keySet().iterator();
+            while (iStyles.hasNext()) {
+                String styleName = (String) iStyles.next();
+                if (styleName != null && styleName.trim().length() > 0) {
+                    ContentStyles contentStyle = (ContentStyles) hStyleObjs.get(styleName);
+                    if (contentStyle.getName() != null
+                            && (contentStyle.getFont() != null
+                            || contentStyle.getSize()!=null
+                            || contentStyle.getColor() != null)) {
+                        String sname = styleName;             //contentStyle.getName(); //cambio para soportar multiples nombres
+                        if (!sname.equals("h1") && !sname.equals("h2")
+                                && !sname.equals("h3")) {
+                            sname = "p." + sname + ", li." + sname + ", div." + sname;
                         }
-                        content=findStyles(content,sname,contentStyle.getFont(),contentStyle.getSize(),contentStyle.getColor());
+                        content = findStyles(content, sname, contentStyle.getFont(),
+                                contentStyle.getSize(), contentStyle.getColor());
                     }
                 }
             }
@@ -1735,14 +2289,17 @@ public class SWBPortal
     }
 
     /**
-     * Busca los estilos en el documento y si los encuentra los remplaza de acuerdo a
-     * archivo de configuración
-     * @param content
-     * @param word
-     * @param font
-     * @param size
-     * @param color
-     * @return
+     * Replaces the font format styles (font type, size and color) found in {@code content}
+     * with the arguments' values received. <p>Busca los estilos para el formato
+     * de letra (fuente, tama&ntilde;o y color) en una cadena y si los encuentra
+     * los remplaza por los valores de los argumentos recibidos.</p>
+     * @param content a string with the text to modify
+     * @param word a string representing a style class name
+     * @param font a string representing the font type to replace the one found
+     * @param size a string representing the font size to replace the one found
+     * @param color a string representing the font color to replace the one found
+     * @return a string like {@code content} but with the font format styles related
+     *         to the style class defined by {@code word} replaced with the arguments' values
      */
     public static String findStyles(String content,String word,String font,String size,String color){
         int pos=-1;
