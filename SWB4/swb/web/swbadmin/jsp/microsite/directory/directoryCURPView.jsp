@@ -345,7 +345,7 @@ private final int I_PAGE_SIZE = 20;
                         intnumber = propValue;
                     }else if(semProp==CURPModule.swbcomm_extNumber){
                         extnumber = propValue;
-                    }else if(semProp==CURPModule.ClassMgr.swbcomm_cityCouncil){
+                    }else if(semProp==CURPModule.swbcomm_cityCouncil){
                         council = propValue;
                     }else if(semProp==CURPModule.swbcomm_city){
                         city = propValue;
