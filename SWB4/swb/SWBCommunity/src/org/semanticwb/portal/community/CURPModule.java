@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
-
 public class CURPModule extends org.semanticwb.portal.community.base.CURPModuleBase
 {
     public CURPModule(org.semanticwb.platform.SemanticObject base)
@@ -91,7 +90,12 @@ public class CURPModule extends org.semanticwb.portal.community.base.CURPModuleB
             streetName = streetName + " ";
         }
         String intNumber = getIntNumber();
-        if (intNumber == null || intNumber.equals("null")) intNumber = "";
+        if (intNumber == null || intNumber.equals("null")) {
+            intNumber = "";
+        } else {
+            intNumber = " interior " + intNumber + ", ";
+        }
+
         String extNumber = getExtNumber();
         if (extNumber == null || extNumber.equals("null")) {
             extNumber = "";
