@@ -22,6 +22,6 @@ public class TaskInstance extends org.semanticwb.process.base.TaskInstanceBase
         }
         setEnded(new Date());
         setEndedby(user);
-        getProcessInstance().checkStatus(user);
+        getParentProcessInstance().checkStatus(user);
     }
 }

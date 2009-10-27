@@ -40,6 +40,7 @@ public class ActivityInstance extends org.semanticwb.process.base.ActivityInstan
                     setStatus(Process.STATUS_CLOSED);
                     setEnded(new Date());
                     setEndedby(user);
+                    if(getParentProcessInstance()!=null)getParentProcessInstance().checkStatus(user);
                 }
             }
         }

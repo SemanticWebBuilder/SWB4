@@ -12,6 +12,8 @@ public class ActivityBase extends org.semanticwb.model.SWBClass implements org.s
        public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
        public static final org.semanticwb.platform.SemanticClass swbps_Activity=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Activity");
        public static final org.semanticwb.platform.SemanticProperty swbps_hasDependence=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#hasDependence");
+       public static final org.semanticwb.platform.SemanticClass swbps_Process=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Process");
+       public static final org.semanticwb.platform.SemanticProperty swbps_parentProcessInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#parentProcessInv");
        public static final org.semanticwb.platform.SemanticProperty swbps_executions=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#executions");
        public static final org.semanticwb.platform.SemanticProperty swb_valid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#valid");
        public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
@@ -185,6 +187,39 @@ public class ActivityBase extends org.semanticwb.model.SWBClass implements org.s
          if(obj!=null)
          {
              ret=(org.semanticwb.process.Activity)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+    public void setParentProcess(org.semanticwb.process.Process value)
+    {
+        getSemanticObject().setObjectProperty(ClassMgr.swbps_parentProcessInv, value.getSemanticObject());
+    }
+
+    public void removeParentProcess()
+    {
+        getSemanticObject().removeProperty(ClassMgr.swbps_parentProcessInv);
+    }
+
+   public static java.util.Iterator<org.semanticwb.process.Activity> listActivityByParentProcess(org.semanticwb.process.Process parentprocessinv,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.Activity> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(ClassMgr.swbps_parentProcessInv, parentprocessinv.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.process.Activity> listActivityByParentProcess(org.semanticwb.process.Process parentprocessinv)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.Activity> it=new org.semanticwb.model.GenericIterator(parentprocessinv.getSemanticObject().getModel().listSubjects(ClassMgr.swbps_parentProcessInv,parentprocessinv.getSemanticObject()));
+       return it;
+   }
+
+    public org.semanticwb.process.Process getParentProcess()
+    {
+         org.semanticwb.process.Process ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(ClassMgr.swbps_parentProcessInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.process.Process)obj.createGenericInstance();
          }
          return ret;
     }
