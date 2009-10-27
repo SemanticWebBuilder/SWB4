@@ -64,7 +64,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
                 <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
                 <%
                     SemanticObject obj = SemanticObject.createSemanticObject(r);
-                    if (obj.instanceOf(WebPage.sclass)) {
+                    if (obj.instanceOf(WebPage.ClassMgr.sclass)) {
                         WebPage wp = (WebPage) obj.createGenericInstance();
                         %>
                         <div class="listEntryInfo">                            
@@ -73,7 +73,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
                         </div>
                         <div class="clear"> </div>
                         <%
-                    } else if (obj.instanceOf(DirectoryObject.sclass)) {
+                    } else if (obj.instanceOf(DirectoryObject.ClassMgr.sclass)) {
                         DirectoryObject c = (DirectoryObject) obj.createGenericInstance();
                         //Hotel c = (Hotel)obj.createGenericInstance();
                         String photo = obj.getProperty(swbcomm_dirPhoto);
