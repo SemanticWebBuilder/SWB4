@@ -5,6 +5,7 @@
         <admdbconnmgr defconn="true"/>
         <fieldset>
             <input type="TEXT" name="maxResults" label="Resultados por página:"/>
+            <input type="TEXT" name="viewJSP" label="JSP de vista:"/>
         </fieldset>
         <fieldset>
             <input type="SUBMIT" name="btnSave"  value="Guardar"/>
