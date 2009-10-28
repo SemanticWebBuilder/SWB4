@@ -2,44 +2,63 @@
 <%
     SemanticProperty swbcomm_dirPhoto = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#dirPhoto");
     SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
-    ArrayList<String> results = (ArrayList<String>) request.getAttribute("results");
+    ArrayList<SemanticObject> results = (ArrayList<SemanticObject>) request.getAttribute("results");
+    ArrayList<SemanticObject> allRes = (ArrayList<SemanticObject>) request.getAttribute("allRes");
     String searchUrl = (String) request.getAttribute("rUrl");
-    HashMap<String, String> map = new HashMap<String, String>();
-    map.put("separator", "-");
+    String what = (String) request.getParameter("what");
+    //System.out.println("what: " + what);
+%>
+
+<%!
+    class GeoLocation {
+        private double latitude;
+        private double longitude;
+        int step;
+        String name;
+        public GeoLocation(double latitude, double longitude, int step, String name)
+        {
+            this.latitude = latitude;
+            this.longitude = longitude;
+            this.step = step;
+            this.name = name;
+        }
+        public double getLatitude(){ return latitude;}
+        public double getLongitude(){ return longitude;}
+        public int getStep(){ return step;}
+        public String getName(){ return name;}
+    }
 %>
 
 <%
-if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
-%>
-    <div id="busqueda">
-        <h2>B&uacute;squeda</h2>
-        <div class="clear">&nbsp;</div>
-        <form id="busqueda_form" action="<%=searchUrl%>" method="get">
-            <p>
-                <input id="busqueda_input" type="text" name="q"/>
-                <input id="busqueda_enviar" type="submit"/>
-                <label for="what">Buscar en:&nbsp;</label>
-                <select name="what">
-                    <option selected value="Todo">Todo</option>
-                    <option value="Organization">Organizaciones</option>
-                    <option value="Commerce">Comercios</option>
-                    <option value="Clasified">Clasificados</option>
-                    <option value="PointOfInterest">Sitios de Inter&eacute;s</option>
-                    <option value="Person">Personas</option>
-                </select>
-            </p>
-        </form>
-    </div>
-<%
-} else if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
-    Iterator<String> it = null;
-    if (results != null) it = results.iterator();
-    
-    if(results != null && it.hasNext()){
+if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
+    if (results != null && results.size() > 0) {
+
+        //Get all DirectoryObject's GeoLocations as arrayList
+        ArrayList<GeoLocation> objs = new ArrayList<GeoLocation>();
+        Iterator<SemanticObject> soit = allRes.iterator();
+        while (soit.hasNext()) {
+            SemanticObject so = soit.next();
+            if (so.getSemanticClass().isSubClass(Geolocalizable.swb_Geolocalizable)) {
+                DirectoryObject dob = (DirectoryObject) so.createGenericInstance();
+                so.getProperty(Addressable.swbcomm_streetName);
+                String html = "<b><font color=\"blue\">" + dob.getTitle() + "</font></b><br>" +
+                    getAddressString(so) +
+                    "<br><b>Contacto:</b> " + so.getProperty(Contactable.swbcomm_contactName) +
+                    "<br><b>Teléfono:</b> " + so.getProperty(Contactable.swbcomm_contactPhoneNumber);
+                System.out.println(html);
+                objs.add(new GeoLocation(
+                    so.getDoubleProperty(Geolocalizable.swb_latitude),
+                    so.getDoubleProperty(Geolocalizable.swb_longitude),
+                    so.getIntProperty(Geolocalizable.swb_geoStep),
+                    html));
+            }
+        }
+
+        Iterator<SemanticObject> it = results.iterator();
         int total = (Integer) request.getAttribute("t");
         int maxr = Integer.valueOf(paramRequest.getResourceBase().getAttribute("maxResults", "10"));
         int pageNumber = 1;
-        
+
         if (request.getParameter("p") != null)
             pageNumber = Integer.valueOf(request.getParameter("p"));
 
@@ -47,151 +66,262 @@ if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
         int end = start + maxr - 1;
         if (end > total - 1) end = total - 1;
 
-        String sliceUrl = paramRequest.getRenderUrl().setMode("slice") + "?q=" + request.getParameter("q");
-    %>
+        String sliceUrl = paramRequest.getRenderUrl() + "?q=" + request.getParameter("q") + "&what=" + request.getParameter("what");
+        SWBResourceURL byDate = paramRequest.getRenderUrl().setParameter("o", "1");
+        byDate.setParameter("p", request.getParameter("p"));
+        byDate.setParameter("what", request.getParameter("what"));
+        SWBResourceURL byName = paramRequest.getRenderUrl().setParameter("o", "2");
+        byName.setParameter("p", request.getParameter("p"));
+        byName.setParameter("what", request.getParameter("what"));
+        SWBResourceURL byPrice = paramRequest.getRenderUrl().setParameter("o", "3");
+        byPrice.setParameter("p", request.getParameter("p"));
+        byPrice.setParameter("what", request.getParameter("what"));
+        String basePath = SWBPortal.getWebWorkPath()+"/models/" + paramRequest.getWebPage().getWebSite().getTitle()+"/images/";
+
+%>
+        <script type="text/javascript">
+            dojo.require("dojo.fx");
+            dojo.require("dijit.ColorPalette");
+            dojo.require("dijit.form.Button");
+
+            function expande(oId) {
+                    var anim1 = dojo.fx.wipeIn( {node:oId, duration:500 });
+                    var anim2 = dojo.fadeIn({node:oId, duration:500});
+                    dojo.fx.combine([anim1,anim2]).play();
+                    dojo.byId('toggle_link').innerHTML = "Ocultar mapa de distribuci&oacute;n";
+            }
+
+            function collapse(oId) {
+                    var anim1 = dojo.fx.wipeOut( {node:oId, duration:500 });
+                    var anim2 = dojo.fadeOut({node:oId, duration:600});
+                    dojo.fx.combine([anim1, anim2]).play();
+                    dojo.byId('toggle_link').innerHTML = "Mostrar mapa de distribuci&oacute;n";
+            }
+
+            function toggle(oId) {
+                    var o = dojo.byId(oId);
+                    if(o.style.display=='block' || o.style.display==''){
+                            collapse(oId);
+                    } else {
+                            expande(oId);
+                }
+            }
+        </script>
+
         <h3>Resultados de la b&uacute;squeda <i><%=request.getParameter("q")%></i></h3>
-        <br>
+        <%
+        if (what != null && what.trim().equals("Organization")) {
+            %>
+            <a id="toggle_link" href="#" onclick="toggle('map_container')">Ocultar Mapa de distribuci&oacute;n</a>
+            <div id="map_container">
+                    <div id="map_canvas" style="border:1px solid black; width: 480px; height: 300px;"></div>
+            </div>
+            <br>
+
+            <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<%=SWBPortal.getEnv("key/gmap","")%>" type="text/javascript"></script>
+            <script type="text/javascript">
+                function createMarker(map, point, name, icon) {
+                        var modulo = new GMarker(point, icon);
+                        GEvent.addListener(modulo, "click", function() {
+                            var myHtml = name;
+                            map.openInfoWindowHtml(point, myHtml);
+                     });
+                     return modulo;
+                }
+
+                function initialize() {
+                    var myIcon = new GIcon();
+                    myIcon.image = '<%=basePath%>image.png';
+                    myIcon.printImage = '<%=basePath%>printImage.gif';
+                    myIcon.mozPrintImage = '<%=basePath%>mozPrintImage.gif';
+                    myIcon.iconSize = new GSize(25,25);
+                    myIcon.shadow = '<%=basePath%>shadow.png';
+                    myIcon.transparent = '<%=basePath%>transparent.png';
+                    myIcon.shadowSize = new GSize(38,25);
+                    myIcon.printShadow = '<%=basePath%>printShadow.gif';
+                    myIcon.iconAnchor = new GPoint(13,25);
+                    myIcon.infoWindowAnchor = new GPoint(13,0);
+                    myIcon.imageMap = [16,0,18,1,20,2,21,3,22,4,22,5,23,6,23,7,24,8,24,9,24,10,24,11,24,12,24,13,24,14,24,15,24,16,23,17,23,18,22,19,22,20,21,21,20,22,18,23,15,24,9,24,6,23,4,22,3,21,3,20,2,19,1,18,1,17,0,16,0,15,0,14,0,13,0,12,0,11,0,10,0,9,0,8,1,7,1,6,1,5,2,4,3,3,4,2,6,1,8,0];
+
+                    if (GBrowserIsCompatible()) {
+                        var map = new GMap2(document.getElementById("map_canvas"));
+                        map.addControl(new GSmallMapControl());
+                        map.addControl(new GMapTypeControl());
+                        var bounds = new GLatLngBounds();
+                        <%
+                        Iterator<GeoLocation> listit = objs.iterator();
+                        while (listit.hasNext()) {
+                            GeoLocation actual = listit.next();
+                        %>
+                            var pointer = new GLatLng(<%=actual.getLatitude()%>, <%=actual.getLongitude()%>);
+                            bounds.extend(pointer);
+                            map.addOverlay(createMarker(map, pointer, '<%=actual.getName()%>'/*, myIcon*/));
+                        <%
+                        }
+                    %>
+                    }
+                    map.setCenter(bounds.getCenter());
+                    map.setZoom(map.getBoundsZoomLevel(bounds));
+                }
+                initialize();
+            </script>
+        <%
+        }
+        %>
         <p>
             Mostrando resultados <b><%=start+1%></b> al <b><%=end+1%></b> de <b><%=total%></b>.
-            <br>            
+        </p>
+        <p>
+            Ordenar por <a href="<%=byDate.setParameter("q", request.getParameter("q"))%>">fecha</a> | <a href="<%=byName.setParameter("q", request.getParameter("q"))%>">nombre</a>
         </p>
         <div class="entriesList">
         <%
             while(it.hasNext()) {
-                String r = it.next();
-                if (r == null || r.equals("null")) continue;
-        %>
-                <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
-                <%
-                    SemanticObject obj = SemanticObject.createSemanticObject(r);
-                    if (obj.instanceOf(WebPage.ClassMgr.sclass)) {
-                        WebPage wp = (WebPage) obj.createGenericInstance();
-                        %>
-                        <div class="listEntryInfo">                            
-                            <p class="tituloNaranja"><%=wp.getTitle()%>&nbsp;(WebPage)</p>
-                            <p class="vermas"><a href ="<%=wp.getUrl()%>">Ir a</a></p>
-                        </div>
-                        <div class="clear"> </div>
+                SemanticObject obj = it.next();
+                if (obj == null) continue;
+                if (obj.instanceOf(DirectoryObject.ClassMgr.sclass)) {
+                    %>
+                    <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
+                    <%
+                    DirectoryObject c = (DirectoryObject) obj.createGenericInstance();
+                    String photo = obj.getProperty(swbcomm_dirPhoto);
+                    if(photo != null && !photo.equals("null")) {
+                    %>
+                        <img height="95" width="95" src="<%=SWBPortal.getWebWorkPath()+c.getDirectoryResource().getWorkPath()+"/"+obj.getId()+"/"+photo%>">
+                    <%
+                    } else {
+                    %>
+                        <img height="95" width="95" src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/noDisponible.gif">
+                    <%
+                    }
+                    %>
+                    <div class="listEntryInfo">
+                        <p class="tituloNaranja"><!--a href ="%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>"--><%=c.getTitle()%>&nbsp;(<%=obj.getSemanticClass().getDisplayName("es")%>)<!--/a--></p>
+                        <!--p>
+                            <!--%=c.getWebPage().getPath(map)%>
+                        </p-->
+                        <p>
+                            <b><%=(c.getDescription()==null)?"":c.getDescription()%></b>
+                        </p>
                         <%
-                    } else if (obj.instanceOf(DirectoryObject.ClassMgr.sclass)) {
-                        DirectoryObject c = (DirectoryObject) obj.createGenericInstance();
-                        //Hotel c = (Hotel)obj.createGenericInstance();
-                        String photo = obj.getProperty(swbcomm_dirPhoto);
-                        if(photo != null && !photo.equals("null")) {
-                        %>
-                            <img height="95" width="95" src="<%=SWBPortal.getWebWorkPath()+c.getDirectoryResource().getWorkPath()+"/"+obj.getId()+"/"+photo%>">
-                        <%
-                        } else {
-                        %>
-                            <img height="95" width="95" src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/noDisponible.gif">
-                        <%
-                        }
-                        %>
-                        <div class="listEntryInfo">
-                            <p class="tituloNaranja"><!--a href ="%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>"--><%=c.getTitle()%>&nbsp;(<%=obj.getSemanticClass().getDisplayName("es")%>)<!--/a--></p>
-                            <!--p>
-                                <!--%=c.getWebPage().getPath(map)%>
-                            </p-->
+                        if (obj.instanceOf(Addressable.swbcomm_Addressable)) {
+                            %>
                             <p>
-                                <b><%=(c.getDescription()==null)?"":c.getDescription()%></b>
+                                <%=(getAddressString(obj).trim().equals(""))?"":getAddressString(obj)%>
                             </p>
                             <%
-                            if (obj.instanceOf(Addressable.swbcomm_Addressable)) {
-                                SemanticClass obclass = obj.getSemanticClass();
-                                String streetName = obj.getProperty(obclass.getProperty("streetName"));
-                                String extNumber = obj.getProperty(obclass.getProperty("extNumber"));
-                                String intNumber = obj.getProperty(obclass.getProperty("intNumber"));
-                                String cityCouncil = obj.getProperty(obclass.getProperty("cityCouncil"));
-                                String city = obj.getProperty(obclass.getProperty("city"));
-                                String state = obj.getProperty(obclass.getProperty("state"));
+                        }
 
-                                String street = (streetName!=null?streetName:"") + (extNumber!=null?" " + extNumber:"") +
-                                        (intNumber!=null?" int. " + intNumber:"");
-                                %>
-                                <p>
-                                    <%=(street==null)?"":street%>
-                                </p>
-                                <p>
-                                    <%=(cityCouncil==null)?"":cityCouncil%>
-                                </p>
-                                <p>
-                                    <%=(city==null)?"":city%>
-                                </p>
-                                <p>
-                                    <%=(state==null)?"":state%>
-                                </p>
-                                <%
-                            }
-                        
-                            if (obj.instanceOf(Contactable.swbcomm_Contactable)) {
-                                SemanticClass obclass = obj.getSemanticClass();
-                                String email = obj.getProperty(obclass.getProperty("contactEmail"));
-                                String phone = obj.getProperty(obclass.getProperty("contactPhoneNumber"));
-                                %>
-                                <p>
-                                    <%=(phone==null)?"":phone%>
-                                </p>
-                                <p>
-                                    <%=(email==null)?"":email%>
-                                </p>
-                                <%
-                            }
+                        if (obj.instanceOf(Contactable.swbcomm_Contactable)) {
+                            SemanticClass obclass = obj.getSemanticClass();
+                            String email = obj.getProperty(obclass.getProperty("contactEmail"));
+                            String phone = obj.getProperty(obclass.getProperty("contactPhoneNumber"));
+                            String name = obj.getProperty(obclass.getProperty("contactName"));
                             %>
-                            <!--p>-Palabras clave:%=c.getTags()%></p-->
-                            <p class="vermas"><a href ="<%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>">Ver mas</a></p>
-                        </div>
-                        <div class="clear"> </div>
-                        <%
-                    }
-                    %>
-                </div>
-                <div class="listEntry"> </div>
+                            <p>
+                                <%=(phone==null)?"":"Tel.: " + phone%>
+                            </p>
+                            <p>
+                                <%=(name==null)?"":"Contacto: " + name + ((email==null)?"":"[" + email + "]")%>
+                            </p>
+                            <%
+                        }
+                        %>
+                        <p><%=(c.getTags()==null?"":"Palabras clave: " + c.getTags())%></p>
+                        <p class="vermas"><a href ="<%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>">Ver mas</a></p>
+                    </div>
+                    <div class="clear"> </div>
+                    <%
+                }
+                %>
+            </div>
+            <%
+        }
+        %>
+        </div>
+        <div class="listEntry"> </div>
+        <p align="center"> P&aacute;gina (
+        <%
+            if (pageNumber - 1 >= 1) {
+                %>
+                <a href="<%=sliceUrl + "&p=" + (pageNumber - 1)%>">&lt;&nbsp;</a>
                 <%
             }
-            %>
-            </div>
-            <p align="center">
-            <%
-                if (pageNumber - 1 >= 1) {
-                    %>
-                    <a href="<%=sliceUrl + "&p=" + (pageNumber - 1)%>">&lt;&nbsp;</a>
-                    <%
-                }
-                double pages = Math.ceil((double) total / (double) maxr);
-                    for (int i = 1; i <= pages; i++) {
-                        start = maxr * (i - 1);
-                        if ((start + maxr) - 1 > total - 1) {
-                            end = total - 1;
-                        } else {
-                            end = (start + maxr) - 1;
-                        }
-                        if (pageNumber == i) {
-                            %>
-                            <span><font size="2.8"><b><%=i%></b></font></span>
-                            <%
-                        } else {
-                            %>
-                            <a href="<%=sliceUrl + "&p=" + i%>"><%=i%></a>
-                            <%
-                        }
+            double pages = Math.ceil((double) total / (double) maxr);
+                for (int i = 1; i <= pages; i++) {
+                    start = maxr * (i - 1);
+                    if ((start + maxr) - 1 > total - 1) {
+                        end = total - 1;
+                    } else {
+                        end = (start + maxr) - 1;
                     }
-                if (pageNumber + 1 <= pages) {
-                    %>
-                    <a href="<%=sliceUrl + "&p=" + (pageNumber + 1)%>">&nbsp;&gt;</a>
-                    <%
+                    if (pageNumber == i) {
+                        %>
+                        <span><font size="2.8"><b><%=i%></b></font></span>
+                        <%
+                    } else {
+                        %>
+                        <a href="<%=sliceUrl + "&p=" + i%>"><%=i%></a>
+                        <%
+                    }
                 }
-            %>
-            </p>        
+            if (pageNumber + 1 <= pages) {
+                %>
+                <a href="<%=sliceUrl + "&p=" + (pageNumber + 1)%>">&nbsp;&gt;</a>
+                <%
+            }
+        %>
+        )
+        </p>
         <%
     } else {
-    %>
-        <h3>Resultados de la búsqueda <i><%=request.getParameter("q")%></i></h3>
+        %><h3>Resultados de la b&uacute;squeda <i><%=request.getParameter("q")%></i></h3>
         <br>
         <hr/>
         <p>
             No hay resultados.
-        </p>
-    <%
+        </p><%
     }
+    %>
+    <form action="#">
+        <input type="submit" value="Regresar" onclick="history.go(-1)"/>
+    </form>
+    <%
 }
+%>
+
+<%!
+    private String getAddressString(SemanticObject o) {
+        String streetName = o.getProperty(Addressable.swbcomm_streetName);
+        if (streetName == null || streetName.equals("null")) {
+            streetName = "";
+        } else {
+            streetName = streetName + " ";
+        }
+        String intNumber = o.getProperty(Addressable.swbcomm_intNumber);
+        if (intNumber == null || intNumber.equals("null")) {
+            intNumber = "";
+        } else {
+            intNumber = " interior " + intNumber + ", ";
+        }
+
+        String extNumber = o.getProperty(Addressable.swbcomm_extNumber);
+        if (extNumber == null || extNumber.equals("null")) {
+            extNumber = "";
+        } else {
+            extNumber = " exterior " + extNumber + ",<br>";
+        }
+        String council = o.getProperty(Addressable.swbcomm_cityCouncil);
+        if (council == null || council.equals("null")) council = "";
+        String city = o.getProperty(Addressable.swbcomm_city);
+        if (city == null || city.equals("null")) {
+            city = "";
+        } else {
+            city = ", " + city + " ";
+        }
+        String state = o.getProperty(Addressable.swbcomm_state);
+        if (state == null || state.equals("null")) state = "";
+
+        return streetName + intNumber + extNumber + council + city + state;
+    }
 %>
