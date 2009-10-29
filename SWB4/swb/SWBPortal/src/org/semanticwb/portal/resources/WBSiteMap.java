@@ -545,6 +545,7 @@ public class WBSiteMap extends GenericAdmResource
                     }else {
                         html.append("<li>");
                         //html.append("<img src=\""+pathImages+"/trans.gif\" />");
+                        html.append("<a class=\"icomap\"><span><span></a>");
                         if(openOnClick) {
                             html.append("<a onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\">");
                             html.append(webpage.getDisplayTitle(this.language));
@@ -614,11 +615,12 @@ public class WBSiteMap extends GenericAdmResource
                     }else {
                         html.append("<li>");
                         //html.append("<img src=\""+pathImages+"/trans.gif\" />");
-                        if(openOnClick) {
+                        html.append("<a class=\"icomap\"><span><span></a>");
+                        if(openOnClick) {                            
                             html.append("<a onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\">");
                             html.append(webpage.getDisplayTitle(this.language));
                             html.append("</a>");
-                        }else {
+                        }else {                            
                             html.append("<a onclick=\"window.location='"+webpage.getUrl()+"'\">");
                             html.append(webpage.getDisplayTitle(this.language));
                             html.append("</a>");
