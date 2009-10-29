@@ -128,7 +128,7 @@ public class SWBVirtualHostFilter implements Filter
         //System.out.println("Path:"+path);
         boolean isjsp = false;
         InternalServlet serv = intServlets.get(iserv);
-        if (serv != null && path.endsWith(".jsp"))
+        if (serv != null && (path.endsWith(".jsp") || path.endsWith(".groovy")))
         {
             serv = null;
             isjsp = true;
