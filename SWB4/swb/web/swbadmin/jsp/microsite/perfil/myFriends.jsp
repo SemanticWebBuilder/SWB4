@@ -51,10 +51,9 @@
             imgSize="width=\"39\" height=\"39\"";            
         }
      %>
-          <div class="miembros">
-          <%if(owner==user){%>
-            <h2>Mis Amigos</h2>
-          <%}else{%> <h2>Amigos de <%=user.getFirstName()%></h2> <%}%>
+          <ul class="amigos">
+          <%if(owner!=user){%>
+            Amigos de <%=user.getFirstName()%> <%}%>
 
              <%
              String firstName="", lastName="";
@@ -69,24 +68,26 @@
                      {
                          if(friendUser.getPhoto()!=null) photo=friendUser.getPhoto();                         
                          %>
-                            <div class="moreUser">
+                            <li>
                             <a href="<%=perfilPath%>?user=<%=friendUser.getEncodedURI()%>"><img alt="Foto de <%=friendUser.getFullName()%>" src="<%=SWBPortal.getWebWorkPath()+photo%>" <%=imgSize%> title="<%=friendUser.getFullName()%>">
                             <%if(!isStrategy){%>
                                 <br>
                                 <%=firstName%>
                                 <%=lastName%>
                             <%}%>
-                            </a>
-                         </div>
+                            </li>
                          <%
                          contTot++;
                          if(isStrategy && contTot==18) break;
                      }
                  }
              }
+             %>
+             </ul>
+             <%
              if(isStrategy && contTot>=18){%>
                  <div class="clear">
-                    <p class="vermas"><a href="<%=friendsPath%>" >Ver todos</a></p>
+                    <p class="verTodos"><a href="<%=friendsPath%>" >Ver todos</a></p>
                  </div>
              <%}else if(contTot==0){%>
                <div class="clear">
@@ -94,7 +95,7 @@
                </div>
              <%}%>
              <div class="clear"></div>
-          </div>
+         
 
 <%
 }
