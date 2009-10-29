@@ -411,7 +411,7 @@ public class TemplateImp extends Template
                                 String src=tag.getParam("src");
                                 if(tag!=null)
                                 {
-                                    if(!(src.endsWith(".jsp")||src.contains(".jsp?")||src.endsWith(".php")||src.contains(".php?")||src.endsWith(".py")||src.contains(".py?")))
+                                    if(!(src.endsWith(".jsp")||src.contains(".jsp?")||src.endsWith(".php")||src.contains(".php?")||src.endsWith(".py")||src.contains(".py?")||src.endsWith(".groovy")||src.contains(".groovy?")))
                                     {
                                         ArrayList arr = parse(tag.getParam("src"));
                                         parts.addAll(arr);
