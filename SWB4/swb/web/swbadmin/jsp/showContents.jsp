@@ -40,7 +40,7 @@
         if(uri!=null && !uri.trim().equals(""))
         {
              SemanticObject object=SemanticObject.createSemanticObject(uri);
-             if(object!=null && (object.getSemanticClass().isSubClass(Folder.sclass) || object.getSemanticClass().equals(Folder.sclass)))
+             if(object!=null && (object.getSemanticClass().isSubClass(Folder.ClassMgr.sclass) || object.getSemanticClass().equals(Folder.ClassMgr.sclass)))
              {            
                  Folder folder=new Folder(object);
                  Iterator<BaseNode> nodes=folder.listNodes();
@@ -48,10 +48,10 @@
                  while(nodes.hasNext())
                  {
                      BaseNode child=nodes.next();
-                     if(child.getSemanticObject().getSemanticClass().isSubClass(File.sclass) || child.getSemanticObject().getSemanticClass().equals(File.sclass))
+                     if(child.getSemanticObject().getSemanticClass().isSubClass(File.ClassMgr.sclass) || child.getSemanticObject().getSemanticClass().equals(File.ClassMgr.sclass))
                      {
                          File file=new File(child.getSemanticObject());
-                         if(child.getSemanticObject().getSemanticClass().equals(OfficeContent.sclass))
+                         if(child.getSemanticObject().getSemanticClass().equals(OfficeContent.ClassMgr.sclass))
                          {
                              OfficeContent content=new OfficeContent(child.getSemanticObject());
                              out.println("<tr>");
