@@ -75,6 +75,7 @@
                                 <%=firstName%>
                                 <%=lastName%>
                             <%}%>
+                            </a>
                             </li>
                          <%
                          contTot++;
