@@ -43,13 +43,12 @@
     }
 %>
 
-<h2 class="titulo2">Comunidades más activas</h2>
-<div class="cajas">
-    <ul>
+<h3>Las m&aacute;s activas</h3>
+    <ul class="comunidades">
         <%
             WebPage webpage = (WebPage) request.getAttribute("webpage");
             WebSite site = webpage.getWebSite();
-            Iterator communities = sortByViews(MicroSite.listMicroSites(site), false);
+            Iterator communities = sortByViews(MicroSite.ClassMgr.listMicroSites(site), false);
             int i = 0;
             while (communities.hasNext())
             {
@@ -70,4 +69,3 @@
 
         %>
     </ul>
-</div>
