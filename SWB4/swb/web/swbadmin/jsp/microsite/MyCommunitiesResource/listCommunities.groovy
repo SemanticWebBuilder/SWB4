@@ -40,7 +40,6 @@ if(request.getParameter("user")!=null)
 {
     return;
 }
-System.out.println("entra a clase");
 println """
 <ul id="MenuBar1" class="MenuBarHorizontal">
 <li class="selectTitle">
@@ -51,7 +50,6 @@ lista.each(){
     Member mem_curr = it
     MicroSite mem_mcs = mem_curr.getMicroSite()
     if (null!=mem_mcs){
-        System.out.println("entra..:"+ mem_mcs.getDisplayName());
         def titulo = mem_mcs.getDisplayName()
         def url = mem_mcs.getUrl()
         def urlimg=SWBPortal.getWebWorkPath()+"/models/"+ paramRequest.getWebPage().getWebSiteId()  +"/css/boton_contacto.png"
