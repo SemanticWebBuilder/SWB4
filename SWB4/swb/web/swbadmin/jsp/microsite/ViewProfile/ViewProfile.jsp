@@ -7,7 +7,7 @@
        WebPage perfil=webpage.getWebSite().getWebPage("perfil");
        String path=perfil.getUrl();
         %>
-        <li><%=user.getFullName()%></li>
+        <li><a>Hola &nbsp;<%=user.getFullName()%></a></li>
         <li><a href="<%=path%>">Ver perfil</a></li>
         <%
     }   
