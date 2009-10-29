@@ -13,10 +13,8 @@
             {
                 String path = paramRequest.getWebPage().getWebSite().getWebPage("Lo_ultimo").getUrl();
 %>
-<div class="espacio1_home">
-    <h2 class="tituloEspacio">Actividad reciente en el sitio</h2>
-    <div class="cajas">
-        <ul>
+    <h2>Actividad m&aacute;s reciente en el sitio</h2>
+        <ul class="listaElementos">
             <%
     for (MicroSiteElement element : elements)
     {
@@ -83,8 +81,6 @@
                 %>
         </ul>
         <p class="vermas"><a href="<%=path%>" >Ver m&aacute;s</a></p>
-    </div>
-</div>
 <%
             }
 %>
