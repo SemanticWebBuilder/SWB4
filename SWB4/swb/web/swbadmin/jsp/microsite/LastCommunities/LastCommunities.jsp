@@ -1,7 +1,7 @@
 <%@page import="org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.model.*,java.util.*"%>
-<h2 class="titulo2">Comunidades más recientes</h2>
-<div class="cajas">
-    <ul>
+<h2 class="titulo2">Comunidades</h2>
+<h3>Las m&aacute;s recientes</h3>
+     <ul class="comunidades">
         <%
             //User user=(User)request.getAttribute("user");
             WebPage webpage = (WebPage) request.getAttribute("webpage");
@@ -27,4 +27,3 @@
             }
         %>
     </ul>
-</div>
