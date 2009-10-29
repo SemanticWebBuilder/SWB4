@@ -26,6 +26,8 @@ public class PersonBase extends org.semanticwb.portal.community.DirectoryObject 
        public static final org.semanticwb.platform.SemanticProperty swbcomm_hasDirTopicWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasDirTopicWebPage");
        public static final org.semanticwb.platform.SemanticProperty swbcomm_dirPhoto=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#dirPhoto");
        public static final org.semanticwb.platform.SemanticProperty swbcomm_city=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#city");
+       public static final org.semanticwb.platform.SemanticProperty swbcomm_cityCouncil=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#cityCouncil");
+       public static final org.semanticwb.platform.SemanticProperty swbcomm_state=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#state");
        public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
        public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
        public static final org.semanticwb.platform.SemanticClass swbcomm_Person=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Person");
@@ -143,5 +145,26 @@ public class PersonBase extends org.semanticwb.portal.community.DirectoryObject 
     public void setCity(String value)
     {
         getSemanticObject().setProperty(ClassMgr.swbcomm_city, value);
+    }
+
+
+    public String getCityCouncil()
+    {
+        return getSemanticObject().getProperty(ClassMgr.swbcomm_cityCouncil);
+    }
+
+    public void setCityCouncil(String value)
+    {
+        getSemanticObject().setProperty(ClassMgr.swbcomm_cityCouncil, value);
+    }
+
+    public String getState()
+    {
+        return getSemanticObject().getProperty(ClassMgr.swbcomm_state);
+    }
+
+    public void setState(String value)
+    {
+        getSemanticObject().setProperty(ClassMgr.swbcomm_state, value);
     }
 }
