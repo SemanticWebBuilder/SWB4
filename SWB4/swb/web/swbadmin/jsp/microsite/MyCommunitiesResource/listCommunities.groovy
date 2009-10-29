@@ -53,7 +53,7 @@ lista.each(){
         def titulo = mem_mcs.getDisplayName()
         def url = mem_mcs.getUrl()
         def urlimg=SWBPortal.getWebWorkPath()+"/models/"+ paramRequest.getWebPage().getWebSiteId()  +"/css/boton_contacto.png"
-        println """<li><a href="${url}"><img src="${urlimg}" alt="Ir a Nombre de la empresa"></a><a class="contactos_nombre" href="${url}">$titulo</a></li>"""
+        println """<li><a class="contactos_nombre" href="${url}">$titulo</a></li>"""
     }
 }
 println """</ul></li></ul>"""
