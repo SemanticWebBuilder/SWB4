@@ -23,8 +23,8 @@
         dojo.addOnLoad(function(){
             dojo.connect(dijit.byId("btnSave"), "onClick",
                 function() {
-                    if(jsValida(dojo.byId("frmPromo"))) {
-                        dojo.byId("frmPromo").submit();
+                    if(jsValida(dojo.byId("frmIndiceTematicoXSL"))) {
+                        dojo.byId("frmIndiceTematicoXSL").submit();
                     }
                 }
             );
@@ -33,7 +33,7 @@
         dojo.addOnLoad(function(){
             dojo.connect(dijit.byId("btnReset"), "onClick",
                 function() {
-                    dojo.byId("frmPromo").reset();
+                    dojo.byId("frmIndiceTematicoXSL").reset();
                 }
             );
         });
