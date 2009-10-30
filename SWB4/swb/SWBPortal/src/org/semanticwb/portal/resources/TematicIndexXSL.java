@@ -122,15 +122,21 @@ public class TematicIndexXSL extends GenericAdmResource
             Element father = dom.createElement("father");
             father.appendChild(dom.createTextNode(""));
             out.appendChild(father);
+
+            WebPage pageBase=paramRequest.getWebPage();
+            if(base.getAttribute("pageBase")!=null)
+                pageBase=paramRequest.getWebPage().getWebSite().getWebPage(base.getAttribute("pageBase"));
+
+
             Element fathertitle = dom.createElement("fathertitle");
-            fathertitle.appendChild(dom.createTextNode(paramRequest.getWebPage().getDisplayName(usrlanguage)));
+            fathertitle.appendChild(dom.createTextNode(pageBase.getDisplayName(usrlanguage)));
             father.setAttribute("path", path);
-            father.setAttribute("id", paramRequest.getWebPage().getId());
+            father.setAttribute("id", pageBase.getId());
             father.appendChild(fathertitle);
             
             if(usrlanguage!=null)
             {
-                String descr=paramRequest.getWebPage().getDisplayDescription(usrlanguage);
+                String descr=pageBase.getDisplayDescription(usrlanguage);
                 if(descr!=null)
                 {
                     father.setAttribute("hasfatherdescription","1");
@@ -140,7 +146,7 @@ public class TematicIndexXSL extends GenericAdmResource
                 }
             }
             
-            Iterator <WebPage> hijos = paramRequest.getWebPage().listChilds(usrlanguage, true, false, false, null);
+            Iterator <WebPage> hijos = pageBase.listChilds(usrlanguage, true, false, false, null);
             ison=0;
             while(hijos.hasNext())
             {
