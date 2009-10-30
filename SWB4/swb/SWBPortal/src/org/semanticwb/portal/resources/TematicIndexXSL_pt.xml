@@ -16,4 +16,27 @@
             </statictext>
         </fieldset>
     </form>
+    <script type="text/javascript">
+        <![CDATA[
+        dojo.require("dijit.form.Button");
+
+        dojo.addOnLoad(function(){
+            dojo.connect(dijit.byId("btnSave"), "onClick",
+                function() {
+                    if(jsValida(dojo.byId("frmPromo"))) {
+                        dojo.byId("frmPromo").submit();
+                    }
+                }
+            );
+        });
+
+        dojo.addOnLoad(function(){
+            dojo.connect(dijit.byId("btnReset"), "onClick",
+                function() {
+                    dojo.byId("frmPromo").reset();
+                }
+            );
+        });
+        ]]>
+    </script>
 </admresource>
