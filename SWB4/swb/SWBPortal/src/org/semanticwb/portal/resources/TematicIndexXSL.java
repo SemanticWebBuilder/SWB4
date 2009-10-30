@@ -124,9 +124,9 @@ public class TematicIndexXSL extends GenericAdmResource
             out.appendChild(father);
 
             WebPage pageBase=paramRequest.getWebPage();
-            if(base.getAttribute("pageBase")!=null)
+            if(base.getAttribute("pageBase")!=null) {
                 pageBase=paramRequest.getWebPage().getWebSite().getWebPage(base.getAttribute("pageBase"));
-
+            }
 
             Element fathertitle = dom.createElement("fathertitle");
             fathertitle.appendChild(dom.createTextNode(pageBase.getDisplayName(usrlanguage)));
