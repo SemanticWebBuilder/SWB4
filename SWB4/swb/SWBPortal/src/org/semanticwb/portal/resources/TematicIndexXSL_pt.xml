@@ -22,10 +22,8 @@
 
         dojo.addOnLoad(function(){
             dojo.connect(dijit.byId("btnSave"), "onClick",
-                function() {
-                    if(jsValida(dojo.byId("frmIndiceTematicoXSL"))) {
-                        dojo.byId("frmIndiceTematicoXSL").submit();
-                    }
+                function() {                    
+                    dojo.byId("frmIndiceTematicoXSL").submit();
                 }
             );
         });
