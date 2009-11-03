@@ -26,9 +26,11 @@ import com.hp.hpl.jena.query.larq.IndexLARQ;
 import com.hp.hpl.jena.rdf.model.Model;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.TreeSet;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,6 +49,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.SWBComparator;
+import org.semanticwb.model.Traceable;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericAdmResource;
@@ -249,31 +252,38 @@ public class Search extends GenericAdmResource {
         int offset = (page - 1) * max;
         Set results = null;
 
-        ArrayList<DirectoryObject> sorted = new ArrayList<DirectoryObject>();
-        Iterator<SemanticObject> soit = solutions.iterator();
-        while (soit.hasNext()) {
-            SemanticObject o = soit.next();
-            DirectoryObject dob =(DirectoryObject) o.createGenericInstance();
-            if (dob != null)
-                sorted.add(dob);
-        }
-
         //Sort objects
         if (sortType != SORT_NOSORT) {
             if (sortType == SORT_BYDATE) {
-                results = SWBComparator.sortByCreatedSet(sorted.iterator(), false);
+                //Sort manually by date because SWBComparator fails launching a
+                //ClassCast exception
+                results = new TreeSet(new Comparator() {
+                    public int compare(Object o1, Object o2)
+                    {
+                        Traceable ob1 = (Traceable) ((SemanticObject)o1).createGenericInstance();
+                        Traceable ob2 = (Traceable) ((SemanticObject)o2).createGenericInstance();
+                        int ret = ob1.getCreated().after(ob2.getCreated())?-1:1;
+                        return ret;
+                    }
+                });
+
+                Iterator<SemanticObject> soit = solutions.iterator();
+                while (soit.hasNext()) {
+                    SemanticObject o = soit.next();
+                    results.add(o);
+                }
+                
             } else if (sortType == SORT_BYNAME) {
-                results = SWBComparator.sortByDisplayNameSet(sorted.iterator(), language);
+                results = SWBComparator.sortByDisplayNameSet(solutions.iterator(), language);
             } else if (sortType == SORT_BYPRICE) {
                 //TODO
             }
 
             //Copy sort results
-            Iterator<DirectoryObject> soit2 = results.iterator();
+            Iterator<SemanticObject> soit = results.iterator();
             solutions = new ArrayList<SemanticObject>();
-            while (soit2.hasNext()) {
-                DirectoryObject o = soit2.next();
-                solutions.add(o.getSemanticObject());
+            while (soit.hasNext()) {
+                solutions.add(soit.next());
             }
         }
 
