@@ -14,7 +14,7 @@
 <%
 User owner=paramRequest.getUser();
 User user=owner;
-WebPage wpage=paramRequest.getWebPage();
+WebPage wpage=paramRequest.getWebPage().getWebSite().getWebPage("perfil");
 if(request.getParameter("user")!=null)
 {
     SemanticObject semObj=SemanticObject.createSemanticObject(request.getParameter("user"));
