@@ -9,9 +9,9 @@
             int numrec = (Integer) request.getAttribute("numrec");
             Iterator<CommunityActivity> activities = (Iterator<CommunityActivity>) request.getAttribute("activities");
 %>
-<div id="contactos">
-    <h2>Mis Actividades</h2>
-    <ul>
+
+    <h2>Contenidos recientes</h2>
+    <ul class="listaElementos">
         <%
 
             CommunityActivity ca = null;
@@ -35,7 +35,7 @@
                     {
         %>
         <li><a class="contactos_nombre" href="<%=mse.getURL()%>"><img src="/work/models/Ciudad_Digital/css/boton_contacto.png" alt=""></a>
-            Usted agregó <a class="contactos_nombre" href="<%=mse.getURL()%>"><%=mse.getDisplayTitle(user.getLanguage())%></a>
+            Usted agregó <a class="elemento" href="<%=mse.getURL()%>"><%=mse.getDisplayTitle(user.getLanguage())%></a>
             <%=SWBUtils.TEXT.getTimeAgo(mse.getUpdated(), user.getLanguage())%>.</li>
             <%
                     }
@@ -48,7 +48,7 @@
         <%            }
         %>
     </ul>
-</div>
+
 <%
 
 %>
