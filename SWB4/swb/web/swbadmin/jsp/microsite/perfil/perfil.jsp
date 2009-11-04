@@ -156,58 +156,58 @@ if(request.getParameter("changePhoto")!=null && request.getParameter("changePhot
              sex="Femenino";
          }
          %>
-         <div id="tabs">
-            <div id="TabbedPanels1" class="TabbedPanels">
-                <div class="TabbedPanelsContentGroup">
-                    <div class="TabbedPanelsContent">
-                        <h2 class="h2oculto">Información</h2>
-                        <div id="informacionPersonal">
-                               <%
-                            if(owner==user)
-                            {
-                                %>
-                                <div class="editarInfo">
-                                <p><a href="<%=registryPath%>">Editar información</a></p>
-                                </div>
-                                <%
-                            }
-                            %>   
-                            <div class="clear">&nbsp;</div>
-                                <h3><%=user.getFullName()%></h3>
-             <%             
-             
-                if(owner==user || areFriends){ //Agregar datos privados (email, sexo, fotos, etc)
+ <h1><%=user.getFullName()%></h1>
+    <ul id="menuInterna">
+        <%
+            String principalURL=paramRequest.getWebPage().getWebSite().getWebPage("perfil").getUrl();
+            String Amigos=paramRequest.getWebPage().getWebSite().getWebPage("Amigos").getUrl();
+            String Mis_Eventos=paramRequest.getWebPage().getWebSite().getWebPage("Mis_Eventos").getUrl();
+            String Mis_favoritos=paramRequest.getWebPage().getWebSite().getWebPage("Mis_favoritos").getUrl();
+            String Twitter=paramRequest.getWebPage().getWebSite().getWebPage("Twitter").getUrl();
+
+
+
+        %>
+    	<li><a class="active" href="<%=principalURL%>" >Principal</a></li>
+      <!-- <li><a href="#" >Mis mensajes</a></li> -->
+      <li><a href="<%=Amigos%>" >Mis amigos</a></li>
+      <li><a href="<%=Mis_Eventos%>" >Mis eventos</a></li>
+      <li><a href="<%=Mis_favoritos%>" >Mis favoritos</a></li>
+      <!-- li><a href="#" >Mis contenidos</a></li -->
+      <li><a href="<%=Twitter%>" >Twitter</a></li>
+    </ul>
+  </div>
+  <div id="bodyBottom">
+  	<div id="twoColWrapper">
+      <div class="columnaIzquierda">
+<h2>Resumen</h2>
+<%
+        if(owner==user)
+            {
+   %>
+
+        <a class="editar" href="<%=registryPath%>" >[editar]</a>
+        <%
+        }
+       
+        if(owner==user || areFriends){ //Agregar datos privados (email, sexo, fotos, etc)
                     %>
-                                <table width="100%" border="0" cellspacing="10" cellpadding="0">
-                                    <tr><th valign="top">E-mail</th><td><p><%=email%></p></td></tr>
-                                    <tr><th valign="top">Edad</th><td><p><%=age%></p></td></tr>
-                                    <tr><th valign="top">Sexo</th><td><p><%=sex%></p></td></tr>
-                                    <tr><th valign="top">Estado Civil</th><td><p><%=userStatus%></p></td></tr>
-                                    <tr><th valign="top">Intereses</th><td><p><%=userInterest%></p></td></tr>
-                                    <tr><th valign="top">Hobbies</th><td><p><%=userHobbies%></p></td></tr>
-                                    <tr><th valign="top">Inciso</th><td><p><%=userInciso%></p></td></tr>
-                               </table>
-                    <%
-                }
-             %>
-                            </div>
-                            <div class="clear">&nbsp;</div>
-                            
-                                 <%
-                            if(owner==user)
-                            {
-                                %>
-                                <div class="editarInfo">
-                                <p><a href="<%=registryPath%>">Editar información</a></p>
-                                </div>
-                                <%
-                            }
-                            %>   
-                            
-                        </div>
-                    </div>
-                </div>
-         </div>
+         <div class="resumenText">
+          <p><span class="itemTitle">E-mail:</span>&nbsp;<a href="mailto:<%=email%>"><%=email%></a></p>
+          <p><span class="itemTitle">Edad:</span> &nbsp;<%=age%></p>
+          <p><span class="itemTitle">Sexo:</span> <%=sex%></p>
+          <p><span class="itemTitle">Estado Civil:</span> <%=userStatus%></p>          
+        </div>         
+        <h2>Intereses</h2>        
+        <p><%=userInterest%></p>
+        <h2>Hobbies</h2>        
+        <p><%=userHobbies%></p>
+        <h2>Inciso</h2>
+        <p><%=userInciso%></p>
+         <%
+          }
+          %>
+         
     <%
     }
 
