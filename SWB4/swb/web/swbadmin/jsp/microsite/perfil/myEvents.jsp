@@ -21,7 +21,29 @@
                 lang = user.getLanguage();
             }
 %>
+<h1><%=user.getFullName()%></h1>
+    <ul id="menuInterna">
+        <%
+            String principalURL=paramRequest.getWebPage().getWebSite().getWebPage("perfil").getUrl();
+            String Amigos=paramRequest.getWebPage().getWebSite().getWebPage("Amigos").getUrl();
+            String Mis_Eventos=paramRequest.getWebPage().getWebSite().getWebPage("Mis_Eventos").getUrl();
+            String Mis_favoritos=paramRequest.getWebPage().getWebSite().getWebPage("Mis_favoritos").getUrl();
+            String Twitter=paramRequest.getWebPage().getWebSite().getWebPage("Twitter").getUrl();
 
+
+
+        %>
+    	<li><a href="<%=principalURL%>" >Principal</a></li>
+      <li><a class="active" href="<%=Amigos%>" >Mis amigos</a></li>
+      <li><a href="<%=Mis_Eventos%>" >Mis eventos</a></li>
+      <li><a href="<%=Mis_favoritos%>" >Mis favoritos</a></li>
+
+      <li><a href="<%=Twitter%>" >Twitter</a></li>
+    </ul>
+  </div>
+  <div id="bodyBottom">
+  	<div id="twoColWrapper">
+      <div class="columnaIzquierda">
 <div id="entriesWrapper">
     <%
                 Iterator<EventElement> it;

@@ -168,12 +168,11 @@ if(request.getParameter("changePhoto")!=null && request.getParameter("changePhot
 
 
         %>
-    	<li><a class="active" href="<%=principalURL%>" >Principal</a></li>
-      <!-- <li><a href="#" >Mis mensajes</a></li> -->
+    	<li><a class="active" href="<%=principalURL%>" >Principal</a></li>      
       <li><a href="<%=Amigos%>" >Mis amigos</a></li>
       <li><a href="<%=Mis_Eventos%>" >Mis eventos</a></li>
       <li><a href="<%=Mis_favoritos%>" >Mis favoritos</a></li>
-      <!-- li><a href="#" >Mis contenidos</a></li -->
+      
       <li><a href="<%=Twitter%>" >Twitter</a></li>
     </ul>
   </div>
