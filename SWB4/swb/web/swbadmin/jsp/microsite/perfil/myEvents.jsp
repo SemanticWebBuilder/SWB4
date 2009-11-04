@@ -34,8 +34,8 @@
 
         %>
     	<li><a href="<%=principalURL%>" >Principal</a></li>
-      <li><a class="active" href="<%=Amigos%>" >Mis amigos</a></li>
-      <li><a href="<%=Mis_Eventos%>" >Mis eventos</a></li>
+      <li><a href="<%=Amigos%>" >Mis amigos</a></li>
+      <li><a class="active" href="<%=Mis_Eventos%>" >Mis eventos</a></li>
       <li><a href="<%=Mis_favoritos%>" >Mis favoritos</a></li>
 
       <li><a href="<%=Twitter%>" >Twitter</a></li>
