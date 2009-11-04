@@ -187,20 +187,23 @@ while (itfriendUser.hasNext())
         String urluser=java.net.URLEncoder.encode(friendUser.getURI());
     %>
 
-    <div class="profilePic" onMouseOver="this.className='profilePicHover'" onMouseOut="this.className='profilePic'">
-        <img src="<%=SWBPortal.getWebWorkPath() + photo%>" width="150" height="150" alt="Foto de <%=friendUser.getFullName()%>" />
+    <!-- <div class="profilePic" onMouseOver="this.className='profilePicHover'" onMouseOut="this.className='profilePic'"> -->
+    <p><span class="itemTitle"><img src="<%=SWBPortal.getWebWorkPath() + photo%>" width="150" height="150" alt="Foto de <%=friendUser.getFullName()%>" /></span></p>
+
+        
         <p><a class="contactos_nombre" href="<%=perfilurl%>?user=<%=urluser%>"><%=friendUser.getFullName()%></a></p>
         <p>Edad: <%=usr_age%></p>
         <p>Sexo: <%=usr_sex%></p>
         <p>Tipo: <%=usr_status%></p>
-    </div>
+
+    <!-- </div> -->
 
     <%
 }
 }
 }
     %>
-</div><div class="clear">&nbsp;</div><h2>dfwer Ubicaci&oacute;n de mis amigos</h2>
+</div><div class="clear">&nbsp;</div><h2>Ubicaci&oacute;n de mis amigos</h2>
 <div id="map_canvas" style="width: 480px; height: 300px; float: left"></div>
 <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<%=SWBPortal.getEnv("key/gmap", "")%>"
 type="text/javascript"></script>
