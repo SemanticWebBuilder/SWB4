@@ -21,7 +21,7 @@ if(request.getParameter("user")!=null)
     user=(User)semObj.createGenericInstance();
 }
 if(!owner.isRegistered() || !user.isRegistered()) return;
-Resource base=paramRequest.getResourceBase();
+//Resource base=paramRequest.getResourceBase();
 //String registryPath=base.getAttribute("registryPath","");
 //String attributes=base.getAttribute("attributes","");
 
