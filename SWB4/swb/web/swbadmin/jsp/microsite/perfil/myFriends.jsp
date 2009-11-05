@@ -195,13 +195,12 @@ while (itfriendUser.hasNext())
           <div class="friendCardInfo">
               <a class="ico" href="mailto:<%=email%>"><img src="<%=path%>icoMail.png" alt="enviar un mensaje"></a>
             <a class="ico" href="<%=perfilurl%>?user=<%=urluser%>"><img src="<%=path%>icoUser.png" alt="ir al perfil"></a>
-            <!-- <a class="ico" href="#"><img src="<%=path%>icoMas.png" alt="agregar"></a> -->
+            <%-- <a class="ico" href="#"><img src="<%=path%>icoMas.png" alt="agregar"></a> --%>
             <div class="friendCardName">
               <p><%=friendUser.getFullName()%></p>
             </div>
             <p>Sexo:<%=usr_sex%></p>
-            <p>Edad:<%=usr_age%></p>
-          <!-- <p>Estado civil:<%=usr_status%></p>  -->
+            <p>Edad:<%=usr_age%></p>          
           </div>
         </div>    
     <%
