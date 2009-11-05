@@ -21,9 +21,8 @@
             }
             Iterator<MicroSiteElement> elements = PostElement.listMicroSiteElementByCreator(user,site);
             while (elements.hasNext())
-            {
-                MicroSiteElement element = elements.next();
-                if (element instanceof PostElement)
+            {                
+                if (elements.next() instanceof PostElement)
                 {
                     count++;
                 }
