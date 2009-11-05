@@ -29,6 +29,7 @@
 <%
        String perfilPath = paramRequest.getWebPage().getWebSite().getWebPage("perfil").getUrl();
        String friendsPath = paramRequest.getWebPage().getWebSite().getWebPage("Amigos").getUrl();
+       String path= SWBPortal.getWebWorkPath()+"/models/"+paramRequest.getWebPage().getWebSite().getId()+"/css/images/";
        User owner = paramRequest.getUser();
        User user = owner;
        if (request.getParameter("user") != null)
@@ -62,6 +63,7 @@
     <%
    String firstName = "", lastName = "";
    int contTot = 0;
+
    Iterator<Friendship> itMyFriends = Friendship.listFriendshipByFriend(user, wpage.getWebSite());
    while (itMyFriends.hasNext())
    {
@@ -119,8 +121,7 @@
         else
         {
 %>
-
-<div id="friendCards">
+<div id="friendCards">    
     <%
 GeoLocation userLoc = null;
 if (user.getSemanticObject().getDoubleProperty(Geolocalizable.swb_latitude) != 0D)
@@ -185,45 +186,32 @@ while (itfriendUser.hasNext())
                     friendUser.getFullName()));
         }
         String urluser=java.net.URLEncoder.encode(friendUser.getURI());
-        String path= SWBPortal.getWebWorkPath()+"/models/"+paramRequest.getWebPage().getWebSite().getId()+"/css/images/";
+        
         String email=friendUser.getEmail();
 
     %>
-
-    <div class="friendCard">
-          <img class="profilePic" src="<%=SWBPortal.getWebWorkPath() + photo%>" alt="<%=friendUser.getFullName()%>">
+      <div class="friendCard">
+          <img class="profilePic" width="121" height="121" src="<%=SWBPortal.getWebWorkPath() + photo%>" alt="<%=friendUser.getFullName()%>">
           <div class="friendCardInfo">
-            <a class="ico" href="mailto:<%=email%>"><img src="<%=path%>icoMail.png" alt="enviar un mensaje"></a>
+              <a class="ico" href="mailto:<%=email%>"><img src="<%=path%>icoMail.png" alt="enviar un mensaje"></a>
             <a class="ico" href="<%=perfilurl%>?user=<%=urluser%>"><img src="<%=path%>icoUser.png" alt="ir al perfil"></a>
-            <a class="ico" href="#"><img src="<%=path%>icoMas.png" alt="agregar"></a>
+            <!-- <a class="ico" href="#"><img src="<%=path%>icoMas.png" alt="agregar"></a> -->
             <div class="friendCardName">
               <p><%=friendUser.getFullName()%></p>
             </div>
             <p>Sexo:<%=usr_sex%></p>
             <p>Edad:<%=usr_age%></p>
-            <p>Estado civil:<%=usr_status%></p>
+          <!-- <p>Estado civil:<%=usr_status%></p>  -->
           </div>
-        </div>
-    
-    <!-- <div class="profilePic" onMouseOver="this.className='profilePicHover'" onMouseOut="this.className='profilePic'"> -->
-    <%-- <p><span class="itemTitle"><img src="<%=SWBPortal.getWebWorkPath() + photo%>" width="150" height="150" alt="Foto de <%=friendUser.getFullName()%>" /></span></p>
-
-        
-        <p><a class="contactos_nombre" href="<%=perfilurl%>?user=<%=urluser%>"><%=friendUser.getFullName()%></a></p>
-        <p>Edad: <%=usr_age%></p>
-        <p>Sexo: <%=usr_sex%></p>
-        <p>Tipo: <%=usr_status%></p>
-
-    <!-- </div> -->
-
-    --%>
+        </div>    
     <%
 }
 }
 }
     %>
-</div><div class="clear">&nbsp;</div><h2>Ubicaci&oacute;n de mis amigos</h2>
-<div id="map_canvas" style="width: 480px; height: 300px; float: left"></div>
+</div> 
+<div class="clear">&nbsp;</div><h2>Ubicaci&oacute;n de mis amigos</h2>
+<div id="map_canvas" style="width: 425px; height: 300px; float: left"></div>
 <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<%=SWBPortal.getEnv("key/gmap", "")%>"
 type="text/javascript"></script>
 <script type="text/javascript">
