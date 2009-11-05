@@ -3,6 +3,7 @@
 <%@page import="org.semanticwb.portal.community.*"%>
 <%@page import="org.semanticwb.model.*"%>
 <%@page import="org.semanticwb.SWBPortal"%>
+<%@page import="org.semanticwb.platform.*"%>
 <%@page import="java.util.*"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
@@ -44,6 +45,11 @@
 <!-- <p class="addOn">Mis Invitaciones</p> -->
 <h2>Mis invitaciones</h2>
 <%
+                if (!isStrategy)
+                {
+%>
+<div id="friendCards">
+    <%                }
                 int contTot = 0;
                 itFriendshipProspect = FriendshipProspect.listFriendshipProspectByFriendShipRequested(owner, wpage.getWebSite());
                 while (itFriendshipProspect.hasNext())
@@ -57,21 +63,64 @@
                     urlAction.setParameter("user", userRequester.getURI());
                     if (!isStrategy)
                     {
-%>
-<div class="moreUser">
-    <a href="<%=perfilPath%>?user=<%=userRequester.getEncodedURI()%>"><img src="<%=photo%>" alt="<%=userRequester.getFullName()%>" width="80" height="70">
-        <br><%=userRequester.getFullName()%>
-    </a>
-    <br>
-    <%urlAction.setAction("acceptfriend");%>
-    <div class="editarInfo"><p><a href="<%=urlAction%>">Aceptar</a></p></div>
-    <%urlAction.setAction("noacceptfriend");%>
-    <div class="editarInfo"><p><a href="<%=urlAction%>">No aceptar</a></p></div>    
-</div>
-<%
+                        String path = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSite().getId() + "/css/images/";
+                        String urluser = java.net.URLEncoder.encode(userRequester.getURI());
+                        String email = userRequester.getEmail();
+                        HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
+                        Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#_ExtendedAttributes").listProperties();
+                        while (list.hasNext())
+                        {
+                            SemanticProperty prop = list.next();
+                            mapa.put(prop.getName(), prop);
+                        }
+                        String perfilurl = paramRequest.getWebPage().getWebSite().getWebPage("perfil").getUrl();
+                        if (request.getParameter("user") != null)
+                        {
+                            perfilurl += "?user=" + java.net.URLEncoder.encode(request.getParameter("user"));
+                        }
+                        String usr_sex = (String) userRequester.getExtendedAttribute(mapa.get("userSex"));
+                        Object usr_age = (Object) userRequester.getExtendedAttribute(mapa.get("userAge"));
+                        if (null == usr_age)
+                        {
+                            usr_age = "";
+                        }
+                        if ("M".equals(usr_sex))
+                        {
+                            usr_sex = "Hombre";
+                        }
+                        if ("F".equals(usr_sex))
+                        {
+                            usr_sex = "Mujer";
+                        }
+
+    %>
+
+    <div class="friendCard">
+        <img class="profilePic" width="121" height="121" src="<%=photo%>" alt="<%=userRequester.getFullName()%>">
+        <div class="friendCardInfo">
+            <a class="ico" href="mailto:<%=email%>"><img src="<%=path%>icoMail.png" alt="enviar un mensaje"></a>
+            <a class="ico" href="<%=perfilurl%>?user=<%=urluser%>"><img src="<%=path%>icoUser.png" alt="ir al perfil"></a>
+                <%-- <a class="ico" href="#"><img src="<%=path%>icoMas.png" alt="agregar"></a> --%>
+            <div class="friendCardName">
+                <p><%=userRequester.getFullName()%></p>
+            </div>
+            <p>Sexo:<%=usr_sex%></p>
+            <p>Edad:<%=usr_age%></p>
+            <%urlAction.setAction("acceptfriend");%>
+            <p><a href="<%=urlAction%>">[Aceptar]</a></p>
+            <%urlAction.setAction("noacceptfriend");%>
+            <p><a href="<%=urlAction%>">[No aceptar]</a></p>
+        </div>
+    </div>
+    <%
                     }
                     contTot++;
                 }
+                if (!isStrategy)
+                {
+    %>
+</div>
+<%                }
                 if (isStrategy && contTot > 0)
                 {
 %>
@@ -85,6 +134,7 @@
 %>
 <p class="titulo">No Te han invitado personas a ser su amigo</p>
 <%                }
+
 
             }
 
