@@ -6,6 +6,7 @@
 <%@page import="java.util.*"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
+<h2>Mis solicitudes</h2>
 <%
             User owner = paramRequest.getUser();
             User user = owner;
@@ -42,50 +43,58 @@
             if (hasRequest)
             {
 %>
-<div class="miembros">
-    <p class="addOn">Mis solicitudes</p>
-    <%
-                itFriendshipProspect = FriendshipProspect.listFriendshipProspectByFriendShipRequester(owner, wpage.getWebSite());
-                while (itFriendshipProspect.hasNext())
+
+
+<%
+            itFriendshipProspect = FriendshipProspect.listFriendshipProspectByFriendShipRequester(owner, wpage.getWebSite());
+            while (itFriendshipProspect.hasNext())
+            {
+                FriendshipProspect friendshipProspect = itFriendshipProspect.next();
+                User userRequested = friendshipProspect.getFriendShipRequested();
+                if (userRequested.getPhoto() != null)
                 {
-                    FriendshipProspect friendshipProspect = itFriendshipProspect.next();
-                    User userRequested = friendshipProspect.getFriendShipRequested();
-                    if (userRequested.getPhoto() != null)
-                    {
-                        photo = SWBPortal.getWebWorkPath() + userRequested.getPhoto();
-                    }
-                    urlAction.setParameter("user", userRequested.getURI());
-                    if (!isStrategy)
-                    {
-    %>
-    <div class="moreUser">
-        <a href="<%=perfilPath%>?user=<%=userRequested.getEncodedURI()%>"><img src="<%=photo%>" alt="<%=userRequested.getFullName()%>" width="80" height="70">
-            <br>
-            <%=userRequested.getFullName()%>
-        </a>
-        <br>
-        <%urlAction.setAction("removeRequest");%>
-        <br>
-        <div class="editarInfo"><p><a href="<%=urlAction%>">Eliminar solicitud</a></p></div>
-    </div>
-    <%
-                    }
-                    contTot++;
+                    photo = SWBPortal.getWebWorkPath() + userRequested.getPhoto();
                 }
-                if (isStrategy && contTot > 0)
-                {%>
-    <div class="clear">
-        <p class="titulo"><a href="<%=requestedPath%><%=userParam%>">Has solicidado a <%=contTot%> personas que se unan como tus amigos</a></p>
-    </div>
-    <%}
-                else if (contTot == 0)
-                {%>
-    <p>No has solicitado personas que se unan a ti como amigos.</p>
-    <%                }
-    %>
+                urlAction.setParameter("user", userRequested.getURI());
+                if (!isStrategy)
+                {
+%>
+<div class="moreUser">
+    <a href="<%=perfilPath%>?user=<%=userRequested.getEncodedURI()%>"><img src="<%=photo%>" alt="<%=userRequested.getFullName()%>" width="80" height="70">
+        <br>
+        <%=userRequested.getFullName()%>
+    </a>
+    <br>
+    <%urlAction.setAction("removeRequest");%>
+    <br>
+    <div class="editarInfo"><p><a href="<%=urlAction%>">Eliminar solicitud</a></p></div>
 </div>
 <%
+                }
+                contTot++;
             }
+            if (isStrategy && contTot > 0)
+            {%>
+<div class="clear">
+    <p class="titulo"><a href="<%=requestedPath%><%=userParam%>">Has solicidado a <%=contTot%> personas que se unan como tus amigos</a></p>
+</div>
+<%}
+            else if (contTot == 0)
+            {
+                %>
+<p>No has solicitado personas que se unan a ti como amigos.</p>
+<%
+            }
+%>
+
+<%
+            }
+            else
+                {
+                 %>
+<p>No has solicitado personas que se unan a ti como amigos.</p>
+<%                
+                }
 
 %>
 

@@ -31,7 +31,7 @@
             if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY)
             {
                 isStrategy = true;
-            }            
+            }
             boolean hasInvitations = false;
             Iterator<FriendshipProspect> itFriendshipProspect = FriendshipProspect.listFriendshipProspectByFriendShipRequested(owner, wpage.getWebSite());
             if (itFriendshipProspect.hasNext())
@@ -41,7 +41,8 @@
             if (hasInvitations)
             {
 %>
-<p class="addOn">Mis Invitaciones</p>
+<!-- <p class="addOn">Mis Invitaciones</p> -->
+<h2>Mis invitaciones</h2>
 <%
                 int contTot = 0;
                 itFriendshipProspect = FriendshipProspect.listFriendshipProspectByFriendShipRequested(owner, wpage.getWebSite());
@@ -52,7 +53,7 @@
                     if (userRequester.getPhoto() != null)
                     {
                         photo = SWBPortal.getWebWorkPath() + userRequester.getPhoto();
-                    }                    
+                    }
                     urlAction.setParameter("user", userRequester.getURI());
                     if (!isStrategy)
                     {
@@ -74,9 +75,9 @@
                 if (isStrategy && contTot > 0)
                 {
 %>
-<div class="clear">
-    <p class="titulo"><a href="<%=requesterPath%><%=userParam%>" >Te han invitado <%=contTot%> persona(s) a que te unas como su amigo</a></p>
-</div>
+<ul class="listaElementos">
+    <li><a class="contactos_nombre" href="<%=requesterPath%><%=userParam%>" >Te han invitado <%=contTot%> persona(s) a que te unas como su amigo</a></li>
+</ul>
 <%
                 }
                 else if (!hasInvitations)
@@ -85,6 +86,6 @@
 <p class="titulo">No Te han invitado personas a ser su amigo</p>
 <%                }
 
-            }           
+            }
 
 %>
