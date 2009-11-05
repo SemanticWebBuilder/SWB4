@@ -14,27 +14,37 @@
             String day = request.getParameter("d");
             Date current = null;
 
-            if (day != null && month != null && year != null) {
+            if (day != null && month != null && year != null)
+            {
                 current = new Date(Integer.valueOf(year), Integer.valueOf(month), Integer.valueOf(day));
             }
-            if (user.getLanguage() != null) {
+            if (user.getLanguage() != null)
+            {
                 lang = user.getLanguage();
             }
 %>
 
 <div id="entriesWrapper">
     <%
-                Iterator<EventElement> it;
+            Iterator<EventElement> it;
 
-                if (current == null) {
-                    it = EventElement.listEventElementByAttendant(user, paramRequest.getWebPage().getWebSite());
-                } else {
-                    it = EventElement.listEventElementsByDate(user, current, wpage, wpage.getWebSite());
-                }
-                while (it.hasNext()) {
-                    EventElement event = it.next();
-                    String viewurl = event.getURL();
-                    if (event.canView(member)) {
+            if (current == null)
+            {
+                it = EventElement.listEventElementByAttendant(user, paramRequest.getWebPage().getWebSite());
+            }
+            else
+            {
+                it = EventElement.listEventElementsByDate(user, current, wpage, wpage.getWebSite());
+            }
+            boolean hasEvents=false;
+            while (it.hasNext())
+            {
+
+                EventElement event = it.next();
+                String viewurl = event.getURL();
+                if (event.canView(member))
+                {
+                    hasEvents=true;
     %>
     <div class="entry">
         <a href="<%=viewurl%>">
@@ -51,6 +61,14 @@
         </div>
     </div>
     <%      }
-                }
+            }
+    %>
+    <%
+        if(!hasEvents)
+            {
+            %>
+            <p>No tiene eventos registrados.</p>
+            <%
+            }
     %>
 </div>
