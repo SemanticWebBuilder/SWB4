@@ -186,7 +186,7 @@ while (itfriendUser.hasNext())
         }
         String urluser=java.net.URLEncoder.encode(friendUser.getURI());
         String path= SWBPortal.getWebWorkPath()+"/models/"+paramRequest.getWebPage().getWebSite().getId()+"/css/images/";
-        String email=user.getEmail();
+        String email=friendUser.getEmail();
 
     %>
 
