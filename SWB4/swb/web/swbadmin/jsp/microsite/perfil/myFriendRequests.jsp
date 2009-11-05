@@ -46,18 +46,18 @@
 
 
 <%
-            itFriendshipProspect = FriendshipProspect.listFriendshipProspectByFriendShipRequester(owner, wpage.getWebSite());
-            while (itFriendshipProspect.hasNext())
-            {
-                FriendshipProspect friendshipProspect = itFriendshipProspect.next();
-                User userRequested = friendshipProspect.getFriendShipRequested();
-                if (userRequested.getPhoto() != null)
+                itFriendshipProspect = FriendshipProspect.listFriendshipProspectByFriendShipRequester(owner, wpage.getWebSite());
+                while (itFriendshipProspect.hasNext())
                 {
-                    photo = SWBPortal.getWebWorkPath() + userRequested.getPhoto();
-                }
-                urlAction.setParameter("user", userRequested.getURI());
-                if (!isStrategy)
-                {
+                    FriendshipProspect friendshipProspect = itFriendshipProspect.next();
+                    User userRequested = friendshipProspect.getFriendShipRequested();
+                    if (userRequested.getPhoto() != null)
+                    {
+                        photo = SWBPortal.getWebWorkPath() + userRequested.getPhoto();
+                    }
+                    urlAction.setParameter("user", userRequested.getURI());
+                    if (!isStrategy)
+                    {
 %>
 <div class="moreUser">
     <a href="<%=perfilPath%>?user=<%=userRequested.getEncodedURI()%>"><img src="<%=photo%>" alt="<%=userRequested.getFullName()%>" width="80" height="70">
@@ -70,31 +70,41 @@
     <div class="editarInfo"><p><a href="<%=urlAction%>">Eliminar solicitud</a></p></div>
 </div>
 <%
+                    }
+                    contTot++;
                 }
-                contTot++;
-            }
-            if (isStrategy && contTot > 0)
-            {%>
-<div class="clear">
-    <p class="titulo"><a href="<%=requestedPath%><%=userParam%>">Has solicidado a <%=contTot%> personas que se unan como tus amigos</a></p>
-</div>
+                if (isStrategy && contTot > 0)
+                {%>
+<ul class="listaElementos">
+    <li>
+        <a class="contactos_nombre" href="<%=requestedPath%><%=userParam%>">Has solicidado a <%=contTot%> personas que se unan como tus amigos</a>
+    </li>
+</ul>
+
 <%}
-            else if (contTot == 0)
-            {
-                %>
-<p>No has solicitado personas que se unan a ti como amigos.</p>
-<%
-            }
+                else if (contTot == 0)
+                {
+%>
+<ul class="listaElementos">
+    <li>
+        No has solicitado personas que se unan a ti como amigos.
+    </li>
+</ul>
+
+<%            }
 %>
 
 <%
             }
             else
-                {
-                 %>
-<p>No has solicitado personas que se unan a ti como amigos.</p>
-<%                
-                }
+            {
+%>
+<ul class="listaElementos">
+    <li>
+        No has solicitado personas que se unan a ti como amigos.
+    </li>
+</ul>  
+<%            }
 
 %>
 
