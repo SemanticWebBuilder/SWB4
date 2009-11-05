@@ -210,7 +210,7 @@ while (itfriendUser.hasNext())
     %>
 </div> 
 <div class="clear">&nbsp;</div><h2>Ubicaci&oacute;n de mis amigos</h2>
-<div id="map_canvas" style="width: 425px; height: 300px; float: left"></div>
+<div id="map_canvas" style="width: 420px; height: 300px; float: left; margin-left:5px; margin-right:5px;margin-top:5px"></div>
 <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<%=SWBPortal.getEnv("key/gmap", "")%>"
 type="text/javascript"></script>
 <script type="text/javascript">
