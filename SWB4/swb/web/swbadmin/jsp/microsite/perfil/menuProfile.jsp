@@ -24,10 +24,20 @@
             {
                 classtwiter = "class=\"active\"";
             }
+
+            String parameter = request.getParameter("user");
+            if (parameter == null)
+            {
+                parameter = "";
+            }
+            else
+            {
+                parameter = "?user=" + java.net.URLEncoder.encode(parameter);
+            }
     %>
-    <li><a <%=classPerfil%> href="{topic@getUrl}/../perfil" >Principal</a></li>
-    <li><a <%=classamigos%> href="{topic@getUrl}/../Amigos" >Mis amigos</a></li>
-    <li><a <%=classeventos%> href="{topic@getUrl}/../Mis_Eventos" >Mis eventos</a></li>
-    <li><a <%=classfaviritos%> href="{topic@getUrl}/../Mis_favoritos" >Mis favoritos</a></li>
-    <li><a <%=classtwiter%> href="{topic@getUrl}/../Twitter" >Twitter</a></li>
+    <li><a <%=classPerfil%> href="{topic@getUrl}/../perfil<%=parameter%>" >Principal</a></li>
+    <li><a <%=classamigos%> href="{topic@getUrl}/../Amigos<%=parameter%>" >Mis amigos</a></li>
+    <li><a <%=classeventos%> href="{topic@getUrl}/../Mis_Eventos<%=parameter%>" >Mis eventos</a></li>
+    <li><a <%=classfaviritos%> href="{topic@getUrl}/../Mis_favoritos<%=parameter%>" >Mis favoritos</a></li>
+    <li><a <%=classtwiter%> href="{topic@getUrl}/../Twitter<%=parameter%>" >Twitter</a></li>
 </ul>
