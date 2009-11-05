@@ -5,5 +5,4 @@ if(owner!=null && request.getParameter("user")!=null && !request.getParameter("u
 {
     SemanticObject semObj=SemanticObject.createSemanticObject(request.getParameter("user"));
     user=(User)semObj.createGenericInstance();
-}
-%><%=user.getFullName()%>
+}%><%=user.getFullName()%>
