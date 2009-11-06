@@ -10,14 +10,7 @@
         }
     }
 </script>
-
-<div id="twoColWrapper">
-        <div class="columnaIzquierda">
-
-
-<div id="panorama">
-    <br>
-    <%
+<%
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             User user = paramRequest.getUser();
             String lang = "es";
@@ -25,139 +18,142 @@
             {
                 lang = user.getLanguage();
             }
-            String pathIamge = SWBPortal.getWebWorkPath();
-
             WebPage wpage = paramRequest.getWebPage();
             Blog blog = (Blog) request.getAttribute("blog");
-            if (blog != null)
+            String defaultFormat = "d 'de' MMMM  'del' yyyy 'a las' HH:mm";
+            SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat, new Locale(lang));
+            String createdBlog = iso8601dateFormat.format(blog.getCreated());
+            String updatedBlog = iso8601dateFormat.format(blog.getUpdated());
+            Member member = Member.getMember(user, wpage);
+            SWBResourceURL urlAdd = paramRequest.getRenderUrl();
+            urlAdd.setParameter("act", "add");
+            String titleBlog = blog.getTitle();
+            String descriptionBlog = blog.getDescription();
+            SWBResourceURL urleditar = paramRequest.getRenderUrl();
+            urleditar.setParameter("act", "edit");
+            urleditar.setParameter("mode", "editblog");
+            boolean editarblog = false;
+            if (member.getAccessLevel() == member.LEVEL_OWNER)
             {
-                String srcLine = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/solidLine.jpg";
-                Member member = Member.getMember(user, wpage);
-                String defaultFormat = "d 'de' MMMM  'del' yyyy 'a las' HH:mm";
-                SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat, new Locale(lang));
-                String created = iso8601dateFormat.format(blog.getCreated());
-                String updated = iso8601dateFormat.format(blog.getUpdated());
-                if (member.getAccessLevel() == member.LEVEL_OWNER)
-                {
-                    SWBResourceURL urleditar = paramRequest.getRenderUrl();
-                    urleditar.setParameter("act", "edit");
-                    urleditar.setParameter("mode", "editblog");
-    %>
-    <div class="editarInfo"><p><a href="<%=urleditar%>">Editar información</a></p></div>
-    <%
-                }
-                if (member.canAdd())
-                {
-                    SWBResourceURL urlAdd = paramRequest.getRenderUrl();
-                    urlAdd.setParameter("act", "add");
-    %>
-    <div class="editarInfo"><p><a href="<%=urlAdd%>">Agregar Entrada</a></p></div>
-    <%
-                }
-    %>
-    <div class="clear">&nbsp;</div>
-    <h2 class="tituloGrande"><%=blog.getTitle()%></h2>
-    <p>Creado el: <%=created%></p>
-    <%
-                if (!created.equals(updated))
-                {
-    %>
-    <p>Actualizado el: <%=updated%></p>
-    <%
-                }
-    %>
-
-
-    <p><img src="<%=srcLine%>" alt="" width="495" height="1" ></p>
-    <p><%=blog.getDescription()%></p>
-    <p>&nbsp;</p>
-    <div id="blog">
+                editarblog = true;
+            }
+            boolean canadd = false;
+            canadd = member.canAdd();
+%>
+<div class="columnaIzquierda">
+    <div class="adminTools">
         <%
-                ArrayList<PostElement> elements = new ArrayList();
-                Iterator<PostElement> posts = SWBComparator.sortByCreated(blog.listPostElements(), false);
-                int i = 0;
-                while (posts.hasNext())
+            if (canadd)
+            {
+        %>
+        <a class="adminTool" href="<%=urlAdd%>">Agregar entrada</a>
+        <%
+            }
+        %>
+
+        <%
+            if (editarblog)
+            {
+        %>
+        <a class="adminTool" href="<%=urleditar%>">Administrar</a>
+        <%
+            }
+        %>
+
+    </div>
+    <h2 class="hidden"><%=titleBlog%></h2>
+    <%
+            ArrayList<PostElement> elements = new ArrayList();
+            Iterator<PostElement> posts = SWBComparator.sortByCreated(blog.listPostElements(), false);
+            int i = 0;
+            while (posts.hasNext())
+            {
+                PostElement post = posts.next();
+                if (post.canView(member))
                 {
-                    PostElement post = posts.next();
-                    if (post.canView(member))
+                    elements.add(post);
+                    i++;
+                    if (i == 10) // sólo muestra hasta 10 últimas entradas
                     {
-                        elements.add(post);
-                        i++;
-                        if (i == 10) // sólo muestra hasta 10 últimas entradas
-                        {
-                            break;
-                        }
+                        break;
                     }
                 }
-                for (PostElement post : elements)
+            }
+            for (PostElement post : elements)
+            {
+                if (post.canView(member))
                 {
-                    if (post.canView(member))
+                    String description = post.getDescription();
+                    String title = post.getTitle();
+                    if (description == null)
                     {
-                        String description = post.getDescription();
-                        if (description == null)
-                        {
-                            description = "";
-                        }
-                        String postAuthor = post.getCreator().getFullName();
-                        String createdPost = SWBUtils.TEXT.getTimeAgo(post.getCreated(), user.getLanguage());
-                        SWBResourceURL urlDetail = paramRequest.getRenderUrl();
-                        urlDetail.setParameter("act", "detail");
-                        urlDetail.setParameter("uri", post.getURI());
+                        description = "";
+                    }
 
-                        String srcImageUsuario = "";
-                        if (post.getCreator().getPhoto() != null)
-                        {
-                            srcImageUsuario = pathIamge + post.getCreator().getPhoto();
-                        }
-                        DecimalFormat df = new DecimalFormat("#0.0#");
-                        String rank = df.format(post.getRank());
+
+                    SWBResourceURL removeUrl = paramRequest.getActionUrl();
+                    removeUrl.setParameter("act", "remove");
+
+                    SWBResourceURL urlEditPost = paramRequest.getRenderUrl();
+                    urlEditPost.setParameter("act", "edit");
+                    urlEditPost.setParameter("uri", post.getURI());
+                    urlEditPost.setParameter("mode", "editpost");
+
+                    String postAuthor = post.getCreator().getFullName();
+                    String createdPost = SWBUtils.TEXT.getTimeAgo(post.getCreated(), user.getLanguage());
+                    String updatedPost = SWBUtils.TEXT.getTimeAgo(post.getUpdated(), user.getLanguage());
+                    SWBResourceURL urlDetail = paramRequest.getRenderUrl();
+                    urlDetail.setParameter("act", "detail");
+                    urlDetail.setParameter("uri", post.getURI());
+                    String removeurl = "javascript:validateremove('" + removeUrl + "','" + post.getTitle() + "','" + post.getURI() + "')";
+                    boolean canEditPost = post.canModify(member);
+                    DecimalFormat df = new DecimalFormat("#0.0#");
+                    String rank = df.format(post.getRank());
+                    String visited = String.valueOf(post.getViews());
+                    int comments = 0;
+                    GenericIterator it = post.listComments();
+                    while (it.hasNext())
+                    {
+                        it.next();
+                        comments++;
+                    }
+
+    %>
+    <div class="blogEntry">
+        <h3 class="blogEntryTitle"><%=title%></h3>
+        <%
+                    if (canEditPost)
+                    {
         %>
-        <div class="entryBlog">
-            <p><img src="<%=srcImageUsuario%>" alt="<%=postAuthor%>" width="90" height="90" ></p>
-            <p class="tituloNaranja"><%=post.getTitle()%></p>
-            <p>Creado por: <%=postAuthor%> , <%=createdPost%></p>
-            <p>Visitas: <%=post.getViews()%>, Calificación: <%=rank%></p>
-            <p><%=description%></p>
-            <div class="vermasFloat"><p class="vermas"><a href="<%=urlDetail%>">Ver más</a></p></div>
-            <%
-                        if (post.canModify(member))
-                        {
-                            SWBResourceURL sWBResourceURL = paramRequest.getRenderUrl();
-                            sWBResourceURL.setParameter("act", "edit");
-                            sWBResourceURL.setParameter("uri", post.getURI());
-                            sWBResourceURL.setParameter("mode", "editpost");
-
-                            SWBResourceURL removeUrl = paramRequest.getActionUrl();
-                            removeUrl.setParameter("act", "remove");
-            %>
-            <div class="editarInfo"><p><a href="<%=sWBResourceURL%>">Editar información</a></p></div>
-            <div class="editarInfo"><p><a href="javascript:validateremove('<%=removeUrl%>','<%=post.getTitle()%>','<%=post.getURI()%>')">Eliminar</a><p></div>
-            <%
-                        }
-            %>
-            <div class="clear">&nbsp;</div>
-        </div> <!-- fin blogentry -->
+        <a class="editar" href="<%=removeurl%>">[eliminar]</a> <a class="editar" href="<%=urlEditPost%>">[editar]</a>
         <%
                     }
-                }
         %>
-    </div> <!-- fin blog div -->
+
+        <p><span class="itemTitle">Autor:</span> <%=postAuthor%><br>
+            <span class="itemTitle">Creada:</span> <%=createdPost%><br>
+            <span class="itemTitle">Modificada:</span> <%=updatedPost%><br>
+            <span class="itemTitle">Calificación:</span> <%=rank%><br>
+            <span class="itemTitle">Visitada:</span> <%=visited%> veces
+        </p>
+        <p><%=description%></p>
+        <p><a href="<%=urlDetail%>">Leer entrada completa</a>&nbsp;<span class="notificaciones"><%=comments%> comentarios</span> </p>
+    </div>
     <%
+                }
             }
     %>
-</div> <!-- fin  centerProfile -->
-        </div>
-        <div class="columnaCentro">
-            <%
-                String title=blog.getTitle();
-                String description=blog.getDescription();
-            %>
-            <h2><%=title%></h2>
-            <p> <%=description%> </p>
-            <ul class="miContenido">
-    <li><a href="#">Suscribirse a esta comunidad</a></li>
-    <li><a class="rss" href="#">Suscribirse via RSS</a></li>
-</ul> 
-         
-        </div>
-      </div>
+
+</div>
+<div class="columnaCentro">
+    <h2 class="blogTitle"><%=titleBlog%></h2>
+    <p> <%=descriptionBlog%> </p>
+    <p> Creado el: <%=createdBlog%> </p>
+    <p> Actualizado el: <%=updatedBlog%> </p>
+    <ul class="miContenido">
+        <li><a href="#">Suscribirse a esta comunidad</a></li>
+        <li><a class="rss" href="#">Suscribirse via RSS</a></li>
+    </ul>
+</div>
+
+
