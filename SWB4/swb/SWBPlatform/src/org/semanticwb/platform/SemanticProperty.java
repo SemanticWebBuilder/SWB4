@@ -84,6 +84,11 @@ public class SemanticProperty
             }
         }
     }
+
+    public SemanticObject getSemanticObject()
+    {
+        return SWBPlatform.getSemanticMgr().getSchema().getSemanticObject(getURI());
+    }
     
     public Property getRDFProperty()
     {
