@@ -10,6 +10,11 @@
         }
     }
 </script>
+
+<div id="twoColWrapper">
+        <div class="columnaIzquierda">
+
+
 <div id="panorama">
     <br>
     <%
@@ -141,3 +146,18 @@
             }
     %>
 </div> <!-- fin  centerProfile -->
+        </div>
+        <div class="columnaCentro">
+            <%
+                String title=blog.getTitle();
+                String description=blog.getDescription();
+            %>
+            <h2><%=title%></h2>
+            <p> <%=description%> </p>
+            <ul class="miContenido">
+    <li><a href="#">Suscribirse a esta comunidad</a></li>
+    <li><a class="rss" href="#">Suscribirse via RSS</a></li>
+</ul> 
+         
+        </div>
+      </div>
