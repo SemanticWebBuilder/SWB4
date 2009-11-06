@@ -157,7 +157,7 @@ public class CodeGenerator
                 }
                 if (tpc.isSWBInterface())
                 {
-                    createInterface(tpc, pDirectory);
+                    createInterfaceBase(tpc, pDirectory);
                 }
                 else if (tpc.isSWBSemanticResource())
                 {
@@ -281,7 +281,7 @@ public class CodeGenerator
                 }
                 if (tpc.isSWBInterface())
                 {
-                    createInterface(tpc, pDirectory);
+                    createInterfaceBase(tpc, pDirectory);
                 }
                 else if (tpc.isSWBSemanticResource())
                 {
@@ -950,19 +950,45 @@ public class CodeGenerator
     {
         File dir = createPackage(tpc.getCodePackage(), pDirectory);
         StringBuilder javaClassContent = new StringBuilder();
+
         if (!tpc.getCodePackage().equals(""))
         {
             javaClassContent.append("package " + tpc.getCodePackage() + ";" + ENTER);
             javaClassContent.append("" + ENTER);
         }
+
+        javaClassContent.append("public interface " + toUpperCase(tpc.getClassCodeName()) + " extends "+tpc.getCodePackage()+".base."+toUpperCase(tpc.getClassCodeName())+"Base" + ENTER);
+        javaClassContent.append("{" + ENTER);
+        javaClassContent.append("}" + ENTER);
+        File fileClass = new File(dir.getPath() + File.separatorChar + toUpperCase(tpc.getClassCodeName()) + ".java");
+        boolean exists=false;
+        if(fileClass.exists())
+        {
+            exists=true;
+        }
+        exists=false;
+        if(!exists)
+        {
+            saveFile(fileClass, javaClassContent.toString());
+        }
+    }
+    private void createInterfaceBase(SemanticClass tpc, File pDirectory) throws CodeGeneratorException
+    {
+        File dir = createPackage(tpc.getCodePackage()+".base", pDirectory);
+        StringBuilder javaClassContent = new StringBuilder();
+        if (!tpc.getCodePackage().equals(""))
+        {
+            javaClassContent.append("package " + tpc.getCodePackage() + ".base;" + ENTER);
+            javaClassContent.append("" + ENTER);
+        }
         HashSet<SemanticClass> interfaces = getInterfaces(tpc);
         if (interfaces.size() == 0)
         {
-            javaClassContent.append("public interface " + toUpperCase(tpc.getClassCodeName()) + " extends org.semanticwb.model.GenericObject" + ENTER);
+            javaClassContent.append("public interface " + toUpperCase(tpc.getClassCodeName()) + "Base extends org.semanticwb.model.GenericObject" + ENTER);
         }
         else
         {
-            javaClassContent.append("public interface " + toUpperCase(tpc.getClassCodeName()) + " " + getInterfacesAsString(tpc, true) + ENTER);
+            javaClassContent.append("public interface " + toUpperCase(tpc.getClassCodeName()) + "Base " + getInterfacesAsString(tpc, true) + ENTER);
         }
         javaClassContent.append("{" + ENTER);
         HashSet<SemanticClass> staticClasses = new HashSet<SemanticClass>();
@@ -1029,8 +1055,9 @@ public class CodeGenerator
         javaClassContent.append("    public static final org.semanticwb.platform.SemanticClass " + tpc.getPrefix() + "_" + toUpperCase(tpc.getClassCodeName()) + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + tpc.getURI() + "\");" + ENTER);
         insertPropertiesToInterface(tpc, javaClassContent);
         javaClassContent.append("}" + ENTER);
-        File fileClass = new File(dir.getPath() + File.separatorChar + toUpperCase(tpc.getClassCodeName()) + ".java");
+        File fileClass = new File(dir.getPath() + File.separatorChar + toUpperCase(tpc.getClassCodeName()+"Base") + ".java");
         saveFile(fileClass, javaClassContent.toString());
+        createInterface(tpc, pDirectory);
     }
 
     private void insertPropertiesToInterface(SemanticClass tpc, StringBuilder javaClassContent)
@@ -1108,7 +1135,7 @@ public class CodeGenerator
                             javaClassContent.append(ENTER);
                             javaClassContent.append("    public void remove" + objectName + "(" + pack + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ");" + ENTER);
                             javaClassContent.append(ENTER);
-                            javaClassContent.append(PUBLIC + valueToReturn + " get" + objectName + "();" + ENTER);
+                            javaClassContent.append(PUBLIC + pack+"."+valueToReturn + " get" + objectName + "();" + ENTER);
                         }
                     }
                     else
@@ -1123,7 +1150,7 @@ public class CodeGenerator
                         javaClassContent.append(ENTER);
                         javaClassContent.append("    public void remove" + objectName + "();" + ENTER);
                         javaClassContent.append(ENTER);
-                        javaClassContent.append(PUBLIC + valueToReturn + " get" + objectName + "();" + ENTER);
+                        javaClassContent.append(PUBLIC + pack+"."+valueToReturn + " get" + objectName + "();" + ENTER);
                     }
 
                 }
