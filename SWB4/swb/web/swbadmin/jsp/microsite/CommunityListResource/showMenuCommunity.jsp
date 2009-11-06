@@ -8,7 +8,6 @@
             if (parent instanceof MicroSite)
             {
                 classActivePrincipal = active;
-
             }
             else
             {
