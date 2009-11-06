@@ -45,7 +45,7 @@
                     }
                     else if (currentpage.getId().endsWith("_Twitter"))
                     {
-                        classActiveVideo = active;
+                        classActiveTwitter = active;
                     }
                 }
             }
