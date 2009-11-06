@@ -12,14 +12,14 @@
     NewsElement anew = (NewsElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
 %>
 
-<br />
+<div class="columnaIzquierda">
 <%if (anew.canModify(member)) {%>
 <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", anew.getURI())%>">Editar Información</a></p></div>
 <%}%>
 <%if (anew.canModify(member)) {%>
 <div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", anew.getURI())%>">Eliminar</a></p></div>
 <%}%>
-<div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Ver todas</a></p></div>
+<div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">[Ver todas las noticias]</a></p></div>
 
 
 <%
@@ -43,3 +43,7 @@
 anew.renderGenericElements(request, res, paramRequest);
 out.write(res.toString());
 %>
+</div>
+<div class="columnaCentro">
+
+</div>
