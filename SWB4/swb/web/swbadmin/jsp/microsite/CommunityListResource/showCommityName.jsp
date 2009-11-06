@@ -7,16 +7,16 @@
 %>
 <%=title%>
 <%
-}
-else
-{
-webpage = webpage.getParent();
-if (webpage!=null && webpage instanceof MicroSite)
-{
-String title = webpage.getTitle();
+            }
+            else
+            {
+                webpage = webpage.getParent();
+                if (webpage != null && webpage instanceof MicroSite)
+                {
+                    String title = webpage.getTitle();
 %>
 <%=title%>
 <%
-    }
-}
+                }
+            }
 %>
