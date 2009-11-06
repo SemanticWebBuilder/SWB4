@@ -1,113 +1,83 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="org.semanticwb.portal.lib.*,java.text.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
- 
+
 <script language="Javascript" type="text/javascript">
-        function validateremove(url, title,uri)
+    function validateremove(url, title,uri)
+    {
+        if(confirm('¿Esta seguro de borrar la entrada '+title+'?'))
         {
-            if(confirm('¿Esta seguro de borrar la entrada '+title+'?'))
-            {
-                var url=url+'&uri='+escape(uri);
-                window.location.href=url;
-            }
+            var url=url+'&uri='+escape(uri);
+            window.location.href=url;
         }
-    </script>
+    }
+</script>
 
 <%
-    SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
-    if(paramRequest==null)
-        {
-        return;
-        }
-    User user=paramRequest.getUser();
-    WebPage wpage=paramRequest.getWebPage();
-    PostElement post=(PostElement)request.getAttribute("post");
-    Member member=Member.getMember(user,wpage);
-    if(!post.canView(member) || post==null)
-    {
-        %>
-        <p>No tiene permisos para ver esta entrada, o la entrada ya no existe</p>
-        <%
+            SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
+            if (paramRequest == null)
+            {
+                return;
+            }
+            User user = paramRequest.getUser();
+            WebPage wpage = paramRequest.getWebPage();
+            PostElement post = (PostElement) request.getAttribute("post");
+            Member member = Member.getMember(user, wpage);
+            if (!post.canView(member) || post == null)
+            {
+%>
+<p>No tiene permisos para ver esta entrada, o la entrada ya no existe</p>
+<%
         return;
     }
-    String srcLine=SWBPortal.getWebWorkPath()+"/models/"+ paramRequest.getWebPage().getWebSiteId()  +"/css/solidLine.jpg";
+    
 
     String updated = SWBUtils.TEXT.getTimeAgo(post.getUpdated(), user.getLanguage());
     String postAuthor = post.getCreator().getFirstName();
-    postAuthor=post.getCreator().getFullName();
-    String email=post.getCreator().getEmail();
-    String content="Sin contenido";
-    post.incViews();  //Incrementar apariciones
-    if(post.getContent()!=null)
-    {
-        content=post.getContent();
-    }
-    DecimalFormat df=new DecimalFormat("#0.0#");
-    String rank=df.format(post.getRank());
-    SWBResourceURL removeUrl=paramRequest.getActionUrl();
+    postAuthor = post.getCreator().getFullName();        
+    post.incViews();  //Incrementar apariciones    
+    DecimalFormat df = new DecimalFormat("#0.0#");
+    String rank = df.format(post.getRank());
+    SWBResourceURL removeUrl = paramRequest.getActionUrl();
     removeUrl.setParameter("act", "remove");
+    boolean canadd=post.canModify(member);
+    String editURL=paramRequest.getRenderUrl().setParameter("act","edit").setParameter("uri",post.getURI()).setParameter("mode","editpost").toString();
+    String deleteUrl="javascript:validateremove('"+removeUrl+"','"+post.getTitle()+"','"+post.getURI()+"')";
 %>
-<br>
-<div id="blog">
-<table width="100%" cellpadding="2" cellspacing="2" border="0">
-    <tr>
-        <td>
-            <h2 class="tituloGrande"><%=post.getTitle()%></h2>
-        </td>
-    </tr>    
-    
-    <tr>
-        <td>            
-            <%
 
-if(email!=null)
-    {
-    %>
-    <p>Escrito por: <a href="mailto:<%=email%>"><%=postAuthor%></a> , <%=updated%>, visitas: <%=post.getViews()%> , calificación: <%=rank%></p>    
-    <%
-    }
-    else
-        {
-        %>
-        <p id="author">Escrito por: <%=postAuthor%> , <%=updated%>, visitas: <%=post.getViews()%> , calificación: <%=post.getRank()%></p>
-        
+<div class="columnaIzquierda">
+    <div class="adminTools">
         <%
-        }
-%>
-
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <div class="blogcontent"><p><b><%=post.getDescription()%></b></p></div>
-            <p><img src="<%=srcLine%>" alt="" width="680" height="1" ></p>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <br>
-             <div class="blogcontent"><%=content%></div>
-        </td>
-    </tr>
-
-</table>
-</div>
-
-<br>
-<p><img src="<%=srcLine%>" alt="" width="680" height="1" ></p>
-<center>
-    <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Regresar</a></p></div>
-    <%if(post.canModify(member)){%><div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act","edit").setParameter("uri",post.getURI()).setParameter("mode","editpost")%>">Editar Información</a></p></div><%}%>
-    <%if(post.canModify(member)){%><div class="editarInfo"><p><a href="javascript:validateremove('<%=removeUrl%>','<%=post.getTitle()%>','<%=post.getURI()%>')">Eliminar Entrada</a></p></div><%}%>
-</center>
-    <br>    
-    <br>
-    <br>
-
+            if (canadd)
+            {
+        %>
+        <a class="adminTool" href="<%=editURL%>">Editar Entrada</a>
+        <a class="adminTool" href="<%=deleteUrl%>">Eliminar Entrada</a>
+        <%
+            }
+        %>
+    </div>
+    <h2 class="hidden"><%=post.getTitle()%></h2>
     
-<%
-SWBResponse res=new SWBResponse(response);
-post.renderGenericElements(request, res, paramRequest);
-out.write(res.toString());
-%>
+    <%=post.getContent()%>
+    <br>
+    <br>
 
+    <%
+            SWBResponse res = new SWBResponse(response);
+            post.renderGenericElements(request, res, paramRequest);
+            out.write(res.toString());
+%>
+</div>
+<div class="columnaCentro">
+    <h2 class="blogTitle"><%=post.getTitle()%></h2>
+    <p> <%=post.getDescription()%> </p>
+    <p> Autor: <%=postAuthor%> </p>
+    <p> Acualizado: <%=updated%> </p>
+    <p> Calificación: <%=rank%> </p>
+    <p> Visitas <%=post.getViews()%> </p>
+    <ul class="miContenido">
+        <li><a href="#">Suscribirse a esta comunidad</a></li>
+        <li><a class="rss" href="#">Suscribirse via RSS</a></li>
+    </ul>
+</div>
 
