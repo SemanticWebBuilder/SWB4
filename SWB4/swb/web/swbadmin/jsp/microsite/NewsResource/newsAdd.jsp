@@ -55,53 +55,54 @@
     }
 </script>
 
-<br />
-<div id="panorama">
-<form name="frmaaddnews" id="frmaaddnews" class="swbform" enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
-    <div>
-        <fieldset>
-            <legend>Agregar noticia</legend>
-            <div>
-                <p>
-                    <label for="new_image">Imagen de la noticia:&nbsp;</label><br />
-                    <input type="file" id="foto" name="foto" size="60" />
-                </p>
-                <p>
-                    <label for="new_title">Título de la noticia:&nbsp;</label><br />
-                    <input type="text" id="new_title" name="new_title" maxlength="70" size="60" />
-                </p>
-                <p>
-                    <label for="new_author">Autor de la noticia:&nbsp;</label><br />
-                    <input type="text" id="new_author" name="new_author" maxlength="50" size="60" />
-                </p>
-                <p>
-                    <label for="new_abstract">Resumen de la noticia:&nbsp;</label><br />
-                    <textarea id="new_abstract" name="new_abstract" cols="60" rows="2"></textarea>
-                </p>
-                <p>
-                    <label for="new_fulltext">Texto completo:&nbsp;</label><br />
-                    <textarea id="new_fulltext" name="new_fulltext" cols="60" rows="6"></textarea>
-                </p>
-                <p>
-                    <label for="new_citation">Fuente:&nbsp;</label><br />
-                    <input type="text" id="new_citation" name="new_citation" maxlength="50" size="60" />
-                </p>
-                <p>
-                    <label for="new_tags">Etiquetas:&nbsp;</label><br />
-                    <input type="text" id="new_tags" name="new_tags" maxlength="50" size="60" />
-                </p>
-            </div>
-        </fieldset>
-        <fieldset>
-            <legend></legend>
-            <div>
-            <p>
-                <div class="editarInfo"><p><a onclick="validaForma()" href="#">Enviar</a></p></div>
-                <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Cancelar</a></p></div>
-            </p>
-            </div>
-        </fieldset>
-    </div>
-    <input type="hidden" name="act" value="add"/>
-</form>
+<div class="columnaIzquierda">
+    <form name="frmaaddnews" id="frmaaddnews" class="swbform" enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
+        <div>
+            <fieldset>
+                <legend>Agregar noticia</legend>
+                <div>
+                    <p>
+                        <label for="new_image">Imagen de la noticia:&nbsp;</label><br />
+                        <input type="file" id="foto" name="foto" size="60" />
+                    </p>
+                    <p>
+                        <label for="new_title">Título de la noticia:&nbsp;</label><br />
+                        <input type="text" id="new_title" name="new_title" maxlength="70" size="60" />
+                    </p>
+                    <p>
+                        <label for="new_author">Autor de la noticia:&nbsp;</label><br />
+                        <input type="text" id="new_author" name="new_author" maxlength="50" size="60" />
+                    </p>
+                    <p>
+                        <label for="new_abstract">Resumen de la noticia:&nbsp;</label><br />
+                        <textarea id="new_abstract" name="new_abstract" cols="60" rows="2"></textarea>
+                    </p>
+                    <p>
+                        <label for="new_fulltext">Texto completo:&nbsp;</label><br />
+                        <textarea id="new_fulltext" name="new_fulltext" cols="60" rows="6"></textarea>
+                    </p>
+                    <p>
+                        <label for="new_citation">Fuente:&nbsp;</label><br />
+                        <input type="text" id="new_citation" name="new_citation" maxlength="50" size="60" />
+                    </p>
+                    <p>
+                        <label for="new_tags">Etiquetas:&nbsp;</label><br />
+                        <input type="text" id="new_tags" name="new_tags" maxlength="50" size="60" />
+                    </p>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend></legend>
+                <div>
+                    
+                    <div class="editarInfo"><p><a onclick="validaForma()" href="#">[Crear noticia]</a></div>
+                    <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">[Cancelar]</a></div>                    
+                </div>
+            </fieldset>
+        </div>
+        <input type="hidden" name="act" value="add"/>
+    </form>
+</div>
+<div class="columnaCentro">
+
 </div>
