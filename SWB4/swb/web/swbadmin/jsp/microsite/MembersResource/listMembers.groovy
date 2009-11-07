@@ -48,62 +48,115 @@ if (null!=microsite){
 
 
     String perfil = wpage.getWebSite().getWebPage("perfil").getRealUrl()
-
+    println """
+<div class="columnaIzquierda">
+          """
     Iterator<Member> lista = microsite.listMembers()
-    if (paramRequest.getCallMethod()==paramRequest.Call_STRATEGY && (!paramRequest.getArgument("virtualcontent").equals("true"))){
-        println """<div id="contactos" class="miembros">
-<h2>Miembros de la comunidad</h2><div>
-"""
-
-
+    if (paramRequest.getCallMethod()==paramRequest.Call_STRATEGY && (!paramRequest.getArgument("virtualcontent").equals("true")))
+    {
         def i = 0;
         while (lista.hasNext() && i<18){
             Member mem_curr = lista.next()
             User mem_usr = mem_curr.getUser()
             if (null!=mem_usr)
             {
-                def uri = mem_usr.getEncodedURI()
-                def nombre = mem_usr.getFullName()
-                def img = SWBPortal.getWebWorkPath()+mem_usr.getPhoto()
-                def alt=mem_usr.getFullName()
-                if (null==img) img = "/swbadmin/images/defaultPhoto.jpg"
-                println """<div class="moreUser"><a href="${perfil}?user=$uri" alt="Ir al perfil de $nombre"><img  title="$alt" alt="$alt"  src="$img" width="39" height="39"  /></a></div>"""
-            }
-        }
-
-        def url_mas = wpage.getRealUrl()
-
-        println """</div><div class="clear"></div>"""
-        if(i==18)
-        {
-            println """<div><p class="vermas"><a href="${url_mas}_Members" >Ver todos</a></p></div>"""
-        }
-        println """</div>"""
-    } else {
-        def mapa = new HashMap()
-Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#_ExtendedAttributes").listProperties();
+                def mapa = new HashMap()
+                Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#_ExtendedAttributes").listProperties();
                 list.each{
                     def sp = it
                     mapa.put(sp.getName(),sp)
                 }
-       
-        lista.each(){
-            Member mem_curr = it
-            User mem_usr = mem_curr.getUser()
-            if (null!=mem_usr)
-            {
                 def uri = mem_usr.getEncodedURI()
-                def nombre = mem_usr.getFullName()
                 def img = SWBPortal.getWebWorkPath()+mem_usr.getPhoto()
-                if (null==img) img = "/swbadmin/images/defaultPhoto.jpg"
-                def usr_age = mem_usr.getExtendedAttribute(mapa.get("userAge"))
-                if (null==usr_age) usr_age = ""
+                def name=mem_usr.getFullName()
                 def usr_sex = mem_usr.getExtendedAttribute(mapa.get("userSex"))
                 if ("M".equals(usr_sex)) usr_sex = "Hombre"
                 if ("F".equals(usr_sex)) usr_sex = "Mujer"
-                def usr_status = mem_usr.getExtendedAttribute(mapa.get("userStatus"))
-                if (null==usr_status) usr_status = ""
+
+                def usr_age = mem_usr.getExtendedAttribute(mapa.get("userAge"))
+                if (null==usr_age) usr_age = ""
                 println """
+                <div class="noticia">
+                        <img src="$img" alt="Foto de $name">
+                  <div class="noticiaTexto">
+                        <h2>$name</h2>
+                    <p class="stats">
+                        Sexo: $usr_sex<br>
+                        Edad: $usr_age
+                    </p>
+                    <p><br><br><br></p>                    
+                    <p><a href="$uri">Ver m&aacute;s</a>
+                    </p>
+                    
+                  </div>
+                </div>           
+              
+            """
+            }
+       
+        }    
+   
+        println """
+</div >
+      <div class="columnaCentro">      	
+      </div> """
+    }
+}
+/*Iterator<Member> lista = microsite.listMembers()
+if (paramRequest.getCallMethod()==paramRequest.Call_STRATEGY && (!paramRequest.getArgument("virtualcontent").equals("true"))){
+println """<div id="contactos" class="miembros">
+<h2>Miembros de la comunidad</h2><div>
+"""
+
+
+def i = 0;
+while (lista.hasNext() && i<18){
+Member mem_curr = lista.next()
+User mem_usr = mem_curr.getUser()
+if (null!=mem_usr)
+{
+def uri = mem_usr.getEncodedURI()
+def nombre = mem_usr.getFullName()
+def img = SWBPortal.getWebWorkPath()+mem_usr.getPhoto()
+def alt=mem_usr.getFullName()
+if (null==img) img = "/swbadmin/images/defaultPhoto.jpg"
+println """<div class="moreUser"><a href="${perfil}?user=$uri" alt="Ir al perfil de $nombre"><img  title="$alt" alt="$alt"  src="$img" width="39" height="39"  /></a></div>"""
+}
+}
+
+def url_mas = wpage.getRealUrl()
+
+println """</div><div class="clear"></div>"""
+if(i==18)
+{
+println """<div><p class="vermas"><a href="${url_mas}_Members" >Ver todos</a></p></div>"""
+}
+println """</div>"""
+} else {
+def mapa = new HashMap()
+Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#_ExtendedAttributes").listProperties();
+list.each{
+def sp = it
+mapa.put(sp.getName(),sp)
+}
+       
+lista.each(){
+Member mem_curr = it
+User mem_usr = mem_curr.getUser()
+if (null!=mem_usr)
+{
+def uri = mem_usr.getEncodedURI()
+def nombre = mem_usr.getFullName()
+def img = SWBPortal.getWebWorkPath()+mem_usr.getPhoto()
+if (null==img) img = "/swbadmin/images/defaultPhoto.jpg"
+def usr_age = mem_usr.getExtendedAttribute(mapa.get("userAge"))
+if (null==usr_age) usr_age = ""
+def usr_sex = mem_usr.getExtendedAttribute(mapa.get("userSex"))
+if ("M".equals(usr_sex)) usr_sex = "Hombre"
+if ("F".equals(usr_sex)) usr_sex = "Mujer"
+def usr_status = mem_usr.getExtendedAttribute(mapa.get("userStatus"))
+if (null==usr_status) usr_status = ""
+println """
 <div class="profilePic" onMouseOver="this.className='profilePicHover'" onMouseOut="this.className='profilePic'">
 <img src="$img" width="150" height="150" alt="Foto de $nombre" />
 <p><a class="contactos_nombre" href="${perfil}?user=$uri" alt="Ir al perfil de $nombre" >$nombre</a></p>
@@ -111,9 +164,10 @@ Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().ge
 <p>Sexo: $usr_sex</p>
 <p>Tipo: $usr_status</p>
 </div>"""
-            }
-        }
+}
+}
        
-    }
+}
 
 }
+ */
