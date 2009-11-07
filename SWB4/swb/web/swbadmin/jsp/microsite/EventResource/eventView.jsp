@@ -8,23 +8,43 @@
             Member member = Member.getMember(user, wpage);
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");
-            String urlViewEvent = paramRequest.getRenderUrl().setParameter("act", "calendar").toString();
+            String urlViewCalendar = paramRequest.getRenderUrl().setParameter("act", "calendar").toString();
+            String addEventURL = paramRequest.getRenderUrl().setParameter("act", "add").toString();
 
 %>
 <div class="columnaIzquierda">
     <div class="adminTools">
-        <a class="adminTool" href="#">Agregar noticia</a><a class="adminTool" href="#">Administrar</a>
+        <%
+            if (member.canAdd())
+            {
+        %>
+        <a class="adminTool" href="<%=addEventURL%>">Agregar evento</a>
+        <%
+            }
+            if( member.canView() ) {
+        if(!wputil.isSubscribed(member)) {
+        %>
+        <a class="adminTool" href="<%=paramRequest.getActionUrl().setParameter("act", "subscribe").toString()%>">Suscribirse</a>
+        <%
+                }else {
+        %>
+        <a class="adminTool" href="<%=paramRequest.getActionUrl().setParameter("act", "unsubscribe").toString()%>">Cancelar suscripción</a>
+
+        <%
+                }
+            }
+        %>
     </div>
     <%
-        Iterator<EventElement> it = EventElement.listEventElementByEventWebPage(wpage, wpage.getWebSite());
-        while (it.hasNext())
-        {
-            EventElement event = it.next();
-            SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", event.getURI());
-            if (event.canView(member))
+            Iterator<EventElement> it = EventElement.listEventElementByEventWebPage(wpage, wpage.getWebSite());
+            while (it.hasNext())
             {
-                java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
-                String rank = df.format(event.getRank());
+                EventElement event = it.next();
+                SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", event.getURI());
+                if (event.canView(member))
+                {
+                    java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
+                    String rank = df.format(event.getRank());
     %>
     <div class="noticia">
         <img src="<%=SWBPortal.getWebWorkPath() + event.getEventThumbnail()%>" alt="<%= event.getTitle()%>">
@@ -41,8 +61,8 @@
         </div>
     </div>
     <%
-        }
-    }
+                }
+            }
     %>
 
     <!--div id="paginacion">
@@ -50,30 +70,7 @@
 				</div-->
 </div>
 <div class="columnaCentro">
-    <div id="calendario">
-        <h2><a href="#">&lt;</a> Septiembre <a href="#">&gt;</a></h2>
-        <ul class="dias semana">
-            <li>D</li><li>L</li><li>M</li><li>M</li><li>J</li><li>V</li><li>S</li>
-        </ul>
-        <ul class="dias">
-            <li>&nbsp;</li> <li>&nbsp;</li> <li>1</li> <li>2</li> <li><a href="#">3</a></li> <li>4</li> <li>5</li>
-            <li>6</li> <li>7</li> <li>8</li> <li>9</li> <li>10</li> <li>11</li> <li>12</li>
-            <li>13</li> <li>14</li> <li>15</li> <li><a href="#">16</a></li> <li><a href="#">17</a></li> <li>18</li> <li>19</li>
-            <li>20</li> <li>21</li> <li>22</li> <li>23</li> <li>24</li> <li>25</li> <li>26</li>
-            <li>27</li> <li>28</li> <li>29</li> <li>30</li> <li>&nbsp;</li> <li>&nbsp;</li> <li>&nbsp;</li>
-        </ul>
-        <div class="clear">&nbsp;</div>
-    </div>
-    <ul class="miContenido">
-        <li><a class="rss" href="#">Suscribirse RSS</a></li>
-    </ul>
-    <h2>Noticias recientes</h2>
-    <ul class="listaElementos">
-        <li><a class="autor" href="#">Jei Solis</a> agregó la noticia <a class="elemento">Maremoto en Samoa</a> (03/10/10)</li>
-        <li><a class="autor" href="#">Jei Solis</a> agregó la foto <a class="elemento">Cartel de Where The Wild Things Are</a> (03/10/10)</li>
-        <li><a class="autor" href="#">Jei Solis</a> agregó la noticia <a class="elemento">Maremoto en Samoa</a> (03/10/10)</li>
-        <li><a class="autor" href="#">Jei Solis</a> agregó la foto <a class="elemento">Cartel de Where The Wild Things Are</a> (03/10/10)</li>
-    </ul>
+
 </div>
 <%--
 
