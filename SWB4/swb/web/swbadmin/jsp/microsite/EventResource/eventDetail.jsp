@@ -16,8 +16,8 @@
     if(event!=null && event.canView(member)) {
         event.incViews();
 %>
+<div class="columnaIzquierda">
 
-<br/>
 <%
     SWBResourceURL back = paramRequest.getRenderUrl().setParameter("act", "view");
     back = paramRequest.getRenderUrl().setParameter("act", "edit");
@@ -87,3 +87,7 @@ out.write(res.toString());
     }
 %>
 
+</div>
+<div class="columnaCentro">
+
+</div>
