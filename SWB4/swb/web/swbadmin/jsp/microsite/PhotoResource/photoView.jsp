@@ -32,16 +32,17 @@
                     String postAuthor = photo.getCreator().getFullName();
                     SWBResourceURL urlDetail = paramRequest.getRenderUrl();
                     urlDetail.setParameter("act", "detail");
-                    urlDetail.setParameter("uri", photo.getURI());
-                    String created = SWBUtils.TEXT.getTimeAgo(photo.getCreated(), user.getLanguage());
+                    urlDetail.setParameter("uri", photo.getURI());                    
                     SWBResourceURL viewurl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", photo.getURI());
                     java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
                     String rank = df.format(photo.getRank());
                     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
 
     %>
-    <div class="noticia">
-        <img src="<%=SWBPortal.getWebWorkPath() + photo.getPhotoThumbnail()%>" alt="<%=photo.getTitle()%>">
+    <div class="noticia">        
+        <a dojoType="dojox.image.Lightbox" title="<%= photo.getTitle()%>" href="<%= SWBPortal.getWebWorkPath() + photo.getImageURL()%>">
+                <img id="img_<%=i + base.getId()%>" src="<%= SWBPortal.getWebWorkPath() + photo.getPhotoThumbnail()%>" alt="<%= photo.getTitle()%>" border="0" />
+            </a>
         <div class="noticiaTexto">
             <h2><%=photo.getTitle()%></h2>
             <p>&nbsp;<br>Por:<%=postAuthor%><br><%=dateFormat.format(photo.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(photo.getCreated(), user.getLanguage())%></p>
