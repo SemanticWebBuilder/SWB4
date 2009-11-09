@@ -92,7 +92,7 @@
             }
             String pageUri="/swbadmin/jsp/microsite/rss/rss.jsp?event="+java.net.URLEncoder.encode(wpage.getURI());
         %>
-        <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS a canal de eventos</a></li>
+        <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS a eventos de la comunidad</a></li>
         </ul>
 </div>
 <%--
