@@ -31,7 +31,7 @@
             if (!(wp.getSemanticObject().getGenericInstance() instanceof MicroSite))
             {
                 return;
-            }
+            }            
             String pathPhoto = "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
 
             if (site.getPhoto() != null)
@@ -41,6 +41,7 @@
 %>
 
 <div class="columnaIzquierda">
+    <%=request.getParameter("act")%>
     <%
             if (site.getDescription() != null)
             {
