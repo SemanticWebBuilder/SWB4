@@ -151,7 +151,26 @@
     <p> Creado el: <%=createdBlog%> </p>
     <p> Actualizado el: <%=updatedBlog%> </p>
     <ul class="miContenido">
-        <li><a href="#">Suscribirse a esta comunidad</a></li>
+        <%
+            SWBResourceURL urla = paramRequest.getActionUrl();
+            if (user.isRegistered())
+            {
+                if (member == null)
+                {
+                    urla.setParameter("act", "subscribe");
+        %>
+        <li><a href="<%=urla%>">Suscribirse a esta comunidad</a></li>
+        <%
+            }
+            else
+            {
+                urla.setParameter("act", "unsubscribe");
+        %>
+        <li><a href="<%=urla%>">Cancelar suscripción</a></li>
+        <%
+                }
+            }
+        %>
         <li><a class="rss" href="#">Suscribirse via RSS</a></li>
     </ul>
 </div>
