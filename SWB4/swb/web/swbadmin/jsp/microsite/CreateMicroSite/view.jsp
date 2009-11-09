@@ -27,8 +27,10 @@
         SWBResourceURL urlAdd = paramRequest.getRenderUrl();
         urlAdd.setParameter("act", "add");
         urlAdd.setWindowState(SWBResourceURL.WinState_NORMAL);
-%>
-<div class="adminTools" ><a class="adminTool" href="<%=urlAdd%>">Crear Comunidad</a></div>
-<%
+        %>
+        <div class="adminTools" >
+            <a class="adminTool" href="<%=urlAdd%>">Crear Comunidad</a>
+        </div>
+        <%
     }
 %>
