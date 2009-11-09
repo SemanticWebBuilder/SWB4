@@ -5,6 +5,8 @@
     User user=paramRequest.getUser();
     WebPage wpage=paramRequest.getWebPage();
     Member member=Member.getMember(user,wpage);
+    java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("dd-MMM-yyyy");
+    java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
 %>
 <%
         String uri=request.getParameter("uri");
@@ -12,6 +14,7 @@
         rec.incViews();                             //Incrementar apariciones
         if(rec!=null)
         {
+            String rank = df.format(rec.getRank());
 %>
 <div class="columnaIzquierda">
     
@@ -38,8 +41,9 @@ out.write(res.toString());
 <div class="columnaCentro">
     <h2 class="blogTitle"><%=rec.getTitle()%></h2>
     <p><%=rec.getDescription()%></p>
-    <p>Creado el: <%=rec.getCreated()%></p>
+    <p>Creado el: <%=dateFormat.format(rec.getCreated())%></p>
     <p><%=rec.getViews()%> vistas</p>
+    <p>Calificación: <%=rank%></p>
 </div>
 
 
