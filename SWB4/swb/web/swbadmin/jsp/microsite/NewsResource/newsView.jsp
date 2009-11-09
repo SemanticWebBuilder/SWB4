@@ -80,62 +80,29 @@
     </div >-->
 </div>
 <div class="columnaCentro">
-    
-</div>
-
-<%--
-    if (member.canAdd()) {
-%>
-    <br />
-    <div class="editarInfo">
-        <p><a href="<%=paramRequest.getRenderUrl().setParameter("act", "add").toString()%>">Agregar noticia</a></p>
-    </div>
-<%
-        if(wputil != null && member.canView()) {
-            if(!wputil.isSubscribed(member)) {
-%>
-    <div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act", "subcribe").toString()%>">Suscribirse</a></p></div>
-<%
-            }else {
-%>
-    <div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act", "unsubcribe").toString()%>">Cancelar suscripción</a></p></div>
-<%
+    <ul class="miContenido">
+    <%
+            SWBResourceURL urla = paramRequest.getActionUrl();
+            if (user.isRegistered())
+            {
+                if (member == null)
+                {
+                    urla.setParameter("act", "subscribe");
+        %>
+        <li><a href="<%=urla%>">Suscribirse a esta comunidad</a></li>
+        <%
+                }
+                else
+                {
+                    urla.setParameter("act", "unsubscribe");
+        %>
+        <li><a href="<%=urla%>">Cancelar suscripción a comunidad</a></li>
+        <%
+                }
             }
-        }
-    }
-%>
-
-<br /><br />
-<div id="entriesWrapper">
-<%
-    Iterator<NewsElement> eit = NewsElement.listNewsElementByNewsWebPage(wpage, wpage.getWebSite());
-    while (eit.hasNext()) {
-        NewsElement anew = eit.next();
-        if(anew.canView(member)) {
-            SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", anew.getURI());
-%>
-
-<div class="entry">
-    <a href="<%= viewUrl%>">
-        <img src="<%= SWBPortal.getWebWorkPath()+anew.getNewsThumbnail() %>" alt="<%= anew.getTitle()%>" border="0" />
-    </a>
-    <div class="entryInfo">
-        <p class="tituloNaranja"><%= anew.getTitle()%>&nbsp;(<%= anew.getCitation()%>)</p>
-        <p>Por:&nbsp;<strong><%= anew.getAuthor()%></strong></p>
-        <p class="eventoInicio">
-            <strong><%= dateFormat.format(anew.getCreated()) %></strong> - <%=SWBUtils.TEXT.getTimeAgo(anew.getCreated(), user.getLanguage())%>
-        </p>
-        <p><%= anew.getDescription()%>&nbsp;|&nbsp;<a href="<%=viewUrl%>">Ver m&aacute;s</a></p>
-        <p>Puntuación:&nbsp;<%= anew.getRank()%></p>
-        <p><%= anew.getViews()%> vistas.</p>
-        <div class="clear">&nbsp;</div>
-    </div>
-</div>
-<%
-        }
-    }
-%>
-
+            String pageUri="/swbadmin/jsp/microsite/rss/rss.jsp?news="+java.net.URLEncoder.encode(wpage.getURI());
+        %>
+        <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS a noticias de la comunidad</a></li>
+        </ul>
 </div>
 
---%>
