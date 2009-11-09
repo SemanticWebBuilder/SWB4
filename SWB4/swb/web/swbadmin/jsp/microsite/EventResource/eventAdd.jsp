@@ -41,8 +41,14 @@
     }
 </script>
 
-<br />
-<div id="panorama">
+
+<div class="columnaIzquierda">
+    <div class="adminTools">
+
+        <a class="adminTool" onclick="validaForma()" href="#">Enviar</a>
+        <a class="adminTool" href="<%=paramRequest.getRenderUrl()%>">Cancelar</a>
+
+    </div>
 <form name="frmaddevent" id="frmaddevent" class="swbform" enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
     <div>
         <fieldset>
@@ -50,19 +56,19 @@
             <div>
                 <p>
                     <label for="foto">Imagen del evento:&nbsp;</label><br />
-                    <input type="file" id="foto" name="foto" size="60" />
+                    <input type="file" id="foto" name="foto" size="45" />
                 </p>
                 <p>
                     <label for="event_title">Título del evento:&nbsp;</label><br />
-                    <input type="text" id="event_title" name="event_title" maxlength="50" size="60" />
+                    <input type="text" id="event_title" name="event_title" maxlength="50" size="45" />
                 </p>
                 <p>
                     <label for="event_description">Descripción del evento:&nbsp;</label><br />
-                    <textarea id="event_description" name="event_description" cols="60" rows="2"></textarea>
+                    <textarea id="event_description" name="event_description" cols="45" rows="2"></textarea>
                 </p>
                 <p>
                     <label for="event_audience">Dirigido a:&nbsp;</label><br />
-                    <input type="text" id="event_audience" name="event_audience" value="Todos" maxlength="50" size="60" />
+                    <input type="text" id="event_audience" name="event_audience" value="Todos" maxlength="50" size="45" />
                 </p>
                 <p>
                     <label for="event_startDate">Fecha de inicio:&nbsp;</label><br />
@@ -89,17 +95,11 @@
                     <input type="text" id="event_tags" name="event_tags" maxlength="50" size="60" />
                 </p>
             </div>
-        </fieldset>
-        <fieldset>
-            <legend></legend>
-            <div>
-            <p>
-                <div class="editarInfo"><p><a onclick="validaForma()" href="#">Enviar</a></p></div>
-                <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Cancelar</a></p></div>
-            </p>
-            </div>
-        </fieldset>
+        </fieldset>        
     </div>
     <input type="hidden" name="act" value="add"/>
 </form>
+</div>
+                <div class="columnaCentro">
+
 </div>
