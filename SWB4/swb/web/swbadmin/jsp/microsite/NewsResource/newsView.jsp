@@ -54,6 +54,7 @@
                     SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", anew.getURI());
                     java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
                     String rank = df.format(anew.getRank());
+                    String editEventURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", anew.getURI()).toString();
     %>
     <div class="noticia">
         <img src="<%= SWBPortal.getWebWorkPath() + anew.getNewsThumbnail()%>" alt="<%= anew.getTitle()%>">
@@ -62,6 +63,14 @@
             <p>&nbsp;<br>Por:<%=anew.getAuthor()%><br><%=dateFormat.format(anew.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(anew.getCreated(), user.getLanguage())%></p>
             <p>
                 <%=anew.getDescription()%> | <a href="<%=viewUrl%>">Ver más</a>
+                <%
+                    if(anew.canModify(member))
+                        {
+                        %>
+                        | <a href="<%=editEventURL%>">Editar</a> | <a href="<%=viewUrl%>">Eliminar</a>
+                        <%
+                        }
+                %>
             </p>
             <p class="stats">
             	Puntuación: <%=rank%><br>
