@@ -37,6 +37,7 @@
                     java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
                     String rank = df.format(photo.getRank());
                     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+                    String editEventURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", photo.getURI()).toString();
 
     %>
     <div class="noticia">        
@@ -48,6 +49,14 @@
             <p>&nbsp;<br>Por:<%=postAuthor%><br><%=dateFormat.format(photo.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(photo.getCreated(), user.getLanguage())%></p>
             <p>
                 <%=photo.getDescription()%> | <a href="<%=viewurl%>">Ver más</a>
+                <%
+                    if(photo.canModify(member))
+                        {
+                        %>
+                        | <a href="<%=editEventURL%>">Editar</a> | <a href="<%=viewurl%>">Eliminar</a>
+                        <%
+                        }
+                %>
             </p>
             <p class="stats">
             	Puntuación: <%=rank%><br>
