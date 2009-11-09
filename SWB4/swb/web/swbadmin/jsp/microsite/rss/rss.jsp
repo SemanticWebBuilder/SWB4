@@ -7,6 +7,25 @@
         n.appendChild(doc.createTextNode(value));
         return n;
     }
+%><%!    public String getTitle(WebPage webpage)
+    {
+
+        if (webpage instanceof MicroSite)
+        {
+            String title = webpage.getTitle();
+            return title;
+        }
+        else
+        {
+            webpage = webpage.getParent();
+            if (webpage != null && webpage instanceof MicroSite)
+            {
+                String title = webpage.getTitle();
+                return title;
+            }
+        }
+        return "";
+    }
 %><%
 
             if (request.getAttribute("webpage") != null)
@@ -96,10 +115,11 @@
                         doc.appendChild(rss);
 
                         Element channel = doc.createElement("channel");
-                        rss.appendChild(channel);                        
-                        addAtribute(channel, "title", "Eventos de la comunidad");
+                        rss.appendChild(channel);
+                        String title=getTitle(eventwebpage);
+                        addAtribute(channel, "title", "Eventos de la comunidad "+title);
                         addAtribute(channel, "link", eventwebpage.getUrl());
-                        addAtribute(channel, "description", "Eventos de la comunidad");
+                        addAtribute(channel, "description", "Eventos de la comunidad "+title);
 
 
 
@@ -112,6 +132,54 @@
                                 Element item = doc.createElement("item");
                                 channel.appendChild(item);
                                 EventElement element = (EventElement) obj;
+                                addAtribute(item, "title", element.getTitle());
+                                addAtribute(item, "link", element.getURL());
+                                addAtribute(item, "description", element.getDescription());
+                                addAtribute(item, "pubDate", element.getCreated().toGMTString());
+                                addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
+                            }
+                        }
+                        out.write(org.semanticwb.SWBUtils.XML.domToXml(doc));
+
+                    }
+                    else
+                    {
+                        response.sendError(404);
+                    }
+                }
+                else if (request.getParameter("photo") != null)
+                {
+                    String eventURI = request.getParameter("photo");
+                    SemanticObject eventObj = SemanticObject.createSemanticObject(eventURI);
+                    if (eventObj != null)
+                    {
+                        WebPage photowebpage = new WebPage(eventObj);
+
+
+                        response.setContentType("application/rss+xml");
+                        Document doc = org.semanticwb.SWBUtils.XML.getNewDocument();
+                        Element rss = doc.createElement("rss");
+                        rss.setAttribute("version", "2.0");
+                        doc.appendChild(rss);
+
+                        Element channel = doc.createElement("channel");
+                        rss.appendChild(channel);
+                        String title=getTitle(photowebpage);
+                        addAtribute(channel, "title", "Eventos de la comunidad "+title);
+                        addAtribute(channel, "link", photowebpage.getUrl());
+                        addAtribute(channel, "description", "Eventos de la comunidad "+title);
+
+
+
+                        Iterator<PhotoElement> elements = PhotoElement.listPhotoElementByPhotoWebPage(photowebpage);
+                        while (elements.hasNext())
+                        {
+                            Object obj = elements.next();
+                            if (obj instanceof PhotoElement)
+                            {
+                                Element item = doc.createElement("item");
+                                channel.appendChild(item);
+                                PhotoElement element = (PhotoElement) obj;
                                 addAtribute(item, "title", element.getTitle());
                                 addAtribute(item, "link", element.getURL());
                                 addAtribute(item, "description", element.getDescription());
