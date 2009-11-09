@@ -55,12 +55,24 @@
                imgSize = "width=\"39\" height=\"39\"";
            }
 %>
-<ul class="amigos">
-    <%if (owner != user)
-            {%>
-    Amigos de <%=user.getFirstName()%> <%}%>
 
+ <%
+    if (owner != user)
+            {
+    %>
+    <h2>Amigos de <%=user.getFirstName()%></h2>
     <%
+    }
+           else
+               {
+               %>
+               <h2>Mis a amigos</h2>
+               <%
+               }
+           %>
+<ul class="amigos">
+   
+<%
    String firstName = "", lastName = "";
    int contTot = 0;
 
