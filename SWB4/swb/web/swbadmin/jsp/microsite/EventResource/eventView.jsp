@@ -10,6 +10,7 @@
             SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");
             String urlViewCalendar = paramRequest.getRenderUrl().setParameter("act", "calendar").toString();
             String addEventURL = paramRequest.getRenderUrl().setParameter("act", "add").toString();
+            
 
 %>
 <div class="columnaIzquierda">
@@ -45,6 +46,7 @@
                 {
                     java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
                     String rank = df.format(event.getRank());
+                    String editEventURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", event.getURI()).toString();
     %>
     <div class="noticia">
         <img src="<%=SWBPortal.getWebWorkPath() + event.getEventThumbnail()%>" alt="<%= event.getTitle()%>">
@@ -53,6 +55,15 @@
             <p>&nbsp;<br>Por:<%=event.getCreator().getFullName()%><br><%=dateFormat.format(event.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%></p>
             <p>
                 <%=event.getDescription()%> | <a href="<%=viewUrl%>">Ver más</a>
+                <%
+                    if(event.canModify(member))
+                        {
+                        %>
+                        | <a href="<%=editEventURL%>">Editar</a> | <a href="<%=viewUrl%>">Eliminar</a>
+                        <%
+                        }
+                %>
+                
             </p>
             <p class="stats">
             	Puntuación: <%=rank%><br>
@@ -95,64 +106,3 @@
         <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS a eventos de la comunidad</a></li>
         </ul>
 </div>
-<%--
-
-<%
-    if (member.canAdd()) {
-%>
-<br/>
-<div id="panorama">
-    <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act", "calendar")%>">Ver calendario</a></p></div>
-    <div class="editarInfo">
-        <p><a href="<%=paramRequest.getRenderUrl().setParameter("act", "add").toString()%>">Agregar evento</a></p>
-    </div>
-
-<%
-    if( member.canView() ) {
-        if(!wputil.isSubscribed(member)) {
-%>
-    <div class="editarInfo">
-        <p><a href="<%= paramRequest.getActionUrl().setParameter("act", "subscribe").toString()%>">Suscribirse</a></p>
-    </div>
-<%
-        }else {
-%>
-    <div class="editarInfo">
-        <p><a href="<%= paramRequest.getActionUrl().setParameter("act", "unsubscribe").toString()%>">Cancelar suscripción</a></p>
-    </div>
-<%
-        }
-    }
-%>
-</div>
-<%  }%>
-
-<br/><br/>
-<div id="entriesWrapper">
-<%
-    Iterator<EventElement> it = EventElement.listEventElementByEventWebPage(wpage, wpage.getWebSite());
-    while (it.hasNext()) {
-        EventElement event = it.next();
-        SWBResourceURL viewurl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", event.getURI());
-        if (event.canView(member)) {
-%>
-    <div class="entry">
-        <a href="<%=viewurl%>">
-            <img src="<%=SWBPortal.getWebWorkPath()+event.getEventThumbnail()%>" alt="<%= event.getTitle()%>" border="0" />
-        </a>
-        <div class="entryInfo">            
-            <p><%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%></p>
-            <p class="tituloNaranja"><%=event.getTitle()%></p>
-            <p class="eventoInicio">Inicia: <strong><%= (event.getStartDate()==null?"":dateFormat.format(event.getStartDate()))%></strong> a las <strong><%= (event.getStartTime()==null?"":timeFormat.format(event.getStartTime()))%></strong></p>
-            <p class="eventoFinal">Termina: <strong><%= (event.getEndDate()==null?"":dateFormat.format(event.getEndDate()))%></strong> a las <strong><%= (event.getEndTime()==null?"":timeFormat.format(event.getEndTime()))%></strong></p>
-            <p>Valoraci&oacute;n:<%=event.getRank()%></p>
-            <p><%=event.getViews()%> vistas</p>
-            <div class="clear">&nbsp;</div>
-        </div>
-    </div>
-<%      }
-    }
-%>
-</div>
-
---%>
