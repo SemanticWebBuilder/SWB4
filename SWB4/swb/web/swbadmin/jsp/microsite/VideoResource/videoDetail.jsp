@@ -13,22 +13,27 @@
         if(rec!=null)
         {
 %>
-    <div>
+<div class="columnaIzquierda">
+    
       <table border="0">
         <tr><td valign="top">
         <%=rec.getCode()%>
             </td><td valign="top" align="left">
         <%if(rec.canModify(member)){%><a href="<%=paramRequest.getRenderUrl().setParameter("act","edit").setParameter("uri",rec.getURI())%>">Editar Información</a><br><%}%>
         <%if(rec.canModify(member)){%><a href="<%=paramRequest.getActionUrl().setParameter("act","remove").setParameter("uri",rec.getURI())%>">Eliminar Video</a><br><%}%>
-        <small>
+       </td></tr>
+        <tr>
+            <td>
+                 <small>
         <%=rec.getTitle()%> <br>
         <%=rec.getDescription()%> <br>
         <%=rec.getCreated()%> <br>
-        <!--</small></td><td valign="top"><small>-->
         <%=rec.getViews()%> vistas<br>
-        </small></td></tr>
+        </small>
+            </td>
+        </tr>
       </table>
-    </div><br>
+    <br>
 <%
         }
 %>        
@@ -41,3 +46,7 @@ out.write(res.toString());
 <br>
 <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Regresar</a></p></div>
 
+</div>
+<div class="columnaCentro">
+    
+</div>
