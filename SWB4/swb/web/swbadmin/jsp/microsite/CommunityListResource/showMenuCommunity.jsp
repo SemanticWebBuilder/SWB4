@@ -1,6 +1,27 @@
 <%@page import="org.semanticwb.platform.SemanticObject,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*" %>
+<%!
+    private Member getMember(User user, MicroSite site)
+    {
+        //System.out.println("getMember:"+user+" "+site);
+        if(site!=null)
+        {
+            Iterator<Member> it=Member.listMemberByUser(user,site.getWebSite());
+            while(it.hasNext())
+            {
+                Member mem=it.next();
+                //System.out.println("mem:"+mem+" "+mem.getMicroSite());
+                if(mem.getMicroSite().equals(site))
+                {
+                   return mem;
+                }
+            }
+        }
+        return null;
+    }
+%>
 <%
             WebPage parent = (WebPage) request.getAttribute("webpage");
+            User user=(User)request.getAttribute("user");
             WebPage currentpage = (WebPage) request.getAttribute("webpage");
             String classActiveTwitter = "", classActiveBlog = "", classActiveWiki = "", classActiveVideo = "", classActivePrincipal = "", classActiveChat = "", classActiveEvents = "", classActiveFotos = "", classActiveMiembros = "", classActiveNoticias = "";
             String urlTwitter = "", urlBlog = "", urlWiki = "", urlVideo = "", urlPrincipal = "", urlChat = "", urlEvents = "", urlFotos = "", urlMiembros = "", urlNoticias = "";
@@ -62,7 +83,7 @@
             }
 
 %>
-<ul id="menuInterna">
+
     <li><a <%=classActivePrincipal%> href="<%=urlPrincipal%>">Principal</a></li>
     <li><a <%=classActiveBlog%> href="<%=urlBlog%>">Blog</a></li>
     <li><a <%=classActiveChat%> href="<%=urlChat%>">Chat</a></li>
@@ -72,5 +93,6 @@
     <li><a <%=classActiveNoticias%> href="<%=urlNoticias%>">Noticias</a></li>
     <li><a <%=classActiveTwitter%> href="<%=urlTwitter%>">Twitter</a></li>
     <li><a <%=classActiveVideo%> href="<%=urlVideo%>">Videos</a></li>
-    <%-- <li><a <%=classActiveWiki%> href="#">Wiki</a></li> --%>
-</ul>
+    
+    
+    
