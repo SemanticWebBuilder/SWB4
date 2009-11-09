@@ -40,10 +40,6 @@ color: #ff0000; /* Dummy definition to overcome IE bug */
 
 /* CSS Document */
 
-body {
-	font-size: 100.1%;
-}
-
 #WBWikiTextbox{
     width: 100%;
     height: 300px;
