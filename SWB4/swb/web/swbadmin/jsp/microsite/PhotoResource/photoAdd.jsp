@@ -34,8 +34,11 @@ function validaForma()
     document.frmaddfoto.submit();
 }
 </script>
-<br />
-<div id="panorama">
+<div class="columnaIzquierda">
+    <div class="adminTools">
+        <a class="adminTool" onclick="validaForma()" href="#">Guardar</a>
+        <a class="adminTool" href="<%=paramRequest.getRenderUrl()%>">Cancelar</a>
+    </div>
 <form name="frmaddfoto" id="frmaddfoto" enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
     <div>
         <fieldset>
@@ -43,19 +46,19 @@ function validaForma()
             <div>
                 <p>
                     <label for="foto">Archivo:&nbsp;</label><br />
-                    <input id="foto" type="file" name="foto" size="60" />
+                    <input id="foto" type="file" name="foto" size="45" />
                 </p>
                 <p>
                     <label for="title">Título:&nbsp;</label><br />
-                    <input id="title" type="text" name="title" maxlength="50" size="60" />
+                    <input id="title" type="text" name="title" maxlength="50" size="45" />
                 </p>
                 <p>
                     <label for="description">Descripción</label><br />
-                    <textarea id="description" cols="60" rows="3" name="description"></textarea>
+                    <textarea id="description" cols="45" rows="3" name="description"></textarea>
                  </p>
                  <p>
                     <label for="tags">Etiquetas:&nbsp;</label><br />
-                    <input id="tags" type="text" name="tags" maxlength="50" size="60" />
+                    <input id="tags" type="text" name="tags" maxlength="50" size="45" />
                 </p>
             </div>
         </fieldset>
@@ -73,16 +76,11 @@ function validaForma()
                 </p>
             </div>
         </fieldset>
-        <fieldset>
-            <legend></legend>
-            <div>
-            <p>
-                <div class="editarInfo"><p><a onclick="validaForma()" href="#">Enviar</a></p></div>
-                <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Cancelar</a></p></div>
-            </p>
-            </div>
-        </fieldset>
+        
     </div>
     <input type="hidden" name="act" value="add"/>
 </form>
+</div>
+            <div class="columnaCentro">
+
 </div>
