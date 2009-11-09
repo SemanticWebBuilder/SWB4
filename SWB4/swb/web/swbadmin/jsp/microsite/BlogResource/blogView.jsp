@@ -161,17 +161,18 @@
         %>
         <li><a href="<%=urla%>">Suscribirse a esta comunidad</a></li>
         <%
-            }
-            else
-            {
-                urla.setParameter("act", "unsubscribe");
+                }
+                else
+                {
+                    urla.setParameter("act", "unsubscribe");
         %>
         <li><a href="<%=urla%>">Cancelar suscripción</a></li>
         <%
                 }
             }
+            String pageUri="/swbadmin/jsp/microsite/perfil/showBlogsofUser.jsp?blog="+java.net.URLEncoder.eencode(blog.getURI());
         %>
-        <li><a class="rss" href="#">Suscribirse via RSS</a></li>
+        <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS</a></li>
     </ul>
 </div>
 
