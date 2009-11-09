@@ -74,11 +74,11 @@ if(site.getPhoto()!=null)
     pathPhoto=SWBPortal.getContextPath()+SWBPortal.getWebWorkPath()+site.getPhoto();
 }
 %>
-<div id="leftProfile">
+<div class="columnaIzquierda">
 <p><img src="<%=pathPhoto%>" alt="Imagen comunidad" ></p>
-</div>
+
 <div id="clear">&nbsp;</div>
-<div class="soria">
+
 <form id="fupload" name="fupload" enctype="multipart/form-data" class="swbform" dojoType="dijit.form.Form" action="<%=urla%>" method="post" target="pictureTransferFrame" >
     <fieldset>
         <legend>Imagen comunidad</legend>
@@ -91,17 +91,17 @@ if(site.getPhoto()!=null)
             <tr><td colspan="2" align="center"><br/><br/>
                                     <br>
                                 <div class="editarInfo">
-                                <p><a href="javascript:enviar();">Cambiar imagen</a></p>
+                                <p><a href="javascript:enviar();">[Cambiar imagen]</a></p>
                                 </div>
                                 <div class="editarInfo">
-                                <p><a href=":history.back();">Cancelar</a></p>
+                                <p><a href=":history.back();">[Cancelar]</a></p>
                                 </div>
                                 </td></tr>
 	</table>
         </fieldset>
 </form>
-    </div>
-<br>
+</div>
+    <div class="columnaCentro"></div>
 
 
 
