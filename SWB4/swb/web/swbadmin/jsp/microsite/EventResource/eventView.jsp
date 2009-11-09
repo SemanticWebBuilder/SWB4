@@ -70,7 +70,30 @@
 				</div-->
 </div>
 <div class="columnaCentro">
-
+    <ul class="miContenido">
+<%
+            SWBResourceURL urla = paramRequest.getActionUrl();
+            if (user.isRegistered())
+            {
+                if (member == null)
+                {
+                    urla.setParameter("act", "subscribe");
+        %>
+        <li><a href="<%=urla%>">Suscribirse a esta comunidad a comunidad</a></li>
+        <%
+                }
+                else
+                {
+                    urla.setParameter("act", "unsubscribe");
+        %>
+        <li><a href="<%=urla%>">Cancelar suscripción a comunidad</a></li>
+        <%
+                }
+            }
+            String pageUri="/swbadmin/jsp/microsite/rss/rss.jsp?event="+java.net.URLEncoder.encode(wpage.getURI());
+        %>
+        <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS a canal de eventos</a></li>
+        </ul>
 </div>
 <%--
 
