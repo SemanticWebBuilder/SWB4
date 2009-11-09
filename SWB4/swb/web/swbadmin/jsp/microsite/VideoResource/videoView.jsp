@@ -52,6 +52,7 @@
                 {
                     java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
                     String rank = df.format(video.getRank());
+                    String editEventURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", video.getURI()).toString();
 
     %>
     <div class="noticia">
@@ -61,6 +62,14 @@
             <p>&nbsp;<br>Por:<%=video.getCreator().getFullName()%><br><%=dateFormat.format(video.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(video.getCreated(), user.getLanguage())%></p>
             <p>
                 <%=video.getDescription()%> | <a href="<%=viewUrl%>">Ver más</a>
+                 <%
+                    if(video.canModify(member))
+                        {
+                        %>
+                        | <a href="<%=editEventURL%>">Editar</a> | <a href="<%=viewUrl%>">Eliminar</a>
+                        <%
+                        }
+                %>
             </p>
             <p class="stats">
             	Puntuación: <%=rank%><br>
