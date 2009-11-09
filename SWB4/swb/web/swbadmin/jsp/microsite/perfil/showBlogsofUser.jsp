@@ -50,9 +50,9 @@
 
                         Element channel = doc.createElement("channel");
                         rss.appendChild(channel);
-
+                        String url=site.getWebPage("perfil").getUrl()+"?user="+java.net.URLEncoder.encode(user.getURI());
                         addAtribute(channel, "title", "Artículos publicados de " + user.getFullName());
-                        addAtribute(channel, "link", "link");
+                        addAtribute(channel, "link", url);
                         addAtribute(channel, "description", "Artículos publicados de " + user.getFullName());
 
 
