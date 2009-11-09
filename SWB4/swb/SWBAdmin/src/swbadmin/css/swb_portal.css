@@ -747,34 +747,34 @@ color: #ff0000; /* Dummy definition to overcome IE bug */
 }
 .icomap {
     background-color: #eeeeee;
-	width:8px;
-	height:8px;
-	margin:5px 3px 0px 0px;
-	float:left;
-	border:#CCCCCC solid 1px;
-	cursor:pointer;
-	text-align:center;
+    width:8px;
+    height:8px;
+    margin:5px 3px 0px 0px;
+    float:left;
+    border:#CCCCCC solid 1px;
+    cursor:pointer;
+    text-align:center;
 }
 .icomap hover{
     background-color: #009900;
-	width:8px;
-	height:8px;
-	margin:5px 3px 0px 0px;
-	float:left;
-	border:#CCCCCC solid 1px;
-	cursor:pointer;
+    width:8px;
+    height:8px;
+    margin:5px 3px 0px 0px;
+    float:left;
+    border:#CCCCCC solid 1px;
+    cursor:pointer;
 }
 .icomap span {
-	color: #999;
-	line-height: 8px;
+    color: #999;
     line-height: 8px;
-    display: block;
+    line-height: 8px;
+    /*display: block;*/
 }
 .icomap span:hover {
     background-color: #99ccff;
-	color: #0000FF;
-	line-height: 8px;
-	display: block;
+    color: #0000FF;
+    line-height: 8px;
+    /*display: block;*/
 }
 /* estilos para los "+" y "-"  */
 /*------------------- Mapa de sitio ---*/
