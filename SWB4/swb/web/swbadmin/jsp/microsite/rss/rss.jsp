@@ -165,9 +165,9 @@
                         Element channel = doc.createElement("channel");
                         rss.appendChild(channel);
                         String title=getTitle(photowebpage);
-                        addAtribute(channel, "title", "Eventos de la comunidad "+title);
+                        addAtribute(channel, "title", "Fotos de la comunidad "+title);
                         addAtribute(channel, "link", photowebpage.getUrl());
-                        addAtribute(channel, "description", "Eventos de la comunidad "+title);
+                        addAtribute(channel, "description", "Fotos de la comunidad "+title);
 
 
 
@@ -180,6 +180,54 @@
                                 Element item = doc.createElement("item");
                                 channel.appendChild(item);
                                 PhotoElement element = (PhotoElement) obj;
+                                addAtribute(item, "title", element.getTitle());
+                                addAtribute(item, "link", element.getURL());
+                                addAtribute(item, "description", element.getDescription());
+                                addAtribute(item, "pubDate", element.getCreated().toGMTString());
+                                addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
+                            }
+                        }
+                        out.write(org.semanticwb.SWBUtils.XML.domToXml(doc));
+
+                    }
+                    else
+                    {
+                        response.sendError(404);
+                    }
+                }
+                else if (request.getParameter("news") != null)
+                {
+                    String eventURI = request.getParameter("news");
+                    SemanticObject eventObj = SemanticObject.createSemanticObject(eventURI);
+                    if (eventObj != null)
+                    {
+                        WebPage newswebpage = new WebPage(eventObj);
+
+
+                        response.setContentType("application/rss+xml");
+                        Document doc = org.semanticwb.SWBUtils.XML.getNewDocument();
+                        Element rss = doc.createElement("rss");
+                        rss.setAttribute("version", "2.0");
+                        doc.appendChild(rss);
+
+                        Element channel = doc.createElement("channel");
+                        rss.appendChild(channel);
+                        String title=getTitle(newswebpage);
+                        addAtribute(channel, "title", "Noticias de la comunidad "+title);
+                        addAtribute(channel, "link", newswebpage.getUrl());
+                        addAtribute(channel, "description", "Noticias de la comunidad "+title);
+
+
+
+                        Iterator<NewsElement> elements = NewsElement.listNewsElementByNewsWebPage(newswebpage);
+                        while (elements.hasNext())
+                        {
+                            Object obj = elements.next();
+                            if (obj instanceof NewsElement)
+                            {
+                                Element item = doc.createElement("item");
+                                channel.appendChild(item);
+                                NewsElement element = (NewsElement) obj;
                                 addAtribute(item, "title", element.getTitle());
                                 addAtribute(item, "link", element.getURL());
                                 addAtribute(item, "description", element.getDescription());
