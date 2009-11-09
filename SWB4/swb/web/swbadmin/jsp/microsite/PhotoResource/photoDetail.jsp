@@ -24,9 +24,9 @@
 %>
 
 
-<br/><br/>
- 
-<div id="detalleFoto">
+<div class="columnaIzquierda">
+
+
     <h2 class="tituloGrande"><%= photo.getTitle()%></h2>
     <div class="entry_listadoFotos">
         <!-- <a dojoType="dojox.image.Lightbox" title="<%= photo.getTitle()%>" href="<%= SWBPortal.getWebWorkPath()+photo.getImageURL()%>"> -->
@@ -49,7 +49,7 @@
         <%}%>
         <div class="clear">&nbsp;</div>
     </div>
-</div>
+
        
 <script type="text/javascript">
     var img = document.getElementById('img_<%=photo.getId()%>');
@@ -74,4 +74,7 @@
 photo.renderGenericElements(request, res, paramRequest);
 out.write(res.toString());
 %>
+</div>
+<div class="columnaCentro">
 
+</div>
