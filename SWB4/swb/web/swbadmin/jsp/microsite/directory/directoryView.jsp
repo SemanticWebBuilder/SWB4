@@ -23,19 +23,19 @@ String perfilPath=wpage.getWebSite().getWebPage("perfil").getUrl();
 Iterator<DirectoryObject> itObjs=(Iterator)request.getAttribute("itDirObjs");
 SemanticObject sobj = (SemanticObject) request.getAttribute("sobj");
 SemanticClass cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sobj.getURI());
+SWBResourceURL url=paramRequest.getRenderUrl();
 
 if (sobj != null) {
-SWBResourceURL url=paramRequest.getRenderUrl();
-url.setParameter("uri", sobj.getURI());
+    url.setParameter("uri", sobj.getURI());
+    url.setParameter("act","add");
 %>
-
-       <%url.setParameter("act","add");%>
+<div class="twoColContent">
        <div class="editarInfo1">
             <p>
                 <%if(user.isRegistered() && user.isSigned()){%>
-                    <a href="<%=url%>">Agregar elemento al directorio</a>
+            <div class="adminTools"><a href="<%=url%>">Agregar elemento al indice</a></div>
                <%}else{%>
-                    Registrese para publicar
+                <span class="adminTool">Registrese para publicar</span>
                <%}%>
             </p>
        </div>
@@ -180,7 +180,7 @@ url.setParameter("uri", sobj.getURI());
         %>
         <form action="<%=urlOrder.setAction("filter")%>" method="post">
         <table align="center">
-        <tr><td><b>Buscar con los siguientes criterios:</b></td></tr>
+        <tr><td><b>Filtrar en base a los siguientes criterios:</b></td></tr>
         <tr><td>
         Solo anuncios con foto  </td><td><input type="checkbox" name="dirPhoto" <%=dirPhotoCheck%>></td>
         <input type="hidden" name="swbdirParam_dirPhoto" value="1">
@@ -213,7 +213,7 @@ url.setParameter("uri", sobj.getURI());
              }
         }
         %>
-        <tr><td colspan="2" align="center"><input type="submit" value="Buscar"></td></tr>
+        <tr><td colspan="2" align="center"><input type="submit" value="Filtrar"></td></tr>
         </table>
         </form>
         <p align="right"><a href="<%=urlOrder.setParameter("orderBy", "title")%>">Por Nombre</a> | <a href="<%=urlOrder.setParameter("orderBy", "date")%>">por fecha</a></p>
@@ -284,26 +284,26 @@ url.setParameter("uri", sobj.getURI());
               <div class="listEntry" onmouseover="this.className='listEntryHover'" onmouseout="this.className='listEntry'">
               <%if(!img.equals("")){%><%=img%><%}else{%><img src="<%=SWBPortal.getContextPath()%>/swbadmin/images/noDisponible.gif" /><%}%>
               <div class="listEntryInfo">
-                    <p class="tituloNaranja">
+                    <p class="tituloRojo">
                         <%=title%>
                     </p>
-                        <%=wpage.getPath(map)%>
+                        <!--%=wpage.getPath(map)%-->
                     <p>
                         <%=description%>
                     </p><br/>
-                    <%if(price!=null && price.trim().length()>0 && !price.equals("null")){%><p class="tituloNaranja">-Precio:<%=price%></p><%}%>
-                    <p>-Palabras clave:<%=tags%></p>
-                    <p>-Creado por:<%=creator%></p>
-                    <p>-Creado:<%=created%></p>
-
-                    <div class="vermasFloat"><p class="tituloNaranja"><p class="vermas"><a href="<%=urlDetail%>"><%=paramRequest.getLocaleString("seeMore")%></a></p></div>
+                    <%if(price!=null && price.trim().length()>0 && !price.equals("null")){%><p><span class="itemTitle">Precio: </span><%=price%></p><%}%>
+                    <%if (!tags.trim().equals("")) {%><p><span class="itemTitle">Palabras clave: </span><%=tags%></p><%}%>
+                    <p><span class="itemTitle">Creado por: </span><%=creator%>, <%=created%></p>
+                    <p class="tituloRojo"><p class="vermas"><a href="<%=urlDetail%>"><%=paramRequest.getLocaleString("seeMore")%></a></p>
                     <%
                     if(user.isRegistered() && user.isSigned()){
                         UserGroup group=user.getUserRepository().getUserGroup("admin");
                         if((userObj!=null && userObj.getURI().equals(user.getURI())) || group!=null && user.hasUserGroup(group)){
                     %>
-                        <div class="editarInfo"><p><a href="<%=urlEdit%>"><%=paramRequest.getLocaleString("editInfo")%></a></p></div>
-                        <div class="editarInfo"><p><a href="<%=urlRemove.setAction(urlRemove.Action_REMOVE)%>"><%=paramRequest.getLocaleString("remove")%></a></p></div>
+                        <div>
+                            <p><a href="<%=urlEdit%>"><%=paramRequest.getLocaleString("editInfo")%></a></p>
+                            <p><a href="<%=urlRemove.setAction(urlRemove.Action_REMOVE)%>"><%=paramRequest.getLocaleString("remove")%></a></p>
+                        </div>
                     <%  }
                     }
                     %>
@@ -317,20 +317,17 @@ url.setParameter("uri", sobj.getURI());
                 <div class="listEntry" onmouseover="this.className='listEntryHover'" onmouseout="this.className='listEntry'">
                     <img src="<%=SWBPortal.getContextPath()%>/swbadmin/images/anunciate.gif">
                     <div class="listEntryInfo">
-                        <p class="tituloNaranja">
+                        <p class="tituloRojo">
                             Título de tu anuncio
                         </p>
-                            <%=wpage.getPath(map)%>
+                            <!--%=wpage.getPath(map)%-->
                         <p>
-                            description de tu anuncio
+                            Descripci&oacute;n de tu anuncio
                         </p><br/>
-                        <p>-Palabras clave:</p>
-                        <p>-Creado por:Tu nombre aquí</p>
-                        <p>-creado:Fecha de creación de anuncio</p>
+                        <p><span class="itemTitle">Palabras clave: </span>Palabras clave</p>
+                        <p><span class="itemTitle">Creado por: </span>Tu nombre aquí</p>
 
                         <div class="vermasFloat"><p class="tituloNaranja"><p class="vermas"><%=paramRequest.getLocaleString("seeMore")%></p></div>
-                        <div class="editarInfo"><p><%=paramRequest.getLocaleString("editInfo")%></p></div>
-                        <div class="editarInfo"><p><%=paramRequest.getLocaleString("remove")%></p></div>
                         <div class="clear">&nbsp;</div>
                    </div>
                 </div>
@@ -338,6 +335,7 @@ url.setParameter("uri", sobj.getURI());
             }
             %>
       </div>
+    </div>
 <%
  }
 %>
