@@ -49,7 +49,7 @@ def lista = topic.listChilds()
 lista.each{
     WebPage act = (WebPage) it
     //System.out.println ""+(!act.getClass().equals(MicroSite.class)) +"--"+it
-    if ((!act.getClass().equals(MicroSite.class))&&act.isActive()&&!act.isDeleted()&&!act.isHidden()&&act.isOnSchedule()) {
+    if ((!act.getClass().equals(MicroSite.class))&&act.isValid()) {
        // println ""+act+" - "+act.isActive()+"-"+act.isDeleted()+"-"+act.isHidden()+"-"+act.isOnSchedule()
         if(findif(act,lugar)) setLugar.add(act)
         if(findif(act,servicio)) setServicio.add(act)
