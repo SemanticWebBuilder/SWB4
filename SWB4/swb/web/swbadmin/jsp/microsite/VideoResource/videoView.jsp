@@ -78,76 +78,28 @@
     </div-->
 </div>
 <div class="columnaCentro">
-
-</div>
-<%--
-<%
-    if(member.canAdd())
-    {
-%>
-    <br />
-    <div class="editarInfo">
-        <p><a href="<%=paramRequest.getRenderUrl().setParameter("act","add").toString()%>">Agregar Video</a></p>
-    </div>
-<%
-        if(wputil!=null && member.canView())
-        {
-            if(!wputil.isSubscribed(member))
+<ul class="miContenido">
+    <%
+            SWBResourceURL urla = paramRequest.getActionUrl();
+            if (user.isRegistered())
             {
-%>
-    <div class="editarInfo">
-        <p><a href="<%=paramRequest.getActionUrl().setParameter("act","subscribe").toString()%>">Suscribirse a este elemento</a></p>
-    </div>
-<%
-            }else
-            {
-%>
-    <div class="editarInfo">
-        <p><a href="<%=paramRequest.getActionUrl().setParameter("act","unsubscribe").toString()%>">Cancelar suscripción</a></p>
-    </div>
-<%
+                if (member == null)
+                {
+                    urla.setParameter("act", "subscribe");
+        %>
+        <li><a href="<%=urla%>">Suscribirse a esta comunidad</a></li>
+        <%
+                }
+                else
+                {
+                    urla.setParameter("act", "unsubscribe");
+        %>
+        <li><a href="<%=urla%>">Cancelar suscripción a comunidad</a></li>
+        <%
+                }
             }
-        }
-    }%>
-
-<br /><br />
-<div id="entriesWrapper">
-<%
-    Iterator<VideoElement> it=VideoElement.listVideoElementByWebPage(wpage,wpage.getWebSite());
-    int i=0;
-    while(it.hasNext())
-    {
-        VideoElement video=it.next();
-        SWBResourceURL viewurl=paramRequest.getRenderUrl().setParameter("act","detail").setParameter("uri",video.getURI());
-        if(video.canView(member))
-        {
-            if(i%2==0)
-                out.println("<tr>");
-%>
-    <div class="entry">
-        <a href="<%=viewurl%>">
-            <img src="<%=video.getPreview()%>" alt="<%= video.getTitle()%>" border="0" />
-        </a>
-        <div class="entryInfo">
-            <p><%=SWBUtils.TEXT.getTimeAgo(video.getCreated(),user.getLanguage())%></p>
-            <p class="tituloNaranja"><%=video.getTitle()%></p>
-            <p><%=video.getDescription()%></p>
-            <p><strong><%=video.getCreator().getFullName()%></strong></p>            
-            <p><%
-                DecimalFormat df=new DecimalFormat("#0.0#");
-                String rank=df.format(video.getRank());
-            %>
-            Calificación: <%=rank%> de 5</p>
-            <p><%=video.getViews()%> vistas</p>
-            <div class="clear">&nbsp;</div>
-        </div>
-    </div>
-
-<%
-
-        }
-    }
-%>
+            String pageUri="/swbadmin/jsp/microsite/rss/rss.jsp?video="+java.net.URLEncoder.encode(wpage.getURI());
+        %>
+        <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS a videos de la comunidad</a></li>
+        </ul>
 </div>
-
---%>
