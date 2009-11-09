@@ -66,7 +66,7 @@
            else
                {
                %>
-               <h2>Mis a amigos</h2>
+               <h2>Mis amigos</h2>
                <%
                }
            %>
