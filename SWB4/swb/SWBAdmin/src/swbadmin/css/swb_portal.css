@@ -725,11 +725,15 @@ color: #ff0000; /* Dummy definition to overcome IE bug */
 
 
 /* estilos para los "+" y "-"  */
-.sinicomap{
+.icomap-trans {
+    background-color: transparent;
     width:8px;
     height:8px;
     margin:5px 3px 0px 0px;
     float:left;
+    border: transparent solid 1px;
+    cursor:pointer;
+    text-align:center;
 }
 .icomap {
     background-color: #eeeeee;
@@ -754,13 +758,13 @@ color: #ff0000; /* Dummy definition to overcome IE bug */
     color: #999;
     line-height: 8px;
     line-height: 8px;
-    /*display: block;*/
+    display: block;
 }
 .icomap span:hover {
     background-color: #99ccff;
     color: #0000FF;
     line-height: 8px;
-    /*display: block;*/
+    display: block;
 }
 /* estilos para los "+" y "-"  */
 /*------------------- Mapa de sitio ---*/
