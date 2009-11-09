@@ -67,6 +67,7 @@ if (null!=microsite){
                     mapa.put(sp.getName(),sp)
                 }
                 def uri = mem_usr.getEncodedURI()
+
                 def img = SWBPortal.getWebWorkPath()+mem_usr.getPhoto()
                 def name=mem_usr.getFullName()
                 def usr_sex = mem_usr.getExtendedAttribute(mapa.get("userSex"))
@@ -85,7 +86,7 @@ if (null!=microsite){
                         Edad: $usr_age
                     </p>
                     <p><br><br><br></p>                    
-                    <p><a href="$uri">Ver m&aacute;s</a>
+                    <p><a href="$perfil?user=$uri">Ver m&aacute;s</a>
                     </p>
                     
                   </div>
