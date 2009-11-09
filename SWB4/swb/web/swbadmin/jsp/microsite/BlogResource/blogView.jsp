@@ -170,7 +170,7 @@
         <%
                 }
             }
-            String pageUri="/swbadmin/jsp/microsite/perfil/showBlogsofUser.jsp?blog="+java.net.URLEncoder.eencode(blog.getURI());
+            String pageUri="/swbadmin/jsp/microsite/perfil/showBlogsofUser.jsp?blog="+java.net.URLEncoder.encode(blog.getURI());
         %>
         <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS</a></li>
     </ul>
