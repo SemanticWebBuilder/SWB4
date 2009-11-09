@@ -80,7 +80,53 @@
                         response.sendError(404);
                     }
                 }
-                
+                else if (request.getParameter("event") != null)
+                {
+                    String eventURI = request.getParameter("event");
+                    SemanticObject eventObj = SemanticObject.createSemanticObject(eventURI);
+                    if (eventObj != null)
+                    {
+                        WebPage eventwebpage = new WebPage(eventObj);
+
+
+                        response.setContentType("application/rss+xml");
+                        Document doc = org.semanticwb.SWBUtils.XML.getNewDocument();
+                        Element rss = doc.createElement("rss");
+                        rss.setAttribute("version", "2.0");
+                        doc.appendChild(rss);
+
+                        Element channel = doc.createElement("channel");
+                        rss.appendChild(channel);                        
+                        addAtribute(channel, "title", "Eventos de la comunidad");
+                        addAtribute(channel, "link", eventwebpage.getUrl());
+                        addAtribute(channel, "description", "Eventos de la comunidad");
+
+
+
+                        Iterator<EventElement> elements = EventElement.listEventElementByEventWebPage(eventwebpage);
+                        while (elements.hasNext())
+                        {
+                            Object obj = elements.next();
+                            if (obj instanceof EventElement)
+                            {
+                                Element item = doc.createElement("item");
+                                channel.appendChild(item);
+                                EventElement element = (EventElement) obj;
+                                addAtribute(item, "title", element.getTitle());
+                                addAtribute(item, "link", element.getURL());
+                                addAtribute(item, "description", element.getDescription());
+                                addAtribute(item, "pubDate", element.getCreated().toGMTString());
+                                addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
+                            }
+                        }
+                        out.write(org.semanticwb.SWBUtils.XML.domToXml(doc));
+
+                    }
+                    else
+                    {
+                        response.sendError(404);
+                    }
+                }
                 else if (request.getParameter("blog") != null)
                 {
                     String blogURI = request.getParameter("blog");
