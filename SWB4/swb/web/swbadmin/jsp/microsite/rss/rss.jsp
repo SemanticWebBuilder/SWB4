@@ -291,6 +291,47 @@
                         response.sendError(404);
                     }
                 }
+
+                else if (request.getParameter("comm") != null)
+                {
+                    String eventURI = request.getParameter("comm");
+                    SemanticObject eventObj = SemanticObject.createSemanticObject(eventURI);
+                    if (eventObj != null)
+                    {
+                        WebPage commWebpage=(WebPage)eventObj.createGenericInstance();
+
+
+                        response.setContentType("application/rss+xml");
+                        Document doc = org.semanticwb.SWBUtils.XML.getNewDocument();
+                        Element rss = doc.createElement("rss");
+                        rss.setAttribute("version", "2.0");
+                        doc.appendChild(rss);
+
+                        Element channel = doc.createElement("channel");
+                        rss.appendChild(channel);
+                        String title=getTitle(commWebpage);
+
+                        addAtribute(channel, "title", title);
+                        addAtribute(channel, "link", commWebpage.getUrl());
+                        addAtribute(channel, "description", title);
+
+
+                        channel = doc.createElement("channel");
+                        rss.appendChild(channel);
+                        title=getTitle(commWebpage);
+
+                        addAtribute(channel, "title", title);
+                        addAtribute(channel, "link", commWebpage.getUrl());
+                        addAtribute(channel, "description", title);
+                        
+                        out.write(org.semanticwb.SWBUtils.XML.domToXml(doc));
+
+                    }
+                    else
+                    {
+                        response.sendError(404);
+                    }
+                }
                 else if (request.getParameter("blog") != null)
                 {
                     String blogURI = request.getParameter("blog");
