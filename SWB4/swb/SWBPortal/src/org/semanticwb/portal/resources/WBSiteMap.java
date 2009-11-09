@@ -364,21 +364,21 @@ public class WBSiteMap extends GenericAdmResource
                 if(tpid!=null && tpid.getId().equalsIgnoreCase(tmhome.getId())) {
                     if(opened) {
                         params.append("&"+tmhome.getId()+"=0");
-                        html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\"><span>+<span></a>");
+                        html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\"><span>+</span></a>");
                         if(level==0)
                             opened = false;
                     }else {
                         params.append("&"+tmhome.getId()+"=1");
-                        html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\"><span>-<span></a>");
+                        html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\"><span>-</span></a>");
                         opened = true;
                     }
                 }else {
                     if(opened) {
                         params.append("&"+tmhome.getId()+"=1");
-                        html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\"><span>-<span></a>");
+                        html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\"><span>-</span></a>");
                     }else {
                         params.append("&"+tmhome.getId()+"=0");
-                        html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\"><span>+<span></a>");
+                        html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\"><span>+</span></a>");
                     }
                 }
 
@@ -449,21 +449,21 @@ public class WBSiteMap extends GenericAdmResource
                 if(tpid!=null && tpid.getId().equalsIgnoreCase(tmhome.getId())) {                    
                     if(opened) {
                         params.append("&"+tmhome.getId()+"=0");
-                        html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\"><span>+<span></a>");
+                        html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\"><span>+</span></a>");
                         if(level==0)
                             opened = false;
                     }else {
                         params.append("&"+tmhome.getId()+"=1");
-                        html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\"><span>-<span></a>");
+                        html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\"><span>-</span></a>");
                         opened = true;
                     }
                 }else {
                     if(opened) {
                         params.append("&"+tmhome.getId()+"=1");
-                        html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\"><span>-<span></a>");
+                        html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\"><span>-</span></a>");
                     }else {
                         params.append("&"+tmhome.getId()+"=0");
-                        html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\"><span>+<span></a>");
+                        html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\"><span>+</span></a>");
                     }
                 }
 
@@ -509,21 +509,21 @@ public class WBSiteMap extends GenericAdmResource
                         if(tpid!=null && tpid.getId().equalsIgnoreCase(webpage.getId())) {
                             if(opened) {
                                 params.append("&"+webpage.getId()+"=0");
-                                html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\"><span>+<span></a>");
+                                html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\"><span>+</span></a>");
                                 if(this.level==level)
                                     opened = false;
                             }else {
                                 params.append("&"+webpage.getId()+"=1");
-                                html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\"><span>-<span></a>");
+                                html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\"><span>-</span></a>");
                                 opened = true;
                             }
                         }else {
                             if(opened) {
                                 params.append("&"+webpage.getId()+"=1");
-                                html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\"><span>-<span></a>");
+                                html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\"><span>-</span></a>");
                             }else {
                                 params.append("&"+webpage.getId()+"=0");
-                                html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\"><span>+<span></a>");
+                                html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\"><span>+</span></a>");
                             }
                         }
 
@@ -545,7 +545,7 @@ public class WBSiteMap extends GenericAdmResource
                     }else {
                         html.append("<li>");
                         //html.append("<img src=\""+pathImages+"/trans.gif\" />");
-                        html.append("<a class=\"icomap\"><span><span></a>");
+                        html.append("<a class=\"icomap-trans\"><span></span></a>");
                         if(openOnClick) {
                             html.append("<a onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\">");
                             html.append(webpage.getDisplayTitle(this.language));
@@ -580,20 +580,20 @@ public class WBSiteMap extends GenericAdmResource
                         if(tpid!=null && tpid.getId().equalsIgnoreCase(webpage.getId())) {
                             if(opened) {
                                 params.append("&"+webpage.getId()+"=0");
-                                html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\"><span>+<span></a>");
+                                html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\"><span>+</span></a>");
                                 opened = false;
                             }else {
                                 params.append("&"+webpage.getId()+"=1");
-                                html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\"><span>-<span></a>");
+                                html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\"><span>-</span></a>");
                                 opened = true;
                             }
                         }else {
                             if(opened) {
                                 params.append("&"+webpage.getId()+"=1");
-                                html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\"><span>-<span></a>");
+                                html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\"><span>-</span></a>");
                             }else {
                                 params.append("&"+webpage.getId()+"=0");
-                                html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\"><span>+<span></a>");
+                                html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\"><span>+</span></a>");
                             }
                         }
 
@@ -615,7 +615,7 @@ public class WBSiteMap extends GenericAdmResource
                     }else {
                         html.append("<li>");
                         //html.append("<img src=\""+pathImages+"/trans.gif\" />");
-                        html.append("<a class=\"icomap\"><span><span></a>");
+                        html.append("<a class=\"icomap-trans\"><span></span></a>");
                         if(openOnClick) {                            
                             html.append("<a onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\">");
                             html.append(webpage.getDisplayTitle(this.language));
