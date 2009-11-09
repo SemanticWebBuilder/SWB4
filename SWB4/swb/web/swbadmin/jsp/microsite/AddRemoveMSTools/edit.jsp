@@ -30,9 +30,11 @@
                 url.setParameter("act", "edit");
                 url.setCallMethod(SWBResourceURL.Call_CONTENT);
                 url.setWindowState(SWBResourceURL.WinState_MAXIMIZED);
-                out.println("<ul >");
-                out.println("<li><a href=\"" + url + "\">Administrar Herramientas</a></li>");
-                out.println("</ul>");
+                %>
+                <ul>
+                    <li><a href="<%=url%>">Administrar Herramientas</a></li>
+                </ul>
+                <%
             }
             else
             {
