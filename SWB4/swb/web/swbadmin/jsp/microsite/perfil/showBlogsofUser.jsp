@@ -29,18 +29,18 @@
                     }
                 }
                 String userURI = java.net.URLEncoder.encode(user.getURI());
-                String pageUri="/swbadmin/jsp/microsite/perfil/showBlogsofUser.jsp";
-                String siteid=site.getId();
+                String pageUri = "/swbadmin/jsp/microsite/perfil/showBlogsofUser.jsp";
+                String siteid = site.getId();
 %><li><a class="rss" href="<%=pageUri%>?user=<%=userURI%>&site=<%=siteid%>" >Mis artículos publicados (<%=count%>)</a></li><%
             }
             else
             {
                 if (request.getParameter("user") != null && request.getParameter("site") != null)
                 {
-                    WebSite site=WebSite.ClassMgr.getWebSite(request.getParameter("site"));
+                    WebSite site = WebSite.ClassMgr.getWebSite(request.getParameter("site"));
                     SemanticObject semObj = SemanticObject.createSemanticObject(request.getParameter("user"));
                     User user = (User) semObj.createGenericInstance();
-                    if (user != null && site!=null)
+                    if (user != null && site != null)
                     {
                         response.setContentType("application/rss+xml");
                         Document doc = org.semanticwb.SWBUtils.XML.getNewDocument();
@@ -50,30 +50,80 @@
 
                         Element channel = doc.createElement("channel");
                         rss.appendChild(channel);
-                        String url=site.getWebPage("perfil").getUrl()+"?user="+java.net.URLEncoder.encode(user.getURI());
+                        String url = site.getWebPage("perfil").getUrl() + "?user=" + java.net.URLEncoder.encode(user.getURI());
                         addAtribute(channel, "title", "Artículos publicados de " + user.getFullName());
                         addAtribute(channel, "link", url);
                         addAtribute(channel, "description", "Artículos publicados de " + user.getFullName());
 
 
-                       
-                        Iterator<MicroSiteElement> elements = PostElement.listMicroSiteElementByCreator(user,site);
+
+                        Iterator<MicroSiteElement> elements = PostElement.listMicroSiteElementByCreator(user, site);
                         while (elements.hasNext())
                         {
-                            Object obj=elements.next();
+                            Object obj = elements.next();
                             if (obj instanceof PostElement)
                             {
-                                 Element item = doc.createElement("item");
+                                Element item = doc.createElement("item");
                                 channel.appendChild(item);
-                                PostElement element=(PostElement)obj;
+                                PostElement element = (PostElement) obj;
                                 addAtribute(item, "title", element.getTitle());
                                 addAtribute(item, "link", element.getURL());
                                 addAtribute(item, "description", element.getDescription());
-                                addAtribute(item, "pubDate", element.getCreated().toGMTString());                                
+                                addAtribute(item, "pubDate", element.getCreated().toGMTString());
                                 addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
                             }
                         }
                         out.write(org.semanticwb.SWBUtils.XML.domToXml(doc));
+                    }
+                    else
+                    {
+                        response.sendError(404);
+                    }
+                }
+                
+                else if (request.getParameter("blog") != null)
+                {
+                    String blogURI = request.getParameter("blog");
+                    SemanticObject objBlog = SemanticObject.createSemanticObject(blogURI);
+                    if (objBlog != null)
+                    {
+                        Blog blog = new Blog(objBlog);
+
+
+
+                        response.setContentType("application/rss+xml");
+                        Document doc = org.semanticwb.SWBUtils.XML.getNewDocument();
+                        Element rss = doc.createElement("rss");
+                        rss.setAttribute("version", "2.0");
+                        doc.appendChild(rss);
+
+                        Element channel = doc.createElement("channel");
+                        rss.appendChild(channel);
+                        //String url = site.getWebPage("perfil").getUrl() + "?user=" + java.net.URLEncoder.encode(user.getURI());
+                        addAtribute(channel, "title", blog.getTitle());
+                        addAtribute(channel, "link", blog.getWebPage().getUrl());
+                        addAtribute(channel, "description", blog.getDescription());
+
+
+
+                        Iterator<PostElement> elements = blog.listPostElements();
+                        while (elements.hasNext())
+                        {
+                            Object obj = elements.next();
+                            if (obj instanceof PostElement)
+                            {
+                                Element item = doc.createElement("item");
+                                channel.appendChild(item);
+                                PostElement element = (PostElement) obj;
+                                addAtribute(item, "title", element.getTitle());
+                                addAtribute(item, "link", element.getURL());
+                                addAtribute(item, "description", element.getDescription());
+                                addAtribute(item, "pubDate", element.getCreated().toGMTString());
+                                addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
+                            }
+                        }
+                        out.write(org.semanticwb.SWBUtils.XML.domToXml(doc));
+
                     }
                     else
                     {
