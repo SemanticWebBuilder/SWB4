@@ -24,9 +24,11 @@
                 entries=arrayEntries.iterator();
             }
 %>
-<div id="contactos">
+
     <h2>Mis Favoritos</h2>
     <%
+    String sitepath=paramRequest.getWebPage().getWebSite().getId();
+    String pathImg="/work/models/"+sitepath+"/css/images/blockListBack.png";
     if (paramRequest.getUser().isSigned())
     {
             if(!existe && paramRequest.getCallMethod()!=paramRequest.Call_CONTENT)
@@ -48,10 +50,11 @@
         <%
             while (entries.hasNext() && bkCount < maxBookmarks) {
                 BookmarkEntry entry = entries.next();
+
         %>
         <li>
-            <a class="contactos_nombre" href="<%=entry.getBookmarkURL()%>">
-                <img alt=""  src="/work/models/Ciudad_Digital/css/boton_contacto.png"/>
+            <a href="<%=entry.getBookmarkURL()%>">
+                <img alt="<%=entry.getTitle()%>"  src="<%=pathImg%>"/>
             </a>
                 <a class="contactos_nombre" href="<%=entry.getBookmarkURL()%>">
                 <%=entry.getTitle()%>
@@ -60,11 +63,11 @@
                 if(paramRequest.getCallMethod()==paramRequest.Call_CONTENT)
                 {
             %>
-            <div class="editarInfo">
+            
                 <p>
                     <a href="<%=paramRequest.getActionUrl().setAction("DELETE").setParameter("id", entry.getId())%>">Eliminar</a>
                 </p>
-            </div>
+            
             <%
                 }
             %>
@@ -77,4 +80,3 @@
 <%
     }
             %>
-</div>
