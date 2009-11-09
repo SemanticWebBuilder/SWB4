@@ -315,14 +315,7 @@
                         addAtribute(channel, "link", commWebpage.getUrl());
                         addAtribute(channel, "description", title);
 
-
-                        channel = doc.createElement("channel");
-                        rss.appendChild(channel);
-                        title=getTitle(commWebpage);
-
-                        addAtribute(channel, "title", title);
-                        addAtribute(channel, "link", commWebpage.getUrl());
-                        addAtribute(channel, "description", title);
+                       
                         
                         out.write(org.semanticwb.SWBUtils.XML.domToXml(doc));
 
