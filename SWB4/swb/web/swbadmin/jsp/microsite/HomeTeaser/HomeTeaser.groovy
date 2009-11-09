@@ -66,7 +66,7 @@ panels.each{
             test.getHijos().each{
                 def valor = it.getWebPage()
                 valor.listChilds().each{
-                    if (it.isActive()) elecount++
+                    if (it.isValid()) elecount++
                 }
                 linea = linea + "<a href=\"" + valor.getRealUrl()+"\">"+valor.getDisplayName("es")+"</a>, "
             }
