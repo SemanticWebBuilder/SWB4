@@ -56,8 +56,10 @@
     }
 </script>
 
-<br />
-<div id="panorama">
+
+<div class="columnaIzquierda">
+    <a class="adminTool" onclick="validaForma()" href="#">Guardar</a>
+        <a class="adminTool" href="<%=paramRequest.getRenderUrl()%>">Cancelar</a>
 <form name="frmaeditevent" id="frmaeditevent" class="swbform" enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
     <div>
         <fieldset>
@@ -68,15 +70,15 @@
                     <a href="<%= SWBPortal.getWebWorkPath()+rec.getEventImage()%>" target="_self">
                         <img id="img_<%=rec.getId()%>" src="<%= SWBPortal.getWebWorkPath()+rec.getEventImage() %>" alt="<%= rec.getTitle() %>" border="0" />
                     </a><br />
-                    <input type="file" id="foto" name="foto" size="60" />
+                    <input type="file" id="foto" name="foto" size="45" />
                 </p>
                 <p>
                     <label for="event_title">Título del evento:&nbsp;</label><br />
-                    <input type="text" id="event_title" name="event_title" value="<%=(rec.getTitle()==null?"":rec.getTitle())%>" maxlength="50" size="60" />
+                    <input type="text" id="event_title" name="event_title" value="<%=(rec.getTitle()==null?"":rec.getTitle())%>" maxlength="50" size="45" />
                 </p>
                 <p>
                     <label for="event_description">Descripción del evento:&nbsp;</label><br />
-                    <textarea id="event_description" name="event_description" cols="60" rows="5"><%=(rec.getDescription()==null?"":rec.getDescription())%></textarea>
+                    <textarea id="event_description" name="event_description" cols="45" rows="5"><%=(rec.getDescription()==null?"":rec.getDescription())%></textarea>
                 </p>
                 <p>
                     <label for="event_audience">Dirigido a:&nbsp;</label><br />
@@ -131,19 +133,15 @@
     back.setParameter("month", request.getParameter("month"));
     back.setParameter("year", request.getParameter("year"));
 %>
-        <fieldset>
-            <legend></legend>
-            <div>
-                <div class="editarInfo"><p><a onclick="validaForma()" href="#">Enviar</a></p></div>
-                <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Cancelar</a></p></div>
-            </div>
-        </fieldset>
+        
     </div>
     <input type="hidden" name="uri" value="<%=rec.getURI()%>"/>
     <input type="hidden" name="act" value="edit"/>
 </form>
 </div>
-    
+    <div class="columnaCentro">
+
+</div>
 <script type="text/javascript">
     var img = document.getElementById('img_<%=rec.getId()%>');
     if( img.width>img.height && img.width>350) {
