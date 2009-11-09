@@ -46,13 +46,14 @@
             int bkCount = 0;
             if (entries != null && entries.hasNext() /*&& showList*/) {
     %>
-    <ul>
+    <!-- <ul> -->
         <%
             while (entries.hasNext() && bkCount < maxBookmarks) {
                 BookmarkEntry entry = entries.next();
 
         %>
-        <li>
+        <!-- <li> -->
+        <p>
             <a href="<%=entry.getBookmarkURL()%>">
                 <img alt="<%=entry.getTitle()%>"  src="<%=pathImg%>"/>
             </a>
@@ -71,12 +72,12 @@
             <%
                 }
             %>
-        </li>
+        </p><!-- </li> -->
         <%
                 bkCount++;
             }
         %>
-    </ul>
+    <!-- </ul> -->
 <%
     }
             %>
