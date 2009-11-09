@@ -58,8 +58,10 @@
 
 
 <div class="columnaIzquierda">
+    <div class="adminTools">
     <a class="adminTool" onclick="validaForma()" href="#">Guardar</a>
         <a class="adminTool" href="<%=paramRequest.getRenderUrl()%>">Cancelar</a>
+</div>
 <form name="frmaeditevent" id="frmaeditevent" class="swbform" enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
     <div>
         <fieldset>
