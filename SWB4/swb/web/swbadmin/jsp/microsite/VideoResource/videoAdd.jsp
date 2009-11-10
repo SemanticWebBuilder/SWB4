@@ -14,11 +14,9 @@
     dojo.require("dijit.form.Button");
     dojo.require("dojo.parser");
 </script>
-<div class="soria">
-    <form class="swbform" method="post" action="<%=paramRequest.getActionUrl()%>">
-        <div>
-            <h3>Agregar video</h3>
-        </div>
+<div class="columnaIzquierda">
+    <h3>Agregar video</h3>
+    <form class="swbform" method="post" action="<%=paramRequest.getActionUrl()%>">        
         <div>
             <fieldset>
                 <table>
@@ -30,7 +28,7 @@
                     </tr>
                 </table>
             </fieldset>
-            <p class="pad5 last-child clear right">
+            <p>
                 <strong><input class="button" dojoType="dijit.form.Button" type="submit" value="Guardar" label="Guardar"/></strong>
                 <input class="button" dojoType="dijit.form.Button" type="button" label="Cancelar" value="Cancelar" onclick="window.location='<%=paramRequest.getRenderUrl()%>';"/>
             </p>
