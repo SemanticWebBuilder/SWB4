@@ -32,15 +32,7 @@
 
     <p class="descripcion" style="text-align:justify;"><%=anew.getFullText()%></p>
 
-    <%if (anew.canModify(member))
-            {%>
-    <p><a href="<%=paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", anew.getURI())%>">Editar Información</a></p>
-    <%}%>
-    <%if (anew.canModify(member))
-            {%>
-    <p><a href="<%=paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", anew.getURI())%>">Eliminar</a></p>
-    <%}%>
-    <p><a href="<%=paramRequest.getRenderUrl()%>">[Ver todas las noticias]</a></p>
+    
 
     <%  }
                 SWBResponse res = new SWBResponse(response);
@@ -56,4 +48,38 @@
     <p>Creado el: <%=dateFormat.format(anew.getCreated())%></p>
     <p><%=anew.getViews()%> vistas</p>
     <p>Calificación: <%=rank%></p>
+    <p><a href="<%=paramRequest.getRenderUrl()%>">[Ver todas las noticias]</a></p>
+    <%if (anew.canModify(member))
+            {%>
+    <p><a href="<%=paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", anew.getURI())%>">[Editar Información]</a></p>
+    <%}%>
+    <%if (anew.canModify(member))
+            {%>
+    <p><a href="<%=paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", anew.getURI())%>">[Eliminar]</a></p>
+    <%}%>
+    <ul class="miContenido">
+    <%
+            SWBResourceURL urla = paramRequest.getActionUrl();
+            if (user.isRegistered())
+            {
+                if (member == null)
+                {
+                    urla.setParameter("act", "subscribe");
+        %>
+        <li><a href="<%=urla%>">Suscribirse a esta comunidad</a></li>
+        <%
+                }
+                else
+                {
+                    urla.setParameter("act", "unsubscribe");
+        %>
+        <li><a href="<%=urla%>">Cancelar suscripción a comunidad</a></li>
+        <%
+                }
+            }
+            String pageUri="/swbadmin/jsp/microsite/rss/rss.jsp?news="+java.net.URLEncoder.encode(wpage.getURI());
+        %>
+        <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS al canal de noticias de la comunidad</a></li>
+        </ul>
+
 </div>
