@@ -172,7 +172,7 @@
             }
             String pageUri="/swbadmin/jsp/microsite/rss/rss.jsp?blog="+java.net.URLEncoder.encode(blog.getURI());
         %>
-        <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS a blog</a></li>
+        <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS al blog de la comunidad</a></li>
     </ul>
 </div>
 

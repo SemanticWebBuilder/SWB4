@@ -97,6 +97,6 @@
             }
             String pageUri="/swbadmin/jsp/microsite/rss/rss.jsp?photo="+java.net.URLEncoder.encode(wpage.getURI());
         %>
-        <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS a fotos de la comunidad</a></li>
+        <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS al canal de fotos de la comunidad</a></li>
         </ul>
 </div>
