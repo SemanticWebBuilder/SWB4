@@ -166,7 +166,7 @@
         <img src="<%=video.getPreview()%>" alt="<%= video.getTitle()%>">
         <div class="noticiaTexto">
             <h2><%=video.getTitle()%></h2>
-            <p>&nbsp;<br>Por:<%=video.getCreator().getFullName()%><br><%=dateFormat.format(video.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(video.getCreated(), user.getLanguage())%></p>
+            <p>&nbsp;<br>Por: <%=video.getCreator().getFullName()%><br><%=dateFormat.format(video.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(video.getCreated(), user.getLanguage())%></p>
             <p>
                 <%=video.getDescription()%> | <a href="<%=viewUrl%>">Ver más</a>
                 <%
