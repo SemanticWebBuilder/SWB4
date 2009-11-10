@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class ClasifiedServiceBase extends org.semanticwb.portal.community.ClasifiedBuySell implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.portal.community.Contactable
+public class ClasifiedServiceBase extends org.semanticwb.portal.community.ClasifiedBuySell implements org.semanticwb.portal.community.Contactable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
     public static class ClassMgr
     {
