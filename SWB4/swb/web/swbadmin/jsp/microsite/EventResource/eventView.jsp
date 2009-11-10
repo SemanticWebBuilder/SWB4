@@ -128,7 +128,7 @@
                 if (!wputil.isSubscribed(member))
                 {
         %>
-        <a class="adminTool" href="<%=paramRequest.getActionUrl().setParameter("act", "subscribe").toString()%>">Suscribirse</a>
+        <a class="adminTool" href="<%=paramRequest.getActionUrl().setParameter("act", "subscribe").toString()%>">Suscribirse a canal de eventos</a>
         <%
                 }
                 else
