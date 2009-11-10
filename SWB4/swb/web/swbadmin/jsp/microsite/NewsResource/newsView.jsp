@@ -1,4 +1,4 @@
-<%@page contentType="text/html"%>
+p<%@page contentType="text/html"%>
 <%@page import="java.util.Calendar, java.util.GregorianCalendar, java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <script language="Javascript" type="text/javascript">
     function validateremove(url, title,uri)
@@ -129,7 +129,7 @@
                 if (!wputil.isSubscribed(member))
                 {
         %>
-        <a class="adminTool" href="<%=suscribeURL%>">Suscribirse</a>
+        <a class="adminTool" href="<%=suscribeURL%>">Suscribirse a canal de noticias</a>
         <%
                 }
                 else
@@ -170,7 +170,7 @@
         <img src="<%= SWBPortal.getWebWorkPath() + anew.getNewsThumbnail()%>" alt="<%= anew.getTitle()%>">
         <div class="noticiaTexto">
             <h2><%=anew.getTitle()%></h2>
-            <p>&nbsp;<br>Por:<%=anew.getAuthor()%><br><%=dateFormat.format(anew.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(anew.getCreated(), user.getLanguage())%></p>
+            <p>&nbsp;<br>Por: <%=anew.getAuthor()%><br><%=dateFormat.format(anew.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(anew.getCreated(), user.getLanguage())%></p>
             <p>
                 <%=anew.getDescription()%> | <a href="<%=viewUrl%>">Ver más</a>
                 <%
