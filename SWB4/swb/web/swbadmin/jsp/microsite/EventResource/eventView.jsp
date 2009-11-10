@@ -165,7 +165,7 @@
         <img src="<%=SWBPortal.getWebWorkPath() + event.getEventThumbnail()%>" alt="<%= event.getTitle()%>">
         <div class="noticiaTexto">
             <h2><%=event.getTitle()%></h2>
-            <p>&nbsp;<br>Por:<%=event.getCreator().getFullName()%><br><%=dateFormat.format(event.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%></p>
+            <p>&nbsp;<br>Por: <%=event.getCreator().getFullName()%><br><%=dateFormat.format(event.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%></p>
             <p>
                 <%=event.getDescription()%> | <a href="<%=viewUrl%>">Ver más</a>
                 <%
