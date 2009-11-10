@@ -6,6 +6,7 @@
     ArrayList<SemanticObject> allRes = (ArrayList<SemanticObject>) request.getAttribute("allRes");
     String searchUrl = (String) request.getAttribute("rUrl");
     String what = (String) request.getParameter("what");
+    WebPage wpage = paramRequest.getWebPage();
     //System.out.println("what: " + what);
 %>
 
@@ -179,7 +180,32 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
             while(it.hasNext()) {
                 SemanticObject obj = it.next();
                 if (obj == null) continue;
-                if (obj.instanceOf(DirectoryObject.ClassMgr.sclass)) {
+                if(obj.instanceOf(Member.ClassMgr.sclass)) {
+                    Member memUser = (Member)obj.createGenericInstance();
+                    User usr = memUser.getUser();
+                    String photo = SWBPortal.getContextPath() + "/swbadmin/images/defaultPhoto.jpg";
+                    if(usr.getPhoto() != null) photo = SWBPortal.getWebWorkPath() + usr.getPhoto();
+
+                    String perfilPath = wpage.getWebSite().getWebPage("perfil").getUrl();
+                    String profile = "<a href=\"" + perfilPath + "?user=" + usr.getEncodedURI() + "\">Ir al perfil</a>";
+                %>
+                    <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
+                    <img alt="<%=usr.getLogin()%>"src="<%=photo%>"/>
+                    <div class="listEntryInfo">
+                        <p class="tituloRojo">
+                            <%=usr.getLogin()%>
+                        </p>
+                        <p>
+                            <%=usr.getFullName()%>
+                        </p>
+                        <p class="vermas">
+                            <%=profile%>
+                        </p>
+                    </div>
+                    <div class="clear">&nbsp;</div>
+                    </div>
+                <%
+                } else if (obj.instanceOf(DirectoryObject.ClassMgr.sclass)) {
                     %>
                     <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
                     <%
@@ -196,7 +222,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                     }
                     %>
                     <div class="listEntryInfo">
-                        <p class="tituloNaranja"><!--a href ="%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>"--><%=c.getTitle()%>&nbsp;(<%=obj.getSemanticClass().getDisplayName("es")%>)<!--/a--></p>
+                        <p class="tituloRojo"><!--a href ="%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>"--><%=c.getTitle()%>&nbsp;(<%=obj.getSemanticClass().getDisplayName("es")%>)<!--/a--></p>
                         <!--p>
                             <!--%=c.getWebPage().getPath(map)%>
                         </p-->
@@ -228,13 +254,14 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                         }
                         %>
                         <p><%=(c.getTags()==null?"":"Palabras clave: " + c.getTags())%></p>
+                       
                         <p class="vermas"><a href ="<%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>">Ver mas</a></p>
                     </div>
                     <div class="clear"> </div>
+                    </div>
                     <%
                 }
                 %>
-            </div>
             <%
         }
         %>
