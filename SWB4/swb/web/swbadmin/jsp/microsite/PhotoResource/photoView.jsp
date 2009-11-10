@@ -216,6 +216,14 @@
    
 </div>
 <div class="columnaCentro">
+    <%
+        if(paginas>1)
+            {
+            %>
+            <br><br>
+            <%
+            }
+    %>
     <ul class="miContenido">
         <%
             SWBResourceURL urla = paramRequest.getActionUrl();

@@ -48,7 +48,7 @@
             ArrayList<PostElement> elements = new ArrayList();
             int elementos = 0;
             Iterator<PostElement> posts = blog.listPostElements();
-            posts=SWBComparator.sortByCreated(posts, false);
+            posts = SWBComparator.sortByCreated(posts, false);
             while (posts.hasNext())
             {
                 PostElement post = posts.next();
@@ -98,32 +98,32 @@
             }
     %>
     <%
-                if (paginas > 1)
-                {
+            if (paginas > 1)
+            {
     %>    
     <div id="paginacion">
 
 
         <%
-                String nextURL = "#";
-                String previusURL = "#";
-                if (ipage < paginas)
-                {
-                    nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
-                }
-                if (ipage > 1)
-                {
-                    previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
-                }
+                    String nextURL = "#";
+                    String previusURL = "#";
+                    if (ipage < paginas)
+                    {
+                        nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
+                    }
+                    if (ipage > 1)
+                    {
+                        previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
+                    }
         %>
         <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
             <%
-                for (int i = 1; i <= paginas; i++)
-                {
+                    for (int i = 1; i <= paginas; i++)
+                    {
             %>
         <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%=i%></a>
         <%
-                }
+                    }
         %>
 
         <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
@@ -230,7 +230,7 @@
             }
     %>
     <!-- paginacion -->
-<%
+    <%
                 if (paginas > 1)
                 {
     %>
@@ -238,25 +238,25 @@
 
 
         <%
-                String nextURL = "#";
-                String previusURL = "#";
-                if (ipage < paginas)
-                {
-                    nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
-                }
-                if (ipage > 1)
-                {
-                    previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
-                }
+                    String nextURL = "#";
+                    String previusURL = "#";
+                    if (ipage < paginas)
+                    {
+                        nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
+                    }
+                    if (ipage > 1)
+                    {
+                        previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
+                    }
         %>
         <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
             <%
-                for (int i = 1; i <= paginas; i++)
-                {
+                    for (int i = 1; i <= paginas; i++)
+                    {
             %>
         <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%=i%></a>
         <%
-                }
+                    }
         %>
 
 
@@ -268,11 +268,20 @@
     <!-- fin paginacion -->
 </div>
 <div class="columnaCentro">
+    <%
+            if (paginas > 1)
+            {
+    %>
+    <br><br>
+    <%            }
+    %>
     <h2 class="blogTitle"><%=titleBlog%></h2>
     <p> <%=descriptionBlog%> </p>
     <p> Creado el: <%=createdBlog%> </p>
     <p> Actualizado el: <%=updatedBlog%> </p>
+
     <ul class="miContenido">
+
         <%
             SWBResourceURL urla = paramRequest.getActionUrl();
             if (user.isRegistered())
