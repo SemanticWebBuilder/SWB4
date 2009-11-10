@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class PointOfInterestBase extends org.semanticwb.portal.community.DirectoryObject implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public class PointOfInterestBase extends org.semanticwb.portal.community.DirectoryObject implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
     public static class ClassMgr
     {
