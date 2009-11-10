@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class CommerceBase extends org.semanticwb.portal.community.Organization implements org.semanticwb.portal.community.FacilitiesEnable,org.semanticwb.portal.community.Addressable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Geolocalizable,org.semanticwb.portal.community.Contactable,org.semanticwb.model.Traceable
+public class CommerceBase extends org.semanticwb.portal.community.Organization implements org.semanticwb.portal.community.Contactable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.portal.community.Addressable,org.semanticwb.model.Geolocalizable,org.semanticwb.portal.community.FacilitiesEnable
 {
     public static class ClassMgr
     {
