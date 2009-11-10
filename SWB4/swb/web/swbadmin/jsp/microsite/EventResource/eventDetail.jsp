@@ -15,7 +15,7 @@
             String rank = df.format(event.getRank());
             if (event != null && event.canView(member))
             {
-                event.incViews();
+                //event.incViews();
                 
 %>
 <div class="columnaIzquierda">
@@ -28,13 +28,7 @@
                 back.setParameter("day", request.getParameter("day"));
                 back.setParameter("uri", event.getURI());
     %>
-    <%
-                if (event.canModify(member))
-                {
-                    
-    %>
-    <div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act", "attend").setParameter("uri", event.getURI())%>">Asistir al evento</a></p></div>
-    <%  }%>
+    
     
 
 
@@ -48,18 +42,26 @@
                 <img id="img_<%=event.getId()%>" src="<%= SWBPortal.getWebWorkPath() + event.getEventImage()%>" alt="<%=event.getTitle()%>" border="0" width="380" height="100%" />
             </a>
         </p>
+        <%
+                if (event.canModify(member))
+                {
+
+    %>
+    <p><a href="<%=paramRequest.getActionUrl().setParameter("act", "attend").setParameter("uri", event.getURI())%>">[Asistir al evento]</a></p>
+    <%  }%>
+
         <p><a href="<%= paramRequest.getRenderUrl()%>">[Ver todos los eventos]</a></p>
         <%
                 if (event.canModify(member))
                 {
         %>
-        <div class="editarInfo"><p><a href="<%= back%>">Editar información</a></p></div>
+        <div class="editarInfo"><p><a href="<%= back%>">[Editar información]</a></p></div>
         <%
                 }
                 if (event.canModify(member))
                 {
         %>
-        <div class="editarInfo"><p><a href="<%= paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", event.getURI())%>">Eliminar</a></p></div>
+        <div class="editarInfo"><p><a href="<%= paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", event.getURI())%>">[Eliminar]</a></p></div>
         <%
                 }%>
     
