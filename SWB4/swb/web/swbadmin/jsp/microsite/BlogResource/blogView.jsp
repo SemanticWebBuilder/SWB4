@@ -1,5 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.text.*,org.semanticwb.platform.*,java.text.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<%!    private static final int ELEMENETS_BY_PAGE = 5;
+%>
 <script language="Javascript" type="text/javascript">
     function validateremove(url, title,uri)
     {
@@ -39,8 +41,98 @@
             }
             boolean canadd = false;
             canadd = member.canAdd();
+            String cssPath = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/images/";
 %>
 <div class="columnaIzquierda">
+    <%
+            ArrayList<PostElement> elements = new ArrayList();
+            int elementos = 0;
+            Iterator<PostElement> posts = blog.listPostElements();
+            posts=SWBComparator.sortByCreated(posts, false);
+            while (posts.hasNext())
+            {
+                PostElement post = posts.next();
+                if (post.canView(member))
+                {
+                    elements.add(post);
+                    elementos++;
+                }
+            }
+            int paginas = elementos / ELEMENETS_BY_PAGE;
+            if (elementos % ELEMENETS_BY_PAGE != 0)
+            {
+                paginas++;
+            }
+            int inicio = 0;
+            int fin = ELEMENETS_BY_PAGE;
+            int ipage = 1;
+            if (request.getParameter("ipage") != null)
+            {
+                try
+                {
+                    ipage = Integer.parseInt(request.getParameter("ipage"));
+                    inicio = (ipage * ELEMENETS_BY_PAGE) - ELEMENETS_BY_PAGE;
+                    fin = (ipage * ELEMENETS_BY_PAGE);
+                }
+                catch (NumberFormatException nfe)
+                {
+                    ipage = 1;
+                }
+            }
+            if (ipage < 1 || ipage > paginas)
+            {
+                ipage = 1;
+            }
+            if (inicio < 0)
+            {
+                inicio = 0;
+            }
+            if (fin > elementos)
+            {
+                fin = ELEMENETS_BY_PAGE;
+            }
+            if (inicio > fin)
+            {
+                inicio = 0;
+                fin = ELEMENETS_BY_PAGE;
+            }
+    %>
+    <%
+                if (paginas > 1)
+                {
+    %>    
+    <div id="paginacion">
+
+
+        <%
+                String nextURL = "#";
+                String previusURL = "#";
+                if (ipage < paginas)
+                {
+                    nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
+                }
+                if (ipage > 1)
+                {
+                    previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
+                }
+        %>
+        <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
+            <%
+                for (int i = 1; i <= paginas; i++)
+                {
+            %>
+        <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%=i%></a>
+        <%
+                }
+        %>
+
+        <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
+    </div>
+    <%
+            }
+    %>
+
+
     <div class="adminTools">
         <%
             if (canadd)
@@ -61,71 +153,63 @@
         %>
 
     </div>
+
     <h2 class="hidden"><%=titleBlog%></h2>
     <%
-            ArrayList<PostElement> elements = new ArrayList();
-            Iterator<PostElement> posts = SWBComparator.sortByCreated(blog.listPostElements(), false);
-            int i = 0;
-            while (posts.hasNext())
-            {
-                PostElement post = posts.next();
-                if (post.canView(member))
-                {
-                    elements.add(post);
-                    i++;
-                    if (i == 10) // sólo muestra hasta 10 últimas entradas
-                    {
-                        break;
-                    }
-                }
-            }
+
+
+
+            int iElement = 0;
             for (PostElement post : elements)
             {
                 if (post.canView(member))
                 {
-                    String description = post.getDescription();
-                    String title = post.getTitle();
-                    if (description == null)
+                    iElement++;
+                    if (iElement >= inicio && iElement <= fin)
                     {
-                        description = "";
-                    }
+                        String description = post.getDescription();
+                        String title = post.getTitle();
+                        if (description == null)
+                        {
+                            description = "";
+                        }
 
-                    SWBResourceURL urlEditPost = paramRequest.getRenderUrl();
-                    urlEditPost.setParameter("act", "edit");
-                    urlEditPost.setParameter("uri", post.getURI());
-                    urlEditPost.setParameter("mode", "editpost");
+                        SWBResourceURL urlEditPost = paramRequest.getRenderUrl();
+                        urlEditPost.setParameter("act", "edit");
+                        urlEditPost.setParameter("uri", post.getURI());
+                        urlEditPost.setParameter("mode", "editpost");
 
-                    String postAuthor = post.getCreator().getFullName();
-                    String createdPost = SWBUtils.TEXT.getTimeAgo(post.getCreated(), user.getLanguage());
-                    String updatedPost = SWBUtils.TEXT.getTimeAgo(post.getUpdated(), user.getLanguage());
-                    SWBResourceURL urlDetail = paramRequest.getRenderUrl();
-                    urlDetail.setParameter("act", "detail");
-                    urlDetail.setParameter("uri", post.getURI());
-                    SWBResourceURL removeUrl = paramRequest.getActionUrl();
-                    removeUrl.setParameter("act", "remove");
-                    String removeurl = "javascript:validateremove('" + removeUrl + "','" + post.getTitle() + "','" + post.getURI() + "')";
-                    boolean canEditPost = post.canModify(member);
-                    DecimalFormat df = new DecimalFormat("#0.0#");
-                    String rank = df.format(post.getRank());
-                    String visited = String.valueOf(post.getViews());
-                    int comments = 0;
-                    GenericIterator it = post.listComments();
-                    while (it.hasNext())
-                    {
-                        it.next();
-                        comments++;
-                    }
+                        String postAuthor = post.getCreator().getFullName();
+                        String createdPost = SWBUtils.TEXT.getTimeAgo(post.getCreated(), user.getLanguage());
+                        String updatedPost = SWBUtils.TEXT.getTimeAgo(post.getUpdated(), user.getLanguage());
+                        SWBResourceURL urlDetail = paramRequest.getRenderUrl();
+                        urlDetail.setParameter("act", "detail");
+                        urlDetail.setParameter("uri", post.getURI());
+                        SWBResourceURL removeUrl = paramRequest.getActionUrl();
+                        removeUrl.setParameter("act", "remove");
+                        String removeurl = "javascript:validateremove('" + removeUrl + "','" + post.getTitle() + "','" + post.getURI() + "')";
+                        boolean canEditPost = post.canModify(member);
+                        DecimalFormat df = new DecimalFormat("#0.0#");
+                        String rank = df.format(post.getRank());
+                        String visited = String.valueOf(post.getViews());
+                        int comments = 0;
+                        GenericIterator it = post.listComments();
+                        while (it.hasNext())
+                        {
+                            it.next();
+                            comments++;
+                        }
 
     %>
     <div class="blogEntry">
         <h3 class="blogEntryTitle"><%=title%></h3>
         <%
-                    if (canEditPost)
-                    {
+                        if (canEditPost)
+                        {
         %>
         <a class="editar" href="<%=removeurl%>">[eliminar]</a> <a class="editar" href="<%=urlEditPost%>">[editar]</a>
         <%
-                    }
+                        }
         %>
 
         <p><span class="itemTitle">Autor:</span> <%=postAuthor%><br>
@@ -136,12 +220,49 @@
         </p>
         <p><%=description%></p>
         <p><a href="<%=urlDetail%>">Leer entrada completa</a>&nbsp;<span class="notificaciones"><%=comments%> comentarios</span> </p>
+
+
     </div>
     <%
+                    }
+
                 }
             }
     %>
+<%
+                if (paginas > 1)
+                {
+    %>
+    <div id="paginacion">
 
+
+        <%
+                String nextURL = "#";
+                String previusURL = "#";
+                if (ipage < paginas)
+                {
+                    nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
+                }
+                if (ipage > 1)
+                {
+                    previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
+                }
+        %>
+        <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
+            <%
+                for (int i = 1; i <= paginas; i++)
+                {
+            %>
+        <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%=i%></a>
+        <%
+                }
+        %>
+
+        <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
+    </div>
+    <%
+            }
+    %>
 </div>
 <div class="columnaCentro">
     <h2 class="blogTitle"><%=titleBlog%></h2>
@@ -168,7 +289,7 @@
         <%
                 }
             }
-            String pageUri="/swbadmin/jsp/microsite/rss/rss.jsp?blog="+java.net.URLEncoder.encode(blog.getURI());
+            String pageUri = "/swbadmin/jsp/microsite/rss/rss.jsp?blog=" + java.net.URLEncoder.encode(blog.getURI());
         %>
         <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS al blog de la comunidad</a></li>
     </ul>
