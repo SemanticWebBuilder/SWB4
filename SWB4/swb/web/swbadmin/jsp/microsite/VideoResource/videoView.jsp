@@ -237,8 +237,7 @@
             <%
             }
     %>
-    <ul class="miContenido">
-        <%
+    <ul class="miContenido">        <%
                 SWBResourceURL urla = paramRequest.getActionUrl();
                 if (user.isRegistered())
                 {
