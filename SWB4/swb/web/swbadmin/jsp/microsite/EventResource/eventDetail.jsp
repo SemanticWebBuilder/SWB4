@@ -54,17 +54,17 @@
     <p>Lugar: <strong><%= event.getPlace()%></strong></p>
     <p>Asistentes:
         <%
-        Iterator<User> users = event.listAttendants();
-        while (users.hasNext())
-        {
-            User m = users.next();
+            Iterator<User> users = event.listAttendants();
+            while (users.hasNext())
+            {
+                User m = users.next();
         %>
         <%= m.getFullName()%>
         <%
-                if (users.hasNext())
-                {
+            if (users.hasNext())
+            {
         %>,&nbsp;<%            }
-        }
+            }
         %>
     </p>
     <p>Creado el: <%=dateFormat.format(event.getCreated())%></p>
@@ -79,24 +79,49 @@
             back.setParameter("uri", event.getURI());
     %>
     <p><a href="<%= paramRequest.getRenderUrl()%>">[Ver todos los eventos]</a></p>
-     <%
-                if (event.canModify(member))
-                {
+    <%
+           if (event.canModify(member))
+           {
 
     %>
     <p><a href="<%=paramRequest.getActionUrl().setParameter("act", "attend").setParameter("uri", event.getURI())%>">[Asistir al evento]</a></p>
     <%  }%>  
     <%
-        if (event.canModify(member))
-        {
+            if (event.canModify(member))
+            {
     %>
     <p><a href="<%= back%>">[Editar información]</a></p>
     <%
-        }
-        if (event.canModify(member))
-        {
+            }
+            if (event.canModify(member))
+            {
     %>
     <p><a href="<%= paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", event.getURI())%>">[Eliminar]</a></p>
     <%
             }%>
+
+    <ul class="miContenido">
+        <%
+                    SWBResourceURL urla = paramRequest.getActionUrl();
+                    if (user.isRegistered())
+                    {
+                        if (member == null)
+                        {
+                            urla.setParameter("act", "subscribe");
+        %>
+        <li><a href="<%=urla%>">Suscribirse a esta comunidad a comunidad</a></li>
+        <%
+                }
+                else
+                {
+                    urla.setParameter("act", "unsubscribe");
+        %>
+        <li><a href="<%=urla%>">Cancelar suscripción a comunidad</a></li>
+        <%
+                }
+            }
+            String pageUri = "/swbadmin/jsp/microsite/rss/rss.jsp?event=" + java.net.URLEncoder.encode(wpage.getURI());
+        %>
+        <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS al canal de eventos de la comunidad</a></li>
+    </ul>
 </div>
