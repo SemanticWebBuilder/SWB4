@@ -744,7 +744,7 @@ public class SWBATree extends GenericResource
         //addOptRefresh(menu,user);
 
         //child
-        Iterator it=tp.listChilds(user.getLanguage(), true, false, false, false); //getSortChild(false);
+        Iterator it=tp.listChilds(user.getLanguage(), null, false, null, null); //getSortChild(false);
         while(it.hasNext())
         {
             WebPage tp2=(WebPage)it.next();
@@ -802,7 +802,7 @@ public class SWBATree extends GenericResource
                 //addOptRefresh(menu,user);
 
                 //have child
-                Iterator it2=tp2.listChilds(user.getLanguage(), true, false, false, false); //getSortChild(false);
+                Iterator it2=tp2.listChilds(user.getLanguage(), null, false, null, null); //getSortChild(false);
                 if(it2.hasNext())
                 {
                     WebPage tp3=(WebPage)it2.next();

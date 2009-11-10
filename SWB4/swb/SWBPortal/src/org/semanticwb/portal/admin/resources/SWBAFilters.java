@@ -871,15 +871,12 @@ public class SWBAFilters extends SWBATree {
             act = "view";
         } else if (act.equals("add")) {
 
-
-
-
-
             SWBResourceURL url = paramRequest.getRenderUrl();
             url.setMode("gateway");
             url.setCallMethod(url.Call_DIRECT);
             out.println("<div class=\"swbform\">");
             out.println("<fieldset>");
+            out.println("<div class=\"applet\">");
             out.println("<APPLET id=\"editfilter\" name=\"editfilter\" code=\"applets.filters.EditFilter.class\" codebase=\""+SWBPlatform.getContextPath()+"/\" ARCHIVE=\"swbadmin/lib/SWBAplEditFilters.jar, swbadmin/lib/SWBAplCommons.jar\" WIDTH=\"100%\" HEIGHT=\"450\">");
             out.println("<PARAM NAME =\"cgipath\" VALUE=\""+url+"\">");
             out.println("<PARAM NAME =\"locale\" VALUE=\""+user.getLanguage()+"\">");
@@ -888,6 +885,7 @@ public class SWBAFilters extends SWBATree {
             url.setMode(url.Mode_VIEW);
             out.println("<PARAM NAME =\"location\" VALUE=\""+url+"\">");
             out.println("</APPLET>");
+            out.println("</div>");
 
 //            out.println("<div dojoType=\"dijit.layout.SplitContainer\" orientation=\"horizontal\" sizerWidth=\"7\" activeSizing=\"false\" style=\"border: 1px solid #bfbfbf; float: left; width: 600px; height: 400px;\">"); //
 //            out.println("<div dojoType=\"dijit.layout.ContentPane\" sizeMin=\"20\" sizeShare=\"20\">");
@@ -946,6 +944,7 @@ public class SWBAFilters extends SWBATree {
         } else if (act.equals("edit") && request.getParameter("id") != null) {
             out.println("<div class=\"swbform\">");
             out.println("<fieldset>");
+            out.println("<div class=\"applet\">");
             out.println("<APPLET id=\"editfilter\" name=\"editfilter\" code=\"applets.filters.EditFilter.class\" codebase=\"" + SWBPlatform.getContextPath() + "/\" ARCHIVE=\"swbadmin/lib/SWBAplEditFilters.jar, swbadmin/lib/SWBAplCommons.jar\" width=\"100%\" height=\"100%\">");
             SWBResourceURL url = paramRequest.getRenderUrl();
             url.setMode("gateway");
@@ -958,6 +957,7 @@ public class SWBAFilters extends SWBATree {
             url.setMode(url.Mode_VIEW);
             out.println("<PARAM NAME =\"location\" VALUE=\"" + url + "\">");
             out.println("</APPLET>");
+            out.println("</div>");
 //            out.println("<div dojoType=\"dijit.layout.SplitContainer\" orientation=\"horizontal\" sizerWidth=\"7\" activeSizing=\"false\" style=\"border: 1px solid #bfbfbf; float: left; width: 400px; height: 300px;\">");
 //            out.println("<div dojoType=\"dijit.layout.ContentPane\" sizeMin=\"20\" sizeShare=\"20\">");
 //            out.println("Aquí va el arbol");
