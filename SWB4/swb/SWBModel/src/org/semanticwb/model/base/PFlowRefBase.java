@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class PFlowRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Activeable,org.semanticwb.model.PFlowable
+public class PFlowRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.PFlowable,org.semanticwb.model.Activeable
 {
     public static class ClassMgr
     {

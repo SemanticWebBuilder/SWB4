@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class ResourceFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.XMLable
+public class ResourceFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.XMLable,org.semanticwb.model.Traceable
 {
     public static class ClassMgr
     {

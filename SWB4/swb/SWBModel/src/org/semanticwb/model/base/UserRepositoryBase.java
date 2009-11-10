@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable
+public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable
 {
     public static class ClassMgr
     {

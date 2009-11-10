@@ -1,7 +1,7 @@
 package org.semanticwb.repository.base;
 
 
-public class VersionBase extends org.semanticwb.repository.BaseNode implements org.semanticwb.repository.Traceable,org.semanticwb.repository.Referenceable
+public class VersionBase extends org.semanticwb.repository.BaseNode implements org.semanticwb.repository.Referenceable,org.semanticwb.repository.Traceable
 {
     public static class ClassMgr
     {

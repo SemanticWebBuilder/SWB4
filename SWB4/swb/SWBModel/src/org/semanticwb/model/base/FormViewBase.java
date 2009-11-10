@@ -29,6 +29,12 @@ public class FormViewBase extends org.semanticwb.model.SWBClass implements org.s
            return new org.semanticwb.model.GenericIterator<org.semanticwb.model.FormView>(it, true);
        }
 
+       public static org.semanticwb.model.FormView createFormView(org.semanticwb.model.SWBModel model)
+       {
+           long id=model.getSemanticObject().getModel().getCounter(sclass);
+           return org.semanticwb.model.FormView.ClassMgr.createFormView(String.valueOf(id), model);
+       }
+
        public static org.semanticwb.model.FormView getFormView(String id, org.semanticwb.model.SWBModel model)
        {
            return (org.semanticwb.model.FormView)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
