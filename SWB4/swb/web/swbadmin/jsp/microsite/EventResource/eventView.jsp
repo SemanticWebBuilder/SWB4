@@ -38,6 +38,7 @@
     </div>
     <%
             Iterator<EventElement> it = EventElement.listEventElementByEventWebPage(wpage, wpage.getWebSite());
+            it = SWBComparator.sortByCreated(it, false);
             while (it.hasNext())
             {
                 EventElement event = it.next();
