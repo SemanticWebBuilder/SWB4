@@ -46,6 +46,7 @@
     </div>
     <%
             Iterator<NewsElement> eit = NewsElement.listNewsElementByNewsWebPage(wpage, wpage.getWebSite());
+            eit = SWBComparator.sortByCreated(eit, false);
             while (eit.hasNext())
             {
                 NewsElement anew = eit.next();
