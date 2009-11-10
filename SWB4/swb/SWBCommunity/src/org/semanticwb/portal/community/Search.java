@@ -170,6 +170,7 @@ public class Search extends GenericAdmResource {
             //solutions = performQuery(q, lang);
 
             if (what.equalsIgnoreCase("All")) {
+                solutions = new ArrayList<SemanticObject>();
                 solutions.addAll(search4Members(q, language));
                 solutions.addAll(performQuery(q, "Organization"));
                 solutions.addAll(performQuery(q, "Clasified"));
