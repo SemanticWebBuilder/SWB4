@@ -1,7 +1,17 @@
 <%@page contentType="text/html"%>
 <%@page import="java.util.Calendar, java.util.GregorianCalendar, java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<script language="Javascript" type="text/javascript">
+    function validateremove(url, title,uri)
+    {
+        if(confirm('¿Esta seguro de borrar la noticia '+title+'?'))
+        {
+            var url=url+'&uri='+escape(uri);
+            window.location.href=url;
+        }
+    }
+</script>
 <%
-            SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");            
+            SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             User user = paramRequest.getUser();
             WebPage wpage = paramRequest.getWebPage();
             MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
@@ -29,14 +39,14 @@
         %>
         <a class="adminTool" href="<%=suscribeURL%>">Suscribirse</a>
         <%
-                    }
-                    else
-                    {
+                }
+                else
+                {
         %>
         <a class="adminTool" href="<%=unSuscribeURL%>">Cancelar suscripción</a>
         <%
-                        }
-                    }
+                }
+            }
 
 
         %>
@@ -56,6 +66,9 @@
                     java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
                     String rank = df.format(anew.getRank());
                     String editEventURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", anew.getURI()).toString();
+                    SWBResourceURL removeUrl = paramRequest.getActionUrl();
+                    removeUrl.setParameter("act", "remove");
+                    String removeurl = "javascript:validateremove('" + removeUrl + "','" + anew.getTitle() + "','" + anew.getURI() + "')";
     %>
     <div class="noticia">
         <img src="<%= SWBPortal.getWebWorkPath() + anew.getNewsThumbnail()%>" alt="<%= anew.getTitle()%>">
@@ -65,12 +78,12 @@
             <p>
                 <%=anew.getDescription()%> | <a href="<%=viewUrl%>">Ver más</a>
                 <%
-                    if(anew.canModify(member))
-                        {
-                        %>
-                        | <a href="<%=editEventURL%>">Editar</a> | <a href="<%=viewUrl%>">Eliminar</a>
-                        <%
-                        }
+                    if (anew.canModify(member))
+                    {
+                %>
+                | <a href="<%=editEventURL%>">Editar</a> | <a href="<%=removeurl%>">Eliminar</a>
+                <%
+            }
                 %>
             </p>
             <p class="stats">
@@ -91,13 +104,13 @@
 </div>
 <div class="columnaCentro">
     <ul class="miContenido">
-    <%
-            SWBResourceURL urla = paramRequest.getActionUrl();
-            if (user.isRegistered())
-            {
-                if (member == null)
+        <%
+                SWBResourceURL urla = paramRequest.getActionUrl();
+                if (user.isRegistered())
                 {
-                    urla.setParameter("act", "subscribe");
+                    if (member == null)
+                    {
+                        urla.setParameter("act", "subscribe");
         %>
         <li><a href="<%=urla%>">Suscribirse a esta comunidad</a></li>
         <%
@@ -110,9 +123,9 @@
         <%
                 }
             }
-            String pageUri="/swbadmin/jsp/microsite/rss/rss.jsp?news="+java.net.URLEncoder.encode(wpage.getURI());
+            String pageUri = "/swbadmin/jsp/microsite/rss/rss.jsp?news=" + java.net.URLEncoder.encode(wpage.getURI());
         %>
         <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS al canal de noticias de la comunidad</a></li>
-        </ul>
+    </ul>
 </div>
 
