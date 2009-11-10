@@ -74,10 +74,6 @@
     <p> Autor: <%=postAuthor%> </p>
     <p> Acualizado: <%=updated%> </p>
     <p> Calificación: <%=rank%> </p>
-    <p> Visitas <%=post.getViews()%> </p>
-    <ul class="miContenido">
-        <li><a href="#">Suscribirse a esta comunidad</a></li>
-        <li><a class="rss" href="#">Suscribirse via RSS</a></li>
-    </ul>
+    <p> Visitas <%=post.getViews()%> </p>    
 </div>
 
