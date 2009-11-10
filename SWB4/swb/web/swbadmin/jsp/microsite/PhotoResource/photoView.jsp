@@ -16,6 +16,9 @@
 %>
 <%
 
+            java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             String cssPath = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/images/";
             Resource base = paramRequest.getResourceBase();
@@ -68,7 +71,7 @@
             }
             if (fin > elementos)
             {
-                fin = ELEMENETS_BY_PAGE;
+                fin = elementos;
             }
             if (inicio > fin)
             {
@@ -91,25 +94,25 @@
 
 
         <%
-                    String nextURL = "#";
-                    String previusURL = "#";
-                    if (ipage < paginas)
-                    {
-                        nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
-                    }
-                    if (ipage > 1)
-                    {
-                        previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
-                    }
+                String nextURL = "#";
+                String previusURL = "#";
+                if (ipage < paginas)
+                {
+                    nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
+                }
+                if (ipage > 1)
+                {
+                    previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
+                }
         %>
         <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
             <%
-                    for (int i = 1; i <= paginas; i++)
-                    {
+                for (int i = 1; i <= paginas; i++)
+                {
             %>
         <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%=i%></a>
         <%
-                    }
+                }
         %>
 
 
@@ -127,7 +130,7 @@
 
             int iElement = 0;
             for (PhotoElement photo : elements)
-            {                
+            {
                 if (photo.canView(member))
                 {
                     iElement++;
@@ -138,9 +141,7 @@
                         urlDetail.setParameter("act", "detail");
                         urlDetail.setParameter("uri", photo.getURI());
                         SWBResourceURL viewurl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", photo.getURI());
-                        java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
                         String rank = df.format(photo.getRank());
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
                         String editEventURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", photo.getURI()).toString();
                         SWBResourceURL removeUrl = paramRequest.getActionUrl();
                         removeUrl.setParameter("act", "remove");
@@ -176,7 +177,7 @@
                 }
             }
     %>
-<!-- paginacion -->
+    <!-- paginacion -->
     <%
             if (paginas > 1)
             {
@@ -185,25 +186,25 @@
 
 
         <%
-                    String nextURL = "#";
-                    String previusURL = "#";
-                    if (ipage < paginas)
-                    {
-                        nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
-                    }
-                    if (ipage > 1)
-                    {
-                        previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
-                    }
+                String nextURL = "#";
+                String previusURL = "#";
+                if (ipage < paginas)
+                {
+                    nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
+                }
+                if (ipage > 1)
+                {
+                    previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
+                }
         %>
         <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
             <%
-                    for (int i = 1; i <= paginas; i++)
-                    {
+                for (int i = 1; i <= paginas; i++)
+                {
             %>
         <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%=i%></a>
         <%
-                    }
+                }
         %>
 
 
@@ -213,16 +214,15 @@
             }
     %>
     <!-- fin paginacion -->
-   
+
 </div>
 <div class="columnaCentro">
     <%
-        if(paginas>1)
+            if (paginas > 1)
             {
-            %>
-            <br><br>
-            <%
-            }
+    %>
+    <br><br>
+    <%            }
     %>
     <ul class="miContenido">
         <%

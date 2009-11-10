@@ -13,6 +13,8 @@
     }
 </script>
 <%
+            java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             User user = paramRequest.getUser();
             String lang = "es";
@@ -78,7 +80,7 @@
                 {
                     ipage = 1;
                 }
-            }
+            }           
             if (ipage < 1 || ipage > paginas)
             {
                 ipage = 1;
@@ -86,16 +88,17 @@
             if (inicio < 0)
             {
                 inicio = 0;
-            }
+            }            
             if (fin > elementos)
             {
-                fin = ELEMENETS_BY_PAGE;
-            }
+                fin = elementos;
+            }           
             if (inicio > fin)
             {
                 inicio = 0;
                 fin = ELEMENETS_BY_PAGE;
             }
+            
     %>
     <%
             if (paginas > 1)
@@ -179,17 +182,14 @@
                         urlEditPost.setParameter("uri", post.getURI());
                         urlEditPost.setParameter("mode", "editpost");
 
-                        String postAuthor = post.getCreator().getFullName();
-                        String createdPost = SWBUtils.TEXT.getTimeAgo(post.getCreated(), user.getLanguage());
-                        String updatedPost = SWBUtils.TEXT.getTimeAgo(post.getUpdated(), user.getLanguage());
+                        String postAuthor = post.getCreator().getFullName();                        
                         SWBResourceURL urlDetail = paramRequest.getRenderUrl();
                         urlDetail.setParameter("act", "detail");
                         urlDetail.setParameter("uri", post.getURI());
                         SWBResourceURL removeUrl = paramRequest.getActionUrl();
                         removeUrl.setParameter("act", "remove");
                         String removeurl = "javascript:validateremove('" + removeUrl + "','" + post.getTitle() + "','" + post.getURI() + "')";
-                        boolean canEditPost = post.canModify(member);
-                        DecimalFormat df = new DecimalFormat("#0.0#");
+                        boolean canEditPost = post.canModify(member);                        
                         String rank = df.format(post.getRank());
                         String visited = String.valueOf(post.getViews());
                         int comments = 0;
@@ -212,9 +212,9 @@
                         }
         %>
 
-        <p><span class="itemTitle">Autor:</span> <%=postAuthor%><br>
-            <span class="itemTitle">Creada:</span> <%=createdPost%><br>
-            <span class="itemTitle">Modificada:</span> <%=updatedPost%><br>
+        <p><span class="itemTitle">Por:</span> <%=postAuthor%><br>
+            <span class="itemTitle">Creada:</span> <%=dateFormat.format(post.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(post.getCreated(), user.getLanguage())%><br>
+            <span class="itemTitle">Modificada:</span> <%=dateFormat.format(post.getUpdated())%> - <%=SWBUtils.TEXT.getTimeAgo(post.getUpdated(), user.getLanguage())%><br>
             <span class="itemTitle">Calificación:</span> <%=rank%><br>
             <span class="itemTitle">Visitada:</span> <%=visited%> veces
         </p>
