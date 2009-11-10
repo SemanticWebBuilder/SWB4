@@ -14,15 +14,7 @@
 %>
 
 <div class="columnaIzquierda">
-    <%if (anew.canModify(member))
-            {%>
-    <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", anew.getURI())%>">Editar Información</a></p></div>
-    <%}%>
-    <%if (anew.canModify(member))
-            {%>
-    <div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", anew.getURI())%>">Eliminar</a></p></div>
-    <%}%>
-    <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">[Ver todas las noticias]</a></p></div>
+    
 
 
     <%
@@ -39,6 +31,16 @@
 
 
     <p class="descripcion" style="text-align:justify;"><%=anew.getFullText()%></p>
+
+    <%if (anew.canModify(member))
+            {%>
+    <p><a href="<%=paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", anew.getURI())%>">Editar Información</a></p>
+    <%}%>
+    <%if (anew.canModify(member))
+            {%>
+    <p><a href="<%=paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", anew.getURI())%>">Eliminar</a></p>
+    <%}%>
+    <p><a href="<%=paramRequest.getRenderUrl()%>">[Ver todas las noticias]</a></p>
 
     <%  }
                 SWBResponse res = new SWBResponse(response);
