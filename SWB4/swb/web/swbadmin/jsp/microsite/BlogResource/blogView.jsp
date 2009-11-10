@@ -80,7 +80,7 @@
                 {
                     ipage = 1;
                 }
-            }           
+            }
             if (ipage < 1 || ipage > paginas)
             {
                 ipage = 1;
@@ -88,17 +88,26 @@
             if (inicio < 0)
             {
                 inicio = 0;
-            }            
+            }
+            if (fin < 0)
+            {
+                fin = ELEMENETS_BY_PAGE;
+            }
             if (fin > elementos)
             {
                 fin = elementos;
-            }           
+            }
             if (inicio > fin)
             {
                 inicio = 0;
                 fin = ELEMENETS_BY_PAGE;
             }
-            
+            if (fin - inicio > ELEMENETS_BY_PAGE)
+            {
+                inicio = 0;
+                fin = ELEMENETS_BY_PAGE;
+            }
+
     %>
     <%
             if (paginas > 1)
@@ -108,25 +117,25 @@
 
 
         <%
-                    String nextURL = "#";
-                    String previusURL = "#";
-                    if (ipage < paginas)
-                    {
-                        nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
-                    }
-                    if (ipage > 1)
-                    {
-                        previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
-                    }
+                String nextURL = "#";
+                String previusURL = "#";
+                if (ipage < paginas)
+                {
+                    nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
+                }
+                if (ipage > 1)
+                {
+                    previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
+                }
         %>
         <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
             <%
-                    for (int i = 1; i <= paginas; i++)
-                    {
+                for (int i = 1; i <= paginas; i++)
+                {
             %>
         <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%=i%></a>
         <%
-                    }
+                }
         %>
 
         <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
@@ -182,14 +191,14 @@
                         urlEditPost.setParameter("uri", post.getURI());
                         urlEditPost.setParameter("mode", "editpost");
 
-                        String postAuthor = post.getCreator().getFullName();                        
+                        String postAuthor = post.getCreator().getFullName();
                         SWBResourceURL urlDetail = paramRequest.getRenderUrl();
                         urlDetail.setParameter("act", "detail");
                         urlDetail.setParameter("uri", post.getURI());
                         SWBResourceURL removeUrl = paramRequest.getActionUrl();
                         removeUrl.setParameter("act", "remove");
                         String removeurl = "javascript:validateremove('" + removeUrl + "','" + post.getTitle() + "','" + post.getURI() + "')";
-                        boolean canEditPost = post.canModify(member);                        
+                        boolean canEditPost = post.canModify(member);
                         String rank = df.format(post.getRank());
                         String visited = String.valueOf(post.getViews());
                         int comments = 0;
@@ -231,8 +240,8 @@
     %>
     <!-- paginacion -->
     <%
-                if (paginas > 1)
-                {
+            if (paginas > 1)
+            {
     %>
     <div id="paginacion">
 

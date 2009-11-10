@@ -69,11 +69,20 @@
             {
                 inicio = 0;
             }
+            if (fin < 0)
+            {
+                fin = ELEMENETS_BY_PAGE;
+            }
             if (fin > elementos)
             {
                 fin = elementos;
             }
             if (inicio > fin)
+            {
+                inicio = 0;
+                fin = ELEMENETS_BY_PAGE;
+            }
+            if (fin - inicio > ELEMENETS_BY_PAGE)
             {
                 inicio = 0;
                 fin = ELEMENETS_BY_PAGE;
