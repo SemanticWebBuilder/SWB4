@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class TemplateBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.RoleRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Localeable,org.semanticwb.model.Expirable,org.semanticwb.model.Referensable,org.semanticwb.model.Versionable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Trashable,org.semanticwb.model.Traceable,org.semanticwb.model.Deviceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.CalendarRefable
+public class TemplateBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Expirable,org.semanticwb.model.Referensable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Deviceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Trashable,org.semanticwb.model.Versionable,org.semanticwb.model.Localeable,org.semanticwb.model.CalendarRefable
 {
     public static class ClassMgr
     {

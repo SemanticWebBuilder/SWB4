@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class ResourceRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Priorityable,org.semanticwb.model.Activeable
+public class ResourceRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Activeable,org.semanticwb.model.Priorityable
 {
     public static class ClassMgr
     {

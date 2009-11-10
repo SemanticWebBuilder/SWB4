@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class ResourceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.RoleRefable,org.semanticwb.model.XMLConfable,org.semanticwb.model.Campable,org.semanticwb.model.Sortable,org.semanticwb.model.Activeable,org.semanticwb.model.Localeable,org.semanticwb.model.Expirable,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Indexable,org.semanticwb.model.Viewable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Priorityable,org.semanticwb.model.Trashable,org.semanticwb.model.Hitable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Deviceable,org.semanticwb.model.XMLable,org.semanticwb.model.CalendarRefable
+public class ResourceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Sortable,org.semanticwb.model.Expirable,org.semanticwb.model.XMLable,org.semanticwb.model.Indexable,org.semanticwb.model.Hitable,org.semanticwb.model.Referensable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Deviceable,org.semanticwb.model.Priorityable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.XMLConfable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Viewable,org.semanticwb.model.Campable,org.semanticwb.model.Trashable,org.semanticwb.model.Localeable,org.semanticwb.model.CalendarRefable
 {
     public static class ClassMgr
     {
