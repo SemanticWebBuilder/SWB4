@@ -128,7 +128,7 @@
                 if (!wputil.isSubscribed(member))
                 {
         %>
-        <a class="adminTool" href="<%=suscribeURL%>">Suscribirse a este elemento</a>
+        <a class="adminTool" href="<%=suscribeURL%>">Suscribirse a canal de videos</a>
         <%
            }
            else
