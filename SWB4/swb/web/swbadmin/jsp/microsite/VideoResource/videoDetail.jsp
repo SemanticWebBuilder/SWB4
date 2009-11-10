@@ -39,7 +39,7 @@ out.write(res.toString());
 
 </div>
 <div class="columnaCentro">
-    <h2 class="blogTitle"><%=rec.getTitle()%></h2>
+    <h2><%=rec.getTitle()%></h2><br>
     <p><%=rec.getDescription()%></p>
     <p>Creado el: <%=dateFormat.format(rec.getCreated())%></p>
     <p><%=rec.getViews()%> vistas</p>
