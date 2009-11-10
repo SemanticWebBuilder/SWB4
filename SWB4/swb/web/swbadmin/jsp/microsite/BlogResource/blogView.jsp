@@ -90,10 +90,6 @@
                         description = "";
                     }
 
-
-                    SWBResourceURL removeUrl = paramRequest.getActionUrl();
-                    removeUrl.setParameter("act", "remove");
-
                     SWBResourceURL urlEditPost = paramRequest.getRenderUrl();
                     urlEditPost.setParameter("act", "edit");
                     urlEditPost.setParameter("uri", post.getURI());
@@ -105,6 +101,8 @@
                     SWBResourceURL urlDetail = paramRequest.getRenderUrl();
                     urlDetail.setParameter("act", "detail");
                     urlDetail.setParameter("uri", post.getURI());
+                    SWBResourceURL removeUrl = paramRequest.getActionUrl();
+                    removeUrl.setParameter("act", "remove");
                     String removeurl = "javascript:validateremove('" + removeUrl + "','" + post.getTitle() + "','" + post.getURI() + "')";
                     boolean canEditPost = post.canModify(member);
                     DecimalFormat df = new DecimalFormat("#0.0#");
