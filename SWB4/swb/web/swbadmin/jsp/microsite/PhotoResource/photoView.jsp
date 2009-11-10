@@ -23,6 +23,7 @@
     </div>
     <%
             Iterator<PhotoElement> it = PhotoElement.listPhotoElementByPhotoWebPage(wpage, wpage.getWebSite());
+            it = SWBComparator.sortByCreated(it, false);
             int i = 0;
             while (it.hasNext())
             {
