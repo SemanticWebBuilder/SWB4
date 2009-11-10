@@ -95,11 +95,14 @@
         <li><a href="<%=urla%>">Cancelar suscripción</a></li>
         <%
     }
-            String pageUri="/swbadmin/jsp/microsite/rss/rss.jsp?comm="+java.net.URLEncoder.encode(wp.getURI());
+            
+}
+String pageUri="/swbadmin/jsp/microsite/rss/rss.jsp?comm="+java.net.URLEncoder.encode(wp.getURI());
             %>
             <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS </a></li>
             <%
-}%>
+
+%>
    
     </ul>
 </div>
