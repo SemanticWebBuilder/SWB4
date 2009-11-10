@@ -40,6 +40,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.Template;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
@@ -318,6 +319,16 @@ public class Distributor implements InternalServlet
             try//Traer template y comprimir salida..
             {
                 TemplateImp currTemplate = (TemplateImp)SWBPortal.getTemplateMgr().getTemplate(user, webpage);
+                //Trae pkantilla por defecto
+                if(currTemplate==null)
+                {
+                    Template aux=webpage.getWebSite().getDefaultTemplate();
+                    if(aux!=null)
+                    {
+                        currTemplate=(TemplateImp)SWBPortal.getTemplateMgr().getTemplateImp(aux);
+                    }
+
+                }
                 if(currTemplate==null)
                 {
                     log.warn("No se encontro template para la seccion:" + webpage.getId());

@@ -551,8 +551,16 @@ public class SWBFormMgr
         }
         return ret;
     }
-    
-    private void renderProp(HttpServletRequest request, StringBuffer ret, SemanticProperty prop, FormElement ele)
+
+
+    /**
+     * Rederea propiedad (metodo interno del SWBFormMgr
+     * @param request
+     * @param ret
+     * @param prop
+     * @param ele
+     */
+    public void renderProp(HttpServletRequest request, StringBuffer ret, SemanticProperty prop, FormElement ele)
     {
         String label=null;
         String element=null;
@@ -739,4 +747,30 @@ public class SWBFormMgr
         filterRequired=onlyRequired;
         init();
     }
+
+    public void setMode(String mode)
+    {
+        m_mode=mode;
+    }
+
+    public String getMode()
+    {
+        return m_mode;
+    }
+
+    public void setSemanticObject(SemanticObject obj)
+    {
+        m_obj=obj;
+    }
+
+    public SemanticObject getSemanticObject()
+    {
+        return m_obj;
+    }
+
+    public void clearProperties()
+    {
+        groups=new HashMap();
+    }
+
 }
