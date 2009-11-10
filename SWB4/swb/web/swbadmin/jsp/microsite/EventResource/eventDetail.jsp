@@ -16,20 +16,13 @@
             if (event != null && event.canView(member))
             {
                 //event.incViews();
-                
+
 %>
 <div class="columnaIzquierda">
 
-    <%
-                SWBResourceURL back = paramRequest.getRenderUrl().setParameter("act", "view");
-                back = paramRequest.getRenderUrl().setParameter("act", "edit");
-                back.setParameter("year", request.getParameter("year"));
-                back.setParameter("month", request.getParameter("month"));
-                back.setParameter("day", request.getParameter("day"));
-                back.setParameter("uri", event.getURI());
-    %>
-    
-    
+
+
+
 
 
     <%
@@ -37,34 +30,11 @@
                 {
                     event.incViews();
     %>
-        <p>
-            <a href="<%= SWBPortal.getWebWorkPath() + event.getEventImage()%>" target="_self">
-                <img id="img_<%=event.getId()%>" src="<%= SWBPortal.getWebWorkPath() + event.getEventImage()%>" alt="<%=event.getTitle()%>" border="0" width="380" height="100%" />
-            </a>
-        </p>
-        <%
-                if (event.canModify(member))
-                {
-
-    %>
-    <p><a href="<%=paramRequest.getActionUrl().setParameter("act", "attend").setParameter("uri", event.getURI())%>">[Asistir al evento]</a></p>
-    <%  }%>
-
-        <p><a href="<%= paramRequest.getRenderUrl()%>">[Ver todos los eventos]</a></p>
-        <%
-                if (event.canModify(member))
-                {
-        %>
-        <div class="editarInfo"><p><a href="<%= back%>">[Editar información]</a></p></div>
-        <%
-                }
-                if (event.canModify(member))
-                {
-        %>
-        <div class="editarInfo"><p><a href="<%= paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", event.getURI())%>">[Eliminar]</a></p></div>
-        <%
-                }%>
-    
+    <p>
+        <a href="<%= SWBPortal.getWebWorkPath() + event.getEventImage()%>" target="_self">
+            <img id="img_<%=event.getId()%>" src="<%= SWBPortal.getWebWorkPath() + event.getEventImage()%>" alt="<%=event.getTitle()%>" border="0" width="380" height="100%" />
+        </a>
+    </p>
     <br/>
     <%
                 }
@@ -83,21 +53,50 @@
     <p>Termina:<strong><%= (event.getEndDate() == null ? "" : dateFormat.format(event.getEndDate()))%></strong> a las <strong><%= (event.getEndTime() == null ? "" : timeFormat.format(event.getEndTime()))%></strong></p>
     <p>Lugar: <strong><%= event.getPlace()%></strong></p>
     <p>Asistentes:
-            <%
-                Iterator<User> users = event.listAttendants();
-                while (users.hasNext())
+        <%
+        Iterator<User> users = event.listAttendants();
+        while (users.hasNext())
+        {
+            User m = users.next();
+        %>
+        <%= m.getFullName()%>
+        <%
+                if (users.hasNext())
                 {
-                    User m = users.next();
-            %>
-            <%= m.getFullName()%>
-            <%
-                        if (users.hasNext())
-                        {
-            %>,&nbsp;<%            }
-                }
-            %>
-        </p>
-        <p>Creado el: <%=dateFormat.format(event.getCreated())%></p>
+        %>,&nbsp;<%            }
+        }
+        %>
+    </p>
+    <p>Creado el: <%=dateFormat.format(event.getCreated())%></p>
     <p><%=event.getViews()%> vistas</p>
     <p>Calificación: <%=rank%></p>
+    <%
+            SWBResourceURL back = paramRequest.getRenderUrl().setParameter("act", "view");
+            back = paramRequest.getRenderUrl().setParameter("act", "edit");
+            back.setParameter("year", request.getParameter("year"));
+            back.setParameter("month", request.getParameter("month"));
+            back.setParameter("day", request.getParameter("day"));
+            back.setParameter("uri", event.getURI());
+    %>
+    <p><a href="<%= paramRequest.getRenderUrl()%>">[Ver todos los eventos]</a></p>
+     <%
+                if (event.canModify(member))
+                {
+
+    %>
+    <p><a href="<%=paramRequest.getActionUrl().setParameter("act", "attend").setParameter("uri", event.getURI())%>">[Asistir al evento]</a></p>
+    <%  }%>  
+    <%
+        if (event.canModify(member))
+        {
+    %>
+    <p><a href="<%= back%>">[Editar información]</a></p>
+    <%
+        }
+        if (event.canModify(member))
+        {
+    %>
+    <p><a href="<%= paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", event.getURI())%>">[Eliminar]</a></p>
+    <%
+            }%>
 </div>
