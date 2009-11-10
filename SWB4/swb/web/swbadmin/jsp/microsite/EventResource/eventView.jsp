@@ -77,9 +77,6 @@
             }
     %>
 
-    <!--div id="paginacion">
-     <a href="#"><img src="images/pageArrowLeft.gif" alt="anterior"></a> <a href="#">1</a><a href="#">2</a><a href="#">3</a><a href="#">4</a><a href="#">5</a> <a href="#"><img src="images/pageArrowRight.gif" alt="siguiente"></a>
-				</div-->
 </div>
 <div class="columnaCentro">
     <ul class="miContenido">
