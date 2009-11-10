@@ -44,18 +44,7 @@
     String deleteUrl="javascript:validateremove('"+removeUrl+"','"+post.getTitle()+"','"+post.getURI()+"')";
 %>
 
-<div class="columnaIzquierda">
-    <div class="adminTools">
-        <%
-            if (canadd)
-            {
-        %>
-        <a class="adminTool" href="<%=editURL%>">Editar Entrada</a>
-        <a class="adminTool" href="<%=deleteUrl%>">Eliminar Entrada</a>
-        <%
-            }
-        %>
-    </div>
+<div class="columnaIzquierda">    
     <h2 class="hidden"><%=post.getTitle()%></h2>
     
     <p><%=post.getContent()%></p>
@@ -75,6 +64,16 @@
     <p> Acualizado: <%=updated%> </p>
     <p> Calificación: <%=rank%> </p>
     <p> <%=post.getViews()%> visitas  </p>
+    <p><a href="<%=paramRequest.getRenderUrl()%>">[Ver todas las entradas del blog]</a></p>
+    <%
+            if (canadd)
+            {
+        %>
+        <p><a href="<%=editURL%>">[Editar Entrada]</a></p>
+        <p><a href="<%=deleteUrl%>">[Eliminar Entrada]</a></p>
+        <%
+            }
+        %>
     <ul class="miContenido">
         <%
             SWBResourceURL urla = paramRequest.getActionUrl();
