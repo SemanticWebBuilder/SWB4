@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class MicroSiteUtilBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Sortable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Resourceable
+public class MicroSiteUtilBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Sortable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.Resourceable
 {
     public static class ClassMgr
     {
