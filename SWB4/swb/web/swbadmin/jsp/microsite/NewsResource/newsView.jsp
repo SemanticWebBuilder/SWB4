@@ -13,13 +13,14 @@ p<%@page contentType="text/html"%>
 <%!    private static final int ELEMENETS_BY_PAGE = 5;
 %>
 <%
+            java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             String cssPath = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/images/";
             User user = paramRequest.getUser();
             WebPage wpage = paramRequest.getWebPage();
             MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
-            Member member = Member.getMember(user, wpage);
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+            Member member = Member.getMember(user, wpage);            
             String urladd = paramRequest.getRenderUrl().setParameter("act", "add").toString();
             boolean canadd = member.canAdd();
             String suscribeURL = paramRequest.getActionUrl().setParameter("act", "subcribe").toString();
@@ -69,7 +70,7 @@ p<%@page contentType="text/html"%>
             }
             if (fin > elementos)
             {
-                fin = ELEMENETS_BY_PAGE;
+                fin = elementos;
             }
             if (inicio > fin)
             {
@@ -158,8 +159,7 @@ p<%@page contentType="text/html"%>
 
                     if (iElement >= inicio && iElement <= fin)
                     {
-                        SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", anew.getURI());
-                        java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
+                        SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", anew.getURI());                        
                         String rank = df.format(anew.getRank());
                         String editEventURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", anew.getURI()).toString();
                         SWBResourceURL removeUrl = paramRequest.getActionUrl();

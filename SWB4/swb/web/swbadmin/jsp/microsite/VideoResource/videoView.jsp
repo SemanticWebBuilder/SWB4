@@ -13,13 +13,14 @@
 <%!    private static final int ELEMENETS_BY_PAGE = 5;
 %>
 <%
+            java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             String cssPath = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/images/";
             User user = paramRequest.getUser();
             WebPage wpage = paramRequest.getWebPage();
             MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
             Member member = Member.getMember(user, wpage);
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
             String suscribeURL = paramRequest.getActionUrl().setParameter("act", "subscribe").toString();
             String unsuscribeURL = paramRequest.getActionUrl().setParameter("act", "unsubscribe").toString();
             String urlAddVideo = paramRequest.getRenderUrl().setParameter("act", "add").toString();
@@ -67,7 +68,7 @@
             }
             if (fin > elementos)
             {
-                fin = ELEMENETS_BY_PAGE;
+                fin = elementos;
             }
             if (inicio > fin)
             {
@@ -79,8 +80,8 @@
 <div class="columnaIzquierda">
     <!-- paginacion -->
     <%
-                if (paginas > 1)
-                {
+            if (paginas > 1)
+            {
     %>
     <div id="paginacion">
 
@@ -130,9 +131,9 @@
         %>
         <a class="adminTool" href="<%=suscribeURL%>">Suscribirse a canal de videos</a>
         <%
-           }
-           else
-           {
+                }
+                else
+                {
         %>
         <a class="adminTool" href="<%=unsuscribeURL%>">Calcelar suscripción</a>
         <%
@@ -154,7 +155,6 @@
                     iElement++;
                     if (iElement >= inicio && iElement <= fin)
                     {
-                        java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
                         String rank = df.format(video.getRank());
                         String editEventURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", video.getURI()).toString();
                         SWBResourceURL removeUrl = paramRequest.getActionUrl();
@@ -170,12 +170,12 @@
             <p>
                 <%=video.getDescription()%> | <a href="<%=viewUrl%>">Ver más</a>
                 <%
-                       if (video.canModify(member))
-                       {
+                        if (video.canModify(member))
+                        {
                 %>
                 | <a href="<%=editEventURL%>">Editar</a> | <a href="<%=removeurl%>">Eliminar</a>
                 <%
-                }
+                        }
                 %>
             </p>
             <p class="stats">
@@ -191,7 +191,7 @@
     %>
 
     <!-- paginacion -->
-<%
+    <%
                 if (paginas > 1)
                 {
     %>
@@ -199,25 +199,25 @@
 
 
         <%
-                String nextURL = "#";
-                String previusURL = "#";
-                if (ipage < paginas)
-                {
-                    nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
-                }
-                if (ipage > 1)
-                {
-                    previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
-                }
+                    String nextURL = "#";
+                    String previusURL = "#";
+                    if (ipage < paginas)
+                    {
+                        nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
+                    }
+                    if (ipage > 1)
+                    {
+                        previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
+                    }
         %>
         <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
             <%
-                for (int i = 1; i <= paginas; i++)
-                {
+                    for (int i = 1; i <= paginas; i++)
+                    {
             %>
         <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%=i%></a>
         <%
-                }
+                    }
         %>
 
 
@@ -230,27 +230,26 @@
 </div>
 <div class="columnaCentro">
     <%
-        if(paginas>1)
+            if (paginas > 1)
             {
-            %>
-            <br><br>
-            <%
-            }
+    %>
+    <br><br>
+    <%            }
     %>
     <ul class="miContenido">        <%
-                SWBResourceURL urla = paramRequest.getActionUrl();
-                if (user.isRegistered())
+            SWBResourceURL urla = paramRequest.getActionUrl();
+            if (user.isRegistered())
+            {
+                if (member == null)
                 {
-                    if (member == null)
-                    {
-                        urla.setParameter("act", "subscribe");
+                    urla.setParameter("act", "subscribe");
         %>
         <li><a href="<%=urla%>">Suscribirse a esta comunidad</a></li>
         <%
-                }
-                else
-                {
-                    urla.setParameter("act", "unsubscribe");
+                    }
+                    else
+                    {
+                        urla.setParameter("act", "unsubscribe");
         %>
         <li><a href="<%=urla%>">Cancelar suscripción a comunidad</a></li>
         <%
