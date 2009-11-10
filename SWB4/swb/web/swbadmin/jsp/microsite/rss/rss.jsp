@@ -7,7 +7,10 @@
         n.appendChild(doc.createTextNode(value));
         return n;
     }
-%><%!    public String getTitle(WebPage webpage)
+%><%!
+
+private static final int MAX_ITEMS=10;
+public String getTitle(WebPage webpage)
     {
 
         if (webpage instanceof MicroSite)
@@ -40,6 +43,7 @@
                     user = (User) semObj.createGenericInstance();
                 }
                 Iterator<MicroSiteElement> elements = PostElement.listMicroSiteElementByCreator(user, site);
+                elements = SWBComparator.sortByCreated(elements, false);
                 while (elements.hasNext())
                 {
                     if (elements.next() instanceof PostElement)
@@ -75,8 +79,9 @@
                         addAtribute(channel, "description", "Artículos publicados de " + user.getFullName());
 
 
-
+                        int i = 0;
                         Iterator<MicroSiteElement> elements = PostElement.listMicroSiteElementByCreator(user, site);
+                        elements = SWBComparator.sortByCreated(elements, false);
                         while (elements.hasNext())
                         {
                             Object obj = elements.next();
@@ -90,6 +95,11 @@
                                 addAtribute(item, "description", element.getDescription());
                                 addAtribute(item, "pubDate", element.getCreated().toGMTString());
                                 addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
+                                i++;
+                                if (i == MAX_ITEMS)
+                                {
+                                    break;
+                                }
                             }
                         }
                         out.write(org.semanticwb.SWBUtils.XML.domToXml(doc));
@@ -116,14 +126,16 @@
 
                         Element channel = doc.createElement("channel");
                         rss.appendChild(channel);
-                        String title=getTitle(eventwebpage);
-                        addAtribute(channel, "title", "Eventos de la comunidad "+title);
+                        String title = getTitle(eventwebpage);
+                        addAtribute(channel, "title", "Eventos de la comunidad " + title);
                         addAtribute(channel, "link", eventwebpage.getUrl());
-                        addAtribute(channel, "description", "Eventos de la comunidad "+title);
+                        addAtribute(channel, "description", "Eventos de la comunidad " + title);
 
 
 
                         Iterator<EventElement> elements = EventElement.listEventElementByEventWebPage(eventwebpage);
+                        elements = SWBComparator.sortByCreated(elements, false);
+                        int i = 0;
                         while (elements.hasNext())
                         {
                             Object obj = elements.next();
@@ -137,6 +149,11 @@
                                 addAtribute(item, "description", element.getDescription());
                                 addAtribute(item, "pubDate", element.getCreated().toGMTString());
                                 addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
+                                i++;
+                                if (i == MAX_ITEMS)
+                                {
+                                    break;
+                                }
                             }
                         }
                         out.write(org.semanticwb.SWBUtils.XML.domToXml(doc));
@@ -164,14 +181,16 @@
 
                         Element channel = doc.createElement("channel");
                         rss.appendChild(channel);
-                        String title=getTitle(photowebpage);
-                        addAtribute(channel, "title", "Fotos de la comunidad "+title);
+                        String title = getTitle(photowebpage);
+                        addAtribute(channel, "title", "Fotos de la comunidad " + title);
                         addAtribute(channel, "link", photowebpage.getUrl());
-                        addAtribute(channel, "description", "Fotos de la comunidad "+title);
+                        addAtribute(channel, "description", "Fotos de la comunidad " + title);
 
 
 
                         Iterator<PhotoElement> elements = PhotoElement.listPhotoElementByPhotoWebPage(photowebpage);
+                        elements = SWBComparator.sortByCreated(elements, false);
+                        int i = 0;
                         while (elements.hasNext())
                         {
                             Object obj = elements.next();
@@ -185,6 +204,11 @@
                                 addAtribute(item, "description", element.getDescription());
                                 addAtribute(item, "pubDate", element.getCreated().toGMTString());
                                 addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
+                                i++;
+                                if (i == MAX_ITEMS)
+                                {
+                                    break;
+                                }
                             }
                         }
                         out.write(org.semanticwb.SWBUtils.XML.domToXml(doc));
@@ -212,14 +236,16 @@
 
                         Element channel = doc.createElement("channel");
                         rss.appendChild(channel);
-                        String title=getTitle(newswebpage);
-                        addAtribute(channel, "title", "Noticias de la comunidad "+title);
+                        String title = getTitle(newswebpage);
+                        addAtribute(channel, "title", "Noticias de la comunidad " + title);
                         addAtribute(channel, "link", newswebpage.getUrl());
-                        addAtribute(channel, "description", "Noticias de la comunidad "+title);
+                        addAtribute(channel, "description", "Noticias de la comunidad " + title);
 
 
 
                         Iterator<NewsElement> elements = NewsElement.listNewsElementByNewsWebPage(newswebpage);
+                        elements = SWBComparator.sortByCreated(elements, false);
+                        int i = 0;
                         while (elements.hasNext())
                         {
                             Object obj = elements.next();
@@ -233,6 +259,11 @@
                                 addAtribute(item, "description", element.getDescription());
                                 addAtribute(item, "pubDate", element.getCreated().toGMTString());
                                 addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
+                                i++;
+                                if (i == MAX_ITEMS)
+                                {
+                                    break;
+                                }
                             }
                         }
                         out.write(org.semanticwb.SWBUtils.XML.domToXml(doc));
@@ -260,14 +291,16 @@
 
                         Element channel = doc.createElement("channel");
                         rss.appendChild(channel);
-                        String title=getTitle(videowebpage);
-                        addAtribute(channel, "title", "Videos de la comunidad "+title);
+                        String title = getTitle(videowebpage);
+                        addAtribute(channel, "title", "Videos de la comunidad " + title);
                         addAtribute(channel, "link", videowebpage.getUrl());
-                        addAtribute(channel, "description", "Videos de la comunidad "+title);
+                        addAtribute(channel, "description", "Videos de la comunidad " + title);
 
 
 
                         Iterator<VideoElement> elements = VideoElement.listVideoElementByWebPage(videowebpage);
+                        elements = SWBComparator.sortByCreated(elements, false);
+                        int i = 0;
                         while (elements.hasNext())
                         {
                             Object obj = elements.next();
@@ -281,6 +314,11 @@
                                 addAtribute(item, "description", element.getDescription());
                                 addAtribute(item, "pubDate", element.getCreated().toGMTString());
                                 addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
+                                i++;
+                                if (i == MAX_ITEMS)
+                                {
+                                    break;
+                                }
                             }
                         }
                         out.write(org.semanticwb.SWBUtils.XML.domToXml(doc));
@@ -291,14 +329,13 @@
                         response.sendError(404);
                     }
                 }
-
                 else if (request.getParameter("comm") != null)
                 {
                     String eventURI = request.getParameter("comm");
                     SemanticObject eventObj = SemanticObject.createSemanticObject(eventURI);
                     if (eventObj != null)
                     {
-                        WebPage commWebpage=(WebPage)eventObj.createGenericInstance();
+                        WebPage commWebpage = (WebPage) eventObj.createGenericInstance();
 
 
                         response.setContentType("application/rss+xml");
@@ -309,14 +346,38 @@
 
                         Element channel = doc.createElement("channel");
                         rss.appendChild(channel);
-                        String title=getTitle(commWebpage);
+                        String title = getTitle(commWebpage);
 
                         addAtribute(channel, "title", title);
                         addAtribute(channel, "link", commWebpage.getUrl());
                         addAtribute(channel, "description", title);
 
-                       
-                        
+
+
+                        Iterator elements = MicroSiteElement.ClassMgr.listMicroSiteElements(commWebpage.getWebSite());
+                        elements = SWBComparator.sortByCreated(elements, false);
+                        int i = 0;
+                        while (elements.hasNext())
+                        {
+                            Object obj = elements.next();
+                            if (obj instanceof MicroSiteElement)
+                            {
+                                Element item = doc.createElement("item");
+                                channel.appendChild(item);
+                                MicroSiteElement element = (MicroSiteElement) obj;
+                                addAtribute(item, "title", element.getTitle());
+                                addAtribute(item, "link", element.getURL());
+                                addAtribute(item, "description", element.getDescription());
+                                addAtribute(item, "pubDate", element.getCreated().toGMTString());
+                                addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
+                                i++;
+                                if (i == MAX_ITEMS)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+
                         out.write(org.semanticwb.SWBUtils.XML.domToXml(doc));
 
                     }
@@ -342,8 +403,7 @@
                         doc.appendChild(rss);
 
                         Element channel = doc.createElement("channel");
-                        rss.appendChild(channel);
-                        //String url = site.getWebPage("perfil").getUrl() + "?user=" + java.net.URLEncoder.encode(user.getURI());
+                        rss.appendChild(channel);                        
                         addAtribute(channel, "title", blog.getTitle());
                         addAtribute(channel, "link", blog.getWebPage().getUrl());
                         addAtribute(channel, "description", blog.getDescription());
@@ -351,6 +411,8 @@
 
 
                         Iterator<PostElement> elements = blog.listPostElements();
+                        elements = SWBComparator.sortByCreated(elements, false);
+                        int i = 0;
                         while (elements.hasNext())
                         {
                             Object obj = elements.next();
@@ -364,6 +426,11 @@
                                 addAtribute(item, "description", element.getDescription());
                                 addAtribute(item, "pubDate", element.getCreated().toGMTString());
                                 addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
+                                i++;
+                                if (i == MAX_ITEMS)
+                                {
+                                    break;
+                                }
                             }
                         }
                         out.write(org.semanticwb.SWBUtils.XML.domToXml(doc));
