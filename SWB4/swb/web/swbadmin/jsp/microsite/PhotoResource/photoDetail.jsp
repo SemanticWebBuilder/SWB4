@@ -27,8 +27,7 @@
 <div class="columnaIzquierda">
     <p><a dojoType="dojox.image.Lightbox" title="<%= photo.getTitle()%>" href="<%= SWBPortal.getWebWorkPath()+photo.getImageURL()%>">
         <img id="img_<%=photo.getId()%>" src="<%= SWBPortal.getWebWorkPath()+photo.getImageURL() %>" alt="<%= photo.getTitle() %>" border="0" width="300" height="100%" />
-        </a></p>
-        <p><a href="<%=paramRequest.getRenderUrl()%>">[Ver todas las fotos]</a></p>
+        </a></p>        
 <script type="text/javascript">
     var img = document.getElementById('img_<%=photo.getId()%>');
     if( img.width>img.height && img.width>450) {
@@ -60,6 +59,7 @@ out.write(res.toString());
         <p>Creado el: <%=dateFormat.format(photo.getCreated())%></p>
         <p><%= photo.getViews()%> vistas</p>
         <p>Calificación: <%=rank%></p>
+        <p><a href="<%=paramRequest.getRenderUrl()%>">[Ver todas las fotos]</a></p>
         <%if(photo.canModify(member)){%>
         <p><a href="<%=paramRequest.getRenderUrl().setParameter("act","edit").setParameter("uri",photo.getURI())%>">[Editar información]</a></p>
         <%}%>
