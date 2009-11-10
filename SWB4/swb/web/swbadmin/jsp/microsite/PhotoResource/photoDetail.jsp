@@ -18,39 +18,17 @@
 
     DecimalFormat df = new DecimalFormat("#0.0#");
                         String rank = df.format(photo.getRank());
-    if(member.canView() && photo!=null)
+    if(photo!=null && photo.canView(member))
     {
         photo.incViews();  //Incrementar apariciones
 %>
 
 
 <div class="columnaIzquierda">
-
-
-    <h2 class="tituloGrande"><%= photo.getTitle()%></h2>
-    <div class="entry_listadoFotos">
-        <!-- <a dojoType="dojox.image.Lightbox" title="<%= photo.getTitle()%>" href="<%= SWBPortal.getWebWorkPath()+photo.getImageURL()%>"> -->
-        <a href="<%= SWBPortal.getWebWorkPath()+photo.getImageURL() %>" title="<%=photo.getTitle()%>">
-            <img id="img_<%=photo.getId()%>" src="<%= SWBPortal.getWebWorkPath()+photo.getImageURL() %>" alt="<%= photo.getTitle() %>" border="0" width="300" height="100%" />
-            </a>
-        <!-- </a>                  -->
-    </div>
-    
-    <div class="detalleFotoInfo">
-        <p class="tituloNaranja">Autor: <%= photo.getCreator().getFirstName()%></p>
-        <p class="fotoInfo">Fecha: <%= SWBUtils.TEXT.getStrDate(photo.getCreated(), lang, "dd/mm/yy")%>   | <span class="linkNaranja"><%= photo.getViews()%> Vistas</span></p>
-        <p class="descripcion"><%= photo.getDescription()%></p>  
-        <p class="descripcion">Calificación: <%=rank%></p>
-        <%if(photo.canModify(member)){%>
-        <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act","edit").setParameter("uri",photo.getURI())%>">Editar información</a></p></div>
-        <%}%>
-        <%if(photo.canModify(member)){%>
-        <div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act","remove").setParameter("uri",photo.getURI())%>">Eliminar</a></p></div>
-        <%}%>
-        <div class="clear">&nbsp;</div>
-    </div>
-
-       
+    <p><a dojoType="dojox.image.Lightbox" title="<%= photo.getTitle()%>" href="<%= SWBPortal.getWebWorkPath()+photo.getImageURL()%>">
+        <img id="img_<%=photo.getId()%>" src="<%= SWBPortal.getWebWorkPath()+photo.getImageURL() %>" alt="<%= photo.getTitle() %>" border="0" width="300" height="100%" />
+        </a></p>
+        <p><a href="<%=paramRequest.getRenderUrl()%>">[Regresar]</a></p>
 <script type="text/javascript">
     var img = document.getElementById('img_<%=photo.getId()%>');
     if( img.width>img.height && img.width>450) {
@@ -67,8 +45,8 @@
     }
 %>
 
- <div class="clear">&nbsp;</div>
-<div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Regresar</a></p></div>
+ 
+
 <%
     SWBResponse res=new SWBResponse(response);
 photo.renderGenericElements(request, res, paramRequest);
@@ -76,5 +54,17 @@ out.write(res.toString());
 %>
 </div>
 <div class="columnaCentro">
-
+        <h2><%=photo.getTitle()%></h2><br>
+        <p><%= photo.getDescription()%></p>
+        <p>Autor: <%= photo.getCreator().getFirstName()%></p>
+        <p class="fotoInfo">Fecha: <%= SWBUtils.TEXT.getStrDate(photo.getCreated(), lang, "dd/mm/yy")%>   | <span class="linkNaranja"><%= photo.getViews()%> Vistas</span></p>
+        <p class="descripcion"><%= photo.getDescription()%></p>
+        <p class="descripcion">Calificación: <%=rank%></p>
+        <%if(photo.canModify(member)){%>
+        <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act","edit").setParameter("uri",photo.getURI())%>">Editar información</a></p></div>
+        <%}%>
+        <%if(photo.canModify(member)){%>
+        <div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act","remove").setParameter("uri",photo.getURI())%>">Eliminar</a></p></div>
+        <%}%>
+        
 </div>
