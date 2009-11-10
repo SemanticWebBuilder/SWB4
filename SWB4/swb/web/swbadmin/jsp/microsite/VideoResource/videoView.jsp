@@ -43,6 +43,7 @@
     </div>
     <%
             Iterator<VideoElement> it = VideoElement.listVideoElementByWebPage(wpage, wpage.getWebSite());
+            it = SWBComparator.sortByCreated(it, false);
             int i = 0;
             while (it.hasNext())
             {
