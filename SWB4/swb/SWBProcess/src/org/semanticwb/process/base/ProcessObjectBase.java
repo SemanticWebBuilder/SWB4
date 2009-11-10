@@ -55,4 +55,9 @@ public class ProcessObjectBase extends org.semanticwb.model.base.GenericObjectBa
     {
         return new org.semanticwb.model.GenericIterator(getSemanticObject().listRelatedObjects(),true);
     }
+
+    public org.semanticwb.process.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }
