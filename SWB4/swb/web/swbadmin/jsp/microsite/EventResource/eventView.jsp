@@ -24,6 +24,7 @@
             SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");
             String urlViewCalendar = paramRequest.getRenderUrl().setParameter("act", "calendar").toString();
             String addEventURL = paramRequest.getRenderUrl().setParameter("act", "add").toString();
+
             ArrayList<EventElement> elements = new ArrayList();
             int elementos = 0;
             Iterator<EventElement> it = EventElement.listEventElementByEventWebPage(wpage, wpage.getWebSite());
