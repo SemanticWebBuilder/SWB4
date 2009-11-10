@@ -74,7 +74,7 @@
     <p> Autor: <%=postAuthor%> </p>
     <p> Acualizado: <%=updated%> </p>
     <p> Calificación: <%=rank%> </p>
-    <p> Visitas <%=post.getViews()%> </p>
+    <p> <%=post.getViews()%> visitas  </p>
     <ul class="miContenido">
         <%
             SWBResourceURL urla = paramRequest.getActionUrl();
