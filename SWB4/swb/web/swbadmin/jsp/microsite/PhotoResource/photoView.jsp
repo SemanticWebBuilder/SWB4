@@ -5,7 +5,7 @@
 <script language="Javascript" type="text/javascript">
     function validateremove(url, title,uri)
     {
-        if(confirm('¿Esta seguro de borrar la foto '+title+'?'))
+        if(confirm('¿Esta seguro de borrar la foto: '+title+'?'))
         {
             var url=url+'&uri='+escape(uri);
             window.location.href=url;
