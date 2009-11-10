@@ -10,8 +10,11 @@
         }
     }
 </script>
+<%!    private static final int ELEMENETS_BY_PAGE = 5;
+%>
 <%
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
+            String cssPath = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/images/";
             User user = paramRequest.getUser();
             WebPage wpage = paramRequest.getWebPage();
             MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
@@ -21,9 +24,98 @@
             boolean canadd = member.canAdd();
             String suscribeURL = paramRequest.getActionUrl().setParameter("act", "subcribe").toString();
             String unSuscribeURL = paramRequest.getActionUrl().setParameter("act", "unsubcribe").toString();
+
+            ArrayList<NewsElement> elements = new ArrayList();
+            int elementos = 0;
+            Iterator<NewsElement> it = NewsElement.listNewsElementByNewsWebPage(wpage, wpage.getWebSite());
+            it = SWBComparator.sortByCreated(it, false);
+            while (it.hasNext())
+            {
+                NewsElement element = it.next();
+                if (element.canView(member))
+                {
+                    elements.add(element);
+                    elementos++;
+                }
+            }
+            int paginas = elementos / ELEMENETS_BY_PAGE;
+            if (elementos % ELEMENETS_BY_PAGE != 0)
+            {
+                paginas++;
+            }
+            int inicio = 0;
+            int fin = ELEMENETS_BY_PAGE;
+            int ipage = 1;
+            if (request.getParameter("ipage") != null)
+            {
+                try
+                {
+                    ipage = Integer.parseInt(request.getParameter("ipage"));
+                    inicio = (ipage * ELEMENETS_BY_PAGE) - ELEMENETS_BY_PAGE;
+                    fin = (ipage * ELEMENETS_BY_PAGE);
+                }
+                catch (NumberFormatException nfe)
+                {
+                    ipage = 1;
+                }
+            }
+            if (ipage < 1 || ipage > paginas)
+            {
+                ipage = 1;
+            }
+            if (inicio < 0)
+            {
+                inicio = 0;
+            }
+            if (fin > elementos)
+            {
+                fin = ELEMENETS_BY_PAGE;
+            }
+            if (inicio > fin)
+            {
+                inicio = 0;
+                fin = ELEMENETS_BY_PAGE;
+            }
 %>
 
 <div class="columnaIzquierda">
+    <!-- paginacion -->
+    <%
+            if (paginas > 1)
+            {
+    %>
+    <div id="paginacion">
+
+
+        <%
+                String nextURL = "#";
+                String previusURL = "#";
+                if (ipage < paginas)
+                {
+                    nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
+                }
+                if (ipage > 1)
+                {
+                    previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
+                }
+        %>
+        <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
+            <%
+                for (int i = 1; i <= paginas; i++)
+                {
+            %>
+        <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%=i%></a>
+        <%
+                }
+        %>
+
+
+        <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
+    </div>
+    <%
+            }
+    %>
+    <!-- fin paginacion -->
     <div class="adminTools">
         <%
             if (canadd)
@@ -57,18 +149,22 @@
     <%
             Iterator<NewsElement> eit = NewsElement.listNewsElementByNewsWebPage(wpage, wpage.getWebSite());
             eit = SWBComparator.sortByCreated(eit, false);
-            while (eit.hasNext())
+            int iElement = 0;
+            for (NewsElement anew : elements)
             {
-                NewsElement anew = eit.next();
                 if (anew.canView(member))
                 {
-                    SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", anew.getURI());
-                    java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
-                    String rank = df.format(anew.getRank());
-                    String editEventURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", anew.getURI()).toString();
-                    SWBResourceURL removeUrl = paramRequest.getActionUrl();
-                    removeUrl.setParameter("act", "remove");
-                    String removeurl = "javascript:validateremove('" + removeUrl + "','" + anew.getTitle() + "','" + anew.getURI() + "')";
+                    iElement++;
+
+                    if (iElement >= inicio && iElement <= fin)
+                    {
+                        SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", anew.getURI());
+                        java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
+                        String rank = df.format(anew.getRank());
+                        String editEventURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", anew.getURI()).toString();
+                        SWBResourceURL removeUrl = paramRequest.getActionUrl();
+                        removeUrl.setParameter("act", "remove");
+                        String removeurl = "javascript:validateremove('" + removeUrl + "','" + anew.getTitle() + "','" + anew.getURI() + "')";
     %>
     <div class="noticia">
         <img src="<%= SWBPortal.getWebWorkPath() + anew.getNewsThumbnail()%>" alt="<%= anew.getTitle()%>">
@@ -78,12 +174,12 @@
             <p>
                 <%=anew.getDescription()%> | <a href="<%=viewUrl%>">Ver más</a>
                 <%
-                    if (anew.canModify(member))
-                    {
+                        if (anew.canModify(member))
+                        {
                 %>
                 | <a href="<%=editEventURL%>">Editar</a> | <a href="<%=removeurl%>">Eliminar</a>
                 <%
-            }
+                        }
                 %>
             </p>
             <p class="stats">
@@ -93,31 +189,66 @@
         </div>
     </div>
     <%
+                    }
                 }
             }
     %>
 
 
-    <!-- <div id="paginacion">
-        <a href="#"><img src="images/pageArrowLeft.gif" alt="anterior"></a> <a href="#">1</a><a href="#">2</a><a href="#">3</a><a href="#">4</a><a href="#">5</a> <a href="#"><img src="images/pageArrowRight.gif" alt="siguiente"></a>
-    </div >-->
+<!-- paginacion -->
+<%
+                if (paginas > 1)
+                {
+    %>
+    <div id="paginacion">
+
+
+        <%
+                String nextURL = "#";
+                String previusURL = "#";
+                if (ipage < paginas)
+                {
+                    nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
+                }
+                if (ipage > 1)
+                {
+                    previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
+                }
+        %>
+        <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
+            <%
+                for (int i = 1; i <= paginas; i++)
+                {
+            %>
+        <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%=i%></a>
+        <%
+                }
+        %>
+
+
+        <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
+    </div>
+    <%
+            }
+    %>
+    <!-- fin paginacion -->
 </div>
 <div class="columnaCentro">
     <ul class="miContenido">
         <%
-                SWBResourceURL urla = paramRequest.getActionUrl();
-                if (user.isRegistered())
+            SWBResourceURL urla = paramRequest.getActionUrl();
+            if (user.isRegistered())
+            {
+                if (member == null)
                 {
-                    if (member == null)
-                    {
-                        urla.setParameter("act", "subscribe");
+                    urla.setParameter("act", "subscribe");
         %>
         <li><a href="<%=urla%>">Suscribirse a esta comunidad</a></li>
         <%
-                }
-                else
-                {
-                    urla.setParameter("act", "unsubscribe");
+                    }
+                    else
+                    {
+                        urla.setParameter("act", "unsubscribe");
         %>
         <li><a href="<%=urla%>">Cancelar suscripción a comunidad</a></li>
         <%
