@@ -229,6 +229,7 @@
                 }
             }
     %>
+    <!-- paginacion -->
 <%
                 if (paginas > 1)
                 {
@@ -258,11 +259,13 @@
                 }
         %>
 
+
         <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
     </div>
     <%
             }
     %>
+    <!-- fin paginacion -->
 </div>
 <div class="columnaCentro">
     <h2 class="blogTitle"><%=titleBlog%></h2>
