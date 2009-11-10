@@ -7,6 +7,12 @@
     String searchUrl = (String) request.getAttribute("rUrl");
     String what = (String) request.getParameter("what");
     WebPage wpage = paramRequest.getWebPage();
+    String lang = "es";
+    if (paramRequest.getUser().getLanguage() != null) {
+        lang = paramRequest.getUser().getLanguage();
+    }
+    String imgDefaultPath = "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
+
     //System.out.println("what: " + what);
 %>
 
@@ -180,27 +186,87 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
             while(it.hasNext()) {
                 SemanticObject obj = it.next();
                 if (obj == null) continue;
-                if(obj.instanceOf(Member.ClassMgr.sclass)) {
-                    Member memUser = (Member)obj.createGenericInstance();
-                    User usr = memUser.getUser();
-                    String photo = SWBPortal.getContextPath() + "/swbadmin/images/defaultPhoto.jpg";
+                if (obj.instanceOf(MicroSite.ClassMgr.sclass)) {
+                    MicroSite site = (MicroSite)obj.createGenericInstance();
+                    Iterator<Member> members = site.listMembers();
+                    int count = 0;
+                    while (members != null && members.hasNext()) {
+                        count++;
+                        members.next();
+                    }
+                    String imgPath = imgDefaultPath;
+                    //String imgPath = "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
+                    if (site.getPhoto() != null)
+                    {
+                        imgPath = SWBPortal.getContextPath() + SWBPortal.getWebWorkPath() + site.getPhoto();
+                    }
+                    %>
+                    <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
+                        <img alt="<%=site.getTitle()%>" src="<%=imgPath%>" />
+                        <div class="listEntryInfo">
+                            <p class="tituloRojo">
+                                <%=site.getTitle()%>
+                            </p>
+                            <p>
+                                <%=site.getDescription()%>
+                            </p>
+                            <p>
+                                <span class="itemTitle">Miembros: </span><%=count%>
+                            </p>
+                            <p class="vermas">
+                                <a href="<%=site.getUrl()%>">Ver comunidad</a>
+                            </p>
+                        </div>
+                        <div class="clear">&nbsp;</div>
+                    </div>
+                    <%
+                } else if (obj.instanceOf(User.ClassMgr.sclass)) {
+                    User usr = (User)obj.createGenericInstance();
+                    String photo = imgDefaultPath;//SWBPortal.getContextPath() + "/swbadmin/images/defaultPhoto.jpg";
                     if(usr.getPhoto() != null) photo = SWBPortal.getWebWorkPath() + usr.getPhoto();
+                    HashMap<String, SemanticProperty> extProperties = new HashMap<String, SemanticProperty>();
+                    Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#_ExtendedAttributes").listProperties();
+                    while (list != null && list.hasNext()) {
+                        SemanticProperty sp = list.next();
+                        extProperties.put(sp.getName(), sp);
+                    }
+                    String usr_sex = (String) usr.getExtendedAttribute(extProperties.get("userSex"));
+                    int usr_age = (Integer) usr.getExtendedAttribute(extProperties.get("userAge"));
+                    //if (null == usr_age) usr_age = "";
+                    if (usr_sex.equals("M")) usr_sex = "Hombre";
+                    if (usr_sex.equals("F")) usr_sex = "Mujer";
 
                     String perfilPath = wpage.getWebSite().getWebPage("perfil").getUrl();
-                    String profile = "<a href=\"" + perfilPath + "?user=" + usr.getEncodedURI() + "\">Ir al perfil</a>";
+                    String profile = "<a href=\"" + perfilPath + "?user=" + usr.getEncodedURI() + "\">Ver perfil</a>";
                 %>
                     <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
                     <img alt="<%=usr.getLogin()%>"src="<%=photo%>"/>
                     <div class="listEntryInfo">
                         <p class="tituloRojo">
-                            <%=usr.getLogin()%>
-                        </p>
-                        <p>
                             <%=usr.getFullName()%>
                         </p>
-                        <p class="vermas">
-                            <%=profile%>
-                        </p>
+                        <%
+                        if (paramRequest.getUser().isRegistered() && paramRequest.getUser().isSigned()) {
+                        %>
+                            <p>
+                                <%=usr.getFullName()%>
+                            </p>
+                            <p>
+                                <span class="itemTitle">Sexo: </span><%=usr_sex%>
+                            </p>
+                            <p>
+                                <span class="itemTitle">Edad: </span><%=usr_age%>
+                            </p>
+                            <p class="vermas">
+                                <%=profile%>
+                            </p>
+                        <%
+                        } else {
+                        %>
+                            <p>Registrese para ver los datos del usuario</p>
+                        <%
+                        }
+                        %>
                     </div>
                     <div class="clear">&nbsp;</div>
                     </div>
@@ -210,22 +276,14 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                     <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
                     <%
                     DirectoryObject c = (DirectoryObject) obj.createGenericInstance();
-                    String photo = obj.getProperty(swbcomm_dirPhoto);
-                    if(photo != null && !photo.equals("null")) {
-                    %>
-                        <img height="95" width="95" src="<%=SWBPortal.getWebWorkPath()+c.getDirectoryResource().getWorkPath()+"/"+obj.getId()+"/"+photo%>">
-                    <%
-                    } else {
-                    %>
-                        <img height="95" width="95" src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/noDisponible.gif">
-                    <%
+                    String photo = imgDefaultPath; //obj.getProperty(swbcomm_dirPhoto);
+                    if (obj.getProperty(swbcomm_dirPhoto) != null) {
+                        photo = SWBPortal.getWebWorkPath()+c.getDirectoryResource().getWorkPath()+"/"+obj.getId()+"/"+obj.getProperty(swbcomm_dirPhoto);
                     }
                     %>
-                    <div class="listEntryInfo">
-                        <p class="tituloRojo"><!--a href ="%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>"--><%=c.getTitle()%>&nbsp;(<%=obj.getSemanticClass().getDisplayName("es")%>)<!--/a--></p>
-                        <!--p>
-                            <!--%=c.getWebPage().getPath(map)%>
-                        </p-->
+                        <img height="95" alt="<%=c.getTitle()%>" width="95" src="<%=photo%>" />
+                        <div class="listEntryInfo">
+                        <p class="tituloRojo"><%=c.getTitle()%>&nbsp;(<%=obj.getSemanticClass().getDisplayName(lang)%>)</p>
                         <p>
                             <b><%=(c.getDescription()==null)?"":c.getDescription()%></b>
                         </p>
