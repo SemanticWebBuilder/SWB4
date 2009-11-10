@@ -58,7 +58,7 @@
     </div>
     <h2 class="hidden"><%=post.getTitle()%></h2>
     
-    <%=post.getContent()%>
+    <p><%=post.getContent()%></p>
     <br>
     <br>
 
@@ -74,6 +74,30 @@
     <p> Autor: <%=postAuthor%> </p>
     <p> Acualizado: <%=updated%> </p>
     <p> Calificación: <%=rank%> </p>
-    <p> Visitas <%=post.getViews()%> </p>    
+    <p> Visitas <%=post.getViews()%> </p>
+    <ul class="miContenido">
+        <%
+            SWBResourceURL urla = paramRequest.getActionUrl();
+            if (user.isRegistered())
+            {
+                if (member == null)
+                {
+                    urla.setParameter("act", "subscribe");
+        %>
+        <li><a href="<%=urla%>">Suscribirse a esta comunidad</a></li>
+        <%
+                }
+                else
+                {
+                    urla.setParameter("act", "unsubscribe");
+        %>
+        <li><a href="<%=urla%>">Cancelar suscripción a comunidad</a></li>
+        <%
+                }
+            }
+            String pageUri="/swbadmin/jsp/microsite/rss/rss.jsp?blog="+java.net.URLEncoder.encode(post.getBlog().getURI());
+        %>
+        <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS al blog de la comunidad</a></li>
+    </ul>
 </div>
 
