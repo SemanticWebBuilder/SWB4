@@ -1,5 +1,15 @@
 <%@page contentType="text/html"%>
 <%@page import="java.text.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<script language="Javascript" type="text/javascript">
+    function validateremove(url, title,uri)
+    {
+        if(confirm('¿Esta seguro de borrar el video '+title+'?'))
+        {
+            var url=url+'&uri='+escape(uri);
+            window.location.href=url;
+        }
+    }
+</script>
 <%
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             User user = paramRequest.getUser();
@@ -54,6 +64,9 @@
                     java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
                     String rank = df.format(video.getRank());
                     String editEventURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", video.getURI()).toString();
+                    SWBResourceURL removeUrl = paramRequest.getActionUrl();
+                    removeUrl.setParameter("act", "remove");
+                    String removeurl = "javascript:validateremove('" + removeUrl + "','" + video.getTitle() + "','" + video.getURI() + "')";
 
     %>
     <div class="noticia">
@@ -67,7 +80,7 @@
                     if(video.canModify(member))
                         {
                         %>
-                        | <a href="<%=editEventURL%>">Editar</a> | <a href="<%=viewUrl%>">Eliminar</a>
+                        | <a href="<%=editEventURL%>">Editar</a> | <a href="<%=removeurl%>">Eliminar</a>
                         <%
                         }
                 %>
