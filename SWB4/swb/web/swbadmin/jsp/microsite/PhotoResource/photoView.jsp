@@ -2,6 +2,16 @@
 <%@page import="org.semanticwb.platform.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%@page import="org.semanticwb.model.Resource" %>
 <%@page import="java.text.*,org.semanticwb.portal.SWBFormMgr"%>
+<script language="Javascript" type="text/javascript">
+    function validateremove(url, title,uri)
+    {
+        if(confirm('¿Esta seguro de borrar la foto '+title+'?'))
+        {
+            var url=url+'&uri='+escape(uri);
+            window.location.href=url;
+        }
+    }
+</script>
 <%
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             Resource base = paramRequest.getResourceBase();
@@ -39,6 +49,9 @@
                     String rank = df.format(photo.getRank());
                     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
                     String editEventURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", photo.getURI()).toString();
+                    SWBResourceURL removeUrl = paramRequest.getActionUrl();
+                    removeUrl.setParameter("act", "remove");
+                    String removeurl = "javascript:validateremove('" + removeUrl + "','" + photo.getTitle() + "','" + photo.getURI() + "')";
 
     %>
     <div class="noticia">        
@@ -54,7 +67,7 @@
                     if(photo.canModify(member))
                         {
                         %>
-                        | <a href="<%=editEventURL%>">Editar</a> | <a href="<%=viewurl%>">Eliminar</a>
+                        | <a href="<%=editEventURL%>">Editar</a> | <a href="<%=removeurl%>">Eliminar</a>
                         <%
                         }
                 %>
