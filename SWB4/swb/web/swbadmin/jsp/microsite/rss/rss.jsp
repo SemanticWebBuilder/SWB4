@@ -7,10 +7,9 @@
         n.appendChild(doc.createTextNode(value));
         return n;
     }
-%><%!
+%><%!    private static final int MAX_ITEMS = 10;
 
-private static final int MAX_ITEMS=10;
-public String getTitle(WebPage webpage)
+    public String getTitle(WebPage webpage)
     {
 
         if (webpage instanceof MicroSite)
@@ -78,27 +77,34 @@ public String getTitle(WebPage webpage)
                         addAtribute(channel, "link", url);
                         addAtribute(channel, "description", "Artículos publicados de " + user.getFullName());
 
-
                         int i = 0;
+
                         Iterator<MicroSiteElement> elements = PostElement.listMicroSiteElementByCreator(user, site);
                         elements = SWBComparator.sortByCreated(elements, false);
                         while (elements.hasNext())
                         {
                             Object obj = elements.next();
-                            if (obj instanceof PostElement)
+                            if (obj != null && obj instanceof PostElement)
                             {
-                                Element item = doc.createElement("item");
-                                channel.appendChild(item);
                                 PostElement element = (PostElement) obj;
-                                addAtribute(item, "title", element.getTitle());
-                                addAtribute(item, "link", element.getURL());
-                                addAtribute(item, "description", element.getDescription());
-                                addAtribute(item, "pubDate", element.getCreated().toGMTString());
-                                addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
-                                i++;
-                                if (i == MAX_ITEMS)
+                                if (element != null)
                                 {
-                                    break;
+                                    Element item = doc.createElement("item");
+                                    channel.appendChild(item);
+                                    if (element.getVisibility() == MicroSiteElement.VIS_ALL)
+                                    {
+                                        addAtribute(item, "title", element.getTitle());
+                                        addAtribute(item, "link", element.getURL());
+                                        addAtribute(item, "description", element.getDescription());
+                                        addAtribute(item, "pubDate", element.getCreated().toGMTString());
+                                        addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
+                                        i++;
+                                        if (i == MAX_ITEMS)
+                                        {
+                                            break;
+                                        }
+                                    }
+
                                 }
                             }
                         }
@@ -141,19 +147,23 @@ public String getTitle(WebPage webpage)
                             Object obj = elements.next();
                             if (obj instanceof EventElement)
                             {
-                                Element item = doc.createElement("item");
-                                channel.appendChild(item);
                                 EventElement element = (EventElement) obj;
-                                addAtribute(item, "title", element.getTitle());
-                                addAtribute(item, "link", element.getURL());
-                                addAtribute(item, "description", element.getDescription());
-                                addAtribute(item, "pubDate", element.getCreated().toGMTString());
-                                addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
-                                i++;
-                                if (i == MAX_ITEMS)
+                                if (element.getVisibility() == MicroSiteElement.VIS_ALL)
                                 {
-                                    break;
+                                    Element item = doc.createElement("item");
+                                    channel.appendChild(item);
+                                    addAtribute(item, "title", element.getTitle());
+                                    addAtribute(item, "link", element.getURL());
+                                    addAtribute(item, "description", element.getDescription());
+                                    addAtribute(item, "pubDate", element.getCreated().toGMTString());
+                                    addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
+                                    i++;
+                                    if (i == MAX_ITEMS)
+                                    {
+                                        break;
+                                    }
                                 }
+
                             }
                         }
                         out.write(org.semanticwb.SWBUtils.XML.domToXml(doc));
@@ -196,19 +206,24 @@ public String getTitle(WebPage webpage)
                             Object obj = elements.next();
                             if (obj instanceof PhotoElement)
                             {
-                                Element item = doc.createElement("item");
-                                channel.appendChild(item);
                                 PhotoElement element = (PhotoElement) obj;
-                                addAtribute(item, "title", element.getTitle());
-                                addAtribute(item, "link", element.getURL());
-                                addAtribute(item, "description", element.getDescription());
-                                addAtribute(item, "pubDate", element.getCreated().toGMTString());
-                                addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
-                                i++;
-                                if (i == MAX_ITEMS)
+                                if (element.getVisibility() == MicroSiteElement.VIS_ALL)
                                 {
-                                    break;
+                                    Element item = doc.createElement("item");
+                                    channel.appendChild(item);
+
+                                    addAtribute(item, "title", element.getTitle());
+                                    addAtribute(item, "link", element.getURL());
+                                    addAtribute(item, "description", element.getDescription());
+                                    addAtribute(item, "pubDate", element.getCreated().toGMTString());
+                                    addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
+                                    i++;
+                                    if (i == MAX_ITEMS)
+                                    {
+                                        break;
+                                    }
                                 }
+
                             }
                         }
                         out.write(org.semanticwb.SWBUtils.XML.domToXml(doc));
@@ -251,19 +266,24 @@ public String getTitle(WebPage webpage)
                             Object obj = elements.next();
                             if (obj instanceof NewsElement)
                             {
-                                Element item = doc.createElement("item");
-                                channel.appendChild(item);
                                 NewsElement element = (NewsElement) obj;
-                                addAtribute(item, "title", element.getTitle());
-                                addAtribute(item, "link", element.getURL());
-                                addAtribute(item, "description", element.getDescription());
-                                addAtribute(item, "pubDate", element.getCreated().toGMTString());
-                                addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
-                                i++;
-                                if (i == MAX_ITEMS)
+                                if (element.getVisibility() == MicroSiteElement.VIS_ALL)
                                 {
-                                    break;
+                                    Element item = doc.createElement("item");
+                                    channel.appendChild(item);
+
+                                    addAtribute(item, "title", element.getTitle());
+                                    addAtribute(item, "link", element.getURL());
+                                    addAtribute(item, "description", element.getDescription());
+                                    addAtribute(item, "pubDate", element.getCreated().toGMTString());
+                                    addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
+                                    i++;
+                                    if (i == MAX_ITEMS)
+                                    {
+                                        break;
+                                    }
                                 }
+
                             }
                         }
                         out.write(org.semanticwb.SWBUtils.XML.domToXml(doc));
@@ -306,19 +326,24 @@ public String getTitle(WebPage webpage)
                             Object obj = elements.next();
                             if (obj instanceof VideoElement)
                             {
-                                Element item = doc.createElement("item");
-                                channel.appendChild(item);
                                 VideoElement element = (VideoElement) obj;
-                                addAtribute(item, "title", element.getTitle());
-                                addAtribute(item, "link", element.getURL());
-                                addAtribute(item, "description", element.getDescription());
-                                addAtribute(item, "pubDate", element.getCreated().toGMTString());
-                                addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
-                                i++;
-                                if (i == MAX_ITEMS)
+                                if (element.getVisibility() == MicroSiteElement.VIS_ALL)
                                 {
-                                    break;
+                                    Element item = doc.createElement("item");
+                                    channel.appendChild(item);
+
+                                    addAtribute(item, "title", element.getTitle());
+                                    addAtribute(item, "link", element.getURL());
+                                    addAtribute(item, "description", element.getDescription());
+                                    addAtribute(item, "pubDate", element.getCreated().toGMTString());
+                                    addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
+                                    i++;
+                                    if (i == MAX_ITEMS)
+                                    {
+                                        break;
+                                    }
                                 }
+
                             }
                         }
                         out.write(org.semanticwb.SWBUtils.XML.domToXml(doc));
@@ -362,19 +387,24 @@ public String getTitle(WebPage webpage)
                             Object obj = elements.next();
                             if (obj instanceof MicroSiteElement)
                             {
-                                Element item = doc.createElement("item");
-                                channel.appendChild(item);
                                 MicroSiteElement element = (MicroSiteElement) obj;
-                                addAtribute(item, "title", element.getTitle());
-                                addAtribute(item, "link", element.getURL());
-                                addAtribute(item, "description", element.getDescription());
-                                addAtribute(item, "pubDate", element.getCreated().toGMTString());
-                                addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
-                                i++;
-                                if (i == MAX_ITEMS)
+                                if (element.getVisibility() == MicroSiteElement.VIS_ALL)
                                 {
-                                    break;
+                                    Element item = doc.createElement("item");
+                                    channel.appendChild(item);
+
+                                    addAtribute(item, "title", element.getTitle());
+                                    addAtribute(item, "link", element.getURL());
+                                    addAtribute(item, "description", element.getDescription());
+                                    addAtribute(item, "pubDate", element.getCreated().toGMTString());
+                                    addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
+                                    i++;
+                                    if (i == MAX_ITEMS)
+                                    {
+                                        break;
+                                    }
                                 }
+
                             }
                         }
 
@@ -403,7 +433,7 @@ public String getTitle(WebPage webpage)
                         doc.appendChild(rss);
 
                         Element channel = doc.createElement("channel");
-                        rss.appendChild(channel);                        
+                        rss.appendChild(channel);
                         addAtribute(channel, "title", blog.getTitle());
                         addAtribute(channel, "link", blog.getWebPage().getUrl());
                         addAtribute(channel, "description", blog.getDescription());
@@ -418,19 +448,23 @@ public String getTitle(WebPage webpage)
                             Object obj = elements.next();
                             if (obj instanceof PostElement)
                             {
-                                Element item = doc.createElement("item");
-                                channel.appendChild(item);
                                 PostElement element = (PostElement) obj;
-                                addAtribute(item, "title", element.getTitle());
-                                addAtribute(item, "link", element.getURL());
-                                addAtribute(item, "description", element.getDescription());
-                                addAtribute(item, "pubDate", element.getCreated().toGMTString());
-                                addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
-                                i++;
-                                if (i == MAX_ITEMS)
+                                if (element.getVisibility() == MicroSiteElement.VIS_ALL)
                                 {
-                                    break;
+                                    Element item = doc.createElement("item");
+                                    channel.appendChild(item);
+                                    addAtribute(item, "title", element.getTitle());
+                                    addAtribute(item, "link", element.getURL());
+                                    addAtribute(item, "description", element.getDescription());
+                                    addAtribute(item, "pubDate", element.getCreated().toGMTString());
+                                    addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
+                                    i++;
+                                    if (i == MAX_ITEMS)
+                                    {
+                                        break;
+                                    }
                                 }
+
                             }
                         }
                         out.write(org.semanticwb.SWBUtils.XML.domToXml(doc));
