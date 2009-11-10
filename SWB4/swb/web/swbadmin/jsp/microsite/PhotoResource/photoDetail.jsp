@@ -14,7 +14,7 @@
 
     String uri=request.getParameter("uri");
     PhotoElement photo=(PhotoElement)SemanticObject.createSemanticObject(uri).createGenericInstance();
-    
+    java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("dd-MMM-yyyy");
 
     DecimalFormat df = new DecimalFormat("#0.0#");
                         String rank = df.format(photo.getRank());
@@ -54,17 +54,17 @@ out.write(res.toString());
 %>
 </div>
 <div class="columnaCentro">
-        <h2><%=photo.getTitle()%></h2><br>
+        <h2 class="blogTitle"><%=photo.getTitle()%></h2><br>
         <p><%= photo.getDescription()%></p>
-        <p>Autor: <%= photo.getCreator().getFirstName()%></p>
-        <p class="fotoInfo">Fecha: <%= SWBUtils.TEXT.getStrDate(photo.getCreated(), lang, "dd/mm/yy")%>   | <span class="linkNaranja"><%= photo.getViews()%> Vistas</span></p>
-        <p class="descripcion"><%= photo.getDescription()%></p>
-        <p class="descripcion">Calificación: <%=rank%></p>
+        <p>Autor: <%= photo.getCreator().getFullName()%></p>
+        <p>Creado el: <%=dateFormat.format(photo.getCreated())%></p>
+        <p><%= photo.getViews()%> Vistas</p>
+        <p>Calificación: <%=rank%></p>
         <%if(photo.canModify(member)){%>
-        <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act","edit").setParameter("uri",photo.getURI())%>">Editar información</a></p></div>
+        <p><a href="<%=paramRequest.getRenderUrl().setParameter("act","edit").setParameter("uri",photo.getURI())%>">Editar información</a></p>
         <%}%>
         <%if(photo.canModify(member)){%>
-        <div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act","remove").setParameter("uri",photo.getURI())%>">Eliminar</a></p></div>
+        <p><a href="<%=paramRequest.getActionUrl().setParameter("act","remove").setParameter("uri",photo.getURI())%>">Eliminar</a></p>
         <%}%>
         
 </div>
