@@ -16,19 +16,13 @@
         {
             String rank = df.format(rec.getRank());
 %>
-<div class="columnaIzquierda">
-    
-      <table border="0">
-        <tr><td valign="top">
-        <%=rec.getCode()%>
-            </td><td valign="top" align="left">
-        <%if(rec.canModify(member)){%><a href="<%=paramRequest.getRenderUrl().setParameter("act","edit").setParameter("uri",rec.getURI())%>">Editar Información</a><br><%}%>
-        <%if(rec.canModify(member)){%><a href="<%=paramRequest.getActionUrl().setParameter("act","remove").setParameter("uri",rec.getURI())%>">Eliminar Video</a><br><%}%>
-       </td></tr>        
-      </table>
-    <br>
-     
+<div class="columnaIzquierda">    
+    <br><%=rec.getCode()%>
+    <p><a href="<%= paramRequest.getRenderUrl()%>">[Ver todos los videos]</a></p>
+        <%if(rec.canModify(member)){%><p><a href="<%=paramRequest.getRenderUrl().setParameter("act","edit").setParameter("uri",rec.getURI())%>">Editar Información</a></p><%}%>
+        <%if(rec.canModify(member)){%><p><a href="<%=paramRequest.getActionUrl().setParameter("act","remove").setParameter("uri",rec.getURI())%>">Eliminar Video</a></p><%}%>
 
+    <br>
 <%
 SWBResponse res=new SWBResponse(response);
 rec.renderGenericElements(request, res, paramRequest);
