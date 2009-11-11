@@ -84,6 +84,7 @@
                 inicio = 0;
                 fin = ELEMENETS_BY_PAGE;
             }
+            inicio++;
 %>
 
 <div class="columnaIzquierda">
@@ -96,29 +97,39 @@
 
 
         <%
-                    String nextURL = "#";
-                    String previusURL = "#";
-                    if (ipage < paginas)
-                    {
-                        nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
-                    }
-                    if (ipage > 1)
-                    {
-                        previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
-                    }
+                String nextURL = "#";
+                String previusURL = "#";
+                if (ipage < paginas)
+                {
+                    nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
+                }
+                if (ipage > 1)
+                {
+                    previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
+                }
+                if (ipage > 1)
+                {
         %>
         <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
             <%
-                    for (int i = 1; i <= paginas; i++)
-                    {
+                }
+                for (int i = 1; i <= paginas; i++)
+                {
             %>
         <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%=i%></a>
         <%
-                    }
+                }
         %>
 
 
+        <%
+                if (ipage != paginas)
+                {
+        %>
         <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
+            <%
+                }
+            %>
     </div>
     <%
             }
@@ -155,10 +166,9 @@
     <%
             if (elements.size() == 0)
             {
-            %>
-            <p>No hay videos registrados en la comunidad</p>
-            <%
-            }
+    %>
+    <p>No hay videos registrados en la comunidad</p>
+    <%            }
             int iElement = 0;
             for (VideoElement video : elements)
             {
@@ -185,12 +195,12 @@
             <p>
                 <%=video.getDescription()%> | <a href="<%=viewUrl%>">Ver más</a>
                 <%
-                        if (video.canModify(member))
-                        {
+                if (video.canModify(member))
+                {
                 %>
                 | <a href="<%=editEventURL%>">Editar</a> | <a href="<%=removeurl%>">Eliminar</a>
                 <%
-                        }
+                }
                 %>
             </p>
             <p class="stats">
@@ -207,36 +217,46 @@
 
     <!-- paginacion -->
     <%
-                if (paginas > 1)
-                {
+            if (paginas > 1)
+            {
     %>
     <div id="paginacion">
 
 
         <%
-                    String nextURL = "#";
-                    String previusURL = "#";
-                    if (ipage < paginas)
-                    {
-                        nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
-                    }
-                    if (ipage > 1)
-                    {
-                        previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
-                    }
+                String nextURL = "#";
+                String previusURL = "#";
+                if (ipage < paginas)
+                {
+                    nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
+                }
+                if (ipage > 1)
+                {
+                    previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
+                }
+                if (ipage > 1)
+                {
         %>
         <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
             <%
-                    for (int i = 1; i <= paginas; i++)
-                    {
+                }
+                for (int i = 1; i <= paginas; i++)
+                {
             %>
         <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%=i%></a>
         <%
-                    }
+                }
         %>
 
 
+        <%
+                if (ipage != paginas)
+                {
+        %>
         <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
+            <%
+                }
+            %>
     </div>
     <%
             }
@@ -261,10 +281,10 @@
         %>
         <li><a href="<%=urla%>">Suscribirse a esta comunidad</a></li>
         <%
-                    }
-                    else
-                    {
-                        urla.setParameter("act", "unsubscribe");
+                }
+                else
+                {
+                    urla.setParameter("act", "unsubscribe");
         %>
         <li><a href="<%=urla%>">Cancelar suscripción a comunidad</a></li>
         <%
