@@ -178,9 +178,39 @@ if (sobj != null) {
         String dirPhotoCheck="";
         if(request.getParameter("dirPhoto")!=null) dirPhotoCheck="checked";
         %>
+        <script type="text/javascript">
+            dojo.require("dojo.fx");
+            dojo.require("dijit.ColorPalette");
+            dojo.require("dijit.form.Button");
+
+            function expande(oId) {
+                    var anim1 = dojo.fx.wipeIn( {node:oId, duration:500 });
+                    var anim2 = dojo.fadeIn({node:oId, duration:500});
+                    dojo.fx.combine([anim1,anim2]).play();
+                    dojo.byId('toggle_link').innerHTML = "Ocultar Filtros";
+            }
+
+            function collapse(oId) {
+                    var anim1 = dojo.fx.wipeOut( {node:oId, duration:500 });
+                    var anim2 = dojo.fadeOut({node:oId, duration:600});
+                    dojo.fx.combine([anim1, anim2]).play();
+                    dojo.byId('toggle_link').innerHTML = "Mostrar Filtros";
+            }
+
+            function toggle(oId) {
+                    var o = dojo.byId(oId);
+                    if(o.style.display=='block' || o.style.display==''){
+                            collapse(oId);
+                    } else {
+                            expande(oId);
+                }
+            }
+        </script>
+        <span id="toggle_link" href="#" onclick="toggle('togle_div')">Mostrar Filtros</span>
+        <div id="togle_div" style="display:none">
         <form action="<%=urlOrder.setAction("filter")%>" method="post">
+            <fieldset>
         <table align="center">
-        <tr><td><b>Filtrar en base a los siguientes criterios:</b></td></tr>
         <tr><td>
         Solo anuncios con foto  </td><td><input type="checkbox" name="dirPhoto" <%=dirPhotoCheck%>></td>
         <input type="hidden" name="swbdirParam_dirPhoto" value="1">
@@ -215,7 +245,9 @@ if (sobj != null) {
         %>
         <tr><td colspan="2" align="center"><input type="submit" value="Filtrar"></td></tr>
         </table>
+            </fieldset>
         </form>
+                   </div>
         <p align="right">Ordenar por <a href="<%=urlOrder.setParameter("orderBy", "title")%>">nombre</a> | <a href="<%=urlOrder.setParameter("orderBy", "date")%>">fecha</a></p>
         <!--Termina desplagado de criterios (filtros) de busqueda-->
         <%
