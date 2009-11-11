@@ -1,4 +1,4 @@
-p<%@page contentType="text/html"%>
+<%@page contentType="text/html"%>
 <%@page import="java.util.Calendar, java.util.GregorianCalendar, java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <script language="Javascript" type="text/javascript">
     function validateremove(url, title,uri)

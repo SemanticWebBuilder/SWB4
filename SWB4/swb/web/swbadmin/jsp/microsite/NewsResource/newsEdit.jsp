@@ -66,9 +66,7 @@
         document.frmaeditnews.submit();
     }
 </script>
-
-<br />
-<div id="panorama">
+<div class="columnaIzquierda">
 <form name="frmaeditnews" id="frmaeditnews" class="swbform" enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
     <div>
         <fieldset>
@@ -79,31 +77,31 @@
                 <a href="<%= SWBPortal.getWebWorkPath()+rec.getNewsImage()%>" target="_self">
                     <img id="img_<%=rec.getId()%>" src="<%= SWBPortal.getWebWorkPath()+rec.getNewsImage() %>" alt="<%= rec.getTitle() %>" border="0" />
                 </a><br />
-                <input type="file" id="foto" name="foto" size="60" />
+                <input type="file" id="foto" name="foto" size="45" />
             </p>
             <p>
                 <label for="new_title">Título de la noticia:&nbsp;</label><br />
-                <input type="text" id="new_title" name="new_title" value="<%=(rec.getTitle()==null?"":rec.getTitle())%>" maxlength="70" size="60" />
+                <input type="text" id="new_title" name="new_title" value="<%=(rec.getTitle()==null?"":rec.getTitle())%>" maxlength="70" size="45" />
             </p>
             <p>
                 <label for="new_author">Autor de la noticia:&nbsp;</label><br />
-                <input type="text" id="new_author" name="new_author" value="<%=(rec.getAuthor()==null?"":rec.getAuthor())%>" maxlength="50" size="60" />
+                <input type="text" id="new_author" name="new_author" value="<%=(rec.getAuthor()==null?"":rec.getAuthor())%>" maxlength="50" size="45" />
             </p>
             <p>
                 <label for="new_abstract">Resumen de la noticia:&nbsp;</label><br />
-                <textarea id="new_abstract" name="new_abstract" cols="60" rows="2"><%=(rec.getDescription()==null?"":rec.getDescription())%></textarea>
+                <textarea id="new_abstract" name="new_abstract" cols="45" rows="2"><%=(rec.getDescription()==null?"":rec.getDescription())%></textarea>
             </p>
             <p>
                 <label for="new_fulltext">Texto completo:&nbsp;</label><br />
-                <textarea id="new_fulltext" name="new_fulltext" cols="60" rows="6"><%=(rec.getFullText()==null?"":rec.getFullText())%></textarea>
+                <textarea id="new_fulltext" name="new_fulltext" cols="45" rows="6"><%=(rec.getFullText()==null?"":rec.getFullText())%></textarea>
             </p>
             <p>
                 <label for="new_citation">Fuente:&nbsp;</label><br />
-                <input type="text" id="new_citation" name="new_citation" value="<%=(rec.getCitation()==null?"":rec.getCitation())%>" maxlength="50" size="60" />
+                <input type="text" id="new_citation" name="new_citation" value="<%=(rec.getCitation()==null?"":rec.getCitation())%>" maxlength="50" size="45" />
             </p>
             <p>
                 <label for="new_tags">Etiquetas:&nbsp;</label><br />
-                <input type="text" id="new_tags" name="new_tags" value="<%=(rec.getTags()==null?"":rec.getTags())%>" maxlength="50" size="60" />
+                <input type="text" id="new_tags" name="new_tags" value="<%=(rec.getTags()==null?"":rec.getTags())%>" maxlength="50" size="45" />
             </p>
         </div>
         </fieldset>
@@ -126,8 +124,8 @@
             <legend></legend>
             <div>
             <p>
-                <div class="editarInfo"><p><a onclick="validaForma()" href="#">Enviar</a></p></div>
-                <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Cancelar</a></p></div>
+                <div class="editarInfo"><p><a onclick="validaForma()" href="#">[Guardar]</a></p></div>
+                <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">[Cancelar]</a></p></div>
             </p>
             </div>
         </fieldset>
@@ -136,7 +134,9 @@
     <input type="hidden" name="act" value="edit"/>
 </form>
 </div>
+<div class="columnaCentro">
 
+</div>
 <script type="text/javascript">
     var img = document.getElementById('img_<%=rec.getId()%>');
     if( img.width>img.height && img.width>350) {
