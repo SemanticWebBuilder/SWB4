@@ -115,32 +115,30 @@
                 {
                     previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
                 }
-                if(ipage>1)
-                    {
+                if (ipage > 1)
+                {
         %>
         <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
             <%
-            }
+                }
                 for (int i = 1; i <= paginas; i++)
                 {
             %>
         <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%
-                if(i==ipage)
+                    if (i == ipage)
                     {
-                    %>
-                    <strong>
-                    <%
-                    }
             %>
-            <%=i%>
-            <%
-            if(i==ipage)
-                    {
-                    %>
-                    </strong>
-                    <%
-                    }
-                %></a>
+            <strong>
+                <%                    }
+                %>
+                <%=i%>
+                <%
+                        if (i == ipage)
+                        {
+                %>
+            </strong>
+            <%                    }
+            %></a>
         <%
                 }
         %>
@@ -161,42 +159,45 @@
     <!-- fin paginacion -->
     <div class="adminTools">
         <%
-        if (member.canAdd())
+            if (member.canAdd())
             {
-            %>
-                <a class="adminTool" href="<%=urlAddPhoto%>">Agregar foto</a>
-            <%
-            }
         %>
-        
+        <a class="adminTool" href="<%=urlAddPhoto%>">Agregar foto</a>
+        <%
+        }
+        %>
+
 
     </div>
     <%
             if (elements.size() == 0)
             {
-            %>
-            <p>No hay fotos registradas en la comunidad</p>
-            <%
-            }
-            int iElement = 0;
-            for (PhotoElement photo : elements)
+    %>
+    <p>No hay fotos registradas en la comunidad</p>
+    <%            }
+    int iElement = 0;
+    for (PhotoElement photo : elements)
+    {
+        if (photo.canView(member))
+        {
+            iElement++;
+            if (iElement > fin)
             {
-                if (photo.canView(member))
-                {
-                    iElement++;
-                    if (iElement >= inicio && iElement <= fin)
-                    {
-                        String postAuthor = photo.getCreator().getFullName();
-                        SWBResourceURL urlDetail = paramRequest.getRenderUrl();
-                        urlDetail.setParameter("act", "detail");
-                        urlDetail.setParameter("uri", photo.getURI());
-                        SWBResourceURL viewurl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", photo.getURI());
-                        String rank = df.format(photo.getRank());
-                        String editEventURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", photo.getURI()).toString();
-                        SWBResourceURL removeUrl = paramRequest.getActionUrl();
-                        removeUrl.setParameter("act", "remove");
-                        removeUrl.setParameter("uri", photo.getEncodedURI());
-                        String removeurl = "javascript:validateremove('" + removeUrl + "','" + photo.getTitle() + "')";
+                break;
+            }
+            if (iElement >= inicio && iElement <= fin)
+            {
+                String postAuthor = photo.getCreator().getFullName();
+                SWBResourceURL urlDetail = paramRequest.getRenderUrl();
+                urlDetail.setParameter("act", "detail");
+                urlDetail.setParameter("uri", photo.getURI());
+                SWBResourceURL viewurl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", photo.getURI());
+                String rank = df.format(photo.getRank());
+                String editEventURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", photo.getURI()).toString();
+                SWBResourceURL removeUrl = paramRequest.getActionUrl();
+                removeUrl.setParameter("act", "remove");
+                removeUrl.setParameter("uri", photo.getEncodedURI());
+                String removeurl = "javascript:validateremove('" + removeUrl + "','" + photo.getTitle() + "')";
 
     %>
     <div class="noticia">        
@@ -247,32 +248,30 @@
                 {
                     previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
                 }
-                if(ipage>1)
-                    {
+                if (ipage > 1)
+                {
         %>
         <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
             <%
-            }
+                }
                 for (int i = 1; i <= paginas; i++)
                 {
             %>
         <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%
-                if(i==ipage)
+                    if (i == ipage)
                     {
-                    %>
-                    <strong>
-                    <%
-                    }
             %>
-            <%=i%>
-            <%
-            if(i==ipage)
-                    {
-                    %>
-                    </strong>
-                    <%
-                    }
-                %></a>
+            <strong>
+                <%                    }
+                %>
+                <%=i%>
+                <%
+                        if (i == ipage)
+                        {
+                %>
+            </strong>
+            <%                    }
+            %></a>
         <%
                 }
         %>
@@ -304,7 +303,7 @@
     <ul class="miContenido">
         <%
             SWBResourceURL urla = paramRequest.getActionUrl();
-           if (member.canView())
+            if (member.canView())
             {
                 if (!wputil.isSubscribed(member))
                 {

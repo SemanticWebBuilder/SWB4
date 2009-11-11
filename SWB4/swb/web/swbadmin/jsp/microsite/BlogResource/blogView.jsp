@@ -211,6 +211,10 @@
                 if (post.canView(member))
                 {
                     iElement++;
+                    if (iElement > fin)
+                    {
+                        break;
+                    }
                     if (iElement >= inicio && iElement <= fin)
                     {
                         String description = post.getDescription();

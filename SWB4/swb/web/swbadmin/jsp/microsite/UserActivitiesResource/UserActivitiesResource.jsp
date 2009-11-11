@@ -32,12 +32,13 @@
                     user = ca.getUser();
                     mse = ca.getElement();
                     ms = ca.getCommunity();
+                    Date updated=new Date(ca.getModified().getTime());
                     if (mse != null && user != null && ms != null)
                     {
     %>
     
     <li> <%=user.getFullName()%> actualizó <a class="elemento" href="<%=mse.getURL()%>" ><%=mse.getDisplayTitle(user.getLanguage())%></a>
-        <%=SWBUtils.TEXT.getTimeAgo(mse.getUpdated(), user.getLanguage())%>.</li>
+        <%=SWBUtils.TEXT.getTimeAgo(updated, user.getLanguage())%>.</li>
         <%
                 }
             }

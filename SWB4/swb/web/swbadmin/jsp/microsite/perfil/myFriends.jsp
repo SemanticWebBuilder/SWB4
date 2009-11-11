@@ -143,14 +143,14 @@
 %>
 
 <%
-          if (owner != user)
-          {
+                if (owner != user)
+                {
 %>
 <h2>Amigos de <%=user.getFirstName()%></h2>
 <%
-}
-else
-{
+          }
+          else
+          {
 %>
 <h2>Mis amigos</h2>
 <%           }
@@ -158,28 +158,28 @@ else
 <ul class="amigos">
 
     <%
-               String firstName = "", lastName = "";
-               int contTot = 0;
+                String firstName = "", lastName = "";
+                int contTot = 0;
 
-               Iterator<Friendship> itMyFriends = Friendship.listFriendshipByFriend(user, wpage.getWebSite());
-               while (itMyFriends.hasNext())
-               {
-                   Friendship friendShip = itMyFriends.next();
-                   Iterator<User> itfriendUser = friendShip.listFriends();
-                   while (itfriendUser.hasNext())
-                   {
-                       User friendUser = itfriendUser.next();
-                       if (!friendUser.getURI().equals(user.getURI()))
-                       {
-                           if (friendUser.getPhoto() != null)
-                           {
-                               photo = friendUser.getPhoto();
-                           }
+                Iterator<Friendship> itMyFriends = Friendship.listFriendshipByFriend(user, wpage.getWebSite());
+                while (itMyFriends.hasNext())
+                {
+                    Friendship friendShip = itMyFriends.next();
+                    Iterator<User> itfriendUser = friendShip.listFriends();
+                    while (itfriendUser.hasNext())
+                    {
+                        User friendUser = itfriendUser.next();
+                        if (!friendUser.getURI().equals(user.getURI()))
+                        {
+                            if (friendUser.getPhoto() != null)
+                            {
+                                photo = friendUser.getPhoto();
+                            }
     %>
     <li>
         <a href="<%=perfilPath%>?user=<%=friendUser.getEncodedURI()%>"><img alt="Foto de <%=friendUser.getFullName()%>" src="<%=SWBPortal.getWebWorkPath() + photo%>" <%=imgSize%> title="<%=friendUser.getFullName()%>">
             <%if (!isStrategy)
-               {%>
+                           {%>
             <br>
             <%=firstName%>
             <%=lastName%>
@@ -187,25 +187,25 @@ else
         </a>
     </li>
     <%
-                       contTot++;
-                       if (isStrategy && contTot == 18)
-                       {
-                           break;
-                       }
-                   }
-               }
-           }
+                            contTot++;
+                            if (isStrategy && contTot == 18)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
     %>
 </ul>
 <%
-           if (isStrategy && contTot >= 18)
-           {%>
+                if (isStrategy && contTot >= 18)
+                {%>
 <div class="clear">
     <p class="verTodos"><a href="<%=friendsPath%>" >Ver todos</a></p>
 </div>
 <%}
-            else if (contTot == 0)
-            {%>
+           else if (contTot == 0)
+           {%>
 <div class="clear">
     <p class="titulo">Aún no tienes amigos &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
 </div>
@@ -214,138 +214,140 @@ else
 
 
 <%
-       }
-       else
-       {
-%>
-<!-- paginacion -->
-    <%
-            if (paginas > 1)
-            {
-    %>
-    <div id="paginacion">
-
-        
-        <%
-                String nextURL = "#";
-                String previusURL = "#";
-                if (ipage < paginas)
-                {
-                    nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
-                }
-                if (ipage > 1)
-                {
-                    previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
-                }
-                if (ipage > 1)
-                {
-        %>
-        <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
-            <%
-                }
-                for (int i = 1; i <= paginas; i++)
-                {
-            %>
-        <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%
-                if(i==ipage)
-                    {
-                    %>
-                    <strong>
-                    <%
-                    }
-            %>
-            <%=i%>
-            <%
-            if(i==ipage)
-                    {
-                    %>
-                    </strong>
-                    <%
-                    }
-                %></a>
-        <%
-                }
-        %>
-
-
-        <%
-                if (ipage != paginas)
-                {
-        %>
-        <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
-            <%
-                }
-            %>        
-    </div>
-    <%
-            }
-    %>
-    <!-- fin paginacion -->
-<div id="friendCards">    
-    <%
-            GeoLocation userLoc = null;
-            if (user.getSemanticObject().getDoubleProperty(Geolocalizable.swb_latitude) != 0D)
-            {
-                userLoc = new GeoLocation(
-                        user.getSemanticObject().getDoubleProperty(Geolocalizable.swb_latitude),
-                        user.getSemanticObject().getDoubleProperty(Geolocalizable.swb_longitude),
-                        user.getSemanticObject().getIntProperty(Geolocalizable.swb_geoStep),
-                        user.getFullName());
             }
             else
             {
-                userLoc = new GeoLocation(22.99885, -101.77734, 4, user.getFullName());
-            }
-            HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
-            Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#_ExtendedAttributes").listProperties();
-            while (list.hasNext())
-            {
-                SemanticProperty prop = list.next();
-                mapa.put(prop.getName(), prop);
-            }
-            String perfilurl = paramRequest.getWebPage().getWebSite().getWebPage("perfil").getUrl();
-            int iElement = 0;
-            for(User friendUser : elements)
-            {
-                
-                
-                    iElement++;
-                    if (iElement >= inicio && iElement <= fin)
-                        {
-                        String usr_sex = (String) friendUser.getExtendedAttribute(mapa.get("userSex"));
-                        Object usr_age = (Object) friendUser.getExtendedAttribute(mapa.get("userAge"));
-                        if (null == usr_age)
-                        {
-                            usr_age = "";
-                        }
-                        if ("M".equals(usr_sex))
-                        {
-                            usr_sex = "Hombre";
-                        }
-                        if ("F".equals(usr_sex))
-                        {
-                            usr_sex = "Mujer";
-                        }
-                        String usr_status = (String) friendUser.getExtendedAttribute(mapa.get("userStatus"));
-                        if (null == usr_status)
-                        {
-                            usr_status = "";
-                        }
-                        if (friendUser.getPhoto() != null)
-                        {
-                            photo = friendUser.getPhoto();
-                        }
-                        if (friendUser.getSemanticObject().getDoubleProperty(Geolocalizable.swb_latitude) != 0D)
-                        {
-                            lista.add(new GeoLocation(
-                                    friendUser.getSemanticObject().getDoubleProperty(Geolocalizable.swb_latitude),
-                                    friendUser.getSemanticObject().getDoubleProperty(Geolocalizable.swb_longitude),
-                                    friendUser.getSemanticObject().getIntProperty(Geolocalizable.swb_geoStep),
-                                    friendUser.getFullName()));
-                        }
-                        String urluser = java.net.URLEncoder.encode(friendUser.getURI());
+%>
+<!-- paginacion -->
+<%
+       if (paginas > 1)
+       {
+%>
+<div id="paginacion">
 
-                        String email = friendUser.getEmail();
+
+    <%
+            String nextURL = "#";
+            String previusURL = "#";
+            if (ipage < paginas)
+            {
+                nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
+            }
+            if (ipage > 1)
+            {
+                previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
+            }
+            if (ipage > 1)
+            {
+    %>
+    <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
+        <%
+            }
+            for (int i = 1; i <= paginas; i++)
+            {
+        %>
+    <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%
+                if (i == ipage)
+                {
+        %>
+        <strong>
+            <%                    }
+            %>
+            <%=i%>
+            <%
+                    if (i == ipage)
+                    {
+            %>
+        </strong>
+        <%                    }
+        %></a>
+    <%
+            }
+    %>
+
+
+    <%
+            if (ipage != paginas)
+            {
+    %>
+    <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
+        <%
+            }
+        %>
+</div>
+<%
+       }
+%>
+<!-- fin paginacion -->
+<div id="friendCards">    
+    <%
+           GeoLocation userLoc = null;
+           if (user.getSemanticObject().getDoubleProperty(Geolocalizable.swb_latitude) != 0D)
+           {
+               userLoc = new GeoLocation(
+                       user.getSemanticObject().getDoubleProperty(Geolocalizable.swb_latitude),
+                       user.getSemanticObject().getDoubleProperty(Geolocalizable.swb_longitude),
+                       user.getSemanticObject().getIntProperty(Geolocalizable.swb_geoStep),
+                       user.getFullName());
+           }
+           else
+           {
+               userLoc = new GeoLocation(22.99885, -101.77734, 4, user.getFullName());
+           }
+           HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
+           Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#_ExtendedAttributes").listProperties();
+           while (list.hasNext())
+           {
+               SemanticProperty prop = list.next();
+               mapa.put(prop.getName(), prop);
+           }
+           String perfilurl = paramRequest.getWebPage().getWebSite().getWebPage("perfil").getUrl();
+           int iElement = 0;
+           for (User friendUser : elements)
+           {
+
+
+               iElement++;
+               if (iElement > fin)
+               {
+                   break;
+               }
+               if (iElement >= inicio && iElement <= fin)
+               {
+                   String usr_sex = (String) friendUser.getExtendedAttribute(mapa.get("userSex"));
+                   Object usr_age = (Object) friendUser.getExtendedAttribute(mapa.get("userAge"));
+                   if (null == usr_age)
+                   {
+                       usr_age = "";
+                   }
+                   if ("M".equals(usr_sex))
+                   {
+                       usr_sex = "Hombre";
+                   }
+                   if ("F".equals(usr_sex))
+                   {
+                       usr_sex = "Mujer";
+                   }
+                   String usr_status = (String) friendUser.getExtendedAttribute(mapa.get("userStatus"));
+                   if (null == usr_status)
+                   {
+                       usr_status = "";
+                   }
+                   if (friendUser.getPhoto() != null)
+                   {
+                       photo = friendUser.getPhoto();
+                   }
+                   if (friendUser.getSemanticObject().getDoubleProperty(Geolocalizable.swb_latitude) != 0D)
+                   {
+                       lista.add(new GeoLocation(
+                               friendUser.getSemanticObject().getDoubleProperty(Geolocalizable.swb_latitude),
+                               friendUser.getSemanticObject().getDoubleProperty(Geolocalizable.swb_longitude),
+                               friendUser.getSemanticObject().getIntProperty(Geolocalizable.swb_geoStep),
+                               friendUser.getFullName()));
+                   }
+                   String urluser = java.net.URLEncoder.encode(friendUser.getURI());
+
+                   String email = friendUser.getEmail();
 
     %>
     <div class="friendCard">
@@ -361,10 +363,10 @@ else
         </div>
     </div>
     <%
-            }
+               }
 
-        }
-            
+           }
+
     %>
 </div> 
 <div class="clear">&nbsp;</div><h2>Ubicaci&oacute;n de mis amigos</h2>
@@ -397,16 +399,16 @@ type="text/javascript"></script>
             });
         map.addOverlay(marker);*/
     <%
-            Iterator<GeoLocation> listit = lista.iterator();
-            while (listit.hasNext())
-            {
-                GeoLocation actual = listit.next();
+           Iterator<GeoLocation> listit = lista.iterator();
+           while (listit.hasNext())
+           {
+               GeoLocation actual = listit.next();
     %>
                 var pointer = new GLatLng(<%=actual.getLatitude()%>, <%=actual.getLongitude()%>);
                 bounds.extend(pointer);
                 map.addOverlay(createMarker(map, pointer, '<%=actual.getName()%>'));
     <%
-            }
+           }
     %>
                 map.setCenter(bounds.getCenter());
                 map.setZoom(map.getBoundsZoomLevel(bounds));
