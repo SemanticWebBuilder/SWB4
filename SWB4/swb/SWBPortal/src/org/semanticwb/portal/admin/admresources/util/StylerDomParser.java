@@ -32,6 +32,12 @@ public class StylerDomParser {
         script = new StringBuilder();
     }
 
+    public StylerDomParser(Document dom, Resource client) throws NullPointerException {
+        this.dom = dom;
+        this.client = client;
+        script = new StringBuilder();
+    }
+
     private void parseXml(String xml) throws NullPointerException {
         dom = SWBUtils.XML.xmlToDom(xml);
         if(dom==null) {
