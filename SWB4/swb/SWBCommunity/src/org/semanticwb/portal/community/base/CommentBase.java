@@ -9,7 +9,7 @@ public class CommentBase extends org.semanticwb.model.SWBClass implements org.se
        public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
        public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
        public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
-       public static final org.semanticwb.platform.SemanticClass swbcomm_MicroSiteElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#MicroSiteElement");
+       public static final org.semanticwb.platform.SemanticClass swbcomm_Interactiveable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Interactiveable");
        public static final org.semanticwb.platform.SemanticProperty swbcomm_comMicroSiteElementInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#comMicroSiteElementInv");
        public static final org.semanticwb.platform.SemanticProperty swbcomm_comSpam=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#comSpam");
        public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
@@ -115,7 +115,7 @@ public class CommentBase extends org.semanticwb.model.SWBClass implements org.se
          return ret;
     }
 
-    public void setMicroSiteElement(org.semanticwb.portal.community.MicroSiteElement value)
+    public void setMicroSiteElement(org.semanticwb.portal.community.Interactiveable value)
     {
         getSemanticObject().setObjectProperty(ClassMgr.swbcomm_comMicroSiteElementInv, value.getSemanticObject());
     }
@@ -125,25 +125,25 @@ public class CommentBase extends org.semanticwb.model.SWBClass implements org.se
         getSemanticObject().removeProperty(ClassMgr.swbcomm_comMicroSiteElementInv);
     }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.Comment> listCommentByMicroSiteElement(org.semanticwb.portal.community.MicroSiteElement commicrositeelementinv,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.portal.community.Comment> listCommentByMicroSiteElement(org.semanticwb.portal.community.Interactiveable commicrositeelementinv,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Comment> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(ClassMgr.swbcomm_comMicroSiteElementInv, commicrositeelementinv.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.Comment> listCommentByMicroSiteElement(org.semanticwb.portal.community.MicroSiteElement commicrositeelementinv)
+   public static java.util.Iterator<org.semanticwb.portal.community.Comment> listCommentByMicroSiteElement(org.semanticwb.portal.community.Interactiveable commicrositeelementinv)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Comment> it=new org.semanticwb.model.GenericIterator(commicrositeelementinv.getSemanticObject().getModel().listSubjects(ClassMgr.swbcomm_comMicroSiteElementInv,commicrositeelementinv.getSemanticObject()));
        return it;
    }
 
-    public org.semanticwb.portal.community.MicroSiteElement getMicroSiteElement()
+    public org.semanticwb.portal.community.Interactiveable getMicroSiteElement()
     {
-         org.semanticwb.portal.community.MicroSiteElement ret=null;
+         org.semanticwb.portal.community.Interactiveable ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(ClassMgr.swbcomm_comMicroSiteElementInv);
          if(obj!=null)
          {
-             ret=(org.semanticwb.portal.community.MicroSiteElement)obj.createGenericInstance();
+             ret=(org.semanticwb.portal.community.Interactiveable)obj.createGenericInstance();
          }
          return ret;
     }
