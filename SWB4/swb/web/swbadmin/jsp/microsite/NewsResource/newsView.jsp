@@ -145,27 +145,7 @@
         <a class="adminTool" href="<%=urladd%>">Agregar noticia</a>
         <%
             }
-            if (wputil != null && member.canView())
-            {
-                if (!wputil.isSubscribed(member))
-                {
         %>
-        <a class="adminTool" href="<%=suscribeURL%>">Suscribirse a canal de noticias</a>
-        <%
-                }
-                else
-                {
-        %>
-        <a class="adminTool" href="<%=unSuscribeURL%>">Cancelar suscripción</a>
-        <%
-                }
-            }
-
-
-        %>
-
-
-
     </div>
     <%
             if (elements.size() == 0)
