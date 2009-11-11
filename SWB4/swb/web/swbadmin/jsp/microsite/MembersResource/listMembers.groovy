@@ -126,15 +126,11 @@ if (null!=microsite){
         def imageurlright=cssPath +"""pageArrowRight.gif"""
         if(ipage>1)
         {
-            println """
-        <a href="$previusURL"><img src="$imageurlleft" alt="anterior"></a>
-            """
+            println """<a href="$previusURL"><img src="$imageurlleft" alt="anterior"></a>"""
         }
         for (int i = 1; i <= paginas; i++)
         {
-            println """
-        <a href="$url?ipage=$i">
-        """
+            println """<a href="$url?ipage=$i">"""
             if(i==ipage)
             {
                 println """<strong>"""
@@ -144,20 +140,15 @@ if (null!=microsite){
             {
                 println """</strong>"""
             }
-            println """
-        </a>
-        """
+            println """</a>"""
         }
         if(ipage!=paginas)
         {
             println """<a href="$nextURL"><img src="$imageurlright" alt="siguiente"></a>"""
         }
+        println """</div><!-- fin paginacion -->"""
     }
-    println """
-</div>
-    <!-- fin paginacion -->
-
-    """
+   
     
    
     if (paramRequest.getCallMethod()==paramRequest.Call_STRATEGY && (!paramRequest.getArgument("virtualcontent").equals("true")))
@@ -213,11 +204,7 @@ if (null!=microsite){
         }    
         if (paginas > 1)
         {
-            println """
-    <div id="paginacion">
-
-
-        """
+            println """<div id="paginacion">"""
             String nextURL = "#";
             String previusURL = "#";
             if (ipage < paginas)
@@ -234,37 +221,29 @@ if (null!=microsite){
             if(ipage>1)
             {
                 println """
-        <a href="$previusURL"><img src="$imageurlleft" alt="anterior"></a>
-            """
+        <a href="$previusURL"><img src="$imageurlleft" alt="anterior"></a>"""
             }
-           for (int i = 1; i <= paginas; i++)
-        {
-            println """
-        <a href="$url?ipage=$i">
-        """
-            if(i==ipage)
+            for (int i = 1; i <= paginas; i++)
             {
-                println """<strong>"""
+                println """<a href="$url?ipage=$i">"""
+                if(i==ipage)
+                {
+                    println """<strong>"""
+                }
+                println """$i"""
+                if(i==ipage)
+                {
+                    println """</strong>"""
+                }
+                println """</a>"""
             }
-            println """$i"""
-            if(i==ipage)
-            {
-                println """</strong>"""
-            }
-            println """
-        </a>
-        """
-        }
             if(ipage!=paginas)
             {
                 println """<a href="$nextURL"><img src="$imageurlright" alt="siguiente"></a>"""
             }
+            println """</div><!-- fin paginacion -->"""
         }
-        println """
-    </div>
-    <!-- fin paginacion -->
-
-    """
+       
         println """
 </div >
       <div class="columnaCentro">      	
