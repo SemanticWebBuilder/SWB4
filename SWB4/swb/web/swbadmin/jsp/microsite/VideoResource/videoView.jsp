@@ -116,22 +116,20 @@
                 {
             %>
         <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%
-                if(i==ipage)
+                    if (i == ipage)
                     {
-                    %>
-                    <strong>
-                    <%
-                    }
             %>
-            <%=i%>
-            <%
-            if(i==ipage)
-                    {
-                    %>
-                    </strong>
-                    <%
-                    }
-                %></a>
+            <strong>
+                <%                    }
+                %>
+                <%=i%>
+                <%
+                        if (i == ipage)
+                        {
+                %>
+            </strong>
+            <%                    }
+            %></a>
         <%
                 }
         %>
@@ -178,6 +176,10 @@
                 if (video.canView(member))
                 {
                     iElement++;
+                    if (iElement > fin)
+                    {
+                        break;
+                    }
                     if (iElement >= inicio && iElement <= fin)
                     {
                         String rank = df.format(video.getRank());
@@ -191,7 +193,7 @@
                         {
                             title = video.getTitle();
                         }
-                        String description="Sin descripción";
+                        String description = "Sin descripción";
                         if (video.getDescription() != null)
                         {
                             description = video.getDescription();
@@ -255,22 +257,20 @@
                 {
             %>
         <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%
-                if(i==ipage)
+                    if (i == ipage)
                     {
-                    %>
-                    <strong>
-                    <%
-                    }
             %>
-            <%=i%>
-            <%
-            if(i==ipage)
-                    {
-                    %>
-                    </strong>
-                    <%
-                    }
-                %></a>
+            <strong>
+                <%                    }
+                %>
+                <%=i%>
+                <%
+                        if (i == ipage)
+                        {
+                %>
+            </strong>
+            <%                    }
+            %></a>
         <%
                 }
         %>

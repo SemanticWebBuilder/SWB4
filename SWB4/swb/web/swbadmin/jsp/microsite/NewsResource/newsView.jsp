@@ -174,7 +174,10 @@
         if (anew.canView(member))
         {
             iElement++;
-
+             if (iElement > fin)
+            {
+                break;
+            }
             if (iElement >= inicio && iElement <= fin)
             {
                 SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", anew.getURI());

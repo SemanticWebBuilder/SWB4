@@ -108,32 +108,30 @@
                 {
                     previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
                 }
-                if(ipage>1)
-                    {
+                if (ipage > 1)
+                {
         %>
         <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
             <%
-            }
+                }
                 for (int i = 1; i <= paginas; i++)
                 {
             %>
         <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%
-                if(i==ipage)
+                    if (i == ipage)
                     {
-                    %>
-                    <strong>
-                    <%
-                    }
             %>
-            <%=i%>
-            <%
-            if(i==ipage)
-                    {
-                    %>
-                    </strong>
-                    <%
-                    }
-                %></a>
+            <strong>
+                <%                    }
+                %>
+                <%=i%>
+                <%
+                        if (i == ipage)
+                        {
+                %>
+            </strong>
+            <%                    }
+            %></a>
         <%
                 }
         %>
@@ -158,33 +156,36 @@
         %>
         <a class="adminTool" href="<%=addEventURL%>">Agregar evento</a>
         <%
-            }            
+            }
         %>
     </div>
     <%
 
-if (elements.size() == 0)
+            if (elements.size() == 0)
             {
-            %>
-            <p>No hay eventos registrados en la comunidad</p>
-            <%
-            }
+    %>
+    <p>No hay eventos registrados en la comunidad</p>
+    <%            }
 
-            int iElement = 0;
-            for (EventElement event : elements)
+    int iElement = 0;
+    for (EventElement event : elements)
+    {
+        SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", event.getURI());
+        if (event.canView(member))
+        {
+            iElement++;
+            if (iElement > fin)
             {
-                SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", event.getURI());
-                if (event.canView(member))
-                {
-                    iElement++;
-                    if (iElement >= inicio && iElement <= fin)
-                    {
-                        String rank = df.format(event.getRank());
-                        String editEventURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", event.getURI()).toString();
-                        SWBResourceURL removeUrl = paramRequest.getActionUrl();
-                        removeUrl.setParameter("act", "remove");
-                        removeUrl.setParameter("uri", event.getEncodedURI());
-                        String removeurl = "javascript:validateremove('" + removeUrl + "','" + event.getTitle() + "')";
+                break;
+            }
+            if (iElement >= inicio && iElement <= fin)
+            {
+                String rank = df.format(event.getRank());
+                String editEventURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", event.getURI()).toString();
+                SWBResourceURL removeUrl = paramRequest.getActionUrl();
+                removeUrl.setParameter("act", "remove");
+                removeUrl.setParameter("uri", event.getEncodedURI());
+                String removeurl = "javascript:validateremove('" + removeUrl + "','" + event.getTitle() + "')";
     %>
     <div class="noticia">
         <img src="<%=SWBPortal.getWebWorkPath() + event.getEventThumbnail()%>" alt="<%= event.getTitle()%>">
@@ -223,44 +224,42 @@ if (elements.size() == 0)
 
 
         <%
-                        String nextURL = "#";
-                        String previusURL = "#";
-                        if (ipage < paginas)
-                        {
-                            nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
-                        }
-                        if (ipage > 1)
-                        {
-                            previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
-                        }
-                        if(ipage>1)
-                    {
+                String nextURL = "#";
+                String previusURL = "#";
+                if (ipage < paginas)
+                {
+                    nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
+                }
+                if (ipage > 1)
+                {
+                    previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
+                }
+                if (ipage > 1)
+                {
         %>
         <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
             <%
-            }
-                        for (int i = 1; i <= paginas; i++)
-                        {
+                }
+                for (int i = 1; i <= paginas; i++)
+                {
             %>
         <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%
-                if(i==ipage)
-                    {
-                    %>
-                    <strong>
-                    <%
-                    }
+                            if (i == ipage)
+                            {
             %>
-            <%=i%>
-            <%
-            if(i==ipage)
-                    {
-                    %>
-                    </strong>
-                    <%
-                    }
-                %></a>
+            <strong>
+                <%                            }
+                %>
+                <%=i%>
+                <%
+                                if (i == ipage)
+                                {
+                %>
+            </strong>
+            <%                            }
+            %></a>
         <%
-                        }
+                }
         %>
 
 
