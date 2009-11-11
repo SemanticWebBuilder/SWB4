@@ -34,8 +34,7 @@
                     if (mse != null && user != null && ms != null)
                     {
         %>
-        <li><a class="contactos_nombre" href="<%=mse.getURL()%>"><img src="/work/models/Ciudad_Digital/css/boton_contacto.png" alt=""></a>
-            Usted agregó <a class="elemento" href="<%=mse.getURL()%>"><%=mse.getDisplayTitle(user.getLanguage())%></a>
+        <li> Usted agregó <a class="elemento" href="<%=mse.getURL()%>" ><%=mse.getDisplayTitle(user.getLanguage())%></a>
             <%=SWBUtils.TEXT.getTimeAgo(mse.getUpdated(), user.getLanguage())%>.</li>
             <%
                     }
