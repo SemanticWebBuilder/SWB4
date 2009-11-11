@@ -35,6 +35,7 @@ import org.semanticwb.platform.SemanticProperty
 
 
 def paramRequest=request.getAttribute("paramRequest")
+def String cssPath = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/images/";
 User user = paramRequest.getUser()
 WebPage wpage=paramRequest.getWebPage()
 Member member = Member.getMember(user,wpage)
@@ -46,37 +47,135 @@ microsite = wpage
 
 if (null!=microsite){
 
-
-    String perfil = wpage.getWebSite().getWebPage("perfil").getRealUrl()
+    def ELEMENETS_BY_PAGE = 5;    
+    def perfil = wpage.getWebSite().getWebPage("perfil").getRealUrl()
+    def url=wpage.getUrl()
     println """
 <div class="columnaIzquierda">
           """
+    def elementos=0;
     Iterator<Member> lista = microsite.listMembers()
+    while (lista.hasNext()){
+        Member mem_curr = lista.next()
+        elementos++
+    }
+    int paginas = elementos / ELEMENETS_BY_PAGE;
+    if (elementos % ELEMENETS_BY_PAGE != 0)
+    {
+        paginas++;
+    }
+    int inicio = 0;
+    int fin = ELEMENETS_BY_PAGE;
+    int ipage = 1;
+    if (request.getParameter("ipage") != null)
+    {
+        try
+        {
+            ipage = Integer.parseInt(request.getParameter("ipage"));
+            inicio = (ipage * ELEMENETS_BY_PAGE) - ELEMENETS_BY_PAGE;
+            fin = (ipage * ELEMENETS_BY_PAGE);
+        }
+        catch (NumberFormatException nfe)
+        {
+            ipage = 1;
+        }
+    }
+    if (ipage < 1 || ipage > paginas)
+    {
+        ipage = 1;
+    }
+    if (inicio < 0)
+    {
+        inicio = 0;
+    }
+    if (fin < 0)
+    {
+        fin = ELEMENETS_BY_PAGE;
+    }
+    if (fin > elementos)
+    {
+        fin = elementos;
+    }
+    if (inicio > fin)
+    {
+        inicio = 0;
+        fin = ELEMENETS_BY_PAGE;
+    }
+    if (fin - inicio > ELEMENETS_BY_PAGE)
+    {
+        inicio = 0;
+        fin = ELEMENETS_BY_PAGE;
+    }
+    if (paginas > 1)
+    {
+        println """<div id="paginacion">"""
+
+        String nextURL = "#";
+        String previusURL = "#";        
+        if (ipage < paginas)
+        {
+            nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
+        }
+        if (ipage > 1)
+        {
+            previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
+        }
+
+        def imageurlleft=cssPath +"""pageArrowLeft.gif"""
+        def imageurlright=cssPath +"""pageArrowRight.gif"""
+        println """
+        <a href="$previusURL"><img src="$imageurlleft" alt="anterior"></a>
+            """
+        for (int i = 1; i <= paginas; i++)
+        {
+            println """
+        <a href="$url?ipage=$i">$i</a>
+        """
+        }
+        println """
+
+
+        <a href="$nextURL"><img src="$imageurlright" alt="siguiente"></a>
+    </div>
+    """
+    }
+    println """
+    <!-- fin paginacion -->
+
+    """
+
+    
+   
     if (paramRequest.getCallMethod()==paramRequest.Call_STRATEGY && (!paramRequest.getArgument("virtualcontent").equals("true")))
     {
-        def i = 0;
-        while (lista.hasNext() && i<18){
+        def iElement = 0;
+        lista = microsite.listMembers()
+        while (lista.hasNext()){
+            iElement++;
             Member mem_curr = lista.next()
-            User mem_usr = mem_curr.getUser()
-            if (null!=mem_usr)
+            if (iElement >= inicio && iElement <= fin)
             {
-                def mapa = new HashMap()
-                Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#_ExtendedAttributes").listProperties();
-                list.each{
-                    def sp = it
-                    mapa.put(sp.getName(),sp)
-                }
-                def uri = mem_usr.getEncodedURI()
+                User mem_usr = mem_curr.getUser()
+                if (null!=mem_usr)
+                {
+                    def mapa = new HashMap()
+                
+                    Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#_ExtendedAttributes").listProperties();
+                    list.each{
+                        def sp = it
+                        mapa.put(sp.getName(),sp)
+                    }
+                    def uri = mem_usr.getEncodedURI()
 
-                def img = SWBPortal.getWebWorkPath()+mem_usr.getPhoto()
-                def name=mem_usr.getFullName()
-                def usr_sex = mem_usr.getExtendedAttribute(mapa.get("userSex"))
-                if ("M".equals(usr_sex)) usr_sex = "Hombre"
-                if ("F".equals(usr_sex)) usr_sex = "Mujer"
+                    def img = SWBPortal.getWebWorkPath()+mem_usr.getPhoto()
+                    def name=mem_usr.getFullName()
+                    def usr_sex = mem_usr.getExtendedAttribute(mapa.get("userSex"))
+                    if ("M".equals(usr_sex)) usr_sex = "Hombre"
+                    if ("F".equals(usr_sex)) usr_sex = "Mujer"
 
-                def usr_age = mem_usr.getExtendedAttribute(mapa.get("userAge"))
-                if (null==usr_age) usr_age = ""
-                println """
+                    def usr_age = mem_usr.getExtendedAttribute(mapa.get("userAge"))
+                    if (null==usr_age) usr_age = ""
+                    println """
                 <div class="noticia">
                         <img src="$img" alt="Foto de $name">
                   <div class="noticiaTexto">
@@ -93,10 +192,50 @@ if (null!=microsite){
                 </div>           
               
             """
+                }
             }
        
         }    
-   
+        if (paginas > 1)
+        {
+            println """
+    <div id="paginacion">
+
+
+        """
+            String nextURL = "#";
+            String previusURL = "#";
+            if (ipage < paginas)
+            {
+                nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
+            }
+            if (ipage > 1)
+            {
+                previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
+            }
+
+            def imageurlleft=cssPath +"""pageArrowLeft.gif"""
+            def imageurlright=cssPath +"""pageArrowRight.gif"""
+            println """
+        <a href="$previusURL"><img src="$imageurlleft" alt="anterior"></a>
+            """
+            for (int i = 1; i <= paginas; i++)
+            {
+                println """
+        <a href="$url?ipage=$i">$i</a>
+        """
+            }
+            println """
+
+
+        <a href="$nextURL"><img src="$imageurlright" alt="siguiente"></a>
+    </div>
+    """
+        }
+        println """
+    <!-- fin paginacion -->
+
+    """
         println """
 </div >
       <div class="columnaCentro">      	
