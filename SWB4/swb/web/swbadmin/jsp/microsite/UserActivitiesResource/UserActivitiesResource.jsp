@@ -2,51 +2,58 @@
 <%
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             User user = paramRequest.getUser();
-            if(request.getParameter("user")!=null)
+            if (request.getParameter("user") != null)
             {
                 return;
             }
             int numrec = (Integer) request.getAttribute("numrec");
-            Iterator<CommunityActivity> activities = (Iterator<CommunityActivity>) request.getAttribute("activities");
+            HashSet<CommunityActivity> activities = new HashSet<CommunityActivity>();
+            Iterator<CommunityActivity> it = (Iterator<CommunityActivity>) request.getAttribute("activities");
+            if (it.hasNext())
+            {               
+                activities.add(it.next());
+            }
 %>
 
-    <h2>Contenidos recientes</h2>
-    <ul class="listaElementos">
-        <%
+<h2>Contenidos recientes</h2>
+<ul class="listaElementos">
+    <%
 
             CommunityActivity ca = null;
             MicroSiteElement mse = null;
             MicroSite ms = null;
-            if (activities.hasNext())
+            it = activities.iterator();
+            if (it.hasNext())
             {
                 int num = 0;
-                while (activities.hasNext())
+                while (it.hasNext())
                 {
                     num++;
                     if (num > numrec)
                     {
                         break;
                     }
-                    ca = activities.next();
+                    ca = it.next();
                     user = ca.getUser();
                     mse = ca.getElement();
                     ms = ca.getCommunity();
                     if (mse != null && user != null && ms != null)
                     {
-        %>
-        <li> Usted agregó <a class="elemento" href="<%=mse.getURL()%>" ><%=mse.getDisplayTitle(user.getLanguage())%></a>
-            <%=SWBUtils.TEXT.getTimeAgo(mse.getUpdated(), user.getLanguage())%>.</li>
-            <%
-                    }
+    %>
+    
+    <li> <%=user.getFullName()%> agregó <a class="elemento" href="<%=mse.getURL()%>" ><%=mse.getDisplayTitle(user.getLanguage())%></a>
+        <%=SWBUtils.TEXT.getTimeAgo(mse.getUpdated(), user.getLanguage())%>.</li>
+        <%
                 }
             }
-            else
-            {
-            %>
-        <li>No hay actividades que reportar.</li>
-        <%            }
+        }
+        else
+        {
         %>
-    </ul>
+    <li>No hay actividades que reportar.</li>
+    <%            }
+    %>
+</ul>
 
 <%
 
