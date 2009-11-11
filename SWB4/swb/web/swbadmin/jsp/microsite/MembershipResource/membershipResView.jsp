@@ -92,7 +92,7 @@
     {
         urla.setParameter("act", "unsubscribe");
         %>
-        <li><a href="<%=urla%>">Cancelar suscripción</a></li>
+        <li><a href="<%=urla%>">Cancelar suscripción a comunidad</a></li>
         <%
     }
             
