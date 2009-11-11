@@ -493,18 +493,18 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
             doShowAdmin(request, response, paramRequest);
         }*/
 
+        Iterator<BookmarkEntry> entries = listAllEntriesByUser(user);
         try {
+            if (entries != null && entries.hasNext())
+                request.setAttribute("entries", entries);
             request.setAttribute("paramRequest", paramRequest);
             request.setAttribute("l", Boolean.valueOf(showList));
             //request.setAttribute("admurl", url);
-            Iterator<BookmarkEntry> entries = listAllEntriesByUser(user);
-            if (entries != null)
-                request.setAttribute("entries", entries);
+            
             RequestDispatcher rd = request.getRequestDispatcher(path);
             rd.include(request, response);
         } catch (Exception e) {
-            log.error("Bookmarks say ");
-            e.printStackTrace();
+            log.error(e);
         }
     }
 
