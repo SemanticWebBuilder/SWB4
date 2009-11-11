@@ -20,7 +20,7 @@
         WebPage webpage=paramRequest.getWebPage();
         WebSite website=webpage.getWebSite();
         User user=paramRequest.getUser();
-
+        if(!user.isSigned()) return;
 
 
         String sparams="";boolean existFilter=false;
