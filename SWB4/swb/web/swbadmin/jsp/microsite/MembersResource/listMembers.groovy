@@ -124,23 +124,25 @@ if (null!=microsite){
 
         def imageurlleft=cssPath +"""pageArrowLeft.gif"""
         def imageurlright=cssPath +"""pageArrowRight.gif"""
-        println """
+        if(ipage>1)
+        {
+            println """
         <a href="$previusURL"><img src="$imageurlleft" alt="anterior"></a>
             """
+        }
         for (int i = 1; i <= paginas; i++)
         {
             println """
         <a href="$url?ipage=$i">$i</a>
         """
         }
-        println """
-
-
-        <a href="$nextURL"><img src="$imageurlright" alt="siguiente"></a>
-    </div>
-    """
+        if(ipage!=paginas)
+        {
+            println """<a href="$nextURL"><img src="$imageurlright" alt="siguiente"></a>"""
+        }
     }
     println """
+</div>
     <!-- fin paginacion -->
 
     """
@@ -217,23 +219,25 @@ if (null!=microsite){
 
             def imageurlleft=cssPath +"""pageArrowLeft.gif"""
             def imageurlright=cssPath +"""pageArrowRight.gif"""
-            println """
+            if(ipage>1)
+            {
+                println """
         <a href="$previusURL"><img src="$imageurlleft" alt="anterior"></a>
             """
+            }
             for (int i = 1; i <= paginas; i++)
             {
                 println """
         <a href="$url?ipage=$i">$i</a>
         """
             }
-            println """
-
-
-        <a href="$nextURL"><img src="$imageurlright" alt="siguiente"></a>
-    </div>
-    """
+            if(ipage!=paginas)
+            {
+                println """<a href="$nextURL"><img src="$imageurlright" alt="siguiente"></a>"""
+            }
         }
         println """
+    </div>
     <!-- fin paginacion -->
 
     """
