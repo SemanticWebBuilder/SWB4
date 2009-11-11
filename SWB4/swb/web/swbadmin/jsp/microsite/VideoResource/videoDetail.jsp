@@ -15,6 +15,21 @@
         if(rec!=null)
         {
             String rank = df.format(rec.getRank());
+            String title = "Sin título";
+                        if (rec.getTitle() != null)
+                        {
+                            title = rec.getTitle();
+                        }
+                        String description="Sin descripción";
+                        if (rec.getDescription() != null)
+                        {
+                            description = rec.getDescription();
+                        }
+                        String tags="Sin descripción";
+                        if (rec.getTags() != null)
+                        {
+                            tags = rec.getTags();
+                        }
 %>
 <div class="columnaIzquierda">    
     <br><%=rec.getCode()%>
@@ -26,9 +41,10 @@ out.write(res.toString());
 %>
 </div>
 <div class="columnaCentro">
-    <h2 class="blogTitle"><%=rec.getTitle()%></h2><br>
-    <p><%=rec.getDescription()%></p>
+    <h2 class="blogTitle"><%=title%></h2><br>
+    <p><%=description%></p>
     <p>Creado el: <%=dateFormat.format(rec.getCreated())%></p>
+    <p>Etiquetas: <%=tags%></p>
     <p><%=rec.getViews()%> vistas</p>
     <p>Calificación: <%=rank%></p>
     <p><a href="<%=paramRequest.getRenderUrl()%>">[Ver todos los videos]</a></p>    
