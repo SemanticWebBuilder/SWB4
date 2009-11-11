@@ -25,7 +25,7 @@
                         {
                             description = rec.getDescription();
                         }
-                        String tags="Sin descripción";
+                        String tags="Sin etiquetas";
                         if (rec.getTags() != null)
                         {
                             tags = rec.getTags();
