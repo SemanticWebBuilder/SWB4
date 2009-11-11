@@ -11,7 +11,8 @@
 <%@page import="org.semanticwb.portal.community.*"%>
 <%@page import="org.semanticwb.model.WebPage"%>
 
-
+<div class="columnaIzquierda">
+    <p>
 <%
         WebPage webpage=paramRequest.getWebPage();
         User owner = paramRequest.getUser();
@@ -60,7 +61,7 @@
                         <div id="entriesTwitter">
                         <a href="http://twitter.com" target="_new"><img src="<%=imgPath%>twitter_logo.png" valign="top"/></a>
                         <% if(owner.getURI()!=null && owner.getURI().equals(user.getURI())){%>
-                            <a href="<%=url.toString()%>">Configurar</a>
+                            <a href="<%=url.toString()%>">[Configurar]</a>
                         <%}%>
                         <form action="<%=urlAction.toString()%>">
                             <table>
@@ -122,7 +123,7 @@
                             No existe información para la cuenta de usuario proporcionada, o no se pudo autenticar el usuario en Twitter...
                             <br/>
                          <% if(owner.getURI()!=null && owner.getURI().equals(user.getURI())){%>
-                            <a href="<%=url.toString()%>">Configurar</a>
+                            <a href="<%=url.toString()%>">[Configurar]</a>
                          <%}%>
                         <%
                         }
@@ -136,7 +137,7 @@
                     <%
                 }
 %>
-
+</p></div><div class="columnaCentro"></div>
 <%!
     private void getForm(String formRedirect, javax.servlet.jsp.JspWriter out, String login, String password) {
         try {
