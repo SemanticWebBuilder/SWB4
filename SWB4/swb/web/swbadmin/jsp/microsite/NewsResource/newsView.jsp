@@ -118,7 +118,23 @@
                 for (int i = 1; i <= paginas; i++)
                 {
             %>
-        <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%=i%></a>
+        <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%
+                if(i==ipage)
+                    {
+                    %>
+                    <strong>
+                    <%
+                    }
+            %>
+            <%=i%>
+            <%
+            if(i==ipage)
+                    {
+                    %>
+                    </strong>
+                    <%
+                    }
+                %></a>
         <%
                 }
         %>
@@ -226,7 +242,23 @@
                     for (int i = 1; i <= paginas; i++)
                     {
             %>
-        <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%=i%></a>
+        <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%
+                if(i==ipage)
+                    {
+                    %>
+                    <strong>
+                    <%
+                    }
+            %>
+            <%=i%>
+            <%
+            if(i==ipage)
+                    {
+                    %>
+                    </strong>
+                    <%
+                    }
+                %></a>
         <%
                     }
         %>
