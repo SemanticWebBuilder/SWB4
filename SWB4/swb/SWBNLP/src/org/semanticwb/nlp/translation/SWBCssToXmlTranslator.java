@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -21,16 +22,16 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.tree.CommonTree;
+
+import org.semanticwb.SWBUtils;
 import org.semanticwb.nlp.analysis.CSSLexer;
 import org.semanticwb.nlp.analysis.SimpleCSSParser;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+
+import org.w3c.dom.*;
 
 /**
  *
@@ -55,15 +56,14 @@ public class SWBCssToXmlTranslator {
             SimpleCSSParser.styleSheet_return qres = (SimpleCSSParser.styleSheet_return) parser.styleSheet();
 
             //Si no hay errores reportados por el parser
-            if (parser.getErrorCount() == 0) {
+            if(parser.getErrorCount() == 0) {
                 //Se obtiene el AST
                 sTree = (CommonTree) qres.getTree();
 
                 //Se obtiene el XML del AST
                 Document doc = parse(sTree);
 
-                if (doc != null) {
-
+                if(doc != null) {
                     //Se escribe el archivo XML
                     Source source = new DOMSource(doc);
                     File f = new File(filePath);
@@ -85,6 +85,29 @@ public class SWBCssToXmlTranslator {
         } catch (org.antlr.runtime.RecognitionException ex) {
             System.out.println("El CSS no pasó");
         }        
+    }
+
+    public Document translateCSS (String css) {
+        //Se inicializa el parser
+        input = new ANTLRStringStream(css);
+        tokenizer = new CSSLexer(input);
+        tokens = new CommonTokenStream(tokenizer);
+        parser = new SimpleCSSParser(tokens);
+
+        CommonTree sTree = null;
+        Document doc = null;
+        try {
+            SimpleCSSParser.styleSheet_return qres = (SimpleCSSParser.styleSheet_return) parser.styleSheet();
+            if(parser.getErrorCount() == 0) {
+                sTree = (CommonTree) qres.getTree();
+                doc = parse(sTree);
+            } else {
+                System.out.println("El CSS no pasó");
+            }
+        } catch (org.antlr.runtime.RecognitionException ex) {
+            System.out.println("El CSS no pasó");
+        }
+        return doc;
     }
 
     //Recorre el DOM y escribe sus nodos en la terminal
