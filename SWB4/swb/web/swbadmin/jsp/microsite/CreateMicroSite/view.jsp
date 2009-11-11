@@ -21,16 +21,15 @@
         }
     }
 
-
     if(user.isRegistered()&&nwp==0)
     {
         SWBResourceURL urlAdd = paramRequest.getRenderUrl();
         urlAdd.setParameter("act", "add");
         urlAdd.setWindowState(SWBResourceURL.WinState_NORMAL);
         %>
-        <li>
-            <a class="active" href="<%=urlAdd%>">Crear Comunidad</a>
-        </li>
+        <div class="adminTools" >
+            <a class="adminTool" href="<%=urlAdd%>">Crear Comunidad</a>
+        </div>
         <%
     }
 %>
