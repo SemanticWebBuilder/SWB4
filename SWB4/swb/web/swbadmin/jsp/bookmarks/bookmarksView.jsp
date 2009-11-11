@@ -107,7 +107,7 @@ if(arrayEntries.size()>0)
 else
     {
     %>
-    <ul class="userList"><li>No tiene ligas registradas</li>
+    <ul class="userList"><li>No tiene ligas registradas.</li>
         <%
         if (paramRequest.getCallMethod() != paramRequest.Call_CONTENT)
                 {
