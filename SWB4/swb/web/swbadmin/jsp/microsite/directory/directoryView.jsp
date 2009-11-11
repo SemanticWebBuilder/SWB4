@@ -30,17 +30,15 @@ if (sobj != null) {
     url.setParameter("act","add");
 %>
     <div class="twoColContent">
-       <div class="editarInfo1">
-            <p>
-                <%if(user.isRegistered() && user.isSigned()){%>
-            <div class="adminTools"><a class="adminTool" href="<%=url%>">Agregar elemento al indice</a></div>
-               <%}else{%>
-                <span class="adminTool">Registrese para publicar</span>
-               <%}%>
-            </p>
-       </div>
-       <div class="clear">&nbsp;</div>
-       <div id="entriesList">
+      <div class="adminTools">
+          <%if(user.isRegistered() && user.isSigned()){%>
+            <a class="adminTool" href="<%=url%>">Agregar elemento al indice</a>
+          <%}else{%>
+            <span class="adminTool">Registrese para publicar</span>
+          <%}%>
+          <span class="adminTool "id="toggle_link" href="#" onclick="toggle('togle_div')">Mostrar Filtros</span>
+      </div>
+      <div id="entriesList">
         <%
         //Empieza paginación
         SWBResourceURL urlPag=paramRequest.getRenderUrl();
@@ -48,26 +46,27 @@ if (sobj != null) {
         if (request.getParameter("actualPage") != null) {
             actualPage = Integer.parseInt(request.getParameter("actualPage"));
         }
+
         //Leer parametros que se envían para filtrado
-         String sparams="";
-         HashMap hdirParams=new HashMap();
-         Map mParams=request.getParameterMap();
-         Iterator itParams=mParams.keySet().iterator();
-         while(itParams.hasNext()){
-             String pname=(String)itParams.next();
-             sparams+="&"+pname+"="+request.getParameter(pname);
-             if(pname.startsWith("swbdirParam_"))
-             {
-                 String param=pname.substring(12);
-                 if(request.getParameter(param)!=null){
+        String sparams = "";
+        HashMap hdirParams = new HashMap();
+        Map mParams = request.getParameterMap();
+        Iterator itParams = mParams.keySet().iterator();
+        while(itParams.hasNext()) {
+            String pname = (String)itParams.next();
+            sparams += "&" + pname + "=" + request.getParameter(pname);
+            if(pname.startsWith("swbdirParam_")) {
+                String param = pname.substring(12);
+                if(request.getParameter(param) != null){
                      hdirParams.put(param, request.getParameter(param));
-                 }
-             }
-         }
-         //System.out.println("PARAMS SIZE:"+hdirParams.size());
+                }
+            }
+        }
+
+        //System.out.println("PARAMS SIZE:"+hdirParams.size());
          //Termina leida de parametros para filtrar
-         ArrayList<DirectoryObject> alFilterTmp=new ArrayList();
-         if(hdirParams.size()>0) {//Se desea filtrar información en los resultados
+        ArrayList<DirectoryObject> alFilterTmp = new ArrayList();
+        if(hdirParams.size() > 0) {//Se desea filtrar información en los resultados
             while(itObjs.hasNext())
             {
                 ArrayList alFilter=new ArrayList();
@@ -206,7 +205,6 @@ if (sobj != null) {
                 }
             }
         </script>
-        <span id="toggle_link" href="#" onclick="toggle('togle_div')">Mostrar Filtros</span>
         <div id="togle_div" style="display:none">
         <form action="<%=urlOrder.setAction("filter")%>" method="post">
             <fieldset>
