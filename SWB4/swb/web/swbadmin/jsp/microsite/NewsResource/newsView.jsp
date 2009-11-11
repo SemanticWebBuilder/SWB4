@@ -1,11 +1,10 @@
 <%@page contentType="text/html"%>
 <%@page import="java.util.Calendar, java.util.GregorianCalendar, java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <script language="Javascript" type="text/javascript">
-    function validateremove(url, title,uri)
+    function validateremove(url, title)
     {
         if(confirm('¿Esta seguro de borrar la noticia: '+title+'?'))
-        {
-            var url=url+'&uri='+escape(uri);
+        {            
             window.location.href=url;
         }
     }
@@ -183,7 +182,8 @@
                 String editEventURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", anew.getURI()).toString();
                 SWBResourceURL removeUrl = paramRequest.getActionUrl();
                 removeUrl.setParameter("act", "remove");
-                String removeurl = "javascript:validateremove('" + removeUrl + "','" + anew.getTitle() + "','" + anew.getURI() + "')";
+                removeUrl.setParameter("uri", anew.getEncodedURI());
+                String removeurl = "javascript:validateremove('" + removeUrl + "','" + anew.getTitle() + "')";
     %>
     <div class="noticia">
         <img src="<%= SWBPortal.getWebWorkPath() + anew.getNewsThumbnail()%>" alt="<%= anew.getTitle()%>">
