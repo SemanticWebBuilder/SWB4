@@ -26,9 +26,9 @@
             }
 %>
 <%
-if (paramRequest.getUser().isSigned())
-    {
-    %>
+            if (paramRequest.getUser().isSigned())
+            {
+%>
 <h2>Mis Favoritos</h2>
 <script language="Javascript" type="text/javascript">
     function validateremove(url, title)
@@ -43,33 +43,33 @@ if (paramRequest.getUser().isSigned())
     <%
 
 
-            int bkCount = 0;
-            if (entries != null && entries.hasNext() /*&& showList*/)
-            {
+        int bkCount = 0;
+        if (entries != null && entries.hasNext() /*&& showList*/)
+        {
     %>
 
     <%
                 while (entries.hasNext() && bkCount < maxBookmarks)
                 {
                     BookmarkEntry entry = entries.next();
-                    SWBResourceURL removeUrl=paramRequest.getActionUrl();
-            removeUrl.setAction("DELETE").setParameter("id", entry.getId());
-            String removeurl = "javascript:validateremove('" + removeUrl + "','" + entry.getTitle() + "')";
+                    SWBResourceURL removeUrl = paramRequest.getActionUrl();
+                    removeUrl.setAction("DELETE").setParameter("id", entry.getId());
+                    String removeurl = "javascript:validateremove('" + removeUrl + "','" + entry.getTitle() + "')";
 
     %>
     <li>
-        
+
         <a href="<%=entry.getBookmarkURL()%>">
             <%=entry.getTitle()%>
         </a>
-    
+
         <%
                     if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT)
                     {
         %>
 
-            <a class="userListLink" href="<%=removeurl%>">Eliminar <%=entry.getTitle()%></a>
-        
+        <a class="userListLink" href="<%=removeurl%>">Eliminar <%=entry.getTitle()%></a>
+
 
 
         <%
@@ -93,6 +93,6 @@ if (paramRequest.getUser().isSigned())
     %>
 </ul> 
 <%
-            }
+                }
             }
 %>
