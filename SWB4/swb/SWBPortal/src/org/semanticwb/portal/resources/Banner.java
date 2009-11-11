@@ -76,6 +76,7 @@ public class Banner extends GenericAdmResource
                     String url = base.getAttribute("url", "").trim();
                     String width = base.getAttribute("width", "").trim();
                     String height = base.getAttribute("height", "").trim();
+                    String styleClass = base.getAttribute("styleClass", "").trim();
 
                     width=paramRequest.getArgument("width", width);
                     height=paramRequest.getArgument("height", height);
@@ -120,7 +121,11 @@ public class Banner extends GenericAdmResource
                                     if (target.equals("1")) {
                                         ret.append(" target=\"_newbnr\"");
                                     }
+                                    if (!styleClass.equals("")) {
+                                        ret.append(" class=\"" + styleClass + "\"");
+                                    }
                                     ret.append(">");
+                                    System.out.println("liga: " + ret.toString());
                                 }
                             }
                             ret.append("<img src=\"");
