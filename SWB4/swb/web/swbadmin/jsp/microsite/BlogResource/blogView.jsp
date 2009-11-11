@@ -23,6 +23,7 @@
                 lang = user.getLanguage();
             }
             WebPage wpage = paramRequest.getWebPage();
+            MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
             Blog blog = (Blog) request.getAttribute("blog");
             String defaultFormat = "d 'de' MMMM  'del' yyyy 'a las' HH:mm";
             SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat, new Locale(lang));
@@ -318,20 +319,20 @@
 
         <%
             SWBResourceURL urla = paramRequest.getActionUrl();
-            if (user.isRegistered())
+            if (member.canView())
             {
-                if (member == null)
+                if (!wputil.isSubscribed(member))
                 {
                     urla.setParameter("act", "subscribe");
         %>
-        <li><a href="<%=urla%>">Suscribirse a esta comunidad</a></li>
+        <li><a href="<%=urla%>">Suscribirse a blog</a></li>
         <%
                 }
                 else
                 {
                     urla.setParameter("act", "unsubscribe");
         %>
-        <li><a href="<%=urla%>">Cancelar suscripción a comunidad</a></li>
+        <li><a href="<%=urla%>">Cancelar suscripción a blog</a></li>
         <%
                 }
             }
