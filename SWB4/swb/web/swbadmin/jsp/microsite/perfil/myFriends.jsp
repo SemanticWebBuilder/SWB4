@@ -225,7 +225,7 @@ else
     %>
     <div id="paginacion">
 
-
+        
         <%
                 String nextURL = "#";
                 String previusURL = "#";
@@ -260,6 +260,7 @@ else
             <%
                 }
             %>
+        Total de amigos: <%=elements.size()%>&nbsp;
     </div>
     <%
             }
