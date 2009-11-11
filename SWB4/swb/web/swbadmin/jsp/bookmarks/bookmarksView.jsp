@@ -41,6 +41,10 @@
         }
     }
 </script>
+<%
+if(arrayEntries.size()>0)
+    {
+%>
 <ul class="userList">
     <%
 
@@ -99,5 +103,21 @@
     %>
 </ul>
 <%
+}
+else
+    {
+    %>
+    <ul class="userList"><li>No tiene ligas registradas</li>
+        <%
+        if (paramRequest.getCallMethod() != paramRequest.Call_CONTENT)
+                {
+        %>
+        <li><a class="userListLink" href="<%=aUrl%>">Agregar esta p&aacute;gina </a></li>
+        <%
+            }
+        %>
+    </ul>
+    <%
+    }
             }
 %>
