@@ -106,6 +106,7 @@ if (null!=microsite){
         inicio = 0;
         fin = ELEMENETS_BY_PAGE;
     }
+    inicio++;
     if (paginas > 1)
     {
         println """<div id="paginacion">"""
@@ -143,7 +144,6 @@ if (null!=microsite){
     <!-- fin paginacion -->
 
     """
-
     
    
     if (paramRequest.getCallMethod()==paramRequest.Call_STRATEGY && (!paramRequest.getArgument("virtualcontent").equals("true")))
@@ -153,6 +153,7 @@ if (null!=microsite){
         while (lista.hasNext()){
             iElement++;
             Member mem_curr = lista.next()
+            
             if (iElement >= inicio && iElement <= fin)
             {
                 User mem_usr = mem_curr.getUser()
