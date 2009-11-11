@@ -44,236 +44,216 @@
   dojo.require("dojox.form.Rating");
 </script>
 <script language="javascript" type="text/javascript">  //dojo.require("dojo.parser");
-var request = false;
-try {
-  request = new XMLHttpRequest();
-} catch (trymicrosoft) {
-  try {
-    request = new ActiveXObject("Msxml2.XMLHTTP");
-  } catch (othermicrosoft) {
+    var request = false;
     try {
-      request = new ActiveXObject("Microsoft.XMLHTTP");
-    } catch (failed) {
-      request = false;
-    }
-  }
-}
-if (!request)
-  alert("Error al inicializar XMLHttpRequest!");
-var invoke = true;
-var count = 0;
-
-function vote(val) {
-    if (!invoke) return;
-    //alert('En funcion para votar');
-    var uri='<%=suri%>';
-    uri=escape(uri);
-    var url = '<%=url%>?act=vote&value='+escape(val)+'&uri='+uri;
-    request.open("GET", url, true);
-    request.onreadystatechange = ranked;
-    request.send(null);
-}
-
-function ranked() {
-  var response = request.responseText;
-  if (count == 0) {
-    if(request.readyState!=4) return;
-    if(request.status==200) {
-      if ('Not OK'!=response && ''!=response) {
-          var ranking = Math.floor(response.split('|')[0]);
-          var votes = response.split('|')[1];
-          document.getElementById("reviews").innerHTML = votes;
-          invoke = false;
-      } else {
-          alert('Lo sentimos, ha ocurrido un problema al contabilizar la calificación!');
-      }
-      count++;
-    }
-  }
-}
-var invokeAbused = true;
-
-function changeAbusedState() {
-    if (!invokeAbused) return;
-    var uri='<%=suri%>';
-    uri=escape(uri);
-    var url = '<%=url%>?act=abuseReport&uri='+uri;
-    request.open("GET", url, true);
-    request.onreadystatechange = abusedStateChanged;
-    request.send(null);
-}
-
-function abusedStateChanged() {
-  if (request.readyState != 4) return;
-  if (request.status == 200) {
-    var response = request.responseText;
-    if ('' != response && 'Not OK' != response) {
-      var etiqueta = document.getElementById("abused").innerHTML;
-      if (response == 'true') {
-        document.getElementById("abused").innerHTML = 'Inapropiado';
-        var divmarkup=document.getElementById("markop");
-        if(divmarkup)
-        {
-            divmarkup.style.display='none';
+        request = new XMLHttpRequest();
+    } catch (trymicrosoft) {
+        try {
+            request = new ActiveXObject("Msxml2.XMLHTTP");
+        } catch (othermicrosoft) {
+            try {
+                request = new ActiveXObject("Microsoft.XMLHTTP");
+            } catch (failed) {
+                request = false;
+            }
         }
-      } else {
-        document.getElementById("abused").innerHTML = 'Apropiado';
+    }
+    if (!request)
+    alert("Error al inicializar XMLHttpRequest!");
+    var invoke = true;
+    var count = 0;
+
+    function vote(val) {
+        if (!invoke) return;
+        //alert('En funcion para votar');
+        var uri='<%=suri%>';
+        uri=escape(uri);
+        var url = '<%=url%>?act=vote&value='+escape(val)+'&uri='+uri;
+        request.open("GET", url, true);
+        request.onreadystatechange = ranked;
+        request.send(null);
+    }
+
+    function ranked() {
+      var response = request.responseText;
+      if (count == 0) {
+        if(request.readyState!=4) return;
+        if(request.status==200) {
+          if ('Not OK'!=response && ''!=response) {
+              var ranking = Math.floor(response.split('|')[0]);
+              var votes = response.split('|')[1];
+              document.getElementById("reviews").innerHTML = votes;
+              invoke = false;
+          } else {
+              alert('Lo sentimos, ha ocurrido un problema al contabilizar la calificación!');
+          }
+          count++;
+        }
       }
-      invokeAbused = false;
     }
-  }
-}
-function sendComment()
-{
-    document.addCommentForm.submit();
-}
-function addComment() {
-    document.getElementById("addComment").style.display="inline";
-}
-function showComments() {
-    var x = document.getElementById("commentsList").style.display;
-    if (x == 'none') {
-      document.getElementById("commentsList").style.display="inline";
-      document.getElementById("ctrlComments").innerHTML="<%=OCULTAR_COMENTARIOS%>";
-    } else {
-      document.getElementById("commentsList").style.display="none";
-      document.getElementById("ctrlComments").innerHTML="<%=VER_COMENTARIOS%>";
+    var invokeAbused = true;
+
+    function changeAbusedState() {
+        if (!invokeAbused) return;
+        var uri='<%=suri%>';
+        uri=escape(uri);
+        var url = '<%=url%>?act=abuseReport&uri='+uri;
+        request.open("GET", url, true);
+        request.onreadystatechange = abusedStateChanged;
+        request.send(null);
     }
-}
 
-
-
-var invokeSpam = true;
-var spamId = 0;
-
-function spam(commentId) {
-    spamId = commentId;
-    if (!invokeSpam) return;
-    var uri='<%=suri%>';
-    uri=escape(uri);
-    var url = '<%=url%>?act=spamReport&commentId='+commentId+'&uri='+uri;
-    request.open("GET", url, true);
-    request.onreadystatechange = spamStateChanged;
-    request.send(null);
-}
-
-function spamStateChanged() {
-  if (request.readyState != 4) return;
-  if (request.status == 200) {
-    var response = request.responseText;
-    if ('' != response && 'Not OK' != response) {
-      var etiqueta = document.getElementById("spamMark"+spamId).innerHTML;
-      if (response == 'false') {
-        document.getElementById("spamMark"+spamId).innerHTML = 'Marcar como spam';
-      } else {
-        document.getElementById("spamMark"+spamId).innerHTML = 'Es spam';
+    function abusedStateChanged() {
+      if (request.readyState != 4) return;
+      if (request.status == 200) {
+        var response = request.responseText;
+        if ('' != response && 'Not OK' != response) {
+          var etiqueta = document.getElementById("abused").innerHTML;
+          if (response == 'true') {
+            document.getElementById("abused").innerHTML = 'Inapropiado';
+            var divmarkup=document.getElementById("markop");
+            if(divmarkup)
+            {
+                divmarkup.style.display='none';
+            }
+          } else {
+            document.getElementById("abused").innerHTML = 'Apropiado';
+          }
+          invokeAbused = false;
+        }
       }
-      invokeSpam = false;
     }
-  }
-  invokeSpam = true;
-}
+    function sendComment()
+    {
+        document.addCommentForm.submit();
+    }
+    function addComment() {
+        document.getElementById("addComment").style.display="inline";
+    }
+    function showComments() {
+        var x = document.getElementById("commentsList").style.display;
+        if (x == 'none') {
+          document.getElementById("commentsList").style.display="inline";
+          document.getElementById("ctrlComments").innerHTML="<%=OCULTAR_COMENTARIOS%>";
+        } else {
+          document.getElementById("commentsList").style.display="none";
+          document.getElementById("ctrlComments").innerHTML="<%=VER_COMENTARIOS%>";
+        }
+    }
+
+    var invokeSpam = true;
+    var spamId = 0;
+
+    function spam(commentId) {
+        spamId = commentId;
+        if (!invokeSpam) return;
+        var uri='<%=suri%>';
+        uri=escape(uri);
+        var url = '<%=url%>?act=spamReport&commentId='+commentId+'&uri='+uri;
+        request.open("GET", url, true);
+        request.onreadystatechange = spamStateChanged;
+        request.send(null);
+    }
+
+    function spamStateChanged() {
+      if (request.readyState != 4) return;
+      if (request.status == 200) {
+        var response = request.responseText;
+        if ('' != response && 'Not OK' != response) {
+          var etiqueta = document.getElementById("spamMark"+spamId).innerHTML;
+          if (response == 'false') {
+            document.getElementById("spamMark"+spamId).innerHTML = '[marcar como spam]';
+          } else {
+            document.getElementById("spamMark"+spamId).innerHTML = '[es spam]';
+          }
+          invokeSpam = false;
+        }
+      }
+      invokeSpam = true;
+    }
 </script>
     
 <div class="common_funcs">
     <span style="float:left; width:200px;"> 
         <div class="rank_label">Calificar:</div>
         <%
-        if (mem.canView())
-        {
-            %>
+        if (mem.canView()) {
+        %>
             <div class="rank_stars" dojoType="dojox.form.Rating" numStars="5" value="<%=rank%>">
-            <script type="dojo/event" event="onChange">vote(this.value);</script></div>
-            <%
-            
+                <script type="dojo/event" event="onChange">vote(this.value);</script>
+            </div>
+        <%
         } else {
-            %>
+        %>
             <div class="rank_stars" dojoType="dojox.form.Rating" numStars="5" value="<%=rank%>">
                     <script type="dojo/event" event="_onMouse">return;</script>
                     <script type="dojo/event" event="onStarClick">return;</script>
             </div>
-            <%
-            
+        <%
         }
         %>
-        </span> 
-        <div class="rec_votes">
+    </span> 
+    <div class="rec_votes">
         <div class="rec_votes_num" id="reviews"><%=mse.getReviews()%></div>
         <div class="rec_votes_label"> votos</div>
-        </div>
-        <span class="abused">
-                P&uacute;blicamente
-        
-         <span id="abused">
+    </div>
+    <span class="abused">
+        P&uacute;blicamente
+        <span id="abused">
          <%=abusedDesc%>
-         </span></span>
-         <%
-        if (mem.canView() && !mse.isAbused()) {
-            %>
-            <div class="clearL"></div>
-            <div id="markop">
-            <div class="editarInfo"><p><a href="javascript:changeAbusedState();">Marcar inapropiado</a></p></div>
-            </div>
-            <%
-        }
-        %>
-        </div><br/><br/>
-        <div class="comments_head">
-        
-        <span class="comments_title">
-        Comentarios
         </span>
-            <div class="clearL"></div>
-            <span class="comments_title_link">
-            <div class="editarInfo"><p><a id="ctrlComments" href="javascript:showComments();"><%=OCULTAR_COMENTARIOS%></a></p></div>
-            <!-- <a href="javascript:showComments();" id="ctrlComments"><%=OCULTAR_COMENTARIOS%></a> -->
-        </span> 
-        <%
-        url.setAction("addComment");
-        url.setCallMethod(SWBResourceURL.Call_CONTENT);
-        if (mem.canView())
-            {
-            %>
-            <!-- <span class="comments_write"> -->
-            <div class="clearL"></div>
-            <div class="clearL"></div>
-            <div class="editarInfo"><p><a href="javascript:addComment()">Escribir comentario</a></p></div>
-            <!-- </span>  -->
-            <%
-            
-        } else {
-            %>
-            <span class="comments_write">
-                &nbsp;
-            </span>
-            <%
-            
-        }
-        %>
-        </div> 
-        <%
-        if (mem.canView()) {
-            %>
-            <div id="addComment">
-            <br>Comentario
-            <form name="addCommentForm" action="<%=url%>">
-            <input type="hidden" name="uri" value="<%=suri%>">
-            <input type="hidden" name="act" value="addComment">
-            <textarea name="comentario" cols="40" rows="4"></textarea>            
-            </form>            
-            <div class="editarInfo"><p><a href="javascript:sendComment()">Publicar comentario</a></p></div>
-            </div>
-            <%
-            
-        }
-        %>
+    </span>
+    <%
+    if (mem.canView() && !mse.isAbused()) {
+    %>
         <div class="clearL"></div>
+        <div id="markop">
+            <div class="editarInfo"><p><a class="userTool" href="javascript:changeAbusedState();">Marcar como inapropiado</a></p></div>
+        </div>
+    <%
+    }
+    %>
+</div><br/><br/>
+<div class="commentBox">
+    <!--p-->
+    <%
+    url.setAction("addComment");
+    url.setCallMethod(SWBResourceURL.Call_CONTENT);
+    if (mem.canView()) {
+    %>
+        <a class="userTool" href="javascript:addComment()">Escribir comentario</a>
+    <%
+    }
+    %>
+    <a class="userTool" id="ctrlComments" href="javascript:showComments();"><%=OCULTAR_COMENTARIOS%></a>
+    <!--/p-->
+    <%
+    url.setAction("addComment");
+    url.setCallMethod(SWBResourceURL.Call_CONTENT);
+    if (mem.canView()) {
+    %>
+        <div id="addComment">
+            <form name="addCommentForm" id="addCommentForm" action="<%=url%>" method="post">
+                <div>
+                    <label for="comentario">Comentario</label>
+                    <input type="hidden" name="uri" value="<%=suri%>">
+                    <input type="hidden" name="act" value="addComment">
+                    <textarea name="comentario" id="comentario" cols="45" rows="5"></textarea>
+                </div>
+            </form>
+            <!--p-->
+                <a class="userTool" href="javascript:sendComment()">Publicar</a>
+            <!--/p-->
+        </div>
+    <%
+    }
+    %>
+</div> 
+<h2>Comentarios</h2>
         <%
         request.setAttribute("page",pageNumber);
         request.setAttribute("suri",suri);
         %>        
         <jsp:include flush="true" page="RenderListComments.jsp"></jsp:include>
         <%
-        
 %>
-<div class="clearL"></div>
