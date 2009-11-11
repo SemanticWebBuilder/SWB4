@@ -153,7 +153,12 @@
     </div>
     <%
 
-
+if (elements.size() == 0)
+            {
+            %>
+            <p>No hay eventos registrados en la comunidad</p>
+            <%
+            }
 
             int iElement = 0;
             for (EventElement event : elements)

@@ -157,8 +157,12 @@
 
     </div>
     <%
-            Iterator<NewsElement> eit = NewsElement.listNewsElementByNewsWebPage(wpage, wpage.getWebSite());
-            eit = SWBComparator.sortByCreated(eit, false);
+            if (elements.size() == 0)
+            {
+            %>
+            <p>No hay noticias registradas en la comunidad</p>
+            <%
+            }
             int iElement = 0;
             for (NewsElement anew : elements)
             {

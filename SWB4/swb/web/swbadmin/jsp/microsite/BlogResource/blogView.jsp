@@ -169,7 +169,12 @@
     <h2 class="hidden"><%=titleBlog%></h2>
     <%
 
-
+            if (elements.size() == 0)
+            {
+            %>
+            <p>No hay entradas para el blog</p>
+            <%
+            }
 
             int iElement = 0;
             for (PostElement post : elements)
@@ -247,25 +252,25 @@
 
 
         <%
-                    String nextURL = "#";
-                    String previusURL = "#";
-                    if (ipage < paginas)
-                    {
-                        nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
-                    }
-                    if (ipage > 1)
-                    {
-                        previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
-                    }
+                String nextURL = "#";
+                String previusURL = "#";
+                if (ipage < paginas)
+                {
+                    nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
+                }
+                if (ipage > 1)
+                {
+                    previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
+                }
         %>
         <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
             <%
-                    for (int i = 1; i <= paginas; i++)
-                    {
+                for (int i = 1; i <= paginas; i++)
+                {
             %>
         <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%=i%></a>
         <%
-                    }
+                }
         %>
 
 

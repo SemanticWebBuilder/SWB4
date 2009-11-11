@@ -136,7 +136,12 @@
 
     </div>
     <%
-
+            if (elements.size() == 0)
+            {
+            %>
+            <p>No hay fotos registradas en la comunidad</p>
+            <%
+            }
             int iElement = 0;
             for (PhotoElement photo : elements)
             {

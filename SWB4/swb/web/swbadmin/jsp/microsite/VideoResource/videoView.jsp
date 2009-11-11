@@ -153,6 +153,12 @@
 
     </div>
     <%
+            if (elements.size() == 0)
+            {
+            %>
+            <p>No hay videos registrados en la comunidad</p>
+            <%
+            }
             int iElement = 0;
             for (VideoElement video : elements)
             {
