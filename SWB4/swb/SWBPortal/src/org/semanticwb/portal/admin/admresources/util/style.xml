@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource>
+    <elemento title="swb-encuesta" selector="swb-encuesta"></elemento>
+    <elemento title="swb-encuesta h1" selector="swb-encuesta h1" selected="true"></elemento>
+    <elemento title="swb-encuesta h2" selector="swb-encuesta h2"></elemento>
+    <elemento title="swb-encuesta label" selector="swb-encuesta label"></elemento>
+    <elemento title="swb-encuesta ul" selector="swb-encuesta ul"></elemento>
+    <elemento title="swb-encuesta a" selector="swb-encuesta a"></elemento>
+</resource>
