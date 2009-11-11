@@ -16,6 +16,7 @@
             <statictext name="txtTarget">Em uma nova janela:</statictext>
             <input type="RADIO" name="target" label="Sim" value="1"/>
             <input type="RADIO" name="target" label="Não" value="0"/>
+            <input type="TEXT" name="styleClass" id="styleClass" label="Nombre de clase de estilo para liga:" size="30"/>
         </fieldset>
 
         <fieldset>
