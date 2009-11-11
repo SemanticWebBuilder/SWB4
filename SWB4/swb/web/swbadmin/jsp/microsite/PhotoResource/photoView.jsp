@@ -132,7 +132,15 @@
     %>
     <!-- fin paginacion -->
     <div class="adminTools">
-        <a class="adminTool" href="<%=urlAddPhoto%>">Agregar foto</a>
+        <%
+        if (member.canAdd())
+            {
+            %>
+                <a class="adminTool" href="<%=urlAddPhoto%>">Agregar foto</a>
+            <%
+            }
+        %>
+        
 
     </div>
     <%
