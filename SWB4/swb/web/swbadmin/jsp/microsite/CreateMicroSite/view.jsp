@@ -28,9 +28,9 @@
         urlAdd.setParameter("act", "add");
         urlAdd.setWindowState(SWBResourceURL.WinState_NORMAL);
         %>
-        <div class="adminTools" >
-            <a class="adminTool" href="<%=urlAdd%>">Crear Comunidad</a>
-        </div>
+        <li>
+            <a class="active" href="<%=urlAdd%>">Crear Comunidad</a>
+        </li>
         <%
     }
 %>
