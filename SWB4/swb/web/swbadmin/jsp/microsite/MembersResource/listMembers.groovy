@@ -158,7 +158,10 @@ if (null!=microsite){
         while (lista.hasNext()){
             iElement++;
             Member mem_curr = lista.next()
-            
+            if (iElement > fin)
+            {
+                break;
+            }
             if (iElement >= inicio && iElement <= fin)
             {
                 User mem_usr = mem_curr.getUser()
