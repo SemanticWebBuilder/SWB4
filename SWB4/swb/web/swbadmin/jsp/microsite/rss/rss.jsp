@@ -35,6 +35,10 @@
                 int count = 0;
                 WebSite site = ((WebPage) request.getAttribute("webpage")).getWebSite();
                 User owner = (User) request.getAttribute("user");
+                if (owner == null)
+                {
+                    return;
+                }
                 User user = owner;
                 if (request.getParameter("user") != null)
                 {
@@ -49,7 +53,7 @@
                     if (obj != null && obj instanceof PostElement && ((PostElement) obj).getVisibility() == MicroSiteElement.VIS_ALL)
                     {
                         count++;
-                        
+
                     }
                 }
                 String userURI = java.net.URLEncoder.encode(user.getURI());
