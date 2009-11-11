@@ -8,9 +8,12 @@
         <%@page import="org.semanticwb.SWBPortal"%>
         <%@page import="org.semanticwb.SWBUtils"%>
         <%@page import="org.semanticwb.model.*"%>
+        <%@page import="org.semanticwb.platform.*"%>
+
+
 
         <%!
-        private final int I_PAGE_SIZE = 4;
+        private final int I_PAGE_SIZE = 10;
         private final int I_INIT_PAGE = 1;
         %>
         <%
@@ -125,11 +128,17 @@
         <%
         //Termina paginación
         String perfilPath=website.getWebPage("perfil").getUrl();
-        SWBResourceURL urlAction=paramRequest.getActionUrl();
         String photo=SWBPortal.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
         %>
         <div id="friendCards">
         <%
+        HashMap <String, SemanticProperty> mapa = new HashMap();
+        Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#_ExtendedAttributes").listProperties();
+        while(list.hasNext())
+        {
+            SemanticProperty sp=list.next();
+            mapa.put(sp.getName(),sp);
+        }
         int cont=0;
         Iterator itResult=setResult.iterator();
         while(itResult.hasNext())
@@ -139,26 +148,24 @@
             if(cont<=iIniPage) continue;
             else if(cont>iFinPage) break;
 
-            urlAction.setAction("createProspect");
-            urlAction.setParameter("user", userprosp.getURI());
             if(userprosp.getPhoto()!=null) photo=userprosp.getPhoto();
         %>
             <div class="friendCard">
               <img class="profilePic" src="<%=SWBPortal.getWebWorkPath()+photo%>" alt="usuario">
                <div class="friendCardInfo">
-                <a class="ico" href="#"><img src="<%=SWBPortal.getWebWorkPath()%>/models/<%=website.getId()%>/css/images/icoMail.png" alt="enviar un mensaje"></a>
+                <a class="ico" href="mailto:<%=userprosp.getEmail()%>"><img src="<%=SWBPortal.getWebWorkPath()%>/models/<%=website.getId()%>/css/images/icoMail.png" alt="enviar un mensaje"></a>
                 <a class="ico" href="<%=perfilPath%>?user=<%=userprosp.getEncodedURI()%>"><img src="<%=SWBPortal.getWebWorkPath()%>/models/<%=website.getId()%>/css/images/icoUser.png" alt="ir al perfil"></a>
                 <%if(!user.getURI().equals(userprosp.getURI()) && !FriendshipProspect.findFriendProspectedByRequester(user, userprosp, website)){
-                    urlAction.setAction("addFriendRelship");
+                    urlAction.setAction("createProspect");
                     urlAction.setParameter("user", userprosp.getURI());
                 %>
-                    <a class="ico" href="#"><img src="<%=SWBPortal.getWebWorkPath()%>/models/<%=website.getId()%>/css/images/icoMas.png" alt="agregar"></a>
+                    <a class="ico" href="<%=urlAction%>"><img src="<%=SWBPortal.getWebWorkPath()%>/models/<%=website.getId()%>/css/images/icoMas.png" alt="agregar"></a>
                 <%}%>
                 <div class="friendCardName">
                   <p><%=userprosp.getFullName()%></p>
                 </div>
-                <p>Sexo:<%=userprosp.getExtendedAttribute("gender")%></p>
-                <p>Edad:<%=userprosp.getExtendedAttribute("age")%></p>
+                <p>Sexo:<%=user.getExtendedAttribute(mapa.get("userSex"))%></p>
+                <p>Edad:<%=user.getExtendedAttribute(mapa.get("userAge"))%></p>
             </div>
             </div>
             <%
