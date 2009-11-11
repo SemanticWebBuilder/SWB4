@@ -42,22 +42,22 @@
     }
 </script>
 <%
-if(arrayEntries.size()>0)
-    {
+                if (arrayEntries.size() > 0)
+                {
 %>
 <ul class="userList">
     <%
 
 
-                int bkCount = 0;
-                if (entries != null && entries.hasNext() /*&& showList*/)
-                {
+                    int bkCount = 0;
+                    if (entries != null && entries.hasNext() /*&& showList*/)
+                    {
     %>
 
     <%
-                    while (entries.hasNext() && bkCount < maxBookmarks)
-                    {
-                        BookmarkEntry entry = entries.next();
+                        while (entries.hasNext() && bkCount < maxBookmarks)
+                        {
+                            BookmarkEntry entry = entries.next();
 
 
     %>
@@ -69,11 +69,11 @@ if(arrayEntries.size()>0)
         </a>
 
         <%
-                if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT)
-                {
-                    SWBResourceURL removeUrl = paramRequest.getActionUrl();
-                    removeUrl.setAction("DELETE").setParameter("id", entry.getId());
-                    String removeurl = "javascript:validateremove('" + removeUrl + "','" + entry.getTitle() + "')";
+                            if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT)
+                            {
+                                SWBResourceURL removeUrl = paramRequest.getActionUrl();
+                                removeUrl.setAction("DELETE").setParameter("id", entry.getId());
+                                String removeurl = "javascript:validateremove('" + removeUrl + "','" + entry.getTitle() + "')";
         %>
 
         <a class="userListLink" href="<%=removeurl%>">Eliminar <%=entry.getTitle()%></a>
@@ -81,15 +81,15 @@ if(arrayEntries.size()>0)
 
 
         <%
-                }
+                            }
         %>
     </li>
     <%
-                        bkCount++;
+                            bkCount++;
+                        }
+
                     }
-                    
-                }
-                if (paramRequest.getUser().isSigned())
+                    if (paramRequest.getUser().isSigned())
                     {
                         if (!existe && paramRequest.getCallMethod() != paramRequest.Call_CONTENT)
                         {
@@ -103,21 +103,26 @@ if(arrayEntries.size()>0)
     %>
 </ul>
 <%
-}
-else
-    {
-    %>
-    <ul class="userList"><li>No tiene ligas registradas.</li>
-        <%
-        if (paramRequest.getCallMethod() != paramRequest.Call_CONTENT)
+                }
+                else
                 {
-        %>
-        <li><a class="userListLink" href="<%=aUrl%>">Agregar esta p&aacute;gina </a></li>
-        <%
-            }
-        %>
-    </ul>
-    <%
-    }
+%>
+<ul class="userList">
+<%
+                    if (paramRequest.getCallMethod() != paramRequest.Call_CONTENT)
+                    {
+%>
+<li><a class="userListLink" href="<%=aUrl%>">Agregar esta p&aacute;gina </a></li>
+<%
+                    }
+                    else
+                    {
+%>
+<li>No tiene ligas registradas.</li>
+    <%        }
+    %>
+</ul>
+<%
+                }
             }
 %>
