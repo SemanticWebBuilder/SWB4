@@ -143,7 +143,7 @@
         %>
         <a class="adminTool" href="<%=urlAddVideo%>">Agregar video</a>
         <%
-            }           
+            }
         %>
 
 
@@ -170,22 +170,32 @@
                         SWBResourceURL removeUrl = paramRequest.getActionUrl();
                         removeUrl.setParameter("act", "remove");
                         String removeurl = "javascript:validateremove('" + removeUrl + "','" + video.getTitle() + "','" + video.getURI() + "')";
+                        String title = "Sin título";
+                        if (video.getTitle() != null)
+                        {
+                            title = video.getTitle();
+                        }
+                        String description="Sin descripción";
+                        if (video.getDescription() != null)
+                        {
+                            description = video.getDescription();
+                        }
 
     %>
     <div class="noticia">
-        <img src="<%=video.getPreview()%>" alt="<%= video.getTitle()%>">
+        <img src="<%=video.getPreview()%>" alt="<%=title%>">
         <div class="noticiaTexto">
-            <h2><%=video.getTitle()%></h2>
+            <h2><%=title%></h2>
             <p>&nbsp;<br>Por: <%=video.getCreator().getFullName()%><br><%=dateFormat.format(video.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(video.getCreated(), user.getLanguage())%></p>
             <p>
-                <%=video.getDescription()%> | <a href="<%=viewUrl%>">Ver más</a>
+                <%=description%> | <a href="<%=viewUrl%>">Ver más</a>
                 <%
-                if (video.canModify(member))
-                {
+                        if (video.canModify(member))
+                        {
                 %>
                 | <a href="<%=editEventURL%>">Editar</a> | <a href="<%=removeurl%>">Eliminar</a>
                 <%
-                }
+                        }
                 %>
             </p>            
             <p class="stats">
