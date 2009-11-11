@@ -3,11 +3,12 @@
 <%@page import="org.semanticwb.model.Resource" %>
 <%@page import="java.text.*,org.semanticwb.portal.SWBFormMgr"%>
 <script language="Javascript" type="text/javascript">
-    function validateremove(url, title,uri)
+    function validateremove(url, title)
     {
         if(confirm('¿Esta seguro de borrar la foto: '+title+'?'))
         {
-            var url=url+'&uri='+escape(uri);
+            //var url=url+'&uri='+escape(uri);
+            //alert(url);
             window.location.href=url;
         }
     }
@@ -194,7 +195,8 @@
                         String editEventURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", photo.getURI()).toString();
                         SWBResourceURL removeUrl = paramRequest.getActionUrl();
                         removeUrl.setParameter("act", "remove");
-                        String removeurl = "javascript:validateremove('" + removeUrl + "','" + photo.getTitle() + "','" + photo.getURI() + "')";
+                        removeUrl.setParameter("uri", photo.getEncodedURI());
+                        String removeurl = "javascript:validateremove('" + removeUrl + "','" + photo.getTitle() + "')";
 
     %>
     <div class="noticia">        
