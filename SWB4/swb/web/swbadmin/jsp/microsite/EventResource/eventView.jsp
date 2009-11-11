@@ -86,6 +86,7 @@
                 inicio = 0;
                 fin = ELEMENETS_BY_PAGE;
             }
+            inicio++;
 %>
 <div class="columnaIzquierda">
 
@@ -108,9 +109,12 @@
                 {
                     previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
                 }
+                if(ipage>1)
+                    {
         %>
         <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
             <%
+            }
                 for (int i = 1; i <= paginas; i++)
                 {
             %>
@@ -119,7 +123,14 @@
                 }
         %>
 
+        <%
+                if (ipage != paginas)
+                {
+        %>
         <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
+            <%
+                }
+            %>
     </div>
     <%
             }
@@ -222,9 +233,12 @@ if (elements.size() == 0)
                         {
                             previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
                         }
+                        if(ipage>1)
+                    {
         %>
         <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
             <%
+            }
                         for (int i = 1; i <= paginas; i++)
                         {
             %>
@@ -234,7 +248,14 @@ if (elements.size() == 0)
         %>
 
 
+        <%
+                if (ipage != paginas)
+                {
+        %>
         <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
+            <%
+                }
+            %>
     </div>
     <%
             }

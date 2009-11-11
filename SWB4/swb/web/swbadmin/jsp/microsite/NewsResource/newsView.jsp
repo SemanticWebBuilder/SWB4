@@ -20,7 +20,7 @@
             User user = paramRequest.getUser();
             WebPage wpage = paramRequest.getWebPage();
             MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
-            Member member = Member.getMember(user, wpage);            
+            Member member = Member.getMember(user, wpage);
             String urladd = paramRequest.getRenderUrl().setParameter("act", "add").toString();
             boolean canadd = member.canAdd();
             String suscribeURL = paramRequest.getActionUrl().setParameter("act", "subcribe").toString();
@@ -86,6 +86,7 @@
                 inicio = 0;
                 fin = ELEMENETS_BY_PAGE;
             }
+            inicio++;
 %>
 
 <div class="columnaIzquierda">
@@ -108,9 +109,12 @@
                 {
                     previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
                 }
+                if (ipage > 1)
+                {
         %>
         <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
             <%
+                }
                 for (int i = 1; i <= paginas; i++)
                 {
             %>
@@ -120,7 +124,14 @@
         %>
 
 
+        <%
+                if (ipage != paginas)
+                {
+        %>
         <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
+            <%
+                }
+            %>
     </div>
     <%
             }
@@ -159,25 +170,24 @@
     <%
             if (elements.size() == 0)
             {
-            %>
-            <p>No hay noticias registradas en la comunidad</p>
-            <%
-            }
-            int iElement = 0;
-            for (NewsElement anew : elements)
-            {
-                if (anew.canView(member))
-                {
-                    iElement++;
+    %>
+    <p>No hay noticias registradas en la comunidad</p>
+    <%            }
+    int iElement = 0;
+    for (NewsElement anew : elements)
+    {
+        if (anew.canView(member))
+        {
+            iElement++;
 
-                    if (iElement >= inicio && iElement <= fin)
-                    {
-                        SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", anew.getURI());                        
-                        String rank = df.format(anew.getRank());
-                        String editEventURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", anew.getURI()).toString();
-                        SWBResourceURL removeUrl = paramRequest.getActionUrl();
-                        removeUrl.setParameter("act", "remove");
-                        String removeurl = "javascript:validateremove('" + removeUrl + "','" + anew.getTitle() + "','" + anew.getURI() + "')";
+            if (iElement >= inicio && iElement <= fin)
+            {
+                SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", anew.getURI());
+                String rank = df.format(anew.getRank());
+                String editEventURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", anew.getURI()).toString();
+                SWBResourceURL removeUrl = paramRequest.getActionUrl();
+                removeUrl.setParameter("act", "remove");
+                String removeurl = "javascript:validateremove('" + removeUrl + "','" + anew.getTitle() + "','" + anew.getURI() + "')";
     %>
     <div class="noticia">
         <img src="<%= SWBPortal.getWebWorkPath() + anew.getNewsThumbnail()%>" alt="<%= anew.getTitle()%>">
@@ -208,8 +218,8 @@
     %>
 
 
-<!-- paginacion -->
-<%
+    <!-- paginacion -->
+    <%
                 if (paginas > 1)
                 {
     %>
@@ -217,29 +227,39 @@
 
 
         <%
-                String nextURL = "#";
-                String previusURL = "#";
-                if (ipage < paginas)
-                {
-                    nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
-                }
-                if (ipage > 1)
-                {
-                    previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
-                }
+                    String nextURL = "#";
+                    String previusURL = "#";
+                    if (ipage < paginas)
+                    {
+                        nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
+                    }
+                    if (ipage > 1)
+                    {
+                        previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
+                    }
+                    if(ipage>1)
+                    {
         %>
         <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
             <%
-                for (int i = 1; i <= paginas; i++)
-                {
+            }
+                    for (int i = 1; i <= paginas; i++)
+                    {
             %>
         <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%=i%></a>
         <%
-                }
+                    }
         %>
 
 
+        <%
+                if (ipage != paginas)
+                {
+        %>
         <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
+            <%
+                }
+            %>
     </div>
     <%
             }
@@ -248,12 +268,11 @@
 </div>
 <div class="columnaCentro">
     <%
-        if(paginas>1)
+            if (paginas > 1)
             {
-            %>
-            <br><br>
-            <%
-            }
+    %>
+    <br><br>
+    <%            }
     %>
     <ul class="miContenido">
         <%
@@ -266,10 +285,10 @@
         %>
         <li><a href="<%=urla%>">Suscribirse a esta comunidad</a></li>
         <%
-                    }
-                    else
-                    {
-                        urla.setParameter("act", "unsubscribe");
+                }
+                else
+                {
+                    urla.setParameter("act", "unsubscribe");
         %>
         <li><a href="<%=urla%>">Cancelar suscripción a comunidad</a></li>
         <%

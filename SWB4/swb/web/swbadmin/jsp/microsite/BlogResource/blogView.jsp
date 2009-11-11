@@ -107,6 +107,7 @@
                 inicio = 0;
                 fin = ELEMENETS_BY_PAGE;
             }
+            inicio++;
 
     %>
     <%
@@ -127,9 +128,12 @@
                 {
                     previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
                 }
+                if (ipage > 1)
+                {
         %>
         <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
             <%
+                }
                 for (int i = 1; i <= paginas; i++)
                 {
             %>
@@ -137,8 +141,15 @@
         <%
                 }
         %>
-
+        <%
+                if (ipage != paginas)
+                {
+        %>
         <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
+            <%
+                }
+            %>
+
     </div>
     <%
             }
@@ -171,10 +182,9 @@
 
             if (elements.size() == 0)
             {
-            %>
-            <p>No hay entradas para el blog</p>
-            <%
-            }
+    %>
+    <p>No hay entradas para el blog</p>
+    <%            }
 
             int iElement = 0;
             for (PostElement post : elements)
@@ -262,9 +272,12 @@
                 {
                     previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
                 }
+                if (ipage > 1)
+                {
         %>
         <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
             <%
+                }
                 for (int i = 1; i <= paginas; i++)
                 {
             %>
@@ -272,9 +285,16 @@
         <%
                 }
         %>
-
-
+        <%
+                        if (ipage != paginas)
+                        {
+        %>
         <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
+            <%
+                }
+            %>
+
+
     </div>
     <%
             }
