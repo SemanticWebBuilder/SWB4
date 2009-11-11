@@ -35,25 +35,26 @@ WebPage wpage=paramRequest.getWebPage()
 Member member = Member.getMember(user,wpage)
 def lista = Member.listMemberByUser(user,wpage.getWebSite())
 
-
 if(request.getParameter("user")!=null)
 {
     return;
 }
-println """
-<ul id="MenuBar1" class="MenuBarHorizontal">
-<li class="selectTitle">
-    <p>Mis comunidades</p>
-     <ul>
-"""
-lista.each(){
-    Member mem_curr = it
-    MicroSite mem_mcs = mem_curr.getMicroSite()
-    if (null!=mem_mcs){
-        def titulo = mem_mcs.getDisplayName()
-        def url = mem_mcs.getUrl()
-        def urlimg=SWBPortal.getWebWorkPath()+"/models/"+ paramRequest.getWebPage().getWebSiteId()  +"/css/boton_contacto.png"
-        println """<li><a class="contactos_nombre" href="${url}">$titulo</a></li>"""
+if(lista.hasNext()) {
+    println """
+    <ul id="MenuBar1" class="MenuBarHorizontal">
+    <li class="selectTitle">
+        <p>Mis comunidades</p>
+         <ul>
+    """
+    lista.each(){
+        Member mem_curr = it
+        MicroSite mem_mcs = mem_curr.getMicroSite()
+        if (null!=mem_mcs){
+            def titulo = mem_mcs.getDisplayName()
+            def url = mem_mcs.getUrl()
+            def urlimg=SWBPortal.getWebWorkPath()+"/models/"+ paramRequest.getWebPage().getWebSiteId()  +"/css/boton_contacto.png"
+            println """<li><a class="contactos_nombre" href="${url}">$titulo</a></li>"""
+        }
     }
+    println """</ul></li></ul>"""
 }
-println """</ul></li></ul>"""
