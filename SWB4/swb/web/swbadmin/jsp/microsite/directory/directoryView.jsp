@@ -33,7 +33,7 @@ if (sobj != null) {
        <div class="editarInfo1">
             <p>
                 <%if(user.isRegistered() && user.isSigned()){%>
-            <div class="adminTools"><a href="<%=url%>">Agregar elemento al indice</a></div>
+            <div class="adminTools"><a class="adminTool" href="<%=url%>">Agregar elemento al indice</a></div>
                <%}else{%>
                 <span class="adminTool">Registrese para publicar</span>
                <%}%>
