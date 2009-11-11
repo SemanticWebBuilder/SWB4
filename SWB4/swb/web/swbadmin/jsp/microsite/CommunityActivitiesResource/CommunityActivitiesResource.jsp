@@ -30,15 +30,14 @@
                     user = ca.getUser();
                     mse = ca.getElement();
                     Date updated=new Date(ca.getModified().getTime());
-                    String sActualized="actualizó";
-                    
                     if (mse != null && user != null && ms != null)
                     {
-                        if(mse.getCreated().equals(updated))
+                        String sActualized="actualizó";
+                        if(SWBUtils.TEXT.getTimeAgo(updated, user.getLanguage()).equals(SWBUtils.TEXT.getTimeAgo(mse.getCreated(), user.getLanguage())))
                         {
                         sActualized="registró";
                         }
-        %>
+        %>        
         <li> <%=user.getFullName()%> <%=sActualized%> <a class="elemento" href="<%=mse.getURL()%>" ><%=mse.getDisplayTitle(user.getLanguage())%></a>
             <%=SWBUtils.TEXT.getTimeAgo(updated, user.getLanguage())%>.</li>
             <%
