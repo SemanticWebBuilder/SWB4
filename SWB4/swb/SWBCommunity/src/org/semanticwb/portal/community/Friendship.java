@@ -31,6 +31,16 @@ public class Friendship extends org.semanticwb.portal.community.base.FriendshipB
         return false;
     }
 
+    public static int myFriends(User user1, SWBModel model) {
+        int cont=0;
+        Iterator<Friendship> itMyFriends = Friendship.listFriendshipByFriend(user1, model);
+        while (itMyFriends.hasNext()) {
+            itMyFriends.next();
+            cont++;
+        }
+        return cont;
+    }
+
     public static boolean removeFriendRelationShip(User user1, User user2, SWBModel model) {
         Iterator<Friendship> itMyFriends = Friendship.listFriendshipByFriend(user1, model);
         while (itMyFriends.hasNext()) {
