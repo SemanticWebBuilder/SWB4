@@ -1,14 +1,11 @@
 <%@page contentType="text/html"%>
 <%@page import="org.semanticwb.platform.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
-<script type="text/javascript">
 
 <%
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             User user = paramRequest.getUser();
             WebPage wpage = paramRequest.getWebPage();
             Member member = Member.getMember(user, wpage);
-%>
-<%
             String uri = request.getParameter("uri");
             VideoElement rec = (VideoElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
             if (rec == null)
@@ -39,7 +36,7 @@ Error: Elemento no encontrado...
             }
 
 %>
-
+<script type="text/javascript">
     function validaForma()
 {
     var foto = document.frmeditvideo.video_code.value;
