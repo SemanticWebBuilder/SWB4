@@ -18,9 +18,22 @@
     dojo.require("dijit.form.Button");
     dojo.require("dojo.parser");
 </script>
+<script type="text/javascript">
+    function validaForma()
+{
+    var foto = document.frmeditvideo.video_code.value;
+    if(!foto)
+    {
+        alert('¡Debe ingresar el código de youtube!');
+        document.frmaddfoto.foto.focus();
+        return;
+    }
+    document.frmeditvideo.submit();
+}
+</script>
 <div class="columnaIzquierda">
     <h3>Agregar video</h3>
-    <form class="swbform" method="post" action="<%=paramRequest.getActionUrl()%>">        
+    <form class="swbform" name="frmeditvideo" method="post" action="<%=paramRequest.getActionUrl()%>">
         <div>
             <fieldset>
                 <table>
@@ -33,7 +46,7 @@
                 </table>
             </fieldset>
             <p>
-                <strong><input class="button" dojoType="dijit.form.Button" type="submit" value="Guardar" label="Guardar"/></strong>
+                <strong><input class="button" onclick="validaForma()" dojoType="dijit.form.Button" type="button" value="Guardar" label="Guardar"/></strong>
                 <input class="button" dojoType="dijit.form.Button" type="button" label="Cancelar" value="Cancelar" onclick="window.location='<%=paramRequest.getRenderUrl()%>';"/>
             </p>
         </div>
