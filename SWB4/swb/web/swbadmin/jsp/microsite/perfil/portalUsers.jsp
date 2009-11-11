@@ -17,8 +17,11 @@
         private final int I_INIT_PAGE = 1;
         %>
         <%
-        WebSite website=paramRequest.getWebPage().getWebSite();
+        WebPage webpage=paramRequest.getWebPage();
+        WebSite website=webpage.getWebSite();
         User user=paramRequest.getUser();
+
+
 
         String sparams="";boolean existFilter=false;
         if(request.getParameter("alphabet")!=null) {
@@ -95,13 +98,12 @@
 
         <div class="paginacion">
         <%
-        if(iTotPage>1)%>Página(<%
         if (actualPage > 1) {
              int gotop = (actualPage - 1);
              urlPag.setParameter("actualPage", ""+gotop);
 
              %>
-                <a class="link" href="<%=urlPag%><%if(existFilter){%>&alphabet=<%=sparams%><%}%>"><<</a>
+                <a class="link" href="<%=urlPag%><%if(existFilter){%>&alphabet=<%=sparams%><%}%>"><img src="<%=SWBPortal.getWebWorkPath()%>/models/<%=website.getId()%>/css/images/pageArrowLeft.gif" alt="anterior"></a>
              <%
         }
         if(iTotPage>1){
@@ -120,10 +122,11 @@
              int gotop = (actualPage + 1);
              urlPag.setParameter("actualPage", ""+gotop);
              %>
-                <a class="link" href="<%=urlPag%><%if(existFilter){%>&alphabet=<%=sparams%><%}%>">>></a>
+                <a class="link" href="<%=urlPag%><%if(existFilter){%>&alphabet=<%=sparams%><%}%>"><img src="<%=SWBPortal.getWebWorkPath()%>/models/<%=website.getId()%>/css/images/pageArrowRight.gif" alt="anterior"></a>
              <%
         }
-        if(iTotPage>1){%>)<%}%>
+        
+        %>
         </div>
         <%
         //Termina paginación
