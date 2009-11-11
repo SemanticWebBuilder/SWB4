@@ -45,9 +45,11 @@
                 elements = SWBComparator.sortByCreated(elements, false);
                 while (elements.hasNext())
                 {
-                    if (elements.next() instanceof PostElement)
+                    Object obj = elements.next();
+                    if (obj != null && obj instanceof PostElement && ((PostElement) obj).getVisibility() == MicroSiteElement.VIS_ALL)
                     {
                         count++;
+                        
                     }
                 }
                 String userURI = java.net.URLEncoder.encode(user.getURI());
