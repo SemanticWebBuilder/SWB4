@@ -1,11 +1,10 @@
 <%@page contentType="text/html"%>
 <%@page import="java.text.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <script language="Javascript" type="text/javascript">
-    function validateremove(url, title,uri)
+    function validateremove(url, title)
     {
         if(confirm('¿Esta seguro de borrar el video: '+title+'?'))
-        {
-            var url=url+'&uri='+escape(uri);
+        {            
             window.location.href=url;
         }
     }
@@ -185,6 +184,7 @@
                         String editEventURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", video.getURI()).toString();
                         SWBResourceURL removeUrl = paramRequest.getActionUrl();
                         removeUrl.setParameter("act", "remove");
+                        removeUrl.setParameter("uri", video.getEncodedURI());
                         String removeurl = "javascript:validateremove('" + removeUrl + "','" + video.getTitle() + "','" + video.getURI() + "')";
                         String title = "Sin título";
                         if (video.getTitle() != null)
