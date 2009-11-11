@@ -133,7 +133,19 @@ if (null!=microsite){
         for (int i = 1; i <= paginas; i++)
         {
             println """
-        <a href="$url?ipage=$i">$i</a>
+        <a href="$url?ipage=$i">
+        """
+            if(i==ipage)
+            {
+                println """<strong>"""
+            }
+            println """$i"""
+            if(i==ipage)
+            {
+                println """</strong>"""
+            }
+            println """
+        </a>
         """
         }
         if(ipage!=paginas)
