@@ -35,6 +35,7 @@ Error: Elemento no encontrado...
             {
                 tags = rec.getTags();
             }
+
 %>
 <div class="columnaIzquierda">    
     <form method="post" action="<%=paramRequest.getActionUrl()%>">
@@ -54,7 +55,11 @@ Error: Elemento no encontrado...
                 <div>
                     <div>
                         <p>
-                            <label for="video_title">Título:</label><br />
+                            <label for="video_code">Código youTube&nbsp;<em>*</em></label><br/>
+                        <textarea id="video_code" style_="width: 98%" rows="2" cols="23" name="video_code"><%=rec.getCode()%></textarea>
+                        </p>
+                        <p>
+                            <label for="video_title">Título:</label><br/>
                             <input id="video_title" style="width: 98%;" type="text" class="textfield" size="25" name="video_title" maxlength="200" value="<%=title%>" />
                         </p>
                         <p>
