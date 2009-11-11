@@ -187,7 +187,7 @@
                 <%
                 }
                 %>
-            </p>
+            </p>            
             <p class="stats">
             	Puntuación: <%=rank%><br>
                 <%=video.getViews()%> vistas
