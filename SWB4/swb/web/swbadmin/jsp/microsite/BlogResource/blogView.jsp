@@ -3,11 +3,10 @@
 <%!    private static final int ELEMENETS_BY_PAGE = 5;
 %>
 <script language="Javascript" type="text/javascript">
-    function validateremove(url, title,uri)
+    function validateremove(url, title)
     {
         if(confirm('¿Esta seguro de borrar la entrada: '+title+'?'))
-        {
-            var url=url+'&uri='+escape(uri);
+        {            
             window.location.href=url;
         }
     }
@@ -232,7 +231,8 @@
                         urlDetail.setParameter("uri", post.getURI());
                         SWBResourceURL removeUrl = paramRequest.getActionUrl();
                         removeUrl.setParameter("act", "remove");
-                        String removeurl = "javascript:validateremove('" + removeUrl + "','" + post.getTitle() + "','" + post.getURI() + "')";
+                        removeUrl.setParameter("uri", post.getEncodedURI());
+                        String removeurl = "javascript:validateremove('" + removeUrl + "','" + post.getTitle() + "')";
                         boolean canEditPost = post.canModify(member);
                         String rank = df.format(post.getRank());
                         String visited = String.valueOf(post.getViews());
