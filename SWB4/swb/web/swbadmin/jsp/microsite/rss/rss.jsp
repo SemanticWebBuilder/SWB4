@@ -32,18 +32,22 @@
 
             if (request.getAttribute("webpage") != null)
             {
-                int count = 0;
-                WebSite site = ((WebPage) request.getAttribute("webpage")).getWebSite();
-                User owner = (User) request.getAttribute("user");
-                if (owner == null)
+                if (request.getAttribute("user") == null || request.getAttribute("webpage") == null)
                 {
                     return;
                 }
+                int count = 0;
+                WebSite site = ((WebPage) request.getAttribute("webpage")).getWebSite();
+                User owner = (User) request.getAttribute("user");
                 User user = owner;
                 if (request.getParameter("user") != null)
                 {
                     SemanticObject semObj = SemanticObject.createSemanticObject(request.getParameter("user"));
                     user = (User) semObj.createGenericInstance();
+                }
+                if (user.getURI() == null)
+                {
+                    return;
                 }
                 Iterator<MicroSiteElement> elements = PostElement.listMicroSiteElementByCreator(user, site);
                 elements = SWBComparator.sortByCreated(elements, false);
