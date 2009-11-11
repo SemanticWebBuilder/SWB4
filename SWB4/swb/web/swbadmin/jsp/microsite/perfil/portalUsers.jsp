@@ -65,6 +65,7 @@
             else if(contTokens==3) iTotPage=Integer.parseInt(token);
         }
         %>
+        <b>Resultado:</b> <%=setResult.size()%> usuarios
         <ul id="listaAlfabet">
             <li><a <%if(!existFilter){%>class="active"<%}%> href="<%=urlAlphabetic%>">Todos&nbsp;&nbsp;&nbsp;</a></li>
             <li><a <%if(sparams.equals("a")){%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "a")%>">A</a></li>
@@ -81,7 +82,7 @@
             <li><a <%if(sparams.equals("l")){%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "l")%>">L</a></li>
             <li><a <%if(sparams.equals("m")){%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "m")%>">M</a></li>
             <li><a <%if(sparams.equals("n")){%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "n")%>">N</a></li>
-            <li><a <%if(sparams.equals("ñ")){%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "ñ")%>">Ñ</a></li>
+            <li><a <%if(sparams.equals("ñ")){%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "ñ")%>">&Ntilde;</a></li>
             <li><a <%if(sparams.equals("o")){%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "o")%>">O</a></li>
             <li><a <%if(sparams.equals("p")){%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "p")%>">P</a></li>
             <li><a <%if(sparams.equals("q")){%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "q")%>">Q</a></li>
@@ -158,7 +159,7 @@
                <div class="friendCardInfo">
                 <a class="ico" href="mailto:<%=userprosp.getEmail()%>"><img src="<%=SWBPortal.getWebWorkPath()%>/models/<%=website.getId()%>/css/images/icoMail.png" alt="enviar un mensaje"></a>
                 <a class="ico" href="<%=perfilPath%>?user=<%=userprosp.getEncodedURI()%>"><img src="<%=SWBPortal.getWebWorkPath()%>/models/<%=website.getId()%>/css/images/icoUser.png" alt="ir al perfil"></a>
-                <%if(!user.getURI().equals(userprosp.getURI()) && !FriendshipProspect.findFriendProspectedByRequester(user, userprosp, website)){
+                <%if(!user.getURI().equals(userprosp.getURI()) && !Friendship.areFriends(user, userprosp, website)&& !FriendshipProspect.findFriendProspectedByRequester(user, userprosp, website)){
                     urlAction.setAction("createProspect");
                     urlAction.setParameter("user", userprosp.getURI());
                 %>
