@@ -121,6 +121,7 @@ public class VideoResource extends org.semanticwb.portal.community.base.VideoRes
             VideoElement rec=(VideoElement)SemanticObject.createSemanticObject(uri).createGenericInstance();
             if(rec!=null && rec.canModify(mem))
             {
+                rec.setCode(request.getParameter("video_code"));
                 rec.setTitle(request.getParameter("video_title"));
                 rec.setDescription(request.getParameter("video_description"));
                 rec.setTags(request.getParameter("video_tags"));
