@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class EventElementBase extends org.semanticwb.portal.community.MicroSiteElement implements org.semanticwb.model.Rankable,org.semanticwb.model.Viewable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public class EventElementBase extends org.semanticwb.portal.community.MicroSiteElement implements org.semanticwb.model.Rankable,org.semanticwb.model.Viewable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.portal.community.Interactiveable
 {
     public static class ClassMgr
     {
