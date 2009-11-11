@@ -16,6 +16,10 @@
 <%
             return;
         }
+        if(!rec.canModify(member))
+    {
+        return;
+    }
 %>
 <div class="columnaIzquierda">    
 <form method="post" action="<%=paramRequest.getActionUrl()%>">
