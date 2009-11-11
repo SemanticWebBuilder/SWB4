@@ -237,12 +237,24 @@ if (null!=microsite){
         <a href="$previusURL"><img src="$imageurlleft" alt="anterior"></a>
             """
             }
-            for (int i = 1; i <= paginas; i++)
-            {
-                println """
-        <a href="$url?ipage=$i">$i</a>
+           for (int i = 1; i <= paginas; i++)
+        {
+            println """
+        <a href="$url?ipage=$i">
         """
+            if(i==ipage)
+            {
+                println """<strong>"""
             }
+            println """$i"""
+            if(i==ipage)
+            {
+                println """</strong>"""
+            }
+            println """
+        </a>
+        """
+        }
             if(ipage!=paginas)
             {
                 println """<a href="$nextURL"><img src="$imageurlright" alt="siguiente"></a>"""
