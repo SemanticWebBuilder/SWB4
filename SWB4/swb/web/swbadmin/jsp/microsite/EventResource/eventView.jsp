@@ -143,23 +143,7 @@
         %>
         <a class="adminTool" href="<%=addEventURL%>">Agregar evento</a>
         <%
-            }
-            if (member.canView())
-            {
-                if (!wputil.isSubscribed(member))
-                {
-        %>
-        <a class="adminTool" href="<%=paramRequest.getActionUrl().setParameter("act", "subscribe").toString()%>">Suscribirse a canal de eventos</a>
-        <%
-                }
-                else
-                {
-        %>
-        <a class="adminTool" href="<%=paramRequest.getActionUrl().setParameter("act", "unsubscribe").toString()%>">Cancelar suscripción</a>
-
-        <%
-                }
-            }
+            }            
         %>
     </div>
     <%
@@ -273,20 +257,21 @@ if (elements.size() == 0)
     <ul class="miContenido">
         <%
             SWBResourceURL urla = paramRequest.getActionUrl();
-            if (user.isRegistered())
+
+            if (member.canView())
             {
-                if (member == null)
+                if (!wputil.isSubscribed(member))
                 {
                     urla.setParameter("act", "subscribe");
         %>
-        <li><a href="<%=urla%>">Suscribirse a esta comunidad a comunidad</a></li>
+        <li><a href="<%=urla%>">Suscribirse a eventos</a></li>
         <%
                 }
                 else
                 {
                     urla.setParameter("act", "unsubscribe");
         %>
-        <li><a href="<%=urla%>">Cancelar suscripción a comunidad</a></li>
+        <li><a href="<%=urla%>">Cancelar suscripción a eventos</a></li>
         <%
                 }
             }
