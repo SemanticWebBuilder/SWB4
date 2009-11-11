@@ -5,6 +5,10 @@
             User user = paramRequest.getUser();
             WebPage wpage = paramRequest.getWebPage();
             Member member = Member.getMember(user, wpage);
+            if (!member.canAdd())
+            {
+                return;
+            }
 %>
 <script type="text/javascript">
     dojo.require("dijit.form.TextBox");
