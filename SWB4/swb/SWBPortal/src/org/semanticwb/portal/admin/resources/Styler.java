@@ -56,9 +56,9 @@ public class Styler extends GenericResource {
                     "text-decoration:none;\n" +
                     "display:block;\n" +
                     "}";
-            SWBCssToXmlTranslator csst = new SWBCssToXmlTranslator();
-            String xml = csst.translateCSS(css);
-            handler = new StylerDomParser(xml, base);
+            
+            SWBCssToXmlTranslator csst = new SWBCssToXmlTranslator();            
+            handler = new StylerDomParser(csst.translateCSS(css), base);
 
 
             SWBResourceURL url = paramRequest.getRenderUrl().setCallMethod(paramRequest.Call_DIRECT).setMode("fillStyle");
