@@ -20,9 +20,9 @@
         return;
     }
     if(!rec.canModify(member))
-        {
-            return;
-        }
+    {
+        return;
+    }
 %>
 <script type="text/javascript">
     dojo.require("dijit.form.TextBox");

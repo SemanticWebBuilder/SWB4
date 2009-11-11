@@ -16,6 +16,10 @@
 <%
             return;
         }
+        if(!rec.canModify(member))
+    {
+        return;
+    }
 %>
 <script type="text/javascript">
 function validaForma()
