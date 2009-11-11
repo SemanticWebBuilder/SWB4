@@ -275,8 +275,7 @@ else
         <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
             <%
                 }
-            %>
-        Total de amigos: <%=elements.size()%>&nbsp;
+            %>        
     </div>
     <%
             }
