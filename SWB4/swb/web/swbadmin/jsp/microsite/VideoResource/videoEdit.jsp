@@ -1,5 +1,7 @@
 <%@page contentType="text/html"%>
 <%@page import="org.semanticwb.platform.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<script type="text/javascript">
+
 <%
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             User user = paramRequest.getUser();
@@ -37,8 +39,35 @@ Error: Elemento no encontrado...
             }
 
 %>
+
+    function validaForma()
+{
+    var foto = document.frmeditvideo.video_code.value;
+    if(!foto)
+    {
+        alert('¡Debe ingresar el código de youtube!');
+        document.frmaddfoto.foto.focus();
+        return;
+    }
+    var title = document.frmeditvideo.video_title.value;
+    if(!title)
+    {
+        alert('¡Debe ingresar el título del video!');
+        document.frmaddfoto.description.focus();
+        return;
+    }
+    var description = document.frmeditvideo.video_description.value;
+    if(!description)
+    {
+        alert('¡Debe ingresar la description del video!');
+        document.frmaddfoto.description.focus();
+        return;
+    }
+    document.frmeditvideo.submit();
+}
+</script>
 <div class="columnaIzquierda">    
-    <form method="post" action="<%=paramRequest.getActionUrl()%>">
+    <form method="post" name="frmeditvideo" action="<%=paramRequest.getActionUrl()%>">
         <div>
             <h3>Añádele el título, descripción y otra información al video que agregaste.</h3>
             <!--
@@ -96,7 +125,7 @@ Error: Elemento no encontrado...
                 </div>
             </fieldset>
             <p>
-                <strong><input dojoType="dijit.form.Button" type="submit" label="Guardar cambios" value="Guardar cambios" class="button"/></strong>
+                <strong><input dojoType="dijit.form.Button" onclick="validaForma()" type="button" label="Guardar cambios" value="Guardar cambios" class="button"/></strong>
                 <input class="button" dojoType="dijit.form.Button" type="button" label="Cancelar" value="Cancelar" onclick="window.location='<%=paramRequest.getRenderUrl()%>';"/>
             </p>
         </div>
