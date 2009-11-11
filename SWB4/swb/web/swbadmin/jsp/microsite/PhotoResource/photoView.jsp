@@ -270,20 +270,20 @@
     <ul class="miContenido">
         <%
             SWBResourceURL urla = paramRequest.getActionUrl();
-            if (user.isRegistered())
+           if (member.canView())
             {
-                if (member == null)
+                if (!wputil.isSubscribed(member))
                 {
                     urla.setParameter("act", "subscribe");
         %>
-        <li><a href="<%=urla%>">Suscribirse a esta comunidad</a></li>
+        <li><a href="<%=urla%>">Suscribirse a fotos</a></li>
         <%
                 }
                 else
                 {
                     urla.setParameter("act", "unsubscribe");
         %>
-        <li><a href="<%=urla%>">Cancelar suscripción a comunidad</a></li>
+        <li><a href="<%=urla%>">Cancelar suscripción a fotos</a></li>
         <%
                 }
             }
