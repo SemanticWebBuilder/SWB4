@@ -143,22 +143,7 @@
         %>
         <a class="adminTool" href="<%=urlAddVideo%>">Agregar video</a>
         <%
-            }
-            if (wputil != null && member.canView())
-            {
-                if (!wputil.isSubscribed(member))
-                {
-        %>
-        <a class="adminTool" href="<%=suscribeURL%>">Suscribirse a canal de videos</a>
-        <%
-                }
-                else
-                {
-        %>
-        <a class="adminTool" href="<%=unsuscribeURL%>">Calcelar suscripción</a>
-        <%
-                }
-            }
+            }           
         %>
 
 
@@ -273,20 +258,20 @@
     %>
     <ul class="miContenido">        <%
             SWBResourceURL urla = paramRequest.getActionUrl();
-            if (user.isRegistered())
+            if (member.canView())
             {
-                if (member == null)
+                if (!wputil.isSubscribed(member))
                 {
                     urla.setParameter("act", "subscribe");
         %>
-        <li><a href="<%=urla%>">Suscribirse a esta comunidad</a></li>
+        <li><a href="<%=urla%>">Suscribirse a videos</a></li>
         <%
                 }
                 else
                 {
                     urla.setParameter("act", "unsubscribe");
         %>
-        <li><a href="<%=urla%>">Cancelar suscripción a comunidad</a></li>
+        <li><a href="<%=urla%>">Cancelar suscripción a videos</a></li>
         <%
                 }
             }
