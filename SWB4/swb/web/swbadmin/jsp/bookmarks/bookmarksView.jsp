@@ -25,11 +25,23 @@
                 entries = arrayEntries.iterator();
             }
 %>
-
+<%
+if (paramRequest.getUser().isSigned())
+    {
+    %>
 <h2>Mis Favoritos</h2>
+<script language="Javascript" type="text/javascript">
+    function validateremove(url, title)
+    {
+        if(confirm('¿Esta seguro de borrar la liga a favorito: '+title+'?'))
+        {            
+            window.location.href=url;
+        }
+    }
+</script>
 <ul class="userList">
     <%
-            String sitepath = paramRequest.getWebPage().getWebSite().getId();            
+
 
             int bkCount = 0;
             if (entries != null && entries.hasNext() /*&& showList*/)
@@ -40,19 +52,24 @@
                 while (entries.hasNext() && bkCount < maxBookmarks)
                 {
                     BookmarkEntry entry = entries.next();
+                    SWBResourceURL removeUrl=paramRequest.getActionUrl();
+            removeUrl.setAction("DELETE").setParameter("id", entry.getId());
+            String removeurl = "javascript:validateremove('" + removeUrl + "','" + entry.getTitle() + "')";
 
     %>
     <li>
+        
         <a href="<%=entry.getBookmarkURL()%>">
             <%=entry.getTitle()%>
         </a>
+    
         <%
                     if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT)
                     {
         %>
 
-
-        <a href="<%=paramRequest.getActionUrl().setAction("DELETE").setParameter("id", entry.getId())%>">Eliminar</a>
+            <a class="userListLink" href="<%=removeurl%>">Eliminar <%=entry.getTitle()%></a>
+        
 
 
         <%
@@ -76,5 +93,6 @@
     %>
 </ul> 
 <%
+            }
             }
 %>
