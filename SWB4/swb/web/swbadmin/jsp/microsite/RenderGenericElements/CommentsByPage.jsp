@@ -4,98 +4,82 @@
     private static final int COMMENTS_IN_PAGE = 5;
 %>
 <%
-        MicroSiteElement mse=(MicroSiteElement)request.getAttribute("MicroSiteElement");
-        SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
-        WebPage webPage  = paramRequest.getWebPage();
-        Member mem = Member.getMember(paramRequest.getUser(), webPage);
-        long lpage=(Long)request.getAttribute("page");
+    MicroSiteElement mse = (MicroSiteElement) request.getAttribute("MicroSiteElement");
+    SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
+    WebPage webPage = paramRequest.getWebPage();
+    Member mem = Member.getMember(paramRequest.getUser(), webPage);
+    long lpage = (Long) request.getAttribute("page");
+    String perfilPath = paramRequest.getWebPage().getWebSite().getWebPage("perfil").getUrl();
+    
+    Iterator iterator = mse.listComments();
+    int ordinal = 0;
+    long firstInPage = ((lpage - 1) * COMMENTS_IN_PAGE) + 1;
+    long lastInPage = lpage * COMMENTS_IN_PAGE;
+
+    iterator = SWBComparator.sortByCreated(iterator, false);
+
+    while (iterator.hasNext()) {
+        Comment comment = (Comment) iterator.next();
+        ordinal++;
         
-        Iterator iterator = mse.listComments();        
-        int ordinal = 0;        
-        long firstInPage = ((lpage - 1) * COMMENTS_IN_PAGE) + 1;
-        long lastInPage = lpage * COMMENTS_IN_PAGE;
-
-        iterator = SWBComparator.sortByCreated(iterator, false);
-
-        while (iterator.hasNext()) {
-            Comment comment = (Comment) iterator.next();
-            ordinal++;
-            
-            if (ordinal < firstInPage) {
-                continue;
-            } else if (ordinal > lastInPage) {
-                break;
-            }
-
-            String spamMark = (comment.isSpam() ? "Es spam" : "Marcar como spam");
-            %>
-            <div id="comment<%=comment.getId()%>" class="comment-entry">
-            <div class="comment-head">
-            <div class="comment-info">
-            <%-- <%=ordinal%>. --%>
-            <%
-            
-            try {
-                if (comment.getCreator().getPhoto()!=null) {
-                    %>
-                    <img src="<%=SWBPortal.getWebWorkPath()%><%=comment.getCreator().getPhoto()%>" alt="foto" width="50px" height="50px" border="0">&nbsp;
-                    <%
-                }
-            } catch (NullPointerException npe) {}
-            //out.write("<span class="comment-auth">");
-            %>
-            <span class="comment-auth">
-            <%
-            try {
-                if (!comment.getCreator().getFullName().equals("")) {
-                    %>
-                    <%=comment.getCreator().getFullName()%>
-                    <%
-                    
-                } else {
-                    %>
-                    Desconocido
-                    <%
-                    
-                }
-            } catch (NullPointerException npe) {
-                %>
-                    Desconocido
-                    <%
-            }
-            %>            
-            </span>        </div>
-             <span class="comment-time">
-            <%=SWBUtils.TEXT.getTimeAgo(comment.getCreated(), mem.getUser().getLanguage())%>
-            </span>
-            <%
-            
-            
-            if (mem.canView()) {
-                %>
-                <!-- <span class="comment-spam"> -->                
-                    <div class="editarInfo"><p><a href="javascript:spam(<%=comment.getId()%>)" id="spamMark<%=comment.getId()%>"><%=spamMark%></a></p></div>
-                <!-- </span> -->
-                <%
-                
-            } else if (comment.isSpam()) {
-                %>
-                <span class="comment-spam"><%=spamMark%></span>
-                <%
-                
-            }
-            %>
-            </div>
-            <div id="comment_body_<%=comment.getId()%>">
-            <div class="comment-body">
-            <div><%=comment.getDescription()%></div>
-            </div>
-            </div>
-            </div>
-            <%
-           
+        if (ordinal < firstInPage) {
+            continue;
+        } else if (ordinal > lastInPage) {
+            break;
         }
 
+        String spamMark = (comment.isSpam() ? "[es spam]" : "[marcar como spam]");
 %>
-
- 
+    <div id="comment<%=comment.getId()%>" class="comment">
+<%
+    try {
+        if (comment.getCreator().getPhoto()!=null) {
+%>
+        <img src="<%=SWBPortal.getWebWorkPath()%><%=comment.getCreator().getPhoto()%>" alt="foto">
+<%
+        } else {
+%>
+        <img src="<%=SWBPortal.getContextPath()%>/swbadmin/images/defaultPhoto.jpg" alt="foto">
+<%
+        }
+    } catch (NullPointerException npe) {}
+        //out.write("<span class="comment-auth">");
+%>
+        <div class="commentText">
+            <p>Escrito por 
+<%
+    try {
+        if (!comment.getCreator().getFullName().equals("")) {
+%>
+                <a href="<%=perfilPath%>?user=<%=comment.getCreator().getEncodedURI()%>"><%=comment.getCreator().getFullName()%></a>
+<%
+        } else {
+%>
+                Desconocido
+<%
+        }
+    } catch (NullPointerException npe) {
+%>
+                Desconocido
+<%
+    }
+%>
+                <%=SWBUtils.TEXT.getTimeAgo(comment.getCreated(), mem.getUser().getLanguage())%>
+            </p>
+            <p><%=comment.getDescription()%></p>
+<%
+    if (mem.canView()) {
+%>
+            <p><a href="javascript:spam(<%=comment.getId()%>)" id="spamMark<%=comment.getId()%>"><%=spamMark%></a></p>
+<%
+    } else if (comment.isSpam()) {
+%>
+            <p><%=spamMark%></p>
+<%
+    }
+%>
+        </div>
+    </div>
+<%
+    }
+%>
