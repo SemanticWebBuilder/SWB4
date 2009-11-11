@@ -6,13 +6,9 @@
             {
                 return;
             }
-            int numrec = (Integer) request.getAttribute("numrec");
-            HashSet<CommunityActivity> activities = new HashSet<CommunityActivity>();
+            int numrec = (Integer) request.getAttribute("numrec");            
             Iterator<CommunityActivity> it = (Iterator<CommunityActivity>) request.getAttribute("activities");
-            if (it.hasNext())
-            {               
-                activities.add(it.next());
-            }
+            
 %>
 
 <h2>Contenidos recientes</h2>
@@ -21,8 +17,7 @@
 
             CommunityActivity ca = null;
             MicroSiteElement mse = null;
-            MicroSite ms = null;
-            it = activities.iterator();
+            MicroSite ms = null;            
             if (it.hasNext())
             {
                 int num = 0;
@@ -41,7 +36,7 @@
                     {
     %>
     
-    <li> <%=user.getFullName()%> agregó <a class="elemento" href="<%=mse.getURL()%>" ><%=mse.getDisplayTitle(user.getLanguage())%></a>
+    <li> <%=user.getFullName()%> actualizó <a class="elemento" href="<%=mse.getURL()%>" ><%=mse.getDisplayTitle(user.getLanguage())%></a>
         <%=SWBUtils.TEXT.getTimeAgo(mse.getUpdated(), user.getLanguage())%>.</li>
         <%
                 }
