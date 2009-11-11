@@ -24,11 +24,13 @@
 
                 entries = arrayEntries.iterator();
             }
+
 %>
 <%
             if (paramRequest.getUser().isSigned())
             {
 %>
+
 <h2>Mis Favoritos</h2>
 <script language="Javascript" type="text/javascript">
     function validateremove(url, title)
@@ -43,20 +45,19 @@
     <%
 
 
-        int bkCount = 0;
-        if (entries != null && entries.hasNext() /*&& showList*/)
-        {
+                int bkCount = 0;
+                if (entries != null && entries.hasNext() /*&& showList*/)
+                {
     %>
 
     <%
-                while (entries.hasNext() && bkCount < maxBookmarks)
-                {
-                    BookmarkEntry entry = entries.next();
-                    SWBResourceURL removeUrl = paramRequest.getActionUrl();
-                    removeUrl.setAction("DELETE").setParameter("id", entry.getId());
-                    String removeurl = "javascript:validateremove('" + removeUrl + "','" + entry.getTitle() + "')";
+                    while (entries.hasNext() && bkCount < maxBookmarks)
+                    {
+                        BookmarkEntry entry = entries.next();
+
 
     %>
+
     <li>
 
         <a href="<%=entry.getBookmarkURL()%>">
@@ -64,8 +65,11 @@
         </a>
 
         <%
-                    if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT)
-                    {
+                if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT)
+                {
+                    SWBResourceURL removeUrl = paramRequest.getActionUrl();
+                    removeUrl.setAction("DELETE").setParameter("id", entry.getId());
+                    String removeurl = "javascript:validateremove('" + removeUrl + "','" + entry.getTitle() + "')";
         %>
 
         <a class="userListLink" href="<%=removeurl%>">Eliminar <%=entry.getTitle()%></a>
@@ -73,26 +77,27 @@
 
 
         <%
-                    }
+                }
         %>
     </li>
     <%
-                    bkCount++;
+                        bkCount++;
+                    }
+                    
                 }
                 if (paramRequest.getUser().isSigned())
-                {
-                    if (!existe && paramRequest.getCallMethod() != paramRequest.Call_CONTENT)
                     {
+                        if (!existe && paramRequest.getCallMethod() != paramRequest.Call_CONTENT)
+                        {
     %>
 
     <li><a class="userListLink" href="<%=aUrl%>">Agregar esta p&aacute;gina </a></li>
 
     <%
+                        }
                     }
-                }
     %>
-</ul> 
+</ul>
 <%
-                }
             }
 %>
