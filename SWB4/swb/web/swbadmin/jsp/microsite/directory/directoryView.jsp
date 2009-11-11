@@ -29,7 +29,7 @@ if (sobj != null) {
     url.setParameter("uri", sobj.getURI());
     url.setParameter("act","add");
 %>
-<div class="twoColContent">
+    <div class="twoColContent">
        <div class="editarInfo1">
             <p>
                 <%if(user.isRegistered() && user.isSigned()){%>
@@ -40,7 +40,7 @@ if (sobj != null) {
             </p>
        </div>
        <div class="clear">&nbsp;</div>
- <div id="entriesList">
+       <div id="entriesList">
         <%
         //Empieza paginación
         SWBResourceURL urlPag=paramRequest.getRenderUrl();
@@ -216,7 +216,7 @@ if (sobj != null) {
         <tr><td colspan="2" align="center"><input type="submit" value="Filtrar"></td></tr>
         </table>
         </form>
-        <p align="right"><a href="<%=urlOrder.setParameter("orderBy", "title")%>">Por Nombre</a> | <a href="<%=urlOrder.setParameter("orderBy", "date")%>">por fecha</a></p>
+        <p align="right">Ordenar por <a href="<%=urlOrder.setParameter("orderBy", "title")%>">nombre</a> | <a href="<%=urlOrder.setParameter("orderBy", "date")%>">fecha</a></p>
         <!--Termina desplagado de criterios (filtros) de busqueda-->
         <%
          //Comienza Desplegado de elementos filtrados (si aplica) y ordenados
