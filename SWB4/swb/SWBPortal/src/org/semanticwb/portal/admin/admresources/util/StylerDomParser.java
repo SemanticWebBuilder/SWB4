@@ -21,7 +21,7 @@ public class StylerDomParser {
     private Document dom;
     private long serial;
     private long cp;
-    private HashMap matriz;
+    private HashMap tabs;
     private Resource client;
 
     StringBuilder script;
@@ -67,6 +67,7 @@ public class StylerDomParser {
         System.out.println("fin parseDocument");
     }
 
+    //private void processClass(Element sel) {
     private void processSelector(Element sel) {
         System.out.println("inicia processSelector...");
         String name = sel.getAttribute("name");
@@ -300,7 +301,7 @@ public class StylerDomParser {
             script.append("</div>");
             nl();
 
-            matriz.put(name, new HashMap());
+            tabs.put(name, new HashMap());
             System.out.println("fin processSelector");
         }
     }
@@ -373,7 +374,7 @@ public class StylerDomParser {
         script.append("<input id=\"stel\" type=\"hidden\" />");
         script.append("<div dojoType=\"dijit.layout.TabContainer\" id=\"tc_"+client.getId()+"\" style=\"width: 100%;\" doLayout=\"false\">\n");
 
-        matriz = new HashMap();
+        tabs = new HashMap();
         System.out.println("fin processStartDocument");
     }
     
@@ -396,8 +397,8 @@ public class StylerDomParser {
         System.out.println("fin processEndDocument");
     }
 
-    public HashMap getMatriz() {
-        return matriz;
+    public HashMap getTabs() {
+        return tabs;
     }
 
     public static void main(String argv[]) {
