@@ -34,7 +34,9 @@ WebPage Temas = topic.getWebSite().getWebPage("Home_Shortcuts")
 println """<div id="ligasCiudad">"""
 Temas.listChilds().each{
     if (!it.isHidden()){
-        println """<a href="${it.getUrl()}" >${it.getDisplayName("es")}</a>"""
+        def target=""
+        if (null!=it.getTarget()) target = "target=\""+it.getTarget()+"\" "
+        println """<a href="${it.getUrl()}" $target>${it.getDisplayName("es")}</a>"""
     }
 }
 println "</div>"

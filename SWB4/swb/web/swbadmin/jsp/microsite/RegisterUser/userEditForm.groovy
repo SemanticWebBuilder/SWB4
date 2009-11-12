@@ -162,6 +162,9 @@ import org.semanticwb.model.DisplayProperty
         </script>
 <form id="form_$id" dojoType="dijit.form.Form" class="swbform"
 action="$acc_url"   method="post">
+<div class="adminTools">
+                    <p><a  class="adminTool"href="javascript:enviar()">Guardar</a>&nbsp;&nbsp;&nbsp;&nbsp;<a  class="adminTool"href="javascript:history.back();">Cancelar</a></p>
+                    </div>
     <input type="hidden" name="suri" value="$uri"/>
     <input type="hidden" name="scls" value="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
     <input type="hidden" name="smode" value="edit"/>
@@ -306,13 +309,6 @@ initialize();
 	</table>
     </fieldset>
 </form>
-    <br>
-    <div class="editarInfo">
-                    <p><a href="javascript:enviar()">Guardar</a></p>
-                    </div>
-    <div class="editarInfo">
-                    <p><a href="javascript:history.back();">Cancelar</a></p>
-                    </div>
 
 """
 System.out.println "*********************** User: ${user.getExternalID()} ${user.getLogin()}"
