@@ -14,11 +14,6 @@
                 SemanticObject semObj = SemanticObject.createSemanticObject(request.getParameter("user"));
                 User propect = (User) semObj.createGenericInstance(); // es un tercero
                 boolean isFriend = false;
-                if (request.getParameter("addprospect") != null && request.getParameter("addprospect").equalsIgnoreCase("true"))
-                {
-                    isFriend = FriendshipProspect.createFriendshipProspect(user, propect, site);
-                }
-                
                 if (!isFriend) // puede ser un invitado
                 {
                     Iterator<FriendshipProspect> itFriendshipProspect = FriendshipProspect.listFriendshipProspectByFriendShipRequested(user, site);
@@ -31,6 +26,15 @@
                         }
                     }
                 }
+                if (!isFriend) // puede ser un invitado
+                {
+                    if (request.getParameter("addprospect") != null && request.getParameter("addprospect").equalsIgnoreCase("true"))
+                    {
+                        isFriend = FriendshipProspect.createFriendshipProspect(user, propect, site);
+                    }
+                }
+
+
                 if (!isFriend) // puede ser un amigo
                 {
                     Iterator<Friendship> itMyFriends = Friendship.listFriendshipByFriend(user, site);
