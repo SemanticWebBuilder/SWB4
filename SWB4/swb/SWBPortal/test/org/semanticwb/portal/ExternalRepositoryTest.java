@@ -30,6 +30,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.*;
 import org.semanticwb.platform.SemanticClass;
@@ -44,9 +45,15 @@ public class ExternalRepositoryTest
     @BeforeClass
     public static void setUpClass() throws Exception
     {
-        //SWBPlatform.setUseDB(false);
-        SWBPlatform.createInstance(null);
-    //SWBPlatform.
+        String base=SWBUtils.getApplicationPath();
+        SWBPlatform.createInstance();
+        SWBPlatform.getSemanticMgr().initializeDB();
+        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/swb.owl");
+        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/swb_rep.owl");
+        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/office.owl");
+        SWBPlatform.getSemanticMgr().loadBaseVocabulary();
+        SWBPlatform.getSemanticMgr().loadDBModels();
+        SWBPlatform.getSemanticMgr().getOntology().rebind();
     }
 
     @AfterClass
@@ -84,7 +91,7 @@ public class ExternalRepositoryTest
             user.setPassword("alma");
             
         }
-        Iterator<SemanticClass> it = UserTypeDef.sclass.listSubClasses();
+        Iterator<SemanticClass> it = UserTypeDef.ClassMgr.sclass.listSubClasses();
         while (it.hasNext()){
             SemanticClass utd = it.next();
             //user.addUserType(utd.getName());

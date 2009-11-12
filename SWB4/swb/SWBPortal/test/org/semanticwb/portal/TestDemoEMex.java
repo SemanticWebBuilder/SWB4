@@ -77,9 +77,15 @@ public class TestDemoEMex {
         @BeforeClass
     public static void setUpClass() throws Exception
     {
-        //SWBPlatform.setUseDB(false);
-        SWBPlatform.createInstance(null);
-    //SWBPlatform.
+        String base=SWBUtils.getApplicationPath();
+        SWBPlatform.createInstance();
+        SWBPlatform.getSemanticMgr().initializeDB();
+        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/swb.owl");
+        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/swb_rep.owl");
+        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/office.owl");
+        SWBPlatform.getSemanticMgr().loadBaseVocabulary();
+        SWBPlatform.getSemanticMgr().loadDBModels();
+        SWBPlatform.getSemanticMgr().getOntology().rebind();
     }
 
     @AfterClass

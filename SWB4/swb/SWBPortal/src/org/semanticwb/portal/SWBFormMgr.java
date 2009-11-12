@@ -562,6 +562,18 @@ public class SWBFormMgr
      */
     public void renderProp(HttpServletRequest request, StringBuffer ret, SemanticProperty prop, FormElement ele)
     {
+        renderProp(request, ret, prop, ele, m_mode);
+    }
+
+    /**
+     * Rederea propiedad (metodo interno del SWBFormMgr
+     * @param request
+     * @param ret
+     * @param prop
+     * @param ele
+     */
+    public void renderProp(HttpServletRequest request, StringBuffer ret, SemanticProperty prop, FormElement ele, String mode)
+    {
         String label=null;
         String element=null;
         boolean hidden=false;
@@ -581,13 +593,13 @@ public class SWBFormMgr
                     element=ele.renderElement(request, m_obj, prop, m_type, m_propmap.get(prop), m_lang);
                 }else
                 {
-                    label=ele.renderLabel(request, m_obj, prop, m_type, m_mode, m_lang);
-                    element=ele.renderElement(request, m_obj, prop, m_type, m_mode, m_lang);
+                    label=ele.renderLabel(request, m_obj, prop, m_type, mode, m_lang);
+                    element=ele.renderElement(request, m_obj, prop, m_type, mode, m_lang);
                 }
             }catch(Exception e){log.error("Element:"+ele,e);}
             if(element!=null && element.length()>0)
             {
-                if(!m_mode.equals(MODE_CREATE))
+                if(!mode.equals(MODE_CREATE))
                 {
                     ret.append("                <tr><td width=\"200px\" align=\"right\">");
                 }else
@@ -599,7 +611,7 @@ public class SWBFormMgr
                 ret.append(element);
                 ret.append("</td></tr>\n");
             }
-        }else if(m_mode.equals(MODE_CREATE))
+        }else if(mode.equals(MODE_CREATE))
         {
             String name=prop.getName();
             String value=request.getParameter(name);

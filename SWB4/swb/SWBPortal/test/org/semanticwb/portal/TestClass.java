@@ -42,6 +42,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.platform.SemanticClass;
@@ -59,7 +60,15 @@ public class TestClass {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        SWBPlatform.createInstance(null);
+        String base=SWBUtils.getApplicationPath();
+        SWBPlatform.createInstance();
+        SWBPlatform.getSemanticMgr().initializeDB();
+        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/swb.owl");
+        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/swb_rep.owl");
+        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/office.owl");
+        SWBPlatform.getSemanticMgr().loadBaseVocabulary();
+        SWBPlatform.getSemanticMgr().loadDBModels();
+        SWBPlatform.getSemanticMgr().getOntology().rebind();
         out = System.out;
     }
 
@@ -145,8 +154,8 @@ public class TestClass {
     @Test
     public void testClassRoot()
     {
-        System.out.println("WebPage:"+WebPage.sclass.getRootClass());
-        System.out.println("MenuItem:"+MenuItem.sclass.getRootClass());
+        System.out.println("WebPage:"+WebPage.ClassMgr.sclass.getRootClass());
+        System.out.println("MenuItem:"+MenuItem.ClassMgr.sclass.getRootClass());
         WebSite site=SWBContext.getWebSite("sep");
         TemplateRef ref=site.createTemplateRef();
         System.out.println(ref.getPriority());
