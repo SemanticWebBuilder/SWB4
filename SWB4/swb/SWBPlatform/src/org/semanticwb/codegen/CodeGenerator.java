@@ -966,7 +966,7 @@ public class CodeGenerator
         {
             exists=true;
         }
-        exists=false;
+        //exists=false;
         if(!exists)
         {
             saveFile(fileClass, javaClassContent.toString());
