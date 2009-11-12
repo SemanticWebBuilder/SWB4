@@ -70,8 +70,15 @@ public class TestAdminWebSite {
     @BeforeClass
     public static void setUpClass() throws Exception
     {
-        //SWBUtils.createInstance("D:/programming/proys/SWB4/swb/build/web/");
-        SWBPlatform.createInstance(null);
+        String base=SWBUtils.getApplicationPath();
+        SWBPlatform.createInstance();
+        SWBPlatform.getSemanticMgr().initializeDB();
+        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/swb.owl");
+        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/swb_rep.owl");
+        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/office.owl");
+        SWBPlatform.getSemanticMgr().loadBaseVocabulary();
+        SWBPlatform.getSemanticMgr().loadDBModels();
+        SWBPlatform.getSemanticMgr().getOntology().rebind();
     }
 
     @AfterClass
@@ -106,10 +113,10 @@ public class TestAdminWebSite {
 
     public ObjectBehavior createBehavior(WebSite site, String id, String title, String sort)
     {
-        ObjectBehavior obj=ObjectBehavior.getObjectBehavior(id, site);
+        ObjectBehavior obj=ObjectBehavior.ClassMgr.getObjectBehavior(id, site);
         if(obj==null)
         {
-            obj=ObjectBehavior.createObjectBehavior(id, site);
+            obj=ObjectBehavior.ClassMgr.createObjectBehavior(id, site);
             obj.setTitle(title);
             obj.setSortName(sort);
             obj.setActive(true);
@@ -294,7 +301,7 @@ public class TestAdminWebSite {
             }catch(Exception e){e.printStackTrace();}
             obj.addResource(p);
             obj.setParent(ob);
-            obj.setInterface(Template.sclass.getSemanticObject());
+            obj.setInterface(Template.ClassMgr.sclass.getSemanticObject());
         }
 
         obj=createBehavior(site,"bh_RuleEditor","Editar Regla","20");
@@ -307,7 +314,7 @@ public class TestAdminWebSite {
             p.setPriority(3);
             obj.addResource(p);
             obj.setParent(ob);
-            obj.setInterface(Rule.sclass.getSemanticObject());
+            obj.setInterface(Rule.ClassMgr.sclass.getSemanticObject());
         }
 
         obj=createBehavior(site,"bh_Templates","Plantillas","20");
@@ -339,7 +346,7 @@ public class TestAdminWebSite {
             }catch(Exception e){e.printStackTrace();}
             obj.addResource(p);
             obj.setParent(ob);
-            obj.setInterface(Resource.sclass.getSemanticObject());
+            obj.setInterface(Resource.ClassMgr.sclass.getSemanticObject());
         }
 
         obj=createBehavior(site,"bh_PFlows","Flujos de Publicación","40");
