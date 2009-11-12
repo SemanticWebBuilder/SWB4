@@ -16,7 +16,7 @@ public class PostElement extends org.semanticwb.portal.community.base.PostElemen
     public String getURL()
     {
         String url = "#";
-        Iterator<Blog> blogs = Blog.listBlogByPostElement(this);
+        Iterator<Blog> blogs = Blog.ClassMgr.listBlogByPostElement(this);
         if (blogs.hasNext())
         {
             url = blogs.next().getWebPage().getUrl();
@@ -28,7 +28,7 @@ public class PostElement extends org.semanticwb.portal.community.base.PostElemen
     public WebPage getWebPage()
     {
 
-        Iterator<Blog> blogs=Blog.listBlogByPostElement(this);
+        Iterator<Blog> blogs=Blog.ClassMgr.listBlogByPostElement(this);
         if(blogs.hasNext())
         {
             Blog blog=blogs.next();

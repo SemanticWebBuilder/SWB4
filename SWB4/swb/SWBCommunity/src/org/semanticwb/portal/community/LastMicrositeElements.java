@@ -84,7 +84,7 @@ public class LastMicrositeElements extends GenericAdmResource
             }
         }*/
         WebSite site=paramRequest.getWebPage().getWebSite();
-        Iterator<SemanticObject> oelements=site.getSemanticObject().getModel().listInstancesOfClass(MicroSiteElement.ClassMgr.sclass, true);
+        Iterator<SemanticObject> oelements=site.getSemanticObject().getModel().listInstancesOfClass(MicroSiteElement.sclass, true);
         while(oelements.hasNext())
         {
             SemanticObject obj=oelements.next();

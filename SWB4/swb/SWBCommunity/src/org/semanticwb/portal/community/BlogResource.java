@@ -43,7 +43,7 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        Iterator<Blog> blogs = Blog.listBlogByWebPage(paramRequest.getWebPage());
+        Iterator<Blog> blogs = Blog.ClassMgr.listBlogByWebPage(paramRequest.getWebPage());
         Blog blog = null;
         if (blogs.hasNext())
         {
@@ -122,7 +122,7 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
             String content = request.getParameter("content");
             if (title != null && description != null)
             {
-                Iterator<Blog> blogs = Blog.listBlogByWebPage(response.getWebPage());
+                Iterator<Blog> blogs = Blog.ClassMgr.listBlogByWebPage(response.getWebPage());
                 Blog blog = null;
                 if (blogs.hasNext())
                 {
@@ -176,7 +176,7 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
         {
             User user = response.getUser();
             Member member = Member.getMember(user, response.getWebPage());
-            Iterator<Blog> blogs = Blog.listBlogByWebPage(response.getWebPage());
+            Iterator<Blog> blogs = Blog.ClassMgr.listBlogByWebPage(response.getWebPage());
             Blog blog = null;
             if (blogs.hasNext())
             {

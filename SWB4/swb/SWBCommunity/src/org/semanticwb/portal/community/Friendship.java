@@ -17,7 +17,7 @@ public class Friendship extends org.semanticwb.portal.community.base.FriendshipB
     }
 
     public static boolean areFriends(User user1, User user2, SWBModel model) {
-        Iterator<Friendship> itMyFriends = Friendship.listFriendshipByFriend(user1, model);
+        Iterator<Friendship> itMyFriends = Friendship.ClassMgr.listFriendshipByFriend(user1, model);
         while (itMyFriends.hasNext()) {
             Friendship friendShip = itMyFriends.next();
             Iterator<User> itfriendUser = friendShip.listFriends();
@@ -33,7 +33,7 @@ public class Friendship extends org.semanticwb.portal.community.base.FriendshipB
 
     public static int myFriends(User user1, SWBModel model) {
         int cont=0;
-        Iterator<Friendship> itMyFriends = Friendship.listFriendshipByFriend(user1, model);
+        Iterator<Friendship> itMyFriends = Friendship.ClassMgr.listFriendshipByFriend(user1, model);
         while (itMyFriends.hasNext()) {
             itMyFriends.next();
             cont++;
@@ -42,7 +42,7 @@ public class Friendship extends org.semanticwb.portal.community.base.FriendshipB
     }
 
     public static boolean removeFriendRelationShip(User user1, User user2, SWBModel model) {
-        Iterator<Friendship> itMyFriends = Friendship.listFriendshipByFriend(user1, model);
+        Iterator<Friendship> itMyFriends = Friendship.ClassMgr.listFriendshipByFriend(user1, model);
         while (itMyFriends.hasNext()) {
             Friendship friendShip = itMyFriends.next();
             Iterator<User> itfriendUser = friendShip.listFriends();
