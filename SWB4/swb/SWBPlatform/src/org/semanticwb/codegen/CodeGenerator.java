@@ -553,36 +553,36 @@ public class CodeGenerator
         HashSet<SemanticProperty> staticProperties = new HashSet<SemanticProperty>();
         Iterator<SemanticProperty> properties = tpc.listProperties();
 
-        javaClassContent.append("    public static class " + GLOBAL_CLASS_NAME + ENTER);
-        javaClassContent.append("    {" + ENTER);
+        //javaClassContent.append("    public static class " + GLOBAL_CLASS_NAME + ENTER);
+        //javaClassContent.append("    {" + ENTER);
 
         while (properties.hasNext())
         {
             SemanticProperty tpp = properties.next();
-//            boolean isInClass = false;
-//            Iterator<SemanticClass> classes = tpc.listSuperClasses(true);
-//            while (classes.hasNext())
-//            {
-//                SemanticClass superclass = classes.next();
-//                if (superclass.isSWBClass() || superclass.isSWBModel() || superclass.isSWBFormElement())
-//                {
-//                    Iterator<SemanticProperty> propInterfaces = superclass.listProperties();
-//                    while (propInterfaces.hasNext())
-//                    {
-//                        SemanticProperty propSuperClass = propInterfaces.next();
-//                        if (propSuperClass.equals(tpp))
-//                        {
-//                            isInClass = true;
-//                            break;
-//                        }
-//                    }
-//                    if (isInClass)
-//                    {
-//                        break;
-//                    }
-//                }
-//            }
-//            if (!isInClass)
+            boolean isInClass = false;
+            Iterator<SemanticClass> classes = tpc.listSuperClasses(true);
+            while (classes.hasNext())
+            {
+                SemanticClass superclass = classes.next();
+                if (superclass.isSWBClass() || superclass.isSWBModel() || superclass.isSWBFormElement())
+                {
+                    Iterator<SemanticProperty> propInterfaces = superclass.listProperties();
+                    while (propInterfaces.hasNext())
+                    {
+                        SemanticProperty propSuperClass = propInterfaces.next();
+                        if (propSuperClass.equals(tpp))
+                        {
+                            isInClass = true;
+                            break;
+                        }
+                    }
+                    if (isInClass)
+                    {
+                        break;
+                    }
+                }
+            }
+            if (!isInClass)
             {
                 SemanticClass range = tpp.getRangeClass();
                 if (range != null)
@@ -610,7 +610,7 @@ public class CodeGenerator
 
         javaClassContent.append("       public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + tpc.getURI() + "\");" + ENTER);
 
-        javaClassContent.append("    }" + ENTER);
+        //javaClassContent.append("    }" + ENTER);
 
         javaClassContent.append(ENTER);
 
