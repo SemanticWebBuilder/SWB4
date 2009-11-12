@@ -14,6 +14,7 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.model.DisplayProperty;
 import org.semanticwb.model.FormElement;
+import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.PropertyGroup;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.platform.SemanticClass;
@@ -30,6 +31,7 @@ public class SWBProcessFormMgr
 {
     private FlowObjectInstance m_pinst=null;
     private HashMap<String, SWBFormMgr> mgrs;
+    private HashMap<SemanticClass, HashMap<SemanticProperty, String>> views;
 
 
     private Map<SemanticProperty, String> m_propmap=null;
@@ -53,6 +55,7 @@ public class SWBProcessFormMgr
     {
         this.m_pinst=inst;
         mgrs=new HashMap();
+        views=new HashMap();
         hidden=new HashMap();
         buttons=new ArrayList();
         Iterator<ProcessObject> objs=inst.getAllProcessObjects().iterator();
@@ -73,12 +76,26 @@ public class SWBProcessFormMgr
             SWBFormMgr mgr = it.next();
             mgr.clearProperties();
         }
+        views=new HashMap();
     }
 
     public void addProperty(SemanticProperty prop, SemanticClass cls)
     {
+        addProperty(prop, cls, SWBFormMgr.MODE_EDIT);
+    }
+
+    public void addProperty(SemanticProperty prop, SemanticClass cls, String view)
+    {
         SWBFormMgr mgr=mgrs.get(cls.getURI());
         mgr.addProperty(prop);
+
+        HashMap map=views.get(cls);
+        if(map==null)
+        {
+            map=new HashMap();
+            views.put(cls, map);
+        }
+        map.put(prop, view);
     }
 
     /**
@@ -154,7 +171,8 @@ public class SWBProcessFormMgr
                     while (itprop.hasNext())
                     {
                         SemanticProperty semanticProperty = itprop.next();
-                        set.add(new SWBProcessProperty(mgr.getSemanticObject().getSemanticClass(),semanticProperty));
+                        SemanticClass cls=mgr.getSemanticObject().getSemanticClass();
+                        set.add(new SWBProcessProperty(cls,semanticProperty, views.get(cls).get(semanticProperty)));
                     }
                 }
             }
@@ -174,7 +192,7 @@ public class SWBProcessFormMgr
                     SWBFormMgr mgr=mgrs.get(pp.getSemanticClass().getURI());
                     SemanticProperty prop=pp.getSemanticProperty();
                     FormElement ele=mgr.getFormElement(prop);
-                    mgr.renderProp(request, ret, prop,ele);
+                    mgr.renderProp(request, ret, prop, ele, pp.getMode());
                 }
                 ret.append("	    </table>\n");
                 ret.append("	</fieldset>\n");
@@ -202,6 +220,34 @@ public class SWBProcessFormMgr
         ret.append("</form>\n");
         //ret.append("<div id=\""+frmname+"_loading\">Loading...</div>");
         return ret.toString();
+    }
+
+    public void processForm(HttpServletRequest request) throws FormValidateException
+    {
+        //TODO
+        //validateForm(request);
+        String smode=request.getParameter(SWBFormMgr.PRM_MODE);
+        if(smode!=null)
+        {
+            Iterator<SemanticClass> itcls=views.keySet().iterator();
+            while (itcls.hasNext())
+            {
+                SemanticClass cls=itcls.next();
+                Iterator<SemanticProperty> it=views.get(cls).keySet().iterator();
+                while(it.hasNext())
+                {
+                    SemanticProperty prop=it.next();
+                    SWBFormMgr mgr=mgrs.get(cls.getURI());
+                    if(SWBFormMgr.MODE_EDIT.equals(views.get(cls).get(prop)))
+                    {
+                        //System.out.println("ProcessElement:"+prop);
+                        mgr.processElement(request, prop);
+                    }
+                }
+
+            }
+
+        }
     }
 
 
@@ -232,7 +278,7 @@ public class SWBProcessFormMgr
         StringBuffer ret=new StringBuffer();
         if(m_pinst!=null)ret.append("    <input type=\"hidden\" name=\""+SWBFormMgr.PRM_URI+"\" value=\""+m_pinst.getURI()+"\"/>\n");
         //if(m_cls!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_CLS+"\" value=\""+m_cls.getURI()+"\"/>\n");
-        //if(m_mode!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_MODE+"\" value=\""+m_mode+"\"/>\n");
+        if(m_mode!=null)ret.append("    <input type=\"hidden\" name=\""+SWBFormMgr.PRM_MODE+"\" value=\""+m_mode+"\"/>\n");
         //if(m_ref!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_REF+"\" value=\""+m_ref.getURI()+"\"/>\n");
         Iterator<Map.Entry<String,String>> hit=hidden.entrySet().iterator();
         while(hit.hasNext())
@@ -258,5 +304,12 @@ public class SWBProcessFormMgr
         buttons.add(button);
     }
 
+    public String getAction() {
+        return m_action;
+    }
 
+    public void setAction(String action) {
+        this.m_action = action;
+    }
+    
 }

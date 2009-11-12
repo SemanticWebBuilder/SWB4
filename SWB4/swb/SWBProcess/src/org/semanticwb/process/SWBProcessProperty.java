@@ -16,11 +16,13 @@ public class SWBProcessProperty
 {
     private SemanticClass m_cls=null;
     private SemanticProperty m_prop=null;
+    private String m_mode=null;
 
-    public SWBProcessProperty(SemanticClass cls, SemanticProperty prop)
+    public SWBProcessProperty(SemanticClass cls, SemanticProperty prop, String mode)
     {
         this.m_cls=cls;
         this.m_prop=prop;
+        this.m_mode=mode;
     }
 
     /**
@@ -49,6 +51,20 @@ public class SWBProcessProperty
      */
     public void setSemanticProperty(SemanticProperty prop) {
         this.m_prop = prop;
+    }
+
+    /**
+     * @return the m_view
+     */
+    public String getMode() {
+        return m_mode;
+    }
+
+    /**
+     * @param view the m_view to set
+     */
+    public void setMode(String mode) {
+        this.m_mode = mode;
     }
 
 

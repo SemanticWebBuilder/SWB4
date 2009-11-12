@@ -14,6 +14,28 @@ public class FlowObjectInstance extends org.semanticwb.process.base.FlowObjectIn
         super(base);
     }
 
+    public ProcessWebPage getProcessWebPage()
+    {
+        FlowObject fo=getFlowObjectType();
+        ProcessWebPage page=null;
+        if(fo instanceof Process)
+        {
+            page=((Process)fo).getProcessWebPage();
+        }else
+        {
+            page=fo.getParentProcess().getProcessWebPage();
+        }
+        if(page==null)
+        {
+            ProcessInstance inst=getParentProcessInstance();
+            if(inst!=null)
+            {
+                page=inst.getProcessWebPage();
+            }
+        }
+        return page;
+    }
+
     /**
      * Crea una instancia del objeto de flujo
      * @param fobj
