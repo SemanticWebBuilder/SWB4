@@ -16,7 +16,7 @@
 <%
         WebPage webpage=paramRequest.getWebPage();
         User owner = paramRequest.getUser();
-
+        
         Member member = null;
         if (webpage.getSemanticObject().getGenericInstance() instanceof MicroSite) {
             member = getMember(owner, (MicroSite)webpage);
@@ -63,6 +63,7 @@
                         <% if(owner.getURI()!=null && owner.getURI().equals(user.getURI())){%>
                             <a href="<%=url.toString()%>">[Configurar]</a>
                         <%}%>
+                        <%if (owner.getURI()!=null && owner.getURI().equals(user.getURI())){%>
                         <form action="<%=urlAction.toString()%>">
                             <table>
                                 <tr>
@@ -76,6 +77,7 @@
                                 </tr>
                             </table>
                         </form>
+                        <%}%>
                         <%
                             int max = Integer.parseInt(base.getAttribute("noMsg", "" + 10));
                             int cont = 0;
