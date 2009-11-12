@@ -175,15 +175,17 @@
         <%if (serviceHours != null) {%><p><span class="itemTitle">Horario: </span><%=serviceHours%></p><%}%>
     </div>
     <%if (description != null) {%><h2>Descripci&oacute;n</h2><p><%=description%></p><%}%>
-    <h2>Ubicaci&oacute;n</h2>
-    <%if (streetName != null) {%><p><span class="itemTitle">Calle: </span><%=streetName%></p><%}%>
-    <%if (intNumber != null) {%><p><span class="itemTitle">N&uacute;mero Interior: </span><%=intNumber%></p><%}%>
-    <%if (extNumber != null) {%><p><span class="itemTitle">N&uacute;mero Exterior: </span><%=extNumber%></p><%}%>
-    <%if (city != null) {%><p><span class="itemTitle">Ciudad: </span><%=city%></p><%}%>
-    <div class="googleMapsResource">
-        <%if (mapa != null) {%><%=mapa%><%}%>
-    </div>
+    <%if (showLocation){%>
+        <h2>Ubicaci&oacute;n</h2>
+        <%if (streetName != null) {%><p><span class="itemTitle">Calle: </span><%=streetName%></p><%}%>
+        <%if (intNumber != null) {%><p><span class="itemTitle">N&uacute;mero Interior: </span><%=intNumber%></p><%}%>
+        <%if (extNumber != null) {%><p><span class="itemTitle">N&uacute;mero Exterior: </span><%=extNumber%></p><%}%>
+        <%if (city != null) {%><p><span class="itemTitle">Ciudad: </span><%=city%></p><%}%>
+        <div class="googleMapsResource">
+            <%if (mapa != null) {%><%=mapa%><%}%>
+        </div>
     <%
+    }
     SWBResponse res=new SWBResponse(response);
     dirObj.renderGenericElements(request, res, paramRequest);
     out.write(res.toString());
