@@ -91,7 +91,11 @@
                                 String text = twitt.getText();
                                 Iterator<String> itFounds = SWBUtils.TEXT.findInterStr(twitt.getText(), "@", " ");
                                 while (itFounds.hasNext()) {
+                                    String specialChar=null;
                                     String strFound = itFounds.next();
+                                    if(strFound.endsWith(")")) {
+                                        strFound=strFound.substring(0,strFound.length()-1);
+                                    }
                                     text = text.replaceAll("@" + strFound, "<a href=\"" + twitter.getBaseURL() + strFound + "\" target=\"_new\">" + "@" + strFound + "</a>");
                                 }
                                 itFounds = SWBUtils.TEXT.findInterStr(text, "#", " ");
