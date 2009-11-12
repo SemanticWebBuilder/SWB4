@@ -186,7 +186,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
             while(it.hasNext()) {
                 SemanticObject obj = it.next();
                 if (obj == null) continue;
-                if (obj.instanceOf(MicroSite.ClassMgr.sclass)) {
+                if (obj.instanceOf(MicroSite.sclass)) {
                     MicroSite site = (MicroSite)obj.createGenericInstance();
                     Iterator<Member> members = site.listMembers();
                     int count = 0;
@@ -220,7 +220,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                         <div class="clear">&nbsp;</div>
                     </div>
                     <%
-                } else if (obj.instanceOf(User.ClassMgr.sclass)) {
+                } else if (obj.instanceOf(User.sclass)) {
                     User usr = (User)obj.createGenericInstance();
                     String photo = imgDefaultPath;//SWBPortal.getContextPath() + "/swbadmin/images/defaultPhoto.jpg";
                     if(usr.getPhoto() != null) photo = SWBPortal.getWebWorkPath() + usr.getPhoto();
@@ -271,7 +271,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                     <div class="clear">&nbsp;</div>
                     </div>
                 <%
-                } else if (obj.instanceOf(DirectoryObject.ClassMgr.sclass)) {
+                } else if (obj.instanceOf(DirectoryObject.sclass)) {
                     %>
                     <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
                     <%

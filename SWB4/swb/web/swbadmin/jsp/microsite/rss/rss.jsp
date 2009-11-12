@@ -49,7 +49,7 @@
                 {
                     return;
                 }
-                Iterator<MicroSiteElement> elements = PostElement.listMicroSiteElementByCreator(user, site);
+                Iterator<MicroSiteElement> elements = PostElement.ClassMgr.listMicroSiteElementByCreator(user, site);
                 elements = SWBComparator.sortByCreated(elements, false);
                 while (elements.hasNext())
                 {
@@ -89,7 +89,7 @@
 
                         int i = 0;
 
-                        Iterator<MicroSiteElement> elements = PostElement.listMicroSiteElementByCreator(user, site);
+                        Iterator<MicroSiteElement> elements = PostElement.ClassMgr.listMicroSiteElementByCreator(user, site);
                         elements = SWBComparator.sortByCreated(elements, false);
                         while (elements.hasNext())
                         {
@@ -149,7 +149,7 @@
 
 
 
-                        Iterator<EventElement> elements = EventElement.listEventElementByEventWebPage(eventwebpage);
+                        Iterator<EventElement> elements = EventElement.ClassMgr.listEventElementByEventWebPage(eventwebpage);
                         elements = SWBComparator.sortByCreated(elements, false);
                         int i = 0;
                         while (elements.hasNext())
@@ -208,7 +208,7 @@
 
 
 
-                        Iterator<PhotoElement> elements = PhotoElement.listPhotoElementByPhotoWebPage(photowebpage);
+                        Iterator<PhotoElement> elements = PhotoElement.ClassMgr.listPhotoElementByPhotoWebPage(photowebpage);
                         elements = SWBComparator.sortByCreated(elements, false);
                         int i = 0;
                         while (elements.hasNext())
@@ -268,7 +268,7 @@
 
 
 
-                        Iterator<NewsElement> elements = NewsElement.listNewsElementByNewsWebPage(newswebpage);
+                        Iterator<NewsElement> elements = NewsElement.ClassMgr.listNewsElementByNewsWebPage(newswebpage);
                         elements = SWBComparator.sortByCreated(elements, false);
                         int i = 0;
                         while (elements.hasNext())
@@ -328,7 +328,7 @@
 
 
 
-                        Iterator<VideoElement> elements = VideoElement.listVideoElementByWebPage(videowebpage);
+                        Iterator<VideoElement> elements = VideoElement.ClassMgr.listVideoElementByWebPage(videowebpage);
                         elements = SWBComparator.sortByCreated(elements, false);
                         int i = 0;
                         while (elements.hasNext())

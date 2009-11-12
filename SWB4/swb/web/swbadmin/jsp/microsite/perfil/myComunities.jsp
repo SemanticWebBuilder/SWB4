@@ -19,7 +19,7 @@ User user=paramRequest.getUser();
 
 String lang="es";
 if(user.getLanguage()!=null) lang=user.getLanguage();
-Iterator<Member> itMember=Member.listMemberByUser(user);
+Iterator<Member> itMember=Member.ClassMgr.listMemberByUser(user);
 while(itMember.hasNext()){
     Member member=itMember.next();
     MicroSite microsite=member.getMicroSite();

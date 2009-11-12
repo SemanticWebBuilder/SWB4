@@ -317,7 +317,7 @@
         {
             addHerarquicalNodes(childs, obj,lang);
 
-            boolean isWebPage=obj.instanceOf(WebPage.ClassMgr.sclass);
+            boolean isWebPage=obj.instanceOf(WebPage.sclass);
 
             Iterator<SemanticObject> it=obj.listHerarquicalChilds();
             if(addChilds)

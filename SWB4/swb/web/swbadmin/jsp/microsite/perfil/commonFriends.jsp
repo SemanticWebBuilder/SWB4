@@ -19,7 +19,7 @@
         }
 
         ArrayList aOwnerFriends=new ArrayList();
-        Iterator<Friendship> itOwnerFriends = Friendship.listFriendshipByFriend(owner, wsite);
+        Iterator<Friendship> itOwnerFriends = Friendship.ClassMgr.listFriendshipByFriend(owner, wsite);
         while (itOwnerFriends.hasNext()) {
             Friendship friendship = itOwnerFriends.next();
             Iterator<User> itfriendUser = friendship.listFriends();
@@ -32,7 +32,7 @@
         }
 
         ArrayList acommonFriends=new ArrayList();
-        Iterator<Friendship> itUserFriends = Friendship.listFriendshipByFriend(user, wsite);
+        Iterator<Friendship> itUserFriends = Friendship.ClassMgr.listFriendshipByFriend(user, wsite);
         while (itUserFriends.hasNext()) {
             Friendship friendship = itUserFriends.next();
             Iterator<User> itfriendUser = friendship.listFriends();

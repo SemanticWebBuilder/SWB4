@@ -117,7 +117,7 @@ try
 
         //TODO: revisar mejor opcion
         String view=null;
-        if(obj.getSemanticClass().equals(Resource.ClassMgr.sclass))
+        if(obj.getSemanticClass().equals(Resource.sclass))
         {
             int pmode=((org.semanticwb.model.Resource)obj.createGenericInstance()).getResourceType().getResourceMode();
             view="resourceMode"+pmode;

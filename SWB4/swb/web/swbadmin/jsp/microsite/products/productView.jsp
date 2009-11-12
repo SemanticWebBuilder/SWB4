@@ -12,7 +12,7 @@
 %>
 <table border="0" width="100%">
 <%
-    Iterator<ProductElement> it=ProductElement.listProductElementByWebPage(wpage,wpage.getWebSite());
+    Iterator<ProductElement> it=ProductElement.ClassMgr.listProductElementByWebPage(wpage,wpage.getWebSite());
     int i=0;
     while(it.hasNext())
     {

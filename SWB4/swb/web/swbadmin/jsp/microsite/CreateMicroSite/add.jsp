@@ -11,15 +11,15 @@
 <div class="soria">
     <fieldset><legend>Nueva comunidad</legend>
 <%
-    SWBFormMgr mgr=new SWBFormMgr(MicroSite.ClassMgr.sclass, wpage.getSemanticObject(), null);
+    SWBFormMgr mgr=new SWBFormMgr(MicroSite.sclass, wpage.getSemanticObject(), null);
     mgr.setType(mgr.TYPE_DOJO);
     mgr.setAction(paramRequest.getActionUrl().toString());
     mgr.addProperty(Descriptiveable.swb_description);
-    mgr.addProperty(WebPage.ClassMgr.swb_tags);
+    mgr.addProperty(WebPage.swb_tags);
     //mgr.addProperty(MicroSite.swbcomm_type);
-    mgr.addProperty(MicroSite.ClassMgr.swbcomm_private);
-    mgr.addProperty(MicroSite.ClassMgr.swbcomm_moderate);
-    mgr.addProperty(MicroSiteType.ClassMgr.swbcomm_hasMicroSiteUtil);
+    mgr.addProperty(MicroSite.swbcomm_private);
+    mgr.addProperty(MicroSite.swbcomm_moderate);
+    mgr.addProperty(MicroSiteType.swbcomm_hasMicroSiteUtil);
     mgr.addButton(SWBFormButton.newSaveButton());
     mgr.addButton(SWBFormButton.newCancelButton().setAttribute("onclick", "window.location='"+paramRequest.getRenderUrl()+"';"));
     mgr.addHiddenParameter("act", "add");

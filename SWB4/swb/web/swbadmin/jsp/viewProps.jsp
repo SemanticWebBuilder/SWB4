@@ -31,7 +31,7 @@
 
     String description=obj.getProperty(Descriptiveable.swb_description);
     String active=obj.getProperty(Activeable.swb_active);
-    String sortname=obj.getProperty(WebPage.ClassMgr.swb_webPageSortName);
+    String sortname=obj.getProperty(WebPage.swb_webPageSortName);
 %>
 <table>
     <!--<caption>Propiedades</caption>-->
