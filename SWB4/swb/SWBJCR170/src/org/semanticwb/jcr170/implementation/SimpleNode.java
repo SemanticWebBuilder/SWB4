@@ -134,7 +134,7 @@ public class SimpleNode implements Node
             parent.childs.put(this.id, this);
         }
 
-        if (clazz.equals(HierarchyNode.ClassMgr.nt_HierarchyNode) || clazz.isSubClass(HierarchyNode.ClassMgr.nt_HierarchyNode))
+        if (clazz.equals(HierarchyNode.nt_HierarchyNode) || clazz.isSubClass(HierarchyNode.nt_HierarchyNode))
         {
             PropertyImp prop = addProperty(getName(Traceable.jcr_created), clazz, false);
             Value time = factory.createValue(Calendar.getInstance());
@@ -194,7 +194,7 @@ public class SimpleNode implements Node
                         propImp = addProperty(getName(prop), clazz, true);
                     }
 
-                    if (prop.equals(BaseNode.ClassMgr.jcr_primaryType) && propImp.getValue() == null)
+                    if (prop.equals(BaseNode.jcr_primaryType) && propImp.getValue() == null)
                     {
                         propImp.setValueInternal(clazz.getPrefix() + ":" + clazz.getName());
                     }
@@ -1196,7 +1196,7 @@ public class SimpleNode implements Node
         session.removeSimpleNode(this);
         parent.modified = true;
         this.modified = true;
-        if (this.node != null && this.node.getSemanticObject().getSemanticClass().equals(org.semanticwb.repository.Version.ClassMgr.sclass) && this instanceof VersionImp)
+        if (this.node != null && this.node.getSemanticObject().getSemanticClass().equals(org.semanticwb.repository.Version.sclass) && this instanceof VersionImp)
         {
             VersionHistoryImp vh = (VersionHistoryImp) ((VersionImp) this).getContainingHistory();
             SimpleNode nodeParent = vh.parent;
