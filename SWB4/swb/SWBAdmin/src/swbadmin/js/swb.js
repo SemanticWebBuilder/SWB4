@@ -634,7 +634,7 @@
           if(!jsonNode || jsonNode==null)
           {
               onlyNode=true;
-              jsonNode=getJSON(context+"/swbadmin/jsp/Tree.jsp?suri="+encodeURIComponent(item.id))[0];
+              jsonNode=getJSON(context+store.controllerURL+"?suri="+encodeURIComponent(item.id))[0];
           }
 
           store.setValues(item, "title", jsonNode.title);
@@ -676,13 +676,13 @@
               act_treeNode.markProcessing();
           }
           document.body.style.cursor="wait";
-          dojo.byId("leftAccordion").style.cursor="wait";
+          //dojo.byId("leftAccordion").style.cursor="wait";
       }
 
       function setDefaultCursor()
       {
           document.body.style.cursor="default";
-          dojo.byId("leftAccordion").style.cursor="default";
+          //dojo.byId("leftAccordion").style.cursor="default";
           if(act_treeNode && act_treeNode.isTreeNode)
           {
               act_treeNode.unmarkProcessing();
@@ -767,7 +767,7 @@
           setWaitCursor();
           //alert("reload:"+item.id);
           removeChilds(store,item);
-          var arr=getJSON(context+"/swbadmin/jsp/Tree.jsp?suri="+encodeURIComponent(item.id))
+          var arr=getJSON(context+store.controllerURL+"?suri="+encodeURIComponent(item.id))
           updateTreeNode(store,item,arr[0]);
           //alert("arr:"+arr[0].id);
           var items=arr[0].children;
@@ -785,7 +785,7 @@
           if(!store)store=act_store;
           setWaitCursor();
           //alert("reload:"+item.id);
-          var arr=getJSON(context+"/swbadmin/jsp/Tree.jsp?childs=false&suri="+encodeURIComponent(uri));
+          var arr=getJSON(context+store.controllerURL+"?childs=false&suri="+encodeURIComponent(uri));
           var item=arr[0];
           addItem(store,item,parent);
           store.save();
@@ -815,6 +815,7 @@
             {
                 for(var x=0;x<childs.length;x++)
                 {
+                    alert("store:"+store+" childs[x]:"+childs[x]+" item:"+ite);
                     addItem(store, childs[x], ite);
                 }
             }else if(item.hasChilds)
