@@ -63,6 +63,9 @@ Error: Elemento no encontrado...
     document.frmeditvideo.submit();
 }
 </script>
+<%
+String cancelurl=paramRequest.getRenderUrl().toString();
+%>
 <div class="columnaIzquierda">
     <div class="adminTools">
     <a class="adminTool" onclick="validaForma()" href="#">Guardar</a>
