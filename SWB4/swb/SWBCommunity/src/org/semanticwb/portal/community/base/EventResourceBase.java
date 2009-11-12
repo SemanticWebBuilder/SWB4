@@ -22,46 +22,35 @@ public class EventResourceBase extends org.semanticwb.portal.community.Community
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.EventElement> listEvents()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.EventElement>(getSemanticObject().listObjectProperties(ClassMgr.swbcomm_hasEvent));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.EventElement>(getSemanticObject().listObjectProperties(swbcomm_hasEvent));
     }
 
     public boolean hasEvent(org.semanticwb.portal.community.EventElement eventelement)
     {
         if(eventelement==null)return false;
-        return getSemanticObject().hasObjectProperty(ClassMgr.swbcomm_hasEvent,eventelement.getSemanticObject());
+        return getSemanticObject().hasObjectProperty(swbcomm_hasEvent,eventelement.getSemanticObject());
     }
 
     public void addEvent(org.semanticwb.portal.community.EventElement value)
     {
-        getSemanticObject().addObjectProperty(ClassMgr.swbcomm_hasEvent, value.getSemanticObject());
+        getSemanticObject().addObjectProperty(swbcomm_hasEvent, value.getSemanticObject());
     }
 
     public void removeAllEvent()
     {
-        getSemanticObject().removeProperty(ClassMgr.swbcomm_hasEvent);
+        getSemanticObject().removeProperty(swbcomm_hasEvent);
     }
 
     public void removeEvent(org.semanticwb.portal.community.EventElement eventelement)
     {
-        getSemanticObject().removeObjectProperty(ClassMgr.swbcomm_hasEvent,eventelement.getSemanticObject());
+        getSemanticObject().removeObjectProperty(swbcomm_hasEvent,eventelement.getSemanticObject());
     }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.EventResource> listEventResourceByEvent(org.semanticwb.portal.community.EventElement hasevent,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.EventResource> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(ClassMgr.swbcomm_hasEvent, hasevent.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.portal.community.EventResource> listEventResourceByEvent(org.semanticwb.portal.community.EventElement hasevent)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.EventResource> it=new org.semanticwb.model.GenericIterator(hasevent.getSemanticObject().getModel().listSubjects(ClassMgr.swbcomm_hasEvent,hasevent.getSemanticObject()));
-       return it;
-   }
 
     public org.semanticwb.portal.community.EventElement getEvent()
     {
          org.semanticwb.portal.community.EventElement ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(ClassMgr.swbcomm_hasEvent);
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbcomm_hasEvent);
          if(obj!=null)
          {
              ret=(org.semanticwb.portal.community.EventElement)obj.createGenericInstance();
