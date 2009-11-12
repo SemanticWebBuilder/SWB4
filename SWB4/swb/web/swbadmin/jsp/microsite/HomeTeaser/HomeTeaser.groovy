@@ -29,7 +29,8 @@ import org.semanticwb.platform.*
 import java.util.*
 
 //long time1 = System.currentTimeMillis()
-Contenedor local = LocalCache.getInicio()
+WebSite wsid = request.getAttribute("topic").getWebSite()
+Contenedor local = LocalCache.getInicio(wsid)
 def path = "/work"+request.getAttribute("topic").getWorkPath()+"../../../css/images/"
 
 //recurseContenedor(local,0)
@@ -151,19 +152,20 @@ class LocalCache{
     //static long cache_time = 1000L*60*60*12
     static long cache_time = 1000L*60*5
 
-    static public Contenedor getInicio(){
-        if (null==inicio || System.currentTimeMillis()>timer+cache_time) init()
+    static public Contenedor getInicio(WebSite wsid){
+        if (null==inicio || System.currentTimeMillis()>timer+cache_time) init(wsid)
         return inicio
     }
 
-    static private synchronized void init(){
+    static private synchronized void init(WebSite wsid){
         if (null!=inicio) return
         timer = System.currentTimeMillis()
-        WebPage homeTeaser = org.semanticwb.model.SWBContext.getWebSite("Ciudad_Digital").getWebPage("HomeTeasers")
+//        WebPage homeTeaser = org.semanticwb.model.SWBContext.getWebSite("Ciudad_Digital").getWebPage("HomeTeasers")
+        WebPage homeTeaser = wsid.getWebPage("HomeTeasers")
         inicio = new Contenedor(homeTeaser, new TreeSet<Contenedor>(new CompContenedor()))
-        WebPage lugar = org.semanticwb.model.SWBContext.getWebSite("Ciudad_Digital").getWebPage("Sitios_de_Interes")
-        WebPage servicio = org.semanticwb.model.SWBContext.getWebSite("Ciudad_Digital").getWebPage("Servicios")
-        WebPage organizacion = org.semanticwb.model.SWBContext.getWebSite("Ciudad_Digital").getWebPage("Organizaciones")
+        WebPage lugar = wsid.getWebPage("Sitios_de_Interes")
+        WebPage servicio = wsid.getWebPage("Servicios")
+        WebPage organizacion = wsid.getWebPage("Organizaciones")
         //wpage.getWebSite().getWebPage("HomeTeasers")
         //println homeTeaser
 
