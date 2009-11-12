@@ -3,11 +3,10 @@ package org.semanticwb.portal.community.base;
 
 public class MicroSiteClassBase extends org.semanticwb.model.SWBClass 
 {
-    public static class ClassMgr
-    {
-       public static final org.semanticwb.platform.SemanticProperty swb_valid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#valid");
        public static final org.semanticwb.platform.SemanticClass swbcomm_MicroSiteClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#MicroSiteClass");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#MicroSiteClass");
+    public static class ClassMgr
+    {
 
        public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteClass> listMicroSiteClasses(org.semanticwb.model.SWBModel model)
        {

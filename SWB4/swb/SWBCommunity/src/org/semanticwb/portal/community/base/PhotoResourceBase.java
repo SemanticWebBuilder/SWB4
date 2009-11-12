@@ -22,46 +22,35 @@ public class PhotoResourceBase extends org.semanticwb.portal.community.Community
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.PhotoElement> listPhotos()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.PhotoElement>(getSemanticObject().listObjectProperties(ClassMgr.swbcomm_hasPhoto));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.PhotoElement>(getSemanticObject().listObjectProperties(swbcomm_hasPhoto));
     }
 
     public boolean hasPhoto(org.semanticwb.portal.community.PhotoElement photoelement)
     {
         if(photoelement==null)return false;
-        return getSemanticObject().hasObjectProperty(ClassMgr.swbcomm_hasPhoto,photoelement.getSemanticObject());
+        return getSemanticObject().hasObjectProperty(swbcomm_hasPhoto,photoelement.getSemanticObject());
     }
 
     public void addPhoto(org.semanticwb.portal.community.PhotoElement value)
     {
-        getSemanticObject().addObjectProperty(ClassMgr.swbcomm_hasPhoto, value.getSemanticObject());
+        getSemanticObject().addObjectProperty(swbcomm_hasPhoto, value.getSemanticObject());
     }
 
     public void removeAllPhoto()
     {
-        getSemanticObject().removeProperty(ClassMgr.swbcomm_hasPhoto);
+        getSemanticObject().removeProperty(swbcomm_hasPhoto);
     }
 
     public void removePhoto(org.semanticwb.portal.community.PhotoElement photoelement)
     {
-        getSemanticObject().removeObjectProperty(ClassMgr.swbcomm_hasPhoto,photoelement.getSemanticObject());
+        getSemanticObject().removeObjectProperty(swbcomm_hasPhoto,photoelement.getSemanticObject());
     }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.PhotoResource> listPhotoResourceByPhoto(org.semanticwb.portal.community.PhotoElement hasphoto,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.PhotoResource> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(ClassMgr.swbcomm_hasPhoto, hasphoto.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.portal.community.PhotoResource> listPhotoResourceByPhoto(org.semanticwb.portal.community.PhotoElement hasphoto)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.PhotoResource> it=new org.semanticwb.model.GenericIterator(hasphoto.getSemanticObject().getModel().listSubjects(ClassMgr.swbcomm_hasPhoto,hasphoto.getSemanticObject()));
-       return it;
-   }
 
     public org.semanticwb.portal.community.PhotoElement getPhoto()
     {
          org.semanticwb.portal.community.PhotoElement ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(ClassMgr.swbcomm_hasPhoto);
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbcomm_hasPhoto);
          if(obj!=null)
          {
              ret=(org.semanticwb.portal.community.PhotoElement)obj.createGenericInstance();
