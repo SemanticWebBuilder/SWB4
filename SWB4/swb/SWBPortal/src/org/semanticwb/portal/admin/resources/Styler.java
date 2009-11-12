@@ -90,7 +90,7 @@ public class Styler extends GenericResource {
             script.append("</form> ");
             script.append("</div>");
 
-            mm.put(base.getId(), handler.getMatriz());
+            mm.put(base.getId(), handler.getTabs());
         }catch(Exception e) {
             //e.printStackTrace();
             System.out.println("*******************error\n\n"+e);

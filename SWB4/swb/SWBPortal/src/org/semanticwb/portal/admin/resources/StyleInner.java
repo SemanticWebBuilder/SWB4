@@ -29,14 +29,15 @@ public class StyleInner {
     private static Logger log = SWBUtils.getLogger(Styler.class);
 
     private HashMap mm;
-    private Resource base;
+    //private Resource base;
 
     public StyleInner(Resource base) {
         mm = new HashMap();
-        this.base = base;
+        //this.base = base;
     }
 
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        Resource base = paramRequest.getResourceBase();
         StringBuilder script = new StringBuilder();
         //StyleHandler handler = null;
         StylerDomParser handler = null;
@@ -87,7 +88,7 @@ public class StyleInner {
             script.append("</form> ");
             script.append("</div>");
 
-            mm.put(base.getId(), handler.getMatriz());
+            mm.put(base.getId(), handler.getTabs());
         }catch(Exception e) {
             //e.printStackTrace();
             System.out.println("*******************error\n\n"+e);
@@ -145,21 +146,20 @@ public class StyleInner {
         }
     }*/
 
-    public void printMatriz(Resource base) {
-        HashMap matriz = (HashMap)mm.get(base.getId());
-        Iterator<String> it1 = matriz.keySet().iterator();
-        while(it1.hasNext()) {
-            String k = it1.next();
-            System.out.println("k="+k);
-            HashMap hm = (HashMap)matriz.get(k);
-            Iterator<String> it2 = hm.keySet().iterator();
-            while(it2.hasNext()) {
-                String l = it2.next();
-                System.out.println("key="+l+", value="+hm.get(l));
+    public void printMatriz(String key) {
+        HashMap matriz = (HashMap)mm.get(key);
+        if(matriz!=null) {
+            Iterator<String> it1 = matriz.keySet().iterator();
+            while(it1.hasNext()) {
+                String k = it1.next();
+                System.out.println("k="+k);
+                HashMap hm = (HashMap)matriz.get(k);
+                Iterator<String> it2 = hm.keySet().iterator();
+                while(it2.hasNext()) {
+                    String l = it2.next();
+                    System.out.println("key="+l+", value="+hm.get(l));
+                }
             }
-
-
-
         }
     }
 
