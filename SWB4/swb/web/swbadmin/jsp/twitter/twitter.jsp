@@ -91,17 +91,13 @@
                                 String text = twitt.getText();
                                 Iterator<String> itFounds = SWBUtils.TEXT.findInterStr(twitt.getText(), "@", " ");
                                 while (itFounds.hasNext()) {
-                                    String specialChar=null;
                                     String strFound = itFounds.next();
-                                    if(strFound.endsWith(")")) {
-                                        strFound=strFound.substring(0,strFound.length()-1);
-                                    }
-                                    text = text.replaceAll("@" + strFound, "<a href=\"" + twitter.getBaseURL() + strFound + "\" target=\"_new\">" + "@" + strFound + "</a>");
+                                    text=SWBUtils.TEXT.replaceAll(text, "@" + strFound, "<a href=\"" + twitter.getBaseURL() + strFound + "\" target=\"_new\">" + "@" + strFound + "</a>");
                                 }
                                 itFounds = SWBUtils.TEXT.findInterStr(text, "#", " ");
                                 while (itFounds.hasNext()) {
                                     String strFound = itFounds.next();
-                                    text = text.replaceAll("#" + strFound, "<a href=\"" + twitter.getBaseURL() + "/search?q=%23" +strFound + "\" target=\"_new\">" + "#" + strFound + "</a>");
+                                    text = SWBUtils.TEXT.replaceAll(text,"#" + strFound, "<a href=\"" + twitter.getBaseURL() + "/search?q=%23" +strFound + "\" target=\"_new\">" + "#" + strFound + "</a>");
                                 }
                         %>
                                  <a href="<%=twitter.getBaseURL()%><%=poster%>" target="_new"><img src="<%=imgPath%>" valign="top" width="40" height="40"/></a>
