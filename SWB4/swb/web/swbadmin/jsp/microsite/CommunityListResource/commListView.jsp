@@ -50,7 +50,7 @@
     if (wplevel == 3 || nwp == 0) {
         if (nms > 0) {
         %>
-            <ul id="MenuBar2" class="MenuBarHorizontal">
+            <ul id="MenuBar3" class="MenuBarHorizontal">
                 <li class="selectTitle">
                     <p>Comunidades relacionadas</p>
                     <ul>
@@ -69,7 +69,7 @@
             </ul>
             <script type="text/javascript">
                 <!--
-                var MenuBar2 = new Spry.Widget.MenuBar("MenuBar2", {imgDown:"SpryAssets/SpryMenuBarDownHover.gif", imgRight:"SpryAssets/SpryMenuBarRightHover.gif"});
+                var MenuBar2 = new Spry.Widget.MenuBar("MenuBar3", {imgDown:"SpryAssets/SpryMenuBarDownHover.gif", imgRight:"SpryAssets/SpryMenuBarRightHover.gif"});
                 //-->
             </script>
         <%
