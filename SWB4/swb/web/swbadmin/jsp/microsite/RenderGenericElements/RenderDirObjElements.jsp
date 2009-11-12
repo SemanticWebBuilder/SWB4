@@ -224,10 +224,11 @@
     url.setCallMethod(SWBResourceURL.Call_CONTENT);
     if (mem.isSigned()) {%>
         <a class="userTool" href="javascript:addComment()">Escribir comentario</a>
-    <%}%>
-    <a class="userTool" id="ctrlComments" href="javascript:showComments();"><%=OCULTAR_COMENTARIOS%></a>
-    <!--/p-->
     <%
+    } if (mse.listComments() != null && mse.listComments().hasNext()) {%>
+        <a class="userTool" id="ctrlComments" href="javascript:showComments();"><%=OCULTAR_COMENTARIOS%></a>
+    <%
+    }
     url.setAction("addComment");
     url.setCallMethod(SWBResourceURL.Call_CONTENT);
     if (mem.isSigned()) {%>
@@ -250,6 +251,9 @@
 <%
 request.setAttribute("page",pageNumber);
 request.setAttribute("suri",suri);
-%>
-<div style="border-bottom:1px solid #CCCCCC; margin:20px; width:389px;"></div>
-<jsp:include flush="true" page="ListDirObjComments.jsp"></jsp:include>
+
+if (mse.listComments() != null && mse.listComments().hasNext()) {%>
+    <jsp:include flush="true" page="ListDirObjComments.jsp"></jsp:include>
+<%} else if (!mem.isSigned()) {
+%><p>A&uacute;n no hay comentarios, reg&iacute;strese para comentar</p><%
+}%>
