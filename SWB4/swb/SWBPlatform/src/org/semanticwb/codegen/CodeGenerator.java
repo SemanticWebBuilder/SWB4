@@ -440,7 +440,7 @@ public class CodeGenerator
             {
                 javaClassContent.append("    public static final SemanticClass " + tpc.getPrefix() + "_" + toUpperCase(tpc.getClassCodeName()) + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + tpc.getURI() + "\");" + ENTER);
                 javaClassContent.append(ENTER);
-                javaClassContent.append("    public static " + tpc.getCodePackage() + "."+ toUpperCase(tpc.getClassCodeName()) + " get" + toUpperCase(tpc.getClassCodeName()) + "(String name)" + ENTER);
+                javaClassContent.append("    public static " + tpc.getCodePackage() + "." + toUpperCase(tpc.getClassCodeName()) + " get" + toUpperCase(tpc.getClassCodeName()) + "(String name)" + ENTER);
                 javaClassContent.append("    {" + ENTER);
                 javaClassContent.append("        return " + tpc.getCodePackage() + "." + toUpperCase(tpc.getClassCodeName()) + "." + GLOBAL_CLASS_NAME + ".get" + toUpperCase(tpc.getClassCodeName()) + "(name);" + ENTER);
                 javaClassContent.append("    }" + ENTER);
@@ -457,7 +457,7 @@ public class CodeGenerator
                 javaClassContent.append(ENTER);
                 javaClassContent.append("    public static " + tpc.getCodePackage() + "." + toUpperCase(tpc.getClassCodeName()) + " create" + toUpperCase(tpc.getClassCodeName()) + "(String name, String namespace)" + ENTER);
                 javaClassContent.append("    {" + ENTER);
-                javaClassContent.append("       return " + tpc.getCodePackage() + "."  + toUpperCase(tpc.getClassCodeName()) + "." + GLOBAL_CLASS_NAME + ".create" + toUpperCase(tpc.getClassCodeName()) + "(name, namespace);" + ENTER);
+                javaClassContent.append("       return " + tpc.getCodePackage() + "." + toUpperCase(tpc.getClassCodeName()) + "." + GLOBAL_CLASS_NAME + ".create" + toUpperCase(tpc.getClassCodeName()) + "(name, namespace);" + ENTER);
                 javaClassContent.append("    }" + ENTER);
             }
         }
@@ -559,7 +559,6 @@ public class CodeGenerator
         while (properties.hasNext())
         {
             SemanticProperty tpp = properties.next();
-
 //            boolean isInClass = false;
 //            Iterator<SemanticClass> classes = tpc.listSuperClasses(true);
 //            while (classes.hasNext())
@@ -676,76 +675,75 @@ public class CodeGenerator
         HashSet<SemanticClass> staticClasses = new HashSet<SemanticClass>();
         HashSet<SemanticProperty> staticProperties = new HashSet<SemanticProperty>();
         Iterator<SemanticProperty> properties = tpc.listProperties();
-        //HashSet<SemanticClass> interfaces = getInterfaces(tpc);
-        javaClassContent.append("    public static class " + GLOBAL_CLASS_NAME + ENTER);
-        javaClassContent.append("    {" + ENTER);
+        HashSet<SemanticClass> interfaces = getInterfaces(tpc);
+
         while (properties.hasNext())
         {
             SemanticProperty tpp = properties.next();
 
-            //boolean isInClass = false;
-            /*Iterator<SemanticClass> classes = tpc.listSuperClasses(true);
+            boolean isInClass = false;
+            Iterator<SemanticClass> classes = tpc.listSuperClasses(true);
             while (classes.hasNext())
             {
-            SemanticClass superclass = classes.next();
-            if (superclass.isSWBClass() || superclass.isSWBModel() || superclass.isSWBFormElement())
-            {
-            Iterator<SemanticProperty> propInterfaces = superclass.listProperties();
-            while (propInterfaces.hasNext())
-            {
-            SemanticProperty propSuperClass = propInterfaces.next();
-            if (propSuperClass.equals(tpp))
-            {
-            isInClass = true;
-            break;
-            }
-            }
-            if (isInClass)
-            {
-            break;
-            }
-            }
-            }*/
-            /*if (!isInClass)
-            {
-            for (SemanticClass ointerface : interfaces)
-            {
-            Iterator<SemanticProperty> propInterfaces = ointerface.listProperties();
-            while (propInterfaces.hasNext())
-            {
-            SemanticProperty propSuperClass = propInterfaces.next();
-            if (propSuperClass.equals(tpp))
-            {
-            isInClass = true;
-            break;
-            }
-            }
-            if (isInClass)
-            {
-            break;
-            }
-            }
-            }*/
-
-
-            /*if (!isInClass)
-            {*/
-            SemanticClass range = tpp.getRangeClass();
-            if (range != null)
-            {
-                if (!staticClasses.contains(range))
+                SemanticClass superclass = classes.next();
+                if (superclass.isSWBClass() || superclass.isSWBModel() || superclass.isSWBFormElement())
                 {
-                    javaClassContent.append("       public static final org.semanticwb.platform.SemanticClass " + range.getPrefix() + "_" + toUpperCase(range.getClassCodeName()) + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + range.getURI() + "\");" + ENTER);
-                    staticClasses.add(range);
+                    Iterator<SemanticProperty> propInterfaces = superclass.listProperties();
+                    while (propInterfaces.hasNext())
+                    {
+                        SemanticProperty propSuperClass = propInterfaces.next();
+                        if (propSuperClass.equals(tpp))
+                        {
+                            isInClass = true;
+                            break;
+                        }
+                    }
+                    if (isInClass)
+                    {
+                        break;
+                    }
+                }
+            }
+            if (!isInClass)
+            {
+                for (SemanticClass ointerface : interfaces)
+                {
+                    Iterator<SemanticProperty> propInterfaces = ointerface.listProperties();
+                    while (propInterfaces.hasNext())
+                    {
+                        SemanticProperty propSuperClass = propInterfaces.next();
+                        if (propSuperClass.equals(tpp))
+                        {
+                            isInClass = true;
+                            break;
+                        }
+                    }
+                    if (isInClass)
+                    {
+                        break;
+                    }
                 }
             }
 
-            if (!staticProperties.contains(tpp))
+
+            if (!isInClass)
             {
-                javaClassContent.append("       public static final org.semanticwb.platform.SemanticProperty " + tpp.getPrefix() + "_" + tpp.getName() + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(\"" + tpp.getURI() + "\");" + ENTER);
-                //staticProperties.add(tpp);
+                SemanticClass range = tpp.getRangeClass();
+                if (range != null)
+                {
+                    if (!staticClasses.contains(range))
+                    {
+                        javaClassContent.append("       public static final org.semanticwb.platform.SemanticClass " + range.getPrefix() + "_" + toUpperCase(range.getClassCodeName()) + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + range.getURI() + "\");" + ENTER);
+                        staticClasses.add(range);
+                    }
                 }
-            //}
+
+                if (!staticProperties.contains(tpp))
+                {
+                    javaClassContent.append("       public static final org.semanticwb.platform.SemanticProperty " + tpp.getPrefix() + "_" + tpp.getName() + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(\"" + tpp.getURI() + "\");" + ENTER);
+                    staticProperties.add(tpp);
+                }
+            }
         }
 
 
@@ -775,7 +773,8 @@ public class CodeGenerator
 
         javaClassContent.append("       public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + tpc.getURI() + "\");" + ENTER);
 
-
+        javaClassContent.append("    public static class " + GLOBAL_CLASS_NAME + ENTER);
+        javaClassContent.append("    {" + ENTER);
 
 
         String fullpathClass = tpc.getCodePackage() + "." + toUpperCase(tpc.getClassCodeName());
@@ -878,7 +877,37 @@ public class CodeGenerator
             javaClassContent.append("       }" + ENTER);
         }
 
-        javaClassContent.append("    }" + ENTER);
+        Iterator<SemanticProperty> tppit = tpc.listProperties();
+        while (tppit.hasNext())
+        {
+            SemanticProperty tpp = tppit.next();
+            if (tpp.isObjectProperty())
+            {
+                if (!isPropertyOfParent(tpp, parent))
+                {
+                    SemanticClass tpcToReturn = tpp.getRangeClass();
+                    String nameList = tpp.getPropertyCodeName();
+                    if (nameList.startsWith("has"))
+                    {
+                        nameList = nameList.substring(3);
+                    }
+                    javaClassContent.append("   public static java.util.Iterator<" + tpc.getCodePackage() + "." + tpc.getClassCodeName() + "> list" + toUpperCase(tpc.getClassCodeName()) + "By" + toUpperCase(nameList) + "(" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + " " + tpp.getName().toLowerCase() + ",org.semanticwb.model.SWBModel model)" + ENTER);
+                    javaClassContent.append("   {" + ENTER);
+                    javaClassContent.append("       org.semanticwb.model.GenericIterator<" + tpc.getCodePackage() + "." + tpc.getClassCodeName() + "> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + tpp.getName().toLowerCase() + ".getSemanticObject()));" + ENTER);
+                    javaClassContent.append("       return it;" + ENTER);
+                    javaClassContent.append("   }" + ENTER);
+
+                    javaClassContent.append(ENTER);
+                    javaClassContent.append("   public static java.util.Iterator<" + tpc.getCodePackage() + "." + tpc.getClassCodeName() + "> list" + toUpperCase(tpc.getClassCodeName()) + "By" + toUpperCase(nameList) + "(" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + " " + tpp.getName().toLowerCase() + ")" + ENTER);
+                    javaClassContent.append("   {" + ENTER);
+                    javaClassContent.append("       org.semanticwb.model.GenericIterator<" + tpc.getCodePackage() + "." + tpc.getClassCodeName() + "> it=new org.semanticwb.model.GenericIterator(" + tpp.getName().toLowerCase() + ".getSemanticObject().getModel().listSubjects(" + tpp.getPrefix() + "_" + tpp.getName() + "," + tpp.getName().toLowerCase() + ".getSemanticObject()));" + ENTER);
+                    javaClassContent.append("       return it;" + ENTER);
+                    javaClassContent.append("   }" + ENTER);
+                }
+            }
+        }
+
+        javaClassContent.append("    }" + ENTER); // ennd ClassMgr
 
         javaClassContent.append(ENTER);
         javaClassContent.append(PUBLIC + toUpperCase(tpc.getClassCodeName()) + "Base(org.semanticwb.platform.SemanticObject base)" + ENTER);
@@ -887,6 +916,9 @@ public class CodeGenerator
         javaClassContent.append(CLOSE_BLOCK + ENTER);
 
         insertPropertiesToClass(tpc, javaClassContent, parent);
+
+        
+
         if (tpc.isSWBModel())
         {
             insertPropertiesToModel(tpc, javaClassContent);
@@ -957,24 +989,25 @@ public class CodeGenerator
             javaClassContent.append("" + ENTER);
         }
 
-        javaClassContent.append("public interface " + toUpperCase(tpc.getClassCodeName()) + " extends "+tpc.getCodePackage()+".base."+toUpperCase(tpc.getClassCodeName())+"Base" + ENTER);
+        javaClassContent.append("public interface " + toUpperCase(tpc.getClassCodeName()) + " extends " + tpc.getCodePackage() + ".base." + toUpperCase(tpc.getClassCodeName()) + "Base" + ENTER);
         javaClassContent.append("{" + ENTER);
         javaClassContent.append("}" + ENTER);
         File fileClass = new File(dir.getPath() + File.separatorChar + toUpperCase(tpc.getClassCodeName()) + ".java");
-        boolean exists=false;
-        if(fileClass.exists())
+        boolean exists = false;
+        if (fileClass.exists())
         {
-            exists=true;
+            exists = true;
         }
         //exists=false;
-        if(!exists)
+        if (!exists)
         {
             saveFile(fileClass, javaClassContent.toString());
         }
     }
+
     private void createInterfaceBase(SemanticClass tpc, File pDirectory) throws CodeGeneratorException
     {
-        File dir = createPackage(tpc.getCodePackage()+".base", pDirectory);
+        File dir = createPackage(tpc.getCodePackage() + ".base", pDirectory);
         StringBuilder javaClassContent = new StringBuilder();
         if (!tpc.getCodePackage().equals(""))
         {
@@ -1055,7 +1088,7 @@ public class CodeGenerator
         javaClassContent.append("    public static final org.semanticwb.platform.SemanticClass " + tpc.getPrefix() + "_" + toUpperCase(tpc.getClassCodeName()) + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + tpc.getURI() + "\");" + ENTER);
         insertPropertiesToInterface(tpc, javaClassContent);
         javaClassContent.append("}" + ENTER);
-        File fileClass = new File(dir.getPath() + File.separatorChar + toUpperCase(tpc.getClassCodeName()+"Base") + ".java");
+        File fileClass = new File(dir.getPath() + File.separatorChar + toUpperCase(tpc.getClassCodeName() + "Base") + ".java");
         saveFile(fileClass, javaClassContent.toString());
         createInterface(tpc, pDirectory);
     }
@@ -1135,7 +1168,7 @@ public class CodeGenerator
                             javaClassContent.append(ENTER);
                             javaClassContent.append("    public void remove" + objectName + "(" + pack + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ");" + ENTER);
                             javaClassContent.append(ENTER);
-                            javaClassContent.append(PUBLIC + pack+"."+valueToReturn + " get" + objectName + "();" + ENTER);
+                            javaClassContent.append(PUBLIC + pack + "." + valueToReturn + " get" + objectName + "();" + ENTER);
                         }
                     }
                     else
@@ -1150,7 +1183,7 @@ public class CodeGenerator
                         javaClassContent.append(ENTER);
                         javaClassContent.append("    public void remove" + objectName + "();" + ENTER);
                         javaClassContent.append(ENTER);
-                        javaClassContent.append(PUBLIC + pack+"."+valueToReturn + " get" + objectName + "();" + ENTER);
+                        javaClassContent.append(PUBLIC + pack + "." + valueToReturn + " get" + objectName + "();" + ENTER);
                     }
 
                 }
@@ -1310,7 +1343,7 @@ public class CodeGenerator
                 javaClassContent.append(ENTER);
                 javaClassContent.append("    public " + tpc.getCodePackage() + "." + toUpperCase(tpc.getClassCodeName()) + " create" + toUpperCase(tpc.getClassCodeName()) + "()" + ENTER);
                 javaClassContent.append("    {" + ENTER);
-                javaClassContent.append("        long id=getSemanticObject().getModel().getCounter(" + GLOBAL_CLASS_NAME + "." + tpc.getPrefix() + "_" + toUpperCase(tpc.getClassCodeName()) + ");" + ENTER);
+                javaClassContent.append("        long id=getSemanticObject().getModel().getCounter(" + tpc.getPrefix() + "_" + toUpperCase(tpc.getClassCodeName()) + ");" + ENTER);
                 javaClassContent.append("        return " + tpc.getCodePackage() + "." + toUpperCase(tpc.getClassCodeName()) + "." + GLOBAL_CLASS_NAME + ".create" + toUpperCase(tpc.getClassCodeName()) + "(String.valueOf(id),this);" + ENTER);
                 javaClassContent.append("    } " + ENTER);
 
@@ -1422,7 +1455,7 @@ public class CodeGenerator
 //                {
 
             javaClassContent.append("        java.util.ArrayList<" + type + "> values=new java.util.ArrayList<" + type + ">();" + ENTER);
-            javaClassContent.append("        java.util.Iterator<org.semanticwb.platform.SemanticLiteral> it=getSemanticObject().listLiteralProperties(" + GLOBAL_CLASS_NAME + "." + tpp.getPrefix() + "_" + tpp.getName() + ");" + ENTER);
+            javaClassContent.append("        java.util.Iterator<org.semanticwb.platform.SemanticLiteral> it=getSemanticObject().listLiteralProperties(" + tpp.getPrefix() + "_" + tpp.getName() + ");" + ENTER);
             javaClassContent.append("        while(it.hasNext())" + ENTER);
             javaClassContent.append("        {" + ENTER);
             javaClassContent.append("                org.semanticwb.platform.SemanticLiteral literal=it.next();" + ENTER);
@@ -1437,17 +1470,17 @@ public class CodeGenerator
                 javaClassContent.append(ENTER);
                 javaClassContent.append("    public void add" + objectName + "(" + type + " " + objectName.toLowerCase() + ")" + ENTER);
                 javaClassContent.append(OPEN_BLOCK + ENTER);
-                javaClassContent.append("        get" + semanticObject + "().set" + (type.equals("String") ? "" : type) + "Property(" + GLOBAL_CLASS_NAME + "." + tpp.getPrefix() + "_" + tpp.getName() + ", " + objectName.toLowerCase() + ");" + ENTER);
+                javaClassContent.append("        get" + semanticObject + "().set" + (type.equals("String") ? "" : type) + "Property(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + objectName.toLowerCase() + ");" + ENTER);
                 javaClassContent.append(CLOSE_BLOCK + ENTER);
                 javaClassContent.append(ENTER);
                 javaClassContent.append("    public void removeAll" + objectName + "()" + ENTER);
                 javaClassContent.append(OPEN_BLOCK + ENTER);
-                javaClassContent.append("        get" + semanticObject + "().removeProperty(" + GLOBAL_CLASS_NAME + "." + tpp.getPrefix() + "_" + tpp.getName() + ");" + ENTER);
+                javaClassContent.append("        get" + semanticObject + "().removeProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ");" + ENTER);
                 javaClassContent.append(CLOSE_BLOCK + ENTER);
                 javaClassContent.append(ENTER);
                 javaClassContent.append("    public void remove" + objectName + "(" + type + " " + objectName.toLowerCase() + ")" + ENTER);
                 javaClassContent.append(OPEN_BLOCK + ENTER);
-                javaClassContent.append("        get" + semanticObject + "().removeProperty(" + GLOBAL_CLASS_NAME + "." + tpp.getPrefix() + "_" + tpp.getName() + "," + objectName.toLowerCase() + ");" + ENTER);
+                javaClassContent.append("        get" + semanticObject + "().removeProperty(" + tpp.getPrefix() + "_" + tpp.getName() + "," + objectName.toLowerCase() + ");" + ENTER);
                 javaClassContent.append(CLOSE_BLOCK + ENTER);
             }
         }
@@ -1550,11 +1583,11 @@ public class CodeGenerator
             if (tpp.isExternalInvocation())
             {
                 javaClassContent.append("        //Override this method in " + toUpperCase(tpc.getClassCodeName()) + " object" + ENTER);
-                javaClassContent.append("        return " + getMethod + "(" + GLOBAL_CLASS_NAME + "." + tpp.getPrefix() + "_" + tpp.getName() + ",false);" + ENTER);
+                javaClassContent.append("        return " + getMethod + "(" + tpp.getPrefix() + "_" + tpp.getName() + ",false);" + ENTER);
             }
             else
             {
-                javaClassContent.append("        return " + getMethod + "(" + GLOBAL_CLASS_NAME + "." + tpp.getPrefix() + "_" + tpp.getName() + ");" + ENTER);
+                javaClassContent.append("        return " + getMethod + "(" + tpp.getPrefix() + "_" + tpp.getName() + ");" + ENTER);
             }
             javaClassContent.append(CLOSE_BLOCK + ENTER);
 
@@ -1577,18 +1610,18 @@ public class CodeGenerator
                 }
                 else
                 {
-                    javaClassContent.append("        " + setMethod + "(" + GLOBAL_CLASS_NAME + "." + tpp.getPrefix() + "_" + tpp.getName() + ", " + "value" + ",false);" + ENTER);
+                    javaClassContent.append("        " + setMethod + "(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + "value" + ",false);" + ENTER);
                 }
             }
             else
             {
                 if (type.equals("java.io.InputStream"))
                 {
-                    javaClassContent.append("        " + setMethod + "(" + GLOBAL_CLASS_NAME + "." + tpp.getPrefix() + "_" + tpp.getName() + ", " + "value" + ",name);" + ENTER);
+                    javaClassContent.append("        " + setMethod + "(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + "value" + ",name);" + ENTER);
                 }
                 else
                 {
-                    javaClassContent.append("        " + setMethod + "(" + GLOBAL_CLASS_NAME + "." + tpp.getPrefix() + "_" + tpp.getName() + ", " + "value" + ");" + ENTER);
+                    javaClassContent.append("        " + setMethod + "(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + "value" + ");" + ENTER);
                 }
             }
             javaClassContent.append(CLOSE_BLOCK + ENTER);
@@ -1601,12 +1634,12 @@ public class CodeGenerator
                 if (tpp.isExternalInvocation())
                 {
                     javaClassContent.append("        //Override this method in " + toUpperCase(tpc.getClassCodeName()) + " object" + ENTER);
-                    javaClassContent.append("        return " + getMethod + "(" + GLOBAL_CLASS_NAME + "." + tpp.getPrefix() + "_" + tpp.getName() + ", null, lang,false);" + ENTER);
+                    javaClassContent.append("        return " + getMethod + "(" + tpp.getPrefix() + "_" + tpp.getName() + ", null, lang,false);" + ENTER);
 
                 }
                 else
                 {
-                    javaClassContent.append("        return " + getMethod + "(" + GLOBAL_CLASS_NAME + "." + tpp.getPrefix() + "_" + tpp.getName() + ", null, lang);" + ENTER);
+                    javaClassContent.append("        return " + getMethod + "(" + tpp.getPrefix() + "_" + tpp.getName() + ", null, lang);" + ENTER);
                 }
                 javaClassContent.append(CLOSE_BLOCK + ENTER);
 
@@ -1615,7 +1648,7 @@ public class CodeGenerator
                     javaClassContent.append(ENTER);
                     javaClassContent.append(PUBLIC + type + " " + prefix + "Display" + methodName + "(String lang)" + ENTER);
                     javaClassContent.append(OPEN_BLOCK + ENTER);
-                    javaClassContent.append("        return " + "get" + semanticObject + "().getLocaleProperty" + "(" + GLOBAL_CLASS_NAME + "." + tpp.getPrefix() + "_" + tpp.getName() + ", lang);" + ENTER);
+                    javaClassContent.append("        return " + "get" + semanticObject + "().getLocaleProperty" + "(" + tpp.getPrefix() + "_" + tpp.getName() + ", lang);" + ENTER);
                     javaClassContent.append(CLOSE_BLOCK + ENTER);
                 }
 
@@ -1626,12 +1659,12 @@ public class CodeGenerator
                 {
 
                     javaClassContent.append("        //Override this method in " + toUpperCase(tpc.getClassCodeName()) + " object" + ENTER);
-                    javaClassContent.append("        " + setMethod + "(" + GLOBAL_CLASS_NAME + "." + tpp.getPrefix() + "_" + tpp.getName() + ", " + tpp.getName() + ", lang,false);" + ENTER);
+                    javaClassContent.append("        " + setMethod + "(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + tpp.getName() + ", lang,false);" + ENTER);
 
                 }
                 else
                 {
-                    javaClassContent.append("        " + setMethod + "(" + GLOBAL_CLASS_NAME + "." + tpp.getPrefix() + "_" + tpp.getName() + ", " + tpp.getName() + ", lang);" + ENTER);
+                    javaClassContent.append("        " + setMethod + "(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + tpp.getName() + ", lang);" + ENTER);
                 }
                 javaClassContent.append(CLOSE_BLOCK + ENTER);
             }
@@ -1659,20 +1692,20 @@ public class CodeGenerator
                 javaClassContent.append(ENTER);
                 javaClassContent.append("    public org.semanticwb.model.GenericIterator<" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + "> list" + getNameInPlural(objectName) + "()" + ENTER);
                 javaClassContent.append(OPEN_BLOCK + ENTER);
-                javaClassContent.append("        return new org.semanticwb.model.GenericIterator<" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + ">(getSemanticObject().listObjectProperties(" + GLOBAL_CLASS_NAME + "." + tpp.getPrefix() + "_" + tpp.getName() + "));");
+                javaClassContent.append("        return new org.semanticwb.model.GenericIterator<" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + ">(getSemanticObject().listObjectProperties(" + tpp.getPrefix() + "_" + tpp.getName() + "));");
                 javaClassContent.append(ENTER + CLOSE_BLOCK + ENTER);
                 javaClassContent.append(ENTER);
                 javaClassContent.append("    public boolean has" + objectName + "(" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + " " + tpcToReturn.getClassCodeName().toLowerCase() + ")" + ENTER);
                 javaClassContent.append(OPEN_BLOCK + ENTER);
                 javaClassContent.append("        if(" + tpcToReturn.getClassCodeName().toLowerCase() + "==null)return false;" + ENTER);
-                javaClassContent.append("        return get" + semanticObject + "().hasObjectProperty(" + GLOBAL_CLASS_NAME + "." + tpp.getPrefix() + "_" + tpp.getName() + "," + tpcToReturn.getClassCodeName().toLowerCase() + ".getSemanticObject());");
+                javaClassContent.append("        return get" + semanticObject + "().hasObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + "," + tpcToReturn.getClassCodeName().toLowerCase() + ".getSemanticObject());");
                 javaClassContent.append(ENTER + CLOSE_BLOCK + ENTER);
                 if (tpp.isInheritProperty())
                 {
                     javaClassContent.append(ENTER);
                     javaClassContent.append("    public org.semanticwb.model.GenericIterator<" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + "> listInherit" + getNameInPlural(objectName) + "()" + ENTER);
                     javaClassContent.append(OPEN_BLOCK + ENTER);
-                    javaClassContent.append("        return new org.semanticwb.model.GenericIterator<" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + ">(getSemanticObject().listInheritProperties(" + GLOBAL_CLASS_NAME + "." + tpp.getPrefix() + "_" + tpp.getName() + "));");
+                    javaClassContent.append("        return new org.semanticwb.model.GenericIterator<" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + ">(getSemanticObject().listInheritProperties(" + tpp.getPrefix() + "_" + tpp.getName() + "));");
                     javaClassContent.append(ENTER + CLOSE_BLOCK + ENTER);
                 }
 
@@ -1681,19 +1714,19 @@ public class CodeGenerator
                     javaClassContent.append(ENTER);
                     javaClassContent.append("    public void add" + objectName + "(" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + " " + "value" + ")" + ENTER);
                     javaClassContent.append(OPEN_BLOCK + ENTER);
-                    javaClassContent.append("        get" + semanticObject + "().addObjectProperty(" + GLOBAL_CLASS_NAME + "." + tpp.getPrefix() + "_" + tpp.getName() + ", " + "value" + ".getSemanticObject());" + ENTER);
+                    javaClassContent.append("        get" + semanticObject + "().addObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + "value" + ".getSemanticObject());" + ENTER);
                     javaClassContent.append(CLOSE_BLOCK + ENTER);
 
                     javaClassContent.append(ENTER);
                     javaClassContent.append("    public void removeAll" + objectName + "()" + ENTER);
                     javaClassContent.append(OPEN_BLOCK + ENTER);
-                    javaClassContent.append("        get" + semanticObject + "().removeProperty(" + GLOBAL_CLASS_NAME + "." + tpp.getPrefix() + "_" + tpp.getName() + ");" + ENTER);
+                    javaClassContent.append("        get" + semanticObject + "().removeProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ");" + ENTER);
                     javaClassContent.append(CLOSE_BLOCK + ENTER);
 
                     javaClassContent.append(ENTER);
                     javaClassContent.append("    public void remove" + objectName + "(" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + " " + tpcToReturn.getClassCodeName().toLowerCase() + ")" + ENTER);
                     javaClassContent.append(OPEN_BLOCK + ENTER);
-                    javaClassContent.append("        get" + semanticObject + "().removeObjectProperty(" + GLOBAL_CLASS_NAME + "." + tpp.getPrefix() + "_" + tpp.getName() + "," + tpcToReturn.getClassCodeName().toLowerCase() + ".getSemanticObject());" + ENTER);
+                    javaClassContent.append("        get" + semanticObject + "().removeObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + "," + tpcToReturn.getClassCodeName().toLowerCase() + ".getSemanticObject());" + ENTER);
                     javaClassContent.append(CLOSE_BLOCK + ENTER);
                 }
             }
@@ -1702,13 +1735,13 @@ public class CodeGenerator
                 javaClassContent.append(ENTER);
                 javaClassContent.append("    public void set" + objectName + "(" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + " " + "value" + ")" + ENTER);
                 javaClassContent.append(OPEN_BLOCK + ENTER);
-                javaClassContent.append("        get" + semanticObject + "().setObjectProperty(" + GLOBAL_CLASS_NAME + "." + tpp.getPrefix() + "_" + tpp.getName() + ", " + "value" + ".getSemanticObject());" + ENTER);
+                javaClassContent.append("        get" + semanticObject + "().setObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + "value" + ".getSemanticObject());" + ENTER);
                 javaClassContent.append(CLOSE_BLOCK + ENTER);
 
                 javaClassContent.append(ENTER);
                 javaClassContent.append("    public void remove" + objectName + "()" + ENTER);
                 javaClassContent.append(OPEN_BLOCK + ENTER);
-                javaClassContent.append("        get" + semanticObject + "().removeProperty(" + GLOBAL_CLASS_NAME + "." + tpp.getPrefix() + "_" + tpp.getName() + ");" + ENTER);
+                javaClassContent.append("        get" + semanticObject + "().removeProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ");" + ENTER);
                 javaClassContent.append(CLOSE_BLOCK + ENTER);
             }
 
@@ -1718,24 +1751,24 @@ public class CodeGenerator
             {
                 nameList = nameList.substring(3);
             }
-            javaClassContent.append("   public static java.util.Iterator<" + tpc.getCodePackage() + "." + tpc.getClassCodeName() + "> list" + toUpperCase(tpc.getClassCodeName()) + "By" + toUpperCase(nameList) + "(" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + " " + tpp.getName().toLowerCase() + ",org.semanticwb.model.SWBModel model)" + ENTER);
+            /*javaClassContent.append("   public static java.util.Iterator<" + tpc.getCodePackage() + "." + tpc.getClassCodeName() + "> list" + toUpperCase(tpc.getClassCodeName()) + "By" + toUpperCase(nameList) + "(" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + " " + tpp.getName().toLowerCase() + ",org.semanticwb.model.SWBModel model)" + ENTER);
             javaClassContent.append("   {" + ENTER);
-            javaClassContent.append("       org.semanticwb.model.GenericIterator<" + tpc.getCodePackage() + "." + tpc.getClassCodeName() + "> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(" + GLOBAL_CLASS_NAME + "." + tpp.getPrefix() + "_" + tpp.getName() + ", " + tpp.getName().toLowerCase() + ".getSemanticObject()));" + ENTER);
+            javaClassContent.append("       org.semanticwb.model.GenericIterator<" + tpc.getCodePackage() + "." + tpc.getClassCodeName() + "> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + tpp.getName().toLowerCase() + ".getSemanticObject()));" + ENTER);
             javaClassContent.append("       return it;" + ENTER);
             javaClassContent.append("   }" + ENTER);
 
             javaClassContent.append(ENTER);
             javaClassContent.append("   public static java.util.Iterator<" + tpc.getCodePackage() + "." + tpc.getClassCodeName() + "> list" + toUpperCase(tpc.getClassCodeName()) + "By" + toUpperCase(nameList) + "(" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + " " + tpp.getName().toLowerCase() + ")" + ENTER);
             javaClassContent.append("   {" + ENTER);
-            javaClassContent.append("       org.semanticwb.model.GenericIterator<" + tpc.getCodePackage() + "." + tpc.getClassCodeName() + "> it=new org.semanticwb.model.GenericIterator(" + tpp.getName().toLowerCase() + ".getSemanticObject().getModel().listSubjects(" + GLOBAL_CLASS_NAME + "." + tpp.getPrefix() + "_" + tpp.getName() + "," + tpp.getName().toLowerCase() + ".getSemanticObject()));" + ENTER);
+            javaClassContent.append("       org.semanticwb.model.GenericIterator<" + tpc.getCodePackage() + "." + tpc.getClassCodeName() + "> it=new org.semanticwb.model.GenericIterator(" + tpp.getName().toLowerCase() + ".getSemanticObject().getModel().listSubjects(" + tpp.getPrefix() + "_" + tpp.getName() + "," + tpp.getName().toLowerCase() + ".getSemanticObject()));" + ENTER);
             javaClassContent.append("       return it;" + ENTER);
-            javaClassContent.append("   }" + ENTER);
+            javaClassContent.append("   }" + ENTER);*/
 
             javaClassContent.append(ENTER);
             javaClassContent.append(PUBLIC + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + " get" + objectName + "()" + ENTER);
             javaClassContent.append(OPEN_BLOCK + ENTER);
             javaClassContent.append("         " + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + " ret=null;" + ENTER);
-            javaClassContent.append("         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(" + GLOBAL_CLASS_NAME + "." + tpp.getPrefix() + "_" + tpp.getName() + ");" + ENTER);
+            javaClassContent.append("         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ");" + ENTER);
             javaClassContent.append("         if(obj!=null)" + ENTER);
             javaClassContent.append("         {" + ENTER);
             javaClassContent.append("             ret=(" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + ")obj.createGenericInstance();" + ENTER);
@@ -1762,7 +1795,7 @@ public class CodeGenerator
                 javaClassContent.append("    public org.semanticwb.platform.SemanticIterator<" + pack + "." + valueToReturn + "> list" + getNameInPlural(objectName) + "()" + ENTER);
                 javaClassContent.append(OPEN_BLOCK + ENTER);
 //                
-                javaClassContent.append("        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getRDFResource().listProperties(" + GLOBAL_CLASS_NAME + "." + tpp.getPrefix() + "_" + tpp.getName() + ".getRDFProperty());" + ENTER);
+                javaClassContent.append("        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getRDFResource().listProperties(" + tpp.getPrefix() + "_" + tpp.getName() + ".getRDFProperty());" + ENTER);
                 javaClassContent.append("        return new org.semanticwb.platform.SemanticIterator<" + pack + "." + valueToReturn + ">(stit);" + ENTER);
 //               
                 javaClassContent.append(CLOSE_BLOCK + ENTER);
@@ -1772,19 +1805,19 @@ public class CodeGenerator
                     javaClassContent.append(ENTER);
                     javaClassContent.append("    public void add" + objectName + "(" + pack + "." + valueToReturn + " " + "value" + ")" + ENTER);
                     javaClassContent.append(OPEN_BLOCK + ENTER);
-                    javaClassContent.append("        get" + semanticObject + "().addObjectProperty(" + GLOBAL_CLASS_NAME + "." + tpp.getPrefix() + "_" + tpp.getName() + ", " + "value" + ");" + ENTER);
+                    javaClassContent.append("        get" + semanticObject + "().addObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + "value" + ");" + ENTER);
                     javaClassContent.append(CLOSE_BLOCK + ENTER);
 
                     javaClassContent.append(ENTER);
                     javaClassContent.append("    public void removeAll" + objectName + "()" + ENTER);
                     javaClassContent.append(OPEN_BLOCK + ENTER);
-                    javaClassContent.append("        get" + semanticObject + "().removeProperty(" + GLOBAL_CLASS_NAME + "." + tpp.getPrefix() + "_" + tpp.getName() + ");" + ENTER);
+                    javaClassContent.append("        get" + semanticObject + "().removeProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ");" + ENTER);
                     javaClassContent.append(CLOSE_BLOCK + ENTER);
 
                     javaClassContent.append(ENTER);
                     javaClassContent.append("    public void remove" + objectName + "(" + pack + "." + toUpperCase(valueToReturn) + " " + valueToReturn.toLowerCase() + ")" + ENTER);
                     javaClassContent.append(OPEN_BLOCK + ENTER);
-                    javaClassContent.append("        get" + semanticObject + "().removeObjectProperty(" + GLOBAL_CLASS_NAME + "." + tpp.getPrefix() + "_" + tpp.getName() + "," + valueToReturn.toLowerCase() + ");" + ENTER);
+                    javaClassContent.append("        get" + semanticObject + "().removeObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + "," + valueToReturn.toLowerCase() + ");" + ENTER);
                     javaClassContent.append(CLOSE_BLOCK + ENTER);
                 }
             }
@@ -1793,13 +1826,13 @@ public class CodeGenerator
                 javaClassContent.append(ENTER);
                 javaClassContent.append("    public void set" + objectName + "(" + pack + "." + toUpperCase(valueToReturn) + " " + "value" + ")" + ENTER);
                 javaClassContent.append(OPEN_BLOCK + ENTER);
-                javaClassContent.append("        get" + semanticObject + "().setObjectProperty(" + GLOBAL_CLASS_NAME + "." + tpp.getPrefix() + "_" + tpp.getName() + ", " + "value" + ");" + ENTER);
+                javaClassContent.append("        get" + semanticObject + "().setObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + "value" + ");" + ENTER);
                 javaClassContent.append(CLOSE_BLOCK + ENTER);
 
                 javaClassContent.append(ENTER);
                 javaClassContent.append("    public void remove" + objectName + "()" + ENTER);
                 javaClassContent.append(OPEN_BLOCK + ENTER);
-                javaClassContent.append("        get" + semanticObject + "().removeProperty(" + GLOBAL_CLASS_NAME + "." + tpp.getPrefix() + "_" + tpp.getName() + ");" + ENTER);
+                javaClassContent.append("        get" + semanticObject + "().removeProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ");" + ENTER);
                 javaClassContent.append(CLOSE_BLOCK + ENTER);
             }
 
@@ -1807,7 +1840,7 @@ public class CodeGenerator
             javaClassContent.append(PUBLIC + pack + "." + valueToReturn + " get" + objectName + "()" + ENTER);
             javaClassContent.append(OPEN_BLOCK + ENTER);
             javaClassContent.append("         " + pack + "." + valueToReturn + " ret=null;" + ENTER);
-            javaClassContent.append("         ret=get" + semanticObject + "().getObjectProperty(" + GLOBAL_CLASS_NAME + "." + tpp.getPrefix() + "_" + tpp.getName() + ");" + ENTER);
+            javaClassContent.append("         ret=get" + semanticObject + "().getObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ");" + ENTER);
             javaClassContent.append("         return ret;" + ENTER);
             javaClassContent.append(CLOSE_BLOCK + ENTER);
         }
