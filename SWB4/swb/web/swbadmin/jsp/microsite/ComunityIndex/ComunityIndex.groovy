@@ -53,7 +53,8 @@ temaTree.each{
 
             localCom.each{
                 WebPage curr = (WebPage)it
-                println "                  <li><a href=\"${curr.getRealUrl()}\">${curr.getDisplayName("es")}</a></li>"
+                User user = it.getCreator()
+                println "                  <li><a href=\"${curr.getRealUrl()}\">${curr.getDisplayName("es")},</a> creada por ${user.getFullName()}</li>"
             }
             println "                </ul></div></div>"
         }

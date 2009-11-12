@@ -44,6 +44,9 @@ println """<script type="text/javascript">
 <form id="org.semanticwb.community.User/com/create" dojoType="dijit.form.Form" class="swbform"
 action="$url" 
 method="POST">
+<div class="adminTools">
+                    <p><a  class="adminTool"href="javascript:enviar()">Guardar</a>&nbsp;&nbsp;&nbsp;&nbsp;<a  class="adminTool"href="javascript:history.back();">Cancelar</a></p>
+                    </div>
 <fieldset><legend>Registro de Nuevo Usuario</legend>
 	<table>
 		<tr>
@@ -67,14 +70,7 @@ method="POST">
 		</tr>
 	<tr>
 		<td align="center" colspan="2">
-                    <br>
-                    <!--<button dojoType='dijit.form.Button' type="submit">Guardar</button> -->
-                    <div class="editarInfo">
-                    <p><a href="javascript:enviar();">Siguiente</a></p>
-                    </div>
-                    <div class="editarInfo">
-                    <p><a href="javascript:history.back();">Cancelar</a></p>
-                    </div>
+                    
 <script type="text/javascript">
     function enviar()
     {
