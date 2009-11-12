@@ -183,14 +183,14 @@
 <div class="common_funcs" style="padding:10px;">
     <div style="float:left; width:200px;">
         <%if (mem.isSigned()) {%>
-            <div class="rank_label" style="margin-left:20px;">
+            <div class="rank_label" style="margin-left:8px;">
                 Calificar:
             </div>
             <div class="rank_stars" dojoType="dojox.form.Rating" numStars="5" value="<%=rank%>">
                 <script type="dojo/event" event="onChange">vote(this.value);</script>
             </div>
         <%} else {%>
-            <div class="rank_label" style="margin-left:20px;">
+            <div class="rank_label" style="margin-left:8px;">
                 Calificaci&oacute;n:
             </div>
             <div class="rank_stars" dojoType="dojox.form.Rating" numStars="5" value="<%=rank%>">
