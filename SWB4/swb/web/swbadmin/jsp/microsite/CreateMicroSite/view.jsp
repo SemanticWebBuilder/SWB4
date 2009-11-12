@@ -27,8 +27,8 @@
         urlAdd.setParameter("act", "add");
         urlAdd.setWindowState(SWBResourceURL.WinState_NORMAL);
         %>
-        <div id="busquedaPalabraClave" style="margin-top:10px; margin-left:20px;">
-            <a class="adminTool" href="<%=urlAdd%>">Crear Comunidad</a>
+        <div id="busquedaPalabraClave" style="width:130px; margin-top:18px;">
+            <a style="margin-left:20px;" class="adminTool" href="<%=urlAdd%>">Crear Comunidad</a>
         </div>
         <%
     }
