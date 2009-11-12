@@ -48,7 +48,7 @@
                 if (!isFriend)
                 {
 %>
-<li><a href="<%=url%>" >Invitar a <%=propect.getFullName()%> a ser tu amigo</a></li>
+<li><a href="<%=url%>" >Invitar a <%=propect.getFullName()%></a></li>
 <%
                 }
             }
