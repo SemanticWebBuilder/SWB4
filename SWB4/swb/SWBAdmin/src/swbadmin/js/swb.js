@@ -815,7 +815,8 @@
             {
                 for(var x=0;x<childs.length;x++)
                 {
-                    alert("store:"+store+" childs[x]:"+childs[x]+" item:"+ite);
+                    //TODO:
+                    //alert("store:"+store+" childs[x]:"+childs[x].title+" item:"+ite.title);
                     addItem(store, childs[x], ite);
                 }
             }else if(item.hasChilds)
