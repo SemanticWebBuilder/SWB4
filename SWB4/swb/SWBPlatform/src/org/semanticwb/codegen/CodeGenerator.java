@@ -1134,6 +1134,7 @@ public class CodeGenerator
                     {
                         SemanticClass tpcToReturn = tpp.getRangeClass();
                         valueToReturn = toUpperCase(tpcToReturn.getClassCodeName());
+                        pack=tpcToReturn.getCodePackage();
                     }
                     else if (tpp.getRange() != null)
                     {
