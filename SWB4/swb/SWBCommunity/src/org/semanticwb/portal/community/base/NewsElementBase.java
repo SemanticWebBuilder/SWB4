@@ -56,6 +56,17 @@ public class NewsElementBase extends org.semanticwb.portal.community.MicroSiteEl
        {
            return (getNewsElement(id, model)!=null);
        }
+   public static java.util.Iterator<org.semanticwb.portal.community.NewsElement> listNewsElementByModifiedBy(org.semanticwb.model.User modifiedby,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.NewsElement> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_modifiedBy, modifiedby.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.NewsElement> listNewsElementByModifiedBy(org.semanticwb.model.User modifiedby)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.NewsElement> it=new org.semanticwb.model.GenericIterator(modifiedby.getSemanticObject().getModel().listSubjects(swb_modifiedBy,modifiedby.getSemanticObject()));
+       return it;
+   }
    public static java.util.Iterator<org.semanticwb.portal.community.NewsElement> listNewsElementByNewsWebPage(org.semanticwb.model.WebPage newswebpage,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.NewsElement> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_newsWebPage, newswebpage.getSemanticObject()));
@@ -65,6 +76,28 @@ public class NewsElementBase extends org.semanticwb.portal.community.MicroSiteEl
    public static java.util.Iterator<org.semanticwb.portal.community.NewsElement> listNewsElementByNewsWebPage(org.semanticwb.model.WebPage newswebpage)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.NewsElement> it=new org.semanticwb.model.GenericIterator(newswebpage.getSemanticObject().getModel().listSubjects(swbcomm_newsWebPage,newswebpage.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.portal.community.NewsElement> listNewsElementByCreator(org.semanticwb.model.User creator,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.NewsElement> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_creator, creator.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.NewsElement> listNewsElementByCreator(org.semanticwb.model.User creator)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.NewsElement> it=new org.semanticwb.model.GenericIterator(creator.getSemanticObject().getModel().listSubjects(swb_creator,creator.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.portal.community.NewsElement> listNewsElementByComment(org.semanticwb.portal.community.Comment hascomment,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.NewsElement> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_hasComment, hascomment.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.NewsElement> listNewsElementByComment(org.semanticwb.portal.community.Comment hascomment)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.NewsElement> it=new org.semanticwb.model.GenericIterator(hascomment.getSemanticObject().getModel().listSubjects(swbcomm_hasComment,hascomment.getSemanticObject()));
        return it;
    }
     }

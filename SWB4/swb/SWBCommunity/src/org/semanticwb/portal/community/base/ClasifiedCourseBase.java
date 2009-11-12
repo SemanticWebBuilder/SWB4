@@ -45,6 +45,83 @@ public class ClasifiedCourseBase extends org.semanticwb.portal.community.Clasifi
        {
            return (getClasifiedCourse(id, model)!=null);
        }
+   public static java.util.Iterator<org.semanticwb.portal.community.ClasifiedCourse> listClasifiedCourseByDirectoryResource(org.semanticwb.portal.community.DirectoryResource directoryresource,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.ClasifiedCourse> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_directoryResource, directoryresource.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.ClasifiedCourse> listClasifiedCourseByDirectoryResource(org.semanticwb.portal.community.DirectoryResource directoryresource)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.ClasifiedCourse> it=new org.semanticwb.model.GenericIterator(directoryresource.getSemanticObject().getModel().listSubjects(swbcomm_directoryResource,directoryresource.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.portal.community.ClasifiedCourse> listClasifiedCourseByProfile(org.semanticwb.model.WebPage hasdirprofilewebpage,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.ClasifiedCourse> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_hasDirProfileWebPage, hasdirprofilewebpage.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.ClasifiedCourse> listClasifiedCourseByProfile(org.semanticwb.model.WebPage hasdirprofilewebpage)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.ClasifiedCourse> it=new org.semanticwb.model.GenericIterator(hasdirprofilewebpage.getSemanticObject().getModel().listSubjects(swbcomm_hasDirProfileWebPage,hasdirprofilewebpage.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.portal.community.ClasifiedCourse> listClasifiedCourseByModifiedBy(org.semanticwb.model.User modifiedby,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.ClasifiedCourse> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_modifiedBy, modifiedby.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.ClasifiedCourse> listClasifiedCourseByModifiedBy(org.semanticwb.model.User modifiedby)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.ClasifiedCourse> it=new org.semanticwb.model.GenericIterator(modifiedby.getSemanticObject().getModel().listSubjects(swb_modifiedBy,modifiedby.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.portal.community.ClasifiedCourse> listClasifiedCourseByWebPage(org.semanticwb.model.WebPage dirwebpage,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.ClasifiedCourse> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_dirWebPage, dirwebpage.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.ClasifiedCourse> listClasifiedCourseByWebPage(org.semanticwb.model.WebPage dirwebpage)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.ClasifiedCourse> it=new org.semanticwb.model.GenericIterator(dirwebpage.getSemanticObject().getModel().listSubjects(swbcomm_dirWebPage,dirwebpage.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.portal.community.ClasifiedCourse> listClasifiedCourseByTopicWebPage(org.semanticwb.model.WebPage hasdirtopicwebpage,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.ClasifiedCourse> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_hasDirTopicWebPage, hasdirtopicwebpage.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.ClasifiedCourse> listClasifiedCourseByTopicWebPage(org.semanticwb.model.WebPage hasdirtopicwebpage)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.ClasifiedCourse> it=new org.semanticwb.model.GenericIterator(hasdirtopicwebpage.getSemanticObject().getModel().listSubjects(swbcomm_hasDirTopicWebPage,hasdirtopicwebpage.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.portal.community.ClasifiedCourse> listClasifiedCourseByCreator(org.semanticwb.model.User creator,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.ClasifiedCourse> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_creator, creator.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.ClasifiedCourse> listClasifiedCourseByCreator(org.semanticwb.model.User creator)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.ClasifiedCourse> it=new org.semanticwb.model.GenericIterator(creator.getSemanticObject().getModel().listSubjects(swb_creator,creator.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.portal.community.ClasifiedCourse> listClasifiedCourseByComment(org.semanticwb.portal.community.Comment hascomment,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.ClasifiedCourse> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_hasComment, hascomment.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.ClasifiedCourse> listClasifiedCourseByComment(org.semanticwb.portal.community.Comment hascomment)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.ClasifiedCourse> it=new org.semanticwb.model.GenericIterator(hascomment.getSemanticObject().getModel().listSubjects(swbcomm_hasComment,hascomment.getSemanticObject()));
+       return it;
+   }
     }
 
     public ClasifiedCourseBase(org.semanticwb.platform.SemanticObject base)

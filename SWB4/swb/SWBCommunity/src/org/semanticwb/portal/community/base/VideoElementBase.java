@@ -63,6 +63,39 @@ public class VideoElementBase extends org.semanticwb.portal.community.MicroSiteE
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.VideoElement> it=new org.semanticwb.model.GenericIterator(videowebpage.getSemanticObject().getModel().listSubjects(swbcomm_videoWebPage,videowebpage.getSemanticObject()));
        return it;
    }
+   public static java.util.Iterator<org.semanticwb.portal.community.VideoElement> listVideoElementByModifiedBy(org.semanticwb.model.User modifiedby,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.VideoElement> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_modifiedBy, modifiedby.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.VideoElement> listVideoElementByModifiedBy(org.semanticwb.model.User modifiedby)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.VideoElement> it=new org.semanticwb.model.GenericIterator(modifiedby.getSemanticObject().getModel().listSubjects(swb_modifiedBy,modifiedby.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.portal.community.VideoElement> listVideoElementByCreator(org.semanticwb.model.User creator,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.VideoElement> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_creator, creator.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.VideoElement> listVideoElementByCreator(org.semanticwb.model.User creator)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.VideoElement> it=new org.semanticwb.model.GenericIterator(creator.getSemanticObject().getModel().listSubjects(swb_creator,creator.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.portal.community.VideoElement> listVideoElementByComment(org.semanticwb.portal.community.Comment hascomment,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.VideoElement> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_hasComment, hascomment.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.VideoElement> listVideoElementByComment(org.semanticwb.portal.community.Comment hascomment)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.VideoElement> it=new org.semanticwb.model.GenericIterator(hascomment.getSemanticObject().getModel().listSubjects(swbcomm_hasComment,hascomment.getSemanticObject()));
+       return it;
+   }
     }
 
     public VideoElementBase(org.semanticwb.platform.SemanticObject base)

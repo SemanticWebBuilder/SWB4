@@ -46,6 +46,83 @@ public class CommerceBase extends org.semanticwb.portal.community.Organization i
        {
            return (getCommerce(id, model)!=null);
        }
+   public static java.util.Iterator<org.semanticwb.portal.community.Commerce> listCommerceByDirectoryResource(org.semanticwb.portal.community.DirectoryResource directoryresource,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Commerce> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_directoryResource, directoryresource.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.Commerce> listCommerceByDirectoryResource(org.semanticwb.portal.community.DirectoryResource directoryresource)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Commerce> it=new org.semanticwb.model.GenericIterator(directoryresource.getSemanticObject().getModel().listSubjects(swbcomm_directoryResource,directoryresource.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.portal.community.Commerce> listCommerceByProfile(org.semanticwb.model.WebPage hasdirprofilewebpage,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Commerce> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_hasDirProfileWebPage, hasdirprofilewebpage.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.Commerce> listCommerceByProfile(org.semanticwb.model.WebPage hasdirprofilewebpage)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Commerce> it=new org.semanticwb.model.GenericIterator(hasdirprofilewebpage.getSemanticObject().getModel().listSubjects(swbcomm_hasDirProfileWebPage,hasdirprofilewebpage.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.portal.community.Commerce> listCommerceByModifiedBy(org.semanticwb.model.User modifiedby,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Commerce> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_modifiedBy, modifiedby.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.Commerce> listCommerceByModifiedBy(org.semanticwb.model.User modifiedby)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Commerce> it=new org.semanticwb.model.GenericIterator(modifiedby.getSemanticObject().getModel().listSubjects(swb_modifiedBy,modifiedby.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.portal.community.Commerce> listCommerceByWebPage(org.semanticwb.model.WebPage dirwebpage,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Commerce> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_dirWebPage, dirwebpage.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.Commerce> listCommerceByWebPage(org.semanticwb.model.WebPage dirwebpage)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Commerce> it=new org.semanticwb.model.GenericIterator(dirwebpage.getSemanticObject().getModel().listSubjects(swbcomm_dirWebPage,dirwebpage.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.portal.community.Commerce> listCommerceByTopicWebPage(org.semanticwb.model.WebPage hasdirtopicwebpage,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Commerce> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_hasDirTopicWebPage, hasdirtopicwebpage.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.Commerce> listCommerceByTopicWebPage(org.semanticwb.model.WebPage hasdirtopicwebpage)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Commerce> it=new org.semanticwb.model.GenericIterator(hasdirtopicwebpage.getSemanticObject().getModel().listSubjects(swbcomm_hasDirTopicWebPage,hasdirtopicwebpage.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.portal.community.Commerce> listCommerceByCreator(org.semanticwb.model.User creator,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Commerce> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_creator, creator.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.Commerce> listCommerceByCreator(org.semanticwb.model.User creator)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Commerce> it=new org.semanticwb.model.GenericIterator(creator.getSemanticObject().getModel().listSubjects(swb_creator,creator.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.portal.community.Commerce> listCommerceByComment(org.semanticwb.portal.community.Comment hascomment,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Commerce> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_hasComment, hascomment.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.Commerce> listCommerceByComment(org.semanticwb.portal.community.Comment hascomment)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Commerce> it=new org.semanticwb.model.GenericIterator(hascomment.getSemanticObject().getModel().listSubjects(swbcomm_hasComment,hascomment.getSemanticObject()));
+       return it;
+   }
     }
 
     public CommerceBase(org.semanticwb.platform.SemanticObject base)
