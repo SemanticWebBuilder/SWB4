@@ -45,6 +45,28 @@ public class AssociationFlowBase extends org.semanticwb.process.ConnectionObject
        {
            return (getAssociationFlow(id, model)!=null);
        }
+   public static java.util.Iterator<org.semanticwb.process.AssociationFlow> listAssociationFlowByToFlowObject(org.semanticwb.process.FlowObject toflowobject,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.AssociationFlow> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbps_toFlowObject, toflowobject.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.process.AssociationFlow> listAssociationFlowByToFlowObject(org.semanticwb.process.FlowObject toflowobject)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.AssociationFlow> it=new org.semanticwb.model.GenericIterator(toflowobject.getSemanticObject().getModel().listSubjects(swbps_toFlowObject,toflowobject.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.process.AssociationFlow> listAssociationFlowByFromFlowObject(org.semanticwb.process.FlowObject fromflowobjectinv,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.AssociationFlow> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbps_fromFlowObjectInv, fromflowobjectinv.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.process.AssociationFlow> listAssociationFlowByFromFlowObject(org.semanticwb.process.FlowObject fromflowobjectinv)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.AssociationFlow> it=new org.semanticwb.model.GenericIterator(fromflowobjectinv.getSemanticObject().getModel().listSubjects(swbps_fromFlowObjectInv,fromflowobjectinv.getSemanticObject()));
+       return it;
+   }
     }
 
     public AssociationFlowBase(org.semanticwb.platform.SemanticObject base)
