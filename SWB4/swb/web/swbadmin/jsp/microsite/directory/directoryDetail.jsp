@@ -96,10 +96,12 @@
 
     Date created = dirObj.getCreated();
     Iterator<SemanticProperty> itProps = semObject.listProperties();
+    boolean showLocation = false;
     while (itProps.hasNext()) {
         SemanticProperty semProp = itProps.next();
         if (semProp == Geolocalizable.swb_latitude) {
             mapa = mgr.renderElement(request, semProp.getName());
+            showLocation = true;
             break;
         }
     }
@@ -181,62 +183,11 @@
     <div class="googleMapsResource">
         <%if (mapa != null) {%><%=mapa%><%}%>
     </div>
-    <div class="commentBox">
-        <a class="userTool" href="">Escribir comentario</a>
-        <a class="userTool" href="">Ocultar comentarios</a>
-        <form action="" method="post">
-            <div>
-                <label for="commentTextArea">Comentario</label>
-                <textarea id="commentTextArea" rows="5" cols="45" name="commentTextArea"></textarea>
-            </div>
-        </form>
-        <a class="userTool">Publicar</a>
-    </div>
-    <h2>Comentarios</h2>
-    <div id="commentsBoard">
-        <div class="comment">
-            <img alt="usuario" src="images/commentImagePlaceHolder.jpg"/>
-            <div class="commentText">
-                <p>
-                    Escrito por <a href="">Jei Solis</a> 19/10/09 3 d&iacute;a(s) atr&aacute;s
-                </p>
-                <p>
-                    Frosted Flakes", by itself, is purely a description of the product; as a result that term cannot be trademarked and can be used by any company making a similar product. By contrast, "Kellogg's Frosted Flakes"
-                </p>
-                <p>
-                    <a href="">[marcar como spam]</a>
-                </p>
-            </div>
-        </div>
-        <div class="comment">
-            <img alt="usuario" src="images/commentImagePlaceHolder.jpg"/>
-            <div class="commentText">
-                <p>
-                    Escrito por <a href="">Jei Solis</a> 19/10/09 3 d&iacute;a(s) atr&aacute;s
-                </p>
-                <p>
-                    Frosted Flakes", by itself, is purely a description of the product; as a result that term cannot be trademarked and can be used by any company making a similar product. By contrast, "Kellogg's Frosted Flakes"
-                </p>
-                <p>
-                    <a href="">[marcar como spam]</a>
-                </p>
-            </div>
-        </div>
-        <div class="comment">
-            <img alt="usuario" src="images/commentImagePlaceHolder.jpg"/>
-            <div class="commentText">
-                <p>
-                    Escrito por <a href="">Jei Solis</a> 19/10/09 3 d&iacute;a(s) atr&aacute;s
-                </p>
-                <p>
-                    Frosted Flakes", by itself, is purely a description of the product; as a result that term cannot be trademarked and can be used by any company making a similar product. By contrast, "Kellogg's Frosted Flakes"
-                </p>
-                <p>
-                    <a href="">[marcar como spam]</a>
-                </p>
-            </div>
-        </div>
-    </div>
+    <%
+    SWBResponse res=new SWBResponse(response);
+    dirObj.renderGenericElements(request, res, paramRequest);
+    out.write(res.toString());
+    %>
 </div>
 <div class="columnaCentro">
     <div style="margin:20px; padding:0px;">
