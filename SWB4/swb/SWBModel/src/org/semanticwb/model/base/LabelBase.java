@@ -3,10 +3,10 @@ package org.semanticwb.model.base;
 
 public class LabelBase extends org.semanticwb.model.base.FormElementBase 
 {
-    public static class ClassMgr
-    {
        public static final org.semanticwb.platform.SemanticClass swbxf_Label=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#Label");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#Label");
+    public static class ClassMgr
+    {
 
        public static java.util.Iterator<org.semanticwb.model.Label> listLabels(org.semanticwb.model.SWBModel model)
        {

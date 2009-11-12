@@ -3,13 +3,11 @@ package org.semanticwb.model.base;
 
 public class CodeEditorBase extends org.semanticwb.model.TextArea 
 {
-    public static class ClassMgr
-    {
-       public static final org.semanticwb.platform.SemanticProperty swbxf_textAreaRows=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#textAreaRows");
-       public static final org.semanticwb.platform.SemanticProperty swbxf_textAreaCols=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#textAreaCols");
        public static final org.semanticwb.platform.SemanticProperty swbxf_codeEditorLanguage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#codeEditorLanguage");
        public static final org.semanticwb.platform.SemanticClass swbxf_CodeEditor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#CodeEditor");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#CodeEditor");
+    public static class ClassMgr
+    {
 
        public static java.util.Iterator<org.semanticwb.model.CodeEditor> listCodeEditors(org.semanticwb.model.SWBModel model)
        {
@@ -51,11 +49,11 @@ public class CodeEditorBase extends org.semanticwb.model.TextArea
 
     public String getLanguage()
     {
-        return getSemanticObject().getProperty(ClassMgr.swbxf_codeEditorLanguage);
+        return getSemanticObject().getProperty(swbxf_codeEditorLanguage);
     }
 
     public void setLanguage(String value)
     {
-        getSemanticObject().setProperty(ClassMgr.swbxf_codeEditorLanguage, value);
+        getSemanticObject().setProperty(swbxf_codeEditorLanguage, value);
     }
 }

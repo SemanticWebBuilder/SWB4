@@ -92,7 +92,7 @@ public class UserRepository extends UserRepositoryBase
         EXTERNAL = ret;
         bridge = classRet;
         //Reemplazando el código posterior:
-        Iterator<SemanticClass> it = UserTypeDef.ClassMgr.sclass.listSubClasses();
+        Iterator<SemanticClass> it = UserTypeDef.sclass.listSubClasses();
         while (it.hasNext()){
             SemanticClass utd = it.next();
             //System.out.println("Adding: "+utd.getName());
@@ -280,7 +280,7 @@ public class UserRepository extends UserRepositoryBase
         log.debug("Login a buscar: "+login+" External:"+EXTERNAL);
         if (null != login)
         {
-            Iterator aux = getSemanticObject().getRDFResource().getModel().listStatements(null, User.ClassMgr.swb_usrLogin.getRDFProperty(), getSemanticObject().getModel().getRDFModel().createLiteral(login));
+            Iterator aux = getSemanticObject().getRDFResource().getModel().listStatements(null, User.swb_usrLogin.getRDFProperty(), getSemanticObject().getModel().getRDFModel().createLiteral(login));
             Iterator it = new GenericIterator(aux, true);
             if (it.hasNext())
             {
@@ -292,7 +292,7 @@ public class UserRepository extends UserRepositoryBase
                 {
                     if (null == ret)
                     {
-                        aux = getSemanticObject().getRDFResource().getModel().listStatements(null, User.ClassMgr.swb_usrLogin.getRDFProperty(), getSemanticObject().getModel().getRDFModel().createLiteral(login));
+                        aux = getSemanticObject().getRDFResource().getModel().listStatements(null, User.swb_usrLogin.getRDFProperty(), getSemanticObject().getModel().getRDFModel().createLiteral(login));
                         it = new GenericIterator(aux, true);
                         if (it.hasNext())
                         {
@@ -733,7 +733,7 @@ public class UserRepository extends UserRepositoryBase
         User ret = null;
         if (null != externalID)
         {
-            Iterator aux = getSemanticObject().getRDFResource().getModel().listStatements(null, User.ClassMgr.swb_externalID.getRDFProperty(), getSemanticObject().getModel().getRDFModel().createLiteral(externalID));
+            Iterator aux = getSemanticObject().getRDFResource().getModel().listStatements(null, User.swb_externalID.getRDFProperty(), getSemanticObject().getModel().getRDFModel().createLiteral(externalID));
             Iterator it = new GenericIterator(aux, true);
             if (it.hasNext())
             {

@@ -3,12 +3,10 @@ package org.semanticwb.model.base;
 
 public class PropertyGroupBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Sortable
 {
-    public static class ClassMgr
-    {
-       public static final org.semanticwb.platform.SemanticProperty swb_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#index");
-       public static final org.semanticwb.platform.SemanticProperty swb_valid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#valid");
        public static final org.semanticwb.platform.SemanticClass swbxf_PropertyGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#PropertyGroup");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#PropertyGroup");
+    public static class ClassMgr
+    {
 
        public static java.util.Iterator<org.semanticwb.model.PropertyGroup> listPropertyGroups(org.semanticwb.model.SWBModel model)
        {
@@ -50,11 +48,11 @@ public class PropertyGroupBase extends org.semanticwb.model.SWBClass implements 
 
     public int getIndex()
     {
-        return getSemanticObject().getIntProperty(ClassMgr.swb_index);
+        return getSemanticObject().getIntProperty(swb_index);
     }
 
     public void setIndex(int value)
     {
-        getSemanticObject().setIntProperty(ClassMgr.swb_index, value);
+        getSemanticObject().setIntProperty(swb_index, value);
     }
 }

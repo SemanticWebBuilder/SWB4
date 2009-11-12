@@ -3,13 +3,13 @@ package org.semanticwb.model.base;
 
 public class GMapBase extends org.semanticwb.model.base.FormElementBase 
 {
-    public static class ClassMgr
-    {
        public static final org.semanticwb.platform.SemanticProperty swbxf_initLatitude=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#initLatitude");
        public static final org.semanticwb.platform.SemanticProperty swb_initLongitude=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#initLongitude");
        public static final org.semanticwb.platform.SemanticProperty swb_initStep=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#initStep");
        public static final org.semanticwb.platform.SemanticClass swbxf_GMap=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#GMap");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#GMap");
+    public static class ClassMgr
+    {
 
        public static java.util.Iterator<org.semanticwb.model.GMap> listGMaps(org.semanticwb.model.SWBModel model)
        {
@@ -51,32 +51,32 @@ public class GMapBase extends org.semanticwb.model.base.FormElementBase
 
     public double getInitLatitude()
     {
-        return getSemanticObject().getDoubleProperty(ClassMgr.swbxf_initLatitude);
+        return getSemanticObject().getDoubleProperty(swbxf_initLatitude);
     }
 
     public void setInitLatitude(double value)
     {
-        getSemanticObject().setDoubleProperty(ClassMgr.swbxf_initLatitude, value);
+        getSemanticObject().setDoubleProperty(swbxf_initLatitude, value);
     }
 
     public double getInitLongitude()
     {
-        return getSemanticObject().getDoubleProperty(ClassMgr.swb_initLongitude);
+        return getSemanticObject().getDoubleProperty(swb_initLongitude);
     }
 
     public void setInitLongitude(double value)
     {
-        getSemanticObject().setDoubleProperty(ClassMgr.swb_initLongitude, value);
+        getSemanticObject().setDoubleProperty(swb_initLongitude, value);
     }
 
     public int getInitStep()
     {
-        return getSemanticObject().getIntProperty(ClassMgr.swb_initStep);
+        return getSemanticObject().getIntProperty(swb_initStep);
     }
 
     public void setInitStep(int value)
     {
-        getSemanticObject().setIntProperty(ClassMgr.swb_initStep, value);
+        getSemanticObject().setIntProperty(swb_initStep, value);
     }
 
     public void remove()

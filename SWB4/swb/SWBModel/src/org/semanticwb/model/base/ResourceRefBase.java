@@ -3,15 +3,12 @@ package org.semanticwb.model.base;
 
 public class ResourceRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Activeable,org.semanticwb.model.Priorityable
 {
-    public static class ClassMgr
-    {
-       public static final org.semanticwb.platform.SemanticProperty swb_priority=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#priority");
-       public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
-       public static final org.semanticwb.platform.SemanticProperty swb_valid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#valid");
        public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
        public static final org.semanticwb.platform.SemanticProperty swb_resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#resource");
        public static final org.semanticwb.platform.SemanticClass swb_ResourceRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceRef");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceRef");
+    public static class ClassMgr
+    {
 
        public static java.util.Iterator<org.semanticwb.model.ResourceRef> listResourceRefs(org.semanticwb.model.SWBModel model)
        {
@@ -50,6 +47,17 @@ public class ResourceRefBase extends org.semanticwb.model.Reference implements o
        {
            return (getResourceRef(id, model)!=null);
        }
+   public static java.util.Iterator<org.semanticwb.model.ResourceRef> listResourceRefByResource(org.semanticwb.model.Resource resource,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceRef> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_resource, resource.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.model.ResourceRef> listResourceRefByResource(org.semanticwb.model.Resource resource)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceRef> it=new org.semanticwb.model.GenericIterator(resource.getSemanticObject().getModel().listSubjects(swb_resource,resource.getSemanticObject()));
+       return it;
+   }
     }
 
     public ResourceRefBase(org.semanticwb.platform.SemanticObject base)
@@ -59,40 +67,29 @@ public class ResourceRefBase extends org.semanticwb.model.Reference implements o
 
     public int getPriority()
     {
-        return getSemanticObject().getIntProperty(ClassMgr.swb_priority);
+        return getSemanticObject().getIntProperty(swb_priority);
     }
 
     public void setPriority(int value)
     {
-        getSemanticObject().setIntProperty(ClassMgr.swb_priority, value);
+        getSemanticObject().setIntProperty(swb_priority, value);
     }
 
     public void setResource(org.semanticwb.model.Resource value)
     {
-        getSemanticObject().setObjectProperty(ClassMgr.swb_resource, value.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_resource, value.getSemanticObject());
     }
 
     public void removeResource()
     {
-        getSemanticObject().removeProperty(ClassMgr.swb_resource);
+        getSemanticObject().removeProperty(swb_resource);
     }
 
-   public static java.util.Iterator<org.semanticwb.model.ResourceRef> listResourceRefByResource(org.semanticwb.model.Resource resource,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceRef> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(ClassMgr.swb_resource, resource.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.model.ResourceRef> listResourceRefByResource(org.semanticwb.model.Resource resource)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceRef> it=new org.semanticwb.model.GenericIterator(resource.getSemanticObject().getModel().listSubjects(ClassMgr.swb_resource,resource.getSemanticObject()));
-       return it;
-   }
 
     public org.semanticwb.model.Resource getResource()
     {
          org.semanticwb.model.Resource ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(ClassMgr.swb_resource);
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_resource);
          if(obj!=null)
          {
              ret=(org.semanticwb.model.Resource)obj.createGenericInstance();

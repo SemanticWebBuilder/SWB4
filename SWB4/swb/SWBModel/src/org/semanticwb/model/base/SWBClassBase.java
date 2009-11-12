@@ -3,11 +3,11 @@ package org.semanticwb.model.base;
 
 public class SWBClassBase extends org.semanticwb.model.base.GenericObjectBase 
 {
-    public static class ClassMgr
-    {
        public static final org.semanticwb.platform.SemanticProperty swb_valid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#valid");
        public static final org.semanticwb.platform.SemanticClass swb_SWBClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#SWBClass");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#SWBClass");
+    public static class ClassMgr
+    {
 
        public static java.util.Iterator<org.semanticwb.model.SWBClass> listSWBClasses(org.semanticwb.model.SWBModel model)
        {
@@ -50,13 +50,13 @@ public class SWBClassBase extends org.semanticwb.model.base.GenericObjectBase
     public boolean isValid()
     {
         //Override this method in SWBClass object
-        return getSemanticObject().getBooleanProperty(ClassMgr.swb_valid,false);
+        return getSemanticObject().getBooleanProperty(swb_valid,false);
     }
 
     public void setValid(boolean value)
     {
         //Override this method in SWBClass object
-        getSemanticObject().setBooleanProperty(ClassMgr.swb_valid, value,false);
+        getSemanticObject().setBooleanProperty(swb_valid, value,false);
     }
 
     public void remove()

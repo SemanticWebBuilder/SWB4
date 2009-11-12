@@ -3,13 +3,12 @@ package org.semanticwb.model.base;
 
 public class UserFavoriteBase extends org.semanticwb.model.SWBClass 
 {
-    public static class ClassMgr
-    {
        public static final org.semanticwb.platform.SemanticClass owl_Thing=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.w3.org/2002/07/owl#Thing");
        public static final org.semanticwb.platform.SemanticProperty swb_usrfHasObject=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrfHasObject");
-       public static final org.semanticwb.platform.SemanticProperty swb_valid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#valid");
        public static final org.semanticwb.platform.SemanticClass swb_UserFavorite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserFavorite");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserFavorite");
+    public static class ClassMgr
+    {
 
        public static java.util.Iterator<org.semanticwb.model.UserFavorite> listUserFavorites(org.semanticwb.model.SWBModel model)
        {
@@ -57,29 +56,29 @@ public class UserFavoriteBase extends org.semanticwb.model.SWBClass
 
     public org.semanticwb.platform.SemanticIterator<org.semanticwb.platform.SemanticObject> listObjects()
     {
-        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getRDFResource().listProperties(ClassMgr.swb_usrfHasObject.getRDFProperty());
+        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getRDFResource().listProperties(swb_usrfHasObject.getRDFProperty());
         return new org.semanticwb.platform.SemanticIterator<org.semanticwb.platform.SemanticObject>(stit);
     }
 
     public void addObject(org.semanticwb.platform.SemanticObject value)
     {
-        getSemanticObject().addObjectProperty(ClassMgr.swb_usrfHasObject, value);
+        getSemanticObject().addObjectProperty(swb_usrfHasObject, value);
     }
 
     public void removeAllObject()
     {
-        getSemanticObject().removeProperty(ClassMgr.swb_usrfHasObject);
+        getSemanticObject().removeProperty(swb_usrfHasObject);
     }
 
     public void removeObject(org.semanticwb.platform.SemanticObject semanticobject)
     {
-        getSemanticObject().removeObjectProperty(ClassMgr.swb_usrfHasObject,semanticobject);
+        getSemanticObject().removeObjectProperty(swb_usrfHasObject,semanticobject);
     }
 
     public org.semanticwb.platform.SemanticObject getObject()
     {
          org.semanticwb.platform.SemanticObject ret=null;
-         ret=getSemanticObject().getObjectProperty(ClassMgr.swb_usrfHasObject);
+         ret=getSemanticObject().getObjectProperty(swb_usrfHasObject);
          return ret;
     }
 

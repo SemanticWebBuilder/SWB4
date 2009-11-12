@@ -3,14 +3,12 @@ package org.semanticwb.model.base;
 
 public class PFlowRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.PFlowable,org.semanticwb.model.Activeable
 {
-    public static class ClassMgr
-    {
        public static final org.semanticwb.platform.SemanticClass swb_PFlow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlow");
        public static final org.semanticwb.platform.SemanticProperty swb_pflow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#pflow");
-       public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
-       public static final org.semanticwb.platform.SemanticProperty swb_valid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#valid");
        public static final org.semanticwb.platform.SemanticClass swb_PFlowRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlowRef");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlowRef");
+    public static class ClassMgr
+    {
 
        public static java.util.Iterator<org.semanticwb.model.PFlowRef> listPFlowRefs(org.semanticwb.model.SWBModel model)
        {
@@ -49,6 +47,17 @@ public class PFlowRefBase extends org.semanticwb.model.Reference implements org.
        {
            return (getPFlowRef(id, model)!=null);
        }
+   public static java.util.Iterator<org.semanticwb.model.PFlowRef> listPFlowRefByPflow(org.semanticwb.model.PFlow pflow,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowRef> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_pflow, pflow.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.model.PFlowRef> listPFlowRefByPflow(org.semanticwb.model.PFlow pflow)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowRef> it=new org.semanticwb.model.GenericIterator(pflow.getSemanticObject().getModel().listSubjects(swb_pflow,pflow.getSemanticObject()));
+       return it;
+   }
     }
 
     public PFlowRefBase(org.semanticwb.platform.SemanticObject base)
@@ -58,30 +67,19 @@ public class PFlowRefBase extends org.semanticwb.model.Reference implements org.
 
     public void setPflow(org.semanticwb.model.PFlow value)
     {
-        getSemanticObject().setObjectProperty(ClassMgr.swb_pflow, value.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_pflow, value.getSemanticObject());
     }
 
     public void removePflow()
     {
-        getSemanticObject().removeProperty(ClassMgr.swb_pflow);
+        getSemanticObject().removeProperty(swb_pflow);
     }
 
-   public static java.util.Iterator<org.semanticwb.model.PFlowRef> listPFlowRefByPflow(org.semanticwb.model.PFlow pflow,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowRef> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(ClassMgr.swb_pflow, pflow.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.model.PFlowRef> listPFlowRefByPflow(org.semanticwb.model.PFlow pflow)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowRef> it=new org.semanticwb.model.GenericIterator(pflow.getSemanticObject().getModel().listSubjects(ClassMgr.swb_pflow,pflow.getSemanticObject()));
-       return it;
-   }
 
     public org.semanticwb.model.PFlow getPflow()
     {
          org.semanticwb.model.PFlow ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(ClassMgr.swb_pflow);
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_pflow);
          if(obj!=null)
          {
              ret=(org.semanticwb.model.PFlow)obj.createGenericInstance();

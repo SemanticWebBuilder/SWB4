@@ -3,11 +3,11 @@ package org.semanticwb.model.base;
 
 public class DateElementBase extends org.semanticwb.model.base.FormElementBase 
 {
-    public static class ClassMgr
-    {
        public static final org.semanticwb.platform.SemanticProperty swb_dateConstraints=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#dateConstraints");
        public static final org.semanticwb.platform.SemanticClass swbxf_DateElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#DateElement");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#DateElement");
+    public static class ClassMgr
+    {
 
        public static java.util.Iterator<org.semanticwb.model.DateElement> listDateElements(org.semanticwb.model.SWBModel model)
        {
@@ -49,12 +49,12 @@ public class DateElementBase extends org.semanticwb.model.base.FormElementBase
 
     public String getConstraints()
     {
-        return getSemanticObject().getProperty(ClassMgr.swb_dateConstraints);
+        return getSemanticObject().getProperty(swb_dateConstraints);
     }
 
     public void setConstraints(String value)
     {
-        getSemanticObject().setProperty(ClassMgr.swb_dateConstraints, value);
+        getSemanticObject().setProperty(swb_dateConstraints, value);
     }
 
     public void remove()
