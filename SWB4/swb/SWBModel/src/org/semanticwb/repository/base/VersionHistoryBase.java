@@ -40,6 +40,28 @@ public class VersionHistoryBase extends org.semanticwb.repository.BaseNode imple
        {
            return (getVersionHistory(id, model)!=null);
        }
+   public static java.util.Iterator<org.semanticwb.repository.VersionHistory> listVersionHistoryByParent(org.semanticwb.repository.BaseNode parentnode,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.repository.VersionHistory> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbrep_parentNode, parentnode.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.repository.VersionHistory> listVersionHistoryByParent(org.semanticwb.repository.BaseNode parentnode)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.repository.VersionHistory> it=new org.semanticwb.model.GenericIterator(parentnode.getSemanticObject().getModel().listSubjects(swbrep_parentNode,parentnode.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.repository.VersionHistory> listVersionHistoryByNode(org.semanticwb.repository.BaseNode hasnodes,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.repository.VersionHistory> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbrep_hasNodes, hasnodes.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.repository.VersionHistory> listVersionHistoryByNode(org.semanticwb.repository.BaseNode hasnodes)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.repository.VersionHistory> it=new org.semanticwb.model.GenericIterator(hasnodes.getSemanticObject().getModel().listSubjects(swbrep_hasNodes,hasnodes.getSemanticObject()));
+       return it;
+   }
     }
 
     public VersionHistoryBase(org.semanticwb.platform.SemanticObject base)

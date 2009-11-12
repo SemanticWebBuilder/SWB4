@@ -42,6 +42,28 @@ public class FrozenNodeBase extends org.semanticwb.repository.BaseNode implement
        {
            return (getFrozenNode(id, model)!=null);
        }
+   public static java.util.Iterator<org.semanticwb.repository.FrozenNode> listFrozenNodeByParent(org.semanticwb.repository.BaseNode parentnode,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.repository.FrozenNode> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbrep_parentNode, parentnode.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.repository.FrozenNode> listFrozenNodeByParent(org.semanticwb.repository.BaseNode parentnode)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.repository.FrozenNode> it=new org.semanticwb.model.GenericIterator(parentnode.getSemanticObject().getModel().listSubjects(swbrep_parentNode,parentnode.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.repository.FrozenNode> listFrozenNodeByNode(org.semanticwb.repository.BaseNode hasnodes,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.repository.FrozenNode> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbrep_hasNodes, hasnodes.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.repository.FrozenNode> listFrozenNodeByNode(org.semanticwb.repository.BaseNode hasnodes)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.repository.FrozenNode> it=new org.semanticwb.model.GenericIterator(hasnodes.getSemanticObject().getModel().listSubjects(swbrep_hasNodes,hasnodes.getSemanticObject()));
+       return it;
+   }
     }
 
     public FrozenNodeBase(org.semanticwb.platform.SemanticObject base)

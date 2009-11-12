@@ -41,6 +41,17 @@ public class VersionBase extends org.semanticwb.repository.BaseNode implements o
        {
            return (getVersion(id, model)!=null);
        }
+   public static java.util.Iterator<org.semanticwb.repository.Version> listVersionByParent(org.semanticwb.repository.BaseNode parentnode,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.repository.Version> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbrep_parentNode, parentnode.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.repository.Version> listVersionByParent(org.semanticwb.repository.BaseNode parentnode)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.repository.Version> it=new org.semanticwb.model.GenericIterator(parentnode.getSemanticObject().getModel().listSubjects(swbrep_parentNode,parentnode.getSemanticObject()));
+       return it;
+   }
    public static java.util.Iterator<org.semanticwb.repository.Version> listVersionBySuccessors(org.semanticwb.repository.Version successors,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.repository.Version> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(jcr_successors, successors.getSemanticObject()));
@@ -61,6 +72,17 @@ public class VersionBase extends org.semanticwb.repository.BaseNode implements o
    public static java.util.Iterator<org.semanticwb.repository.Version> listVersionByPredecessors(org.semanticwb.repository.Version predecessors)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.repository.Version> it=new org.semanticwb.model.GenericIterator(predecessors.getSemanticObject().getModel().listSubjects(jcr_predecessors,predecessors.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.repository.Version> listVersionByNode(org.semanticwb.repository.BaseNode hasnodes,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.repository.Version> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbrep_hasNodes, hasnodes.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.repository.Version> listVersionByNode(org.semanticwb.repository.BaseNode hasnodes)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.repository.Version> it=new org.semanticwb.model.GenericIterator(hasnodes.getSemanticObject().getModel().listSubjects(swbrep_hasNodes,hasnodes.getSemanticObject()));
        return it;
    }
     }
