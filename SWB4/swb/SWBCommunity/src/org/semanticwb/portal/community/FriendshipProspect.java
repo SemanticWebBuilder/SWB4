@@ -30,7 +30,7 @@ public class FriendshipProspect extends org.semanticwb.portal.community.base.Fri
     }
 
     public static boolean removeFriendshipProspectByRequested(User requested, User requester, SWBModel model) {
-        Iterator<FriendshipProspect> itFriendshipProspect = FriendshipProspect.listFriendshipProspectByFriendShipRequested(requested, model);
+        Iterator<FriendshipProspect> itFriendshipProspect = FriendshipProspect.ClassMgr.listFriendshipProspectByFriendShipRequested(requested, model);
         while (itFriendshipProspect.hasNext()) {
             FriendshipProspect friendshipProspect = itFriendshipProspect.next();
             User userRequester = friendshipProspect.getFriendShipRequester();
@@ -44,7 +44,7 @@ public class FriendshipProspect extends org.semanticwb.portal.community.base.Fri
 
 
     public static boolean removeFriendshipProspectByRequester(User requester, User requested,  SWBModel model) {
-        Iterator<FriendshipProspect> itFriendshipProspect = FriendshipProspect.listFriendshipProspectByFriendShipRequester(requester, model);
+        Iterator<FriendshipProspect> itFriendshipProspect = FriendshipProspect.ClassMgr.listFriendshipProspectByFriendShipRequester(requester, model);
         while (itFriendshipProspect.hasNext()) {
             FriendshipProspect friendshipProspect = itFriendshipProspect.next();
             User userRequested = friendshipProspect.getFriendShipRequested();
@@ -57,7 +57,7 @@ public class FriendshipProspect extends org.semanticwb.portal.community.base.Fri
     }
 
     public static boolean findFriendProspectedByRequester(User requester, User requested, SWBModel model) {
-        Iterator<FriendshipProspect> itFriendshipProspect = FriendshipProspect.listFriendshipProspectByFriendShipRequester(requester, model);
+        Iterator<FriendshipProspect> itFriendshipProspect = FriendshipProspect.ClassMgr.listFriendshipProspectByFriendShipRequester(requester, model);
         while (itFriendshipProspect.hasNext()) {
             FriendshipProspect friendshipProspect = itFriendshipProspect.next();
             User userRequested = friendshipProspect.getFriendShipRequested();

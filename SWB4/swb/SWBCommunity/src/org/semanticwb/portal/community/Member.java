@@ -29,7 +29,7 @@ public class Member extends org.semanticwb.portal.community.base.MemberBase
         {
             if(user.isRegistered())
             {
-                Iterator<Member> it=Member.listMemberByUser(user,page.getWebSite());
+                Iterator<Member> it=Member.ClassMgr.listMemberByUser(user,page.getWebSite());
                 while(it.hasNext())
                 {
                     Member mem=it.next();
@@ -53,7 +53,7 @@ public class Member extends org.semanticwb.portal.community.base.MemberBase
             }
             if(ret==null)
             {
-                ret=new Member(new SemanticObject(page.getSemanticObject().getModel(),Member.ClassMgr.sclass));
+                ret=new Member(new SemanticObject(page.getSemanticObject().getModel(),Member.sclass));
                 ret.setMicroSite((MicroSite)page);
                 ret.setUser(user);
                 //TODO: Comentar esto cuando se tengan miembros

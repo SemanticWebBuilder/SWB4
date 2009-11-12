@@ -1,0 +1,65 @@
+package org.semanticwb.portal.community.base;
+
+
+public class DocumentElementBase extends org.semanticwb.portal.community.MicroSiteElement implements org.semanticwb.model.Rankable,org.semanticwb.model.Viewable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.portal.community.Interactiveable
+{
+       public static final org.semanticwb.platform.SemanticProperty swbcomm_documentURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#documentURL");
+       public static final org.semanticwb.platform.SemanticClass swbcomm_DocumentElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#DocumentElement");
+       public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#DocumentElement");
+    public static class ClassMgr
+    {
+
+       public static java.util.Iterator<org.semanticwb.portal.community.DocumentElement> listDocumentElements(org.semanticwb.model.SWBModel model)
+       {
+           java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
+           return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.DocumentElement>(it, true);
+       }
+
+       public static java.util.Iterator<org.semanticwb.portal.community.DocumentElement> listDocumentElements()
+       {
+           java.util.Iterator it=sclass.listInstances();
+           return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.DocumentElement>(it, true);
+       }
+
+       public static org.semanticwb.portal.community.DocumentElement createDocumentElement(org.semanticwb.model.SWBModel model)
+       {
+           long id=model.getSemanticObject().getModel().getCounter(sclass);
+           return org.semanticwb.portal.community.DocumentElement.ClassMgr.createDocumentElement(String.valueOf(id), model);
+       }
+
+       public static org.semanticwb.portal.community.DocumentElement getDocumentElement(String id, org.semanticwb.model.SWBModel model)
+       {
+           return (org.semanticwb.portal.community.DocumentElement)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+       }
+
+       public static org.semanticwb.portal.community.DocumentElement createDocumentElement(String id, org.semanticwb.model.SWBModel model)
+       {
+           return (org.semanticwb.portal.community.DocumentElement)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+       }
+
+       public static void removeDocumentElement(String id, org.semanticwb.model.SWBModel model)
+       {
+           model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
+       }
+
+       public static boolean hasDocumentElement(String id, org.semanticwb.model.SWBModel model)
+       {
+           return (getDocumentElement(id, model)!=null);
+       }
+    }
+
+    public DocumentElementBase(org.semanticwb.platform.SemanticObject base)
+    {
+        super(base);
+    }
+
+    public String getDocumentURL()
+    {
+        return getSemanticObject().getProperty(swbcomm_documentURL);
+    }
+
+    public void setDocumentURL(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_documentURL, value);
+    }
+}

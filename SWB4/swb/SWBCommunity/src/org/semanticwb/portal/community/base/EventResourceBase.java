@@ -3,13 +3,10 @@ package org.semanticwb.portal.community.base;
 
 public class EventResourceBase extends org.semanticwb.portal.community.CommunityResource 
 {
-    public static class ClassMgr
-    {
        public static final org.semanticwb.platform.SemanticClass swbcomm_EventElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#EventElement");
        public static final org.semanticwb.platform.SemanticProperty swbcomm_hasEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasEvent");
        public static final org.semanticwb.platform.SemanticClass swbcomm_EventResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#EventResource");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#EventResource");
-    }
 
     public EventResourceBase()
     {

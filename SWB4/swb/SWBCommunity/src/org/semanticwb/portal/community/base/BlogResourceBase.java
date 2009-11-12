@@ -3,13 +3,10 @@ package org.semanticwb.portal.community.base;
 
 public class BlogResourceBase extends org.semanticwb.portal.community.CommunityResource 
 {
-    public static class ClassMgr
-    {
        public static final org.semanticwb.platform.SemanticClass swbcomm_Blog=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Blog");
        public static final org.semanticwb.platform.SemanticProperty swbcomm_hasBlog=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasBlog");
        public static final org.semanticwb.platform.SemanticClass swbcomm_BlogResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#BlogResource");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#BlogResource");
-    }
 
     public BlogResourceBase()
     {

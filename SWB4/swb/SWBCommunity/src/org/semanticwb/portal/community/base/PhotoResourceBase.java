@@ -3,13 +3,10 @@ package org.semanticwb.portal.community.base;
 
 public class PhotoResourceBase extends org.semanticwb.portal.community.CommunityResource 
 {
-    public static class ClassMgr
-    {
        public static final org.semanticwb.platform.SemanticClass swbcomm_PhotoElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#PhotoElement");
        public static final org.semanticwb.platform.SemanticProperty swbcomm_hasPhoto=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasPhoto");
        public static final org.semanticwb.platform.SemanticClass swbcomm_PhotoResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#PhotoResource");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#PhotoResource");
-    }
 
     public PhotoResourceBase()
     {

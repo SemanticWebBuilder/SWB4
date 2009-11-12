@@ -65,9 +65,9 @@ public class EventElement extends org.semanticwb.portal.community.base.EventElem
         Iterator<EventElement> evs;
 
         if (user == null) {
-             evs = listEventElementByEventWebPage(wpage, model);
+             evs = ClassMgr.listEventElementByEventWebPage(wpage, model);
         } else {
-            evs = listEventElementByAttendant(user, model);
+            evs = ClassMgr.listEventElementByAttendant(user, model);
         }
         ArrayList<EventElement> res = new ArrayList<EventElement>();
         
