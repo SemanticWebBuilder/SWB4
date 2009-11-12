@@ -3,16 +3,12 @@ package org.semanticwb.model.base;
 
 public class TemplateRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Inheritable,org.semanticwb.model.Activeable,org.semanticwb.model.Priorityable
 {
-    public static class ClassMgr
-    {
        public static final org.semanticwb.platform.SemanticClass swb_Template=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Template");
        public static final org.semanticwb.platform.SemanticProperty swb_template=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#template");
-       public static final org.semanticwb.platform.SemanticProperty swb_priority=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#priority");
-       public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
-       public static final org.semanticwb.platform.SemanticProperty swb_valid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#valid");
-       public static final org.semanticwb.platform.SemanticProperty swb_inherit=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#inherit");
        public static final org.semanticwb.platform.SemanticClass swb_TemplateRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#TemplateRef");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#TemplateRef");
+    public static class ClassMgr
+    {
 
        public static java.util.Iterator<org.semanticwb.model.TemplateRef> listTemplateRefs(org.semanticwb.model.SWBModel model)
        {
@@ -51,6 +47,17 @@ public class TemplateRefBase extends org.semanticwb.model.Reference implements o
        {
            return (getTemplateRef(id, model)!=null);
        }
+   public static java.util.Iterator<org.semanticwb.model.TemplateRef> listTemplateRefByTemplate(org.semanticwb.model.Template template,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateRef> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_template, template.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.model.TemplateRef> listTemplateRefByTemplate(org.semanticwb.model.Template template)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateRef> it=new org.semanticwb.model.GenericIterator(template.getSemanticObject().getModel().listSubjects(swb_template,template.getSemanticObject()));
+       return it;
+   }
     }
 
     public TemplateRefBase(org.semanticwb.platform.SemanticObject base)
@@ -60,30 +67,19 @@ public class TemplateRefBase extends org.semanticwb.model.Reference implements o
 
     public void setTemplate(org.semanticwb.model.Template value)
     {
-        getSemanticObject().setObjectProperty(ClassMgr.swb_template, value.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_template, value.getSemanticObject());
     }
 
     public void removeTemplate()
     {
-        getSemanticObject().removeProperty(ClassMgr.swb_template);
+        getSemanticObject().removeProperty(swb_template);
     }
 
-   public static java.util.Iterator<org.semanticwb.model.TemplateRef> listTemplateRefByTemplate(org.semanticwb.model.Template template,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateRef> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(ClassMgr.swb_template, template.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.model.TemplateRef> listTemplateRefByTemplate(org.semanticwb.model.Template template)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateRef> it=new org.semanticwb.model.GenericIterator(template.getSemanticObject().getModel().listSubjects(ClassMgr.swb_template,template.getSemanticObject()));
-       return it;
-   }
 
     public org.semanticwb.model.Template getTemplate()
     {
          org.semanticwb.model.Template ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(ClassMgr.swb_template);
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_template);
          if(obj!=null)
          {
              ret=(org.semanticwb.model.Template)obj.createGenericInstance();
@@ -93,22 +89,22 @@ public class TemplateRefBase extends org.semanticwb.model.Reference implements o
 
     public int getPriority()
     {
-        return getSemanticObject().getIntProperty(ClassMgr.swb_priority);
+        return getSemanticObject().getIntProperty(swb_priority);
     }
 
     public void setPriority(int value)
     {
-        getSemanticObject().setIntProperty(ClassMgr.swb_priority, value);
+        getSemanticObject().setIntProperty(swb_priority, value);
     }
 
     public int getInherit()
     {
-        return getSemanticObject().getIntProperty(ClassMgr.swb_inherit);
+        return getSemanticObject().getIntProperty(swb_inherit);
     }
 
     public void setInherit(int value)
     {
-        getSemanticObject().setIntProperty(ClassMgr.swb_inherit, value);
+        getSemanticObject().setIntProperty(swb_inherit, value);
     }
 
     public org.semanticwb.model.WebSite getWebSite()

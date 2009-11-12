@@ -3,19 +3,11 @@ package org.semanticwb.repository.base;
 
 public class VersionHistoryBase extends org.semanticwb.repository.BaseNode implements org.semanticwb.repository.Referenceable
 {
-    public static class ClassMgr
-    {
-       public static final org.semanticwb.platform.SemanticClass nt_BaseNode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#base");
-       public static final org.semanticwb.platform.SemanticProperty swbrep_parentNode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/repository#parentNode");
-       public static final org.semanticwb.platform.SemanticProperty jcr_primaryType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#primaryType");
        public static final org.semanticwb.platform.SemanticProperty jcr_versionableUuid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#versionableUuid");
-       public static final org.semanticwb.platform.SemanticProperty jcr_uuid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#uuid");
-       public static final org.semanticwb.platform.SemanticProperty swbrep_path=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/repository#path");
-       public static final org.semanticwb.platform.SemanticProperty swbrep_name=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/repository#name");
-       public static final org.semanticwb.platform.SemanticProperty swbrep_hasNodes=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/repository#hasNodes");
-       public static final org.semanticwb.platform.SemanticProperty jcr_mixinTypes=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#mixinTypes");
        public static final org.semanticwb.platform.SemanticClass nt_VersionHistory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#versionHistory");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#versionHistory");
+    public static class ClassMgr
+    {
 
        public static java.util.Iterator<org.semanticwb.repository.VersionHistory> listVersionHistories(org.semanticwb.model.SWBModel model)
        {
@@ -57,21 +49,21 @@ public class VersionHistoryBase extends org.semanticwb.repository.BaseNode imple
 
     public String getVersionableUuid()
     {
-        return getSemanticObject().getProperty(ClassMgr.jcr_versionableUuid);
+        return getSemanticObject().getProperty(jcr_versionableUuid);
     }
 
     public void setVersionableUuid(String value)
     {
-        getSemanticObject().setProperty(ClassMgr.jcr_versionableUuid, value);
+        getSemanticObject().setProperty(jcr_versionableUuid, value);
     }
 
     public String getUuid()
     {
-        return getSemanticObject().getProperty(ClassMgr.jcr_uuid);
+        return getSemanticObject().getProperty(jcr_uuid);
     }
 
     public void setUuid(String value)
     {
-        getSemanticObject().setProperty(ClassMgr.jcr_uuid, value);
+        getSemanticObject().setProperty(jcr_uuid, value);
     }
 }

@@ -3,11 +3,10 @@ package org.semanticwb.model.base;
 
 public class UserTypeDefBase extends org.semanticwb.model.SWBClass 
 {
-    public static class ClassMgr
-    {
-       public static final org.semanticwb.platform.SemanticProperty swb_valid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#valid");
        public static final org.semanticwb.platform.SemanticClass swb_UserTypeDef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserTypeDef");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserTypeDef");
+    public static class ClassMgr
+    {
 
        public static java.util.Iterator<org.semanticwb.model.UserTypeDef> listUserTypeDefs(org.semanticwb.model.SWBModel model)
        {

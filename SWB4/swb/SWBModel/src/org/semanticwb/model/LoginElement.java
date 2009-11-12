@@ -61,12 +61,12 @@ public class LoginElement extends org.semanticwb.model.base.LoginElementBase
     log.debug("obj: "+obj.getDisplayName());
     String model=null;
     User cu = null;
-    if (obj.instanceOf(User.ClassMgr.sclass)) {
+    if (obj.instanceOf(User.sclass)) {
 
            cu= new User(obj);
            model=cu.getUserRepository().getId();
 
-    } else if (obj.instanceOf(UserRepository.ClassMgr.sclass)){
+    } else if (obj.instanceOf(UserRepository.sclass)){
         UserRepository ur = new UserRepository(obj);
         model=ur.getId();
     }

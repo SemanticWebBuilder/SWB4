@@ -3,11 +3,10 @@ package org.semanticwb.model.base;
 
 public class ClassElementBase extends org.semanticwb.model.Text 
 {
-    public static class ClassMgr
-    {
-       public static final org.semanticwb.platform.SemanticProperty swbxf_textRegExp=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#textRegExp");
        public static final org.semanticwb.platform.SemanticClass swbxf_ClassElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#ClassElement");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#ClassElement");
+    public static class ClassMgr
+    {
 
        public static java.util.Iterator<org.semanticwb.model.ClassElement> listClassElements(org.semanticwb.model.SWBModel model)
        {

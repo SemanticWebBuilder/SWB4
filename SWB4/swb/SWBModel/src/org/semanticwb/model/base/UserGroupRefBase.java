@@ -3,14 +3,12 @@ package org.semanticwb.model.base;
 
 public class UserGroupRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Activeable
 {
-    public static class ClassMgr
-    {
        public static final org.semanticwb.platform.SemanticClass swb_UserGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroup");
        public static final org.semanticwb.platform.SemanticProperty swb_userGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userGroup");
-       public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
-       public static final org.semanticwb.platform.SemanticProperty swb_valid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#valid");
        public static final org.semanticwb.platform.SemanticClass swb_UserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRef");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRef");
+    public static class ClassMgr
+    {
 
        public static java.util.Iterator<org.semanticwb.model.UserGroupRef> listUserGroupRefs(org.semanticwb.model.SWBModel model)
        {
@@ -49,6 +47,17 @@ public class UserGroupRefBase extends org.semanticwb.model.Reference implements 
        {
            return (getUserGroupRef(id, model)!=null);
        }
+   public static java.util.Iterator<org.semanticwb.model.UserGroupRef> listUserGroupRefByUserGroup(org.semanticwb.model.UserGroup usergroup,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_userGroup, usergroup.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.model.UserGroupRef> listUserGroupRefByUserGroup(org.semanticwb.model.UserGroup usergroup)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef> it=new org.semanticwb.model.GenericIterator(usergroup.getSemanticObject().getModel().listSubjects(swb_userGroup,usergroup.getSemanticObject()));
+       return it;
+   }
     }
 
     public UserGroupRefBase(org.semanticwb.platform.SemanticObject base)
@@ -58,30 +67,19 @@ public class UserGroupRefBase extends org.semanticwb.model.Reference implements 
 
     public void setUserGroup(org.semanticwb.model.UserGroup value)
     {
-        getSemanticObject().setObjectProperty(ClassMgr.swb_userGroup, value.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_userGroup, value.getSemanticObject());
     }
 
     public void removeUserGroup()
     {
-        getSemanticObject().removeProperty(ClassMgr.swb_userGroup);
+        getSemanticObject().removeProperty(swb_userGroup);
     }
 
-   public static java.util.Iterator<org.semanticwb.model.UserGroupRef> listUserGroupRefByUserGroup(org.semanticwb.model.UserGroup usergroup,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(ClassMgr.swb_userGroup, usergroup.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.model.UserGroupRef> listUserGroupRefByUserGroup(org.semanticwb.model.UserGroup usergroup)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef> it=new org.semanticwb.model.GenericIterator(usergroup.getSemanticObject().getModel().listSubjects(ClassMgr.swb_userGroup,usergroup.getSemanticObject()));
-       return it;
-   }
 
     public org.semanticwb.model.UserGroup getUserGroup()
     {
          org.semanticwb.model.UserGroup ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(ClassMgr.swb_userGroup);
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_userGroup);
          if(obj!=null)
          {
              ret=(org.semanticwb.model.UserGroup)obj.createGenericInstance();

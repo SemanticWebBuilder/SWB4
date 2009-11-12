@@ -3,11 +3,11 @@ package org.semanticwb.model.base;
 
 public class PasswordUpdateBase extends org.semanticwb.model.base.FormElementBase 
 {
-    public static class ClassMgr
-    {
        public static final org.semanticwb.platform.SemanticProperty swb_passUpdVerify=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#passUpdVerify");
        public static final org.semanticwb.platform.SemanticClass swbxf_PasswordUpdate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#PasswordUpdate");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#PasswordUpdate");
+    public static class ClassMgr
+    {
 
        public static java.util.Iterator<org.semanticwb.model.PasswordUpdate> listPasswordUpdates(org.semanticwb.model.SWBModel model)
        {
@@ -49,27 +49,27 @@ public class PasswordUpdateBase extends org.semanticwb.model.base.FormElementBas
 
     public String getVerifyText()
     {
-        return getSemanticObject().getProperty(ClassMgr.swb_passUpdVerify);
+        return getSemanticObject().getProperty(swb_passUpdVerify);
     }
 
     public void setVerifyText(String value)
     {
-        getSemanticObject().setProperty(ClassMgr.swb_passUpdVerify, value);
+        getSemanticObject().setProperty(swb_passUpdVerify, value);
     }
 
     public String getVerifyText(String lang)
     {
-        return getSemanticObject().getProperty(ClassMgr.swb_passUpdVerify, null, lang);
+        return getSemanticObject().getProperty(swb_passUpdVerify, null, lang);
     }
 
     public String getDisplayVerifyText(String lang)
     {
-        return getSemanticObject().getLocaleProperty(ClassMgr.swb_passUpdVerify, lang);
+        return getSemanticObject().getLocaleProperty(swb_passUpdVerify, lang);
     }
 
     public void setVerifyText(String passUpdVerify, String lang)
     {
-        getSemanticObject().setProperty(ClassMgr.swb_passUpdVerify, passUpdVerify, lang);
+        getSemanticObject().setProperty(swb_passUpdVerify, passUpdVerify, lang);
     }
 
     public void remove()

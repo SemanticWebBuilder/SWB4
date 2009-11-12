@@ -3,12 +3,12 @@ package org.semanticwb.model.base;
 
 public class FileUploadBase extends org.semanticwb.model.base.FormElementBase 
 {
-    public static class ClassMgr
-    {
        public static final org.semanticwb.platform.SemanticProperty swbxf_fileMaxSize=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#fileMaxSize");
        public static final org.semanticwb.platform.SemanticProperty swbxf_fileFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#fileFilter");
        public static final org.semanticwb.platform.SemanticClass swbxf_FileUpload=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUpload");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUpload");
+    public static class ClassMgr
+    {
 
        public static java.util.Iterator<org.semanticwb.model.FileUpload> listFileUploads(org.semanticwb.model.SWBModel model)
        {
@@ -50,22 +50,22 @@ public class FileUploadBase extends org.semanticwb.model.base.FormElementBase
 
     public long getFileMaxSize()
     {
-        return getSemanticObject().getLongProperty(ClassMgr.swbxf_fileMaxSize);
+        return getSemanticObject().getLongProperty(swbxf_fileMaxSize);
     }
 
     public void setFileMaxSize(long value)
     {
-        getSemanticObject().setLongProperty(ClassMgr.swbxf_fileMaxSize, value);
+        getSemanticObject().setLongProperty(swbxf_fileMaxSize, value);
     }
 
     public String getFileFilter()
     {
-        return getSemanticObject().getProperty(ClassMgr.swbxf_fileFilter);
+        return getSemanticObject().getProperty(swbxf_fileFilter);
     }
 
     public void setFileFilter(String value)
     {
-        getSemanticObject().setProperty(ClassMgr.swbxf_fileFilter, value);
+        getSemanticObject().setProperty(swbxf_fileFilter, value);
     }
 
     public void remove()

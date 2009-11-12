@@ -3,12 +3,10 @@ package org.semanticwb.model.base;
 
 public class ReferenceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable
 {
-    public static class ClassMgr
-    {
-       public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
-       public static final org.semanticwb.platform.SemanticProperty swb_valid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#valid");
        public static final org.semanticwb.platform.SemanticClass swb_Reference=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Reference");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Reference");
+    public static class ClassMgr
+    {
 
        public static java.util.Iterator<org.semanticwb.model.Reference> listReferences(org.semanticwb.model.SWBModel model)
        {
@@ -56,11 +54,11 @@ public class ReferenceBase extends org.semanticwb.model.SWBClass implements org.
 
     public boolean isActive()
     {
-        return getSemanticObject().getBooleanProperty(ClassMgr.swb_active);
+        return getSemanticObject().getBooleanProperty(swb_active);
     }
 
     public void setActive(boolean value)
     {
-        getSemanticObject().setBooleanProperty(ClassMgr.swb_active, value);
+        getSemanticObject().setBooleanProperty(swb_active, value);
     }
 }

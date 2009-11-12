@@ -3,13 +3,11 @@ package org.semanticwb.model.base;
 
 public class SelectTreeBase extends org.semanticwb.model.SelectOne 
 {
-    public static class ClassMgr
-    {
-       public static final org.semanticwb.platform.SemanticProperty swbxf_so_globalScope=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#so_globalScope");
-       public static final org.semanticwb.platform.SemanticProperty swbxf_so_nullSuport=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#so_nullSuport");
        public static final org.semanticwb.platform.SemanticProperty swbxf_st_startElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#st_startElement");
        public static final org.semanticwb.platform.SemanticClass swbxf_SelectTree=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectTree");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectTree");
+    public static class ClassMgr
+    {
 
        public static java.util.Iterator<org.semanticwb.model.SelectTree> listSelectTrees(org.semanticwb.model.SWBModel model)
        {
@@ -51,11 +49,11 @@ public class SelectTreeBase extends org.semanticwb.model.SelectOne
 
     public String getStartElement()
     {
-        return getSemanticObject().getProperty(ClassMgr.swbxf_st_startElement);
+        return getSemanticObject().getProperty(swbxf_st_startElement);
     }
 
     public void setStartElement(String value)
     {
-        getSemanticObject().setProperty(ClassMgr.swbxf_st_startElement, value);
+        getSemanticObject().setProperty(swbxf_st_startElement, value);
     }
 }

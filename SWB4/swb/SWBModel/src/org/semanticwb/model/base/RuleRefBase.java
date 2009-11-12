@@ -3,14 +3,12 @@ package org.semanticwb.model.base;
 
 public class RuleRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Activeable
 {
-    public static class ClassMgr
-    {
        public static final org.semanticwb.platform.SemanticClass swb_Rule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Rule");
        public static final org.semanticwb.platform.SemanticProperty swb_rule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#rule");
-       public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
-       public static final org.semanticwb.platform.SemanticProperty swb_valid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#valid");
        public static final org.semanticwb.platform.SemanticClass swb_RuleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RuleRef");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RuleRef");
+    public static class ClassMgr
+    {
 
        public static java.util.Iterator<org.semanticwb.model.RuleRef> listRuleRefs(org.semanticwb.model.SWBModel model)
        {
@@ -49,6 +47,17 @@ public class RuleRefBase extends org.semanticwb.model.Reference implements org.s
        {
            return (getRuleRef(id, model)!=null);
        }
+   public static java.util.Iterator<org.semanticwb.model.RuleRef> listRuleRefByRule(org.semanticwb.model.Rule rule,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_rule, rule.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.model.RuleRef> listRuleRefByRule(org.semanticwb.model.Rule rule)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef> it=new org.semanticwb.model.GenericIterator(rule.getSemanticObject().getModel().listSubjects(swb_rule,rule.getSemanticObject()));
+       return it;
+   }
     }
 
     public RuleRefBase(org.semanticwb.platform.SemanticObject base)
@@ -58,30 +67,19 @@ public class RuleRefBase extends org.semanticwb.model.Reference implements org.s
 
     public void setRule(org.semanticwb.model.Rule value)
     {
-        getSemanticObject().setObjectProperty(ClassMgr.swb_rule, value.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_rule, value.getSemanticObject());
     }
 
     public void removeRule()
     {
-        getSemanticObject().removeProperty(ClassMgr.swb_rule);
+        getSemanticObject().removeProperty(swb_rule);
     }
 
-   public static java.util.Iterator<org.semanticwb.model.RuleRef> listRuleRefByRule(org.semanticwb.model.Rule rule,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(ClassMgr.swb_rule, rule.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.model.RuleRef> listRuleRefByRule(org.semanticwb.model.Rule rule)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef> it=new org.semanticwb.model.GenericIterator(rule.getSemanticObject().getModel().listSubjects(ClassMgr.swb_rule,rule.getSemanticObject()));
-       return it;
-   }
 
     public org.semanticwb.model.Rule getRule()
     {
          org.semanticwb.model.Rule ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(ClassMgr.swb_rule);
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_rule);
          if(obj!=null)
          {
              ret=(org.semanticwb.model.Rule)obj.createGenericInstance();

@@ -3,11 +3,11 @@ package org.semanticwb.model.base;
 
 public class TimeElementBase extends org.semanticwb.model.base.FormElementBase 
 {
-    public static class ClassMgr
-    {
        public static final org.semanticwb.platform.SemanticProperty swbxf_timeConstraints=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#timeConstraints");
        public static final org.semanticwb.platform.SemanticClass swbxf_TimeElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#TimeElement");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#TimeElement");
+    public static class ClassMgr
+    {
 
        public static java.util.Iterator<org.semanticwb.model.TimeElement> listTimeElements(org.semanticwb.model.SWBModel model)
        {

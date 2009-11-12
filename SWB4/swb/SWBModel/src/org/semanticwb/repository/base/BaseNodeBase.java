@@ -3,8 +3,6 @@ package org.semanticwb.repository.base;
 
 public class BaseNodeBase extends org.semanticwb.model.base.GenericObjectBase 
 {
-    public static class ClassMgr
-    {
        public static final org.semanticwb.platform.SemanticClass nt_BaseNode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#base");
        public static final org.semanticwb.platform.SemanticProperty swbrep_parentNode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/repository#parentNode");
        public static final org.semanticwb.platform.SemanticProperty jcr_primaryType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#primaryType");
@@ -13,6 +11,8 @@ public class BaseNodeBase extends org.semanticwb.model.base.GenericObjectBase
        public static final org.semanticwb.platform.SemanticProperty swbrep_hasNodes=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/repository#hasNodes");
        public static final org.semanticwb.platform.SemanticProperty jcr_mixinTypes=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#mixinTypes");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#base");
+    public static class ClassMgr
+    {
 
        public static java.util.Iterator<org.semanticwb.repository.BaseNode> listBaseNodes(org.semanticwb.model.SWBModel model)
        {
@@ -45,6 +45,28 @@ public class BaseNodeBase extends org.semanticwb.model.base.GenericObjectBase
        {
            return (getBaseNode(id, model)!=null);
        }
+   public static java.util.Iterator<org.semanticwb.repository.BaseNode> listBaseNodeByParent(org.semanticwb.repository.BaseNode parentnode,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.repository.BaseNode> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbrep_parentNode, parentnode.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.repository.BaseNode> listBaseNodeByParent(org.semanticwb.repository.BaseNode parentnode)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.repository.BaseNode> it=new org.semanticwb.model.GenericIterator(parentnode.getSemanticObject().getModel().listSubjects(swbrep_parentNode,parentnode.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.repository.BaseNode> listBaseNodeByNode(org.semanticwb.repository.BaseNode hasnodes,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.repository.BaseNode> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbrep_hasNodes, hasnodes.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.repository.BaseNode> listBaseNodeByNode(org.semanticwb.repository.BaseNode hasnodes)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.repository.BaseNode> it=new org.semanticwb.model.GenericIterator(hasnodes.getSemanticObject().getModel().listSubjects(swbrep_hasNodes,hasnodes.getSemanticObject()));
+       return it;
+   }
     }
 
     public BaseNodeBase(org.semanticwb.platform.SemanticObject base)
@@ -54,30 +76,19 @@ public class BaseNodeBase extends org.semanticwb.model.base.GenericObjectBase
 
     public void setParent(org.semanticwb.repository.BaseNode value)
     {
-        getSemanticObject().setObjectProperty(ClassMgr.swbrep_parentNode, value.getSemanticObject());
+        getSemanticObject().setObjectProperty(swbrep_parentNode, value.getSemanticObject());
     }
 
     public void removeParent()
     {
-        getSemanticObject().removeProperty(ClassMgr.swbrep_parentNode);
+        getSemanticObject().removeProperty(swbrep_parentNode);
     }
 
-   public static java.util.Iterator<org.semanticwb.repository.BaseNode> listBaseNodeByParent(org.semanticwb.repository.BaseNode parentnode,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.repository.BaseNode> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(ClassMgr.swbrep_parentNode, parentnode.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.repository.BaseNode> listBaseNodeByParent(org.semanticwb.repository.BaseNode parentnode)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.repository.BaseNode> it=new org.semanticwb.model.GenericIterator(parentnode.getSemanticObject().getModel().listSubjects(ClassMgr.swbrep_parentNode,parentnode.getSemanticObject()));
-       return it;
-   }
 
     public org.semanticwb.repository.BaseNode getParent()
     {
          org.semanticwb.repository.BaseNode ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(ClassMgr.swbrep_parentNode);
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbrep_parentNode);
          if(obj!=null)
          {
              ret=(org.semanticwb.repository.BaseNode)obj.createGenericInstance();
@@ -87,61 +98,50 @@ public class BaseNodeBase extends org.semanticwb.model.base.GenericObjectBase
 
     public String getPrimaryType()
     {
-        return getSemanticObject().getProperty(ClassMgr.jcr_primaryType);
+        return getSemanticObject().getProperty(jcr_primaryType);
     }
 
     public void setPrimaryType(String value)
     {
-        getSemanticObject().setProperty(ClassMgr.jcr_primaryType, value);
+        getSemanticObject().setProperty(jcr_primaryType, value);
     }
 
     public String getPath()
     {
-        return getSemanticObject().getProperty(ClassMgr.swbrep_path);
+        return getSemanticObject().getProperty(swbrep_path);
     }
 
     public void setPath(String value)
     {
-        getSemanticObject().setProperty(ClassMgr.swbrep_path, value);
+        getSemanticObject().setProperty(swbrep_path, value);
     }
 
     public String getName()
     {
-        return getSemanticObject().getProperty(ClassMgr.swbrep_name);
+        return getSemanticObject().getProperty(swbrep_name);
     }
 
     public void setName(String value)
     {
-        getSemanticObject().setProperty(ClassMgr.swbrep_name, value);
+        getSemanticObject().setProperty(swbrep_name, value);
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.repository.BaseNode> listNodes()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.BaseNode>(getSemanticObject().listObjectProperties(ClassMgr.swbrep_hasNodes));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.BaseNode>(getSemanticObject().listObjectProperties(swbrep_hasNodes));
     }
 
     public boolean hasNode(org.semanticwb.repository.BaseNode basenode)
     {
         if(basenode==null)return false;
-        return getSemanticObject().hasObjectProperty(ClassMgr.swbrep_hasNodes,basenode.getSemanticObject());
+        return getSemanticObject().hasObjectProperty(swbrep_hasNodes,basenode.getSemanticObject());
     }
 
-   public static java.util.Iterator<org.semanticwb.repository.BaseNode> listBaseNodeByNode(org.semanticwb.repository.BaseNode hasnodes,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.repository.BaseNode> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(ClassMgr.swbrep_hasNodes, hasnodes.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.repository.BaseNode> listBaseNodeByNode(org.semanticwb.repository.BaseNode hasnodes)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.repository.BaseNode> it=new org.semanticwb.model.GenericIterator(hasnodes.getSemanticObject().getModel().listSubjects(ClassMgr.swbrep_hasNodes,hasnodes.getSemanticObject()));
-       return it;
-   }
 
     public org.semanticwb.repository.BaseNode getNode()
     {
          org.semanticwb.repository.BaseNode ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(ClassMgr.swbrep_hasNodes);
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbrep_hasNodes);
          if(obj!=null)
          {
              ret=(org.semanticwb.repository.BaseNode)obj.createGenericInstance();
@@ -151,12 +151,12 @@ public class BaseNodeBase extends org.semanticwb.model.base.GenericObjectBase
 
     public String getMixinTypes()
     {
-        return getSemanticObject().getProperty(ClassMgr.jcr_mixinTypes);
+        return getSemanticObject().getProperty(jcr_mixinTypes);
     }
 
     public void setMixinTypes(String value)
     {
-        getSemanticObject().setProperty(ClassMgr.jcr_mixinTypes, value);
+        getSemanticObject().setProperty(jcr_mixinTypes, value);
     }
 
     public void remove()

@@ -3,14 +3,12 @@ package org.semanticwb.model.base;
 
 public class CalendarRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Activeable
 {
-    public static class ClassMgr
-    {
        public static final org.semanticwb.platform.SemanticClass swb_Calendar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Calendar");
        public static final org.semanticwb.platform.SemanticProperty swb_calendar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#calendar");
-       public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
-       public static final org.semanticwb.platform.SemanticProperty swb_valid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#valid");
        public static final org.semanticwb.platform.SemanticClass swb_CalendarRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#CalendarRef");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#CalendarRef");
+    public static class ClassMgr
+    {
 
        public static java.util.Iterator<org.semanticwb.model.CalendarRef> listCalendarRefs(org.semanticwb.model.SWBModel model)
        {
@@ -49,6 +47,17 @@ public class CalendarRefBase extends org.semanticwb.model.Reference implements o
        {
            return (getCalendarRef(id, model)!=null);
        }
+   public static java.util.Iterator<org.semanticwb.model.CalendarRef> listCalendarRefByCalendar(org.semanticwb.model.Calendar calendar,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.CalendarRef> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_calendar, calendar.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.model.CalendarRef> listCalendarRefByCalendar(org.semanticwb.model.Calendar calendar)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.CalendarRef> it=new org.semanticwb.model.GenericIterator(calendar.getSemanticObject().getModel().listSubjects(swb_calendar,calendar.getSemanticObject()));
+       return it;
+   }
     }
 
     public CalendarRefBase(org.semanticwb.platform.SemanticObject base)
@@ -58,30 +67,19 @@ public class CalendarRefBase extends org.semanticwb.model.Reference implements o
 
     public void setCalendar(org.semanticwb.model.Calendar value)
     {
-        getSemanticObject().setObjectProperty(ClassMgr.swb_calendar, value.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_calendar, value.getSemanticObject());
     }
 
     public void removeCalendar()
     {
-        getSemanticObject().removeProperty(ClassMgr.swb_calendar);
+        getSemanticObject().removeProperty(swb_calendar);
     }
 
-   public static java.util.Iterator<org.semanticwb.model.CalendarRef> listCalendarRefByCalendar(org.semanticwb.model.Calendar calendar,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.model.CalendarRef> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(ClassMgr.swb_calendar, calendar.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.model.CalendarRef> listCalendarRefByCalendar(org.semanticwb.model.Calendar calendar)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.model.CalendarRef> it=new org.semanticwb.model.GenericIterator(calendar.getSemanticObject().getModel().listSubjects(ClassMgr.swb_calendar,calendar.getSemanticObject()));
-       return it;
-   }
 
     public org.semanticwb.model.Calendar getCalendar()
     {
          org.semanticwb.model.Calendar ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(ClassMgr.swb_calendar);
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_calendar);
          if(obj!=null)
          {
              ret=(org.semanticwb.model.Calendar)obj.createGenericInstance();

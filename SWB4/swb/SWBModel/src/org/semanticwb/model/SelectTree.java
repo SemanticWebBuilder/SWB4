@@ -157,7 +157,7 @@ public class SelectTree extends org.semanticwb.model.base.SelectTreeBase
                 if(isBlankSuport())ret.append("<option value=\"\"></option>");
                 SemanticClass cls=prop.getRangeClass();
                 Iterator<SemanticObject> it=null;
-                if(cls!=WebPage.ClassMgr.sclass)
+                if(cls!=WebPage.sclass)
                 {
                     if(isGlobalScope())
                     {

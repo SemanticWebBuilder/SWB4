@@ -3,12 +3,12 @@ package org.semanticwb.model.base;
 
 public class SelectMultipleBase extends org.semanticwb.model.base.FormElementBase 
 {
-    public static class ClassMgr
-    {
        public static final org.semanticwb.platform.SemanticProperty swbxf_sm_globalScope=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#sm_globalScope");
        public static final org.semanticwb.platform.SemanticProperty swbxf_sm_nullSupport=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#sm_nullSupport");
        public static final org.semanticwb.platform.SemanticClass swbxf_SelectMultiple=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultiple");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultiple");
+    public static class ClassMgr
+    {
 
        public static java.util.Iterator<org.semanticwb.model.SelectMultiple> listSelectMultiples(org.semanticwb.model.SWBModel model)
        {
@@ -50,22 +50,22 @@ public class SelectMultipleBase extends org.semanticwb.model.base.FormElementBas
 
     public boolean isGlobalScope()
     {
-        return getSemanticObject().getBooleanProperty(ClassMgr.swbxf_sm_globalScope);
+        return getSemanticObject().getBooleanProperty(swbxf_sm_globalScope);
     }
 
     public void setGlobalScope(boolean value)
     {
-        getSemanticObject().setBooleanProperty(ClassMgr.swbxf_sm_globalScope, value);
+        getSemanticObject().setBooleanProperty(swbxf_sm_globalScope, value);
     }
 
     public boolean isNullSupport()
     {
-        return getSemanticObject().getBooleanProperty(ClassMgr.swbxf_sm_nullSupport);
+        return getSemanticObject().getBooleanProperty(swbxf_sm_nullSupport);
     }
 
     public void setNullSupport(boolean value)
     {
-        getSemanticObject().setBooleanProperty(ClassMgr.swbxf_sm_nullSupport, value);
+        getSemanticObject().setBooleanProperty(swbxf_sm_nullSupport, value);
     }
 
     public void remove()
