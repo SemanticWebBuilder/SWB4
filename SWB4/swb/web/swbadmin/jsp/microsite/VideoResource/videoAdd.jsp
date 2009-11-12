@@ -31,8 +31,14 @@
     document.frmeditvideo.submit();
 }
 </script>
+<%
+String cancelurl=paramRequest.getRenderUrl().toString();
+%>
 <div class="columnaIzquierda">
-    <h3>Agregar video</h3>
+    <div class="adminTools">
+    <a class="adminTool" onclick="validaForma()" href="#">Guardar</a>
+    <a class="adminTool" href="<%=cancelurl%>">Cancelar</a>
+    </div>
     <form class="swbform" name="frmeditvideo" method="post" action="<%=paramRequest.getActionUrl()%>">
         <div>
             <fieldset>
@@ -45,10 +51,6 @@
                     </tr>
                 </table>
             </fieldset>
-            <p>
-                <strong><input class="button" onclick="validaForma()" dojoType="dijit.form.Button" type="button" value="Guardar" label="Guardar"/></strong>
-                <input class="button" dojoType="dijit.form.Button" type="button" label="Cancelar" value="Cancelar" onclick="window.location='<%=paramRequest.getRenderUrl()%>';"/>
-            </p>
         </div>
         <input type="hidden" name="act" value="add"/>
     </form>
