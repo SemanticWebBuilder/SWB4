@@ -38,6 +38,14 @@
     <li><a <%=classPerfil%> href="{topic@getUrl}/../perfil<%=parameter%>" >Principal</a></li>
     <li><a <%=classamigos%> href="{topic@getUrl}/../Amigos<%=parameter%>" >Mis amigos</a></li>
     <li><a <%=classeventos%> href="{topic@getUrl}/../Mis_Eventos<%=parameter%>" >Mis eventos</a></li>
-    <li><a <%=classfaviritos%> href="{topic@getUrl}/../Mis_favoritos<%=parameter%>" >Mis favoritos</a></li>
+    <%
+        if(request.getParameter("user")==null)
+            {
+            %>
+            <li><a <%=classfaviritos%> href="{topic@getUrl}/../Mis_favoritos<%=parameter%>" >Mis favoritos</a></li>
+            <%
+            }
+    %>
+    
     <li><a <%=classtwiter%> href="{topic@getUrl}/../Twitter<%=parameter%>" >Twitter</a></li>
 </ul>
