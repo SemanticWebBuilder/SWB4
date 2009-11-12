@@ -498,7 +498,7 @@ public class SWBAOntTree extends GenericResource
                 {
                     SemanticObject ch=it2.next();
                     boolean add=true;
-                    if(ch.instanceOf(Resource.ClassMgr.sclass))
+                    if(ch.instanceOf(Resource.sclass))
                     {
                         Resource res=(Resource)ch.createGenericInstance();
                         if(res.getResourceSubType()!=null)add=false;
@@ -539,7 +539,7 @@ public class SWBAOntTree extends GenericResource
 
         //TODO:validar treeController
         //System.out.println("type:"+type);
-        if(cls.equals(ResourceType.ClassMgr.sclass))
+        if(cls.equals(ResourceType.sclass))
         {
             addResourceType(arr,obj,addChilds,addDummy,paramRequest);
             return;
@@ -574,7 +574,7 @@ public class SWBAOntTree extends GenericResource
         jobj.putOpt("menus", menus);
 
         //TODO:separar treeController
-        if(!cls.equals(WebSite.ClassMgr.sclass))
+        if(!cls.equals(WebSite.sclass))
         {
             //menus creacion
             Iterator<SemanticProperty> pit=cls.listHerarquicalProperties();

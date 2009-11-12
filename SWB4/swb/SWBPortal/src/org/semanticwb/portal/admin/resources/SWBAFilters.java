@@ -243,7 +243,7 @@ public class SWBAFilters extends SWBATree {
             classele.setAttribute("icon", "sitev");
 
 
-            Iterator<ObjectBehavior> obit = SWBComparator.sortSermanticObjects(ObjectBehavior.ClassMgr.swbxf_ObjectBehavior.listGenericInstances(true));
+            Iterator<ObjectBehavior> obit = SWBComparator.sortSermanticObjects(ObjectBehavior.swbxf_ObjectBehavior.listGenericInstances(true));
             while (obit.hasNext()) {
                 ObjectBehavior ob = obit.next();
                 if (!ob.isVisible()) {
