@@ -4,11 +4,12 @@
     private static final String VER_COMENTARIOS="Ver comentarios";
     private static final String OCULTAR_COMENTARIOS="Ocultar comentarios";
 %>
+
 <%
     DirectoryObject mse = (DirectoryObject) request.getAttribute("DirectoryObject");
     SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
     if (paramRequest == null) return;
-    //WebPage webPage  = paramRequest.getWebPage();
+
     User mem = paramRequest.getUser();
     String suri = request.getParameter("uri");
     String abusedDesc = mse.isAbused() ? "Inapropiado" : "Apropiado";
@@ -43,7 +44,7 @@
   dojo.require("dojox.form.Rating");
 </script>
 
-<script language="javascript" type="text/javascript">  //dojo.require("dojo.parser");
+<script language="javascript" type="text/javascript">
     var request = false;
     try {
         request = new XMLHttpRequest();
@@ -123,6 +124,11 @@
         }
       }
     }
+    function cancelComment()
+    {
+        document.getElementById("comentario").value="";
+        document.getElementById("addComment").style.display="none";
+    }
     function sendComment()
     {
         document.addCommentForm.submit();
@@ -175,18 +181,18 @@
 
 <h2>Evaluaci&oacute;n</h2>
 <div class="common_funcs" style="padding:10px;">
-    <span style="float:left; width:200px;">
-        <%
-        if (mem.isSigned()) {
-        %>
-        <div class="rank_label" style="margin-left:20px;">Calificar:</div>
+    <div style="float:left; width:200px;">
+        <%if (mem.isSigned()) {%>
+            <div class="rank_label" style="margin-left:20px;">
+                Calificar:
+            </div>
             <div class="rank_stars" dojoType="dojox.form.Rating" numStars="5" value="<%=rank%>">
                 <script type="dojo/event" event="onChange">vote(this.value);</script>
             </div>
-        <%
-        } else {
-        %>
-        <div class="rank_label" style="margin-left:20px;">Calificaci&oacute;n:</div>
+        <%} else {%>
+            <div class="rank_label" style="margin-left:20px;">
+                Calificaci&oacute;n:
+            </div>
             <div class="rank_stars" dojoType="dojox.form.Rating" numStars="5" value="<%=rank%>">
                     <script type="dojo/event" event="_onMouse">return;</script>
                     <script type="dojo/event" event="onStarClick">return;</script>
@@ -194,27 +200,18 @@
         <%
         }
         %>
-    </span>
+    </div>
     <div class="rec_votes">
         <div class="rec_votes_num" id="reviews"><%=mse.getReviews()%></div>
         <div class="rec_votes_label"> votos</div>
     </div>
-    <span class="abused">
-        P&uacute;blicamente
-        <span id="abused">
-         <%=abusedDesc%>
-        </span>
-    </span>
-    <%
-    if (mem.isSigned() && !mse.isAbused()) {
-    %>
+    <span class="abused">P&uacute;blicamente <span id="abused"><%=abusedDesc%></span></span>
+    <%if (mem.isSigned() && !mse.isAbused()) {%>
         <div class="clearL"></div>
         <div id="markop">
-            <div class="editarInfo"><p><a class="userTool" href="javascript:changeAbusedState();">Marcar como inapropiado</a></p></div>
+            <div class="editarInfo"><p><a class="userTool" onclick="javascript:changeAbusedState();" href="#">Marcar como inapropiado</a></p></div>
         </div>
-    <%
-    }
-    %>
+    <%}%>
 </div>
 <%if (!mem.isSigned()) {%>
     <br/><br/>
@@ -225,38 +222,34 @@
     <%
     url.setAction("addComment");
     url.setCallMethod(SWBResourceURL.Call_CONTENT);
-    if (mem.isSigned()) {
-    %>
+    if (mem.isSigned()) {%>
         <a class="userTool" href="javascript:addComment()">Escribir comentario</a>
-    <%
-    }
-    %>
+    <%}%>
     <a class="userTool" id="ctrlComments" href="javascript:showComments();"><%=OCULTAR_COMENTARIOS%></a>
     <!--/p-->
     <%
     url.setAction("addComment");
     url.setCallMethod(SWBResourceURL.Call_CONTENT);
-    if (mem.isSigned()) {
-    %>
+    if (mem.isSigned()) {%>
         <div id="addComment">
             <form name="addCommentForm" id="addCommentForm" action="<%=url%>" method="post">
                 <div>
                     <label for="comentario">Comentario</label>
                     <input type="hidden" name="uri" value="<%=suri%>">
                     <input type="hidden" name="act" value="addComment">
-                    <textarea name="comentario" id="comentario" cols="45" rows="5"></textarea>
+                    <textarea style="border:1px solid #CACACA;" name="comentario" id="comentario" cols="45" rows="5"></textarea>
                 </div>
             </form>
             <!--p-->
                 <a class="userTool" href="javascript:sendComment()">Publicar</a>
+                <a class="userTool" href="javascript:cancelComment()">Cancelar</a>
             <!--/p-->
         </div>
-    <%
-    }
-    %>
+   <%}%>
 </div>
-        <%
-        request.setAttribute("page",pageNumber);
-        request.setAttribute("suri",suri);
-        %>
-        <jsp:include flush="true" page="ListDirObjComments.jsp"></jsp:include>
+<%
+request.setAttribute("page",pageNumber);
+request.setAttribute("suri",suri);
+%>
+<div style="border-bottom:1px solid #CCCCCC; margin:20px; width:389px;"></div>
+<jsp:include flush="true" page="ListDirObjComments.jsp"></jsp:include>
