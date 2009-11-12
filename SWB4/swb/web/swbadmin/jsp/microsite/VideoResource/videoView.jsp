@@ -25,7 +25,7 @@
             String urlAddVideo = paramRequest.getRenderUrl().setParameter("act", "add").toString();
             ArrayList<VideoElement> elements = new ArrayList();
             int elementos = 0;
-            Iterator<VideoElement> it = VideoElement.listVideoElementByWebPage(wpage, wpage.getWebSite());
+            Iterator<VideoElement> it = VideoElement.ClassMgr.listVideoElementByWebPage(wpage, wpage.getWebSite());
             it = SWBComparator.sortByCreated(it, false);
             while (it.hasNext())
             {

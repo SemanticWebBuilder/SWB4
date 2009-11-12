@@ -17,7 +17,7 @@
     String urlAddPhoto = paramRequest.getRenderUrl().setParameter("act", "add").toString();
     ArrayList<PhotoElement> elements = new ArrayList();
     int elementos = 0;
-    Iterator<PhotoElement> it = PhotoElement.listPhotoElementByPhotoWebPage(wpage, wpage.getWebSite());
+    Iterator<PhotoElement> it = PhotoElement.ClassMgr.listPhotoElementByPhotoWebPage(wpage, wpage.getWebSite());
     it = SWBComparator.sortByCreated(it, false);
     while (it.hasNext())
     {

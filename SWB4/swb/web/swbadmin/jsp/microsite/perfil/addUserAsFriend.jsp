@@ -16,7 +16,7 @@
                 boolean isFriend = false;
                 if (!isFriend) // puede ser un invitado
                 {
-                    Iterator<FriendshipProspect> itFriendshipProspect = FriendshipProspect.listFriendshipProspectByFriendShipRequested(user, site);
+                    Iterator<FriendshipProspect> itFriendshipProspect = FriendshipProspect.ClassMgr.listFriendshipProspectByFriendShipRequested(user, site);
                     if (itFriendshipProspect.hasNext())
                     {
                         FriendshipProspect fp = itFriendshipProspect.next();
@@ -37,7 +37,7 @@
 
                 if (!isFriend) // puede ser un amigo
                 {
-                    Iterator<Friendship> itMyFriends = Friendship.listFriendshipByFriend(user, site);
+                    Iterator<Friendship> itMyFriends = Friendship.ClassMgr.listFriendshipByFriend(user, site);
                     while (itMyFriends.hasNext())
                     {
                         Friendship friendShip = itMyFriends.next();

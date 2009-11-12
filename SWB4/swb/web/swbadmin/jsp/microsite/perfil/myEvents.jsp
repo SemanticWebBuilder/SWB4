@@ -30,7 +30,7 @@
 
             if (current == null)
             {
-                it = EventElement.listEventElementByAttendant(user, paramRequest.getWebPage().getWebSite());
+                it = EventElement.ClassMgr.listEventElementByAttendant(user, paramRequest.getWebPage().getWebSite());
             }
             else
             {

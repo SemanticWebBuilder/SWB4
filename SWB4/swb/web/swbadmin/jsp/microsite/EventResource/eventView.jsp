@@ -27,7 +27,7 @@
 
             ArrayList<EventElement> elements = new ArrayList();
             int elementos = 0;
-            Iterator<EventElement> it = EventElement.listEventElementByEventWebPage(wpage, wpage.getWebSite());
+            Iterator<EventElement> it = EventElement.ClassMgr.listEventElementByEventWebPage(wpage, wpage.getWebSite());
             it = SWBComparator.sortByCreated(it, false);
             while (it.hasNext())
             {

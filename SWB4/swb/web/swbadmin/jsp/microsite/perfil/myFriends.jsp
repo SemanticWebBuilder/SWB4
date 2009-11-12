@@ -68,7 +68,7 @@
             String photo = SWBPortal.getContextPath() + "/swbadmin/images/defaultPhoto.jpg";
 
             ArrayList<User> elements = new ArrayList<User>();
-            Iterator<Friendship> it = Friendship.listFriendshipByFriend(user, wpage.getWebSite());
+            Iterator<Friendship> it = Friendship.ClassMgr.listFriendshipByFriend(user, wpage.getWebSite());
             while (it.hasNext())
             {
                 Friendship friendShip = it.next();
@@ -161,7 +161,7 @@
                 String firstName = "", lastName = "";
                 int contTot = 0;
 
-                Iterator<Friendship> itMyFriends = Friendship.listFriendshipByFriend(user, wpage.getWebSite());
+                Iterator<Friendship> itMyFriends = Friendship.ClassMgr.listFriendshipByFriend(user, wpage.getWebSite());
                 while (itMyFriends.hasNext())
                 {
                     Friendship friendShip = itMyFriends.next();
