@@ -8,6 +8,7 @@ import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
@@ -20,6 +21,8 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.admin.resources.StyleInner;
 
 public class TestStyler extends GenericResource {
+    private static Logger log = SWBUtils.getLogger(TestStyler.class);
+    private StyleInner si;
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -83,8 +86,6 @@ public class TestStyler extends GenericResource {
         out.flush();
     }
 
-    StyleInner si;
-
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         si = new StyleInner(getResourceBase());
@@ -106,15 +107,14 @@ public class TestStyler extends GenericResource {
         String stel = request.getParameter("stel");
         System.out.println("stel="+stel);
         String[] tkns = stel.split("@",3);
+        System.out.println("tkns[0]="+tkns[0]);
+        System.out.println("tkns[1]="+tkns[1]);
+        System.out.println("tkns[2]="+tkns[2]);
 
         //HashMap matriz = (HashMap)mm.get(base.getId());
         HashMap matriz = (HashMap)si.getMm().get(base.getId());
         if(matriz != null) {
             try {
-                System.out.println("tkns[0]="+tkns[0]);
-                System.out.println("tkns[1]="+tkns[1]);
-                System.out.println("tkns[2]="+tkns[2]);
-
                 HashMap h = (HashMap)matriz.get(tkns[0]);
                 h.put(tkns[1], tkns[2]+";");
                 System.out.println("\n\n");
@@ -128,6 +128,6 @@ public class TestStyler extends GenericResource {
     }
 
     private void printMatriz() {
-        si.printMatriz(getResourceBase());
+        si.printMatriz(getResourceBase().getId());
     }
 }
