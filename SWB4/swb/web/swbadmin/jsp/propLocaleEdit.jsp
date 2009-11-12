@@ -27,7 +27,7 @@
         ret.append("<form dojoType=\"dijit.form.Form\" class=\"swbform\">");
         ret.append(" <fieldset>");
         ret.append("    <table>");
-        Iterator<SemanticObject> it=sobj.getModel().listInstancesOfClass(Language.ClassMgr.sclass);
+        Iterator<SemanticObject> it=sobj.getModel().listInstancesOfClass(Language.sclass);
         while(it.hasNext())
         {
             Language lng=(Language)it.next().getGenericInstance();

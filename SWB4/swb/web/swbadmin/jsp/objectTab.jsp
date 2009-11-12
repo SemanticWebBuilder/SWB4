@@ -77,7 +77,7 @@
                     if(obj.instanceOf(scls))
                     {
                         addDiv=true;
-                    }else if(obj.instanceOf(Resource.ClassMgr.sclass))
+                    }else if(obj.instanceOf(Resource.sclass))
                     {
                         Resource res=(Resource)obj.getGenericInstance();
                         SWBResource swbres=SWBPortal.getResourceMgr().getResource(res);

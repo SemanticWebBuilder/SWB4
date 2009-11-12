@@ -6,7 +6,7 @@
     SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
     
     String lang="es";
-    SWBFormMgr mgr = new SWBFormMgr(PhotoElement.ClassMgr.swbcomm_PhotoElement, paramRequest.getWebPage().getSemanticObject(), null);
+    SWBFormMgr mgr = new SWBFormMgr(PhotoElement.swbcomm_PhotoElement, paramRequest.getWebPage().getSemanticObject(), null);
     if (paramRequest.getUser() != null) {
         lang = paramRequest.getUser().getLanguage();
     }

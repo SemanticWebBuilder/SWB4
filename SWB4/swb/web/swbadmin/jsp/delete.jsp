@@ -42,7 +42,7 @@
         if(virp!=null)
         {
             SemanticObject vp=ont.getSemanticObject(virp);
-            obj.removeObjectProperty(WebPage.ClassMgr.swb_hasWebPageVirtualParent, vp);
+            obj.removeObjectProperty(WebPage.swb_hasWebPageVirtualParent, vp);
             out.println("Referencia eliminada...");
             out.println("<script type=\"text/javascript\">reloadTreeNodeByURI('"+vp.getURI()+"');</script>");
         }else

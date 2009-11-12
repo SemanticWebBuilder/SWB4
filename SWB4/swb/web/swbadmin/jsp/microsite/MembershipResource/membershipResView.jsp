@@ -6,7 +6,7 @@
     {
         if (site != null)
         {
-            Iterator<Member> it = Member.listMemberByUser(user, site.getWebSite());
+            Iterator<Member> it = Member.ClassMgr.listMemberByUser(user, site.getWebSite());
             while (it.hasNext())
             {
                 Member mem = it.next();
