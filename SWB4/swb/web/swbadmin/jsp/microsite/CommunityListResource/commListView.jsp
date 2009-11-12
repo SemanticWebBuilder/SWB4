@@ -50,7 +50,7 @@
     if (wplevel == 3 || nwp == 0) {
         if (nms > 0) {
         %>
-            <ul id="MenuBar3" class="MenuBarHorizontal">
+            <ul id="MenuBar3" class="MenuBarHorizontal" style="margin-top:10px">
                 <li class="selectTitle">
                     <p>Comunidades relacionadas</p>
                     <ul>
