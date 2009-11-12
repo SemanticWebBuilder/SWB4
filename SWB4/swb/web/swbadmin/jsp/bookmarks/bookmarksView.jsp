@@ -1,6 +1,10 @@
 <%@page import="java.util.*,java.text.SimpleDateFormat, org.semanticwb.portal.resources.sem.BookmarkEntry, org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 
 <%
+            if(request.getParameter("user")!=null)
+            {
+                return;
+            }
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             Iterator<BookmarkEntry> entries = (Iterator<BookmarkEntry>) request.getAttribute("entries");
             SWBResourceURL aUrl = paramRequest.getActionUrl().setAction("ADDNEW");
