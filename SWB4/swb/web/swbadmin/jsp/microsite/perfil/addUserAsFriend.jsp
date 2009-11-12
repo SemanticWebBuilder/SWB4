@@ -20,7 +20,7 @@
                     if (itFriendshipProspect.hasNext())
                     {
                         FriendshipProspect fp = itFriendshipProspect.next();
-                        if (fp.getFriendShipRequester().getURI().equalsIgnoreCase(propect.getURI()))
+                        if (fp.getFriendShipRequester().getURI().equalsIgnoreCase(propect.getURI()) || fp.getFriendShipRequested().getURI().equalsIgnoreCase(user.getURI()))
                         {
                             isFriend = true;
                         }

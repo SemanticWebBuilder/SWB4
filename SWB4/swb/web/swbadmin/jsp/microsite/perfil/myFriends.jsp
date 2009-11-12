@@ -207,7 +207,7 @@
            else if (contTot == 0)
            {%>
 <div class="clear">
-    <p class="titulo">Aún no tienes amigos &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+    <p class="titulo"><%=user.getFirstName()%> aún no tiene amigos &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
 </div>
 <%}%>
 <div class="clear"></div>

@@ -41,9 +41,15 @@
             }
             if (hasInvitations)
             {
+                if(request.getParameter("user")==null)
+                    {
+                    %>
+                    <h2>Mis invitaciones</h2>
+                    <%
+                    }
 %>
-<!-- <p class="addOn">Mis Invitaciones</p> -->
-<h2>Mis invitaciones</h2>
+
+
 <%
                 if (!isStrategy)
                 {
@@ -125,7 +131,15 @@
                 {
 %>
 <ul class="listaElementos">
-    <li><a class="contactos_nombre" href="<%=requesterPath%><%=userParam%>" >Te han invitado <%=contTot%> persona(s) a que te unas como su amigo</a></li>
+    <%
+        if(request.getParameter("user")==null)
+            {
+            %>
+                <li><a class="contactos_nombre" href="<%=requesterPath%><%=userParam%>" >Te han invitado <%=contTot%> persona(s) a que te unas como su amigo</a></li>
+            <%
+            }
+    %>
+    
 </ul>
 <%
                 }
