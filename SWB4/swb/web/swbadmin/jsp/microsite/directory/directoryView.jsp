@@ -294,7 +294,7 @@ if (sobj != null) {
                              tags=propValue;
                         }else if(semProp==ClasifiedBuySell.ClassMgr.swbcomm_Price){
                              price=propValue;
-                        }else if(semProp==DirectoryObject.swb_created){
+                        }else if(semProp==DirectoryObject.ClassMgr.swb_created){
                             SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
                             Date date=new Date();
                             date=formatoDelTexto.parse(propValue);
