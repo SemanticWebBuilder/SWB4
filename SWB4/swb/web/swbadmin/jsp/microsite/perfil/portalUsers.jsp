@@ -10,8 +10,6 @@
         <%@page import="org.semanticwb.model.*"%>
         <%@page import="org.semanticwb.platform.*"%>
 
-
-
         <%!
         private final int I_PAGE_SIZE = 10;
         private final int I_INIT_PAGE = 1;
@@ -132,7 +130,7 @@
         <%
         //Termina paginación
         String perfilPath=website.getWebPage("perfil").getUrl();
-        String photo=SWBPortal.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
+        String photo=SWBPortal.getContextPath()+"/swbadmin/images/profilePlaceholder.jpg";
         %>
         <div id="friendCards">
         <%
@@ -152,10 +150,10 @@
             if(cont<=iIniPage) continue;
             else if(cont>iFinPage) break;
 
-            if(userprosp.getPhoto()!=null) photo=userprosp.getPhoto();
+            if(userprosp.getPhoto()!=null) photo=SWBPortal.getWebWorkPath()+userprosp.getPhoto();
         %>
             <div class="friendCard">
-              <img class="profilePic" src="<%=SWBPortal.getWebWorkPath()+photo%>" alt="usuario">
+              <img class="profilePic" src="<%=photo%>" alt="usuario">
                <div class="friendCardInfo">
                 <a class="ico" href="mailto:<%=userprosp.getEmail()%>"><img src="<%=SWBPortal.getWebWorkPath()%>/models/<%=website.getId()%>/css/images/icoMail.png" alt="enviar un mensaje"></a>
                 <a class="ico" href="<%=perfilPath%>?user=<%=userprosp.getEncodedURI()%>"><img src="<%=SWBPortal.getWebWorkPath()%>/models/<%=website.getId()%>/css/images/icoUser.png" alt="ir al perfil"></a>
@@ -168,8 +166,14 @@
                 <div class="friendCardName">
                   <p><%=userprosp.getFullName()%></p>
                 </div>
-                <p>Sexo:<%=user.getExtendedAttribute(mapa.get("userSex"))%></p>
-                <p>Edad:<%=user.getExtendedAttribute(mapa.get("userAge"))%></p>
+                <%
+                String gender="";
+                int age=0;
+                if(userprosp.getExtendedAttribute(mapa.get("userSex"))!=null && !((String)userprosp.getExtendedAttribute(mapa.get("userSex"))).equals("null")) gender=(String)userprosp.getExtendedAttribute(mapa.get("userSex"));
+                if(userprosp.getExtendedAttribute(mapa.get("userAge"))!=null && ((Integer)userprosp.getExtendedAttribute(mapa.get("userAge"))).intValue()>0) age=((Integer)userprosp.getExtendedAttribute(mapa.get("userAge"))).intValue();
+                %>
+                <p>Sexo:<%=gender%></p>
+                <p>Edad:<%if(age>0){%><%=age%><%}%></p>
             </div>
             </div>
             <%
