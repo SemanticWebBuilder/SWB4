@@ -49,7 +49,7 @@
                 {
                     return;
                 }
-                Iterator<MicroSiteElement> elements = PostElement.ClassMgr.listMicroSiteElementByCreator(user, site);
+                Iterator<MicroSiteElement> elements = MicroSiteElement.ClassMgr.listMicroSiteElementByCreator(user, site);
                 elements = SWBComparator.sortByCreated(elements, false);
                 while (elements.hasNext())
                 {
@@ -89,7 +89,7 @@
 
                         int i = 0;
 
-                        Iterator<MicroSiteElement> elements = PostElement.ClassMgr.listMicroSiteElementByCreator(user, site);
+                        Iterator<MicroSiteElement> elements = MicroSiteElement.ClassMgr.listMicroSiteElementByCreator(user, site);
                         elements = SWBComparator.sortByCreated(elements, false);
                         while (elements.hasNext())
                         {
