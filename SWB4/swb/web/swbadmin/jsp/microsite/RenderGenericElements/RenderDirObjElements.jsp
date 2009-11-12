@@ -173,7 +173,7 @@
     }
 </script>
 
-<h2>Evaluar</h2>
+<h2>Evaluaci&oacute;n</h2>
 <div class="common_funcs" style="padding:10px;">
     <span style="float:left; width:200px;">
         <%
