@@ -67,7 +67,7 @@
         if(!hasEvents)
             {
             %>
-            <p>No tiene eventos registrados.</p>
+            <p>No hay eventos registrados.</p>
             <%
             }
     %>
