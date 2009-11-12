@@ -3,14 +3,10 @@ package org.semanticwb.process.base;
 
 public class MessageFlowBase extends org.semanticwb.process.ConnectionObject 
 {
-    public static class ClassMgr
-    {
-       public static final org.semanticwb.platform.SemanticProperty swb_valid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#valid");
-       public static final org.semanticwb.platform.SemanticClass swbps_FlowObject=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#FlowObject");
-       public static final org.semanticwb.platform.SemanticProperty swbps_toFlowObject=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#toFlowObject");
-       public static final org.semanticwb.platform.SemanticProperty swbps_fromFlowObjectInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#fromFlowObjectInv");
        public static final org.semanticwb.platform.SemanticClass swbps_MessageFlow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#MessageFlow");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#MessageFlow");
+    public static class ClassMgr
+    {
 
        public static java.util.Iterator<org.semanticwb.process.MessageFlow> listMessageFlows(org.semanticwb.model.SWBModel model)
        {
