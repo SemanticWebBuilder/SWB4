@@ -13,8 +13,10 @@
     long lpage = (Long) request.getAttribute("page");
     long totalPages = totalPagesNumber(mse);
 %>
+
 <div>
     <div id="commentsList">
+        <div style="border-bottom:1px solid #CCCCCC; margin:20px; width:389px;"></div>
         <jsp:include flush="true" page="DirObjCommentsByPage.jsp" />
         <%if (totalPages > 0) {%>
             <div class="clearL"></div>
