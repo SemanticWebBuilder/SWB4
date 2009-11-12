@@ -1,94 +1,186 @@
 <%@page import="org.semanticwb.process.*"%>
 <%@page import="org.semanticwb.*"%>
+<%@page import="org.semanticwb.portal.*"%>
 <%@page import="java.util.*"%>
+<%@page import="java.io.*"%>
 <%@page import="org.semanticwb.model.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%!
+    public void printActivityInstance(FlowObjectInstance ai, JspWriter out) throws IOException
+    {
+        out.println("<li>");
+        out.println("Activity: "+ai.getFlowObjectType().getTitle()+" "+ai.getId());
+        out.println("Status:"+ai.getStatus());
+        out.println("</li>");
+        if(ai instanceof ProcessInstance)
+        {
+            ProcessInstance pi=(ProcessInstance)ai;
+            Iterator<FlowObjectInstance> acit=pi.listFlowObjectInstances();
+            if(acit.hasNext())
+            {
+                out.println("<ul>");
+                while(acit.hasNext())
+                {
+                    FlowObjectInstance actinst =  acit.next();
+                    printActivityInstance(actinst,out);
+                }
+                out.println("</ul>");
+            }
+        }
+    }
+
+    public org.semanticwb.process.Process createSubProcess(org.semanticwb.process.Process process,String name)
+    {
+        org.semanticwb.process.Process sps=process.getProcessSite().createProcess();
+        sps.setTitle(name);
+        process.addFlowObject(sps);
+        return sps;
+    }
+
+    public UserTask createTask(org.semanticwb.process.Process process,String name)
+    {
+        UserTask task=process.getProcessSite().createUserTask(SWBPlatform.getIDGenerator().getID(name, null, true));
+        task.setTitle(name);
+        task.setActive(true);
+        process.addFlowObject(task);
+        Resource res=task.getWebSite().createResource();
+        res.setTitle(name);
+        res.setActive(true);
+        res.setResourceType(task.getWebSite().getResourceType("ProcessForm"));
+        task.addResource(res);
+        return task;
+    }
+
+    public SequenceFlow linkObject(FlowObject from, FlowObject to)
+    {
+        SequenceFlow seq=from.getProcessSite().createSequenceFlow();
+        from.addToConnectionObject(seq);
+        seq.setToFlowObject(to);
+        return seq;
+    }
+
+%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
    "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
-    </head>
-    <body>
-        <h1>Hello World!</h1>
-<%
-        User user=SWBContext.getSessionUser();
-%>
-        User:<%=user.getFullName()%><br/>
-<%
+        <style type="text/css">
+            @import "/swbadmin/js/dojo/dojo/resources/dojo.css";
+            @import "/swbadmin/js/dojo/dijit/themes/soria/soria.css";
+            @import "/swbadmin/css/swb.css";
+        </style>
 
-        ProcessSite site=ProcessSite.getProcessSite("oqp");
+        <script type="text/javascript" src="/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: false, locale: 'es'" ></script>
+        <script type="text/javascript" charset="utf-8" src="/swbadmin/js/swb.js" ></script>
+        <!--script type="text/javascript" charset="utf-8" src="/swbadmin/js/swb_admin.js" ></script-->
+    </head>
+    <body class="soria">
+        <h1>Test de Procesos</h1>
+        <a href="?act=cpi">Crear Instancia de Proceso</a>
+<%
+        String login=request.getParameter("user");
+        if(login==null)login="admin";
+        User user=SWBContext.getAdminRepository().getUserByLogin(login);
+%>
+
+<%
+        ProcessSite site=ProcessSite.ClassMgr.getProcessSite("oqp");
         UserRepository urep=SWBContext.getAdminRepository();
 
-        org.semanticwb.process.Process process=site.getProcess("8");
+        org.semanticwb.process.Process process=null;
+        Iterator<org.semanticwb.process.Process> psit=site.listProcesses();
+        if(psit.hasNext())process=psit.next();
         if(process==null)
         {
             process=site.createProcess();
-            process.setTitle("Gestion de Negocios 2");
-            process.addProcessClass(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/oqp#PlanEstrategico").getSemanticObject());
+            process.setTitle("Gestion de Negocios");
+            process.addProcessClass(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/oqp#GestionNegocios").getSemanticObject());
 
-            Activity act=site.createActivity();
-            process.addActivity(act);
-            act.setTitle("Plan Estrategico");
+            InitEvent ini=site.createInitEvent();
+            process.addFlowObject(ini);
 
-            Task mision=site.createTask();
-            act.addTask(mision);
-            mision.setTitle("Misión");
-            mision.addUserGroup(urep.getUserGroup("Directivos"));
+            org.semanticwb.process.Process plan=createSubProcess(process, "Plan Estrategico");
+            plan.addProcessClass(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/oqp#PlanEstrategico").getSemanticObject());
+            org.semanticwb.process.Process com=createSubProcess(process, "Plan Comunicación");
+            com.addProcessClass(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/oqp#PlanComunicacion").getSemanticObject());
 
-            Task vision=site.createTask();
-            act.addTask(vision);
-            vision.setTitle("Visión");
-            vision.addUserGroup(urep.getUserGroup("Directivos"));
+            EndEvent end=site.createEndEvent();
+            process.addFlowObject(end);
 
-            Task valores=site.createTask();
-            act.addTask(valores);
-            valores.setTitle("Valores");
-            valores.addUserGroup(urep.getUserGroup("Directivos"));
+            linkObject(ini, plan);
+            linkObject(plan, com);
+            linkObject(com, end);
 
-            Task objetives=site.createTask();
-            act.addTask(objetives);
-            objetives.setTitle("Objetivos");
-            objetives.addDependence(mision);
-            objetives.addDependence(vision);
-            objetives.addDependence(valores);
-            objetives.addUserGroup(urep.getUserGroup("Gerentes"));
+            //*******************************************************************
 
-            Task endt=site.createTask();
-            act.addTask(endt);
-            endt.setTitle("Fin");
-            endt.addDependence(objetives);
-            endt.addRole(urep.getRole("Cordinador"));
+            InitEvent pini=site.createInitEvent();
+            plan.addFlowObject(pini);
 
-            Activity act2=site.createActivity();
-            act2.addDependence(act);
-            process.addActivity(act2);
-            act2.setTitle("Plan Comercial");
+            GateWay gtw1=site.createANDGateWay();
+            GateWay gtw2=site.createANDGateWay();
 
-            Task comer1=site.createTask();
-            act2.addTask(comer1);
-            comer1.setTitle("Comer 1");
-            comer1.addUserGroup(urep.getUserGroup("Gerentes"));
+            UserTask mision=createTask(plan, "Misión");
+            FormView view=site.createFormView();
+            view.addEditProperty(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/oqp#peMision").getSemanticObject());
+            mision.setFormView(view);
 
-            Task comer2=site.createTask();
-            act2.addTask(comer2);
-            comer2.setTitle("Comer 2");
-            comer2.addDependence(comer1);
-            comer2.addUserGroup(urep.getUserGroup("Gerentes"));
-            comer2.addRole(urep.getRole("Cordinador"));
+            Task vision=createTask(plan, "Vision");
+            Task valores=createTask(plan, "Valores");
+            Task objetivos=createTask(plan, "Objetivos");
+            Task fin=createTask(plan, "Fin");
 
-            Task comer21=site.createTask();
-            act2.addTask(comer21);
-            comer21.setTitle("Comer 2.1");
-            comer21.addDependence(comer1);
-            comer21.addUserGroup(urep.getUserGroup("Gerentes"));
+            EndEvent pend=site.createEndEvent();
+            plan.addFlowObject(pend);
 
-            Task comer3=site.createTask();
-            act2.addTask(comer3);
-            comer3.setTitle("Comer 3");
-            comer3.addDependence(comer2);
-            comer3.addRole(urep.getRole("Cordinador"));
+            linkObject(pini, gtw1);
+            linkObject(gtw1, mision);
+            linkObject(gtw1, vision);
+            linkObject(gtw1, valores);
+
+            linkObject(mision, gtw2);
+            linkObject(vision, gtw2);
+            linkObject(valores, gtw2);
+
+            linkObject(gtw2, objetivos);
+            linkObject(objetivos, fin);
+            linkObject(fin, pend);
+
+            //*******************************************************************
+
+            pini=site.createInitEvent();
+            com.addFlowObject(pini);
+
+            GateWay gtw3=site.createORGateWay();
+            GateWay gtw4=site.createORGateWay();
+
+            Task t1=createTask(com, "Tarea 1");
+            Task t2=createTask(com, "Tarea 2");
+            Task t3=createTask(com, "Tarea 3");
+            Task t4=createTask(com, "Tarea 4");
+            Task t5=createTask(com, "Tarea 5");
+            Task t6=createTask(com, "Tarea 6");
+            Task t7=createTask(com, "Tarea 7");
+            Task t8=createTask(com, "Tarea 8");
+
+            pend=site.createEndEvent();
+            com.addFlowObject(pend);
+
+            linkObject(pini, t1);
+            linkObject(t1,gtw3);
+            linkObject(gtw3,t2);
+            linkObject(gtw3,t3);
+            linkObject(gtw3,t4);
+            linkObject(t2,t5);
+            linkObject(t3,t6);
+            linkObject(t4,gtw4);
+            linkObject(t5,gtw4);
+            linkObject(t6,gtw4);
+            linkObject(gtw4,t7);
+            linkObject(t7,t8);
+            linkObject(t8, pend);
+            //objetives.addUserGroup(urep.getUserGroup("Gerentes"));
         }
 
         String act=request.getParameter("act");
@@ -96,12 +188,15 @@
         {
             if(act.equals("cpi"))
             {
-                SWBProcessMgr.createProcessInstance(site, process);
+                SWBProcessMgr.createProcessInstance(site, process, user);
             }
             if(act.equals("accept"))
             {
                 String id=request.getParameter("id");
-                TaskInstance.getTaskInstance(id, site).accept(user);
+                FlowObjectInstance inst=FlowObjectInstance.ClassMgr.getFlowObjectInstance(id, site);
+                //inst.getFlowObjectType()
+                //inst.getParentProcessInstance();
+                inst.close(user);
             }
         }
 
@@ -110,51 +205,52 @@
         {
             ProcessInstance pi =  it.next();
 %>
-            <br/>Proceso Instance:<%=pi.getId()%> <%=pi.getProcessType().getTitle()%> status:<%=pi.getStatus()%><br/>
+            <h2>Proceso Instance: <%=pi.getFlowObjectType().getTitle()%> <%=pi.getId()%></h2>
 <%
-
-            Iterator<TaskInstance> utkit=SWBProcessMgr.getUserTaskInstances(pi, user).iterator();
+            user=SWBContext.getAdminRepository().getUserByLogin("admin");
+%>
+            <h3>Tareas del usuario (<%=user.getFullName()%>)</h3>
+<%
+            out.println("<ul>");
+            Iterator<FlowObjectInstance> utkit=SWBProcessMgr.getUserTaskInstances(pi, user).iterator();
             while(utkit.hasNext())
             {
-                TaskInstance tkinst =  utkit.next();
+                FlowObjectInstance tkinst =  utkit.next();
     %>
-                >User Task Instance:<%=tkinst.getId()%> <%=tkinst.getTaskType().getTitle()%> status:<%=tkinst.getStatus()%><a href="?id=<%=tkinst.getId()%>&act=accept">accept</a><br/>
+                <li>User Task: <%=tkinst.getFlowObjectType().getTitle()%> <%=tkinst.getId()%> Status:<%=tkinst.getStatus()%> <a href="?id=<%=tkinst.getId()%>&act=accept&user=<%=user.getLogin()%>">accept</a></li>
     <%
             }
+            out.println("</ul>");
+            user=SWBContext.getAdminRepository().getUserByLogin("admin");
+%>
 
-            Iterator<ProcessObject> objit=pi.listProcessObjects();
+        <h3>Artefactos</h3>
+<%
+            out.println("<ul>");
+            Iterator<ProcessObject> objit=pi.getAllProcessObjects().iterator();
             while(objit.hasNext())
             {
                 ProcessObject obj =  objit.next();
     %>
-                >Object Instance:<%=obj.getURI()%> <br/>
+                <li>Object Instance:<%=obj.getURI()%></li>
     <%
+                //SWBFormMgr mgr=new SWBFormMgr(obj.getSemanticObject(),null,SWBFormMgr.MODE_EDIT);
+                //out.println(mgr.renderForm(request));
             }
-
-
-
-            Iterator<ActivityInstance> acit=pi.listActivityInstances();
-            while(acit.hasNext())
-            {
-                ActivityInstance actinst =  acit.next();
-    %>
-                --> Activity Instance:<%=actinst.getId()%> <%=actinst.getActivityType().getTitle()%> status:<%=actinst.getStatus()%><br/>
-    <%
-                Iterator<TaskInstance> tkit=actinst.listTaskinstances();
-                while(tkit.hasNext())
-                {
-                    TaskInstance tkinst =  tkit.next();
-        %>
-                    ----> Task Instance:<%=tkinst.getId()%> <%=tkinst.getTaskType().getTitle()%> status:<%=tkinst.getStatus()%><br/>
-        <%
-                }
-            }
-
-
-        }
+            out.println("</ul>");
 
 %>
-
-        <a href="?act=cpi">Crear Instancia de Proceso</a>
+        <h3>Detalle de Proceso</h3>
+<%
+            out.println("<ul>");
+            Iterator<FlowObjectInstance> actit=pi.listFlowObjectInstances();
+            while(actit.hasNext())
+            {
+                FlowObjectInstance obj =  actit.next();
+                printActivityInstance(obj, out);
+            }
+            out.println("</ul>");
+        }
+%>
     </body>
 </html>
