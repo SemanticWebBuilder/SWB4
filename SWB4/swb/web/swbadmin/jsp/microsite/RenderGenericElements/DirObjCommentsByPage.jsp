@@ -37,7 +37,7 @@
                 <%
                 } else {
                 %>
-                <img src="<%=SWBPortal.getContextPath()%>/swbadmin/images/defaultPhoto.jpg" alt="foto">
+                <img src="<%=SWBPortal.getWebWorkPath()%>/models/<%=paramRequest.getWebPage().getWebSite().getTitle()%>/css/images/commentImageplaceHolder.jpg" alt="foto">
                 <%
                 }
             } catch (NullPointerException npe) {}
