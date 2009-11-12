@@ -2367,7 +2367,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 rinfo.id = rule.getId();
                 rinfo.title = rule.getTitle();
                 rinfo.active = ref.isActive();
-                rinfo.type = Rule.ClassMgr.sclass.getName();
+                rinfo.type = Rule.sclass.getName();
                 rules.add(rinfo);
             }
         }
@@ -2381,7 +2381,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 rinfo.id = role.getId();
                 rinfo.title = role.getTitle();
                 rinfo.active = ref.isActive();
-                rinfo.type = Role.ClassMgr.sclass.getName();
+                rinfo.type = Role.sclass.getName();
                 rules.add(rinfo);
             }
         }
@@ -2395,7 +2395,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 rinfo.id = userGroupRef.getId();
                 rinfo.title = userGroupRef.getTitle();
                 rinfo.active = ref.isActive();
-                rinfo.type = Role.ClassMgr.sclass.getName();
+                rinfo.type = Role.sclass.getName();
                 rules.add(rinfo);
             }
         }
@@ -2406,7 +2406,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
         Resource resource = Resource.ClassMgr.getResource(info.id, site);
-        if (ruleInfo.type.equals(Rule.ClassMgr.sclass.getName()))
+        if (ruleInfo.type.equals(Rule.sclass.getName()))
         {
             GenericIterator<RuleRef> refs = resource.listRuleRefs();
             boolean exists = false;
@@ -2429,7 +2429,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 resource.addRuleRef(ref);
             }
         }
-        if (ruleInfo.type.equals(Role.ClassMgr.sclass.getName()))
+        if (ruleInfo.type.equals(Role.sclass.getName()))
         {
             GenericIterator<RoleRef> refs = resource.listRoleRefs();
             boolean exists = false;
@@ -2452,7 +2452,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 resource.addRoleRef(ref);
             }
         }
-        if (ruleInfo.type.equals(UserGroup.ClassMgr.sclass.getName()))
+        if (ruleInfo.type.equals(UserGroup.sclass.getName()))
         {
             GenericIterator<UserGroupRef> refs = resource.listUserGroupRefs();
             boolean exists = false;
@@ -2482,7 +2482,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
         Resource resource = site.getResource(info.id);
-        if (ruleInfo.type.equals(Rule.ClassMgr.sclass.getName()))
+        if (ruleInfo.type.equals(Rule.sclass.getName()))
         {
             GenericIterator<RuleRef> refs = resource.listRuleRefs();
             while (refs.hasNext())
@@ -2496,7 +2496,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 }
             }
         }
-        if (ruleInfo.type.equals(Role.ClassMgr.sclass.getName()))
+        if (ruleInfo.type.equals(Role.sclass.getName()))
         {
             GenericIterator<RoleRef> refs = resource.listRoleRefs();
             while (refs.hasNext())
@@ -2510,7 +2510,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 }
             }
         }
-        if (ruleInfo.type.equals(UserGroup.ClassMgr.sclass.getName()))
+        if (ruleInfo.type.equals(UserGroup.sclass.getName()))
         {
             GenericIterator<UserGroupRef> refs = resource.listUserGroupRefs();
             while (refs.hasNext())
