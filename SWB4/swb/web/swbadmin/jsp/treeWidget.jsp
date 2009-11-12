@@ -281,6 +281,7 @@
 -->
     <script type="dojo/connect">
 
+        <%=store%>.controllerURL="/swbadmin/jsp/Tree.jsp";
         dojo.dnd.Avatar.prototype._generateText = function()
         {
             return (this.manager.copy ? "<%=getLocaleString("referencing",lang)%>" : "<%=getLocaleString("moving",lang)%>") +
