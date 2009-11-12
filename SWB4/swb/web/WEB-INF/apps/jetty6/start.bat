@@ -1,1 +1,0 @@
-java -Xss256k -Xms24m -Xmx256m -Xverify:none -Dfile.encoding=8859_1 -jar start.jar
