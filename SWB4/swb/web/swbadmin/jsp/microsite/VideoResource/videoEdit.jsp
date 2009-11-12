@@ -63,7 +63,11 @@ Error: Elemento no encontrado...
     document.frmeditvideo.submit();
 }
 </script>
-<div class="columnaIzquierda">    
+<div class="columnaIzquierda">
+    <div class="adminTools">
+    <a class="adminTool" onclick="validaForma()" href="#">Guardar</a>
+    <a class="adminTool" href="<%=cancelurl%>">Cancelar</a>
+    </div>
     <form method="post" name="frmeditvideo" action="<%=paramRequest.getActionUrl()%>">
         <div>
             <h3>Añádele el título, descripción y otra información al video que agregaste.</h3>
@@ -120,11 +124,7 @@ Error: Elemento no encontrado...
                         </fieldset>
                     </div>
                 </div>
-            </fieldset>
-            <p>
-                <strong><input dojoType="dijit.form.Button" onclick="validaForma()" type="button" label="Guardar cambios" value="Guardar cambios" class="button"/></strong>
-                <input class="button" dojoType="dijit.form.Button" type="button" label="Cancelar" value="Cancelar" onclick="window.location='<%=paramRequest.getRenderUrl()%>';"/>
-            </p>
+            </fieldset>            
         </div>
         <input type="hidden" name="uri" value="<%=rec.getURI()%>"/>
         <input type="hidden" name="act" value="edit"/>
