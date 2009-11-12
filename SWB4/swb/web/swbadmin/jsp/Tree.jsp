@@ -760,14 +760,14 @@
         //System.out.println("Ont:"+sont.getRDFOntModel().size());
     }
 
-    System.out.println("Inicio");
+    //System.out.println("Inicio");
     Iterator mit=sont.getRDFOntModel().listSubModels();
     while(mit.hasNext())
     {
         OntModel model=(OntModel)mit.next();
-        System.out.println(model.getNsPrefixMap());
+        //System.out.println(model.getNsPrefixMap());
     }
-    System.out.println("fin");
+    //System.out.println("fin");
 
     String id=request.getParameter("id");
     if(id==null)id="mtree";
