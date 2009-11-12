@@ -3,6 +3,7 @@
 <%!
     private static final int COMMENTS_IN_PAGE = 5;
 %>
+
 <%
     DirectoryObject mse = (DirectoryObject) request.getAttribute("DirectoryObject");
     SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
@@ -28,56 +29,53 @@
 
         String spamMark = (comment.isSpam() ? "[es spam]" : "[marcar como spam]");
 %>
-    <div id="comment<%=comment.getId()%>" class="comment">
-<%
-    try {
-        if (comment.getCreator().getPhoto()!=null) {
-%>
-        <img src="<%=SWBPortal.getWebWorkPath()%><%=comment.getCreator().getPhoto()%>" alt="foto">
-<%
-        } else {
-%>
-        <img src="<%=SWBPortal.getContextPath()%>/swbadmin/images/defaultPhoto.jpg" alt="foto">
-<%
-        }
-    } catch (NullPointerException npe) {}
-        //out.write("<span class="comment-auth">");
-%>
-        <div class="commentText">
-            <p>Escrito por
-<%
-    try {
-        if (!comment.getCreator().getFullName().equals("")) {
-%>
-                <a href="<%=perfilPath%>?user=<%=comment.getCreator().getEncodedURI()%>"><%=comment.getCreator().getFullName()%></a>
-<%
-        } else {
-%>
-                Desconocido
-<%
-        }
-    } catch (NullPointerException npe) {
-%>
-                Desconocido
-<%
-    }
-%>
-                <%=SWBUtils.TEXT.getTimeAgo(comment.getCreated(), mem.getLanguage())%>
-            </p>
-            <p><%=comment.getDescription()%></p>
-<%
-    if (mem.isSigned()) {
-%>
-            <p><a href="javascript:spam(<%=comment.getId()%>)" id="spamMark<%=comment.getId()%>"><%=spamMark%></a></p>
-<%
-    } else if (comment.isSpam()) {
-%>
-            <p><%=spamMark%></p>
-<%
-    }
-%>
+        <div id="comment<%=comment.getId()%>" class="comment">
+            <%
+            try {
+                if (comment.getCreator().getPhoto()!=null) {%>
+                    <img src="<%=SWBPortal.getWebWorkPath()%><%=comment.getCreator().getPhoto()%>" alt="foto">
+                <%
+                } else {
+                %>
+                <img src="<%=SWBPortal.getContextPath()%>/swbadmin/images/defaultPhoto.jpg" alt="foto">
+                <%
+                }
+            } catch (NullPointerException npe) {}
+                //out.write("<span class="comment-auth">");
+            %>
+            <div class="commentText">
+                <p>Escrito por
+                <%
+                    try {
+                        if (!comment.getCreator().getFullName().equals("")) {
+                        %>
+                            <a href="<%=perfilPath%>?user=<%=comment.getCreator().getEncodedURI()%>"><%=comment.getCreator().getFullName()%></a>
+                        <%
+                        } else {
+                        %>
+                            Desconocido
+                        <%
+                        }
+                    } catch (NullPointerException npe) {
+                        %>Desconocido<%
+                    }
+                    %>
+                        <%=SWBUtils.TEXT.getTimeAgo(comment.getCreated(), mem.getLanguage())%>
+                </p>
+                <p><%=comment.getDescription()%></p>
+                <%
+                if (mem.isSigned()) {
+                %>
+                    <p><a href="javascript:spam(<%=comment.getId()%>)" id="spamMark<%=comment.getId()%>"><%=spamMark%></a></p>
+                <%
+                } else if (comment.isSpam()) {
+                %>
+                    <p><%=spamMark%></p>
+                <%
+                }
+                %>
+            </div>
         </div>
-    </div>
-<%
+        <%
     }
 %>
