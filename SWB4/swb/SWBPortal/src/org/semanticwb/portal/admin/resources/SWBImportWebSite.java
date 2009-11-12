@@ -709,14 +709,14 @@ public class SWBImportWebSite extends GenericResource {
             out.println("</select>");
             out.println("</td></tr>");
 
-            Iterator<SemanticClass> itcls = WebSite.ClassMgr.sclass.listSubClasses();
+            Iterator<SemanticClass> itcls = WebSite.sclass.listSubClasses();
             if(itcls.hasNext())
             {
                 out.append("<tr><td align=\"right\">");
                 out.println(paramRequest.getLocaleLogString("wstype")+" <em>*</em>");
                 out.println("</td><td>");
                 out.println("<select name=\"wstype\">");
-                out.println("<option value=\""+WebSite.ClassMgr.sclass.getClassId()+"\">" + WebSite.ClassMgr.sclass.getDisplayName(lang) + "</option>");
+                out.println("<option value=\""+WebSite.sclass.getClassId()+"\">" + WebSite.sclass.getDisplayName(lang) + "</option>");
                 while (itcls.hasNext()) {
                     SemanticClass cls = itcls.next();
                     out.println("<option value=\"" + cls.getClassId() + "\">" + cls.getDisplayName(lang) + "</option>");

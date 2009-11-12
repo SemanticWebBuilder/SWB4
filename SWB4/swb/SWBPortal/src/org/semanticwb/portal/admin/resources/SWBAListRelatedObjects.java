@@ -202,7 +202,7 @@ public class SWBAListRelatedObjects extends GenericResource {
                     if (null != semobj) {
                         log.debug("MODIFIEDBY-------" + semobj.getURI());
                         out.println("<a href=\"#\"  onclick=\"addNewTab('" + semobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + semobj.getDisplayName() + "');return false;\" >");
-                        out.println(semobj.getProperty(User.ClassMgr.swb_usrLogin));
+                        out.println(semobj.getProperty(User.swb_usrLogin));
                         out.println("</a>");
                     }
                 }

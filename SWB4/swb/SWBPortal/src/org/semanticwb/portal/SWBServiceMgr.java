@@ -79,12 +79,12 @@ public class SWBServiceMgr implements SemanticObserver {
                 if (action.equals("CREATE")) //CREATE
                 {
                     updateTraceable(obj,usr);
-                    if(obj.instanceOf(SWBModel.ClassMgr.sclass))
+                    if(obj.instanceOf(SWBModel.sclass))
                     {
                         java.io.File dir=new java.io.File(SWBPortal.getWorkPath() + "/models/"+ obj.getId());
                         dir.mkdirs();
                     }
-                    if(obj.instanceOf(WebSite.ClassMgr.sclass))
+                    if(obj.instanceOf(WebSite.sclass))
                     {
 //                        WebSite website=(WebSite)obj.createGenericInstance();
 //                        //Crea repositorio x defecto
@@ -107,7 +107,7 @@ public class SWBServiceMgr implements SemanticObserver {
                         dir.mkdirs();
                         //
                     }
-                    if(obj.instanceOf(Template.ClassMgr.sclass))
+                    if(obj.instanceOf(Template.sclass))
                     {
                         String ctx=SWBPlatform.getContextPath();
                         Template tpl=(Template)obj.createGenericInstance();
@@ -122,39 +122,39 @@ public class SWBServiceMgr implements SemanticObserver {
                             SWBPortal.writeFileToWorkPath(tpl.getWorkPath()+"/1/"+"template.html", SWBUtils.IO.getStreamFromString(txt), usr.getURI());
                         }catch(Exception e){log.error(e);}
                     }
-                    if(obj.instanceOf(Dns.ClassMgr.sclass))
+                    if(obj.instanceOf(Dns.sclass))
                     {
                         Dns.refresh();
                     }
                 } else //REMOVES
                 {
-                    if (obj.instanceOf(SWBModel.ClassMgr.sclass)) //Removes website
+                    if (obj.instanceOf(SWBModel.sclass)) //Removes website
                     {
                         SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + "/models/"+obj.getId());
-                    } else if (obj.instanceOf(Template.ClassMgr.sclass)) // Removes Template
+                    } else if (obj.instanceOf(Template.sclass)) // Removes Template
                     {
                         SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + obj.getWorkPath());
-                    } else if (obj.instanceOf(Resource.ClassMgr.sclass)) // Removes Resource
+                    } else if (obj.instanceOf(Resource.sclass)) // Removes Resource
                     {
                         SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + obj.getWorkPath());
                     }
-                    if(obj.instanceOf(Dns.ClassMgr.sclass))
+                    if(obj.instanceOf(Dns.sclass))
                     {
                         Dns.refresh();
                     }
-                    if(obj.instanceOf(WebPage.ClassMgr.sclass))
+                    if(obj.instanceOf(WebPage.sclass))
                     {
                         SWBPortal.getIndexMgr().getDefaultIndexer().removeTopic(obj.getModel().getName(), obj.getId());
                     }
-                    if(obj.instanceOf(WebSite.ClassMgr.sclass))
+                    if(obj.instanceOf(WebSite.sclass))
                     {
                         SWBPortal.getIndexMgr().getDefaultIndexer().removeWebSite(obj.getId());
                     }
-                    if(obj.instanceOf(ResourceType.ClassMgr.sclass))
+                    if(obj.instanceOf(ResourceType.sclass))
                     {
                         try
                         {
-                            Class cls2=SWBPortal.getResourceMgr().createSWBResourceClass(obj.getProperty(ResourceType.ClassMgr.swb_resourceClassName));
+                            Class cls2=SWBPortal.getResourceMgr().createSWBResourceClass(obj.getProperty(ResourceType.swb_resourceClassName));
                             ((SWBResource)cls2.newInstance()).uninstall((ResourceType)obj.createGenericInstance());
                         }catch(Exception e){log.error(e);}
                     }
@@ -163,16 +163,16 @@ public class SWBServiceMgr implements SemanticObserver {
             } else if (prop instanceof SemanticProperty)
             {
                 //System.out.println("obj2:"+obj+" "+Resource.sclass+"="+Resource.sclass+" prop:"+prop+"="+Resource.swb_resourceSubType);
-                if(obj.instanceOf(ResourceType.ClassMgr.sclass) && prop.equals(ResourceType.ClassMgr.swb_resourceClassName))
+                if(obj.instanceOf(ResourceType.sclass) && prop.equals(ResourceType.swb_resourceClassName))
                 {
                     try
                     {
-                        Class cls2=SWBPortal.getResourceMgr().createSWBResourceClass(obj.getProperty(ResourceType.ClassMgr.swb_resourceClassName));
+                        Class cls2=SWBPortal.getResourceMgr().createSWBResourceClass(obj.getProperty(ResourceType.swb_resourceClassName));
                         ((SWBResource)cls2.newInstance()).install((ResourceType)obj.createGenericInstance());
                     }catch(Exception e){log.error(e);}
                 }
 
-                if(obj.instanceOf(Resource.ClassMgr.sclass) && prop.equals(Resource.ClassMgr.swb_resourceSubType))
+                if(obj.instanceOf(Resource.sclass) && prop.equals(Resource.swb_resourceSubType))
                 {
                     Resource res=(Resource)obj.createGenericInstance();
                     if(res.getResourceType()==null)
@@ -185,7 +185,7 @@ public class SWBServiceMgr implements SemanticObserver {
                         }
                     }
                 }
-                if(obj.instanceOf(Resource.ClassMgr.sclass))
+                if(obj.instanceOf(Resource.sclass))
                 {
                     SWBResource res=SWBPortal.getResourceMgr().getResource(obj.getURI());
                     //System.out.println("Instanceof SWBResource:"+res);
@@ -194,11 +194,11 @@ public class SWBServiceMgr implements SemanticObserver {
                         if(res!=null)res.setResourceBase(res.getResourceBase());
                     }catch(Exception e){log.error(e);}
                 }
-                if(obj.instanceOf(Dns.ClassMgr.sclass)&& prop.equals(Dns.ClassMgr.swb_dns))
+                if(obj.instanceOf(Dns.sclass)&& prop.equals(Dns.swb_dns))
                 {
                     Dns.refresh();
                 }
-                if(obj.instanceOf(Template.ClassMgr.sclass)&& prop.equals(Template.ClassMgr.swb_active))
+                if(obj.instanceOf(Template.sclass)&& prop.equals(Template.swb_active))
                 {
                     Template aux=(Template)obj.createGenericInstance();
                     Template tpl=SWBPortal.getTemplateMgr().getTemplateImp(aux);
@@ -223,13 +223,13 @@ public class SWBServiceMgr implements SemanticObserver {
                 lastthread=Thread.currentThread().getId();
                 updateTraceable(obj,usr);
 
-                if(obj.instanceOf(WebPage.ClassMgr.sclass))
+                if(obj.instanceOf(WebPage.sclass))
                 {
                     SWBIndexer indexer=SWBPortal.getIndexMgr().getDefaultIndexer();
                     indexer.removeTopic(obj.getModel().getName(),obj.getId());
                     indexer.indexWebPage((WebPage)obj.createGenericInstance());
                 }
-                if(obj.instanceOf(Resource.ClassMgr.sclass))
+                if(obj.instanceOf(Resource.sclass))
                 {
                     //System.out.println("Resource modificado");
                     Resource res=(Resource)obj.createGenericInstance();

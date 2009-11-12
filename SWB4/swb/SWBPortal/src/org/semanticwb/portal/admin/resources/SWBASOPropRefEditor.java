@@ -215,8 +215,8 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                 out.println("</th>");
                 inheritHeader.append("</th>");
             }
-            if (hmprop.get(Template.ClassMgr.swb_templateGroup) != null) {
-                sptemp = (SemanticProperty) hmprop.get(Template.ClassMgr.swb_templateGroup);
+            if (hmprop.get(Template.swb_templateGroup) != null) {
+                sptemp = (SemanticProperty) hmprop.get(Template.swb_templateGroup);
                 String propname = sptemp.getName();
                 try {
                     propname = sptemp.getDisplayName(user.getLanguage());
@@ -334,7 +334,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                 //log.debug("Clase: " + clsobj.getName()+" -- "+sobj.getObjectProperty(UserGroupRef.swb_userGroup).getProperty(UserGroup.swb_title));
                 //String stitle = getDisplaySemObj(sobj, user.getLanguage());
                 if (clsobj.getName().trim().equals("UserGroupRef")) {
-                    title = sobj.getObjectProperty(UserGroupRef.ClassMgr.swb_userGroup).getProperty(UserGroup.swb_title);
+                    title = sobj.getObjectProperty(UserGroupRef.swb_userGroup).getProperty(UserGroup.swb_title);
                 }
 
                 if(idpref==null) idpref = idp;  //
@@ -397,7 +397,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                         if (null != sem_o) {
                             log.debug("MODIFIEDBY-------" + sem_o.getURI());
                             out.println("<a href=\"#\"  onclick=\"addNewTab('" + sem_o.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sem_o.getDisplayName() + "');return false;\" >");
-                            out.println(sem_o.getProperty(User.ClassMgr.swb_usrLogin));
+                            out.println(sem_o.getProperty(User.swb_usrLogin));
                             out.println("</a>");
                         } else {
                             out.print(so.getProperty(semprop));
@@ -408,7 +408,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                         if (null != sem_o) {
                             log.debug("(else)MODIFIEDBY-------" + sem_o.getURI());
                             out.println("<a href=\"#\"  onclick=\"addNewTab('" + sem_o.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sem_o.getDisplayName() + "');return false;\" >");
-                            out.println(sem_o.getProperty(User.ClassMgr.swb_usrLogin));
+                            out.println(sem_o.getProperty(User.swb_usrLogin));
                             out.println("</a>");
                         } else if (so != null) {
                             out.print(so.getProperty(semprop));
@@ -416,8 +416,8 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                     }
                     out.println("</td>");
                 }
-                if (hmprop.get(Template.ClassMgr.swb_templateGroup) != null) {
-                    semprop = (SemanticProperty) hmprop.get(Template.ClassMgr.swb_templateGroup);
+                if (hmprop.get(Template.swb_templateGroup) != null) {
+                    semprop = (SemanticProperty) hmprop.get(Template.swb_templateGroup);
                     semobj = sobj.getObjectProperty(spref);
                     out.println("<td>");
                     out.println(getValueSemProp(semobj.getObjectProperty(semprop), Descriptiveable.swb_title));
@@ -682,7 +682,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                                 if (null != sem_o) {
                                     log.debug("MODIFIEDBY-------" + sem_o.getURI());
                                     out.println("<a href=\"#\"  onclick=\"addNewTab('" + sem_o.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sem_o.getDisplayName() + "');return false;\" >");
-                                    out.println(sem_o.getProperty(User.ClassMgr.swb_usrLogin));
+                                    out.println(sem_o.getProperty(User.swb_usrLogin));
                                     out.println("</a>");
                                 } else {
                                     out.print(so.getProperty(semprop));
@@ -692,7 +692,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                                 if (null != sem_o) {
                                     log.debug("(else)MODIFIEDBY-------" + sem_o.getURI());
                                     out.println("<a href=\"#\"  onclick=\"addNewTab('" + sem_o.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sem_o.getDisplayName() + "');return false;\" >");
-                                    out.println(sem_o.getProperty(User.ClassMgr.swb_usrLogin));
+                                    out.println(sem_o.getProperty(User.swb_usrLogin));
                                     out.println("</a>");
                                 } else if (so != null) {
                                     out.print(so.getProperty(semprop));
@@ -701,8 +701,8 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                             }
                             out.println("</td>");
                         }
-                        if (hmprop.get(Template.ClassMgr.swb_templateGroup) != null) {
-                            semprop = (SemanticProperty) hmprop.get(Template.ClassMgr.swb_templateGroup);
+                        if (hmprop.get(Template.swb_templateGroup) != null) {
+                            semprop = (SemanticProperty) hmprop.get(Template.swb_templateGroup);
                             semobj = sobj.getObjectProperty(spref);
                             out.println("<td>");
                             out.println(getValueSemProp(semobj.getObjectProperty(semprop), Descriptiveable.swb_title));
@@ -835,7 +835,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
             }
 
             SemanticObject obusrRep = null;
-            if (clsprop.equals(Role.ClassMgr.swb_Role) || clsprop.equals(User.swb_UserGroup)) { //||clsprop.equals(UserGroup.swb_UserGroupable)
+            if (clsprop.equals(Role.swb_Role) || clsprop.equals(User.swb_UserGroup)) { //||clsprop.equals(UserGroup.swb_UserGroupable)
                 GenericObject go = obj.getModel().getModelObject().createGenericInstance();
                 if (go instanceof WebSite) {
                     obusrRep = ((WebSite) go).getUserRepository().getSemanticObject();
@@ -844,7 +844,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                 }
             }
 
-            if (obj.getSemanticClass().equals(User.swb_User) && propref.getRangeClass().equals(Role.ClassMgr.swb_Role)) {
+            if (obj.getSemanticClass().equals(User.swb_User) && propref.getRangeClass().equals(Role.swb_Role)) {
                 ite_so = obj.listObjectProperties(propref);
                 while (ite_so.hasNext()) {
                     SemanticObject so = ite_so.next();
@@ -863,7 +863,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
             log.debug("choose:" + clsprop.getName() + ", " + idp);
 
             SWBResourceURL urladd = paramRequest.getActionUrl();
-            if ((idp.endsWith("hasRole") && clsprop.equals(Role.ClassMgr.swb_Role)) || (idp.endsWith("hasUserGroup") && clsprop.equals(UserGroup.ClassMgr.swb_UserGroup))|| (idp.endsWith("hasProcessActivity"))) {
+            if ((idp.endsWith("hasRole") && clsprop.equals(Role.swb_Role)) || (idp.endsWith("hasUserGroup") && clsprop.equals(UserGroup.swb_UserGroup))|| (idp.endsWith("hasProcessActivity"))) {
                 urladd.setAction("choose");
             } else {
                 urladd.setAction("new");
@@ -932,7 +932,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                     out.println("<tr>");
                     out.println("<td>" + stitle + "</td> ");
                     SWBResourceURL urlchoose = paramRequest.getActionUrl();
-                    if ((idp.endsWith("hasRole") && clsprop.equals(Role.ClassMgr.swb_Role)) || (idp.endsWith("hasUserGroup") && clsprop.equals(UserGroup.ClassMgr.swb_UserGroup)) || (idp.endsWith("hasProcessActivity"))) {
+                    if ((idp.endsWith("hasRole") && clsprop.equals(Role.swb_Role)) || (idp.endsWith("hasUserGroup") && clsprop.equals(UserGroup.swb_UserGroup)) || (idp.endsWith("hasProcessActivity"))) {
                         urlchoose.setAction("choose");
                         urlchoose.setParameter("suri", id);
                     } else {
