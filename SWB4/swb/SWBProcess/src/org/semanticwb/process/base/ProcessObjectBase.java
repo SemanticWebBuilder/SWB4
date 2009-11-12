@@ -3,10 +3,10 @@ package org.semanticwb.process.base;
 
 public class ProcessObjectBase extends org.semanticwb.model.base.GenericObjectBase 
 {
-    public static class ClassMgr
-    {
        public static final org.semanticwb.platform.SemanticClass swbps_ProcessObject=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessObject");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessObject");
+    public static class ClassMgr
+    {
 
        public static java.util.Iterator<org.semanticwb.process.ProcessObject> listProcessObjects(org.semanticwb.model.SWBModel model)
        {

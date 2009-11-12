@@ -3,29 +3,6 @@ package org.semanticwb.process.base;
 
 public class ProcessSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Indexable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.Localeable,org.semanticwb.model.Filterable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable
 {
-    public static class ClassMgr
-    {
-       public static final org.semanticwb.platform.SemanticProperty swb_deleted=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#deleted");
-       public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
-       public static final org.semanticwb.platform.SemanticClass swb_Language=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Language");
-       public static final org.semanticwb.platform.SemanticProperty swb_language=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#language");
-       public static final org.semanticwb.platform.SemanticClass swb_SWBModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#SWBModel");
-       public static final org.semanticwb.platform.SemanticProperty swb_hasSubModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasSubModel");
-       public static final org.semanticwb.platform.SemanticProperty swb_undeleteable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#undeleteable");
-       public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
-       public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
-       public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
-       public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
-       public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
-       public static final org.semanticwb.platform.SemanticClass swb_UserRepository=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserRepository");
-       public static final org.semanticwb.platform.SemanticProperty swb_userRepository=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepository");
-       public static final org.semanticwb.platform.SemanticProperty swb_indexable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#indexable");
-       public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
-       public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
-       public static final org.semanticwb.platform.SemanticProperty swb_homePage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#homePage");
-       public static final org.semanticwb.platform.SemanticClass swb_Template=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Template");
-       public static final org.semanticwb.platform.SemanticProperty swb_defaultTemplate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#defaultTemplate");
-       public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
        public static final org.semanticwb.platform.SemanticClass swbps_XOREventGateWay=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#XOREventGateWay");
        public static final org.semanticwb.platform.SemanticClass swbps_XORGateWay=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#XORGateWay");
        public static final org.semanticwb.platform.SemanticClass swbps_ProcessInstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessInstance");
@@ -50,6 +27,8 @@ public class ProcessSiteBase extends org.semanticwb.model.WebSite implements org
        public static final org.semanticwb.platform.SemanticClass swbps_ConnectionObject=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ConnectionObject");
        public static final org.semanticwb.platform.SemanticClass swbps_ProcessSite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessSite");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessSite");
+    public static class ClassMgr
+    {
 
        public static java.util.Iterator<org.semanticwb.process.ProcessSite> listProcessSites(org.semanticwb.model.SWBModel model)
        {
@@ -123,7 +102,7 @@ public class ProcessSiteBase extends org.semanticwb.model.WebSite implements org
 
     public org.semanticwb.process.XOREventGateWay createXOREventGateWay()
     {
-        long id=getSemanticObject().getModel().getCounter(ClassMgr.swbps_XOREventGateWay);
+        long id=getSemanticObject().getModel().getCounter(swbps_XOREventGateWay);
         return org.semanticwb.process.XOREventGateWay.ClassMgr.createXOREventGateWay(String.valueOf(id),this);
     } 
 
@@ -153,7 +132,7 @@ public class ProcessSiteBase extends org.semanticwb.model.WebSite implements org
 
     public org.semanticwb.process.XORGateWay createXORGateWay()
     {
-        long id=getSemanticObject().getModel().getCounter(ClassMgr.swbps_XORGateWay);
+        long id=getSemanticObject().getModel().getCounter(swbps_XORGateWay);
         return org.semanticwb.process.XORGateWay.ClassMgr.createXORGateWay(String.valueOf(id),this);
     } 
 
@@ -183,7 +162,7 @@ public class ProcessSiteBase extends org.semanticwb.model.WebSite implements org
 
     public org.semanticwb.process.ProcessInstance createProcessInstance()
     {
-        long id=getSemanticObject().getModel().getCounter(ClassMgr.swbps_ProcessInstance);
+        long id=getSemanticObject().getModel().getCounter(swbps_ProcessInstance);
         return org.semanticwb.process.ProcessInstance.ClassMgr.createProcessInstance(String.valueOf(id),this);
     } 
 
@@ -213,7 +192,7 @@ public class ProcessSiteBase extends org.semanticwb.model.WebSite implements org
 
     public org.semanticwb.model.FormView createFormView()
     {
-        long id=getSemanticObject().getModel().getCounter(ClassMgr.swbxf_FormView);
+        long id=getSemanticObject().getModel().getCounter(swbxf_FormView);
         return org.semanticwb.model.FormView.ClassMgr.createFormView(String.valueOf(id),this);
     } 
 
@@ -243,7 +222,7 @@ public class ProcessSiteBase extends org.semanticwb.model.WebSite implements org
 
     public org.semanticwb.process.InitEvent createInitEvent()
     {
-        long id=getSemanticObject().getModel().getCounter(ClassMgr.swbps_InitEvent);
+        long id=getSemanticObject().getModel().getCounter(swbps_InitEvent);
         return org.semanticwb.process.InitEvent.ClassMgr.createInitEvent(String.valueOf(id),this);
     } 
 
@@ -297,7 +276,7 @@ public class ProcessSiteBase extends org.semanticwb.model.WebSite implements org
 
     public org.semanticwb.process.FlowObjectInstance createFlowObjectInstance()
     {
-        long id=getSemanticObject().getModel().getCounter(ClassMgr.swbps_FlowObjectInstance);
+        long id=getSemanticObject().getModel().getCounter(swbps_FlowObjectInstance);
         return org.semanticwb.process.FlowObjectInstance.ClassMgr.createFlowObjectInstance(String.valueOf(id),this);
     } 
 
@@ -327,7 +306,7 @@ public class ProcessSiteBase extends org.semanticwb.model.WebSite implements org
 
     public org.semanticwb.process.AutoTask createAutoTask()
     {
-        long id=getSemanticObject().getModel().getCounter(ClassMgr.swbps_AutoTask);
+        long id=getSemanticObject().getModel().getCounter(swbps_AutoTask);
         return org.semanticwb.process.AutoTask.ClassMgr.createAutoTask(String.valueOf(id),this);
     } 
 
@@ -357,7 +336,7 @@ public class ProcessSiteBase extends org.semanticwb.model.WebSite implements org
 
     public org.semanticwb.process.MessageFlow createMessageFlow()
     {
-        long id=getSemanticObject().getModel().getCounter(ClassMgr.swbps_MessageFlow);
+        long id=getSemanticObject().getModel().getCounter(swbps_MessageFlow);
         return org.semanticwb.process.MessageFlow.ClassMgr.createMessageFlow(String.valueOf(id),this);
     } 
 
@@ -387,7 +366,7 @@ public class ProcessSiteBase extends org.semanticwb.model.WebSite implements org
 
     public org.semanticwb.process.EndEvent createEndEvent()
     {
-        long id=getSemanticObject().getModel().getCounter(ClassMgr.swbps_EndEvent);
+        long id=getSemanticObject().getModel().getCounter(swbps_EndEvent);
         return org.semanticwb.process.EndEvent.ClassMgr.createEndEvent(String.valueOf(id),this);
     } 
 
@@ -417,7 +396,7 @@ public class ProcessSiteBase extends org.semanticwb.model.WebSite implements org
 
     public org.semanticwb.process.XORDataGateWay createXORDataGateWay()
     {
-        long id=getSemanticObject().getModel().getCounter(ClassMgr.swbps_XORDataGateWay);
+        long id=getSemanticObject().getModel().getCounter(swbps_XORDataGateWay);
         return org.semanticwb.process.XORDataGateWay.ClassMgr.createXORDataGateWay(String.valueOf(id),this);
     } 
 
@@ -447,7 +426,7 @@ public class ProcessSiteBase extends org.semanticwb.model.WebSite implements org
 
     public org.semanticwb.process.Process createProcess()
     {
-        long id=getSemanticObject().getModel().getCounter(ClassMgr.swbps_Process);
+        long id=getSemanticObject().getModel().getCounter(swbps_Process);
         return org.semanticwb.process.Process.ClassMgr.createProcess(String.valueOf(id),this);
     } 
 
@@ -477,7 +456,7 @@ public class ProcessSiteBase extends org.semanticwb.model.WebSite implements org
 
     public org.semanticwb.process.ANDGateWay createANDGateWay()
     {
-        long id=getSemanticObject().getModel().getCounter(ClassMgr.swbps_ANDGateWay);
+        long id=getSemanticObject().getModel().getCounter(swbps_ANDGateWay);
         return org.semanticwb.process.ANDGateWay.ClassMgr.createANDGateWay(String.valueOf(id),this);
     } 
 
@@ -507,7 +486,7 @@ public class ProcessSiteBase extends org.semanticwb.model.WebSite implements org
 
     public org.semanticwb.process.SequenceFlow createSequenceFlow()
     {
-        long id=getSemanticObject().getModel().getCounter(ClassMgr.swbps_SequenceFlow);
+        long id=getSemanticObject().getModel().getCounter(swbps_SequenceFlow);
         return org.semanticwb.process.SequenceFlow.ClassMgr.createSequenceFlow(String.valueOf(id),this);
     } 
 
@@ -537,7 +516,7 @@ public class ProcessSiteBase extends org.semanticwb.model.WebSite implements org
 
     public org.semanticwb.process.InterEvent createInterEvent()
     {
-        long id=getSemanticObject().getModel().getCounter(ClassMgr.swbps_InterEvent);
+        long id=getSemanticObject().getModel().getCounter(swbps_InterEvent);
         return org.semanticwb.process.InterEvent.ClassMgr.createInterEvent(String.valueOf(id),this);
     } 
 
@@ -591,7 +570,7 @@ public class ProcessSiteBase extends org.semanticwb.model.WebSite implements org
 
     public org.semanticwb.process.ComplexGateWay createComplexGateWay()
     {
-        long id=getSemanticObject().getModel().getCounter(ClassMgr.swbps_ComplexGateWay);
+        long id=getSemanticObject().getModel().getCounter(swbps_ComplexGateWay);
         return org.semanticwb.process.ComplexGateWay.ClassMgr.createComplexGateWay(String.valueOf(id),this);
     } 
 
@@ -645,7 +624,7 @@ public class ProcessSiteBase extends org.semanticwb.model.WebSite implements org
 
     public org.semanticwb.process.ORGateWay createORGateWay()
     {
-        long id=getSemanticObject().getModel().getCounter(ClassMgr.swbps_ORGateWay);
+        long id=getSemanticObject().getModel().getCounter(swbps_ORGateWay);
         return org.semanticwb.process.ORGateWay.ClassMgr.createORGateWay(String.valueOf(id),this);
     } 
 
@@ -675,7 +654,7 @@ public class ProcessSiteBase extends org.semanticwb.model.WebSite implements org
 
     public org.semanticwb.process.GateWay createGateWay()
     {
-        long id=getSemanticObject().getModel().getCounter(ClassMgr.swbps_GateWay);
+        long id=getSemanticObject().getModel().getCounter(swbps_GateWay);
         return org.semanticwb.process.GateWay.ClassMgr.createGateWay(String.valueOf(id),this);
     } 
 
@@ -705,7 +684,7 @@ public class ProcessSiteBase extends org.semanticwb.model.WebSite implements org
 
     public org.semanticwb.process.AssociationFlow createAssociationFlow()
     {
-        long id=getSemanticObject().getModel().getCounter(ClassMgr.swbps_AssociationFlow);
+        long id=getSemanticObject().getModel().getCounter(swbps_AssociationFlow);
         return org.semanticwb.process.AssociationFlow.ClassMgr.createAssociationFlow(String.valueOf(id),this);
     } 
 

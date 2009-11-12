@@ -25,7 +25,7 @@ public class SWBProcessMgr
     public static List<ProcessInstance> getActiveProcessInstance(ProcessSite site, Process process)
     {
         ArrayList ret=new ArrayList();
-        Iterator<FlowObjectInstance> it=FlowObjectInstance.listFlowObjectInstanceByFlowObjectType(process, site);
+        Iterator<FlowObjectInstance> it=FlowObjectInstance.ClassMgr.listFlowObjectInstanceByFlowObjectType(process, site);
         while (it.hasNext())
         {
             ProcessInstance processInstance = (ProcessInstance)it.next();
