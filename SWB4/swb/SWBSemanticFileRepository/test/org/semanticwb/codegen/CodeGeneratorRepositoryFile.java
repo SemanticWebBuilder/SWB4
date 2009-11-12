@@ -35,6 +35,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBUtils;
 import static org.junit.Assert.*;
 
 /**
@@ -49,9 +50,15 @@ public class CodeGeneratorRepositoryFile {
     @BeforeClass
     public static void setUpClass() throws Exception
     {
-        SWBPlatform.setUseDB(false);
-        //SWBPlatform.setUseWebProperties(false);
-        SWBPlatform.createInstance(null);
+        String base=SWBUtils.getApplicationPath();
+        SWBPlatform.createInstance();
+        //SWBPlatform.getSemanticMgr().initializeDB();
+        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/swb.owl");
+        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/swb_rep.owl");
+        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/office.owl");
+        SWBPlatform.getSemanticMgr().loadBaseVocabulary();
+        //SWBPlatform.getSemanticMgr().loadDBModels();
+        SWBPlatform.getSemanticMgr().getOntology().rebind();
         
     }
 
