@@ -6,7 +6,15 @@
 <%@page import="java.util.*"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
-<h2>Mis solicitudes</h2>
+<%
+if(request.getParameter("user")==null)
+    {
+    %>
+    <h2>Mis solicitudes</h2>
+    <%
+    }
+%>
+
 <%
             User owner = paramRequest.getUser();
             User user = owner;
@@ -75,11 +83,20 @@
                 }
                 if (isStrategy && contTot > 0)
                 {%>
+
+<%
+                    if (request.getParameter("user") == null)
+                    {
+%>
 <ul class="listaElementos">
     <li>
         <a class="contactos_nombre" href="<%=requestedPath%><%=userParam%>">Has solicidado a <%=contTot%> personas que se unan como tus amigos</a>
     </li>
 </ul>
+<%
+                    }
+%>        
+
 
 <%}
                 else if (contTot == 0)
