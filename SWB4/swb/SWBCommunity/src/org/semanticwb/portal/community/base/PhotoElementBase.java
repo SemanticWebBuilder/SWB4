@@ -53,6 +53,17 @@ public class PhotoElementBase extends org.semanticwb.portal.community.MicroSiteE
        {
            return (getPhotoElement(id, model)!=null);
        }
+   public static java.util.Iterator<org.semanticwb.portal.community.PhotoElement> listPhotoElementByModifiedBy(org.semanticwb.model.User modifiedby,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.PhotoElement> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_modifiedBy, modifiedby.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.PhotoElement> listPhotoElementByModifiedBy(org.semanticwb.model.User modifiedby)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.PhotoElement> it=new org.semanticwb.model.GenericIterator(modifiedby.getSemanticObject().getModel().listSubjects(swb_modifiedBy,modifiedby.getSemanticObject()));
+       return it;
+   }
    public static java.util.Iterator<org.semanticwb.portal.community.PhotoElement> listPhotoElementByPhotoWebPage(org.semanticwb.model.WebPage photowebpage,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.PhotoElement> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_photoWebPage, photowebpage.getSemanticObject()));
@@ -62,6 +73,28 @@ public class PhotoElementBase extends org.semanticwb.portal.community.MicroSiteE
    public static java.util.Iterator<org.semanticwb.portal.community.PhotoElement> listPhotoElementByPhotoWebPage(org.semanticwb.model.WebPage photowebpage)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.PhotoElement> it=new org.semanticwb.model.GenericIterator(photowebpage.getSemanticObject().getModel().listSubjects(swbcomm_photoWebPage,photowebpage.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.portal.community.PhotoElement> listPhotoElementByCreator(org.semanticwb.model.User creator,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.PhotoElement> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_creator, creator.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.PhotoElement> listPhotoElementByCreator(org.semanticwb.model.User creator)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.PhotoElement> it=new org.semanticwb.model.GenericIterator(creator.getSemanticObject().getModel().listSubjects(swb_creator,creator.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.portal.community.PhotoElement> listPhotoElementByComment(org.semanticwb.portal.community.Comment hascomment,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.PhotoElement> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_hasComment, hascomment.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.PhotoElement> listPhotoElementByComment(org.semanticwb.portal.community.Comment hascomment)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.PhotoElement> it=new org.semanticwb.model.GenericIterator(hascomment.getSemanticObject().getModel().listSubjects(swbcomm_hasComment,hascomment.getSemanticObject()));
        return it;
    }
     }
