@@ -883,8 +883,8 @@ public class CodeGenerator
             SemanticProperty tpp = tppit.next();
             if (tpp.isObjectProperty())
             {
-                if (!isPropertyOfParent(tpp, parent))
-                {
+                //if (!isPropertyOfParent(tpp, parent))
+                //{
                     SemanticClass tpcToReturn = tpp.getRangeClass();
                     if (tpcToReturn != null && tpcToReturn.getURI() != null && tpcToReturn.isSWB())
                     {
@@ -906,7 +906,7 @@ public class CodeGenerator
                         javaClassContent.append("       return it;" + ENTER);
                         javaClassContent.append("   }" + ENTER);
                     }
-                }
+                //}
             }
         }
 
