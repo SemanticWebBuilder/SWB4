@@ -43,7 +43,7 @@ if(request.getParameter("user")==null)
             }
             int contTot = 0;
             boolean hasRequest = false;
-            Iterator<FriendshipProspect> itFriendshipProspect = FriendshipProspect.listFriendshipProspectByFriendShipRequester(owner, wpage.getWebSite());
+            Iterator<FriendshipProspect> itFriendshipProspect = FriendshipProspect.ClassMgr.listFriendshipProspectByFriendShipRequester(owner, wpage.getWebSite());
             if (itFriendshipProspect.hasNext())
             {
                 hasRequest = true;
@@ -54,7 +54,7 @@ if(request.getParameter("user")==null)
 
 
 <%
-                itFriendshipProspect = FriendshipProspect.listFriendshipProspectByFriendShipRequester(owner, wpage.getWebSite());
+                itFriendshipProspect = FriendshipProspect.ClassMgr.listFriendshipProspectByFriendShipRequester(owner, wpage.getWebSite());
                 while (itFriendshipProspect.hasNext())
                 {
                     FriendshipProspect friendshipProspect = itFriendshipProspect.next();

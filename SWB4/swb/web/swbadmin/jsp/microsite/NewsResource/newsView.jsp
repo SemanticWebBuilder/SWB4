@@ -27,7 +27,7 @@
 
             ArrayList<NewsElement> elements = new ArrayList();
             int elementos = 0;
-            Iterator<NewsElement> it = NewsElement.listNewsElementByNewsWebPage(wpage, wpage.getWebSite());
+            Iterator<NewsElement> it = NewsElement.ClassMgr.listNewsElementByNewsWebPage(wpage, wpage.getWebSite());
             it = SWBComparator.sortByCreated(it, false);
             while (it.hasNext())
             {

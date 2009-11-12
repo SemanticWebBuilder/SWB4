@@ -44,7 +44,7 @@
     SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
     
     //Obtener valores de propiedades genericas
-    String dirPhoto = semObject.getProperty(DirectoryObject.ClassMgr.swbcomm_dirPhoto);
+    String dirPhoto = semObject.getProperty(DirectoryObject.swbcomm_dirPhoto);
     String[] sImgs = null;
 
     int cont = 0;
@@ -114,14 +114,14 @@
     String contactName = semObject.getProperty(Commerce.swbcomm_contactName);
     String contactPhoneNumber = semObject.getProperty(Commerce.swbcomm_contactPhoneNumber);
     String contactEmail = semObject.getProperty(Commerce.swbcomm_contactEmail);
-    String website = semObject.getProperty(Commerce.ClassMgr.swbcomm_webSite);
+    String website = semObject.getProperty(Commerce.swbcomm_webSite);
     /*---------- Facilities ------------*/
-    String paymentType = semObject.getProperty(Commerce.ClassMgr.swbcomm_paymentType);
+    String paymentType = semObject.getProperty(Commerce.swbcomm_paymentType);
     String impairedPeopleAccessible = semObject.getProperty(Commerce.swbcomm_impairedPeopleAccessible);
     String parkingLot = semObject.getProperty(Commerce.swbcomm_parkingLot);
     String elevator = semObject.getProperty(Commerce.swbcomm_elevator);
     String foodCourt = semObject.getProperty(Commerce.swbcomm_foodCourt);
-    String serviceHours = semObject.getProperty(Commerce.ClassMgr.swbcomm_serviceHours);
+    String serviceHours = semObject.getProperty(Commerce.swbcomm_serviceHours);
 
     SWBResourceURL url = paramRequest.getActionUrl();
 %>

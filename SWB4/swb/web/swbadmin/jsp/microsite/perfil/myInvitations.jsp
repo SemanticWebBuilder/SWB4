@@ -34,7 +34,7 @@
                 isStrategy = true;
             }
             boolean hasInvitations = false;
-            Iterator<FriendshipProspect> itFriendshipProspect = FriendshipProspect.listFriendshipProspectByFriendShipRequested(owner, wpage.getWebSite());
+            Iterator<FriendshipProspect> itFriendshipProspect = FriendshipProspect.ClassMgr.listFriendshipProspectByFriendShipRequested(owner, wpage.getWebSite());
             if (itFriendshipProspect.hasNext())
             {
                 hasInvitations = true;
@@ -57,7 +57,7 @@
 <div id="friendCards">
     <%                }
                 int contTot = 0;
-                itFriendshipProspect = FriendshipProspect.listFriendshipProspectByFriendShipRequested(owner, wpage.getWebSite());
+                itFriendshipProspect = FriendshipProspect.ClassMgr.listFriendshipProspectByFriendShipRequested(owner, wpage.getWebSite());
                 while (itFriendshipProspect.hasNext())
                 {
                     FriendshipProspect friendshipProspect = itFriendshipProspect.next();
