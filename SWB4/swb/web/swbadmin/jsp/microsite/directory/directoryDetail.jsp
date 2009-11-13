@@ -27,7 +27,6 @@
 <%@page import="org.semanticwb.portal.community.*"%>
 <%@page import="org.semanticwb.portal.lib.SWBResponse"%>
 
-
 <%
     SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
     SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
@@ -78,7 +77,7 @@
     if (sImgs.length > 0) {
         imggalery = SWBPortal.UTIL.getGalleryScript(sImgs);
     } else {
-        imggalery = "<img src=\"" + SWBPortal.getContextPath() + "/swbadmin/images/noDisponible.gif\"/>";
+        imggalery = "<img src=\"" + SWBPortal.getContextPath() + "/swbadmin/images/noDisponible.gif\" style=\"margin-left:0px;\"/>";
     }
 
     String title = dirObj.getTitle();
