@@ -1,15 +1,23 @@
 <%@page import="org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
-<%
-            User user = (User) request.getAttribute("user");           
+<%@page import="org.semanticwb.platform.SemanticObject"%><%
+            User user = (User) request.getAttribute("user");
             WebSite site = ((WebPage) request.getAttribute("webpage")).getWebSite();
-            if(!user.isSigned()) return;
+            if (request.getParameter("user") != null && !request.getParameter("user").equals(user.getURI()))
+            {
+                SemanticObject semObj = SemanticObject.createSemanticObject(request.getParameter("user"));
+                user = (User) semObj.createGenericInstance();
+            }
+            /*if (!user.isSigned())
+            {
+                return;
+            }*/
             Iterator<Friendship> itMyFriends = Friendship.ClassMgr.listFriendshipByFriend(user, site);
-            int count=0;
+            int count = 0;
             while (itMyFriends.hasNext())
             {
                 itMyFriends.next();
-                count++;                
+                count++;
             }
-            String url=site.getWebPage("Amigos").getUrl();
+            String url = site.getWebPage("Amigos").getUrl();
 %>
-          <li><a href="<%=url%>" >Mis amigos (<%=count%>)</a></li>
+<li><a href="<%=url%>" >Amigos de <%=user.getFullName()%> (<%=count%>)</a></li>
