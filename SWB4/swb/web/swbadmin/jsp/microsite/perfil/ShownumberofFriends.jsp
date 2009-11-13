@@ -20,4 +20,4 @@
             }
             String url = site.getWebPage("Amigos").getUrl();
 %>
-<li><a href="<%=url%>" >Amigos de <%=user.getFullName()%> (<%=count%>)</a></li>
+<li><a href="<%=url%>" >Amigos (<%=count%>)</a></li>

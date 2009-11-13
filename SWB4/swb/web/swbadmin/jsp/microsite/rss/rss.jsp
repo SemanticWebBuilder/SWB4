@@ -63,7 +63,7 @@
                 String userURI = java.net.URLEncoder.encode(user.getURI());
                 String pageUri = "/swbadmin/jsp/microsite/rss/rss.jsp";
                 String siteid = site.getId();
-%><li><a class="rss" href="<%=pageUri%>?user=<%=userURI%>&site=<%=siteid%>" >Mis artículos publicados (<%=count%>)</a></li><%
+%><li><a class="rss" href="<%=pageUri%>?user=<%=userURI%>&site=<%=siteid%>" >Artículos publicados (<%=count%>)</a></li><%
             }
             else
             {
