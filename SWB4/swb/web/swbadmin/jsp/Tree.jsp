@@ -241,6 +241,9 @@
         if(cls.equals(Language.sclass))
         {
             url+="/swbadmin/jsp/addLang.jsp";
+        }else if(cls.equals(Country.sclass))
+        {
+            url+="/swbadmin/jsp/addCountry.jsp";
         }else
         {
             url+="/swbadmin/jsp/SemObjectEditor.jsp";
@@ -261,8 +264,13 @@
         menus.put(getMenuReload(lang));
 
         SemanticProperty herarprop=null;   //Herarquical property;
+        //System.out.println(cls);
         Iterator<SemanticProperty> hprops=cls.listInverseHerarquicalProperties();
-        if(hprops.hasNext())herarprop=hprops.next();
+        while(hprops.hasNext())
+        {
+            herarprop=hprops.next();
+            //System.out.println("herarprop1:"+herarprop);
+        }
 
         //System.out.println("herarprop:"+herarprop);
 
@@ -276,10 +284,12 @@
                     if(so.getObjectProperty(herarprop)==null)
                     {
                         addSemanticObject(childs, so,false,lang);
+                        System.out.println("so1:"+so);
                     }
                 }else
                 {
                     addSemanticObject(childs, so,false,lang);
+                    System.out.println("so2:"+so);
                 }
             }
         }else
