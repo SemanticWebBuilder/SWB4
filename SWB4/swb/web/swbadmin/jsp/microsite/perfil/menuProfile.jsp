@@ -35,17 +35,17 @@
                 parameter = "?user=" + java.net.URLEncoder.encode(parameter);
             }
     %>
-    <li><a <%=classPerfil%> href="{topic@getUrl}/../perfil<%=parameter%>" >Principal</a></li>
-    <li><a <%=classamigos%> href="{topic@getUrl}/../Amigos<%=parameter%>" >Amigos</a></li>
-    <li><a <%=classeventos%> href="{topic@getUrl}/../Mis_Eventos<%=parameter%>" >Eventos</a></li>
+    <li><a <%=classPerfil%> href="<%=webpage.getWebSite().getWebPage("perfil").getUrl()%><%=parameter%>" >Principal</a></li>
+    <li><a <%=classamigos%> href="<%=webpage.getWebSite().getWebPage("Amigos").getUrl()%><%=parameter%>" >Amigos</a></li>
+    <li><a <%=classeventos%> href="<%=webpage.getWebSite().getWebPage("Mis_Eventos").getUrl()%><%=parameter%>" >Eventos</a></li>
     <%
         if(request.getParameter("user")==null)
             {
             %>
-            <li><a <%=classfaviritos%> href="{topic@getUrl}/../Mis_favoritos<%=parameter%>" >Favoritos</a></li>
+            <li><a <%=classfaviritos%> href="<%=webpage.getWebSite().getWebPage("Mis_favoritos").getUrl()%><%=parameter%>" >Favoritos</a></li>
             <%
             }
     %>
     
-    <li><a <%=classtwiter%> href="{topic@getUrl}/../Twitter<%=parameter%>" >Twitter</a></li>
+    <li><a <%=classtwiter%> href="<%=webpage.getWebSite().getWebPage("Twitter").getUrl()%><%=parameter%>" >Twitter</a></li>
 </ul>
