@@ -73,6 +73,8 @@ html, body, #main{
 .swbIconPFlowU,
 .swbIconLanguages,
 .swbIconLanguage,
+.swbIconCountrys,
+.swbIconCountry,
 .swbIconDevices,
 .swbIconDevice,
 .swbIconRules,
@@ -142,6 +144,8 @@ html, body, #main{
 .swbIconDns         { background-position: -80px -18px; }
 .swbIconLanguages   { background-position: -20px -0px; }
 .swbIconLanguage    { background-position: -20px -18px; }
+.swbIconCountrys   { background-position: -440px -0px; }
+.swbIconCountry    { background-position: -440px -18px; }
 .swbIconRoles       { background-position: -40px -0px; }
 .swbIconRole        { background-position: -40px -18px; }
 .swbIconUser        { background-position: -0px -18px; }
@@ -163,70 +167,14 @@ html, body, #main{
 .swbIconPFlowU      { background-position: -120px -36px; }
 .swbIconClass       { background-position: -380px -18px; }
 .swbIconClassU      { background-position: -380px -36px; }
-.swbIconTrash       { background-position: -440px -18px; }
-.swbIconReload      { background-position: -520px -18px; }
+.swbIconTrash       { background-position: -440px -200px; }
+.swbIconReload      { background-position: -520px -200px; }
 .swbIconDelete      { background-position: -103px -200px; }
 .swbIconAdd         { background-position: -242px -200px; }
 .swbIconEdit        { background-position: -3px -145px; }
 .swbIconCalendars   { background-position: -220px -0px; }
 .swbIconCalendar    { background-position: -220px -18px; }
 .swbIconCalendarU   { background-position: -220px -36px; }
-
-/*  48x48 */
-
-.swbIcon2MnuView,
-.swbIcon2MnuReload,
-.swbIcon2MnuDelete,
-.swbIcon2MnuAdd,
-.swbIcon2MnuActive,
-.swbIcon2MnuEdit,
-.swbIcon2Resources,
-.swbIcon2ResourceType,
-.swbIcon2Resource,
-.swbIcon2ResourceU,
-.swbIcon2TemplateGroup,
-.swbIcon2Templates,
-.swbIcon2Template,
-.swbIcon2TemplateU,
-.swbIcon2WebSites,
-.swbIcon2WebSite,
-.swbIcon2WebSiteU,
-.swbIcon2UserRespositorys,
-.swbIcon2UserRepository,
-.swbIcon2WebPage,
-.swbIcon2WebPageU,
-.swbIcon2Camps,
-.swbIcon2Camp,
-.swbIcon2CampU,
-.swbIcon2PFlows,
-.swbIcon2PFlow,
-.swbIcon2PFlowU,
-.swbIcon2Languages,
-.swbIcon2Language,
-.swbIcon2Devices,
-.swbIcon2Device,
-.swbIcon2Rules,
-.swbIcon2Rule,
-.swbIcon2RuleU,
-.swbIcon2Roles,
-.swbIcon2Role,
-.swbIcon2RoleU,
-.swbIcon2Dnss,
-.swbIcon2Dns,
-.swbIcon2UserGroups,
-.swbIcon2UserGroup,
-.swbIcon2ObjectBehaviors,
-.swbIcon2ObjectBehavior,
-.swbIcon2Menus,
-.swbIcon2Menu
-{
-	background-repeat: no-repeat;
-	width:48px;
-	height:48px;
-	text-align: center;
-	padding-right:0px;
-    background-image: url('../icons/icons48x48.png'); background-position: -0px 1px;
-}
 
 
 .admViewProperties table{ padding:0px; margin:-10px; width:100%; }
