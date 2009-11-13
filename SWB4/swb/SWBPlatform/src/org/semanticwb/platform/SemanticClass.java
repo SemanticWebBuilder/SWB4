@@ -101,19 +101,20 @@ public class SemanticClass
     private void init()
     {
         m_ontclass=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getOntClass(m_class.getURI());
-        //System.out.println(m_class+" "+m_ontclass);
+        //System.out.println(m_ontclass+" "+m_ontclass);
         m_props=new HashMap();
         herarquicalProps=new ArrayList();
         inverseHerarquicalProps=new ArrayList();
         // super-classes
-        //System.out.println("m_class:"+m_class);
+        //System.out.println("m_class1:"+m_class);
+        //Thread.currentThread().dumpStack();
         int x=0;
         for (Iterator i = m_class.listDeclaredProperties(false); i.hasNext(); )
         {
             Property prop=(Property)i.next();
             x++;
             SemanticProperty p=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(prop);
-            //System.out.println("cls:"+this+" prop:"+prop+" name:"+p.isUsedAsName()+" he:"+p.isHeraquicalRelation()+" inv:"+p.isInverseHeraquicalRelation()+" dom:"+p.getDomainClass());
+            //System.out.println("cls:"+this+" prop:"+prop+" name:"+p.isUsedAsName()+" he:"+p.isHeraquicalRelation()+" inv:"+p.isInverseHeraquicalRelation());
             if(p.isUsedAsName())displayNameProperty=p;
             if(p.isHeraquicalRelation())herarquicalProps.add(p);
             if(p.isInverseHeraquicalRelation())inverseHerarquicalProps.add(p);

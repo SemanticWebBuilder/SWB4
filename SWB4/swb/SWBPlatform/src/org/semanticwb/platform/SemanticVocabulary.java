@@ -157,6 +157,7 @@ public class SemanticVocabulary
                     //System.out.println("Remove:"+tpp.getName());
                     tppit.remove();
                     tpc.herarquicalProps.remove(tpp);
+                    tpc.inverseHerarquicalProps.remove(tpp);
                 }
             }
 //        }
