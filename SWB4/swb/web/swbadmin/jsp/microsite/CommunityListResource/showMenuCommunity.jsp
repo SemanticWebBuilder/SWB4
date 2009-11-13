@@ -2,17 +2,15 @@
 <%!
     private Member getMember(User user, MicroSite site)
     {
-        //System.out.println("getMember:"+user+" "+site);
-        if(site!=null)
+        if (site != null)
         {
-            Iterator<Member> it=Member.ClassMgr.listMemberByUser(user,site.getWebSite());
-            while(it.hasNext())
+            Iterator<Member> it = Member.ClassMgr.listMemberByUser(user, site.getWebSite());
+            while (it.hasNext())
             {
-                Member mem=it.next();
-                //System.out.println("mem:"+mem+" "+mem.getMicroSite());
-                if(mem.getMicroSite().equals(site))
+                Member mem = it.next();
+                if (mem.getMicroSite().equals(site))
                 {
-                   return mem;
+                    return mem;
                 }
             }
         }
@@ -20,79 +18,53 @@
     }
 %>
 <%
-            WebPage parent = (WebPage) request.getAttribute("webpage");
-            User user=(User)request.getAttribute("user");
+            WebPage community = null;
+            User user = (User) request.getAttribute("user");
             WebPage currentpage = (WebPage) request.getAttribute("webpage");
-            String classActiveTwitter = "", classActiveBlog = "", classActiveWiki = "", classActiveVideo = "", classActivePrincipal = "", classActiveChat = "", classActiveEvents = "", classActiveFotos = "", classActiveMiembros = "", classActiveNoticias = "";
-            String urlTwitter = "", urlBlog = "", urlWiki = "", urlVideo = "", urlPrincipal = "", urlChat = "", urlEvents = "", urlFotos = "", urlMiembros = "", urlNoticias = "";
-            String active = "class=\"active\"";
-            if (parent instanceof MicroSite)
+
+            if (currentpage instanceof MicroSite)
             {
-                classActivePrincipal = active;
+                community = currentpage;
             }
             else
             {
-                parent = parent.getParent();
-                if (parent != null && parent instanceof MicroSite)
+                community = currentpage.getParent();
+            }
+            if (community != null)
+            {
+                String urlPrincipal = community.getUrl();
+                String active = "";
+                if (community.getURI().equals(currentpage.getURI()))
                 {
-                    if (currentpage.getId().endsWith("_Blog"))
+                    active = "class=\"active\"";
+                }
+
+%>
+<li><a <%=active%> href="<%=urlPrincipal%>">Principal</a></li>
+<%
+                Iterator<WebPage> tools = community.listVisibleChilds("es");
+                while (tools.hasNext())
+                {
+                    WebPage tool = tools.next();
+                    if (tool.isVisible())
                     {
-                        classActiveBlog = active;
-                    }
-                    else if (currentpage.getId().endsWith("_Chat"))
-                    {
-                        classActiveChat = active;
-                    }
-                    else if (currentpage.getId().endsWith("_Events"))
-                    {
-                        classActiveEvents = active;
-                    }
-                    else if (currentpage.getId().endsWith("_Photos"))
-                    {
-                        classActiveFotos = active;
-                    }
-                    else if (currentpage.getId().endsWith("_Members"))
-                    {
-                        classActiveMiembros = active;
-                    }
-                    else if (currentpage.getId().endsWith("_News"))
-                    {
-                        classActiveNoticias = active;
-                    }
-                    else if (currentpage.getId().endsWith("_Videos"))
-                    {
-                        classActiveVideo = active;
-                    }
-                    else if (currentpage.getId().endsWith("_Twitter"))
-                    {
-                        classActiveTwitter = active;
+                        active = "";
+
+                        String url = tool.getUrl();
+                        if (tool.getURI().equals(currentpage.getURI()))
+                        {
+                            active = "class=\"active\"";
+                        }
+                        String title = tool.getTitle();
+%>
+<li><a <%=active%> href="<%=url%>"><%=title%></a></li>
+<%
                     }
                 }
             }
-            if (parent != null)
-            {
-                urlPrincipal = parent.getUrl();
-                urlBlog=parent.getWebSite().getWebPage(parent.getId()+"_Blog").getUrl();
-                urlChat=parent.getWebSite().getWebPage(parent.getId()+"_Chat").getUrl();
-                urlEvents=parent.getWebSite().getWebPage(parent.getId()+"_Events").getUrl();
-                urlFotos=parent.getWebSite().getWebPage(parent.getId()+"_Photos").getUrl();
-                urlMiembros=parent.getWebSite().getWebPage(parent.getId()+"_Members").getUrl();
-                urlNoticias=parent.getWebSite().getWebPage(parent.getId()+"_News").getUrl();
-                urlVideo=parent.getWebSite().getWebPage(parent.getId()+"_Videos").getUrl();
-                urlTwitter=parent.getWebSite().getWebPage(parent.getId()+"_Twitter").getUrl();
-            }
+
 
 %>
 
-    <li><a <%=classActivePrincipal%> href="<%=urlPrincipal%>">Principal</a></li>
-    <li><a <%=classActiveBlog%> href="<%=urlBlog%>">Blog</a></li>
-    <li><a <%=classActiveChat%> href="<%=urlChat%>">Chat</a></li>
-    <li><a <%=classActiveEvents%> href="<%=urlEvents%>">Eventos</a></li>
-    <li><a <%=classActiveFotos%> href="<%=urlFotos%>">Fotos</a></li>
-    <li><a <%=classActiveMiembros%> href="<%=urlMiembros%>">Miembros</a></li>
-    <li><a <%=classActiveNoticias%> href="<%=urlNoticias%>">Noticias</a></li>
-    <li><a <%=classActiveTwitter%> href="<%=urlTwitter%>">Twitter</a></li>
-    <li><a <%=classActiveVideo%> href="<%=urlVideo%>">Videos</a></li>
-    
-    
-    
+
+
