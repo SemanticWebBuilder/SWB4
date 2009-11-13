@@ -1084,15 +1084,15 @@
         <swb:hasClass rdf:resource="#Device"/>
         <swb:hasHerarquicalNode>
           <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTContents">
-            <swb:title xml:lang="en">Content Components</swb:title>
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconContent</swb:iconClass>
             <swb:title xml:lang="es">Componentes de Contenido</swb:title>
             <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
             >77</swb:index>
             <swbxf:heClass rdf:resource="#ResourceType"/>
             <swbxf:hePropertyFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >resourceMode=1</swbxf:hePropertyFilter>
-            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >swbIconResources</swb:iconClass>
+            <swb:title xml:lang="en">Content Components</swb:title>
           </swbxf:HerarquicalNode>
         </swb:hasHerarquicalNode>
         <swb:hasClass rdf:resource="#TemplateRef"/>
@@ -1179,29 +1179,29 @@
         </swb:hasHerarquicalNode>
         <swb:hasHerarquicalNode>
           <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTSystems">
-            <swb:title xml:lang="es">Componentes de Sistema</swb:title>
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconSystem</swb:iconClass>
             <swb:title xml:lang="en">System Components</swb:title>
             <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
             >75</swb:index>
             <swbxf:heClass rdf:resource="#ResourceType"/>
             <swbxf:hePropertyFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >resourceMode=3</swbxf:hePropertyFilter>
-            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >swbIconResources</swb:iconClass>
+            <swb:title xml:lang="es">Componentes de Sistema</swb:title>
           </swbxf:HerarquicalNode>
         </swb:hasHerarquicalNode>
         <rdfs:subClassOf rdf:resource="#Undeleteable"/>
         <swb:hasHerarquicalNode>
           <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTStrategies">
-            <swb:title xml:lang="en">Strategy Componentes</swb:title>
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconStrategy</swb:iconClass>
             <swb:title xml:lang="es">Componentes de Estrategia</swb:title>
             <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
             >70</swb:index>
             <swbxf:heClass rdf:resource="#ResourceType"/>
             <swbxf:hePropertyFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >resourceMode=2</swbxf:hePropertyFilter>
-            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >swbIconResources</swb:iconClass>
+            <swb:title xml:lang="en">Strategy Componentes</swb:title>
           </swbxf:HerarquicalNode>
         </swb:hasHerarquicalNode>
         <swb:hasClass rdf:resource="#RoleRef"/>
