@@ -7,10 +7,14 @@
                 SemanticObject semObj = SemanticObject.createSemanticObject(request.getParameter("user"));
                 user = (User) semObj.createGenericInstance();
             }
-            /*if (!user.isSigned())
+            else
             {
-                return;
-            }*/
+                if (!user.isSigned())
+                {
+                    return;
+                }
+            }
+
             Iterator<Friendship> itMyFriends = Friendship.ClassMgr.listFriendshipByFriend(user, site);
             int count = 0;
             while (itMyFriends.hasNext())
