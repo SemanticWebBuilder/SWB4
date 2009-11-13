@@ -231,11 +231,11 @@
             String previusURL = "#";
             if (ipage < paginas)
             {
-                nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
+                nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1) + "&user=" + user.getEncodedURI();;
             }
             if (ipage > 1)
             {
-                previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
+                previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1) + "&user=" + user.getEncodedURI();;
             }
             if (ipage > 1)
             {
@@ -246,7 +246,7 @@
             for (int i = 1; i <= paginas; i++)
             {
         %>
-    <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%
+    <a href="<%=wpage.getUrl()%>?ipage=<%=i%>&user=<%=user.getEncodedURI()%>"><%
                 if (i == ipage)
                 {
         %>
