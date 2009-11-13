@@ -24,7 +24,7 @@ html, body, #main{
 .swbLogo{
     width: 252px;
     height: 26px;
-	padding: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
     background-image: url('../images/swb-logo.jpg');
     margin: expression('0px 0px -7px 0px'); /*IE*/
 }
@@ -37,6 +37,9 @@ html, body, #main{
 .swbIconMnuAdd,
 .swbIconMnuActive,
 .swbIconMnuEdit,
+.swbIconSystem,
+.swbIconStrategy,
+.swbIconContent,
 .swbIconResources,
 .swbIconResourceType,
 .swbIconResource,
@@ -113,9 +116,12 @@ html, body, #main{
 	height: 18px;
 	text-align: center;
 	padding-right:0px;
-    background-image: url('../icons/icons20x18.png'); background-position: -620px -18px;
+    background-image: url('../icons/icons20x18.png'); background-position: -620px -200px;
 }
 
+.swbIconSystem    { background-position: -200px -0px; }
+.swbIconStrategy    { background-position: -240px -0px; }
+.swbIconContent    { background-position: -260px -0px; }
 .swbIconResources    { background-position: -340px -0px; }
 .swbIconResource     { background-position: -340px -18px; }
 .swbIconResourceU    { background-position: -340px -36px; }
@@ -157,7 +163,7 @@ html, body, #main{
 .swbIconCamps       { background-position: -160px -0px; }
 .swbIconCamp        { background-position: -160px -18px; }
 .swbIconCampU       { background-position: -160px -36px; }
-.swbIconRules       { background-position: -260px -0px; }
+.swbIconRules       { background-position: -60px -0px; }
 .swbIconRule        { background-position: -260px -18px; }
 .swbIconRuleU       { background-position: -260px -36px; }
 .swbIconDevices     { background-position: -100px -0px; }
