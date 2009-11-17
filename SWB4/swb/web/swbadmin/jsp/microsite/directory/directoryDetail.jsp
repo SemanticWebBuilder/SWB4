@@ -94,21 +94,16 @@
         creator = "<a href=\"" + perfilPath + "?user=" + semUser.getEncodedURI() + "\">" + semUser.getFullName() + "</a>";
     }
 
-    Date created = dirObj.getCreated();
-    Iterator<SemanticProperty> itProps = semObject.listProperties();
     boolean showLocation = false;
-    while (itProps.hasNext()) {
-        SemanticProperty semProp = itProps.next();
-        if (semProp == Geolocalizable.swb_latitude) {
-            mapa = mgr.renderElement(request, semProp.getName());
-            showLocation = true;
-            lat = semObject.getProperty(Geolocalizable.swb_latitude);
-            lon = semObject.getProperty(Geolocalizable.swb_longitude);
-            step = semObject.getProperty(Geolocalizable.swb_geoStep);
-            break;
-        }
+    if (semObject.instanceOf(Geolocalizable.swb_Geolocalizable)) {
+        mapa = mgr.renderElement(request, Geolocalizable.swb_latitude.getName());
+        showLocation = true;
+        lat = semObject.getProperty(Geolocalizable.swb_latitude);
+        lon = semObject.getProperty(Geolocalizable.swb_longitude);
+        step = semObject.getProperty(Geolocalizable.swb_geoStep);
     }
     
+    Date created = dirObj.getCreated();
     String streetName = semObject.getProperty(Commerce.swbcomm_streetName);
     String intNumber = semObject.getProperty(Commerce.swbcomm_intNumber);
     String extNumber = semObject.getProperty(Commerce.swbcomm_extNumber);
