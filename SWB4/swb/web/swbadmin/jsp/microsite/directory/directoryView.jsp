@@ -24,10 +24,8 @@ Iterator<DirectoryObject> itObjs = (Iterator) request.getAttribute("itDirObjs");
 SemanticObject sobj = (SemanticObject) request.getAttribute("sobj");
 SemanticClass cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sobj.getURI());
 SWBResourceURL url = paramRequest.getRenderUrl();
+boolean toggleOrder = true;
 
-if (cls.equals(ClasifiedBuySell.sclass)) {
-System.out.println("-------------> Class: "  + cls.getName());
-}
 if (sobj != null) {
     url.setParameter("uri", sobj.getURI());
     url.setParameter("act","add");
@@ -122,7 +120,7 @@ if (sobj != null) {
         {
             urlPag.setParameter("orderBy", "date");
             setResult=SWBComparator.sortByCreatedSet(itObjs, false);
-        } else if(request.getParameter("orderBy")!=null && request.getParameter("orderBy").equals("price")) {
+        } else if(request.getParameter("orderBy")!=null && request.getParameter("orderBy").equals("pricel")) {
             setResult = new TreeSet(new Comparator() {
                     public int compare(Object o1, Object o2)
                     {
@@ -131,6 +129,21 @@ if (sobj != null) {
                         return Float.compare(ob1.getPrice(), ob2.getPrice());
                     }
                 });
+            toggleOrder = false;
+            while (itObjs.hasNext()) {
+                DirectoryObject o = itObjs.next();
+                setResult.add(o);
+            }
+        } else if(request.getParameter("orderBy")!=null && request.getParameter("orderBy").equals("priceh")) {
+            setResult = new TreeSet(new Comparator() {
+                    public int compare(Object o1, Object o2)
+                    {
+                        ClasifiedBuySell ob1 = (ClasifiedBuySell)o1;
+                        ClasifiedBuySell ob2 = (ClasifiedBuySell)o2;
+                        return Float.compare(ob2.getPrice(), ob1.getPrice());
+                    }
+                });
+            toggleOrder = true;
             while (itObjs.hasNext()) {
                 DirectoryObject o = itObjs.next();
                 setResult.add(o);
@@ -262,7 +275,20 @@ if (sobj != null) {
             </fieldset>
         </form>
                    </div>
-        <p align="right">Ordenar por <%if (cls.equals(ClasifiedBuySell.sclass)){%><a href="<%=urlOrder.setParameter("orderBy", "price")%>">precio</a> | <%}%><a href="<%=urlOrder.setParameter("orderBy", "title")%>">nombre</a> | <a href="<%=urlOrder.setParameter("orderBy", "date")%>">fecha</a></p>
+        <p align="right">Ordenar por
+            <%if (cls.equals(ClasifiedBuySell.sclass)) {
+                if (toggleOrder) {
+                %>
+                    <a href="<%=urlOrder.setParameter("orderBy", "pricel")%>">menor precio</a> |
+                <%
+                } else {
+                %>
+                    <a href="<%=urlOrder.setParameter("orderBy", "priceh")%>">mayor precio</a> |
+                <%
+                }
+             }
+             %>
+            <a href="<%=urlOrder.setParameter("orderBy", "title")%>">nombre</a> | <a href="<%=urlOrder.setParameter("orderBy", "date")%>">fecha</a></p>
         <!--Termina desplagado de criterios (filtros) de busqueda-->
         <%
          //Comienza Desplegado de elementos filtrados (si aplica) y ordenados
