@@ -70,9 +70,9 @@ public class DocumentResource extends org.semanticwb.portal.community.base.Docum
         }        
 
         String path="/swbadmin/jsp/microsite/DocumentResource/documentView.jsp";
-        if(act.equals("add"))path="/swbadmin/jsp/microsite/PhotoResource/photoAdd.jsp";
-        /*if(act.equals("edit"))path="/swbadmin/jsp/microsite/PhotoResource/photoEdit.jsp";
-        if(act.equals("detail"))path="/swbadmin/jsp/microsite/PhotoResource/photoDetail.jsp";*/
+        if(act.equals("add"))path="/swbadmin/jsp/microsite/DocumentResource/documentAdd.jsp";
+        if(act.equals("edit"))path="/swbadmin/jsp/microsite/DocumentResource/documentEdit.jsp";
+        if(act.equals("detail"))path="/swbadmin/jsp/microsite/DocumentResource/documentDetail.jsp";
 
         RequestDispatcher dis=request.getRequestDispatcher(path);
         try {
@@ -106,7 +106,7 @@ public class DocumentResource extends org.semanticwb.portal.community.base.Docum
                 if(page instanceof MicroSiteWebPageUtil) {
                     ((MicroSiteWebPageUtil)page).sendNotification(doc);
                 }
-                //doc.setDocumentWebPage(page);
+                doc.setDocumentWebPage(page);
             }
         }
         /*else if("edit".equals(action)) {
