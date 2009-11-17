@@ -1,6 +1,6 @@
 package org.semanticwb.portal.community;
 
-import java.net.URLEncoder;
+
 import org.semanticwb.model.WebPage;
 
 
@@ -15,7 +15,7 @@ public class ProductElement extends org.semanticwb.portal.community.base.Product
     {
         String url = "#";
         url=this.getWebPage().getUrl();
-        url+="?&act=detail&uri="+URLEncoder.encode(this.getURI());
+        url+="?&act=detail&amp;uri="+this.getEncodedURI();
         return url;
         
     }

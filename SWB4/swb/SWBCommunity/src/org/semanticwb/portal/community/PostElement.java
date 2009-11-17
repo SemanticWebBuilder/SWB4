@@ -1,6 +1,6 @@
 package org.semanticwb.portal.community;
 
-import java.net.URLEncoder;
+
 import java.util.Iterator;
 import org.semanticwb.model.WebPage;
 
@@ -21,7 +21,7 @@ public class PostElement extends org.semanticwb.portal.community.base.PostElemen
         {
             url = blogs.next().getWebPage().getUrl();
         }
-        url+="?act=detail&uri="+URLEncoder.encode(this.getURI());
+        url+="?act=detail&amp;uri="+this.getEncodedURI();
         return url;
     }
     @Override
