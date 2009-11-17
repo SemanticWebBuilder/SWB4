@@ -10,5 +10,12 @@
         <li><a>Hola &nbsp;<%=user.getFullName()%></a></li>
         <li><a href="<%=path%>">Ver perfil</a></li>
         <%
-    }   
+    }
+    else
+        {
+        // puesto por razones de accesibilidad
+        %>
+        <li>&nbsp;</li>
+        <%
+        }
 %>
