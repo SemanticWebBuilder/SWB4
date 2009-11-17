@@ -134,6 +134,7 @@ public class Banner extends GenericAdmResource
                            if (paramRequest.getArguments().containsKey("border")) {
                                 ret.append(" border=\"" + (String) paramRequest.getArguments().get("border") + "\"");
                             }
+                            
                            /*else {
                                 ret.append(" border=\"0\"");
                             }*/
