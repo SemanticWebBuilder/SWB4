@@ -13,7 +13,7 @@
     }
     else
         {
-        // puesto por razones de accesibilidad
+        // puesto por razones de validación w3c
         %>
         <li>&nbsp;</li>
         <%
