@@ -11,6 +11,10 @@
             {
                 if (!user.isSigned())
                 {
+                    %>
+                      <li>&nbsp</li>
+                    <%
+
                     return;
                 }
             }
