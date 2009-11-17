@@ -130,11 +130,13 @@ public class Banner extends GenericAdmResource
                             }
                             ret.append("<img src=\"");
                             ret.append(SWBPortal.getWebWorkPath() + base.getWorkPath() + "/" + img + "\"");
-                            if (paramRequest.getArguments().containsKey("border")) {
+
+                           if (paramRequest.getArguments().containsKey("border")) {
                                 ret.append(" border=\"" + (String) paramRequest.getArguments().get("border") + "\"");
-                            } else {
-                                ret.append(" border=\"0\"");
                             }
+                           /*else {
+                                ret.append(" border=\"0\"");
+                            }*/
                             /*if (!alt.equals("")) {
                                 ret.append(" alt=\"" + alt + "\"");
                             }*/
