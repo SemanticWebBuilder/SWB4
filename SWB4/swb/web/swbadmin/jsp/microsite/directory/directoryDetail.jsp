@@ -165,7 +165,7 @@
     <div class="resumenText">
         <%if (price != null) {%><p><span class="itemTitle">Precio: </span><%=price%></p><%}%>
         <%if (creator != null) {%><p><span class="itemTitle">Creado por: </span><%=creator%></p><%}%>
-        <%if (created != null) {%><p><span class="itemTitle">Fecha de publicación: </span><%=iso8601dateFormat.format(created)%></p><%}%>
+        <%if (created != null) {%><p><span class="itemTitle">Fecha de publicaci&oacute;n: </span><%=iso8601dateFormat.format(created)%></p><%}%>
         <%if (paymentType != null) {%><p><span class="itemTitle">Forma de pago: </span><%=paymentType%></p><%}%>
         <%
           if (impairedPeopleAccessible != null) {
@@ -192,7 +192,7 @@
           if (foodCourt != null) {
             String sfoodCourt = (foodCourt.equals("true")?"Si":"No");
             %>
-            <p><span class="itemTitle">Area de comida: </span><%=sfoodCourt%></p>
+            <p><span class="itemTitle">&Aacute;rea de comida: </span><%=sfoodCourt%></p>
             <%
           }
         %>
