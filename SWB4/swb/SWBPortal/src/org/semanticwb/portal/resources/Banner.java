@@ -135,9 +135,11 @@ public class Banner extends GenericAdmResource
                             } else {
                                 ret.append(" border=\"0\"");
                             }
-                            if (!alt.equals("")) {
+                            /*if (!alt.equals("")) {
                                 ret.append(" alt=\"" + alt + "\"");
-                            }
+                            }*/
+                            // El uso de alt es obligatorio
+                            ret.append(" alt=\"" + alt + "\"");
                             if (!width.equals("")) {
                                 ret.append(" width=\"" + width + "\"");
                             }
