@@ -27,7 +27,7 @@
             WebPage wpage = paramRequest.getWebPage();
             MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
             Member member = Member.getMember(user, wpage);
-            String urlAddPhoto = paramRequest.getRenderUrl().setParameter("act", "add").toString();
+            String urlAddDocument = paramRequest.getRenderUrl().setParameter("act", "add").toString();
             ArrayList<DocumentElement> elements = new ArrayList();
             int elementos = 0;
             Iterator<DocumentElement> it = DocumentElement.ClassMgr.listDocumentElements();
@@ -49,14 +49,13 @@
 </script>
 
 <div class="columnaIzquierda">
-    <p>los documentos</p>
 
     <div class="adminTools">
         <%
             if (member.canAdd())
             {
         %>
-        <a class="adminTool" href="<%=urlAddPhoto%>">Agregar foto</a>
+        <a class="adminTool" href="<%=urlAddDocument%>">Agregar documento</a>
         <%
         }
         %>
@@ -91,11 +90,23 @@
 
     %>
     <div class="noticia">
-        <a><%= doc.getTitle()%></a>
+        <a href="<%= SWBPortal.getWebWorkPath()+doc.getDocumentURL()%>" target="new"><%= doc.getTitle()%></a>
 
         <div class="noticiaTexto">
             <h2><%= doc.getDescription()%></h2>
             <p>&nbsp;<br>Por: <%= postAuthor%><br><%= dateFormat.format(doc.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(doc.getCreated(), user.getLanguage())%></p>
+            <p>
+                <%=doc.getDescription()%> | <a href="<%= viewurl%>">Ver más</a>
+                <%
+                        if (doc.canModify(member))
+                        {
+                %>
+                | <a href="<%= editEventURL%>">Editar</a> | <a href="<%= removeurl%>">Eliminar</a>
+                <%
+                        }
+                %>
+            </p>
+
 
             <p class="stats">
             	Puntuación: <%=rank%><br>
