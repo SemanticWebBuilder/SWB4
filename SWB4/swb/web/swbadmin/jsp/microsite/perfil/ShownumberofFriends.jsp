@@ -12,7 +12,7 @@
                 if (!user.isSigned())
                 {
                     %>
-                      <li>&nbsp</li>
+                      <li>&nbsp;</li>
                     <%
 
                     return;
