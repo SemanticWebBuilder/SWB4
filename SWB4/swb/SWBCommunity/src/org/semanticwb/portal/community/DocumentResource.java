@@ -61,18 +61,22 @@ public class DocumentResource extends org.semanticwb.portal.community.base.Docum
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        String act=request.getParameter("act");
-        if(act==null) {
-            act = (String)request.getSession(true).getAttribute("act");
+        String action = request.getParameter("act");
+        if(action==null) {
+            action = (String)request.getSession(true).getAttribute("act");
         }
-        if(act==null) {
-            act = "view";
-        }        
+        if(action==null) {
+            action = "view";
+        }
+
+        System.out.println("\n\n ***************************************processaction... act="+action);
 
         String path="/swbadmin/jsp/microsite/DocumentResource/documentView.jsp";
-        if(act.equals("add"))path="/swbadmin/jsp/microsite/DocumentResource/documentAdd.jsp";
-        if(act.equals("edit"))path="/swbadmin/jsp/microsite/DocumentResource/documentEdit.jsp";
-        if(act.equals("detail"))path="/swbadmin/jsp/microsite/DocumentResource/documentDetail.jsp";
+        if(action.equals("add"))path="/swbadmin/jsp/microsite/DocumentResource/documentAdd.jsp";
+        if(action.equals("edit"))path="/swbadmin/jsp/microsite/DocumentResource/documentEdit.jsp";
+        if(action.equals("detail"))path="/swbadmin/jsp/microsite/DocumentResource/documentDetail.jsp";
+
+        System.out.println("\n\n doview... act="+path);
 
         RequestDispatcher dis=request.getRequestDispatcher(path);
         try {
@@ -86,12 +90,12 @@ public class DocumentResource extends org.semanticwb.portal.community.base.Docum
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        final String path="/../swbadmin/jsp/microsite/PhotoResource/sinfoto.png";
         WebPage page = response.getWebPage();
         Member mem=Member.getMember(response.getUser(),response.getWebPage());
         if(!mem.canView())return;  //si el usuario no pertenece a la red sale;
 
         String action=request.getParameter("act");
+        System.out.println("\n\n ***************************************processaction... act="+action);
         if(action==null) {
             HashMap<String,String> params = upload(request);
             if(mem.canAdd() && params.containsValue("add")) {
@@ -107,29 +111,45 @@ public class DocumentResource extends org.semanticwb.portal.community.base.Docum
                     ((MicroSiteWebPageUtil)page).sendNotification(doc);
                 }
                 doc.setDocumentWebPage(page);
-            }
-        }
-        /*else if("edit".equals(action)) {
-            String uri=request.getParameter("uri");
-            PhotoElement rec = (PhotoElement)SemanticObject.createSemanticObject(uri).createGenericInstance();
-            if(rec!=null && rec.canModify(mem)) {
-                rec.setTitle(request.getParameter("title"));
-                rec.setDescription(request.getParameter("description"));
-                rec.setTags(request.getParameter("tags"));
-                rec.setVisibility(Integer.parseInt(request.getParameter("level")));
-                if(page instanceof MicroSiteWebPageUtil) {
-                    ((MicroSiteWebPageUtil)page).sendNotification(rec);
+            }else if(params.containsValue("edit")) {
+                String uri = params.get("uri");
+                DocumentElement doc = (DocumentElement)SemanticObject.createSemanticObject(uri).createGenericInstance();
+                if(doc!=null && doc.canModify(mem)) {
+                    if(params.containsKey("filename")) {
+                        String rp = SWBPortal.getWorkPath()+doc.getDocumentURL();
+                        File f = new File(rp);
+                        if(f!=null && f.exists()) {
+                            f.delete();
+                        }
+                        doc.setDocumentURL(params.get("filename"));
+                    }
+                    if(params.containsKey("title"))
+                        doc.setTitle(params.get("title"));
+                    if(params.containsKey("description"))
+                        doc.setDescription(params.get("description"));
+                    if(params.containsKey("tags"))
+                        doc.setTags(params.get("tags"));
+                    if(params.containsKey("level"))
+                        doc.setVisibility(Integer.parseInt(params.get("level")));
+                    if(page instanceof MicroSiteWebPageUtil) {
+                        ((MicroSiteWebPageUtil)page).sendNotification(doc);
+                    }
                 }
+                response.setRenderParameter("act", "view");
             }
-            response.setRenderParameter("act", "view");
         }
         else if("remove".equals(action)) {
             String uri = request.getParameter("uri");
-            PhotoElement rec = (PhotoElement)SemanticObject.createSemanticObject(uri).createGenericInstance();
-            if(rec!=null && rec.canModify(mem)) {
-                rec.remove();  //elimina el registro
+            DocumentElement doc = (DocumentElement)SemanticObject.createSemanticObject(uri).createGenericInstance();
+            if(doc!=null && doc.canModify(mem)) {
+                String rp = SWBPortal.getWorkPath()+doc.getDocumentURL();
+                File f = new File(rp);
+                if(f!=null && f.exists()) {
+                    f.delete();
+                }
+                doc.remove();  //elimina el registro
             }
-        }*/
+        }
         else {
             super.processAction(request, response);
         }
