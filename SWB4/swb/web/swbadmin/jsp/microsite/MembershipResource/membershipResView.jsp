@@ -2,16 +2,12 @@
 <%@page import="org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 
 <%!
-    private Member getMember(User user, MicroSite site)
-    {
-        if (site != null)
-        {
+    private Member getMember(User user, MicroSite site) {
+        if (site != null) {
             Iterator<Member> it = Member.ClassMgr.listMemberByUser(user, site.getWebSite());
-            while (it.hasNext())
-            {
+            while (it.hasNext()) {
                 Member mem = it.next();
-                if (mem.getMicroSite().equals(site))
-                {
+                if (mem.getMicroSite().equals(site)) {
                     return mem;
                 }
             }
@@ -22,53 +18,191 @@
 <%
 
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
+            String cssPath = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/images/";
             User user = paramRequest.getUser();
             WebPage wp = paramRequest.getWebPage();
             SWBResourceURL urle = paramRequest.getRenderUrl();
             urle.setParameter("act", "edit");
             MicroSite site = MicroSite.getMicroSite(paramRequest.getWebPage());
             Member member = getMember(user, site);
-            if (!(wp.getSemanticObject().getGenericInstance() instanceof MicroSite))
-            {
+            if (!(wp.getSemanticObject().getGenericInstance() instanceof MicroSite)) {
                 return;
-            }            
+            }
             String pathPhoto = "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
 
-            if (site.getPhoto() != null)
-            {
+            if (site.getPhoto() != null) {
                 pathPhoto = SWBPortal.getContextPath() + SWBPortal.getWebWorkPath() + site.getPhoto();
             }
 %>
 
-<div class="columnaIzquierda">    
+<div class="columnaIzquierda">
+    <h2>Resumen</h2>
+    <div class="resumenText">
+        <%
+            if (site.getTags() != null && site.getTags().trim().length() > 0 && !site.getTags().equals("null")) {
+        %>
+        <p><span class="itemTitle">Palabras Clave:</span> <%=site.getTags()%></p>
+        <%
+            }
+        %>
+        <p><span class="itemTitle">Creador:</span> <%=site.getCreator().getFullName()%></p>
+        <p><span class="itemTitle">Creada:</span> <%=SWBUtils.TEXT.getTimeAgo(site.getCreated(), user.getLanguage())%></p>
+        <p><span class="itemTitle">Modificada:</span> <%=SWBUtils.TEXT.getTimeAgo(site.getUpdated(), user.getLanguage())%></p>
+
+    </div>
+    <h2>Descripción</h2>
     <%
-            if (site.getDescription() != null)
-            {
+            if (site.getDescription() != null && !site.getDescription().trim().equals("")) {
+    %>
+    <p><%=site.getDescription()%></p>
+    <%
+            }
+            else
+                {
                 %>
-                <p><%=site.getDescription()%></p>
+                        <p>Sin descripción</p>
+                        <%
+                }
+    %>
+
+    <h2>Contenidos</h2>
+
+    <ul class="listaContenidos">
+        <%
+            {
+                int entradas = 0;
+                if (wp.getWebSite().getWebPage(wp.getId() + "_Blog") != null) {
+                    Iterator<Blog> blogs = Blog.ClassMgr.listBlogByWebPage(wp.getWebSite().getWebPage(wp.getId() + "_Blog"));
+                    if (blogs.hasNext()) {
+                        Blog blog = blogs.next();
+                        if (blog != null) {
+                            Iterator it = blog.listPostElements();
+                            while (it.hasNext()) {
+                                it.next();
+                                entradas++;
+                            }
+        %>
+        <li><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Blog").getUrl()%>"><img src="<%=cssPath%>icoBlog.png" alt="blog">Blog: <%=entradas%> entradas</a> <a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Blog").getUrl()%>" class="verMas">ver</a></li>
+                <%
+                    }
+                }
+            }
+            }
+
+                %>
+
+
+        <%
+        {
+            int eventos = 0;
+            if (wp.getWebSite().getWebPage(wp.getId() + "_Events") != null) {
+                Iterator<EventElement> elements = EventElement.ClassMgr.listEventElementByEventWebPage(wp.getWebSite().getWebPage(wp.getId() + "_Events"));
+                while (elements.hasNext()) {
+                    elements.next();
+                    eventos++;
+                }
+
+        %>
+        <li><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Events").getUrl()%>"><img src="<%=cssPath%>icoEventos.png" alt="eventos"><span class="elemento">Eventos:</span> <%=eventos%> entradas</a><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Events").getUrl()%>" class="verMas">ver</a></li>
                 <%
 
-                
             }
-            if (site.getTags() != null && site.getTags().trim().length() > 0 && !site.getTags().equals("null"))
-            {
+            }
+
                 %>
-                <p>Palabras clave: <%=site.getTags()%></p>
+
+
+        <%
+            {
+                int fotos = 0;
+                if (wp.getWebSite().getWebPage(wp.getId() + "_Photos") != null) {
+                    Iterator<PhotoElement> elements = PhotoElement.ClassMgr.listPhotoElementByPhotoWebPage(wp.getWebSite().getWebPage(wp.getId() + "_Photos"));
+                    while (elements.hasNext()) {
+                        elements.next();
+                        fotos++;
+                    }
+
+        %>
+        <li><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Photos").getUrl()%>"><img src="<%=cssPath%>icoFotos.png" alt="fotos"><span class="elemento">Fotos</span> <%=fotos%> entradas</a><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Photos").getUrl()%>" class="verMas">ver</a></li>
                 <%
+
+
+                }
             }
-            %>
-            <p>Creador: <%=site.getCreator().getFullName()%></p>
-            <p>Creada: <%=SWBUtils.TEXT.getTimeAgo(site.getCreated(), user.getLanguage())%></p>
-            <p>Modificada: <%=SWBUtils.TEXT.getTimeAgo(site.getUpdated(), user.getLanguage())%></p>
-            
+
+                %>
+
+
+        <%
+            {
+                int miembros = 0;
+                MicroSite ms = (MicroSite) wp;
+                GenericIterator<Member> members = ms.listMembers();
+                while (members.hasNext()) {
+                    members.next();
+                    miembros++;
+                }
+
+        %>
+        <li><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Members").getUrl()%>"><img src="<%=cssPath%>icoUsuario.png" alt="miembros"><span class="elemento">Miembros:</span> <%=miembros%> entradas</a><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Members").getUrl()%>" class="verMas">ver</a></li>
+                <%
+
+            }
+
+                %>
+
+
+        <%
+            {
+                int noticias = 0;
+                if (wp.getWebSite().getWebPage(wp.getId() + "_News") != null) {
+                    Iterator<NewsElement> elements = NewsElement.ClassMgr.listNewsElementByNewsWebPage(wp.getWebSite().getWebPage(wp.getId() + "_News"));
+                    while (elements.hasNext()) {
+                        elements.next();
+                        noticias++;
+                    }
+
+        %>
+        <li><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_News").getUrl()%>"><img src="<%=cssPath%>icoNoticias.png" alt="noticias"><span class="elemento">Noticias:</span> <%=noticias%> entradas</a><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_News").getUrl()%>" class="verMas">ver</a></li>
+                <%
+
+
+                }
+            }
+
+                %>
+
+
+        <%
+        
+            {
+                int videos = 0;
+                if (wp.getWebSite().getWebPage(wp.getId() + "_Videos") != null) {
+                    Iterator<VideoElement> elements = VideoElement.ClassMgr.listVideoElementByWebPage(wp.getWebSite().getWebPage(wp.getId() + "_Videos"));
+                    while (elements.hasNext()) {
+                        elements.next();
+                        videos++;
+                    }
+
+        %>
+        <li><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Videos").getUrl()%>"><img src="<%=cssPath%>icoVideo.png" alt="videos"><span class="elemento">Videos:</span> <%=videos%> entradas</a><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Videos").getUrl()%>" class="verMas">ver</a></li>
+                <%
+
+
+                }
+            }
+
+                %>
+
+
+    </ul>
 </div>
 
 <div class="columnaCentro">
     <h2 class="blogTitle"><%=site.getTitle()%></h2>
     <p><img src="<%=pathPhoto%>" alt="Imagen comunidad"  ></p>
         <%
-            if (null != member && member.getAccessLevel() == Member.LEVEL_OWNER && user.isRegistered())
-            {
+            if (null != member && member.getAccessLevel() == Member.LEVEL_OWNER && user.isRegistered()) {
 
         %>
     <p><a href="<%=urle%>">[Cambiar imagen]</a></p>
@@ -77,32 +211,28 @@
             }
     %>
     <ul class="miContenido">
-       <%
-        SWBResourceURL urla = paramRequest.getActionUrl();
-        if (user.isRegistered())
-        {
-            if (member == null)
-            {
-                urla.setParameter("act", "subscribe");
+        <%
+            SWBResourceURL urla = paramRequest.getActionUrl();
+            if (user.isRegistered()) {
+                if (member == null) {
+                    urla.setParameter("act", "subscribe");
         %>
         <li><a href="<%=urla%>">Suscribirse a esta comunidad</a></li>
         <%
-    }
-    else
-    {
-        urla.setParameter("act", "unsubscribe");
+                } else {
+                    urla.setParameter("act", "unsubscribe");
         %>
         <li><a href="<%=urla%>">Cancelar suscripción a comunidad</a></li>
         <%
-    }
-            
-}
-String pageUri="/swbadmin/jsp/microsite/rss/rss.jsp?comm="+java.net.URLEncoder.encode(wp.getURI());
-            %>
-            <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS </a></li>
-            <%
+                }
 
-%>
-   
+            }
+            String pageUri = "/swbadmin/jsp/microsite/rss/rss.jsp?comm=" + java.net.URLEncoder.encode(wp.getURI());
+        %>
+        <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS </a></li>
+        <%
+
+        %>
+
     </ul>
 </div>
