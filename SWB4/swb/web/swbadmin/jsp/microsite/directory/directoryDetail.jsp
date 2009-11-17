@@ -119,6 +119,7 @@
     String contactEmail = semObject.getProperty(Commerce.swbcomm_contactEmail);
     String website = semObject.getProperty(Commerce.swbcomm_webSite);
     /*---------- Facilities ------------*/
+    String price = semObject.getProperty(ClasifiedBuySell.swbcomm_Price);
     String paymentType = semObject.getProperty(Commerce.swbcomm_paymentType);
     String impairedPeopleAccessible = semObject.getProperty(Commerce.swbcomm_impairedPeopleAccessible);
     String parkingLot = semObject.getProperty(Commerce.swbcomm_parkingLot);
@@ -167,7 +168,7 @@
     </div>
     <p class="tituloRojo"><%=title%></p>
     <div class="resumenText">
-        <%if (tags != null) {%><p><span class="itemTitle">Palabras clave: </span><%=tags%></p><%}%>
+        <%if (price != null) {%><p><span class="itemTitle">Precio: </span><%=price%></p><%}%>
         <%if (creator != null) {%><p><span class="itemTitle">Creado por: </span><%=creator%></p><%}%>
         <%if (created != null) {%><p><span class="itemTitle">Fecha de publicación: </span><%=iso8601dateFormat.format(created)%></p><%}%>
         <%if (paymentType != null) {%><p><span class="itemTitle">Forma de pago: </span><%=paymentType%></p><%}%>
