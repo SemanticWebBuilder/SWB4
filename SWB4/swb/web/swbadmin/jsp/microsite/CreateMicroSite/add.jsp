@@ -4,10 +4,16 @@
     SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
     User user=paramRequest.getUser();
     WebPage wpage=paramRequest.getWebPage();
+    String mode=paramRequest.getArgument("mode", "");
+        if(mode!=null && mode.equals("content"))
+            {
+
 %>
 <script type="text/javascript">
     dojo.require("dijit.form.ValidationTextBox");
 </script>
+
+
 <div class="soria">
     <fieldset><legend>Nueva comunidad</legend>
 <%
@@ -27,3 +33,9 @@
 %>
     </fieldset>
 </div>
+    
+
+    <%
+    }
+    %>
+    
