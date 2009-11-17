@@ -16,15 +16,18 @@ private final int I_PAGE_SIZE = 20;
 %>
 
 <%
-Resource base=paramRequest.getResourceBase();
-User user=paramRequest.getUser();
-WebPage wpage=paramRequest.getWebPage();
-String perfilPath=wpage.getWebSite().getWebPage("perfil").getUrl();
-Iterator<DirectoryObject> itObjs=(Iterator)request.getAttribute("itDirObjs");
+Resource base = paramRequest.getResourceBase();
+User user = paramRequest.getUser();
+WebPage wpage = paramRequest.getWebPage();
+String perfilPath = wpage.getWebSite().getWebPage("perfil").getUrl();
+Iterator<DirectoryObject> itObjs = (Iterator) request.getAttribute("itDirObjs");
 SemanticObject sobj = (SemanticObject) request.getAttribute("sobj");
-SemanticClass cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sobj.getURI());
-SWBResourceURL url=paramRequest.getRenderUrl();
+SemanticClass cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sobj.getURI());
+SWBResourceURL url = paramRequest.getRenderUrl();
 
+if (cls.equals(ClasifiedBuySell.sclass)) {
+System.out.println("-------------> Class: "  + cls.getName());
+}
 if (sobj != null) {
     url.setParameter("uri", sobj.getURI());
     url.setParameter("act","add");
@@ -119,7 +122,20 @@ if (sobj != null) {
         {
             urlPag.setParameter("orderBy", "date");
             setResult=SWBComparator.sortByCreatedSet(itObjs, false);
-        }else {
+        } else if(request.getParameter("orderBy")!=null && request.getParameter("orderBy").equals("price")) {
+            setResult = new TreeSet(new Comparator() {
+                    public int compare(Object o1, Object o2)
+                    {
+                        ClasifiedBuySell ob1 = (ClasifiedBuySell)o1;
+                        ClasifiedBuySell ob2 = (ClasifiedBuySell)o2;
+                        return Float.compare(ob1.getPrice(), ob2.getPrice());
+                    }
+                });
+            while (itObjs.hasNext()) {
+                DirectoryObject o = itObjs.next();
+                setResult.add(o);
+            }
+        } else {
             setResult=SWBComparator.sortByDisplayNameSet(itObjs, user.getLanguage());
         }
         //Ya sabiendo cuantos y cuales son los elementos a listar (ya que puede ser una busqueda filtrada), se página
@@ -246,7 +262,7 @@ if (sobj != null) {
             </fieldset>
         </form>
                    </div>
-        <p align="right">Ordenar por <a href="<%=urlOrder.setParameter("orderBy", "title")%>">nombre</a> | <a href="<%=urlOrder.setParameter("orderBy", "date")%>">fecha</a></p>
+        <p align="right">Ordenar por <%if (cls.equals(ClasifiedBuySell.sclass)){%><a href="<%=urlOrder.setParameter("orderBy", "price")%>">precio</a> | <%}%><a href="<%=urlOrder.setParameter("orderBy", "title")%>">nombre</a> | <a href="<%=urlOrder.setParameter("orderBy", "date")%>">fecha</a></p>
         <!--Termina desplagado de criterios (filtros) de busqueda-->
         <%
          //Comienza Desplegado de elementos filtrados (si aplica) y ordenados
