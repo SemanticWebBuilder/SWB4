@@ -313,10 +313,12 @@ if (sobj != null) {
             else if(cont>iFinPage) break;
             exist=true;
             String img="", title="", description="", tags="", price=null, creator="", created="";
+            String claimerUrl = "";
             urlDetail.setParameter("uri", dirObj.getURI());
             urlEdit.setParameter("uri", dirObj.getURI());
             urlRemove.setParameter("uri", dirObj.getURI());
             User userObj=null;
+            User claimer = null;
             SemanticObject semObject = dirObj.getSemanticObject();
             Iterator<SemanticProperty> ipsemProps=semObject.listProperties();
             while(ipsemProps.hasNext())
@@ -344,7 +346,13 @@ if (sobj != null) {
                             created=propValue;
                         }
                     }
-                }else if(semProp==DirectoryObject.swb_creator){
+                } /*else if (semProp==DirectoryObject.swbcomm_claimer) {
+                    SemanticObject claimerUsr = semObject.getObjectProperty(DirectoryObject.swbcomm_claimer);
+                    if (claimerUsr != null) {
+                        claimer = (User)claimerUsr.createGenericInstance();
+                        claimerUrl = "<a href=\""+perfilPath+"?user="+claimer.getEncodedURI()+"\">"+claimer.getFullName()+"</a>";
+                    }
+               }*/else if(semProp==DirectoryObject.swb_creator){
                         SemanticObject semUser=semObject.getObjectProperty(DirectoryObject.swb_creator);
                         if(semUser!=null){
                             userObj=(User)semUser.createGenericInstance();
@@ -366,9 +374,14 @@ if (sobj != null) {
                     <%if(price!=null && price.trim().length()>0 && !price.equals("null")){%><p><span class="itemTitle">Precio: </span><%=price%></p><%}%>
                     <%if (!tags.trim().equals("")) {%><p><span class="itemTitle">Palabras clave: </span><%=tags%></p><%}%>
                     <p><span class="itemTitle">Creado por: </span><%=creator%>, <%=created%></p>
+                    <%
+                    if (claimer != null) {%>
+                        <p><b>Este elemento ha sido reclamado por <a href="<%=claimerUrl%>">Mi</a></b></p><%
+                    }
+                    %>
                     <p class="tituloRojo"><p class="vermas"><a href="<%=urlDetail%>"><%=paramRequest.getLocaleString("seeMore")%></a></p>
                     <%
-                    if(user.isRegistered() && user.isSigned()){
+                    if(user.isRegistered() && user.isSigned()) {
                         UserGroup group=user.getUserRepository().getUserGroup("admin");
                         if((userObj!=null && userObj.getURI().equals(user.getURI())) || group!=null && user.hasUserGroup(group)){
                     %>
