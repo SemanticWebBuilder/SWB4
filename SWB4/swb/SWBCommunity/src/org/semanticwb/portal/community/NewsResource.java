@@ -23,6 +23,8 @@
 package org.semanticwb.portal.community;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import javax.servlet.RequestDispatcher;
@@ -38,7 +40,6 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.WebPage;
@@ -84,6 +85,8 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String action = request.getParameter("act");
         WebPage page = response.getWebPage();
+        final String realpath = SWBPortal.getWorkPath();
+        final String finalpath = page.getWorkPath() + "/";
         Member mem = Member.getMember(response.getUser(), page);
         if (!mem.canView()) {
             return;                                       //si el usuario no pertenece a la red sale;
@@ -93,8 +96,33 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
             HashMap<String, String> params = upload(request);
             if (mem.canAdd() && params.containsValue("add")) {
                 NewsElement rec = NewsElement.ClassMgr.createNewsElement(getResourceBase().getWebSite());
+
+                File file = new File(realpath + params.get("filename"));
+                if (file.exists()) {
+                    FileInputStream in = new FileInputStream(file);
+                    String filename = file.getName();
+                    String target = realpath + finalpath + filename;
+                    FileOutputStream out = new FileOutputStream(target);
+                    SWBUtils.IO.copyStream(in, out);
+                    file.delete();
+                    params.put("filename", finalpath + filename);
+                }
                 rec.setNewsImage(params.get("filename"));
+
+
+                file = new File(realpath + params.get("thumbnail"));
+                if (file.exists()) {
+                    FileInputStream in = new FileInputStream(file);
+                    String filename = file.getName();
+                    String target = realpath + finalpath + filename;
+                    FileOutputStream out = new FileOutputStream(target);
+                    SWBUtils.IO.copyStream(in, out);
+                    file.delete();
+                    params.put("thumbnail", finalpath + filename);
+                }
                 rec.setNewsThumbnail(params.get("thumbnail"));
+
+
                 rec.setTitle(params.get("new_title"));
                 rec.setAuthor(params.get("new_author"));
                 rec.setDescription(params.get("new_abstract"));
@@ -114,10 +142,31 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
                 String uri = params.get("uri");
                 NewsElement rec = (NewsElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
                 if (rec != null && rec.canModify(mem)) {
+
                     if (params.containsKey("filename")) {
+                        File file = new File(realpath + params.get("filename"));
+                        if (file.exists()) {
+                            FileInputStream in = new FileInputStream(file);
+                            String filename = file.getName();
+                            String target = realpath + finalpath + filename;
+                            FileOutputStream out = new FileOutputStream(target);
+                            SWBUtils.IO.copyStream(in, out);
+                            file.delete();
+                            params.put("filename", finalpath + filename);
+                        }
                         rec.setNewsImage(params.get("filename"));
                     }
                     if (params.containsKey("thumbnail")) {
+                        File file = new File(realpath + params.get("thumbnail"));
+                        if (file.exists()) {
+                            FileInputStream in = new FileInputStream(file);
+                            String filename = file.getName();
+                            String target = realpath + finalpath + filename;
+                            FileOutputStream out = new FileOutputStream(target);
+                            SWBUtils.IO.copyStream(in, out);
+                            file.delete();
+                            params.put("thumbnail", finalpath + filename);
+                        }
                         rec.setNewsThumbnail(params.get("thumbnail"));
                     }
                     rec.setTitle(params.get("new_title"));
