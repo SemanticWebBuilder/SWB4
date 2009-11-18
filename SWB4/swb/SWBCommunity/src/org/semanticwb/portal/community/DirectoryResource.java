@@ -20,6 +20,7 @@ import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
+import org.semanticwb.portal.community.utilresources.ImageResizer;
 import org.semanticwb.servlet.internal.UploadFormElement;
 
 /**
@@ -192,8 +193,16 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
                             dirObj.addExtraPhoto(value);
                         }
 
+                        String ext="";
+                        pos=-1;
+                        pos=value.indexOf(".");
+                        if(pos>-1){
+                            ext=value.substring(pos+1);
+                        }
+                        
                         try {
                             item.write(fichero);
+                            ImageResizer.resizeCrop(fichero, 180, fichero, ext);
                         } catch (Exception e) {
                             e.printStackTrace();
                             log.debug(e);
