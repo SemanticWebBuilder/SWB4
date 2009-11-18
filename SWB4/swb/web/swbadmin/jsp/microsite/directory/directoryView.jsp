@@ -329,7 +329,7 @@ if (sobj != null) {
                    if(propValue!=null && !propValue.equals("null")){
                         if(semProp==DirectoryObject.swbcomm_dirPhoto)
                         {
-                            img="<img src=\""+SWBPortal.getWebWorkPath()+base.getWorkPath()+"/"+semObject.getId()+"/"+propValue+ "\" width=\"90\" height=\"90\">";
+                            img="<img src=\""+SWBPortal.getWebWorkPath()+"/"+semObject.getWorkPath()+"/"+propValue+ "\" width=\"90\" height=\"90\">";
                         }if(semProp==DirectoryObject.swb_title) {
                              title=propValue;
                         }else if(semProp==DirectoryObject.swb_description){
