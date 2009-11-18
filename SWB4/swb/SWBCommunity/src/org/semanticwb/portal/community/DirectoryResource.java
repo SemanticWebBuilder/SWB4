@@ -16,7 +16,6 @@ import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
-import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.SWBFormMgr;
@@ -112,7 +111,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
                         dirObj.addExtraPhoto(dirHasExtraPhotoHidden);
                         
                     }
-                    processFiles(request, response, dirObj.getSemanticObject(), dirPhoto);
+                    processFiles(request, dirObj.getSemanticObject(), dirPhoto);
                 } catch (FormValidateException e) {
                     log.event(e);
                 }
@@ -129,7 +128,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
                     DirectoryObject dirObj = (DirectoryObject) sobj.createGenericInstance();
                     dirObj.setDirectoryResource(this);
                     dirObj.setWebPage(response.getWebPage());
-                    processFiles(request, response, dirObj.getSemanticObject(), null);
+                    processFiles(request, dirObj.getSemanticObject(), null);
                 } catch (FormValidateException e) {
                     log.event(e);
                 }
@@ -161,9 +160,8 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
         response.setMode(response.Mode_VIEW);
     }
 
-    private void processFiles(HttpServletRequest request, SWBActionResponse response, SemanticObject sobj, String actualPhoto) {
-        Resource base = response.getResourceBase();
-        String basepath = SWBPortal.getWorkPath() + base.getWorkPath() + "/" + sobj.getId() + "/";
+    private void processFiles(HttpServletRequest request, SemanticObject sobj, String actualPhoto) {
+        String basepath = SWBPortal.getWorkPath() + sobj.getWorkPath() + "/";
         if (request.getSession().getAttribute(UploadFormElement.FILES_UPLOADED) != null) {
             Iterator itfilesUploaded = ((List) request.getSession().getAttribute(UploadFormElement.FILES_UPLOADED)).iterator();
             while (itfilesUploaded.hasNext()) {
