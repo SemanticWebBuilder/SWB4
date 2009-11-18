@@ -154,8 +154,8 @@ public class TestClass {
     @Test
     public void testClassRoot()
     {
-        System.out.println("WebPage:"+WebPage.ClassMgr.sclass.getRootClass());
-        System.out.println("MenuItem:"+MenuItem.ClassMgr.sclass.getRootClass());
+        System.out.println("WebPage:"+WebPage.sclass.getRootClass());
+        System.out.println("MenuItem:"+MenuItem.sclass.getRootClass());
         WebSite site=SWBContext.getWebSite("sep");
         TemplateRef ref=site.createTemplateRef();
         System.out.println(ref.getPriority());

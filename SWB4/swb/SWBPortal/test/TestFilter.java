@@ -81,7 +81,7 @@ public class TestFilter {
     public void test()
     {
         
-        Iterator<SemanticObject> it=SWBObjectFilter.filter(ResourceType.ClassMgr.sclass.listInstances(),"resourceMode=1");
+        Iterator<SemanticObject> it=SWBObjectFilter.filter(ResourceType.sclass.listInstances(),"resourceMode=1");
         while(it.hasNext())
         {
             SemanticObject obj=it.next();

@@ -301,7 +301,7 @@ public class TestAdminWebSite {
             }catch(Exception e){e.printStackTrace();}
             obj.addResource(p);
             obj.setParent(ob);
-            obj.setInterface(Template.ClassMgr.sclass.getSemanticObject());
+            obj.setInterface(Template.sclass.getSemanticObject());
         }
 
         obj=createBehavior(site,"bh_RuleEditor","Editar Regla","20");
@@ -314,7 +314,7 @@ public class TestAdminWebSite {
             p.setPriority(3);
             obj.addResource(p);
             obj.setParent(ob);
-            obj.setInterface(Rule.ClassMgr.sclass.getSemanticObject());
+            obj.setInterface(Rule.sclass.getSemanticObject());
         }
 
         obj=createBehavior(site,"bh_Templates","Plantillas","20");
@@ -346,7 +346,7 @@ public class TestAdminWebSite {
             }catch(Exception e){e.printStackTrace();}
             obj.addResource(p);
             obj.setParent(ob);
-            obj.setInterface(Resource.ClassMgr.sclass.getSemanticObject());
+            obj.setInterface(Resource.sclass.getSemanticObject());
         }
 
         obj=createBehavior(site,"bh_PFlows","Flujos de Publicación","40");
