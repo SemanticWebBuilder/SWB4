@@ -40,6 +40,7 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
+import org.semanticwb.model.WebPage;
 import org.semanticwb.servlet.internal.Admin;
 import org.semanticwb.servlet.internal.Distributor;
 import org.semanticwb.servlet.internal.DistributorParams;
@@ -177,7 +178,7 @@ public class SWBVirtualHostFilter implements Filter
                             {
                                 case 500:
                                 case 404:
-                                    processError(resp.getError(), resp.getErrorMsg(), _response);
+                                    processError(resp.getError(), resp.getErrorMsg(), _response, dparams);
                                     log.error(path + " - " + resp.getError() + ":" + resp.getErrorMsg());
                                     break;
                                 case 403:
@@ -353,18 +354,29 @@ public class SWBVirtualHostFilter implements Filter
         return ret;
     }
 
-    public void processError(int err, String errMsg, HttpServletResponse response)
+    public void processError(int err, String errMsg, HttpServletResponse response, DistributorParams dparams)
             throws ServletException, IOException
     {
+        WebPage page=dparams.getWebPage();
+        String modelid=null;
+        if(page!=null)modelid=page.getWebSiteId();
         log.debug("SendError " + err + ": " + errMsg);
         String path = "/config/" + err + ".html";
         String msg = null;
         try
         {
-            //msg = WBUtils.getInstance().getFileFromWorkPath2(path);
-            msg = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/work/" + path);
-            //msg = WBUtils.getInstance().parseHTML(msg, WBUtils.getInstance().getWebWorkPath() + "/config/images/");
-            msg = SWBPortal.UTIL.parseHTML(msg, SWBPortal.getWebWorkPath() + "/config/images/");
+            if(modelid!=null)
+            {
+                msg = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/work/models/"+modelid + path);
+            }
+            if(msg==null)
+            {
+                msg = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/work/" + path);
+            }
+            if(msg==null)
+            {
+                msg = SWBPortal.UTIL.parseHTML(msg, SWBPortal.getWebWorkPath() + "/config/images/");
+            }else msg="";
         }
         catch (Exception e)
         {
