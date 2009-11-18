@@ -93,9 +93,7 @@ public final class SWBRepository implements Repository
         boolean exists = false;
         for (String name : listWorkspaces())
         {
-            if (name.equals(defaultWorkspaceName))
-            {
-                Workspace ws=SWBContext.getWorkspace(name);
+            Workspace ws=SWBContext.getWorkspace(name);
                 if(ws.getRoot()==null)
                 {
                     Unstructured root = Unstructured.ClassMgr.createUnstructured(ws);
@@ -103,6 +101,9 @@ public final class SWBRepository implements Repository
                     root.setPath("/");
                     ws.setRoot(root);
                 }
+            if (name.equals(defaultWorkspaceName))
+            {
+                
                 if(ws.getTitle()==null)
                 {
                     ws.setTitle(TITLE_DEFAULT_WORKSPACE);
@@ -126,9 +127,7 @@ public final class SWBRepository implements Repository
         boolean exists = false;
         for (String name : listWorkspaces())
         {
-            if (name.equals(defaultWorkspaceName))
-            {
-                Workspace ws = SWBContext.getWorkspace(name);
+            Workspace ws = SWBContext.getWorkspace(name);
                 if(ws.getRoot()==null)
                 {
                     Unstructured root = Unstructured.ClassMgr.createUnstructured(ws);
@@ -136,6 +135,9 @@ public final class SWBRepository implements Repository
                     root.setPath("/");
                     ws.setRoot(root);
                 }
+            if (name.equals(defaultWorkspaceName))
+            {
+                
                 if(ws.getTitle()==null)
                 {
                     ws.setTitle(TITLE_DEFAULT_WORKSPACE);
