@@ -202,7 +202,7 @@
     %>
     <div class="noticia">        
         <a dojoType="dojox.image.Lightbox" title="<%= photo.getTitle()%>" href="<%= SWBPortal.getWebWorkPath() + photo.getImageURL()%>">
-            <img id="img_<%=iElement + base.getId()%>" src="<%= SWBPortal.getWebWorkPath() + photo.getPhotoThumbnail()%>" alt="<%= photo.getTitle()%>" border="0" width="140" height="140" />
+            <img id="img_<%=iElement + base.getId()%>" src="<%= SWBPortal.getWebWorkPath() + photo.getPhotoThumbnail()%>" alt="<%= photo.getTitle()%>" width="140" height="140" />
         </a>
         <div class="noticiaTexto">
             <h2><%=photo.getTitle()%></h2>
