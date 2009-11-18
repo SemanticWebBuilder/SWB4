@@ -69,14 +69,10 @@ public class DocumentResource extends org.semanticwb.portal.community.base.Docum
             action = "view";
         }
 
-        System.out.println("\n\n ***************************************processaction... act="+action);
-
         String path="/swbadmin/jsp/microsite/DocumentResource/documentView.jsp";
         if(action.equals("add"))path="/swbadmin/jsp/microsite/DocumentResource/documentAdd.jsp";
         if(action.equals("edit"))path="/swbadmin/jsp/microsite/DocumentResource/documentEdit.jsp";
         if(action.equals("detail"))path="/swbadmin/jsp/microsite/DocumentResource/documentDetail.jsp";
-
-        System.out.println("\n\n doview... act="+path);
 
         RequestDispatcher dis=request.getRequestDispatcher(path);
         try {
@@ -95,7 +91,6 @@ public class DocumentResource extends org.semanticwb.portal.community.base.Docum
         if(!mem.canView())return;  //si el usuario no pertenece a la red sale;
 
         String action=request.getParameter("act");
-        System.out.println("\n\n ***************************************processaction... act="+action);
         if(action==null) {
             HashMap<String,String> params = upload(request);
             if(mem.canAdd() && params.containsValue("add")) {
