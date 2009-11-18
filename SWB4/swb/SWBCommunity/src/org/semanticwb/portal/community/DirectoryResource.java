@@ -119,7 +119,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             } else if (action.equals(response.Action_REMOVE)) {
                 SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
                 semObject.remove();
-                SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + base.getWorkPath() + "/" + semObject.getId());
+                SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + "/" + semObject.getWorkPath());
             } else if (action.equals(response.Action_ADD)) {
                 SemanticClass cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(request.getParameter("uri"));
                 SWBFormMgr mgr = new SWBFormMgr(cls, response.getWebPage().getWebSite().getSemanticObject(), null);
@@ -138,8 +138,11 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
                     SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
                     DirectoryObject dirObj = (DirectoryObject) semObject.createGenericInstance();
                     dirObj.removeExtraPhoto(request.getParameter("removeAttach"));
-                    File file = new File(SWBPortal.getWorkPath() + base.getWorkPath() + "/" + semObject.getId() + "/" + request.getParameter("removeAttach"));
+                    System.out.println("Achivo a borrar:"+SWBPortal.getWorkPath() + "/" + semObject.getWorkPath() + "/" + request.getParameter("removeAttach"));
+                    File file = new File(SWBPortal.getWorkPath() + "/" + semObject.getWorkPath() + "/" + request.getParameter("removeAttach"));
+                    System.out.println("file:"+file);
                     file.delete();
+
                 }
             }
             if (action.equals("admin_update")) {
