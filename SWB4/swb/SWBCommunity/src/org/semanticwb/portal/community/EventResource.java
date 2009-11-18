@@ -23,6 +23,8 @@
 package org.semanticwb.portal.community;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -40,7 +42,6 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
@@ -84,6 +85,8 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
         final String path = "/../swbadmin/jsp/microsite/EventResource/noevent.jpg";
         String action = request.getParameter("act");
         WebPage page = response.getWebPage();
+        final String realpath = SWBPortal.getWorkPath();
+        final String finalpath = page.getWorkPath() + "/";
         Member mem = Member.getMember(response.getUser(), page);
         if (!mem.canView()) {
             return;                                       //si el usuario no pertenece a la red sale;
@@ -94,11 +97,32 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
             if (mem.canAdd() && params.containsValue("add")) {
                 EventElement rec = EventElement.ClassMgr.createEventElement(getResourceBase().getWebSite());
                 if (params.containsKey("filename")) {
+
+                    File file = new File(realpath + params.get("filename"));
+                    if (file.exists()) {
+                        FileInputStream in = new FileInputStream(file);
+                        String filename = file.getName();
+                        String target = realpath + finalpath + filename;
+                        FileOutputStream out = new FileOutputStream(target);
+                        SWBUtils.IO.copyStream(in, out);
+                        file.delete();
+                        params.put("filename", finalpath + filename);
+                    }
                     rec.setEventImage(params.get("filename"));
                 } else {
                     rec.setEventImage(path);
                 }
                 if (params.containsKey("thumbnail")) {
+                    File file = new File(realpath + params.get("thumbnail"));
+                    if (file.exists()) {
+                        FileInputStream in = new FileInputStream(file);
+                        String filename = file.getName();
+                        String target = realpath + finalpath + filename;
+                        FileOutputStream out = new FileOutputStream(target);
+                        SWBUtils.IO.copyStream(in, out);
+                        file.delete();
+                        params.put("thumbnail", finalpath + filename);
+                    }
                     rec.setEventThumbnail(params.get("thumbnail"));
                 } else {
                     rec.setEventThumbnail(path);
@@ -138,9 +162,29 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                 EventElement rec = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
                 if (rec != null && rec.canModify(mem)) {
                     if (params.get("filename") != null) {
+                        File file = new File(realpath + params.get("filename"));
+                        if (file.exists()) {
+                            FileInputStream in = new FileInputStream(file);
+                            String filename = file.getName();
+                            String target = realpath + finalpath + filename;
+                            FileOutputStream out = new FileOutputStream(target);
+                            SWBUtils.IO.copyStream(in, out);
+                            file.delete();
+                            params.put("filename", finalpath + filename);
+                        }
                         rec.setEventImage(params.get("filename"));
                     }
                     if (params.get("thumbnail") != null) {
+                        File file = new File(realpath + params.get("thumbnail"));
+                        if (file.exists()) {
+                            FileInputStream in = new FileInputStream(file);
+                            String filename = file.getName();
+                            String target = realpath + finalpath + filename;
+                            FileOutputStream out = new FileOutputStream(target);
+                            SWBUtils.IO.copyStream(in, out);
+                            file.delete();
+                            params.put("thumbnail", finalpath + filename);
+                        }
                         rec.setEventThumbnail(params.get("thumbnail"));
                     }
                     rec.setTitle(params.get("event_title"));
