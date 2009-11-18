@@ -27,7 +27,8 @@
             break;
         }
 
-        String spamMark = (comment.isSpam() ? "[es spam]" : "[marcar como spam]");
+        //String spamMark = (comment.isSpam() ? "[es spam]" : "[marcar como spam]");
+        String spamMark="[marcar como spam]";
 %>
         <div id="comment<%=comment.getId()%>" class="comment">
             <%
@@ -68,12 +69,9 @@
                 %>
                     <p><a href="javascript:spam(<%=comment.getId()%>)" id="spamMark<%=comment.getId()%>"><%=spamMark%></a></p>
                 <%
-                } else if (comment.isSpam()) {
-                %>
-                    <p><%=spamMark%></p>
-                <%
                 }
-                %>
+        %>
+        <p><%=spamMark%></p>
             </div>
         </div>
         <%

@@ -12,7 +12,8 @@
 
     User mem = paramRequest.getUser();
     String suri = request.getParameter("uri");
-    String abusedDesc = mse.isAbused() ? "Inapropiado" : "Apropiado";
+    //String abusedDesc = mse.isAbused() ? "Inapropiado" : "Apropiado";
+    String abusedDesc ="Inapropiado";
     int rank = 0;
     long pageNumber = 0;
     boolean showComments = false;
@@ -206,7 +207,14 @@
         <div class="rec_votes_label"> votos</div>
     </div>
     <span class="abused">P&uacute;blicamente <span id="abused"><%=abusedDesc%></span></span>
-    <%if (mem.isSigned() && !mse.isAbused()) {%>
+    <%--if (mem.isSigned() && !mse.isAbused()) {%>
+        <div class="clearL"></div>
+        <div id="markop">
+            <div class="editarInfo"><p><a class="userTool" onclick="javascript:changeAbusedState();" href="#">Marcar como inapropiado</a></p></div>
+        </div>
+    <%}--%>
+
+    <%if (mem.isSigned()) {%>
         <div class="clearL"></div>
         <div id="markop">
             <div class="editarInfo"><p><a class="userTool" onclick="javascript:changeAbusedState();" href="#">Marcar como inapropiado</a></p></div>
