@@ -41,6 +41,17 @@ public class MicroSiteUtilBase extends org.semanticwb.model.SWBClass implements 
        {
            return (getMicroSiteUtil(id, model)!=null);
        }
+   public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteUtil> listMicroSiteUtilByCommSiteUtil(org.semanticwb.portal.community.MicroSiteWebPageUtil hascommsiteutilsinv,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteUtil> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_hasCommSiteUtilsInv, hascommsiteutilsinv.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteUtil> listMicroSiteUtilByCommSiteUtil(org.semanticwb.portal.community.MicroSiteWebPageUtil hascommsiteutilsinv)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteUtil> it=new org.semanticwb.model.GenericIterator(hascommsiteutilsinv.getSemanticObject().getModel().listSubjects(swbcomm_hasCommSiteUtilsInv,hascommsiteutilsinv.getSemanticObject()));
+       return it;
+   }
    public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteUtil> listMicroSiteUtilByModifiedBy(org.semanticwb.model.User modifiedby,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteUtil> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_modifiedBy, modifiedby.getSemanticObject()));
@@ -74,17 +85,6 @@ public class MicroSiteUtilBase extends org.semanticwb.model.SWBClass implements 
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteUtil> it=new org.semanticwb.model.GenericIterator(creator.getSemanticObject().getModel().listSubjects(swb_creator,creator.getSemanticObject()));
        return it;
    }
-   public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteUtil> listMicroSiteUtilByCommSiteUtil(org.semanticwb.portal.community.MicroSiteWebPageUtil hascommsiteutilsinv,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteUtil> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_hasCommSiteUtilsInv, hascommsiteutilsinv.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteUtil> listMicroSiteUtilByCommSiteUtil(org.semanticwb.portal.community.MicroSiteWebPageUtil hascommsiteutilsinv)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteUtil> it=new org.semanticwb.model.GenericIterator(hascommsiteutilsinv.getSemanticObject().getModel().listSubjects(swbcomm_hasCommSiteUtilsInv,hascommsiteutilsinv.getSemanticObject()));
-       return it;
-   }
     }
 
     public MicroSiteUtilBase(org.semanticwb.platform.SemanticObject base)
@@ -92,14 +92,37 @@ public class MicroSiteUtilBase extends org.semanticwb.model.SWBClass implements 
         super(base);
     }
 
-    public int getIndex()
+    public boolean isActive()
     {
-        return getSemanticObject().getIntProperty(swb_index);
+        return getSemanticObject().getBooleanProperty(swb_active);
     }
 
-    public void setIndex(int value)
+    public void setActive(boolean value)
     {
-        getSemanticObject().setIntProperty(swb_index, value);
+        getSemanticObject().setBooleanProperty(swb_active, value);
+    }
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteWebPageUtil> listCommSiteUtils()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteWebPageUtil>(getSemanticObject().listObjectProperties(swbcomm_hasCommSiteUtilsInv));
+    }
+
+    public boolean hasCommSiteUtil(org.semanticwb.portal.community.MicroSiteWebPageUtil micrositewebpageutil)
+    {
+        if(micrositewebpageutil==null)return false;
+        return getSemanticObject().hasObjectProperty(swbcomm_hasCommSiteUtilsInv,micrositewebpageutil.getSemanticObject());
+    }
+
+
+    public org.semanticwb.portal.community.MicroSiteWebPageUtil getCommSiteUtil()
+    {
+         org.semanticwb.portal.community.MicroSiteWebPageUtil ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbcomm_hasCommSiteUtilsInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.portal.community.MicroSiteWebPageUtil)obj.createGenericInstance();
+         }
+         return ret;
     }
 
     public java.util.Date getCreated()
@@ -110,6 +133,16 @@ public class MicroSiteUtilBase extends org.semanticwb.model.SWBClass implements 
     public void setCreated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_created, value);
+    }
+
+    public int getIndex()
+    {
+        return getSemanticObject().getIntProperty(swb_index);
+    }
+
+    public void setIndex(int value)
+    {
+        getSemanticObject().setIntProperty(swb_index, value);
     }
 
     public void setModifiedBy(org.semanticwb.model.User value)
@@ -132,6 +165,31 @@ public class MicroSiteUtilBase extends org.semanticwb.model.SWBClass implements 
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
+    }
+
+    public String getTitle()
+    {
+        return getSemanticObject().getProperty(swb_title);
+    }
+
+    public void setTitle(String value)
+    {
+        getSemanticObject().setProperty(swb_title, value);
+    }
+
+    public String getTitle(String lang)
+    {
+        return getSemanticObject().getProperty(swb_title, null, lang);
+    }
+
+    public String getDisplayTitle(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_title, lang);
+    }
+
+    public void setTitle(String title, String lang)
+    {
+        getSemanticObject().setProperty(swb_title, title, lang);
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource> listResources()
@@ -172,31 +230,6 @@ public class MicroSiteUtilBase extends org.semanticwb.model.SWBClass implements 
          return ret;
     }
 
-    public String getTitle()
-    {
-        return getSemanticObject().getProperty(swb_title);
-    }
-
-    public void setTitle(String value)
-    {
-        getSemanticObject().setProperty(swb_title, value);
-    }
-
-    public String getTitle(String lang)
-    {
-        return getSemanticObject().getProperty(swb_title, null, lang);
-    }
-
-    public String getDisplayTitle(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(swb_title, lang);
-    }
-
-    public void setTitle(String title, String lang)
-    {
-        getSemanticObject().setProperty(swb_title, title, lang);
-    }
-
     public java.util.Date getUpdated()
     {
         return getSemanticObject().getDateProperty(swb_updated);
@@ -205,16 +238,6 @@ public class MicroSiteUtilBase extends org.semanticwb.model.SWBClass implements 
     public void setUpdated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_updated, value);
-    }
-
-    public boolean isActive()
-    {
-        return getSemanticObject().getBooleanProperty(swb_active);
-    }
-
-    public void setActive(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(swb_active, value);
     }
 
     public void setCreator(org.semanticwb.model.User value)
@@ -235,29 +258,6 @@ public class MicroSiteUtilBase extends org.semanticwb.model.SWBClass implements 
          if(obj!=null)
          {
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteWebPageUtil> listCommSiteUtils()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteWebPageUtil>(getSemanticObject().listObjectProperties(swbcomm_hasCommSiteUtilsInv));
-    }
-
-    public boolean hasCommSiteUtil(org.semanticwb.portal.community.MicroSiteWebPageUtil micrositewebpageutil)
-    {
-        if(micrositewebpageutil==null)return false;
-        return getSemanticObject().hasObjectProperty(swbcomm_hasCommSiteUtilsInv,micrositewebpageutil.getSemanticObject());
-    }
-
-
-    public org.semanticwb.portal.community.MicroSiteWebPageUtil getCommSiteUtil()
-    {
-         org.semanticwb.portal.community.MicroSiteWebPageUtil ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbcomm_hasCommSiteUtilsInv);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.portal.community.MicroSiteWebPageUtil)obj.createGenericInstance();
          }
          return ret;
     }

@@ -153,14 +153,14 @@ public class CommentBase extends org.semanticwb.model.SWBClass implements org.se
          return ret;
     }
 
-    public boolean isSpam()
+    public int getSpam()
     {
-        return getSemanticObject().getBooleanProperty(swbcomm_comSpam);
+        return getSemanticObject().getIntProperty(swbcomm_comSpam);
     }
 
-    public void setSpam(boolean value)
+    public void setSpam(int value)
     {
-        getSemanticObject().setBooleanProperty(swbcomm_comSpam, value);
+        getSemanticObject().setIntProperty(swbcomm_comSpam, value);
     }
 
     public java.util.Date getUpdated()

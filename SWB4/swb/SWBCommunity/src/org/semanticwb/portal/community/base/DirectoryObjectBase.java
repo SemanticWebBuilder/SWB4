@@ -162,14 +162,14 @@ public class DirectoryObjectBase extends org.semanticwb.model.base.GenericObject
         getSemanticObject().setProperty(swb_tags, value);
     }
 
-    public boolean isAbused()
+    public int getAbused()
     {
-        return getSemanticObject().getBooleanProperty(swbcomm_abused);
+        return getSemanticObject().getIntProperty(swbcomm_abused);
     }
 
-    public void setAbused(boolean value)
+    public void setAbused(int value)
     {
-        getSemanticObject().setBooleanProperty(swbcomm_abused, value);
+        getSemanticObject().setIntProperty(swbcomm_abused, value);
     }
 
     public void setDirectoryResource(org.semanticwb.portal.community.DirectoryResource value)
