@@ -107,12 +107,13 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
         }
         if (so.getGenericInstance() instanceof MicroSiteElement) {
             MicroSiteElement mse = (MicroSiteElement) so.getGenericInstance();
-            if (mse.isAbused()) {
+            /*if (mse.isAbused()) {
                 mse.setAbused(false);
             } else {
                 mse.setAbused(true);
             }
-            message = Boolean.toString(mse.isAbused());
+            message = Boolean.toString(mse.isAbused());*/
+            mse.setAbused(mse.getAbused()+1);
         }
         response.setMode("returnStateMessage");
         response.setRenderParameter("message",
@@ -166,12 +167,14 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
                 Comment comment = iterator.next();
                 //System.out.println("comment.Id:" + comment.getId() + ", comparacion:" + comment.getId().equals(commentId));
                 if (comment.getId().equals(commentId)) {
-                    if (comment.isSpam()) {
+                    /*if (comment.isSpam()) {
                         comment.setSpam(false);
                     } else {
                         comment.setSpam(true);
                     }
-                    message = Boolean.toString(comment.isSpam());
+                    message = Boolean.toString(comment.isSpam());*/
+                    comment.setSpam(comment.getSpam()+1);
+
                     //System.out.println("message:" + message);
                     break;
                 }

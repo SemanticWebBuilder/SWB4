@@ -256,12 +256,13 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
         }
         if (so.getGenericInstance() instanceof DirectoryObject) {
             DirectoryObject mse = (DirectoryObject) so.getGenericInstance();
-            if (mse.isAbused()) {
+            /*if (mse.isAbused()) {
                 mse.setAbused(false);
             } else {
                 mse.setAbused(true);
             }
-            message = Boolean.toString(mse.isAbused());
+            message = Boolean.toString(mse.isAbused());*/
+            mse.setAbused(mse.getAbused()+1);
         }
         response.setMode("returnStateMessage");
         response.setRenderParameter("message",
@@ -313,13 +314,14 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
                 Comment comment = iterator.next();
                 //System.out.println("comment.Id:" + comment.getId() + ", comparacion:" + comment.getId().equals(commentId));
                 if (comment.getId().equals(commentId)) {
-                    if (comment.isSpam()) {
+                    /*if (comment.isSpam()) {
                         comment.setSpam(false);
                     } else {
                         comment.setSpam(true);
                     }
-                    message = Boolean.toString(comment.isSpam());
+                    message = Boolean.toString(comment.isSpam());*/
                     //System.out.println("message:" + message);
+                    comment.setSpam(comment.getSpam()+1);
                     break;
                 }
             }
