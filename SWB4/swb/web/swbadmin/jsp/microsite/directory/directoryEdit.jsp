@@ -37,7 +37,7 @@
         url.setAction(url.Action_EDIT);
         mgr.setAction(url.toString());
 
-        String basepath = SWBPortal.getWebWorkPath() + base.getWorkPath() + "/" + semObject.getId() + "/";
+        String basepath = SWBPortal.getWebWorkPath() + "/" + semObject.getWorkPath() + "/";
         DirectoryObject dirObj=(DirectoryObject)semObject.createGenericInstance();
         String dirPhoto=dirObj.getPhoto();
         if(dirPhoto!=null){
