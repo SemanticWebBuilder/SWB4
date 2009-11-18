@@ -154,7 +154,7 @@
                 %>
 
 
-        <%--
+        <%
             {
                 int noticias = 0;
                 if (wp.getWebSite().getWebPage(wp.getId() + "_News") != null) {
@@ -194,7 +194,7 @@
                 }
             }
 
-        --%>
+        %>
 
 
     </ul> 
