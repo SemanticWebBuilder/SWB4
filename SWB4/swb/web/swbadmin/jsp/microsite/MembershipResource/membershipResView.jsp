@@ -56,13 +56,10 @@
     %>
     <p><%=site.getDescription()%></p>
     <%
-            }
-            else
-                {
-                %>
-                        <p>Sin descripción</p>
-                        <%
-                }
+            } else {
+    %>
+    <p>Sin descripción</p>
+    <%            }
     %>
 
     <h2>Contenidos</h2>
@@ -84,29 +81,29 @@
         %>
         <li><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Blog").getUrl()%>"><img src="<%=cssPath%>icoBlog.png" alt="blog">Blog: <%=entradas%> entradas</a> <a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Blog").getUrl()%>" class="verMas">ver</a></li>
                 <%
+                        }
                     }
                 }
-            }
             }
 
                 %>
 
 
         <%
-        {
-            int eventos = 0;
-            if (wp.getWebSite().getWebPage(wp.getId() + "_Events") != null) {
-                Iterator<EventElement> elements = EventElement.ClassMgr.listEventElementByEventWebPage(wp.getWebSite().getWebPage(wp.getId() + "_Events"));
-                while (elements.hasNext()) {
-                    elements.next();
-                    eventos++;
-                }
+            {
+                int eventos = 0;
+                if (wp.getWebSite().getWebPage(wp.getId() + "_Events") != null) {
+                    Iterator<EventElement> elements = EventElement.ClassMgr.listEventElementByEventWebPage(wp.getWebSite().getWebPage(wp.getId() + "_Events"));
+                    while (elements.hasNext()) {
+                        elements.next();
+                        eventos++;
+                    }
 
         %>
         <li><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Events").getUrl()%>"><img src="<%=cssPath%>icoEventos.png" alt="eventos"><span class="elemento">Eventos:</span> <%=eventos%> entradas</a><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Events").getUrl()%>" class="verMas">ver</a></li>
                 <%
 
-            }
+                }
             }
 
                 %>
@@ -134,25 +131,30 @@
 
 
         <%
-            {
+            if (wp.getWebSite().getWebPage(wp.getId() + "_Members") != null) {
                 int miembros = 0;
-                MicroSite ms = (MicroSite) wp;
-                GenericIterator<Member> members = ms.listMembers();
-                while (members.hasNext()) {
-                    members.next();
-                    miembros++;
-                }
+                if (wp instanceof MicroSite) {
+                    MicroSite ms = (MicroSite) wp;
+                    if (ms != null) {
+                        GenericIterator<Member> members = ms.listMembers();
+                        while (members.hasNext()) {
+                            members.next();
+                            miembros++;
+                        }
 
         %>
         <li><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Members").getUrl()%>"><img src="<%=cssPath%>icoUsuario.png" alt="miembros"><span class="elemento">Miembros:</span> <%=miembros%> entradas</a><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Members").getUrl()%>" class="verMas">ver</a></li>
                 <%
 
+                    }
+                }
             }
+
 
                 %>
 
 
-        <%
+        <%--
             {
                 int noticias = 0;
                 if (wp.getWebSite().getWebPage(wp.getId() + "_News") != null) {
@@ -174,7 +176,7 @@
 
 
         <%
-        
+
             {
                 int videos = 0;
                 if (wp.getWebSite().getWebPage(wp.getId() + "_Videos") != null) {
@@ -192,10 +194,10 @@
                 }
             }
 
-                %>
+        --%>
 
 
-    </ul>
+    </ul> 
 </div>
 
 <div class="columnaCentro">
@@ -219,8 +221,8 @@
         %>
         <li><a href="<%=urla%>">Suscribirse a esta comunidad</a></li>
         <%
-                } else {
-                    urla.setParameter("act", "unsubscribe");
+                    } else {
+                        urla.setParameter("act", "unsubscribe");
         %>
         <li><a href="<%=urla%>">Cancelar suscripción a comunidad</a></li>
         <%
