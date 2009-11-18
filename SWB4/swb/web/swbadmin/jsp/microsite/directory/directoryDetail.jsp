@@ -35,7 +35,7 @@
     WebPage wpage = paramRequest.getWebPage();
     Resource base = paramRequest.getResourceBase();
     String perfilPath = wpage.getWebSite().getWebPage("perfil").getUrl();
-    String path = SWBPortal.getWebWorkPath() + base.getWorkPath() + "/" + semObject.getId() + "/";
+    String path = SWBPortal.getWebWorkPath() + "/" + semObject.getWorkPath() + "/";
     
     DirectoryObject dirObj = (DirectoryObject) semObject.createGenericInstance();
 
