@@ -23,8 +23,10 @@
         photo.incViews();  //Incrementar apariciones
 %>
 <div class="columnaIzquierda">
-    <p><a dojoType="dojox.image.Lightbox" title="<%= photo.getTitle()%>" href="<%= SWBPortal.getWebWorkPath() + photo.getImageURL()%>">
-            <img id="img_<%=photo.getId()%>" src="<%= SWBPortal.getWebWorkPath() + photo.getImageURL()%>" alt="<%= photo.getTitle()%>" border="0" width="300" height="100%" />
+    <h2><%=photo.getTitle()%></h2><br>
+    <p><%= photo.getDescription()%></p>
+    <p align="center"><a dojoType="dojox.image.Lightbox" title="<%= photo.getTitle()%>" href="<%= SWBPortal.getWebWorkPath() + photo.getImageURL()%>">
+            <img id="img_<%=photo.getId()%>" src="<%= SWBPortal.getWebWorkPath() + photo.getPhotoThumbnail()%>" alt="<%= photo.getTitle()%>" border="0" width="50%" height="50%" />
         </a></p>        
     <script type="text/javascript">
         var img = document.getElementById('img_<%=photo.getId()%>');
@@ -48,8 +50,7 @@
 %>
 </div>
 <div class="columnaCentro">
-    <h2 class="blogTitle"><%=photo.getTitle()%></h2><br>
-    <p><%= photo.getDescription()%></p>
+    <p>&nbsp;</p>
     <p>Autor: <%= photo.getCreator().getFullName()%></p>
     <p>Creado el: <%=dateFormat.format(photo.getCreated())%></p>
     <p><%= photo.getViews()%> vistas</p>
