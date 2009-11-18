@@ -1,5 +1,5 @@
 <%@page contentType="text/html"%>
-<%@page import="org.semanticwb.portal.lib.*,java.text.SimpleDateFormat, org.semanticwb.platform.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<%@page import="java.util.*,org.semanticwb.portal.lib.*,java.text.SimpleDateFormat, org.semanticwb.platform.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             Resource base = paramRequest.getResourceBase();
@@ -13,21 +13,13 @@
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");
             String rank = df.format(event.getRank());
-            if (event != null && event.canView(member))
-            {
+            if (event != null && event.canView(member)) {
                 //event.incViews();
 
 %>
 <div class="columnaIzquierda">
-
-
-
-
-
-
     <%
-                if (event != null && event.canView(member))
-                {
+                if (event != null && event.canView(member)) {
                     event.incViews();
     %>
     <p>
@@ -49,20 +41,80 @@
     <h2 class="blogTitle"><%= event.getTitle()%></h2>
     <p><%= event.getDescription()%></p>
     <p>Audiencia: <%= event.getAudienceType()%></p>
+
+    <%
+            GregorianCalendar cal = new GregorianCalendar(new Locale("es"));
+            SimpleDateFormat sf = new SimpleDateFormat("MMMM", new Locale("es"));
+            String smonth = sf.format(event.getStartDate());
+            smonth = smonth.substring(0, 1).toUpperCase() + smonth.substring(1);
+            cal.setTime(event.getStartDate());
+            int year = cal.get(cal.YEAR);
+    %>
+    <div id="calendario">
+        <h2><%=smonth%> de <%=year%></h2>
+        <ul class="dias semana">
+            <li>D</li><li>L</li><li>M</li><li>M</li><li>J</li><li>V</li><li>S</li>
+        </ul>
+        <ul class="dias">
+            <%
+            int inicio = 1;
+            int fin = cal.getActualMaximum(cal.DAY_OF_MONTH);
+            cal.set(cal.DAY_OF_MONTH, 1);
+            int offset = cal.get(cal.DAY_OF_WEEK) - cal.SUNDAY;
+            for (int i = 1; i <= offset; i++) {
+            %>
+            <li>&nbsp;</li>
+            <%            }
+            cal.setTime(event.getStartDate());
+
+            java.util.Calendar cend=java.util.Calendar.getInstance();
+            cend.setTime(event.getEndDate());
+            java.util.Calendar cinit=java.util.Calendar.getInstance();
+            cinit.setTime(event.getStartDate());
+
+            for (int i = inicio; i <= fin; i++) {
+                boolean active = false;
+                cal.set(cal.DAY_OF_MONTH, i);
+                if(cal.compareTo(cinit)>=0 && cal.compareTo(cend)<=0)
+                    {
+                        active=true;
+                    }
+                if (active) {
+            %>
+            <li><a href="#"><%=i%></a></li>
+            <%
+                } else {
+            %>
+            <li><%=i%></li>
+            <%
+
+                }
+            }
+            %>
+            <!-- <li>&nbsp;</li> <li>&nbsp;</li> <li>1</li> <li>2</li> <li><a href="#">3</a></li> <li>4</li> <li>5</li>
+            <li>6</li> <li>7</li> <li>8</li> <li>9</li> <li>10</li> <li>11</li> <li>12</li>
+            <li>13</li> <li>14</li> <li>15</li> <li><a href="#">16</a></li> <li><a href="#">17</a></li> <li>18</li> <li>19</li>
+            <li>20</li> <li>21</li> <li>22</li> <li>23</li> <li>24</li> <li>25</li> <li>26</li>
+            <li>27</li> <li>28</li> <li>29</li> <li>30</li> <li>&nbsp;</li> <li>&nbsp;</li> <li>&nbsp;</li> -->
+        </ul>
+        <div class="clear">&nbsp;</div>
+    </div>
+
+
+
+
     <p>Inicia:<strong><%= (event.getStartDate() == null ? "" : dateFormat.format(event.getStartDate()))%></strong> a las <strong><%= (event.getStartTime() == null ? "" : timeFormat.format(event.getStartTime()))%></strong></p>
     <p>Termina:<strong><%= (event.getEndDate() == null ? "" : dateFormat.format(event.getEndDate()))%></strong> a las <strong><%= (event.getEndTime() == null ? "" : timeFormat.format(event.getEndTime()))%></strong></p>
     <p>Lugar: <strong><%= event.getPlace()%></strong></p>
     <p>Asistentes:
         <%
             Iterator<User> users = event.listAttendants();
-            while (users.hasNext())
-            {
+            while (users.hasNext()) {
                 User m = users.next();
         %>
         <%= m.getFullName()%>
         <%
-            if (users.hasNext())
-            {
+                if (users.hasNext()) {
         %>,&nbsp;<%            }
             }
         %>
@@ -80,21 +132,18 @@
     %>
     <p><a href="<%= paramRequest.getRenderUrl()%>">[Ver todos los eventos]</a></p>
     <%
-           if (event.canModify(member))
-           {
+            if (event.canModify(member)) {
 
     %>
     <p><a href="<%=paramRequest.getActionUrl().setParameter("act", "attend").setParameter("uri", event.getURI())%>">[Asistir al evento]</a></p>
     <%  }%>  
     <%
-            if (event.canModify(member))
-            {
+            if (event.canModify(member)) {
     %>
     <p><a href="<%= back%>">[Editar información]</a></p>
     <%
             }
-            if (event.canModify(member))
-            {
+            if (event.canModify(member)) {
     %>
     <p><a href="<%= paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", event.getURI())%>">[Eliminar]</a></p>
     <%
@@ -102,18 +151,14 @@
 
     <ul class="miContenido">
         <%
-                    SWBResourceURL urla = paramRequest.getActionUrl();
-                    if (user.isRegistered())
-                    {
-                        if (member == null)
-                        {
-                            urla.setParameter("act", "subscribe");
+            SWBResourceURL urla = paramRequest.getActionUrl();
+            if (user.isRegistered()) {
+                if (member == null) {
+                    urla.setParameter("act", "subscribe");
         %>
         <li><a href="<%=urla%>">Suscribirse a esta comunidad a comunidad</a></li>
         <%
-                }
-                else
-                {
+                } else {
                     urla.setParameter("act", "unsubscribe");
         %>
         <li><a href="<%=urla%>">Cancelar suscripción a comunidad</a></li>
