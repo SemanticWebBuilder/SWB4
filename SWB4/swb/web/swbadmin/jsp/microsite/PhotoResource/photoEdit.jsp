@@ -23,14 +23,7 @@
 %>
 <script type="text/javascript">
 function validaForma()
-{
-    var foto = document.frmaddfoto.title.value;
-    if(!foto)
-    {
-        alert('¡Debe ingresar el archivo de la foto!');
-        document.frmaddfoto.foto.focus();
-        return;
-    }
+{    
     var title = document.frmaddfoto.title.value;
     if(!title)
     {
@@ -51,7 +44,7 @@ function validaForma()
 
 <br />
 <div id="panorama">
-<form name="frmaddfoto" id="frmaddfoto" method="post" action="<%=paramRequest.getActionUrl()%>">
+<form name="frmaddfoto" id="frmaddfoto" enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
     <div>
         <fieldset>
             <legend>Editar foto</legend>
@@ -93,7 +86,7 @@ function validaForma()
             <legend></legend>
             <div>
             <p>
-                <div class="editarInfo"><p><a onclick="validaForma()" href="#">Enviar</a></p></div>
+                <div class="editarInfo"><p><a onclick="validaForma()" href="#">Guardar</a></p></div>
                 <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Cancelar</a></p></div>
             </p>
             </div>

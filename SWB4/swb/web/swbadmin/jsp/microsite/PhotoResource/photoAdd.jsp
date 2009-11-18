@@ -67,7 +67,7 @@
                 </div>
             </fieldset>
             <fieldset>
-                <legend>¿Quién puede ver este video?</legend>
+                <legend>¿Quién puede ver esta foto?</legend>
                 <div>
                     <p>
                         <label for="level"><input type="radio" name="level" value="0" checked="checked" />&nbsp;Cualquiera</label>
