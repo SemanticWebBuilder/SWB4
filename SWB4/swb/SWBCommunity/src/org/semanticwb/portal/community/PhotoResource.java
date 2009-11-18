@@ -108,9 +108,37 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                     ((MicroSiteWebPageUtil)page).sendNotification(rec);
                 }
                 rec.setPhotoWebPage(page);
+            }else if(params.containsValue("edit")) {
+                String uri = params.get("uri");
+                PhotoElement rec = (PhotoElement)SemanticObject.createSemanticObject(uri).createGenericInstance();
+                if(rec!=null && rec.canModify(mem)) {
+                    if(params.containsKey("filename")) {
+                        File f = new File(SWBPortal.getWorkPath()+rec.getImageURL());
+                        if(f!=null && f.exists()) {
+                            f.delete();
+                        }
+                        f = new File(SWBPortal.getWorkPath()+rec.getPhotoThumbnail());
+                        if(f!=null && f.exists()) {
+                            f.delete();
+                        }
+                        rec.setImageURL(params.get("filename"));
+                        rec.setPhotoThumbnail(params.get("thumbnail"));
+                    }
+                    if(params.containsKey("title"))
+                        rec.setTitle(params.get("title"));
+                    if(params.containsKey("description"))
+                        rec.setDescription(params.get("description"));
+                    if(params.containsKey("tags"))
+                        rec.setTags(params.get("tags"));
+                    if(params.containsKey("level"))
+                        rec.setVisibility(Integer.parseInt(params.get("level")));
+                    if(page instanceof MicroSiteWebPageUtil) {
+                        ((MicroSiteWebPageUtil)page).sendNotification(rec);
+                    }
+                }
             }
         }
-        else if("edit".equals(action)) {
+        /*else if("edit".equals(action)) {
             String uri=request.getParameter("uri");
             PhotoElement rec = (PhotoElement)SemanticObject.createSemanticObject(uri).createGenericInstance();
             if(rec!=null && rec.canModify(mem)) {
@@ -123,11 +151,19 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                 }
             }
             response.setRenderParameter("act", "view");
-        }
+        }*/
         else if("remove".equals(action)) {
             String uri = request.getParameter("uri");
             PhotoElement rec = (PhotoElement)SemanticObject.createSemanticObject(uri).createGenericInstance();
             if(rec!=null && rec.canModify(mem)) {
+                File f = new File(SWBPortal.getWorkPath()+rec.getImageURL());
+                if(f!=null && f.exists()) {
+                    f.delete();
+                }
+                f = new File(SWBPortal.getWorkPath()+rec.getPhotoThumbnail());
+                if(f!=null && f.exists()) {
+                    f.delete();
+                }
                 rec.remove();  //elimina el registro
             }
         }else {
