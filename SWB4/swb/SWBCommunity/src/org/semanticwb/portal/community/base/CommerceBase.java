@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class CommerceBase extends org.semanticwb.portal.community.Organization implements org.semanticwb.model.Rankable,org.semanticwb.portal.community.FacilitiesEnable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.portal.community.Addressable,org.semanticwb.portal.community.Contactable,org.semanticwb.model.Geolocalizable,org.semanticwb.portal.community.Interactiveable
+public class CommerceBase extends org.semanticwb.portal.community.Organization implements org.semanticwb.model.Rankable,org.semanticwb.model.Campable,org.semanticwb.portal.community.FacilitiesEnable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.portal.community.Addressable,org.semanticwb.model.Geolocalizable,org.semanticwb.portal.community.Contactable,org.semanticwb.portal.community.Interactiveable
 {
        public static final org.semanticwb.platform.SemanticProperty swbcomm_paymentType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#paymentType");
        public static final org.semanticwb.platform.SemanticClass swbcomm_Commerce=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Commerce");
@@ -46,6 +46,17 @@ public class CommerceBase extends org.semanticwb.portal.community.Organization i
        {
            return (getCommerce(id, model)!=null);
        }
+   public static java.util.Iterator<org.semanticwb.portal.community.Commerce> listCommerceByCamp(org.semanticwb.model.Camp camp,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Commerce> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_camp, camp.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.Commerce> listCommerceByCamp(org.semanticwb.model.Camp camp)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Commerce> it=new org.semanticwb.model.GenericIterator(camp.getSemanticObject().getModel().listSubjects(swb_camp,camp.getSemanticObject()));
+       return it;
+   }
    public static java.util.Iterator<org.semanticwb.portal.community.Commerce> listCommerceByDirectoryResource(org.semanticwb.portal.community.DirectoryResource directoryresource,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Commerce> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_directoryResource, directoryresource.getSemanticObject()));

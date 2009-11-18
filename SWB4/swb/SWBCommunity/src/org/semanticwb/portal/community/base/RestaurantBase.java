@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class RestaurantBase extends org.semanticwb.portal.community.Commerce implements org.semanticwb.model.Rankable,org.semanticwb.portal.community.FacilitiesEnable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.portal.community.Addressable,org.semanticwb.portal.community.Contactable,org.semanticwb.model.Geolocalizable,org.semanticwb.portal.community.Interactiveable
+public class RestaurantBase extends org.semanticwb.portal.community.Commerce implements org.semanticwb.model.Rankable,org.semanticwb.model.Campable,org.semanticwb.portal.community.FacilitiesEnable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.portal.community.Addressable,org.semanticwb.model.Geolocalizable,org.semanticwb.portal.community.Contactable,org.semanticwb.portal.community.Interactiveable
 {
        public static final org.semanticwb.platform.SemanticClass swbcomm_Restaurant=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Restaurant");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Restaurant");
@@ -45,6 +45,17 @@ public class RestaurantBase extends org.semanticwb.portal.community.Commerce imp
        {
            return (getRestaurant(id, model)!=null);
        }
+   public static java.util.Iterator<org.semanticwb.portal.community.Restaurant> listRestaurantByCamp(org.semanticwb.model.Camp camp,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Restaurant> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_camp, camp.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.Restaurant> listRestaurantByCamp(org.semanticwb.model.Camp camp)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Restaurant> it=new org.semanticwb.model.GenericIterator(camp.getSemanticObject().getModel().listSubjects(swb_camp,camp.getSemanticObject()));
+       return it;
+   }
    public static java.util.Iterator<org.semanticwb.portal.community.Restaurant> listRestaurantByDirectoryResource(org.semanticwb.portal.community.DirectoryResource directoryresource,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Restaurant> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_directoryResource, directoryresource.getSemanticObject()));
