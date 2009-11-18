@@ -38,7 +38,7 @@
             }
         }
     </script>
-</div>
+
 <%
     }
 
@@ -46,7 +46,7 @@
     photo.renderGenericElements(request, res, paramRequest);
     out.write(res.toString());
 %>
-
+</div>
 <div class="columnaCentro">
     <h2 class="blogTitle"><%=photo.getTitle()%></h2><br>
     <p><%= photo.getDescription()%></p>
