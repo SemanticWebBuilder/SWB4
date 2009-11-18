@@ -91,7 +91,7 @@ public class ExternalRepositoryTest
             user.setPassword("alma");
             
         }
-        Iterator<SemanticClass> it = UserTypeDef.ClassMgr.sclass.listSubClasses();
+        Iterator<SemanticClass> it = UserTypeDef.sclass.listSubClasses();
         while (it.hasNext()){
             SemanticClass utd = it.next();
             //user.addUserType(utd.getName());
