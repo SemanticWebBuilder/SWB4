@@ -21,12 +21,18 @@
     <%
                 if (event != null && event.canView(member)) {
                     event.incViews();
+                    
     %>
-    <p>
+    <h2><%= event.getTitle()%></h2>
+<p><%= event.getDescription()%></p>
+<p align="center">
         <a href="<%= SWBPortal.getWebWorkPath() + event.getEventImage()%>" target="_self">
-            <img id="img_<%=event.getId()%>" src="<%= SWBPortal.getWebWorkPath() + event.getEventImage()%>" alt="<%=event.getTitle()%>" border="0" width="380" height="100%" />
+            <img id="img_<%=event.getId()%>" src="<%= SWBPortal.getWebWorkPath() + event.getEventThumbnail()%>" alt="<%=event.getTitle()%>" border="0" width="50%" height="50%" />
         </a>
     </p>
+    <p><span class="itemTitle">Comienza:</span> <%= (event.getStartDate() == null ? "" : dateFormat.format(event.getStartDate()))%></strong> a las <strong><%= (event.getStartTime() == null ? "" : timeFormat.format(event.getStartTime()))%><br>
+    <span class="itemTitle">Termina:</span> <%= (event.getEndDate() == null ? "" : dateFormat.format(event.getEndDate()))%></strong> a las <strong><%= (event.getEndTime() == null ? "" : timeFormat.format(event.getEndTime()))%></p>
+
     <br/>
     <%
                 }
@@ -37,10 +43,8 @@
     %>
 
 </div>
-<div class="columnaCentro">
-    <h2 class="blogTitle"><%= event.getTitle()%></h2>
-    <p><%= event.getDescription()%></p>
-    <p>Audiencia: <%= event.getAudienceType()%></p>
+<div class="columnaCentro">        
+    
 
     <%
             GregorianCalendar cal = new GregorianCalendar(new Locale("es"));
@@ -90,21 +94,11 @@
 
                 }
             }
-            %>
-            <!-- <li>&nbsp;</li> <li>&nbsp;</li> <li>1</li> <li>2</li> <li><a href="#">3</a></li> <li>4</li> <li>5</li>
-            <li>6</li> <li>7</li> <li>8</li> <li>9</li> <li>10</li> <li>11</li> <li>12</li>
-            <li>13</li> <li>14</li> <li>15</li> <li><a href="#">16</a></li> <li><a href="#">17</a></li> <li>18</li> <li>19</li>
-            <li>20</li> <li>21</li> <li>22</li> <li>23</li> <li>24</li> <li>25</li> <li>26</li>
-            <li>27</li> <li>28</li> <li>29</li> <li>30</li> <li>&nbsp;</li> <li>&nbsp;</li> <li>&nbsp;</li> -->
+            %>            
         </ul>
         <div class="clear">&nbsp;</div>
     </div>
-
-
-
-
-    <p>Inicia:<strong><%= (event.getStartDate() == null ? "" : dateFormat.format(event.getStartDate()))%></strong> a las <strong><%= (event.getStartTime() == null ? "" : timeFormat.format(event.getStartTime()))%></strong></p>
-    <p>Termina:<strong><%= (event.getEndDate() == null ? "" : dateFormat.format(event.getEndDate()))%></strong> a las <strong><%= (event.getEndTime() == null ? "" : timeFormat.format(event.getEndTime()))%></strong></p>
+    <p>Audiencia: <%= event.getAudienceType()%></p>
     <p>Lugar: <strong><%= event.getPlace()%></strong></p>
     <p>Asistentes:
         <%
