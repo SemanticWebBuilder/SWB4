@@ -13,6 +13,7 @@
 <%
     String uri = request.getParameter("uri");
     EventElement rec = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
+
     if (rec == null) {
 %>
         Error: Elemento no encontrado...
@@ -74,7 +75,7 @@
                 <p>
                     <label for="foto">Imagen del evento:&nbsp;</label>
                     <a href="<%= SWBPortal.getWebWorkPath()+rec.getEventImage()%>" target="_self">
-                        <img id="img_<%=rec.getId()%>" src="<%= SWBPortal.getWebWorkPath()+rec.getEventImage() %>" alt="<%= rec.getTitle() %>" border="0" />
+                        <img id="img_<%=rec.getId()%>" src="<%= SWBPortal.getWebWorkPath()+rec.getEventThumbnail() %>" alt="<%= rec.getTitle() %>" border="0" />
                     </a><br />
                     <input type="file" id="foto" name="foto" size="45" />
                 </p>
