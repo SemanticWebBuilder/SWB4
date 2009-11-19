@@ -42,9 +42,9 @@
     %>
     <img src="<%=SWBPortal.getWebWorkPath()%><%=comment.getCreator().getPhoto()%>" alt="foto">
     <%
-                }
-                else
-                {
+                    }
+                    else
+                    {
     %>
     <img src="<%=SWBPortal.getContextPath()%>/swbadmin/images/defaultPhoto.jpg" alt="foto">
     <%
@@ -55,8 +55,8 @@
                     npe.printStackTrace();
                 }
                 //out.write("<span class="comment-auth">");
-%>
-     <div class="commentText">
+    %>
+    <div class="commentText">
         <p>Escrito por
             <%
                 try
@@ -66,15 +66,15 @@
             %>
             <a href="<%=perfilPath%>?user=<%=comment.getCreator().getEncodedURI()%>"><%=comment.getCreator().getFullName()%></a>
             <%
-                        }
-                        else
-                        {
+                    }
+                    else
+                    {
             %>
             Desconocido
             <%        }
-                    }
-                    catch (NullPointerException npe)
-                    {
+                }
+                catch (NullPointerException npe)
+                {
             %>
             Desconocido
             <%        }
@@ -82,13 +82,14 @@
             <%=SWBUtils.TEXT.getTimeAgo(comment.getCreated(), mem.getUser().getLanguage())%>
         </p>
         <p><%=comment.getDescription()%></p>
-        <% int spam=0;
-            try
-            {
-                spam=comment.getSpam();
-                        }
-            catch(Exception e)
-                    {
+        <% int spam = 0;
+                try
+                {
+                    spam = comment.getSpam();
+                }
+                catch (Exception e)
+                {
+                    comment.setSpam(0);
                     e.printStackTrace();
                 }
         %>
@@ -105,7 +106,7 @@
 
         %>
 
-</div>
+    </div>
 </div>
 
 <%
