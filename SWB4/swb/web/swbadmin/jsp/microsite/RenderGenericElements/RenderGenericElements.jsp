@@ -205,7 +205,7 @@
         </span>
     </span>
     <%
-    if (mem.canView() && !mse.isAbused()) {
+    if (mem.canView()) {
     %>
         <div class="clearL"></div>
         <div id="markop">
