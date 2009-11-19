@@ -9,7 +9,6 @@ import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -25,7 +24,7 @@ public class PerfilPhoto extends GenericAdmResource {
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         try {
             request.setAttribute("paramRequest", paramRequest);
-            RequestDispatcher rd = request.getRequestDispatcher(SWBPlatform.getContextPath() + "/swbadmin/jsp/microsite/perfil/photo.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/swbadmin/jsp/microsite/perfil/photo.jsp");
             rd.include(request, response);
         } catch (Exception e) {
             e.printStackTrace();
