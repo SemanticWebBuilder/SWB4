@@ -253,7 +253,7 @@
         <div class="rec_votes_num" id="reviews"><%=mse.getReviews()%></div>
         <div class="rec_votes_label"> votos</div>
     </div>
-    <div class="rec_votes">
+    <div  class="rank_label">
         <%
         java.text.DecimalFormat df = new java.text.DecimalFormat("###,###");
         String data = df.format(mse.getAbused());
