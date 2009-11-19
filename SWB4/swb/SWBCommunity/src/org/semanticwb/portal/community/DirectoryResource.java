@@ -458,7 +458,14 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
                 if (comment.getId().equals(commentId))
                 {
 
-                    comment.setSpam(comment.getSpam() + 1);
+                    try
+                    {
+                        comment.setSpam(comment.getSpam() + 1);
+                    }
+                    catch (Exception e)
+                    {
+                        comment.setSpam(1);
+                    }
                     request.getSession().setAttribute(comment.getURI(), "true");
                     break;
                 }
