@@ -474,7 +474,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String path = SWBPlatform.getContextPath() + "/swbadmin/jsp/bookmarks/bookmarksView.jsp";
+        String path ="/swbadmin/jsp/bookmarks/bookmarksView.jsp";
         User user = paramRequest.getUser();
         String showList = paramRequest.getArgument("showList", "false");
 
