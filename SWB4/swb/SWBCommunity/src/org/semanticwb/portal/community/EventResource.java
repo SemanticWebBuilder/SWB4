@@ -234,7 +234,7 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
             EventElement rec = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
 
             //Add attendant member
-            if (rec != null && rec.canModify(mem)) {
+            if (rec != null && rec.canView(mem)) {
                 boolean found = false;
                 Iterator<User> uit = rec.listAttendants();
                 while (uit.hasNext() && !found) {
