@@ -20,7 +20,7 @@
     {
         return;
     }
-    //String editDocURL = paramRequest.getActionUrl().setParameter("act", "edit").setParameter("uri", rec.getURI()).toString();
+    String editElURL = paramRequest.getActionUrl().setParameter("act", "edit").setParameter("uri", rec.getURI()).toString();
 %>
 <script type="text/javascript">
     function validaForma()
@@ -45,7 +45,7 @@
 
 <br />
 <div id="panorama">
-<form name="frmadddoc" id="frmadddoc" enctype="multipart/form-data" method="post" action="<%= paramRequest.getActionUrl()%>">
+<form name="frmadddoc" id="frmadddoc" enctype="multipart/form-data" method="post" action="<%= editElURL%>">
     <div>
         <fieldset>
             <legend>Editar documento</legend>
@@ -93,7 +93,5 @@
             </div>
         </fieldset>
     </div>
-    <input type="hidden" name="uri" value="<%=rec.getURI()%>"/>
-    <input type="hidden" name="act" value="edit"/>
 </form>
 </div>
