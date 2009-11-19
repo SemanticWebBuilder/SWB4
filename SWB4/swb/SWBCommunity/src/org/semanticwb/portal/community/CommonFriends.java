@@ -25,7 +25,7 @@ public class CommonFriends extends GenericResource {
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         try {
             request.setAttribute("paramRequest", paramRequest);
-            RequestDispatcher rd = request.getRequestDispatcher(SWBPlatform.getContextPath() + "/swbadmin/jsp/microsite/perfil/commonFriends.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/swbadmin/jsp/microsite/perfil/commonFriends.jsp");
             rd.include(request, response);
         } catch (Exception e) {
             e.printStackTrace();
