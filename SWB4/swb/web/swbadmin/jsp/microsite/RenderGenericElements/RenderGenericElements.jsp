@@ -102,6 +102,7 @@
         request.open("GET", url, true);
         request.onreadystatechange = abusedStateChanged;
         request.send(null);
+        document.getElementById("markabused").style.visibility='hidden';
     }
 
     function abusedStateChanged() {
@@ -154,6 +155,8 @@
         request.open("GET", url, true);
         request.onreadystatechange = spamStateChanged;
         request.send(null);
+        document.getElementById("divspamMark"+id).style.visibility='hidden';
+
     }
 
     function spamStateChanged() {
@@ -199,18 +202,22 @@
         <div class="rec_votes_label"> votos</div>
     </div>
     <span class="abused">
-        <%=mse.getAbused()%> veces marcado como inapropiado
+        <%
+            java.text.DecimalFormat df=new java.text.DecimalFormat("###,###");
+            String data=df.format(mse.getAbused());
+        %>
+        <%=data%> veces marcado como inapropiado
         <span id="abused">
         
         </span>
     </span>
     <%
-    if (mem.canView()) {
+    
+    if (mem.canView() && request.getSession().getAttribute(mse.getURI())==null) {
     %>
         <div class="clearL"></div>
-        <div id="markop">
-            
-            <div class="editarInfo"><p><a class="userTool" href="javascript:changeAbusedState();">Marcar como inapropiado</a></p></div>
+        <div id="markop">            
+            <%=request.getSession().getAttribute(mse.getURI())%><div id="markabused" class="editarInfo"><p><a class="userTool" href="javascript:changeAbusedState();">Marcar como inapropiado</a></p></div>
         </div>
     <%
     }
