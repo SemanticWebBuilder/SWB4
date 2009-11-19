@@ -78,11 +78,11 @@
         request.send(null);
     }
 
-    function ranked() {
-        var response = request.responseText;
+    function ranked() {        
         if (count == 0) {
             if(request.readyState!=4) return;
             if(request.status==200) {
+                var response = request.responseText;
                 if ('Not OK'!=response && ''!=response) {
                     var ranking = Math.floor(response.split('|')[0]);
                     var votes = response.split('|')[1];
