@@ -174,7 +174,6 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
                     }
                     message = Boolean.toString(comment.isSpam());*/
                     comment.setSpam(comment.getSpam()+1);
-
                     //System.out.println("message:" + message);
                     break;
                 }
