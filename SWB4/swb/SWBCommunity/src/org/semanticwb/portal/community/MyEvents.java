@@ -27,7 +27,6 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.WebPage;
@@ -55,14 +54,14 @@ public class MyEvents extends GenericAdmResource {
         if (rsa != null && rsa instanceof WebPage) {
                 url = ((WebPage) rsa).getUrl();
         }
-        String path = SWBPlatform.getContextPath() + "/swbadmin/jsp/microsite/perfil/myEvents.jsp";
+        String path = "/swbadmin/jsp/microsite/perfil/myEvents.jsp";
         if (action == null) action = "view";
         
         if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
-            path = SWBPlatform.getContextPath() + "/swbadmin/jsp/microsite/perfil/myEventsCalendar.jsp";
+            path = "/swbadmin/jsp/microsite/perfil/myEventsCalendar.jsp";
         } else if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
             if (mode != null && mode.equals("calendar")) {
-                path = SWBPlatform.getContextPath() + "/swbadmin/jsp/microsite/perfil/myEventsCalendar.jsp";
+                path = "/swbadmin/jsp/microsite/perfil/myEventsCalendar.jsp";
             }
         }
         
