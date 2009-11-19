@@ -45,127 +45,165 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.portal.community.utilresources.ImageResizer;
 
-public class PhotoResource extends org.semanticwb.portal.community.base.PhotoResourceBase {
+public class PhotoResource extends org.semanticwb.portal.community.base.PhotoResourceBase
+{
 
     private static Logger log = SWBUtils.getLogger(PhotoResource.class);
 
-    public PhotoResource() {
+    public PhotoResource()
+    {
     }
 
-    public PhotoResource(org.semanticwb.platform.SemanticObject base) {
+    public PhotoResource(org.semanticwb.platform.SemanticObject base)
+    {
         super(base);
     }
 
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
         String act = request.getParameter("act");
-        if (act == null) {
+        if (act == null)
+        {
             act = (String) request.getSession(true).getAttribute("act");
             /*request.getSession(true).setAttribute("act", null);
             request.getSession(true).removeAttribute("act");*/
         }
-        if (act == null) {
+        if (act == null)
+        {
             act = "view";
         }
 
         String path = "/swbadmin/jsp/microsite/PhotoResource/photoView.jsp";
-        if (act.equals("add")) {
+        if (act.equals("add"))
+        {
             path = "/swbadmin/jsp/microsite/PhotoResource/photoAdd.jsp";
         }
-        if (act.equals("edit")) {
+        if (act.equals("edit"))
+        {
             path = "/swbadmin/jsp/microsite/PhotoResource/photoEdit.jsp";
         }
-        if (act.equals("detail")) {
+        if (act.equals("detail"))
+        {
             path = "/swbadmin/jsp/microsite/PhotoResource/photoDetail.jsp";
         }
 
         RequestDispatcher dis = request.getRequestDispatcher(path);
-        try {
+        try
+        {
             request.setAttribute("paramRequest", paramRequest);
             dis.include(request, response);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             log.error(e);
         }
     }
 
     @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
+    {
         final String path = "/../swbadmin/jsp/microsite/PhotoResource/sinfoto.png";
         WebPage page = response.getWebPage();
         Member mem = Member.getMember(response.getUser(), response.getWebPage());
         final String realpath = SWBPortal.getWorkPath();
         final String finalpath = page.getWorkPath() + "/";
-        if (!mem.canView()) {
+        if (!mem.canView())
+        {
             return;  //si el usuario no pertenece a la red sale;
         }
         String action = request.getParameter("act");
-        if (action == null) {
+        if (action == null)
+        {
             HashMap<String, String> params = upload(request);
-            if (mem.canAdd() && params.containsValue("add")) {
-                
+            if (mem.canAdd() && params.containsValue("add"))
+            {
+
 
                 PhotoElement rec = PhotoElement.ClassMgr.createPhotoElement(getResourceBase().getWebSite());
 
-                if (params.containsKey("filename")) {
+                if (params.containsKey("filename"))
+                {
                     File file = new File(realpath + params.get("filename"));
-                    if (file.exists()) {
+                    if (file.exists())
+                    {
                         FileInputStream in = new FileInputStream(file);
                         String filename = file.getName();
                         String target = realpath + finalpath + filename;
-                        FileOutputStream out = new FileOutputStream(target);
+                        File ftarget = new File(target);
+                        ftarget.getParentFile().mkdirs();
+                        FileOutputStream out = new FileOutputStream(ftarget);
                         SWBUtils.IO.copyStream(in, out);
                         file.delete();
                         params.put("filename", finalpath + filename);
                     }
                     rec.setImageURL(params.get("filename"));
-                } else {
+                }
+                else
+                {
                     rec.setImageURL(path);
                 }
 
 
-                if (params.containsKey("thumbnail")) {
+                if (params.containsKey("thumbnail"))
+                {
                     File file = new File(realpath + params.get("thumbnail"));
-                    if (file.exists()) {
+                    if (file.exists())
+                    {
                         FileInputStream in = new FileInputStream(file);
                         String filename = file.getName();
                         String target = realpath + finalpath + filename;
-                        FileOutputStream out = new FileOutputStream(target);
+                        File ftarget = new File(target);
+                        ftarget.getParentFile().mkdirs();
+                        FileOutputStream out = new FileOutputStream(ftarget);
                         SWBUtils.IO.copyStream(in, out);
                         file.delete();
                         params.put("thumbnail", finalpath + filename);
                     }
                     rec.setPhotoThumbnail(params.get("thumbnail"));
-                } else {
+                }
+                else
+                {
                     rec.setPhotoThumbnail(path);
                 }
                 rec.setTitle(params.get("title"));
                 rec.setDescription(params.get("description"));
                 rec.setTags(params.get("tags"));
                 rec.setVisibility(Integer.parseInt(params.get("level")));
-                if (page instanceof MicroSiteWebPageUtil) {
+                if (page instanceof MicroSiteWebPageUtil)
+                {
                     ((MicroSiteWebPageUtil) page).sendNotification(rec);
                 }
                 rec.setPhotoWebPage(page);
-            } else if (params.containsValue("edit")) {
+            }
+            else if (params.containsValue("edit"))
+            {
                 String uri = params.get("uri");
                 PhotoElement rec = (PhotoElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
-                if (rec != null && rec.canModify(mem)) {
-                    if (params.containsKey("filename")) {
+                if (rec != null && rec.canModify(mem))
+                {
+                    if (params.containsKey("filename"))
+                    {
                         File f = new File(SWBPortal.getWorkPath() + rec.getImageURL());
-                        if (f != null && f.exists()) {
+                        if (f != null && f.exists())
+                        {
                             f.delete();
                         }
                         f = new File(SWBPortal.getWorkPath() + rec.getPhotoThumbnail());
-                        if (f != null && f.exists()) {
+                        if (f != null && f.exists())
+                        {
                             f.delete();
                         }
 
                         File file = new File(realpath + params.get("filename"));
-                        if (file.exists()) {
+                        if (file.exists())
+                        {
                             FileInputStream in = new FileInputStream(file);
                             String filename = file.getName();
                             String target = realpath + finalpath + filename;
-                            FileOutputStream out = new FileOutputStream(target);
+                            File ftarget = new File(target);
+                            ftarget.getParentFile().mkdirs();
+                            FileOutputStream out = new FileOutputStream(ftarget);
                             SWBUtils.IO.copyStream(in, out);
                             file.delete();
                             params.put("filename", finalpath + filename);
@@ -173,30 +211,38 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                         rec.setImageURL(params.get("filename"));
 
                         file = new File(realpath + params.get("thumbnail"));
-                        if (file.exists()) {
+                        if (file.exists())
+                        {
                             FileInputStream in = new FileInputStream(file);
                             String filename = file.getName();
                             String target = realpath + finalpath + filename;
-                            FileOutputStream out = new FileOutputStream(target);
+                            File ftarget = new File(target);
+                            ftarget.getParentFile().mkdirs();
+                            FileOutputStream out = new FileOutputStream(ftarget);
                             SWBUtils.IO.copyStream(in, out);
                             file.delete();
                             params.put("thumbnail", finalpath + filename);
                         }
                         rec.setPhotoThumbnail(params.get("thumbnail"));
                     }
-                    if (params.containsKey("title")) {
+                    if (params.containsKey("title"))
+                    {
                         rec.setTitle(params.get("title"));
                     }
-                    if (params.containsKey("description")) {
+                    if (params.containsKey("description"))
+                    {
                         rec.setDescription(params.get("description"));
                     }
-                    if (params.containsKey("tags")) {
+                    if (params.containsKey("tags"))
+                    {
                         rec.setTags(params.get("tags"));
                     }
-                    if (params.containsKey("level")) {
+                    if (params.containsKey("level"))
+                    {
                         rec.setVisibility(Integer.parseInt(params.get("level")));
                     }
-                    if (page instanceof MicroSiteWebPageUtil) {
+                    if (page instanceof MicroSiteWebPageUtil)
+                    {
                         ((MicroSiteWebPageUtil) page).sendNotification(rec);
                     }
                 }
@@ -214,30 +260,38 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
         }
         }
         response.setRenderParameter("act", "view");
-        }*/ else if ("remove".equals(action)) {
+        }*/ else if ("remove".equals(action))
+        {
             String uri = request.getParameter("uri");
             PhotoElement rec = (PhotoElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
-            if (rec != null && rec.canModify(mem)) {
+            if (rec != null && rec.canModify(mem))
+            {
                 File f = new File(SWBPortal.getWorkPath() + rec.getImageURL());
-                if (f != null && f.exists()) {
+                if (f != null && f.exists())
+                {
                     f.delete();
                 }
                 f = new File(SWBPortal.getWorkPath() + rec.getPhotoThumbnail());
-                if (f != null && f.exists()) {
+                if (f != null && f.exists())
+                {
                     f.delete();
                 }
                 rec.remove();  //elimina el registro
             }
-        } else {
+        }
+        else
+        {
             super.processAction(request, response);
         }
     }
 
     @Override
-    public void doAdminHlp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    public void doAdminHlp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
         Member mem = Member.getMember(paramRequest.getUser(), paramRequest.getWebPage());
 
-        if (mem.canAdd()) {
+        if (mem.canAdd())
+        {
             HashMap<String, String> params = upload(request);
 
             WebPage page = paramRequest.getWebPage();
@@ -249,34 +303,42 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
             rec.setDescription(params.get("description"));
             rec.setTags(params.get("tags"));
             rec.setVisibility(Integer.parseInt(params.get("level")));
-            if (page instanceof MicroSiteWebPageUtil) {
+            if (page instanceof MicroSiteWebPageUtil)
+            {
                 ((MicroSiteWebPageUtil) page).sendNotification(rec);
             }
             rec.setPhotoWebPage(page);
         }
     }
 
-    private HashMap<String, String> upload(HttpServletRequest request) {
+    private HashMap<String, String> upload(HttpServletRequest request)
+    {
         final String realpath = SWBPortal.getWorkPath() + getResourceBase().getWorkPath() + "/";
         final String path = getResourceBase().getWorkPath() + "/";
 
         HashMap<String, String> params = new HashMap<String, String>();
-        try {
+        try
+        {
             boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-            if (isMultipart) {
+            if (isMultipart)
+            {
                 File tmpwrk = new File(SWBPortal.getWorkPath() + "/tmp");
-                if (!tmpwrk.exists()) {
+                if (!tmpwrk.exists())
+                {
                     tmpwrk.mkdirs();
                 }
                 FileItemFactory factory = new DiskFileItemFactory(1 * 1024 * 1024, tmpwrk);
                 ServletFileUpload upload = new ServletFileUpload(factory);
-                ProgressListener progressListener = new ProgressListener() {
+                ProgressListener progressListener = new ProgressListener()
+                {
 
                     private long kBytes = -1;
 
-                    public void update(long pBytesRead, long pContentLength, int pItems) {
+                    public void update(long pBytesRead, long pContentLength, int pItems)
+                    {
                         long mBytes = pBytesRead / 10000;
-                        if (kBytes == mBytes) {
+                        if (kBytes == mBytes)
+                        {
                             return;
                         }
                         kBytes = mBytes;
@@ -287,26 +349,33 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                 List items = upload.parseRequest(request); /* FileItem */
                 FileItem currentFile = null;
                 Iterator iter = items.iterator();
-                while (iter.hasNext()) {
+                while (iter.hasNext())
+                {
                     FileItem item = (FileItem) iter.next();
 
-                    if (item.isFormField()) {
+                    if (item.isFormField())
+                    {
                         String name = item.getFieldName();
                         String value = item.getString();
                         params.put(name, value);
-                    } else {
+                    }
+                    else
+                    {
                         currentFile = item;
                         File file = new File(path);
-                        if (!file.exists()) {
+                        if (!file.exists())
+                        {
                             file.mkdirs();
                         }
 
-                        try {
+                        try
+                        {
                             long serial = (new Date()).getTime();
                             String filename = serial + "_" + currentFile.getFieldName() + currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
 
                             File image = new File(realpath);
-                            if (!image.exists()) {
+                            if (!image.exists())
+                            {
                                 image.mkdir();
                             }
                             image = new File(realpath + filename);
@@ -317,12 +386,16 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
 
                             params.put("filename", path + filename);
                             params.put("thumbnail", path + "thumbn_" + filename);
-                        } catch (StringIndexOutOfBoundsException iobe) {
+                        }
+                        catch (StringIndexOutOfBoundsException iobe)
+                        {
                         }
                     }
                 }
             }
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             ex.printStackTrace();
         }
 //        return null;
