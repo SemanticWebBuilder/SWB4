@@ -1,37 +1,48 @@
 <%@page contentType="text/html"%>
 <%@page import="org.semanticwb.portal.lib.*,java.text.*,org.semanticwb.platform.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%
-    SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
-    User user = paramRequest.getUser();
-    WebPage wpage = paramRequest.getWebPage();
-    Member member = Member.getMember(user, wpage);
+            SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
+            User user = paramRequest.getUser();
+            WebPage wpage = paramRequest.getWebPage();
+            Member member = Member.getMember(user, wpage);
 
-    String lang = user.getLanguage();
+            String lang = user.getLanguage();
 
-    String uri = request.getParameter("uri");
-    PhotoElement photo = (PhotoElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
-    java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("dd-MMM-yyyy");
+            String uri = request.getParameter("uri");
+            PhotoElement photo = (PhotoElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
+            java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("dd-MMM-yyyy");
 
-    DecimalFormat df = new DecimalFormat("#0.0#");
-    String rank = df.format(photo.getRank());
-    if (photo != null && photo.canView(member))
-    {
-        photo.incViews();  //Incrementar apariciones
+            DecimalFormat df = new DecimalFormat("#0.0#");
+            String rank = df.format(photo.getRank());
+            if (photo != null && photo.canView(member))
+            {
+                photo.incViews();  //Incrementar apariciones
+                String title = "";
+                if (photo.getTitle() != null)
+                {
+                    title = photo.getTitle();
+                }
+                String description = "";
+                if (photo.getDescription() != null)
+                {
+                    description = photo.getDescription();
+                }
 %>
 <div class="columnaIzquierda">
-    <h2><%=photo.getTitle()%></h2><br>
-    <p><%= photo.getDescription()%></p>
-    <p align="center"><a title="<%= photo.getTitle()%>" href="<%= SWBPortal.getWebWorkPath() + photo.getImageURL()%>">
-            <img id="img_<%=photo.getId()%>" src="<%= SWBPortal.getWebWorkPath() + photo.getPhotoThumbnail()%>" alt="<%= photo.getTitle()%>" width="50%" height="50%" />
+    <h2><%=title%></h2><br>
+    <p><%= description%></p>
+    <p align="center"><a title="<%= title%>" href="<%= SWBPortal.getWebWorkPath() + photo.getImageURL()%>">
+            <img id="img_<%=photo.getId()%>" src="<%= SWBPortal.getWebWorkPath() + photo.getPhotoThumbnail()%>" alt="<%=title%>" width="50%" height="50%" />
         </a></p>            
 
-<%
-    }
-
-    SWBResponse res = new SWBResponse(response);
-    photo.renderGenericElements(request, res, paramRequest);
-    out.write(res.toString());
-%>
+    <%
+                }
+               
+                SWBResponse res = new SWBResponse(response);
+                photo.renderGenericElements(request, res, paramRequest);
+                out.write(res.toString());
+                
+    %>
 </div>
 <div class="columnaCentro">
     <p>&nbsp;</p>
@@ -49,27 +60,27 @@
     <p><a href="<%=paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", photo.getURI())%>">[Eliminar]</a></p>
     <%}%>
     <ul class="miContenido">
-<%
-    SWBResourceURL urla = paramRequest.getActionUrl();
-    if (user.isRegistered())
-    {
-        if (member == null)
-        {
-            urla.setParameter("act", "subscribe");
-%>
+        <%
+                    SWBResourceURL urla = paramRequest.getActionUrl();
+                    if (user.isRegistered())
+                    {
+                        if (member == null)
+                        {
+                            urla.setParameter("act", "subscribe");
+        %>
         <li><a href="<%=urla%>">Suscribirse a esta comunidad</a></li>
-<%
-        }
-        else
-        {
-            urla.setParameter("act", "unsubscribe");
-%>
+        <%
+                }
+                else
+                {
+                    urla.setParameter("act", "unsubscribe");
+        %>
         <li><a href="<%=urla%>">Cancelar suscripción a comunidad</a></li>
-<%
-        }
-    }
-    String pageUri = "/swbadmin/jsp/microsite/rss/rss.jsp?photo=" + java.net.URLEncoder.encode(wpage.getURI());
-%>
+        <%
+                        }
+                    }
+                    String pageUri = "/swbadmin/jsp/microsite/rss/rss.jsp?photo=" + java.net.URLEncoder.encode(wpage.getURI());
+        %>
         <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS al canal de fotos de la comunidad</a></li>
     </ul>
 </div>
