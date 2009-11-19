@@ -49,7 +49,7 @@
 <div class="columnaIzquierda">
     <div class="adminTools">
 
-        <a class="adminTool" onclick="validaForma()" href="#">Enviar</a>
+        <a class="adminTool" onclick="validaForma()" href="#">Guardar</a>
         <a class="adminTool" href="<%=paramRequest.getRenderUrl()%>">Cancelar</a>
 
     </div>
