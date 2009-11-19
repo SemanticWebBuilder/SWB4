@@ -106,7 +106,7 @@
         request.onreadystatechange = abusedStateChanged;
         request.send(null);
         document.getElementById("markabused").style.visibility='hidden';
-        refreshAbused();
+        
     }
 
     function refreshAbused() {
@@ -134,6 +134,7 @@
     function abusedStateChanged() {
         if (request.readyState != 4) return;
         if (request.status == 200) {
+            refreshAbused();
             var response = request.responseText;
             if ('' != response && 'Not OK' != response) {
                 var etiqueta = document.getElementById("abused").innerHTML;
