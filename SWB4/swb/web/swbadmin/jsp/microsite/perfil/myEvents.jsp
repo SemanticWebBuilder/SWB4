@@ -1,10 +1,13 @@
 <%@page contentType="text/html"%>
 <%@page import="java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<%!    private static final int ELEMENETS_BY_PAGE = 5;
+%>
 <%
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             User user = paramRequest.getUser();
             WebPage wpage = paramRequest.getWebPage();
             MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
+            String cssPath = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/images/";
             Member member = Member.getMember(user, wpage);
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");
@@ -27,7 +30,7 @@
 
 <div class="columnaIzquierda">
 
-    
+
     <%
             Iterator<EventElement> it;
 
@@ -39,16 +42,139 @@
             {
                 it = EventElement.listEventElementsByDate(user, current, wpage, wpage.getWebSite());
             }
-            boolean hasEvents=false;
+            ArrayList<EventElement> elements = new ArrayList();
+            int elementos = 0;
+            it = SWBComparator.sortByCreated(it, false);
+            boolean hasEvents = false;
             while (it.hasNext())
             {
-
                 EventElement event = it.next();
-                String viewUrl = event.getURL(); 
-                String rank = df.format(event.getRank());
                 if (event.canView(member))
                 {
-                    hasEvents=true;
+                    elements.add(event);
+                    elementos++;
+                }
+
+            }
+            int paginas = elementos / ELEMENETS_BY_PAGE;
+            if (elementos % ELEMENETS_BY_PAGE != 0)
+            {
+                paginas++;
+            }
+            int inicio = 0;
+            int fin = ELEMENETS_BY_PAGE;
+            int ipage = 1;
+            if (request.getParameter("ipage") != null)
+            {
+                try
+                {
+                    ipage = Integer.parseInt(request.getParameter("ipage"));
+                    inicio = (ipage * ELEMENETS_BY_PAGE) - ELEMENETS_BY_PAGE;
+                    fin = (ipage * ELEMENETS_BY_PAGE);
+                }
+                catch (NumberFormatException nfe)
+                {
+                    ipage = 1;
+                }
+            }
+            if (ipage < 1 || ipage > paginas)
+            {
+                ipage = 1;
+            }
+            if (inicio < 0)
+            {
+                inicio = 0;
+            }
+            if (fin < 0)
+            {
+                fin = ELEMENETS_BY_PAGE;
+            }
+            if (fin > elementos)
+            {
+                fin = elementos;
+            }
+            if (inicio > fin)
+            {
+                inicio = 0;
+                fin = ELEMENETS_BY_PAGE;
+            }
+            if (fin - inicio > ELEMENETS_BY_PAGE)
+            {
+                inicio = 0;
+                fin = ELEMENETS_BY_PAGE;
+            }
+            inicio++;
+    %>
+    <!-- paginacion -->
+    <%
+            if (paginas > 1)
+            {
+    %>
+    <div id="paginacion">
+
+
+        <%
+                String nextURL = "#";
+                String previusURL = "#";
+                if (ipage < paginas)
+                {
+                    nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
+                }
+                if (ipage > 1)
+                {
+                    previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
+                }
+                if (ipage > 1)
+                {
+        %>
+        <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
+            <%
+                }
+                for (int i = 1; i <= paginas; i++)
+                {
+            %>
+        <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%
+                    if (i == ipage)
+                    {
+            %>
+            <strong>
+                <%                            }
+                %>
+                <%=i%>
+                <%
+                    if (i == ipage)
+                    {
+                %>
+            </strong>
+            <%                            }
+            %></a>
+        <%
+                }
+        %>
+
+
+        <%
+                if (ipage != paginas)
+                {
+        %>
+        <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
+            <%
+                }
+            %>
+    </div>
+    <%
+            }
+    %>
+    <!-- fin paginacion -->
+    <%
+                for (EventElement event : elements)
+                {
+
+                    String viewUrl = event.getURL();
+                    String rank = df.format(event.getRank());
+                    if (event.canView(member))
+                    {
+                        hasEvents = true;
     %>
     <div class="noticia">
         <img src="<%=SWBPortal.getWebWorkPath() + event.getEventThumbnail()%>" alt="<%= event.getTitle()%>">
@@ -63,33 +189,78 @@
                 <%=event.getViews()%> vistas
             </p>
         </div>
-    </div>
-    <%-- <div class="entry">
-        
-        <a href="<%=viewurl%>">
-            <img src="<%=SWBPortal.getWebWorkPath() + event.getEventThumbnail()%>" alt="<%= event.getTitle()%>" >
-        </a>
-        <div class="entryInfo">
-            <p>Creado: <%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%></p>
-            <p class="tituloNaranja"><%=event.getTitle()%></p>
-            <p class="eventoInicio">Inicia: <strong><%= (event.getStartDate() == null ? "" : dateFormat.format(event.getStartDate()))%></strong> a las <strong><%= (event.getStartTime() == null ? "" : timeFormat.format(event.getStartTime()))%></strong></p>
-            <p class="eventoFinal">Termina: <strong><%= (event.getEndDate() == null ? "" : dateFormat.format(event.getEndDate()))%></strong> a las <strong><%= (event.getEndTime() == null ? "" : timeFormat.format(event.getEndTime()))%></strong></p>
-            <p>Valoraci&oacute;n:<%=event.getRank()%></p>
-            <p><%=event.getViews()%> vistas</p>
-            <div class="clear">&nbsp;</div>
-        </div>
-               </div> --%>
+    </div>   
 
     <%      }
             }
     %>
     <%
-        if(!hasEvents)
+            if (!hasEvents)
             {
-            %>
-            <p>No hay eventos registrados.</p>
+    %>
+    <p>No hay eventos registrados.</p>
+    <%            }
+    %>
+    <!-- paginacion -->
+    <%
+            if (paginas > 1)
+            {
+    %>
+    <div id="paginacion">
+
+
+        <%
+                String nextURL = "#";
+                String previusURL = "#";
+                if (ipage < paginas)
+                {
+                    nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
+                }
+                if (ipage > 1)
+                {
+                    previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
+                }
+                if (ipage > 1)
+                {
+        %>
+        <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
             <%
+                }
+                for (int i = 1; i <= paginas; i++)
+                {
+            %>
+        <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%
+                            if (i == ipage)
+                            {
+            %>
+            <strong>
+                <%                            }
+                %>
+                <%=i%>
+                <%
+                                if (i == ipage)
+                                {
+                %>
+            </strong>
+            <%                            }
+            %></a>
+        <%
+                }
+        %>
+
+
+        <%
+                if (ipage != paginas)
+                {
+        %>
+        <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
+            <%
+                }
+            %>
+    </div>
+    <%
             }
     %>
+    <!-- fin paginacion -->
 </div>
 <div class="columnaCentro"></div>
