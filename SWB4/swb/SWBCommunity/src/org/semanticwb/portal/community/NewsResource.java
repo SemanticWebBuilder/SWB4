@@ -102,7 +102,9 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
                     FileInputStream in = new FileInputStream(file);
                     String filename = file.getName();
                     String target = realpath + finalpath + filename;
-                    FileOutputStream out = new FileOutputStream(target);
+                    File ftarget = new File(target);
+                        ftarget.getParentFile().mkdirs();
+                        FileOutputStream out = new FileOutputStream(ftarget);
                     SWBUtils.IO.copyStream(in, out);
                     file.delete();
                     params.put("filename", finalpath + filename);
@@ -115,7 +117,9 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
                     FileInputStream in = new FileInputStream(file);
                     String filename = file.getName();
                     String target = realpath + finalpath + filename;
-                    FileOutputStream out = new FileOutputStream(target);
+                    File ftarget = new File(target);
+                        ftarget.getParentFile().mkdirs();
+                        FileOutputStream out = new FileOutputStream(ftarget);
                     SWBUtils.IO.copyStream(in, out);
                     file.delete();
                     params.put("thumbnail", finalpath + filename);
@@ -149,7 +153,9 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
                             FileInputStream in = new FileInputStream(file);
                             String filename = file.getName();
                             String target = realpath + finalpath + filename;
-                            FileOutputStream out = new FileOutputStream(target);
+                            File ftarget = new File(target);
+                        ftarget.getParentFile().mkdirs();
+                        FileOutputStream out = new FileOutputStream(ftarget);
                             SWBUtils.IO.copyStream(in, out);
                             file.delete();
                             params.put("filename", finalpath + filename);
@@ -162,7 +168,9 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
                             FileInputStream in = new FileInputStream(file);
                             String filename = file.getName();
                             String target = realpath + finalpath + filename;
-                            FileOutputStream out = new FileOutputStream(target);
+                            File ftarget = new File(target);
+                        ftarget.getParentFile().mkdirs();
+                        FileOutputStream out = new FileOutputStream(ftarget);
                             SWBUtils.IO.copyStream(in, out);
                             file.delete();
                             params.put("thumbnail", finalpath + filename);
