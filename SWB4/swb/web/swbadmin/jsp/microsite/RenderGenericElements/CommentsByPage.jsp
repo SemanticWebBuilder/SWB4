@@ -68,16 +68,18 @@
                 <%=SWBUtils.TEXT.getTimeAgo(comment.getCreated(), mem.getUser().getLanguage())%>
             </p>
             <p><%=comment.getDescription()%></p>
+            <p><%=comment.getSpam()%> marcas como spam</p>
 <%
-    if (mem.canView())
+    if (mem.canView() && request.getSession().getAttribute(comment.getURI())==null)
     {
+        
 %>
-            <p><a href="javascript:spam(<%=comment.getId()%>)" id="spamMark<%=comment.getId()%>"><%=spamMark%></a></p>
+<div id="divspamMark<%=comment.getId()%>"><p><a href="javascript:spam(<%=comment.getId()%>)" id="spamMark<%=comment.getId()%>"><%=spamMark%></a></p></div>
 <%
     }
 
         %>
-        <p><%=spamMark%></p>
+        
         </div>
     </div>
 <%
