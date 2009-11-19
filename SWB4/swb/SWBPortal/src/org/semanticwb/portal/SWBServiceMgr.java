@@ -131,10 +131,7 @@ public class SWBServiceMgr implements SemanticObserver {
                     if (obj.instanceOf(SWBModel.sclass)) //Removes website
                     {
                         SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + "/models/"+obj.getId());
-                    } else if (obj.instanceOf(Template.sclass)) // Removes Template
-                    {
-                        SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + obj.getWorkPath());
-                    } else if (obj.instanceOf(Resource.sclass)) // Removes Resource
+                    } else
                     {
                         SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + obj.getWorkPath());
                     }
