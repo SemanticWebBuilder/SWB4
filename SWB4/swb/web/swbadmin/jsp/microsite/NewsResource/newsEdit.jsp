@@ -68,6 +68,7 @@
             return;
         }
         document.frmaeditnews.submit();
+
     }
 </script>
 <div class="columnaIzquierda">
@@ -79,7 +80,7 @@
             <p>
                 <label for="new_image">Imagen de la noticia:&nbsp;</label>
                 <a href="<%= SWBPortal.getWebWorkPath()+rec.getNewsImage()%>" target="_self">
-                    <img id="img_<%=rec.getId()%>" src="<%= SWBPortal.getWebWorkPath()+rec.getNewsImage() %>" alt="<%= rec.getTitle() %>" border="0" />
+                    <img id="img_<%=rec.getId()%>" src="<%= SWBPortal.getWebWorkPath()+rec.getNewsThumbnail() %>" alt="<%= rec.getTitle() %>" border="0" />
                 </a><br />
                 <input type="file" id="foto" name="foto" size="45" />
             </p>
