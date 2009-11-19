@@ -8,7 +8,6 @@ import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
@@ -28,7 +27,7 @@ public class MyInvitations extends GenericResource {
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         try {
             request.setAttribute("paramRequest", paramRequest);
-            RequestDispatcher rd = request.getRequestDispatcher(SWBPlatform.getContextPath() + "/swbadmin/jsp/microsite/perfil/myInvitations.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/swbadmin/jsp/microsite/perfil/myInvitations.jsp");
             rd.include(request, response);
         } catch (Exception e) {
             e.printStackTrace();
