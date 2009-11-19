@@ -105,7 +105,7 @@
         document.getElementById("markabused").style.visibility='hidden';
     }
 
-    /*function abusedStateChanged() {
+    function abusedStateChanged() {
       if (request.readyState != 4) return;
       if (request.status == 200) {
         var response = request.responseText;
@@ -124,7 +124,7 @@
           invokeAbused = false;
         }
       }
-    }*/
+    }
     function sendComment()
     {
         document.addCommentForm.submit();
