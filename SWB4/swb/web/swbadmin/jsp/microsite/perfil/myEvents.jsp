@@ -44,7 +44,7 @@
             {
 
                 EventElement event = it.next();
-                String viewUrl = event.getURL(); //paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", event.getURI());
+                String viewUrl = event.getURL(); 
                 String rank = df.format(event.getRank());
                 if (event.canView(member))
                 {
