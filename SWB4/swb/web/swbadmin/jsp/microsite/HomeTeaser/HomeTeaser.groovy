@@ -31,7 +31,7 @@ import java.util.*
 //long time1 = System.currentTimeMillis()
 WebSite wsid = request.getAttribute("topic").getWebSite()
 Contenedor local = LocalCache.getInicio(wsid)
-def path =  SWBPortal.getWebWorkPath() + "/models/" + wsid.getWebSiteId() + "/css/images/"
+def path =  SWBPortal.getWebWorkPath() + "/models/" + wsid.getId() + "/css/images/"
 
 //recurseContenedor(local,0)
 
