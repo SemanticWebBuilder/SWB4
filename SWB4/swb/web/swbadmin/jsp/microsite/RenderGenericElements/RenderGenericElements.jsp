@@ -155,7 +155,7 @@
         request.open("GET", url, true);
         request.onreadystatechange = spamStateChanged;
         request.send(null);
-        document.getElementById("divspamMark"+id).style.visibility='hidden';
+        document.getElementById("divspamMark"+commentId).style.visibility='hidden';
 
     }
 
@@ -217,7 +217,7 @@
     %>
         <div class="clearL"></div>
         <div id="markop">            
-            <%=request.getSession().getAttribute(mse.getURI())%><div id="markabused" class="editarInfo"><p><a class="userTool" href="javascript:changeAbusedState();">Marcar como inapropiado</a></p></div>
+            <div id="markabused" class="editarInfo"><p><a class="userTool" href="javascript:changeAbusedState();">Marcar como inapropiado</a></p></div>
         </div>
     <%
     }
