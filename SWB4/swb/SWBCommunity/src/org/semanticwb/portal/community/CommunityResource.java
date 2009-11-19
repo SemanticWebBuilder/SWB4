@@ -106,14 +106,9 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
             so = SemanticObject.createSemanticObject(suri);
         }
         if (so.getGenericInstance() instanceof MicroSiteElement) {
-            MicroSiteElement mse = (MicroSiteElement) so.getGenericInstance();
-            /*if (mse.isAbused()) {
-                mse.setAbused(false);
-            } else {
-                mse.setAbused(true);
-            }
-            message = Boolean.toString(mse.isAbused());*/
+            MicroSiteElement mse = (MicroSiteElement) so.getGenericInstance();            
             mse.setAbused(mse.getAbused()+1);
+            request.getSession().setAttribute(suri,"true");
         }
         response.setMode("returnStateMessage");
         response.setRenderParameter("message",
@@ -164,17 +159,10 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
             MicroSiteElement mse = (MicroSiteElement) so.getGenericInstance();
             GenericIterator<Comment> iterator =  mse.listComments();
             while (iterator.hasNext()) {
-                Comment comment = iterator.next();
-                //System.out.println("comment.Id:" + comment.getId() + ", comparacion:" + comment.getId().equals(commentId));
-                if (comment.getId().equals(commentId)) {
-                    /*if (comment.isSpam()) {
-                        comment.setSpam(false);
-                    } else {
-                        comment.setSpam(true);
-                    }
-                    message = Boolean.toString(comment.isSpam());*/
+                Comment comment = iterator.next();                
+                if (comment.getId().equals(commentId)) {                   
                     comment.setSpam(comment.getSpam()+1);
-                    //System.out.println("message:" + message);
+                    request.getSession().setAttribute(comment.getURI(),"true");
                     break;
                 }
             }
