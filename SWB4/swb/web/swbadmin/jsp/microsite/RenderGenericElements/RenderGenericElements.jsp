@@ -14,7 +14,8 @@
         WebPage webPage  = paramRequest.getWebPage();
         Member mem = Member.getMember(paramRequest.getUser(), webPage);
         String suri = request.getParameter("uri");        
-        String abusedDesc = mse.isAbused() ? "Inapropiado" : "Apropiado";
+        //String abusedDesc = mse.isAbused() ? "Inapropiado" : "Apropiado";
+        String abusedDesc ="Inapropiado" ;
         int rank = 0;
         long pageNumber = 0;
         boolean showComments = false;
