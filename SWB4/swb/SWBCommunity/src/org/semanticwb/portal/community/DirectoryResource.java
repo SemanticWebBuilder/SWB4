@@ -138,9 +138,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
                     SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
                     DirectoryObject dirObj = (DirectoryObject) semObject.createGenericInstance();
                     dirObj.removeExtraPhoto(request.getParameter("removeAttach"));
-                    System.out.println("Achivo a borrar:"+SWBPortal.getWorkPath() + "/" + semObject.getWorkPath() + "/" + request.getParameter("removeAttach"));
                     File file = new File(SWBPortal.getWorkPath() + "/" + semObject.getWorkPath() + "/" + request.getParameter("removeAttach"));
-                    System.out.println("file:"+file);
                     file.delete();
 
                 }
