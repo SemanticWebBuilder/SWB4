@@ -3,6 +3,7 @@
 <%!    private static final int COMMENTS_IN_PAGE = 5;
 %>
 <%
+
             MicroSiteElement mse = (MicroSiteElement) request.getAttribute("MicroSiteElement");
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             WebPage webPage = paramRequest.getWebPage();
@@ -30,51 +31,50 @@
                 {
                     break;
                 }
-
-                //String spamMark = (comment.isSpam() ? "[es spam]" : "[marcar como spam]");
                 String spamMark = "[marcar como spam]";
 %>
 <div id="comment<%=comment.getId()%>" class="comment">
     <%
-            try
-            {
-                if (comment.getCreator().getPhoto() != null)
+                try
                 {
+                    if (comment.getCreator().getPhoto() != null)
+                    {
     %>
     <img src="<%=SWBPortal.getWebWorkPath()%><%=comment.getCreator().getPhoto()%>" alt="foto">
     <%
-            }
-            else
-            {
+                }
+                else
+                {
     %>
     <img src="<%=SWBPortal.getContextPath()%>/swbadmin/images/defaultPhoto.jpg" alt="foto">
     <%
-                }
-            }
-            catch (NullPointerException npe)
-            {
-            }
-            //out.write("<span class="comment-auth">");
-    %>
-    <div class="commentText">
-        <p>Escrito por
-            <%
-                    try
-                    {
-                        if (!comment.getCreator().getFullName().equals(""))
-                        {
-            %>
-            <a href="<%=perfilPath%>?user=<%=comment.getCreator().getEncodedURI()%>"><%=comment.getCreator().getFullName()%></a>
-            <%
                     }
-                    else
-                    {
-            %>
-            Desconocido
-            <%        }
                 }
                 catch (NullPointerException npe)
                 {
+                    npe.printStackTrace();
+                }
+                //out.write("<span class="comment-auth">");
+%>
+     <div class="commentText">
+        <p>Escrito por
+            <%
+                try
+                {
+                    if (!comment.getCreator().getFullName().equals(""))
+                    {
+            %>
+            <a href="<%=perfilPath%>?user=<%=comment.getCreator().getEncodedURI()%>"><%=comment.getCreator().getFullName()%></a>
+            <%
+                        }
+                        else
+                        {
+            %>
+            Desconocido
+            <%        }
+                    }
+                    catch (NullPointerException npe)
+                    {
             %>
             Desconocido
             <%        }
@@ -82,7 +82,17 @@
             <%=SWBUtils.TEXT.getTimeAgo(comment.getCreated(), mem.getUser().getLanguage())%>
         </p>
         <p><%=comment.getDescription()%></p>
-        <div id="labeldivspamMark<%=comment.getId()%>"><p><%=comment.getSpam()%> marcas como spam</p></div>
+        <% int spam=0;
+            try
+            {
+                spam=comment.getSpam();
+                        }
+            catch(Exception e)
+                    {
+                    e.printStackTrace();
+                }
+        %>
+        <div id="labeldivspamMark<%=comment.getId()%>"><p><%=spam%> marcas como spam</p></div>
 
         <%
                 if (mem.canView() && request.getSession().getAttribute(comment.getURI()) == null)
@@ -95,9 +105,10 @@
 
         %>
 
-    </div>
 </div>
-        
+</div>
+
 <%
             }
+
 %>
