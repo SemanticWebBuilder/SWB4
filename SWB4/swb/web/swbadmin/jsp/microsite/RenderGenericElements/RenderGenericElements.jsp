@@ -133,10 +133,10 @@
 
     function abusedStateChanged() {
         if (request.readyState != 4) return;
-        if (request.status == 200) {
-            refreshAbused();
+        if (request.status == 200) {            
             var response = request.responseText;
-            if ('' != response && 'Not OK' != response) {
+            refreshAbused();
+            if ('' != response && 'Not OK' != response) {                
                 var etiqueta = document.getElementById("abused").innerHTML;
                 if (response == 'true') {
                     document.getElementById("abused").innerHTML = 'Inapropiado';
