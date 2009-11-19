@@ -126,11 +126,12 @@
     %>
     <p><a href="<%= paramRequest.getRenderUrl()%>">[Ver todos los eventos]</a></p>
     <%
-            if (event.canModify(member)) {
+            if (member.canView()) {
 
     %>
     <p><a href="<%=paramRequest.getActionUrl().setParameter("act", "attend").setParameter("uri", event.getURI())%>">[Asistir al evento]</a></p>
-    <%  }%>  
+    <%  }
+            %>
     <%
             if (event.canModify(member)) {
     %>
