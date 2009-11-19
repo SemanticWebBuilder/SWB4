@@ -8,6 +8,7 @@
             Member member = Member.getMember(user, wpage);
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");
+            java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
             String lang = "es";
             String year = request.getParameter("y");
             String month = request.getParameter("m");
@@ -24,7 +25,9 @@
             }
 %>
 
-<div id="entriesWrapper">
+<div class="columnaIzquierda">
+
+    
     <%
             Iterator<EventElement> it;
 
@@ -41,17 +44,33 @@
             {
 
                 EventElement event = it.next();
-                String viewurl = event.getURL();
+                String viewUrl = event.getURL(); //paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", event.getURI());
+                String rank = df.format(event.getRank());
                 if (event.canView(member))
                 {
                     hasEvents=true;
     %>
-    <div class="entry">
+    <div class="noticia">
+        <img src="<%=SWBPortal.getWebWorkPath() + event.getEventThumbnail()%>" alt="<%= event.getTitle()%>">
+        <div class="noticiaTexto">
+            <h2><%=event.getTitle()%></h2>
+            <p>&nbsp;<br>Por: <%=event.getCreator().getFullName()%><br><%=dateFormat.format(event.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%></p>
+            <p>
+                <%=event.getDescription()%> | <a href="<%=viewUrl%>">Ver más</a>
+            </p>
+            <p class="stats">
+            	Puntuación: <%=rank%><br>
+                <%=event.getViews()%> vistas
+            </p>
+        </div>
+    </div>
+    <%-- <div class="entry">
+        
         <a href="<%=viewurl%>">
-            <img src="<%=SWBPortal.getWebWorkPath() + event.getEventThumbnail()%>" alt="<%= event.getTitle()%>" border="0" />
+            <img src="<%=SWBPortal.getWebWorkPath() + event.getEventThumbnail()%>" alt="<%= event.getTitle()%>" >
         </a>
         <div class="entryInfo">
-            <p><%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%></p>
+            <p>Creado: <%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%></p>
             <p class="tituloNaranja"><%=event.getTitle()%></p>
             <p class="eventoInicio">Inicia: <strong><%= (event.getStartDate() == null ? "" : dateFormat.format(event.getStartDate()))%></strong> a las <strong><%= (event.getStartTime() == null ? "" : timeFormat.format(event.getStartTime()))%></strong></p>
             <p class="eventoFinal">Termina: <strong><%= (event.getEndDate() == null ? "" : dateFormat.format(event.getEndDate()))%></strong> a las <strong><%= (event.getEndTime() == null ? "" : timeFormat.format(event.getEndTime()))%></strong></p>
@@ -59,7 +78,8 @@
             <p><%=event.getViews()%> vistas</p>
             <div class="clear">&nbsp;</div>
         </div>
-    </div>
+               </div> --%>
+
     <%      }
             }
     %>
@@ -72,3 +92,4 @@
             }
     %>
 </div>
+<div class="columnaCentro"></div>
