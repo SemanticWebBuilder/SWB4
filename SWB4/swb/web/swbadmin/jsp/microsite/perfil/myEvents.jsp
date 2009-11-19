@@ -167,12 +167,20 @@
     %>
     <!-- fin paginacion -->
     <%
-                for (EventElement event : elements)
-                {
+            int iElement = 0;
+            for (EventElement event : elements)
+            {
 
-                    String viewUrl = event.getURL();
-                    String rank = df.format(event.getRank());
-                    if (event.canView(member))
+                String viewUrl = event.getURL();
+                String rank = df.format(event.getRank());
+                if (event.canView(member))
+                {
+                    iElement++;
+                    if (iElement > fin)
+                    {
+                        break;
+                    }
+                    if (iElement >= inicio && iElement <= fin)
                     {
                         hasEvents = true;
     %>
@@ -191,7 +199,8 @@
         </div>
     </div>   
 
-    <%      }
+    <%                  }
+                }
             }
     %>
     <%
@@ -230,16 +239,16 @@
                 {
             %>
         <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%
-                            if (i == ipage)
-                            {
+                    if (i == ipage)
+                    {
             %>
             <strong>
                 <%                            }
                 %>
                 <%=i%>
                 <%
-                                if (i == ipage)
-                                {
+                    if (i == ipage)
+                    {
                 %>
             </strong>
             <%                            }
