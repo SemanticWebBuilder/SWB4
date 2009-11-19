@@ -253,14 +253,9 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             so = SemanticObject.createSemanticObject(suri);
         }
         if (so.getGenericInstance() instanceof DirectoryObject) {
-            DirectoryObject mse = (DirectoryObject) so.getGenericInstance();
-            /*if (mse.isAbused()) {
-                mse.setAbused(false);
-            } else {
-                mse.setAbused(true);
-            }
-            message = Boolean.toString(mse.isAbused());*/
+            DirectoryObject mse = (DirectoryObject) so.getGenericInstance();           
             mse.setAbused(mse.getAbused()+1);
+            request.getSession().setAttribute(suri,"true");
         }
         response.setMode("returnStateMessage");
         response.setRenderParameter("message",
@@ -309,17 +304,11 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             DirectoryObject mse = (DirectoryObject) so.getGenericInstance();
             GenericIterator<Comment> iterator = mse.listComments();
             while (iterator.hasNext()) {
-                Comment comment = iterator.next();
-                //System.out.println("comment.Id:" + comment.getId() + ", comparacion:" + comment.getId().equals(commentId));
+                Comment comment = iterator.next();                
                 if (comment.getId().equals(commentId)) {
-                    /*if (comment.isSpam()) {
-                        comment.setSpam(false);
-                    } else {
-                        comment.setSpam(true);
-                    }
-                    message = Boolean.toString(comment.isSpam());*/
-                    //System.out.println("message:" + message);
+                    
                     comment.setSpam(comment.getSpam()+1);
+                    request.getSession().setAttribute(comment.getURI(),"true");
                     break;
                 }
             }
