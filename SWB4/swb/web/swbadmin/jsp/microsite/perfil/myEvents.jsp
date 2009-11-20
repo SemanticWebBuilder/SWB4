@@ -43,15 +43,6 @@
                 it = EventElement.listEventElementsByDate(user, current, wpage, wpage.getWebSite());
             }
 
-            if (current == null)
-            {
-                it = EventElement.ClassMgr.listEventElementByAttendant(user, paramRequest.getWebPage().getWebSite());
-            }
-            else
-            {
-                it = EventElement.listEventElementsByDate(user, current, wpage, wpage.getWebSite());
-            }
-
             java.util.Calendar today = java.util.Calendar.getInstance();
             today.setTime(new Date(System.currentTimeMillis()));
             today.set(today.HOUR_OF_DAY, 23);
@@ -72,6 +63,14 @@
             }
             ArrayList<EventElement> elements = new ArrayList();
             int elementos = 0;
+            if (current == null)
+            {
+                it = EventElement.ClassMgr.listEventElementByAttendant(user, paramRequest.getWebPage().getWebSite());
+            }
+            else
+            {
+                it = EventElement.listEventElementsByDate(user, current, wpage, wpage.getWebSite());
+            }
             it = SWBComparator.sortByCreated(it, false);
             boolean hasEvents = false;
             while (it.hasNext())
@@ -87,6 +86,11 @@
                     elements.add(event);
                     elementos++;
                 }
+                else
+                    {
+                    System.out.println("end date"+end.getTime());
+                    System.out.println("today "+today.getTime());
+                    }
 
 
             }
