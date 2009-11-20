@@ -22,20 +22,29 @@
             MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
             Member member = Member.getMember(user, wpage);
             String addEventURL = paramRequest.getRenderUrl().setParameter("act", "add").toString();
-            Date today = new Date(System.currentTimeMillis());
-            java.util.Calendar cal = java.util.Calendar.getInstance();
+
+            java.util.Calendar today = java.util.Calendar.getInstance();
+            today.setTime(new Date(System.currentTimeMillis()));
+            today.set(today.HOUR_OF_DAY, 23);
+            today.set(today.MINUTE, 59);
+            today.set(today.SECOND, 59);
+            today.set(today.MILLISECOND, 00);
+
+
+            java.util.Calendar end = java.util.Calendar.getInstance();
 
             Iterator<EventElement> it = EventElement.ClassMgr.listEventElementByEventWebPage(wpage, wpage.getWebSite());
             while (it.hasNext())
             {
-                EventElement event = it.next();                
-                cal.setTime(event.getEndDate());
-                cal.add(cal.MONTH, 1);
-                Date end = cal.getTime();
+
+                EventElement event = it.next();
+                end.setTime(event.getEndDate());
+                end.add(end.MONTH, 1);
                 if (today.after(end) || today.equals(end))
-                {                    
+                {
+                    System.out.println("borrando elemento " + end);
                     event.remove();
-                }
+                }                
             }
             ArrayList<EventElement> elements = new ArrayList();
             int elementos = 0;
@@ -44,11 +53,22 @@
             while (it.hasNext())
             {
                 EventElement event = it.next();
-                if (event.canView(member) && today.after(event.getEndDate()))
+                end.setTime(event.getEndDate());
+                end.set(end.HOUR_OF_DAY, 23);
+                end.set(end.MINUTE, 59);
+                end.set(end.SECOND, 59);
+                end.set(end.MILLISECOND, 00);
+                if (event.canView(member) && !today.after(end))
                 {
                     elements.add(event);
                     elementos++;
-                }                
+                }
+                else
+                {
+                    System.out.println("no muestra " + event.getEndDate());
+                    System.out.println("hoy        " + today.getTime());
+
+                }
             }
             int paginas = elementos / ELEMENETS_BY_PAGE;
             if (elementos % ELEMENETS_BY_PAGE != 0)
