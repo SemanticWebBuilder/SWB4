@@ -71,11 +71,12 @@
             while (it.hasNext())
             {
                 EventElement event = it.next();
-                if (event.canView(member) && today.after(event.getEndDate()))
+                if (event.canView(member) && !today.after(event.getEndDate()))
                 {
                     elements.add(event);
                     elementos++;
                 }
+
 
             }
             int paginas = elementos / ELEMENETS_BY_PAGE;
