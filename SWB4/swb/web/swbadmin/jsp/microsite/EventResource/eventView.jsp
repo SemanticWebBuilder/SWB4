@@ -20,19 +20,34 @@
             User user = paramRequest.getUser();
             WebPage wpage = paramRequest.getWebPage();
             MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
-            Member member = Member.getMember(user, wpage);
-            //SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");
-            //String urlViewCalendar = paramRequest.getRenderUrl().setParameter("act", "calendar").toString();
+            Member member = Member.getMember(user, wpage);            
             String addEventURL = paramRequest.getRenderUrl().setParameter("act", "add").toString();
+            Date today = new Date(System.currentTimeMillis());
+            java.util.Calendar cal = java.util.Calendar.getInstance();
+            cal.setTime(today);
+            cal.add(cal.MONTH, cal.get(cal.MONTH) + 1);
+            Date end = cal.getTime();
 
+            Iterator<EventElement> it = EventElement.ClassMgr.listEventElementByEventWebPage(wpage, wpage.getWebSite());
+            while (it.hasNext())
+            {
+                EventElement event = it.next();
+                %>
+                aaa <%=end.after(event.getEndDate())%>
+                <%
+                if (end.after(event.getEndDate()) || event.getEndDate().equals(end))
+                {
+                    event.remove();
+                }
+            }
             ArrayList<EventElement> elements = new ArrayList();
             int elementos = 0;
-            Iterator<EventElement> it = EventElement.ClassMgr.listEventElementByEventWebPage(wpage, wpage.getWebSite());
+            it = EventElement.ClassMgr.listEventElementByEventWebPage(wpage, wpage.getWebSite());
             it = SWBComparator.sortByCreated(it, false);
             while (it.hasNext())
             {
                 EventElement event = it.next();
-                if (event.canView(member))
+                if (event.canView(member) && (today.after(event.getEndDate()) || event.getEndDate().equals(today)))
                 {
                     elements.add(event);
                     elementos++;
@@ -126,8 +141,8 @@
                 %>
                 <%=i%>
                 <%
-                        if (i == ipage)
-                        {
+                    if (i == ipage)
+                    {
                 %>
             </strong>
             <%                    }
@@ -167,25 +182,25 @@
     <p>No hay eventos registrados en la comunidad</p>
     <%            }
 
-    int iElement = 0;
-    for (EventElement event : elements)
-    {
-        SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", event.getURI());
-        if (event.canView(member))
-        {
-            iElement++;
-            if (iElement > fin)
+            int iElement = 0;
+            for (EventElement event : elements)
             {
-                break;
-            }
-            if (iElement >= inicio && iElement <= fin)
-            {
-                String rank = df.format(event.getRank());
-                String editEventURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", event.getURI()).toString();
-                SWBResourceURL removeUrl = paramRequest.getActionUrl();
-                removeUrl.setParameter("act", "remove");
-                removeUrl.setParameter("uri", event.getEncodedURI());
-                String removeurl = "javascript:validateremove('" + removeUrl + "','" + event.getTitle() + "')";
+                SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", event.getURI());
+                if (event.canView(member))
+                {
+                    iElement++;
+                    if (iElement > fin)
+                    {
+                        break;
+                    }
+                    if (iElement >= inicio && iElement <= fin)
+                    {
+                        String rank = df.format(event.getRank());
+                        String editEventURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", event.getURI()).toString();
+                        SWBResourceURL removeUrl = paramRequest.getActionUrl();
+                        removeUrl.setParameter("act", "remove");
+                        removeUrl.setParameter("uri", event.getEncodedURI());
+                        String removeurl = "javascript:validateremove('" + removeUrl + "','" + event.getTitle() + "')";
     %>
     <div class="noticia">
         <img src="<%=SWBPortal.getWebWorkPath() + event.getEventThumbnail()%>" alt="<%= event.getTitle()%>">
@@ -195,12 +210,12 @@
             <p>
                 <%=event.getDescription()%> | <a href="<%=viewUrl%>">Ver más</a>
                 <%
-                        if (event.canModify(member))
-                        {
+                if (event.canModify(member))
+                {
                 %>
                 | <a href="<%=editEventURL%>">Editar</a> | <a href="<%=removeurl%>">Eliminar</a>
                 <%
-                        }
+                }
                 %>
 
             </p>
@@ -244,16 +259,16 @@
                 {
             %>
         <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%
-                            if (i == ipage)
-                            {
+                    if (i == ipage)
+                    {
             %>
             <strong>
                 <%                            }
                 %>
                 <%=i%>
                 <%
-                                if (i == ipage)
-                                {
+                    if (i == ipage)
+                    {
                 %>
             </strong>
             <%                            }
