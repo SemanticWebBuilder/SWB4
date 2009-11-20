@@ -881,7 +881,7 @@ public class CodeGenerator
         while (tppit.hasNext())
         {
             SemanticProperty tpp = tppit.next();
-            if (tpp.isObjectProperty())
+            if (tpp.isObjectProperty() && !tpp.isNotCodeGeneration())
             {
                 //if (!isPropertyOfParent(tpp, parent))
                 //{
