@@ -63,6 +63,7 @@ public class SWBServiceMgr implements SemanticObserver {
 
     private int lastobj;              //ultimo objeto modificado
     private long lastthread;          //ultimo thread utilizado
+    private long lasttime;            //ultimo time utilizado
 
     public void notify(SemanticObject obj, Object prop, String action)
     {
@@ -213,11 +214,12 @@ public class SWBServiceMgr implements SemanticObserver {
         try
         {
             //TODO:Una rapida aproximacion para no estar actualizando al modificar cada propiedad
-            //if(obj.hashCode()!=lastobj || Thread.currentThread().getId()!=lastthread)
+            if(obj.hashCode()!=lastobj || Thread.currentThread().getId()!=lastthread || System.currentTimeMillis()>(lasttime+100))
             {
                 //System.out.println("updateObject:"+obj+" user:"+usr);
                 lastobj=obj.hashCode();
                 lastthread=Thread.currentThread().getId();
+                lasttime=System.currentTimeMillis();
                 updateTraceable(obj,usr);
 
                 if(obj.instanceOf(WebPage.sclass))
