@@ -169,8 +169,8 @@ public class DocumentResource extends org.semanticwb.portal.community.base.Docum
                         filename = serial + currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
                         file = new File(path +"/"+ filename);
                         currentFile.write(file);
-                        params.put("filename", doc.getWorkPath()+"/"+filename);
-                        //params.put("uri", doc.getURI());
+                        //params.put("filename", doc.getWorkPath()+"/"+filename);
+                        params.put("filename", filename);
                     }catch(StringIndexOutOfBoundsException iobe) {
                     }                    
                 }
@@ -241,7 +241,8 @@ public class DocumentResource extends org.semanticwb.portal.community.base.Docum
                         filename = serial + currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
                         File file = new File(path +"/"+ filename);
                         currentFile.write(file);
-                        params.put("filename", doc.getWorkPath()+"/"+filename);
+                        //params.put("filename", doc.getWorkPath()+"/"+filename);
+                        params.put("filename", filename);
                     }catch(StringIndexOutOfBoundsException iobe) {
                     }                    
                 }
@@ -249,7 +250,8 @@ public class DocumentResource extends org.semanticwb.portal.community.base.Docum
         }
 
         if(params.containsKey("filename")) {
-            String rp = SWBPortal.getWorkPath()+doc.getDocumentURL();
+            //String rp = SWBPortal.getWorkPath()+doc.getDocumentURL();
+            String rp = SWBPortal.getWorkPath()+doc.getWorkPath()+"/"+doc.getDocumentURL();
             File f = new File(rp);
             if(f!=null && f.exists()) {
                 f.delete();
