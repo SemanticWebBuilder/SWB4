@@ -42,6 +42,28 @@
             {
                 it = EventElement.listEventElementsByDate(user, current, wpage, wpage.getWebSite());
             }
+
+            if (current == null)
+            {
+                it = EventElement.ClassMgr.listEventElementByAttendant(user, paramRequest.getWebPage().getWebSite());
+            }
+            else
+            {
+                it = EventElement.listEventElementsByDate(user, current, wpage, wpage.getWebSite());
+            }
+            Date today = new Date(System.currentTimeMillis());
+            java.util.Calendar cal = java.util.Calendar.getInstance();
+            cal.setTime(today);
+            cal.add(cal.MONTH, cal.get(cal.MONTH) + 1);
+            Date end = cal.getTime();
+            while (it.hasNext())
+            {
+                EventElement event = it.next();
+                if (end.after(event.getEndDate()) || event.getEndDate().equals(end))
+                {
+                    event.remove();
+                }
+            }
             ArrayList<EventElement> elements = new ArrayList();
             int elementos = 0;
             it = SWBComparator.sortByCreated(it, false);
@@ -49,7 +71,7 @@
             while (it.hasNext())
             {
                 EventElement event = it.next();
-                if (event.canView(member))
+                if (event.canView(member) && (today.after(event.getEndDate()) || event.getEndDate().equals(today)))
                 {
                     elements.add(event);
                     elementos++;
