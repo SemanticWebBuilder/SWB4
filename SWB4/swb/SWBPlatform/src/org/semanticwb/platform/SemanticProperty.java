@@ -51,7 +51,8 @@ public class SemanticProperty
     private boolean isInverse=false;
     private Boolean isExternalInvocation=null;
     private Boolean isInheritProperty=null;
-    private Boolean isNoObservable=null;
+    private Boolean isNotObservable=null;
+    private Boolean isNotCodeGeneration=null;
     private Boolean isRemoveDependency=null;
     private Boolean isCloneDependency=null;
     private Boolean isHeraquicalRelation=null;
@@ -286,16 +287,34 @@ public class SemanticProperty
      */
     public boolean isNotObservable()
     {
-        if(isNoObservable==null)
+        if(isNotObservable==null)
         {
-            isNoObservable=false;
+            isNotObservable=false;
             Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_NOTOBSERVABLE));
             if(st!=null)
             {
-                isNoObservable=st.getBoolean();
+                isNotObservable=st.getBoolean();
             }
         }
-        return isNoObservable;
+        return isNotObservable;
+    }
+
+    /**
+     * Esta propiedad se utiliza para desabilitar la generacion de código de la propiedad
+     * @return
+     */
+    public boolean isNotCodeGeneration()
+    {
+        if(isNotCodeGeneration==null)
+        {
+            isNotCodeGeneration=false;
+            Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_NOTCODEGENERATION));
+            if(st!=null)
+            {
+                isNotCodeGeneration=st.getBoolean();
+            }
+        }
+        return isNotCodeGeneration;
     }
 
     /**
