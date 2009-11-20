@@ -2274,5 +2274,22 @@ public class SemanticObject
         return "/models/"+getModel().getName()+"/"+getSemanticClass().getClassGroupId()+"/"+getId();
     }
 
+    /**
+     * Regresa todos los valores de la propiedad sin importar el idioma
+     * Utilizado para la indexación del objeto
+     * @param prop
+     * @return
+     */
+    public String getPropertyIndexData(SemanticProperty prop)
+    {
+        String ret="";
+        StmtIterator stit = m_res.listProperties(prop.getRDFProperty());
+        while(stit.hasNext())
+        {
+            Statement st=stit.nextStatement();
+            ret=ret+st.getString()+"\n";
+        }
+        return ret;
+    }
 }
 
