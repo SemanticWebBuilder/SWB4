@@ -90,7 +90,8 @@
 
     %>
     <div class="noticia">
-        <a href="<%= SWBPortal.getWebWorkPath()+doc.getDocumentURL()%>" target="new"><%= doc.getTitle()%></a>
+        <%--<a href="<%= SWBPortal.getWebWorkPath()+doc.getDocumentURL()%>" target="new"><%= doc.getTitle()%></a>--%>
+        <a href="/swbadmin/jsp/microsite/DocumentResource/displayDoc.jsp?uri=<%=java.net.URLEncoder.encode(doc.getURI())%>" target="new"><%= doc.getTitle()%></a>
 
         <div class="noticiaTexto">
             <h2><%= doc.getDescription()%></h2>
