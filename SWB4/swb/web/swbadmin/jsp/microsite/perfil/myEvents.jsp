@@ -51,14 +51,20 @@
             {
                 it = EventElement.listEventElementsByDate(user, current, wpage, wpage.getWebSite());
             }
-            Date today = new Date(System.currentTimeMillis());
-            java.util.Calendar cal = java.util.Calendar.getInstance();
-            cal.setTime(today);
-            cal.add(cal.MONTH, 1);
-            Date end = cal.getTime();
+
+            java.util.Calendar today = java.util.Calendar.getInstance();
+            today.setTime(new Date(System.currentTimeMillis()));
+            today.set(today.HOUR_OF_DAY, 23);
+            today.set(today.MINUTE, 59);
+            today.set(today.SECOND, 59);
+            today.set(today.MILLISECOND, 00);
+            java.util.Calendar end = java.util.Calendar.getInstance();
+
             while (it.hasNext())
             {
                 EventElement event = it.next();
+                end.setTime(event.getEndDate());
+                end.add(end.MONTH, 1);
                 if (today.after(end) || today.equals(end))
                 {
                     event.remove();
@@ -71,7 +77,12 @@
             while (it.hasNext())
             {
                 EventElement event = it.next();
-                if (event.canView(member) && !today.after(event.getEndDate()))
+                end.setTime(event.getEndDate());
+                end.set(end.HOUR_OF_DAY, 23);
+                end.set(end.MINUTE, 59);
+                end.set(end.SECOND, 59);
+                end.set(end.MILLISECOND, 00);
+                if (event.canView(member) && !today.after(end))
                 {
                     elements.add(event);
                     elementos++;
