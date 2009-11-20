@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class OrganizationCommBase extends org.semanticwb.portal.community.Community 
+public abstract class OrganizationCommBase extends org.semanticwb.portal.community.Community 
 {
        public static final org.semanticwb.platform.SemanticClass swbcomm_OrganizationComm=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#OrganizationComm");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#OrganizationComm");

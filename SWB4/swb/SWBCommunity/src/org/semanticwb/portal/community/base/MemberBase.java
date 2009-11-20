@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class MemberBase extends org.semanticwb.model.SWBClass 
+public abstract class MemberBase extends org.semanticwb.model.SWBClass 
 {
        public static final org.semanticwb.platform.SemanticClass swbcomm_MicroSite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#MicroSite");
        public static final org.semanticwb.platform.SemanticProperty swbcomm_memMicroSite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#memMicroSite");

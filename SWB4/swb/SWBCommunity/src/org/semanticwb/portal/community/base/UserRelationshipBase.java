@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class UserRelationshipBase extends org.semanticwb.model.SWBClass 
+public abstract class UserRelationshipBase extends org.semanticwb.model.SWBClass 
 {
        public static final org.semanticwb.platform.SemanticClass swbcomm_UserRelationship=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#UserRelationship");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#UserRelationship");
