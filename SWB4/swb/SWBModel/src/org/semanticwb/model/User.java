@@ -538,43 +538,4 @@ public class User extends UserBase implements Principal
         return lista.iterator();
     }
 
-    public boolean canSearchIndex() {
-        return false;
-    }
-
-    public String getSearchCategories() {
-        return null;
-    }
-
-    public String getSearchTitle() {
-        return getFullName();
-    }
-
-    public String getSearchDisplayTitle(String lang) {
-        return getFullName();
-    }
-
-    public String getSearchTags() {
-        return null;
-    }
-
-    public String getSearchURL() {
-        return "{SWBUserURL}"+getId();
-    }
-
-    public String getSearchData()
-    {
-        return null;
-    }
-
-    public String getSearchDisplaySummary(String lang) 
-    {
-        return null;
-    }
-
-    public String getSearchDisplayImage() 
-    {
-        return "{SWBUserImage}"+getId();
-    }
-
 }
