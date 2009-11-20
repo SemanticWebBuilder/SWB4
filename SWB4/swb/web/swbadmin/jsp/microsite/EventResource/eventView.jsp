@@ -41,8 +41,7 @@
                 end.setTime(event.getEndDate());
                 end.add(end.MONTH, 1);
                 if (today.after(end) || today.equals(end))
-                {
-                    System.out.println("borrando elemento " + end);
+                {                    
                     event.remove();
                 }                
             }
@@ -62,13 +61,7 @@
                 {
                     elements.add(event);
                     elementos++;
-                }
-                else
-                {
-                    System.out.println("no muestra " + event.getEndDate());
-                    System.out.println("hoy        " + today.getTime());
-
-                }
+                }                
             }
             int paginas = elementos / ELEMENETS_BY_PAGE;
             if (elementos % ELEMENETS_BY_PAGE != 0)
