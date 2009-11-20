@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class DocumentElementBase extends org.semanticwb.portal.community.MicroSiteElement implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Rankable,org.semanticwb.portal.community.Interactiveable,org.semanticwb.model.Viewable,org.semanticwb.model.Traceable
+public class DocumentElementBase extends org.semanticwb.portal.community.MicroSiteElement implements org.semanticwb.portal.community.Interactiveable,org.semanticwb.model.Rankable,org.semanticwb.model.Searchable,org.semanticwb.model.Viewable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
        public static final org.semanticwb.platform.SemanticProperty swbcomm_documentURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#documentURL");
        public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");

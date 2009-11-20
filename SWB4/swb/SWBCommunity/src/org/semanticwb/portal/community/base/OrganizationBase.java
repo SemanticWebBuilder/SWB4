@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class OrganizationBase extends org.semanticwb.portal.community.DirectoryObject implements org.semanticwb.model.Geolocalizable,org.semanticwb.model.Rankable,org.semanticwb.model.Campable,org.semanticwb.portal.community.Contactable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.portal.community.Addressable,org.semanticwb.portal.community.Interactiveable
+public class OrganizationBase extends org.semanticwb.portal.community.DirectoryObject implements org.semanticwb.portal.community.Interactiveable,org.semanticwb.model.Rankable,org.semanticwb.model.Searchable,org.semanticwb.portal.community.Addressable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.portal.community.Contactable,org.semanticwb.model.Campable,org.semanticwb.model.Geolocalizable
 {
        public static final org.semanticwb.platform.SemanticProperty swbcomm_webSite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#webSite");
        public static final org.semanticwb.platform.SemanticProperty swbcomm_serviceHours=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#serviceHours");
