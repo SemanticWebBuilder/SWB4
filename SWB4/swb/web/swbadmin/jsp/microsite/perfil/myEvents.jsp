@@ -54,12 +54,12 @@
             Date today = new Date(System.currentTimeMillis());
             java.util.Calendar cal = java.util.Calendar.getInstance();
             cal.setTime(today);
-            cal.add(cal.MONTH, cal.get(cal.MONTH) + 1);
+            cal.add(cal.MONTH, 1);
             Date end = cal.getTime();
             while (it.hasNext())
             {
                 EventElement event = it.next();
-                if (end.after(event.getEndDate()) || event.getEndDate().equals(end))
+                if (today.after(end) || today.equals(end))
                 {
                     event.remove();
                 }
@@ -71,7 +71,7 @@
             while (it.hasNext())
             {
                 EventElement event = it.next();
-                if (event.canView(member) && (today.after(event.getEndDate()) || event.getEndDate().equals(today)))
+                if (event.canView(member) && today.after(event.getEndDate()))
                 {
                     elements.add(event);
                     elementos++;
