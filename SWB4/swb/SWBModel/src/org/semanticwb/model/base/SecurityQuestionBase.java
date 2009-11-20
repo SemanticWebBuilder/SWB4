@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class SecurityQuestionBase extends org.semanticwb.model.base.FormElementBase 
+public abstract class SecurityQuestionBase extends org.semanticwb.model.base.FormElementBase 
 {
        public static final org.semanticwb.platform.SemanticClass swbxf_SecurityQuestion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#SecurityQuestion");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#SecurityQuestion");

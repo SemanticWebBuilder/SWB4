@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class GMapBase extends org.semanticwb.model.base.FormElementBase 
+public abstract class GMapBase extends org.semanticwb.model.base.FormElementBase 
 {
        public static final org.semanticwb.platform.SemanticProperty swbxf_initLatitude=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#initLatitude");
        public static final org.semanticwb.platform.SemanticProperty swb_initLongitude=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#initLongitude");

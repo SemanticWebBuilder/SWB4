@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class RichTextBase extends org.semanticwb.model.TextArea 
+public abstract class RichTextBase extends org.semanticwb.model.TextArea 
 {
        public static final org.semanticwb.platform.SemanticClass swbxf_RichText=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#RichText");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#RichText");

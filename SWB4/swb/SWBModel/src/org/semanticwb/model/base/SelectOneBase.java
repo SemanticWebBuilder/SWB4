@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class SelectOneBase extends org.semanticwb.model.base.FormElementBase 
+public abstract class SelectOneBase extends org.semanticwb.model.base.FormElementBase 
 {
        public static final org.semanticwb.platform.SemanticProperty swbxf_so_globalScope=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#so_globalScope");
        public static final org.semanticwb.platform.SemanticProperty swbxf_so_nullSuport=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#so_nullSuport");

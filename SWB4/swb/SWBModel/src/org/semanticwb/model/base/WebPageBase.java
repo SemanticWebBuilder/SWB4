@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class WebPageBase extends org.semanticwb.model.Topic implements org.semanticwb.model.Expirable,org.semanticwb.model.Rankable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.Resourceable,org.semanticwb.model.Indexable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Viewable,org.semanticwb.model.Searchable,org.semanticwb.model.Trashable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Filterable
+public abstract class WebPageBase extends org.semanticwb.model.Topic implements org.semanticwb.model.Hiddenable,org.semanticwb.model.Referensable,org.semanticwb.model.Rankable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Indexable,org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Traceable,org.semanticwb.model.Viewable,org.semanticwb.model.Searchable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable,org.semanticwb.model.Resourceable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Expirable,org.semanticwb.model.Filterable
 {
        public static final org.semanticwb.platform.SemanticProperty swb_webPageSortName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#webPageSortName");
        public static final org.semanticwb.platform.SemanticProperty swb_webPageURLType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#webPageURLType");
@@ -650,6 +650,16 @@ public class WebPageBase extends org.semanticwb.model.Topic implements org.seman
     public void setHidden(boolean value)
     {
         getSemanticObject().setBooleanProperty(swb_hidden, value);
+    }
+
+    public boolean isIndexable()
+    {
+        return getSemanticObject().getBooleanProperty(swb_indexable);
+    }
+
+    public void setIndexable(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_indexable, value);
     }
 
     public long getDiskUsage()

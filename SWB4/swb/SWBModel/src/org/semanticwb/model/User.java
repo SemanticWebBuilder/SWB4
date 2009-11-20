@@ -40,7 +40,6 @@ import org.semanticwb.platform.SemanticVocabulary;
 
 public class User extends UserBase implements Principal
 {
-
     static Logger log = SWBUtils.getLogger(User.class);
     private Device device = null;
     private String ip = null;
@@ -537,6 +536,45 @@ public class User extends UserBase implements Principal
             if (null!=sc) lista.add(sc);
         }
         return lista.iterator();
+    }
+
+    public boolean canSearchIndex() {
+        return false;
+    }
+
+    public String getSearchCategories() {
+        return null;
+    }
+
+    public String getSearchTitle() {
+        return getFullName();
+    }
+
+    public String getSearchDisplayTitle(String lang) {
+        return getFullName();
+    }
+
+    public String getSearchTags() {
+        return null;
+    }
+
+    public String getSearchURL() {
+        return "{SWBUserURL}"+getId();
+    }
+
+    public String getSearchData()
+    {
+        return null;
+    }
+
+    public String getSearchDisplaySummary(String lang) 
+    {
+        return null;
+    }
+
+    public String getSearchDisplayImage() 
+    {
+        return "{SWBUserImage}"+getId();
     }
 
 }

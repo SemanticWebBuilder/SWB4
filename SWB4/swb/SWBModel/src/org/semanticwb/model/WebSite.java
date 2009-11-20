@@ -158,5 +158,49 @@ public class WebSite extends WebSiteBase
         //TODO: revisar e invocar desde servicios cuando se crean ipfilters
         ipfilters=null;
     }
+
+    public String getSearchCategories()
+    {
+        return null;
+    }
+
+    public String getSearchURL() {
+        return null;
+    }
+
+    public String getSearchData()
+    {
+        return getSemanticObject().getPropertyIndexData(swb_description);
+    }
+
+    public String getSearchDisplaySummary(String lang)
+    {
+        return getDisplayDescription(lang);
+    }
+
+    public boolean canSearchIndex()
+    {
+        return false;
+    }
+
+    public String getSearchTitle()
+    {
+        return getSemanticObject().getPropertyIndexData(swb_title);
+    }
+
+    public String getSearchDisplayTitle(String lang)
+    {
+        return getDisplayTitle(lang);
+    }
+
+    public String getSearchTags()
+    {
+        return null;
+    }
+
+    public String getSearchDisplayImage()
+    {
+        return null;
+    }
     
 }

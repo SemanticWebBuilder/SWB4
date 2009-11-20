@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class UserFavoriteBase extends org.semanticwb.model.SWBClass 
+public abstract class UserFavoriteBase extends org.semanticwb.model.SWBClass 
 {
        public static final org.semanticwb.platform.SemanticClass owl_Thing=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.w3.org/2002/07/owl#Thing");
        public static final org.semanticwb.platform.SemanticProperty swb_usrfHasObject=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrfHasObject");

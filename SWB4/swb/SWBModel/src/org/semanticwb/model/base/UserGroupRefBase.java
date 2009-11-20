@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class UserGroupRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Activeable
+public abstract class UserGroupRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Activeable
 {
        public static final org.semanticwb.platform.SemanticClass swb_UserGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroup");
        public static final org.semanticwb.platform.SemanticProperty swb_userGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userGroup");

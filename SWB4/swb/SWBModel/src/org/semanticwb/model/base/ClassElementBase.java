@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class ClassElementBase extends org.semanticwb.model.Text 
+public abstract class ClassElementBase extends org.semanticwb.model.Text 
 {
        public static final org.semanticwb.platform.SemanticClass swbxf_ClassElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#ClassElement");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#ClassElement");

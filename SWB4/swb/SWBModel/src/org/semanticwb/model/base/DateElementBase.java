@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class DateElementBase extends org.semanticwb.model.base.FormElementBase 
+public abstract class DateElementBase extends org.semanticwb.model.base.FormElementBase 
 {
        public static final org.semanticwb.platform.SemanticProperty swb_dateConstraints=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#dateConstraints");
        public static final org.semanticwb.platform.SemanticClass swbxf_DateElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#DateElement");

@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class LabelBase extends org.semanticwb.model.base.FormElementBase 
+public abstract class LabelBase extends org.semanticwb.model.base.FormElementBase 
 {
        public static final org.semanticwb.platform.SemanticClass swbxf_Label=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#Label");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#Label");

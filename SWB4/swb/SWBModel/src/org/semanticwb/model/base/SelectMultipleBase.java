@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class SelectMultipleBase extends org.semanticwb.model.base.FormElementBase 
+public abstract class SelectMultipleBase extends org.semanticwb.model.base.FormElementBase 
 {
        public static final org.semanticwb.platform.SemanticProperty swbxf_sm_globalScope=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#sm_globalScope");
        public static final org.semanticwb.platform.SemanticProperty swbxf_sm_nullSupport=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#sm_nullSupport");

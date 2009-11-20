@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class TopicBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Searchable,org.semanticwb.model.Indexable
+public abstract class TopicBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
        public static final org.semanticwb.platform.SemanticClass swb_AssMember=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#AssMember");
        public static final org.semanticwb.platform.SemanticProperty swb_hasAssMemberInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasAssMemberInv");
@@ -195,16 +195,6 @@ public class TopicBase extends org.semanticwb.model.SWBClass implements org.sema
     public void setUpdated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_updated, value);
-    }
-
-    public boolean isIndexable()
-    {
-        return getSemanticObject().getBooleanProperty(swb_indexable);
-    }
-
-    public void setIndexable(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(swb_indexable, value);
     }
 
     public String getTags()

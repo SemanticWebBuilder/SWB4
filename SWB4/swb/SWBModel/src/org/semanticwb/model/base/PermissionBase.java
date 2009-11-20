@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class PermissionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable
+public abstract class PermissionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable
 {
        public static final org.semanticwb.platform.SemanticClass swb_Permission=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Permission");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Permission");

@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class FormViewBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable
+public abstract class FormViewBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable
 {
        public static final org.semanticwb.platform.SemanticClass rdf_Property=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.w3.org/1999/02/22-rdf-syntax-ns#Property");
        public static final org.semanticwb.platform.SemanticProperty swbxf_hasCreateProperty=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#hasCreateProperty");

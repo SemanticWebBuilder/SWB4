@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class CodeEditorBase extends org.semanticwb.model.TextArea 
+public abstract class CodeEditorBase extends org.semanticwb.model.TextArea 
 {
        public static final org.semanticwb.platform.SemanticProperty swbxf_codeEditorLanguage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#codeEditorLanguage");
        public static final org.semanticwb.platform.SemanticClass swbxf_CodeEditor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#CodeEditor");

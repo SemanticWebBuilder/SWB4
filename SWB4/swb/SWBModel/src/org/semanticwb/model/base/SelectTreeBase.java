@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class SelectTreeBase extends org.semanticwb.model.SelectOne 
+public abstract class SelectTreeBase extends org.semanticwb.model.SelectOne 
 {
        public static final org.semanticwb.platform.SemanticProperty swbxf_st_startElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#st_startElement");
        public static final org.semanticwb.platform.SemanticClass swbxf_SelectTree=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectTree");

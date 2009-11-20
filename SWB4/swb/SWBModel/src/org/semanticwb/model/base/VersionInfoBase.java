@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class VersionInfoBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable
+public abstract class VersionInfoBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable
 {
        public static final org.semanticwb.platform.SemanticProperty swb_versionValue=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionValue");
        public static final org.semanticwb.platform.SemanticClass swb_VersionInfo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#VersionInfo");

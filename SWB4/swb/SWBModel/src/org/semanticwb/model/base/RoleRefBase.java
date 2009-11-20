@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class RoleRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Activeable
+public abstract class RoleRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Activeable
 {
        public static final org.semanticwb.platform.SemanticClass swb_Role=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Role");
        public static final org.semanticwb.platform.SemanticProperty swb_role=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#role");
