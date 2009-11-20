@@ -103,6 +103,7 @@ public class SemanticVocabulary
     public static final String SWB_PROP_HASHERARQUICALNODE=URI+"hasHerarquicalNode";
 //    public static final String SWB_PROP_DRAGSUPPORT=URI+"dragSupport";
     public static final String SWB_PROP_NOTOBSERVABLE=URI+"notObservable";
+    public static final String SWB_PROP_NOTCODEGENERATION=URI+"notCodeGeneration";
     public static final String SWB_PROP_INHERITPROPERTY=URI+"inheritProperty";
 //    public static final String SWB_PROP_PROPGROUP=URI+"propGroup";
 //    public static final String SWB_PROP_PROPINDEX=URI+"propIndex";
