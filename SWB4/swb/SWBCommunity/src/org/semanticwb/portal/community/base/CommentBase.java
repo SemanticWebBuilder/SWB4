@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class CommentBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable
+public abstract class CommentBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable
 {
        public static final org.semanticwb.platform.SemanticProperty swbcomm_comDescription=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#comDescription");
        public static final org.semanticwb.platform.SemanticClass swbcomm_Interactiveable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Interactiveable");

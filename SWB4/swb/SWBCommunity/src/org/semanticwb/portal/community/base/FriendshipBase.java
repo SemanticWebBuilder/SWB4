@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class FriendshipBase extends org.semanticwb.portal.community.UserRelationship 
+public abstract class FriendshipBase extends org.semanticwb.portal.community.UserRelationship 
 {
        public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
        public static final org.semanticwb.platform.SemanticProperty swbcomm_hasFriend=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasFriend");
