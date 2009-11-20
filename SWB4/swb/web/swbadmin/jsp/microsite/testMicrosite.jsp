@@ -29,7 +29,7 @@
             {
                 DirectoryObject obj=it.next();
                 if(clear)obj.remove();
-                out.println(obj);
+                out.println(obj+"<br/>");
             }
         }
 %>
@@ -42,7 +42,7 @@
             {
                 MicroSite obj=it.next();
                 if(clear)obj.remove();
-                out.println(obj);
+                out.println(obj+"<br/>");
             }
         }
 
@@ -56,7 +56,22 @@
             {
                 MicroSiteElement obj=it.next();
                 if(clear)obj.remove();
-                out.println(obj);
+                out.println(obj+"<br/>");
+            }
+        }
+
+%>
+        <h1>Users</h1>
+<%
+        {
+            WebSite site=SWBContext.getWebSite("cd");
+            UserRepository urep=site.getUserRepository();
+            Iterator<User> it=User.ClassMgr.listUsers(urep);
+            while(it.hasNext())
+            {
+                User obj=it.next();
+                if(clear)obj.remove();
+                out.println(obj+":"+obj.getFullName()+"<br/>");
             }
         }
 
