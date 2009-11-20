@@ -20,23 +20,20 @@
             User user = paramRequest.getUser();
             WebPage wpage = paramRequest.getWebPage();
             MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
-            Member member = Member.getMember(user, wpage);            
+            Member member = Member.getMember(user, wpage);
             String addEventURL = paramRequest.getRenderUrl().setParameter("act", "add").toString();
             Date today = new Date(System.currentTimeMillis());
             java.util.Calendar cal = java.util.Calendar.getInstance();
-            cal.setTime(today);
-            cal.add(cal.MONTH, cal.get(cal.MONTH) + 1);
-            Date end = cal.getTime();
 
             Iterator<EventElement> it = EventElement.ClassMgr.listEventElementByEventWebPage(wpage, wpage.getWebSite());
             while (it.hasNext())
             {
-                EventElement event = it.next();
-                %>
-                aaa <%=end.after(event.getEndDate())%>
-                <%
-                if (end.after(event.getEndDate()) || event.getEndDate().equals(end))
-                {
+                EventElement event = it.next();                
+                cal.setTime(event.getEndDate());
+                cal.add(cal.MONTH, 1);
+                Date end = cal.getTime();
+                if (today.after(end) || today.equals(end))
+                {                    
                     event.remove();
                 }
             }
@@ -47,11 +44,11 @@
             while (it.hasNext())
             {
                 EventElement event = it.next();
-                if (event.canView(member) && (today.after(event.getEndDate()) || event.getEndDate().equals(today)))
+                if (event.canView(member) && today.after(event.getEndDate()))
                 {
                     elements.add(event);
                     elementos++;
-                }
+                }                
             }
             int paginas = elementos / ELEMENETS_BY_PAGE;
             if (elementos % ELEMENETS_BY_PAGE != 0)
@@ -210,12 +207,12 @@
             <p>
                 <%=event.getDescription()%> | <a href="<%=viewUrl%>">Ver más</a>
                 <%
-                if (event.canModify(member))
-                {
+                        if (event.canModify(member))
+                        {
                 %>
                 | <a href="<%=editEventURL%>">Editar</a> | <a href="<%=removeurl%>">Eliminar</a>
                 <%
-                }
+                        }
                 %>
 
             </p>
