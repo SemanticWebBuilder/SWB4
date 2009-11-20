@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class AssociationBase extends org.semanticwb.model.SWBClass 
+public abstract class AssociationBase extends org.semanticwb.model.SWBClass 
 {
        public static final org.semanticwb.platform.SemanticClass swb_AssMember=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#AssMember");
        public static final org.semanticwb.platform.SemanticProperty swb_hasMember=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasMember");

@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class DisplayObjectBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Iconable
+public abstract class DisplayObjectBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Iconable
 {
        public static final org.semanticwb.platform.SemanticProperty swbxf_doDispatcher=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#doDispatcher");
        public static final org.semanticwb.platform.SemanticProperty swbxf_doTreeController=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#doTreeController");

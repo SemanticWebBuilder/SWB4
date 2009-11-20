@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class UserTypeDefBase extends org.semanticwb.model.SWBClass 
+public abstract class UserTypeDefBase extends org.semanticwb.model.SWBClass 
 {
        public static final org.semanticwb.platform.SemanticClass swb_UserTypeDef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserTypeDef");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserTypeDef");

@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class RuleRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Activeable
+public abstract class RuleRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Activeable
 {
        public static final org.semanticwb.platform.SemanticClass swb_Rule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Rule");
        public static final org.semanticwb.platform.SemanticProperty swb_rule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#rule");

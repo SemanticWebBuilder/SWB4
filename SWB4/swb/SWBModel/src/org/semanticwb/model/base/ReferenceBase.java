@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class ReferenceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable
+public abstract class ReferenceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable
 {
        public static final org.semanticwb.platform.SemanticClass swb_Reference=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Reference");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Reference");
