@@ -30,7 +30,7 @@
             String urlAddDocument = paramRequest.getRenderUrl().setParameter("act", "add").toString();
             ArrayList<DocumentElement> elements = new ArrayList();
             int elementos = 0;
-            Iterator<DocumentElement> it = DocumentElement.ClassMgr.listDocumentElements();
+            Iterator<DocumentElement> it = DocumentElement.ClassMgr.listDocumentElementByDocumentWebPage(wpage, wpage.getWebSite());
             it = SWBComparator.sortByCreated(it, false);
             while (it.hasNext())
             {
