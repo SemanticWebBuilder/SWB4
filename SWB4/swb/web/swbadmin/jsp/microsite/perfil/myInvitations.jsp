@@ -27,7 +27,7 @@
 
             String perfilPath = paramRequest.getWebPage().getWebSite().getWebPage("perfil").getUrl();
             String requesterPath = paramRequest.getWebPage().getWebSite().getWebPage("mis_invitaciones").getUrl();
-            String photo = SWBPortal.getContextPath() + "/swbadmin/images/defaultPhoto.jpg";
+            String photo = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/perfil/profilePlaceholder.jpg";
             boolean isStrategy = false;
             if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY)
             {
