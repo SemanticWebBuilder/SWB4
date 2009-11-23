@@ -63,7 +63,7 @@
             else if(contTokens==3) iTotPage=Integer.parseInt(token);
         }
         %>
-        <b>Resultado:</b> <%=setResult.size()%> usuarios
+        <%-- <b>Resultado:</b> <%=setResult.size()%> usuarios --%>
         <ul id="listaAlfabet">
             <li><a <%if(!existFilter){%>class="active"<%}%> href="<%=urlAlphabetic%>">Todos&nbsp;&nbsp;&nbsp;</a></li>
             <li><a <%if(sparams.equals("a")){%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "a")%>">A</a></li>
