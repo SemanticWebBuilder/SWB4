@@ -28,17 +28,17 @@
                     description = photo.getDescription();
                 }
                 String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/PhotoResource/sinfoto.png";
-                        String path = wpage.getWorkPath();
-                        if (photo.getPhotoThumbnail() != null)
-                        {
-                            int pos = photo.getPhotoThumbnail().lastIndexOf("/");
-                            if (pos != -1)
-                            {
-                                String sphoto = photo.getPhotoThumbnail().substring(pos + 1);
-                                photo.setPhotoThumbnail(sphoto);
-                            }
-                            pathPhoto = SWBPortal.getWebWorkPath() + path + "/" + photo.getPhotoThumbnail();
-                        }
+                String path = wpage.getWorkPath();
+                if (photo.getPhotoThumbnail() != null)
+                {
+                    int pos = photo.getPhotoThumbnail().lastIndexOf("/");
+                    if (pos != -1)
+                    {
+                        String sphoto = photo.getPhotoThumbnail().substring(pos + 1);
+                        photo.setPhotoThumbnail(sphoto);
+                    }
+                    pathPhoto = SWBPortal.getWebWorkPath() + path + "/" + photo.getPhotoThumbnail();
+                }
 %>
 <div class="columnaIzquierda">
     <h2><%=title%></h2><br>
@@ -48,12 +48,12 @@
         </a></p>            
 
     <%
-                }
-               
-                SWBResponse res = new SWBResponse(response);
-                photo.renderGenericElements(request, res, paramRequest);
-                out.write(res.toString());
-                
+            }
+
+            SWBResponse res = new SWBResponse(response);
+            photo.renderGenericElements(request, res, paramRequest);
+            out.write(res.toString());
+
     %>
 </div>
 <div class="columnaCentro">
@@ -73,25 +73,25 @@
     <%}%>
     <ul class="miContenido">
         <%
-                    SWBResourceURL urla = paramRequest.getActionUrl();
-                    if (user.isRegistered())
-                    {
-                        if (member == null)
-                        {
-                            urla.setParameter("act", "subscribe");
+            SWBResourceURL urla = paramRequest.getActionUrl();
+            if (user.isRegistered())
+            {
+                if (member == null)
+                {
+                    urla.setParameter("act", "subscribe");
         %>
         <li><a href="<%=urla%>">Suscribirse a esta comunidad</a></li>
         <%
-                }
-                else
-                {
-                    urla.setParameter("act", "unsubscribe");
+                        }
+                        else
+                        {
+                            urla.setParameter("act", "unsubscribe");
         %>
         <li><a href="<%=urla%>">Cancelar suscripción a comunidad</a></li>
         <%
-                        }
-                    }
-                    String pageUri = "/swbadmin/jsp/microsite/rss/rss.jsp?photo=" + java.net.URLEncoder.encode(wpage.getURI());
+                }
+            }
+            String pageUri = "/swbadmin/jsp/microsite/rss/rss.jsp?photo=" + java.net.URLEncoder.encode(wpage.getURI());
         %>
         <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS al canal de fotos de la comunidad</a></li>
     </ul>
