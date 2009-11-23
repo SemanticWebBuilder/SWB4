@@ -128,7 +128,7 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                     {
                         FileInputStream in = new FileInputStream(file);
                         String filename = file.getName();
-                        String finalpath = rec.getWorkPath();
+                        String finalpath = rec.getWorkPath() + "/";
                         String target = realpath + finalpath + filename;
                         File ftarget = new File(target);
                         ftarget.getParentFile().mkdirs();
@@ -152,7 +152,7 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                     {
                         FileInputStream in = new FileInputStream(file);
                         String filename = file.getName();
-                        String finalpath = rec.getWorkPath();
+                        String finalpath = rec.getWorkPath() + "/";
                         String target = realpath + finalpath + filename;
                         File ftarget = new File(target);
                         ftarget.getParentFile().mkdirs();
@@ -201,7 +201,7 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                         {
                             FileInputStream in = new FileInputStream(file);
                             String filename = file.getName();
-                            String finalpath = rec.getWorkPath();
+                            String finalpath = rec.getWorkPath() + "/";
                             String target = realpath + finalpath + filename;
                             File ftarget = new File(target);
                             ftarget.getParentFile().mkdirs();
@@ -217,7 +217,7 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                         {
                             FileInputStream in = new FileInputStream(file);
                             String filename = file.getName();
-                            String finalpath = rec.getWorkPath();
+                            String finalpath = rec.getWorkPath() + "/";
                             String target = realpath + finalpath + filename;
                             File ftarget = new File(target);
                             ftarget.getParentFile().mkdirs();
