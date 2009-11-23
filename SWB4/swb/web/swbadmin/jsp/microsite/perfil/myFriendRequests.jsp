@@ -53,8 +53,7 @@
                 User userRequested = friendshipProspect.getFriendShipRequested();
                 elements.add(userRequested);
                 elementos++;
-            }
-            int contTot = elementos;
+            }            
             boolean hasRequest = elements.size()>0;
             int paginas = elementos / ELEMENETS_BY_PAGE;
             if (elementos % ELEMENETS_BY_PAGE != 0)
@@ -286,7 +285,7 @@
 
     
 <%                }
-            if (isStrategy && contTot > 0)
+            if (isStrategy && elementos > 0)
             {
 %>
 
@@ -296,7 +295,7 @@
 %>
 <ul class="listaElementos">
     <li>
-        <a class="contactos_nombre" href="<%=requestedPath%><%=userParam%>">Has solicidado a <%=contTot%> personas que se unan como tus amigos</a>
+        <a class="contactos_nombre" href="<%=requestedPath%><%=userParam%>">Has solicidado a <%=elementos%> personas que se unan como tus amigos</a>
     </li>
 </ul>
 <%
@@ -305,7 +304,7 @@
 
 
 <%}
-                else if (contTot == 0)
+                else if (elementos == 0)
                 {
 %>
 <ul class="listaElementos">
