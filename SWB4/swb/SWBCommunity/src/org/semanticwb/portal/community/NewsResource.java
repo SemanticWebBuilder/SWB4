@@ -175,7 +175,7 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
                             file.delete();
                             params.put("thumbnail", finalpath + filename);
                         }
-                        rec.setNewsThumbnail(params.get("thumbnail"));
+                        rec.setNewsThumbnail(file.getName());
                     }
                     rec.setTitle(params.get("new_title"));
                     rec.setAuthor(params.get("new_author"));
