@@ -86,6 +86,10 @@
                         }
                         String usr_sex = (String) userRequester.getExtendedAttribute(mapa.get("userSex"));
                         Object usr_age = (Object) userRequester.getExtendedAttribute(mapa.get("userAge"));
+                        if (usr_sex == null)
+                        {
+                            usr_sex = "No indicó el usuario su sexo";
+                        }
                         if (null == usr_age)
                         {
                             usr_age = "";
