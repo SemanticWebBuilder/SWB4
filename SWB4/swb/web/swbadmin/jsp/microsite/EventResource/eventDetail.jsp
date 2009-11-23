@@ -16,7 +16,7 @@
             if (event != null && event.canView(member))
             {
 
-                String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
+                String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/EventResource/noevent.jpg";
                         String path = wpage.getWorkPath();
                         if (event.getEventThumbnail() != null)
                         {
