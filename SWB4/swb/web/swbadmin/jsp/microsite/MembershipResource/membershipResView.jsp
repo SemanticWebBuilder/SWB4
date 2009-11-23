@@ -2,12 +2,16 @@
 <%@page import="org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 
 <%!
-    private Member getMember(User user, MicroSite site) {
-        if (site != null) {
+    private Member getMember(User user, MicroSite site)
+    {
+        if (site != null)
+        {
             Iterator<Member> it = Member.ClassMgr.listMemberByUser(user, site.getWebSite());
-            while (it.hasNext()) {
+            while (it.hasNext())
+            {
                 Member mem = it.next();
-                if (mem.getMicroSite().equals(site)) {
+                if (mem.getMicroSite().equals(site))
+                {
                     return mem;
                 }
             }
@@ -25,14 +29,23 @@
             urle.setParameter("act", "edit");
             MicroSite site = MicroSite.getMicroSite(paramRequest.getWebPage());
             Member member = getMember(user, site);
-            if (!(wp.getSemanticObject().getGenericInstance() instanceof MicroSite)) {
+            if (!(wp.getSemanticObject().getGenericInstance() instanceof MicroSite))
+            {
                 return;
             }
             String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
             String path = wp.getWorkPath();
-            if (site.getPhoto() != null) {
-                pathPhoto =SWBPortal.getWebWorkPath() + path+"/"+site.getPhoto();
-                
+
+            if (site.getPhoto() != null)
+            {
+                int pos = site.getPhoto().lastIndexOf("/");
+                if (pos != -1)
+                {
+                    String photo = site.getPhoto().substring(pos + 1);
+                    site.setPhoto(photo);
+                }
+                pathPhoto = SWBPortal.getWebWorkPath() + path + "/" + site.getPhoto();
+
             }
 %>
 
@@ -40,7 +53,8 @@
     <h2>Resumen</h2>
     <div class="resumenText">
         <%
-            if (site.getTags() != null && site.getTags().trim().length() > 0 && !site.getTags().equals("null")) {
+            if (site.getTags() != null && site.getTags().trim().length() > 0 && !site.getTags().equals("null"))
+            {
         %>
         <p><span class="itemTitle">Palabras Clave:</span> <%=site.getTags()%></p>
         <%
@@ -53,11 +67,14 @@
     </div>
     <h2>Descripción</h2>
     <%
-            if (site.getDescription() != null && !site.getDescription().trim().equals("")) {
+            if (site.getDescription() != null && !site.getDescription().trim().equals(""))
+            {
     %>
     <p><%=site.getDescription()%></p>
     <%
-            } else {
+            }
+            else
+            {
     %>
     <p>Sin descripción</p>
     <%            }
@@ -69,13 +86,17 @@
         <%
             {
                 int entradas = 0;
-                if (wp.getWebSite().getWebPage(wp.getId() + "_Blog") != null) {
+                if (wp.getWebSite().getWebPage(wp.getId() + "_Blog") != null)
+                {
                     Iterator<Blog> blogs = Blog.ClassMgr.listBlogByWebPage(wp.getWebSite().getWebPage(wp.getId() + "_Blog"));
-                    if (blogs.hasNext()) {
+                    if (blogs.hasNext())
+                    {
                         Blog blog = blogs.next();
-                        if (blog != null) {
+                        if (blog != null)
+                        {
                             Iterator it = blog.listPostElements();
-                            while (it.hasNext()) {
+                            while (it.hasNext())
+                            {
                                 it.next();
                                 entradas++;
                             }
@@ -93,9 +114,11 @@
         <%
             {
                 int eventos = 0;
-                if (wp.getWebSite().getWebPage(wp.getId() + "_Events") != null) {
+                if (wp.getWebSite().getWebPage(wp.getId() + "_Events") != null)
+                {
                     Iterator<EventElement> elements = EventElement.ClassMgr.listEventElementByEventWebPage(wp.getWebSite().getWebPage(wp.getId() + "_Events"));
-                    while (elements.hasNext()) {
+                    while (elements.hasNext())
+                    {
                         elements.next();
                         eventos++;
                     }
@@ -113,9 +136,11 @@
         <%
             {
                 int fotos = 0;
-                if (wp.getWebSite().getWebPage(wp.getId() + "_Photos") != null) {
+                if (wp.getWebSite().getWebPage(wp.getId() + "_Photos") != null)
+                {
                     Iterator<PhotoElement> elements = PhotoElement.ClassMgr.listPhotoElementByPhotoWebPage(wp.getWebSite().getWebPage(wp.getId() + "_Photos"));
-                    while (elements.hasNext()) {
+                    while (elements.hasNext())
+                    {
                         elements.next();
                         fotos++;
                     }
@@ -132,13 +157,17 @@
 
 
         <%
-            if (wp.getWebSite().getWebPage(wp.getId() + "_Members") != null) {
+            if (wp.getWebSite().getWebPage(wp.getId() + "_Members") != null)
+            {
                 int miembros = 0;
-                if (wp instanceof MicroSite) {
+                if (wp instanceof MicroSite)
+                {
                     MicroSite ms = (MicroSite) wp;
-                    if (ms != null) {
+                    if (ms != null)
+                    {
                         GenericIterator<Member> members = ms.listMembers();
-                        while (members.hasNext()) {
+                        while (members.hasNext())
+                        {
                             members.next();
                             miembros++;
                         }
@@ -158,9 +187,11 @@
         <%
             {
                 int noticias = 0;
-                if (wp.getWebSite().getWebPage(wp.getId() + "_News") != null) {
+                if (wp.getWebSite().getWebPage(wp.getId() + "_News") != null)
+                {
                     Iterator<NewsElement> elements = NewsElement.ClassMgr.listNewsElementByNewsWebPage(wp.getWebSite().getWebPage(wp.getId() + "_News"));
-                    while (elements.hasNext()) {
+                    while (elements.hasNext())
+                    {
                         elements.next();
                         noticias++;
                     }
@@ -180,9 +211,11 @@
 
             {
                 int videos = 0;
-                if (wp.getWebSite().getWebPage(wp.getId() + "_Videos") != null) {
+                if (wp.getWebSite().getWebPage(wp.getId() + "_Videos") != null)
+                {
                     Iterator<VideoElement> elements = VideoElement.ClassMgr.listVideoElementByWebPage(wp.getWebSite().getWebPage(wp.getId() + "_Videos"));
-                    while (elements.hasNext()) {
+                    while (elements.hasNext())
+                    {
                         elements.next();
                         videos++;
                     }
@@ -195,7 +228,7 @@
                 }
             }
 
-        %>
+                %>
 
 
     </ul> 
@@ -205,7 +238,8 @@
     <h2 class="blogTitle"><%=site.getTitle()%></h2>
     <p><img src="<%=pathPhoto%>" alt="Imagen comunidad"  ></p>
         <%
-            if (null != member && member.getAccessLevel() == Member.LEVEL_OWNER && user.isRegistered()) {
+            if (null != member && member.getAccessLevel() == Member.LEVEL_OWNER && user.isRegistered())
+            {
 
         %>
     <p><a href="<%=urle%>">[Cambiar imagen]</a></p>
@@ -216,14 +250,18 @@
     <ul class="miContenido">
         <%
             SWBResourceURL urla = paramRequest.getActionUrl();
-            if (user.isRegistered()) {
-                if (member == null) {
+            if (user.isRegistered())
+            {
+                if (member == null)
+                {
                     urla.setParameter("act", "subscribe");
         %>
         <li><a href="<%=urla%>">Suscribirse a esta comunidad</a></li>
         <%
-                    } else {
-                        urla.setParameter("act", "unsubscribe");
+                }
+                else
+                {
+                    urla.setParameter("act", "unsubscribe");
         %>
         <li><a href="<%=urla%>">Cancelar suscripción a comunidad</a></li>
         <%
