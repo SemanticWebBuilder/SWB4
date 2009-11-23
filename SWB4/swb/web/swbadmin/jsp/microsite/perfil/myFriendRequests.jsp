@@ -110,7 +110,7 @@
 %>
 <!-- paginacion -->
 <%
-            if (paginas > 1)
+            if (paginas > 1 && !isStrategy)
             {
 %>
 <div id="paginacion">
@@ -169,6 +169,7 @@
             }
 %>
 <!-- fin paginacion -->
+
 
 <%
             if (request.getParameter("user") == null)
