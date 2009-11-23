@@ -69,6 +69,7 @@ urla.setCallMethod(SWBResourceURL.Call_DIRECT);
 
 String pathPhoto = "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
 String path = wpage.getWorkPath();
+String backURL=wpage.getUrl();
 if(site.getPhoto()!=null)
 {
     pathPhoto =SWBPortal.getWebWorkPath() + path+"/"+site.getPhoto();
@@ -94,7 +95,7 @@ if(site.getPhoto()!=null)
                                 <p><a href="javascript:enviar();">[Cambiar imagen]</a></p>
                                 </div>
                                 <div class="editarInfo">
-                                <p><a href=":history.back();">[Cancelar]</a></p>
+                                <p><a href="<%=backURL%>">[Cancelar]</a></p>
                                 </div>
                                 </td></tr>
 	</table>
