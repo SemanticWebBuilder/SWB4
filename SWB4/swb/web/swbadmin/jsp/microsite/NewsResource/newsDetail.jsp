@@ -11,6 +11,19 @@
             String uri = request.getParameter("uri");
             NewsElement anew = (NewsElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
             String rank = df.format(anew.getRank());
+
+            String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
+                        String path = wpage.getWorkPath();
+                        if (anew.getNewsThumbnail() != null)
+                        {
+                            int pos = anew.getNewsThumbnail().lastIndexOf("/");
+                            if (pos != -1)
+                            {
+                                String sphoto = anew.getNewsThumbnail().substring(pos + 1);
+                                anew.setNewsThumbnail(sphoto);
+                            }
+                            pathPhoto = SWBPortal.getWebWorkPath() + path + "/" + anew.getNewsThumbnail();
+                        }
 %>
 
 <div class="columnaIzquierda">
@@ -26,7 +39,7 @@
 
 
 
-    <p><img id="img_<%=anew.getId()%>" src="<%= SWBPortal.getWebWorkPath() + anew.getNewsImage()%>" alt="<%= anew.getTitle()%>" border="0" width="380" height="100%" /></p>
+    <p><img id="img_<%=anew.getId()%>" src="<%= pathPhoto%>" alt="<%= anew.getTitle()%>" border="0" width="380" height="100%" /></p>
 
 
 

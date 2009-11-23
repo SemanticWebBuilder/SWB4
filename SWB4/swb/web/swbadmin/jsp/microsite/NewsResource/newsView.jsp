@@ -118,22 +118,20 @@
                 {
             %>
         <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%
-                if(i==ipage)
+                    if (i == ipage)
                     {
-                    %>
-                    <strong>
-                    <%
-                    }
             %>
-            <%=i%>
-            <%
-            if(i==ipage)
-                    {
-                    %>
-                    </strong>
-                    <%
-                    }
-                %></a>
+            <strong>
+                <%                    }
+                %>
+                <%=i%>
+                <%
+                        if (i == ipage)
+                        {
+                %>
+            </strong>
+            <%                    }
+            %></a>
         <%
                 }
         %>
@@ -168,40 +166,53 @@
     %>
     <p>No hay noticias registradas en la comunidad</p>
     <%            }
-    int iElement = 0;
-    for (NewsElement anew : elements)
-    {
-        if (anew.canView(member))
-        {
-            iElement++;
-             if (iElement > fin)
+            int iElement = 0;
+            for (NewsElement anew : elements)
             {
-                break;
-            }
-            if (iElement >= inicio && iElement <= fin)
-            {
-                SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", anew.getURI());
-                String rank = df.format(anew.getRank());
-                String editEventURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", anew.getURI()).toString();
-                SWBResourceURL removeUrl = paramRequest.getActionUrl();
-                removeUrl.setParameter("act", "remove");
-                removeUrl.setParameter("uri", anew.getEncodedURI());
-                String removeurl = "javascript:validateremove('" + removeUrl + "','" + anew.getTitle() + "')";
+                if (anew.canView(member))
+                {
+                    iElement++;
+                    if (iElement > fin)
+                    {
+                        break;
+                    }
+                    if (iElement >= inicio && iElement <= fin)
+                    {
+                        SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", anew.getURI());
+                        String rank = df.format(anew.getRank());
+                        String editEventURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", anew.getURI()).toString();
+                        SWBResourceURL removeUrl = paramRequest.getActionUrl();
+                        removeUrl.setParameter("act", "remove");
+                        removeUrl.setParameter("uri", anew.getEncodedURI());
+                        String removeurl = "javascript:validateremove('" + removeUrl + "','" + anew.getTitle() + "')";
+
+                        String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
+                        String path = wpage.getWorkPath();
+                        if (anew.getNewsThumbnail() != null)
+                        {
+                            int pos = anew.getNewsThumbnail().lastIndexOf("/");
+                            if (pos != -1)
+                            {
+                                String sphoto = anew.getNewsThumbnail().substring(pos + 1);
+                                anew.setNewsThumbnail(sphoto);
+                            }
+                            pathPhoto = SWBPortal.getWebWorkPath() + path + "/" + anew.getNewsThumbnail();
+                        }
     %>
     <div class="noticia">
-        <img src="<%= SWBPortal.getWebWorkPath() + anew.getNewsThumbnail()%>" alt="<%= anew.getTitle()%>">
+        <img src="<%= pathPhoto%>" alt="<%= anew.getTitle()%>">
         <div class="noticiaTexto">
             <h2><%=anew.getTitle()%></h2>
             <p>&nbsp;<br>Por: <%=anew.getAuthor()%><br><%=dateFormat.format(anew.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(anew.getCreated(), user.getLanguage())%></p>
             <p>
                 <%=anew.getDescription()%> | <a href="<%=viewUrl%>">Ver más</a>
                 <%
-                        if (anew.canModify(member))
-                        {
+                if (anew.canModify(member))
+                {
                 %>
                 | <a href="<%=editEventURL%>">Editar</a> | <a href="<%=removeurl%>">Eliminar</a>
                 <%
-                        }
+                }
                 %>
             </p>
             <p class="stats">
@@ -219,8 +230,8 @@
 
     <!-- paginacion -->
     <%
-                if (paginas > 1)
-                {
+            if (paginas > 1)
+            {
     %>
     <div id="paginacion">
 
@@ -236,44 +247,42 @@
                     {
                         previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
                     }
-                    if(ipage>1)
+                    if (ipage > 1)
                     {
         %>
         <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
             <%
-            }
+                    }
                     for (int i = 1; i <= paginas; i++)
                     {
             %>
         <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%
-                if(i==ipage)
-                    {
-                    %>
-                    <strong>
-                    <%
-                    }
+                        if (i == ipage)
+                        {
             %>
-            <%=i%>
-            <%
-            if(i==ipage)
-                    {
-                    %>
-                    </strong>
-                    <%
-                    }
-                %></a>
+            <strong>
+                <%                        }
+                %>
+                <%=i%>
+                <%
+                            if (i == ipage)
+                            {
+                %>
+            </strong>
+            <%                        }
+            %></a>
         <%
                     }
         %>
 
 
         <%
-                if (ipage != paginas)
-                {
+                    if (ipage != paginas)
+                    {
         %>
         <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
             <%
-                }
+                    }
             %>
     </div>
     <%
