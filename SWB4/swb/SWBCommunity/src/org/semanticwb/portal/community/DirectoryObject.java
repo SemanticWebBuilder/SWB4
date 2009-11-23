@@ -91,6 +91,11 @@ public class DirectoryObject extends org.semanticwb.portal.community.base.Direct
         return false;
     }
 
+    /**
+     * Indica si el elemento puede ser reclamado por algun usuario.
+     * @return <code>true</code> si el elemento puede ser reclamado,
+     * <code>false</code> en otro caso.
+     */
     public boolean isClaimable() {
         if (getSemanticObject().instanceOf(Claimable.swbcomm_Claimable) &&
                 getSemanticObject().getBooleanProperty(Claimable.swbcomm_claimable)) {
@@ -99,6 +104,11 @@ public class DirectoryObject extends org.semanticwb.portal.community.base.Direct
         return false;
     }
 
+    /**
+     * Indica si el elemento ha sido reclamado por algun usuario.
+     * @return <code>true</code> si el elemento ha sido reclamado,
+     * <code>false</code> en otro caso.
+     */
     public boolean isClaimed () {
         if (isClaimable()) {
             if (getSemanticObject().getObjectProperty(Claimable.swbcomm_claimer) != null) {
