@@ -104,6 +104,11 @@
                         {
                             usr_sex = "Mujer";
                         }
+                        if (usr_age.equals("0") || usr_age.equals(""))
+                        {
+                            usr_age = "No indicó el usuario";
+                        }
+
     %>
 
     <div class="friendCard">
