@@ -7,13 +7,10 @@
 <%@page import="java.util.*"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
-<%
-            if (request.getParameter("user") == null)
-            {
+<%!    private static final int ELEMENETS_BY_PAGE = 5;
 %>
-<h2>Mis solicitudes</h2>
-<%            }
-%>
+
+
 
 <%
             User owner = paramRequest.getUser();
@@ -30,6 +27,7 @@
             }
 
             WebPage wpage = paramRequest.getWebPage();
+            String cssPath = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/images/";
             SWBResourceURL urlAction = paramRequest.getActionUrl();
 
             String perfilPath = paramRequest.getWebPage().getWebSite().getWebPage("perfil").getUrl();
@@ -43,27 +41,166 @@
             }
             int contTot = 0;
             boolean hasRequest = false;
+
+            ArrayList<User> elements = new ArrayList();
+            int elementos = 0;
+
+
             Iterator<FriendshipProspect> itFriendshipProspect = FriendshipProspect.ClassMgr.listFriendshipProspectByFriendShipRequester(owner, wpage.getWebSite());
-            if (itFriendshipProspect.hasNext())
+            while (itFriendshipProspect.hasNext())
+            {
+                FriendshipProspect friendshipProspect = itFriendshipProspect.next();
+                User userRequested = friendshipProspect.getFriendShipRequested();
+                elements.add(userRequested);
+                elementos++;
+            }
+            int paginas = elementos / ELEMENETS_BY_PAGE;
+            if (elementos % ELEMENETS_BY_PAGE != 0)
+            {
+                paginas++;
+            }
+            int inicio = 0;
+            int fin = ELEMENETS_BY_PAGE;
+            int ipage = 1;
+            if (request.getParameter("ipage") != null)
+            {
+                try
+                {
+                    ipage = Integer.parseInt(request.getParameter("ipage"));
+                    inicio = (ipage * ELEMENETS_BY_PAGE) - ELEMENETS_BY_PAGE;
+                    fin = (ipage * ELEMENETS_BY_PAGE);
+                }
+                catch (NumberFormatException nfe)
+                {
+                    ipage = 1;
+                }
+            }
+            if (ipage < 1 || ipage > paginas)
+            {
+                ipage = 1;
+            }
+            if (inicio < 0)
+            {
+                inicio = 0;
+            }
+            if (fin < 0)
+            {
+                fin = ELEMENETS_BY_PAGE;
+            }
+            if (fin > elementos)
+            {
+                fin = elementos;
+            }
+            if (inicio > fin)
+            {
+                inicio = 0;
+                fin = ELEMENETS_BY_PAGE;
+            }
+            if (fin - inicio > ELEMENETS_BY_PAGE)
+            {
+                inicio = 0;
+                fin = ELEMENETS_BY_PAGE;
+            }
+            inicio++;
+            if (elements.size() > 0)
             {
                 hasRequest = true;
             }
+%>
+<!-- paginacion -->
+<%
+            if (paginas > 1)
+            {
+%>
+<div id="paginacion">
+
+
+    <%
+            String nextURL = "#";
+            String previusURL = "#";
+            if (ipage < paginas)
+            {
+                nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
+            }
+            if (ipage > 1)
+            {
+                previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
+            }
+            if (ipage > 1)
+            {
+    %>
+    <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
+        <%
+            }
+            for (int i = 1; i <= paginas; i++)
+            {
+        %>
+    <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%
+                if (i == ipage)
+                {
+        %>
+        <strong>
+            <%                            }
+            %>
+            <%=i%>
+            <%
+                if (i == ipage)
+                {
+            %>
+        </strong>
+        <%                            }
+        %></a>
+    <%
+            }
+    %>
+
+
+    <%
+            if (ipage != paginas)
+            {
+    %>
+    <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
+        <%
+            }
+        %>
+</div>
+<%
+            }
+%>
+<!-- fin paginacion -->
+
+<%
+            if (request.getParameter("user") == null)
+            {
+%>
+
+<h2>Mis solicitudes</h2>
+<%            }
+%>
+
+<%
             if (hasRequest)
             {
 %>
 
 
 <%
-                itFriendshipProspect = FriendshipProspect.ClassMgr.listFriendshipProspectByFriendShipRequester(owner, wpage.getWebSite());
-                if (!isStrategy)
-                {
+            itFriendshipProspect = FriendshipProspect.ClassMgr.listFriendshipProspectByFriendShipRequester(owner, wpage.getWebSite());
+            if (!isStrategy)
+            {
 %>
 <div id="friendCards">
     <%                }
-                while (itFriendshipProspect.hasNext())
+            int iElement = 0;
+            for (User userRequested : elements)
+            {
+                iElement++;
+                if (iElement > fin)
                 {
-                    FriendshipProspect friendshipProspect = itFriendshipProspect.next();
-                    User userRequested = friendshipProspect.getFriendShipRequested();
+                    break;
+                }
+                if (iElement >= inicio && iElement <= fin)
+                {
                     if (userRequested.getPhoto() != null)
                     {
                         photo = SWBPortal.getWebWorkPath() + userRequested.getPhoto();
@@ -115,12 +252,12 @@
         <img class="profilePic" width="121" height="121" src="<%=photo%>" alt="<%=userRequested.getFullName()%>">
         <div class="friendCardInfo">
             <%
-                        if (userRequested.getEmail() != null)
-                        {
+                            if (userRequested.getEmail() != null)
+                            {
             %>
             <a class="ico" href="mailto:<%=email%>"><img src="<%=path%>icoMail.png" alt="enviar un mensaje"></a>
                 <%
-                        }
+                            }
                 %>
 
 
@@ -140,13 +277,14 @@
                     }
                     contTot++;
                 }
-                if (!isStrategy)
-                {
+            }
+            if (!isStrategy)
+            {
     %>
 </div>
 <%                }
-                if (isStrategy && contTot > 0)
-                {
+            if (isStrategy && contTot > 0)
+            {
 %>
 
 <%
@@ -177,9 +315,9 @@
 %>
 
 <%
-            }
-            else
-            {
+        }
+        else
+        {
 %>
 <ul class="listaElementos">
     <li>
