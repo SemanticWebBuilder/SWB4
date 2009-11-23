@@ -32,7 +32,7 @@
 %>
 <li><a href="<%=url%>" >Amigos (<%=count%>)</a></li>
 <%
-            if (request.getParameter("user") != null)
+            if (request.getParameter("user") != null && user.isSigned())
             {
                 // muestra si el amigo esta invitado
                 user = (User) request.getAttribute("user");
