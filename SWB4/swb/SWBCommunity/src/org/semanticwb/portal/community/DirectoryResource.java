@@ -16,6 +16,7 @@ import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
+import org.semanticwb.model.UserGroup;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.SWBFormMgr;
@@ -151,6 +152,11 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             if ("vote".equals(act))
             {
                 rank(request, response);
+            }
+            else if ("claim".equals(action))
+            {
+                //System.out.println(response.getUser().getFullName() + " is trying to claim " + getDirectoryObject().getTitle());
+                claim(request, response);
             }
             else if ("getAbused".equals(action))
             {
@@ -338,6 +344,67 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
                 }
             }
             request.getSession().setAttribute(UploadFormElement.FILES_UPLOADED, null);
+        }
+    }
+
+    private void claim (HttpServletRequest request, SWBActionResponse response) {
+        //Obtener uri del objeto y el usuario actual
+        String suri = request.getParameter("uri");
+        String justify = request.getParameter("justify");
+        if (justify == null || justify.equals("null")) justify = "";
+        SemanticObject so = null;
+        User user = response.getUser();
+
+        //Crear objeto semantico del objeto de directorio
+        if (suri != null) {
+            so = SemanticObject.createSemanticObject(suri);
+        }
+
+        //Obtener objeto de directorio
+        if (so.getGenericInstance() instanceof DirectoryObject) {
+            DirectoryObject mse = (DirectoryObject) so.getGenericInstance();
+            System.out.println("----" + user.getFullName() + " intenta reclamar la entrada " + mse.getTitle());
+
+            //Si el creador no es quien reclama
+            if (!mse.getCreator().equals(user) && user.isSigned()) {                
+                Organization org = (Organization)mse;
+                System.out.println("----Se ha recuperado la organizacion " + org.getTitle());
+                //Si nadie lo ha reclamado
+                if (org.getClaimer() == null) {
+                    System.out.println(user.getFullName() + " ha reclamado la entrada " + mse.getTitle());
+                    org.setClaimer(user);
+                    org.setClaimJustify(justify);
+                } else {
+                    System.out.println("----El elemento ya ha sido reclamado por " + org.getClaimer().getFullName());
+                }
+            } else if (user.isSigned()) {
+                System.out.println("----El creador no puede reclamar");
+            }
+        }
+        
+        response.setRenderParameter("uri", suri);
+        response.setRenderParameter("act", "detail");
+        response.setMode(SWBParamRequest.Mode_VIEW);
+    }
+
+    private void acceptClaim(HttpServletRequest request, SWBActionResponse response) {
+        String suri = request.getParameter("uri");
+        User admin = response.getUser();
+        SemanticObject so = null;
+
+        UserGroup admgp = response.getWebPage().getWebSite().getUserRepository().getUserGroup("admin");
+        if (admin.isSigned() && admin.hasUserGroup(admgp)) {
+            //Crear objeto semantico del objeto de directorio
+            if (suri != null) {
+                so = SemanticObject.createSemanticObject(suri);
+            }
+
+        //Obtener objeto de directorio
+        if (so.getGenericInstance() instanceof DirectoryObject) {
+            DirectoryObject mse = (DirectoryObject) so.getGenericInstance();
+
+            
+        }
         }
     }
 
