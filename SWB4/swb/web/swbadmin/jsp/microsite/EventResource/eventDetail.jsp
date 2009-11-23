@@ -15,7 +15,19 @@
             String rank = df.format(event.getRank());
             if (event != null && event.canView(member))
             {
-                //event.incViews();
+
+                String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
+                        String path = wpage.getWorkPath();
+                        if (event.getEventThumbnail() != null)
+                        {
+                            int pos = event.getEventThumbnail().lastIndexOf("/");
+                            if (pos != -1)
+                            {
+                                String sphoto = event.getEventThumbnail().substring(pos + 1);
+                                event.setEventThumbnail(sphoto);
+                            }
+                            pathPhoto = SWBPortal.getWebWorkPath() + path + "/" + event.getEventThumbnail();
+                        }
 
 %>
 <div class="columnaIzquierda">
@@ -29,7 +41,7 @@
     <p><%= event.getDescription()%></p>
     <p align="center">
         <a href="<%= SWBPortal.getWebWorkPath() + event.getEventImage()%>" target="_self">
-            <img id="img_<%=event.getId()%>" src="<%= SWBPortal.getWebWorkPath() + event.getEventThumbnail()%>" alt="<%=event.getTitle()%>" border="0" width="50%" height="50%" />
+            <img id="img_<%=event.getId()%>" src="<%= pathPhoto%>" alt="<%=event.getTitle()%>" border="0" width="50%" height="50%" />
         </a>
     </p>
     <p><span class="itemTitle">Comienza:</span> <%= (event.getStartDate() == null ? "" : dateFormat.format(event.getStartDate()))%></strong> a las <strong><%= (event.getStartTime() == null ? "" : timeFormat.format(event.getStartTime()))%><br>

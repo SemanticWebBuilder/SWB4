@@ -211,9 +211,22 @@
                         removeUrl.setParameter("act", "remove");
                         removeUrl.setParameter("uri", event.getEncodedURI());
                         String removeurl = "javascript:validateremove('" + removeUrl + "','" + event.getTitle() + "')";
+
+                        String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
+                        String path = wpage.getWorkPath();
+                        if (event.getEventThumbnail() != null)
+                        {
+                            int pos = event.getEventThumbnail().lastIndexOf("/");
+                            if (pos != -1)
+                            {
+                                String sphoto = event.getEventThumbnail().substring(pos + 1);
+                                event.setEventThumbnail(sphoto);
+                            }
+                            pathPhoto = SWBPortal.getWebWorkPath() + path + "/" + event.getEventThumbnail();
+                        }
     %>
     <div class="noticia">
-        <img src="<%=SWBPortal.getWebWorkPath() + event.getEventThumbnail()%>" alt="<%= event.getTitle()%>">
+        <img src="<%=pathPhoto%>" alt="<%= event.getTitle()%>">
         <div class="noticiaTexto">
             <h2><%=event.getTitle()%></h2>
             <p>&nbsp;<br>Por: <%=event.getCreator().getFullName()%><br><%=dateFormat.format(event.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%></p>
