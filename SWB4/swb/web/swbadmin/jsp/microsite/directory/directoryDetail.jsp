@@ -151,7 +151,7 @@
             //map.setZoom(map.getBoundsZoomLevel(bounds));
         }
     }
-
+    
     function sendClaim() {
         if (document.getElementById("justify").value.trim() == "") {
             alert("Debe escribir una justificación.");
@@ -181,21 +181,24 @@
             %><a class="adminTool" href="<%=url%>">Borrar</a><%
         }
 
-        if (dirObj.isClaimed()) {
+        /*if (dirObj.isClaimed()) {
             User claimer = (User)semObject.getObjectProperty(Claimable.swbcomm_claimer).createGenericInstance();
             if (isAdmin) {
-                %>
-                <a class="adminTool" href="#">Aceptar reclamo</a>
-                <a class="adminTool" href="#">Rechazar reclamo</a>
+                SWBResourceURL aUrl = paramRequest.getActionUrl().setAction("accept");
+                SWBResourceURL cUrl = paramRequest.getActionUrl().setAction("reject");                
+                %
+                <a class="adminTool" href="<%=aUrl%">Aceptar reclamo</a>
+                <a class="adminTool" href="<%=cUrl%">Rechazar reclamo</a>
                 <%
             } else if (claimer.equals(user)) {
-                %><a class="adminTool" href="#">Liberar elemento</a><%
+                SWBResourceURL fUrl = paramRequest.getActionUrl().setAction("unclaim");
+                %<a class="adminTool" href="<%=fUrl%">Liberar elemento</a><%
             }
         } else if (dirObj.canClaim(user)) {
-            %><a class="adminTool" onclick="javascript:showClaimForm();">Reclamar elemento</a><%
-        } else {
-
+            %<a class="adminTool" onclick="javascript:showClaimForm();">Reclamar elemento</a><%
         }
+
+        SWBResourceURL aUrl = paramRequest.getActionUrl().setAction("claim");*/
         %>
     </div>
     <div class="commentBox">
@@ -209,7 +212,7 @@
         <a class="userTool" href="javascript:hideClaimForm()">Cancelar</a>
     </div>
     </div>
-    <p class="tituloRojo"><%=title%> <%if (dirObj.isClaimed()) {%><i>(Reclamado por <%=((User)semObject.getObjectProperty(Claimable.swbcomm_claimer).createGenericInstance()).getFullName()%>)</i><%}%></p>
+    <p class="tituloRojo"><%=title%></p>
     <div class="resumenText">
         <%if (price != null) {%><p><span class="itemTitle">Precio: </span><%=price%></p><%}%>
         <%if (creator != null) {%><p><span class="itemTitle">Creado por: </span><%=creator%></p><%}%>
@@ -247,7 +250,6 @@
         <%if (serviceHours != null) {%><p><span class="itemTitle">Horario: </span><%=serviceHours%></p><%}%>
     </div>
     <%if (description != null) {%><h2>Descripci&oacute;n</h2><p><%=description%></p><%}%>
-    <%if (dirObj.isClaimed() && isAdmin) {%><h2>Informaci&oacute;n de reclamo</h2><p><%=semObject.getProperty(Claimable.swbcomm_claimJustify)%></p><%}%>
     <%if (showLocation){%>
         <h2>Ubicaci&oacute;n</h2>
         <%if (streetName != null) {%><p><span class="itemTitle">Calle: </span><%=streetName%></p><%}%>
