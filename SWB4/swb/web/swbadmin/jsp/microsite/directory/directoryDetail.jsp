@@ -30,18 +30,17 @@
 <%
     SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
     SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
-    SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_VIEW);
     User user = paramRequest.getUser();
 
     WebPage wpage = paramRequest.getWebPage();
     String perfilPath = wpage.getWebSite().getWebPage("perfil").getUrl();
     String path = SWBPortal.getWebWorkPath() + "/" + semObject.getWorkPath() + "/";
-    
+
     DirectoryObject dirObj = (DirectoryObject) semObject.createGenericInstance();
 
     String defaultFormat = "dd/MM/yy HH:mm";
     SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
-    
+
     //Obtener valores de propiedades genericas
     String dirPhoto = semObject.getProperty(DirectoryObject.swbcomm_dirPhoto);
     String[] sImgs = null;
@@ -66,7 +65,7 @@
         cont = 0;
     }
     itExtraPhotos = dirObj.listExtraPhotos();
-    
+
     while (itExtraPhotos.hasNext()) {
         cont++;
         String photo = itExtraPhotos.next();
@@ -87,7 +86,7 @@
     String lat = "";
     String lon = "";
     String step = "";
-    
+
     User semUser = dirObj.getCreator();
     if (semUser != null) {
         creator = "<a href=\"" + perfilPath + "?user=" + semUser.getEncodedURI() + "\">" + semUser.getFullName() + "</a>";
@@ -100,7 +99,7 @@
         lon = semObject.getProperty(Geolocalizable.swb_longitude);
         step = semObject.getProperty(Geolocalizable.swb_geoStep);
     }
-    
+
     Date created = dirObj.getCreated();
     String streetName = semObject.getProperty(Commerce.swbcomm_streetName);
     String intNumber = semObject.getProperty(Commerce.swbcomm_intNumber);
@@ -140,9 +139,9 @@
             map.addControl(new GMapTypeControl());
             var p1 = new GLatLng(<%=lat%>, <%=lon%>);
             map.setCenter(p1, <%=step%>-2);
-            //var bounds = new GLatLngBounds();            
+            //var bounds = new GLatLngBounds();
             map.addOverlay(createMarker(map, p1, '<%=dirObj.getTitle()%>'));
-            //bounds.extend(p1);            
+            //bounds.extend(p1);
             //map.setZoom(map.getBoundsZoomLevel(bounds));
         }
     }
@@ -159,9 +158,9 @@
         document.getElementById("addJustify").style.display="none";
         document.getElementById("justify").value = "";
     }
-    
+
 </script>
-            
+
 <div class="columnaIzquierda">
     <div class="adminTools">
         <a class="adminTool" onclick="javascript:history.go(-1);" href="#">Regresar al indice</a>
@@ -172,18 +171,21 @@
             %><a class="adminTool" href="<%=url%>">Borrar</a><%
         }
 
-        if (dirObj.isClaimable()) {
+        if (dirObj.isClaimed()) {
+            User claimer = (User)semObject.getObjectProperty(Claimable.swbcomm_claimer).createGenericInstance();
             if (user.hasUserGroup(wpage.getWebSite().getUserRepository().getUserGroup("admin"))) {
                 %>
                 <a class="adminTool" href="#">Aceptar reclamo</a>
                 <a class="adminTool" href="#">Rechazar reclamo</a>
                 <%
-            } else if (dirObj.canClaim(user)) {
-                %><a class="adminTool" onclick="javascript:showClaimForm();">Reclamar elemento</a><%
+            } else if (claimer.equals(user)) {
+                %><a class="adminTool" href="#">Liberar elemento</a><%
             }
-        }        
-        
+        } else if (dirObj.canClaim(user)) {
+            %><a class="adminTool" onclick="javascript:showClaimForm();">Reclamar elemento</a><%
+        } else {
 
+        }
         %>
     </div>
     <div class="commentBox">
@@ -197,7 +199,7 @@
         <a class="userTool" href="javascript:hideClaimForm()">Cancelar</a>
     </div>
     </div>
-    <p class="tituloRojo"><%=title%></p>
+    <p class="tituloRojo"><%=title%> <%if (dirObj.isClaimed()) {%><i>(Reclamado por <%=((User)semObject.getObjectProperty(Claimable.swbcomm_claimer).createGenericInstance()).getFullName()%>)</i><%}%></p>
     <div class="resumenText">
         <%if (price != null) {%><p><span class="itemTitle">Precio: </span><%=price%></p><%}%>
         <%if (creator != null) {%><p><span class="itemTitle">Creado por: </span><%=creator%></p><%}%>
@@ -210,7 +212,7 @@
             <p><span class="itemTitle">Habilitado para discapacitados: </span><%=sPeopleAccessible%></p>
             <%
           }
-    
+
           if (parkingLot != null) {
             String sparkingLot = (parkingLot.equals("true")?"Si":"No");
             %>
@@ -224,7 +226,7 @@
             <p><span class="itemTitle">Elevador: </span><%=selevator%></p>
             <%
           }
-        
+
           if (foodCourt != null) {
             String sfoodCourt = (foodCourt.equals("true")?"Si":"No");
             %>
@@ -235,6 +237,7 @@
         <%if (serviceHours != null) {%><p><span class="itemTitle">Horario: </span><%=serviceHours%></p><%}%>
     </div>
     <%if (description != null) {%><h2>Descripci&oacute;n</h2><p><%=description%></p><%}%>
+    <%if (dirObj.isClaimed()) {%><h2>Informaci&oacute;n de reclamo</h2><p><%=semObject.getProperty(Claimable.swbcomm_claimJustify)%></p><%}%>
     <%if (showLocation){%>
         <h2>Ubicaci&oacute;n</h2>
         <%if (streetName != null) {%><p><span class="itemTitle">Calle: </span><%=streetName%></p><%}%>
