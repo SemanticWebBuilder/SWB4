@@ -102,7 +102,7 @@
                         {
                             usr_sex = "Mujer";
                         }
-                        if (usr_age.equals("0") || usr_age.equals(""))
+                        if (usr_age.toString().equals("0") || usr_age.toString().equals(""))
                         {
                             usr_age = "No indicó el usuario";
                         }
