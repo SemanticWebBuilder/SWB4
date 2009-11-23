@@ -13,27 +13,27 @@
             String rank = df.format(anew.getRank());
 
             String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
-                        String path = wpage.getWorkPath();
-                        if (anew.getNewsThumbnail() != null)
-                        {
-                            int pos = anew.getNewsThumbnail().lastIndexOf("/");
-                            if (pos != -1)
-                            {
-                                String sphoto = anew.getNewsThumbnail().substring(pos + 1);
-                                anew.setNewsThumbnail(sphoto);
-                            }
-                            pathPhoto = SWBPortal.getWebWorkPath() + path + "/" + anew.getNewsThumbnail();
-                        }
+            String path = wpage.getWorkPath();
+            if (anew.getNewsThumbnail() != null)
+            {
+                int pos = anew.getNewsThumbnail().lastIndexOf("/");
+                if (pos != -1)
+                {
+                    String sphoto = anew.getNewsThumbnail().substring(pos + 1);
+                    anew.setNewsThumbnail(sphoto);
+                }
+                pathPhoto = SWBPortal.getWebWorkPath() + path + "/" + anew.getNewsThumbnail();
+            }
 %>
 
 <div class="columnaIzquierda">
-    
+
 
 
     <%
-                if (anew != null && anew.canView(member))
-                {
-                    anew.incViews();
+            if (anew != null && anew.canView(member))
+            {
+                anew.incViews();
     %>
 
 
@@ -45,12 +45,12 @@
 
     <p class="descripcion" style="text-align:justify;"><%=anew.getFullText()%></p>
 
-    
+
 
     <%  }
-                SWBResponse res = new SWBResponse(response);
-                anew.renderGenericElements(request, res, paramRequest);
-                out.write(res.toString());
+            SWBResponse res = new SWBResponse(response);
+            anew.renderGenericElements(request, res, paramRequest);
+            out.write(res.toString());
     %>
 </div>
 <div class="columnaCentro">
@@ -71,13 +71,13 @@
     <p><a href="<%=paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", anew.getURI())%>">[Eliminar]</a></p>
     <%}%>
     <ul class="miContenido">
-    <%
-            SWBResourceURL urla = paramRequest.getActionUrl();
-            if (user.isRegistered())
-            {
-                if (member == null)
+        <%
+                SWBResourceURL urla = paramRequest.getActionUrl();
+                if (user.isRegistered())
                 {
-                    urla.setParameter("act", "subscribe");
+                    if (member == null)
+                    {
+                        urla.setParameter("act", "subscribe");
         %>
         <li><a href="<%=urla%>">Suscribirse a esta comunidad</a></li>
         <%
@@ -90,9 +90,9 @@
         <%
                 }
             }
-            String pageUri="/swbadmin/jsp/microsite/rss/rss.jsp?news="+java.net.URLEncoder.encode(wpage.getURI());
+            String pageUri = "/swbadmin/jsp/microsite/rss/rss.jsp?news=" + java.net.URLEncoder.encode(wpage.getURI());
         %>
         <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS al canal de noticias de la comunidad</a></li>
-        </ul>
+    </ul>
 
 </div>
