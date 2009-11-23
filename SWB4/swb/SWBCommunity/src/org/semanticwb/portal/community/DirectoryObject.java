@@ -64,4 +64,19 @@ public class DirectoryObject extends org.semanticwb.portal.community.base.Direct
         }
         return ret;
     }
+
+    public boolean canClaim(User mem) {
+        boolean ret = false;
+        if (getSemanticObject().instanceOf(Claimable.swbcomm_Claimable)) {
+            if (mem.isSigned()) {
+                if (!getCreator().equals(mem)) {
+                    User claimer = (User)getSemanticObject().getObjectProperty(Claimable.swbcomm_claimer).createGenericInstance();
+                    if (claimer == null) {
+                        ret = true;
+                    }
+                }
+            }
+        }
+        return ret;
+    }
 }
