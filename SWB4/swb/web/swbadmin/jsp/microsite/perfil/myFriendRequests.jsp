@@ -87,6 +87,10 @@
                             perfilurl += "?user=" + java.net.URLEncoder.encode(request.getParameter("user"));
                         }
                         String usr_sex = (String) userRequested.getExtendedAttribute(mapa.get("userSex"));
+                        if (usr_sex == null)
+                        {
+                            usr_sex = "No indicó el usuario su sexo";
+                        }
                         Object usr_age = (Object) userRequested.getExtendedAttribute(mapa.get("userAge"));
                         if (null == usr_age)
                         {
@@ -132,8 +136,8 @@
 %>
 
 <%
-    if (request.getParameter("user") == null)
-    {
+                    if (request.getParameter("user") == null)
+                    {
 %>
 <ul class="listaElementos">
     <li>
@@ -141,13 +145,13 @@
     </li>
 </ul>
 <%
-    }
+                    }
 %>        
 
 
 <%}
-else if (contTot == 0)
-{
+                else if (contTot == 0)
+                {
 %>
 <ul class="listaElementos">
     <li>
