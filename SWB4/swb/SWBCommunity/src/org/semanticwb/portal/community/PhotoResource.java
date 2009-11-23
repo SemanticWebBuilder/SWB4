@@ -137,7 +137,7 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                         file.delete();
                         params.put("filename", finalpath + filename);
                     }
-                    rec.setImageURL(params.get("filename"));
+                    rec.setImageURL(file.getName());
                 }
                 else
                 {
@@ -296,7 +296,24 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
 
             WebPage page = paramRequest.getWebPage();
             PhotoElement rec = PhotoElement.ClassMgr.createPhotoElement(getResourceBase().getWebSite());
-            rec.setImageURL(params.get("filename"));
+            if(params.get("filename")!=null)
+            {
+                String path=params.get("filename").toString();
+                int pos=path.lastIndexOf("/");
+                if(pos!=-1)
+                {
+                    path=path.substring(pos+1);
+                    rec.setImageURL(path);
+                }
+                else
+                {
+                    rec.setImageURL(path);
+                }
+            }
+            else
+            {
+                rec.setImageURL(null);
+            }
 
 
             rec.setTitle(params.get("title"));
