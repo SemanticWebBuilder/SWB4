@@ -31,9 +31,9 @@
     SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
     SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
     SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_VIEW);
+    User user = paramRequest.getUser();
 
     WebPage wpage = paramRequest.getWebPage();
-    Resource base = paramRequest.getResourceBase();
     String perfilPath = wpage.getWebSite().getWebPage("perfil").getUrl();
     String path = SWBPortal.getWebWorkPath() + "/" + semObject.getWorkPath() + "/";
     
@@ -86,7 +86,6 @@
     String creator = "";
     String lat = "";
     String lon = "";
-    String mapa = "";
     String step = "";
     
     User semUser = dirObj.getCreator();
@@ -96,7 +95,6 @@
 
     boolean showLocation = false;
     if (semObject.instanceOf(Geolocalizable.swb_Geolocalizable)) {
-        mapa = mgr.renderElement(request, Geolocalizable.swb_latitude.getName());
         showLocation = true;
         lat = semObject.getProperty(Geolocalizable.swb_latitude);
         lon = semObject.getProperty(Geolocalizable.swb_longitude);
@@ -148,6 +146,20 @@
             //map.setZoom(map.getBoundsZoomLevel(bounds));
         }
     }
+
+    function sendClaim() {
+        document.addJustifyForm.submit();
+    }
+
+    function showClaimForm() {
+        document.getElementById("addJustify").style.display="inline";
+    }
+
+    function hideClaimForm() {
+        document.getElementById("addJustify").style.display="none";
+        document.getElementById("justify").value = "";
+    }
+    
 </script>
             
 <div class="columnaIzquierda">
@@ -159,7 +171,31 @@
             url.setAction(url.Action_REMOVE);
             %><a class="adminTool" href="<%=url%>">Borrar</a><%
         }
+
+        if (dirObj.isClaimable()) {
+            if (user.hasUserGroup(wpage.getWebSite().getUserRepository().getUserGroup("admin"))) {
+                %>
+                <a class="adminTool" href="#">Aceptar reclamo</a>
+                <a class="adminTool" href="#">Rechazar reclamo</a>
+                <%
+            } else if (dirObj.canClaim(user)) {
+                %><a class="adminTool" onclick="javascript:showClaimForm();">Reclamar elemento</a><%
+            }
+        }        
+        
+
         %>
+    </div>
+    <div class="commentBox">
+    <div id="addJustify" style="display:none;">
+        <form name="addJustifyForm" name="addJustifyForm" action="#">
+            <label for="justify">Justificaci&oacute;n</label>
+                <textarea style="border:1px solid #CACACA;" name="justify" id="justify" cols="45" rows="5"></textarea>
+                <input type="hidden" name="uri" value="<%=semObject.getURI()%>">
+        </form>
+        <a class="userTool" href="javascript:sendClaim()">Reclamar</a>
+        <a class="userTool" href="javascript:hideClaimForm()">Cancelar</a>
+    </div>
     </div>
     <p class="tituloRojo"><%=title%></p>
     <div class="resumenText">
