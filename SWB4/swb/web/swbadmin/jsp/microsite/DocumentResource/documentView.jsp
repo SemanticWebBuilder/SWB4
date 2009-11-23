@@ -41,15 +41,118 @@
                     elementos++;
                 }
             }
-            
+            int paginas = elementos / ELEMENETS_BY_PAGE;
+            if (elementos % ELEMENETS_BY_PAGE != 0)
+            {
+                paginas++;
+            }
+            int inicio = 0;
+            int fin = ELEMENETS_BY_PAGE;
+            int ipage = 1;
+            if (request.getParameter("ipage") != null)
+            {
+                try
+                {
+                    ipage = Integer.parseInt(request.getParameter("ipage"));
+                    inicio = (ipage * ELEMENETS_BY_PAGE) - ELEMENETS_BY_PAGE;
+                    fin = (ipage * ELEMENETS_BY_PAGE);
+                }
+                catch (NumberFormatException nfe)
+                {
+                    ipage = 1;
+                }
+            }
+            if (ipage < 1 || ipage > paginas)
+            {
+                ipage = 1;
+            }
+            if (inicio < 0)
+            {
+                inicio = 0;
+            }
+            if (fin < 0)
+            {
+                fin = ELEMENETS_BY_PAGE;
+            }
+            if (fin > elementos)
+            {
+                fin = elementos;
+            }
+            if (inicio > fin)
+            {
+                inicio = 0;
+                fin = ELEMENETS_BY_PAGE;
+            }
+            if (fin - inicio > ELEMENETS_BY_PAGE)
+            {
+                inicio = 0;
+                fin = ELEMENETS_BY_PAGE;
+            }
+            inicio++;
 %>
-<script type="text/javascript">
-    dojo.require("dojox.image.Lightbox");
-    dojo.require("dojo.parser");
-</script>
 
 <div class="columnaIzquierda">
+    <!-- paginacion -->
+    <%
+            if (paginas > 1)
+            {
+    %>
+    <div id="paginacion">
 
+
+        <%
+                String nextURL = "#";
+                String previusURL = "#";
+                if (ipage < paginas)
+                {
+                    nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
+                }
+                if (ipage > 1)
+                {
+                    previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
+                }
+                if (ipage > 1)
+                {
+        %>
+        <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
+            <%
+                }
+                for (int i = 1; i <= paginas; i++)
+                {
+            %>
+        <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%
+                    if (i == ipage)
+                    {
+            %>
+            <strong>
+                <%                    }
+                %>
+                <%=i%>
+                <%
+                        if (i == ipage)
+                        {
+                %>
+            </strong>
+            <%                    }
+            %></a>
+        <%
+                }
+        %>
+
+
+        <%
+                if (ipage != paginas)
+                {
+        %>
+        <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
+            <%
+                }
+            %>
+    </div>
+    <%
+            }
+    %>
+    <!-- fin paginacion -->
     <div class="adminTools">
         <%
             if (member.canAdd())
@@ -71,11 +174,15 @@
     int iElement = 0;
     for (DocumentElement doc : elements)
     {
-        /*if (doc.canView(member))
-        {*/
+        if (doc.canView(member))
+        {
             iElement++;
-
-
+            if (iElement > fin)
+            {
+                break;
+            }
+            if (iElement >= inicio && iElement <= fin)
+            {
                 String postAuthor = doc.getCreator().getFullName();
                 SWBResourceURL urlDetail = paramRequest.getRenderUrl();
                 urlDetail.setParameter("act", "detail");
@@ -90,7 +197,6 @@
 
     %>
     <div class="noticia">
-        <%--<a href="<%= SWBPortal.getWebWorkPath()+doc.getDocumentURL()%>" target="new"><%= doc.getTitle()%></a>--%>
         <a href="/swbadmin/jsp/microsite/DocumentResource/displayDoc.jsp?uri=<%=java.net.URLEncoder.encode(doc.getURI())%>" target="new"><%= doc.getTitle()%></a>
 
         <div class="noticiaTexto">
@@ -107,8 +213,6 @@
                         }
                 %>
             </p>
-
-
             <p class="stats">
             	Puntuación: <%=rank%><br>
                 <%=doc.getViews()%> vistas
@@ -116,15 +220,81 @@
         </div>
     </div>
     <%
-                    
-                /*}*/
+                    }
+                }
             }
     %>
+    <!-- paginacion -->
+    <%
+            if (paginas > 1)
+            {
+    %>
+    <div id="paginacion">
 
+
+        <%
+                String nextURL = "#";
+                String previusURL = "#";
+                if (ipage < paginas)
+                {
+                    nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
+                }
+                if (ipage > 1)
+                {
+                    previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
+                }
+                if (ipage > 1)
+                {
+        %>
+        <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
+            <%
+                }
+                for (int i = 1; i <= paginas; i++)
+                {
+            %>
+        <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%
+                    if (i == ipage)
+                    {
+            %>
+            <strong>
+                <%                    }
+                %>
+                <%=i%>
+                <%
+                        if (i == ipage)
+                        {
+                %>
+            </strong>
+            <%                    }
+            %></a>
+        <%
+                }
+        %>
+
+
+        <%
+                if (ipage != paginas)
+                {
+        %>
+        <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
+            <%
+                }
+            %>
+    </div>
+    <%
+            }
+    %>
+    <!-- fin paginacion -->
 
 </div>
 <div class="columnaCentro">
-
+    <%
+            if (paginas > 1)
+            {
+    %>
+    <br><br>
+    <%            }
+    %>
     <ul class="miContenido">
         <%
             SWBResourceURL urla = paramRequest.getActionUrl();
