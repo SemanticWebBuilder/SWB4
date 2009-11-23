@@ -39,11 +39,23 @@
                     }
                     pathPhoto = SWBPortal.getWebWorkPath() + path + "/" + photo.getPhotoThumbnail();
                 }
+
+                String imgPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/PhotoResource/sinfoto.png";
+                if (photo.getImageURL() != null)
+                {
+                    int pos = photo.getImageURL().lastIndexOf("/");
+                    if (pos != -1)
+                    {
+                        String sphoto = photo.getImageURL().substring(pos + 1);
+                        photo.setImageURL(sphoto);
+                    }
+                    imgPhoto = SWBPortal.getWebWorkPath() + path + "/" + photo.getImageURL();
+                }
 %>
 <div class="columnaIzquierda">
     <h2><%=title%></h2><br>
     <p><%= description%></p>
-    <p align="center"><a title="<%= title%>" href="<%= SWBPortal.getWebWorkPath() + photo.getImageURL()%>">
+    <p align="center"><a title="<%= title%>" href="<%= imgPhoto%>">
             <img id="img_<%=photo.getId()%>" src="<%= pathPhoto%>" alt="<%=title%>" width="50%" height="50%" />
         </a></p>            
 
