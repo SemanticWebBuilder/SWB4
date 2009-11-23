@@ -130,7 +130,7 @@
         <%
         //Termina paginación
         String perfilPath=website.getWebPage("perfil").getUrl();
-        String photo=SWBPortal.getContextPath()+"/swbadmin/images/profilePlaceholder.jpg";
+        String photo = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/perfil/profilePlaceholder.jpg";
         %>
         <div id="friendCards">
         <%
