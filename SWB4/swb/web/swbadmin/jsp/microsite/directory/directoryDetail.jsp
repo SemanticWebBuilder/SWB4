@@ -30,9 +30,15 @@
 <%
     SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
     SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
+    WebPage wpage = paramRequest.getWebPage();
     User user = paramRequest.getUser();
 
-    WebPage wpage = paramRequest.getWebPage();
+    boolean isAdmin = false;
+    if (user.hasUserGroup(wpage.getWebSite().getUserRepository().getUserGroup("admin"))) {
+        isAdmin = true;
+    }
+
+    
     String perfilPath = wpage.getWebSite().getWebPage("perfil").getUrl();
     String path = SWBPortal.getWebWorkPath() + "/" + semObject.getWorkPath() + "/";
 
@@ -173,7 +179,7 @@
 
         if (dirObj.isClaimed()) {
             User claimer = (User)semObject.getObjectProperty(Claimable.swbcomm_claimer).createGenericInstance();
-            if (user.hasUserGroup(wpage.getWebSite().getUserRepository().getUserGroup("admin"))) {
+            if (isAdmin) {
                 %>
                 <a class="adminTool" href="#">Aceptar reclamo</a>
                 <a class="adminTool" href="#">Rechazar reclamo</a>
@@ -237,7 +243,7 @@
         <%if (serviceHours != null) {%><p><span class="itemTitle">Horario: </span><%=serviceHours%></p><%}%>
     </div>
     <%if (description != null) {%><h2>Descripci&oacute;n</h2><p><%=description%></p><%}%>
-    <%if (dirObj.isClaimed()) {%><h2>Informaci&oacute;n de reclamo</h2><p><%=semObject.getProperty(Claimable.swbcomm_claimJustify)%></p><%}%>
+    <%if (dirObj.isClaimed() && isAdmin) {%><h2>Informaci&oacute;n de reclamo</h2><p><%=semObject.getProperty(Claimable.swbcomm_claimJustify)%></p><%}%>
     <%if (showLocation){%>
         <h2>Ubicaci&oacute;n</h2>
         <%if (streetName != null) {%><p><span class="itemTitle">Calle: </span><%=streetName%></p><%}%>
