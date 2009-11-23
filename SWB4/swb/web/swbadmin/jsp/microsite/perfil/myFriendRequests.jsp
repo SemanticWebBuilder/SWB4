@@ -39,8 +39,8 @@
             {
                 isStrategy = true;
             }
-            int contTot = 0;
-            boolean hasRequest = false;
+            
+            
 
             ArrayList<User> elements = new ArrayList();
             int elementos = 0;
@@ -54,6 +54,8 @@
                 elements.add(userRequested);
                 elementos++;
             }
+            int contTot = elementos;
+            boolean hasRequest = elements.size()>0;
             int paginas = elementos / ELEMENETS_BY_PAGE;
             if (elementos % ELEMENETS_BY_PAGE != 0)
             {
@@ -185,7 +187,7 @@
 
 
 <%
-            itFriendshipProspect = FriendshipProspect.ClassMgr.listFriendshipProspectByFriendShipRequester(owner, wpage.getWebSite());
+            //itFriendshipProspect = FriendshipProspect.ClassMgr.listFriendshipProspectByFriendShipRequester(owner, wpage.getWebSite());
             if (!isStrategy)
             {
 %>
@@ -274,8 +276,7 @@
     </div>
 
     <%
-                    }
-                    contTot++;
+                    }                    
                 }
             }
             if (!isStrategy)
