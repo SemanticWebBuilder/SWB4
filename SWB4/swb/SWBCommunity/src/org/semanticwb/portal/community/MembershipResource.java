@@ -211,8 +211,8 @@ public class MembershipResource extends org.semanticwb.portal.community.base.Mem
                     path = page.getWorkPath();
 
 
-                    //SWBPlatform.getWebWorkPath() +
-                    ms.setPhoto(path + "/" + name);
+                    
+                    ms.setPhoto(name);
                     per.setPercentage(100);
                     File f = new File(photoName);
 
