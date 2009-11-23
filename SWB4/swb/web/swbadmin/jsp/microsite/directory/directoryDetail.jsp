@@ -153,7 +153,11 @@
     }
 
     function sendClaim() {
-        document.addJustifyForm.submit();
+        if (document.getElementById("justify").value.trim() == "") {
+            alert("Debe escribir una justificación.");
+        } else {
+            document.addJustifyForm.submit();
+        }
     }
 
     function showClaimForm() {
