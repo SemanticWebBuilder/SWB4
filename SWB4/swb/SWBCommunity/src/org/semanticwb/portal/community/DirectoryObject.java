@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
@@ -66,17 +67,25 @@ public class DirectoryObject extends org.semanticwb.portal.community.base.Direct
     }
 
     public boolean canClaim(User mem) {
-        boolean ret = false;
-        if (getSemanticObject().instanceOf(Claimable.swbcomm_Claimable)) {
-            if (mem.isSigned()) {
-                if (!getCreator().equals(mem)) {
-                    User claimer = (User)getSemanticObject().getObjectProperty(Claimable.swbcomm_claimer).createGenericInstance();
-                    if (claimer == null) {
-                        ret = true;
+        if (isClaimable()) {
+            boolean isClaimable = getSemanticObject().getBooleanProperty(Claimable.swbcomm_claimable);            
+            if (isClaimable) {
+                if (mem.isSigned()) {
+                    if (!getCreator().equals(mem)) {
+                        SemanticObject soClaimer = getSemanticObject().getObjectProperty(Claimable.swbcomm_claimer);
+                        if (soClaimer != null) {
+                            return false;
+                        } else {
+                            return true;
+                        }
                     }
                 }
             }
         }
-        return ret;
+        return false;
+    }
+
+    public boolean isClaimable() {
+        return getSemanticObject().instanceOf(Claimable.swbcomm_Claimable);
     }
 }
