@@ -367,7 +367,6 @@ if (sobj != null) {
                     <p class="tituloRojo">
                         <%=title%>
                     </p>
-                        <!--%=wpage.getPath(map)%-->
                     <p>
                         <%=description%>
                     </p><br/>
