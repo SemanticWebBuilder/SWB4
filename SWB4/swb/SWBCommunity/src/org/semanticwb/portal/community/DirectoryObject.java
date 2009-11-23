@@ -86,6 +86,10 @@ public class DirectoryObject extends org.semanticwb.portal.community.base.Direct
     }
 
     public boolean isClaimable() {
-        return getSemanticObject().instanceOf(Claimable.swbcomm_Claimable);
+        if (getSemanticObject().instanceOf(Claimable.swbcomm_Claimable) &&
+                getSemanticObject().getBooleanProperty(Claimable.swbcomm_claimable)) {
+            return true;
+        }
+        return false;
     }
 }
