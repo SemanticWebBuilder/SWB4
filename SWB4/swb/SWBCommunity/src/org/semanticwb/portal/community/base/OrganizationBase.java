@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public abstract class OrganizationBase extends org.semanticwb.portal.community.DirectoryObject implements org.semanticwb.model.Searchable,org.semanticwb.portal.community.Interactiveable,org.semanticwb.model.Rankable,org.semanticwb.model.Campable,org.semanticwb.portal.community.Addressable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.portal.community.Contactable,org.semanticwb.model.Geolocalizable
+public abstract class OrganizationBase extends org.semanticwb.portal.community.DirectoryObject implements org.semanticwb.model.Searchable,org.semanticwb.portal.community.Interactiveable,org.semanticwb.model.Rankable,org.semanticwb.portal.community.Addressable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.portal.community.Contactable,org.semanticwb.portal.community.Claimable,org.semanticwb.model.Geolocalizable
 {
        public static final org.semanticwb.platform.SemanticProperty swbcomm_webSite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#webSite");
        public static final org.semanticwb.platform.SemanticProperty swbcomm_serviceHours=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#serviceHours");
@@ -47,17 +47,6 @@ public abstract class OrganizationBase extends org.semanticwb.portal.community.D
        {
            return (getOrganization(id, model)!=null);
        }
-   public static java.util.Iterator<org.semanticwb.portal.community.Organization> listOrganizationByCamp(org.semanticwb.model.Camp camp,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Organization> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_camp, camp.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.portal.community.Organization> listOrganizationByCamp(org.semanticwb.model.Camp camp)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Organization> it=new org.semanticwb.model.GenericIterator(camp.getSemanticObject().getModel().listSubjects(swb_camp,camp.getSemanticObject()));
-       return it;
-   }
    public static java.util.Iterator<org.semanticwb.portal.community.Organization> listOrganizationByDirectoryResource(org.semanticwb.portal.community.DirectoryResource directoryresource,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Organization> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_directoryResource, directoryresource.getSemanticObject()));
@@ -135,6 +124,17 @@ public abstract class OrganizationBase extends org.semanticwb.portal.community.D
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Organization> it=new org.semanticwb.model.GenericIterator(hascomment.getSemanticObject().getModel().listSubjects(swbcomm_hasComment,hascomment.getSemanticObject()));
        return it;
    }
+   public static java.util.Iterator<org.semanticwb.portal.community.Organization> listOrganizationByClaimer(org.semanticwb.model.User claimer,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Organization> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_claimer, claimer.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.Organization> listOrganizationByClaimer(org.semanticwb.model.User claimer)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Organization> it=new org.semanticwb.model.GenericIterator(claimer.getSemanticObject().getModel().listSubjects(swbcomm_claimer,claimer.getSemanticObject()));
+       return it;
+   }
     }
 
     public OrganizationBase(org.semanticwb.platform.SemanticObject base)
@@ -160,28 +160,6 @@ public abstract class OrganizationBase extends org.semanticwb.portal.community.D
     public void setContactPhoneNumber(String value)
     {
         getSemanticObject().setProperty(swbcomm_contactPhoneNumber, value);
-    }
-
-    public void setCamp(org.semanticwb.model.Camp value)
-    {
-        getSemanticObject().setObjectProperty(swb_camp, value.getSemanticObject());
-    }
-
-    public void removeCamp()
-    {
-        getSemanticObject().removeProperty(swb_camp);
-    }
-
-
-    public org.semanticwb.model.Camp getCamp()
-    {
-         org.semanticwb.model.Camp ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_camp);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.Camp)obj.createGenericInstance();
-         }
-         return ret;
     }
 
     public String getContactName()
@@ -212,6 +190,16 @@ public abstract class OrganizationBase extends org.semanticwb.portal.community.D
     public void setWebSite(String value)
     {
         getSemanticObject().setProperty(swbcomm_webSite, value);
+    }
+
+    public boolean isClaimable()
+    {
+        return getSemanticObject().getBooleanProperty(swbcomm_claimable);
+    }
+
+    public void setClaimable(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swbcomm_claimable, value);
     }
 
     public String getIntNumber()
@@ -274,6 +262,16 @@ public abstract class OrganizationBase extends org.semanticwb.portal.community.D
         getSemanticObject().setProperty(swbcomm_streetName, value);
     }
 
+    public String getClaimJustify()
+    {
+        return getSemanticObject().getProperty(swbcomm_claimJustify);
+    }
+
+    public void setClaimJustify(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_claimJustify, value);
+    }
+
     public String getCityCouncil()
     {
         return getSemanticObject().getProperty(swbcomm_cityCouncil);
@@ -302,5 +300,27 @@ public abstract class OrganizationBase extends org.semanticwb.portal.community.D
     public void setContactEmail(String value)
     {
         getSemanticObject().setProperty(swbcomm_contactEmail, value);
+    }
+
+    public void setClaimer(org.semanticwb.model.User value)
+    {
+        getSemanticObject().setObjectProperty(swbcomm_claimer, value.getSemanticObject());
+    }
+
+    public void removeClaimer()
+    {
+        getSemanticObject().removeProperty(swbcomm_claimer);
+    }
+
+
+    public org.semanticwb.model.User getClaimer()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbcomm_claimer);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
     }
 }
