@@ -28,7 +28,7 @@
             if (!(wp.getSemanticObject().getGenericInstance() instanceof MicroSite)) {
                 return;
             }
-            String pathPhoto = "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
+            String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
 
             if (site.getPhoto() != null) {
                 pathPhoto = SWBPortal.getContextPath() + SWBPortal.getWebWorkPath() + site.getPhoto();
