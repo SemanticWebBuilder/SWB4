@@ -17,17 +17,28 @@
             {
 
                 String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/EventResource/noevent.jpg";
-                        String path = wpage.getWorkPath();
-                        if (event.getEventThumbnail() != null)
-                        {
-                            int pos = event.getEventThumbnail().lastIndexOf("/");
-                            if (pos != -1)
-                            {
-                                String sphoto = event.getEventThumbnail().substring(pos + 1);
-                                event.setEventThumbnail(sphoto);
-                            }
-                            pathPhoto = SWBPortal.getWebWorkPath() + path + "/" + event.getEventThumbnail();
-                        }
+                String path = event.getWorkPath();
+                if (event.getEventThumbnail() != null)
+                {
+                    int pos = event.getEventThumbnail().lastIndexOf("/");
+                    if (pos != -1)
+                    {
+                        String sphoto = event.getEventThumbnail().substring(pos + 1);
+                        event.setEventThumbnail(sphoto);
+                    }
+                    pathPhoto = SWBPortal.getWebWorkPath() + path + "/" + event.getEventThumbnail();
+                }
+                String imgPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
+                if (event.getEventImage() != null)
+                {
+                    int pos = event.getEventImage().lastIndexOf("/");
+                    if (pos != -1)
+                    {
+                        String sphoto = event.getEventImage().substring(pos + 1);
+                        event.setEventImage(sphoto);
+                    }
+                    imgPhoto = SWBPortal.getWebWorkPath() + path + "/" + event.getEventImage();
+                }
 
 %>
 <div class="columnaIzquierda">
@@ -40,7 +51,7 @@
     <h2><%= event.getTitle()%></h2>
     <p><%= event.getDescription()%></p>
     <p align="center">
-        <a href="<%= SWBPortal.getWebWorkPath() + event.getEventImage()%>" target="_self">
+        <a href="<%= imgPhoto%>" target="_self">
             <img id="img_<%=event.getId()%>" src="<%= pathPhoto%>" alt="<%=event.getTitle()%>" border="0" width="50%" height="50%" />
         </a>
     </p>
@@ -191,10 +202,10 @@
         %>
         <li><a href="<%=urla%>">Suscribirse a esta comunidad a comunidad</a></li>
         <%
-                        }
-                        else
-                        {
-                            urla.setParameter("act", "unsubscribe");
+                }
+                else
+                {
+                    urla.setParameter("act", "unsubscribe");
         %>
         <li><a href="<%=urla%>">Cancelar suscripción a comunidad</a></li>
         <%

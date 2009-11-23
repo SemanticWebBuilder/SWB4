@@ -1,25 +1,26 @@
 <%@page contentType="text/html"%>
 <%@page import="java.text.SimpleDateFormat, org.semanticwb.platform.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%
-    SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
-    Resource base = paramRequest.getResourceBase();
-    User user = paramRequest.getUser();
-    WebPage wpage = paramRequest.getWebPage();
-    Member member = Member.getMember(user, wpage);
-    %>
-    <%
-    String uri = request.getParameter("uri");
-    NewsElement rec = (NewsElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
-    if (rec == null) {
+            SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
+            Resource base = paramRequest.getResourceBase();
+            User user = paramRequest.getUser();
+            WebPage wpage = paramRequest.getWebPage();
+            Member member = Member.getMember(user, wpage);
 %>
-        Error: Elemento no encontrado...
 <%
-        return;
-    }
-    if(!rec.canModify(member))
-    {
-        return;
-    }
+            String uri = request.getParameter("uri");
+            NewsElement rec = (NewsElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
+            if (rec == null)
+            {
+%>
+Error: Elemento no encontrado...
+<%
+                return;
+            }
+            if (!rec.canModify(member))
+            {
+                return;
+            }
 %>
 <script type="text/javascript">
     dojo.require("dijit.form.TextBox");
@@ -72,72 +73,110 @@
     }
 </script>
 <div class="columnaIzquierda">
-<form name="frmaeditnews" id="frmaeditnews" class="swbform" enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
-    <div>
-        <fieldset>
-        <legend>Editar noticia</legend>
+    <form name="frmaeditnews" id="frmaeditnews" class="swbform" enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
         <div>
-            <p>
-                <label for="new_image">Imagen de la noticia:&nbsp;</label>
-                <a href="<%= SWBPortal.getWebWorkPath()+rec.getNewsImage()%>" target="_self">
-                    <img id="img_<%=rec.getId()%>" src="<%= SWBPortal.getWebWorkPath()+rec.getNewsThumbnail() %>" alt="<%= rec.getTitle() %>" border="0" />
-                </a><br />
-                <input type="file" id="foto" name="foto" size="45" />
-            </p>
-            <p>
-                <label for="new_title">Título de la noticia:&nbsp;</label><br />
-                <input type="text" id="new_title" name="new_title" value="<%=(rec.getTitle()==null?"":rec.getTitle())%>" maxlength="70" size="45" />
-            </p>
-            <p>
-                <label for="new_author">Autor de la noticia:&nbsp;</label><br />
-                <input type="text" id="new_author" name="new_author" value="<%=(rec.getAuthor()==null?"":rec.getAuthor())%>" maxlength="50" size="45" />
-            </p>
-            <p>
-                <label for="new_abstract">Resumen de la noticia:&nbsp;</label><br />
-                <textarea id="new_abstract" name="new_abstract" cols="45" rows="2"><%=(rec.getDescription()==null?"":rec.getDescription())%></textarea>
-            </p>
-            <p>
-                <label for="new_fulltext">Texto completo:&nbsp;</label><br />
-                <textarea id="new_fulltext" name="new_fulltext" cols="45" rows="6"><%=(rec.getFullText()==null?"":rec.getFullText())%></textarea>
-            </p>
-            <p>
-                <label for="new_citation">Fuente:&nbsp;</label><br />
-                <input type="text" id="new_citation" name="new_citation" value="<%=(rec.getCitation()==null?"":rec.getCitation())%>" maxlength="50" size="45" />
-            </p>
-            <p>
-                <label for="new_tags">Etiquetas:&nbsp;</label><br />
-                <input type="text" id="new_tags" name="new_tags" value="<%=(rec.getTags()==null?"":rec.getTags())%>" maxlength="50" size="45" />
-            </p>
+            <fieldset>
+                <legend>Editar noticia</legend>
+                <div>
+                    <p>
+                        <label for="new_image">Imagen de la noticia:&nbsp;</label>
+
+
+                        <%
+            String path = rec.getWorkPath();
+            String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
+
+            if (rec.getNewsThumbnail() != null)
+            {
+                int pos = rec.getNewsThumbnail().lastIndexOf("/");
+                if (pos != -1)
+                {
+                    String sphoto = rec.getNewsThumbnail().substring(pos + 1);
+                    rec.setNewsThumbnail(sphoto);
+                }
+                pathPhoto = SWBPortal.getWebWorkPath() + path + "/" + rec.getNewsThumbnail();
+            }
+
+            String imgPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
+            if (rec.getNewsImage() != null)
+            {
+                int pos = rec.getNewsImage().lastIndexOf("/");
+                if (pos != -1)
+                {
+                    String sphoto = rec.getNewsImage().substring(pos + 1);
+                    rec.setNewsImage(sphoto);
+                }
+                imgPhoto = SWBPortal.getWebWorkPath() + path + "/" + rec.getNewsImage();
+            }
+                        %>
+                        <a href="<%= imgPhoto%>" target="_self">
+                            <img id="img_<%=rec.getId()%>" src="<%= pathPhoto%>" alt="<%= rec.getTitle()%>" border="0" />
+                        </a><br />
+                        <input type="file" id="foto" name="foto" size="45" />
+                    </p>
+                    <p>
+                        <label for="new_title">Título de la noticia:&nbsp;</label><br />
+                        <input type="text" id="new_title" name="new_title" value="<%=(rec.getTitle() == null ? "" : rec.getTitle())%>" maxlength="70" size="45" />
+                    </p>
+                    <p>
+                        <label for="new_author">Autor de la noticia:&nbsp;</label><br />
+                        <input type="text" id="new_author" name="new_author" value="<%=(rec.getAuthor() == null ? "" : rec.getAuthor())%>" maxlength="50" size="45" />
+                    </p>
+                    <p>
+                        <label for="new_abstract">Resumen de la noticia:&nbsp;</label><br />
+                        <textarea id="new_abstract" name="new_abstract" cols="45" rows="2"><%=(rec.getDescription() == null ? "" : rec.getDescription())%></textarea>
+                    </p>
+                    <p>
+                        <label for="new_fulltext">Texto completo:&nbsp;</label><br />
+                        <textarea id="new_fulltext" name="new_fulltext" cols="45" rows="6"><%=(rec.getFullText() == null ? "" : rec.getFullText())%></textarea>
+                    </p>
+                    <p>
+                        <label for="new_citation">Fuente:&nbsp;</label><br />
+                        <input type="text" id="new_citation" name="new_citation" value="<%=(rec.getCitation() == null ? "" : rec.getCitation())%>" maxlength="50" size="45" />
+                    </p>
+                    <p>
+                        <label for="new_tags">Etiquetas:&nbsp;</label><br />
+                        <input type="text" id="new_tags" name="new_tags" value="<%=(rec.getTags() == null ? "" : rec.getTags())%>" maxlength="50" size="45" />
+                    </p>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>¿Quién puede ver este evento?</legend>
+                <%String chk = "checked=\"checked\"";%>
+                <div>
+                    <p>
+                        <label for="level"><input type="radio" name="level" value="0" <%if (rec.getVisibility() == 0)
+            {
+                out.println(chk);
+            }%> />&nbsp;Cualquiera</label>
+                    </p>
+                    <p>
+                        <label for="level"><input type="radio" name="level" value="1" <%if (rec.getVisibility() == 1)
+            {
+                out.println(chk);
+            }%> />&nbsp;Sólo los miembros</label>
+                    </p>
+                    <p>
+                        <label for="level"><input type="radio" name="level" value="3" <%if (rec.getVisibility() == 3)
+            {
+                out.println(chk);
+            }%> />&nbsp;Sólo yo</label>
+                    </p>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend></legend>
+                <div>
+                    <p>
+                    <div class="editarInfo"><p><a onclick="validaForma()" href="#">[Guardar]</a></p></div>
+                    <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">[Cancelar]</a></p></div>
+                    </p>
+                </div>
+            </fieldset>
         </div>
-        </fieldset>
-        <fieldset>
-            <legend>¿Quién puede ver este evento?</legend>
-            <%String chk = "checked=\"checked\"";%>
-            <div>
-                <p>
-                    <label for="level"><input type="radio" name="level" value="0" <%if(rec.getVisibility()==0)out.println(chk);%> />&nbsp;Cualquiera</label>
-                </p>
-                <p>
-                    <label for="level"><input type="radio" name="level" value="1" <%if(rec.getVisibility()==1)out.println(chk);%> />&nbsp;Sólo los miembros</label>
-                </p>
-                <p>
-                    <label for="level"><input type="radio" name="level" value="3" <%if(rec.getVisibility()==3)out.println(chk);%> />&nbsp;Sólo yo</label>
-                </p>
-            </div>
-        </fieldset>
-        <fieldset>
-            <legend></legend>
-            <div>
-            <p>
-                <div class="editarInfo"><p><a onclick="validaForma()" href="#">[Guardar]</a></p></div>
-                <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">[Cancelar]</a></p></div>
-            </p>
-            </div>
-        </fieldset>
-    </div>
-    <input type="hidden" name="uri" value="<%=rec.getURI()%>"/>
-    <input type="hidden" name="act" value="edit"/>
-</form>
+        <input type="hidden" name="uri" value="<%=rec.getURI()%>"/>
+        <input type="hidden" name="act" value="edit"/>
+    </form>
 </div>
 <div class="columnaCentro">
 

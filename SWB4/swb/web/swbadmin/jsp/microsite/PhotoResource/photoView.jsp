@@ -200,7 +200,7 @@
                         String removeurl = "javascript:validateremove('" + removeUrl + "','" + photo.getTitle() + "')";
 
                         String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/PhotoResource/sinfoto.png";
-                        String path = wpage.getWorkPath();
+                        String path = photo.getWorkPath();
                         if (photo.getPhotoThumbnail() != null)
                         {
                             int pos = photo.getPhotoThumbnail().lastIndexOf("/");
@@ -212,9 +212,21 @@
                             pathPhoto = SWBPortal.getWebWorkPath() + path + "/" + photo.getPhotoThumbnail();
                         }
 
+                        String imgPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/PhotoResource/sinfoto.png";
+                        if (photo.getImageURL() != null)
+                        {
+                            int pos = photo.getImageURL().lastIndexOf("/");
+                            if (pos != -1)
+                            {
+                                String sphoto = photo.getImageURL().substring(pos + 1);
+                                photo.setImageURL(sphoto);
+                            }
+                            imgPhoto = SWBPortal.getWebWorkPath() + path + "/" + photo.getImageURL();
+                        }
+
     %>
     <div class="noticia">        
-        <a dojoType="dojox.image.Lightbox" title="<%= photo.getTitle()%>" href="<%= SWBPortal.getWebWorkPath() + photo.getImageURL()%>">
+        <a dojoType="dojox.image.Lightbox" title="<%= photo.getTitle()%>" href="<%= imgPhoto%>">
             <img id="img_<%=iElement + base.getId()%>" src="<%=pathPhoto%>" alt="<%= photo.getTitle()%>" width="140" height="140" />
         </a>
         <div class="noticiaTexto">
@@ -223,12 +235,12 @@
             <p>
                 <%=photo.getDescription()%> | <a href="<%=viewurl%>">Ver más</a>
                 <%
-                if (photo.canModify(member))
-                {
+                        if (photo.canModify(member))
+                        {
                 %>
                 | <a href="<%=editEventURL%>">Editar</a> | <a href="<%=removeurl%>">Eliminar</a>
                 <%
-                }
+                        }
                 %>
             </p>
             <p class="stats">

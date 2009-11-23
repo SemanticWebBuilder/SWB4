@@ -213,7 +213,7 @@
                         String removeurl = "javascript:validateremove('" + removeUrl + "','" + event.getTitle() + "')";
 
                         String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/EventResource/noevent.jpg";
-                        String path = wpage.getWorkPath();
+                        String path = event.getWorkPath();
                         if (event.getEventThumbnail() != null)
                         {
                             int pos = event.getEventThumbnail().lastIndexOf("/");

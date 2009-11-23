@@ -28,7 +28,7 @@
                     description = photo.getDescription();
                 }
                 String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/PhotoResource/sinfoto.png";
-                String path = wpage.getWorkPath();
+                String path = photo.getWorkPath();
                 if (photo.getPhotoThumbnail() != null)
                 {
                     int pos = photo.getPhotoThumbnail().lastIndexOf("/");

@@ -13,7 +13,7 @@
             String rank = df.format(anew.getRank());
 
             String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
-            String path = wpage.getWorkPath();
+            String path = anew.getWorkPath();
             if (anew.getNewsThumbnail() != null)
             {
                 int pos = anew.getNewsThumbnail().lastIndexOf("/");
