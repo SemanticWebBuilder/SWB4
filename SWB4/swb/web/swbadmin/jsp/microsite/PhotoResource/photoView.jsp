@@ -199,7 +199,7 @@
                         removeUrl.setParameter("uri", photo.getEncodedURI());
                         String removeurl = "javascript:validateremove('" + removeUrl + "','" + photo.getTitle() + "')";
 
-                        String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
+                        String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/PhotoResource/sinfoto.png";
                         String path = wpage.getWorkPath();
                         if (photo.getPhotoThumbnail() != null)
                         {
