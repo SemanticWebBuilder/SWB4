@@ -27,7 +27,7 @@
                 {
                     description = photo.getDescription();
                 }
-                String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
+                String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/PhotoResource/sinfoto.png";
                         String path = wpage.getWorkPath();
                         if (photo.getPhotoThumbnail() != null)
                         {
