@@ -346,13 +346,13 @@ if (sobj != null) {
                             created=propValue;
                         }
                     }
-                } /*else if (semProp==DirectoryObject.swbcomm_claimer) {
-                    SemanticObject claimerUsr = semObject.getObjectProperty(DirectoryObject.swbcomm_claimer);
+                } else if (semProp==Claimable.swbcomm_claimer) {
+                    SemanticObject claimerUsr = semObject.getObjectProperty(Claimable.swbcomm_claimer);
                     if (claimerUsr != null) {
                         claimer = (User)claimerUsr.createGenericInstance();
-                        claimerUrl = "<a href=\""+perfilPath+"?user="+claimer.getEncodedURI()+"\">"+claimer.getFullName()+"</a>";
+                        claimerUrl = perfilPath+"?user="+claimer.getEncodedURI();
                     }
-               }*/else if(semProp==DirectoryObject.swb_creator){
+               } else if(semProp==DirectoryObject.swb_creator){
                         SemanticObject semUser=semObject.getObjectProperty(DirectoryObject.swb_creator);
                         if(semUser!=null){
                             userObj=(User)semUser.createGenericInstance();
@@ -376,7 +376,7 @@ if (sobj != null) {
                     <p><span class="itemTitle">Creado por: </span><%=creator%>, <%=created%></p>
                     <%
                     if (claimer != null) {%>
-                        <p><b>Este elemento ha sido reclamado por <a href="<%=claimerUrl%>">Mi</a></b></p><%
+                    <p><b><font color="#B40000">Este elemento ha sido reclamado por <a href="<%=claimerUrl%>"><%=claimer.getFullName()%></a></font></b></p><%
                     }
                     %>
                     <p class="tituloRojo"><p class="vermas"><a href="<%=urlDetail%>"><%=paramRequest.getLocaleString("seeMore")%></a></p>
