@@ -41,12 +41,11 @@
             }
             if (hasInvitations)
             {
-                if(request.getParameter("user")==null)
-                    {
-                    %>
-                    <h2>Mis invitaciones</h2>
-                    <%
-                    }
+                if (request.getParameter("user") == null)
+                {
+%>
+<h2>Mis invitaciones</h2>
+<%                }
 %>
 
 
@@ -112,7 +111,17 @@
     <div class="friendCard">
         <img class="profilePic" width="121" height="121" src="<%=photo%>" alt="<%=userRequester.getFullName()%>">
         <div class="friendCardInfo">
+            <%
+                        if (userRequester.getEmail() != null)
+                        {
+            %>
             <a class="ico" href="mailto:<%=email%>"><img src="<%=path%>icoMail.png" alt="enviar un mensaje"></a>
+                <%
+                    }
+                %>
+
+
+
             <a class="ico" href="<%=perfilurl%>?user=<%=urluser%>"><img src="<%=path%>icoUser.png" alt="ir al perfil"></a>
                 <%-- <a class="ico" href="#"><img src="<%=path%>icoMas.png" alt="agregar"></a> --%>
             <div class="friendCardName">
@@ -140,14 +149,14 @@
 %>
 <ul class="listaElementos">
     <%
-        if(request.getParameter("user")==null)
-            {
-            %>
-                <li><a class="contactos_nombre" href="<%=requesterPath%><%=userParam%>" >Te han invitado <%=contTot%> persona(s) a que te unas como su amigo</a></li>
-            <%
+                    if (request.getParameter("user") == null)
+                    {
+    %>
+    <li><a class="contactos_nombre" href="<%=requesterPath%><%=userParam%>" >Te han invitado <%=contTot%> persona(s) a que te unas como su amigo</a></li>
+    <%
             }
     %>
-    
+
 </ul>
 <%
                 }
