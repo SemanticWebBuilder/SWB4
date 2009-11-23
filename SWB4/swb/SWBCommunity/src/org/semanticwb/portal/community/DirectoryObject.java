@@ -66,6 +66,12 @@ public class DirectoryObject extends org.semanticwb.portal.community.base.Direct
         return ret;
     }
 
+    /**
+     * Indica si el <code>User</code> recibido puede reclamar el elemento.
+     * @param mem
+     * @return <code>true</code> si el usuario tiene derecho a reclamar el elemento,
+     * <code>false</code> en otro caso.
+     */
     public boolean canClaim(User mem) {
         if (isClaimable()) {
             boolean isClaimable = getSemanticObject().getBooleanProperty(Claimable.swbcomm_claimable);            
@@ -89,6 +95,15 @@ public class DirectoryObject extends org.semanticwb.portal.community.base.Direct
         if (getSemanticObject().instanceOf(Claimable.swbcomm_Claimable) &&
                 getSemanticObject().getBooleanProperty(Claimable.swbcomm_claimable)) {
             return true;
+        }
+        return false;
+    }
+
+    public boolean isClaimed () {
+        if (isClaimable()) {
+            if (getSemanticObject().getObjectProperty(Claimable.swbcomm_claimer) != null) {
+                return true;
+            }
         }
         return false;
     }
