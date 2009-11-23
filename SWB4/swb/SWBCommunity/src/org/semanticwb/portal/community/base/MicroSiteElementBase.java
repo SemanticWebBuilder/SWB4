@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public abstract class MicroSiteElementBase extends org.semanticwb.model.SWBClass implements org.semanticwb.portal.community.Interactiveable,org.semanticwb.model.Searchable,org.semanticwb.model.Rankable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Viewable
+public abstract class MicroSiteElementBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Viewable,org.semanticwb.model.Rankable,org.semanticwb.portal.community.Interactiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Searchable
 {
        public static final org.semanticwb.platform.SemanticProperty swbcomm_visibility=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#visibility");
        public static final org.semanticwb.platform.SemanticProperty swb_tags=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#tags");
