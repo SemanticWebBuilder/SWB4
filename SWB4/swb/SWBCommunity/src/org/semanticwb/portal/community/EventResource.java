@@ -57,7 +57,8 @@ import org.semanticwb.portal.community.utilresources.ImageResizer;
  * <p>
  * Recurso administrador de eventos.
  */
-public class EventResource extends org.semanticwb.portal.community.base.EventResourceBase {
+public class EventResource extends org.semanticwb.portal.community.base.EventResourceBase
+{
 
     private static Logger log = SWBUtils.getLogger(EventResource.class);
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -68,7 +69,8 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
      * <p>
      * Constructor vacío.
      */
-    public EventResource() {
+    public EventResource()
+    {
     }
 
     /**
@@ -76,32 +78,39 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
      * <p>
      * Constructor por defecto.
      */
-    public EventResource(org.semanticwb.platform.SemanticObject base) {
+    public EventResource(org.semanticwb.platform.SemanticObject base)
+    {
         super(base);
     }
 
     @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        //final String path = "/../swbadmin/jsp/microsite/EventResource/noevent.jpg";
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
+    {
+
         String action = request.getParameter("act");
         WebPage page = response.getWebPage();
         final String realpath = SWBPortal.getWorkPath();
-        final String finalpath = page.getWorkPath() + "/";
         Member mem = Member.getMember(response.getUser(), page);
-        if (!mem.canView()) {
+        if (!mem.canView())
+        {
             return;                                       //si el usuario no pertenece a la red sale;
         }
 
-        if (action == null) {
+        if (action == null)
+        {
             HashMap<String, String> params = upload(request);
-            if (mem.canAdd() && params.containsValue("add")) {
+            if (mem.canAdd() && params.containsValue("add"))
+            {
                 EventElement rec = EventElement.ClassMgr.createEventElement(getResourceBase().getWebSite());
-                if (params.containsKey("filename")) {
+                if (params.containsKey("filename"))
+                {
 
                     File file = new File(realpath + params.get("filename"));
-                    if (file.exists()) {
+                    if (file.exists())
+                    {
                         FileInputStream in = new FileInputStream(file);
                         String filename = file.getName();
+                        String finalpath = rec.getWorkPath();
                         String target = realpath + finalpath + filename;
                         File ftarget = new File(target);
                         ftarget.getParentFile().mkdirs();
@@ -111,16 +120,19 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                         params.put("filename", finalpath + filename);
                     }
                     rec.setEventImage(file.getName());
-                } 
+                }
                 else
                 {
                     rec.setEventImage(null);
                 }
-                if (params.containsKey("thumbnail")) {
+                if (params.containsKey("thumbnail"))
+                {
                     File file = new File(realpath + params.get("thumbnail"));
-                    if (file.exists()) {
+                    if (file.exists())
+                    {
                         FileInputStream in = new FileInputStream(file);
                         String filename = file.getName();
+                        String finalpath = rec.getWorkPath();
                         String target = realpath + finalpath + filename;
                         File ftarget = new File(target);
                         ftarget.getParentFile().mkdirs();
@@ -131,13 +143,15 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                     }
                     rec.setEventThumbnail(file.getName());
                 }
-                else {
+                else
+                {
                     rec.setEventThumbnail(null);
                 }
                 rec.setTitle(params.get("event_title"));
                 rec.setDescription(params.get("event_description"));
                 rec.setAudienceType(params.get("event_audience"));
-                try {
+                try
+                {
                     String startDate = params.get("event_startDate");
                     startDate = (startDate == null ? "" : startDate);
                     String endDate = params.get("event_endDate");
@@ -150,48 +164,62 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                     rec.setEndDate(dateFormat.parse(endDate.trim()));
                     rec.setStartTime(new Timestamp(timeFormat.parse(startTime).getTime()));
                     rec.setEndTime(new Timestamp(timeFormat.parse(endTime).getTime()));
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     log.error(e);
                 }
                 rec.setPlace(params.get("event_place"));
                 rec.setTags(params.get("event_tags"));
                 rec.setEventWebPage(page);
-                try {
+                try
+                {
                     response.setRenderParameter("act", "edit");
                     response.setRenderParameter("uri", rec.getURI());
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     log.error(e);
                     response.setRenderParameter("act", "add");
                     response.setRenderParameter("err", "true");
                 }
-            } else if (params.containsValue("edit")) {
+            }
+            else if (params.containsValue("edit"))
+            {
                 String uri = params.get("uri");
                 EventElement rec = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
-                if (rec != null && rec.canModify(mem)) {
-                    if (params.get("filename") != null) {
+                if (rec != null && rec.canModify(mem))
+                {
+                    if (params.get("filename") != null)
+                    {
                         File file = new File(realpath + params.get("filename"));
-                        if (file.exists()) {
+                        if (file.exists())
+                        {
                             FileInputStream in = new FileInputStream(file);
                             String filename = file.getName();
+                            String finalpath = rec.getWorkPath();
                             String target = realpath + finalpath + filename;
                             File ftarget = new File(target);
-                        ftarget.getParentFile().mkdirs();
-                        FileOutputStream out = new FileOutputStream(ftarget);
+                            ftarget.getParentFile().mkdirs();
+                            FileOutputStream out = new FileOutputStream(ftarget);
                             SWBUtils.IO.copyStream(in, out);
                             file.delete();
                             params.put("filename", finalpath + filename);
                         }
                         rec.setEventImage(file.getName());
                     }
-                    if (params.get("thumbnail") != null) {
+                    if (params.get("thumbnail") != null)
+                    {
                         File file = new File(realpath + params.get("thumbnail"));
-                        if (file.exists()) {
+                        if (file.exists())
+                        {
                             FileInputStream in = new FileInputStream(file);
                             String filename = file.getName();
+                            String finalpath = rec.getWorkPath();
                             String target = realpath + finalpath + filename;
                             File ftarget = new File(target);
-                        ftarget.getParentFile().mkdirs();
-                        FileOutputStream out = new FileOutputStream(ftarget);
+                            ftarget.getParentFile().mkdirs();
+                            FileOutputStream out = new FileOutputStream(ftarget);
                             SWBUtils.IO.copyStream(in, out);
                             file.delete();
                             params.put("thumbnail", finalpath + filename);
@@ -201,7 +229,8 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                     rec.setTitle(params.get("event_title"));
                     rec.setDescription(params.get("event_description"));
                     rec.setAudienceType(params.get("event_audience"));
-                    try {
+                    try
+                    {
                         String startDate = params.get("event_startDate");
                         startDate = (startDate == null ? "" : startDate);
                         String endDate = params.get("event_endDate");
@@ -214,7 +243,9 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                         rec.setEndDate(dateFormat.parse(endDate.trim()));
                         rec.setStartTime(new Timestamp(timeFormat.parse(startTime).getTime()));
                         rec.setEndTime(new Timestamp(timeFormat.parse(endTime).getTime()));
-                    } catch (Exception e) {
+                    }
+                    catch (Exception e)
+                    {
                         log.error(e);
                     }
                     rec.setPlace(params.get("event_place"));
@@ -222,62 +253,80 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                     rec.setEventWebPage(page);
                 }
             }
-        } else if (action.equals("remove")) {
+        }
+        else if (action.equals("remove"))
+        {
             //Get event object
             String uri = request.getParameter("uri");
             EventElement rec = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
 
             //Remove event object
-            if (rec != null && rec.canModify(mem)) {
+            if (rec != null && rec.canModify(mem))
+            {
                 rec.remove();                                       //elimina el registro
             }
-        } else if (action.equals("attend")) {
+        }
+        else if (action.equals("attend"))
+        {
             //Get event object
             String uri = request.getParameter("uri");
             EventElement rec = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
 
             //Add attendant member
-            if (rec != null && rec.canView(mem)) {
+            if (rec != null && rec.canView(mem))
+            {
                 boolean found = false;
                 Iterator<User> uit = rec.listAttendants();
-                while (uit.hasNext() && !found) {
+                while (uit.hasNext() && !found)
+                {
                     User u = uit.next();
-                    if (u.getFullName().equals(response.getUser().getFullName())) {
+                    if (u.getFullName().equals(response.getUser().getFullName()))
+                    {
                         found = true;
                     }
                 }
-                if (!found) {
+                if (!found)
+                {
                     rec.addAttendant(response.getUser());
                 }
             }
             response.setRenderParameter("uri", uri);
             response.setRenderParameter("act", "detail");
-        } else {
+        }
+        else
+        {
             super.processAction(request, response);
         }
     }
 
-    private HashMap<String, String> upload(HttpServletRequest request) {
+    private HashMap<String, String> upload(HttpServletRequest request)
+    {
         final String realpath = SWBPortal.getWorkPath() + getResourceBase().getWorkPath() + "/";
         final String path = getResourceBase().getWorkPath() + "/";
 
         HashMap<String, String> params = new HashMap<String, String>();
-        try {
+        try
+        {
             boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-            if (isMultipart) {
+            if (isMultipart)
+            {
                 File tmpwrk = new File(SWBPortal.getWorkPath() + "/tmp");
-                if (!tmpwrk.exists()) {
+                if (!tmpwrk.exists())
+                {
                     tmpwrk.mkdirs();
                 }
                 FileItemFactory factory = new DiskFileItemFactory(1 * 1024 * 1024, tmpwrk);
                 ServletFileUpload upload = new ServletFileUpload(factory);
-                ProgressListener progressListener = new ProgressListener() {
+                ProgressListener progressListener = new ProgressListener()
+                {
 
                     private long kBytes = -1;
 
-                    public void update(long pBytesRead, long pContentLength, int pItems) {
+                    public void update(long pBytesRead, long pContentLength, int pItems)
+                    {
                         long mBytes = pBytesRead / 10000;
-                        if (kBytes == mBytes) {
+                        if (kBytes == mBytes)
+                        {
                             return;
                         }
                         kBytes = mBytes;
@@ -288,26 +337,33 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                 List items = upload.parseRequest(request); /* FileItem */
                 FileItem currentFile = null;
                 Iterator iter = items.iterator();
-                while (iter.hasNext()) {
+                while (iter.hasNext())
+                {
                     FileItem item = (FileItem) iter.next();
 
-                    if (item.isFormField()) {
+                    if (item.isFormField())
+                    {
                         String name = item.getFieldName();
                         String value = item.getString();
                         params.put(name, value);
-                    } else {
+                    }
+                    else
+                    {
                         currentFile = item;
                         File file = new File(path);
-                        if (!file.exists()) {
+                        if (!file.exists())
+                        {
                             file.mkdirs();
                         }
 
-                        try {
+                        try
+                        {
                             long serial = (new Date()).getTime();
                             String filename = serial + "_" + currentFile.getFieldName() + currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
 
                             File image = new File(realpath);
-                            if (!image.exists()) {
+                            if (!image.exists())
+                            {
                                 image.mkdir();
                             }
                             image = new File(realpath + filename);
@@ -317,41 +373,59 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                             ImageResizer.resizeCrop(image, 150, thumbnail, "jpeg");
                             params.put("filename", path + filename);
                             params.put("thumbnail", path + "thumbn_" + filename);
-                        } catch (StringIndexOutOfBoundsException iobe) {
+                        }
+                        catch (StringIndexOutOfBoundsException iobe)
+                        {
                         }
                     }
                 }
             }
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             ex.printStackTrace();
         }
         return params;
     }
 
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
         String action = request.getParameter("act");
-        if (action == null) {
+        if (action == null)
+        {
             action = "view";
         }
 
         String path = "/swbadmin/jsp/microsite/EventResource/eventView.jsp";
-        if (action.equals("calendar")) {
+        if (action.equals("calendar"))
+        {
             path = "/swbadmin/jsp/microsite/EventResource/eventsCalendar.jsp";
-        } else if (action.equals("add")) {
+        }
+        else if (action.equals("add"))
+        {
             path = "/swbadmin/jsp/microsite/EventResource/eventAdd.jsp";
-        } else if (action.equals("edit")) {
+        }
+        else if (action.equals("edit"))
+        {
             path = "/swbadmin/jsp/microsite/EventResource/eventEdit.jsp";
-        } else if (action.equals("detail")) {
+        }
+        else if (action.equals("detail"))
+        {
             path = "/swbadmin/jsp/microsite/EventResource/eventDetail.jsp";
-        } else if (action.equals("daily")) {
+        }
+        else if (action.equals("daily"))
+        {
             path = "/swbadmin/jsp/microsite/EventResource/eventDailyView.jsp";
         }
         RequestDispatcher dis = request.getRequestDispatcher(path);
-        try {
+        try
+        {
             request.setAttribute("paramRequest", paramRequest);
             dis.include(request, response);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             log.error(e);
         }
     }

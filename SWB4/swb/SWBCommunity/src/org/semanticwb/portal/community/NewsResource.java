@@ -47,64 +47,81 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.portal.community.utilresources.ImageResizer;
 
-public class NewsResource extends org.semanticwb.portal.community.base.NewsResourceBase {
+public class NewsResource extends org.semanticwb.portal.community.base.NewsResourceBase
+{
 
     private static Logger log = SWBUtils.getLogger(NewsResource.class);
 
-    public NewsResource() {
+    public NewsResource()
+    {
     }
 
-    public NewsResource(org.semanticwb.platform.SemanticObject base) {
+    public NewsResource(org.semanticwb.platform.SemanticObject base)
+    {
         super(base);
     }
 
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
         String action = request.getParameter("act");
         action = (action == null ? "view" : action);
 
         String path = "/swbadmin/jsp/microsite/NewsResource/newsView.jsp";
-        if (action.equals("add")) {
+        if (action.equals("add"))
+        {
             path = "/swbadmin/jsp/microsite/NewsResource/newsAdd.jsp";
-        } else if (action.equals("edit")) {
+        }
+        else if (action.equals("edit"))
+        {
             path = "/swbadmin/jsp/microsite/NewsResource/newsEdit.jsp";
-        } else if (action.equals("detail")) {
+        }
+        else if (action.equals("detail"))
+        {
             path = "/swbadmin/jsp/microsite/NewsResource/newsDetail.jsp";
         }
 
         RequestDispatcher dis = request.getRequestDispatcher(path);
-        try {
+        try
+        {
             request.setAttribute("paramRequest", paramRequest);
             dis.include(request, response);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             log.error(e);
         }
     }
 
     @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
+    {
         String action = request.getParameter("act");
         WebPage page = response.getWebPage();
         final String realpath = SWBPortal.getWorkPath();
-        final String finalpath = page.getWorkPath() + "/";
         Member mem = Member.getMember(response.getUser(), page);
-        if (!mem.canView()) {
+        if (!mem.canView())
+        {
             return;                                       //si el usuario no pertenece a la red sale;
         }
 
-        if (action == null) {
+        if (action == null)
+        {
             HashMap<String, String> params = upload(request);
-            if (mem.canAdd() && params.containsValue("add")) {
+            if (mem.canAdd() && params.containsValue("add"))
+            {
                 NewsElement rec = NewsElement.ClassMgr.createNewsElement(getResourceBase().getWebSite());
 
                 File file = new File(realpath + params.get("filename"));
-                if (file.exists()) {
+                if (file.exists())
+                {
                     FileInputStream in = new FileInputStream(file);
                     String filename = file.getName();
+                    String finalpath = rec.getWorkPath();
                     String target = realpath + finalpath + filename;
                     File ftarget = new File(target);
-                        ftarget.getParentFile().mkdirs();
-                        FileOutputStream out = new FileOutputStream(ftarget);
+                    ftarget.getParentFile().mkdirs();
+                    FileOutputStream out = new FileOutputStream(ftarget);
                     SWBUtils.IO.copyStream(in, out);
                     file.delete();
                     params.put("filename", finalpath + filename);
@@ -113,13 +130,15 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
 
 
                 file = new File(realpath + params.get("thumbnail"));
-                if (file.exists()) {
+                if (file.exists())
+                {
                     FileInputStream in = new FileInputStream(file);
                     String filename = file.getName();
+                    String finalpath = rec.getWorkPath();
                     String target = realpath + finalpath + filename;
                     File ftarget = new File(target);
-                        ftarget.getParentFile().mkdirs();
-                        FileOutputStream out = new FileOutputStream(ftarget);
+                    ftarget.getParentFile().mkdirs();
+                    FileOutputStream out = new FileOutputStream(ftarget);
                     SWBUtils.IO.copyStream(in, out);
                     file.delete();
                     params.put("thumbnail", finalpath + filename);
@@ -134,43 +153,55 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
                 rec.setCitation(params.get("new_citation"));
                 rec.setTags(params.get("new_tags"));
                 rec.setNewsWebPage(page);
-                try {
+                try
+                {
                     response.setRenderParameter("act", "edit");
                     response.setRenderParameter("uri", rec.getURI());
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     log.error(e);
                     response.setRenderParameter("act", "add");
                     response.setRenderParameter("err", "true");
                 }
-            } else if (params.containsValue("edit")) {
+            }
+            else if (params.containsValue("edit"))
+            {
                 String uri = params.get("uri");
                 NewsElement rec = (NewsElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
-                if (rec != null && rec.canModify(mem)) {
+                if (rec != null && rec.canModify(mem))
+                {
 
-                    if (params.containsKey("filename")) {
+                    if (params.containsKey("filename"))
+                    {
                         File file = new File(realpath + params.get("filename"));
-                        if (file.exists()) {
+                        if (file.exists())
+                        {
                             FileInputStream in = new FileInputStream(file);
                             String filename = file.getName();
+                            String finalpath = rec.getWorkPath();
                             String target = realpath + finalpath + filename;
                             File ftarget = new File(target);
-                        ftarget.getParentFile().mkdirs();
-                        FileOutputStream out = new FileOutputStream(ftarget);
+                            ftarget.getParentFile().mkdirs();
+                            FileOutputStream out = new FileOutputStream(ftarget);
                             SWBUtils.IO.copyStream(in, out);
                             file.delete();
                             params.put("filename", finalpath + filename);
                         }
                         rec.setNewsImage(file.getName());
                     }
-                    if (params.containsKey("thumbnail")) {
+                    if (params.containsKey("thumbnail"))
+                    {
                         File file = new File(realpath + params.get("thumbnail"));
-                        if (file.exists()) {
+                        if (file.exists())
+                        {
                             FileInputStream in = new FileInputStream(file);
                             String filename = file.getName();
+                            String finalpath = rec.getWorkPath();
                             String target = realpath + finalpath + filename;
                             File ftarget = new File(target);
-                        ftarget.getParentFile().mkdirs();
-                        FileOutputStream out = new FileOutputStream(ftarget);
+                            ftarget.getParentFile().mkdirs();
+                            FileOutputStream out = new FileOutputStream(ftarget);
                             SWBUtils.IO.copyStream(in, out);
                             file.delete();
                             params.put("thumbnail", finalpath + filename);
@@ -186,41 +217,53 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
                     rec.setNewsWebPage(page);
                 }
             }
-        } else if (action.equals("remove")) {
+        }
+        else if (action.equals("remove"))
+        {
             //Get news object
             String uri = request.getParameter("uri");
             NewsElement rec = (NewsElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
 
             //Remove news object
-            if (rec != null && rec.canModify(mem)) {
+            if (rec != null && rec.canModify(mem))
+            {
                 rec.remove();                                       //elimina el registro
             }
-        } else {
+        }
+        else
+        {
             super.processAction(request, response);
         }
     }
 
-    private HashMap<String, String> upload(HttpServletRequest request) {
+    private HashMap<String, String> upload(HttpServletRequest request)
+    {
         final String realpath = SWBPortal.getWorkPath() + getResourceBase().getWorkPath() + "/";
         final String path = getResourceBase().getWorkPath() + "/";
 
         HashMap<String, String> params = new HashMap<String, String>();
-        try {
+        try
+        {
             boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-            if (isMultipart) {
+            if (isMultipart)
+            {
                 File tmpwrk = new File(SWBPortal.getWorkPath() + "/tmp");
-                if (!tmpwrk.exists()) {
+                if (!tmpwrk.exists())
+                {
                     tmpwrk.mkdirs();
                 }
                 FileItemFactory factory = new DiskFileItemFactory(1 * 1024 * 1024, tmpwrk);
                 ServletFileUpload upload = new ServletFileUpload(factory);
-                ProgressListener progressListener = new ProgressListener() {
+                ProgressListener progressListener = new ProgressListener()
+                {
 
                     private long kBytes = -1;
 
-                    public void update(long pBytesRead, long pContentLength, int pItems) {
+                    public void update(long pBytesRead, long pContentLength, int pItems)
+                    {
                         long mBytes = pBytesRead / 10000;
-                        if (kBytes == mBytes) {
+                        if (kBytes == mBytes)
+                        {
                             return;
                         }
                         kBytes = mBytes;
@@ -231,25 +274,32 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
                 List items = upload.parseRequest(request); /* FileItem */
                 FileItem currentFile = null;
                 Iterator iter = items.iterator();
-                while (iter.hasNext()) {
+                while (iter.hasNext())
+                {
                     FileItem item = (FileItem) iter.next();
 
-                    if (item.isFormField()) {
+                    if (item.isFormField())
+                    {
                         String name = item.getFieldName();
                         String value = item.getString();
                         params.put(name, value);
-                    } else {
+                    }
+                    else
+                    {
                         currentFile = item;
                         File file = new File(path);
-                        if (!file.exists()) {
+                        if (!file.exists())
+                        {
                             file.mkdirs();
                         }
-                        try {
+                        try
+                        {
                             long serial = (new Date()).getTime();
                             String filename = serial + "_" + currentFile.getFieldName() + currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
 
                             File image = new File(realpath);
-                            if (!image.exists()) {
+                            if (!image.exists())
+                            {
                                 image.mkdir();
                             }
                             image = new File(realpath + filename);
@@ -259,12 +309,16 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
 
                             params.put("filename", path + filename);
                             params.put("thumbnail", path + "thumbn_" + filename);
-                        } catch (StringIndexOutOfBoundsException iobe) {
+                        }
+                        catch (StringIndexOutOfBoundsException iobe)
+                        {
                         }
                     }
                 }
             }
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             ex.printStackTrace();
         }
         return params;
