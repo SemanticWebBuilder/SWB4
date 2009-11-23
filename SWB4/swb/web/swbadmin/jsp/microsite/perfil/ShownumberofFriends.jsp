@@ -11,9 +11,9 @@
             {
                 if (!user.isSigned())
                 {
-                    %>
-                      <li>&nbsp;</li>
-                    <%
+%>
+<li>&nbsp;</li>
+<%
 
                     return;
                 }
@@ -27,5 +27,50 @@
                 count++;
             }
             String url = site.getWebPage("Amigos").getUrl();
+            String mis_invitacionesURL=site.getWebPage("mis_invitaciones").getUrl();
+            String mis_solicitudesURL=site.getWebPage("mis_solicitudes").getUrl();
 %>
 <li><a href="<%=url%>" >Amigos (<%=count%>)</a></li>
+<%
+            if (request.getParameter("user") != null)
+            {
+                // muestra si el amigo esta invitado
+                user = (User) request.getAttribute("user");
+                SemanticObject semObj = SemanticObject.createSemanticObject(request.getParameter("user"));
+                User friend = (User) semObj.createGenericInstance();
+
+                Iterator<FriendshipProspect> prospecs = FriendshipProspect.ClassMgr.listFriendshipProspectByFriendShipRequester(user, site);
+                boolean invited = false;
+                while (prospecs.hasNext())
+                {
+                    FriendshipProspect propect = prospecs.next();
+                    if (propect.getFriendShipRequested().getURI().endsWith(friend.getURI()) && propect.getFriendShipRequester().getURI().equals(user.getURI()))
+                    {
+                        invited = true;
+                        break;
+                    }
+                }
+                if (invited)
+                {
+%>
+<li><a href="<%=mis_solicitudesURL%>" >Has invitado a este usuario a ser tu amigo</a></li>
+<%                }
+                prospecs = FriendshipProspect.ClassMgr.listFriendshipProspectByFriendShipRequested(user, site);
+                invited = false;
+                while (prospecs.hasNext())
+                {
+                    FriendshipProspect propect = prospecs.next();
+                    if (propect.getFriendShipRequested().getURI().endsWith(user.getURI()) && propect.getFriendShipRequester().getURI().equals(friend.getURI()))
+                    {
+                        invited = true;
+                        break;
+                    }
+                }
+                if (invited)
+                {
+%>
+<li><a href="<%=mis_invitacionesURL%>" >Tienes una invitación de este usuario para ser tu amigo</a></li>
+<%                }
+
+            }
+%>
