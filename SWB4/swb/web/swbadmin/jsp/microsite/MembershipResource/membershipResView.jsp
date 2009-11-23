@@ -29,9 +29,10 @@
                 return;
             }
             String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
-
+            String path = wp.getWorkPath();
             if (site.getPhoto() != null) {
-                pathPhoto = SWBPortal.getContextPath() + SWBPortal.getWebWorkPath() + site.getPhoto();
+                pathPhoto =SWBPortal.getWebWorkPath() + path+"/"+site.getPhoto();
+                
             }
 %>
 
