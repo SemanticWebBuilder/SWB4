@@ -25,7 +25,7 @@ if(!owner.isRegistered() || !user.isRegistered()) return;
 //String registryPath=base.getAttribute("registryPath","");
 //String attributes=base.getAttribute("attributes","");
 
- String photo=SWBPortal.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
+ String photo = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/perfil/profilePlaceholder.jpg";
  if(user.getPhoto()!=null) photo=SWBPortal.getWebWorkPath()+user.getPhoto();
  %>
  <br>
