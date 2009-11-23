@@ -15,6 +15,7 @@ import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.Traceable;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
 import org.semanticwb.platform.SemanticClass;
@@ -146,6 +147,13 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
         String action = response.getAction();
         String act = request.getParameter("act");
         User mem = response.getUser();
+        DirectoryObject dob = null;
+        if (request.getParameter("uri") != null && !request.getParameter("uri").equals("null")) {
+            SemanticObject so = SemanticObject.createSemanticObject(request.getParameter("uri"));
+            if (so != null) {
+                dob = (DirectoryObject)so.createGenericInstance();
+            }
+        }
 
         try
         {
@@ -155,8 +163,15 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             }
             else if ("claim".equals(action))
             {
-                //System.out.println(response.getUser().getFullName() + " is trying to claim " + getDirectoryObject().getTitle());
                 claim(request, response);
+            }
+            else if ("accept".equals(action))
+            {
+                acceptClaim(request, response);
+            }
+            else if("reject".equals(action) || "unclaim".equals(action))
+            {
+                unClaim(request, response);
             }
             else if ("getAbused".equals(action))
             {
@@ -347,39 +362,47 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
         }
     }
 
-    private void claim (HttpServletRequest request, SWBActionResponse response) {
-        //Obtener uri del objeto y el usuario actual
+    private void unClaim (HttpServletRequest request, SWBActionResponse response) {
         String suri = request.getParameter("uri");
-        String justify = request.getParameter("justify");
-        if (justify == null || justify.equals("null")) justify = "";
-        SemanticObject so = null;
+        SemanticObject sobj = null;
         User user = response.getUser();
 
-        //Crear objeto semantico del objeto de directorio
-        if (suri != null) {
-            so = SemanticObject.createSemanticObject(suri);
+        if (suri != null && !suri.equals("null")) {
+            sobj = SemanticObject.createSemanticObject(suri);
         }
 
-        //Obtener objeto de directorio
-        if (so.getGenericInstance() instanceof DirectoryObject) {
-            DirectoryObject mse = (DirectoryObject) so.getGenericInstance();
-            System.out.println("----" + user.getFullName() + " intenta reclamar la entrada " + mse.getTitle());
-
-            //Si el creador no es quien reclama
-            if (!mse.getCreator().equals(user) && user.isSigned()) {                
-                Organization org = (Organization)mse;
-                System.out.println("----Se ha recuperado la organizacion " + org.getTitle());
-                //Si nadie lo ha reclamado
-                if (org.getClaimer() == null) {
-                    System.out.println(user.getFullName() + " ha reclamado la entrada " + mse.getTitle());
-                    org.setClaimer(user);
-                    org.setClaimJustify(justify);
-                } else {
-                    System.out.println("----El elemento ya ha sido reclamado por " + org.getClaimer().getFullName());
+        if (sobj.getGenericInstance() instanceof DirectoryObject) {
+            if (user.isSigned()) {
+                if (sobj != null) {
+                    sobj.removeProperty(Claimable.swbcomm_claimJustify);
+                    sobj.removeProperty(Claimable.swbcomm_claimer);
                 }
-            } else if (user.isSigned()) {
-                System.out.println("----El creador no puede reclamar");
             }
+        }
+
+        response.setRenderParameter("uri", suri);
+        response.setRenderParameter("act", "detail");
+        response.setMode(SWBParamRequest.Mode_VIEW);
+    }
+
+    private void claim (HttpServletRequest request, SWBActionResponse response) {
+        String suri = request.getParameter("uri");
+        SemanticObject sobj = null;
+        User user = response.getUser();
+
+        String justify = request.getParameter("justify");
+        if (justify == null || justify.equals("null")) {
+            justify = "";
+        }
+        
+        if (suri != null && !suri.equals("null")) {
+            sobj = SemanticObject.createSemanticObject(suri);
+        }
+                
+        if (sobj.getGenericInstance() instanceof DirectoryObject) {
+            Organization org = (Organization)sobj.createGenericInstance();
+            org.setClaimer(user);
+            org.setClaimJustify(justify);
         }
         
         response.setRenderParameter("uri", suri);
@@ -389,23 +412,22 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
 
     private void acceptClaim(HttpServletRequest request, SWBActionResponse response) {
         String suri = request.getParameter("uri");
-        User admin = response.getUser();
-        SemanticObject so = null;
+        SemanticObject sobj = null;
 
-        UserGroup admgp = response.getWebPage().getWebSite().getUserRepository().getUserGroup("admin");
-        if (admin.isSigned() && admin.hasUserGroup(admgp)) {
-            //Crear objeto semantico del objeto de directorio
-            if (suri != null) {
-                so = SemanticObject.createSemanticObject(suri);
-            }
-
-        //Obtener objeto de directorio
-        if (so.getGenericInstance() instanceof DirectoryObject) {
-            DirectoryObject mse = (DirectoryObject) so.getGenericInstance();
-
-            
+        if (suri != null && !suri.equals("null")) {
+            sobj = SemanticObject.createSemanticObject(suri);
         }
+         
+        if (sobj.getGenericInstance() instanceof DirectoryObject) {
+            User claimer = (User)sobj.getObjectProperty(Claimable.swbcomm_claimer).createGenericInstance();
+            sobj.setObjectProperty(Traceable.swb_creator, claimer.getSemanticObject());
+            sobj.removeProperty(Claimable.swbcomm_claimer);
+            sobj.removeProperty(Claimable.swbcomm_claimJustify);
         }
+
+        response.setRenderParameter("uri", suri);
+        response.setRenderParameter("act", "detail");
+        response.setMode(SWBParamRequest.Mode_VIEW);
     }
 
     private void rank(HttpServletRequest request, SWBActionResponse response)
