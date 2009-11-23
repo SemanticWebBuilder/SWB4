@@ -283,6 +283,8 @@
             {
     %>
 </div>
+
+    
 <%                }
             if (isStrategy && contTot > 0)
             {
