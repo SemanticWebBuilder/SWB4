@@ -133,8 +133,8 @@
                 %>
                 <%=i%>
                 <%
-                        if (i == ipage)
-                        {
+                    if (i == ipage)
+                    {
                 %>
             </strong>
             <%                    }
@@ -164,7 +164,7 @@
         %>
         <a class="adminTool" href="<%=urlAddPhoto%>">Agregar foto</a>
         <%
-        }
+            }
         %>
 
 
@@ -175,34 +175,47 @@
     %>
     <p>No hay fotos registradas en la comunidad</p>
     <%            }
-    int iElement = 0;
-    for (PhotoElement photo : elements)
-    {
-        if (photo.canView(member))
-        {
-            iElement++;
-            if (iElement > fin)
+            int iElement = 0;
+            for (PhotoElement photo : elements)
             {
-                break;
-            }
-            if (iElement >= inicio && iElement <= fin)
-            {
-                String postAuthor = photo.getCreator().getFullName();
-                SWBResourceURL urlDetail = paramRequest.getRenderUrl();
-                urlDetail.setParameter("act", "detail");
-                urlDetail.setParameter("uri", photo.getURI());
-                SWBResourceURL viewurl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", photo.getURI());
-                String rank = df.format(photo.getRank());
-                String editEventURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", photo.getURI()).toString();
-                SWBResourceURL removeUrl = paramRequest.getActionUrl();
-                removeUrl.setParameter("act", "remove");
-                removeUrl.setParameter("uri", photo.getEncodedURI());
-                String removeurl = "javascript:validateremove('" + removeUrl + "','" + photo.getTitle() + "')";
+                if (photo.canView(member))
+                {
+                    iElement++;
+                    if (iElement > fin)
+                    {
+                        break;
+                    }
+                    if (iElement >= inicio && iElement <= fin)
+                    {
+                        String postAuthor = photo.getCreator().getFullName();
+                        SWBResourceURL urlDetail = paramRequest.getRenderUrl();
+                        urlDetail.setParameter("act", "detail");
+                        urlDetail.setParameter("uri", photo.getURI());
+                        SWBResourceURL viewurl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", photo.getURI());
+                        String rank = df.format(photo.getRank());
+                        String editEventURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", photo.getURI()).toString();
+                        SWBResourceURL removeUrl = paramRequest.getActionUrl();
+                        removeUrl.setParameter("act", "remove");
+                        removeUrl.setParameter("uri", photo.getEncodedURI());
+                        String removeurl = "javascript:validateremove('" + removeUrl + "','" + photo.getTitle() + "')";
+
+                        String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
+                        String path = wpage.getWorkPath();
+                        if (photo.getPhotoThumbnail() != null)
+                        {
+                            int pos = photo.getPhotoThumbnail().lastIndexOf("/");
+                            if (pos != -1)
+                            {
+                                String sphoto = photo.getPhotoThumbnail().substring(pos + 1);
+                                photo.setPhotoThumbnail(sphoto);
+                            }
+                            pathPhoto = SWBPortal.getWebWorkPath() + path + "/" + photo.getPhotoThumbnail();
+                        }
 
     %>
     <div class="noticia">        
         <a dojoType="dojox.image.Lightbox" title="<%= photo.getTitle()%>" href="<%= SWBPortal.getWebWorkPath() + photo.getImageURL()%>">
-            <img id="img_<%=iElement + base.getId()%>" src="<%= SWBPortal.getWebWorkPath() + photo.getPhotoThumbnail()%>" alt="<%= photo.getTitle()%>" width="140" height="140" />
+            <img id="img_<%=iElement + base.getId()%>" src="<%=pathPhoto%>" alt="<%= photo.getTitle()%>" width="140" height="140" />
         </a>
         <div class="noticiaTexto">
             <h2><%=photo.getTitle()%></h2>
@@ -210,12 +223,12 @@
             <p>
                 <%=photo.getDescription()%> | <a href="<%=viewurl%>">Ver más</a>
                 <%
-                        if (photo.canModify(member))
-                        {
+                if (photo.canModify(member))
+                {
                 %>
                 | <a href="<%=editEventURL%>">Editar</a> | <a href="<%=removeurl%>">Eliminar</a>
                 <%
-                        }
+                }
                 %>
             </p>
             <p class="stats">
@@ -266,8 +279,8 @@
                 %>
                 <%=i%>
                 <%
-                        if (i == ipage)
-                        {
+                    if (i == ipage)
+                    {
                 %>
             </strong>
             <%                    }
