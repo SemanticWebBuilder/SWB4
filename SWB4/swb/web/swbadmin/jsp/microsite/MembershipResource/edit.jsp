@@ -68,10 +68,10 @@ urla.setParameter("act", "upload");
 urla.setCallMethod(SWBResourceURL.Call_DIRECT);
 
 String pathPhoto = "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
-
+String path = wpage.getWorkPath();
 if(site.getPhoto()!=null)
 {
-    pathPhoto=SWBPortal.getContextPath()+SWBPortal.getWebWorkPath()+site.getPhoto();
+    pathPhoto =SWBPortal.getWebWorkPath() + path+"/"+site.getPhoto();
 }
 %>
 <div class="columnaIzquierda">
