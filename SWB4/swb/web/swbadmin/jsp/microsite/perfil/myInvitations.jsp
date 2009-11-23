@@ -7,7 +7,8 @@
 <%@page import="java.util.*"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
-
+<%!    private static final int ELEMENETS_BY_PAGE = 5;
+%>
 <%
             User owner = paramRequest.getUser();
             User user = owner;
@@ -21,7 +22,7 @@
             {
                 userParam = "?user=" + user.getEncodedURI();
             }
-
+            String cssPath = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/images/";
             WebPage wpage = paramRequest.getWebPage();
             SWBResourceURL urlAction = paramRequest.getActionUrl();
 
@@ -34,16 +35,133 @@
                 isStrategy = true;
             }
             boolean hasInvitations = false;
+
+            ArrayList<User> elements = new ArrayList();
+            int elementos = 0;
+
             Iterator<FriendshipProspect> itFriendshipProspect = FriendshipProspect.ClassMgr.listFriendshipProspectByFriendShipRequested(owner, wpage.getWebSite());
-            if (itFriendshipProspect.hasNext())
+            while (itFriendshipProspect.hasNext())
             {
-                hasInvitations = true;
+                FriendshipProspect friendshipProspect = itFriendshipProspect.next();
+                User userRequester = friendshipProspect.getFriendShipRequester();
+                elements.add(userRequester);
+                elementos++;
             }
+            hasInvitations = elements.size() > 0;
+            int paginas = elementos / ELEMENETS_BY_PAGE;
+            if (elementos % ELEMENETS_BY_PAGE != 0)
+            {
+                paginas++;
+            }
+            int inicio = 0;
+            int fin = ELEMENETS_BY_PAGE;
+            int ipage = 1;
+            if (request.getParameter("ipage") != null)
+            {
+                try
+                {
+                    ipage = Integer.parseInt(request.getParameter("ipage"));
+                    inicio = (ipage * ELEMENETS_BY_PAGE) - ELEMENETS_BY_PAGE;
+                    fin = (ipage * ELEMENETS_BY_PAGE);
+                }
+                catch (NumberFormatException nfe)
+                {
+                    ipage = 1;
+                }
+            }
+            if (ipage < 1 || ipage > paginas)
+            {
+                ipage = 1;
+            }
+            if (inicio < 0)
+            {
+                inicio = 0;
+            }
+            if (fin < 0)
+            {
+                fin = ELEMENETS_BY_PAGE;
+            }
+            if (fin > elementos)
+            {
+                fin = elementos;
+            }
+            if (inicio > fin)
+            {
+                inicio = 0;
+                fin = ELEMENETS_BY_PAGE;
+            }
+            if (fin - inicio > ELEMENETS_BY_PAGE)
+            {
+                inicio = 0;
+                fin = ELEMENETS_BY_PAGE;
+            }
+            inicio++;
             if (hasInvitations)
             {
                 if (request.getParameter("user") == null)
                 {
 %>
+<!-- paginacion -->
+<%
+            if (paginas > 1)
+            {
+%>
+<div id="paginacion">
+
+
+    <%
+            String nextURL = "#";
+            String previusURL = "#";
+            if (ipage < paginas)
+            {
+                nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
+            }
+            if (ipage > 1)
+            {
+                previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
+            }
+            if (ipage > 1)
+            {
+    %>
+    <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
+        <%
+            }
+            for (int i = 1; i <= paginas; i++)
+            {
+        %>
+    <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%
+                if (i == ipage)
+                {
+        %>
+        <strong>
+            <%                            }
+            %>
+            <%=i%>
+            <%
+                if (i == ipage)
+                {
+            %>
+        </strong>
+        <%                            }
+        %></a>
+    <%
+            }
+    %>
+
+
+    <%
+            if (ipage != paginas)
+            {
+    %>
+    <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
+        <%
+            }
+        %>
+</div>
+<%
+            }
+%>
+<!-- fin paginacion -->
 <h2>Mis invitaciones</h2>
 <%                }
 %>
@@ -54,57 +172,61 @@
                 {
 %>
 <div id="friendCards">
-    <%                }
-                int contTot = 0;
-                itFriendshipProspect = FriendshipProspect.ClassMgr.listFriendshipProspectByFriendShipRequested(owner, wpage.getWebSite());
-                while (itFriendshipProspect.hasNext())
+    <%                }                
+                int iElement = 0;
+                for (User userRequester : elements)
                 {
-                    FriendshipProspect friendshipProspect = itFriendshipProspect.next();
-                    User userRequester = friendshipProspect.getFriendShipRequester();
-                    if (userRequester.getPhoto() != null)
+                    iElement++;
+                    if (iElement > fin)
                     {
-                        photo = SWBPortal.getWebWorkPath() + userRequester.getPhoto();
+                        break;
                     }
-                    urlAction.setParameter("user", userRequester.getURI());
-                    if (!isStrategy)
+                    if (iElement >= inicio && iElement <= fin)
                     {
-                        String path = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSite().getId() + "/css/images/";
-                        String urluser = java.net.URLEncoder.encode(userRequester.getURI());
-                        String email = userRequester.getEmail();
-                        HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
-                        Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#_ExtendedAttributes").listProperties();
-                        while (list.hasNext())
+                        if (userRequester.getPhoto() != null)
                         {
-                            SemanticProperty prop = list.next();
-                            mapa.put(prop.getName(), prop);
+                            photo = SWBPortal.getWebWorkPath() + userRequester.getPhoto();
                         }
-                        String perfilurl = paramRequest.getWebPage().getWebSite().getWebPage("perfil").getUrl();
-                        if (request.getParameter("user") != null)
+                        urlAction.setParameter("user", userRequester.getURI());
+                        if (!isStrategy)
                         {
-                            perfilurl += "?user=" + java.net.URLEncoder.encode(request.getParameter("user"));
-                        }
-                        String usr_sex = (String) userRequester.getExtendedAttribute(mapa.get("userSex"));
-                        Object usr_age = (Object) userRequester.getExtendedAttribute(mapa.get("userAge"));
-                        if (usr_sex == null)
-                        {
-                            usr_sex = "No indicó el usuario su sexo";
-                        }
-                        if (null == usr_age)
-                        {
-                            usr_age = "";
-                        }
-                        if ("M".equals(usr_sex))
-                        {
-                            usr_sex = "Hombre";
-                        }
-                        if ("F".equals(usr_sex))
-                        {
-                            usr_sex = "Mujer";
-                        }
-                        if (usr_age.toString().equals("0") || usr_age.toString().equals(""))
-                        {
-                            usr_age = "No indicó el usuario";
-                        }
+                            String path = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSite().getId() + "/css/images/";
+                            String urluser = java.net.URLEncoder.encode(userRequester.getURI());
+                            String email = userRequester.getEmail();
+                            HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
+                            Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#_ExtendedAttributes").listProperties();
+                            while (list.hasNext())
+                            {
+                                SemanticProperty prop = list.next();
+                                mapa.put(prop.getName(), prop);
+                            }
+                            String perfilurl = paramRequest.getWebPage().getWebSite().getWebPage("perfil").getUrl();
+                            if (request.getParameter("user") != null)
+                            {
+                                perfilurl += "?user=" + java.net.URLEncoder.encode(request.getParameter("user"));
+                            }
+                            String usr_sex = (String) userRequester.getExtendedAttribute(mapa.get("userSex"));
+                            Object usr_age = (Object) userRequester.getExtendedAttribute(mapa.get("userAge"));
+                            if (usr_sex == null)
+                            {
+                                usr_sex = "No indicó el usuario su sexo";
+                            }
+                            if (null == usr_age)
+                            {
+                                usr_age = "";
+                            }
+                            if ("M".equals(usr_sex))
+                            {
+                                usr_sex = "Hombre";
+                            }
+                            if ("F".equals(usr_sex))
+                            {
+                                usr_sex = "Mujer";
+                            }
+                            if (usr_age.toString().equals("0") || usr_age.toString().equals(""))
+                            {
+                                usr_age = "No indicó el usuario";
+                            }
 
     %>
 
@@ -117,7 +239,7 @@
             %>
             <a class="ico" href="mailto:<%=email%>"><img src="<%=path%>icoMail.png" alt="enviar un mensaje"></a>
                 <%
-                    }
+                        }
                 %>
 
 
@@ -136,15 +258,15 @@
         </div>
     </div>
     <%
+                        }                        
                     }
-                    contTot++;
                 }
                 if (!isStrategy)
                 {
     %>
 </div>
 <%                }
-                if (isStrategy && contTot > 0)
+                if (isStrategy && elementos > 0)
                 {
 %>
 <ul class="listaElementos">
@@ -152,9 +274,9 @@
                     if (request.getParameter("user") == null)
                     {
     %>
-    <li><a class="contactos_nombre" href="<%=requesterPath%><%=userParam%>" >Te han invitado <%=contTot%> persona(s) a que te unas como su amigo</a></li>
+    <li><a class="contactos_nombre" href="<%=requesterPath%><%=userParam%>" >Te han invitado <%=elementos%> persona(s) a que te unas como su amigo</a></li>
     <%
-            }
+                    }
     %>
 
 </ul>
