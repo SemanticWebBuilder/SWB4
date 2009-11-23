@@ -27,12 +27,24 @@
                 {
                     description = photo.getDescription();
                 }
+                String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
+                        String path = wpage.getWorkPath();
+                        if (photo.getPhotoThumbnail() != null)
+                        {
+                            int pos = photo.getPhotoThumbnail().lastIndexOf("/");
+                            if (pos != -1)
+                            {
+                                String sphoto = photo.getPhotoThumbnail().substring(pos + 1);
+                                photo.setPhotoThumbnail(sphoto);
+                            }
+                            pathPhoto = SWBPortal.getWebWorkPath() + path + "/" + photo.getPhotoThumbnail();
+                        }
 %>
 <div class="columnaIzquierda">
     <h2><%=title%></h2><br>
     <p><%= description%></p>
     <p align="center"><a title="<%= title%>" href="<%= SWBPortal.getWebWorkPath() + photo.getImageURL()%>">
-            <img id="img_<%=photo.getId()%>" src="<%= SWBPortal.getWebWorkPath() + photo.getPhotoThumbnail()%>" alt="<%=title%>" width="50%" height="50%" />
+            <img id="img_<%=photo.getId()%>" src="<%= pathPhoto%>" alt="<%=title%>" width="50%" height="50%" />
         </a></p>            
 
     <%
