@@ -152,6 +152,13 @@ public class Login extends GenericAdmResource
         out.println("       &nbsp;&nbsp;{request.getParameter(\"XXXXX\")}<BR>");
         out.println("       &nbsp;&nbsp;{session.getAttribute(\"XXXXX\")}<BR>");
         out.println("       &nbsp;&nbsp;{encodeB64(\"XXXXX\")}<BR>");
+
+        out.println("       &nbsp;&nbsp;{webpath}<BR>");
+        out.println("       &nbsp;&nbsp;{distpath}<BR>");
+        out.println("       &nbsp;&nbsp;{webworkpath}<BR>");
+        out.println("       &nbsp;&nbsp;{websiteid}<BR>");
+        out.println("       &nbsp;&nbsp;{workpath}<BR>");
+
         out.println("       <BR>&nbsp;&nbsp;<b>Note:</b> XXXXX=Text<BR><BR>");
         out.println("	</font>");
         out.println("</fieldset>");
