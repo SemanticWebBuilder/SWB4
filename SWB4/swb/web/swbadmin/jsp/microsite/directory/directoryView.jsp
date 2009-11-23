@@ -346,13 +346,13 @@ if (sobj != null) {
                             created=propValue;
                         }
                     }
-                } else if (semProp==Claimable.swbcomm_claimer) {
+                } /*else if (semProp==Claimable.swbcomm_claimer) {
                     SemanticObject claimerUsr = semObject.getObjectProperty(Claimable.swbcomm_claimer);
                     if (claimerUsr != null) {
                         claimer = (User)claimerUsr.createGenericInstance();
                         claimerUrl = perfilPath+"?user="+claimer.getEncodedURI();
                     }
-               } else if(semProp==DirectoryObject.swb_creator){
+               } */else if(semProp==DirectoryObject.swb_creator){
                         SemanticObject semUser=semObject.getObjectProperty(DirectoryObject.swb_creator);
                         if(semUser!=null){
                             userObj=(User)semUser.createGenericInstance();
