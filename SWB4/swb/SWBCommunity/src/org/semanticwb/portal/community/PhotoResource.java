@@ -107,7 +107,6 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
         WebPage page = response.getWebPage();
         Member mem = Member.getMember(response.getUser(), response.getWebPage());
         final String realpath = SWBPortal.getWorkPath();
-        final String finalpath = page.getWorkPath() + "/";
         if (!mem.canView())
         {
             return;  //si el usuario no pertenece a la red sale;
@@ -129,6 +128,7 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                     {
                         FileInputStream in = new FileInputStream(file);
                         String filename = file.getName();
+                        String finalpath = rec.getWorkPath();
                         String target = realpath + finalpath + filename;
                         File ftarget = new File(target);
                         ftarget.getParentFile().mkdirs();
@@ -152,6 +152,7 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                     {
                         FileInputStream in = new FileInputStream(file);
                         String filename = file.getName();
+                        String finalpath = rec.getWorkPath();
                         String target = realpath + finalpath + filename;
                         File ftarget = new File(target);
                         ftarget.getParentFile().mkdirs();
@@ -200,6 +201,7 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                         {
                             FileInputStream in = new FileInputStream(file);
                             String filename = file.getName();
+                            String finalpath = rec.getWorkPath();
                             String target = realpath + finalpath + filename;
                             File ftarget = new File(target);
                             ftarget.getParentFile().mkdirs();
@@ -215,6 +217,7 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                         {
                             FileInputStream in = new FileInputStream(file);
                             String filename = file.getName();
+                            String finalpath = rec.getWorkPath();
                             String target = realpath + finalpath + filename;
                             File ftarget = new File(target);
                             ftarget.getParentFile().mkdirs();
@@ -296,13 +299,13 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
 
             WebPage page = paramRequest.getWebPage();
             PhotoElement rec = PhotoElement.ClassMgr.createPhotoElement(getResourceBase().getWebSite());
-            if(params.get("filename")!=null)
+            if (params.get("filename") != null)
             {
-                String path=params.get("filename").toString();
-                int pos=path.lastIndexOf("/");
-                if(pos!=-1)
+                String path = params.get("filename").toString();
+                int pos = path.lastIndexOf("/");
+                if (pos != -1)
                 {
-                    path=path.substring(pos+1);
+                    path = path.substring(pos + 1);
                     rec.setImageURL(path);
                 }
                 else
