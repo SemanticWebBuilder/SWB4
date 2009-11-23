@@ -109,7 +109,7 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
                     file.delete();
                     params.put("filename", finalpath + filename);
                 }
-                rec.setNewsImage(params.get("filename"));
+                rec.setNewsImage(file.getName());
 
 
                 file = new File(realpath + params.get("thumbnail"));
@@ -160,7 +160,7 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
                             file.delete();
                             params.put("filename", finalpath + filename);
                         }
-                        rec.setNewsImage(params.get("filename"));
+                        rec.setNewsImage(file.getName());
                     }
                     if (params.containsKey("thumbnail")) {
                         File file = new File(realpath + params.get("thumbnail"));

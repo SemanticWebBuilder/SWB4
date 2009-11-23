@@ -82,7 +82,7 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        final String path = "/../swbadmin/jsp/microsite/EventResource/noevent.jpg";
+        //final String path = "/../swbadmin/jsp/microsite/EventResource/noevent.jpg";
         String action = request.getParameter("act");
         WebPage page = response.getWebPage();
         final String realpath = SWBPortal.getWorkPath();
@@ -110,9 +110,11 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                         file.delete();
                         params.put("filename", finalpath + filename);
                     }
-                    rec.setEventImage(params.get("filename"));
-                } else {
-                    rec.setEventImage(path);
+                    rec.setEventImage(file.getName());
+                } 
+                else
+                {
+                    rec.setEventImage(null);
                 }
                 if (params.containsKey("thumbnail")) {
                     File file = new File(realpath + params.get("thumbnail"));
@@ -127,9 +129,10 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                         file.delete();
                         params.put("thumbnail", finalpath + filename);
                     }
-                    rec.setEventThumbnail(params.get("thumbnail"));
-                } else {
-                    rec.setEventThumbnail(path);
+                    rec.setEventThumbnail(file.getName());
+                }
+                else {
+                    rec.setEventThumbnail(null);
                 }
                 rec.setTitle(params.get("event_title"));
                 rec.setDescription(params.get("event_description"));
@@ -178,7 +181,7 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                             file.delete();
                             params.put("filename", finalpath + filename);
                         }
-                        rec.setEventImage(params.get("filename"));
+                        rec.setEventImage(file.getName());
                     }
                     if (params.get("thumbnail") != null) {
                         File file = new File(realpath + params.get("thumbnail"));
@@ -193,7 +196,7 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                             file.delete();
                             params.put("thumbnail", finalpath + filename);
                         }
-                        rec.setEventThumbnail(params.get("thumbnail"));
+                        rec.setEventThumbnail(file.getName());
                     }
                     rec.setTitle(params.get("event_title"));
                     rec.setDescription(params.get("event_description"));

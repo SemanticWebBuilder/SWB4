@@ -103,7 +103,7 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
-        final String path = "/../swbadmin/jsp/microsite/PhotoResource/sinfoto.png";
+        //final String path = "/../swbadmin/jsp/microsite/PhotoResource/sinfoto.png";
         WebPage page = response.getWebPage();
         Member mem = Member.getMember(response.getUser(), response.getWebPage());
         final String realpath = SWBPortal.getWorkPath();
@@ -141,7 +141,7 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                 }
                 else
                 {
-                    rec.setImageURL(path);
+                    rec.setImageURL(null);
                 }
 
 
@@ -160,11 +160,11 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                         file.delete();
                         params.put("thumbnail", finalpath + filename);
                     }
-                    rec.setPhotoThumbnail(params.get("thumbnail"));
+                    rec.setPhotoThumbnail(file.getName());
                 }
                 else
                 {
-                    rec.setPhotoThumbnail(path);
+                    rec.setPhotoThumbnail(null);
                 }
                 rec.setTitle(params.get("title"));
                 rec.setDescription(params.get("description"));
@@ -208,7 +208,7 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                             file.delete();
                             params.put("filename", finalpath + filename);
                         }
-                        rec.setImageURL(params.get("filename"));
+                        rec.setImageURL(file.getName());
 
                         file = new File(realpath + params.get("thumbnail"));
                         if (file.exists())
@@ -223,7 +223,7 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                             file.delete();
                             params.put("thumbnail", finalpath + filename);
                         }
-                        rec.setPhotoThumbnail(params.get("thumbnail"));
+                        rec.setPhotoThumbnail(file.getName());
                     }
                     if (params.containsKey("title"))
                     {
