@@ -7,6 +7,13 @@
             WebPage webpage = (WebPage) request.getAttribute("webpage");
             WebPage clasificados = webpage.getWebSite().getWebPage("Clasificados");
             GenericIterator<Clasified> itClass = new GenericIterator(webpage.getWebSite().getSemanticObject().getModel().listInstancesOfClass(Clasified.sclass, true));
+            if(!itClass.hasNext())
+                {
+                %>
+                <li>&nbsp;</li>
+                <%
+                }
+            itClass = new GenericIterator(webpage.getWebSite().getSemanticObject().getModel().listInstancesOfClass(Clasified.sclass, true));
             Iterator objects = SWBComparator.sortByCreated(itClass, false);
             int count = 0;
             while (objects.hasNext())
