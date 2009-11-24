@@ -5,10 +5,8 @@
 <script type="text/javascript">
     function validateremove(url, title)
     {
-        if(confirm('¿Esta seguro de borrar la foto: '+title+'?'))
+        if(confirm('¿Esta seguro de borrar el documento: '+title+'?'))
         {
-            //var url=url+'&uri='+escape(uri);
-            //alert(url);
             window.location.href=url;
         }
     }
