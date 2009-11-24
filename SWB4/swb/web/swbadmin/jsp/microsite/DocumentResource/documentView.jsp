@@ -5,7 +5,7 @@
 <script type="text/javascript">
     function validateremove(url, title)
     {
-        if(confirm('¿Esta seguro de borrar el documento: '+title+'?'))
+        if(confirm('¿Está seguro de borrar el documento: '+title+'?'))
         {
             window.location.href=url;
         }
