@@ -34,6 +34,7 @@ package org.semanticwb.portal.resources;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
+import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
@@ -74,6 +75,7 @@ public class Banner extends GenericAdmResource
                 if (!img.equals("")) {
                     String wburl = paramRequest.getActionUrl().toString();
                     String url = base.getAttribute("url", "").trim();
+                    url=replaceTags(url, request, paramRequest);
                     String width = base.getAttribute("width", "").trim();
                     String height = base.getAttribute("height", "").trim();
                     String styleClass = base.getAttribute("styleClass", "").trim();
@@ -168,6 +170,53 @@ public class Banner extends GenericAdmResource
         out.print(ret.toString());        
     }
 
+    public String replaceTags(String str, HttpServletRequest request, SWBParamRequest paramRequest)
+    {
+        if(str==null || str.trim().length()==0)
+            return "";
+
+        str=str.trim();
+        //TODO: codificar cualquier atributo o texto
+
+        Iterator it=SWBUtils.TEXT.findInterStr(str, "{request.getParameter(\"", "\")}");
+        while(it.hasNext())
+        {
+            String s=(String)it.next();
+            str=SWBUtils.TEXT.replaceAll(str, "{request.getParameter(\""+s+"\")}", request.getParameter(replaceTags(s,request,paramRequest)));
+        }
+
+        it=SWBUtils.TEXT.findInterStr(str, "{session.getAttribute(\"", "\")}");
+        while(it.hasNext())
+        {
+            String s=(String)it.next();
+            str=SWBUtils.TEXT.replaceAll(str, "{session.getAttribute(\""+s+"\")}", (String)request.getSession().getAttribute(replaceTags(s,request,paramRequest)));
+        }
+
+        it=SWBUtils.TEXT.findInterStr(str, "{template.getArgument(\"", "\")}");
+        while(it.hasNext())
+        {
+            String s=(String)it.next();
+            str=SWBUtils.TEXT.replaceAll(str, "{template.getArgument(\""+s+"\")}", (String)paramRequest.getArgument(replaceTags(s,request,paramRequest)));
+        }
+
+        it=SWBUtils.TEXT.findInterStr(str, "{getEnv(\"", "\")}");
+        while(it.hasNext())
+        {
+            String s=(String)it.next();
+            str=SWBUtils.TEXT.replaceAll(str, "{getEnv(\""+s+"\")}", SWBPlatform.getEnv(replaceTags(s,request,paramRequest)));
+        }
+
+        str=SWBUtils.TEXT.replaceAll(str, "{user.login}", paramRequest.getUser().getLogin());
+        str=SWBUtils.TEXT.replaceAll(str, "{user.email}", paramRequest.getUser().getEmail());
+        str=SWBUtils.TEXT.replaceAll(str, "{user.language}", paramRequest.getUser().getLanguage());
+        str=SWBUtils.TEXT.replaceAll(str, "{webpath}", SWBPortal.getContextPath());
+        str=SWBUtils.TEXT.replaceAll(str, "{distpath}", SWBPortal.getDistributorPath());
+        str=SWBUtils.TEXT.replaceAll(str, "{webworkpath}", SWBPortal.getWebWorkPath());
+        str=SWBUtils.TEXT.replaceAll(str, "{workpath}", SWBPortal.getWorkPath());
+        str=SWBUtils.TEXT.replaceAll(str, "{websiteid}", paramRequest.getWebPage().getWebSiteId());
+        return str;
+    }
+    
     /**
      * Metodo para hacer operaciones
      */
