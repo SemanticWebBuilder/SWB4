@@ -181,29 +181,32 @@
             %><a class="adminTool" href="<%=url%>">Borrar</a><%
         }
 
-        /*if (dirObj.isClaimed()) {
-            User claimer = (User)semObject.getObjectProperty(Claimable.swbcomm_claimer).createGenericInstance();
+        User claimer = null;
+        String claimJustify = "";
+        if (dirObj.isClaimed()) {
+            claimer = (User)semObject.getObjectProperty(Claimable.swbcomm_claimer).createGenericInstance();
+            claimJustify = semObject.getProperty(Claimable.swbcomm_claimJustify);
             if (isAdmin) {
-                SWBResourceURL aUrl = paramRequest.getActionUrl().setAction("accept");
-                SWBResourceURL cUrl = paramRequest.getActionUrl().setAction("reject");                
-                %
-                <a class="adminTool" href="<%=aUrl%">Aceptar reclamo</a>
-                <a class="adminTool" href="<%=cUrl%">Rechazar reclamo</a>
+                SWBResourceURL aUrl = paramRequest.getActionUrl().setAction("accept").setParameter("uri", request.getParameter("uri"));
+                SWBResourceURL cUrl = paramRequest.getActionUrl().setAction("reject").setParameter("uri", request.getParameter("uri"));
+                %>
+                <a class="adminTool" href="<%=aUrl%>">Aceptar reclamo</a>
+                <a class="adminTool" href="<%=cUrl%>">Rechazar reclamo</a>
                 <%
             } else if (claimer.equals(user)) {
-                SWBResourceURL fUrl = paramRequest.getActionUrl().setAction("unclaim");
-                %<a class="adminTool" href="<%=fUrl%">Liberar elemento</a><%
+                SWBResourceURL fUrl = paramRequest.getActionUrl().setAction("unclaim").setParameter("uri", request.getParameter("uri"));
+                %><a class="adminTool" href="<%=fUrl%>">Liberar elemento</a><%
             }
-        } else if (dirObj.canClaim(user)) {
-            %<a class="adminTool" onclick="javascript:showClaimForm();">Reclamar elemento</a><%
+        } else if (dirObj.canClaim(user) && !isAdmin) {
+            %><a class="adminTool" onclick="javascript:showClaimForm();">Reclamar elemento</a><%
         }
 
-        SWBResourceURL aUrl = paramRequest.getActionUrl().setAction("claim");*/
+        SWBResourceURL aUrl = paramRequest.getActionUrl().setAction("claim").setParameter("uri", request.getParameter("uri"));
         %>
     </div>
     <div class="commentBox">
     <div id="addJustify" style="display:none;">
-        <form name="addJustifyForm" name="addJustifyForm" action="#">
+        <form name="addJustifyForm" name="addJustifyForm" action="<%=aUrl%>">
             <label for="justify">Justificaci&oacute;n</label>
                 <textarea style="border:1px solid #CACACA;" name="justify" id="justify" cols="45" rows="5"></textarea>
                 <input type="hidden" name="uri" value="<%=semObject.getURI()%>">
@@ -212,7 +215,7 @@
         <a class="userTool" href="javascript:hideClaimForm()">Cancelar</a>
     </div>
     </div>
-    <p class="tituloRojo"><%=title%></p>
+    <p class="tituloRojo"><%=title%> <%if (dirObj.isClaimed()) {%><i>(Reclamado por <%=claimer.getFullName()%>)</i><%}%></p>
     <div class="resumenText">
         <%if (price != null) {%><p><span class="itemTitle">Precio: </span><%=price%></p><%}%>
         <%if (creator != null) {%><p><span class="itemTitle">Creado por: </span><%=creator%></p><%}%>
@@ -250,6 +253,11 @@
         <%if (serviceHours != null) {%><p><span class="itemTitle">Horario: </span><%=serviceHours%></p><%}%>
     </div>
     <%if (description != null) {%><h2>Descripci&oacute;n</h2><p><%=description%></p><%}%>
+    <%if (dirObj.isClaimed() && isAdmin) {%>
+        <h2>Informaci&oacute;n de reclamo</h2>
+        <p><span class="itemTitle">Reclamante: </span><a href="<%=perfilPath + "?user=" + claimer.getEncodedURI()%>"><%=claimer.getFullName()%></a></p>
+        <p><span class="itemTitle">Justificaci&oacute;n: </span><%=claimJustify%></p>
+    <%}%>
     <%if (showLocation){%>
         <h2>Ubicaci&oacute;n</h2>
         <%if (streetName != null) {%><p><span class="itemTitle">Calle: </span><%=streetName%></p><%}%>
