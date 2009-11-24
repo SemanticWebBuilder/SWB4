@@ -101,7 +101,7 @@
                                 entradas++;
                             }
         %>
-        <li><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Blog").getUrl()%>"><img src="<%=cssPath%>icoBlog.png" alt="blog">Blog: <%=entradas%> entradas</a> <a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Blog").getUrl()%>" class="verMas">ver</a></li>
+        <li><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Blog").getUrl()%>"><img src="<%=cssPath%>icoBlog.png" alt="blog"><span class="elemento">Blog:</span> <%=entradas%> entradas</a> <a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Blog").getUrl()%>" class="verMas">ver</a></li>
                 <%
                         }
                     }
