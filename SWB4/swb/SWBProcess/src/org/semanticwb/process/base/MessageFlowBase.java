@@ -1,7 +1,7 @@
 package org.semanticwb.process.base;
 
 
-public class MessageFlowBase extends org.semanticwb.process.ConnectionObject 
+public abstract class MessageFlowBase extends org.semanticwb.process.ConnectionObject 
 {
        public static final org.semanticwb.platform.SemanticClass swbps_MessageFlow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#MessageFlow");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#MessageFlow");

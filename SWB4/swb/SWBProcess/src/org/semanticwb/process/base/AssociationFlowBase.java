@@ -1,7 +1,7 @@
 package org.semanticwb.process.base;
 
 
-public class AssociationFlowBase extends org.semanticwb.process.ConnectionObject 
+public abstract class AssociationFlowBase extends org.semanticwb.process.ConnectionObject 
 {
        public static final org.semanticwb.platform.SemanticClass swbps_AssociationFlow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#AssociationFlow");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#AssociationFlow");

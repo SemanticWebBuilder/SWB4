@@ -84,6 +84,7 @@ public class FlowObjectInstance extends org.semanticwb.process.base.FlowObjectIn
      */
     public void start(User user)
     {
+        //System.out.println("start:"+getId()+" "+getFlowObjectType().getClass().getName()+" "+getFlowObjectType().getTitle());
         setStatus(Activity.STATUS_PROCESSING);
         FlowObject type=getFlowObjectType();
         if(type instanceof Process)
@@ -113,6 +114,7 @@ public class FlowObjectInstance extends org.semanticwb.process.base.FlowObjectIn
      */
     public void execute(User user)
     {
+        //System.out.println("execute:"+getId()+" "+getFlowObjectType().getClass().getName()+" "+getFlowObjectType().getTitle());
         FlowObject type=getFlowObjectType();
         if(type instanceof InitEvent)
         {
@@ -175,7 +177,16 @@ public class FlowObjectInstance extends org.semanticwb.process.base.FlowObjectIn
      */
     public void close(User user)
     {
-        close(user, Process.STATUS_CLOSED);
+        close(user, Process.STATUS_CLOSED, Process.ACTION_ACCEPT);
+    }
+
+    /**
+     * Cierra la instancia de objeto y continua el flujo al siguiente objeto
+     * @param user
+     */
+    public void close(User user, String action)
+    {
+        close(user, Process.STATUS_CLOSED, action);
     }
 
     /**
@@ -184,16 +195,19 @@ public class FlowObjectInstance extends org.semanticwb.process.base.FlowObjectIn
      */
     public void abort(User user)
     {
-        close(user, Process.STATUS_ABORTED);
+        close(user, Process.STATUS_ABORTED, Process.ACTION_CANCEL);
     }
 
     /**
      * Cierra la instancia de objeto y continua el flujo al siguiente objeto
      * @param user
      */
-    public void close(User user, int status)
+    public void close(User user, int status, String action)
     {
+        //System.out.println("close:"+getId()+" "+getFlowObjectType().getClass().getName()+" "+getFlowObjectType().getTitle()+" "+status+" "+action);
+        //Thread.dumpStack();
         FlowObject type=getFlowObjectType();
+
         if(type instanceof Task && ((Task)type).isKeepOpen())
         {
             setStatus(Activity.STATUS_OPEN);
@@ -201,26 +215,11 @@ public class FlowObjectInstance extends org.semanticwb.process.base.FlowObjectIn
         {
             setStatus(status);
         }
+        setAction(action);
         setEnded(new Date());
         setEndedby(user);
+        abortDependencies(user);
         nextObject(user);
-
-        //Cerrar dependencias
-        Iterator<ConnectionObject> it=type.listFromConnectionObjects();
-        while (it.hasNext())
-        {
-            ConnectionObject connectionObject = it.next();
-            FlowObject obj=connectionObject.getFromFlowObject();
-            FlowObjectInstance inst=getFlowObjectInstance(obj, getParentProcessInstance());
-            if(inst==null)
-            {
-                inst=createFlowObjectInstance(obj, getParentProcessInstance());
-            }
-            if(inst.getStatus()<Process.STATUS_ABORTED)
-            {
-                inst.abort(user);
-            }
-        }
     }
 
 
@@ -230,6 +229,7 @@ public class FlowObjectInstance extends org.semanticwb.process.base.FlowObjectIn
      */
     private void nextObject(User user)
     {
+        //System.out.println("nextObject:"+getId()+" "+getFlowObjectType().getClass().getName()+" "+getFlowObjectType().getTitle());
         FlowObject type=getFlowObjectType();
         Iterator<ConnectionObject> it=type.listToConnectionObjects();
         while (it.hasNext())
@@ -237,15 +237,32 @@ public class FlowObjectInstance extends org.semanticwb.process.base.FlowObjectIn
             ConnectionObject connectionObject = it.next();
             if(connectionObject instanceof SequenceFlow)
             {
-                //TODO: Validar condicion
-                FlowObject toobj=connectionObject.getToFlowObject();
-                FlowObjectInstance inst=getFlowObjectInstance(toobj, getParentProcessInstance());
-                if(inst==null)
+                boolean cond=true;
+                if(connectionObject instanceof ConditionalFlow)
                 {
-                    inst=createFlowObjectInstance(toobj, getParentProcessInstance());
-                    inst.start(user);
+                    ConditionalFlow condFlow=(ConditionalFlow)connectionObject;
+                    cond=condFlow.evaluate(this);
                 }
-                inst.execute(user);
+                if(cond)
+                {
+                    FlowObject toobj=connectionObject.getToFlowObject();
+                    FlowObjectInstance inst=getFlowObjectInstance(toobj, getParentProcessInstance());
+                    if(inst==null)
+                    {
+                        inst=createFlowObjectInstance(toobj, getParentProcessInstance());
+                    }else
+                    {
+                        //recrear instancia en ciclos
+                        int status=inst.getStatus();
+                        if(status==Process.STATUS_ABORTED || status==Process.STATUS_CLOSED)
+                        {
+//                            inst=createFlowObjectInstance(toobj, getParentProcessInstance());
+                            inst.reset();
+                        }
+                    }
+                    if(inst.getStatus()==Activity.STATUS_INIT)inst.start(user);
+                    inst.execute(user);
+                }
             }
         }
     }
@@ -273,5 +290,78 @@ public class FlowObjectInstance extends org.semanticwb.process.base.FlowObjectIn
             ret.addAll(p);
         }
         return ret;
+    }
+
+
+    /**
+     * Cierra la instancia de objeto y continua el flujo al siguiente objeto
+     * @param user
+     */
+    private void abortDependencies(User user)
+    {
+        //System.out.println("abortDependencies:"+getId()+" "+getFlowObjectType().getClass().getName()+" "+getFlowObjectType().getTitle());
+        FlowObject type=getFlowObjectType();
+
+        //Cerrar dependencias
+        Iterator<ConnectionObject> it=type.listFromConnectionObjects();
+        while (it.hasNext())
+        {
+            ConnectionObject connectionObject = it.next();
+            if(connectionObject instanceof SequenceFlow)
+            {
+                if(connectionObject.getClass().equals(SequenceFlow.class))
+                {
+                    //System.out.println(connectionObject);
+                    FlowObject obj=connectionObject.getFromFlowObject();
+                    FlowObjectInstance inst=getFlowObjectInstance(obj, getParentProcessInstance());
+                    if(inst==null)
+                    {
+                        inst=createFlowObjectInstance(obj, getParentProcessInstance());
+                    }
+                    if(inst.getStatus()<Process.STATUS_ABORTED)
+                    {
+                        inst.setStatus(Activity.STATUS_ABORTED);
+                        inst.setAction(Activity.ACTION_CANCEL);
+                        inst.setEnded(new Date());
+                        inst.setEndedby(user);
+                        inst.abortDependencies(user);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Reinicia la instancia del objeto de flujo y sus sucesores
+     */
+    private void reset()
+    {
+        //System.out.println("reset:"+getId()+" "+getFlowObjectType().getClass().getName()+" "+getFlowObjectType().getTitle());
+        //Thread.dumpStack();
+        setStatus(Process.STATUS_INIT);
+        setAction(null);
+        setEnded(null);
+        removeEndedby();
+
+        FlowObject type=getFlowObjectType();
+        //resetear subsecuentes
+        Iterator<ConnectionObject> it=type.listToConnectionObjects();
+        while (it.hasNext())
+        {
+            ConnectionObject connectionObject = it.next();
+            if(connectionObject instanceof SequenceFlow)
+            {
+                if(connectionObject.getClass().equals(SequenceFlow.class))
+                {
+                    FlowObject obj=connectionObject.getToFlowObject();
+                    FlowObjectInstance inst=getFlowObjectInstance(obj, getParentProcessInstance());
+                    if(inst!=null && inst.getStatus()>Process.STATUS_PROCESSING)
+                    {
+                        inst.reset();
+                    }
+                }
+            }
+        }
+
     }
 }
