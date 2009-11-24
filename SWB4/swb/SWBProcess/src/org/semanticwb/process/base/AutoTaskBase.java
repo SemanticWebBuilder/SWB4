@@ -1,7 +1,7 @@
 package org.semanticwb.process.base;
 
 
-public class AutoTaskBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.process.FlowObject,org.semanticwb.process.Activity,org.semanticwb.model.Traceable,org.semanticwb.process.Task,org.semanticwb.model.Descriptiveable
+public abstract class AutoTaskBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.process.Activity,org.semanticwb.model.Traceable,org.semanticwb.process.FlowObject,org.semanticwb.process.Task,org.semanticwb.model.Descriptiveable
 {
        public static final org.semanticwb.platform.SemanticClass swbps_AutoTask=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#AutoTask");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#AutoTask");

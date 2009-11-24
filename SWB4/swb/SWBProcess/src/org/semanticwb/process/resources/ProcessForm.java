@@ -21,6 +21,7 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBParameters;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.process.Activity;
 import org.semanticwb.process.FlowObjectInstance;
 import org.semanticwb.process.ProcessObject;
 import org.semanticwb.process.SWBProcessFormMgr;
@@ -72,9 +73,14 @@ public class ProcessForm extends GenericResource
         }
         mgr.addButton(SWBFormButton.newSaveButton());
         SWBFormButton bt=new SWBFormButton().setTitle("Concluir Tarea","es").setAttribute("type", "submit").setBusyButton(true);
-        bt.setAttribute("name", "close");
+        bt.setAttribute("name", "accept");
         mgr.addButton(bt);
-        mgr.addButton(SWBFormButton.newCancelButton().setAttribute("onclick", "window.location='"+foi.getProcessWebPage().getUrl()+"'"));
+        SWBFormButton rej=new SWBFormButton().setTitle("Rechazar Tarea","es").setAttribute("type", "submit").setBusyButton(true);
+        rej.setAttribute("name", "reject");
+        mgr.addButton(rej);
+        SWBFormButton ret=new SWBFormButton().setTitle("Regersar","es");
+        ret.setAttribute("onclick", "window.location='"+foi.getProcessWebPage().getUrl()+"'");
+        mgr.addButton(ret);
 
         out.println(mgr.renderForm(request));
     }
@@ -139,11 +145,16 @@ public class ProcessForm extends GenericResource
             try
             {
                 mgr.processForm(request);
-                if(request.getParameter("close")!=null)
+                if(request.getParameter("accept")!=null)
                 {
-                    foi.close(response.getUser());
+                    foi.close(response.getUser(),Activity.ACTION_ACCEPT);
+                    response.sendRedirect(foi.getProcessWebPage().getUrl());
+                }else if(request.getParameter("reject")!=null)
+                {
+                    foi.close(response.getUser(),Activity.ACTION_REJECT);
                     response.sendRedirect(foi.getProcessWebPage().getUrl());
                 }
+
             }catch(Exception e)
             {
                 response.setRenderParameter("err", "invalidForm");

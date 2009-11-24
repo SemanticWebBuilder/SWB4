@@ -1,13 +1,16 @@
 package org.semanticwb.process.base;
 
 
-public class FlowObjectInstanceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.process.ProcessTraceable,org.semanticwb.model.Traceable
+public abstract class FlowObjectInstanceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.process.ProcessTraceable,org.semanticwb.model.Traceable
 {
        public static final org.semanticwb.platform.SemanticClass swbps_FlowObject=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#FlowObject");
        public static final org.semanticwb.platform.SemanticProperty swbps_flowObjectType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#flowObjectType");
+       public static final org.semanticwb.platform.SemanticProperty swbps_action=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#action");
        public static final org.semanticwb.platform.SemanticProperty swbps_status=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#status");
+       public static final org.semanticwb.platform.SemanticProperty swbps_iteration=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#iteration");
        public static final org.semanticwb.platform.SemanticClass swbps_ProcessInstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessInstance");
        public static final org.semanticwb.platform.SemanticProperty swbps_parentProcessInstanceInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#parentProcessInstanceInv");
+       public static final org.semanticwb.platform.SemanticProperty swbps_execution=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#execution");
        public static final org.semanticwb.platform.SemanticClass swbps_FlowObjectInstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#FlowObjectInstance");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#FlowObjectInstance");
     public static class ClassMgr
@@ -186,6 +189,16 @@ public class FlowObjectInstanceBase extends org.semanticwb.model.SWBClass implem
         getSemanticObject().setDateProperty(swbps_ended, value);
     }
 
+    public String getAction()
+    {
+        return getSemanticObject().getProperty(swbps_action);
+    }
+
+    public void setAction(String value)
+    {
+        getSemanticObject().setProperty(swbps_action, value);
+    }
+
     public int getStatus()
     {
         return getSemanticObject().getIntProperty(swbps_status);
@@ -194,6 +207,16 @@ public class FlowObjectInstanceBase extends org.semanticwb.model.SWBClass implem
     public void setStatus(int value)
     {
         getSemanticObject().setIntProperty(swbps_status, value);
+    }
+
+    public int getIteration()
+    {
+        return getSemanticObject().getIntProperty(swbps_iteration);
+    }
+
+    public void setIteration(int value)
+    {
+        getSemanticObject().setIntProperty(swbps_iteration, value);
     }
 
     public void setCreator(org.semanticwb.model.User value)
@@ -260,6 +283,16 @@ public class FlowObjectInstanceBase extends org.semanticwb.model.SWBClass implem
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
+    }
+
+    public int getExecution()
+    {
+        return getSemanticObject().getIntProperty(swbps_execution);
+    }
+
+    public void setExecution(int value)
+    {
+        getSemanticObject().setIntProperty(swbps_execution, value);
     }
 
     public org.semanticwb.process.ProcessSite getProcessSite()
