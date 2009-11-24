@@ -42,6 +42,8 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.User;
+import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBActionResponse;
@@ -74,12 +76,10 @@ public class Banner extends GenericAdmResource
                 String img = base.getAttribute("img", "").trim();
                 if (!img.equals("")) {
                     String wburl = paramRequest.getActionUrl().toString();
-                    String url = base.getAttribute("url", "").trim();
-                    //url=replaceTags(url, request, paramRequest);
+                    String url = base.getAttribute("url", "").trim();                                        
                     String width = base.getAttribute("width", "").trim();
                     String height = base.getAttribute("height", "").trim();
                     String styleClass = base.getAttribute("styleClass", "").trim();
-
                     width=paramRequest.getArgument("width", width);
                     height=paramRequest.getArgument("height", height);
 
@@ -170,7 +170,7 @@ public class Banner extends GenericAdmResource
         out.print(ret.toString());        
     }
 
-    public String replaceTags(String str, HttpServletRequest request, SWBParamRequest paramRequest)
+    public String replaceTags(String str, HttpServletRequest request, User user,WebPage webpage)
     {
         if(str==null || str.trim().length()==0)
             return "";
@@ -182,38 +182,38 @@ public class Banner extends GenericAdmResource
         while(it.hasNext())
         {
             String s=(String)it.next();
-            str=SWBUtils.TEXT.replaceAll(str, "{request.getParameter(\""+s+"\")}", request.getParameter(replaceTags(s,request,paramRequest)));
+            str=SWBUtils.TEXT.replaceAll(str, "{request.getParameter(\""+s+"\")}", request.getParameter(replaceTags(s,request,user,webpage)));
         }
 
         it=SWBUtils.TEXT.findInterStr(str, "{session.getAttribute(\"", "\")}");
         while(it.hasNext())
         {
             String s=(String)it.next();
-            str=SWBUtils.TEXT.replaceAll(str, "{session.getAttribute(\""+s+"\")}", (String)request.getSession().getAttribute(replaceTags(s,request,paramRequest)));
+            str=SWBUtils.TEXT.replaceAll(str, "{session.getAttribute(\""+s+"\")}", (String)request.getSession().getAttribute(replaceTags(s,request,user,webpage)));
         }
 
-        it=SWBUtils.TEXT.findInterStr(str, "{template.getArgument(\"", "\")}");
+        /*it=SWBUtils.TEXT.findInterStr(str, "{template.getArgument(\"", "\")}");
         while(it.hasNext())
         {
             String s=(String)it.next();
-            str=SWBUtils.TEXT.replaceAll(str, "{template.getArgument(\""+s+"\")}", (String)paramRequest.getArgument(replaceTags(s,request,paramRequest)));
-        }
+            str=SWBUtils.TEXT.replaceAll(str, "{template.getArgument(\""+s+"\")}", (String)response.getArgument(replaceTags(s,request,user,webpage)));
+        }*/
 
         it=SWBUtils.TEXT.findInterStr(str, "{getEnv(\"", "\")}");
         while(it.hasNext())
         {
             String s=(String)it.next();
-            str=SWBUtils.TEXT.replaceAll(str, "{getEnv(\""+s+"\")}", SWBPlatform.getEnv(replaceTags(s,request,paramRequest)));
+            str=SWBUtils.TEXT.replaceAll(str, "{getEnv(\""+s+"\")}", SWBPlatform.getEnv(replaceTags(s,request,user,webpage)));
         }
 
-        str=SWBUtils.TEXT.replaceAll(str, "{user.login}", paramRequest.getUser().getLogin());
-        str=SWBUtils.TEXT.replaceAll(str, "{user.email}", paramRequest.getUser().getEmail());
-        str=SWBUtils.TEXT.replaceAll(str, "{user.language}", paramRequest.getUser().getLanguage());
+        str=SWBUtils.TEXT.replaceAll(str, "{user.login}", user.getLogin());
+        str=SWBUtils.TEXT.replaceAll(str, "{user.email}", user.getEmail());
+        str=SWBUtils.TEXT.replaceAll(str, "{user.language}", user.getLanguage());
         str=SWBUtils.TEXT.replaceAll(str, "{webpath}", SWBPortal.getContextPath());
         str=SWBUtils.TEXT.replaceAll(str, "{distpath}", SWBPortal.getDistributorPath());
         str=SWBUtils.TEXT.replaceAll(str, "{webworkpath}", SWBPortal.getWebWorkPath());
         str=SWBUtils.TEXT.replaceAll(str, "{workpath}", SWBPortal.getWorkPath());
-        str=SWBUtils.TEXT.replaceAll(str, "{websiteid}", paramRequest.getWebPage().getWebSiteId());
+        str=SWBUtils.TEXT.replaceAll(str, "{websiteid}", webpage.getWebSiteId());
         return str;
     }
     
@@ -225,7 +225,9 @@ public class Banner extends GenericAdmResource
     {
         Resource base=getResourceBase();
         base.addHit(request, response.getUser(), response.getWebPage());
-        String url = base.getAttribute("url", "").trim();        
+        String url = base.getAttribute("url", "").trim();
+        url=replaceTags(url, request, response.getUser(), response.getWebPage());
+
         if (!url.equals("")) response.sendRedirect(url);
     }
 
