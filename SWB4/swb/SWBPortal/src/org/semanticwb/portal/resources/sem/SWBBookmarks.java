@@ -1071,7 +1071,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
             Iterator<BookmarkGroup> git = listGroups();
             while (git.hasNext()) {
                 BookmarkGroup gp = git.next();
-                if (gp.getCreator().equals(user)) {
+                if (gp.getCreator()!=null && user!=null && gp.getCreator().equals(user)) {
                     groups.add(gp);
                 }
             }
