@@ -25,7 +25,7 @@ public class StylerDomParser {
     private Resource client;
 
     StringBuilder script;
-    
+
     public StylerDomParser(String xml, Resource client) throws NullPointerException {
         parseXml(xml);
         this.client = client;
@@ -72,11 +72,11 @@ public class StylerDomParser {
         System.out.println("inicia processSelector...");
         String name = sel.getAttribute("name");
         HashMap props = processProperties(sel);
-        
+
         if(name != null) {
-            script.append("<div dojoType=\"dijit.layout.ContentPane\" title=\""+name+"\" id=\""+name+"\" >");
-            script.append("<table border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"3\" width=\"100%\" bgcolor=\"#E8E8BB\" >");
-            //script.append("<tr><td width=\"12%\"></td><td width=\"18%\"></td><td width=\"12%\"></td><td width=\"18%\"></td><td width=\"12%\"></td><td width=\"18%\"></td></tr>");
+            script.append("<div dojoType=\"dijit.layout.ContentPane\" title=\""+name+"\" id=\""+name+"\">");
+            //script.append("<table border=\"0\" width=\"100%\" bgcolor=\"#E8E8BB\" >");
+            script.append("<table border=\"0\" width=\"100%\" bgcolor=\"#F4F4DD\" >");
 
             script.append("<tr>");
             script.append("<td class=\"label\">border-style :");
@@ -95,16 +95,36 @@ public class StylerDomParser {
             script.append("<option value=\"dotted\">dotted</option>");
             script.append("</select>");
             script.append("</td>");
-            script.append("<td class=\"label\">bg-color :</td>");
+            script.append("</tr>");
+            script.append("<tr>");
+            script.append("<td class=\"label\">border-width :</td>");
             script.append("<td>");
-            script.append("<input type=\"text\" style=\"width:100px;\" dojoType=\"dijit.form.TextBox\" id=\"stl_"+cp+"\" name=\"background-color\" value=\"transparent\"  onchange=\"sendData(dojo.byId('stel').value, this.name, this.value);\" />");
+            script.append("<input dojoType=\"dijit.form.NumberSpinner\" smallDelta=\"1\" constraints=\"{min:1,max:250,places:0}\" id=\"is_"+(++serial)+"\" name=\"border-width\" style=\"width:60px\" onchange=\"sendData(dojo.byId('stel').value, this.name, this.value+dojo.byId('cb_"+serial+"').value);\" />");
+            script.append("<select dojoType=\"dijit.form.ComboBox\" id=\"cb_"+serial+"\" name=\"border-width\" style=\"width:70px\" style=\"width:100px\" onchange=\"sendData(dojo.byId('stel').value, this.name, dojo.byId('is_"+serial+"').value+this.value);\">");
+            script.append("<option value=\"px\">px</option><option value=\"pt\">pt</option><option value=\"em\">em</option><option value=\"pc\">pc</option><option value=\"p100\">&permil;</option>");
+            script.append("</select>");
+            script.append("</td>");
+            script.append("</tr>");
+            script.append("<tr>");
+            script.append("<td class=\"label\">border-color :</td>");
+            script.append("<td>");
+            script.append("<input type=\"text\" style=\"width:100px;\" dojoType=\"dijit.form.TextBox\" id=\"stl_"+cp+"\" name=\"border-color\" value=\"transparent\" />");
             script.append("<img src=\"/swbadmin/images/color_palette.png\" onclick=\"toggle('cp_"+cp+"')\" style=\"cursor:pointer;\" />");
             script.append("<div id=\"cp_"+(cp)+"\"></div>");
             cp++;
             script.append("</td>");
+            script.append("</tr>");
+
+            script.append("<tr>");
+            script.append("<td colspan=\"2\">");
+            script.append("<hr noshade=\"noshade\" size=\"1\" width=\"90%\" />");
+            script.append("</td>");
+            script.append("</tr>");
+
+            script.append("<tr>");
             script.append("<td class=\"label\">font-family :</td>");
             script.append("<td>");
-            script.append("<select dojoType=\"dijit.form.ComboBox\" id=\"cb_"+(serial++)+"\" name=\"font-family\" style=\"width:120px\" onchange=\"sendData(dojo.byId('stel').value, this.name, this.value);\">");
+            script.append("<select dojoType=\"dijit.form.ComboBox\" id=\"cb_"+(++serial)+"\" name=\"font-family\" style=\"width:120px\" onchange=\"sendData(dojo.byId('stel').value, this.name, this.value);\">");
             script.append("<option value=\"empty\"></option>");
             script.append("<option value=\"Arial\" style=\"font-family:Arial\">Arial</option>");
             script.append("<option value=\"Times New Roman\" style=\"font-family:Times New Roman\">Times New Roman</option>");
@@ -115,21 +135,8 @@ public class StylerDomParser {
             script.append("</select>");
             script.append("</td>");
             script.append("</tr>");
+
             script.append("<tr>");
-            script.append("<td class=\"label\">border-width :</td>");
-            script.append("<td>");
-            script.append("<input dojoType=\"dijit.form.NumberSpinner\" smallDelta=\"1\" constraints=\"{min:1,max:250,places:0}\" id=\"is_"+(serial)+"\" name=\"border-width\" style=\"width:60px\" onchange=\"sendData(dojo.byId('stel').value, this.name, this.value+dojo.byId('cb_"+serial+"').value);\" />");
-            script.append("<select dojoType=\"dijit.form.ComboBox\" id=\"cb_"+(serial)+"\" name=\"border-width\" style=\"width:70px\" style=\"width:100px\" onchange=\"sendData(dojo.byId('stel').value, this.name, dojo.byId('is_"+serial+"').value+this.value);\">");
-            script.append("<option value=\"px\">px</option><option value=\"pt\">pt</option><option value=\"em\">em</option><option value=\"pc\">pc</option><option value=\"p100\">&permil;</option>");
-            script.append("</select>");
-            script.append("</td>");
-            script.append("<td class=\"label\">width :</td>");
-            script.append("<td>");
-            script.append("<input dojoType=\"dijit.form.NumberSpinner\" smallDelta=\"1\" constraints=\"{min:0,places:0}\" id=\"is_"+(++serial)+"\" name=\"width\" style=\"width:60px\" onchange=\"sendData(dojo.byId('stel').value, this.name, this.value+dojo.byId('cb_"+serial+"').value);\" />");
-            script.append("<select dojoType=\"dijit.form.ComboBox\" id=\"cb_"+(serial)+"\" name=\"width\" style=\"width:70px\" style=\"width:100px\" onchange=\"sendData(dojo.byId('stel').value, this.name, dojo.byId('is_"+serial+"').value+this.value);\">");
-            script.append("<option value=\"px\">px</option><option value=\"pt\">pt</option><option value=\"em\">em</option><option value=\"pc\">pc</option><option value=\"p100\">&permil;</option>");
-            script.append("</select>");
-            script.append("</td>");
             script.append("<td class=\"label\">font-size :</td>");
             script.append("<td>");
             script.append("<select dojoType=\"dijit.form.ComboBox\" id=\"cb_"+(++serial)+"\" name=\"font-size\" style=\"width:100px\" onchange=\"sendData(dojo.byId('stel').value, this.name, this.value);\">");
@@ -150,20 +157,18 @@ public class StylerDomParser {
             script.append("</tr>");
 
             script.append("<tr>");
-            script.append("<td class=\"label\">border-color :</td>");
+            script.append("<td class=\"label\">font-style :</td>");
             script.append("<td>");
-            script.append("<input type=\"text\" style=\"width:100px;\" dojoType=\"dijit.form.TextBox\" id=\"stl_"+cp+"\" name=\"border-color\" value=\"transparent\" />");
-            script.append("<img src=\"/swbadmin/images/color_palette.png\" onclick=\"toggle('cp_"+cp+"')\" style=\"cursor:pointer;\" />");
-            script.append("<div id=\"cp_"+(cp)+"\"></div>");
-            cp++;
-            script.append("</td>");
-            script.append("<td class=\"label\">height :</td>");
-            script.append("<td>");
-            script.append("<input dojoType=\"dijit.form.NumberSpinner\" smallDelta=\"1\" constraints=\"{min:0,places:0}\" id=\"is_"+(++serial)+"\" name=\"height\" style=\"width:60px\" onchange=\"sendData(dojo.byId('stel').value, this.name, this.value+dojo.byId('cb_"+serial+"').value);\" />");
-            script.append("<select dojoType=\"dijit.form.ComboBox\" id=\"cb_"+(serial)+"\" name=\"height\" style=\"width:70px\" style=\"width:100px\" onchange=\"sendData(dojo.byId('stel').value, this.name, dojo.byId('is_"+serial+"').value+this.value);\">");
-            script.append("<option value=\"px\">px</option><option value=\"pt\">pt</option><option value=\"em\">em</option><option value=\"pc\">pc</option><option value=\"p100\">&permil;</option>");
+            script.append("<select dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\"¡Valor inválido!\" id=\"fs_"+(++serial)+"\" name=\"font-style\" style=\"width:100px\" onchange=\"sendData(dojo.byId('stel').value, this.name, this.value);\">");
+            script.append("<option value=\"empty\"></option>");
+            script.append("<option value=\"normal\">normal</option>");
+            script.append("<option value=\"italic\">italic</option>");
+            script.append("<option value=\"oblique\">oblique</option>");
             script.append("</select>");
             script.append("</td>");
+            script.append("</tr>");
+
+            script.append("<tr>");
             script.append("<td class=\"label\">font-weight :</td>");
             script.append("<td>");
             script.append("<select dojoType=\"dijit.form.ComboBox\" id=\"cb_"+(++serial)+"\" name=\"font-weight\" style=\"width:100px\" onchange=\"sendData(dojo.byId('stel').value, this.name, this.value);\">");
@@ -177,37 +182,6 @@ public class StylerDomParser {
             script.append("</tr>");
 
             script.append("<tr>");
-            script.append("<td></td>");
-            script.append("<td>");
-            script.append("</td>");
-            script.append("<td></td>");
-            script.append("<td>");
-            script.append("</td>");
-            script.append("<td class=\"label\">font-style :</td>");
-            script.append("<td>");
-            script.append("<select dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\"¡Valor inválido!\" id=\"fs_"+(++serial)+"\" name=\"font-style\" style=\"width:100px\" onchange=\"sendData(dojo.byId('stel').value, this.name, this.value);\">");
-            script.append("<option value=\"empty\"></option>");
-            script.append("<option value=\"normal\">normal</option>");
-            script.append("<option value=\"italic\">italic</option>");
-            script.append("<option value=\"oblique\">oblique</option>");
-            script.append("</select>");
-            script.append("</td>");
-            script.append("</tr>");
-
-            script.append("<tr>");
-            script.append("<td class=\"label\">padding :</td>");
-            script.append("<td>");
-            script.append("<input dojoType=\"dijit.form.NumberSpinner\" smallDelta=\"1\" constraints=\"{min:-250,max:250,places:0}\" id=\"is_"+(++serial)+"\" name=\"padding\" style=\"width:60px\" onchange=\"sendData(dojo.byId('stel').value, this.name, this.value+dojo.byId('cb_"+serial+"').value);\" />");
-            script.append("<select dojoType=\"dijit.form.ComboBox\" id=\"cb_"+(serial)+"\" name=\"padding\" style=\"width:70px\" onchange=\"sendData(dojo.byId('stel').value, this.name, dojo.byId('is_"+serial+"').value+this.value);\">");
-            script.append("<option value=\"px\">px</option><option value=\"pt\">pt</option><option value=\"em\">em</option><option value=\"pc\">pc</option><option value=\"p100\">&permil;</option>");
-            script.append("</select>");
-            script.append("</td>");
-            script.append("<td class=\"label\">overflow :</td>");
-            script.append("<td>");
-            script.append("<select dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\"¡Valor inválido!\" id=\"fs_"+(++serial)+"\" name=\"overflow\" style=\"width:100px\" onchange=\"sendData(dojo.byId('stel').value, this.name, this.value);\">");
-            script.append("<option value=\"empty\"></option><option value=\"visible\">visible</option><option value=\"hidden\">hidden</option><option value=\"scroll\">scroll</option><option value=\"auto\">auto</option>");
-            script.append("</select>");
-            script.append("</td>");
             script.append("<td class=\"label\">font-variant :</td>");
             script.append("<td>");
             script.append("<select dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\"¡Valor inválido!\" id=\"fs_"+(++serial)+"\" name=\"font-variant\" style=\"width:100px\" onchange=\"sendData(dojo.byId('stel').value, this.name, this.value);\">");
@@ -220,29 +194,6 @@ public class StylerDomParser {
             script.append("</tr>");
 
             script.append("<tr>");
-            script.append("<td class=\"label\">margin :</td>");
-            script.append("<td>");
-            script.append("<input dojoType=\"dijit.form.NumberSpinner\" smallDelta=\"1\" constraints=\"{min:-250,max:250,places:0}\" id=\"is_"+(++serial)+"\" name=\"margin\" style=\"width:60px\" onchange=\"sendData(dojo.byId('stel').value, this.name, this.value+dojo.byId('cb_"+serial+"').value);\" />");
-            script.append("<select dojoType=\"dijit.form.ComboBox\" id=\"cb_"+(serial)+"\" name=\"margin\" style=\"width:70px\" onchange=\"sendData(dojo.byId('stel').value, this.name, dojo.byId('is_"+serial+"').value+this.value);\">");
-            script.append("<option value=\"px\">px</option><option value=\"pt\">pt</option><option value=\"em\">em</option><option value=\"pc\">pc</option><option value=\"p100\">&permil;</option>");
-            script.append("</select>");
-            script.append("</td>");
-            script.append("<td></td>");
-            script.append("<td>");
-            script.append("</td>");
-            script.append("<td class=\"label\">color :</td>");
-            script.append("<td>");
-            script.append("<input type=\"text\" style=\"width:100px;\" dojoType=\"dijit.form.TextBox\" id=\"stl_"+cp+"\" name=\"color\" />");
-            script.append("<img src=\"/swbadmin/images/color_palette.png\" onclick=\"toggle('cp_"+cp+"')\" style=\"cursor:pointer;\" />");
-            script.append("<div id=\"cp_"+(cp)+"\"></div>");
-            cp++;
-            script.append("</td>");
-            script.append("</tr>");
-
-            script.append("<tr>");
-            script.append("<td></td>");
-            script.append("<td>");
-            script.append("</td>");
             script.append("<td class=\"label\">text-align :</td>");
             script.append("<td>");
             script.append("<select dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\"Valor inválido\" id=\"fs_"+(++serial)+"\" name=\"text-align\" style=\"width:100px\" onchange=\"sendData(dojo.byId('stel').value, this.name, this.value);\">");
@@ -253,10 +204,127 @@ public class StylerDomParser {
             script.append("<option value=\"justify\">justify</option>");
             script.append("</select>");
             script.append("</td>");
+            script.append("</tr>");
+
+            script.append("<tr>");
+            script.append("<td class=\"label\">text-decoration :</td>");
+            script.append("<td>");
+            script.append("<select dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\"Valor inválido\" id=\"fs_"+(++serial)+"\" name=\"text-decoration\" style=\"width:100px\" onchange=\"sendData(dojo.byId('stel').value, this.name, this.value);\">");
+            script.append("<option value=\"empty\"></option>");
+            script.append("<option value=\"underline\">underline</option>");
+            script.append("<option value=\"overline\">overline</option>");
+            script.append("<option value=\"line-through\">line-through</option>");
+            script.append("<option value=\"blink\">blink</option>");
+            script.append("<option value=\"none\">none</option>");
+            script.append("</select>");
+            script.append("</td>");
+            script.append("</tr>");
+
+            script.append("<tr>");
+            script.append("<td class=\"label\">case :</td>");
+            script.append("<td>");
+            script.append("<select dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\"Valor inválido\" id=\"fs_"+(++serial)+"\" name=\"case\" style=\"width:100px\" onchange=\"sendData(dojo.byId('stel').value, this.name, this.value);\">");
+            script.append("<option value=\"empty\"></option>");
+            script.append("<option value=\"capitalize\">capitalize</option>");
+            script.append("<option value=\"uppercase\">uppercase</option>");
+            script.append("<option value=\"lowercase\">lowercase</option>");
+            script.append("<option value=\"none\">none</option>");
+            script.append("</select>");
+            script.append("</td>");
+            script.append("</tr>");
+
+            script.append("<tr>");
             script.append("<td class=\"label\">line-height :</td>");
             script.append("<td><input dojoType=\"dijit.form.NumberSpinner\" smallDelta=\"1\" constraints=\"{min:0,max:250,places:0}\" id=\"is_"+(++serial)+"\" name=\"line-height\" style=\"width:60px\" onchange=\"sendData(dojo.byId('stel').value, this.name, this.value+dojo.byId('cb_"+serial+"').value);\" />");
-            script.append("<select dojoType=\"dijit.form.ComboBox\" id=\"cb_"+(serial)+"\" name=\"line-height\" style=\"width:70px\" onchange=\"sendData(dojo.byId('stel').value, this.name, dojo.byId('is_"+serial+"').value+this.value);\">");
+            script.append("<select dojoType=\"dijit.form.ComboBox\" id=\"cb_"+serial+"\" name=\"line-height\" style=\"width:70px\" onchange=\"sendData(dojo.byId('stel').value, this.name, dojo.byId('is_"+serial+"').value+this.value);\">");
             script.append("<option value=\"px\">px</option><option value=\"pt\">pt</option><option value=\"em\">em</option><option value=\"pc\">pc</option><option value=\"p100\">&permil;</option>");
+            script.append("</select>");
+            script.append("</td>");
+            script.append("</tr>");
+
+            script.append("<tr>");
+            script.append("<td class=\"label\">color :</td>");
+            script.append("<td>");
+            script.append("<input type=\"text\" style=\"width:100px;\" dojoType=\"dijit.form.TextBox\" id=\"stl_"+cp+"\" name=\"color\" />");
+            script.append("<img src=\"/swbadmin/images/color_palette.png\" onclick=\"toggle('cp_"+cp+"')\" style=\"cursor:pointer;\" />");
+            script.append("<div id=\"cp_"+(cp)+"\"></div>");
+            cp++;
+            script.append("</td>");
+            script.append("</tr>");
+
+            script.append("<tr>");
+            script.append("<td colspan=\"2\">");
+            script.append("<hr noshade=\"noshade\" size=\"1\" width=\"90%\" />");
+            script.append("</td>");
+            script.append("</tr>");
+
+            script.append("<tr>");
+            script.append("<td class=\"label\">width :</td>");
+            script.append("<td>");
+            script.append("<input dojoType=\"dijit.form.NumberSpinner\" smallDelta=\"1\" constraints=\"{min:0,places:0}\" id=\"is_"+(++serial)+"\" name=\"width\" style=\"width:60px\" onchange=\"sendData(dojo.byId('stel').value, this.name, this.value+dojo.byId('cb_"+serial+"').value);\" />");
+            script.append("<select dojoType=\"dijit.form.ComboBox\" id=\"cb_"+serial+"\" name=\"width\" style=\"width:70px\" style=\"width:100px\" onchange=\"sendData(dojo.byId('stel').value, this.name, dojo.byId('is_"+serial+"').value+this.value);\">");
+            script.append("<option value=\"px\">px</option><option value=\"pt\">pt</option><option value=\"em\">em</option><option value=\"pc\">pc</option><option value=\"p100\">&permil;</option>");
+            script.append("</select>");
+            script.append("</td>");
+            script.append("</tr>");
+
+            script.append("<tr>");
+            script.append("<td class=\"label\">height :</td>");
+            script.append("<td>");
+            script.append("<input dojoType=\"dijit.form.NumberSpinner\" smallDelta=\"1\" constraints=\"{min:0,places:0}\" id=\"is_"+(++serial)+"\" name=\"height\" style=\"width:60px\" onchange=\"sendData(dojo.byId('stel').value, this.name, this.value+dojo.byId('cb_"+serial+"').value);\" />");
+            script.append("<select dojoType=\"dijit.form.ComboBox\" id=\"cb_"+serial+"\" name=\"height\" style=\"width:70px\" style=\"width:100px\" onchange=\"sendData(dojo.byId('stel').value, this.name, dojo.byId('is_"+serial+"').value+this.value);\">");
+            script.append("<option value=\"px\">px</option><option value=\"pt\">pt</option><option value=\"em\">em</option><option value=\"pc\">pc</option><option value=\"p100\">&permil;</option>");
+            script.append("</select>");
+            script.append("</td>");
+            script.append("</tr>");
+
+            script.append("<tr>");
+            script.append("<td colspan=\"2\">");
+            script.append("<hr noshade=\"noshade\" size=\"1\" width=\"90%\" />");
+            script.append("</td>");
+            script.append("</tr>");
+
+            script.append("<tr>");
+            script.append("<td class=\"label\">padding :</td>");
+            script.append("<td>");
+            script.append("<input dojoType=\"dijit.form.NumberSpinner\" smallDelta=\"1\" constraints=\"{min:-250,max:250,places:0}\" id=\"is_"+(++serial)+"\" name=\"padding\" style=\"width:60px\" onchange=\"sendData(dojo.byId('stel').value, this.name, this.value+dojo.byId('cb_"+serial+"').value);\" />");
+            script.append("<select dojoType=\"dijit.form.ComboBox\" id=\"cb_"+serial+"\" name=\"padding\" style=\"width:70px\" onchange=\"sendData(dojo.byId('stel').value, this.name, dojo.byId('is_"+serial+"').value+this.value);\">");
+            script.append("<option value=\"px\">px</option><option value=\"pt\">pt</option><option value=\"em\">em</option><option value=\"pc\">pc</option><option value=\"p100\">&permil;</option>");
+            script.append("</select>");
+            script.append("</td>");
+            script.append("</tr>");
+
+            script.append("<tr>");
+            script.append("<td class=\"label\">margin :</td>");
+            script.append("<td>");
+            script.append("<input dojoType=\"dijit.form.NumberSpinner\" smallDelta=\"1\" constraints=\"{min:-250,max:250,places:0}\" id=\"is_"+(++serial)+"\" name=\"margin\" style=\"width:60px\" onchange=\"sendData(dojo.byId('stel').value, this.name, this.value+dojo.byId('cb_"+serial+"').value);\" />");
+            script.append("<select dojoType=\"dijit.form.ComboBox\" id=\"cb_"+serial+"\" name=\"margin\" style=\"width:70px\" onchange=\"sendData(dojo.byId('stel').value, this.name, dojo.byId('is_"+serial+"').value+this.value);\">");
+            script.append("<option value=\"px\">px</option><option value=\"pt\">pt</option><option value=\"em\">em</option><option value=\"pc\">pc</option><option value=\"p100\">&permil;</option>");
+            script.append("</select>");
+            script.append("</td>");
+            script.append("</tr>");
+
+            script.append("<tr>");
+            script.append("<td colspan=\"2\">");
+            script.append("<hr noshade=\"noshade\" size=\"1\" width=\"90%\" />");
+            script.append("</td>");
+            script.append("</tr>");
+
+            script.append("<tr>");
+            script.append("<td class=\"label\">bg-color :</td>");
+            script.append("<td>");
+            script.append("<input type=\"text\" style=\"width:100px;\" dojoType=\"dijit.form.TextBox\" id=\"stl_"+cp+"\" name=\"background-color\" value=\"transparent\"  onchange=\"sendData(dojo.byId('stel').value, this.name, this.value);\" />");
+            script.append("<img src=\"/swbadmin/images/color_palette.png\" onclick=\"toggle('cp_"+cp+"')\" style=\"cursor:pointer;\" />");
+            script.append("<div id=\"cp_"+(cp)+"\"></div>");
+            cp++;
+            script.append("</td>");
+            script.append("</tr>");
+
+            script.append("<tr>");
+            script.append("<td class=\"label\">overflow :</td>");
+            script.append("<td>");
+            script.append("<select dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\"¡Valor inválido!\" id=\"fs_"+(++serial)+"\" name=\"overflow\" style=\"width:100px\" onchange=\"sendData(dojo.byId('stel').value, this.name, this.value);\">");
+            script.append("<option value=\"empty\"></option><option value=\"visible\">visible</option><option value=\"hidden\">hidden</option><option value=\"scroll\">scroll</option><option value=\"auto\">auto</option>");
             script.append("</select>");
             script.append("</td>");
             script.append("</tr>");
@@ -272,27 +340,6 @@ public class StylerDomParser {
             script.append("<option value=\"wait\">wait</option>");
             script.append("<option value=\"help\">help</option>");
             script.append("<option value=\"crosshair\">crosshair</option>");
-            script.append("</select>");
-            script.append("</td>");
-            script.append("<td class=\"label\">text-decoration :</td>");
-            script.append("<td>");
-            script.append("<select dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\"Valor inválido\" id=\"fs_"+(++serial)+"\" name=\"text-decoration\" style=\"width:100px\" onchange=\"sendData(dojo.byId('stel').value, this.name, this.value);\">");
-            script.append("<option value=\"empty\"></option>");
-            script.append("<option value=\"underline\">underline</option>");
-            script.append("<option value=\"overline\">overline</option>");
-            script.append("<option value=\"line-through\">line-through</option>");
-            script.append("<option value=\"blink\">blink</option>");
-            script.append("<option value=\"none\">none</option>");
-            script.append("</select>");
-            script.append("</td>");
-            script.append("<td class=\"label\">case :</td>");
-            script.append("<td>");
-            script.append("<select dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\"Valor inválido\" id=\"fs_"+(++serial)+"\" name=\"case\" style=\"width:100px\" onchange=\"sendData(dojo.byId('stel').value, this.name, this.value);\">");
-            script.append("<option value=\"empty\"></option>");
-            script.append("<option value=\"capitalize\">capitalize</option>");
-            script.append("<option value=\"uppercase\">uppercase</option>");
-            script.append("<option value=\"lowercase\">lowercase</option>");
-            script.append("<option value=\"none\">none</option>");
             script.append("</select>");
             script.append("</td>");
             script.append("</tr>");
@@ -327,7 +374,7 @@ public class StylerDomParser {
         script.append("<style type=\"text/css\">\n");
         script.append("  body, div, table, input, select { font-family:helvetica,arial,sans-serif; font-size:10pt; }\n");
         script.append("  td { vertical-align:top; }\n");
-        script.append("  .label { text-align:right; vertical-align:top; }");
+        script.append("  .label { text-align:left; vertical-align:top; width:55px;}");
         script.append("</style>\n");
 
         script.append("<script type=\"text/javascript\">\n");
@@ -372,12 +419,12 @@ public class StylerDomParser {
         script.append("</script>\n");
 
         script.append("<input id=\"stel\" type=\"hidden\" />");
-        script.append("<div dojoType=\"dijit.layout.TabContainer\" id=\"tc_"+client.getId()+"\" style=\"width: 100%;\" doLayout=\"false\">\n");
+        script.append("<div dojoType=\"dijit.layout.TabContainer\" id=\"tc_"+client.getId()+"\" style=\"width:400px;height:510px;\" tabPosition=\"left-h\" tabStrip=\"true\">\n");
 
         tabs = new HashMap();
         System.out.println("fin processStartDocument");
     }
-    
+
     private void processEndDocument() {
         System.out.println("inicia processEndDocuent...");
         script.append("</div>\n");
