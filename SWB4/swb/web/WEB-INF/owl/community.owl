@@ -843,15 +843,6 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayProperty"/>
     <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int">20</swb:index>
   </rdf:Description>
-  <rdf:Description rdf:about="#CURPModule">
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swb:autogenId>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="#Organization"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-    <rdf:type rdf:resource="#DirectoryClass"/>
-    <rdfs:label xml:lang="es">Módulo de CURP</rdfs:label>
-    <rdfs:label xml:lang="en">CURP Module</rdfs:label>
-  </rdf:Description>
   <rdf:Description rdf:about="#NewsResource">
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SemanticResource"/>
     <rdfs:subClassOf rdf:resource="#CommunityResource"/>
@@ -1233,16 +1224,16 @@
     <rdfs:label xml:lang="en">Maximum required age</rdfs:label>
     <swb:displayProperty rdf:resource="#dp_maxRequiredAge"/>
   </rdf:Description>
+  <rdf:Description rdf:about="#abused">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="#Interactiveable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </rdf:Description>
   <rdf:Description rdf:about="#moderate">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
     <rdfs:domain rdf:resource="#MicroSite"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:label>Moderado</rdfs:label>
-  </rdf:Description>
-  <rdf:Description rdf:about="#abused">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:domain rdf:resource="#Interactiveable"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
   </rdf:Description>
   <rdf:Description rdf:about="#productWebPage">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
