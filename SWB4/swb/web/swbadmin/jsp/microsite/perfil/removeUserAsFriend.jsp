@@ -6,29 +6,36 @@
 
 <%
             WebSite site = ((WebPage) request.getAttribute("webpage")).getWebSite();
-            User owner=(User) request.getAttribute("user");
-            User user=owner;
-            if(request.getParameter("user")!=null && !request.getParameter("user").equals(user.getURI()))
+            User owner = (User) request.getAttribute("user");
+            if (owner == null)
             {
-                SemanticObject semObj=SemanticObject.createSemanticObject(request.getParameter("user"));
-                user=(User)semObj.createGenericInstance();
+                return;
             }
-            boolean areFriends=false;
+            User user = owner;
+            if (request.getParameter("user") != null && !request.getParameter("user").equals(user.getURI()))
+            {
+                SemanticObject semObj = SemanticObject.createSemanticObject(request.getParameter("user"));
+                user = (User) semObj.createGenericInstance();
+            }
+            boolean areFriends = false;
 
-            if(!owner.getURI().equals(user.getURI()) && Friendship.areFriends(owner, user, site)) {
-               areFriends=true;
+            if (!owner.getURI().equals(user.getURI()) && Friendship.areFriends(owner, user, site))
+            {
+                areFriends = true;
             }
 
-            boolean friendRemoved=false;
+            boolean friendRemoved = false;
 
-            if(areFriends && request.getParameter("removeFriend")!=null && request.getParameter("removeFriend").equalsIgnoreCase("true")){
-               friendRemoved = Friendship.removeFriendRelationShip(owner, user, site);
+            if (areFriends && request.getParameter("removeFriend") != null && request.getParameter("removeFriend").equalsIgnoreCase("true"))
+            {
+                friendRemoved = Friendship.removeFriendRelationShip(owner, user, site);
             }
-            
-            if(areFriends && !friendRemoved){ //Si el usuario que esta en session(owner) es diferente que el que vino por parametro (user)
+
+            if (areFriends && !friendRemoved)
+            { //Si el usuario que esta en session(owner) es diferente que el que vino por parametro (user)
                 String url = ((WebPage) request.getAttribute("webpage")).getUrl() + "?user=" + user.getEncodedURI() + "&removeFriend=true";
-              %>
-                <li><a href="<%=url%>" >Eliminar a <%=user.getFullName()%> como amigo</a></p>
-              <%
-            }
-            %>
+%>
+<li><a href="<%=url%>" >Eliminar a <%=user.getFullName()%> como amigo</a></p>
+    <%
+  }
+    %>
