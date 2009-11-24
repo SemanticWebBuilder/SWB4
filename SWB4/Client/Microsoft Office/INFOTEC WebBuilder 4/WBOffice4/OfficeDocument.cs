@@ -401,15 +401,27 @@ namespace WBOffice4
             }
             else
             {
-            if (Uri.IsWellFormedUriString(uri, UriKind.Relative))
-            {
-                Uri filepath = new Uri(new Uri(this.FilePath.DirectoryName + Separator), new Uri(uri, UriKind.Relative));
-                file = UriToFile(filepath);
-            }
-            else if (Uri.IsWellFormedUriString(uri, UriKind.Absolute))
-            {
-                file = UriToFile(new Uri(uri));
-            }
+                if (Uri.IsWellFormedUriString(uri, UriKind.Relative))
+                {
+                    Uri filepath = new Uri(new Uri(this.FilePath.DirectoryName + Separator), new Uri(uri, UriKind.Relative));
+                    file = UriToFile(filepath);
+                }
+                else if (Uri.IsWellFormedUriString(uri, UriKind.Absolute))
+                {
+                    file = UriToFile(new Uri(uri));
+                }
+                else
+                {
+                    try
+                    {
+                        file = new FileInfo(uri);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine(e.Message);
+                        file = null;
+                    }
+                }
             }
             return file;
         }
