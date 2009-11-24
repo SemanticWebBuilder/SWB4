@@ -75,7 +75,7 @@ public class Banner extends GenericAdmResource
                 if (!img.equals("")) {
                     String wburl = paramRequest.getActionUrl().toString();
                     String url = base.getAttribute("url", "").trim();
-                    url=replaceTags(url, request, paramRequest);
+                    //url=replaceTags(url, request, paramRequest);
                     String width = base.getAttribute("width", "").trim();
                     String height = base.getAttribute("height", "").trim();
                     String styleClass = base.getAttribute("styleClass", "").trim();
@@ -225,7 +225,7 @@ public class Banner extends GenericAdmResource
     {
         Resource base=getResourceBase();
         base.addHit(request, response.getUser(), response.getWebPage());
-        String url = base.getAttribute("url", "").trim();
+        String url = base.getAttribute("url", "").trim();        
         if (!url.equals("")) response.sendRedirect(url);
     }
 
