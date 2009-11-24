@@ -22,7 +22,10 @@ WebPage wpage = paramRequest.getWebPage();
 String perfilPath = wpage.getWebSite().getWebPage("perfil").getUrl();
 Iterator<DirectoryObject> itObjs = (Iterator) request.getAttribute("itDirObjs");
 SemanticObject sobj = (SemanticObject) request.getAttribute("sobj");
-SemanticClass cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sobj.getURI());
+SemanticClass cls = null;
+if (sobj != null) {
+    cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sobj.getURI());
+}
 SWBResourceURL url = paramRequest.getRenderUrl();
 boolean toggleOrder = true;
 
