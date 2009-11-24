@@ -1,9 +1,10 @@
 package org.semanticwb.portal.community.base;
 
 
-public abstract class ClasifiedBase extends org.semanticwb.portal.community.DirectoryObject implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Rankable,org.semanticwb.portal.community.Interactiveable,org.semanticwb.model.Searchable,org.semanticwb.portal.community.Contactable
+public abstract class ClasifiedBase extends org.semanticwb.portal.community.DirectoryObject implements org.semanticwb.model.Searchable,org.semanticwb.portal.community.Contactable,org.semanticwb.model.Rankable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.portal.community.Interactiveable
 {
        public static final org.semanticwb.platform.SemanticProperty swbcomm_clasifiedOperationType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#clasifiedOperationType");
+       public static final org.semanticwb.platform.SemanticProperty swbcomm_expirationDate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#expirationDate");
        public static final org.semanticwb.platform.SemanticClass swbcomm_Clasified=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Clasified");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Clasified");
     public static class ClassMgr
@@ -168,5 +169,17 @@ public abstract class ClasifiedBase extends org.semanticwb.portal.community.Dire
     public void setContactEmail(String value)
     {
         getSemanticObject().setProperty(swbcomm_contactEmail, value);
+    }
+
+    public java.util.Date getExpirationDate()
+    {
+        //Override this method in Clasified object
+        return getSemanticObject().getDateProperty(swbcomm_expirationDate,false);
+    }
+
+    public void setExpirationDate(java.util.Date value)
+    {
+        //Override this method in Clasified object
+        getSemanticObject().setDateProperty(swbcomm_expirationDate, value,false);
     }
 }
