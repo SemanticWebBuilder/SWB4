@@ -1,6 +1,6 @@
 <%@page contentType="text/html"%>
 <%@page import="java.util.Calendar, java.util.GregorianCalendar, java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
-<script language="Javascript" type="text/javascript">
+<script type="text/javascript">
     function validateremove(url, title)
     {
         if(confirm('¿Esta seguro de borrar la noticia: '+title+'?'))
