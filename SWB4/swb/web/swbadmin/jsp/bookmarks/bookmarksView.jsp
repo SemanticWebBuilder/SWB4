@@ -35,7 +35,7 @@
             {
 %>
 
-<h2>Mis Favoritos</h2>
+<!-- <h2>Mis Favoritos</h2> -->
 <script language="Javascript" type="text/javascript">
     function validateremove(url, title)
     {
