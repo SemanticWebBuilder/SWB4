@@ -11,6 +11,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
    "http://www.w3.org/TR/html4/loose.dtd">
 <%
+    String name="Ciudad_Digital";
     boolean clear=false;
     if("true".equals(request.getParameter("clear")))clear=true;
 %>
@@ -23,7 +24,7 @@
         <h1>DirecroyObjects</h1>
 <%
         {
-            WebSite site=SWBContext.getWebSite("cd");
+            WebSite site=SWBContext.getWebSite(name);
             Iterator<DirectoryObject> it=DirectoryObject.ClassMgr.listDirectoryObjects(site);
             while(it.hasNext())
             {
@@ -36,7 +37,7 @@
         <h1>MicroSites</h1>
 <%
         {
-            WebSite site=SWBContext.getWebSite("cd");
+            WebSite site=SWBContext.getWebSite(name);
             Iterator<MicroSite> it=MicroSite.ClassMgr.listMicroSites(site);
             while(it.hasNext())
             {
@@ -50,7 +51,7 @@
         <h1>MicroSiteElements</h1>
 <%
         {
-            WebSite site=SWBContext.getWebSite("cd");
+            WebSite site=SWBContext.getWebSite(name);
             Iterator<MicroSiteElement> it=MicroSiteElement.ClassMgr.listMicroSiteElements(site);
             while(it.hasNext())
             {
@@ -64,7 +65,7 @@
         <h1>Users</h1>
 <%
         {
-            WebSite site=SWBContext.getWebSite("cd");
+            WebSite site=SWBContext.getWebSite(name);
             UserRepository urep=site.getUserRepository();
             Iterator<User> it=User.ClassMgr.listUsers(urep);
             while(it.hasNext())
