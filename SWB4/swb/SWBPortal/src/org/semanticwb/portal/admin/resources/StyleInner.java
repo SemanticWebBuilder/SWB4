@@ -74,12 +74,12 @@ public class StyleInner {
             script.append("}\n");
 
             script.append("</script>\n");
-            script.append("<div class=\"soria\" style=\"width:99%;\" style=\"float:left;\">\n");
+            script.append("<div class=\"soria\" style=\"float:left;\">\n");
             url = paramRequest.getActionUrl();
             script.append("<form id=\"frmResource\" name=\"frmResource\" method=\"post\" action=\""+ url+"\"> ");
             //script.append(handler.getScript());
             script.append(handler.parse());
-            script.append("\n<table width=\"100%\" align=\"center\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\"> ");
+            script.append("\n<table width=\"100%\" align=\"left\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\"> ");
             script.append("\n <tr><td>");
             script.append("\n <button dojoType=\"dijit.form.Button\" type=\"submit\">Guardar</button>");
             script.append("\n <button dojoType=\"dijit.form.Button\" type=\"reset\">Restablecer</button>");
