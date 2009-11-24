@@ -26,6 +26,7 @@ SemanticClass cls = null;
 
 if (request.getParameter("sobj") != null) {
     sobj = (SemanticObject) request.getAttribute("sobj");
+}
 
 if (sobj != null) {
     cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sobj.getURI());
