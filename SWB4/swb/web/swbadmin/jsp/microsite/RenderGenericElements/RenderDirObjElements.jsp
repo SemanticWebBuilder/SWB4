@@ -45,7 +45,7 @@
   dojo.require("dojox.form.Rating");
 </script>
 
-<script language="javascript" type="text/javascript">
+<script type="text/javascript">
     var request = false;
     try {
         request = new XMLHttpRequest();

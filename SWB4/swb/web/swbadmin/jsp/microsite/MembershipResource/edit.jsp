@@ -17,7 +17,7 @@
     url_chk.setCallMethod(SWBResourceURL.Call_DIRECT);
 
 %>
-<script language="javascript" type="text/javascript" src="/swbadmin/js/upload.js"></script>
+<script type="text/javascript" src="/swbadmin/js/upload.js"></script>
 <link rel="stylesheet" type="text/css" media="screen" href="/swbadmin/css/upload/upload.css"/>
 <script type="text/javascript">
     var uploads_in_progress = 0;

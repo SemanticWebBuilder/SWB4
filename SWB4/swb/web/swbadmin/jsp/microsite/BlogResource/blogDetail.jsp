@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="org.semanticwb.portal.lib.*,java.text.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 
-<script language="Javascript" type="text/javascript">
+<script type="text/javascript">
     function validateremove(url, title,uri)
     {
         if(confirm('¿Esta seguro de borrar la entrada '+title+'?'))
