@@ -125,7 +125,7 @@ public class Banner extends GenericAdmResource
                                         ret.append(" class=\"" + styleClass + "\"");
                                     }
                                     ret.append(">");
-                                    System.out.println("liga: " + ret.toString());
+                                    //System.out.println("liga: " + ret.toString());
                                 }
                             }
                             ret.append("<img src=\"");
@@ -149,7 +149,9 @@ public class Banner extends GenericAdmResource
                             if (!height.equals("")) {
                                 ret.append(" height=\"" + height + "\"");
                             }
+                            
                             ret.append("/>");
+
                             if (!url.equals("")) {
                                 ret.append("</a>");
                             }
