@@ -16,6 +16,13 @@
     <h2>Actividad m&aacute;s reciente en el sitio</h2>
         <ul class="listaElementos">
             <%
+            if(elements.size()==0)
+                {
+                %>
+                <li>&nbsp;</li>
+                <%
+                }
+
     for (MicroSiteElement element : elements)
     {
         User user = paramRequest.getUser();
