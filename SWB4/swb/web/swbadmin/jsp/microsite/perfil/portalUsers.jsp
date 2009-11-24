@@ -153,7 +153,8 @@
             if(userprosp.getPhoto()!=null) photo=SWBPortal.getWebWorkPath()+userprosp.getPhoto();
         %>
             <div class="friendCard">
-              <img class="profilePic" src="<%=photo%>" alt="usuario">
+                <a href="<%=perfilPath%>?user=<%=userprosp.getEncodedURI()%>">
+              <img class="profilePic" src="<%=photo%>" alt="usuario"></a>
                <div class="friendCardInfo">
                 <a class="ico" href="mailto:<%=userprosp.getEmail()%>"><img src="<%=SWBPortal.getWebWorkPath()%>/models/<%=website.getId()%>/css/images/icoMail.png" alt="enviar un mensaje"></a>
                 <a class="ico" href="<%=perfilPath%>?user=<%=userprosp.getEncodedURI()%>"><img src="<%=SWBPortal.getWebWorkPath()%>/models/<%=website.getId()%>/css/images/icoUser.png" alt="ir al perfil"></a>
