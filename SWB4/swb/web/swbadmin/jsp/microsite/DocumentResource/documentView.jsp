@@ -2,7 +2,7 @@
 <%@page import="org.semanticwb.platform.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%@page import="org.semanticwb.model.Resource" %>
 <%@page import="java.text.*,org.semanticwb.portal.SWBFormMgr"%>
-<script language="Javascript" type="text/javascript">
+<script type="text/javascript">
     function validateremove(url, title)
     {
         if(confirm('¿Esta seguro de borrar la foto: '+title+'?'))
