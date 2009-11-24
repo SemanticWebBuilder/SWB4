@@ -33,6 +33,9 @@
             {
                 act_treeNode=node;
                 executeTreeNodeEvent(mtreeStore,item,"onClick");
+                item.selected=true;
+                node._updateItemClasses(item);
+                reloadTreeNode(mtreeStore,item);
             }
         </script>
         <script type="dojo/method" event="onOpen" args="item, node">
@@ -48,8 +51,6 @@
                 act_treeNode=node;
                 executeTreeNodeEvent(mtreeStore,item,"onDblClick");
                 //printObjProp(mtree,false);
-                item.type="x";
-                node._updateItemClasses(item);
             }
         </script>
         <script type="dojo/method" event="getIconClass" args="item, opened">
@@ -67,7 +68,7 @@
         <script type="dojo/method" event="getLabelStyle" args="item, opened">
             if(item)
             {
-                if(item.type=="x")
+                if(item.selected==true)
                 {
                     printObjProp(item,true);
                     return {color: "blue", background: "#e0e0e0"};

@@ -59,6 +59,15 @@
         return seq;
     }
 
+    public SequenceFlow linkConditionObject(FlowObject from, FlowObject to, String condition)
+    {
+        ConditionalFlow seq=from.getProcessSite().createConditionalFlow();
+        from.addToConnectionObject(seq);
+        seq.setToFlowObject(to);
+        seq.setFlowCondition(condition);
+        return seq;
+    }
+
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
    "http://www.w3.org/TR/html4/loose.dtd">
@@ -115,88 +124,97 @@
 
             //*******************************************************************
 
-            InitEvent pini=site.createInitEvent();
-            plan.addFlowObject(pini);
+            {
+                InitEvent pini=site.createInitEvent();
+                plan.addFlowObject(pini);
 
-            GateWay gtw1=site.createANDGateWay();
-            GateWay gtw2=site.createANDGateWay();
+                GateWay gtw1=site.createANDGateWay();
+                plan.addFlowObject(gtw1);
+                GateWay gtw2=site.createANDGateWay();
+                plan.addFlowObject(gtw2);
 
-            UserTask mision=createTask(plan, "Misión");
-            FormView view=site.createFormView();
-            view.addEditProperty(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/oqp#peMision").getSemanticObject());
-            mision.setFormView(view);
+                Task mision=createTask(plan, "Misión");
+                Task vision=createTask(plan, "Vision");
+                Task valores=createTask(plan, "Valores");
+                Task objetivos=createTask(plan, "Objetivos");
+                Task fin=createTask(plan, "Fin");
 
-            Task vision=createTask(plan, "Vision");
-            Task valores=createTask(plan, "Valores");
-            Task objetivos=createTask(plan, "Objetivos");
-            Task fin=createTask(plan, "Fin");
+                EndEvent pend=site.createEndEvent();
+                plan.addFlowObject(pend);
 
-            EndEvent pend=site.createEndEvent();
-            plan.addFlowObject(pend);
+                linkObject(pini, gtw1);
+                linkObject(gtw1, mision);
+                linkObject(gtw1, vision);
+                linkObject(gtw1, valores);
 
-            linkObject(pini, gtw1);
-            linkObject(gtw1, mision);
-            linkObject(gtw1, vision);
-            linkObject(gtw1, valores);
+                linkObject(mision, gtw2);
+                linkObject(vision, gtw2);
+                linkObject(valores, gtw2);
 
-            linkObject(mision, gtw2);
-            linkObject(vision, gtw2);
-            linkObject(valores, gtw2);
-
-            linkObject(gtw2, objetivos);
-            linkObject(objetivos, fin);
-            linkObject(fin, pend);
+                linkObject(gtw2, objetivos);
+                linkObject(objetivos, fin);
+                linkObject(fin, pend);
+            }
 
             //*******************************************************************
 
-            pini=site.createInitEvent();
-            com.addFlowObject(pini);
+            {
+                InitEvent pini2=site.createInitEvent();
+                com.addFlowObject(pini2);
 
-            GateWay gtw3=site.createORGateWay();
-            GateWay gtw4=site.createORGateWay();
+                GateWay gtw3=site.createORGateWay();
+                com.addFlowObject(gtw3);
+                GateWay gtw4=site.createORGateWay();
+                com.addFlowObject(gtw4);
 
-            Task t1=createTask(com, "Tarea 1");
-            Task t2=createTask(com, "Tarea 2");
-            Task t3=createTask(com, "Tarea 3");
-            Task t4=createTask(com, "Tarea 4");
-            Task t5=createTask(com, "Tarea 5");
-            Task t6=createTask(com, "Tarea 6");
-            Task t7=createTask(com, "Tarea 7");
-            Task t8=createTask(com, "Tarea 8");
+                Task t1=createTask(com, "Tarea 1");
+                Task t2=createTask(com, "Tarea 2");
+                Task t3=createTask(com, "Tarea 3");
+                Task t4=createTask(com, "Tarea 4");
+                Task t5=createTask(com, "Tarea 5");
+                Task t6=createTask(com, "Tarea 6");
+                Task t7=createTask(com, "Tarea 7");
+                Task t8=createTask(com, "Tarea 8");
 
-            pend=site.createEndEvent();
-            com.addFlowObject(pend);
+                EndEvent pend2=site.createEndEvent();
+                com.addFlowObject(pend2);
 
-            linkObject(pini, t1);
-            linkObject(t1,gtw3);
-            linkObject(gtw3,t2);
-            linkObject(gtw3,t3);
-            linkObject(gtw3,t4);
-            linkObject(t2,t5);
-            linkObject(t3,t6);
-            linkObject(t4,gtw4);
-            linkObject(t5,gtw4);
-            linkObject(t6,gtw4);
-            linkObject(gtw4,t7);
-            linkObject(t7,t8);
-            linkObject(t8, pend);
-            //objetives.addUserGroup(urep.getUserGroup("Gerentes"));
+                linkObject(pini2, t1);
+                linkObject(t1,gtw3);
+                linkObject(gtw3,t2);
+                linkObject(gtw3,t3);
+                linkObject(gtw3,t4);
+                linkObject(t2,t5);
+                linkObject(t3,t6);
+                linkObject(t4,gtw4);
+                linkObject(t5,gtw4);
+                linkObject(t6,gtw4);
+                linkObject(gtw4,t7);
+                linkConditionObject(t7,t1,Activity.ACTION_REJECT);
+                linkConditionObject(t7,t8,Activity.ACTION_ACCEPT);
+                linkObject(t8, pend2);
+                //objetives.addUserGroup(urep.getUserGroup("Gerentes"));
+            }
         }
 
         String act=request.getParameter("act");
         if(act!=null)
         {
+            if(act.equals("rpi"))
+            {
+                String id=request.getParameter("id");
+                ProcessInstance inst=ProcessInstance.ClassMgr.getProcessInstance(id, site);
+                inst.remove();
+            }
             if(act.equals("cpi"))
             {
                 SWBProcessMgr.createProcessInstance(site, process, user);
             }
-            if(act.equals("accept"))
+            if(act.equals("accept") || act.equals("reject"))
             {
                 String id=request.getParameter("id");
                 FlowObjectInstance inst=FlowObjectInstance.ClassMgr.getFlowObjectInstance(id, site);
-                //inst.getFlowObjectType()
-                //inst.getParentProcessInstance();
-                inst.close(user);
+                inst.close(user,act);
             }
         }
 
@@ -205,7 +223,7 @@
         {
             ProcessInstance pi =  it.next();
 %>
-            <h2>Proceso Instance: <%=pi.getFlowObjectType().getTitle()%> <%=pi.getId()%></h2>
+            <h2>Proceso Instance: <%=pi.getFlowObjectType().getTitle()%> <%=pi.getId()%> <a href="?act=rpi&id=<%=pi.getId()%>">remove</a></h2>
 <%
             user=SWBContext.getAdminRepository().getUserByLogin("admin");
 %>
@@ -217,7 +235,7 @@
             {
                 FlowObjectInstance tkinst =  utkit.next();
     %>
-                <li>User Task: <%=tkinst.getFlowObjectType().getTitle()%> <%=tkinst.getId()%> Status:<%=tkinst.getStatus()%> <a href="?id=<%=tkinst.getId()%>&act=accept&user=<%=user.getLogin()%>">accept</a></li>
+                <li>User Task: <%=tkinst.getFlowObjectType().getTitle()%> <%=tkinst.getId()%> Status:<%=tkinst.getStatus()%> <a href="?id=<%=tkinst.getId()%>&act=accept&user=<%=user.getLogin()%>">accept</a> <a href="?id=<%=tkinst.getId()%>&act=reject&user=<%=user.getLogin()%>">reject</a></li>
     <%
             }
             out.println("</ul>");
