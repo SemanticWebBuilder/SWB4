@@ -9,20 +9,20 @@ public class Clasified extends org.semanticwb.portal.community.base.ClasifiedBas
 {
     static Timer timer=null;
 
-    static
-    {
-        timer=new Timer();
-        TimerTask task=new TimerTask()
-        {
-            @Override
-            public void run()
-            {
-                System.out.println("hola..");
-            }
-        };
-        //timer.schedule(task, 1000L*60*60, 1000L*60*60*24);
-        timer.schedule(task, 1000L*60, 1000L*60);
-    }
+//    static
+//    {
+//        timer=new Timer();
+//        TimerTask task=new TimerTask()
+//        {
+//            @Override
+//            public void run()
+//            {
+//                System.out.println("hola..");
+//            }
+//        };
+//        //timer.schedule(task, 1000L*60*60, 1000L*60*60*24);
+//        timer.schedule(task, 1000L*60, 1000L*60);
+//    }
 
 
     public Clasified(org.semanticwb.platform.SemanticObject base)
