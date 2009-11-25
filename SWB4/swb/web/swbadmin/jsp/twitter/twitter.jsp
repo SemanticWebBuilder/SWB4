@@ -16,10 +16,11 @@
 <%
         WebPage webpage=paramRequest.getWebPage();
         User owner = paramRequest.getUser();
-        
-        Member member = null;
-        if (webpage.getSemanticObject().getGenericInstance() instanceof MicroSite) {
-            member = getMember(owner, (MicroSite)webpage);
+
+        boolean isComunity=false;
+        Member member = Member.getMember(owner, webpage);
+        if (webpage.getSemanticObject().getGenericInstance() instanceof MicroSiteWebPageUtil) {
+            isComunity=true;
         }
         
         String imgPath = SWBPlatform.getContextPath() + "/swbadmin/images/";
@@ -131,7 +132,7 @@
                         }
                        }
                      }
-                } else if (owner.getURI()!=null && owner.getURI().equals(user.getURI()) && member!=null && member.getAccessLevel()>=Member.LEVEL_ADMIN && owner.isRegistered()) { //Forma para que el usuario proporcione login y password de twitter
+                } else if ((!isComunity && owner.getURI()!=null && owner.getURI().equals(user.getURI())) || (isComunity && member!=null && member.getAccessLevel()>=Member.LEVEL_ADMIN) && owner.isRegistered()) { //Forma para que el usuario proporcione login y password de twitter
                     urlAction.setAction("saveUserData");
                     getForm(urlAction.toString(), out, "", "");
                 } else {%>
@@ -164,32 +165,4 @@
         }
     }
 
-    private String getStrMemberLevelAccess(Member member)
-     {
-        int level = member.getAccessLevel();
-        StringBuffer ret = new StringBuffer();
-        ret.append("\n<option value=\""+member.getUser().getId()+"|0\">Cancelar suscripción</option>");
-        ret.append("\n<option value=\""+member.getUser().getId()+"|"+Member.LEVEL_EDIT+"\" "+(level==Member.LEVEL_EDIT?"selected":"")+">Participar en comunidad</option>");
-        ret.append("\n<option value=\""+member.getUser().getId()+"|"+Member.LEVEL_ADMIN+"\" "+(level==Member.LEVEL_ADMIN?"selected":"")+">Administrar comunidad</option>");
-        return ret.toString();
-     }
-
-    private Member getMember(User user, MicroSite site)
-    {
-        //System.out.println("getMember:"+user+" "+site);
-        if(site!=null)
-        {
-            Iterator<Member> it=Member.ClassMgr.listMemberByUser(user,site.getWebSite());
-            while(it.hasNext())
-            {
-                Member mem=it.next();
-                //System.out.println("mem:"+mem+" "+mem.getMicroSite());
-                if(mem.getMicroSite().equals(site))
-                {
-                   return mem;
-                }
-            }
-        }
-        return null;
-    }
 %>
