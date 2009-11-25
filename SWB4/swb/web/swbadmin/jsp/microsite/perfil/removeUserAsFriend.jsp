@@ -19,7 +19,7 @@
             }
             boolean areFriends = false;
 
-            if (!owner.getURI().equals(user.getURI()) && Friendship.areFriends(owner, user, site))
+            if (owner!=null && user!=null && !owner.getURI().equals(user.getURI()) && Friendship.areFriends(owner, user, site))
             {
                 areFriends = true;
             }
