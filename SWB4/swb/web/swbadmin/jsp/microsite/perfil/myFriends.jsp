@@ -65,7 +65,7 @@
             }
             List<GeoLocation> lista = new ArrayList<GeoLocation>();
             WebPage wpage = paramRequest.getWebPage();
-            String photo = SWBPortal.getContextPath() + "/swbadmin/images/defaultPhoto.jpg";
+            String photo = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/perfil/profilePlaceholder.jpg";
 
             ArrayList<User> elements = new ArrayList<User>();
             Iterator<Friendship> it = Friendship.ClassMgr.listFriendshipByFriend(user, wpage.getWebSite());
@@ -173,11 +173,11 @@
                         {
                             if (friendUser.getPhoto() != null)
                             {
-                                photo = friendUser.getPhoto();
+                                photo = SWBPortal.getWebWorkPath() +friendUser.getPhoto();
                             }
     %>
     <li>
-        <a href="<%=perfilPath%>?user=<%=friendUser.getEncodedURI()%>"><img alt="Foto de <%=friendUser.getFullName()%>" src="<%=SWBPortal.getWebWorkPath() + photo%>" <%=imgSize%> title="<%=friendUser.getFullName()%>">
+        <a href="<%=perfilPath%>?user=<%=friendUser.getEncodedURI()%>"><img alt="Foto de <%=friendUser.getFullName()%>" src="<%=photo%>" <%=imgSize%> title="<%=friendUser.getFullName()%>">
             <%if (!isStrategy)
                            {%>
             <br>
