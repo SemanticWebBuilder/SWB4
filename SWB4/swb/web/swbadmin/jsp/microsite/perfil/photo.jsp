@@ -19,13 +19,9 @@
             {
                 SemanticObject semObj = SemanticObject.createSemanticObject(request.getParameter("user"));
                 user = (User) semObj.createGenericInstance();
-            }
+            }   
             
-            
-//if(!owner.isRegistered() || !user.isRegistered()) return;
-//Resource base=paramRequest.getResourceBase();
-//String registryPath=base.getAttribute("registryPath","");
-//String attributes=base.getAttribute("attributes","");
+
 
             String photo = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/perfil/profilePlaceholder.jpg";
             if (user.getPhoto() != null)
