@@ -72,7 +72,7 @@ public class Login extends GenericAdmResource
         String url = SWBPlatform.getContextPath() + "/login/" + paramsRequest.getWebPage().getWebSiteId() + "/" + paramsRequest.getWebPage().getId();
         if (!paramsRequest.getUser().isSigned())
         {
-            out.println(replaceTags(getResourceBase().getAttribute(FRM_LOGIN), request, paramsRequest, url));
+            out.println(replaceTags(frmlogin, request, paramsRequest, url));
 //                out.println("<fieldset><form action=\"" + url + "\" method=\"post\">");
 //                out.println("<label>Usuario:</label><input type=\"text\" id=\"wb_username\" name=\"wb_username\" /><br />");
 //                out.println("<label>Contrase&ntilde;a:</label><input type=\"password\" id=\"wb_password\" name=\"wb_password\" /><br />");
@@ -80,7 +80,7 @@ public class Login extends GenericAdmResource
         } else
         {
 
-            out.println(replaceTags(getResourceBase().getAttribute(FRM_LOGOUT), request, paramsRequest, url + "?wb_logout=true"));
+            out.println(replaceTags(frmlogout, request, paramsRequest, url + "?wb_logout=true"));
         //out.println("<a href=\"" + url + "?wb_logout=true\" >Logout</a>");
         }
 
