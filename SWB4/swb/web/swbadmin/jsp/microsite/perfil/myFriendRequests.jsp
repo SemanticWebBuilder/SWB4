@@ -177,7 +177,18 @@
 %>
 
 <h2>Mis solicitudes</h2>
-<%            }
+<%
+if (!hasRequest)
+    {
+        %>
+        <ul class="listaElementos">
+    <li>
+        <a class="contactos_nombre" href="#">No has solicitado personas que se unan a ti como amigos.</a>
+    </li>
+</ul>
+        <%
+    }
+            }
 %>
 
 <%
