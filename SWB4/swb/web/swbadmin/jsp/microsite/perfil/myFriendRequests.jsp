@@ -42,7 +42,7 @@
             
             
 
-            ArrayList<User> elements = new ArrayList();
+            HashMap<String,User> elements = new HashMap();
             int elementos = 0;
 
 
@@ -51,7 +51,7 @@
             {
                 FriendshipProspect friendshipProspect = itFriendshipProspect.next();
                 User userRequested = friendshipProspect.getFriendShipRequested();
-                elements.add(userRequested);
+                elements.put(userRequested.getURI(),userRequested);
                 elementos++;
             }            
             boolean hasRequest = elements.size()>0;
@@ -205,7 +205,8 @@ if (!hasRequest)
 <div id="friendCards">
     <%                }
             int iElement = 0;
-            for (User userRequested : elements)
+            Collection<User> users=elements.values();
+            for (User userRequested : users)
             {
                 iElement++;
                 if (iElement > fin)
@@ -263,7 +264,7 @@ if (!hasRequest)
 
     <div class="friendCard">
         <img class="profilePic" width="121" height="121" src="<%=photo%>" alt="<%=userRequested.getFullName()%>">
-        <div class="friendCardInfo">
+        <div class="friendCardInfo">            
             <%
                             if (userRequested.getEmail() != null)
                             {
@@ -274,8 +275,7 @@ if (!hasRequest)
                 %>
 
 
-            <a class="ico" href="<%=perfilurl%>?user=<%=urluser%>"><img src="<%=path%>icoUser.png" alt="ir al perfil"></a>
-                <%-- <a class="ico" href="#"><img src="<%=path%>icoMas.png" alt="agregar"></a> --%>
+            <a class="ico" href="<%=perfilurl%>?user=<%=urluser%>"><img src="<%=path%>icoUser.png" alt="ir al perfil"></a>                
             <div class="friendCardName">
                 <p><%=userRequested.getFullName()%></p>
             </div>

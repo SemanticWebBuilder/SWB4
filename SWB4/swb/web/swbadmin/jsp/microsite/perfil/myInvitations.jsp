@@ -36,7 +36,7 @@
             }
             boolean hasInvitations = false;
 
-            ArrayList<User> elements = new ArrayList();
+            HashMap<String,User> elements = new HashMap();
             int elementos = 0;
 
             Iterator<FriendshipProspect> itFriendshipProspect = FriendshipProspect.ClassMgr.listFriendshipProspectByFriendShipRequested(owner, wpage.getWebSite());
@@ -44,7 +44,7 @@
             {
                 FriendshipProspect friendshipProspect = itFriendshipProspect.next();
                 User userRequester = friendshipProspect.getFriendShipRequester();
-                elements.add(userRequester);
+                elements.put(user.getURI(),userRequester);
                 elementos++;
             }
             hasInvitations = elements.size() > 0;
@@ -174,7 +174,7 @@
 <div id="friendCards">
     <%                }                
                 int iElement = 0;
-                for (User userRequester : elements)
+                for (User userRequester : elements.values())
                 {
                     iElement++;
                     if (iElement > fin)
