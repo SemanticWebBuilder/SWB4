@@ -342,11 +342,8 @@ if (sobj != null) {
                         }else if(semProp==ClasifiedBuySell.swbcomm_Price){
                              price=propValue;
                         }else if(semProp==DirectoryObject.swb_created){
-                            SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
-                            Date date=new Date();
-                            date=formatoDelTexto.parse(propValue);
-                            propValue= SWBUtils.TEXT.getTimeAgo(date, user.getLanguage());
-                            created=propValue;
+                            Date date=SWBUtils.TEXT.iso8601DateParse(propValue);
+                            created= SWBUtils.TEXT.getTimeAgo(date, user.getLanguage());
                         }
                     }
                 } else if(semProp==DirectoryObject.swb_creator){
