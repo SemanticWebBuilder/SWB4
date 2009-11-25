@@ -221,9 +221,21 @@
                     if (iElement >= inicio && iElement <= fin)
                     {
                         hasEvents = true;
+                        String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/EventResource/noevent.jpg";
+                        String path = event.getWorkPath();
+                        if (event.getEventThumbnail() != null)
+                        {
+                            int pos = event.getEventThumbnail().lastIndexOf("/");
+                            if (pos != -1)
+                            {
+                                String sphoto = event.getEventThumbnail().substring(pos + 1);
+                                event.setEventThumbnail(sphoto);
+                            }
+                            pathPhoto = SWBPortal.getWebWorkPath() + path + "/" + event.getEventThumbnail();
+                        }
     %>
     <div class="noticia">
-        <img src="<%=SWBPortal.getWebWorkPath() + event.getEventThumbnail()%>" alt="<%= event.getTitle()%>">
+        <img src="<%=pathPhoto%>" alt="<%= event.getTitle()%>">
         <div class="noticiaTexto">
             <h2><%=event.getTitle()%></h2>
             <p>&nbsp;<br>Por: <%=event.getCreator().getFullName()%><br><%=dateFormat.format(event.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%></p>
@@ -245,7 +257,7 @@
             if (!hasEvents)
             {
     %>
-    <p>No hay eventos registrados.</p>
+    <p>No hay eventos registrados, aqui se muestran los eventos  de comunidad a los que esta inscrito.</p>
     <%            }
     %>
     <!-- paginacion -->
