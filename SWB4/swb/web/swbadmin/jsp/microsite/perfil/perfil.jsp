@@ -157,7 +157,7 @@
                     if (user.getEmail() != null && !user.getEmail().trim().equals(""))
                     {
                         email = user.getEmail();
-                    }
+                    }                    
                     if (user.getExtendedAttribute(mapa.get("userAge")) != null)
                     {
                         age = "" + user.getExtendedAttribute(mapa.get("userAge"));
@@ -214,8 +214,15 @@
             if (owner == user || areFriends)
             { //Agregar datos privados (email, sexo, fotos, etc)
     %>
-
-    <p><span class="itemTitle">E-mail:</span>&nbsp;<a href="mailto:<%=email%>"><%=email%></a></p>
+    <%
+    if (user.getEmail() != null && !user.getEmail().trim().equals(""))
+        {
+        %>
+        <p><span class="itemTitle">E-mail:</span>&nbsp;<a href="mailto:<%=email%>"><%=email%></a></p>
+        <%
+        }
+    %>
+    
     <p><span class="itemTitle">Edad:</span> &nbsp;<%=age%></p>
     <p><span class="itemTitle">Sexo:</span> <%=sex%></p>
     <p><span class="itemTitle">Estado Civil:</span> <%=userStatus%></p>
