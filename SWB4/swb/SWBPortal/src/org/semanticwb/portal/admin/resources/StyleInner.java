@@ -39,7 +39,6 @@ public class StyleInner {
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         Resource base = paramRequest.getResourceBase();
         StringBuilder script = new StringBuilder();
-        //StyleHandler handler = null;
         StylerDomParser handler = null;
         try {
             //InputStream is = getClass().getResourceAsStream("/org/semanticwb/portal/admin/admresources/util/style.xml");
@@ -58,11 +57,8 @@ public class StyleInner {
             SWBCssToXmlTranslator csst = new SWBCssToXmlTranslator();
             handler = new StylerDomParser(csst.translateCSS(css), base);
 
-
             SWBResourceURL url = paramRequest.getRenderUrl().setCallMethod(paramRequest.Call_DIRECT).setMode("fillStyle");
             script.append("<script type=\"text/javascript\">\n");
-            script.append(" dojo.require(\"dijit.form.Button\");\n");
-
             script.append("function sendData(tab, styleName, styleValue) {\n");
             script.append("    var xhrArgs = {\n");
             script.append("        url:'"+url+"'+'?stel='+tab+'@'+styleName+'@'+styleValue, \n");
@@ -72,21 +68,20 @@ public class StyleInner {
             script.append("    };\n");
             script.append("    var deferred = dojo.xhrPost(xhrArgs);\n");
             script.append("}\n");
-
             script.append("</script>\n");
-            script.append("<div class=\"soria\" style=\"float:left;\">\n");
+
             url = paramRequest.getActionUrl();
-            script.append("<form id=\"frmResource\" name=\"frmResource\" method=\"post\" action=\""+ url+"\"> ");
-            //script.append(handler.getScript());
+            script.append("<div class=\"soria\" style=\"float:left;\">\n");            
+            script.append("<form id=\"frmResource_0999\" name=\"frmResource\" method=\"post\" action=\""+ url+"\"> ");
             script.append(handler.parse());
-            script.append("\n<table width=\"100%\" align=\"left\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\"> ");
-            script.append("\n <tr><td>");
-            script.append("\n <button dojoType=\"dijit.form.Button\" type=\"submit\">Guardar</button>");
-            script.append("\n <button dojoType=\"dijit.form.Button\" type=\"reset\">Restablecer</button>");
-            script.append("\n </td></tr>");
-            script.append("\n</table> ");
-            script.append("</form> ");
-            script.append("</div>");
+            script.append("<table width=\"100%\" align=\"left\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\">\n");
+            script.append("  <tr><td>\n");
+            script.append("  <button dojoType=\"dijit.form.Button\" type=\"submit\">Guardar</button>\n");
+            script.append("  <button dojoType=\"dijit.form.Button\" type=\"reset\">Restablecer</button>\n");
+            script.append("  </td></tr>\n");
+            script.append("</table>\n");
+            script.append("</form>\n");
+            script.append("</div>\n");
 
             mm.put(base.getId(), handler.getTabs());
         }catch(Exception e) {
@@ -98,7 +93,7 @@ public class StyleInner {
         out.flush();
     }
 
-    
+
     /*public void processAction(javax.servlet.http.HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         System.out.println("\n\n********* processAction ****************");
         Resource base = response.getResourceBase();
@@ -111,7 +106,7 @@ public class StyleInner {
         }
     }*/
 
-    
+
     /*public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         if(paramsRequest.getMode().equalsIgnoreCase("fillStyle")) {
             doEditStyle(request,response,paramsRequest);
