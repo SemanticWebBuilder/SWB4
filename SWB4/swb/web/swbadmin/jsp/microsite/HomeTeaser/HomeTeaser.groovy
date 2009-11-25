@@ -150,15 +150,17 @@ class LocalCache{
     static  Contenedor inicio = null
     static long timer = 0
     //static long cache_time = 1000L*60*60*12
-    static long cache_time = 1000L*60*5
+    static long cache_time = 1000L*60*15
 
     static public Contenedor getInicio(WebSite wsid){
-        if (null==inicio || System.currentTimeMillis()>timer+cache_time) init(wsid)
+        if (null==inicio || System.currentTimeMillis()>timer+cache_time) {
+            init(wsid)
+        }
         return inicio
     }
 
     static private synchronized void init(WebSite wsid){
-        if (null!=inicio) return
+        if (null!=inicio && (System.currentTimeMillis()<timer+cache_time)) return
         timer = System.currentTimeMillis()
 //        WebPage homeTeaser = org.semanticwb.model.SWBContext.getWebSite("Ciudad_Digital").getWebPage("HomeTeasers")
         WebPage homeTeaser = wsid.getWebPage("HomeTeasers")
