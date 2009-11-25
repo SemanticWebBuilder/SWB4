@@ -34,8 +34,14 @@
             if (paramRequest.getUser().isSigned())
             {
 %>
-
-<!-- <h2>Mis Favoritos</h2> -->
+<%
+    if(paramRequest.getCallMethod()==paramRequest.Call_STRATEGY)
+        {
+        %>
+        <h2>Mis Favoritos</h2>
+        <%
+        }
+%>
 <script language="Javascript" type="text/javascript">
     function validateremove(url, title)
     {
