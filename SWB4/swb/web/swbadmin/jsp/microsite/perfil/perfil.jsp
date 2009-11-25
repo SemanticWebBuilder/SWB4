@@ -119,7 +119,7 @@
             {
 
 
-                if (owner.getURI()!=null && !owner.getURI().equals(user.getURI()) && Friendship.areFriends(owner, user, paramRequest.getWebPage().getWebSite()))
+                if (owner.getURI() != null && !owner.getURI().equals(user.getURI()) && Friendship.areFriends(owner, user, paramRequest.getWebPage().getWebSite()))
                 {
                     areFriends = true;
                 }
@@ -134,82 +134,86 @@
 %>
 <p class="addOn"><a href="<%=urlAction%>">Eliminar como amigo</a></p>
 <%
-        }
-        else if (user != null && owner != null && !owner.getURI().equals(user.getURI()) && !FriendshipProspect.findFriendProspectedByRequester(owner, user, wpage.getWebSite()))
-        {
-            urlAction.setAction("addFriendRelship");
-            urlAction.setParameter("user", user.getURI());
+                    }
+                    else if (user != null && owner != null && !owner.getURI().equals(user.getURI()) && !FriendshipProspect.findFriendProspectedByRequester(owner, user, wpage.getWebSite()))
+                    {
+                        urlAction.setAction("addFriendRelship");
+                        urlAction.setParameter("user", user.getURI());
 %>
 <p class="addOn"><a href="<%=urlAction%>">Agregar como amigo</a></p>
 <%
-        }
-        if (!owner.getURI().equals(user.getURI()))
-        {
+                    }
+                    if (!owner.getURI().equals(user.getURI()))
+                    {
 %>
 <p class="addOn"><a href="<%=perfilPath%>">Mi perfil</a></p>
 <%
-        }
-    }
-    else
-    {
+                    }
+                }
+                else
+                {
 
-        String email = "", age = "", sex = "", userStatus = "", userInterest = "", userHobbies = "", userInciso = "";
-        if (user.getEmail() != null)
-        {
-            email = user.getEmail();
-        }
-        if (user.getExtendedAttribute(mapa.get("userAge")) != null)
-        {
-            age = "" + user.getExtendedAttribute(mapa.get("userAge"));
-        }
-        if (user.getExtendedAttribute(mapa.get("userSex")) != null)
-        {
-            sex = "" + user.getExtendedAttribute(mapa.get("userSex"));
-        }
-        if (user.getExtendedAttribute(mapa.get("userStatus")) != null)
-        {
-            userStatus = "" + user.getExtendedAttribute(mapa.get("userStatus"));
-        }
-        if (user.getExtendedAttribute(mapa.get("userInterest")) != null)
-        {
-            userInterest = "" + user.getExtendedAttribute(mapa.get("userInterest"));
-        }
-        if (user.getExtendedAttribute(mapa.get("userHobbies")) != null)
-        {
-            userHobbies = "" + user.getExtendedAttribute(mapa.get("userHobbies"));
-        }
-        if (user.getExtendedAttribute(mapa.get("userInciso")) != null)
-        {
-            userInciso = "" + user.getExtendedAttribute(mapa.get("userInciso"));
-        }
-        if (sex.equalsIgnoreCase("M"))
-        {
-            sex = "Masculino";
-        }
-        else
-        {
-            sex = "Femenino";
-        }
+                    String email = "", age = "", sex = "", userStatus = "", userInterest = "", userHobbies = "", userInciso = "";
+                    if (user.getEmail() != null)
+                    {
+                        email = user.getEmail();
+                    }
+                    if (user.getExtendedAttribute(mapa.get("userAge")) != null)
+                    {
+                        age = "" + user.getExtendedAttribute(mapa.get("userAge"));
+                    }
+                    if (user.getExtendedAttribute(mapa.get("userSex")) != null)
+                    {
+                        sex = "" + user.getExtendedAttribute(mapa.get("userSex"));
+                    }
+                    if (user.getExtendedAttribute(mapa.get("userStatus")) != null)
+                    {
+                        userStatus = "" + user.getExtendedAttribute(mapa.get("userStatus"));
+                    }
+                    if (user.getExtendedAttribute(mapa.get("userInterest")) != null)
+                    {
+                        userInterest = "" + user.getExtendedAttribute(mapa.get("userInterest"));
+                    }
+                    if (user.getExtendedAttribute(mapa.get("userHobbies")) != null)
+                    {
+                        userHobbies = "" + user.getExtendedAttribute(mapa.get("userHobbies"));
+                    }
+                    if (user.getExtendedAttribute(mapa.get("userInciso")) != null)
+                    {
+                        userInciso = "" + user.getExtendedAttribute(mapa.get("userInciso"));
+                    }
+                    if (sex.equalsIgnoreCase("M"))
+                    {
+                        sex = "Masculino";
+                    }
+                    else if (sex.equalsIgnoreCase("F"))
+                    {
+                        sex = "Femenino";
+                    }
+                    else
+                    {
+                        sex = "";
+                    }
 %>
 
 
 <h2>Resumen</h2>
 <%
-                    if (owner == user)
-                    {
+        if (owner == user)
+        {
 %>
 
 <a class="editar" href="<%=registryPath%>" >[editar]</a>
 <%
-                    }
+        }
 %>
 <div class="resumenText">
     <p><span class="itemTitle">Nombre:</span>&nbsp;<%=user.getFullName()%></p>
-<%
+    <%
 
-                    if (owner == user || areFriends)
-                    { //Agregar datos privados (email, sexo, fotos, etc)
-%>
+            if (owner == user || areFriends)
+            { //Agregar datos privados (email, sexo, fotos, etc)
+    %>
 
     <p><span class="itemTitle">E-mail:</span>&nbsp;<a href="mailto:<%=email%>"><%=email%></a></p>
     <p><span class="itemTitle">Edad:</span> &nbsp;<%=age%></p>
@@ -217,15 +221,15 @@
     <p><span class="itemTitle">Estado Civil:</span> <%=userStatus%></p>
 
 
-<h2>Intereses</h2>        
-<p><%=userInterest%></p>
-<h2>Hobbies</h2>        
-<p><%=userHobbies%></p>
-<h2>Inciso</h2>
-<p><%=userInciso%></p>
-<%
-                    }
-%>
+    <h2>Intereses</h2>
+    <p><%=userInterest%></p>
+    <h2>Hobbies</h2>
+    <p><%=userHobbies%></p>
+    <h2>Inciso</h2>
+    <p><%=userInciso%></p>
+    <%
+            }
+    %>
 </div>
 <%
                 }
