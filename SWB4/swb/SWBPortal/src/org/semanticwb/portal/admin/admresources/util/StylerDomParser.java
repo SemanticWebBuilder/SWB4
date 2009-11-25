@@ -24,18 +24,16 @@ public class StylerDomParser {
     private HashMap tabs;
     private Resource client;
 
-    StringBuilder script;
+    private boolean fstel;    
 
     public StylerDomParser(String xml, Resource client) throws NullPointerException {
         parseXml(xml);
         this.client = client;
-        script = new StringBuilder();
     }
 
     public StylerDomParser(Document dom, Resource client) throws NullPointerException {
         this.dom = dom;
         this.client = client;
-        script = new StringBuilder();
     }
 
     private void parseXml(String xml) throws NullPointerException {
@@ -46,36 +44,42 @@ public class StylerDomParser {
     }
 
     public String parse() {
-        System.out.println("incia parse...");
-        processStartDocument();
-        parseDocument();
-        processEndDocument();
-        System.out.println("fin parse");
+        StringBuilder script = new StringBuilder();
+        script.append(processStartDocument());
+        script.append(processDocument());
+        script.append(processEndDocument());
         return script.toString();
     }
 
-    private void parseDocument() {
-        System.out.println("inicia parseDocument...");
+    private String processDocument() {
+        StringBuilder script = new StringBuilder();
         Element docEle = dom.getDocumentElement();
         NodeList nl = docEle.getElementsByTagName("class");
         if(nl!=null && nl.getLength()>0) {
             for(int i=0; i<nl.getLength(); i++) {
                 Element el = (Element)nl.item(i);
-                processSelector(el);
+                script.append(processSelector(el));
             }
         }
-        System.out.println("fin parseDocument");
+        return script.toString();
     }
 
     //private void processClass(Element sel) {
-    private void processSelector(Element sel) {
-        System.out.println("inicia processSelector...");
+    private String processSelector(Element sel) {
+        StringBuilder script = new StringBuilder();
         String name = sel.getAttribute("name");
-        HashMap props = processProperties(sel);
+        //HashMap props = processProperties(sel);
 
         if(name != null) {
+            if(!fstel) {
+                script.append("<script type=\"text/javascript\">\n");
+                script.append("dojo.addOnLoad( function(){\n");
+                script.append(" dojo.byId('stel').value='"+name+"';\n");
+                script.append("});\n");
+                script.append("</script>\n");
+                fstel = true;
+            }
             script.append("<div dojoType=\"dijit.layout.ContentPane\" title=\""+name+"\" id=\""+name+"\">");
-            //script.append("<table border=\"0\" width=\"100%\" bgcolor=\"#E8E8BB\" >");
             script.append("<table border=\"0\" width=\"100%\" bgcolor=\"#F4F4DD\" >");
 
             script.append("<tr>");
@@ -346,35 +350,18 @@ public class StylerDomParser {
 
             script.append("</table>");
             script.append("</div>");
-            nl();
 
-            tabs.put(name, new HashMap());
-            System.out.println("fin processSelector");
+            tabs.put(name, new HashMap());            
         }
+        return script.toString();
     }
 
-    private HashMap processProperties(Element sel) {
-        HashMap attrs = new HashMap();
-        NodeList nl = sel.getElementsByTagName("property");
-        if(nl!=null && nl.getLength()>0) {
-            for(int i=0; i<nl.getLength(); i++) {
-                Element e = (Element)nl.item(i);
-                attrs.put(e.getAttribute("name"), e.getAttribute("value"));
-            }
-        }
-        return attrs;
-    }
-
-    private void nl() {
-        script.append("\n");
-    }
-
-    private void processStartDocument() {
-        System.out.println("inicia processStartDocument...");
+    private String processStartDocument() {
+        StringBuilder script = new StringBuilder();
         script.append("<style type=\"text/css\">\n");
         script.append("  body, div, table, input, select { font-family:helvetica,arial,sans-serif; font-size:10pt; }\n");
         script.append("  td { vertical-align:top; }\n");
-        script.append("  .label { text-align:left; vertical-align:top; width:55px;}");
+        script.append("  .label { text-align:left; vertical-align:top; width:95px;}");
         script.append("</style>\n");
 
         script.append("<script type=\"text/javascript\">\n");
@@ -384,11 +371,10 @@ public class StylerDomParser {
         script.append(" dojo.require(\"dijit.form.ComboBox\");\n");
         script.append(" dojo.require(\"dijit.form.FilteringSelect\");\n");
         script.append(" dojo.require(\"dijit.form.TextBox\");\n");
-        //script.append(" dojo.require(\"dijit.form.Button\");\n");
+        script.append(" dojo.require(\"dijit.form.Form\");\n");
 
         script.append(" dojo.require(\"dojo.fx\");\n");
         script.append(" dojo.require(\"dijit.ColorPalette\");\n");
-        script.append(" dojo.require(\"dijit.form.Button\");\n");
 
         script.append("function expande(oId) {\n");
         script.append("    var anim1 = dojo.fx.wipeIn( {node:oId, duration:500 });\n");
@@ -413,7 +399,7 @@ public class StylerDomParser {
 
         script.append("dojo.addOnLoad( function(){\n");
         script.append("    var tc = dijit.byId('tc_"+client.getId()+"');\n");
-        script.append("    dojo.connect(tc, 'selectChild', function(child){ dojo.byId('stel').value=child.id; console.log('child = '+child.title+' id = '+child.id); });\n");
+        script.append("    dojo.connect(tc, 'selectChild', function(child){ dojo.byId('stel').value=child.id; });\n");
         script.append("});\n");
 
         script.append("</script>\n");
@@ -422,11 +408,11 @@ public class StylerDomParser {
         script.append("<div dojoType=\"dijit.layout.TabContainer\" id=\"tc_"+client.getId()+"\" style=\"width:400px;height:510px;\" tabPosition=\"left-h\" tabStrip=\"true\">\n");
 
         tabs = new HashMap();
-        System.out.println("fin processStartDocument");
+        return script.toString();
     }
 
-    private void processEndDocument() {
-        System.out.println("inicia processEndDocuent...");
+    private String processEndDocument() {
+        StringBuilder script = new StringBuilder();
         script.append("</div>\n");
 
         script.append("<script type=\"text/javascript\">\n");
@@ -441,7 +427,7 @@ public class StylerDomParser {
         }
         script.append("});\n");
         script.append("</script>\n");
-        System.out.println("fin processEndDocument");
+        return script.toString();
     }
 
     public HashMap getTabs() {
@@ -450,5 +436,17 @@ public class StylerDomParser {
 
     public static void main(String argv[]) {
 
+    }
+
+    private HashMap processProperties(Element sel) {
+        HashMap attrs = new HashMap();
+        NodeList nl = sel.getElementsByTagName("property");
+        if(nl!=null && nl.getLength()>0) {
+            for(int i=0; i<nl.getLength(); i++) {
+                Element e = (Element)nl.item(i);
+                attrs.put(e.getAttribute("name"), e.getAttribute("value"));
+            }
+        }
+        return attrs;
     }
 }
