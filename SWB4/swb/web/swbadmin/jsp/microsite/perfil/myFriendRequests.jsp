@@ -308,11 +308,11 @@
                 else if (elementos == 0)
                 {
 %>
-<br><ul class="listaElementos">
+<!-- <br><ul class="listaElementos">
     <li>
         <a class="contactos_nombre" href="#">No has solicitado personas que se unan a ti como amigos.</a>
     </li>
-</ul>
+</ul> -->
 
 <%            }
 %>
@@ -322,11 +322,11 @@
         else
         {
 %>
-<br><ul class="listaElementos">
+<!-- <br><ul class="listaElementos">
     <li>
         <a class="contactos_nombre" href="#">No has solicitado personas que se unan a ti como amigos.</a>
     </li>
-</ul>  
+</ul> -->
 <%            }
 
 %>
