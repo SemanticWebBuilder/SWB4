@@ -209,6 +209,8 @@
 %>
 <div class="resumenText">
     <p><span class="itemTitle">Nombre:</span>&nbsp;<%=user.getFullName()%></p>
+    <p><span class="itemTitle">Edad:</span> &nbsp;<%=age%></p>
+    <p><span class="itemTitle">Sexo:</span> <%=sex%></p>
     <%
 
             if (owner == user || areFriends)
@@ -223,8 +225,7 @@
         }
     %>
     
-    <p><span class="itemTitle">Edad:</span> &nbsp;<%=age%></p>
-    <p><span class="itemTitle">Sexo:</span> <%=sex%></p>
+    
     <p><span class="itemTitle">Estado Civil:</span> <%=userStatus%></p>
 
 
