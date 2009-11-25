@@ -12,26 +12,32 @@
 
 
 <%
-User owner=paramRequest.getUser();
-User user=owner;
-WebPage wpage=paramRequest.getWebPage().getWebSite().getWebPage("perfil");
-if(request.getParameter("user")!=null)
-{
-    SemanticObject semObj=SemanticObject.createSemanticObject(request.getParameter("user"));
-    user=(User)semObj.createGenericInstance();
-}
+            User owner = paramRequest.getUser();
+            User user = owner;
+            WebPage wpage = paramRequest.getWebPage().getWebSite().getWebPage("perfil");
+            if (request.getParameter("user") != null)
+            {
+                SemanticObject semObj = SemanticObject.createSemanticObject(request.getParameter("user"));
+                user = (User) semObj.createGenericInstance();
+            }
+            
+            
 //if(!owner.isRegistered() || !user.isRegistered()) return;
 //Resource base=paramRequest.getResourceBase();
 //String registryPath=base.getAttribute("registryPath","");
 //String attributes=base.getAttribute("attributes","");
 
- String photo = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/perfil/profilePlaceholder.jpg";
- if(user.getPhoto()!=null) photo=SWBPortal.getWebWorkPath()+user.getPhoto();
- %>
- <br>
- <img src="<%=photo%>" width="150" height="150" alt="<%=user.getFullName()%>" /><br>
- <%if(owner.equals(user)){%>
-    <a class="cambiarFoto" href="<%=wpage.getUrl()%>?changePhoto=1">[cambiar foto]</a>
- <%}%>
-                      
-          
+            String photo = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/perfil/profilePlaceholder.jpg";
+            if (user.getPhoto() != null)
+            {
+                photo = SWBPortal.getWebWorkPath() + user.getPhoto();
+            }
+%>
+<br>
+<img src="<%=photo%>" width="150" height="150" alt="<%=user.getFullName()%>" /><br>
+<%if (owner.equals(user))
+            {%>
+<a class="cambiarFoto" href="<%=wpage.getUrl()%>?changePhoto=1">[cambiar foto]</a>
+<%}%>
+
+
