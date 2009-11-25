@@ -107,10 +107,12 @@
     }
 
     Date created = dirObj.getCreated();
+    /*----------  General Data ---------*/
     String streetName = semObject.getProperty(Commerce.swbcomm_streetName);
     String intNumber = semObject.getProperty(Commerce.swbcomm_intNumber);
     String extNumber = semObject.getProperty(Commerce.swbcomm_extNumber);
     String city = semObject.getProperty(Commerce.swbcomm_city);
+    Date expiration = semObject.getDateProperty(Clasified.swbcomm_expirationDate);
     /*----------  Personal Data ---------*/
     String contactName = semObject.getProperty(Commerce.swbcomm_contactName);
     String contactPhoneNumber = semObject.getProperty(Commerce.swbcomm_contactPhoneNumber);
@@ -220,6 +222,7 @@
         <%if (price != null) {%><p><span class="itemTitle">Precio: </span><%=price%></p><%}%>
         <%if (creator != null) {%><p><span class="itemTitle">Creado por: </span><%=creator%></p><%}%>
         <%if (created != null) {%><p><span class="itemTitle">Fecha de publicaci&oacute;n: </span><%=iso8601dateFormat.format(created)%></p><%}%>
+        <%if (expiration != null) {%><p><span class="itemTitle">Fecha de expiraci&oacute;n: </span><%=iso8601dateFormat.format(expiration)%></p><%}%>
         <%if (paymentType != null) {%><p><span class="itemTitle">Forma de pago: </span><%=paymentType%></p><%}%>
         <%
           if (impairedPeopleAccessible != null) {
