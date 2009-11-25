@@ -26,12 +26,12 @@ public class Clasified extends org.semanticwb.portal.community.base.ClasifiedBas
                 while(mit.hasNext())
                 {
                     MicrositeContainer site=mit.next();
-                    System.out.println("Sitio:"+site);
+                    //System.out.println("Sitio:"+site);
                     Iterator<Clasified> it=Clasified.ClassMgr.listClasifieds(site);
                     while(it.hasNext())
                     {
                         Clasified obj=it.next();
-                        System.out.println(obj+" exp:"+obj.getExpirationDate());
+                        //System.out.println(obj+" exp:"+obj.getExpirationDate());
                         if(obj.getExpirationDate().getTime()<System.currentTimeMillis())
                         {
                             obj.remove();
