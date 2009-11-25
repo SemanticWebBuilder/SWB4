@@ -21,20 +21,15 @@ User user = paramRequest.getUser();
 WebPage wpage = paramRequest.getWebPage();
 String perfilPath = wpage.getWebSite().getWebPage("perfil").getUrl();
 Iterator<DirectoryObject> itObjs = (Iterator) request.getAttribute("itDirObjs");
-SemanticObject sobj = null;
 SemanticClass cls = null;
 
-if (request.getParameter("sobj") != null) {
-    sobj = (SemanticObject) request.getAttribute("sobj");
-}
+SemanticObject sobj = (SemanticObject) request.getAttribute("sobj");
 
-if (sobj != null) {
-    cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sobj.getURI());
-}
 SWBResourceURL url = paramRequest.getRenderUrl();
 boolean toggleOrder = true;
 
 if (sobj != null) {
+    cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sobj.getURI());
     url.setParameter("uri", sobj.getURI());
     url.setParameter("act","add");
 %>
