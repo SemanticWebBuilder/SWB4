@@ -145,12 +145,15 @@
         Iterator itResult=setResult.iterator();
         while(itResult.hasNext())
         {
+            photo = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/perfil/profilePlaceholder.jpg";
             cont++;
             User userprosp=(User)itResult.next();
             if(cont<=iIniPage) continue;
             else if(cont>iFinPage) break;
-
-            if(userprosp.getPhoto()!=null) photo=SWBPortal.getWebWorkPath()+userprosp.getPhoto();
+            
+            if(userprosp.getPhoto()!=null)
+{                photo=SWBPortal.getWebWorkPath()+userprosp.getPhoto();
+          }
         %>
             <div class="friendCard">
                 <a href="<%=perfilPath%>?user=<%=userprosp.getEncodedURI()%>">
