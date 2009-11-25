@@ -154,7 +154,7 @@
                 {
 
                     String email = "", age = "", sex = "", userStatus = "", userInterest = "", userHobbies = "", userInciso = "";
-                    if (user.getEmail() != null)
+                    if (user.getEmail() != null && !user.getEmail().trim().equals(""))
                     {
                         email = user.getEmail();
                     }
