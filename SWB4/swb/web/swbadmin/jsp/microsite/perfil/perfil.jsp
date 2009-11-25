@@ -223,7 +223,7 @@
 
     <h2>Intereses</h2>
     <p><%=userInterest%></p>
-    <h2>Hobbies</h2>
+    <h2>Pasatiempos</h2>
     <p><%=userHobbies%></p>
     <h2>Inciso</h2>
     <p><%=userInciso%></p>
