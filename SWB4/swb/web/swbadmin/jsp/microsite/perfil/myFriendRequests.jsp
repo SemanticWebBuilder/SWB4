@@ -308,9 +308,9 @@
                 else if (elementos == 0)
                 {
 %>
-<ul class="listaElementos">
+<br><ul class="listaElementos">
     <li>
-        No has solicitado personas que se unan a ti como amigos.
+        <a class="contactos_nombre" href="#">No has solicitado personas que se unan a ti como amigos.</a>
     </li>
 </ul>
 
@@ -322,9 +322,9 @@
         else
         {
 %>
-<ul class="listaElementos">
+<br><ul class="listaElementos">
     <li>
-        No has solicitado personas que se unan a ti como amigos.
+        <a class="contactos_nombre" href="#">No has solicitado personas que se unan a ti como amigos.</a>
     </li>
 </ul>  
 <%            }
