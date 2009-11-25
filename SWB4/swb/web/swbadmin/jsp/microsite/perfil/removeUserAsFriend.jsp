@@ -17,9 +17,13 @@
                 SemanticObject semObj = SemanticObject.createSemanticObject(request.getParameter("user"));
                 user = (User) semObj.createGenericInstance();
             }
+            if (owner == null || user == null)
+            {
+                return;
+            }
             boolean areFriends = false;
 
-            if (owner!=null && user!=null && !owner.getURI().equals(user.getURI()) && Friendship.areFriends(owner, user, site))
+            if (owner != null && user != null && owner.getURI()!=null && user.getURI()!=null && !owner.getURI().equals(user.getURI()) && Friendship.areFriends(owner, user, site))
             {
                 areFriends = true;
             }
@@ -37,5 +41,5 @@
 %>
 <li><a href="<%=url%>" >Eliminar a <%=user.getFullName()%> como amigo</a></p>
     <%
-  }
+            }
     %>
