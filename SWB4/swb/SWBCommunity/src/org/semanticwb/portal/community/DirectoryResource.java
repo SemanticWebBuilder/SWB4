@@ -147,13 +147,6 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
         String action = response.getAction();
         String act = request.getParameter("act");
         User mem = response.getUser();
-        DirectoryObject dob = null;
-        if (request.getParameter("uri") != null && !request.getParameter("uri").equals("null")) {
-            SemanticObject so = SemanticObject.createSemanticObject(request.getParameter("uri"));
-            if (so != null) {
-                dob = (DirectoryObject)so.createGenericInstance();
-            }
-        }
 
         try
         {
