@@ -20,8 +20,9 @@
             }
         }
     }
+    SWBParamRequestImp imp=(SWBParamRequestImp)paramRequest;
 
-    if(user.isRegistered()&&nwp==0)
+    if(user.isRegistered()&&nwp==0 && imp.getRequest().getParameter("act")==null)
     {
         SWBResourceURL urlAdd = paramRequest.getRenderUrl();
         urlAdd.setParameter("act", "add");
