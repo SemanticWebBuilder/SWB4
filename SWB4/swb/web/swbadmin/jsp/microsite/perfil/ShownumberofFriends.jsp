@@ -27,12 +27,20 @@
                 count++;
             }
             String url = site.getWebPage("Amigos").getUrl();
-            if(request.getParameter("user")!=null)
-                {
-                    url+="?user="+java.net.URLEncoder.encode(request.getParameter("user"));
-                }
-            String mis_invitacionesURL=site.getWebPage("mis_invitaciones").getUrl();
-            String mis_solicitudesURL=site.getWebPage("mis_solicitudes").getUrl();
+            if (request.getParameter("user") != null)
+            {
+                url += "?user=" + java.net.URLEncoder.encode(request.getParameter("user"));
+            }
+            String mis_invitacionesURL = site.getWebPage("mis_invitaciones").getUrl();
+            if (request.getParameter("user") != null)
+            {
+                mis_invitacionesURL += "?user=" + java.net.URLEncoder.encode(request.getParameter("user"));
+            }
+            String mis_solicitudesURL = site.getWebPage("mis_solicitudes").getUrl();
+            if (request.getParameter("user") != null)
+            {
+                mis_solicitudesURL += "?user=" + java.net.URLEncoder.encode(request.getParameter("user"));
+            }
 %>
 <li><a href="<%=url%>" >Amigos (<%=count%>)</a></li>
 <%
