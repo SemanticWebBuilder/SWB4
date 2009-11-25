@@ -337,7 +337,7 @@
                         }
                         if (friendUser.getPhoto() != null)
                         {
-                            photo = friendUser.getPhoto();
+                            photo = SWBPortal.getWebWorkPath() +friendUser.getPhoto();
                         }
                         if (friendUser.getSemanticObject().getDoubleProperty(Geolocalizable.swb_latitude) != 0D)
                         {
@@ -353,7 +353,7 @@
 
     %>
     <div class="friendCard">
-        <img class="profilePic" width="121" height="121" src="<%=SWBPortal.getWebWorkPath() + photo%>" alt="<%=friendUser.getFullName()%>">
+        <img class="profilePic" width="121" height="121" src="<%=photo%>" alt="<%=friendUser.getFullName()%>">
         <div class="friendCardInfo">
             <a class="ico" href="mailto:<%=email%>"><img src="<%=path%>icoMail.png" alt="enviar un mensaje"></a>
             <a class="ico" href="<%=perfilurl%>?user=<%=urluser%>"><img src="<%=path%>icoUser.png" alt="ir al perfil"></a>                
