@@ -20,7 +20,7 @@ if(request.getParameter("user")!=null)
     SemanticObject semObj=SemanticObject.createSemanticObject(request.getParameter("user"));
     user=(User)semObj.createGenericInstance();
 }
-if(!owner.isRegistered() || !user.isRegistered()) return;
+//if(!owner.isRegistered() || !user.isRegistered()) return;
 //Resource base=paramRequest.getResourceBase();
 //String registryPath=base.getAttribute("registryPath","");
 //String attributes=base.getAttribute("attributes","");
