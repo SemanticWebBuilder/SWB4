@@ -30,7 +30,7 @@ if(request.getParameter("user")!=null && !request.getParameter("user").equals(us
     SemanticObject semObj=SemanticObject.createSemanticObject(request.getParameter("user"));
     user=(User)semObj.createGenericInstance();
 }
-if(!owner.isRegistered() || !user.isRegistered())
+/*if(!owner.isRegistered() || !user.isRegistered())
 {
     %>
     <script type="text/javascript">
@@ -38,7 +38,7 @@ if(!owner.isRegistered() || !user.isRegistered())
     </script>
     <%
     return;
-}
+}*/
 
 if(request.getParameter("changePhoto")!=null && request.getParameter("changePhoto").equals("1") && !isStrategy)
 {
