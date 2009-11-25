@@ -43,7 +43,7 @@
             
 
             HashMap<String,User> elements = new HashMap();
-            int elementos = 0;
+            
 
 
             Iterator<FriendshipProspect> itFriendshipProspect = FriendshipProspect.ClassMgr.listFriendshipProspectByFriendShipRequester(owner, wpage.getWebSite());
@@ -51,9 +51,9 @@
             {
                 FriendshipProspect friendshipProspect = itFriendshipProspect.next();
                 User userRequested = friendshipProspect.getFriendShipRequested();
-                elements.put(userRequested.getURI(),userRequested);
-                elementos++;
-            }            
+                elements.put(userRequested.getURI(),userRequested);            
+            }      
+            int elementos=elements.size();
             boolean hasRequest = elements.size()>0;
             int paginas = elementos / ELEMENETS_BY_PAGE;
             if (elementos % ELEMENETS_BY_PAGE != 0)

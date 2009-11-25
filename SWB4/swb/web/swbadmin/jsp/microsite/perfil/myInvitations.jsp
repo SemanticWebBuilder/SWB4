@@ -37,19 +37,19 @@
             boolean hasInvitations = false;
 
             HashMap<String,User> elements = new HashMap();
-            int elementos = 0;
+            
 
             Iterator<FriendshipProspect> itFriendshipProspect = FriendshipProspect.ClassMgr.listFriendshipProspectByFriendShipRequested(owner, wpage.getWebSite());
             while (itFriendshipProspect.hasNext())
             {
                 FriendshipProspect friendshipProspect = itFriendshipProspect.next();
                 User userRequester = friendshipProspect.getFriendShipRequester();
-                elements.put(user.getURI(),userRequester);
-                elementos++;
+                elements.put(user.getURI(),userRequester);            
             }
             hasInvitations = elements.size() > 0;
-            int paginas = elementos / ELEMENETS_BY_PAGE;
-            if (elementos % ELEMENETS_BY_PAGE != 0)
+            int elementos=elements.size();
+            int paginas = elements.size() / ELEMENETS_BY_PAGE;
+            if (elements.size() % ELEMENETS_BY_PAGE != 0)
             {
                 paginas++;
             }
