@@ -5,9 +5,11 @@
 <%@page import="org.semanticwb.SWBPortal"%>
 
 <%
-
-
             User user = (User) request.getAttribute("user");
+            if (!user.isRegistered())
+            {
+                return;
+            }
             WebSite site = ((WebPage) request.getAttribute("webpage")).getWebSite();
             if (user != null && request.getParameter("user") != null)
             {
@@ -57,6 +59,11 @@
                         }
                     }
                 }
+                if (user.getURI() != null && propect.getURI() != null && user.getURI().equals(propect.getURI()))
+                {
+                    isFriend = true;
+                }
+
 
                 String url = ((WebPage) request.getAttribute("webpage")).getUrl() + "?user=" + propect.getEncodedURI() + "&addprospect=true";
                 if (!isFriend)
