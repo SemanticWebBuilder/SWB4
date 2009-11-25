@@ -93,6 +93,11 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.poi.POITextExtractor;
+import org.apache.poi.extractor.ExtractorFactory;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
+import org.apache.xmlbeans.XmlException;
 import org.semanticwb.base.util.ErrorElement;
 import org.semanticwb.base.util.SFBase64;
 import org.semanticwb.base.util.SWBMailSender;
@@ -1006,6 +1011,12 @@ public class SWBUtils {
                 if(!addch)ret.append(ch);
             }
             return ret.toString();
+        }
+        
+
+        public static String getOfficeFileText(File file) throws InvalidFormatException, OpenXML4JException, XmlException, java.io.IOException {
+             POITextExtractor textExtractor = ExtractorFactory.createExtractor(file);
+             return textExtractor.getText();
         }
 
     }
