@@ -27,6 +27,10 @@
                 count++;
             }
             String url = site.getWebPage("Amigos").getUrl();
+            if(request.getParameter("user")!=null)
+                {
+                    url+="?user="+java.net.URLEncoder.encode(request.getParameter("user"));
+                }
             String mis_invitacionesURL=site.getWebPage("mis_invitaciones").getUrl();
             String mis_solicitudesURL=site.getWebPage("mis_solicitudes").getUrl();
 %>
