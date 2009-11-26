@@ -140,22 +140,20 @@
             %>
         <a href="<%=wpage.getUrl()%>?ipage=<%=i%>">
             <%
-                if(i==ipage)
+                    if (i == ipage)
                     {
-                    %>
-                    <strong>
-                    <%
-                    }
             %>
-            <%=i%>
-            <%
-            if(i==ipage)
-                    {
-                    %>
-                    </strong>
-                    <%
-                    }
+            <strong>
+                <%                    }
                 %>
+                <%=i%>
+                <%
+                    if (i == ipage)
+                    {
+                %>
+            </strong>
+            <%                    }
+            %>
         </a>
         <%
                 }
@@ -306,28 +304,26 @@
                 {
             %>
         <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%
-                if(i==ipage)
+                    if (i == ipage)
                     {
-                    %>
-                    <strong>
-                    <%
-                    }
             %>
-            <%=i%>
-            <%
-            if(i==ipage)
+            <strong>
+                <%                    }
+                %>
+                <%=i%>
+                <%
+                    if (i == ipage)
                     {
-                    %>
-                    </strong>
-                    <%
-                    }
-                %></a>
+                %>
+            </strong>
+            <%                    }
+            %></a>
         <%
                 }
         %>
         <%
-                        if (ipage != paginas)
-                        {
+                if (ipage != paginas)
+                {
         %>
         <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
             <%
@@ -379,6 +375,14 @@
         %>
         <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS al blog de la comunidad</a></li>
     </ul>
+        <%
+        if (!editarblog)
+            {
+            %>
+            <br><br><p><span class="tituloRojo">NOTA: </span>Sólo el dueño de la comunidad puede cambiar la información básica del blog.</p>
+            <%
+            }
+        %>
 </div>
 
 
