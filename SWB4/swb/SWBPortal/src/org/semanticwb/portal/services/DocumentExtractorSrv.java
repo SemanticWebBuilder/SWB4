@@ -53,64 +53,6 @@ public class DocumentExtractorSrv implements HSSFListener
     private static StringBuffer excelBuf=new StringBuffer();
     
     
-    
-    /**
-     * Extrae el string de un archivo de excel
-     *
-     * Extract the string of a excel document
-     */    
-    public String excelExtractor(File file){
-        try{
-            FileInputStream fin = new FileInputStream(file);
-            POIFSFileSystem poifs = new POIFSFileSystem(fin);
-            InputStream din = poifs.createDocumentInputStream("Workbook");
-            HSSFRequest req = new HSSFRequest();
-            req.addListenerForAllRecords(new DocumentExtractorSrv());
-            HSSFEventFactory factory = new HSSFEventFactory();
-            factory.processEvents(req, din);
-            fin.close();
-            din.close();
-        }catch(Exception e){
-            log.error("Error while reading excel file in DocumentExtractorSrv/ExcelExtractor:"+e.getMessage());
-        }
-        return excelBuf.toString();
-    }
-    
-    /**
-     * Extrae el string de un archivo de word
-     *
-     * Extract the string of a word document
-     */    
-    public String wordExtractor(File file){
-        try{
-            FileInputStream in = new FileInputStream(file);
-            HWPFDocument doc = new HWPFDocument(in);
-            if(doc!=null && doc.getRange()!=null){
-                return doc.getRange().text();
-            }
-        }catch(Exception e){
-            log.error("Error while reading word file in DocumentExtractorSrv/ExcelExtractor:"+e.getMessage());
-        }
-        return "";
-    }
-    
-    
-    /**
-     * Extrae el string de un archivo de power point
-     *
-     * Extract the string of a power point document
-     */    
-    public static String pptExtractor(File file) throws IOException, FileNotFoundException {
-        POIFSReader r = new POIFSReader();
-        /* Register a listener for *all* documents. */
-        StringBuffer pptBuf=new StringBuffer();
-        MyPOIFSReaderListener listener = new MyPOIFSReaderListener(pptBuf);
-        //MyPOIFSReaderListener listener = new MyPOIFSReaderListener(new BufferedWriter(new FileWriter(dest)));
-        r.registerListener(listener);
-        r.read(new FileInputStream(file));
-        return listener.getString();
-    }
-    
     /**
      * Extrae el string de un archivo pdf
      *
