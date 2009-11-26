@@ -136,6 +136,7 @@ public class SWBModelAdmin extends GenericResource {
                     out.println("</td>");
                     url.setMode("installmodel");
                     url.setAction("form");
+                    url.setParameter("fileName", fileName);
                     out.println("<td align=\"center\"><a href=\"" + url.toString() + "\" onclick=\"submitUrl('" + url.toString() + "',this);return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/iconinst.png\" alt=\""+paramRequest.getLocaleLogString("install") + "\"/></a></td>");
                     out.println("<td align=\"center\"><a href=\"" + WEBPATH + filex.getName() + "\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/icondesin.png\" alt=\""+paramRequest.getLocaleLogString("download") + "\"/></a></td>");
                     urlAction.setParameter("zipName", filex.getAbsolutePath());
@@ -213,14 +214,14 @@ public class SWBModelAdmin extends GenericResource {
                     out.println(paramRequest.getLocaleLogString("msgwsTitle"));
                     out.println("</td>");
                     out.append("<td>");
-                    out.println("<input type=\"text\" name=\"wstitle\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Titulo.\" invalidMessage=\"Titulo es requerido.\" onkeyup=\"dojo.byId('swb_create_id').value=replaceChars4Id(this.textbox.value);dijit.byId('swb_create_id').validate()\" trim=\"true\" >");
+                    out.println("<input type=\"text\" value=\""+request.getParameter("fileName")+"\" name=\"wstitle\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Titulo.\" invalidMessage=\"Titulo es requerido.\" onkeyup=\"dojo.byId('swb_create_id').value=replaceChars4Id(this.textbox.value);dijit.byId('swb_create_id').validate()\" trim=\"true\" >");
                     out.println("</td>");
                     out.append("</tr>");
                     out.append("<tr><td>");
                     out.println("ID:");
                     out.println("</td>");
                     out.append("<td>");
-                    out.println("<input id=\"swb_create_id\" type=\"text\" name=\"wsid\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Identificador.\" isValid=\"return canCreateSemanticObject(this.textbox.value);\" invalidMessage=\"Identificador invalido.\" trim=\"true\" >");
+                    out.println("<input id=\"swb_create_id\" type=\"text\" value=\""+request.getParameter("fileName")+"\" name=\"wsid\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Identificador.\" isValid=\"return canCreateSemanticObject(this.textbox.value);\" invalidMessage=\"Identificador invalido.\" trim=\"true\" >");
                     out.println("</td>");
                     out.append("</tr>");
                     out.println("</table>");
