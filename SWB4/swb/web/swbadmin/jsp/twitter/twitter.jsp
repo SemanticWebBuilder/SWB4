@@ -22,7 +22,7 @@
         if (webpage.getSemanticObject().getGenericInstance() instanceof MicroSiteWebPageUtil) {
             isComunity=true;
         }
-        
+
         String imgPath = SWBPlatform.getContextPath() + "/swbadmin/images/";
         SWBResourceURL urlAction = paramRequest.getActionUrl();
         SWBResourceURL url = paramRequest.getRenderUrl();
@@ -61,10 +61,10 @@
                         %>
                         <div id="entriesTwitter">
                         <a href="http://twitter.com" target="_new"><img src="<%=imgPath%>twitter_logo.png" valign="top"/></a>
-                        <% if(owner.getURI()!=null && owner.getURI().equals(user.getURI())){%>
+                        <%if ((!isComunity && owner.getURI()!=null && owner.getURI().equals(user.getURI())) || (isComunity && member!=null && member.getURI()!=null && member.getAccessLevel()>=Member.LEVEL_ADMIN)){%>
                             <a href="<%=url.toString()%>">[Configurar]</a>
                         <%}%>
-                        <%if (owner.getURI()!=null && owner.getURI().equals(user.getURI())){%>
+                        <%if ((!isComunity && owner.getURI()!=null && owner.getURI().equals(user.getURI())) || (isComunity && member!=null && member.getURI()!=null)){%>
                         <form action="<%=urlAction.toString()%>">
                             <table>
                                 <tr>
@@ -125,7 +125,7 @@
                         %>
                             No existe información para la cuenta de usuario proporcionada, o no se pudo autenticar el usuario en Twitter...
                             <br/>
-                         <% if(owner.getURI()!=null && owner.getURI().equals(user.getURI())){%>
+                        <%if ((!isComunity && owner.getURI()!=null && owner.getURI().equals(user.getURI())) || (isComunity && member!=null && member.getURI()!=null && member.getAccessLevel()>=Member.LEVEL_ADMIN)){%>
                             <a href="<%=url.toString()%>">[Configurar]</a>
                          <%}%>
                         <%
