@@ -256,6 +256,12 @@
 
     <%
             }
+             else
+                {
+                %>
+                <p><span class="tituloRojo">NOTA: </span>Sólo el dueño de la comunidad puede cambiar la información básica de la misma.</p>
+                <%
+                }
     %>
     <ul class="miContenido">
         <%
