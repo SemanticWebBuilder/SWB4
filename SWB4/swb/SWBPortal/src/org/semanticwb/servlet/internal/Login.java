@@ -419,11 +419,11 @@ public class Login implements InternalServlet
 
             try
             {
-                rutaSite = "/" + distributorParams.getWebPage().getWebSite().getId() + ruta;
+                rutaSite = "/models/" + distributorParams.getWebPage().getWebSite().getId() + ruta;
                 login =
                         SWBPortal.readFileFromWorkPath(rutaSite);
                 login =
-                        SWBPortal.UTIL.parseHTML(login, SWBPortal.getWebWorkPath() + "/" + distributorParams.getWebPage().getWebSite().getId() + "/config/images/");
+                        SWBPortal.UTIL.parseHTML(login, SWBPortal.getWebWorkPath() + "/models/" + distributorParams.getWebPage().getWebSite().getId() + "/config/images/");
             } catch (Exception ignored)
             {
             }
