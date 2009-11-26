@@ -39,7 +39,7 @@ if (sobj != null) {
             <a class="adminTool" href="<%=url%>">Agregar elemento al indice</a>
           <%}
             if (itObjs.hasNext()) {%>
-          <span class="adminTool "id="toggle_link" href="#" onclick="toggle('togle_div')">Mostrar Filtros</span>
+                <span class="adminTool "id="toggle_link" href="#" onclick="toggle('togle_div')">Mostrar Filtros</span>
           <%}%>
       </div>
           <%if (!user.isRegistered() && !user.isSigned()) {%>
