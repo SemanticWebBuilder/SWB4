@@ -163,6 +163,30 @@ public class SWBContext extends SWBContextBase
         return getSessionUser(null);
     }
 
+    /**
+     * Regresa usuario Administrador si esta firmado y tiene permisos de administracion, de lo contrario regresa null
+     * @return
+     */
+    public static User getAdminUser()
+    {
+        User user = null;
+        SessionUser sess = m_sessions.get(Thread.currentThread().getName());
+        if (sess != null)
+        {
+            user = (User)sess.getUser(SWBContext.USERREPOSITORY_ADMIN);
+        }
+        if(user!=null && user.isSigned())
+        {
+            UserRepository rep=SWBContext.getAdminRepository();
+            UserGroup admin=UserGroup.ClassMgr.getUserGroup("administrators", rep);
+            if(user.hasUserGroup(admin))
+            {
+                return user;
+            }
+        }
+        return null;
+    }
+
     public static User getSessionUser(String usrrep) {
         Principal user = null;
         SessionUser sess = m_sessions.get(Thread.currentThread().getName());
