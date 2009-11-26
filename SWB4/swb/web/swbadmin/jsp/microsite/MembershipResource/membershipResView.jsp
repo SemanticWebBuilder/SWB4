@@ -255,13 +255,7 @@
     <p><a href="<%=urle%>">[Cambiar imagen]</a></p>
 
     <%
-            }
-             else
-                {
-                %>
-                <p><span class="tituloRojo">NOTA: </span>Sólo el dueño de la comunidad puede cambiar la información básica de la misma.</p>
-                <%
-                }
+            }             
     %>
     <ul class="miContenido">
         <%
@@ -292,4 +286,12 @@
         %>
 
     </ul>
+        <%
+        if (!(null != member && member.getAccessLevel() == Member.LEVEL_OWNER && user.isRegistered()))
+            {
+            %>
+            <p><span class="tituloRojo">NOTA: </span>Sólo el dueño de la comunidad puede cambiar la información básica de la misma.</p>
+            <%
+            }
+        %>
 </div>
