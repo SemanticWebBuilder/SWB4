@@ -65,6 +65,7 @@ import java.io.FileWriter;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import org.apache.commons.mail.HtmlEmail;
@@ -1018,6 +1019,44 @@ public class SWBUtils {
              POITextExtractor textExtractor = ExtractorFactory.createExtractor(file);
              return textExtractor.getText();
         }
+
+        public String pdfExtractor(File file) throws java.io.IOException {
+        FileInputStream is=new FileInputStream(file);
+        org.pdfbox.pdmodel.PDDocument pdfDocument = null;
+        try {
+            pdfDocument = org.pdfbox.pdmodel.PDDocument.load( is );
+
+
+            if( pdfDocument.isEncrypted() ) {
+                //Just try using the default password and move on
+                pdfDocument.decrypt( "" );
+            }
+
+            //create a writer where to append the text content.
+            StringWriter writer = new StringWriter();
+            org.pdfbox.util.PDFTextStripper stripper = new org.pdfbox.util.PDFTextStripper();
+            stripper.writeText( pdfDocument, writer );
+
+            // Note: the buffer to string operation is costless;
+            // the char array value of the writer buffer and the content string
+            // is shared as long as the buffer content is not modified, which will
+            // not occur here.
+            String contents = writer.getBuffer().toString();
+            return contents;
+        }
+        catch( org.pdfbox.exceptions.CryptographyException e ) {
+            throw new IOException( "Error decrypting document(" + file.getPath() + "): " + e );
+        }
+        catch( org.pdfbox.exceptions.InvalidPasswordException e ) {
+            //they didn't suppply a password and the default of "" was wrong.
+            throw new IOException( "Error: The document(" + file.getPath() + ") is encrypted and will not be indexed." );
+        }
+        finally {
+            if( pdfDocument != null ) {
+                pdfDocument.close();
+            }
+        }
+    }
 
     }
 
