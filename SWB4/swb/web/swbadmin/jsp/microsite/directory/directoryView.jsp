@@ -37,8 +37,10 @@ if (sobj != null) {
       <div class="adminTools">
           <%if(user.isRegistered() && user.isSigned()){%>
             <a class="adminTool" href="<%=url%>">Agregar elemento al indice</a>
-          <%}%>
+          <%}
+            if (itObjs.hasNext()) {%>
           <span class="adminTool "id="toggle_link" href="#" onclick="toggle('togle_div')">Mostrar Filtros</span>
+          <%}%>
       </div>
           <%if (!user.isRegistered() && !user.isSigned()) {%>
           <p><span class="tituloRojo">NOTA: </span>Debe estar registrado y haber iniciado sesi&oacute;n para poder publicar elementos.</p>
