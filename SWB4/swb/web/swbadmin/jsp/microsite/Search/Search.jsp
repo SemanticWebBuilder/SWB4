@@ -74,7 +74,7 @@
 <script type="text/javascript">
     var MenuBar3 = new Spry.Widget.MenuBar("MenuBar3");
 </script>
-        <br>
+<br>
 <%
 if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
     if (results != null && results.size() > 0) {
@@ -157,7 +157,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
 
         <h3>Resultados de la b&uacute;squeda <i><%=request.getParameter("q")%></i></h3>
         <%
-        if (what != null && what.trim().equals("Organization")) {            
+        if (what != null && what.trim().equals("Organization")) {
             %>
             <a id="toggle_link" href="#" onclick="toggle('map_container')">Ocultar Mapa de distribuci&oacute;n</a>
             <div id="map_container">
@@ -218,7 +218,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
         <p>
             Mostrando resultados <b><%=start+1%></b> al <b><%=end+1%></b> de <b><%=total%></b>.
         </p>
-        <p>
+        <p align="right">
             Ordenar por <a href="<%=byDate.setParameter("q", request.getParameter("q"))%>">fecha</a> | <a href="<%=byName.setParameter("q", request.getParameter("q"))%>">nombre</a>
         </p>
         <div class="entriesList">
@@ -404,8 +404,11 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
         %>
         )
         </p>
+        <form action="#">
+            <input type="submit" value="Regresar" onclick="history.go(-1)"/>
+        </form>
         <%
-    } else {
+    } else if (request.getParameter("q") != null && !request.getParameter("q").equals("")) {
         %><h3>Resultados de la b&uacute;squeda <i><%=request.getParameter("q")%></i></h3>
         <br>
         <hr/>
@@ -414,9 +417,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
         </p><%
     }
     %>
-    <form action="#">
-        <input type="submit" value="Regresar" onclick="history.go(-1)"/>
-    </form>
+    
     <%
 }
 %>
