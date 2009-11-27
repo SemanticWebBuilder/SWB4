@@ -190,6 +190,13 @@ if (null!=microsite){
 
                     def usr_age = mem_usr.getExtendedAttribute(mapa.get("userAge"))
                     if (null==usr_age) usr_age = ""
+                    
+                    if(usr_age.trim().equals("0"))
+                    {
+                        usr_age="";
+                    }
+                    
+
                     println """
                 <div class="noticia">
                         <img src="$img" width="121" heiht="121" alt="Foto de $name">
@@ -197,7 +204,7 @@ if (null!=microsite){
                         <h2>$name</h2>
                     <p class="stats">
                         Sexo: $usr_sex<br>
-                        Edad: $usr_age<br>
+                        Edad: $usr_age<br><br>
                     <a href="$perfil?user=$uri">Ver m&aacute;s</a>
                     </p>                    
                     <br><br><br><br>
