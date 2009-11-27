@@ -40,12 +40,13 @@
 if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
     if (results != null && results.size() > 0) {
 
+        String resultType = "";
         //Get all DirectoryObject's GeoLocations as arrayList
         ArrayList<GeoLocation> objs = new ArrayList<GeoLocation>();
         Iterator<SemanticObject> soit = allRes.iterator();
         while (soit.hasNext()) {
             SemanticObject so = soit.next();
-            if (so.getSemanticClass().isSubClass(Geolocalizable.swb_Geolocalizable)) {
+            if (so.getSemanticClass().isSubClass(Geolocalizable.swb_Geolocalizable)) {                
                 DirectoryObject dob = (DirectoryObject) so.createGenericInstance();
                 so.getProperty(Addressable.swbcomm_streetName);
                 String html = "<b><font color=\"blue\">" + dob.getTitle() + "</font></b><br>" +
@@ -118,6 +119,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
         <h3>Resultados de la b&uacute;squeda <i><%=request.getParameter("q")%></i></h3>
         <%
         if (what != null && what.trim().equals("Organization")) {
+            resultType = "Organizaci&oacute;n";
             %>
             <a id="toggle_link" href="#" onclick="toggle('map_container')">Ocultar Mapa de distribuci&oacute;n</a>
             <div id="map_container">
@@ -187,6 +189,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                 SemanticObject obj = it.next();
                 if (obj == null) continue;
                 if (obj.instanceOf(MicroSite.sclass)) {
+                    resultType = "Comunidad";
                     MicroSite site = (MicroSite)obj.createGenericInstance();
                     Iterator<Member> members = site.listMembers();
                     int count = 0;
@@ -221,6 +224,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                     </div>
                     <%
                 } else if (obj.instanceOf(User.sclass)) {
+                    resultType = "Persona";
                     User usr = (User)obj.createGenericInstance();
                     String photo = imgDefaultPath;//SWBPortal.getContextPath() + "/swbadmin/images/defaultPhoto.jpg";
                     if(usr.getPhoto() != null) photo = SWBPortal.getWebWorkPath() + usr.getPhoto();
@@ -272,6 +276,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                     </div>
                 <%
                 } else if (obj.instanceOf(DirectoryObject.sclass)) {
+                    resultType = "Clasificado";
                     %>
                     <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
                     <%
@@ -283,7 +288,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                     %>
                         <img height="95" alt="<%=c.getTitle()%>" width="95" src="<%=photo%>" />
                         <div class="listEntryInfo">
-                        <p class="tituloRojo"><%=c.getTitle()%>&nbsp;(<%=obj.getSemanticClass().getDisplayName(lang)%>)</p>
+                        <p class="tituloRojo"><%=c.getTitle()%>&nbsp;(<%=resultType%>)</p>
                         <p>
                             <b><%=(c.getDescription()==null)?"":c.getDescription()%></b>
                         </p>
