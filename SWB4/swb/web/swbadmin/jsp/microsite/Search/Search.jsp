@@ -204,7 +204,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                     }
                     %>
                     <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
-                        <img alt="<%=site.getTitle()%>" src="<%=imgPath%>" />
+                        <img alt="<%=site.getTitle()%>" src="<%=imgPath%>" height="95" width="95"/>
                         <div class="listEntryInfo">
                             <p class="tituloRojo">
                                 <%=site.getTitle()%> (<%=resultType%>)
@@ -243,7 +243,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                     String profile = "<a href=\"" + perfilPath + "?user=" + usr.getEncodedURI() + "\">Ver perfil</a>";
                 %>
                     <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
-                    <img alt="<%=usr.getLogin()%>"src="<%=photo%>"/>
+                    <img alt="<%=usr.getLogin()%>"src="<%=photo%>" height="95" width="95"/>
                     <div class="listEntryInfo">
                         <p class="tituloRojo">
                             <%=usr.getFullName()%>
