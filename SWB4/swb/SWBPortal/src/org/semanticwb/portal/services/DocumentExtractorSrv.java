@@ -31,7 +31,6 @@ package org.semanticwb.portal.services;
 import org.apache.poi.poifs.filesystem.*;
 import org.apache.poi.hssf.eventusermodel.*;
 import org.apache.poi.hssf.record.*;
-import org.apache.poi.hwpf.*;
 import org.apache.poi.hpsf.*;
 import org.apache.poi.poifs.eventfilesystem.*;
 import org.apache.poi.util.LittleEndian;
