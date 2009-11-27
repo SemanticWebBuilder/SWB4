@@ -345,7 +345,7 @@ if (sobj != null) {
                         }else if(semProp==ClasifiedBuySell.swbcomm_Price){
                              price=propValue;
                         }else if(semProp==DirectoryObject.swb_created){
-                            Date date=SWBUtils.TEXT.iso8601DateParse(propValue);
+                            Date date=semObject.getDateProperty(semProp);
                             created= SWBUtils.TEXT.getTimeAgo(date, user.getLanguage());
                         }
                     }
@@ -409,7 +409,6 @@ if (sobj != null) {
                         <p class="tituloRojo">
                             Título de tu anuncio
                         </p>
-                            <!--%=wpage.getPath(map)%-->
                         <p>
                             Descripci&oacute;n de tu anuncio
                         </p><br/>
