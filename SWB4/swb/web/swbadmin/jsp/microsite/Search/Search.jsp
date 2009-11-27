@@ -35,7 +35,19 @@
         public String getName(){ return name;}
     }
 %>
-
+<div class="twoColContent">
+<div id="busquedaAvanzada">
+    <div id="busquedaPalabraClave" class="buscador" method="post" name="busquedaKeyWords">
+        <form action="<%=searchUrl%>">
+            <div>
+                <input id="buscadorKeyWords" type="text" value="Búsqueda por palabra clave" name="q"/>
+                <input id="buscarKeyWords" type="submit" value="Buscar"/>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+        <br>
 <%
 if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
     if (results != null && results.size() > 0) {
