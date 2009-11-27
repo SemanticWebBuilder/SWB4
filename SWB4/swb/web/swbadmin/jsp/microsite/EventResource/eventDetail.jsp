@@ -80,7 +80,7 @@
             int year = cal.get(cal.YEAR);
     %>
     <div id="calendario">
-        <h2><%=smonth%> de <%=year%></h2>
+        <h2><%=smonth%> del <%=year%></h2>
         <ul class="dias semana">
             <li>D</li><li>L</li><li>M</li><li>M</li><li>J</li><li>V</li><li>S</li>
         </ul>
