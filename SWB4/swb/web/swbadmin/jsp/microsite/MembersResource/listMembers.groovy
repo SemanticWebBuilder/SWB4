@@ -183,8 +183,9 @@ if (null!=microsite){
                     }                    
                     def name=mem_usr.getFullName()
                     def usr_sex = mem_usr.getExtendedAttribute(mapa.get("userSex"))
-                    if ("M".equals(usr_sex)) usr_sex = "Hombre"
-                    if ("F".equals(usr_sex)) usr_sex = "Mujer"
+                    if ("M".equals(usr_sex)) usr_sex = "Masculino"
+                    else if ("F".equals(usr_sex)) usr_sex = "Femenino"
+                    else usr_sex = ""
 
                     def usr_age = mem_usr.getExtendedAttribute(mapa.get("userAge"))
                     if (null==usr_age) usr_age = ""
@@ -200,11 +201,11 @@ if (null!=microsite){
                   <div class="noticiaTexto">
                         <h2>$name</h2>
                     <p class="stats">
-                        Sexo: $usr_sex<br>
+                        Sexo: $usr_sex<br><br>
                         Edad: $usr_age<br><br>
                     <a href="$perfil?user=$uri">Ver m&aacute;s</a>
                     </p>                    
-                    <br><br><br><br>
+                    <br><br>
                   </div>
                 </div>           
               
