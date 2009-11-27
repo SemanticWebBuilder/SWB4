@@ -201,8 +201,8 @@ if (null!=microsite){
                   <div class="noticiaTexto">
                         <h2>$name</h2>
                     <p class="stats">
-                        Sexo: $usr_sex<br><br>
                         Edad: $usr_age<br><br>
+                        Sexo: $usr_sex<br><br>
                     <a href="$perfil?user=$uri">Ver m&aacute;s</a>
                     </p>                    
                     <br><br>
