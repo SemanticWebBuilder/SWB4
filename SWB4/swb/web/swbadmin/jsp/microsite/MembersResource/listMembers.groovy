@@ -176,13 +176,11 @@ if (null!=microsite){
                     }
                     def uri = mem_usr.getEncodedURI()
 
-                    String photo = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/perfil/profilePlaceholder.jpg"
+                    def img = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/perfil/profilePlaceholder.jpg"
                     if (mem_usr.getPhoto() != null)
                     {
-                        photo = SWBPortal.getWebWorkPath() + mem_usr.getPhoto()
-                    }
-
-                    def img = photo//SWBPortal.getWebWorkPath()+mem_usr.getPhoto()
+                        img = SWBPortal.getWebWorkPath() + mem_usr.getPhoto()
+                    }                    
                     def name=mem_usr.getFullName()
                     def usr_sex = mem_usr.getExtendedAttribute(mapa.get("userSex"))
                     if ("M".equals(usr_sex)) usr_sex = "Hombre"
@@ -191,11 +189,10 @@ if (null!=microsite){
                     def usr_age = mem_usr.getExtendedAttribute(mapa.get("userAge"))
                     if (null==usr_age) usr_age = ""
                     
-                    if(usr_age.trim().equals("0"))
+                    if((""+usr_age).equals("0"))
                     {
-                        usr_age="";
-                    }
-                    
+                        usr_age=""
+                    }                    
 
                     println """
                 <div class="noticia">
