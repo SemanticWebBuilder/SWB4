@@ -197,12 +197,10 @@ if (null!=microsite){
                         <h2>$name</h2>
                     <p class="stats">
                         Sexo: $usr_sex<br>
-                        Edad: $usr_age
-                    </p>
-                    <p><br><br><br></p>                    
-                    <p><a href="$perfil?user=$uri">Ver m&aacute;s</a>
-                    </p>
-                    
+                        Edad: $usr_age<br>
+                    <a href="$perfil?user=$uri">Ver m&aacute;s</a>
+                    </p>                    
+                    <br><br><br><br>
                   </div>
                 </div>           
               
