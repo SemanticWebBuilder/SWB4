@@ -39,7 +39,16 @@
 <script type="text/javascript">
     function setSearchCategory(what) {
         document.getElementById("what").value = what;
-        document.getElementById("catLabel").innerHTML = what;
+        var catLabel = "Todas";
+        if (what == "Clasified") catLabel = "Clasificados";
+        if (what == "All") catLabel = "Todas";
+        if (what == "Place") catLabel = "Lugares";
+        if (what == "Topic") catLabel = "Temas";
+        if (what == "Member") catLabel = "Personas";
+        if (what == "Service") catLabel = "Servicios";
+        if (what == "Organization") catLabel = "Organizaciones";
+        if (what == "Community") catLabel = "Comunidades";
+        document.getElementById("catLabel").innerHTML = catLabel;
     }
 </script>
 <div class="twoColContent">
