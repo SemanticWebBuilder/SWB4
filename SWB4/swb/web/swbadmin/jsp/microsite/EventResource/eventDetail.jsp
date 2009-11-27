@@ -55,8 +55,8 @@
             <img id="img_<%=event.getId()%>" src="<%= pathPhoto%>" alt="<%=event.getTitle()%>" border="0" width="50%" height="50%" />
         </a>
     </p>
-    <p><span class="itemTitle">Comienza:</span> <%= (event.getStartDate() == null ? "" : dateFormat.format(event.getStartDate()))%></strong> a las <strong><%= (event.getStartTime() == null ? "" : timeFormat.format(event.getStartTime()))%><br>
-            <span class="itemTitle">Termina:</span> <%= (event.getEndDate() == null ? "" : dateFormat.format(event.getEndDate()))%></strong> a las <strong><%= (event.getEndTime() == null ? "" : timeFormat.format(event.getEndTime()))%></p>
+    <p><span class="itemTitle">Comienza:</span> <%= (event.getStartDate() == null ? "" : dateFormat.format(event.getStartDate()))%> a las <%= (event.getStartTime() == null ? "" : timeFormat.format(event.getStartTime()))%><br>
+        <span class="itemTitle">Termina:&nbsp;&nbsp;&nbsp;</span> <%= (event.getEndDate() == null ? "" : dateFormat.format(event.getEndDate()))%> a las <%= (event.getEndTime() == null ? "" : timeFormat.format(event.getEndTime()))%></p>
 
     <br/>
     <%
