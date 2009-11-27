@@ -35,18 +35,45 @@
         public String getName(){ return name;}
     }
 %>
+
+<script type="text/javascript">
+    function setSearchCategory(what) {
+        document.getElementById("what").value = what;
+        document.getElementById("catLabel").innerHTML = what;
+    }
+</script>
 <div class="twoColContent">
 <div id="busquedaAvanzada">
-    <div id="busquedaPalabraClave" class="buscador" method="post" name="busquedaKeyWords">
-        <form action="<%=searchUrl%>">
-            <div>
-                <input id="buscadorKeyWords" type="text" value="Búsqueda por palabra clave" name="q"/>
-                <input id="buscarKeyWords" type="submit" value="Buscar"/>
-            </div>
-        </form>
-    </div>
+      	<div class="buscador" id="busquedaPalabraClave">
+            <form name="busquedaKeyWords" method="post" action="{topic@getUrl}/../Busqueda" >
+          	    <div>
+                <label for="buscadorKeywords">Busca por palabra clave</label>
+                <input name="q" type="text" id="buscadorKeywords" value="B&uacute;squeda por palabra clave" >
+                <label for="buscarKeywords">Buscar</label>
+                <input type="submit" id="buscarKeywords" value="Buscar" />
+                <input type="hidden" name="what" id="what" value="All"/>
+              </div>
+            </form>
+          </div>
+          <ul id="MenuBar3" class="MenuBarHorizontal">
+	  <li class="selectTitle"><p id="catLabel">Categor&iacute;a</p>
+              <ul>
+	      <li><a onclick="setSearchCategory('All');">Todas</a></li>
+	      <li><a onclick="setSearchCategory('Topic');">Temas</a></li>
+	      <li><a onclick="setSearchCategory('Place');">Lugares</a></li>
+              <li><a onclick="setSearchCategory('Member');">Personas</a></li>
+              <li><a onclick="setSearchCategory('Service');" >Servicios</a></li>
+              <li><a onclick="setSearchCategory('Organization');">Organizaciones</a></li>
+              <li><a onclick="setSearchCategory('Clasified');">Clasificados</a></li>
+              <li><a onclick="setSearchCategory('Community');">Comunidades</a></li>
+              </ul>
+	  </li>
+	</ul>
+        </div>
 </div>
-</div>
+<script type="text/javascript">
+    var MenuBar3 = new Spry.Widget.MenuBar("MenuBar3");
+</script>
         <br>
 <%
 if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
