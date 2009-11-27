@@ -69,13 +69,12 @@
             </ul>
             <script type="text/javascript">
                 <!--
-                var MenuBar2 = new Spry.Widget.MenuBar("MenuBar3", {imgDown:"SpryAssets/SpryMenuBarDownHover.gif", imgRight:"SpryAssets/SpryMenuBarRightHover.gif"});
+                var MenuBar2 = new Spry.Widget.MenuBar("MenuBar3");
                 //-->
             </script>
         <%
         }
     } else if (wplevel == 2) {
-        System.out.println("---segundo caso");
         wpch = paramRequest.getWebPage();
 %>
 <div class="groupInteres">
@@ -111,7 +110,6 @@
 </div>
 <%
 } else if (wplevel == 1) {
-System.out.println("---tercer caso");
 while (itwp.hasNext()) {
 
     wpch = itwp.next();
