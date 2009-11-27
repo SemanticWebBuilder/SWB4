@@ -118,8 +118,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
 
         <h3>Resultados de la b&uacute;squeda <i><%=request.getParameter("q")%></i></h3>
         <%
-        if (what != null && what.trim().equals("Organization")) {
-            resultType = "Organizaci&oacute;n";
+        if (what != null && what.trim().equals("Organization")) {            
             %>
             <a id="toggle_link" href="#" onclick="toggle('map_container')">Ocultar Mapa de distribuci&oacute;n</a>
             <div id="map_container">
@@ -208,7 +207,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                         <img alt="<%=site.getTitle()%>" src="<%=imgPath%>" />
                         <div class="listEntryInfo">
                             <p class="tituloRojo">
-                                <%=site.getTitle()%>
+                                <%=site.getTitle()%> (<%=resultType%>)
                             </p>
                             <p>
                                 <%=site.getDescription()%>
@@ -277,6 +276,9 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                 <%
                 } else if (obj.instanceOf(DirectoryObject.sclass)) {
                     resultType = "Clasificado";
+                    if (obj.instanceOf(Organization.sclass)) {
+                        resultType = "Organizaci&oacute;n";
+                    }
                     %>
                     <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
                     <%
