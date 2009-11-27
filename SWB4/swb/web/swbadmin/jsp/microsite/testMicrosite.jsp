@@ -6,8 +6,15 @@
     Created on : 19/11/2009, 03:07:52 PM
     Author     : javier.solis
 --%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    User user=SWBContext.getAdminUser();
+    if(user==null)
+    {
+        response.sendError(403);
+        return;
+    }
+%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
    "http://www.w3.org/TR/html4/loose.dtd">
 <%
