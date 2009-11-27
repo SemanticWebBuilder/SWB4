@@ -53,7 +53,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                     getAddressString(so) +
                     "<br><b>Contacto:</b> " + so.getProperty(Contactable.swbcomm_contactName) +
                     "<br><b>Teléfono:</b> " + so.getProperty(Contactable.swbcomm_contactPhoneNumber);
-                System.out.println(html);
+                //System.out.println(html);
                 objs.add(new GeoLocation(
                     so.getDoubleProperty(Geolocalizable.swb_latitude),
                     so.getDoubleProperty(Geolocalizable.swb_longitude),
