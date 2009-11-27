@@ -61,7 +61,7 @@
     <h2 class="blogTitle"><%=post.getTitle()%></h2>
     <p> <%=post.getDescription()%> </p>
     <p> Autor: <%=postAuthor%> </p>
-    <p> Acualizado: <%=updated%> </p>
+    <p> Actualizado: <%=updated%> </p>
     <p> Calificación: <%=rank%> </p>
     <p> <%=post.getViews()%> visitas  </p>
     <p><a href="<%=paramRequest.getRenderUrl()%>">[Ver todas las entradas del blog]</a></p>
