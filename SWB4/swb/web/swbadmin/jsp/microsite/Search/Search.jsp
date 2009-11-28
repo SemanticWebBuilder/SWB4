@@ -4,7 +4,6 @@
     SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
     ArrayList<SemanticObject> results = (ArrayList<SemanticObject>) request.getAttribute("results");
     ArrayList<SemanticObject> allRes = (ArrayList<SemanticObject>) request.getAttribute("allRes");
-    String searchUrl = (String) request.getAttribute("rUrl");
     String what = (String) request.getParameter("what");
     WebPage wpage = paramRequest.getWebPage();
     String lang = "es";
@@ -122,7 +121,9 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
         int end = start + maxr - 1;
         if (end > total - 1) end = total - 1;
 
-        String sliceUrl = paramRequest.getRenderUrl() + "?q=" + request.getParameter("q") + "&what=" + request.getParameter("what");
+        SWBResourceURL sliceUrl = paramRequest.getRenderUrl();
+        sliceUrl.setParameter("q", request.getParameter("q"));
+        sliceUrl.setParameter("what", request.getParameter("what"));
         SWBResourceURL byDate = paramRequest.getRenderUrl().setParameter("o", "1");
         byDate.setParameter("p", request.getParameter("p"));
         byDate.setParameter("what", request.getParameter("what"));
