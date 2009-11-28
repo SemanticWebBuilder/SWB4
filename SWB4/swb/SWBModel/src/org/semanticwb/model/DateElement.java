@@ -23,7 +23,6 @@
  
 package org.semanticwb.model;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
@@ -35,25 +34,22 @@ import org.semanticwb.platform.SemanticProperty;
 public class DateElement extends org.semanticwb.model.base.DateElementBase 
 {
     private static Logger log=SWBUtils.getLogger(DateElement.class);
-    private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-    public DateElement(org.semanticwb.platform.SemanticObject base)
-    {
+    public DateElement(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
 
     @Override
-    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
-    {
-        if(obj==null)obj=new SemanticObject();
-        boolean IPHONE=false;
-        boolean XHTML=false;
-        boolean DOJO=false;
-        if(type.equals("iphone"))IPHONE=true;
-        else if(type.equals("xhtml"))XHTML=true;
-        else if(type.equals("dojo"))DOJO=true;
-
-        StringBuffer ret=new StringBuffer();
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
+        StringBuffer ret = new StringBuffer();
+        if (obj == null) obj = new SemanticObject();
+        boolean IPHONE = false;
+        boolean XHTML = false;
+        boolean DOJO = false;
+        if(type.equals("iphone"))IPHONE = true;
+        else if(type.equals("xhtml"))XHTML = true;
+        else if(type.equals("dojo"))DOJO = true;
+        
         String name = prop.getName();
         String label = prop.getDisplayName(lang);
         SemanticObject sobj = prop.getDisplayProperty();
@@ -65,11 +61,10 @@ public class DateElement extends org.semanticwb.model.base.DateElementBase
             DisplayProperty dobj = new DisplayProperty(sobj);
             pmsg = dobj.getPromptMessage();
             imsg = dobj.getInvalidMessage();
-            disabled=dobj.isDisabled();
+            disabled = dobj.isDisabled();
         }
 
-        if(DOJO)
-        {
+        if(DOJO) {
             if (imsg == null) {
                 if (required) {
                     imsg = label + " es requerido.";
@@ -93,27 +88,24 @@ public class DateElement extends org.semanticwb.model.base.DateElementBase
             }
         }
 
-        String ext="";
-        if(disabled)
-        {
-            ext+=" disabled=\"disabled\"";
+        String ext = "";
+        if(disabled) {
+            ext += " disabled=\"disabled\"";
         }
 
-        String value=request.getParameter(prop.getName());
-        if(value==null)
-        {
-            Date dt=obj.getDateProperty(prop);
-            if(dt!=null)
-            {
-                value=format.format(dt);
+        String value = request.getParameter(prop.getName());
+        if(value == null) {
+            Date dt = obj.getDateProperty(prop);
+            if(dt != null) {
+                value = SWBUtils.TEXT.iso8601DateFormat(dt);
             }
         }
+        
         if (value == null) {
             value = "";
         }
 
-        if (mode.equals("edit") || mode.equals("create"))
-        {
+        if (mode.equals("edit") || mode.equals("create")) {
             ret.append("<input name=\""+name+"\" value=\""+value+"\"");
             if(DOJO)ret.append(" dojoType=\"dijit.form.DateTextBox\"");
             if(DOJO)ret.append(" required=\""+required+"\"");
@@ -135,29 +127,28 @@ public class DateElement extends org.semanticwb.model.base.DateElementBase
     @Override
     public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop)
     {
-        //System.out.println("process...:"+obj.getURI()+" "+prop.getURI());
-        if(prop.getDisplayProperty()==null)return;
-
-        String value=request.getParameter(prop.getName());
-        String old=obj.getProperty(prop);
-        //System.out.println("com:"+old+"-"+value+"-");
-        if(value!=null)
-        {
-            if(value.length()>0 && !value.equals(old))
-            {
-                //System.out.println("old:"+old+" value:"+value);
-                try
-                {
-                    obj.setDateProperty(prop, format.parse(value));
-                }catch(Exception e)
-                {
-                    log.error(e);
-                }
-            }else if(value.length()==0 && old!=null)
-            {
-                obj.removeProperty(prop);
+        try {
+            //System.out.println("process...:"+obj.getURI()+" "+prop.getURI());
+            if (prop.getDisplayProperty() == null) {
+                return;
             }
+            Date value = SWBUtils.TEXT.iso8601DateParse(request.getParameter(prop.getName()));
+            Date old = obj.getDateProperty(prop);
+            //System.out.println("com:"+old+"-"+value+"-");
+            if (value != null) {
+                if (!value.equals(old)) {
+                    //System.out.println("old:"+old+" value:"+value);
+                    try {
+                        obj.setDateProperty(prop, value);
+                    } catch (Exception e) {
+                        log.error(e);
+                    }
+                } else if (value != null && old != null) {
+                    obj.removeProperty(prop);
+                }
+            }
+        } catch (Exception ex) {
+            log.error(ex);
         }
     }
-
 }
