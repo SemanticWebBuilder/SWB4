@@ -28,6 +28,7 @@ import org.semanticwb.model.DisplayProperty
 import org.semanticwb.portal.api.SWBResourceURL
 import org.semanticwb.platform.SemanticProperty
 import org.semanticwb.platform.SemanticObject
+import org.semanticwb.portal.SWBFormMgr
 
 def paramRequest=request.getAttribute("paramRequest")
 User user = paramRequest.getUser()
@@ -53,7 +54,7 @@ def usr_lname = (user.getLastName()==null?"":user.getLastName())
 def usr_sname = (user.getSecondLastName()==null?"":user.getSecondLastName())
 def usr_mail = (user.getEmail()==null?"":user.getEmail())
 def usr_login = user.getLogin()
-def usr_age = user.getExtendedAttribute(mapa.get("userAge"))
+def usr_age = user.getExtendedAttribute(mapa.get("userBirthDate"))
 if (null==usr_age) usr_age = ""
 def usr_sex = user.getExtendedAttribute(mapa.get("userSex"))
 def usr_sexM = ""
@@ -105,6 +106,11 @@ StringTokenizer st=new StringTokenizer(selectValues,"|");
                 
 
 def fb_app_key = "691414c29ca930cc6961213e3c5d34c7"
+//User.sclass
+SWBFormMgr frm = new SWBFormMgr(user.getSemanticObject(), null, SWBFormMgr.MODE_EDIT)
+frm.setLang("es")
+frm.setType(SWBFormMgr.TYPE_DOJO)
+
 
 println """
 <script language="javascript" type="text/javascript" src="/swbadmin/js/upload.js"></script>
@@ -157,7 +163,14 @@ import org.semanticwb.model.DisplayProperty
 
  function enviar(){
     var x=document.getElementById(\"form_$id\");
-    x.submit();
+    var objd=dijit.byId(\"form_$id\");
+    if (objd.isValid())
+    {
+        x.submit();
+    } else {
+        alert("Datos incompletos o erroneos");
+    }
+
  }
         </script>
 <form id="form_$id" dojoType="dijit.form.Form" class="swbform"
@@ -173,45 +186,31 @@ action="$acc_url"   method="post">
         <table>
             <tr><td width="200px" align="right">Identificador &nbsp;</td>
                 <td>$usr_login</td></tr>
-            <tr><td width="200px" align="right"><label for="usrFirstName">Nombre(s) &nbsp;</label></td>
-                <td><input _id="usrFirstName" name="usrFirstName" value="$usr_name" dojoType="dijit.form.ValidationTextBox"
-                    required="false" promptMessage="Captura Nombre(s)" invalidMessage="Dato Invalido" style="width:300px;"  trim="true"/></td></tr>
-            <tr><td width="200px" align="right"><label for="usrLastName">Primer Apellido &nbsp;</label></td>
-                <td><input _id="usrLastName" name="usrLastName" value="$usr_lname" dojoType="dijit.form.ValidationTextBox" required="false" promptMessage="Captura Primer Apellido" invalidMessage="Dato Invalido" style="width:300px;"  trim="true"/></td></tr>
-            <tr><td width="200px" align="right"><label for="usrSecondLastName">Segundo Apellido &nbsp;</label></td>
-                <td><input _id="usrSecondLastName" name="usrSecondLastName" value="$usr_sname" dojoType="dijit.form.ValidationTextBox" required="false" promptMessage="Captura Segundo Apellido" invalidMessage="Dato Invalido" style="width:300px;"  trim="true"/></td></tr>
-            <tr><td width="200px" align="right"><label for="usrEmail">Correo Electr&oacute;nico &nbsp;</label></td>
-                <td><input _id="usrEmail" name="usrEmail" value="$usr_mail" dojoType="dijit.form.ValidationTextBox"
-                    required="false" promptMessage="Captura Correo Electr&oacute;nico" invalidMessage="Dato Invalido" style="width:300px;"  trim="true"/></td></tr>
-            <tr><td width="200px" align="right"><label for="usrAge">Edad &nbsp;</label></td>
-                <td><input _id="userAge" name="userAge" value="$usr_age" dojoType="dijit.form.ValidationTextBox"
-                    required="false" promptMessage="Captura Edad" invalidMessage="Dato Invalido" style="width:300px;"  trim="true"/></td></tr>
-            <tr><td width="200px" align="right"><label for="usrSex">Sexo &nbsp;</label></td>
-                <td><select dojoType="dijit.form.FilteringSelect" autocomplete="false" _id="userSex" name="userSex" value="$usr_sex"
-                    required="false" promptMessage="Elige Sexo" invalidMessage="Dato Invalido" >
-                    <option value=""></option>
-                    <option value="M" $usr_sexM>Hombre</option>
-                    <option value="F" $usr_sexF>Mujer</option>
-                    </select></td></tr>
-            <tr><td width="200px" align="right"><label for="userDoings">Ocupaci&oacute;n &nbsp;</label></td>
-                    <td><select dojoType="dijit.form.FilteringSelect" autocomplete="false" _id="userDoings" name="userDoings" value="$usr_doings"
-                    required="false" promptMessage="Elige ocupaci&oacute;n" invalidMessage="Dato Invalido" >
-                    $usr_do_sel
-                    </select></td></tr>
+            <tr><td width="200px" align="right">${frm.renderLabel(request, User.swb_usrFirstName, SWBFormMgr.MODE_EDIT)}</td>
+                <td>${frm.renderElement(request, User.swb_usrFirstName, SWBFormMgr.MODE_EDIT)}</td></tr>
+            <tr><td width="200px" align="right">${frm.renderLabel(request, User.swb_usrLastName, SWBFormMgr.MODE_EDIT)}</td>
+                <td>${frm.renderElement(request, User.swb_usrLastName, SWBFormMgr.MODE_EDIT)}</td></tr>
+            <tr><td width="200px" align="right">${frm.renderLabel(request, User.swb_usrSecondLastName, SWBFormMgr.MODE_EDIT)}</td>
+                <td>${frm.renderElement(request, User.swb_usrSecondLastName, SWBFormMgr.MODE_EDIT)}</td></tr>
+            <tr><td width="200px" align="right">${frm.renderLabel(request, User.swb_usrEmail, SWBFormMgr.MODE_EDIT)}</td>
+                <td>${frm.renderElement(request, User.swb_usrEmail, SWBFormMgr.MODE_EDIT)}</td></tr>
+            <tr><td width="200px" align="right">${frm.renderLabel(request, (SemanticProperty)mapa.get("userBirthDate"), SWBFormMgr.MODE_EDIT)}</td>
+                <td>${frm.renderElement(request, (SemanticProperty)mapa.get("userBirthDate"), SWBFormMgr.MODE_EDIT)}</td></tr>
+            <tr><td width="200px" align="right">${frm.renderLabel(request, (SemanticProperty)mapa.get("userSex"), SWBFormMgr.MODE_EDIT)}</td>
+                <td>${frm.renderElement(request, (SemanticProperty)mapa.get("userSex"), SWBFormMgr.MODE_EDIT)}</td></tr>
+            <tr><td width="200px" align="right">${frm.renderLabel(request, (SemanticProperty)mapa.get("userDoings"), SWBFormMgr.MODE_EDIT)}</td>
+                    <td>${frm.renderElement(request, (SemanticProperty)mapa.get("userDoings"), SWBFormMgr.MODE_EDIT)}</td></tr>
         </table>
     </fieldset>
     <fieldset>
     <legend>Informaci&oacute;n complementaria</legend>
 	<table>
-            <tr><td width="200px" align="right"><label for="userStatus">Estado Civil &nbsp;</label></td>
-                <td><input _id="userStatus" name="userStatus" value="$usr_status" dojoType="dijit.form.ValidationTextBox"
-                    required="false" promptMessage="Captura Estado Civil" invalidMessage="Dato Invalido" style="width:300px;"  trim="true"/></td></tr>
+            <tr><td width="200px" align="right">${frm.renderLabel(request, (SemanticProperty)mapa.get("userStatus"), SWBFormMgr.MODE_EDIT)}</td>
+                <td>${frm.renderElement(request, (SemanticProperty)mapa.get("userStatus"), SWBFormMgr.MODE_EDIT)}</td></tr>
             <tr><td width="200px" align="right">Intereses &nbsp;</td>
                 <td><textarea name="userInterest" rows="10" cols="50" dojoType="dijit.form.Textarea">$usr_interest</textarea></td></tr>
             <tr><td width="200px" align="right">Pasatiempos &nbsp;</td>
                 <td><textarea name="userHobbies" rows="10" cols="50" dojoType="dijit.form.Textarea">$usr_hobbies</textarea></td></tr>
-            <tr><td width="200px" align="right">Incisos &nbsp;</td>
-                <td><textarea name="userInciso" rows="10" cols="50" dojoType="dijit.form.Textarea">$usr_inciso</textarea></td></tr>
             <tr><td width="200px" align="right">Ubicaci&oacute;n &nbsp;</td>
                 <td>
 
@@ -311,7 +310,13 @@ initialize();
 </form>
 
 """
-System.out.println "*********************** User: ${user.getExternalID()} ${user.getLogin()}"
+System.out.println "value: "+user.getSemanticObject().getProperty(User.swb_usrFirstName)
+System.out.println User.swb_usrFirstName
+System.out.println "---------"
+System.out.println frm.renderLabel(request, User.swb_usrFirstName, SWBFormMgr.MODE_EDIT)
+System.out.println frm.renderElement(request, User.swb_usrFirstName, SWBFormMgr.MODE_EDIT)
+
+//System.out.println "*********************** User: ${user.getExternalID()} ${user.getLogin()}"
 if (user.getExternalID()==null){
 println """
 <div xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml">
