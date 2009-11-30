@@ -829,7 +829,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                 SemanticObject so = ite_so.next();
                 if (null != so) {
                     log.debug("--prop--so--" + so.getURI());
-                    if (so.createGenericInstance() instanceof UserGroup || idp.endsWith("hasProcessActivity")) {
+                    if (so.createGenericInstance() instanceof UserGroup || idp.endsWith("hasProcessActivity") || idp.endsWith("hasAdminFilter")) {
                         hmSO.put(so.getURI(), so);
                     } else {
                         SemanticObject soref = so.getObjectProperty(propref);
