@@ -32,6 +32,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -149,7 +150,7 @@ public class RegisterUser extends GenericResource
                 while (list.hasNext())
                 {
                     SemanticProperty sp = list.next();
-                    //System.out.println(sp.getName() + ":" + request.getParameter(sp.getName()));
+                    System.out.println(sp.getName() + ":" + request.getParameter(sp.getName())+": isDate:"+sp.isDate());
                     if (null == request.getParameter(sp.getName()))
                     {
                         user.removeExtendedAttribute(sp);
@@ -183,10 +184,13 @@ public class RegisterUser extends GenericResource
                         {
                             try
                             {
-                                Date val = java.sql.Date.valueOf(request.getParameter(sp.getName()));
+                                SimpleDateFormat sf = new SimpleDateFormat("dd/MM/yyyy");
+                                Date val = sf.parse(request.getParameter(sp.getName()));
+                                System.out.println("Date:"+val);
                                 user.setExtendedAttribute(sp, val);
                             } catch (Exception ne)
                             {
+                                ne.printStackTrace();
                             }
                         }
 
