@@ -23,6 +23,8 @@
  
 package org.semanticwb.model;
 
+import org.w3c.dom.Document;
+
 
 public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase 
 {
@@ -30,4 +32,10 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase
     {
         super(base);
     }
+
+    public Document getDom()
+    {
+        return getSemanticObject().getDomProperty(swb_xml);
+    }
+
 }
