@@ -23,8 +23,10 @@
 
 package org.semanticwb.portal;
 
+import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.AdminFilter;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 
@@ -50,13 +52,18 @@ public class SWBAdminFilterMgr
         log.event("Initializing SWBAdminFilterMgr...");
     }
 
-    public boolean haveAccess2WebPage(User user, WebPage page)
+    public boolean haveAccessToWebPage(User user, WebPage page)
     {
-        boolean ret=false;;
-
+        boolean ret=false;
+        Iterator<AdminFilter> it=user.listAdminFilters();
+        if(!it.hasNext())ret=true;
+        while (it.hasNext())
+        {
+            AdminFilter adminFilter = it.next();
+            ret=adminFilter.haveAccessToWebPage(page);
+            if(ret==true)break;
+        }
         return ret;
     }
-
-
 
 }
