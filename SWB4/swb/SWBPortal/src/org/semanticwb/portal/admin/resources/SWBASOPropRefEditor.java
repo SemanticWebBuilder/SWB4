@@ -55,6 +55,12 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
     Resource base = null;
 
     @Override
+    public void doIndex(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        //No se indexa...
+    }
+
+    @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
@@ -320,6 +326,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
 
             if (obj.getSemanticClass().equals(User.swb_User) && !prop.getRangeClass().equals(User.swb_CalendarRef)) {
                 if(spref!=null) itso = obj.listObjectProperties(spref);
+                else itso = obj.listObjectProperties(prop);
             } else if (obj.getSemanticClass().equals(User.swb_User) && prop.getRangeClass().equals(User.swb_CalendarRef)) {
                 itso = obj.listObjectProperties(spro);
             } else {

@@ -77,6 +77,20 @@ public class SWBAFilters extends SWBATree {
     public SWBAFilters() {
     }
 
+    public String getLocaleString(String key, String lang)
+    {
+        String ret="";
+        if(lang==null)
+        {
+            ret=SWBUtils.TEXT.getLocaleString("locale_swb_admin", key);
+        }else
+        {
+            ret=SWBUtils.TEXT.getLocaleString("locale_swb_admin", key, new Locale(lang));
+        }
+        //System.out.println(key+" "+lang+" "+ret);
+        return ret;
+    }
+
     /**
      * @param request
      * @param response
@@ -149,7 +163,13 @@ public class SWBAFilters extends SWBATree {
                     SemanticObject sobj = SemanticObject.createSemanticObject(id);
                     addSemanticObject(user, sobj, res, true);
                 }
-            } else {
+            } else if (cmd.equals("getSemanticClass")) 
+            {
+                SemanticClass scls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(id);
+                System.out.println("Command getSemanticClass:"+scls);
+                addSemanticClass(user, scls, res, true);
+            } else
+            {
                 boolean ret = false;
                 Iterator itex = ext.iterator();
                 while (itex.hasNext()) {
@@ -167,7 +187,7 @@ public class SWBAFilters extends SWBATree {
             log.error(e);
             return getError(3);
         }
-        RevisaNodo(dom.getFirstChild());
+        //RevisaNodo(dom.getFirstChild());
         return dom;
     }
 
@@ -271,81 +291,8 @@ public class SWBAFilters extends SWBATree {
 //            if(!sclass.equals("WebSite")&&!sclass.equals("WebPage"))
 //            {
             SemanticClass sc = (SemanticClass) hmclass.get(sclass);
-            Element classele = this.addNode("topic", sc.getURI(), sc.getDisplayName(lang), etopic);
-            classele.setAttribute("topicmap", map.getId());
-            classele.setAttribute("reload", "getTopic." + sc.getURI()); //getSemanticClass
-            boolean canModify = true; //AdmFilterMgr.getInstance().haveAccess2System4Filter(user, topic);
-            classele.setAttribute("canModify", String.valueOf(canModify));
-            classele.setAttribute("icon", "sitev");
 
-            Element etp = this.addNode("topic", sc.getURI()+"|add", "Agregar", classele);
-            etp.setAttribute("topicmap", map.getId());
-
-            canModify = true; //AdmFilterMgr.getInstance().haveAccess2System4Filter(user, topic);
-            etp.setAttribute("canModify", String.valueOf(canModify));
-            etp.setAttribute("reload", "getTopic." + sc.getURI() + "." + "add");
-            etp.setAttribute("icon", "menu");
-
-            Element etp2 = this.addNode("topic", sc.getURI()+"|edit", "Editar", classele);
-            etp2.setAttribute("topicmap", map.getId());
-
-            canModify = true; //AdmFilterMgr.getInstance().haveAccess2System4Filter(user, topic);
-            etp2.setAttribute("canModify", String.valueOf(canModify));
-            etp2.setAttribute("reload", "getTopic." + sc.getURI() + "." + "edit");
-            etp2.setAttribute("icon", "menu");
-
-            Element etp3 = this.addNode("topic", sc.getURI()+"|remove", "Eliminar", classele);
-            etp3.setAttribute("topicmap", map.getId());
-
-            canModify = true; //AdmFilterMgr.getInstance().haveAccess2System4Filter(user, topic);
-            etp3.setAttribute("canModify", String.valueOf(canModify));
-            etp3.setAttribute("reload", "getTopic." + sc.getURI() + "." + "remove");
-            etp3.setAttribute("icon", "menu");
-
-            if(sc.isSubClass(org.semanticwb.model.Activeable.swb_Activeable ))
-            {
-                Element etp4 = this.addNode("topic", sc.getURI()+"|active", "Activar/Desactivar", classele);
-                etp4.setAttribute("topicmap", map.getId());
-
-                canModify = true; //AdmFilterMgr.getInstance().haveAccess2System4Filter(user, topic);
-                etp4.setAttribute("canModify", String.valueOf(canModify));
-                etp4.setAttribute("reload", "getTopic." + sc.getURI() + "." + "active");
-                etp4.setAttribute("icon", "menu");
-            }
-//            Iterator<ObjectBehavior> obit = SWBComparator.sortSermanticObjects(ObjectBehavior.swbxf_ObjectBehavior.listGenericInstances(true));
-//            while (obit.hasNext()) {
-//                ObjectBehavior ob = obit.next();
-//                if (!ob.isVisible()) {
-//                    continue;
-//                }
-//
-//                String title = ob.getDisplayName(lang);
-//
-//                SemanticObject interf = ob.getInterface();
-//                if (null == interf) {
-//                    Element etp = this.addNode("topic", ob.getId(), title, classele);
-//                    etp.setAttribute("topicmap", sc.getClassId());
-//
-//                    canModify = true; //AdmFilterMgr.getInstance().haveAccess2System4Filter(user, topic);
-//                    etp.setAttribute("canModify", String.valueOf(canModify));
-//                    etp.setAttribute("reload", "getTopic." + sc.getClassId() + "." + ob.getId());
-//                    etp.setAttribute("icon", "menu");
-//                } else {
-//                    SemanticClass scls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(interf.getURI());
-//                    if (scls != null) {
-//                        if (scls.isSuperClass(sc)) {
-//                            Element etp = this.addNode("topic", ob.getId(), title, classele);
-//                            etp.setAttribute("topicmap", sc.getClassId());
-//
-//                            canModify = true; //AdmFilterMgr.getInstance().haveAccess2System4Filter(user, topic);
-//                            etp.setAttribute("canModify", String.valueOf(canModify));
-//                            etp.setAttribute("reload", "getTopic." + sc.getClassId() + "." + ob.getId());
-//                            etp.setAttribute("icon", "menu");
-//                        }
-//                    }
-//
-//                }
-//            }
+            addSemanticClass(user, sc, etopic, true);
         }
     }
 
@@ -394,7 +341,7 @@ public class SWBAFilters extends SWBATree {
     {
         //System.out.println("initTree");
         Document doc = initTree(user, src, false);
-        RevisaNodo(doc.getFirstChild());
+        //RevisaNodo(doc.getFirstChild());
         return doc;
     }
 
@@ -549,7 +496,7 @@ public class SWBAFilters extends SWBATree {
     {
         //System.out.println("initTreeFilter");
         Document doc = initTree(user, src);
-        RevisaNodo(doc.getFirstChild());
+        //RevisaNodo(doc.getFirstChild());
         return doc;
     }
 
@@ -1327,15 +1274,6 @@ public class SWBAFilters extends SWBATree {
                     SemanticObject so=it.next();
                     addSemanticObject(user,so,jobj,false);
                 }
-            }else
-            {
-//                if(it.hasNext())
-//                {
-//                    jobj.put("hasChilds", "true");
-//                    JSONArray events=new JSONArray();
-//                    jobj.putOpt("events", events);
-//                    events.put(getEvent("onOpen", getReloadAction()));
-//                }
             }
         }
     }
@@ -1372,7 +1310,7 @@ public class SWBAFilters extends SWBATree {
 
         String icon=SWBContext.UTILS.getIconClass(obj);
 
-        Element jobj = addNode("node", obj.getId(), obj.getDisplayName(user.getLanguage()), node);
+        Element jobj = addNode("node", obj.getURI(), obj.getDisplayName(user.getLanguage()), node);
         jobj.setAttribute("reload", "getSemanticObject." + obj.getURI());
         jobj.setAttribute("icon", icon);
         //jobj.setAttribute("icon", "homev");
@@ -1421,6 +1359,50 @@ public class SWBAFilters extends SWBATree {
         }
     }
 
+
+     /**
+     *  Add web site to dom document
+     * @param user, used to eval access to each element tree
+     * @param tm,
+     * @param root, first element of the tree
+     * @param access, level of the user access
+     * @param loadChild, for load root childs element
+     * @param isFilter, to eval if have filter or not
+     */
+    protected void addSemanticClass(User user, SemanticClass sc, Element node, boolean addChilds)
+    //public void addSemanticObject(JSONArray arr, SemanticObject obj, boolean addChilds, boolean addDummy, String lang) throws JSONException
+    {
+        System.out.println("addSemanticClass:"+sc+" "+node);
+        String lang=user.getLanguage();
+
+        Element classele = addNode("topic", sc.getClassId(), sc.getDisplayName(user.getLanguage()), node);
+        classele.setAttribute("reload", "getTopic.SC|" + sc.getClassId());
+        classele.setAttribute("icon", "sitev");
+        classele.setAttribute("topicmap", "SWBAdmin");
+
+        Element etp = this.addNode("topic", sc.getClassId() + ";"+"add", getLocaleString("add", lang), classele);
+        etp.setAttribute("reload", "getTopic.SCA|" + sc.getClassId() + "|" + "add");
+        etp.setAttribute("topicmap", "SWBAdmin");
+        //etp.setAttribute("icon", "menu");
+
+        etp = this.addNode("topic", sc.getClassId() + ";"+"edit", getLocaleString("edit", lang), classele);
+        etp.setAttribute("reload", "getTopic.SCA|" + sc.getClassId() + "|" + "edit");
+        etp.setAttribute("topicmap", "SWBAdmin");
+        //etp.setAttribute("icon", "menu");
+
+        etp = this.addNode("topic", sc.getClassId() + ";"+"delete", getLocaleString("delete", lang), classele);
+        etp.setAttribute("reload", "getTopic.SCA|" + sc.getClassId() + "|" + "delete");
+        etp.setAttribute("topicmap", "SWBAdmin");
+        //etp.setAttribute("icon", "menu");
+
+        if(sc.isSubClass(org.semanticwb.model.Activeable.swb_Activeable ))
+        {
+            Element etp4 = this.addNode("topic", sc.getClassId() + ";"+"active", getLocaleString("active",lang)+"/"+getLocaleString("unactive",lang), classele);
+            etp4.setAttribute("reload", "getTopic.SCA|" + sc.getClassId() + "|" + "active");
+            etp4.setAttribute("topicmap", "SWBAdmin");
+            //etp4.setAttribute("icon", "menu");
+        }
+    }
 
 
      /**
