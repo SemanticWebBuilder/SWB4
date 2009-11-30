@@ -32,6 +32,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -173,6 +174,16 @@ public class RegisterUser extends GenericResource
                             try
                             {
                                 Double val = Double.valueOf(request.getParameter(sp.getName()));
+                                user.setExtendedAttribute(sp, val);
+                            } catch (Exception ne)
+                            {
+                            }
+                        }
+                        if (sp.isDate())
+                        {
+                            try
+                            {
+                                Date val = java.sql.Date.valueOf(request.getParameter(sp.getName()));
                                 user.setExtendedAttribute(sp, val);
                             } catch (Exception ne)
                             {
