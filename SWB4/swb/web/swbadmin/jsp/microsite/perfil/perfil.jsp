@@ -158,7 +158,7 @@
                     {
                         email = user.getEmail();
                     }                    
-                    if (user.getExtendedAttribute(mapa.get("userAge")) != null)
+                    if (user.getExtendedAttribute(mapa.get("userBirthDate")) != null)
                     {
                         age = "" + user.getExtendedAttribute(mapa.get("userAge"));
                     }
