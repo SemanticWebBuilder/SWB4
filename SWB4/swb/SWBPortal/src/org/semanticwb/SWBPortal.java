@@ -62,6 +62,7 @@ import org.semanticwb.model.*;
 import org.semanticwb.platform.SemanticMgr;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.portal.PFlowManager;
+import org.semanticwb.portal.SWBAdminFilterMgr;
 import org.semanticwb.portal.SWBMessageCenter;
 import org.semanticwb.portal.SWBMonitor;
 import org.semanticwb.portal.SWBResourceMgr;
@@ -217,6 +218,13 @@ public class SWBPortal
      * <p>Es el administrador de los objetos de servicios en este portal.</p>
      */
     private static SWBServiceMgr servicemgr = null;
+
+    /**
+     * Is the manager for the admin filters.
+     * <p>Es el administrador de los filtros de administracion.</p>
+     */
+    private static SWBAdminFilterMgr adminfiltermgr = null;
+
 
     /**
      * Is the manager for the database log objects in this portal.
@@ -652,6 +660,9 @@ public class SWBPortal
 
         accInc = new SWBAccessIncrement();
         accInc.init();
+
+        adminfiltermgr = new SWBAdminFilterMgr();
+        adminfiltermgr.init();
 
         indmgr = new SWBIndexMgr();
         indmgr.init();
@@ -1198,6 +1209,17 @@ public class SWBPortal
         return servicemgr;
     }
 
+
+    /**
+     * Gets a reference to the service manager for this instance of SWB.
+     * <p>Obtiene una referencia al administrador de servicios de esta instancia de SWB</p>
+     * @return a SWBServiceMgr object for this instance of SWB.
+     */
+    public static SWBAdminFilterMgr getAdminFilterMgr() {
+        return adminfiltermgr;
+    }
+
+    
     /**
      * Gets a reference to the database administration log for this instance of SWB.
      * <p>Obtiene una referencia a la bit&aacute;cora de administraci&oacute;n de
