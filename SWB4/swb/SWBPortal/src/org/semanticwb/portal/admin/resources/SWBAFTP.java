@@ -317,6 +317,7 @@ public class SWBAFTP extends GenericResource{
     public void getDirectories(Element edir,File fdir)
     {
         File[] dirs=fdir.listFiles();
+        Arrays.sort(dirs, new FileComprator());
         for(int i=0;i<dirs.length;i++)
         {
             File file=dirs[i];
@@ -628,4 +629,18 @@ public class SWBAFTP extends GenericResource{
         }
     }
     
+}
+
+class FileComprator implements Comparator
+{
+
+    public int compare(Object o1, Object o2)
+    {
+        if(o1 instanceof File && o2 instanceof File)
+        {
+            return ((File)o1).getName().compareToIgnoreCase(((File)o2).getName());
+        }
+        return 0;
+    }
+
 }
