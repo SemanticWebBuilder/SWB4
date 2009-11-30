@@ -150,7 +150,7 @@ public class RegisterUser extends GenericResource
                 while (list.hasNext())
                 {
                     SemanticProperty sp = list.next();
-                    System.out.println(sp.getName() + ":" + request.getParameter(sp.getName())+": isDate:"+sp.isDate());
+                    //System.out.println(sp.getName() + ":" + request.getParameter(sp.getName())+": isDate:"+sp.isDate());
                     if (null == request.getParameter(sp.getName()))
                     {
                         user.removeExtendedAttribute(sp);
@@ -184,9 +184,9 @@ public class RegisterUser extends GenericResource
                         {
                             try
                             {
-                                SimpleDateFormat sf = new SimpleDateFormat("dd/MM/yyyy");
+                                SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
                                 Date val = sf.parse(request.getParameter(sp.getName()));
-                                System.out.println("Date:"+val);
+                                //System.out.println("Date:"+val);
                                 user.setExtendedAttribute(sp, val);
                             } catch (Exception ne)
                             {
