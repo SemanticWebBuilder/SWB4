@@ -204,6 +204,16 @@ public class User extends UserBase implements Principal
                     throw new SWBException("java.util.Date is not equal to " + value.getClass());
                 }
             }
+            if (SemanticVocabulary.XMLS_DATE.equals(prop.getRange().toString()))
+            {
+                if (value instanceof java.util.Date)
+                {
+                    getSemanticObject().setDateProperty(prop, (java.util.Date) value);
+                } else
+                {
+                    throw new SWBException("java.util.Date is not equal to " + value.getClass());
+                }
+            }
             if (SemanticVocabulary.XMLS_FLOAT.equals(prop.getRange().toString()))
             {
                 if (value instanceof Float)
