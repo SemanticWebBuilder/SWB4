@@ -870,7 +870,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
             log.debug("choose:" + clsprop.getName() + ", " + idp);
 
             SWBResourceURL urladd = paramRequest.getActionUrl();
-            if ((idp.endsWith("hasRole") && clsprop.equals(Role.swb_Role)) || (idp.endsWith("hasUserGroup") && clsprop.equals(UserGroup.swb_UserGroup))|| (idp.endsWith("hasProcessActivity"))) {
+            if ((idp.endsWith("hasRole") && clsprop.equals(Role.swb_Role)) || (idp.endsWith("hasUserGroup") && clsprop.equals(UserGroup.swb_UserGroup))|| (idp.endsWith("hasProcessActivity")) || (idp.endsWith("hasAdminFilter"))) {
                 urladd.setAction("choose");
             } else {
                 urladd.setAction("new");
@@ -939,7 +939,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                     out.println("<tr>");
                     out.println("<td>" + stitle + "</td> ");
                     SWBResourceURL urlchoose = paramRequest.getActionUrl();
-                    if ((idp.endsWith("hasRole") && clsprop.equals(Role.swb_Role)) || (idp.endsWith("hasUserGroup") && clsprop.equals(UserGroup.swb_UserGroup)) || (idp.endsWith("hasProcessActivity"))) {
+                    if ((idp.endsWith("hasRole") && clsprop.equals(Role.swb_Role)) || (idp.endsWith("hasUserGroup") && clsprop.equals(UserGroup.swb_UserGroup)) || (idp.endsWith("hasProcessActivity"))|| (idp.endsWith("hasAdminFilter"))) {
                         urlchoose.setAction("choose");
                         urlchoose.setParameter("suri", id);
                     } else {
