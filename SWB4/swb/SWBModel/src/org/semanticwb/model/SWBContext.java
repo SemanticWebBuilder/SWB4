@@ -178,7 +178,7 @@ public class SWBContext extends SWBContextBase
         if(user!=null && user.isSigned())
         {
             UserRepository rep=SWBContext.getAdminRepository();
-            UserGroup admin=UserGroup.ClassMgr.getUserGroup("administrators", rep);
+            UserGroup admin=UserGroup.ClassMgr.getUserGroup("admin", rep);
             if(user.hasUserGroup(admin))
             {
                 return user;
