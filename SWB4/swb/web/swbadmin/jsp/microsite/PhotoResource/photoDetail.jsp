@@ -1,8 +1,21 @@
 <%@page contentType="text/html"%>
 <%@page import="org.semanticwb.portal.lib.*,java.text.*,org.semanticwb.platform.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<%!    public static final java.text.SimpleDateFormat dateFormat;
+
+    static
+    {
+        String lang = "es";
+        Locale locale = new Locale(lang);
+        dateFormat = new java.text.SimpleDateFormat("dd-MMM-yyyy", locale);
+        String[] months={"Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"};
+        java.text.DateFormatSymbols fs=dateFormat.getDateFormatSymbols();
+        fs.setShortMonths(months);
+        dateFormat.setDateFormatSymbols(fs);
+    }
+%>
 <%
-            String lang = "es";
-            Locale locale=new Locale(lang);
+            //String lang = "es";
+            //Locale locale=new Locale(lang);
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             User user = paramRequest.getUser();
             WebPage wpage = paramRequest.getWebPage();
@@ -12,7 +25,7 @@
 
             String uri = request.getParameter("uri");
             PhotoElement photo = (PhotoElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
-            java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("dd-MMM-yyyy",locale);
+            //java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("dd-MMM-yyyy",locale);
 
             DecimalFormat df = new DecimalFormat("#0.0#");
             String rank = df.format(photo.getRank());
