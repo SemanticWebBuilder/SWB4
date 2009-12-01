@@ -29,6 +29,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.AdminFilter;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
+import org.semanticwb.platform.SemanticClass;
 
 /**
  *
@@ -50,6 +51,20 @@ public class SWBAdminFilterMgr
     public void init()
     {
         log.event("Initializing SWBAdminFilterMgr...");
+    }
+
+    public boolean haveClassAction(User user, SemanticClass cls, String action)
+    {
+        boolean ret=false;
+        Iterator<AdminFilter> it=user.listAdminFilters();
+        if(!it.hasNext())ret=true;
+        while (it.hasNext())
+        {
+            AdminFilter adminFilter = it.next();
+            ret=adminFilter.haveClassAction(cls, action);
+            if(ret==true)break;
+        }
+        return ret;
     }
 
     public boolean haveAccessToWebPage(User user, WebPage page)
