@@ -1,11 +1,23 @@
 <%@page contentType="text/html"%>
 <%@page import="org.semanticwb.portal.lib.*,org.semanticwb.platform.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<%!    public static final java.text.SimpleDateFormat dateFormat;
+
+    static
+    {
+        String lang = "es";
+        Locale locale = new Locale(lang);
+        dateFormat = new java.text.SimpleDateFormat("dd-MMM-yyyy", locale);
+        String[] months={"Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"};
+        java.text.DateFormatSymbols fs=dateFormat.getDateFormatSymbols();
+        fs.setShortMonths(months);
+        dateFormat.setDateFormatSymbols(fs);
+    }
+%>
 <%
     SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
     User user=paramRequest.getUser();
     WebPage wpage=paramRequest.getWebPage();
-    Member member=Member.getMember(user,wpage);
-    java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("dd-MMM-yyyy");
+    Member member=Member.getMember(user,wpage);    
     java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
 %>
 <%
