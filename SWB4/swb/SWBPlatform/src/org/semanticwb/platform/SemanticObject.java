@@ -2129,6 +2129,12 @@ public class SemanticObject
         return ret;
     }
 
+    public SemanticClass transformToSemanticClass()
+    {
+        SemanticClass ret = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(getURI());
+        return ret;
+    }    
+
     public Iterator<SemanticObject> listRelatedObjects()
     {
         ArrayList arr=new ArrayList();
