@@ -36,7 +36,7 @@
             while(it.hasNext())
             {
                 DirectoryObject obj=it.next();
-                if(clear)obj.remove();
+                if(clear && obj!=null)obj.remove();
                 out.println(obj+"<br/>");
             }
         }
@@ -49,7 +49,7 @@
             while(it.hasNext())
             {
                 MicroSite obj=it.next();
-                if(clear)obj.remove();
+                if(clear && obj!=null)obj.remove();
                 out.println(obj+"<br/>");
             }
         }
@@ -63,7 +63,7 @@
             while(it.hasNext())
             {
                 MicroSiteElement obj=it.next();
-                if(clear)obj.remove();
+                if(clear && obj!=null)obj.remove();
                 out.println(obj+"<br/>");
             }
         }
@@ -78,7 +78,7 @@
             while(it.hasNext())
             {
                 User obj=it.next();
-                if(clear)obj.remove();
+                if(clear && obj!=null)obj.remove();
                 out.println(obj+":"+obj.getFullName()+"<br/>");
             }
         }
