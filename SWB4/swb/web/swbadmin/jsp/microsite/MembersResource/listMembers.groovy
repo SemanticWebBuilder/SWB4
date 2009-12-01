@@ -183,17 +183,28 @@ if (null!=microsite){
                     }                    
                     def name=mem_usr.getFullName()
                     def usr_sex = mem_usr.getExtendedAttribute(mapa.get("userSex"))
-                    if ("M".equals(usr_sex)) usr_sex = "Masculino"
-                    else if ("F".equals(usr_sex)) usr_sex = "Femenino"
-                    else usr_sex = ""
+                    if(usr_sex==null)usr_sex="";
+                    if (usr_sex.equalsIgnoreCase("male"))
+                    {
+                        usr_sex = "Masculino";
+                    }
+                    else if (sex.equalsIgnoreCase("female"))
+                    {
+                        usr_sex = "Femenino";
+                    }
+                    else
+                    {
+                        usr_sex = "";
+                    }
+                    
 
-                    def usr_age = mem_usr.getExtendedAttribute(mapa.get("userAge"))
+                    def usr_age = mem_usr.getExtendedAttribute(mapa.get("userBirthDate"))
                     if (null==usr_age) usr_age = ""
                     
-                    if((""+usr_age).equals("0"))
+                    /*if((""+usr_age).equals("0"))
                     {
                         usr_age=""
-                    }                    
+                    } */
 
                     println """
                 <div class="noticia">
