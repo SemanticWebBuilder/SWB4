@@ -173,9 +173,9 @@ public int calcularEdad(java.util.Calendar fechaNaci, java.util.Calendar fechaAl
                     {
                         email = user.getEmail();
                     }
-                    if (user.getExtendedAttribute(mapa.get("userAge")) != null)
+                    if (user.getExtendedAttribute(mapa.get("userBirthDate")) != null)
                     {
-                        age = "" + user.getExtendedAttribute(mapa.get("userAge"));
+                        age = "" + user.getExtendedAttribute(mapa.get("userBirthDate"));
                     }
                     if (user.getExtendedAttribute(mapa.get("userSex")) != null)
                     {
@@ -215,7 +215,8 @@ public int calcularEdad(java.util.Calendar fechaNaci, java.util.Calendar fechaAl
                     }
                     if (!age.equals(""))
                     {
-                        Date date = SWBUtils.TEXT.iso8601DateParse(age);
+                        java.text.SimpleDateFormat df=new java.text.SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                        Date date = df.parse(age);
                         java.util.Calendar cal1 = java.util.Calendar.getInstance();
                         cal1.setTime(date);
 
