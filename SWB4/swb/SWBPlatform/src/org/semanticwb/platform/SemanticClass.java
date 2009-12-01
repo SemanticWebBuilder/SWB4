@@ -509,7 +509,7 @@ public class SemanticClass
         }
         if(ret==null && lang!=null)ret=getLabel(lang);
         if(ret==null)ret=getLabel(null);
-        if(ret==null)ret=getName();
+        if(ret==null)ret=getPrefix()+":"+getName();
         return ret;
     }
     
