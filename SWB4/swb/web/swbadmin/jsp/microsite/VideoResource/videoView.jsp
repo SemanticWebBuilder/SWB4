@@ -9,11 +9,24 @@
         }
     }
 </script>
+<%!    public static final java.text.SimpleDateFormat dateFormat;
+
+    static
+    {
+        String lang = "es";
+        Locale locale = new Locale(lang);
+        dateFormat = new java.text.SimpleDateFormat("dd-MMM-yyyy", locale);
+        String[] months={"Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"};
+        java.text.DateFormatSymbols fs=dateFormat.getDateFormatSymbols();
+        fs.setShortMonths(months);
+        dateFormat.setDateFormatSymbols(fs);
+    }
+%>
 <%!    private static final int ELEMENETS_BY_PAGE = 5;
 %>
 <%
             java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+            //SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             String cssPath = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/images/";
             User user = paramRequest.getUser();
