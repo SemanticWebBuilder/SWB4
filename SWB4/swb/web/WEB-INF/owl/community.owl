@@ -266,6 +266,8 @@
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
   </rdf:Description>
   <rdf:Description rdf:about="#MicroSiteWebPageUtil">
+    <rdfs:label xml:lang="en">Micro Site WebPage Utils</rdfs:label>
+    <rdfs:label xml:lang="es">Página Web de Utileria de Micrositio</rdfs:label>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
     <swb:displayObject rdf:resource="#do_WebPage"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
@@ -1137,11 +1139,11 @@
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
   </rdf:Description>
   <rdf:Description rdf:about="#MicroSite">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="es">Micrositio</rdfs:label>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
     <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
-    <rdfs:label xml:lang="en">MicroSite</rdfs:label>
-    <rdfs:label xml:lang="es">MIcroSitio</rdfs:label>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Microsite</rdfs:label>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </rdf:Description>
   <rdf:Description rdf:about="#EventResource">
@@ -1757,6 +1759,7 @@
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Devices"/>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PFlows"/>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Calendars"/>
+    <rdfs:label xml:lang="es">Contenedor de Micrositios</rdfs:label>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Dnss"/>
     <swb:hasHerarquicalNode rdf:resource="#hn_CommUtils"/>
     <swb:hasClass rdf:resource="#Comment"/>
@@ -1764,6 +1767,7 @@
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTStrategies"/>
     <swb:hasClass rdf:resource="#MicroSite"/>
+    <rdfs:label xml:lang="en">Micro Site Container</rdfs:label>
     <swb:hasClass rdf:resource="#PersonalComm"/>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Templates"/>
     <swb:hasClass rdf:resource="#CompanySite"/>
