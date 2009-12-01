@@ -5,9 +5,24 @@
 <%@page import="java.util.*"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page import="org.semanticwb.SWBPortal"%>
+<%@page import="org.semanticwb.SWBUtils"%>
 <%@page import="org.semanticwb.platform.*"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
+<%!
 
+public int calcularEdad(java.util.Calendar fechaNaci, java.util.Calendar fechaAlta){
+
+        int diff_año =fechaAlta.get(Calendar.YEAR)-
+        fechaNaci.get(Calendar.YEAR);
+        int diff_mes = fechaAlta.get(Calendar.MONTH)- fechaNaci.get(Calendar.MONTH);
+        int diff_dia = fechaAlta.get(Calendar.DATE)-fechaNaci.get(Calendar.DATE);
+        if(diff_mes<0 ||(diff_mes==0 && diff_dia<0)){
+            diff_año =diff_año-1;
+        }
+        return diff_año;
+    }
+
+%>
 
 <%
             String registryPath = paramRequest.getWebPage().getWebSite().getWebPage("Registro_de_Usuarios").getUrl();
@@ -157,10 +172,10 @@
                     if (user.getEmail() != null && !user.getEmail().trim().equals(""))
                     {
                         email = user.getEmail();
-                    }                    
-                    if (user.getExtendedAttribute(mapa.get("userBirthDate")) != null)
+                    }
+                    if (user.getExtendedAttribute(mapa.get("userAge")) != null)
                     {
-                        age = "" + user.getExtendedAttribute(mapa.get("userBirthDate"));
+                        age = "" + user.getExtendedAttribute(mapa.get("userAge"));
                     }
                     if (user.getExtendedAttribute(mapa.get("userSex")) != null)
                     {
@@ -182,11 +197,11 @@
                     {
                         userInciso = "" + user.getExtendedAttribute(mapa.get("userInciso"));
                     }
-                    /*if (sex.equalsIgnoreCase("M"))
+                    if (sex.equalsIgnoreCase("male"))
                     {
                         sex = "Masculino";
                     }
-                    else if (sex.equalsIgnoreCase("F"))
+                    else if (sex.equalsIgnoreCase("female"))
                     {
                         sex = "Femenino";
                     }
@@ -194,42 +209,54 @@
                     {
                         sex = "";
                     }
-                    if(age.equals("0"))
-                        {
-                        age="";
-                        }*/
+                    if (age == null)
+                    {
+                        age = "";
+                    }
+                    if (!age.equals(""))
+                    {
+                        Date date = SWBUtils.TEXT.iso8601DateParse(age);
+                        java.util.Calendar cal1 = java.util.Calendar.getInstance();
+                        cal1.setTime(date);
+
+                        java.util.Calendar cal2 = java.util.Calendar.getInstance();
+                        cal2.setTime(new Date(System.currentTimeMillis()));
+                        age = "" + calcularEdad(cal1, cal2);
+                    }
+
+
 %>
 
 
 <h2>Resumen</h2>
 <%
-        if (owner == user)
-        {
+                    if (owner == user)
+                    {
 %>
 
 <a class="editar" href="<%=registryPath%>" >[editar]</a>
 <%
-        }
+                    }
 %>
 <div class="resumenText">
     <p><span class="itemTitle">Nombre:</span>&nbsp;<%=user.getFullName()%></p>
-    <p><span class="itemTitle">Edad:</span> &nbsp;<%=age%></p>
+    <p><span class="itemTitle">Edad:</span> &nbsp;<%=age%> años</p>
     <p><span class="itemTitle">Sexo:</span> <%=sex%></p>
     <%
 
-            if (owner == user || areFriends)
-            { //Agregar datos privados (email, sexo, fotos, etc)
+                    if (owner == user || areFriends)
+                    { //Agregar datos privados (email, sexo, fotos, etc)
     %>
     <%
-    if (user.getEmail() != null && !user.getEmail().trim().equals(""))
-        {
-        %>
-        <p><span class="itemTitle">E-mail:</span>&nbsp;<a href="mailto:<%=email%>"><%=email%></a></p>
-        <%
-        }
+                        if (user.getEmail() != null && !user.getEmail().trim().equals(""))
+                        {
     %>
-    
-    
+    <p><span class="itemTitle">E-mail:</span>&nbsp;<a href="mailto:<%=email%>"><%=email%></a></p>
+    <%
+                        }
+    %>
+
+
     <p><span class="itemTitle">Estado Civil:</span> <%=userStatus%></p>
 
 
@@ -240,7 +267,7 @@
     <h2>Inciso</h2>
     <p><%=userInciso%></p>
     <%
-            }
+                    }
     %>
 </div>
 <%
