@@ -120,26 +120,31 @@ El usuario test no existe
                 Blog blog = Blog.ClassMgr.createBlog(site);
                 blog.setTitle("Blog " + icomm + "_" + ms.getId());
                 blog.setDescription("Blog " + icomm + "_" + ms.getId());
-                blog.setWebPage(ms);
+                WebPage blogwp=ms.getWebSite().getWebPage(ms.getId()+"_"+"Blog");
+                blog.setWebPage(blogwp);
+                out.println(blog+":"+blog.getTitle()+"<br/>");
                 blog.setCreated(new Date(System.currentTimeMillis()));
                 blog.setCreator(user);
                 for (int j = 1; j <= num; j++)
                 {
                     PostElement element = PostElement.ClassMgr.createPostElement(site);
-                    element.setBlog(blog);
+                    blog.addPostElement(element);
                     element.setContent("Contenido de prueba");
                     element.setDescription("Contenido de prueba");
                     element.setTitle("Contenido de prueba");
                     element.setCreated(new Date(System.currentTimeMillis()));
                     element.setCreator(user);
-
+                    element.setUpdated(new Date(System.currentTimeMillis()));
                 }
 
                 // Eventos
                 for (int j = 1; j <= num; j++)
                 {
                     EventElement element = EventElement.ClassMgr.createEventElement(site);
-                    element.setEventWebPage(ms);
+                    WebPage eventwp=ms.getWebSite().getWebPage(ms.getId()+"_"+"Events");
+                    element.setEventWebPage(eventwp);
+                    element.setEventImage("Quiero_viajar_al_Municipio.jpg");
+                    element.setEventThumbnail("Quiero_viajar_al_Municipio.jpg");
                     element.setCreated(new Date(System.currentTimeMillis()));
                     element.setCreator(user);
                     element.setDescription("Contenido de prueba");
@@ -151,6 +156,7 @@ El usuario test no existe
                     element.setEndDate(cal.getTime());
                     element.setPlace("contenido de prueba");
                     element.setAudienceType("Todos");
+                    out.println(element+":"+element.getTitle()+"<br/>");
                 }
                 // noticias
 
@@ -158,7 +164,8 @@ El usuario test no existe
                 for (int j = 1; j <= num; j++)
                 {
                     NewsElement element = NewsElement.ClassMgr.createNewsElement(site);
-                    element.setNewsWebPage(ms);
+                    WebPage newswp=ms.getWebSite().getWebPage(ms.getId()+"_"+"News");
+                    element.setNewsWebPage(newswp);
                     element.setCreated(new Date(System.currentTimeMillis()));
                     element.setCreator(user);
                     element.setDescription("Contenido de prueba");
@@ -171,6 +178,7 @@ El usuario test no existe
                     element.setAuthor("Contenido de prueba");
                     element.setCitation("Contenido de prueba");
                     element.setFullText("Contenido de prueba");
+                    out.println(element+":"+element.getTitle()+"<br/>");
                 }
 
                 // Fotos
@@ -178,7 +186,8 @@ El usuario test no existe
                 for (int j = 1; j <= num; j++)
                 {
                     PhotoElement element = PhotoElement.ClassMgr.createPhotoElement(site);
-                    element.setPhotoWebPage(ms);
+                    WebPage photowp=ms.getWebSite().getWebPage(ms.getId()+"_"+"Photos");
+                    element.setPhotoWebPage(photowp);
                     element.setCreated(new Date(System.currentTimeMillis()));
                     element.setCreator(user);
                     element.setDescription("Contenido de prueba");
@@ -189,12 +198,14 @@ El usuario test no existe
                     cal.setTime(new Date(System.currentTimeMillis()));
                     cal.add(cal.MONTH, 1);
                     element.setTags("Contenido de prueba");
+                    out.println(element+":"+element.getTitle()+"<br/>");
                 }
                 // videos
                 for (int j = 1; j <= num; j++)
                 {
                     VideoElement element = VideoElement.ClassMgr.createVideoElement(site);
-                    element.setWebPage(ms);
+                    WebPage videowp=ms.getWebSite().getWebPage(ms.getId()+"_"+"Videos");
+                    element.setWebPage(videowp);
                     element.setCreated(new Date(System.currentTimeMillis()));
                     element.setCreator(user);
                     element.setDescription("Contenido de prueba");
@@ -203,6 +214,7 @@ El usuario test no existe
                     cal.setTime(new Date(System.currentTimeMillis()));
                     cal.add(cal.MONTH, 1);
                     element.setTags("Contenido de prueba");
+                    out.println(element+":"+element.getTitle()+"<br/>");
                 }
 
             }
