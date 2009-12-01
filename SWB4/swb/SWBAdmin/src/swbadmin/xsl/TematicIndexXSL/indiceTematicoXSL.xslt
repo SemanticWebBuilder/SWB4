@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:output method="html" version="1.0" encoding="ISO-8859-1" indent="yes"/>
 <xsl:template match="/resource">
@@ -22,7 +22,7 @@
 			<xsl:for-each select="son">
 				<TR><TD colspan="2">
 					<A href="{@sonref}" class="idx_link1">
-						<FONT style="font-size: 10px;">&gt; </FONT><xsl:value-of select="sontitle" />
+                                          <xsl:value-of select="sontitle" />
 					</A>
 				</TD></TR>
 				<TR class="idx_data"><TD><xsl:text disable-output-escaping="yes">&amp;nbsp;&amp;nbsp;</xsl:text></TD><TD>
