@@ -244,11 +244,7 @@ public int calcularEdad(java.util.Calendar fechaNaci, java.util.Calendar fechaAl
                     {
                         userStatus = "Viudo";
                     }
-                    else if (userStatus.equals("married"))
-                    {
-                        userStatus = "Casado";
-                    }
-
+                    
 %>
 
 
