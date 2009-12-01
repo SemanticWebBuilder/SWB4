@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable,org.semanticwb.model.Indexable,org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Traceable,org.semanticwb.model.Localeable,org.semanticwb.model.Searchable,org.semanticwb.model.Filterable
+public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.model.Localeable,org.semanticwb.model.Trashable,org.semanticwb.model.Searchable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Indexable
 {
        public static final org.semanticwb.platform.SemanticClass swb_UserRepository=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserRepository");
        public static final org.semanticwb.platform.SemanticProperty swb_userRepository=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepository");
@@ -25,7 +25,6 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
        public static final org.semanticwb.platform.SemanticClass swb_AdminFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#AdminFilter");
        public static final org.semanticwb.platform.SemanticClass swb_IPFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#IPFilter");
        public static final org.semanticwb.platform.SemanticClass swb_PFlowRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlowRef");
-       public static final org.semanticwb.platform.SemanticClass swb_Permission=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Permission");
        public static final org.semanticwb.platform.SemanticClass swb_Country=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Country");
        public static final org.semanticwb.platform.SemanticClass swb_PFlow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlow");
        public static final org.semanticwb.platform.SemanticClass swb_ResourceFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceFilter");
@@ -875,36 +874,6 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
     public boolean hasPFlowRef(String id)
     {
         return org.semanticwb.model.PFlowRef.ClassMgr.hasPFlowRef(id, this);
-    }
-
-    public org.semanticwb.model.Permission getPermission(String id)
-    {
-        return org.semanticwb.model.Permission.ClassMgr.getPermission(id, this);
-    }
-
-    public java.util.Iterator<org.semanticwb.model.Permission> listPermissions()
-    {
-        return org.semanticwb.model.Permission.ClassMgr.listPermissions(this);
-    }
-
-    public org.semanticwb.model.Permission createPermission(String id)
-    {
-        return org.semanticwb.model.Permission.ClassMgr.createPermission(id,this);
-    }
-
-    public org.semanticwb.model.Permission createPermission()
-    {
-        long id=getSemanticObject().getModel().getCounter(swb_Permission);
-        return org.semanticwb.model.Permission.ClassMgr.createPermission(String.valueOf(id),this);
-    } 
-
-    public void removePermission(String id)
-    {
-        org.semanticwb.model.Permission.ClassMgr.removePermission(id, this);
-    }
-    public boolean hasPermission(String id)
-    {
-        return org.semanticwb.model.Permission.ClassMgr.hasPermission(id, this);
     }
 
     public org.semanticwb.model.Template getTemplate(String id)

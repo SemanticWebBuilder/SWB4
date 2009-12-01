@@ -1,13 +1,12 @@
 package org.semanticwb.model.base;
 
 
-public abstract class RoleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Traceable
+public abstract class RoleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable
 {
        public static final org.semanticwb.platform.SemanticClass swb_RoleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RoleRef");
        public static final org.semanticwb.platform.SemanticProperty swb_hasRoleRefInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasRoleRefInv");
        public static final org.semanticwb.platform.SemanticClass swb_Role=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Role");
        public static final org.semanticwb.platform.SemanticProperty swb_hasRoleChild=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasRoleChild");
-       public static final org.semanticwb.platform.SemanticClass swb_Permission=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Permission");
        public static final org.semanticwb.platform.SemanticProperty swb_hasPermission=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasPermission");
        public static final org.semanticwb.platform.SemanticProperty swb_roleParent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#roleParent");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Role");
@@ -76,17 +75,6 @@ public abstract class RoleBase extends org.semanticwb.model.SWBClass implements 
    public static java.util.Iterator<org.semanticwb.model.Role> listRoleByChild(org.semanticwb.model.Role hasrolechild)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.model.Role> it=new org.semanticwb.model.GenericIterator(hasrolechild.getSemanticObject().getModel().listSubjects(swb_hasRoleChild,hasrolechild.getSemanticObject()));
-       return it;
-   }
-   public static java.util.Iterator<org.semanticwb.model.Role> listRoleByPermission(org.semanticwb.model.Permission haspermission,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.model.Role> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_hasPermission, haspermission.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.model.Role> listRoleByPermission(org.semanticwb.model.Permission haspermission)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.model.Role> it=new org.semanticwb.model.GenericIterator(haspermission.getSemanticObject().getModel().listSubjects(swb_hasPermission,haspermission.getSemanticObject()));
        return it;
    }
    public static java.util.Iterator<org.semanticwb.model.Role> listRoleByCreator(org.semanticwb.model.User creator,org.semanticwb.model.SWBModel model)
@@ -229,44 +217,6 @@ public abstract class RoleBase extends org.semanticwb.model.SWBClass implements 
     public void setUpdated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_updated, value);
-    }
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.model.Permission> listPermissions()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Permission>(getSemanticObject().listObjectProperties(swb_hasPermission));
-    }
-
-    public boolean hasPermission(org.semanticwb.model.Permission permission)
-    {
-        if(permission==null)return false;
-        return getSemanticObject().hasObjectProperty(swb_hasPermission,permission.getSemanticObject());
-    }
-
-    public void addPermission(org.semanticwb.model.Permission value)
-    {
-        getSemanticObject().addObjectProperty(swb_hasPermission, value.getSemanticObject());
-    }
-
-    public void removeAllPermission()
-    {
-        getSemanticObject().removeProperty(swb_hasPermission);
-    }
-
-    public void removePermission(org.semanticwb.model.Permission permission)
-    {
-        getSemanticObject().removeObjectProperty(swb_hasPermission,permission.getSemanticObject());
-    }
-
-
-    public org.semanticwb.model.Permission getPermission()
-    {
-         org.semanticwb.model.Permission ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasPermission);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.Permission)obj.createGenericInstance();
-         }
-         return ret;
     }
 
     public void setCreator(org.semanticwb.model.User value)
