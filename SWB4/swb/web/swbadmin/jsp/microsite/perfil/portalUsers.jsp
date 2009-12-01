@@ -11,6 +11,21 @@
 <%@page import="org.semanticwb.platform.*"%>
 
 <%!
+
+public int calcularEdad(java.util.Calendar fechaNaci, java.util.Calendar fechaAlta){
+
+        int diff_año =fechaAlta.get(java.util.Calendar.YEAR)-
+        fechaNaci.get(java.util.Calendar.YEAR);
+        int diff_mes = fechaAlta.get(java.util.Calendar.MONTH)- fechaNaci.get(java.util.Calendar.MONTH);
+        int diff_dia = fechaAlta.get(java.util.Calendar.DATE)-fechaNaci.get(java.util.Calendar.DATE);
+        if(diff_mes<0 ||(diff_mes==0 && diff_dia<0)){
+            diff_año =diff_año-1;
+        }
+        return diff_año;
+    }
+
+%>
+<%!
 private final int I_PAGE_SIZE = 10;
 private final int I_INIT_PAGE = 1;
 %>
@@ -247,19 +262,45 @@ private final int I_INIT_PAGE = 1;
             </div>
             <%
                 String gender = "";
-                int age = 0;
+                String age = "";
                 if (userprosp.getExtendedAttribute(mapa.get("userSex")) != null && !((String) userprosp.getExtendedAttribute(mapa.get("userSex"))).equals("null"))
                 {
                     gender = (String) userprosp.getExtendedAttribute(mapa.get("userSex"));
                 }
-                if (userprosp.getExtendedAttribute(mapa.get("userAge")) != null && ((Integer) userprosp.getExtendedAttribute(mapa.get("userAge"))).intValue() > 0)
+                if (userprosp.getExtendedAttribute(mapa.get("userBirthDate")) != null)
                 {
-                    age = ((Integer) userprosp.getExtendedAttribute(mapa.get("userAge"))).intValue();
+                    age = ""+userprosp.getExtendedAttribute(mapa.get("userBirthDate"));
                 }
+                if (gender.equalsIgnoreCase("male"))
+                    {
+                        gender = "Masculino";
+                    }
+                    else if (gender.equalsIgnoreCase("female"))
+                    {
+                        gender = "Femenino";
+                    }
+                    else
+                    {
+                        gender = "";
+                    }
+                if (age == null)
+                    {
+                        age = "";
+                    }
+                    if (!age.equals(""))
+                    {
+                        java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                        Date date = df.parse(age);
+                        java.util.Calendar cal1 = java.util.Calendar.getInstance();
+                        cal1.setTime(date);
+
+                        java.util.Calendar cal2 = java.util.Calendar.getInstance();
+                        cal2.setTime(new Date(System.currentTimeMillis()));
+                        age = "" + calcularEdad(cal1, cal2);
+                    }
             %>
             <p>Sexo:<%=gender%></p>
-            <p>Edad:<%if (age > 0)
-                {%><%=age%><%}%></p>
+            <p>Edad:<%=age%></p>
         </div>
     </div>
     <%
