@@ -11,11 +11,25 @@
         }
     }
 </script>
+
+<%!    public static final java.text.SimpleDateFormat dateFormat;
+
+    static
+    {
+        String lang = "es";
+        Locale locale = new Locale(lang);
+        dateFormat = new java.text.SimpleDateFormat("dd-MMM-yyyy", locale);
+        String[] months={"Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"};
+        DateFormatSymbols fs=dateFormat.getDateFormatSymbols();
+        fs.setShortMonths(months);
+        dateFormat.setDateFormatSymbols(fs);
+    }
+%>
 <%
             String lang = "es";
             Locale locale=new Locale(lang);
             java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy",locale);
+            //SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy",locale);
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             User user = paramRequest.getUser();
             
