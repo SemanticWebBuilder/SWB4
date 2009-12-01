@@ -37,6 +37,7 @@
             {
                 DirectoryObject obj=it.next();
                 if(clear && obj!=null)obj.remove();
+                if(obj!=null)
                 out.println(obj+"<br/>");
             }
         }
@@ -49,7 +50,10 @@
             while(it.hasNext())
             {
                 MicroSite obj=it.next();
-                if(clear && obj!=null)obj.remove();
+                if(clear && obj!=null)
+                    {obj.remove();
+                     }
+                if(obj!=null)
                 out.println(obj+"<br/>");
             }
         }
@@ -64,6 +68,7 @@
             {
                 MicroSiteElement obj=it.next();
                 if(clear && obj!=null)obj.remove();
+                if(obj!=null)
                 out.println(obj+"<br/>");
             }
         }
@@ -79,6 +84,7 @@
             {
                 User obj=it.next();
                 if(clear && obj!=null)obj.remove();
+                if(obj!=null)
                 out.println(obj+":"+obj.getFullName()+"<br/>");
             }
         }
@@ -96,6 +102,25 @@
             {
                 PostElement obj=it.next();
                 if(clear && obj!=null)obj.remove();
+                if(obj!=null)
+                out.println(obj+":"+obj.getURI()+"<br/>");
+            }
+        }
+
+%>
+
+
+ <h1>Blogs</h1>
+<%
+        {
+            WebSite site=SWBContext.getWebSite(name);
+
+            Iterator<Blog> it=Blog.ClassMgr.listBlogs(site);
+            while(it.hasNext())
+            {
+                Blog obj=it.next();
+                if(clear && obj!=null)obj.remove();
+                if(obj!=null)
                 out.println(obj+":"+obj.getURI()+"<br/>");
             }
         }
