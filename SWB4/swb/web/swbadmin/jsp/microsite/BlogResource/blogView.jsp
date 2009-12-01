@@ -20,7 +20,7 @@
         Locale locale = new Locale(lang);
         dateFormat = new java.text.SimpleDateFormat("dd-MMM-yyyy", locale);
         String[] months={"Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"};
-        DateFormatSymbols fs=dateFormat.getDateFormatSymbols();
+        java.text.DateFormatSymbols fs=dateFormat.getDateFormatSymbols();
         fs.setShortMonths(months);
         dateFormat.setDateFormatSymbols(fs);
     }
