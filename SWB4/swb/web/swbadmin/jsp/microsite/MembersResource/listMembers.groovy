@@ -31,7 +31,9 @@ import org.semanticwb.model.SWBModel
 import org.semanticwb.SWBPlatform
 import org.semanticwb.SWBPortal
 import org.semanticwb.platform.SemanticProperty
-
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Calendar;
 
 
 def paramRequest=request.getAttribute("paramRequest")
@@ -199,8 +201,21 @@ if (null!=microsite){
                     
 
                     def usr_age = mem_usr.getExtendedAttribute(mapa.get("userBirthDate"))
-                    if (null==usr_age) usr_age = ""
-                    
+                    if (null==usr_age)
+                    {
+                        usr_age = ""
+                    }
+                    if (!usr_age.equals(""))
+                    {
+                        def df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+                        def date = df.parse(usr_age.toString());
+                        java.util.Calendar cal1 = java.util.Calendar.getInstance()
+                        cal1.setTime(date)
+
+                        java.util.Calendar cal2 = java.util.Calendar.getInstance()
+                        cal2.setTime(new Date(System.currentTimeMillis()))                        
+                        usr_age = calcularEdad(cal1, cal2);
+                    }
                     /*if((""+usr_age).equals("0"))
                     {
                         usr_age=""
@@ -273,3 +288,12 @@ if (null!=microsite){
       </div> """
     }
 }
+def calcularEdad( fechaNaci, fechaAlta){    
+        def int diff_ano =fechaAlta.get(Calendar.YEAR)-fechaNaci.get(Calendar.YEAR)
+        def int diff_mes = fechaAlta.get(Calendar.MONTH)- fechaNaci.get(Calendar.MONTH)
+        def int diff_dia = fechaAlta.get(Calendar.DATE)-fechaNaci.get(Calendar.DATE)
+        if(diff_mes<0 ||(diff_mes==0 && diff_dia<0)){
+            diff_ano =diff_ano-1
+        }
+        return diff_ano
+    }
