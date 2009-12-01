@@ -299,6 +299,10 @@ public class User extends UserBase implements Principal
             {
                 obj = getSemanticObject().getDateProperty(prop);
             }
+            if (SemanticVocabulary.XMLS_DATE.equals(prop.getRange().toString()))
+            {
+                obj = getSemanticObject().getDateProperty(prop);
+            }
             if (SemanticVocabulary.XMLS_FLOAT.equals(prop.getRange().toString()))
             {
                 obj = new Float(getSemanticObject().getFloatProperty(prop));
