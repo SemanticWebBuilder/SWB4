@@ -42,6 +42,8 @@ import org.semanticwb.SWBUtils;
 
 import org.semanticwb.model.AdminFilter;
 import org.semanticwb.model.Filterable;
+import org.semanticwb.model.FilterableClass;
+import org.semanticwb.model.FilterableNode;
 import org.semanticwb.model.HerarquicalNode;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBComparator;
@@ -166,7 +168,7 @@ public class SWBAFilters extends SWBATree {
             } else if (cmd.equals("getSemanticClass")) 
             {
                 SemanticClass scls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(id);
-                System.out.println("Command getSemanticClass:"+scls);
+                //System.out.println("Command getSemanticClass:"+scls);
                 addSemanticClass(user, scls, res, true);
             } else
             {
@@ -204,7 +206,7 @@ public class SWBAFilters extends SWBATree {
         if("WBAd_mnu_PopUp".equals(root.getId()))
         {
             //System.out.println("Se encontró sub-menus........");
-            loadSemClass(user);
+            //loadSemClass(user);
             getSubMenus(map, etopic, root, user);
 
         }
@@ -284,15 +286,26 @@ public class SWBAFilters extends SWBATree {
         //System.out.println("getSubMenu");
 
         String lang = user.getLanguage();
-        Iterator<String> its = hmclass.keySet().iterator();
-        //System.out.println("Lista de clases...."+hmclass.keySet().size());
-        while (its.hasNext()) {
-            String sclass = its.next();
-//            if(!sclass.equals("WebSite")&&!sclass.equals("WebPage"))
-//            {
-            SemanticClass sc = (SemanticClass) hmclass.get(sclass);
+//        Iterator<String> its = hmclass.keySet().iterator();
+//        //System.out.println("Lista de clases...."+hmclass.keySet().size());
+//        while (its.hasNext()) {
+//            String sclass = its.next();
+////            if(!sclass.equals("WebSite")&&!sclass.equals("WebPage"))
+////            {
+//            SemanticClass sc = (SemanticClass) hmclass.get(sclass);
+//
+//
+//        }
 
-            addSemanticClass(user, sc, etopic, true);
+
+        Iterator<SemanticClass> it=FilterableClass.swb_FilterableClass.listSubClasses(true);
+        while(it.hasNext())
+        {
+            SemanticClass cls2 = (SemanticClass)it.next();
+            {
+                addSemanticClass(user, cls2, etopic, true);
+                //out.println(cls2.getDisplayName("es")+"<br/>");
+            }
         }
     }
 
@@ -771,7 +784,7 @@ public class SWBAFilters extends SWBATree {
 
                 Document exmlfilter = SWBUtils.XML.xmlToDom(filter.getXml());
 
-                System.out.println("Filter XML:"+SWBUtils.XML.domToXml(exmlfilter,true));
+                //System.out.println("Filter XML:"+SWBUtils.XML.domToXml(exmlfilter,true));
 
 
                 Node node = docres.importNode(exmlfilter.getFirstChild(), true);
@@ -1068,22 +1081,6 @@ public class SWBAFilters extends SWBATree {
         }
     }
 
-    /**
-     * Loads semantic objects related to the user access level.
-     * @param user, a session User
-     */
-    public void loadSemClass(User user)
-    {
-        //System.out.println("loadSemClass");
-        if (hmclass == null) {
-            hmclass = new HashMap();
-        }
-        Iterator<WebSite> it = SWBComparator.sortSermanticObjects(user.getLanguage(), SWBContext.listWebSites());
-        while (it.hasNext()) {
-            WebSite site = it.next();
-            addSemanticObject2(user, site.getSemanticObject(), true, false);//, ele);
-        }
-    }
 
     /**
      * Get true if a Semantic objects have Herarquical Nodes
@@ -1101,102 +1098,6 @@ public class SWBAFilters extends SWBATree {
         return ret;
     }
 
-    /**
-     * Add Herarquical nodes, depends on user and semantic object
-     * @param user, a session User
-     * @param obj, a semantic object to eval
-     */
-    public void addHerarquicalNodes2(User user, SemanticObject obj) //, Element ele)
-    {
-        //System.out.println("addHerarquicalNodes2");
-        Iterator<SemanticObject> it = SWBComparator.sortSortableObject(obj.getSemanticClass().listHerarquicalNodes());
-        while (it.hasNext()) {
-            HerarquicalNode node = new HerarquicalNode(it.next());
-            addHerarquicalNode2(user, node, obj, true); //, ele);
-        }
-    }
-
-    /**
-     * Add herarquical nodes to a semantic object
-     * @param user, a session User
-     * @param node, a Herarquical node
-     * @param obj, a semantic object to eval
-     * @param addChilds, if want to add a semantic object childs
-     */
-    public void addHerarquicalNode2(User user, HerarquicalNode node, SemanticObject obj, boolean addChilds) //, Element ele)
-    {
-        //System.out.println("addHerarquicalNode3");
-        SemanticClass cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(node.getHClass().getURI());
-        hmclass.put(cls.getName(), cls);
-        Iterator<SemanticObject> it = SWBComparator.sortSermanticObjects(user.getLanguage(), obj.getModel().listInstancesOfClass(cls));
-
-        SemanticProperty herarprop = null;   //Herarquical property;
-        Iterator<SemanticProperty> hprops = cls.listInverseHerarquicalProperties();
-        if (hprops.hasNext()) {
-            herarprop = hprops.next();
-        }
-
-        if (addChilds) {
-            while (it.hasNext()) {
-                SemanticObject so = it.next();
-                hmclass.put(so.getSemanticClass().getName(), so.getSemanticClass());
-                if (herarprop != null) {
-                    if (so.getObjectProperty(herarprop) == null) {
-                        addSemanticObject2(user, so, true);//,ele);
-                    }
-                } else {
-                    addSemanticObject2(user, so, true);//,ele);
-                }
-            }
-        }
-
-    }
-
-    /**
-     * Add related semantic objects, depends on the session user
-     * @param user, a session User
-     * @param obj, a selected semantic object
-     * @param addChilds, if wanto to add semantic object childs
-     */
-    public void addSemanticObject2(User user, SemanticObject obj, boolean addChilds)//, Element ele)
-    {
-        //System.out.println("addSemanticObject");
-        addSemanticObject2(user, obj, addChilds, false);//, ele);
-    }
-
-    /**
-     * Add related semantic objects, depends on the user access
-     * @param user, selected user
-     * @param obj, an eval of semantic object
-     * @param addChilds, if want to add semantic object childs
-     * @param addDummy, if want to add a dummy
-     */
-    public void addSemanticObject2(User user, SemanticObject obj, boolean addChilds, boolean addDummy)//, Element ele)
-    {
-        //System.out.println("addSemanticObject2");
-        boolean hasChilds = false;
-
-        SemanticClass cls = obj.getSemanticClass();
-        hmclass.put(cls.getName(), cls);
-
-        hasChilds = hasHerarquicalNodes(obj);
-        if (addChilds || !hasChilds) {
-            addHerarquicalNodes2(user, obj);//, etp);
-
-            Iterator<SemanticObject> it = obj.listHerarquicalChilds();
-            if (addChilds) {
-                Iterator<SemanticObject> it2 = SWBComparator.sortSermanticObjects(user.getLanguage(), it);
-                while (it2.hasNext()) {
-                    SemanticObject ch = it2.next();
-                    addSemanticObject2(user, ch, false);//,etp);
-                }
-            } else {
-                if (it.hasNext()) {
-                    hasChilds = true;
-                }
-            }
-        }
-    }
 
     /**
      *  Add server to dom document
@@ -1264,7 +1165,7 @@ public class SWBAFilters extends SWBATree {
         jobj.setAttribute("icon", node.getIconClass());
         //jobj.setAttribute("icon", "homev");
 
-        if(cls.isSubClass(Filterable.swb_Filterable))
+        if(cls.isSubClass(FilterableNode.swb_FilterableNode))
         {
             Iterator<SemanticObject> it=SWBObjectFilter.filter(SWBComparator.sortSermanticObjects(user.getLanguage(), obj.getModel().listInstancesOfClass(cls)),pf);
             if(addChilds)
@@ -1328,7 +1229,7 @@ public class SWBAFilters extends SWBATree {
                 while(it2.hasNext())
                 {
                     SemanticObject ch=it2.next();
-                    if(ch.instanceOf(Filterable.swb_Filterable))
+                    if(ch.instanceOf(FilterableNode.swb_FilterableNode))
                         addSemanticObject(user,ch,jobj,false);
                 }
             }else
@@ -1336,7 +1237,7 @@ public class SWBAFilters extends SWBATree {
                 while(it.hasNext())
                 {
                     SemanticObject ch=it.next();
-                    if(ch.instanceOf(Filterable.swb_Filterable))
+                    if(ch.instanceOf(FilterableNode.swb_FilterableNode))
                     {
                         hasChilds=true;
                         aux=ch;
@@ -1372,7 +1273,7 @@ public class SWBAFilters extends SWBATree {
     protected void addSemanticClass(User user, SemanticClass sc, Element node, boolean addChilds)
     //public void addSemanticObject(JSONArray arr, SemanticObject obj, boolean addChilds, boolean addDummy, String lang) throws JSONException
     {
-        System.out.println("addSemanticClass:"+sc+" "+node);
+        //System.out.println("addSemanticClass:"+sc+" "+node);
         String lang=user.getLanguage();
 
         Element classele = addNode("topic", sc.getClassId(), sc.getDisplayName(user.getLanguage()), node);
