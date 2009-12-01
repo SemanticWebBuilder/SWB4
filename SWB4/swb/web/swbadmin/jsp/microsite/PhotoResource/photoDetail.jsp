@@ -1,16 +1,18 @@
 <%@page contentType="text/html"%>
 <%@page import="org.semanticwb.portal.lib.*,java.text.*,org.semanticwb.platform.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%
+            String lang = "es";
+            Locale locale=new Locale(lang);
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             User user = paramRequest.getUser();
             WebPage wpage = paramRequest.getWebPage();
             Member member = Member.getMember(user, wpage);
 
-            String lang = user.getLanguage();
+            //String lang = user.getLanguage();
 
             String uri = request.getParameter("uri");
             PhotoElement photo = (PhotoElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
-            java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("dd-MMM-yyyy");
+            java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("dd-MMM-yyyy",locale);
 
             DecimalFormat df = new DecimalFormat("#0.0#");
             String rank = df.format(photo.getRank());
