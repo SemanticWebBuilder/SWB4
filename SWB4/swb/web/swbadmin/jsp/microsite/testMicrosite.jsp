@@ -84,5 +84,22 @@
         }
 
 %>
+
+
+ <h1>Post Elements</h1>
+<%
+        {
+            WebSite site=SWBContext.getWebSite(name);
+
+            Iterator<PostElement> it=PostElement.ClassMgr.listPostElements(site);
+            while(it.hasNext())
+            {
+                PostElement obj=it.next();
+                if(clear && obj!=null)obj.remove();
+                out.println(obj+":"+obj.getURI()+"<br/>");
+            }
+        }
+
+%>
     </body>
 </html>
