@@ -12,20 +12,22 @@
     }
 </script>
 <%
+            String lang = "es";
+            Locale locale=new Locale(lang);
             java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy",locale);
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             User user = paramRequest.getUser();
-            String lang = "es";
-            if (user.getLanguage() != null)
+            
+            /*if (user.getLanguage() != null)
             {
                 lang = user.getLanguage();
-            }
+            }*/
             WebPage wpage = paramRequest.getWebPage();
             MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
             Blog blog = (Blog) request.getAttribute("blog");
             String defaultFormat = "d 'de' MMMM  'del' yyyy 'a las' HH:mm";
-            SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat, new Locale(lang));
+            SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat, locale);
             String createdBlog = iso8601dateFormat.format(blog.getCreated());
             String updatedBlog = iso8601dateFormat.format(blog.getUpdated());
             Member member = Member.getMember(user, wpage);
