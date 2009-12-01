@@ -88,7 +88,7 @@
                 <%            }
                 %>
         </ul>
-        <p class="vermas"><a href="<%=path%>" >Ver m&aacute;s</a></p>
+        <%-- <p class="vermas"><a href="<%=path%>" >Ver m&aacute;s</a></p> --%>
 <%
             }
 %>
