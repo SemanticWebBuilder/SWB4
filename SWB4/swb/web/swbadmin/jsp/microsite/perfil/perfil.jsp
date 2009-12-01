@@ -215,7 +215,7 @@ public int calcularEdad(java.util.Calendar fechaNaci, java.util.Calendar fechaAl
                     }
                     if (!age.equals(""))
                     {
-                        java.text.SimpleDateFormat df=new java.text.SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                        java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                         Date date = df.parse(age);
                         java.util.Calendar cal1 = java.util.Calendar.getInstance();
                         cal1.setTime(date);
@@ -224,7 +224,30 @@ public int calcularEdad(java.util.Calendar fechaNaci, java.util.Calendar fechaAl
                         cal2.setTime(new Date(System.currentTimeMillis()));
                         age = "" + calcularEdad(cal1, cal2);
                     }
-
+                    if (userStatus==null)
+                        {
+                        userStatus="";
+                        }
+                    if (userStatus.equals("single"))
+                    {
+                        userStatus = "Soltero";
+                    }
+                    else if (userStatus.equals("married"))
+                    {
+                        userStatus = "Casado";
+                    }
+                    else if (userStatus.equals("separated"))
+                    {
+                        userStatus = "Divorciado";
+                    }
+                    else if (userStatus.equals("widow"))
+                    {
+                        userStatus = "Viudo";
+                    }
+                    else if (userStatus.equals("married"))
+                    {
+                        userStatus = "Casado";
+                    }
 
 %>
 
@@ -246,8 +269,8 @@ public int calcularEdad(java.util.Calendar fechaNaci, java.util.Calendar fechaAl
     <%
 
                     if (owner == user || areFriends)
-                    { //Agregar datos privados (email, sexo, fotos, etc)
-    %>
+                    { //Agregar datos privados (email, s fotos, etc)
+%>
     <%
                         if (user.getEmail() != null && !user.getEmail().trim().equals(""))
                         {
