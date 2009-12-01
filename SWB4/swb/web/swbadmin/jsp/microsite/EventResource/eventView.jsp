@@ -12,9 +12,10 @@
 <%!    private static final int ELEMENETS_BY_PAGE = 5;
 %>
 <%
-
+            String lang = "es";
+            Locale locale=new Locale(lang);
             java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy",locale);
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             String cssPath = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/images/";
             User user = paramRequest.getUser();
