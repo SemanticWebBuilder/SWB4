@@ -160,7 +160,7 @@
                     }                    
                     if (user.getExtendedAttribute(mapa.get("userBirthDate")) != null)
                     {
-                        age = "" + user.getExtendedAttribute(mapa.get("userAge"));
+                        age = "" + user.getExtendedAttribute(mapa.get("userBirthDate"));
                     }
                     if (user.getExtendedAttribute(mapa.get("userSex")) != null)
                     {
@@ -182,7 +182,7 @@
                     {
                         userInciso = "" + user.getExtendedAttribute(mapa.get("userInciso"));
                     }
-                    if (sex.equalsIgnoreCase("M"))
+                    /*if (sex.equalsIgnoreCase("M"))
                     {
                         sex = "Masculino";
                     }
@@ -197,7 +197,7 @@
                     if(age.equals("0"))
                         {
                         age="";
-                        }
+                        }*/
 %>
 
 
