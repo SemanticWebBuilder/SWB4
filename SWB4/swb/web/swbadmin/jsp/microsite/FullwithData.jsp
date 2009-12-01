@@ -1,7 +1,7 @@
 <%@page contentType="text/html"%>
 <%@page import="org.semanticwb.platform.*,org.semanticwb.portal.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%!
-    private static final int num=3;
+    private static final int num=100;
 %>
 <%
 
