@@ -23,6 +23,7 @@
 
     <%
         WebSite site=paramRequest.getWebPage().getWebSite();
+        User user = paramRequest.getUser();
         SemanticClass cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(request.getParameter("uri"));
         SWBFormMgr mgr = new SWBFormMgr(cls, site.getSemanticObject(), null);
         mgr.setFilterRequired(false);
@@ -40,6 +41,9 @@
         request.setAttribute("formName", mgr.getFormName());
         mgr.addButton(SWBFormButton.newSaveButton());
         mgr.addButton(SWBFormButton.newBackButton());
+        if (user.isRegistered() && user.isSigned()) {
       %>
         <%=mgr.renderForm(request)%>
-    
+      <%} else {%>
+      <p><span class="tituloRojo">NOTA: </span>Debe estar registrado y haber iniciado sesi&oacute;n para poder publicar elementos.</p>
+      <%}%>
