@@ -25,7 +25,7 @@
 
             String uri = request.getParameter("uri");
             PhotoElement photo = (PhotoElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
-            //java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("dd-MMM-yyyy",locale);
+            
 
             DecimalFormat df = new DecimalFormat("#0.0#");
             String rank = df.format(photo.getRank());

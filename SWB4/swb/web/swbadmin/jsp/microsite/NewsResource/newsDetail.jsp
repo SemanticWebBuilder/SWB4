@@ -18,8 +18,7 @@
             Resource base = paramRequest.getResourceBase();
             User user = paramRequest.getUser();
             WebPage wpage = paramRequest.getWebPage();
-            Member member = Member.getMember(user, wpage);
-            //SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy",locale);
+            Member member = Member.getMember(user, wpage);            
             java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
             String uri = request.getParameter("uri");
             NewsElement anew = (NewsElement) SemanticObject.createSemanticObject(uri).createGenericInstance();

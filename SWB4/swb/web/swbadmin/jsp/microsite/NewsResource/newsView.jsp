@@ -27,8 +27,7 @@
             fs.setShortMonths(months);
             dateFormat.setDateFormatSymbols(fs);
 
-            java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
-            //SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy",locale);
+            java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");            
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             String cssPath = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/images/";
             User user = paramRequest.getUser();
