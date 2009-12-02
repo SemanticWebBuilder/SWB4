@@ -116,12 +116,12 @@ public class SessionImp implements Session
         BaseNode rootBaseNode = ws.getRoot();
         if(rootBaseNode==null)
         {
-            Unstructured root = Unstructured.ClassMgr.createUnstructured(ws);
-            root.setName("jcr:root");
-            root.setPath("/");
-            ws.setRoot(root);
+            Unstructured oroot = Unstructured.ClassMgr.createUnstructured(ws);
+            oroot.setName("jcr:root");
+            oroot.setPath("/");
+            ws.setRoot(oroot);
         }
-        rootBaseNode = SWBContext.getWorkspace(this.workspace.getName()).getRoot();
+        rootBaseNode = ws.getRoot();
         root = new SimpleNode(rootBaseNode, this);
     }
 
