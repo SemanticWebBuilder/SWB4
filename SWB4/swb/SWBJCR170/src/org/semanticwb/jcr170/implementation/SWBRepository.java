@@ -1,26 +1,25 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -59,8 +58,8 @@ public final class SWBRepository implements Repository
 
     static Logger log = SWBUtils.getLogger(SWBRepository.class);
     private static Hashtable<String, String> descriptors = new Hashtable<String, String>();
-    private static final String TITLE_DEFAULT_WORKSPACE="Workspace por defecto";
-    private static final String DESCRIPTION_DEFAULT_WORKSPACE=TITLE_DEFAULT_WORKSPACE;
+    private static final String TITLE_DEFAULT_WORKSPACE = "Workspace por defecto";
+    private static final String DESCRIPTION_DEFAULT_WORKSPACE = TITLE_DEFAULT_WORKSPACE;
 
     static
     {
@@ -93,18 +92,18 @@ public final class SWBRepository implements Repository
         boolean exists = false;
         for (String name : listWorkspaces())
         {
-            Workspace ws=SWBContext.getWorkspace(name);
-                if(ws.getRoot()==null)
-                {
-                    Unstructured root = Unstructured.ClassMgr.createUnstructured(ws);
-                    root.setName("jcr:root");
-                    root.setPath("/");
-                    ws.setRoot(root);
-                }
+            Workspace ws = SWBContext.getWorkspace(name);
+            if (ws.getRoot() == null)
+            {
+                Unstructured root = Unstructured.ClassMgr.createUnstructured(ws);
+                root.setName("jcr:root");
+                root.setPath("/");
+                ws.setRoot(root);
+            }
             if (name.equals(defaultWorkspaceName))
             {
-                
-                if(ws.getTitle()==null)
+
+                if (ws.getTitle() == null)
                 {
                     ws.setTitle(TITLE_DEFAULT_WORKSPACE);
                     ws.setDescription(DESCRIPTION_DEFAULT_WORKSPACE);
@@ -115,7 +114,7 @@ public final class SWBRepository implements Repository
         }
         if (!exists)
         {
-            createWorkspace(defaultWorkspaceName,TITLE_DEFAULT_WORKSPACE,DESCRIPTION_DEFAULT_WORKSPACE);
+            createWorkspace(defaultWorkspaceName, TITLE_DEFAULT_WORKSPACE, DESCRIPTION_DEFAULT_WORKSPACE);
         }
 
     }
@@ -128,29 +127,29 @@ public final class SWBRepository implements Repository
         for (String name : listWorkspaces())
         {
             Workspace ws = SWBContext.getWorkspace(name);
-                if(ws.getRoot()==null)
-                {
-                    Unstructured root = Unstructured.ClassMgr.createUnstructured(ws);
-                    root.setName("jcr:root");
-                    root.setPath("/");
-                    ws.setRoot(root);
-                }
+            if (ws.getRoot() == null)
+            {
+                Unstructured root = Unstructured.ClassMgr.createUnstructured(ws);
+                root.setName("jcr:root");
+                root.setPath("/");
+                ws.setRoot(root);
+            }
             if (name.equals(defaultWorkspaceName))
             {
-                
-                if(ws.getTitle()==null)
+
+                if (ws.getTitle() == null)
                 {
                     ws.setTitle(TITLE_DEFAULT_WORKSPACE);
-                    ws.setDescription(DESCRIPTION_DEFAULT_WORKSPACE);                    
+                    ws.setDescription(DESCRIPTION_DEFAULT_WORKSPACE);
                 }
-                
+
                 exists = true;
                 break;
             }
         }
         if (!exists)
         {
-            createWorkspace(defaultWorkspaceName,TITLE_DEFAULT_WORKSPACE,DESCRIPTION_DEFAULT_WORKSPACE);
+            createWorkspace(defaultWorkspaceName, TITLE_DEFAULT_WORKSPACE, DESCRIPTION_DEFAULT_WORKSPACE);
         }
     }
 
@@ -167,7 +166,7 @@ public final class SWBRepository implements Repository
             {
                 String uri = SWBContext.getWorkspace(defaultWorkspaceName).getURI();
                 SWBContext.removeWorkspace(uri);
-                createWorkspace(defaultWorkspaceName,TITLE_DEFAULT_WORKSPACE,DESCRIPTION_DEFAULT_WORKSPACE);
+                createWorkspace(defaultWorkspaceName, TITLE_DEFAULT_WORKSPACE, DESCRIPTION_DEFAULT_WORKSPACE);
                 break;
             }
         }
@@ -221,7 +220,8 @@ public final class SWBRepository implements Repository
         log.debug("Deleting workspace " + name + " ...");
         SWBContext.removeWorkspace(name);
     }
-    public static void createWorkspace(String name,String title,String description) throws RepositoryException
+
+    public static void createWorkspace(String name, String title, String description) throws RepositoryException
     {
         if (name == null || name.trim().equals(""))
         {
@@ -229,28 +229,36 @@ public final class SWBRepository implements Repository
         }
         log.debug("Creating workspace " + name + " ...");
         Workspace ws = SWBContext.createWorkspace(name, namespace);
+        if (ws.getRoot() == null)
+        {
+            Unstructured root = Unstructured.ClassMgr.createUnstructured(ws);
+            root.setName("jcr:root");
+            root.setPath("/");
+            ws.setRoot(root);
+        }
+
         ws.setTitle(title);
         ws.setDescription(description);
-        
+
     }
 
     private Principal authenticate(String pUserName, String pPassword)
     {
-        boolean trusted=false;
+        boolean trusted = false;
         try
         {
-            trusted=Boolean.parseBoolean(SWBPlatform.getEnv("swbrep/repositoryTrusted", "false"));
+            trusted = Boolean.parseBoolean(SWBPlatform.getEnv("swbrep/repositoryTrusted", "false"));
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             log.error(e);
         }
-        if(trusted)
+        if (trusted)
         {
             return new TrustedPrincipal(pUserName);
         }
-        UserRepository ur = SWBContext.getAdminRepository();        
-        String context = ur.getLoginContext();        
+        UserRepository ur = SWBContext.getAdminRepository();
+        String context = ur.getLoginContext();
         Subject subject = new Subject();
         LoginContext lc;
         try
@@ -258,7 +266,7 @@ public final class SWBRepository implements Repository
             SWB4CallbackHandlerGateWayOffice callbackHandler = new SWB4CallbackHandlerGateWayOffice(pUserName, pPassword);
             lc = new LoginContext(context, subject, callbackHandler);
             lc.login();
-            Principal principal=subject.getPrincipals().iterator().next();
+            Principal principal = subject.getPrincipals().iterator().next();
             return principal;
         }
         catch (Exception e)
@@ -284,8 +292,8 @@ public final class SWBRepository implements Repository
             if (credentials instanceof SimpleCredentials)
             {
                 SimpleCredentials simpleCredentials = (SimpleCredentials) credentials;
-                Principal principal=authenticate(simpleCredentials.getUserID(),new String(simpleCredentials.getPassword()));
-                if(principal==null)
+                Principal principal = authenticate(simpleCredentials.getUserID(), new String(simpleCredentials.getPassword()));
+                if (principal == null)
                 {
                     throw new LoginException("The user can not be authenticated");
                 }
@@ -293,8 +301,8 @@ public final class SWBRepository implements Repository
             }
             else if (credentials instanceof SWBCredentials)
             {
-                return new SessionImp(this, workspaceName, ((SWBCredentials)credentials).getPrincipal());
-            }            
+                return new SessionImp(this, workspaceName, ((SWBCredentials) credentials).getPrincipal());
+            }
             else
             {
                 throw new LoginException("The credentials are not valid");
