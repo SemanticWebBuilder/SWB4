@@ -62,8 +62,7 @@
 %>
 <div class="columnaIzquierda">
     <%
-            ArrayList<PostElement> elements = new ArrayList();
-            int elementos = 0;
+            ArrayList<PostElement> elements = new ArrayList();            
             Iterator<PostElement> posts = blog.listPostElements();
             posts = SWBComparator.sortByCreated(posts, false);
             while (posts.hasNext())
@@ -71,12 +70,11 @@
                 PostElement post = posts.next();
                 if (post.canView(member))
                 {
-                    elements.add(post);
-                    elementos++;
+                    elements.add(post);                    
                 }
             }
-            int paginas = elementos / ELEMENETS_BY_PAGE;
-            if (elementos % ELEMENETS_BY_PAGE != 0)
+            int paginas = elements.size() / ELEMENETS_BY_PAGE;
+            if (elements.size() % ELEMENETS_BY_PAGE != 0)
             {
                 paginas++;
             }
@@ -108,9 +106,9 @@
             {
                 fin = ELEMENETS_BY_PAGE;
             }
-            if (fin > elementos)
+            if (fin > elements.size())
             {
-                fin = elementos;
+                fin = elements.size();
             }
             if (inicio > fin)
             {
@@ -386,7 +384,7 @@
         <%
                 }
             }
-            String pageUri = "/swbadmin/jsp/microsite/rss/rss.jsp?blog=" + java.net.URLEncoder.encode(blog.getURI());
+            String pageUri = "/swbadmin/jsp/microsite/rss/rss.jsp?blog=" + blog.getEncodedURI();
         %>
         <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS al blog de la comunidad</a></li>
     </ul>
