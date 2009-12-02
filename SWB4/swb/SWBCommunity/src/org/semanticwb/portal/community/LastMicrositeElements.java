@@ -48,23 +48,36 @@ public class LastMicrositeElements extends GenericAdmResource
 
     private static Logger log = SWBUtils.getLogger(LastMicrositeElements.class);
     private static final String NL = "\r\n";
+    private static final long SLEEP = 1000L * 60 * 5;
+    private static Long timer = new Long(System.currentTimeMillis() + SLEEP);
+    protected static boolean flag = false;
+    protected static ArrayList<MicroSiteElement> cachedelements = new ArrayList<MicroSiteElement>();
+
+    private synchronized void updateCache(SWBParamRequest paramRequest)
+    {
+        if (flag)
+        {
+            return;
+        }
+        flag = true;
+        Hilos hilo = new Hilos()
+        {
+        };
+        hilo.prepara(this, paramRequest);
+        hilo.start();
+
+    }
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-       // long lastTime = System.currentTimeMillis();
-        int limit = 3;
-        String slimit = this.getResourceBase().getAttribute("limit", "3");
-        try
-        {
-            limit = Integer.parseInt(slimit);
-        }
-        catch (NumberFormatException nfe)
-        {
-            log.error(nfe);
 
+        if ((cachedelements.size() == 0 || (timer < System.currentTimeMillis())) && !flag)
+        {
+            updateCache(paramRequest);
         }
-        ArrayList<MicroSiteElement> elements = new ArrayList<MicroSiteElement>();
+
+        //ArrayList<MicroSiteElement> elements = new ArrayList<MicroSiteElement>();
         /*StringBuilder prefixStatement = new StringBuilder();
         prefixStatement.append(" PREFIX swb: <http://www.semanticwebbuilder.org/swb4/ontology#>" + NL);
         prefixStatement.append(" PREFIX swbcomm: <http://www.semanticwebbuilder.org/swb4/community#>" + NL);
@@ -77,50 +90,22 @@ public class LastMicrositeElements extends GenericAdmResource
         ResultSet rs = qe.execSelect();
         while (rs.hasNext())
         {
-            QuerySolution rb = rs.nextSolution();
-            if (rb.get("?x") != null && rb.get("?x").isResource())
-            {
-                Resource res = rb.getResource("?x");
-                SemanticObject obj = SemanticObject.createSemanticObject(res.getURI());
-                MicroSiteElement element = (MicroSiteElement) obj.createGenericInstance();
-                elements.add(element);
-            }
+        QuerySolution rb = rs.nextSolution();
+        if (rb.get("?x") != null && rb.get("?x").isResource())
+        {
+        Resource res = rb.getResource("?x");
+        SemanticObject obj = SemanticObject.createSemanticObject(res.getURI());
+        MicroSiteElement element = (MicroSiteElement) obj.createGenericInstance();
+        elements.add(element);
+        }
         }*/
-        WebSite site=paramRequest.getWebPage().getWebSite();
-        Iterator<SemanticObject> oelements=site.getSemanticObject().getModel().listInstancesOfClass(MicroSiteElement.sclass, true);
-//        System.out.println("Iterador Inicial:"+(System.currentTimeMillis()-lastTime));
-//        lastTime = System.currentTimeMillis();
-        TreeSet<SemanticObject> setVals=new TreeSet<SemanticObject>(new Comparator() {
 
-            public int compare(Object arg0, Object arg1)
-            {
-                SemanticObject obj0 = (SemanticObject) arg0;
-                SemanticObject obj1 = (SemanticObject) arg1;
-                return obj1.getProperty(org.semanticwb.model.comm.MicroSite.swb_created).compareTo(obj0.getProperty(org.semanticwb.model.comm.MicroSite.swb_created));
-            }
-        });
-        while (oelements.hasNext()){
-            setVals.add(oelements.next());
-        }
-        Iterator<SemanticObject> itElements = setVals.iterator();
-        int i = 0;
-        elements = new ArrayList<MicroSiteElement>();
-        while(itElements.hasNext())
-        {
-            MicroSiteElement element=(MicroSiteElement)itElements.next().createGenericInstance();;
-            elements.add(element);
-            i++;
-            if(i==limit)
-            {
-                break;
-            }
-        }
 
-/*        while(oelements.hasNext())
+        /*        while(oelements.hasNext())
         {
-            SemanticObject obj=oelements.next();
-            MicroSiteElement element=(MicroSiteElement) obj.createGenericInstance();
-            elements.add(element);
+        SemanticObject obj=oelements.next();
+        MicroSiteElement element=(MicroSiteElement) obj.createGenericInstance();
+        elements.add(element);
         }
         System.out.println("Instancias Genericas:"+(System.currentTimeMillis()-lastTime));
         lastTime = System.currentTimeMillis();
@@ -131,32 +116,93 @@ public class LastMicrositeElements extends GenericAdmResource
         int i=0;
         while(itElements.hasNext())
         {
-            MicroSiteElement element=(MicroSiteElement)itElements.next();
-            elements.add(element);
-            i++;
-            if(i==limit)
-            {
-                break;
-            }
+        MicroSiteElement element=(MicroSiteElement)itElements.next();
+        elements.add(element);
+        i++;
+        if(i==limit)
+        {
+        break;
         }
-*/
-//        System.out.println("tengo lista:"+(System.currentTimeMillis()-lastTime));
-//        lastTime = System.currentTimeMillis();
+        }
+         */
         String path = "/swbadmin/jsp/microsite/LastMicrositeElements/LastMicrositeElementsView.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
         try
         {
             request.setAttribute("paramRequest", paramRequest);
-            request.setAttribute("elements", elements);
+            request.setAttribute("elements", cachedelements);
             dis.include(request, response);
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             log.error(e);
         }
-//        System.out.println("procece vista:"+(System.currentTimeMillis()-lastTime));
-//        lastTime = System.currentTimeMillis();
 
 
+    }
+}
+
+class Hilos extends Thread
+{
+
+    private static Logger log = SWBUtils.getLogger(Hilos.class);
+    LastMicrositeElements este = null;
+    SWBParamRequest paramRequest = null;
+
+    public void prepara(LastMicrositeElements ele, SWBParamRequest para)
+    {
+        este = ele;
+        paramRequest = para;
+    }
+
+    public void run()
+    {
+        ArrayList<MicroSiteElement> elements = new ArrayList<MicroSiteElement>();
+      //  long lastTime = System.currentTimeMillis();
+       // System.out.println("***************>>>>>>>>>>>> LastMicrositeElements");
+        int limit = 3;
+        String slimit = este.getResourceBase().getAttribute("limit", "3");
+        try
+        {
+            limit = Integer.parseInt(slimit);
+        } catch (NumberFormatException nfe)
+        {
+            log.error(nfe);
+
+        }
+
+        WebSite site = paramRequest.getWebPage().getWebSite();
+        Iterator<SemanticObject> oelements = site.getSemanticObject().getModel().listInstancesOfClass(MicroSiteElement.sclass, true);
+    //    System.out.println("Iterador Inicial:" + (System.currentTimeMillis() - lastTime));
+    //    lastTime = System.currentTimeMillis();
+        TreeSet<SemanticObject> setVals = new TreeSet<SemanticObject>(new Comparator()
+        {
+
+            public int compare(Object arg0, Object arg1)
+            {
+                SemanticObject obj0 = (SemanticObject) arg0;
+                SemanticObject obj1 = (SemanticObject) arg1;
+                return obj1.getProperty(org.semanticwb.model.comm.MicroSite.swb_created).compareTo(obj0.getProperty(org.semanticwb.model.comm.MicroSite.swb_created));
+            }
+        });
+        while (oelements.hasNext())
+        {
+            setVals.add(oelements.next());
+        }
+        Iterator<SemanticObject> itElements = setVals.iterator();
+        int i = 0;
+
+        while (itElements.hasNext())
+        {
+            MicroSiteElement element = (MicroSiteElement) itElements.next().createGenericInstance();
+            ;
+            elements.add(element);
+            i++;
+            if (i == limit)
+            {
+                break;
+            }
+        }
+        este.cachedelements = elements;
+        este.flag = false;
     }
 }
