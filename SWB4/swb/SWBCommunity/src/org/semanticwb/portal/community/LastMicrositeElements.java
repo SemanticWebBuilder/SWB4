@@ -24,7 +24,9 @@ package org.semanticwb.portal.community;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
+import java.util.TreeSet;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -50,6 +52,7 @@ public class LastMicrositeElements extends GenericAdmResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
+       // long lastTime = System.currentTimeMillis();
         int limit = 3;
         String slimit = this.getResourceBase().getAttribute("limit", "3");
         try
@@ -85,13 +88,45 @@ public class LastMicrositeElements extends GenericAdmResource
         }*/
         WebSite site=paramRequest.getWebPage().getWebSite();
         Iterator<SemanticObject> oelements=site.getSemanticObject().getModel().listInstancesOfClass(MicroSiteElement.sclass, true);
-        while(oelements.hasNext())
+//        System.out.println("Iterador Inicial:"+(System.currentTimeMillis()-lastTime));
+//        lastTime = System.currentTimeMillis();
+        TreeSet<SemanticObject> setVals=new TreeSet<SemanticObject>(new Comparator() {
+
+            public int compare(Object arg0, Object arg1)
+            {
+                SemanticObject obj0 = (SemanticObject) arg0;
+                SemanticObject obj1 = (SemanticObject) arg1;
+                return obj1.getProperty(org.semanticwb.model.comm.MicroSite.swb_created).compareTo(obj0.getProperty(org.semanticwb.model.comm.MicroSite.swb_created));
+            }
+        });
+        while (oelements.hasNext()){
+            setVals.add(oelements.next());
+        }
+        Iterator<SemanticObject> itElements = setVals.iterator();
+        int i = 0;
+        elements = new ArrayList<MicroSiteElement>();
+        while(itElements.hasNext())
+        {
+            MicroSiteElement element=(MicroSiteElement)itElements.next().createGenericInstance();;
+            elements.add(element);
+            i++;
+            if(i==limit)
+            {
+                break;
+            }
+        }
+
+/*        while(oelements.hasNext())
         {
             SemanticObject obj=oelements.next();
             MicroSiteElement element=(MicroSiteElement) obj.createGenericInstance();
             elements.add(element);
         }
+        System.out.println("Instancias Genericas:"+(System.currentTimeMillis()-lastTime));
+        lastTime = System.currentTimeMillis();
         Iterator itElements=SWBComparator.sortByCreated(elements.iterator(), false);
+        System.out.println("Sorting:"+(System.currentTimeMillis()-lastTime));
+        lastTime = System.currentTimeMillis();
         elements = new ArrayList<MicroSiteElement>();
         int i=0;
         while(itElements.hasNext())
@@ -104,7 +139,9 @@ public class LastMicrositeElements extends GenericAdmResource
                 break;
             }
         }
-
+*/
+//        System.out.println("tengo lista:"+(System.currentTimeMillis()-lastTime));
+//        lastTime = System.currentTimeMillis();
         String path = "/swbadmin/jsp/microsite/LastMicrositeElements/LastMicrositeElementsView.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
         try
@@ -117,7 +154,8 @@ public class LastMicrositeElements extends GenericAdmResource
         {
             log.error(e);
         }
-
+//        System.out.println("procece vista:"+(System.currentTimeMillis()-lastTime));
+//        lastTime = System.currentTimeMillis();
 
 
     }
