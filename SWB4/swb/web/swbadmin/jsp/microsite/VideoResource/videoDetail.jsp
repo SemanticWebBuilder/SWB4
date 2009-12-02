@@ -43,9 +43,14 @@
                 {
                     tags = rec.getTags();
                 }
+                String code="Video no definido";
+                if(rec.getCode()!=null)
+                    {
+                    code=rec.getCode();
+                    }
 %>
 <div class="columnaIzquierda">    
-    <br><%=rec.getCode()%>
+    <br><%=code%>
     <br>
     <%
                 SWBResponse res = new SWBResponse(response);
