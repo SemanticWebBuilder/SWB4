@@ -44,7 +44,8 @@ public class StylerDomParser {
     }
 
     public String parse() {
-        StringBuilder script = new StringBuilder();
+        tabs = new HashMap();
+        StringBuilder script = new StringBuilder();        
         script.append(processStartDocument());
         script.append(processDocument());
         script.append(processEndDocument());
@@ -68,7 +69,7 @@ public class StylerDomParser {
     private String processSelector(Element sel) {
         StringBuilder script = new StringBuilder();
         String name = sel.getAttribute("name");
-        //HashMap props = processProperties(sel);
+        HashMap props = processProperties(sel);
 
         if(name != null) {
             if(!fstel) {
@@ -87,6 +88,9 @@ public class StylerDomParser {
             script.append("</td>");
             script.append("<td>");
             script.append("<select dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\"¡Valor inválido!\" id=\"fs_"+(++serial)+"\" name=\"border-style\" style=\"width:100px\" onchange=\"sendData(dojo.byId('stel').value, this.name, this.value);\">");
+            if(props.containsKey("border-style")) {
+                if(props.containsValue("")) {}
+            }
             script.append("<option value=\"empty\"></option>");
             script.append("<option value=\"none\">none</option>");
             script.append("<option value=\"solid\">solid</option>");
@@ -351,7 +355,7 @@ public class StylerDomParser {
             script.append("</table>");
             script.append("</div>");
 
-            tabs.put(name, new HashMap());            
+            tabs.put(name, new HashMap());
         }
         return script.toString();
     }
@@ -407,7 +411,6 @@ public class StylerDomParser {
         script.append("<input id=\"stel\" type=\"hidden\" />");
         script.append("<div dojoType=\"dijit.layout.TabContainer\" id=\"tc_"+client.getId()+"\" style=\"width:400px;height:510px;\" tabPosition=\"left-h\" tabStrip=\"true\">\n");
 
-        tabs = new HashMap();
         return script.toString();
     }
 
