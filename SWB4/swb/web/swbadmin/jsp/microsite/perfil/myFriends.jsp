@@ -67,7 +67,7 @@
             WebPage wpage = paramRequest.getWebPage();
             String photo = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/perfil/profilePlaceholder.jpg";
 
-            ArrayList<User> elements = new ArrayList<User>();
+            Hashtable<String,User> elements = new Hashtable<String,User>();
             Iterator<Friendship> it = Friendship.ClassMgr.listFriendshipByFriend(user, wpage.getWebSite());
             while (it.hasNext())
             {
@@ -78,10 +78,11 @@
                     User friendUser = itfriendUser.next();
                     if (!friendUser.getURI().equals(user.getURI()))
                     {
-                        elements.add(friendUser);
+                        elements.put(friendUser.getEncodedURI(),friendUser);
                     }
                 }
             }
+
             int paginas = elements.size() / ELEMENETS_BY_PAGE;
             if (elements.size() % ELEMENETS_BY_PAGE != 0)
             {
@@ -305,7 +306,7 @@
                 }
                 String perfilurl = paramRequest.getWebPage().getWebSite().getWebPage("perfil").getUrl();
                 int iElement = 0;
-                for (User friendUser : elements)
+                for (User friendUser : elements.values())
                 {
 
 
