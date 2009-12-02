@@ -2,8 +2,7 @@
 <%@page import="java.text.*,java.net.*,org.semanticwb.platform.SemanticObject,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 
 
-<%!
-    private final int ABSTRACT_SIZE = 80;
+<%!    private final int ABSTRACT_SIZE = 80;
 %>
 
 <%
@@ -18,39 +17,42 @@
 
 <%
     if (comments.size() > 0) {%>
-    <h2>Opiniones m&aacute;s recientes</h2>
-        <ul class="listaElementos"><%
-        for (int i = 0; i < comments.size(); i++) {
-            Comment com = comments.get(i);
-            String whoUrl = perfilPath + "?user" + com.getCreator().getEncodedURI();
-            String whoName = com.getCreator().getFullName();
-            String what = trunkText(com.getDescription(), ABSTRACT_SIZE);
-            String whereUrl = "#";
-            String whereTitle = "";
+<h2>Opiniones m&aacute;s recientes</h2>
+<ul class="listaElementos"><%
+for (int i = 0; i < comments.size(); i++) {
+    Comment com = comments.get(i);
+String whoName = "Usuario dado de baja";
+    if (com.getCreator() != null)
+    {
+        whoName = com.getCreator().getFirstName();
+    }
+    String what = trunkText(com.getDescription(), ABSTRACT_SIZE);
+    String whereUrl = "#";
+    String whereTitle = "";
 
-            if (objects.get(i).instanceOf(DirectoryObject.sclass)) {
-                DirectoryObject dob = (DirectoryObject)objects.get(i).createGenericInstance();
-                whereUrl = dob.getWebPage().getUrl() +
-                        "?act=detail&uri=" + dob.getEncodedURI();
-                whereTitle = dob.getTitle();
-            } else if (objects.get(i).instanceOf(MicroSiteElement.sclass)) {
-                MicroSiteElement mse = (MicroSiteElement)objects.get(i).createGenericInstance();
-                whereUrl = mse.getWebPage().getUrl() + "?act=detail&uri=" + mse.getEncodedURI();
-                whereTitle = mse.getTitle();
-            }
-            %>
-            <li>
-                <p>
-                    <span><b><%=whoName%></b></span>
-                    en <span><b><%=whereTitle%></b></span>:
-                </p>
-                <p>
-                    <%=what%>...<a href="<%=whereUrl%>"><i>(Leer m&aacute;s)</i></a>
-                </p>
-            </li>
-            <%
-        }
-        %></ul><%
+    if (objects.get(i).instanceOf(DirectoryObject.sclass)) {
+        DirectoryObject dob = (DirectoryObject)objects.get(i).createGenericInstance();
+        whereUrl = dob.getWebPage().getUrl() +
+                "?act=detail&uri=" + dob.getEncodedURI();
+        whereTitle = dob.getTitle();
+    } else if (objects.get(i).instanceOf(MicroSiteElement.sclass)) {
+        MicroSiteElement mse = (MicroSiteElement)objects.get(i).createGenericInstance();
+        whereUrl = mse.getWebPage().getUrl() + "?act=detail&uri=" + mse.getEncodedURI();
+        whereTitle = mse.getTitle();
+    }
+    %>
+    <li>
+        <p>
+            <span><b><%=whoName%></b></span>
+            en <span><b><%=whereTitle%></b></span>:
+        </p>
+        <p>
+            <%=what%>...<a href="<%=whereUrl%>"><i>(Leer m&aacute;s)</i></a>
+        </p>
+    </li>
+    <%
+}
+    %></ul><%
 %>
 
 <%  }%>
