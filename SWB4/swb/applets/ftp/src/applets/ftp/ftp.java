@@ -1371,12 +1371,14 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
             if(dir.getParent() instanceof Directory)
             {                
                 Directory parent=(Directory)dir.getParent();
+                this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
                 if(deleteDir(dir))
                 {                    
                     this.jTreeDirs.setSelectionPath(this.jTreeDirs.getSelectionPath().getParentPath());
                     parent.remove(dir);
                     this.jTreeDirs.updateUI();
                 }
+                this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         }
         
