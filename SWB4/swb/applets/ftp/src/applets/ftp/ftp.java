@@ -30,6 +30,8 @@
  */
 
 package applets.ftp;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.net.*;
 import java.io.*;
 import javax.swing.*;
@@ -60,6 +62,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
     String[] choices =new String[4];
     Locale locale;
     /** Initializes the applet ftp */
+    @Override
     public void init() {
         locale=Locale.getDefault();
         if(this.getParameter("locale")!=null && !this.getParameter("locale").equals(""))
@@ -115,7 +118,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
             path=WBXMLParser.encode(path, "UTF-8");
         }catch(Exception e){}
         String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getDirectories</cmd><path>"+ path +"</path></req>";        
-        String respxml=this.getData(xml);         
+        String respxml=ftp.getData(xml);
         WBXMLParser parser=new WBXMLParser();
         WBTreeNode enode=parser.parse(respxml);
         try
@@ -171,7 +174,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
             path=WBXMLParser.encode(path,"UTF-8");
         }catch(Exception e){}
         String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getFiles</cmd><path>"+ path +"</path></req>";        
-        String respxml=this.getData(xml);                 
+        String respxml=ftp.getData(xml);
         WBXMLParser parser=new WBXMLParser();
         WBTreeNode enode=parser.parse(respxml);
         if(enode.getFirstNode()!=null)
@@ -192,7 +195,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
     private void loadDirectories()
     {        
         String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getDirectories</cmd></req>";        
-        String respxml=this.getData(xml);         
+        String respxml=ftp.getData(xml);
         WBXMLParser parser=new WBXMLParser();
         WBTreeNode enode=parser.parse(respxml);
         if(enode.getFirstNode()!=null && enode.getFirstNode().getFirstNode()!=null)
@@ -623,7 +626,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
     }// </editor-fold>//GEN-END:initComponents
 
     private void jScrollPane2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jScrollPane2MousePressed
-        if(evt.getButton()==evt.BUTTON3 && evt.getClickCount()==1)
+        if(evt.getButton()==MouseEvent.BUTTON3 && evt.getClickCount()==1)
         {         
             if(this.jTableFiles.getSelectedRowCount()>0 && this.jTableFiles.getModel().getRowCount()>0)
             {
@@ -714,7 +717,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
                                 continue;
                         }                             
                         //FileDownload fdown=new FileDownload(file.getPath(), this.jProgressBar1, flocal, this.jsess, urldownload);                                                
-                        FDownload fdown=new FDownload(null,false,file.getPath(),flocal, this.jsess, urldownload,locale);                                                
+                        FDownload fdown=new FDownload(null,false,file.getPath(),flocal, ftp.jsess, urldownload,locale);
                         fdown.show();
                         fdown.setLocation(400,300);
                         fdown.setSize(200, 50);
@@ -752,14 +755,14 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
     }//GEN-LAST:event_jMenuItemRenameFolderActionPerformed
 
     private void jTreeDirsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTreeDirsKeyReleased
-        if(evt.getKeyCode()==evt.VK_DELETE)
+        if(evt.getKeyCode()==KeyEvent.VK_DELETE)
         {
             this.deleteDir();
         }
     }//GEN-LAST:event_jTreeDirsKeyReleased
 
     private void jTableFilesKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTableFilesKeyReleased
-        if(evt.getKeyCode()==evt.VK_DELETE)
+        if(evt.getKeyCode()==KeyEvent.VK_DELETE)
         {
             this.deleteFile();
         }
@@ -802,7 +805,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
     }//GEN-LAST:event_jMenuItemDirAddFolderActionPerformed
 
     private void jTreeDirsMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTreeDirsMousePressed
-        if(evt.getButton()==evt.BUTTON3 && evt.getClickCount()==1)
+        if(evt.getButton()==MouseEvent.BUTTON3 && evt.getClickCount()==1)
         {
             if(this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
             {
@@ -816,7 +819,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
     }//GEN-LAST:event_jMenuItemAddFolderActionPerformed
 
     private void jTableFilesMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableFilesMousePressed
-        if(evt.getButton()==evt.BUTTON3 && evt.getClickCount()==1)
+        if(evt.getButton()==MouseEvent.BUTTON3 && evt.getClickCount()==1)
         {            
              this.jMenuItemFileDownload.setEnabled(true);
             this.jMenuItemFileRename.setEnabled(true);
@@ -896,7 +899,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         try
         {
             URL urlupload=new URL(getCodeBase().getProtocol(),getCodeBase().getHost(),getCodeBase().getPort(),this.uploadpath);                
-            FileUpload fup=new FileUpload(this.jsess,urlupload,locale);
+            FileUpload fup=new FileUpload(ftp.jsess,urlupload,locale);
             fup.sendFile(path, filelocal);
         }
         catch(Exception e)
@@ -913,7 +916,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
             newpath=WBXMLParser.encode(path,"UTF-8");
         }catch(Exception e){}
         String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>exists</cmd><path>"+ newpath +"</path></req>";        
-        String respxml=this.getData(xml); 
+        String respxml=ftp.getData(xml);
         WBXMLParser parser=new WBXMLParser();
         WBTreeNode enode=parser.parse(respxml);
         if(enode.getFirstNode()!=null && enode.getFirstNode().getFirstNode()!=null)
@@ -979,7 +982,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
             }
         }            
         String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>createDir</cmd><path>"+ newpath +"</path></req>";        
-        String respxml=this.getData(xml); 
+        String respxml=ftp.getData(xml);
         WBXMLParser parser=new WBXMLParser();
         WBTreeNode enode=parser.parse(respxml);
         if(enode.getFirstNode()!=null && enode.getFirstNode().getFirstNode()!=null)
@@ -1223,7 +1226,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         }
         catch(Exception e){}
         String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>rename</cmd><path>"+ path +"</path><newpath>" + newpath + "</newpath></req>";        
-        String respxml=this.getData(xml); 
+        String respxml=ftp.getData(xml);
         WBXMLParser parser=new WBXMLParser();
         WBTreeNode enode=parser.parse(respxml);
         if(enode.getFirstNode()!=null && enode.getFirstNode().getFirstNode()!=null)
@@ -1303,7 +1306,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         }
         catch(Exception e){}
         String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>rename</cmd><path>"+ path +"</path><newpath>" + newpath + "</newpath></req>";        
-        String respxml=this.getData(xml); 
+        String respxml=ftp.getData(xml);
         WBXMLParser parser=new WBXMLParser();
         WBTreeNode enode=parser.parse(respxml);
         if(enode.getFirstNode()!=null && enode.getFirstNode().getFirstNode()!=null)
@@ -1389,7 +1392,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         }
         catch(Exception e){}                
         String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>delete</cmd><path>"+ path +"</path></req>";                
-        String respxml=this.getData(xml); 
+        String respxml=ftp.getData(xml);
         WBXMLParser parser=new WBXMLParser();
         WBTreeNode enode=parser.parse(respxml);
         if(enode.getFirstNode()!=null && enode.getFirstNode().getFirstNode()!=null)
@@ -1472,7 +1475,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         }
         catch(Exception e){}
         String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>delete</cmd><path>"+ path +"</path></req>";        
-        String respxml=this.getData(xml); 
+        String respxml=ftp.getData(xml);
         WBXMLParser parser=new WBXMLParser();
         WBTreeNode enode=parser.parse(respxml);
         if(enode.getFirstNode()!=null && enode.getFirstNode().getFirstNode()!=null)
@@ -1536,7 +1539,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
             pathdir=WBXMLParser.encode(pathdir,"UTF-8");
         }catch(Exception e){}
         String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>createDir</cmd><path>"+ pathdir +"</path></req>";        
-        String respxml=this.getData(xml); 
+        String respxml=ftp.getData(xml);
         WBXMLParser parser=new WBXMLParser();
         WBTreeNode enode=parser.parse(respxml);
         if(enode.getFirstNode()!=null && enode.getFirstNode().getFirstNode()!=null)
