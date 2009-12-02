@@ -180,7 +180,12 @@
         if (paramRequest.getAction().equals(paramRequest.Action_REMOVE)) {
             url.setParameter("uri", semObject.getURI());
             url.setAction(url.Action_REMOVE);
-            %><a class="adminTool" href="<%=url%>">Borrar</a><%
+            if(user.isRegistered() && user.isSigned()) {
+                UserGroup group = user.getUserRepository().getUserGroup("admin");
+                if((dirObj.getCreator() != null && dirObj.getCreator().getURI().equals(user.getURI())) || group != null && user.hasUserGroup(group)) {
+                    %><a class="adminTool" href="<%=url%>">Borrar</a><%
+                }
+            }
         }
 
         User claimer = null;
