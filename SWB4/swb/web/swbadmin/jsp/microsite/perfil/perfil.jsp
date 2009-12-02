@@ -168,7 +168,7 @@ public int calcularEdad(java.util.Calendar fechaNaci, java.util.Calendar fechaAl
                 else
                 {
 
-                    String email = "", age = "", sex = "", userStatus = "", userInterest = "", userHobbies = "", userInciso = "";
+                    String email = "", age = "", sex = "", userStatus = "", userInterest = "", userHobbies = "";
                     if (user.getEmail() != null && !user.getEmail().trim().equals(""))
                     {
                         email = user.getEmail();
@@ -193,10 +193,10 @@ public int calcularEdad(java.util.Calendar fechaNaci, java.util.Calendar fechaAl
                     {
                         userHobbies = "" + user.getExtendedAttribute(mapa.get("userHobbies"));
                     }
-                    if (user.getExtendedAttribute(mapa.get("userInciso")) != null)
+                    /*if (user.getExtendedAttribute(mapa.get("userInciso")) != null)
                     {
                         userInciso = "" + user.getExtendedAttribute(mapa.get("userInciso"));
-                    }
+                    }*/
                     if (sex.equalsIgnoreCase("male"))
                     {
                         sex = "Masculino";
@@ -284,8 +284,8 @@ public int calcularEdad(java.util.Calendar fechaNaci, java.util.Calendar fechaAl
     <p><%=userInterest%></p>
     <h2>Pasatiempos</h2>
     <p><%=userHobbies%></p>
-    <h2>Inciso</h2>
-    <p><%=userInciso%></p>
+    <%-- <h2>Inciso</h2>
+    <p><%=userInciso%></p> --%>
     <%
                     }
     %>
