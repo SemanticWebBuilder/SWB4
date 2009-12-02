@@ -1,4 +1,4 @@
-<%@page import="org.w3c.dom.*,org.semanticwb.portal.community.*,java.util.*,org.semanticwb.model.WebPage,org.semanticwb.platform.SemanticObject"%><%@page import="org.semanticwb.model.*,org.semanticwb.SWBPortal,org.semanticwb.SWBPlatform,org.semanticwb.platform.*,org.semanticwb.portal.api.SWBResourceURL"%><%!
+<%@page import="org.w3c.dom.*,org.semanticwb.portal.community.*,java.util.*,org.semanticwb.model.WebPage,org.semanticwb.platform.SemanticObject"%><%@page import="org.semanticwb.model.*,org.semanticwb.SWBUtils,org.semanticwb.SWBPortal,org.semanticwb.SWBPlatform,org.semanticwb.platform.*,org.semanticwb.portal.api.SWBResourceURL"%><%!
     private Element addAtribute(Element ele, String name, String value)
     {
         Document doc = ele.getOwnerDocument();
@@ -82,9 +82,8 @@
 
                         Element channel = doc.createElement("channel");
                         rss.appendChild(channel);
-                        String url = site.getWebPage("perfil").getUrl() + "?user=" + java.net.URLEncoder.encode(user.getURI());
                         addAtribute(channel, "title", "Artículos publicados de " + user.getFullName());
-                        addAtribute(channel, "link", url);
+                        addAtribute(channel, "link", site.getWebPage("perfil").getUrl() + "?user=" + user.getEncodedURI());
                         addAtribute(channel, "description", "Artículos publicados de " + user.getFullName());
 
                         int i = 0;
@@ -104,7 +103,9 @@
                                     if (element.getVisibility() == MicroSiteElement.VIS_ALL)
                                     {
                                         addAtribute(item, "title", element.getTitle());
-                                        addAtribute(item, "link", element.getURL());
+                                        String url = element.getURL();
+                                        url = SWBUtils.TEXT.replaceAllIgnoreCase(url, "&amp;", "&");
+                                        addAtribute(item, "link", url);
                                         addAtribute(item, "description", element.getDescription());
                                         addAtribute(item, "pubDate", element.getCreated().toGMTString());
                                         addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
@@ -144,7 +145,9 @@
                         rss.appendChild(channel);
                         String title = getTitle(eventwebpage);
                         addAtribute(channel, "title", "Eventos de la comunidad " + title);
-                        addAtribute(channel, "link", eventwebpage.getUrl());
+                        String url = eventwebpage.getUrl();
+                        url = SWBUtils.TEXT.replaceAllIgnoreCase(url, "&amp;", "&");
+                        addAtribute(channel, "link", url);
                         addAtribute(channel, "description", "Eventos de la comunidad " + title);
 
 
@@ -163,7 +166,10 @@
                                     Element item = doc.createElement("item");
                                     channel.appendChild(item);
                                     addAtribute(item, "title", element.getTitle());
-                                    addAtribute(item, "link", element.getURL());
+
+                                    String url2 = element.getURL();
+                                    url2 = SWBUtils.TEXT.replaceAllIgnoreCase(url2, "&amp;", "&");
+                                    addAtribute(item, "link", url2);
                                     addAtribute(item, "description", element.getDescription());
                                     addAtribute(item, "pubDate", element.getCreated().toGMTString());
                                     addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
@@ -172,6 +178,7 @@
                                     {
                                         break;
                                     }
+
                                 }
 
                             }
@@ -203,7 +210,9 @@
                         rss.appendChild(channel);
                         String title = getTitle(photowebpage);
                         addAtribute(channel, "title", "Fotos de la comunidad " + title);
-                        addAtribute(channel, "link", photowebpage.getUrl());
+                        String url2 = photowebpage.getUrl();
+                        url2 = SWBUtils.TEXT.replaceAllIgnoreCase(url2, "&amp;", "&");
+                        addAtribute(channel, "link", url2);
                         addAtribute(channel, "description", "Fotos de la comunidad " + title);
 
 
@@ -223,7 +232,9 @@
                                     channel.appendChild(item);
 
                                     addAtribute(item, "title", element.getTitle());
-                                    addAtribute(item, "link", element.getURL());
+                                    String url3 = element.getURL();
+                                    url3 = SWBUtils.TEXT.replaceAllIgnoreCase(url3, "&amp;", "&");
+                                    addAtribute(item, "link", url3);
                                     addAtribute(item, "description", element.getDescription());
                                     addAtribute(item, "pubDate", element.getCreated().toGMTString());
                                     addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
@@ -263,7 +274,9 @@
                         rss.appendChild(channel);
                         String title = getTitle(newswebpage);
                         addAtribute(channel, "title", "Noticias de la comunidad " + title);
-                        addAtribute(channel, "link", newswebpage.getUrl());
+                        String url3 = newswebpage.getUrl();
+                        url3 = SWBUtils.TEXT.replaceAllIgnoreCase(url3, "&amp;", "&");
+                        addAtribute(channel, "link", url3);
                         addAtribute(channel, "description", "Noticias de la comunidad " + title);
 
 
@@ -283,7 +296,9 @@
                                     channel.appendChild(item);
 
                                     addAtribute(item, "title", element.getTitle());
-                                    addAtribute(item, "link", element.getURL());
+                                    String url4 = element.getURL();
+                                    url4 = SWBUtils.TEXT.replaceAllIgnoreCase(url4, "&amp;", "&");
+                                    addAtribute(item, "link", url4);
                                     addAtribute(item, "description", element.getDescription());
                                     addAtribute(item, "pubDate", element.getCreated().toGMTString());
                                     addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
@@ -323,7 +338,9 @@
                         rss.appendChild(channel);
                         String title = getTitle(videowebpage);
                         addAtribute(channel, "title", "Videos de la comunidad " + title);
-                        addAtribute(channel, "link", videowebpage.getUrl());
+                        String url4 = videowebpage.getUrl();
+                        url4 = SWBUtils.TEXT.replaceAllIgnoreCase(url4, "&amp;", "&");
+                        addAtribute(channel, "link", url4);
                         addAtribute(channel, "description", "Videos de la comunidad " + title);
 
 
@@ -343,7 +360,9 @@
                                     channel.appendChild(item);
 
                                     addAtribute(item, "title", element.getTitle());
-                                    addAtribute(item, "link", element.getURL());
+                                    String url5 = element.getURL();
+                                    url5 = SWBUtils.TEXT.replaceAllIgnoreCase(url5, "&amp;", "&");
+                                    addAtribute(item, "link", url5);
                                     addAtribute(item, "description", element.getDescription());
                                     addAtribute(item, "pubDate", element.getCreated().toGMTString());
                                     addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
@@ -384,7 +403,9 @@
                         String title = getTitle(commWebpage);
 
                         addAtribute(channel, "title", title);
-                        addAtribute(channel, "link", commWebpage.getUrl());
+                        String url5 = commWebpage.getUrl();
+                        url5 = SWBUtils.TEXT.replaceAllIgnoreCase(url5, "&amp;", "&");
+                        addAtribute(channel, "link", url5);
                         addAtribute(channel, "description", title);
 
 
@@ -404,7 +425,9 @@
                                     channel.appendChild(item);
 
                                     addAtribute(item, "title", element.getTitle());
-                                    addAtribute(item, "link", element.getURL());
+                                    String url6 = element.getURL();
+                                    url6 = SWBUtils.TEXT.replaceAllIgnoreCase(url6, "&amp;", "&");
+                                    addAtribute(item, "link", url6);
                                     addAtribute(item, "description", element.getDescription());
                                     addAtribute(item, "pubDate", element.getCreated().toGMTString());
                                     addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
@@ -464,7 +487,9 @@
                                     Element item = doc.createElement("item");
                                     channel.appendChild(item);
                                     addAtribute(item, "title", element.getTitle());
-                                    addAtribute(item, "link", element.getURL());
+                                    String url = element.getURL();
+                                    url = SWBUtils.TEXT.replaceAllIgnoreCase(url, "&amp;", "&");
+                                    addAtribute(item, "link", url);
                                     addAtribute(item, "description", element.getDescription());
                                     addAtribute(item, "pubDate", element.getCreated().toGMTString());
                                     addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
