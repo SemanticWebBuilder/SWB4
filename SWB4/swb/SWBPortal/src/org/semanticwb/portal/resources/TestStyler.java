@@ -15,6 +15,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
+import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBResourceException;
 
 
@@ -88,8 +89,25 @@ public class TestStyler extends GenericResource {
 
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        Resource base  = paramRequest.getResourceBase();
+        System.out.println("this.getClass().getName()="+this.getClass().getName());
+        System.out.println("base.getClass().getName()="+getResourceBase().getClass().getName());
+
+        String cssResPath = "/"+SWBUtils.TEXT.replaceAll(getClass().getName(), ".", "/")+".css";
         si = new StyleInner(getResourceBase());
-        si.doView(request, response, paramRequest);
+        String script = null;
+        try {
+            script = si.render(paramRequest, cssResPath);
+        }catch(NullPointerException e) {
+            log.error("Tal vez no exite el archivo "+cssResPath+" en el recurso: "+base.getId() +"-"+ base.getTitle(), e);
+        }catch(IOException e) {
+            log.error("Error al leer el archivo "+cssResPath+" en el recurso: "+base.getId() +"-"+ base.getTitle(), e);
+        }catch(Exception e) {
+            log.error("Error in resource: "+base.getId() +"-"+ base.getTitle(), e);
+        }
+        PrintWriter out = response.getWriter();
+        out.println(script);
+        out.flush();
     }
 
     @Override
@@ -110,15 +128,43 @@ public class TestStyler extends GenericResource {
         System.out.println("tkns[0]="+tkns[0]);
         System.out.println("tkns[1]="+tkns[1]);
         System.out.println("tkns[2]="+tkns[2]);
+        System.out.println("\n\n");
 
         //HashMap matriz = (HashMap)mm.get(base.getId());
-        HashMap matriz = (HashMap)si.getMm().get(base.getId());
-        if(matriz != null) {
+        HashMap tabs = (HashMap)si.getMm(base.getId());
+        if(tabs != null) {
             try {
-                HashMap h = (HashMap)matriz.get(tkns[0]);
-                h.put(tkns[1], tkns[2]+";");
-                System.out.println("\n\n");
-                printMatriz();
+                HashMap t = (HashMap)tabs.get(tkns[0]);
+                t.put(tkns[1], tkns[2]);
+                //printMatriz();
+                StringBuilder css = new StringBuilder();
+                Iterator<String> ittabs = tabs.keySet().iterator();
+                while(ittabs.hasNext()) {
+                    String tab = ittabs.next();
+                    css.append("."+tab);
+                    css.append(" {\n");
+                    HashMap selectors = (HashMap)tabs.get(tab);
+                    Iterator<String> its = selectors.keySet().iterator();
+                    while(its.hasNext()) {
+                        String l = its.next();
+                        css.append(l+":"+selectors.get(l)+";\n");
+                    }
+                    css.append("}\n");
+                }
+                System.out.println("\n******************\nestilo=\n"+css);
+
+                /*String editaccess = request.getParameter("editar");
+                if(editaccess!=null) {
+                    base.setAttribute("editRole", editaccess);
+                }
+                try{
+                    base.updateAttributesToDB();
+                }catch(Exception e){
+                    log.error("Error al guardar atributos en el recurso: "+base.getId() +"-"+ base.getTitle(), e);
+                }*/
+
+
+
             }catch(IndexOutOfBoundsException iobe) {
                 System.out.println("\n error... "+iobe);
             }
@@ -129,5 +175,10 @@ public class TestStyler extends GenericResource {
 
     private void printMatriz() {
         si.printMatriz(getResourceBase().getId());
+    }
+
+    @Override
+    public void processAction(javax.servlet.http.HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+        System.out.println("\nprocessAction...");
     }
 }
