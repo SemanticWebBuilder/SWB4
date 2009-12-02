@@ -12,36 +12,35 @@
     }
 </script>
 
-<%!    public static final java.text.SimpleDateFormat dateFormat;
+<%!    private static final java.text.SimpleDateFormat dateFormat;
+    private static final SimpleDateFormat iso8601dateFormat;
+    private static final java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
 
     static
     {
         String lang = "es";
         Locale locale = new Locale(lang);
         dateFormat = new java.text.SimpleDateFormat("dd-MMM-yyyy", locale);
-        String[] months={"Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"};
-        java.text.DateFormatSymbols fs=dateFormat.getDateFormatSymbols();
+        String[] months =
+        {
+            "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"
+        };
+        java.text.DateFormatSymbols fs = dateFormat.getDateFormatSymbols();
         fs.setShortMonths(months);
         dateFormat.setDateFormatSymbols(fs);
+        String defaultFormat = "d 'de' MMMM  'del' yyyy 'a las' HH:mm";
+        iso8601dateFormat = new SimpleDateFormat(defaultFormat, locale);
     }
 %>
 <%
-            String lang = "es";
-            Locale locale=new Locale(lang);
-            java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
-            //SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy",locale);
+
+
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             User user = paramRequest.getUser();
-            
-            /*if (user.getLanguage() != null)
-            {
-                lang = user.getLanguage();
-            }*/
             WebPage wpage = paramRequest.getWebPage();
             MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
             Blog blog = (Blog) request.getAttribute("blog");
-            String defaultFormat = "d 'de' MMMM  'del' yyyy 'a las' HH:mm";
-            SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat, locale);
+
             String createdBlog = iso8601dateFormat.format(blog.getCreated());
             String updatedBlog = iso8601dateFormat.format(blog.getUpdated());
             Member member = Member.getMember(user, wpage);
@@ -391,14 +390,13 @@
         %>
         <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS al blog de la comunidad</a></li>
     </ul>
-        <%
-        if (!editarblog)
+    <%
+            if (!editarblog)
             {
-            %>
-            <br><br><p><span class="tituloRojo">NOTA: </span>Sólo el dueño de la comunidad puede cambiar la información básica del blog.</p>
-            <%
-            }
-        %>
+    %>
+    <br><br><p><span class="tituloRojo">NOTA: </span>Sólo el dueño de la comunidad puede cambiar la información básica del blog.</p>
+    <%            }
+    %>
 </div>
 
 
