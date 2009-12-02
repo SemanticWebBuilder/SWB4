@@ -73,6 +73,7 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.repository.BaseNode;
 import org.semanticwb.repository.LockUserComparator;
 import org.semanticwb.repository.Referenceable;
+import org.semanticwb.repository.Unstructured;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
@@ -111,7 +112,16 @@ public class SessionImp implements Session
         this.workspaceName = workspaceName;
         this.principal = principal;
         this.workspace = new WorkspaceImp(this, workspaceName);
-        BaseNode rootBaseNode = SWBContext.getWorkspace(this.workspace.getName()).getRoot();
+        org.semanticwb.repository.Workspace ws=SWBContext.getWorkspace(this.workspace.getName());
+        BaseNode rootBaseNode = ws.getRoot();
+        if(rootBaseNode==null)
+        {
+            Unstructured root = Unstructured.ClassMgr.createUnstructured(ws);
+            root.setName("jcr:root");
+            root.setPath("/");
+            ws.setRoot(root);
+        }
+        rootBaseNode = SWBContext.getWorkspace(this.workspace.getName()).getRoot();
         root = new SimpleNode(rootBaseNode, this);
     }
 
