@@ -831,8 +831,10 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
             Directory dir=(Directory)evt.getPath().getLastPathComponent();
             if(dir.getChildCount()==1 && !(dir.getChildAt(0) instanceof Directory))
             {
+                this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
                 dir.remove(0);
                 loadDirectories(dir);
+                this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         }
     }//GEN-LAST:event_jTreeDirsTreeWillExpand
@@ -841,10 +843,12 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         
         if(this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
         {
-            Directory dir=(Directory)this.jTreeDirs.getSelectionPath().getLastPathComponent();                    
+            Directory dir=(Directory)this.jTreeDirs.getSelectionPath().getLastPathComponent();
+            this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
             loadFiles(dir);            
         }
         this.jTreeDirs.updateUI();
+        this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         
     }//GEN-LAST:event_jTreeDirsValueChanged
     public boolean createFile(java.io.File filelocal,String path,boolean siAll) throws Exception 
