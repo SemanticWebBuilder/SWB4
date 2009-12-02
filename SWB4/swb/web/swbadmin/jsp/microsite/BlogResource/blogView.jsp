@@ -12,27 +12,26 @@
     }
 </script>
 
-<%!    private static final java.text.SimpleDateFormat dateFormat;
-    private static final SimpleDateFormat iso8601dateFormat;
-    private static final java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
 
-    static
-    {
-        String lang = "es";
-        Locale locale = new Locale(lang);
-        dateFormat = new java.text.SimpleDateFormat("dd-MMM-yyyy", locale);
-        String[] months =
-        {
-            "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"
-        };
-        java.text.DateFormatSymbols fs = dateFormat.getDateFormatSymbols();
-        fs.setShortMonths(months);
-        dateFormat.setDateFormatSymbols(fs);
-        String defaultFormat = "d 'de' MMMM  'del' yyyy 'a las' HH:mm";
-        iso8601dateFormat = new SimpleDateFormat(defaultFormat, locale);
-    }
-%>
 <%
+
+            java.text.SimpleDateFormat dateFormat;
+            SimpleDateFormat iso8601dateFormat;
+            java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
+
+
+            String lang = "es";
+            Locale locale = new Locale(lang);
+            dateFormat = new java.text.SimpleDateFormat("dd-MMM-yyyy", locale);
+            String[] months =
+            {
+                "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"
+            };
+            java.text.DateFormatSymbols fs = dateFormat.getDateFormatSymbols();
+            fs.setShortMonths(months);
+            dateFormat.setDateFormatSymbols(fs);
+            String defaultFormat = "d 'de' MMMM  'del' yyyy 'a las' HH:mm";
+            iso8601dateFormat = new SimpleDateFormat(defaultFormat, locale);
 
 
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
@@ -62,7 +61,7 @@
 %>
 <div class="columnaIzquierda">
     <%
-            ArrayList<PostElement> elements = new ArrayList();            
+            ArrayList<PostElement> elements = new ArrayList();
             Iterator<PostElement> posts = blog.listPostElements();
             posts = SWBComparator.sortByCreated(posts, false);
             while (posts.hasNext())
@@ -70,7 +69,7 @@
                 PostElement post = posts.next();
                 if (post.canView(member))
                 {
-                    elements.add(post);                    
+                    elements.add(post);
                 }
             }
             int paginas = elements.size() / ELEMENETS_BY_PAGE;
