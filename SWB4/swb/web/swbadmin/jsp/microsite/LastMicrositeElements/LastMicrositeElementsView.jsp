@@ -13,15 +13,14 @@
             {
                 String path = paramRequest.getWebPage().getWebSite().getWebPage("Lo_ultimo").getUrl();
 %>
-    <h2>Actividad m&aacute;s reciente en el sitio</h2>
-        <ul class="listaElementos">
-            <%
-            if(elements.size()==0)
-                {
-                %>
-                <li>&nbsp;</li>
-                <%
-                }
+<h2>Actividad m&aacute;s reciente en el sitio</h2>
+<ul class="listaElementos">
+    <%
+        if (elements.size() == 0)
+        {
+    %>
+    <li>&nbsp;</li>
+    <%                }
 
     for (MicroSiteElement element : elements)
     {
@@ -32,14 +31,14 @@
             Member member = Member.getMember(user, element.getWebPage());
             if (member != null)
             {
-                canview = element.canView(member);                
+                canview = element.canView(member);
             }
         }
         String created = "Sin fecha";
         if (element.getCreated() != null)
         {
             //created = iso8601dateFormat.format(element.getCreated());
-            created=SWBUtils.TEXT.getTimeAgo(element.getCreated(),user.getLanguage());
+            created = SWBUtils.TEXT.getTimeAgo(element.getCreated(), user.getLanguage());
         }
         String title = element.getTitle();
         String textcreated = "creó el elemento ";
@@ -64,31 +63,35 @@
             textcreated = "registró el evento ";
         }
 
-
-            %>
-            <li><%=element.getCreator().getFullName()%>  <%=textcreated%>
-                <%
-                    if (canview)
-                    {
-                %>
-                <a href="<%=element.getURL()%>">
-                    <%=title%>
-                </a>    
-                <%
-                    }
-                    else
-                    {
-                %>
-                <%=title%>
-                <%
-                    }
-                %>
+        String postAuthor = "Usuario dado de baja";
+        if (element.getCreator() != null)
+        {
+            postAuthor = element.getCreator().getFirstName();
+        }
+    %>
+    <li><%=postAuthor%>  <%=textcreated%>
+        <%
+if (canview)
+{
+        %>
+        <a href="<%=element.getURL()%>">
+            <%=title%>
+        </a>
+        <%
+            }
+            else
+            {
+        %>
+        <%=title%>
+        <%
+}
+        %>
 
 						(<%=created%>)</li>
-                <%            }
-                %>
-        </ul>
-        <%-- <p class="vermas"><a href="<%=path%>" >Ver m&aacute;s</a></p> --%>
+        <%            }
+        %>
+</ul>
+<%-- <p class="vermas"><a href="<%=path%>" >Ver m&aacute;s</a></p> --%>
 <%
             }
 %>

@@ -11,7 +11,7 @@
             MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
             String cssPath = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/images/";
             Member member = Member.getMember(user, wpage);
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy",locale);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", locale);
             SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");
             java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
             String lang = "es";
@@ -89,10 +89,10 @@
                     elementos++;
                 }
                 else
-                    {
-                    System.out.println("end date"+end.getTime());
-                    System.out.println("today "+today.getTime());
-                    }
+                {
+                    System.out.println("end date" + end.getTime());
+                    System.out.println("today " + today.getTime());
+                }
 
 
             }
@@ -235,12 +235,17 @@
                             }
                             pathPhoto = SWBPortal.getWebWorkPath() + path + "/" + event.getEventThumbnail();
                         }
+                        String postAuthor = "Usuario dado de baja";
+                        if (event.getCreator() != null)
+                        {
+                            postAuthor = event.getCreator().getFirstName();
+                        }
     %>
     <div class="noticia">
         <img src="<%=pathPhoto%>" alt="<%= event.getTitle()%>">
         <div class="noticiaTexto">
             <h2><%=event.getTitle()%></h2>
-            <p>&nbsp;<br>Por: <%=event.getCreator().getFullName()%><br><%=dateFormat.format(event.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%></p>
+            <p>&nbsp;<br>Por: <%=postAuthor%><br><%=dateFormat.format(event.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%></p>
             <p>
                 <%=event.getDescription()%> | <a href="<%=viewUrl%>">Ver más</a>
             </p>

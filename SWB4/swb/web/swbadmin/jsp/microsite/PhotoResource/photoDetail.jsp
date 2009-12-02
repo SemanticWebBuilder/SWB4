@@ -25,7 +25,7 @@
 
             String uri = request.getParameter("uri");
             PhotoElement photo = (PhotoElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
-            
+
 
             DecimalFormat df = new DecimalFormat("#0.0#");
             String rank = df.format(photo.getRank());
@@ -80,12 +80,16 @@
             SWBResponse res = new SWBResponse(response);
             photo.renderGenericElements(request, res, paramRequest);
             out.write(res.toString());
-
+            String postAuthor = "Usuario dado de baja";
+            if (photo.getCreator() != null)
+            {
+                postAuthor = photo.getCreator().getFirstName();
+            }
     %>
 </div>
 <div class="columnaCentro">
     <p>&nbsp;</p>
-    <p>Autor: <%= photo.getCreator().getFullName()%></p>
+    <p>Autor: <%= postAuthor%></p>
     <p>Creado el: <%=dateFormat.format(photo.getCreated())%></p>
     <p><%= photo.getViews()%> vistas</p>
     <p>Calificación: <%=rank%></p>

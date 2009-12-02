@@ -127,8 +127,8 @@
                 %>
                 <%=i%>
                 <%
-                        if (i == ipage)
-                        {
+                    if (i == ipage)
+                    {
                 %>
             </strong>
             <%                    }
@@ -158,7 +158,7 @@
         %>
         <a class="adminTool" href="<%=urlAddDocument%>">Agregar documento</a>
         <%
-        }
+            }
         %>
 
 
@@ -169,29 +169,33 @@
     %>
     <p>No hay documentos registrados en la comunidad :)</p>
     <%            }
-    int iElement = 0;
-    for (DocumentElement doc : elements)
-    {
-        if (doc.canView(member))
-        {
-            iElement++;
-            if (iElement > fin)
+            int iElement = 0;
+            for (DocumentElement doc : elements)
             {
-                break;
-            }
-            if (iElement >= inicio && iElement <= fin)
-            {
-                String postAuthor = doc.getCreator().getFullName();
-                SWBResourceURL urlDetail = paramRequest.getRenderUrl();
-                urlDetail.setParameter("act", "detail");
-                urlDetail.setParameter("uri", doc.getURI());
-                SWBResourceURL viewurl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", doc.getURI());
-                String rank = df.format(doc.getRank());
-                String editEventURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", doc.getURI()).toString();
-                SWBResourceURL removeUrl = paramRequest.getActionUrl();
-                removeUrl.setParameter("act", "remove");
-                removeUrl.setParameter("uri", doc.getEncodedURI());
-                String removeurl = "javascript:validateremove('" + removeUrl + "','" + doc.getTitle() + "')";
+                if (doc.canView(member))
+                {
+                    iElement++;
+                    if (iElement > fin)
+                    {
+                        break;
+                    }
+                    if (iElement >= inicio && iElement <= fin)
+                    {
+                        String postAuthor = "Usuario dado de baja";
+                        if (doc.getCreator() != null)
+                        {
+                            postAuthor = doc.getCreator().getFirstName();
+                        }
+                        SWBResourceURL urlDetail = paramRequest.getRenderUrl();
+                        urlDetail.setParameter("act", "detail");
+                        urlDetail.setParameter("uri", doc.getURI());
+                        SWBResourceURL viewurl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", doc.getURI());
+                        String rank = df.format(doc.getRank());
+                        String editEventURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", doc.getURI()).toString();
+                        SWBResourceURL removeUrl = paramRequest.getActionUrl();
+                        removeUrl.setParameter("act", "remove");
+                        removeUrl.setParameter("uri", doc.getEncodedURI());
+                        String removeurl = "javascript:validateremove('" + removeUrl + "','" + doc.getTitle() + "')";
 
     %>
     <div class="noticia">
@@ -203,12 +207,12 @@
             <p>
                 <%=doc.getDescription()%> | <a href="<%= viewurl%>">Ver más</a>
                 <%
-                        if (doc.canModify(member))
-                        {
+                if (doc.canModify(member))
+                {
                 %>
                 | <a href="<%= editEventURL%>">Editar</a> | <a href="<%= removeurl%>">Eliminar</a>
                 <%
-                        }
+                }
                 %>
             </p>
             <p class="stats">
@@ -259,8 +263,8 @@
                 %>
                 <%=i%>
                 <%
-                        if (i == ipage)
-                        {
+                    if (i == ipage)
+                    {
                 %>
             </strong>
             <%                    }

@@ -33,7 +33,7 @@
         <div id="comment<%=comment.getId()%>" class="comment">
             <%
             try {
-                if (comment.getCreator().getPhoto()!=null) {%>
+                if (comment.getCreator()!=null && comment.getCreator().getPhoto()!=null) {%>
                     <img src="<%=SWBPortal.getWebWorkPath()%><%=comment.getCreator().getPhoto()%>" alt="foto">
                 <%
                 } else {
@@ -48,7 +48,7 @@
                 <p>Escrito por
                 <%
                     try {
-                        if (!comment.getCreator().getFullName().equals("")) {
+                        if (comment.getCreator()!=null && !comment.getCreator().getFullName().equals("")) {
                         %>
                             <a href="<%=perfilPath%>?user=<%=comment.getCreator().getEncodedURI()%>"><%=comment.getCreator().getFullName()%></a>
                         <%

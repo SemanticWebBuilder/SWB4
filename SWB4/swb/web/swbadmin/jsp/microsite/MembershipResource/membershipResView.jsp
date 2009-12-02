@@ -48,12 +48,9 @@
 
             }
             String creator = "Usuario dado de baja";
-            if (site.getCreator() != null && site.getCreator().getFullName() != null)
+            if (site.getCreator() != null)
             {
-
                 creator = site.getCreator().getFullName();
-                
-
             }
 %>
 
@@ -68,7 +65,6 @@
         <%
             }
         %>
-<%=site.getCreator().getId()%>
         <p><span class="itemTitle">Creador:</span> <%=creator%></p>
         <p><span class="itemTitle">Creada:</span> <%=SWBUtils.TEXT.getTimeAgo(site.getCreated(), user.getLanguage())%></p>
         <p><span class="itemTitle">Modificada:</span> <%=SWBUtils.TEXT.getTimeAgo(site.getUpdated(), user.getLanguage())%></p>

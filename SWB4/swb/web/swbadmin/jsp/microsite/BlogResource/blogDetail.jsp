@@ -27,26 +27,29 @@
 %>
 <p>No tiene permisos para ver esta entrada, o la entrada ya no existe</p>
 <%
-        return;
-    }
-    
+                return;
+            }
 
-    String updated = SWBUtils.TEXT.getTimeAgo(post.getUpdated(), user.getLanguage());
-    String postAuthor = post.getCreator().getFirstName();
-    postAuthor = post.getCreator().getFullName();        
-    post.incViews();  //Incrementar apariciones    
-    DecimalFormat df = new DecimalFormat("#0.0#");
-    String rank = df.format(post.getRank());
-    SWBResourceURL removeUrl = paramRequest.getActionUrl();
-    removeUrl.setParameter("act", "remove");
-    boolean canadd=post.canModify(member);
-    String editURL=paramRequest.getRenderUrl().setParameter("act","edit").setParameter("uri",post.getURI()).setParameter("mode","editpost").toString();
-    String deleteUrl="javascript:validateremove('"+removeUrl+"','"+post.getTitle()+"','"+post.getURI()+"')";
+
+            String updated = SWBUtils.TEXT.getTimeAgo(post.getUpdated(), user.getLanguage());
+            String postAuthor = "Usuario dado de baja";
+            if (post.getCreator() != null)
+            {
+                postAuthor = post.getCreator().getFirstName();
+            }
+            post.incViews();  //Incrementar apariciones
+            DecimalFormat df = new DecimalFormat("#0.0#");
+            String rank = df.format(post.getRank());
+            SWBResourceURL removeUrl = paramRequest.getActionUrl();
+            removeUrl.setParameter("act", "remove");
+            boolean canadd = post.canModify(member);
+            String editURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", post.getURI()).setParameter("mode", "editpost").toString();
+            String deleteUrl = "javascript:validateremove('" + removeUrl + "','" + post.getTitle() + "','" + post.getURI() + "')";
 %>
 
 <div class="columnaIzquierda">    
     <h2 class="hidden"><%=post.getTitle()%></h2>
-    
+
     <p><%=post.getContent()%></p>
     <br>
     <br>
@@ -55,7 +58,7 @@
             SWBResponse res = new SWBResponse(response);
             post.renderGenericElements(request, res, paramRequest);
             out.write(res.toString());
-%>
+    %>
 </div>
 <div class="columnaCentro">
     <h2 class="blogTitle"><%=post.getTitle()%></h2>
@@ -68,12 +71,12 @@
     <%
             if (canadd)
             {
-        %>
-        <p><a href="<%=editURL%>">[Editar Entrada]</a></p>
-        <p><a href="<%=deleteUrl%>">[Eliminar Entrada]</a></p>
-        <%
-            }
-        %>
+    %>
+    <p><a href="<%=editURL%>">[Editar Entrada]</a></p>
+    <p><a href="<%=deleteUrl%>">[Eliminar Entrada]</a></p>
+    <%
+        }
+    %>
     <ul class="miContenido">
         <%
             SWBResourceURL urla = paramRequest.getActionUrl();
@@ -94,7 +97,7 @@
         <%
                 }
             }
-            String pageUri="/swbadmin/jsp/microsite/rss/rss.jsp?blog="+java.net.URLEncoder.encode(post.getBlog().getURI());
+            String pageUri = "/swbadmin/jsp/microsite/rss/rss.jsp?blog=" + java.net.URLEncoder.encode(post.getBlog().getURI());
         %>
         <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS al blog de la comunidad</a></li>
     </ul>

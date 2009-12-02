@@ -31,7 +31,7 @@
             fs.setShortMonths(months);
             dateFormat.setDateFormatSymbols(fs);
 
-            java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");            
+            java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
 
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             String cssPath = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/images/";
@@ -200,7 +200,12 @@
                     }
                     if (iElement >= inicio && iElement <= fin)
                     {
-                        String postAuthor = photo.getCreator().getFullName();
+                        String postAuthor = "Usuario dado de baja";
+                        if (photo.getCreator() != null)
+                        {
+                            postAuthor = photo.getCreator().getFirstName();
+                        }
+
                         SWBResourceURL urlDetail = paramRequest.getRenderUrl();
                         urlDetail.setParameter("act", "detail");
                         urlDetail.setParameter("uri", photo.getURI());

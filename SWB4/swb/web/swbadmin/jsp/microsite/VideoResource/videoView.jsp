@@ -212,13 +212,18 @@
                         {
                             description = video.getDescription();
                         }
+                         String postAuthor = "Usuario dado de baja";
+                        if (video.getCreator() != null)
+                        {
+                            postAuthor = video.getCreator().getFirstName();
+                        }
 
     %>
     <div class="noticia">
         <img src="<%=video.getPreview()%>" alt="<%=title%>">
         <div class="noticiaTexto">
             <h2><%=title%></h2>
-            <p>&nbsp;<br>Por: <%=video.getCreator().getFullName()%><br><%=dateFormat.format(video.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(video.getCreated(), user.getLanguage())%></p>
+            <p>&nbsp;<br>Por: <%=postAuthor%><br><%=dateFormat.format(video.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(video.getCreated(), user.getLanguage())%></p>
             <p>
                 <%=description%> | <a href="<%=viewUrl%>">Ver más</a>
                 <%
