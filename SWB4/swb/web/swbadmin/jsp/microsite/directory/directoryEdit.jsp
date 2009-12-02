@@ -22,6 +22,7 @@
 <%@page import="org.semanticwb.portal.community.*"%>
 
  <%
+        User user = paramRequest.getUser();
         Resource base=paramRequest.getResourceBase();
         SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
         SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
@@ -64,7 +65,9 @@
         request.setAttribute("formName", mgr.getFormName());
         mgr.addButton(SWBFormButton.newSaveButton());
         mgr.addButton(SWBFormButton.newBackButton());
+        if(user.isRegistered() && user.isSigned()) {
     %>
         <%=mgr.renderForm(request)%>
-
-        
+        <%} else {%>
+            <p><span class="tituloRojo">NOTA: </span>Debe estar registrado y haber iniciado sesi&oacute;n para poder editar elementos.</p>
+        <%}%>
