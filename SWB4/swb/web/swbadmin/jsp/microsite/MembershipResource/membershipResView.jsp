@@ -47,6 +47,14 @@
                 pathPhoto = SWBPortal.getWebWorkPath() + path + "/" + site.getPhoto();
 
             }
+            String creator = "Usuario dado de baja";
+            if (site.getCreator() != null && site.getCreator().getFullName() != null)
+            {
+
+                creator = site.getCreator().getFullName();
+                
+
+            }
 %>
 
 <div class="columnaIzquierda">
@@ -60,11 +68,12 @@
         <%
             }
         %>
-        <p><span class="itemTitle">Creador:</span> <%=site.getCreator().getFullName()%></p>
+<%=site.getCreator().getId()%>
+        <p><span class="itemTitle">Creador:</span> <%=creator%></p>
         <p><span class="itemTitle">Creada:</span> <%=SWBUtils.TEXT.getTimeAgo(site.getCreated(), user.getLanguage())%></p>
         <p><span class="itemTitle">Modificada:</span> <%=SWBUtils.TEXT.getTimeAgo(site.getUpdated(), user.getLanguage())%></p>
-        
-        
+
+
 
     </div>
     <h2>Descripción</h2>
@@ -85,8 +94,7 @@
     <h2>Contenidos</h2>
 
     <ul class="listaContenidos">
-        <%
-            {
+        <%            {
                 int entradas = 0;
                 if (wp.getWebSite().getWebPage(wp.getId() + "_Blog") != null)
                 {
@@ -113,8 +121,7 @@
                 %>
 
 
-        <%
-            {
+        <%            {
                 int eventos = 0;
                 if (wp.getWebSite().getWebPage(wp.getId() + "_Events") != null)
                 {
@@ -135,8 +142,7 @@
                 %>
 
 
-        <%
-            {
+        <%            {
                 int fotos = 0;
                 if (wp.getWebSite().getWebPage(wp.getId() + "_Photos") != null)
                 {
@@ -182,12 +188,10 @@
                 }
             }
 
-
                 %>
 
 
-        <%
-            {
+        <%            {
                 int noticias = 0;
                 if (wp.getWebSite().getWebPage(wp.getId() + "_News") != null)
                 {
@@ -209,9 +213,7 @@
                 %>
 
 
-        <%
-
-            {
+        <%            {
                 int videos = 0;
                 if (wp.getWebSite().getWebPage(wp.getId() + "_Videos") != null)
                 {
@@ -234,14 +236,13 @@
 
 
     </ul>
-                <%
-            if(!user.isRegistered())
-                {
-                    %>
-                    <p><span class="tituloRojo">NOTA: </span>Debe estar registrado y estar suscrito a la comunidad para poder agregar contenido a la misma.</p>
-                    <%
-                }
-        %>
+    <%
+if (!user.isRegistered())
+{
+    %>
+    <p><span class="tituloRojo">NOTA: </span>Debe estar registrado y estar suscrito a la comunidad para poder agregar contenido a la misma.</p>
+    <%            }
+    %>
 </div>
 
 <div class="columnaCentro">
@@ -255,7 +256,7 @@
     <p><a href="<%=urle%>">[Cambiar imagen]</a></p>
 
     <%
-            }             
+            }
     %>
     <ul class="miContenido">
         <%
@@ -286,12 +287,11 @@
         %>
 
     </ul>
-        <%
+    <%
         if (!(null != member && member.getAccessLevel() == Member.LEVEL_OWNER && user.isRegistered()))
-            {
-            %>
-            <br><p><span class="tituloRojo">NOTA: </span>Sólo el dueño de la comunidad puede cambiar la información básica de la misma.</p>
-            <%
-            }
-        %>
+        {
+    %>
+    <br><p><span class="tituloRojo">NOTA: </span>Sólo el dueño de la comunidad puede cambiar la información básica de la misma.</p>
+    <%            }
+    %>
 </div>
