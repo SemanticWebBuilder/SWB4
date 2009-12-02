@@ -9,24 +9,26 @@
         }
     }
 </script>
-<%!    public static final java.text.SimpleDateFormat dateFormat;
 
-    static
-    {
-        String lang = "es";
-        Locale locale = new Locale(lang);
-        dateFormat = new java.text.SimpleDateFormat("dd-MMM-yyyy", locale);
-        String[] months={"Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"};
-        java.text.DateFormatSymbols fs=dateFormat.getDateFormatSymbols();
-        fs.setShortMonths(months);
-        dateFormat.setDateFormatSymbols(fs);
-    }
-%>
 <%!    private static final int ELEMENETS_BY_PAGE = 5;
 %>
-<%            
+<%
+            java.text.SimpleDateFormat dateFormat;
+
+
+            String lang = "es";
+            Locale locale = new Locale(lang);
+            dateFormat = new java.text.SimpleDateFormat("dd-MMM-yyyy", locale);
+            String[] months =
+            {
+                "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"
+            };
+            java.text.DateFormatSymbols fs = dateFormat.getDateFormatSymbols();
+            fs.setShortMonths(months);
+            dateFormat.setDateFormatSymbols(fs);
+
             java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
-            
+
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             String cssPath = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/images/";
             User user = paramRequest.getUser();
@@ -53,9 +55,9 @@
                 end.setTime(event.getEndDate());
                 end.add(end.MONTH, 1);
                 if (today.after(end) || today.equals(end))
-                {                    
+                {
                     event.remove();
-                }                
+                }
             }
             ArrayList<EventElement> elements = new ArrayList();
             int elementos = 0;
@@ -73,7 +75,7 @@
                 {
                     elements.add(event);
                     elementos++;
-                }                
+                }
             }
             int paginas = elementos / ELEMENETS_BY_PAGE;
             if (elementos % ELEMENETS_BY_PAGE != 0)

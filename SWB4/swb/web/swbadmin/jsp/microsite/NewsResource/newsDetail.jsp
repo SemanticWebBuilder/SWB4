@@ -1,21 +1,19 @@
 <%@page contentType="text/html"%>
 <%@page import="org.semanticwb.portal.lib.*,java.text.SimpleDateFormat, org.semanticwb.platform.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
-<%!    public static final java.text.SimpleDateFormat dateFormat;
 
-    static
-    {
-        String lang = "es";
-        Locale locale = new Locale(lang);
-        dateFormat = new java.text.SimpleDateFormat("dd-MMM-yyyy", locale);
-        String[] months={"Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"};
-        java.text.DateFormatSymbols fs=dateFormat.getDateFormatSymbols();
-        fs.setShortMonths(months);
-        dateFormat.setDateFormatSymbols(fs);
-    }
-%>
 <%
-            //String lang = "es";
-            //Locale locale=new Locale(lang);
+            java.text.SimpleDateFormat dateFormat;
+            String lang = "es";
+            Locale locale = new Locale(lang);
+            dateFormat = new java.text.SimpleDateFormat("dd-MMM-yyyy", locale);
+            String[] months =
+            {
+                "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"
+            };
+            java.text.DateFormatSymbols fs = dateFormat.getDateFormatSymbols();
+            fs.setShortMonths(months);
+            dateFormat.setDateFormatSymbols(fs);
+
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             Resource base = paramRequest.getResourceBase();
             User user = paramRequest.getUser();
@@ -87,19 +85,19 @@
     <%}%>
     <ul class="miContenido">
         <%
-                SWBResourceURL urla = paramRequest.getActionUrl();
-                if (user.isRegistered())
+            SWBResourceURL urla = paramRequest.getActionUrl();
+            if (user.isRegistered())
+            {
+                if (member == null)
                 {
-                    if (member == null)
-                    {
-                        urla.setParameter("act", "subscribe");
+                    urla.setParameter("act", "subscribe");
         %>
         <li><a href="<%=urla%>">Suscribirse a esta comunidad</a></li>
         <%
-                }
-                else
-                {
-                    urla.setParameter("act", "unsubscribe");
+                    }
+                    else
+                    {
+                        urla.setParameter("act", "unsubscribe");
         %>
         <li><a href="<%=urla%>">Cancelar suscripción a comunidad</a></li>
         <%
