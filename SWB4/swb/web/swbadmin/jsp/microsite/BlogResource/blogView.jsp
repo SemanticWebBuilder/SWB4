@@ -238,8 +238,11 @@
                         urlEditPost.setParameter("act", "edit");
                         urlEditPost.setParameter("uri", post.getURI());
                         urlEditPost.setParameter("mode", "editpost");
-
-                        String postAuthor = post.getCreator().getFullName();
+                        String postAuthor = "Usuario dado de baja";
+                        if (post.getCreator() != null)
+                        {
+                            postAuthor = post.getCreator().getFirstName();
+                        }
                         SWBResourceURL urlDetail = paramRequest.getRenderUrl();
                         urlDetail.setParameter("act", "detail");
                         urlDetail.setParameter("uri", post.getURI());
