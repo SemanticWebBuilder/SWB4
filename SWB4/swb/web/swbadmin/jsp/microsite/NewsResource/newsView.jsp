@@ -9,24 +9,24 @@
         }
     }
 </script>
-<%!    public static final java.text.SimpleDateFormat dateFormat;
 
-    static
-    {
-        String lang = "es";
-        Locale locale = new Locale(lang);
-        dateFormat = new java.text.SimpleDateFormat("dd-MMM-yyyy", locale);
-        String[] months={"Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"};
-        java.text.DateFormatSymbols fs=dateFormat.getDateFormatSymbols();
-        fs.setShortMonths(months);
-        dateFormat.setDateFormatSymbols(fs);
-    }
-%>
 <%!    private static final int ELEMENETS_BY_PAGE = 5;
 %>
 <%
-            //String lang = "es";
-            //Locale locale=new Locale(lang);
+            java.text.SimpleDateFormat dateFormat;
+
+
+            String lang = "es";
+            Locale locale = new Locale(lang);
+            dateFormat = new java.text.SimpleDateFormat("dd-MMM-yyyy", locale);
+            String[] months =
+            {
+                "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"
+            };
+            java.text.DateFormatSymbols fs = dateFormat.getDateFormatSymbols();
+            fs.setShortMonths(months);
+            dateFormat.setDateFormatSymbols(fs);
+
             java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
             //SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy",locale);
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
@@ -141,8 +141,8 @@
                 %>
                 <%=i%>
                 <%
-                        if (i == ipage)
-                        {
+                    if (i == ipage)
+                    {
                 %>
             </strong>
             <%                    }
@@ -222,12 +222,12 @@
             <p>
                 <%=anew.getDescription()%> | <a href="<%=viewUrl%>">Ver más</a>
                 <%
-                if (anew.canModify(member))
-                {
+                        if (anew.canModify(member))
+                        {
                 %>
                 | <a href="<%=editEventURL%>">Editar</a> | <a href="<%=removeurl%>">Eliminar</a>
                 <%
-                }
+                        }
                 %>
             </p>
             <p class="stats">
@@ -252,24 +252,24 @@
 
 
         <%
-                    String nextURL = "#";
-                    String previusURL = "#";
-                    if (ipage < paginas)
-                    {
-                        nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
-                    }
-                    if (ipage > 1)
-                    {
-                        previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
-                    }
-                    if (ipage > 1)
-                    {
+                String nextURL = "#";
+                String previusURL = "#";
+                if (ipage < paginas)
+                {
+                    nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
+                }
+                if (ipage > 1)
+                {
+                    previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
+                }
+                if (ipage > 1)
+                {
         %>
         <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
             <%
-                    }
-                    for (int i = 1; i <= paginas; i++)
-                    {
+                }
+                for (int i = 1; i <= paginas; i++)
+                {
             %>
         <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%
                         if (i == ipage)
@@ -280,24 +280,24 @@
                 %>
                 <%=i%>
                 <%
-                            if (i == ipage)
-                            {
+                        if (i == ipage)
+                        {
                 %>
             </strong>
             <%                        }
             %></a>
         <%
-                    }
+                }
         %>
 
 
         <%
-                    if (ipage != paginas)
-                    {
+                if (ipage != paginas)
+                {
         %>
         <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
             <%
-                    }
+                }
             %>
     </div>
     <%
