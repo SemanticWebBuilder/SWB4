@@ -154,8 +154,10 @@ if (sobj != null) {
                 DirectoryObject o = itObjs.next();
                 setResult.add(o);
             }
+        } else if (request.getParameter("orderBy")!=null && request.getParameter("orderBy").equals("title")) {
+            setResult = SWBComparator.sortByDisplayNameSet(itObjs, user.getLanguage());
         } else {
-            setResult=SWBComparator.sortByDisplayNameSet(itObjs, user.getLanguage());
+            setResult=SWBComparator.sortByCreatedSet(itObjs, false);
         }
         //Ya sabiendo cuantos y cuales son los elementos a listar (ya que puede ser una busqueda filtrada), se página
         String pagination = getPageRange(setResult.size(), actualPage);
@@ -281,7 +283,7 @@ if (sobj != null) {
             </fieldset>
         </form>
                    </div>
-        <%if (itObjs != null && itObjs.hasNext()) {%>
+        <%if (setResult.iterator().hasNext()) {%>
         <p align="right">Ordenar por
             <%if (cls.equals(ClasifiedBuySell.sclass)) {
                 if (toggleOrder) {
