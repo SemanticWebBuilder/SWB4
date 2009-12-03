@@ -15,6 +15,8 @@
                 }
             itClass = new GenericIterator(webpage.getWebSite().getSemanticObject().getModel().listInstancesOfClass(Clasified.sclass, true));
             Iterator objects = SWBComparator.sortByCreated(itClass, false);
+
+
             int count = 0;
             while (objects.hasNext())
             {
