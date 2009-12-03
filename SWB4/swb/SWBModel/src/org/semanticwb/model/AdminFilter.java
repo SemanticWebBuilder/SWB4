@@ -30,6 +30,7 @@ import java.util.StringTokenizer;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticProperty;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -44,9 +45,14 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase
 
     private ArrayList<WebPage> pages=null;
     private ArrayList<WebPage> vpages=null;
+
     private HashMap<SemanticClass,ArrayList> classes=null;
-    private ArrayList<SemanticObject> sobjects=null;
+
+    private ArrayList<String> sobjects=null;
+    private ArrayList<String> vsobjects=null;
     private HashMap<String,ArrayList<HerarquicalNode>> hnodes=null;
+    private ArrayList<SemanticClass> sobjectClasses=null;
+
     private boolean allClasses=false;
     private boolean allSites=false;
 
@@ -55,15 +61,18 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase
         super(base);
         init();
     }
-    
+
     public void init()
     {
         allClasses=false;
         allSites=false;
         pages=new ArrayList();
         vpages=new ArrayList();
+        sobjectClasses=new ArrayList();
         sobjects=new ArrayList();
+        vsobjects=new ArrayList();
         classes=new HashMap();
+        hnodes=new HashMap();
 
         //Menus
         {
@@ -188,6 +197,7 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase
                     SemanticObject obj=SemanticObject.createSemanticObject(hnuri);
                     if(obj!=null)
                     {
+                        if(!vsobjects.contains(modeluri))vsobjects.add(modeluri);
                         HerarquicalNode node=(HerarquicalNode)obj.createGenericInstance();
                         ArrayList<HerarquicalNode> arr=hnodes.get(modeluri);
                         if(arr==null)
@@ -196,12 +206,66 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase
                             hnodes.put(modeluri, arr);
                         }
                         arr.add(node);
+                        //Agrega las clases y subclases del herarquicalnode
+                        SemanticClass cls=node.getHClass().transformToSemanticClass();
+                        addObjectClass(cls);
                     }
                 }else if(val.startsWith("getSemanticObject."))
                 {
                     String id=ele.getAttribute("id");
+                    String path=ele.getAttribute("path");
                     SemanticObject obj=SemanticObject.createSemanticObject(id);
-                    sobjects.add(obj);
+                    if(obj!=null)
+                    {
+                        sobjects.add(obj.getURI());
+                        String modeluri=obj.getModel().getModelObject().getURI();
+                        if(modeluri.equals(id)) //es un modelo
+                        {
+                            //agregar submodelos
+                            if(obj.instanceOf(WebSite.sclass)) 
+                            {
+                                WebSite site=(WebSite)obj.createGenericInstance();
+                                Iterator<SWBModel> it=site.listSubModels();
+                                while (it.hasNext())
+                                {
+                                    SWBModel model = it.next();
+                                    sobjects.add(model.getURI());
+                                }
+                            }
+                        }
+                        if(path!=null)
+                        {
+                            StringTokenizer st=new StringTokenizer(path,"|");
+                            while(st.hasMoreTokens())
+                            {
+                                String aux=st.nextToken();
+                                if(!aux.equals("server") && !aux.equals(id))
+                                {
+                                    SemanticObject aobj=SemanticObject.createSemanticObject(aux);
+                                    if(aobj.instanceOf(SWBModel.sclass))
+                                    {
+                                        modeluri=aobj.getURI();
+                                        if(!vsobjects.contains(modeluri))vsobjects.add(modeluri);
+                                    }else if(aobj.instanceOf(HerarquicalNode.sclass))
+                                    {
+                                        HerarquicalNode node=(HerarquicalNode)aobj.createGenericInstance();
+                                        ArrayList<HerarquicalNode> arr=hnodes.get(modeluri);
+                                        if(arr==null)
+                                        {
+                                            arr=new ArrayList();
+                                            hnodes.put(modeluri, arr);
+                                        }
+                                        arr.add(node);
+                                    }else
+                                    {
+                                        if(!vsobjects.contains(aobj.getURI()))vsobjects.add(aobj.getURI());
+                                        String muri=aobj.getModel().getModelObject().getURI();
+                                        if(!vsobjects.contains(muri))vsobjects.add(muri);
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -220,13 +284,72 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase
         }
     }
 
-    public boolean haveAccessToHerarquicalNode(SWBModel model, HerarquicalNode node)
+    public boolean haveAccessToHerarquicalNode(String modelUri, HerarquicalNode node)
     {
         boolean ret=false;
-        ArrayList<HerarquicalNode> arr=hnodes.get(model.getURI());
-        if(arr!=null)
+        if(!allSites)
         {
-            ret=arr.contains(node);
+            if(sobjects.contains(modelUri))
+            {
+                ret=true;
+            }else if(!vsobjects.contains(modelUri))
+            {
+                //no esta seleccionado
+            }else
+            {
+                ArrayList<HerarquicalNode> arr=hnodes.get(modelUri);
+                if(arr!=null)
+                {
+                    ret=arr.contains(node);
+                }
+            }
+        }else
+        {
+            ret=true;
+        }
+        return ret;
+    }
+
+    private boolean addObjectClass(SemanticClass cls)
+    {
+        boolean ret=false;
+        if(!sobjectClasses.contains(cls))
+        {
+            sobjectClasses.add(cls);
+            Iterator<SemanticClass> it=cls.listSubClasses();
+            while (it.hasNext())
+            {
+                SemanticClass semanticClass = it.next();
+                if(!sobjectClasses.contains(semanticClass))sobjectClasses.add(semanticClass);
+            }
+            ret=true;
+        }
+        return ret;
+    }
+
+    private boolean haveAccessToSemanticObjectParent(SemanticObject obj)
+    {
+        boolean ret=false;
+        Iterator<SemanticObject> it=obj.listHerarquicalParents();
+        while (it.hasNext())
+        {
+            SemanticObject semanticObject = it.next();
+            if(sobjects.contains(semanticObject.getURI()))
+            {
+                ret=true;
+            }else
+            {
+                SemanticClass cls = semanticObject.getSemanticClass();
+                if(sobjectClasses.contains(cls))
+                {
+                    ret=true;
+                }
+            }
+            if(!ret)
+            {
+                ret=haveAccessToSemanticObjectParent(semanticObject);
+            }
+            if(ret)break;
         }
         return ret;
     }
@@ -234,14 +357,29 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase
     public boolean haveAccessToSemanticObject(SemanticObject obj)
     {
         boolean ret=false;
-        SemanticObject model=obj.getModel().getModelObject();
-        if(sobjects.contains(model))
+        if(!allSites)
         {
-            ret=true;
-        }else
-        {
-            //obj.list
-        }
+            SemanticObject model=obj.getModel().getModelObject();
+            if(sobjects.contains(model.getURI()))
+            {
+                ret=true;
+            }else if(!vsobjects.contains(model.getURI()))
+            {
+                //no esta seleccionado
+            }else if(sobjects.contains(obj.getURI()))
+            {
+                ret=true;
+            }else if(vsobjects.contains(obj.getURI()))
+            {
+                ret=true;
+            }else if(sobjectClasses.contains(obj.getSemanticClass()))
+            {
+                ret=true;
+            }else
+            {
+                ret=haveAccessToSemanticObjectParent(obj);
+            }
+        }else ret=true;
         return ret;
     }
 
