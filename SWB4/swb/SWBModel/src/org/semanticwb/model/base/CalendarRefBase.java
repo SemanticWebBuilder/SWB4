@@ -86,4 +86,9 @@ public abstract class CalendarRefBase extends org.semanticwb.model.Reference imp
          }
          return ret;
     }
+
+    public org.semanticwb.model.WebSite getWebSite()
+    {
+        return (org.semanticwb.model.WebSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

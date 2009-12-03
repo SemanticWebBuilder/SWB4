@@ -52,6 +52,27 @@ public class SWBContextBase
     {
        return org.semanticwb.model.UserRepository.ClassMgr.createUserRepository(name, namespace);
     }
+    public static final SemanticClass swb_AdminWebSite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#AdminWebSite");
+
+    public static org.semanticwb.model.AdminWebSite getAdminWebSite(String name)
+    {
+        return org.semanticwb.model.AdminWebSite.ClassMgr.getAdminWebSite(name);
+    }
+
+    public static java.util.Iterator<org.semanticwb.model.AdminWebSite> listAdminWebSites()
+    {
+        return (java.util.Iterator<org.semanticwb.model.AdminWebSite>)swb_AdminWebSite.listGenericInstances();
+    }
+
+    public static void removeAdminWebSite(String name)
+    {
+        org.semanticwb.model.AdminWebSite.ClassMgr.removeAdminWebSite(name);
+    }
+
+    public static org.semanticwb.model.AdminWebSite createAdminWebSite(String name, String namespace)
+    {
+       return org.semanticwb.model.AdminWebSite.ClassMgr.createAdminWebSite(name, namespace);
+    }
     public static final SemanticClass swbrep_Workspace=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/repository#Workspace");
 
     public static org.semanticwb.repository.Workspace getWorkspace(String name)
