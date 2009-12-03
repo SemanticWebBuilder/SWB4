@@ -1160,7 +1160,7 @@ public class SWBAFilters extends SWBATree {
         SemanticClass cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(node.getHClass().getURI());
         String pf=node.getPropertyFilter();
 
-        Element jobj = addNode("node", node.getId(), node.getDisplayTitle(user.getLanguage()), ele);
+        Element jobj = addNode("node", node.getURI(), node.getDisplayTitle(user.getLanguage()), ele);
         jobj.setAttribute("reload", "getSemanticObject." + "HN|"+obj.getURI()+"|"+node.getURI());
         jobj.setAttribute("icon", node.getIconClass());
         //jobj.setAttribute("icon", "homev");
