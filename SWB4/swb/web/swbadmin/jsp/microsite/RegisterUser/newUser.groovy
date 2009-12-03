@@ -55,7 +55,7 @@ method="POST">
 			</td>
 			<td><input type="text" name="login" dojoType="dijit.form.ValidationTextBox"
                         required="true" promptMessage="Captura identificador de usuario."
-                        invalidMessage="El identificador de usuario es requerido."
+                        invalidMessage="El clave de usuario ya existe."
                         isValid="return canAddLogin('$repository',this.textbox.value);" trim="true" />
 			</td>
 		</tr>
@@ -65,13 +65,26 @@ method="POST">
 			</td>
 			<td><input type="password" name="passwd" dojoType="dijit.form.ValidationTextBox" 
                         required="true" promptMessage="Captura contrase&ntilde;a de usuario."
-                        invalidMessage="La contrase&ntilde;a de usuario es requerido." trim="true" />
+                        invalidMessage="La contrase&ntilde;a de usuario es requerida." trim="true" />
 			</td>
 		</tr>
 	<tr>
 		<td align="center" colspan="2">
                     
 <script type="text/javascript">
+
+ function enviar(){
+    var x=document.getElementById('org.semanticwb.community.User/com/create');
+    var objd=dijit.byId('org.semanticwb.community.User/com/create');
+    if (objd.isValid())
+    {
+        x.submit();
+    } else {
+        alert("Datos incompletos o erroneos");
+    }
+
+ }
+/*
     function enviar()
     {
         var x=document.getElementById('org.semanticwb.community.User/com/create');        
@@ -89,6 +102,7 @@ method="POST">
         }
         x.submit();
     }
+*/
 </script>
 
 			</td>
