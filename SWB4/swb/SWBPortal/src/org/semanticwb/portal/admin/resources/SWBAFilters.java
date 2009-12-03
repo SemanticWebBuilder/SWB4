@@ -44,6 +44,7 @@ import org.semanticwb.model.AdminFilter;
 import org.semanticwb.model.Filterable;
 import org.semanticwb.model.FilterableClass;
 import org.semanticwb.model.FilterableNode;
+import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.HerarquicalNode;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBComparator;
@@ -770,6 +771,7 @@ public class SWBAFilters extends SWBATree {
     public Document getFilter(String cmd, Document src, User user, HttpServletRequest request, HttpServletResponse response)
     {
         //System.out.println("getFilter");
+
         UserRepository map = SWBContext.getAdminRepository();
         Document docres = null;
         try {
@@ -781,31 +783,37 @@ public class SWBAFilters extends SWBATree {
                 org.w3c.dom.Text etext = (org.w3c.dom.Text) eid.getFirstChild();
                 String id = etext.getNodeValue();
                 AdminFilter filter = AdminFilter.ClassMgr.getAdminFilter(id, map);
-
+//                String xmldefault = "<filter id=\""+id+"\" name=\""+filter.getDisplayTitle(user.getLanguage())+"\" topicmap=\""+map.getId()+"\"><description> </description><elements/><menus/><sites/></filter>";
+//                System.out.println("Default Filter XML:"+xmldefault);
+//                if(null!=filter.getXml())
+//                    xmldefault = filter.getXml();
                 Document exmlfilter = SWBUtils.XML.xmlToDom(filter.getXml());
 
                 //System.out.println("Filter XML:"+SWBUtils.XML.domToXml(exmlfilter,true));
 
 
-                Node node = docres.importNode(exmlfilter.getFirstChild(), true);
-                res.appendChild(node);
-                NodeList nodes = docres.getElementsByTagName("node");
-                for (int i = 0; i < nodes.getLength(); i++) {
-                    Element enode = (Element) nodes.item(i);
-                    String topicid = enode.getAttribute("id");
-                    String path = topicid;
-                    String topicmap = enode.getAttribute("topicmap");
-                    WebSite topicMap = SWBContext.getWebSite(topicmap);
-                    if (topicMap != null) {
-                        WebPage topic = topicMap.getWebPage(topicid);
-                        if (topic != null) {
-                            while (topic.getParent() != null) {
-                                path = topic.getParent().getId() + "|" + path;
-                                topic = topic.getParent();
+                if(exmlfilter!=null)
+                {
+                    Node node = docres.importNode(exmlfilter.getFirstChild(), true);
+                    res.appendChild(node);
+                    NodeList nodes = docres.getElementsByTagName("node");
+                    for (int i = 0; i < nodes.getLength(); i++) {
+                        Element enode = (Element) nodes.item(i);
+                        String topicid = enode.getAttribute("id");
+                        String path = topicid;
+                        String topicmap = enode.getAttribute("topicmap");
+                        WebSite topicMap = SWBContext.getWebSite(topicmap);
+                        if (topicMap != null) {
+                            WebPage topic = topicMap.getWebPage(topicid);
+                            if (topic != null) {
+                                while (topic.getParent() != null) {
+                                    path = topic.getParent().getId() + "|" + path;
+                                    topic = topic.getParent();
+                                }
                             }
                         }
+                        enode.setAttribute("path", path);
                     }
-                    enode.setAttribute("path", path);
                 }
             }
         } catch (Exception e) {
@@ -860,13 +868,25 @@ public class SWBAFilters extends SWBATree {
         out.println("  dojo.require(\"dijit.layout.ContentPane\");");
         out.println("</script>");
 
-
-
         String act = "view";
         if (request.getParameter("act") != null) {
             act = request.getParameter("act");
         }
-        if (act.equals("remove") && request.getParameter("id") != null) {
+
+        AdminFilter admfilter = null;
+        String id=null;
+        id = request.getParameter("id");
+        String suri = request.getParameter("suri");
+        if(null!=suri){
+            act="edit";
+            GenericObject go = SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
+            if(go instanceof AdminFilter){
+                admfilter = (AdminFilter)go;
+                id=admfilter.getId();
+            }
+        }
+
+        if (act.equals("remove") && id != null) {
             //  TODO:
             // Borrar filtros aplicados a los usuarios
             //WebSite mapadmin=SWBContext.getAdminWebSite();
@@ -877,7 +897,7 @@ public class SWBAFilters extends SWBATree {
 //                User recuser=users.next();
 //
 //            }
-            String id = request.getParameter("id");
+            
             AdminFilter filter = AdminFilter.ClassMgr.getAdminFilter(id, map);
             filter.remove();
             act = "view";
@@ -898,53 +918,12 @@ public class SWBAFilters extends SWBATree {
             out.println("<PARAM NAME =\"location\" VALUE=\""+url+"\">");
             out.println("</APPLET>");
             out.println("</div>");
-
-//            out.println("<div dojoType=\"dijit.layout.SplitContainer\" orientation=\"horizontal\" sizerWidth=\"7\" activeSizing=\"false\" style=\"border: 1px solid #bfbfbf; float: left; width: 600px; height: 400px;\">"); //
-//            out.println("<div dojoType=\"dijit.layout.ContentPane\" sizeMin=\"20\" sizeShare=\"20\">");
-//            out.println("   <div dojoType=\"dijit.layout.AccordionPane\" title=\"Sitios\" selected=\"true\">");
-//            out.println("             <include src=\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/treeWidget.jsp?id=mtree\"/>");
-//            out.println("   </div>");
-//            out.println("</div>");
-//            out.println("<div dojoType=\"dijit.layout.ContentPane\" sizeMin=\"50\" sizeShare=\"50\">");
-//            //out.println("without active resizing, a smaller sizer, different starting sizes and minimum sizes");
-//
-//            out.println("<div dojoType=\"dijit.layout.SplitContainer\" orientation=\"vertical\" sizerWidth=\"7\" activeSizing=\"true\" style=\"border: 1px solid #bfbfbf; float: left; \">"); // width: 400px; margin-right: 30px; height: 300px;
-//            out.println("<div dojoType=\"dijit.layout.ContentPane\" sizeMin=\"10\" sizeShare=\"50\">");
-//            out.println("<p>SubMenús</p>");
-//            out.println("<input type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" name=\"act\" id=\"act\" value=\"foo\">");
-//            out.println("<label for=\"act\">Activar</label><br/>");
-//            out.println("<input type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" name=\"add\" id=\"add\" value=\"foo\">");
-//            out.println("<label for=\"add\">Agregar plantilla</label><br/>");
-//            out.println("<input type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" name=\"del\" id=\"del\" value=\"foo\">");
-//            out.println("<label for=\"del\">Eliminar Plantilla</label><br/>");
-//            out.println("<input type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" name=\"c3\" id=\"c3\" value=\"foo\">");
-//            out.println("<label for=\"c3\">Editar plantilla</label><br/>");
-//            out.println("</div>");
-//            out.println("<div dojoType=\"dijit.layout.ContentPane\" sizeMin=\"20\" sizeShare=\"50\" style=\"background-color: yellow; border: 3px solid purple;\">");
-//            out.println("<p>Comportamientos (TABS)</p>");
-//            out.println("<input type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" name=\"cb1\" id=\"cb1\" value=\"foo\">");
-//            out.println("<label for=\"cb1\">Informacion</label><br/>");
-//            out.println("<input type=\"checkbox\" dojoType=\"dijit.form.CheckBox\" name=\"cb2\" id=\"cb2\" value=\"foo\">");
-//            out.println("<label for=\"cb2\">Editar plantilla</label><br/>");
-//            out.println("</div>");
-////            out.println("<div dojoType=\"dijit.layout.ContentPane\" sizeMin=\"10\" sizeShare=\"50\">");
-////            out.println("    with active resizing");
-////            out.println("</div>");
-//            out.println("</div>");
-//
-//
-//
-//
-//            out.println("</div>");
-//            out.println("</div>");
-
-
             out.println("</fieldset>");
-            out.println("<fieldset>");
-            SWBResourceURL urlb = paramRequest.getRenderUrl();
-            urlb.setParameter("act", "view");
-            out.println("<input type=\"button\" name=\"bckButton\" onclick=\"submitUrl('" + urlb + "',this); return false;\" value=\"" + paramRequest.getLocaleString("btnCancel") + "\">");
-            out.println("</fieldset>");
+//            out.println("<fieldset>");
+//            SWBResourceURL urlb = paramRequest.getRenderUrl();
+//            urlb.setParameter("act", "view");
+//            out.println("<input type=\"button\" name=\"bckButton\" onclick=\"submitUrl('" + urlb + "',this); return false;\" value=\"" + paramRequest.getLocaleString("btnCancel") + "\">");
+//            out.println("</fieldset>");
             out.println("</div>");
             out.println("\r\n<script>\r\n");
             out.println("\r\nfunction doView(){\r\n");
@@ -953,7 +932,7 @@ public class SWBAFilters extends SWBATree {
             out.println("location='" + url + "';\r\n");
             out.println("\r\n}\r\n");
             out.println("</script>\r\n");
-        } else if (act.equals("edit") && request.getParameter("id") != null) {
+        } else if (act.equals("edit") && id != null) {
             out.println("<div class=\"swbform\">");
             out.println("<fieldset>");
             out.println("<div class=\"applet\">");
@@ -961,7 +940,7 @@ public class SWBAFilters extends SWBATree {
             SWBResourceURL url = paramRequest.getRenderUrl();
             url.setMode("gateway");
             url.setCallMethod(url.Call_DIRECT);
-            out.println("<PARAM NAME =\"idfilter\" VALUE=\"" + request.getParameter("id") + "\">");
+            out.println("<PARAM NAME =\"idfilter\" VALUE=\"" + id + "\">");
             out.println("<PARAM NAME =\"cgipath\" VALUE=\"" + url + "\">");
             out.println("<PARAM NAME =\"locale\" VALUE=\"" + user.getLanguage() + "\">");
             out.println("<PARAM NAME =\"tm\" VALUE=\"" + map.getId() + "\">");
@@ -970,30 +949,12 @@ public class SWBAFilters extends SWBATree {
             out.println("<PARAM NAME =\"location\" VALUE=\"" + url + "\">");
             out.println("</APPLET>");
             out.println("</div>");
-//            out.println("<div dojoType=\"dijit.layout.SplitContainer\" orientation=\"horizontal\" sizerWidth=\"7\" activeSizing=\"false\" style=\"border: 1px solid #bfbfbf; float: left; width: 400px; height: 300px;\">");
-//            out.println("<div dojoType=\"dijit.layout.ContentPane\" sizeMin=\"20\" sizeShare=\"20\">");
-//            out.println("Aquí va el arbol");
-//            out.println("</div>");
-//            out.println("<div dojoType=\"dijit.layout.ContentPane\" sizeMin=\"50\" sizeShare=\"50\">");
-//            //out.println("without active resizing, a smaller sizer, different starting sizes and minimum sizes");
-//
-//            out.println("<div dojoType=\"dijit.layout.SplitContainer\" orientation=\"vertical\" sizerWidth=\"7\" activeSizing=\"true\" style=\"border: 1px solid #bfbfbf; float: left; margin-right: 30px;  width: 400px; height: 300px;\">");
-//            out.println("<div dojoType=\"dijit.layout.ContentPane\" sizeMin=\"10\" sizeShare=\"50\">");
-//            out.println("SubMenús");
-//            out.println("</div>");
-//            out.println("<div dojoType=\"dijit.layout.ContentPane\" sizeMin=\"20\" sizeShare=\"50\" style=\"background-color: yellow; border: 3px solid purple;\">");
-//            out.println("Comportamientos (TABS)");
-//            out.println("</div>");
-////            out.println("<div dojoType=\"dijit.layout.ContentPane\" sizeMin=\"10\" sizeShare=\"50\">");
-////            out.println("    with active resizing");
-////            out.println("</div>");
-//            out.println("</div>");
             out.println("</fieldset>");
-            out.println("<fieldset>");
-            SWBResourceURL urlb = paramRequest.getRenderUrl();
-            urlb.setParameter("act", "view");
-            out.println("<input type=\"button\" name=\"bckButton\" onclick=\"submitUrl('" + urlb + "',this); return false;\" value=\"" + paramRequest.getLocaleString("btnCancel") + "\">");
-            out.println("</fieldset>");
+//            out.println("<fieldset>");
+//            SWBResourceURL urlb = paramRequest.getRenderUrl();
+//            urlb.setParameter("act", "view");
+//            out.println("<input type=\"button\" name=\"bckButton\" onclick=\"submitUrl('" + urlb + "',this); return false;\" value=\"" + paramRequest.getLocaleString("btnCancel") + "\">");
+//            out.println("</fieldset>");
             out.println("</div>");
             out.println("\r\n<script>\r\n");
             out.println("\r\nfunction doView(){\r\n");
@@ -1049,7 +1010,8 @@ public class SWBAFilters extends SWBATree {
                 SWBResourceURL urlEdit = paramRequest.getRenderUrl();
                 urlEdit.setParameter("act", "edit");
                 urlEdit.setParameter("id", filter.getId());
-                out.println("<a href=\"#\" onclick=\"submitUrl('" + urlEdit.toString() + "',this); return false;\" ><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" title=\"" + paramRequest.getLocaleString("msgLinkEdit") + "\"></a>");
+                out.println("<a href=\"#\"  onclick=\"addNewTab('" + filter.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + filter.getDisplayTitle(user.getLanguage()) + "');return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" title=\"" + paramRequest.getLocaleString("msgLinkEdit") + "\"></a>"); //onclick=\"submitUrl('"+urlchoose+"',this); return false;\"
+                //out.println("<a href=\"#\" onclick=\"submitUrl('" + urlEdit.toString() + "',this); return false;\" ><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" title=\"" + paramRequest.getLocaleString("msgLinkEdit") + "\"></a>");
 
                 out.println("</td>");
 
@@ -1062,7 +1024,7 @@ public class SWBAFilters extends SWBATree {
                 out.println("</td>");
 
                 out.println("<td >");
-                out.println(filter.getDescription());
+                out.println(filter.getDisplayDescription(user.getLanguage())!=null?filter.getDisplayDescription(user.getLanguage()):"");
                 out.println("</td>");
 
                 out.println("</tr>");
@@ -1071,11 +1033,14 @@ public class SWBAFilters extends SWBATree {
             out.println("</fieldset>");
             out.println("<fieldset>");
             Resource base = getResourceBase();
-            out.println("<form id=\"" + base.getId() + "/addAdminFilter\" action=\"" + url + "\">");
-            out.println("<button dojoType=\"dijit.form.Button\" name=\"op\" onclick=\"submitForm('" + getResourceBase().getId() + "/addAdminFilter'); return false;\">" + paramRequest.getLocaleString("msgBtnAdd") + "</button>");
-            //out.println("<input type=\"submit\" name=\"op\" value=\""+paramRequest.getLocaleString("msgBtnAdd")+"\">");
-            out.println("<input type=\"hidden\" name=\"act\" value=\"add\">");
-            out.println("</form>");
+//            out.println("<form id=\"" + base.getId() + "/addAdminFilter\" action=\"" + url + "\">");
+//            out.println("<button dojoType=\"dijit.form.Button\" name=\"op\" onclick=\"submitForm('" + getResourceBase().getId() + "/addAdminFilter'); return false;\">" + paramRequest.getLocaleString("msgBtnAdd") + "</button>");
+//            //out.println("<input type=\"submit\" name=\"op\" value=\""+paramRequest.getLocaleString("msgBtnAdd")+"\">");
+//            out.println("<input type=\"hidden\" name=\"act\" value=\"add\">");
+//            out.println("</form>");
+            String urlAddNew = SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp";
+            urlAddNew+="?scls="+AdminFilter.sclass.getEncodedURI()+"&sref="+map.getEncodedURI()+"&reloadTab=true";
+            out.println("<button dojoType=\"dijit.form.Button\" onclick=\"showDialog('" + urlAddNew + "',' "+AdminFilter.sclass.getDisplayName(user.getLanguage())+"'); reloadTab('"+base.getURI()+"'); return false;\">" + paramRequest.getLocaleString("msgBtnAdd") + "</button>");
             out.println("</fieldset>");
             out.println("</div>");
         }
