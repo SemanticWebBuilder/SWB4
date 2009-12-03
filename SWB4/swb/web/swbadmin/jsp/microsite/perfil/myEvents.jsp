@@ -11,8 +11,7 @@
             MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
             String cssPath = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/images/";
             Member member = Member.getMember(user, wpage);
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", locale);
-            SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", locale);            
             java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");            
             String year = request.getParameter("y");
             String month = request.getParameter("m");
