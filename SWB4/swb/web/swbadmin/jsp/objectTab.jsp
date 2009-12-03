@@ -10,9 +10,15 @@
     }    
 
 %>
-
 <%
-    User user=SWBContext.getSessionUser();
+    User user=SWBContext.getAdminUser();
+    if(user==null)
+    {
+        response.sendError(403);
+        return;
+    }
+%>
+<%
     String lang="es";
     if(user!=null)lang=user.getLanguage();
     response.setHeader("Cache-Control", "no-cache"); 
@@ -92,6 +98,13 @@
                     }
 
                 }
+            }
+        }
+        if(addDiv)
+        {
+            if(!SWBPortal.getAdminFilterMgr().haveAccessToWebPage(user, ob))
+            {
+                addDiv=false;
             }
         }
         if(addDiv)

@@ -30,6 +30,7 @@
     if(gen instanceof WebSite)url=SWBPortal.getDistributorPath()+"/"+gen.getId();
 
     String description=obj.getProperty(Descriptiveable.swb_description);
+    if(description!=null && description.length()>25)description=description.substring(0,25);
     String active=obj.getProperty(Activeable.swb_active);
     String sortname=obj.getProperty(WebPage.swb_webPageSortName);
 %>
@@ -49,6 +50,7 @@
 <%
     }
 %>
+    <tr><td>Model</td><td><%=obj.getModel().getName()%></td></tr>
     <tr><td>Class</td><td><%=cls.getName()%></td></tr>
     <%if(cls.getDisplayNameProperty()!=null){%><tr><td><%=cls.getDisplayNameProperty().getDisplayName(lang)%></td><td><%=title%></td></tr><%}%>
     <%if(sortname!=null){%><tr><td><%=WebPage.swb_webPageSortName.getDisplayName(lang)%></td><td><%=sortname%></td></tr><%}%>
