@@ -182,7 +182,7 @@ private final int I_INIT_PAGE = 1;
                     {
                         urlPag.setParameter("actualPage", "" + i);
     %>
-       <a href="<%=urlPag%><%if (existFilter)
+    <a href="<%=urlPag%><%if (existFilter)
                         {%>&alphabet=<%=sparams%><%}%>"><%=i%></a>
     <%
                     }
@@ -207,6 +207,7 @@ private final int I_INIT_PAGE = 1;
 %>
 <div id="friendCards">
     <%
+
             HashMap<String, SemanticProperty> mapa = new HashMap();
             Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#_ExtendedAttributes").listProperties();
             while (list.hasNext())
@@ -221,6 +222,7 @@ private final int I_INIT_PAGE = 1;
                 photo = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/perfil/profilePlaceholder.jpg";
                 cont++;
                 User userprosp = (User) itResult.next();
+
                 if (cont <= iIniPage)
                 {
                     continue;
@@ -269,35 +271,35 @@ private final int I_INIT_PAGE = 1;
                 }
                 if (userprosp.getExtendedAttribute(mapa.get("userBirthDate")) != null)
                 {
-                    age = ""+userprosp.getExtendedAttribute(mapa.get("userBirthDate"));
+                    age = "" + userprosp.getExtendedAttribute(mapa.get("userBirthDate"));
                 }
                 if (gender.equalsIgnoreCase("male"))
-                    {
-                        gender = "Masculino";
-                    }
-                    else if (gender.equalsIgnoreCase("female"))
-                    {
-                        gender = "Femenino";
-                    }
-                    else
-                    {
-                        gender = "";
-                    }
+                {
+                    gender = "Masculino";
+                }
+                else if (gender.equalsIgnoreCase("female"))
+                {
+                    gender = "Femenino";
+                }
+                else
+                {
+                    gender = "";
+                }
                 if (age == null)
-                    {
-                        age = "";
-                    }
-                    if (!age.equals(""))
-                    {
-                        java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                        Date date = df.parse(age);
-                        java.util.Calendar cal1 = java.util.Calendar.getInstance();
-                        cal1.setTime(date);
+                {
+                    age = "Sin edad";
+                }
+                if (!age.equals(""))
+                {
+                    java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    Date date = df.parse(age);
+                    java.util.Calendar cal1 = java.util.Calendar.getInstance();
+                    cal1.setTime(date);
 
-                        java.util.Calendar cal2 = java.util.Calendar.getInstance();
-                        cal2.setTime(new Date(System.currentTimeMillis()));
-                        age = "" + calcularEdad(cal1, cal2);
-                    }
+                    java.util.Calendar cal2 = java.util.Calendar.getInstance();
+                    cal2.setTime(new Date(System.currentTimeMillis()));
+                    age = "" + calcularEdad(cal1, cal2);
+                }
             %>
             <p>Sexo:<%=gender%></p>
             <p>Edad:<%=age%></p>
