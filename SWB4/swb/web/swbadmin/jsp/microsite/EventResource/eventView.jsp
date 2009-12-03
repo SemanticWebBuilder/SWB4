@@ -64,16 +64,14 @@
                         }
                     }
                 }
-                catch (Throwable e)
-                {
-                    out.println(e.getMessage());
+                catch (RuntimeException e)
+                {                    
                     SWBUtils.getLogger(this.getClass()).error(e);
                 }
             }
             ArrayList<EventElement> elements = new ArrayList();
             int elementos = 0;
-            try
-                    {
+          
             it = EventElement.ClassMgr.listEventElementByEventWebPage(wpage, wpage.getWebSite());
             it = SWBComparator.sortByCreated(it, false);
             while (it.hasNext())
@@ -95,13 +93,17 @@
                         }
                     }
                 }
-                catch (Throwable e)
-                {                    
+                catch (RuntimeException e)
+                {
+                    if (event.canView(member))
+                    {
+                            elements.add(event);
+                            elementos++;
+                    }
                     SWBUtils.getLogger(this.getClass()).error(e);
                 }
 
-            }
-            }catch(Exception e){}
+            }            
             int paginas = elementos / ELEMENETS_BY_PAGE;
             if (elementos % ELEMENETS_BY_PAGE != 0)
             {
