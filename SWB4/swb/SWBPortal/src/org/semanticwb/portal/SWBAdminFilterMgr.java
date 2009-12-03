@@ -27,9 +27,12 @@ import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.AdminFilter;
+import org.semanticwb.model.HerarquicalNode;
+import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.platform.SemanticObject;
 
 /**
  *
@@ -80,5 +83,34 @@ public class SWBAdminFilterMgr
         }
         return ret;
     }
+
+    public boolean haveAccessToSemanticObject(User user, SemanticObject obj)
+    {
+        boolean ret=false;
+        Iterator<AdminFilter> it=user.listAdminFilters();
+        if(!it.hasNext())ret=true;
+        while (it.hasNext())
+        {
+            AdminFilter adminFilter = it.next();
+            ret=adminFilter.haveAccessToSemanticObject(obj);
+            if(ret==true)break;
+        }
+        return ret;
+    }
+
+    public boolean haveAccessToHerarquicalNode(User user, String modelUri, HerarquicalNode obj)
+    {
+        boolean ret=false;
+        Iterator<AdminFilter> it=user.listAdminFilters();
+        if(!it.hasNext())ret=true;
+        while (it.hasNext())
+        {
+            AdminFilter adminFilter = it.next();
+            ret=adminFilter.haveAccessToHerarquicalNode(modelUri,obj);
+            if(ret==true)break;
+        }
+        return ret;
+    }
+
 
 }
