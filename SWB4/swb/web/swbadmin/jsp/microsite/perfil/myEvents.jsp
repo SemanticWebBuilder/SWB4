@@ -13,8 +13,7 @@
             Member member = Member.getMember(user, wpage);
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", locale);
             SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");
-            java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
-            String lang = "es";
+            java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");            
             String year = request.getParameter("y");
             String month = request.getParameter("m");
             String day = request.getParameter("d");
