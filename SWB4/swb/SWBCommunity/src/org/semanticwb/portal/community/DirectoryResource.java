@@ -340,8 +340,9 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
 
                         try
                         {
+                            System.out.println("fichero:"+fichero.getAbsolutePath());
                             item.write(fichero);
-                            ImageResizer.resizeCrop(fichero, 180, fichero, ext);
+                            ImageResizer.resize(fichero, 180, true, fichero, ext);
                         }
                         catch (Exception e)
                         {
