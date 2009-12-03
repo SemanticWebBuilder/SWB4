@@ -19,7 +19,7 @@
         if (elements.size() == 0)
         {
     %>
-    <li>&nbsp;</li>
+    <li>No hay actividad durante las últimas dos semanas</li>
     <%                }
 
     for (MicroSiteElement element : elements)
