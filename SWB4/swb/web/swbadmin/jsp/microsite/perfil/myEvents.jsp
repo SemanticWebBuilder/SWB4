@@ -8,7 +8,7 @@
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             User user = paramRequest.getUser();
             WebPage wpage = paramRequest.getWebPage();
-            MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
+            //MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
             String cssPath = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/images/";
             Member member = Member.getMember(user, wpage);
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", locale);            
