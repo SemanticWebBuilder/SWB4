@@ -1172,6 +1172,7 @@
           </swbxf:HerarquicalNode>
         </swb:hasHerarquicalNode>
         <rdfs:subClassOf rdf:resource="#SWBModel"/>
+        <swb:hasClass rdf:resource="#AssMember"/>
         <swb:hasClass rdf:resource="#Calendar"/>
         <swb:hasClass rdf:resource="#Rule"/>
         <swb:hasHerarquicalNode>
@@ -1244,6 +1245,15 @@
         <swb:hasClass rdf:resource="#ResourceRef"/>
         <swb:hasClass rdf:resource="#AdminFilter"/>
         <swb:hasClass rdf:resource="#Dns"/>
+        <swb:hasClass>
+          <swb:Class rdf:ID="PFlowInstance">
+            <rdfs:subClassOf rdf:resource="#PFlowable"/>
+            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swb:autogenId>
+            <rdfs:subClassOf rdf:resource="#SWBClass"/>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Class>
+        </swb:hasClass>
         <rdfs:subClassOf rdf:resource="#FilterableClass"/>
         <swb:hasHerarquicalNode>
           <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Languages">
@@ -1258,10 +1268,9 @@
         </swb:hasHerarquicalNode>
         <swb:hasClass rdf:resource="#PFlowRef"/>
         <swb:hasClass rdf:resource="#Country"/>
+        <swb:hasClass rdf:resource="#CalendarRef"/>
         <swb:hasClass rdf:resource="#Association"/>
         <rdfs:subClassOf rdf:resource="#FilterableNode"/>
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >false</swb:autogenId>
         <swb:hasClass rdf:resource="#VersionInfo"/>
         <swb:hasHerarquicalNode>
           <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PFlows">
@@ -1559,15 +1568,7 @@
       <owl:ObjectProperty rdf:ID="hasPFlowInstance"/>
     </owl:inverseOf>
     <rdfs:range rdf:resource="#PFlow"/>
-    <rdfs:domain>
-      <swb:Class rdf:ID="PFlowInstance">
-        <rdfs:subClassOf rdf:resource="#PFlowable"/>
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:subClassOf rdf:resource="#SWBClass"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:domain>
+    <rdfs:domain rdf:resource="#PFlowInstance"/>
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >pflow</swb:propertyCodeName>
   </owl:ObjectProperty>
@@ -3168,6 +3169,28 @@
     <swbxf:timeConstraints rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >{timeFormat='hh:mm:ss a'}</swbxf:timeConstraints>
   </swbxf:TimeElement>
+  <swb:Model rdf:ID="AdminWebSite">
+    <swb:hasClass rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTStrategies"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Templates"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Dnss"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Languages"/>
+    <rdfs:label xml:lang="es">Sitio de Administración</rdfs:label>
+    <rdfs:label xml:lang="en">Admin WebSite</rdfs:label>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTSystems"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Devices"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Calendars"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="#WebSite"/>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_AdminWebSite">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconWebSite</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <swb:hasClass rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTContents"/>
+  </swb:Model>
   <swbxf:FileUpload rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUploadHTML">
     <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
     >10000000</swbxf:fileMaxSize>
