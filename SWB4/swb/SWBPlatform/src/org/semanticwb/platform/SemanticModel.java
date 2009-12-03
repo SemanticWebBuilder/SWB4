@@ -44,10 +44,12 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
+import com.hp.hpl.jena.sparql.util.CollectionUtils;
 import java.io.File;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
@@ -71,6 +73,8 @@ public class SemanticModel
     private String m_nameSpace;
     private SemanticObject m_modelObject;
     private boolean m_trace=true;
+
+    private List m_classes=null;
 
     public SemanticModel(String name, Model model)
     {
@@ -517,4 +521,38 @@ public class SemanticModel
         Query query = QueryFactory.create(queryString);
         return QueryExecutionFactory.create(query, m_ont);
     }
+
+    /**
+     * Lista las clases relacionadas al modelo y sus superclases con la propiedad hasClass
+     * @return clases relacionadas al modelo con la propiedad hasClass
+     */
+    public Iterator<SemanticClass> listModelClasses()
+    {
+        SemanticClass cls=getModelObject().getSemanticClass();
+        if(m_classes==null)
+        {
+            m_classes=SWBUtils.Collections.copyIterator(cls.listModelClasses());
+            Iterator<SemanticClass> it=cls.listSuperClasses();
+            while (it.hasNext())
+            {
+                SemanticClass semanticClass = it.next();
+                if(semanticClass.isSWBModel())
+                {
+                    m_classes.addAll(SWBUtils.Collections.copyIterator(semanticClass.listModelClasses()));
+                }
+            }
+
+        }
+        return m_classes.iterator();
+    }
+
+    public boolean hasModelClass(SemanticClass cls)
+    {
+        if(m_classes==null)
+        {
+            listModelClasses();
+        }
+        return m_classes.contains(cls);
+    }
+
 }
