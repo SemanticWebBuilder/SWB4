@@ -210,6 +210,7 @@
 
     public void addHerarquicalNode(JSONArray arr, HerarquicalNode node, SemanticObject obj, boolean addChilds, User user) throws JSONException
     {
+        if(!SWBPortal.getAdminFilterMgr().haveAccessToHerarquicalNode(user, obj.getURI(), node))return;
         SemanticClass cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(node.getHClass().getURI());
         String pf=node.getPropertyFilter();
         JSONObject jobj=getNode("HN|"+obj.getURI()+"|"+node.getURI(), node.getDisplayTitle(user.getLanguage()), "HerarquicalNode", node.getIconClass());
@@ -302,6 +303,7 @@
     //TODO:Separar en una clase treeController
     public void addResourceType(JSONArray arr, SemanticObject obj, boolean addChilds, boolean addDummy, User user) throws JSONException
     {
+        if(!SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(user, obj))return;
         String lang=user.getLanguage();
         boolean hasChilds=false;
         SemanticClass cls=obj.getSemanticClass();
@@ -462,6 +464,8 @@
 
     public void addSemanticObject(JSONArray arr, SemanticObject obj, boolean addChilds, boolean addDummy, SemanticObject virparent, User user) throws JSONException
     {
+        if(!SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(user, obj))return;
+
         String lang=user.getLanguage();
         boolean hasChilds=false;
         SemanticClass cls=obj.getSemanticClass();
@@ -471,6 +475,12 @@
 
         boolean virtual=virparent!=null;
         //System.out.println("obj:"+obj+" virtual:"+virparent);
+
+        //TODO:Comentaresto cuando liberemos rep. docs.
+        if(cls.equals(org.semanticwb.repository.Workspace.sclass))
+        {
+            return;
+        }
         
         //TODO:validar treeController
         //System.out.println("type:"+type);
