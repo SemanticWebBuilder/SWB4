@@ -52,6 +52,8 @@ import org.semanticwb.platform.SemanticObserver;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.api.SWBResource;
 import org.semanticwb.portal.indexer.SWBIndexer;
+import org.semanticwb.repository.Unstructured;
+import org.semanticwb.repository.Workspace;
 
 /**
  *
@@ -84,6 +86,17 @@ public class SWBServiceMgr implements SemanticObserver {
                     {
                         java.io.File dir=new java.io.File(SWBPortal.getWorkPath() + "/models/"+ obj.getId());
                         dir.mkdirs();
+                    }
+                    if(obj.instanceOf(Workspace.sclass))
+                    {
+                        Workspace ws=(Workspace)obj.createGenericInstance();
+                        if (ws.getRoot() == null)
+                        {
+                            Unstructured root = Unstructured.ClassMgr.createUnstructured(ws);
+                            root.setName("jcr:root");
+                            root.setPath("/");
+                            ws.setRoot(root);
+                        }
                     }
                     if(obj.instanceOf(WebSite.sclass))
                     {
