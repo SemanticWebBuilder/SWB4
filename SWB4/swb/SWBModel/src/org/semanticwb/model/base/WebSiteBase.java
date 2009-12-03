@@ -17,6 +17,7 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
        public static final org.semanticwb.platform.SemanticClass swb_RuleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RuleRef");
        public static final org.semanticwb.platform.SemanticClass swb_Language=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Language");
        public static final org.semanticwb.platform.SemanticClass swb_Dns=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Dns");
+       public static final org.semanticwb.platform.SemanticClass swb_AssMember=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#AssMember");
        public static final org.semanticwb.platform.SemanticClass swb_Rule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Rule");
        public static final org.semanticwb.platform.SemanticClass swb_Camp=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Camp");
        public static final org.semanticwb.platform.SemanticClass swb_VersionInfo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#VersionInfo");
@@ -29,8 +30,10 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
        public static final org.semanticwb.platform.SemanticClass swb_PFlow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlow");
        public static final org.semanticwb.platform.SemanticClass swb_ResourceFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceFilter");
        public static final org.semanticwb.platform.SemanticClass swb_TemplateRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#TemplateRef");
+       public static final org.semanticwb.platform.SemanticClass swb_CalendarRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#CalendarRef");
        public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
        public static final org.semanticwb.platform.SemanticClass swb_ResourceType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceType");
+       public static final org.semanticwb.platform.SemanticClass swb_PFlowInstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlowInstance");
        public static final org.semanticwb.platform.SemanticClass swb_TemplateGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#TemplateGroup");
        public static final org.semanticwb.platform.SemanticClass swb_RoleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RoleRef");
        public static final org.semanticwb.platform.SemanticClass swb_WebSite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebSite");
@@ -618,6 +621,36 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
         return org.semanticwb.model.Dns.ClassMgr.hasDns(id, this);
     }
 
+    public org.semanticwb.model.AssMember getAssMember(String id)
+    {
+        return org.semanticwb.model.AssMember.ClassMgr.getAssMember(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.model.AssMember> listAssMembers()
+    {
+        return org.semanticwb.model.AssMember.ClassMgr.listAssMembers(this);
+    }
+
+    public org.semanticwb.model.AssMember createAssMember(String id)
+    {
+        return org.semanticwb.model.AssMember.ClassMgr.createAssMember(id,this);
+    }
+
+    public org.semanticwb.model.AssMember createAssMember()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb_AssMember);
+        return org.semanticwb.model.AssMember.ClassMgr.createAssMember(String.valueOf(id),this);
+    } 
+
+    public void removeAssMember(String id)
+    {
+        org.semanticwb.model.AssMember.ClassMgr.removeAssMember(id, this);
+    }
+    public boolean hasAssMember(String id)
+    {
+        return org.semanticwb.model.AssMember.ClassMgr.hasAssMember(id, this);
+    }
+
     public org.semanticwb.model.Rule getRule(String id)
     {
         return org.semanticwb.model.Rule.ClassMgr.getRule(id, this);
@@ -1020,6 +1053,36 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
         return org.semanticwb.model.TemplateRef.ClassMgr.hasTemplateRef(id, this);
     }
 
+    public org.semanticwb.model.CalendarRef getCalendarRef(String id)
+    {
+        return org.semanticwb.model.CalendarRef.ClassMgr.getCalendarRef(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.model.CalendarRef> listCalendarRefs()
+    {
+        return org.semanticwb.model.CalendarRef.ClassMgr.listCalendarRefs(this);
+    }
+
+    public org.semanticwb.model.CalendarRef createCalendarRef(String id)
+    {
+        return org.semanticwb.model.CalendarRef.ClassMgr.createCalendarRef(id,this);
+    }
+
+    public org.semanticwb.model.CalendarRef createCalendarRef()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb_CalendarRef);
+        return org.semanticwb.model.CalendarRef.ClassMgr.createCalendarRef(String.valueOf(id),this);
+    } 
+
+    public void removeCalendarRef(String id)
+    {
+        org.semanticwb.model.CalendarRef.ClassMgr.removeCalendarRef(id, this);
+    }
+    public boolean hasCalendarRef(String id)
+    {
+        return org.semanticwb.model.CalendarRef.ClassMgr.hasCalendarRef(id, this);
+    }
+
     public org.semanticwb.model.Resource getResource(String id)
     {
         return org.semanticwb.model.Resource.ClassMgr.getResource(id, this);
@@ -1072,6 +1135,36 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
     public boolean hasResourceType(String id)
     {
         return org.semanticwb.model.ResourceType.ClassMgr.hasResourceType(id, this);
+    }
+
+    public org.semanticwb.model.PFlowInstance getPFlowInstance(String id)
+    {
+        return org.semanticwb.model.PFlowInstance.ClassMgr.getPFlowInstance(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.model.PFlowInstance> listPFlowInstances()
+    {
+        return org.semanticwb.model.PFlowInstance.ClassMgr.listPFlowInstances(this);
+    }
+
+    public org.semanticwb.model.PFlowInstance createPFlowInstance(String id)
+    {
+        return org.semanticwb.model.PFlowInstance.ClassMgr.createPFlowInstance(id,this);
+    }
+
+    public org.semanticwb.model.PFlowInstance createPFlowInstance()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb_PFlowInstance);
+        return org.semanticwb.model.PFlowInstance.ClassMgr.createPFlowInstance(String.valueOf(id),this);
+    } 
+
+    public void removePFlowInstance(String id)
+    {
+        org.semanticwb.model.PFlowInstance.ClassMgr.removePFlowInstance(id, this);
+    }
+    public boolean hasPFlowInstance(String id)
+    {
+        return org.semanticwb.model.PFlowInstance.ClassMgr.hasPFlowInstance(id, this);
     }
 
     public org.semanticwb.model.TemplateGroup getTemplateGroup(String id)

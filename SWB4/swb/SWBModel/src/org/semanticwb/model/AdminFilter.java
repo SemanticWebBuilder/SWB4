@@ -45,7 +45,10 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase
     private ArrayList<WebPage> pages=null;
     private ArrayList<WebPage> vpages=null;
     private HashMap<SemanticClass,ArrayList> classes=null;
+    private ArrayList<SemanticObject> sobjects=null;
+    private HashMap<String,ArrayList<HerarquicalNode>> hnodes=null;
     private boolean allClasses=false;
+    private boolean allSites=false;
 
     public AdminFilter(org.semanticwb.platform.SemanticObject base)
     {
@@ -55,8 +58,11 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase
     
     public void init()
     {
+        allClasses=false;
+        allSites=false;
         pages=new ArrayList();
         vpages=new ArrayList();
+        sobjects=new ArrayList();
         classes=new HashMap();
 
         //Menus
@@ -160,6 +166,46 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase
             }
         }
 
+        //Sites
+        {
+            Document dom=getDom();
+            NodeList list=dom.getElementsByTagName("sites");
+            if(list.getLength()>0)list=((Element)list.item(0)).getElementsByTagName("node");
+            for(int x=0;x<list.getLength();x++)
+            {
+                Element ele=(Element)list.item(x);
+                String val=ele.getAttribute("reload");
+
+                if(val.startsWith("getServer"))
+                {
+                    allSites=true;
+                }else if(val.startsWith("getSemanticObject.HN|"))
+                {
+                    String aux=val.substring(21);
+                    StringTokenizer st=new StringTokenizer(aux,"|");
+                    String modeluri=st.nextToken();
+                    String hnuri=st.nextToken();
+                    SemanticObject obj=SemanticObject.createSemanticObject(hnuri);
+                    if(obj!=null)
+                    {
+                        HerarquicalNode node=(HerarquicalNode)obj.createGenericInstance();
+                        ArrayList<HerarquicalNode> arr=hnodes.get(modeluri);
+                        if(arr==null)
+                        {
+                            arr=new ArrayList();
+                            hnodes.put(modeluri, arr);
+                        }
+                        arr.add(node);
+                    }
+                }else if(val.startsWith("getSemanticObject."))
+                {
+                    String id=ele.getAttribute("id");
+                    SemanticObject obj=SemanticObject.createSemanticObject(id);
+                    sobjects.add(obj);
+                }
+            }
+        }
+
     }
     
     private void addMenu(WebPage page)
@@ -174,10 +220,28 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase
         }
     }
 
+    public boolean haveAccessToHerarquicalNode(SWBModel model, HerarquicalNode node)
+    {
+        boolean ret=false;
+        ArrayList<HerarquicalNode> arr=hnodes.get(model.getURI());
+        if(arr!=null)
+        {
+            ret=arr.contains(node);
+        }
+        return ret;
+    }
+
     public boolean haveAccessToSemanticObject(SemanticObject obj)
     {
         boolean ret=false;
-
+        SemanticObject model=obj.getModel().getModelObject();
+        if(sobjects.contains(model))
+        {
+            ret=true;
+        }else
+        {
+            //obj.list
+        }
         return ret;
     }
 

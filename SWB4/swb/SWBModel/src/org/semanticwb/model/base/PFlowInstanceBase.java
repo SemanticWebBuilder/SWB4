@@ -165,4 +165,9 @@ public abstract class PFlowInstanceBase extends org.semanticwb.model.SWBClass im
     {
         getSemanticObject().setProperty(swb_pfiStep, value);
     }
+
+    public org.semanticwb.model.WebSite getWebSite()
+    {
+        return (org.semanticwb.model.WebSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

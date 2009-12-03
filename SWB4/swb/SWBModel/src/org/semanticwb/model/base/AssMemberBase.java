@@ -155,4 +155,9 @@ public abstract class AssMemberBase extends org.semanticwb.model.SWBClass
          }
          return ret;
     }
+
+    public org.semanticwb.model.WebSite getWebSite()
+    {
+        return (org.semanticwb.model.WebSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }
