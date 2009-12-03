@@ -15,7 +15,43 @@
             String rank = df.format(event.getRank());
             if (event != null && event.canView(member))
             {
+                String comienza = "Sin determinar";
+                String termina = "Sin determinar";
 
+                String hcomienza = "Sin determinar";
+                String htermina = "Sin determinar";
+                try
+                {
+                    comienza = event.getStartDate() == null ? "Sin determinar" : dateFormat.format(event.getStartDate());
+
+                }
+                catch (Exception e)
+                {
+                }
+                try
+                {
+
+                    termina = event.getEndDate() == null ? "Sin determinar" : dateFormat.format(event.getEndDate());
+                }
+                catch (Exception e)
+                {
+                }
+                try
+                {
+                    hcomienza = event.getStartTime() == null ? "Sin determinar" : timeFormat.format(event.getStartTime());
+
+                }
+                catch (Exception e)
+                {
+                }
+                try
+                {
+
+                    htermina = event.getEndTime() == null ? "Sin determinar" : timeFormat.format(event.getEndTime());
+                }
+                catch (Exception e)
+                {
+                }
                 String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/EventResource/noevent.jpg";
                 String path = event.getWorkPath();
                 if (event.getEventThumbnail() != null)
@@ -55,8 +91,8 @@
             <img id="img_<%=event.getId()%>" src="<%= pathPhoto%>" alt="<%=event.getTitle()%>" border="0" width="50%" height="50%" />
         </a>
     </p>
-    <p><span class="itemTitle">Comienza:</span> <%= (event.getStartDate() == null ? "" : dateFormat.format(event.getStartDate()))%> a las <%= (event.getStartTime() == null ? "" : timeFormat.format(event.getStartTime()))%><br>
-        <span class="itemTitle">Termina:&nbsp;&nbsp;&nbsp;</span> <%= (event.getEndDate() == null ? "" : dateFormat.format(event.getEndDate()))%> a las <%= (event.getEndTime() == null ? "" : timeFormat.format(event.getEndTime()))%></p>
+    <p><span class="itemTitle">Comienza:</span> <%= comienza%> a las <%= hcomienza%><br>
+        <span class="itemTitle">Termina:&nbsp;&nbsp;&nbsp;</span> <%= termina%> a las <%= htermina%></p>
 
     <br/>
     <%
@@ -72,6 +108,8 @@
 
 
     <%
+    try
+            {
             GregorianCalendar cal = new GregorianCalendar(new Locale("es"));
             SimpleDateFormat sf = new SimpleDateFormat("MMMM", new Locale("es"));
             String smonth = sf.format(event.getStartDate());
@@ -84,50 +122,59 @@
         <ul class="dias semana">
             <li>D</li><li>L</li><li>M</li><li>M</li><li>J</li><li>V</li><li>S</li>
         </ul>
+        <%
+            
+                cal.setTime(event.getStartDate());
+                java.util.Calendar cend = java.util.Calendar.getInstance();
+                cend.setTime(event.getEndDate());
+                java.util.Calendar cinit = java.util.Calendar.getInstance();
+                cinit.setTime(event.getStartDate());
+        %>
         <ul class="dias">
             <%
-            int inicio = 1;
-            int fin = cal.getActualMaximum(cal.DAY_OF_MONTH);
-            cal.set(cal.DAY_OF_MONTH, 1);
-            int offset = cal.get(cal.DAY_OF_WEEK) - cal.SUNDAY;
-            for (int i = 1; i <= offset; i++)
-            {
+                int inicio = 1;
+                int fin = cal.getActualMaximum(cal.DAY_OF_MONTH);
+                cal.set(cal.DAY_OF_MONTH, 1);
+                int offset = cal.get(cal.DAY_OF_WEEK) - cal.SUNDAY;
+                for (int i = 1; i <= offset; i++)
+                {
             %>
             <li>&nbsp;</li>
-            <%            }
-            cal.setTime(event.getStartDate());
-
-            java.util.Calendar cend = java.util.Calendar.getInstance();
-            cend.setTime(event.getEndDate());
-            java.util.Calendar cinit = java.util.Calendar.getInstance();
-            cinit.setTime(event.getStartDate());
-
-            for (int i = inicio; i <= fin; i++)
-            {
-                boolean active = false;
-                cal.set(cal.DAY_OF_MONTH, i);
-                if (cal.compareTo(cinit) >= 0 && cal.compareTo(cend) <= 0)
-                {
-                    active = true;
+            <%
                 }
-                if (active)
+                for (int i = inicio; i <= fin; i++)
                 {
+                    boolean active = false;
+                    cal.set(cal.DAY_OF_MONTH, i);
+                    if (cal.compareTo(cinit) >= 0 && cal.compareTo(cend) <= 0)
+                    {
+                        active = true;
+                    }
+                    if (active)
+                    {
             %>
             <li><a href="#"><%=i%></a></li>
             <%
-                }
-                else
-                {
+                            }
+                            else
+                            {
             %>
             <li><%=i%></li>
             <%
 
+                    }
                 }
-            }
             %>            
         </ul>
+       
         <div class="clear">&nbsp;</div>
     </div>
+         <%
+            }
+            catch (Exception e)
+            {
+            }
+        %>
     <p>Audiencia: <%= event.getAudienceType()%></p>
     <p>Lugar: <strong><%= event.getPlace()%></strong></p>
     <p>Asistentes:
