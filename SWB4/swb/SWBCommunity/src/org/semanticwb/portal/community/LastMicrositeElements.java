@@ -23,16 +23,17 @@
 package org.semanticwb.portal.community;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.TreeSet;
+import java.util.Calendar;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericAdmResource;
@@ -48,161 +49,100 @@ public class LastMicrositeElements extends GenericAdmResource
 
     private static Logger log = SWBUtils.getLogger(LastMicrositeElements.class);
     private static final String NL = "\r\n";
-    private static final long SLEEP = 1000L * 60 * 5;
-    private static Long timer = new Long(System.currentTimeMillis() + SLEEP);
-    protected static boolean flag = false;
-    protected static ArrayList<MicroSiteElement> cachedelements = new ArrayList<MicroSiteElement>();
-
-    private synchronized void updateCache(SWBParamRequest paramRequest)
-    {
-        if (flag)
-        {
-            return;
-        }
-        flag = true;
-        Hilos hilo = new Hilos()
-        {
-        };
-        hilo.prepara(this, paramRequest);
-        hilo.start();
-
-    }
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-
-        if ((cachedelements.size() == 0 || (timer < System.currentTimeMillis())) && !flag)
+        // long lastTime = System.currentTimeMillis();
+        int limit = 3;
+        String slimit = this.getResourceBase().getAttribute("limit", "3");
+        try
         {
-            updateCache(paramRequest);
+            limit = Integer.parseInt(slimit);
         }
+        catch (NumberFormatException nfe)
+        {
+            log.error(nfe);
 
-        //ArrayList<MicroSiteElement> elements = new ArrayList<MicroSiteElement>();
-        /*StringBuilder prefixStatement = new StringBuilder();
-        prefixStatement.append(" PREFIX swb: <http://www.semanticwebbuilder.org/swb4/ontology#>" + NL);
-        prefixStatement.append(" PREFIX swbcomm: <http://www.semanticwebbuilder.org/swb4/community#>" + NL);
-        prefixStatement.append(" PREFIX rdf: <" + SemanticVocabulary.RDF_URI + "> " + NL);
-        prefixStatement.append(" PREFIX rdfs: <" + SemanticVocabulary.RDFS_URI + "> " + NL);
-        //prefixStatement.append("SELECT ?x ?date WHERE {?x swb:created ?date . ?x rdf:type swbcomm:MicroSiteElement} ORDER BY DESC(?date) LIMIT " + limit);
-        //prefixStatement.append("SELECT DISTINCT ?x ?date WHERE { ?x a swbcomm:MicroSiteElement . ?x swb:created ?date . FILTER(!regex(str(?x),\"^" + NewsElement.sclass.getURI() + "\")) } ORDER BY DESC(?date) LIMIT " + limit);
-        prefixStatement.append("SELECT DISTINCT ?x ?date WHERE { ?x a swbcomm:MicroSiteElement . ?x swb:created ?date } ORDER BY DESC(?date) LIMIT " + limit);
-        QueryExecution qe = paramRequest.getWebPage().getSemanticObject().getModel().sparQLOntologyQuery(prefixStatement.toString());
-        ResultSet rs = qe.execSelect();
-        while (rs.hasNext())
-        {
-        QuerySolution rb = rs.nextSolution();
-        if (rb.get("?x") != null && rb.get("?x").isResource())
-        {
-        Resource res = rb.getResource("?x");
-        SemanticObject obj = SemanticObject.createSemanticObject(res.getURI());
-        MicroSiteElement element = (MicroSiteElement) obj.createGenericInstance();
-        elements.add(element);
         }
-        }*/
+        ArrayList<MicroSiteElement> elements = new ArrayList<MicroSiteElement>();
+
+        WebSite site = paramRequest.getWebPage().getWebSite();
 
 
-        /*        while(oelements.hasNext())
+        Connection con = null;
+        try
         {
-        SemanticObject obj=oelements.next();
-        MicroSiteElement element=(MicroSiteElement) obj.createGenericInstance();
-        elements.add(element);
+            con = SWBUtils.DB.getDefaultConnection();
+            Calendar today = Calendar.getInstance();
+            today.setTime(new java.util.Date(System.currentTimeMillis()));
+            Calendar dayago14 = Calendar.getInstance();
+            dayago14.add(Calendar.DAY_OF_MONTH, -14);
+            dayago14.set(Calendar.HOUR, 0);
+            dayago14.set(Calendar.MINUTE, 0);
+            dayago14.set(Calendar.SECOND, 0);
+
+            PreparedStatement pt = con.prepareStatement("SELECT log_objuri FROM swb_admlog where log_action='create' and log_modelid=? and log_date BETWEEN ? AND ? order by log_date desc");
+            pt.setString(1, site.getId());
+            pt.setTimestamp(3, new java.sql.Timestamp(today.getTime().getTime()));
+            pt.setTimestamp(2, new java.sql.Timestamp(dayago14.getTime().getTime()));
+            ResultSet rs = pt.executeQuery();
+            int i = 0;
+            while (rs.next())
+            {
+                String uri = rs.getString("log_objuri");
+                SemanticObject obj = SemanticObject.createSemanticObject(uri);
+                if (obj != null && obj.getSemanticClass() != null && obj.getSemanticClass().isSubClass(MicroSiteElement.sclass))
+                {
+                    MicroSiteElement element=(MicroSiteElement) obj.createGenericInstance();
+                    elements.add(element);
+                    i++;
+                    if (i == limit)
+                    {
+                        break;
+                    }
+                }
+            }
+            rs.close();
+            pt.close();
         }
-        System.out.println("Instancias Genericas:"+(System.currentTimeMillis()-lastTime));
-        lastTime = System.currentTimeMillis();
-        Iterator itElements=SWBComparator.sortByCreated(elements.iterator(), false);
-        System.out.println("Sorting:"+(System.currentTimeMillis()-lastTime));
-        lastTime = System.currentTimeMillis();
-        elements = new ArrayList<MicroSiteElement>();
-        int i=0;
-        while(itElements.hasNext())
+        catch (SQLException e)
         {
-        MicroSiteElement element=(MicroSiteElement)itElements.next();
-        elements.add(element);
-        i++;
-        if(i==limit)
+            log.error(e);
+        }
+        finally
         {
-        break;
+            if (con != null)
+            {
+                try
+                {
+                    con.close();
+                }
+                catch (Exception e)
+                {
+                    log.error(e);
+                }
+            }
         }
-        }
-         */
+
+
+
+
         String path = "/swbadmin/jsp/microsite/LastMicrositeElements/LastMicrositeElementsView.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
         try
         {
             request.setAttribute("paramRequest", paramRequest);
-            request.setAttribute("elements", cachedelements);
+            request.setAttribute("elements", elements);
             dis.include(request, response);
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             log.error(e);
         }
+//        System.out.println("procece vista:"+(System.currentTimeMillis()-lastTime));
+//        lastTime = System.currentTimeMillis();
 
 
-    }
-}
-
-class Hilos extends Thread
-{
-
-    private static Logger log = SWBUtils.getLogger(Hilos.class);
-    LastMicrositeElements este = null;
-    SWBParamRequest paramRequest = null;
-
-    public void prepara(LastMicrositeElements ele, SWBParamRequest para)
-    {
-        este = ele;
-        paramRequest = para;
-    }
-
-    public void run()
-    {
-        ArrayList<MicroSiteElement> elements = new ArrayList<MicroSiteElement>();
-      //  long lastTime = System.currentTimeMillis();
-       // System.out.println("***************>>>>>>>>>>>> LastMicrositeElements");
-        int limit = 3;
-        String slimit = este.getResourceBase().getAttribute("limit", "3");
-        try
-        {
-            limit = Integer.parseInt(slimit);
-        } catch (NumberFormatException nfe)
-        {
-            log.error(nfe);
-
-        }
-
-        WebSite site = paramRequest.getWebPage().getWebSite();
-        Iterator<SemanticObject> oelements = site.getSemanticObject().getModel().listInstancesOfClass(MicroSiteElement.sclass, true);
-    //    System.out.println("Iterador Inicial:" + (System.currentTimeMillis() - lastTime));
-    //    lastTime = System.currentTimeMillis();
-        TreeSet<SemanticObject> setVals = new TreeSet<SemanticObject>(new Comparator()
-        {
-
-            public int compare(Object arg0, Object arg1)
-            {
-                SemanticObject obj0 = (SemanticObject) arg0;
-                SemanticObject obj1 = (SemanticObject) arg1;
-                return obj1.getProperty(org.semanticwb.model.comm.MicroSite.swb_created).compareTo(obj0.getProperty(org.semanticwb.model.comm.MicroSite.swb_created));
-            }
-        });
-        while (oelements.hasNext())
-        {
-            setVals.add(oelements.next());
-        }
-        Iterator<SemanticObject> itElements = setVals.iterator();
-        int i = 0;
-
-        while (itElements.hasNext())
-        {
-            MicroSiteElement element = (MicroSiteElement) itElements.next().createGenericInstance();
-            ;
-            elements.add(element);
-            i++;
-            if (i == limit)
-            {
-                break;
-            }
-        }
-        este.cachedelements = elements;
-        este.flag = false;
     }
 }
