@@ -1,5 +1,5 @@
 <%@page contentType="text/html"%>
-<%@page import="java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<%@page import="org.semanticwb.*,java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <script type="text/javascript">
     function validateremove(url, title)
     {
@@ -52,11 +52,21 @@
             {
 
                 EventElement event = it.next();
-                end.setTime(event.getEndDate());
-                end.add(end.MONTH, 1);
-                if (today.after(end) || today.equals(end))
+                try
                 {
-                    event.remove();
+                    if (event.getEndDate() != null)
+                    {
+                        end.setTime(event.getEndDate());
+                        end.add(end.MONTH, 1);
+                        if (today.after(end) || today.equals(end))
+                        {
+                            event.remove();
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    SWBUtils.getLogger(this.getClass()).error(e);
                 }
             }
             ArrayList<EventElement> elements = new ArrayList();
@@ -66,16 +76,27 @@
             while (it.hasNext())
             {
                 EventElement event = it.next();
-                end.setTime(event.getEndDate());
-                end.set(end.HOUR_OF_DAY, 23);
-                end.set(end.MINUTE, 59);
-                end.set(end.SECOND, 59);
-                end.set(end.MILLISECOND, 00);
-                if (event.canView(member) && !today.after(end))
+                try
                 {
-                    elements.add(event);
-                    elementos++;
+                    if (event.getEndDate() != null)
+                    {
+                        end.setTime(event.getEndDate());
+                        end.set(end.HOUR_OF_DAY, 23);
+                        end.set(end.MINUTE, 59);
+                        end.set(end.SECOND, 59);
+                        end.set(end.MILLISECOND, 00);
+                        if (event.canView(member) && !today.after(end))
+                        {
+                            elements.add(event);
+                            elementos++;
+                        }
+                    }
                 }
+                catch (Exception e)
+                {
+                    SWBUtils.getLogger(this.getClass()).error(e);
+                }
+
             }
             int paginas = elementos / ELEMENETS_BY_PAGE;
             if (elementos % ELEMENETS_BY_PAGE != 0)
