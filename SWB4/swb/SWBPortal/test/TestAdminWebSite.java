@@ -478,7 +478,7 @@ public class TestAdminWebSite {
         File file=new File(SWBUtils.getApplicationPath()+"../web/swbadmin/rdf/SWBAdmin.nt");
         try
         {
-            System.out.println("file:"+file.getCanonicalPath());
+            //System.out.println("file:"+file.getCanonicalPath());
             FileOutputStream out=new FileOutputStream(file);
             site.getSemanticObject().getModel().write(out,"N-TRIPLE");
         }catch(Exception e){e.printStackTrace();}
@@ -488,7 +488,7 @@ public class TestAdminWebSite {
         file=new File(SWBUtils.getApplicationPath()+"../web/swbadmin/rdf/SWBOntEdit.nt");
         try
         {
-            System.out.println("file:"+file.getCanonicalPath());
+            //System.out.println("file:"+file.getCanonicalPath());
             FileOutputStream out=new FileOutputStream(file);
             site.getSemanticObject().getModel().write(out,"N-TRIPLE");
         }catch(Exception e){e.printStackTrace();}
