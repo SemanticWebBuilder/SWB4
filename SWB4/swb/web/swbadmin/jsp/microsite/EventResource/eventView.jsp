@@ -54,7 +54,7 @@
                 EventElement event = it.next();
                 try
                 {
-                    if (event.getEndDate() != null)
+                    if (event!=null && event.getEndDate() != null)
                     {
                         end.setTime(event.getEndDate());
                         end.add(end.MONTH, 1);
@@ -64,13 +64,16 @@
                         }
                     }
                 }
-                catch (Exception e)
+                catch (Throwable e)
                 {
+                    out.println(e.getMessage());
                     SWBUtils.getLogger(this.getClass()).error(e);
                 }
             }
             ArrayList<EventElement> elements = new ArrayList();
             int elementos = 0;
+            try
+                    {
             it = EventElement.ClassMgr.listEventElementByEventWebPage(wpage, wpage.getWebSite());
             it = SWBComparator.sortByCreated(it, false);
             while (it.hasNext())
@@ -78,7 +81,7 @@
                 EventElement event = it.next();
                 try
                 {
-                    if (event.getEndDate() != null)
+                    if (event!=null && event.getEndDate() != null)
                     {
                         end.setTime(event.getEndDate());
                         end.set(end.HOUR_OF_DAY, 23);
@@ -92,12 +95,13 @@
                         }
                     }
                 }
-                catch (Exception e)
-                {
+                catch (Throwable e)
+                {                    
                     SWBUtils.getLogger(this.getClass()).error(e);
                 }
 
             }
+            }catch(Exception e){}
             int paginas = elementos / ELEMENETS_BY_PAGE;
             if (elementos % ELEMENETS_BY_PAGE != 0)
             {
@@ -230,6 +234,7 @@
             int iElement = 0;
             for (EventElement event : elements)
             {
+                
                 SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", event.getURI());
                 if (event.canView(member))
                 {
