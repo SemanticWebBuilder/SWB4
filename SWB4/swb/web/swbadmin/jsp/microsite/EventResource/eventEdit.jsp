@@ -62,28 +62,28 @@ Error: Elemento no encontrado...
         if(!event_startDate)
         {
             alert('¡Debe ingresar la fecha de inicio del evento!');
-            document.frmaddevent.event_startDate.focus();
+            dijit.byId('event_startDate').focus();
             return;
         }
         var event_endDate = dijit.byId('event_endDate').getValue(false);
         if(!event_endDate)
         {
             alert('¡Debe ingresar la fecha de termino del evento!');
-            document.frmaddevent.event_endDate.focus();
+            dijit.byId('event_endDate').focus();
             return;
         }
         var event_startTime = dijit.byId('event_startTime').getValue(false);
         if(!event_startTime)
         {
             alert('¡Debe ingresar la hora de inicio del evento!');
-            document.frmaddevent.event_startTime.focus();
+            dijit.byId('event_startTime').focus();
             return;
         }
         var event_endTime = dijit.byId('event_endTime').getValue(false);
         if(!event_endTime)
         {
             alert('¡Debe ingresar la hora de termino del evento!');
-            document.frmaddevent.event_endTime.focus();
+            dijit.byId('event_endTime').focus();
             return;
         }
         document.frmaeditevent.submit();
