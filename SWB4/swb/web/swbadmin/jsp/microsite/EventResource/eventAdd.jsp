@@ -41,6 +41,34 @@
             document.frmaddevent.event_audience.focus();
             return;
         }
+        var event_startDate = document.frmaddevent.event_startDate.value;
+        if(!event_startDate)
+        {
+            alert('¡Debe ingresar la fecha de inicio del evento!');
+            document.frmaddevent.event_startDate.focus();
+            return;
+        }
+        var event_endDate = document.frmaddevent.event_endDate.value;
+        if(!event_endDate)
+        {
+            alert('¡Debe ingresar la fecha de termino del evento!');
+            document.frmaddevent.event_endDate.focus();
+            return;
+        }
+        var event_startTime = document.frmaddevent.event_startTime.value;
+        if(!event_startTime)
+        {
+            alert('¡Debe ingresar la hora de inicio del evento!');
+            document.frmaddevent.event_startTime.focus();
+            return;
+        }
+        var event_endTime = document.frmaddevent.event_endTime.value;
+        if(!event_endTime)
+        {
+            alert('¡Debe ingresar la hora de termino del evento!');
+            document.frmaddevent.event_endTime.focus();
+            return;
+        }
         document.frmaddevent.submit();
     }
 </script>
