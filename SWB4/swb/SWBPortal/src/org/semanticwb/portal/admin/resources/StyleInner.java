@@ -35,7 +35,7 @@ public class StyleInner {
         StylerDomParser handler = null;
 
         String css = base.getAttribute("css");
-        if(css == null) {
+        if(css==null) {
             StringBuilder c = new StringBuilder();
             InputStream is = getClass().getResourceAsStream(path);
             BufferedInputStream bin = new BufferedInputStream(is);
@@ -79,12 +79,12 @@ public class StyleInner {
         script.append("<div class=\"soria\" style=\"float:left;\">\n");
         script.append("<form id=\"frmResource_0999\" name=\"frmResource\" method=\"post\" action=\""+ url+"\"> ");
         script.append(handler.parse());
-        script.append("<table width=\"100%\" align=\"left\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\">\n");
+        /*script.append("<table width=\"100%\" align=\"left\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\">\n");
         script.append("  <tr><td>\n");
         script.append("  <button dojoType=\"dijit.form.Button\" type=\"submit\">Guardar</button>\n");
         script.append("  <button dojoType=\"dijit.form.Button\" type=\"reset\">Restablecer</button>\n");
         script.append("  </td></tr>\n");
-        script.append("</table>\n");
+        script.append("</table>\n");*/
         script.append("</form>\n");
         script.append("</div>\n");
 
