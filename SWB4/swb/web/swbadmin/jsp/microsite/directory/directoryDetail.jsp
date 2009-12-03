@@ -112,7 +112,10 @@
     String intNumber = semObject.getProperty(Commerce.swbcomm_intNumber);
     String extNumber = semObject.getProperty(Commerce.swbcomm_extNumber);
     String city = semObject.getProperty(Commerce.swbcomm_city);
-    Date expiration = semObject.getDateProperty(Clasified.swbcomm_expirationDate);
+    Date expiration = null;
+    if (semObject.instanceOf(Clasified.sclass)) {
+        expiration = semObject.getDateProperty(Clasified.swbcomm_expirationDate);
+    }
     /*----------  Personal Data ---------*/
     String contactName = semObject.getProperty(Commerce.swbcomm_contactName);
     String contactPhoneNumber = semObject.getProperty(Commerce.swbcomm_contactPhoneNumber);
