@@ -98,4 +98,5 @@
 
         %>
 </ul>
-<p class="vermas"><a href="<%=clasificados.getUrl()%>" >Ver m&aacute;s</a></p>
+<%--
+<p class="vermas"><a href="<%=clasificados.getUrl()%>" >Ver m&aacute;s</a></p> --%>
