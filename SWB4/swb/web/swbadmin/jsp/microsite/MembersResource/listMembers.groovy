@@ -190,7 +190,7 @@ if (null!=microsite){
                     {
                         usr_sex = "Masculino";
                     }
-                    else if (sex.equalsIgnoreCase("female"))
+                    else if (usr_sex.equalsIgnoreCase("female"))
                     {
                         usr_sex = "Femenino";
                     }
