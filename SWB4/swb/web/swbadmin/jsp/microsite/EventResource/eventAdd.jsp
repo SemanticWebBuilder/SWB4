@@ -41,28 +41,28 @@
             document.frmaddevent.event_audience.focus();
             return;
         }
-        var event_startDate = document.frmaddevent.event_startDate.value;
+        var event_startDate = dijit.byId('event_startDate').getValue(false);
         if(!event_startDate)
         {
             alert('¡Debe ingresar la fecha de inicio del evento!');
             document.frmaddevent.event_startDate.focus();
             return;
         }
-        var event_endDate = document.frmaddevent.event_endDate.value;
+        var event_endDate = dijit.byId('event_endDate').getValue(false);
         if(!event_endDate)
         {
             alert('¡Debe ingresar la fecha de termino del evento!');
             document.frmaddevent.event_endDate.focus();
             return;
         }
-        var event_startTime = document.frmaddevent.event_startTime.value;
+        var event_startTime = dijit.byId('event_startTime').getValue(false);
         if(!event_startTime)
         {
             alert('¡Debe ingresar la hora de inicio del evento!');
             document.frmaddevent.event_startTime.focus();
             return;
         }
-        var event_endTime = document.frmaddevent.event_endTime.value;
+        var event_endTime = dijit.byId('event_endTime').getValue(false);
         if(!event_endTime)
         {
             alert('¡Debe ingresar la hora de termino del evento!');
