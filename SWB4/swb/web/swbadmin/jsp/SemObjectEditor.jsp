@@ -2,7 +2,14 @@
 <%@page pageEncoding="UTF-8"%>
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.portal.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
 <%
-    User user=SWBContext.getSessionUser();
+    User user=SWBContext.getAdminUser();
+    if(user==null)
+    {
+        response.sendError(403);
+        return;
+    }
+%>
+<%
     String lang="es";
     if(user!=null)lang=user.getLanguage();
     response.setHeader("Cache-Control", "no-cache"); 
@@ -114,6 +121,8 @@ try
         //out.println("</fieldset>");
 
         String mode=SWBFormMgr.MODE_EDIT;
+        if(!SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_EDIT))mode=SWBFormMgr.MODE_VIEW;
+
 
         //TODO: revisar mejor opcion
         String view=null;
@@ -151,7 +160,11 @@ try
         frm.setAction(SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp");
 
         //frm.addButton("<button dojoType='dijit.form.Button' type=\"submit\">Guardar</button>");
-        frm.addButton(SWBFormButton.newSaveButton());
+
+        if(SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_EDIT))
+        {
+            frm.addButton(SWBFormButton.newSaveButton());
+        }
 
         if(user!=null)
         {
@@ -166,10 +179,14 @@ try
                 frm.addButton(new SWBFormButton().setTitle("Eliminar de Favoritos", "es").setTitle("Remove of Favorites", "en").setAttribute("onclick", "showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=unactive"+"');").setBusyButton(true));
             }
         }
-        if(obj.getBooleanProperty(Undeleteable.swb_undeleteable)==false)
+
+        if(SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_DELETE))
         {
-            //frm.addButton("<button dojoType='dijit.form.Button' onclick=\"if(confirm('Eliminar el elemento?'))showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+obj.getEncodedURI()+"');\">Eliminar</button>");
-            frm.addButton(SWBFormButton.newDeleteButton().setAttribute("onclick", "if(confirm('Eliminar el elemento?'))showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+obj.getEncodedURI()+"');"));
+            if(obj.getBooleanProperty(Undeleteable.swb_undeleteable)==false)
+            {
+                //frm.addButton("<button dojoType='dijit.form.Button' onclick=\"if(confirm('Eliminar el elemento?'))showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+obj.getEncodedURI()+"');\">Eliminar</button>");
+                frm.addButton(SWBFormButton.newDeleteButton().setAttribute("onclick", "if(confirm('Eliminar el elemento?'))showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+obj.getEncodedURI()+"');"));
+            }
         }
 
         out.println(frm.renderForm(request));
