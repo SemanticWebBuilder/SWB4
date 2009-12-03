@@ -12,7 +12,15 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Role;
+import org.semanticwb.model.User;
+import org.semanticwb.model.UserGroup;
+import org.semanticwb.model.WebPage;
+import org.semanticwb.model.WebSite;
+import org.semanticwb.model.GenericObject;
+import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.model.Resource;
+import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBActionResponse;
@@ -27,72 +35,191 @@ public class TestStyler extends GenericResource {
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        Resource base=getResourceBase();
-        String staticText = replaceTags(base.getAttribute("text"), request, paramRequest);
         PrintWriter out = response.getWriter();
-        out.println(staticText);
-        out.flush();
-    }
+        Resource base = getResourceBase();
+        try {
+            SWBResourceURL url=paramRequest.getActionUrl();
+            User user = paramRequest.getUser();
 
-    public String replaceTags(String str, HttpServletRequest request, SWBParamRequest paramRequest)
-    {
-        if(str==null || str.trim().length()==0)
-            return "";
+            if(base.getAttribute("css")!=null) {
 
-        str=str.trim();
-        Iterator it=SWBUtils.TEXT.findInterStr(str, "{request.getParameter(\"", "\")}");
-        while(it.hasNext())
-        {
-            String s=(String)it.next();
-            str=SWBUtils.TEXT.replaceAll(str, "{request.getParameter(\""+s+"\")}", request.getParameter(replaceTags(s,request,paramRequest)));
+out.println("<script type=\"text/javascript\">");
+out.println("function createStyleSheet(title) {");
+out.println("	var sheet = document.createElement('style');");
+out.println("	sheet.type = 'text/css';");
+out.println("	sheet.title = title;");
+out.println("	document.getElementsByTagName('head')[0].appendChild(sheet);");
+out.println("	return sheet;");
+out.println("}");
+out.println("function getStyleSheetByTitle(title) {");
+out.println("	for(i=0; i<document.styleSheets.length; i++) {");
+out.println("		if (document.styleSheets[i].title == title) {");
+//out.println("alert('title='+title);");
+out.println("			return document.styleSheets[i];");
+out.println("		}");
+out.println("	}");
+out.println("	return null;");
+out.println("}");
+out.println("function removeAllRules(sheet) {");
+out.println("	var rules = sheet.cssRules? sheet.cssRules: sheet.rules;");
+out.println("	sheet.crossdelete = sheet.deleteRule? sheet.deleteRule : sheet.removeRule;");
+out.println("	while(rules.length > 0) {");
+out.println("		sheet.crossdelete(0);");
+out.println("	}");
+out.println("}");
+out.println("function addRules(sheet, rules) {");
+out.println("	if(sheet.cssText) {");
+out.println("		sheet.cssText = rules;");
+out.println("	}else {");
+out.println("		sheet.innerHTML = rules;");
+out.println("	}");
+out.println("}");
+out.println("function setStyleSheetByResource(title, rules) {");
+out.println("	var sheet = getStyleSheetByTitle(title);");
+out.println("	if(sheet == null) {");
+out.println("		sheet = createStyleSheet(title);");
+out.println("	}");
+out.println("	addRules(sheet, rules);");
+out.println("}");
+out.println("setStyleSheetByResource('"+base.getId()+"','"+base.getAttribute("css")+"');");
+out.println("</script>");
+
+                /*out.println("<style type=\"text/css\">");
+                out.println(base.getAttribute("css"));
+                out.println("</style>");*/
+            }
+            
+
+//var myCars=new Array();
+//myCars[0]="Saab";
+//myCars[1]="Volvo";
+//myCars[2]="BMW";
+
+            if(userCanEdit(paramRequest)) {
+                String style = base.getAttribute("style")==null?"width: 99%;":base.getAttribute("style");
+
+                out.println("<script type=\"text/javascript\">");
+                out.println("dojo.require(\"dijit.InlineEditBox\");");
+                out.println("dojo.require(\"dijit.form.Textarea\");");
+                out.println("var iledit_"+base.getId()+";");
+                out.println("dojo.addOnLoad( function() {");
+                out.println("  iledit_"+base.getId()+" = new dijit.InlineEditBox({");
+                out.println("    id: \"inline_"+base.getId()+"\",");
+                out.println("    autoSave: false,");
+                out.println("    editor: \"dijit.form.Textarea\",");
+                out.println("    style: \""+style+"\",");
+                out.println("    onChange: function(value){");
+                out.println("        postHtml('"+url+"?txt='+value,'inline_"+base.getId()+"');");
+                out.println("      }");
+                out.println("    }, 'tb_"+base.getId()+"');");
+                out.println("  }");
+                out.println(");");
+                out.println("</script>");
+            }
+
+            //String cssClass = base.getAttribute("cssClass")==null?"":" class=\""+base.getAttribute("cssClass")+"\" ";
+            //out.println("<div id=\"tb_"+base.getId()+"\""+cssClass+">");
+            out.println("<div id=\"tb_"+base.getId()+"\" class=\"ilta\">");
+            out.println(base.getAttribute("text", ""));
+            out.println("</div>");
+
+        }catch (Exception e) {
+            log.error("Error in resource Banner while bringing HTML", e);
         }
-
-        it=SWBUtils.TEXT.findInterStr(str, "{session.getAttribute(\"", "\")}");
-        while(it.hasNext())
-        {
-            String s=(String)it.next();
-            str=SWBUtils.TEXT.replaceAll(str, "{session.getAttribute(\""+s+"\")}", (String)request.getSession().getAttribute(replaceTags(s,request,paramRequest)));
-        }
-
-        it=SWBUtils.TEXT.findInterStr(str, "{template.getArgument(\"", "\")}");
-        while(it.hasNext())
-        {
-            String s=(String)it.next();
-            str=SWBUtils.TEXT.replaceAll(str, "{template.getArgument(\""+s+"\")}", (String)paramRequest.getArgument(replaceTags(s,request,paramRequest)));
-        }
-
-        it=SWBUtils.TEXT.findInterStr(str, "{getEnv(\"", "\")}");
-        while(it.hasNext())
-        {
-            String s=(String)it.next();
-            str=SWBUtils.TEXT.replaceAll(str, "{getEnv(\""+s+"\")}", SWBPlatform.getEnv(replaceTags(s,request,paramRequest)));
-        }
-
-        str=SWBUtils.TEXT.replaceAll(str, "{user.login}", paramRequest.getUser().getLogin());
-        str=SWBUtils.TEXT.replaceAll(str, "{user.email}", paramRequest.getUser().getEmail());
-        str=SWBUtils.TEXT.replaceAll(str, "{user.language}", paramRequest.getUser().getLanguage());
-        str=SWBUtils.TEXT.replaceAll(str, "{webpath}", SWBPortal.getContextPath());
-        str=SWBUtils.TEXT.replaceAll(str, "{distpath}", SWBPortal.getDistributorPath());
-        str=SWBUtils.TEXT.replaceAll(str, "{webworkpath}", SWBPortal.getWebWorkPath());
-        str=SWBUtils.TEXT.replaceAll(str, "{workpath}", SWBPortal.getWorkPath());
-        return str;
-    }
-
-    @Override
-    public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        Resource base=getResourceBase();
-        String staticText = replaceTags(base.getAttribute("text"), request, paramRequest);
-        PrintWriter out = response.getWriter();
-        out.print(staticText);
-        out.flush();
     }
 
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        Resource base  = paramRequest.getResourceBase();
-        System.out.println("this.getClass().getName()="+this.getClass().getName());
-        System.out.println("base.getClass().getName()="+getResourceBase().getClass().getName());
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
 
+        Resource base = getResourceBase();
+        PrintWriter out = response.getWriter();
+        User user = paramRequest.getUser();
+
+        WebPage wpage = paramRequest.getWebPage();
+        WebSite wsite = wpage.getWebSite();
+
+        String str_role = base.getAttribute("editRole","0");
+        out.println("<div class=\"swbform\">");
+        SWBResourceURL urlA = paramRequest.getActionUrl();
+        urlA.setAction("admin_update");
+        out.println("<form id=\"" + base.getId() + "/InLineEditRes\" name=\"" + getResourceBase().getId() + "/InLineEditRes\" action=\"" + urlA + "\" method=\"post\" >");
+        out.println("<fieldset>");
+        out.println("<legend>");
+        out.println("Datos");
+        out.println("</legend>");
+        out.println("<table width=\"100%\" border=\"0\" >");
+
+        String strTemp = "<option value=\"-1\">" + "No se encontaron roles" + "</option>";
+        Iterator<Role> iRoles = wsite.getUserRepository().listRoles();
+        StringBuffer strRules = new StringBuffer("");
+        String selected = "";
+        if(str_role.equals("0")) {
+            selected = "selected=\"selected\"";
+        }
+        strRules.append("\n<option value=\"0\" " + selected +" >" + "Ninguno" + "</option>");
+        strRules.append("\n<optgroup label=\"Roles\">");
+        while (iRoles.hasNext()) {
+            Role oRole = iRoles.next();
+            selected = "";
+            if (str_role.trim().equals(oRole.getURI())) {
+                selected = "selected=\"selected\"";
+            }
+            strRules.append("\n<option value=\"" + oRole.getURI() + "\" " + selected + ">" + oRole.getDisplayTitle(user.getLanguage()) + "</option>");
+        }
+        strRules.append("\n</optgroup>");
+        strRules.append("\n<optgroup label=\"User Groups\">");
+        Iterator<UserGroup> iugroups = wsite.getUserRepository().listUserGroups();
+        while (iugroups.hasNext()) {
+            UserGroup oUG = iugroups.next();
+            selected = "";
+            if (str_role.trim().equals(oUG.getURI())) {
+                selected = "selected";
+            }
+            strRules.append("\n<option value=\"" + oUG.getURI() + "\" " + selected + " >" + oUG.getDisplayTitle(user.getLanguage()) + "</option>");
+        }
+        strRules.append("\n</optgroup>");
+        if (strRules.toString().length() > 0) {
+            strTemp = strRules.toString();
+        }
+
+        out.println("<tr>");
+        out.println("<td align=\"right\" width=\"150\">Rol o grupo:</td>");
+        out.println("<td><select name=\"editar\">" + strTemp + "</select></td>");
+        out.println("</tr>");
+
+        out.println("<tr>");
+        out.println("<td align=\"right\" width=\"150\">Texto:</td>");
+        out.println("<td><textarea rows=\"4\" cols=\"50\">" + base.getAttribute("text", "") + "</textarea></td>");
+        out.println("</tr>");
+
+        out.println("</table>");
+        out.println("</fieldset>");
+
+        /*out.println("<fieldset>");
+        out.println("<legend>");
+        out.println("Estilo");
+        out.println("</legend>");
+
+        out.println("<table width=\"100%\" border=\"0\" >");
+        out.println("<tr>");
+        out.println("<td align=\"right\" width=\"150\">Clase de estilo css:</td>");
+        out.println("<td><input type=\"text\" name=\"cssClass\" value=\"" + base.getAttribute("cssClass", "") + "\" size=\"40\" /></td>");
+        out.println("</tr>");
+
+        out.println("<tr>");
+        out.println("<td align=\"right\" width=\"150\">Atributo de estilo:</td>");
+        out.println("<td><input type=\"text\" name=\"style\" value=\"" + base.getAttribute("style", "") + "\" size=\"40\" /></td>");
+        out.println("</tr>");
+        out.println("</table>");
+        out.println("</fieldset>");*/
+
+
+        out.println("<fieldset>");
+        out.println("<legend>");
+        out.println("Estilo");
         String cssResPath = "/"+SWBUtils.TEXT.replaceAll(getClass().getName(), ".", "/")+".css";
         si = new StyleInner(getResourceBase());
         String script = null;
@@ -105,8 +232,16 @@ public class TestStyler extends GenericResource {
         }catch(Exception e) {
             log.error("Error in resource: "+base.getId() +"-"+ base.getTitle(), e);
         }
-        PrintWriter out = response.getWriter();
         out.println(script);
+        out.println("</fieldset>");
+
+
+        out.println("<fieldset>");
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">Guardar</button>");
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"reset\" >Restablecer</button>");
+        out.println("</fieldset>");
+        out.println("</form>");
+        out.println("</div>");
         out.flush();
     }
 
@@ -125,10 +260,10 @@ public class TestStyler extends GenericResource {
         String stel = request.getParameter("stel");
         System.out.println("stel="+stel);
         String[] tkns = stel.split("@",3);
-        System.out.println("tkns[0]="+tkns[0]);
+        /*System.out.println("tkns[0]="+tkns[0]);
         System.out.println("tkns[1]="+tkns[1]);
         System.out.println("tkns[2]="+tkns[2]);
-        System.out.println("\n\n");
+        System.out.println("\n");*/
 
         //HashMap matriz = (HashMap)mm.get(base.getId());
         HashMap tabs = (HashMap)si.getMm(base.getId());
@@ -142,28 +277,24 @@ public class TestStyler extends GenericResource {
                 while(ittabs.hasNext()) {
                     String tab = ittabs.next();
                     css.append("."+tab);
-                    css.append(" {\n");
+                    css.append("{");
                     HashMap selectors = (HashMap)tabs.get(tab);
                     Iterator<String> its = selectors.keySet().iterator();
                     while(its.hasNext()) {
                         String l = its.next();
-                        css.append(l+":"+selectors.get(l)+";\n");
+                        css.append(l+":"+selectors.get(l)+";");
                     }
-                    css.append("}\n");
+                    css.append("}");
                 }
-                System.out.println("\n******************\nestilo=\n"+css);
+                System.out.println(css+"\n");
 
-                /*String editaccess = request.getParameter("editar");
-                if(editaccess!=null) {
-                    base.setAttribute("editRole", editaccess);
-                }
+                base.setAttribute("css", css.toString());
                 try{
                     base.updateAttributesToDB();
                 }catch(Exception e){
                     log.error("Error al guardar atributos en el recurso: "+base.getId() +"-"+ base.getTitle(), e);
-                }*/
-
-
+                    System.out.println("\n error....."+e);
+                }
 
             }catch(IndexOutOfBoundsException iobe) {
                 System.out.println("\n error... "+iobe);
@@ -179,6 +310,70 @@ public class TestStyler extends GenericResource {
 
     @Override
     public void processAction(javax.servlet.http.HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        System.out.println("\nprocessAction...");
+        Resource base = response.getResourceBase();
+        base.setAttribute("text", request.getParameter("txt"));
+
+        String action = response.getAction();
+        if( action!=null && action.equalsIgnoreCase("admin_update") ) {
+            String editaccess = request.getParameter("editar");
+            if(editaccess!=null) {
+                base.setAttribute("editRole", editaccess);
+            }
+        }
+
+        try{
+            base.updateAttributesToDB();
+        }catch(Exception e){
+            log.error("Error al guardar atributos del InlineTextArea. ",e);
+        }
+    }
+
+    private boolean userCanEdit(SWBParamRequest paramrequest) {
+        boolean access = false;
+        String str_role = getResourceBase().getAttribute("editRole", "0");
+        User user = paramrequest.getUser();
+        try {
+            if (user != null&&!str_role.equals("0")) {
+                SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+                GenericObject gobj = null;
+                try {
+                    gobj = ont.getGenericObject(str_role);
+                } catch (Exception e) {
+                    log.error("Errror InlineEdit.userCanEdit()", e);
+                }
+
+                UserGroup ugrp = null;
+                Role urole = null;
+
+                if (!str_role.equals("0")) {
+                    if (gobj != null) {
+                        if (gobj instanceof UserGroup) {
+                            ugrp = (UserGroup) gobj;
+                            if (user.hasUserGroup(ugrp)) {
+                                access = true;
+                            }
+                        } else if (gobj instanceof Role) {
+                            urole = (Role) gobj;
+                            if (user.hasRole(urole)) {
+                                access = true;
+                            }
+                        }
+                    } else {
+                        access = true;
+                    }
+                } else {
+                    access = true;
+                }
+            }
+        }
+        catch  (Exception e) {
+            access = false;
+        }
+
+        if(str_role.equals("0")&&user==null) access=true;
+        else if(!str_role.equals("0")&&user==null) access=false;
+        else if(str_role.equals("0")&&user!=null) access=true;
+
+    return   access ;
     }
 }
