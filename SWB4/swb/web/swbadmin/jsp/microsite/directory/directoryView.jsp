@@ -281,6 +281,7 @@ if (sobj != null) {
             </fieldset>
         </form>
                    </div>
+        <%if (itObjs != null && itObjs.hasNext()) {%>
         <p align="right">Ordenar por
             <%if (cls.equals(ClasifiedBuySell.sclass)) {
                 if (toggleOrder) {
@@ -294,7 +295,9 @@ if (sobj != null) {
                 }
              }
              %>
-            <a href="<%=urlOrder.setParameter("orderBy", "title")%>">nombre</a> | <a href="<%=urlOrder.setParameter("orderBy", "date")%>">fecha</a></p>
+            <a href="<%=urlOrder.setParameter("orderBy", "title")%>">nombre</a> | <a href="<%=urlOrder.setParameter("orderBy", "date")%>">fecha</a>
+        </p>
+        <%}%>
         <!--Termina desplagado de criterios (filtros) de busqueda-->
         <%
          //Comienza Desplegado de elementos filtrados (si aplica) y ordenados
