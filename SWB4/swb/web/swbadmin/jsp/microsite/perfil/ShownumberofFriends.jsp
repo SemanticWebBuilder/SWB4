@@ -56,7 +56,7 @@
                 while (prospecs.hasNext())
                 {
                     FriendshipProspect propect = prospecs.next();
-                    if (propect.getFriendShipRequested().getURI().endsWith(friend.getURI()) && propect.getFriendShipRequester().getURI().equals(user.getURI()))
+                    if (propect!=null && propect.getFriendShipRequested()!=null && propect.getFriendShipRequested().getURI()!=null && friend.getURI()!=null && user.getURI()!=null && propect.getFriendShipRequested().getURI().endsWith(friend.getURI()) && propect.getFriendShipRequester().getURI().equals(user.getURI()))
                     {
                         invited = true;
                         break;
