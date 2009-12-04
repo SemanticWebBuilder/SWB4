@@ -100,11 +100,14 @@
                         Blog blog = blogs.next();
                         if (blog != null)
                         {
-                            Iterator it = blog.listPostElements();
+                            Iterator<PostElement> it = blog.listPostElements();
                             while (it.hasNext())
                             {
-                                it.next();
-                                entradas++;
+                                PostElement element = it.next();
+                                if (element.canView(member))
+                                {
+                                    entradas++;
+                                }
                             }
         %>
         <li><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Blog").getUrl()%>"><img src="<%=cssPath%>icoBlog.png" alt="blog"><span class="elemento">Blog:</span> <%=entradas%> entradas</a> <a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Blog").getUrl()%>" class="verMas">ver</a></li>
@@ -124,8 +127,11 @@
                     Iterator<EventElement> elements = EventElement.ClassMgr.listEventElementByEventWebPage(wp.getWebSite().getWebPage(wp.getId() + "_Events"));
                     while (elements.hasNext())
                     {
-                        elements.next();
-                        eventos++;
+                        EventElement element = elements.next();
+                        if (element.canView(member))
+                        {
+                            eventos++;
+                        }
                     }
 
         %>
@@ -145,8 +151,11 @@
                     Iterator<PhotoElement> elements = PhotoElement.ClassMgr.listPhotoElementByPhotoWebPage(wp.getWebSite().getWebPage(wp.getId() + "_Photos"));
                     while (elements.hasNext())
                     {
-                        elements.next();
-                        fotos++;
+                        PhotoElement element = elements.next();
+                        if (element.canView(member))
+                        {
+                            fotos++;
+                        }
                     }
 
         %>
@@ -194,8 +203,11 @@
                     Iterator<NewsElement> elements = NewsElement.ClassMgr.listNewsElementByNewsWebPage(wp.getWebSite().getWebPage(wp.getId() + "_News"));
                     while (elements.hasNext())
                     {
-                        elements.next();
-                        noticias++;
+                        NewsElement element = elements.next();
+                        if (element.canView(member))
+                        {
+                            noticias++;
+                        }
                     }
 
         %>
@@ -216,8 +228,11 @@
                     Iterator<VideoElement> elements = VideoElement.ClassMgr.listVideoElementByWebPage(wp.getWebSite().getWebPage(wp.getId() + "_Videos"));
                     while (elements.hasNext())
                     {
-                        elements.next();
-                        videos++;
+                        VideoElement element = elements.next();
+                        if (element.canView(member))
+                        {
+                            videos++;
+                        }
                     }
 
         %>
@@ -233,8 +248,8 @@
 
     </ul>
     <%
-if (!user.isRegistered())
-{
+            if (!user.isRegistered())
+            {
     %>
     <p><span class="tituloRojo">NOTA: </span>Debe estar registrado y estar suscrito a la comunidad para poder agregar contenido a la misma.</p>
     <%            }
@@ -284,8 +299,8 @@ if (!user.isRegistered())
 
     </ul>
     <%
-        if (!(null != member && member.getAccessLevel() == Member.LEVEL_OWNER && user.isRegistered()))
-        {
+            if (!(null != member && member.getAccessLevel() == Member.LEVEL_OWNER && user.isRegistered()))
+            {
     %>
     <br><p><span class="tituloRojo">NOTA: </span>Sólo el dueño de la comunidad puede cambiar la información básica de la misma.</p>
     <%            }
