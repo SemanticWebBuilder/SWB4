@@ -76,7 +76,4 @@
             %>
         </ul>
     </div>
-        <div class="clear">&nbsp;</div>
-    <%
-
-%>
+    <div class="clear">&nbsp;</div>
