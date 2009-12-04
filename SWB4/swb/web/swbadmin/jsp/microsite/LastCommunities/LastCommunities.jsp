@@ -25,8 +25,7 @@
                     setVals.add(obj);
                 }
             }
-            Iterator<SemanticObject> communities = setVals.iterator();
-            //Iterator communities = SWBComparator.sortByCreated(MicroSite.ClassMgr.listMicroSites(site), false);
+            Iterator<SemanticObject> communities = setVals.iterator();            
             if (!communities.hasNext())
             {
     %>
@@ -40,7 +39,7 @@
                 if (obj != null)
                 {
                     MicroSite comm = (MicroSite) obj.createGenericInstance();
-                    if (comm!=null && comm.isActive())
+                    if (comm!=null && comm.getUrl()!=null && comm.getTitle()!=null && comm.isActive())
                     {
                         i++;
     %>
