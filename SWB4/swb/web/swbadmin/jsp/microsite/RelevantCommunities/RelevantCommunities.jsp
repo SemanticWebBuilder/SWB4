@@ -51,7 +51,11 @@
         }
         while (it.hasNext())
         {
-            set.add(it.next());
+            Object obj = it.next();
+            if (obj != null)
+            {
+                set.add(obj);
+            }
         }
         return set.iterator();
     }
