@@ -38,6 +38,8 @@
                 SemanticObject obj = communities.next();
                 if (obj != null)
                 {
+                    try
+                            {
                     MicroSite comm = (MicroSite) obj.createGenericInstance();
                     if (comm!=null && comm.getUrl()!=null && comm.getTitle()!=null && comm.isActive())
                     {
@@ -50,6 +52,7 @@
                             break;
                         }
                     }
+                    }catch(Exception e){}
                 }
 
             }
