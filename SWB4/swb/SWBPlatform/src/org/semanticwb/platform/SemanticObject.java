@@ -704,7 +704,7 @@ public class SemanticObject
         setLiteralProperty(prop, literal, true);
     }
 
-    private void setLiteralProperty(SemanticProperty prop, SemanticLiteral literal, boolean replase)
+    private void setLiteralProperty(SemanticProperty prop, SemanticLiteral literal, boolean replace)
     {
         if(!m_virtual)
         {
@@ -713,7 +713,7 @@ public class SemanticObject
             Statement stm = null;
 //            if(lang!=null)
 //            {
-            if(replase)
+            if(replace)
             {
                 stm=getLocaleStatement(prop,lang);
             }
@@ -721,7 +721,13 @@ public class SemanticObject
 //            {
 //                stm = m_res.getProperty(prop.getRDFProperty());  //trae la primera que encuentre sin importar el idioma
 //            }
-            if (stm != null)
+            if(obj==null)
+            {
+                if(stm!=null)
+                {
+                    stm.remove();
+                }
+            }else if (stm != null)
             {
                 if(obj instanceof String)
                 {
@@ -790,7 +796,10 @@ public class SemanticObject
                 }
             }
         }
-        if(replase)
+        if(literal.getValue()==null)
+        {
+            removePropertyValueCache(prop, literal.getLanguage());
+        }else if(replace)
         {
             setPropertyValueCache(prop, literal.getLanguage(), literal);
             SWBPlatform.getSemanticMgr().notifyChange(this, prop, "SET");
