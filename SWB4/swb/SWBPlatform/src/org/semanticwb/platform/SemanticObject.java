@@ -694,7 +694,17 @@ public class SemanticObject
         return ret;
     }
 
+    public void addLiteralProperty(SemanticProperty prop, SemanticLiteral literal)
+    {
+        setLiteralProperty(prop, literal, false);
+    }
+
     public void setLiteralProperty(SemanticProperty prop, SemanticLiteral literal)
+    {
+        setLiteralProperty(prop, literal, true);
+    }
+
+    private void setLiteralProperty(SemanticProperty prop, SemanticLiteral literal, boolean replase)
     {
         if(!m_virtual)
         {
@@ -703,7 +713,10 @@ public class SemanticObject
             Statement stm = null;
 //            if(lang!=null)
 //            {
+            if(replase)
+            {
                 stm=getLocaleStatement(prop,lang);
+            }
 //            }else
 //            {
 //                stm = m_res.getProperty(prop.getRDFProperty());  //trae la primera que encuentre sin importar el idioma
@@ -777,8 +790,15 @@ public class SemanticObject
                 }
             }
         }
-        setPropertyValueCache(prop, literal.getLanguage(), literal);
-        SWBPlatform.getSemanticMgr().notifyChange(this, prop, "SET");
+        if(replase)
+        {
+            setPropertyValueCache(prop, literal.getLanguage(), literal);
+            SWBPlatform.getSemanticMgr().notifyChange(this, prop, "SET");
+        }else
+        {
+            addPropertyValueCache(prop, literal.getLanguage(), literal);
+            SWBPlatform.getSemanticMgr().notifyChange(this, prop, "ADD");
+        }
     }
 
     public SemanticObject removeProperty(SemanticProperty prop)
