@@ -40,7 +40,7 @@
                 if (obj != null)
                 {
                     MicroSite comm = (MicroSite) obj.createGenericInstance();
-                    if (comm.isActive())
+                    if (comm!=null && comm.isActive())
                     {
                         i++;
     %>
