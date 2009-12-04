@@ -127,6 +127,10 @@ public class RegisterUser extends GenericResource
             newUser.setActive(true);
             newUser.setDevice(user.getDevice());
             String pwd = request.getParameter("passwd");
+            newUser.setFirstName(request.getParameter("firstName"));
+            newUser.setLastName(request.getParameter("lastName"));
+            newUser.setSecondLastName(request.getParameter("secondLastName"));
+            newUser.setEmail(request.getParameter("email"));
             newUser.setPassword(pwd);
             try
             {
