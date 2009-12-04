@@ -133,30 +133,7 @@
     SWBResourceURL url = paramRequest.getActionUrl();
 %>
 
-<script type="text/javascript">
-    function createMarker(map, point, name) {
-        var amigo = new GMarker(point);
-        GEvent.addListener(amigo, "click", function() {
-            var myHtml = "<b>"+name+"</b>";
-            map.openInfoWindowHtml(point, myHtml);
-        });
-        return amigo;
-    }
-
-    function initialize() {
-        if (GBrowserIsCompatible()) {
-            var map = new GMap2(document.getElementById("map_canvas"));
-            map.addControl(new GSmallMapControl());
-            map.addControl(new GMapTypeControl());
-            var p1 = new GLatLng(<%=lat%>, <%=lon%>);
-            map.setCenter(p1, <%=step%>-2);
-            //var bounds = new GLatLngBounds();
-            map.addOverlay(createMarker(map, p1, '<%=dirObj.getTitle()%>'));
-            //bounds.extend(p1);
-            //map.setZoom(map.getBoundsZoomLevel(bounds));
-        }
-    }
-    
+<script type="text/javascript">    
     function sendClaim() {
         if (document.getElementById("justify").value.trim() == "") {
             alert("Debe escribir una justificación.");
@@ -279,7 +256,31 @@
             <div id="map_canvas" style="width:390px; height:390px;"></div>
         </div>
         <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<%=SWBPortal.getEnv("key/gmap", "")%>" type="text/javascript"></script>
-        <script type="text/javascript">initialize();</script>
+        <script type="text/javascript">
+            function createMarker(map, point, name) {
+                var amigo = new GMarker(point);
+                GEvent.addListener(amigo, "click", function() {
+                    var myHtml = "<b>"+name+"</b>";
+                    map.openInfoWindowHtml(point, myHtml);
+                });
+                return amigo;
+            }
+
+            function initialize() {
+                if (GBrowserIsCompatible()) {
+                    var map = new GMap2(document.getElementById("map_canvas"));
+                    map.addControl(new GSmallMapControl());
+                    map.addControl(new GMapTypeControl());
+                    var p1 = new GLatLng(<%=lat%>, <%=lon%>);
+                    map.setCenter(p1, <%=step%>-2);
+                    //var bounds = new GLatLngBounds();
+                    map.addOverlay(createMarker(map, p1, '<%=dirObj.getTitle()%>'));
+                    //bounds.extend(p1);
+                    //map.setZoom(map.getBoundsZoomLevel(bounds));
+                }
+            }
+            initialize();
+        </script>
     <%
     }
     SWBResponse res=new SWBResponse(response);
