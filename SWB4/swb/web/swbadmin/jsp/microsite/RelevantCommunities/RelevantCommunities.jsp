@@ -1,11 +1,11 @@
 <%@page import="org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.model.*,java.util.*"%>
 <%!
-    public static Iterator sortByViews(Iterator it, boolean ascendente)
+    public static Iterator sortByViews(Iterator<MicroSite> it, boolean ascendente)
     {
-        TreeSet set = null;
+        TreeSet<MicroSite> set = null;
         if (ascendente)
         {
-            set = new TreeSet(new Comparator()
+            set = new TreeSet<MicroSite>(new Comparator()
             {
 
                 public int compare(Object o1, Object o2)
@@ -21,14 +21,14 @@
                     }
                     else
                     {
-                        return 0;
+                        return -1;
                     }
                 }
             });
         }
         else
         {
-            set = new TreeSet(new Comparator()
+            set = new TreeSet<MicroSite>(new Comparator()
             {
 
                 public int compare(Object o1, Object o2)
@@ -44,18 +44,17 @@
                     }
                     else
                     {
+                        return -1;
                     }
-                    return 0;
+                    
                 }
             });
         }
         while (it.hasNext())
         {
-            Object obj = it.next();
-            if (obj != null)
-            {
-                set.add(obj);
-            }
+           
+            MicroSite obj = it.next();
+            set.add(obj);
         }
         return set.iterator();
     }
