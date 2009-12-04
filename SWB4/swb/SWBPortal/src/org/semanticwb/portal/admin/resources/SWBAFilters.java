@@ -721,17 +721,17 @@ public class SWBAFilters extends SWBATree {
             doc.appendChild(res);
             if (src.getElementsByTagName("filter").getLength() > 0) {
                 Element efilter = (Element) src.getElementsByTagName("filter").item(0);
-                String description = "";
-                if (efilter.getElementsByTagName("description").getLength() > 0) {
-                    Element edescription = (Element) efilter.getElementsByTagName("description").item(0);
-                    org.w3c.dom.Text etext = (org.w3c.dom.Text) edescription.getFirstChild();
-                    description = etext.getNodeValue();
-                }
-                String name = efilter.getAttribute("name");
+//                String description = "";
+//                if (efilter.getElementsByTagName("description").getLength() > 0) {
+//                    Element edescription = (Element) efilter.getElementsByTagName("description").item(0);
+//                    org.w3c.dom.Text etext = (org.w3c.dom.Text) edescription.getFirstChild();
+//                    description = etext.getNodeValue();
+//                }
+//                String name = efilter.getAttribute("name");
                 //AdminFilter filter=AdminFilter.getAdminFilter(efilter.getAttribute("id"),efilter.getAttribute("topicmap"));
                 AdminFilter filter = AdminFilter.ClassMgr.getAdminFilter(efilter.getAttribute("id"), aws);
-                filter.setTitle(name);
-                filter.setDescription(description);
+//                filter.setTitle(name);
+//                filter.setDescription(description);
                 //filter.setTopicMapId(efilter.getAttribute("topicmap"));
                 Document xmlfilter = SWBUtils.XML.getNewDocument();
 
