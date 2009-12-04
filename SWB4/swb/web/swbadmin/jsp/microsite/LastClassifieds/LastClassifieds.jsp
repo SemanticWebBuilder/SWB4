@@ -84,6 +84,8 @@
         {
             name = obj.getCreator().getFullName();
         }
+        if(obj!=null && obj.getWebPage()!=null && obj.getWebPage().getUrl()!=null)
+            {
         String url = obj.getWebPage().getUrl();
     %>
     <li><%=name%> agregó el anuncio <a href="<%=url%>"><%=obj.getTitle()%></a>
@@ -94,6 +96,7 @@
             {
                 break;
             }
+        }
         }
 
         %>
