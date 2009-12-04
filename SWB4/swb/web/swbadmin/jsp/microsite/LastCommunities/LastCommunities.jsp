@@ -36,17 +36,20 @@
             //communities = SWBComparator.sortByCreated(MicroSite.ClassMgr.listMicroSites(site), false);
             while (communities.hasNext())
             {
-
-                MicroSite comm = (MicroSite) communities.next().createGenericInstance();
-                if (comm.isActive())
+                SemanticObject obj = communities.next();
+                if (obj != null)
                 {
-                    i++;
+                    MicroSite comm = (MicroSite) obj.createGenericInstance();
+                    if (comm.isActive())
+                    {
+                        i++;
     %>
     <li><a href="<%=comm.getUrl()%>"><%=comm.getTitle()%></a></li>
     <%
-                    if (i == 5)
-                    {
-                        break;
+                        if (i == 5)
+                        {
+                            break;
+                        }
                     }
                 }
 
