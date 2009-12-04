@@ -7,21 +7,25 @@
             WebPage webpage = (WebPage) request.getAttribute("webpage");
             WebSite site = webpage.getWebSite();
             TreeSet<SemanticObject> setVals = new TreeSet<SemanticObject>(new Comparator()
-        {
-
-            public int compare(Object arg0, Object arg1)
             {
-                SemanticObject obj0 = (SemanticObject) arg0;
-                SemanticObject obj1 = (SemanticObject) arg1;
-                return obj1.getProperty(org.semanticwb.model.comm.MicroSite.swb_created
-                        ).compareTo(obj0.getProperty(org.semanticwb.model.comm.MicroSite.swb_created));
+
+                public int compare(Object arg0, Object arg1)
+                {
+                    SemanticObject obj0 = (SemanticObject) arg0;
+                    SemanticObject obj1 = (SemanticObject) arg1;
+                    return obj1.getProperty(org.semanticwb.model.comm.MicroSite.swb_created).compareTo(obj0.getProperty(org.semanticwb.model.comm.MicroSite.swb_created));
+                }
+            });
+            Iterator<SemanticObject> lista = site.getSemanticObject().getModel().listInstancesOfClass(MicroSite.sclass);
+            while (lista.hasNext())
+            {
+                SemanticObject obj = lista.next();
+                if (obj != null)
+                {
+                    setVals.add(obj);
+                }
             }
-        });
-        Iterator<SemanticObject> lista = site.getSemanticObject().getModel().listInstancesOfClass(MicroSite.sclass);
-        while (lista.hasNext()){
-            setVals.add(lista.next());
-        }
-        Iterator<SemanticObject> communities = setVals.iterator();
+            Iterator<SemanticObject> communities = setVals.iterator();
             //Iterator communities = SWBComparator.sortByCreated(MicroSite.ClassMgr.listMicroSites(site), false);
             if (!communities.hasNext())
             {
