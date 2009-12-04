@@ -7,6 +7,7 @@ package org.semanticwb.portal.resources;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.SecureRandom;
+import java.util.Enumeration;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,13 +25,12 @@ import org.semanticwb.portal.api.SWBResourceException;
  *
  * @author serch
  */
-public class PasswordManager extends GenericResource
-{
+public class PasswordManager extends GenericResource {
 
     static int SIZE = 16;
     static String letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
     static SecureRandom generator = new SecureRandom();
-
+    
 
     {
         generator.setSeed(System.currentTimeMillis());
@@ -46,214 +46,192 @@ public class PasswordManager extends GenericResource
     private static final String TXT_mailms = "Ha solicitado recuperar su contraseña, para continuar acuda a {?url}";
 
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
-        if (null != request.getAttribute("message"))
-        {
-            String message = (String) request.getAttribute("message");
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        if (null != request.getParameter("message")) {
+            String message = (String) request.getParameter("message");
             response.getWriter().println(message);
-        } else if (paramRequest.getUser().isSigned())
-        {
+        } else if (paramRequest.getUser().isSigned()) {
             showPasswordChange(request, response, paramRequest);
-        } else if (gotValidToken(request))
-        {
+        } else if (gotValidToken(request)) {
             showNewPassword(request, response, paramRequest);
-        } else
-        {
+        } else {
             showLoginRequest(request, response, paramRequest);
         }
     }
 
     @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
-    {
-        String cadcontrol = (String) request.getAttribute("cadcontrol");
-        if (cadcontrol.equals(request.getParameter("cadcontrol")))
-        {
-            if (response.getAction().equals("UPG"))
-            {
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+        System.out.println("En ProcessAction");
+        Enumeration enumera = request.getSession(true).getAttributeNames();
+        while (enumera.hasMoreElements()) {
+            String name = (String) enumera.nextElement();
+            System.out.println("" + name + ":" + request.getSession(true).getAttribute(name));
+        }
+        String cadcontrol = (String) request.getSession(true).getAttribute("cadcontrol");
+        if (cadcontrol != null && cadcontrol.equals(request.getParameter("cadcontrol"))) {
+            if (response.getAction().equals("UPG")) {
+                System.out.println("en UPG");
                 String pwd1 = request.getParameter("swb_newPassword");
                 String pwd2 = request.getParameter("swb_newPassword2");
-                if (pwd2.equals(pwd1))
-                {
+                if (pwd2.equals(pwd1)) {
                     response.getUser().setPassword(pwd2);
                     response.setRenderParameter("message", "password actualizado");
-                } else
-                {
+                } else {
                     response.setRenderParameter("message", "passwords no corresponden");
                 }
             }
-            if (response.getAction().equals("ADD"))
-            {
-                if (gotValidToken(request))
-                {
+            if (response.getAction().equals("ADD")) {
+                System.out.println("en ADD");
+                if (gotValidToken(request)) {
                     String pwd1 = request.getParameter("swb_newPassword");
                     String pwd2 = request.getParameter("swb_newPassword2");
-                    if (pwd2.equals(pwd1))
-                    {
+                    if (pwd2.equals(pwd1)) {
                         response.getUser().setPassword(pwd2);
                         response.setRenderParameter("message", "password actualizado");
-                    } else
-                    {
+                    } else {
                         response.setRenderParameter("message", "passwords no corresponden");
                     }
                 }
             }
-            if (response.getAction().equals("UPG"))
-            {
+            if (response.getAction().equals("SML")) {
+                System.out.println("en SML");
                 String frmmailms = getResourceBase().getAttribute(FRM_MAILMS);
-                if (null == frmmailms)
-                {
+                if (null == frmmailms) {
                     frmmailms = TXT_mailms;
                 }
-                String email = response.getUser().getUserRepository().getUserByLogin(request.getParameter("login")).getEmail();
-                SWBUtils.EMAIL.sendBGEmail(email, "Recuperar password", replaceTags(frmmailms, request, null, generateToken()));
-                //Send Mail
+                String email = response.getWebPage().getWebSite().getUserRepository().getUserByLogin(request.getParameter("swb_login")).getEmail();
+                String texto = replaceTags(frmmailms, request, null, generateToken());
+                System.out.println(texto);
+                SWBUtils.EMAIL.sendBGEmail(email, "Recuperar password", texto);
+            //Send Mail
             }
-        } else
-        {
+        } else {
             response.setRenderParameter("message", "session inv&acute;lida!");
         }
 
     }
 
-    void showPasswordChange(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
+    void showPasswordChange(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         String frmcontent = getResourceBase().getAttribute(FRM_CHGPWD);
-        if (null == frmcontent)
-        {
+        if (null == frmcontent) {
             frmcontent = TXT_chgpwd;
         }
         String cadcontrol = getCadControl();
-        request.setAttribute("cadcontrol", cadcontrol);
+        request.getSession(true).setAttribute("cadcontrol", cadcontrol);
         out.println(replaceTags(frmcontent, request, paramRequest, cadcontrol));
 
     }
 
-    void showLoginRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
+    void showLoginRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         String frmcontent = getResourceBase().getAttribute(FRM_LOGREQ);
-        if (null == frmcontent)
-        {
+        if (null == frmcontent) {
             frmcontent = TXT_logreq;
         }
         String cadcontrol = getCadControl();
-        request.setAttribute("cadcontrol", cadcontrol);
+        request.getSession(true).setAttribute("cadcontrol", cadcontrol);
         out.println(replaceTags(frmcontent, request, paramRequest, cadcontrol));
     }
 
-    void showNewPassword(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
+    void showNewPassword(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         String frmcontent = getResourceBase().getAttribute(FRM_NEWPWD);
-        if (null == frmcontent)
-        {
+        if (null == frmcontent) {
             frmcontent = TXT_newpwd;
         }
         String cadcontrol = getCadControl();
-        request.setAttribute("cadcontrol", cadcontrol);
+        request.getSession(true).setAttribute("cadcontrol", cadcontrol);
         out.println(replaceTags(frmcontent, request, paramRequest, cadcontrol));
     }
 
-    boolean gotValidToken(HttpServletRequest request)
-    {
+    boolean gotValidToken(HttpServletRequest request) {
         boolean ret = false;
         return ret;
     }
 
-    String replaceTags(String str, HttpServletRequest request, SWBParamRequest paramRequest, String url)
-    {
+    String replaceTags(String str, HttpServletRequest request, SWBParamRequest paramRequest, String url) {
         //System.out.print("\nstr:"+str+"-->");
-        if (str == null || str.trim().length() == 0)
-        {
+        if (str == null || str.trim().length() == 0) {
             return null;
         }
         str = str.trim();
         //TODO: codificar cualquier atributo o texto
         Iterator it = SWBUtils.TEXT.findInterStr(str, "{encodeB64(\"", "\")}");
-        while (it.hasNext())
-        {
+        while (it.hasNext()) {
             String s = (String) it.next();
             str = SWBUtils.TEXT.replaceAll(str, "{encodeB64(\"" + s + "\")}", SFBase64.encodeString(replaceTags(s, request, paramRequest, url)));
         }
 
         it = SWBUtils.TEXT.findInterStr(str, "{request.getParameter(\"", "\")}");
-        while (it.hasNext())
-        {
+        while (it.hasNext()) {
             String s = (String) it.next();
             str = SWBUtils.TEXT.replaceAll(str, "{request.getParameter(\"" + s + "\")}", request.getParameter(replaceTags(s, request, paramRequest, url)));
         }
 
         it = SWBUtils.TEXT.findInterStr(str, "{session.getAttribute(\"", "\")}");
-        while (it.hasNext())
-        {
+        while (it.hasNext()) {
             String s = (String) it.next();
             str = SWBUtils.TEXT.replaceAll(str, "{session.getAttribute(\"" + s + "\")}", (String) request.getSession().getAttribute(replaceTags(s, request, paramRequest, url)));
         }
 
         it = SWBUtils.TEXT.findInterStr(str, "{getEnv(\"", "\")}");
-        while (it.hasNext())
-        {
+        while (it.hasNext()) {
             String s = (String) it.next();
             str = SWBUtils.TEXT.replaceAll(str, "{getEnv(\"" + s + "\")}", SWBPlatform.getEnv(replaceTags(s, request, paramRequest, url)));
         }
 
         it = SWBUtils.TEXT.findInterStr(str, "{?", "}");
-        while (it.hasNext())
-        {
+        while (it.hasNext()) {
             String s = (String) it.next();
             str = SWBUtils.TEXT.replaceAll(str, "{?" + s + "}", url);
         }
 
         str = SWBUtils.TEXT.replaceAll(str, "{rows.number}", request.getAttribute("rowsnum") != null ? (String) request.getAttribute("rowsnum") : "N/A");
         str = SWBUtils.TEXT.replaceAll(str, "{exec.time}", (String) request.getAttribute("extime"));
-        str = SWBUtils.TEXT.replaceAll(str, "{user.login}", paramRequest.getUser().getLogin());
-        str = SWBUtils.TEXT.replaceAll(str, "{user.email}", paramRequest.getUser().getEmail());
-        str = SWBUtils.TEXT.replaceAll(str, "{user.language}", paramRequest.getUser().getLanguage());
+        if (null != paramRequest) {
+            str = SWBUtils.TEXT.replaceAll(str, "{user.login}", paramRequest.getUser().getLogin());
+            str = SWBUtils.TEXT.replaceAll(str, "{user.email}", paramRequest.getUser().getEmail());
+            str = SWBUtils.TEXT.replaceAll(str, "{user.language}", paramRequest.getUser().getLanguage());
+        }
         str = SWBUtils.TEXT.replaceAll(str, "{webpath}", SWBPortal.getContextPath());
         str = SWBUtils.TEXT.replaceAll(str, "{distpath}", SWBPortal.getDistributorPath());
         str = SWBUtils.TEXT.replaceAll(str, "{webworkpath}", SWBPortal.getWebWorkPath());
         str = SWBUtils.TEXT.replaceAll(str, "{workpath}", SWBPortal.getWorkPath());
-        str = SWBUtils.TEXT.replaceAll(str, "{websiteid}", paramRequest.getWebPage().getWebSiteId());
-        str = SWBUtils.TEXT.replaceAll(str, "{actionurl}", paramRequest.getActionUrl().toString());
-        str = SWBUtils.TEXT.replaceAll(str, "{actionurlUPG}", paramRequest.getActionUrl().setAction("UPG").toString());
-        str = SWBUtils.TEXT.replaceAll(str, "{actionurlADD}", paramRequest.getActionUrl().setAction("ADD").toString());
-        str = SWBUtils.TEXT.replaceAll(str, "{actionurlSML}", paramRequest.getActionUrl().setAction("SML").toString());
+        if (null != paramRequest) {
+            str = SWBUtils.TEXT.replaceAll(str, "{websiteid}", paramRequest.getWebPage().getWebSiteId());
+            str = SWBUtils.TEXT.replaceAll(str, "{actionurl}", paramRequest.getActionUrl().toString());
+            str = SWBUtils.TEXT.replaceAll(str, "{actionurlUPG}", paramRequest.getActionUrl().setAction("UPG").toString());
+            str = SWBUtils.TEXT.replaceAll(str, "{actionurlADD}", paramRequest.getActionUrl().setAction("ADD").toString());
+            str = SWBUtils.TEXT.replaceAll(str, "{actionurlSML}", paramRequest.getActionUrl().setAction("SML").toString());
+        }
         str = SWBUtils.TEXT.replaceAll(str, "{?url}", generateToken());
         //System.out.println(str);
         return str;
     }
 
     @Override
-    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
-    {
+    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         String frmchgpwd = getResourceBase().getAttribute(FRM_CHGPWD);
         String frmnewpwd = getResourceBase().getAttribute(FRM_NEWPWD);
         String frmlogreq = getResourceBase().getAttribute(FRM_LOGREQ);
         String frmmailms = getResourceBase().getAttribute(FRM_MAILMS);
-        if (null == frmchgpwd)
-        {
+        if (null == frmchgpwd) {
             frmchgpwd = TXT_chgpwd;
         }
-        if (null == frmnewpwd)
-        {
+        if (null == frmnewpwd) {
             frmnewpwd = TXT_newpwd;
         }
-        if (null == frmlogreq)
-        {
+        if (null == frmlogreq) {
             frmlogreq = TXT_logreq;
         }
-        if (null == frmmailms)
-        {
+        if (null == frmmailms) {
             frmmailms = TXT_mailms;
         }
 
         String act = request.getParameter("act");
-        if (act != null)
-        {
+        if (act != null) {
             frmchgpwd = request.getParameter(FRM_CHGPWD);
             getResourceBase().setAttribute(FRM_CHGPWD, frmchgpwd);
             frmnewpwd = request.getParameter(FRM_NEWPWD);
@@ -262,11 +240,9 @@ public class PasswordManager extends GenericResource
             getResourceBase().setAttribute(FRM_LOGREQ, frmlogreq);
             frmmailms = request.getParameter(FRM_MAILMS);
             getResourceBase().setAttribute(FRM_MAILMS, frmmailms);
-            try
-            {
+            try {
                 getResourceBase().updateAttributesToDB();
-            } catch (Exception e)
-            {
+            } catch (Exception e) {
                 log.error(e);
             }
         }
@@ -342,18 +318,15 @@ public class PasswordManager extends GenericResource
 
     }
 
-    String getCadControl()
-    {
+    String getCadControl() {
         StringBuilder sb = new StringBuilder(SIZE);
-        for (int i = 0; i < SIZE; i++)
-        {
+        for (int i = 0; i < SIZE; i++) {
             sb.append(letras.charAt(generator.nextInt(letras.length())));
         }
         return sb.toString();
     }
 
-    String generateToken()
-    {
+    String generateToken() {
         return "TOKEN";
     }
 }
