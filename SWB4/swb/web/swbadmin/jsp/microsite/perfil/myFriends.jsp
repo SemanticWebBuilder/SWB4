@@ -8,6 +8,22 @@
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%!
+    public int calcularEdad(java.util.Calendar fechaNaci, java.util.Calendar fechaAlta)
+    {
+
+        int diff_año = fechaAlta.get(java.util.Calendar.YEAR) -
+                fechaNaci.get(java.util.Calendar.YEAR);
+        int diff_mes = fechaAlta.get(java.util.Calendar.MONTH) - fechaNaci.get(java.util.Calendar.MONTH);
+        int diff_dia = fechaAlta.get(java.util.Calendar.DATE) - fechaNaci.get(java.util.Calendar.DATE);
+        if (diff_mes < 0 || (diff_mes == 0 && diff_dia < 0))
+        {
+            diff_año = diff_año - 1;
+        }
+        return diff_año;
+    }
+
+%>
+<%!
     class GeoLocation
     {
 
@@ -65,7 +81,7 @@
             }
             List<GeoLocation> lista = new ArrayList<GeoLocation>();
             WebPage wpage = paramRequest.getWebPage();
-            
+
 
             Hashtable<String, User> elements = new Hashtable<String, User>();
             Iterator<Friendship> it = Friendship.ClassMgr.listFriendshipByFriend(user, wpage.getWebSite());
@@ -188,7 +204,7 @@
     <li>
         <a href="<%=perfilPath%>?user=<%=friendUser.getEncodedURI()%>"><img alt="Foto de <%=friendUser.getFullName()%>" src="<%=photo%>" <%=imgSize%> title="<%=friendUser.getFullName()%>">
             <%if (!isStrategy)
-                        {%>
+                    {%>
             <br>
             <%=firstName%>
             <%=lastName%>
@@ -258,16 +274,16 @@
                     {
         %>
     <a href="<%=wpage.getUrl()%>?ipage=<%=i%>&user=<%=user.getEncodedURI()%>"><%
-               if (i == ipage)
-               {
+                        if (i == ipage)
+                        {
         %>
         <strong>
             <%                    }
             %>
             <%=i%>
             <%
-               if (i == ipage)
-               {
+                        if (i == ipage)
+                        {
             %>
         </strong>
         <%                    }
@@ -326,19 +342,35 @@
                     if (iElement >= inicio && iElement <= fin)
                     {
                         String usr_sex = (String) friendUser.getExtendedAttribute(mapa.get("userSex"));
-                        Object usr_age = (Object) friendUser.getExtendedAttribute(mapa.get("userAge"));
+                        Object usr_age = (Object) friendUser.getExtendedAttribute(mapa.get("userBirthDate"));
                         if (null == usr_age)
                         {
                             usr_age = "";
                         }
-                        if ("M".equals(usr_sex))
+                        if (!usr_age.equals(""))
+                        {
+                            java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                            Date date = df.parse(usr_age.toString());
+                            java.util.Calendar cal1 = java.util.Calendar.getInstance();
+                            cal1.setTime(date);
+
+                            java.util.Calendar cal2 = java.util.Calendar.getInstance();
+                            cal2.setTime(new Date(System.currentTimeMillis()));
+                            usr_age = "" + calcularEdad(cal1, cal2);
+                        }
+                        if ("male".equals(usr_sex))
                         {
                             usr_sex = "Hombre";
                         }
-                        if ("F".equals(usr_sex))
+                        if ("female".equals(usr_sex))
                         {
                             usr_sex = "Mujer";
                         }
+                        else
+                        {
+                            usr_sex = "";
+                        }
+
                         String usr_status = (String) friendUser.getExtendedAttribute(mapa.get("userStatus"));
                         if (null == usr_status)
                         {
@@ -390,15 +422,15 @@
 <div id="map_canvas" style="width: 420px; height: 300px; float: left; margin-left:5px; margin-right:5px;margin-top:5px"></div>
 <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<%=SWBPortal.getEnv("key/gmap", "")%>" type="text/javascript"></script>
 <%
-        }
-        else
-        {
-            if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT && elements.size() == 0)
-            {
+                }
+                else
+                {
+                    if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT && elements.size() == 0)
+                    {
 %>
 <p>No tiene amigos registrados.</p>
 <%                    }
-}
+                }
 
 %>
 
