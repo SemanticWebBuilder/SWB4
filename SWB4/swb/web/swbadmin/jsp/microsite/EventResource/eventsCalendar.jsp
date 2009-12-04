@@ -51,13 +51,11 @@
 
 </script>
 
-<div class="calendar">
-<br/>
     <form id="calendarForm" action="<%=paramRequest.getRenderUrl().setParameter("act", "calendar")%>" method="post">
         <fieldset><legend>Elige una fecha</legend>
-            <p><label for="year">Año:</label>
-            <input type="text" style="width:70px;" regExp="\d{4}" dojoType="dijit.form.ValidationTextBox" name="year" id="year" value="<%=current.getYear() + 1900%>"/></p>
-            <p><label for="month">Mes:</label>
+            <label for="year">Año:</label>
+            <input type="text" style="width:70px;" regExp="\d{4}" dojoType="dijit.form.ValidationTextBox" name="year" id="year" value="<%=current.getYear() + 1900%>"/>
+            <label for="month">Mes:</label>
             <select  style="width:150px;" name ="month" id="month" value="<%=current.getMonth()%>">
                 <option value="0" <%= imonth==0?"selected=\"selected\"":""%>>Enero</option>
                 <option value="1" <%= imonth==1?"selected=\"selected\"":""%>>Febrero</option>
@@ -71,31 +69,15 @@
                 <option value="9" <%= imonth==9?"selected=\"selected\"":""%>>Octubre</option>
                 <option value="10" <%= imonth==10?"selected=\"selected\"":""%>>Noviembre</option>
                 <option value="11" <%= imonth==11?"selected=\"selected\"":""%>>Diciembre</option>
-            </select></p>
+            </select>
             <input type="hidden" name="day" id="day" value="1"/>
-            <p><input type="submit" id="calendarSubmit" label="Ir" value="Ir"/></p>
+            <input type="submit" id="calendarSubmit" label="Ir" value="Ir"/>
         </fieldset>
     </form>
 
-    <div class="addEventCalendar">
-    <%  if (member.canAdd()) { %>
-    <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act", "add")%>">Agregar evento</a></p></div>
-    <%  }
-        if (wputil != null && member.canView()) {
-    %>
-    <%      if (!wputil.isSubscribed(member)) { %>
-    <div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act", "subcribe")%>">Suscribirse</a></p></div>
-    <%
-            }else {
-    %>
-    <div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act", "unsubcribe")%>">Cancelar suscripción</a></p></div>
-    <%      } %>
-    <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act", "view")%>">Ver todos</a></p></div>
-    <%  } %>
-    </div>
-
     <%=renderCalendar(current, wpage, paramRequest)%>
-</div>
+    <%SWBResourceURL rUrl = paramRequest.getRenderUrl().setParameter("act", "view");%>
+    <a href="<%=rUrl%>">Regresar a la lista de eventos</a>
 <%!
     private String renderCalendar(Date current, WebPage wpage, SWBParamRequest paramRequest) {
         String resId = paramRequest.getResourceBase().getId();
@@ -130,37 +112,25 @@
         pml.setParameter("day", "1");
 
         sbf.append("\n" +
-                "  <table>\n" +
-                "    <tr>\n" +
-                "      <td class=\"month-head\" colspan=\"7\">" +
-                "<a href=\"" + pml + "\">&lt;</a>    " +
-                months[month] + " " + (year + 1900) +
-                "    <a href=\"" + nml + "\">&gt;</a>" +
-                "</td>\n" +
-                "    </tr>\n" +
-                "    <tr>\n");
+                "  <div id=\"calendario\">\n" +
+                "      <h2><a href=\"" + pml + "\">&lt;</a>    " + months[month] + " " + (year + 1900) + "    <a href=\"" + nml + "\">&gt;</a>" +
+                "</h2>\n");
 
         //Render day labels
+        sbf.append("<ul class=\"dias semana\">\n");
         for (int i = 0; i < 7; i++) {
-            sbf.append("      <td class=\"day-head\">" + days[i] + "</td>\n");
+            sbf.append("      <li>" + days[i] + "</li>\n");
         }
+        sbf.append("    </ul>\n");
 
-        sbf.append("    </tr>\n" +
-                "    <tr>\n");
-
+        sbf.append("<ul class=\"dias\">\n");
         //Fill the first week in the month with the appropiate day offset
         for (int i = 0; i < firstWeekDay; i++) {
-            sbf.append("      <td class=\"empty\"> </td>\n");
+            sbf.append("      <li>&nbsp;</li>\n");
         }
 
         int weekDay = firstWeekDay;
         for (int i = 1; i <= daysInMonth; i++) {
-            weekDay %= 7;
-            if (weekDay == 0) {
-                sbf.append("    </tr>\n" +
-                        "    <tr>\n");
-            }
-
             Iterator<EventElement> evsNow = EventElement.listEventElementsByDate(null, new Date(year, month, i), wpage, wpage.getWebSite());
 
             String eventTitles = "";
@@ -178,14 +148,12 @@
                     viewUrl.setParameter("month", String.valueOf(month));
                     viewUrl.setParameter("day", String.valueOf(i));
 
-                    sbf.append("<td id=\"td_"+i+resId+"\" class=\"dated\">\n");
-                    sbf.append("  <div class=\"daylabel\"><a href=\""+viewUrl+"\" onmouseover=\"openTooltip('td_"+i+resId+"','tt_"+i+resId+"','"+eventTitles+"')\" onmouseout=\"closeTooltip('tt_"+i+resId+"')\">" + i + "</a></div>\n");
-                    sbf.append("</td>\n");
+                    sbf.append("<li id=\"td_"+i+resId+"\">\n");
+                    sbf.append("  <a href=\""+viewUrl+"\" onmouseover=\"openTooltip('td_"+i+resId+"','tt_"+i+resId+"','"+eventTitles+"')\" onmouseout=\"closeTooltip('tt_"+i+resId+"')\">" + i + "</a>\n");
+                    sbf.append("</li>\n");
                 }  else {
                     //There aren't events today
-                    sbf.append("<td class=\"day\">\n");
-                    sbf.append("  <div class=\"daylabel\">" + i + "</div>\n");
-                    sbf.append("</td>\n");
+                    sbf.append("<li>\n" + i + "</li>\n");
                 }
             } else {
                 //Not today
@@ -196,24 +164,21 @@
                     viewUrl.setParameter("month", String.valueOf(month));
                     viewUrl.setParameter("day", String.valueOf(i));
 
-                    sbf.append("<td id=\"td_"+i+resId+"\" class=\"dated\">\n");
-                    sbf.append("  <div class=\"daylabel\"><a href=\""+viewUrl+"\"  onmouseover=\"openTooltip('td_"+i+resId+"','tt_"+i+resId+"','"+eventTitles+"')\" onmouseout=\"closeTooltip('tt_"+i+resId+"')\">" + i + "</a></div>\n");
-                    sbf.append("</td>\n");
+                    sbf.append("<li id=\"td_"+i+resId+"\">\n");
+                    sbf.append("  <a href=\""+viewUrl+"\"  onmouseover=\"openTooltip('td_"+i+resId+"','tt_"+i+resId+"','"+eventTitles+"')\" onmouseout=\"closeTooltip('tt_"+i+resId+"')\">" + i + "</a>\n");
+                    sbf.append("</li>\n");
                 } else {
-                    sbf.append("<td class=\"day\" >\n");
-                    sbf.append("  <div class=\"daylabel\">" + i + "</div>\n");
-                    sbf.append("</td>\n");
+                    sbf.append("<li>\n" + i + "</li>\n");
                 }
             }
             weekDay++;
         }
         for(int i = 0; i < (7-weekDay); i++) {
-            sbf.append("<td class=\"empty\" ></td>\n");
+            sbf.append("<li>&nbsp</li>\n");
         }
-        sbf.append("</tr>\n");
-        sbf.append("</table>\n");
-        //sbf.append("</div>\n");
-
+        sbf.append("</ul>\n");
+        sbf.append("</div>\n");
+        sbf.append("<div class=\"clear\">&nbsp;</div>");
         return sbf.toString();
     }
 %>
