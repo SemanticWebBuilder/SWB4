@@ -157,14 +157,18 @@
     <div class="adminTools">
         <a class="adminTool" onclick="javascript:history.go(-1);" href="#">Regresar al indice</a>
         <%
-        if (paramRequest.getAction().equals(paramRequest.Action_REMOVE)) {
-            url.setParameter("uri", semObject.getURI());
-            url.setAction(url.Action_REMOVE);
-            if(user.isRegistered() && user.isSigned()) {
-                UserGroup group = user.getUserRepository().getUserGroup("admin");
-                if((dirObj.getCreator() != null && dirObj.getCreator().getURI().equals(user.getURI())) || group != null && user.hasUserGroup(group)) {
-                    %><a class="adminTool" href="<%=url%>">Borrar</a><%
-                }
+        url.setParameter("uri", semObject.getURI());
+        url.setAction(url.Action_REMOVE);
+        SWBResourceURL urlEdit = paramRequest.getRenderUrl();
+        urlEdit.setParameter("act", "edit");
+        urlEdit.setParameter("uri", dirObj.getURI());
+        if(user.isRegistered() && user.isSigned()) {
+            UserGroup group = user.getUserRepository().getUserGroup("admin");
+            if((dirObj.getCreator() != null && dirObj.getCreator().getURI().equals(user.getURI())) || group != null && user.hasUserGroup(group)) {
+                %>
+                <a class="adminTool" href="<%=url%>"><%=paramRequest.getLocaleString("remove")%></a>
+                <a class="adminTool" href="<%=urlEdit%>"><%=paramRequest.getLocaleString("editInfo")%></a>
+                <%
             }
         }
 
