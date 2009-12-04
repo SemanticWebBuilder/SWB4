@@ -11,9 +11,17 @@
 
                 public int compare(Object arg0, Object arg1)
                 {
-                    SemanticObject obj0 = (SemanticObject) arg0;
-                    SemanticObject obj1 = (SemanticObject) arg1;
-                    return obj1.getProperty(org.semanticwb.model.comm.MicroSite.swb_created).compareTo(obj0.getProperty(org.semanticwb.model.comm.MicroSite.swb_created));
+                    if (arg0 != null && arg1 != null)
+                    {
+
+                        SemanticObject obj0 = (SemanticObject) arg0;
+                        SemanticObject obj1 = (SemanticObject) arg1;
+                        return obj1.getProperty(org.semanticwb.model.comm.MicroSite.swb_created).compareTo(obj0.getProperty(org.semanticwb.model.comm.MicroSite.swb_created));
+                    }
+                    else
+                    {
+                        return 0;
+                    }
                 }
             });
             Iterator<SemanticObject> lista = site.getSemanticObject().getModel().listInstancesOfClass(MicroSite.sclass);
@@ -25,7 +33,7 @@
                     setVals.add(obj);
                 }
             }
-            Iterator<SemanticObject> communities = setVals.iterator();            
+            Iterator<SemanticObject> communities = setVals.iterator();
             if (!communities.hasNext())
             {
     %>
@@ -39,20 +47,23 @@
                 if (obj != null)
                 {
                     try
-                            {
-                    MicroSite comm = (MicroSite) obj.createGenericInstance();
-                    if (comm!=null && comm.getUrl()!=null && comm.getTitle()!=null && comm.isActive())
                     {
-                        i++;
+                        MicroSite comm = (MicroSite) obj.createGenericInstance();
+                        if (comm != null && comm.getUrl() != null && comm.getTitle() != null && comm.isActive())
+                        {
+                            i++;
     %>
     <li><a href="<%=comm.getUrl()%>"><%=comm.getTitle()%></a></li>
     <%
-                        if (i == 5)
-                        {
-                            break;
+                            if (i == 5)
+                            {
+                                break;
+                            }
                         }
                     }
-                    }catch(Exception e){}
+                    catch (Exception e)
+                    {
+                    }
                 }
 
             }
