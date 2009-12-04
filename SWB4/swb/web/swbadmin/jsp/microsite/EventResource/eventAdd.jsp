@@ -42,6 +42,7 @@
             return;
         }
         var event_startDate = dijit.byId('event_startDate').getValue(false);
+               
         if(!event_startDate)
         {
             alert('¡Debe ingresar la fecha de inicio del evento!');
@@ -68,6 +69,34 @@
             alert('¡Debe ingresar la hora de termino del evento!');
             dijit.byId('event_endTime').focus();
             return;
+        }
+        var endDate=dijit.byId('event_endDate').getValue(false);
+        endDate.setHours(0, 0, 0, 0);
+        var startDate=dijit.byId('event_startDate').getValue(false);
+        startDate.setHours(0, 0, 0, 0);
+        difference = endDate.getTime() - startDate.getTime();
+        alert(difference);
+        if(difference<0)
+        {
+            alert('¡La fecha de inicio debe ser menor a la fecha de termino del evento!');
+            dijit.byId('event_startDate').focus();
+            return;
+        }
+        if(difference==0)
+        {
+
+            var hendDate=dijit.byId('event_endTime').getValue(false);
+            hendDate.setFullYear(2009, 1, 1)
+            var hstartDate=dijit.byId('event_startTime').getValue(false);
+            hstartDate.setFullYear(2009, 1, 1)
+            difference = hendDate.getTime() - hstartDate.getTime();            
+            if(difference<0)
+            {
+                alert('¡La hora de inicio debe ser menor a la hora de termino del evento!');
+                dijit.byId('event_startTime').focus();
+                return;
+            }
+            
         }
         document.frmaddevent.submit();
     }
