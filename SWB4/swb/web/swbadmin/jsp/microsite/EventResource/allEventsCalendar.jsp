@@ -45,7 +45,9 @@
     int firstWeekDay = thisMonth.getDay();
     long daysInMonth = Math.round((nextMonth.getTime() - thisMonth.getTime()) / (1000 * 60 * 60 * 24));
 
-    %><div id ="calendario">
+    %>
+    <h2>Eventos del mes</h2>
+    <div id ="calendario">
         <h2><%=months[ilmonth]%>&nbsp;&nbsp;<%=ilyear+1900%></h2>
         <ul class="dias semana">
             <%
@@ -73,6 +75,8 @@
             }
             %>
         </ul>
-    </div><%
+    </div>
+        <div class="clear">&nbsp;</div>
+    <%
 
 %>
