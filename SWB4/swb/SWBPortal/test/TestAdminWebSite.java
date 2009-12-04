@@ -475,7 +475,8 @@ public class TestAdminWebSite {
     {
         WebSite site=SWBContext.getAdminWebSite();
         System.out.println("********"+SWBUtils.getApplicationPath());
-        File file=new File(SWBUtils.getApplicationPath()+"../web/swbadmin/rdf/SWBAdmin.nt");
+        //File file=new File(SWBUtils.getApplicationPath()+"../web/swbadmin/rdf/SWBAdmin.nt");
+        File file=new File("D:\\programming\\proys\\SWB\\swb\\build\\web\\swbadmin\\rdf\\SWBAdmin.nt");
         try
         {
             //System.out.println("file:"+file.getCanonicalPath());
@@ -485,7 +486,8 @@ public class TestAdminWebSite {
 
         site=SWBContext.getOntEditor();
         System.out.println("********"+SWBUtils.getApplicationPath());
-        file=new File(SWBUtils.getApplicationPath()+"../web/swbadmin/rdf/SWBOntEdit.nt");
+        //file=new File(SWBUtils.getApplicationPath()+"../web/swbadmin/rdf/SWBOntEdit.nt");
+        file=new File("D:\\programming\\proys\\SWB\\swb\\build\\web\\swbadmin\\rdf\\SWBOntEdit.nt");
         try
         {
             //System.out.println("file:"+file.getCanonicalPath());
