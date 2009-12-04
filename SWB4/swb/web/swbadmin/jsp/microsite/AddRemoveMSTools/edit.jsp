@@ -9,8 +9,11 @@
 <%
     SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
     User user=paramRequest.getUser();
+
+
     WebPage wp = paramRequest.getWebPage();
     WebSite model = wp.getWebSite();
+
 %>
     <body>
 <%
@@ -159,6 +162,12 @@
                 out.println("<tfoot>");
                 out.println("<tr><td colspan=\"2\"><hr noshade/><p>");
                 out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"btn_save\">Actualizar</button>");
+
+                SWBResourceURL urldel = paramRequest.getActionUrl();
+                urldel.setParameter("act","remove"); 
+                urldel.setParameter("suri", ms.getURI());
+
+                out.println("<button dojoType=\"dijit.form.Button\" type=\"button\" name=\"btn_del\" onclick=\"if(confirm('¿Estás seguro de querer eliminar esta comunidad?')){window.location='"+urldel+"';}\">Eliminar</button>");
 
                 SWBResourceURL urlback = paramRequest.getRenderUrl();
                 urlback.setCallMethod(SWBResourceURL.Call_STRATEGY);
