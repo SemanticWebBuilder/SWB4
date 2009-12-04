@@ -90,8 +90,7 @@ Error: Elemento no encontrado...
         endDate.setHours(0, 0, 0, 0);
         var startDate=dijit.byId('event_startDate').getValue(false);
         startDate.setHours(0, 0, 0, 0);
-        difference = endDate.getTime() - startDate.getTime();
-        alert(difference);
+        difference = endDate.getTime() - startDate.getTime();        
         if(difference<0)
         {
             alert('¡La fecha de inicio debe ser menor a la fecha de termino del evento!');
