@@ -67,7 +67,7 @@
             WebPage wpage = paramRequest.getWebPage();
             String photo = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/perfil/profilePlaceholder.jpg";
 
-            Hashtable<String,User> elements = new Hashtable<String,User>();
+            Hashtable<String, User> elements = new Hashtable<String, User>();
             Iterator<Friendship> it = Friendship.ClassMgr.listFriendshipByFriend(user, wpage.getWebSite());
             while (it.hasNext())
             {
@@ -78,7 +78,7 @@
                     User friendUser = itfriendUser.next();
                     if (!friendUser.getURI().equals(user.getURI()))
                     {
-                        elements.put(friendUser.getEncodedURI(),friendUser);
+                        elements.put(friendUser.getEncodedURI(), friendUser);
                     }
                 }
             }
@@ -161,7 +161,7 @@
     <%
                 String firstName = "", lastName = "";
                 int contTot = 0;
-
+                elements = new Hashtable<String, User>();
                 Iterator<Friendship> itMyFriends = Friendship.ClassMgr.listFriendshipByFriend(user, wpage.getWebSite());
                 while (itMyFriends.hasNext())
                 {
@@ -172,15 +172,22 @@
                         User friendUser = itfriendUser.next();
                         if (!friendUser.getURI().equals(user.getURI()))
                         {
-                            if (friendUser.getPhoto() != null)
-                            {
-                                photo = SWBPortal.getWebWorkPath() + friendUser.getPhoto();
-                            }
+                            elements.put(friendUser.getURI(), friendUser);
+                        }
+                    }
+
+                }
+                for (User friendUser : elements.values())
+                {
+                    if (friendUser.getPhoto() != null)
+                    {
+                        photo = SWBPortal.getWebWorkPath() + friendUser.getPhoto();
+                    }
     %>
     <li>
         <a href="<%=perfilPath%>?user=<%=friendUser.getEncodedURI()%>"><img alt="Foto de <%=friendUser.getFullName()%>" src="<%=photo%>" <%=imgSize%> title="<%=friendUser.getFullName()%>">
             <%if (!isStrategy)
-                            {%>
+                        {%>
             <br>
             <%=firstName%>
             <%=lastName%>
@@ -188,13 +195,13 @@
         </a>
     </li>
     <%
-                            contTot++;
-                            if (isStrategy && contTot == 18)
-                            {
-                                break;
-                            }
-                        }
+                    contTot++;
+                    if (isStrategy && contTot == 18)
+                    {
+                        break;
                     }
+
+
                 }
     %>
 </ul>
@@ -228,61 +235,61 @@
 
 
     <%
-           String nextURL = "#";
-           String previusURL = "#";
-           if (ipage < paginas)
-           {
-               nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1) + "&user=" + user.getEncodedURI();
-               ;
-           }
-           if (ipage > 1)
-           {
-               previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1) + "&user=" + user.getEncodedURI();
-               ;
-           }
-           if (ipage > 1)
-           {
+                    String nextURL = "#";
+                    String previusURL = "#";
+                    if (ipage < paginas)
+                    {
+                        nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1) + "&user=" + user.getEncodedURI();
+                        ;
+                    }
+                    if (ipage > 1)
+                    {
+                        previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1) + "&user=" + user.getEncodedURI();
+                        ;
+                    }
+                    if (ipage > 1)
+                    {
     %>
     <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
         <%
-           }
-           for (int i = 1; i <= paginas; i++)
-           {
+                    }
+                    for (int i = 1; i <= paginas; i++)
+                    {
         %>
     <a href="<%=wpage.getUrl()%>?ipage=<%=i%>&user=<%=user.getEncodedURI()%>"><%
-                if (i == ipage)
-                {
+               if (i == ipage)
+               {
         %>
         <strong>
             <%                    }
             %>
             <%=i%>
             <%
-                if (i == ipage)
-                {
+               if (i == ipage)
+               {
             %>
         </strong>
         <%                    }
         %></a>
     <%
-           }
+                    }
     %>
 
 
     <%
-           if (ipage != paginas)
-           {
+                    if (ipage != paginas)
+                    {
     %>
     <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
         <%
-           }
+                    }
         %>
 </div>
 <%
                 }
 %>
 <!-- fin paginacion -->
-<div id="friendCards">    
+<div id="friendCards">
     <%
                 GeoLocation userLoc = null;
                 if (user.getSemanticObject().getDoubleProperty(Geolocalizable.swb_latitude) != 0D)
@@ -323,11 +330,11 @@
                         {
                             usr_age = "";
                         }
-                        if ("male".equals(usr_sex) || "M".equals(usr_sex))
+                        if ("M".equals(usr_sex))
                         {
                             usr_sex = "Hombre";
                         }
-                        if ("female".equals(usr_sex) || "F".equals(usr_sex))
+                        if ("F".equals(usr_sex))
                         {
                             usr_sex = "Mujer";
                         }
@@ -338,7 +345,7 @@
                         }
                         if (friendUser.getPhoto() != null)
                         {
-                            photo = SWBPortal.getWebWorkPath() +friendUser.getPhoto();
+                            photo = SWBPortal.getWebWorkPath() + friendUser.getPhoto();
                         }
                         if (friendUser.getSemanticObject().getDoubleProperty(Geolocalizable.swb_latitude) != 0D)
                         {
@@ -357,12 +364,12 @@
         <img class="profilePic" width="121" height="121" src="<%=photo%>" alt="<%=friendUser.getFullName()%>">
         <div class="friendCardInfo">
             <a class="ico" href="mailto:<%=email%>"><img src="<%=path%>icoMail.png" alt="enviar un mensaje"></a>
-            <a class="ico" href="<%=perfilurl%>?user=<%=urluser%>"><img src="<%=path%>icoUser.png" alt="ir al perfil"></a>                
+            <a class="ico" href="<%=perfilurl%>?user=<%=urluser%>"><img src="<%=path%>icoUser.png" alt="ir al perfil"></a>
             <div class="friendCardName">
                 <p><%=friendUser.getFullName()%></p>
             </div>
             <p>Sexo:<%=usr_sex%></p>
-            <p>Edad:<%=usr_age%></p>          
+            <p>Edad:<%=usr_age%></p>
         </div>
     </div>
     <%
@@ -380,19 +387,18 @@
 <div class="clear">&nbsp;</div><h2>Ubicaci&oacute;n de mis amigos</h2>
 <div id="map_canvas" style="width: 420px; height: 300px; float: left; margin-left:5px; margin-right:5px;margin-top:5px"></div>
 <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<%=SWBPortal.getEnv("key/gmap", "")%>" type="text/javascript"></script>
-        <%
-                }
-                else
-                    {
-                        if(paramRequest.getCallMethod()==paramRequest.Call_CONTENT && elements.size()==0)
-                            {
-                            %>
-                            <p>No tiene amigos registrados.</p>
-                            <%
-                            }
-                    }
+<%
+        }
+        else
+        {
+            if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT && elements.size() == 0)
+            {
+%>
+<p>No tiene amigos registrados.</p>
+<%                    }
+}
 
-        %>
+%>
 
 
 
