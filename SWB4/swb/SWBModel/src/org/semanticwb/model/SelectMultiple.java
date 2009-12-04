@@ -23,11 +23,13 @@
  
 package org.semanticwb.model;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.platform.SemanticLiteral;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
@@ -46,9 +48,11 @@ public class SelectMultiple extends org.semanticwb.model.base.SelectMultipleBase
         System.out.println("Prop:"+prop);
         System.out.println("obj:"+obj);
         String vals[]=request.getParameterValues(prop.getName());
+        obj.removeProperty(prop);
         for(int x=0;x<vals.length;x++)
         {
-            System.out.println("val"+x+":"+vals[x]);
+            obj.addLiteralProperty(prop,new SemanticLiteral(vals[x]));
+            //System.out.println("val"+x+":"+vals[x]);
         }
     }
 
@@ -121,21 +125,25 @@ public class SelectMultiple extends org.semanticwb.model.base.SelectMultipleBase
 
         if(prop.isObjectProperty())
         {
-            SemanticObject val=null;
-            String aux=request.getParameter(prop.getName());
-            if(aux!=null)val=SemanticObject.createSemanticObject(aux);
-            else val=obj.getObjectProperty(prop);
-            String uri="";
-            String value="";
-            if(val!=null)
+            ArrayList<String> vals=new ArrayList();
+            String auxs[]=request.getParameterValues(prop.getName());
+            if(auxs==null)auxs=new String[0];
+            for(int x=0;x<auxs.length;x++)
             {
-                uri=val.getURI();
-                value=obj.getDisplayName(lang);
+                vals.add(auxs[x]);
             }
+            Iterator<SemanticObject> it2=obj.listObjectProperties(prop);
+            while (it2.hasNext())
+            {
+                SemanticObject semanticObject = it2.next();
+                vals.add(semanticObject.getURI());
+            }
+
+            String value=obj.getDisplayName(lang);
             if(mode.equals("edit") || mode.equals("create") )
             {
-                ret.append("<select name=\""+name+"\" MULTIPLE");
-                if(DOJO)ret.append(" dojoType_=\"dijit.form.FilteringSelect\" autoComplete_=\"true\" invalidMessage=\""+imsg+"\"");
+                ret.append("<select name=\""+name+"\" multiple=\"true\"");
+                if(DOJO)ret.append(" dojoType=\"dijit.form.MultiSelect\" invalidMessage=\""+imsg+"\"");
                 ret.append(" "+ext+">");
                 //onChange="dojo.byId('oc1').value=arguments[0]"
                 SemanticClass cls=prop.getRangeClass();
@@ -159,7 +167,7 @@ public class SelectMultiple extends org.semanticwb.model.base.SelectMultipleBase
                     if(sob.getURI()!=null)
                     {
                         ret.append("<option value=\""+sob.getURI()+"\" ");
-                        if(sob.getURI().equals(uri))ret.append("selected");
+                        if(vals.contains(sob.getURI()))ret.append("selected=\"selected\"");
                         ret.append(">"+sob.getDisplayName(lang)+"</option>");
                     }
                 }
@@ -172,10 +180,22 @@ public class SelectMultiple extends org.semanticwb.model.base.SelectMultipleBase
         {
             if(selectValues!=null)
             {
-                String value=request.getParameter(prop.getName());
-                if(value==null)value=obj.getProperty(prop);
-                ret.append("<select name=\""+name+"\" MULTIPLE");
-                if(DOJO)ret.append(" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""+imsg+"\"");
+                ArrayList<String> vals=new ArrayList();
+                String auxs[]=request.getParameterValues(prop.getName());
+                if(auxs==null)auxs=new String[0];
+                for(int x=0;x<auxs.length;x++)
+                {
+                    vals.add(auxs[x]);
+                }
+                Iterator<SemanticLiteral> it2=obj.listLiteralProperties(prop);
+                while (it2.hasNext())
+                {
+                    SemanticLiteral lit = it2.next();
+                    vals.add(lit.getString());
+                }
+
+                ret.append("<select name=\""+name+"\" multiple=\"true\"");
+                if(DOJO)ret.append(" dojoType=\"dijit.form.MultiSelect\" invalidMessage=\""+imsg+"\"");
                 ret.append(" "+ext+">");
                 StringTokenizer st=new StringTokenizer(selectValues,"|");
                 while(st.hasMoreTokens())
@@ -190,7 +210,7 @@ public class SelectMultiple extends org.semanticwb.model.base.SelectMultipleBase
                         val=tok.substring(ind+1);
                     }
                     ret.append("<option value=\""+id+"\" ");
-                    if(id.equals(value))ret.append("selected");
+                    if(vals.contains(id))ret.append("selected=\"selected\"");
                     ret.append(">"+val+"</option>");
                 }
                 ret.append("</select>");
