@@ -210,9 +210,13 @@ if (sobj != null) {
         <%
         //Termina paginación
         //Comienza criterios de busqueda y ordenamiento (x los elementos que el usuario puede filtrar en sus busquedas, dependiendo del tipo de objeto)
+
         SWBResourceURL urlOrder = paramRequest.getRenderUrl();
         String dirPhotoCheck="";
         if(request.getParameter("dirPhoto")!=null) dirPhotoCheck="checked";
+
+        String dirAbusedCheck="";
+        if(request.getParameter("dirAbused")!=null) dirAbusedCheck="checked";
         %>
         <script type="text/javascript">
             dojo.require("dojo.fx");
@@ -249,6 +253,10 @@ if (sobj != null) {
         <tr><td>
         Solo anuncios con foto  </td><td><input type="checkbox" name="dirPhoto" <%=dirPhotoCheck%>></td>
         <input type="hidden" name="swbdirParam_dirPhoto" value="1">
+        </tr>
+        <tr><td>
+        Solo apropiados  </td><td><input type="checkbox" name="dirAbused" <%=dirAbusedCheck%>></td>
+        <input type="hidden" name="swbdirParam_dirAbused" value="1">
         </tr>
         <%
         SWBFormMgr mgr = new SWBFormMgr(cls, wpage.getSemanticObject(), null);
