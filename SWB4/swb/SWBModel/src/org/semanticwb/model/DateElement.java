@@ -160,4 +160,14 @@ public class DateElement extends org.semanticwb.model.base.DateElementBase
         }
     }
 
+    @Override
+    public String getConstraints()
+    {
+        String ret=super.getConstraints();
+        ret=SWBUtils.TEXT.replaceAll(ret, "{today}", SWBUtils.TEXT.getStrDate(new Date(), "es", "yyyy-mm-dd")); //2006-12-31
+        return ret;
+    }
+
+
+
 }
