@@ -92,7 +92,11 @@ if (sobj != null) {
                                 if(semProp.getName().equals("dirPhoto")) //La foto x ser de tipo text,no se puede controlar dinamicamente
                                 {
                                     alFilter.add(semProp.getName());
-                                }else if(semProp.isBoolean() && propValue.equals("true")){
+                                } else if(semProp.getName().equals("dirNotAbused")) 
+                                {
+                                    alFilter.add(semProp.getName());
+                                }
+                                else if(semProp.isBoolean() && propValue.equals("true")){
                                      //System.out.println("***Boolean-->semProp:"+semProp+",valor:"+propValue);
                                      alFilter.add(semProp.getName());
                                 }else {
@@ -215,8 +219,8 @@ if (sobj != null) {
         String dirPhotoCheck="";
         if(request.getParameter("dirPhoto")!=null) dirPhotoCheck="checked";
 
-        String dirAbusedCheck="";
-        if(request.getParameter("dirAbused")!=null) dirAbusedCheck="checked";
+        String dirNotAbusedCheck="";
+        if(request.getParameter("dirNotAbused")!=null) dirNotAbusedCheck="checked";
         %>
         <script type="text/javascript">
             dojo.require("dojo.fx");
@@ -255,8 +259,8 @@ if (sobj != null) {
         <input type="hidden" name="swbdirParam_dirPhoto" value="1">
         </tr>
         <tr><td>
-        Solo apropiados  </td><td><input type="checkbox" name="dirAbused" <%=dirAbusedCheck%>></td>
-        <input type="hidden" name="swbdirParam_dirAbused" value="1">
+        Solo apropiados  </td><td><input type="checkbox" name="dirNotAbused" <%=dirNotAbusedCheck%>></td>
+        <input type="hidden" name="swbdirParam_dirNotAbused" value="1">
         </tr>
         <%
         SWBFormMgr mgr = new SWBFormMgr(cls, wpage.getSemanticObject(), null);
