@@ -165,7 +165,7 @@ private final int I_INIT_PAGE = 1;
 </ul>
 <div class="paginacion">
 <%SWBResourceURL url=paramRequest.getRenderUrl();%>
-<form action="<%=url.toString()%>">
+<form id="user_portal" action="<%=url.toString()%>">
  Buscar:<input type="text" name="txtFind"/><button type="submit">ir</button>
 </form>
    <%
