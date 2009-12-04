@@ -66,6 +66,7 @@ if (sobj != null) {
                 String param = pname.substring(12);
                 if(request.getParameter(param) != null){
                      hdirParams.put(param, request.getParameter(param));
+                     System.out.println("====Recibido " + param);
                 }
             }
         }
@@ -84,15 +85,12 @@ if (sobj != null) {
                 while(ipsemProps.hasNext())
                 {
                    SemanticProperty semProp=ipsemProps.next();
-                   if(semProp.isDataTypeProperty()){
+                   if(semProp.isDataTypeProperty()) {
                        String propValue=semObject.getProperty(semProp);
                        if(propValue!=null && !propValue.equals("null")){
                             if(hdirParams.containsKey(semProp.getName())) //Filtrado
                             {
                                 if(semProp.getName().equals("dirPhoto")) //La foto x ser de tipo text,no se puede controlar dinamicamente
-                                {
-                                    alFilter.add(semProp.getName());
-                                } else if(semProp.getName().equals("dirNotAbused")) 
                                 {
                                     alFilter.add(semProp.getName());
                                 }
@@ -112,6 +110,11 @@ if (sobj != null) {
                                 }
                             }
                         }
+                    }
+                }
+                if(hdirParams.containsKey("dirNotAbused")) {
+                    if (dirObj.getAbused() == 0) {
+                        alFilter.add("dirNotAbused");
                     }
                 }
                 if(alFilter.size()==hdirParams.size()) //Si el elemento cumple con todos los filtros, se agrega a los elementos a listar
