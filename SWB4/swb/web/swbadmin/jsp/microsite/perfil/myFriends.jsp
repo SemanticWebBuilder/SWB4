@@ -323,11 +323,11 @@
                         {
                             usr_age = "";
                         }
-                        if ("M".equals(usr_sex))
+                        if ("male".equals(usr_sex) || "M".equals(usr_sex))
                         {
                             usr_sex = "Hombre";
                         }
-                        if ("F".equals(usr_sex))
+                        if ("female".equals(usr_sex) || "F".equals(usr_sex))
                         {
                             usr_sex = "Mujer";
                         }
