@@ -233,6 +233,25 @@ public class SemanticObject
         m_objs.remove(uri);
     }
 
+
+    /**
+     * Elimina el todos los SemanticObject del cache
+     */
+    public static void clearCache()
+    {
+        m_objs.clear();
+    }
+
+    /**
+     * Elimina el SemanticObject del cache
+     * param uri del SemanticObject a eliminar del cache
+     */
+    public static int getCacheSize()
+    {
+        return m_objs.size();
+    }
+
+
     private void setPropertyValueCache(SemanticProperty prop, String lang, Object value)
     {
         if(value==null)value=NULL;
