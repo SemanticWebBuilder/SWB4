@@ -391,32 +391,37 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        String action = request.getParameter("act");
-        if (action == null)
-        {
-            action = "view";
-        }
-
         String path = "/swbadmin/jsp/microsite/EventResource/eventView.jsp";
-        if (action.equals("calendar"))
-        {
+        String action = request.getParameter("act");
+
+        if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
             path = "/swbadmin/jsp/microsite/EventResource/eventsCalendar.jsp";
-        }
-        else if (action.equals("add"))
-        {
-            path = "/swbadmin/jsp/microsite/EventResource/eventAdd.jsp";
-        }
-        else if (action.equals("edit"))
-        {
-            path = "/swbadmin/jsp/microsite/EventResource/eventEdit.jsp";
-        }
-        else if (action.equals("detail"))
-        {
-            path = "/swbadmin/jsp/microsite/EventResource/eventDetail.jsp";
-        }
-        else if (action.equals("daily"))
-        {
-            path = "/swbadmin/jsp/microsite/EventResource/eventDailyView.jsp";
+        } else {        
+            if (action == null)
+            {
+                action = "view";
+            }
+
+            if (action.equals("calendar"))
+            {
+                path = "/swbadmin/jsp/microsite/EventResource/eventsCalendar.jsp";
+            }
+            else if (action.equals("add"))
+            {
+                path = "/swbadmin/jsp/microsite/EventResource/eventAdd.jsp";
+            }
+            else if (action.equals("edit"))
+            {
+                path = "/swbadmin/jsp/microsite/EventResource/eventEdit.jsp";
+            }
+            else if (action.equals("detail"))
+            {
+                path = "/swbadmin/jsp/microsite/EventResource/eventDetail.jsp";
+            }
+            else if (action.equals("daily"))
+            {
+                path = "/swbadmin/jsp/microsite/EventResource/eventDailyView.jsp";
+            }
         }
         RequestDispatcher dis = request.getRequestDispatcher(path);
         try
