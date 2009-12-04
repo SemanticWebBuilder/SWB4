@@ -81,14 +81,19 @@ public class Contact extends GenericAdmResource {
         String gracias = "Gracias por contactarnos...";
         try{
             //SWBUtils.EMAIL.sendBGEMail(email, (new StringBuilder()).append("Contacto del Sitio - ").append(subject).toString(), "text/plain", 0, administrador);
-            InternetAddress address1 = new InternetAddress();
-            address1.setAddress(cto);
-            ArrayList<InternetAddress> aAddress = new ArrayList<InternetAddress>();
-            aAddress.add(address1);
+            if(email!=null && email.trim().length()>0 && message!=null && message.trim().length()>0)
+            {
+                InternetAddress address1 = new InternetAddress();
+                address1.setAddress(cto);
+                ArrayList<InternetAddress> aAddress = new ArrayList<InternetAddress>();
+                aAddress.add(address1);
 
-            SWBUtils.EMAIL.sendMail(email, name, aAddress, null, null, (new StringBuilder()).append("Contacto del Sitio - ").append(subject).toString(), "text/plain", message, null, null, null);
-            response.setRenderParameter("email", "sended");
-            response.setRenderParameter("name", name);
+                SWBUtils.EMAIL.sendMail(email, name, aAddress, null, null, (new StringBuilder()).append("Contacto del Sitio - ").append(subject).toString(), "text/plain", message, null, null, null);
+                response.setRenderParameter("email", "sended");
+                response.setRenderParameter("name", name);
+            }else{
+                response.setRenderParameter("email", "missdata");
+            }
         }catch(Exception e) {
             response.setRenderParameter("email", "error");
         }
@@ -159,6 +164,12 @@ public class Contact extends GenericAdmResource {
             out.println("<pre>");
             out.println(parausuario);
             out.println("</pre>");
+        }else if(email.equals("missdata")) {
+            out.println("<pre>");
+            out.println("Lo sentimos, por el momento no fue posible enviar su comentario.<br>");
+            out.println("Falta información para el envío de su correo:<br>");
+            out.println("Debe escribir su correo electrónico y mensaje como minimo<br><br>");
+            out.println("<pre>");
         }else {
             String site = paramsRequest.getWebPage().getWebSite().getDisplayTitle(paramsRequest.getUser().getLanguage());
             out.println("Lo sentimos, por el momento no fue posible enviar su comentario, ");
