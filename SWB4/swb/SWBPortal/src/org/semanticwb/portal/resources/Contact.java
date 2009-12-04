@@ -26,7 +26,9 @@ package org.semanticwb.portal.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
@@ -78,8 +80,13 @@ public class Contact extends GenericAdmResource {
 
         String gracias = "Gracias por contactarnos...";
         try{
-            //SWBUtils.EMAIL.sendBGEMail(email, cto, null, null, (new StringBuilder()).append("Contacto del Sitio - ").append(subject).toString(), "text/plain", 0, administrador);
-            //SWBUtils.EMAIL.sendBGEMail(cto, email, null, null, gracias, "text/plain", 0, parausuario);
+            //SWBUtils.EMAIL.sendBGEMail(email, (new StringBuilder()).append("Contacto del Sitio - ").append(subject).toString(), "text/plain", 0, administrador);
+            InternetAddress address1 = new InternetAddress();
+            address1.setAddress(cto);
+            ArrayList<InternetAddress> aAddress = new ArrayList<InternetAddress>();
+            aAddress.add(address1);
+
+            SWBUtils.EMAIL.sendMail(email, name, aAddress, null, null, (new StringBuilder()).append("Contacto del Sitio - ").append(subject).toString(), "text/plain", message, null, null, null);
             response.setRenderParameter("email", "sended");
             response.setRenderParameter("name", name);
         }catch(Exception e) {
