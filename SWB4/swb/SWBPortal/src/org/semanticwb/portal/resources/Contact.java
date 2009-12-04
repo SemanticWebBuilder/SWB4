@@ -127,6 +127,7 @@ public class Contact extends GenericAdmResource {
             out.println("  <td ><textarea name=\"message\" cols=\"50\" rows=\"5\"></textarea></td>");
             out.println("</tr>");
             out.println("<tr>");
+            /*
             out.println("<tr>");
             out.println((new StringBuilder()).append("  <td><font size=\"2\"><b>").append(paramsRequest.getLocaleString("rating")).append("</b></font></td>").toString());
             out.println("  <td><font size=\"2\">");
@@ -135,6 +136,7 @@ public class Contact extends GenericAdmResource {
             out.println((new StringBuilder()).append("     <input TYPE=\"RADIO\" NAME=\"rating\" VALUE=\"Radio, Televisi\363n, Medios Gr\341ficos, etc\" style=\"font-weight: 700\"><b>").append(paramsRequest.getLocaleString("medias")).append("</b>").toString());
             out.println("\t\t     </font></td>");
             out.println("</tr>");
+             * */
             out.println("<tr>");
             out.println("  <td colspan=\"2\" align=\"center\">");
             out.println((new StringBuilder()).append("      <input name=\"submit\" type=\"submit\" value=\"").append(paramsRequest.getLocaleString("send")).append("\" />").toString());
