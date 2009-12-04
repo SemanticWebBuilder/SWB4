@@ -243,8 +243,7 @@ public class SemanticObject
     }
 
     /**
-     * Elimina el SemanticObject del cache
-     * param uri del SemanticObject a eliminar del cache
+     * Regresa numero de elementos en cache
      */
     public static int getCacheSize()
     {
