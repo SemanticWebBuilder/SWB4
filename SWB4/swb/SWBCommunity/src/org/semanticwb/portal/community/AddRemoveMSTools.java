@@ -15,6 +15,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
@@ -48,8 +49,6 @@ public class AddRemoveMSTools extends GenericResource {
             request.setAttribute("paramRequest", paramRequest);
             dis.include(request, response);
         }catch(Exception e){log.error(e);}
-
-
 
 //        PrintWriter out = response.getWriter();
 //        User user = paramRequest.getUser();
@@ -246,7 +245,14 @@ public class AddRemoveMSTools extends GenericResource {
                 response.setRenderParameter("act", "view");
                 response.setCallMethod(SWBActionResponse.Call_STRATEGY);
                 response.setMode(SWBActionResponse.Mode_VIEW);
+            } else if("remove".equals(action))
+            {
+                String red = wp.getWebSite().getHomePage().getUrl();
+                MicroSite ms = (MicroSite)wp;
+                ms.remove();
+                response.sendRedirect(red);
             }
+
         }
     }
 
