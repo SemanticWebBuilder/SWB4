@@ -86,7 +86,7 @@
             else
             {
         %>
-                aaaa<span class="currentPage"><%=String.valueOf(i)%></span>
+                <span class="currentPage"><%=String.valueOf(i)%></span>
         <%
             }
         }
