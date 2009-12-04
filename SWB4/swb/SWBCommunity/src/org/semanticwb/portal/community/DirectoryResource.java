@@ -50,8 +50,6 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
         if (paramRequest.getAction().equals("excel"))
         {
             response.setContentType("application/vnd.ms-excel");
-
-
         }
         String act = request.getParameter("act");
         if (act == null)
@@ -103,6 +101,23 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
         }
     }
 
+    @Override
+    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        if (paramRequest.getMode().equals("returnRank"))
+        {
+            returnRank(request, response);
+        }
+        else if (paramRequest.getMode().equals("returnStateMessage"))
+        {
+            returnStateMessage(request, response, paramRequest);
+        }
+        else
+        {
+            super.processRequest(request, response, paramRequest);
+        }
+    }
+
     private void getSpam(HttpServletRequest request,
             SWBActionResponse response)
     {
@@ -120,9 +135,9 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
         {
             so = SemanticObject.createSemanticObject(suri);
         }
-        if (so.getGenericInstance() instanceof MicroSiteElement)
+        if (so.getGenericInstance() instanceof DirectoryObject)
         {
-            MicroSiteElement mse = (MicroSiteElement) so.getGenericInstance();
+            DirectoryObject mse = (DirectoryObject) so.getGenericInstance();
             GenericIterator<Comment> iterator = mse.listComments();
             while (iterator.hasNext())
             {
@@ -140,19 +155,45 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
                 ? message : "");
     }
 
+    
+
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
-        Resource base = response.getResourceBase();
-        String action = response.getAction();
-        String act = request.getParameter("act");
         User mem = response.getUser();
-
+        Resource base = response.getResourceBase();
+        if (!mem.isSigned())
+        {
+            return;                                       //si el usuario no pertenece a la red sale;
+        }
+        String action = request.getParameter("act");
+        System.out.println("===act:" + action);    
+        
         try
         {
-            if ("vote".equals(act))
+            if ("vote".equals(action))
             {
                 rank(request, response);
+            }
+            else if ("abuseReport".equals(action))
+            {
+                abusedStateChange(request, response);
+            }
+            else if ("getAbused".equals(action))
+            {
+                getAbused(request, response);
+            }
+            else if ("getSpam".equals(action))
+            {
+                getSpam(request, response);
+            }
+            else if ("addComment".equals(action))
+            {
+                addComment(request, response, mem);
+            }
+            else if ("spamReport".equals(action))
+            {
+                spamStateChange(request, response);
             }
             else if ("claim".equals(action))
             {
@@ -170,11 +211,11 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             {
                 getAbused(request, response);
             }
-            else if ("abuseReport".equals(act))
+            else if ("abuseReport".equals(action))
             {
                 abusedStateChange(request, response);
             }
-            else if ("addComment".equals(act))
+            else if ("addComment".equals(action))
             {
                 addComment(request, response, mem);
             }
@@ -182,7 +223,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             {
                 getSpam(request, response);
             }
-            else if ("spamReport".equals(act))
+            else if ("spamReport".equals(action))
             {
                 spamStateChange(request, response);
             }
@@ -277,9 +318,9 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
         {
             so = SemanticObject.createSemanticObject(suri);
         }
-        if (so.getGenericInstance() instanceof MicroSiteElement)
+        if (so.getGenericInstance() instanceof DirectoryObject)
         {
-            MicroSiteElement mse = (MicroSiteElement) so.getGenericInstance();
+            DirectoryObject mse = (DirectoryObject) so.getGenericInstance();
             message = String.valueOf(mse.getAbused());
         }
         response.setRenderParameter("message",
@@ -426,8 +467,8 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
 
     private void rank(HttpServletRequest request, SWBActionResponse response)
     {
-
         String suri = request.getParameter("uri");
+        System.out.println("====URI: " + suri);
         SemanticObject so = null;
         if (null != suri)
         {
@@ -435,20 +476,21 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
         }
         if (so.getGenericInstance() instanceof DirectoryObject)
         {
-            DirectoryObject mse = (DirectoryObject) so.getGenericInstance();
+            DirectoryObject mse = (DirectoryObject) so.createGenericInstance();
+            System.out.println("====Calificando: " + mse.getTitle());
             int vote = 0;
-
             try
             {
                 vote = Integer.parseInt(request.getParameter("value"));
+                System.out.println("====Valor del voto: " + vote);
             }
             catch (Exception ne)
             {
-                log.error(ne);
             }
-
             double rank = mse.getRank();
+            System.out.println("====Ranking actual: " + rank);
             long rev = mse.getReviews();
+            System.out.println("====Revisiones: " + rev);
             response.setRenderParameter("uri", suri);
 
             rank = rank * rev;
@@ -457,6 +499,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             rank = rank / rev;
 
             //System.out.println("rank a almacenar:" + rank);
+            System.out.println("====Nuevo Ranking: " + rank);
             mse.setRank(rank);
             mse.setReviews(rev);
         }
@@ -470,7 +513,6 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
         String message = null;
         String suri = request.getParameter("uri");
         SemanticObject so = null;
-
         if (null != suri)
         {
             so = SemanticObject.createSemanticObject(suri);
@@ -540,12 +582,11 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
                 Comment comment = iterator.next();
                 if (comment.getId().equals(commentId))
                 {
-
                     try
                     {
                         comment.setSpam(comment.getSpam() + 1);
                     }
-                    catch (Exception e)
+                    catch(Exception e)
                     {
                         comment.setSpam(1);
                     }
@@ -560,10 +601,10 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
                 ? message : "Not OK");
     }
 
-    private void returnRank(HttpServletRequest request,
-            HttpServletResponse response)
+    private void returnRank(HttpServletRequest request, HttpServletResponse response)
     {
 
+        System.out.println("====Entrando a returnRank");
         String message = null;
         String suri = request.getParameter("uri");
         SemanticObject so = null;
@@ -573,12 +614,14 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
         }
         if (so.getGenericInstance() instanceof DirectoryObject)
         {
-            DirectoryObject mse = (DirectoryObject) so.getGenericInstance();
+            DirectoryObject mse = (DirectoryObject) so.createGenericInstance();
             message = mse.getRank() + "|" + mse.getReviews();
+            System.out.println("====Building message: " + message);
         }
         try
         {
             //System.out.println("message:"+message);
+            System.out.println("====Sending message: " + message);
             response.getWriter().print(message != null ? message : "Not OK");
         }
         catch (IOException ioe)
@@ -598,7 +641,6 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
         }
         catch (IOException ioe)
         {
-            log.error(ioe);
         }
     }
 }
