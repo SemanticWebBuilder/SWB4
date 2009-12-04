@@ -65,7 +65,7 @@
             }
             List<GeoLocation> lista = new ArrayList<GeoLocation>();
             WebPage wpage = paramRequest.getWebPage();
-            String photo = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/perfil/profilePlaceholder.jpg";
+            
 
             Hashtable<String, User> elements = new Hashtable<String, User>();
             Iterator<Friendship> it = Friendship.ClassMgr.listFriendshipByFriend(user, wpage.getWebSite());
@@ -179,6 +179,7 @@
                 }
                 for (User friendUser : elements.values())
                 {
+                    String photo = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/perfil/profilePlaceholder.jpg";
                     if (friendUser.getPhoto() != null)
                     {
                         photo = SWBPortal.getWebWorkPath() + friendUser.getPhoto();
@@ -343,6 +344,7 @@
                         {
                             usr_status = "";
                         }
+                        String photo = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/perfil/profilePlaceholder.jpg";
                         if (friendUser.getPhoto() != null)
                         {
                             photo = SWBPortal.getWebWorkPath() + friendUser.getPhoto();
