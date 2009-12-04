@@ -18,7 +18,6 @@ import org.semanticwb.SWBPlatform;
 
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
-import org.semanticwb.model.Priorityable;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.TemplateGroup;
 import org.semanticwb.model.TemplateRef;
@@ -32,7 +31,6 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
-import org.semanticwb.portal.lib.SWBRequest;
 
 /**
  *
@@ -158,6 +156,8 @@ public class CreateMicroSite extends GenericResource
             member.setAccessLevel(Member.LEVEL_OWNER); //Member.LEVEL_EDIT
             member.setUser(user);
             member.setMicroSite(ms);
+
+            response.sendRedirect(ms.getUrl());
 
         }
         else if("updateConfig".equals(action))
