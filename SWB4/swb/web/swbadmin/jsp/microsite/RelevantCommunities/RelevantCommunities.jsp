@@ -33,12 +33,19 @@
 
                 public int compare(Object o1, Object o2)
                 {
-                    MicroSite ob1 = (MicroSite) (o1);
-                    MicroSite ob2 = (MicroSite) (o2);
-                    Long v1 = ob1.getViews();
-                    Long v2 = ob2.getViews();
-                    int ret = v2.compareTo(v1);
-                    return ret;
+                    if (o1 != null && o2 != null)
+                    {
+                        MicroSite ob1 = (MicroSite) (o1);
+                        MicroSite ob2 = (MicroSite) (o2);
+                        Long v1 = ob1.getViews();
+                        Long v2 = ob2.getViews();
+                        int ret = v2.compareTo(v1);
+                        return ret;
+                    }
+                    else
+                    {
+                    }
+                    return 0;
                 }
             });
         }
