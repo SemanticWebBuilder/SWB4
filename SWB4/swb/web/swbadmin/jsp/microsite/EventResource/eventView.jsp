@@ -216,6 +216,8 @@
     %>
 
     <div class="adminTools">
+        <%SWBResourceURL u = paramRequest.getRenderUrl().setParameter("act", "calendar");%>
+        <a class="adminTool" href="<%=u%>">Ver calendario</a>
         <%
             if (member.canAdd())
             {
