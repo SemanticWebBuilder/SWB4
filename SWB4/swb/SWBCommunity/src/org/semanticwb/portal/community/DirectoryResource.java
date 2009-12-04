@@ -167,8 +167,9 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             return;                                       //si el usuario no pertenece a la red sale;
         }
         String action = request.getParameter("act");
-        System.out.println("===act:" + action);    
-        
+        //System.out.println("===act:" + action);
+
+        String action2 = response.getAction();
         try
         {
             if ("vote".equals(action))
@@ -227,7 +228,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             {
                 spamStateChange(request, response);
             }
-            else if (action.equals(response.Action_EDIT))
+            else if (action2.equals(response.Action_EDIT))
             {
                 SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
                 SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
@@ -255,13 +256,13 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
                     log.event(e);
                 }
             }
-            else if (action.equals(response.Action_REMOVE))
+            else if (action2.equals(response.Action_REMOVE))
             {
                 SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
                 semObject.remove();
                 //SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + "/" + semObject.getWorkPath());
             }
-            else if (action.equals(response.Action_ADD))
+            else if (action2.equals(response.Action_ADD))
             {
                 SemanticClass cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(request.getParameter("uri"));
                 SWBFormMgr mgr = new SWBFormMgr(cls, response.getWebPage().getWebSite().getSemanticObject(), null);
@@ -290,8 +291,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
                     file.delete();
 
                 }
-            }
-            if (action.equals("admin_update"))
+            } else if (action.equals("admin_update"))
             {
                 String editaccess = request.getParameter("editar");
                 if (editaccess != null)
