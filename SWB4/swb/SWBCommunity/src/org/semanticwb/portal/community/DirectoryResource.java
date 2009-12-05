@@ -180,6 +180,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             else if ("abuseReport".equals(action))
             {
                 abusedStateChange(request, response);
+                return;
             }
             else if ("getAbused".equals(action))
             {
@@ -198,6 +199,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             else if ("spamReport".equals(action))
             {
                 spamStateChange(request, response);
+                return;
             }
             else if ("claim".equals(action))
             {
