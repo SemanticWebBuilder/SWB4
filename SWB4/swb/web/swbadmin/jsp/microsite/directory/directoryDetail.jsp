@@ -98,6 +98,8 @@
         creator = "<a href=\"" + perfilPath + "?user=" + semUser.getEncodedURI() + "\">" + semUser.getFullName() + "</a>";
     }
 
+
+
     boolean showLocation = false;
     if (semObject.instanceOf(Geolocalizable.swb_Geolocalizable)) {
         showLocation = true;
@@ -298,7 +300,22 @@
     </div>
     <h2>Datos de contacto</h2>
     <ul class="listaElementos">
+        <%
+            if(semObject.getProperty(Commerce.swbcomm_contactName)!=null && !semObject.getProperty(Commerce.swbcomm_contactName).equals(""))
+                {
+                creator=semObject.getProperty(Commerce.swbcomm_contactName);
+                %>
+                <%if (creator != null) {%><li><p class="itemTitle">Contacto:</p><span class="autor"><%=creator%></span></li><%}%>
+                <%
+                }
+    else
+        {
+        %>
         <%if (creator != null) {%><li><p class="itemTitle">Contacto:</p><span class="autor"><%=creator%></span></li><%}%>
+        <%
+        }
+        %>
+        
         <%if (contactPhoneNumber != null) {%><li><p class="itemTitle">Tel&eacute;fono:</p><%=contactPhoneNumber%></li><%}%>
         <%if (contactEmail != null) {%><li><p class="itemTitle">Correo electr&oacute;nico:</p><a href="mailto:<%=contactEmail%>"><%=contactEmail%></a></li><%}%>
         <%if (tags != null) {%><li><p class="itemTitle">Palabras clave:</p><%=tags%></li><%}%>
