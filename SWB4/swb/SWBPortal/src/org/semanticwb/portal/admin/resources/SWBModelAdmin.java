@@ -95,7 +95,7 @@ public class SWBModelAdmin extends GenericResource {
                 if(request.getParameter("msgKey").equals("siteCreated")){
                     out.println("parent.addItemByURI(parent.mtreeStore, null, '" + request.getParameter("wsUri") + "');");
                 }
-                out.println("parent.showStatus('" + paramRequest.getLocaleLogString(request.getParameter("msgKey")) + "');");
+                out.println("parent.showStatus('" + paramRequest.getLocaleString(request.getParameter("msgKey")) + "');");
                 out.println("</script>");
             }
             SWBResourceURL url = paramRequest.getRenderUrl();
@@ -108,16 +108,16 @@ public class SWBModelAdmin extends GenericResource {
             //out.println("<div id=\"vtemplates\" dojoType=\"dijit.TitlePane\" title=\"Templates existentes de Sitios \" class=\"admViewTemplates\" open=\"true\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
             out.println("<div class=\"swbform\">");
             out.println("<fieldset>");
-            out.println("<legend>" + paramRequest.getLocaleLogString("existTpls") + "</legend>");
+            out.println("<legend>" + paramRequest.getLocaleString("existTpls") + "</legend>");
             out.println("<form action=\"" + urlAction.toString() + "\" method=\"post\" enctype='multipart/form-data'>");
             out.println("<table width=\"100%\">");
             out.println("<tr align=\"left\">");
-            out.println("<th><b>" + paramRequest.getLocaleLogString("tpl") + "</b></th>");
-            out.println("<th><b>" + paramRequest.getLocaleLogString("size") + "</b></th>");
-            out.println("<th><b>"+paramRequest.getLocaleLogString("install") +"</b></th>");
-            out.println("<th><b>"+paramRequest.getLocaleLogString("download") + "</b></th>");
-            out.println("<th><b>"+paramRequest.getLocaleLogString("delete") + "</b></th>");
-            out.println("<th><b>" + paramRequest.getLocaleLogString("up2comunity") + "</b></th>");
+            out.println("<th><b>" + paramRequest.getLocaleString("tpl") + "</b></th>");
+            out.println("<th><b>" + paramRequest.getLocaleString("size") + "</b></th>");
+            out.println("<th><b>"+paramRequest.getLocaleString("install") +"</b></th>");
+            out.println("<th><b>"+paramRequest.getLocaleString("download") + "</b></th>");
+            out.println("<th><b>"+paramRequest.getLocaleString("delete") + "</b></th>");
+            out.println("<th><b>" + paramRequest.getLocaleString("up2comunity") + "</b></th>");
             out.println("</tr>");
             for (int i = 0; i < files.length; i++) {
                 File filex = files[i];
@@ -137,27 +137,27 @@ public class SWBModelAdmin extends GenericResource {
                     url.setMode("installmodel");
                     url.setAction("form");
                     url.setParameter("fileName", fileName);
-                    out.println("<td align=\"center\"><a href=\"" + url.toString() + "\" onclick=\"submitUrl('" + url.toString() + "',this);return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/iconinst.png\" alt=\""+paramRequest.getLocaleLogString("install") + "\"/></a></td>");
-                    out.println("<td align=\"center\"><a href=\"" + WEBPATH + filex.getName() + "\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/icondesin.png\" alt=\""+paramRequest.getLocaleLogString("download") + "\"/></a></td>");
+                    out.println("<td align=\"center\"><a href=\"" + url.toString() + "\" onclick=\"submitUrl('" + url.toString() + "',this);return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/iconinst.png\" alt=\""+paramRequest.getLocaleString("install") + "\"/></a></td>");
+                    out.println("<td align=\"center\"><a href=\"" + WEBPATH + filex.getName() + "\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/icondesin.png\" alt=\""+paramRequest.getLocaleString("download") + "\"/></a></td>");
                     urlAction.setParameter("zipName", filex.getAbsolutePath());
                     urlAction.setAction("delete");
-                    out.println("<td align=\"center\"><a href=\"" + urlAction.toString() + "\" onclick=\"submitUrl('" + urlAction.toString() + "',this);return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/iconelim.png\" alt=\""+paramRequest.getLocaleLogString("delete") + "\"/></a></td>");
-                    out.println("<td align=\"left\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/iconsubcom.png\" alt=\""+paramRequest.getLocaleLogString("up2comunity") + "\"/></td>");
+                    out.println("<td align=\"center\"><a href=\"" + urlAction.toString() + "\" onclick=\"submitUrl('" + urlAction.toString() + "',this);return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/iconelim.png\" alt=\""+paramRequest.getLocaleString("delete") + "\"/></a></td>");
+                    out.println("<td align=\"left\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/iconsubcom.png\" alt=\""+paramRequest.getLocaleString("up2comunity") + "\"/></td>");
                     out.println("</tr>");
                 }
             }
             out.println("</table>");
             out.println("</fieldset>");
             out.println("<fieldset><span align=\"center\">");
-            out.println("" + paramRequest.getLocaleLogString("upload") + "<input type=\"file\" name=\"zipmodel\" value=\"" + paramRequest.getLocaleLogString("new") + "\"/><br/>");
-            out.println("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button id=\"send\" dojoType=\"dijit.form.Button\" type=\"submit\">"+paramRequest.getLocaleLogString("up")+"</button>");
+            out.println("" + paramRequest.getLocaleString("upload") + "<input type=\"file\" name=\"zipmodel\" value=\"" + paramRequest.getLocaleString("new") + "\"/><br/>");
+            out.println("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button id=\"send\" dojoType=\"dijit.form.Button\" type=\"submit\">"+paramRequest.getLocaleString("up")+"</button>");
             out.println("</fieldset>");
             out.println("</form>");
             out.println("</div>");
 
-            out.println("<div class=\"swbform\" id=\"vsites\" dojoType=\"dijit.TitlePane\" title=\""+paramRequest.getLocaleLogString("sites2Save")+"\" open=\"false\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
+            out.println("<div class=\"swbform\" id=\"vsites\" dojoType=\"dijit.TitlePane\" title=\""+paramRequest.getLocaleString("sites2Save")+"\" open=\"false\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
             out.println("<fieldset>");
-            out.println("<legend>" + paramRequest.getLocaleLogString("existTpls") + "</legend>");
+            out.println("<legend>" + paramRequest.getLocaleString("existTpls") + "</legend>");
             out.println("<div class=\"swbform\">");
             out.println("<table width=\"75%\">");
             urlAction.setAction("savesite");
@@ -187,13 +187,13 @@ public class SWBModelAdmin extends GenericResource {
         out.println("<div class=\"swbform\">");
         out.println("<form>");
         out.println("<table width=\"75%\" border=\"1\">");
-        out.println("<tr><td colspan=\"2\" align=\"center\"><b>" + paramRequest.getLocaleLogString("fileContent") + "  " +request.getParameter("zipName") + ":</b></td></tr>");
+        out.println("<tr><td colspan=\"2\" align=\"center\"><b>" + paramRequest.getLocaleString("fileContent") + "  " +request.getParameter("zipName") + ":</b></td></tr>");
         out.println("<tr><td align=\"center\"><b>"+paramRequest.getLocaleString("file")+"</b></td><td align=\"center\"><b>"+paramRequest.getLocaleString("size")+" (bytes)</b></td></tr>");
         for (Iterator<ZipEntry> itfiles = SWBUtils.IO.readZip(request.getParameter("zipName")); itfiles.hasNext();) {
             ZipEntry zen = itfiles.next();
             out.println("<tr><td>" + zen.getName() + "</td><td>"+zen.getSize()+"</td></tr>");
         }
-        out.println("<tr><td colspan=\"2\" align=\"center\"><button id=\"send\" dojoType=\"dijit.form.Button\" value=\"" + paramRequest.getLocaleLogString("return") + "\" onClick=\"javascript:history.go(-1);\"/></td></tr>");
+        out.println("<tr><td colspan=\"2\" align=\"center\"><button id=\"send\" dojoType=\"dijit.form.Button\" onClick=\"javascript:history.go(-1);\"/>"+ paramRequest.getLocaleString("return") + "</button></td></tr>");
         out.println("</table>");
         out.println("</form>");
         out.println("</div>");
@@ -208,10 +208,10 @@ public class SWBModelAdmin extends GenericResource {
                     urlAction.setAction("install");
                     out.println("<form class=\"swbform\" id=\"frmImport1\" action=\"" + urlAction.toString() + "\" dojoType=\"dijit.form.Form\" method=\"post\">");
                     out.println("<fieldset>");
-                    out.println("<legend>" + paramRequest.getLocaleLogString("newsitedata") + "</legend>");
+                    out.println("<legend>" + paramRequest.getLocaleString("newsitedata") + "</legend>");
                     out.println("<table>");
                     out.append("<tr><td>");
-                    out.println(paramRequest.getLocaleLogString("msgwsTitle"));
+                    out.println(paramRequest.getLocaleString("msgwsTitle"));
                     out.println("</td>");
                     out.append("<td>");
                     out.println("<input type=\"text\" value=\""+request.getParameter("fileName")+"\" name=\"wstitle\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Titulo.\" invalidMessage=\"Titulo es requerido.\" onkeyup=\"dojo.byId('swb_create_id').value=replaceChars4Id(this.textbox.value);dijit.byId('swb_create_id').validate()\" trim=\"true\" >");
@@ -228,8 +228,8 @@ public class SWBModelAdmin extends GenericResource {
                     out.println("</fieldset>");
                     out.println("<fieldset><span align=\"center\">");
                     //out.append("<tr>");
-                    out.println("<button dojoType='dijit.form.Button' type=\"submit\" onClick=\"if(!dijit.byId('frmImport1').isValid()) return false;\">" + paramRequest.getLocaleLogString("send") + "</button>");
-                    out.println("<button id=\"send\" dojoType=\"dijit.form.Button\" onClick=\"javascript:history.go(-1);\">"+paramRequest.getLocaleLogString("return")+"</button>");
+                    out.println("<button dojoType='dijit.form.Button' type=\"submit\" onClick=\"if(!dijit.byId('frmImport1').isValid()) return false;\">" + paramRequest.getLocaleString("send") + "</button>");
+                    out.println("<button id=\"send\" dojoType=\"dijit.form.Button\" onClick=\"javascript:history.go(-1);\">"+paramRequest.getLocaleString("return")+"</button>");
                     //out.println("</td></tr>");
                     out.println("</span></fieldset>");
                     
