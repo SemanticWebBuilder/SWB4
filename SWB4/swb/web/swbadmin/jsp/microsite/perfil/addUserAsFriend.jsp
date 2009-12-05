@@ -5,72 +5,25 @@
 <%@page import="org.semanticwb.SWBPortal"%>
 
 <%
-            User user = (User) request.getAttribute("user");
-            if (!user.isRegistered())
-            {
-                return;
-            }
-            WebSite site = ((WebPage) request.getAttribute("webpage")).getWebSite();
-            if (user != null && request.getParameter("user") != null)
-            {
-                SemanticObject semObj = SemanticObject.createSemanticObject(request.getParameter("user"));
-                User propect = (User) semObj.createGenericInstance(); // es un tercero
-                boolean isFriend = false;
-                if (!isFriend) // puede ser un invitado
-                {
-                    Iterator<FriendshipProspect> itFriendshipProspect = FriendshipProspect.ClassMgr.listFriendshipProspectByFriendShipRequested(user, site);
-                    if (itFriendshipProspect.hasNext())
-                    {
-                        FriendshipProspect fp = itFriendshipProspect.next();
-                        if (fp.getFriendShipRequester().getURI().equalsIgnoreCase(propect.getURI()) || fp.getFriendShipRequested().getURI().equalsIgnoreCase(user.getURI()))
-                        {
-                            isFriend = true;
-                        }
-                    }
-                }
-                if (!isFriend) // puede ser un invitado
-                {
-                    if (request.getParameter("addprospect") != null && request.getParameter("addprospect").equalsIgnoreCase("true"))
-                    {
-                        isFriend = FriendshipProspect.createFriendshipProspect(user, propect, site);
-                    }
-                }
-
-
-                if (!isFriend) // puede ser un amigo
-                {
-                    Iterator<Friendship> itMyFriends = Friendship.ClassMgr.listFriendshipByFriend(user, site);
-                    while (itMyFriends.hasNext())
-                    {
-                        Friendship friendShip = itMyFriends.next();
-                        Iterator<User> itfriendUser = friendShip.listFriends();
-                        while (itfriendUser.hasNext())
-                        {
-                            User userfriend = itfriendUser.next();
-                            if (userfriend.getURI().equalsIgnoreCase(propect.getURI()))
-                            {
-                                isFriend = true;
-                                break;
-                            }
-                        }
-                        if (isFriend)
-                        {
-                            break;
-                        }
-                    }
-                }
-                if (user.getURI() != null && propect.getURI() != null && user.getURI().equals(propect.getURI()))
-                {
-                    isFriend = true;
-                }
-
-
-                String url = ((WebPage) request.getAttribute("webpage")).getUrl() + "?user=" + propect.getEncodedURI() + "&addprospect=true";
-                if (!isFriend)
-                {
+      User user = (User) request.getAttribute("user");
+      WebSite website = ((WebPage) request.getAttribute("webpage")).getWebSite();
+      User owner=user;
+      if (request.getParameter("user") != null && !request.getParameter("user").equals(user.getURI()))
+      {
+            SemanticObject semObj = SemanticObject.createSemanticObject(request.getParameter("user"));
+            user = (User) semObj.createGenericInstance();
+      }
+      if (request.getParameter("addprospect") != null && request.getParameter("addprospect").equalsIgnoreCase("true"))
+      {
+        FriendshipProspect.createFriendshipProspect(owner, user, website);
+      }
+      if (!owner.getURI().equals(user.getURI()) && !Friendship.areFriends(owner, user, website) && !FriendshipProspect.findFriendProspectedByRequester(owner, user, website))
+      {
+         String url = ((WebPage) request.getAttribute("webpage")).getUrl() + "?user=" + user.getEncodedURI() + "&addprospect=true";
+        %>
+          <li><a href="<%=url%>" >Invitar a <%=user.getFullName()%></a></li>
+        <%
+      }
 %>
-<li><a href="<%=url%>" >Invitar a <%=propect.getFullName()%></a></li>
-<%
-                }
-            }
-%>
+
+            
