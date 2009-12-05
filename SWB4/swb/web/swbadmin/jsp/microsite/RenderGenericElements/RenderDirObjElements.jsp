@@ -85,9 +85,9 @@
             if(request.status==200) {
                 var response = request.responseText;
                 if ('Not OK'!=response && ''!=response) {
-                    console.log("response: "+ response.split('|')[0]);
+                    
                     var ranking = Math.floor(response.split('|')[0]);
-                    console.log("ranking:  " + ranking);
+                   
                     var votes = response.split('|')[1];
                     document.getElementById("reviews").innerHTML = votes;
                     invoke = false;
@@ -140,7 +140,7 @@
             var response = request.responseText;
             refreshAbused();
             if ('' != response && 'Not OK' != response) {
-                var etiqueta = document.getElementById("abused").innerHTML;
+                /*var etiqueta = document.getElementById("abused").innerHTML;
                 if (response == 'true') {
                     document.getElementById("abused").innerHTML = 'Inapropiado';
                     var divmarkup=document.getElementById("markop");
@@ -150,7 +150,7 @@
                     }
                 } else {
                     document.getElementById("abused").innerHTML = 'Apropiado';
-                }
+                }*/
                 invokeAbused = false;
             }
         }
@@ -205,10 +205,11 @@
     function getSpamStateChanged() {
         if (request.readyState != 4) return;
         if (request.status == 200) {
-            var response = request.responseText;
+            /*var response = request.responseText;
+            alert(response);
             if ('' != response ) {
                 document.getElementById("labeldivspamMark"+spamId).innerHTML='<p>'+response +' marcas como spam</p>';
-            }
+            }*/
         }
     }
 
@@ -271,7 +272,10 @@
     %>
     <div class="clearL"></div>
     <div id="markop">
-        <div id="markabused" class="editarInfo"><p><a class="userTool" href="javascript:changeAbusedState();">Marcar como inapropiado</a></p></div>
+        <div id="markabused" class="editarInfo">
+            <p>
+                <a class="userTool" href="javascript:changeAbusedState();">Marcar como inapropiado</a></p>
+        </div>
     </div>
     <%
             }
