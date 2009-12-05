@@ -243,15 +243,17 @@ class LocalCache{
 }
 
 class Contenedor {
-    WebPage yo
+    String yoid
     Set<Contenedor> hijos
     Contenedor (WebPage yo, Set<Contenedor> hijos){
-        this.yo = yo
+        this.yoid = yo.getURI()
         this.hijos = hijos
     }
 
     WebPage getWebPage(){
-        return yo;
+        SemanticObject obj=SemanticObject.createSemanticObject(yoid)
+        if(obj!=null)return obj.getGenericInstance()
+        return null
     }
 
     Set<Contenedor> getHijos(){
