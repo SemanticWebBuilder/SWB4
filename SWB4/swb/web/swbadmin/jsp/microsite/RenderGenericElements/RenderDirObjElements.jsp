@@ -73,7 +73,7 @@
         //alert('En funcion para votar');
         var uri='<%=suri%>';
         uri=escape(uri);
-        var url = '<%=url%>?value='+escape(val)+'&uri='+uri;
+        var url = '<%=url%>?act=vote&value='+escape(val)+'&uri='+uri;
         request.open("GET", url, true);
         request.onreadystatechange = ranked;
         request.send(null);
@@ -89,6 +89,7 @@
                     var ranking = Math.floor(response.split('|')[0]);
                    
                     var votes = response.split('|')[1];
+                    
                     document.getElementById("reviews").innerHTML = votes;
                     invoke = false;
                 } else {
@@ -187,7 +188,7 @@
         request.onreadystatechange = spamStateChanged;
         request.send(null);
         document.getElementById("divspamMark"+commentId).style.visibility='hidden';
-        refreshSpam(commentId);
+        
     }
 
     function refreshSpam(commentId) {
@@ -206,8 +207,7 @@
     function getSpamStateChanged() {
         if (request.readyState != 4) return;
         if (request.status == 200) {
-            var response = request.responseText;
-            
+            var response = request.responseText;            
             if ('' != response ) {
                 document.getElementById("labeldivspamMark"+spamId).innerHTML='<p>'+response +' marcas como spam</p>';
             }
@@ -216,7 +216,10 @@
 
     function spamStateChanged() {
         if (request.readyState != 4) return;
+       
         if (request.status == 200) {
+           
+            refreshSpam(spamId);
             var response = request.responseText;
             if ('' != response && 'Not OK' != response) {
                 var etiqueta = document.getElementById("spamMark"+spamId).innerHTML;
