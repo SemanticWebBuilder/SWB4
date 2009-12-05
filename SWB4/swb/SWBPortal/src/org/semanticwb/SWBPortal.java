@@ -2276,16 +2276,17 @@ public class SWBPortal {
         return content;
     }
 
-    public static boolean InstallZip(String zipName, String modelsPath) {
-        return InstallZip(zipName, null, null, null, modelsPath);
+    public static boolean InstallZip(String zipName) {
+        return InstallZip(zipName, null, null, null);
     }
 
-    public static boolean InstallZip(String zipName, String file2read, String modelsPath) {
-        return InstallZip(zipName, file2read, null, null, modelsPath);
+    public static boolean InstallZip(String zipName, String file2read) {
+        return InstallZip(zipName, file2read, null, null);
     }
 
-    public static boolean InstallZip(String zipName, String file2read, String newWebSiteid, String newWebSiteTitle, String modelspath) {
+    public static boolean InstallZip(String zipName, String file2read, String newWebSiteid, String newWebSiteTitle) {
         try {
+            String modelspath=SWBPortal.getWorkPath() + "/models/";
             if (file2read == null) {
                 file2read = "siteInfo.xml";
             }
