@@ -49,10 +49,13 @@ public class SelectMultiple extends org.semanticwb.model.base.SelectMultipleBase
         System.out.println("obj:"+obj);
         String vals[]=request.getParameterValues(prop.getName());
         obj.removeProperty(prop);
-        for(int x=0;x<vals.length;x++)
+        if(vals!=null)
         {
-            obj.addLiteralProperty(prop,new SemanticLiteral(vals[x]));
-            //System.out.println("val"+x+":"+vals[x]);
+            for(int x=0;x<vals.length;x++)
+            {
+                obj.addLiteralProperty(prop,new SemanticLiteral(vals[x]));
+                //System.out.println("val"+x+":"+vals[x]);
+            }
         }
     }
 
