@@ -82,6 +82,11 @@ public class GenericObjectBase implements GenericObject
     {
         return m_obj;
     }
+
+    public void setSemanticObject(SemanticObject obj)
+    {
+        m_obj=obj;
+    }
     
     /**
      * Asigna la propiedad con el valor especificado

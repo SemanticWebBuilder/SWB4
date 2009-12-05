@@ -33,9 +33,11 @@ import java.lang.reflect.Method;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
@@ -54,7 +56,7 @@ public class SemanticObject
 {
     private static Logger log = SWBUtils.getLogger(SemanticObject.class);
 
-    private static HashMap<String, SemanticObject>m_objs=new HashMap();
+    private static Map<String, SemanticObject>m_objs=Collections.synchronizedMap(new HashMap());
     private GenericObject m_genobj=null;
 
     private Resource m_res = null;
@@ -64,14 +66,15 @@ public class SemanticObject
     private boolean m_virtual = false;
     private HashMap m_virtprops;
 
-    private HashMap m_cacheprops;
-    private HashMap m_cachepropsrel;
+    private Map m_cacheprops;
+    private Map m_cachepropsrel;
 
     private static String NULL="__NULL__";
 
     private static boolean hasCache=true;
     private static boolean hasPropertyCache=true;
 
+    //No cambian
     private static HashMap<String, Method> extGetMethods=new HashMap();
     private static HashMap<String, Method> extSetMethods=new HashMap();
 
@@ -92,8 +95,8 @@ public class SemanticObject
     private SemanticObject(Resource res)
     {
         if(res==null)throw new NullPointerException("Resource is Null...");
-        m_cacheprops=new HashMap();
-        m_cachepropsrel=new HashMap();
+        m_cacheprops=Collections.synchronizedMap(new HashMap());
+        m_cachepropsrel=Collections.synchronizedMap(new HashMap());
         this.m_res = res;
         validateModel();
         //System.out.println("SemanticObject:"+res);
