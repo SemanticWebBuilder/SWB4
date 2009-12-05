@@ -207,7 +207,7 @@
         if (request.readyState != 4) return;
         if (request.status == 200) {
             var response = request.responseText;
-            alert(response);
+            
             if ('' != response ) {
                 document.getElementById("labeldivspamMark"+spamId).innerHTML='<p>'+response +' marcas como spam</p>';
             }
