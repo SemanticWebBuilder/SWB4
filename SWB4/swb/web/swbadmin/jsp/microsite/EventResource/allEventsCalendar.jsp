@@ -9,7 +9,6 @@
     if (request.getParameter("act") != null)
         act = request.getParameter("act");
 
-    
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss a");
         String year = request.getParameter("y");
@@ -44,16 +43,22 @@
         int firstWeekDay = thisMonth.getDay();
         long daysInMonth = Math.round((nextMonth.getTime() - thisMonth.getTime()) / (1000 * 60 * 60 * 24));
 
+        Date startOfMonth = new Date(current.getYear(), current.getMonth(), 1);
+        Date endOfMonth = new Date(current.getYear(), current.getMonth(), (int)daysInMonth);
+
         Set<Integer> reserved = new TreeSet<Integer>();
         Iterator<EventElement> itev = EventElement.ClassMgr.listEventElements();
-        while(itev.hasNext()) {
+        while(itev.hasNext()) {            
             EventElement ee = itev.next();
             int sDay = ee.getStartDate().getDate();
             int eDay = ee.getEndDate().getDate();
-            //Termina despues de este mes?
-            if (ee.getEndDate().getMonth() > ee.getStartDate().getDate()) {
-                eDay = Integer.parseInt(String.valueOf(daysInMonth));
-            }
+
+            if (ee.getStartDate().before(startOfMonth))
+                sDay = 1;
+
+            if (ee.getEndDate().after(endOfMonth))
+                eDay = (int)daysInMonth;
+            
             //System.out.println("====>Verificando " + ee.getTitle() + "[" + ee.getStartDate().getDate() + " - " + ee.getEndDate().getDate() + "]");
             if (ee.getStartDate().getMonth() == current.getMonth()) {
                 for (int i = sDay; i <= eDay; i++) {
@@ -62,24 +67,29 @@
             }
         }
 
-        /*Iterator<Integer> it = reserved.iterator();
-        while (it.hasNext()) {
-            System.out.println("===Hay evento el " + it.next());
-        }*/
-
         //Build URL for next month
         SWBResourceURL nm = paramRequest.getRenderUrl();
+        
         nm.setParameter("d", "1");
-        nm.setParameter("m", String.valueOf(ilmonth + 1));
-        nm.setParameter("y", String.valueOf(ilyear + 1900));
+        if (ilmonth == 11) {
+            System.out.println("=====Estoy en diciembre ");
+            nm.setParameter("m", "0");
+            nm.setParameter("y", String.valueOf((ilyear + 1) + 1900));
+        } else {
+            nm.setParameter("m", String.valueOf(ilmonth + 1));
+            nm.setParameter("y", String.valueOf(ilyear + 1900));
+        }
 
-        //Build URL for previous month
         SWBResourceURL pm = paramRequest.getRenderUrl();
         pm.setParameter("d", "1");
-        pm.setParameter("m", String.valueOf(ilmonth - 1));
-        pm.setParameter("y", String.valueOf(ilyear + 1900));
-
-
+        if (ilmonth == 0) {
+            System.out.println("=====Estoy en enero ");
+            pm.setParameter("m", "11");
+            pm.setParameter("y", String.valueOf((ilyear - 1) + 1900));
+        } else {
+            pm.setParameter("m", String.valueOf(ilmonth - 1));
+            pm.setParameter("y", String.valueOf(ilyear + 1900));
+        }
 
         %>
         <h2>Eventos del mes</h2>
