@@ -175,6 +175,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             if ("vote".equals(action))
             {
                 rank(request, response);
+                return;
             }
             else if ("abuseReport".equals(action))
             {
