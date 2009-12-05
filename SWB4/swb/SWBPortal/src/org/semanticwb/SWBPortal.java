@@ -91,10 +91,7 @@ import org.w3c.dom.NodeList;
  */
 public class SWBPortal {
 
-    String PATH = SWBPortal.getWorkPath() + "/";
-    String WEBPATH = SWBPortal.getWebWorkPath() + "/sitetemplates/";
-    String MODELS = PATH + "models/";
-    String ZIPDIRECTORY = PATH + "sitetemplates/";
+   
     /**
      * Holds the names and values for the variables declared in {@literal web.properties} file.
      * <p>Almacena los nombres y valores de las variables declaradas en el archivo {@literal web.properties}.</p>
@@ -2279,17 +2276,21 @@ public class SWBPortal {
         return content;
     }
 
-    public boolean InstallZip(String zipName, String file2read) {
-        return InstallZip(zipName, file2read, null, null);
+    public static boolean InstallZip(String zipName, String modelsPath) {
+        return InstallZip(zipName, null, null, null, modelsPath);
     }
 
-    public boolean InstallZip(String zipName, String file2read, String newWebSiteid, String newWebSiteTitle) {
+    public static boolean InstallZip(String zipName, String file2read, String modelsPath) {
+        return InstallZip(zipName, file2read, null, null, modelsPath);
+    }
+
+    public static boolean InstallZip(String zipName, String file2read, String newWebSiteid, String newWebSiteTitle, String modelspath) {
         try {
             if (file2read == null) {
                 file2read = "siteInfo.xml";
             }
             String siteInfo = SWBUtils.IO.readFileFromZipAsString(zipName, file2read);
-            String oldIDModel = null, oldNamespace = null, oldDescription = null;
+            String oldIDModel = null, oldNamespace = null, oldTitle = null, oldDescription = null;
             Document dom = SWBUtils.XML.xmlToDom(siteInfo);
             Node nodeModel = dom.getFirstChild();
             if (nodeModel.getNodeName().equals("model")) {
@@ -2302,6 +2303,8 @@ public class SWBPortal {
                     }
                     if (node.getNodeName().equals("namespace")) {
                         oldNamespace = node.getFirstChild().getNodeValue();
+                    }if (node.getNodeName().equals("title")) {
+                        oldTitle = node.getFirstChild().getNodeValue();
                     }
                     if (node.getNodeName().equals("description")) {
                         oldDescription = node.getFirstChild().getNodeValue();
@@ -2317,10 +2320,10 @@ public class SWBPortal {
                 }
                 String newTitle = newWebSiteTitle;
                 if (newTitle == null) {
-                    newTitle = newWebSiteTitle;
+                    newTitle = oldTitle;
                 }
-                File zip = new File(ZIPDIRECTORY + oldIDModel + ".zip");
-                java.io.File extractTo = new File(MODELS + newId);
+                File zip = new File(zipName);
+                java.io.File extractTo = new File(modelspath + newId);
                 //Descomprimir zip
                 org.semanticwb.SWBUtils.IO.unzip(zip, extractTo);
                 //Mover directorios de modelos a directorio work leyendo rdfs
@@ -2350,14 +2353,14 @@ public class SWBPortal {
                         }
                     } else { //TODO:Archivos rdf(modelos) y xml (siteinfo) y readme, eliminarlos
                         String fileName = file.getName();
-                        if (fileName.equalsIgnoreCase("siteInfo.xml") || fileName.equals("readme.txt")) { //Archivo siteinfo
+                        if (fileName.equalsIgnoreCase(file2read) || fileName.equals("readme.txt")) { //Archivo siteinfo
                             file.delete();
                         }
                     }
                 }
                 //Parseo de nombre de NameSpace anteriores por nuevos
                 String newNs = "http://www." + newId + ".swb#";
-                File fileModel = new File(MODELS + newId + "/" + oldIDModel + ".nt");
+                File fileModel = new File(modelspath + newId + "/" + oldIDModel + ".nt");
                 FileInputStream frdfio = new FileInputStream(fileModel);
                 String rdfcontent = SWBUtils.IO.readInputStream(frdfio);
                 fileModel.delete();
@@ -2394,7 +2397,7 @@ public class SWBPortal {
                         }
                     }
                     //Buscar rdf del submodelo
-                    fileModel = new File(MODELS + newId + "/" + xmodelID + ".nt");
+                    fileModel = new File(modelspath + newId + "/" + xmodelID + ".nt");
                     if (fileModel != null && fileModel.exists()) {
                         frdfio = new FileInputStream(fileModel);
                         String rdfmodel = SWBUtils.IO.readInputStream(frdfio);
@@ -2432,7 +2435,7 @@ public class SWBPortal {
      * @param node
      * @param smodels
      */
-    private void iteraModels(Node node, HashMap smodels) {
+    private static void iteraModels(Node node, HashMap smodels) {
         HashMap submodel = new HashMap();
         NodeList nlChildModels = node.getChildNodes();
         for (int j = 0; j < nlChildModels.getLength(); j++) {
