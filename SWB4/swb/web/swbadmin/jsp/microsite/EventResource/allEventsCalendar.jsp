@@ -8,18 +8,19 @@
     String month = request.getParameter("month");
     String day = request.getParameter("day");
     Date current = new Date(System.currentTimeMillis());
-    
-    System.out.println("====Mostrando eventos en " + dateFormat.format(current));
     int imonth = 0;
-    String [] months = {"Enero", "Febrero", "Marzo", "Abril",
-                            "Mayo", "Junio", "Julio", "Agosto",
-                            "Septiembre", "Octubre", "Noviembre", "Diciembre"};
-    String [] days = {"D", "L", "M", "M", "J", "V", "S"};    
 
     if(day != null && month != null && day != null) {
         current = new Date(Integer.valueOf(year) - 1900, Integer.valueOf(month), Integer.valueOf(day));
         imonth = Integer.parseInt(month);
     }
+    
+    System.out.println("====Mostrando eventos en " + dateFormat.format(current));
+    
+    String [] months = {"Enero", "Febrero", "Marzo", "Abril",
+                            "Mayo", "Junio", "Julio", "Agosto",
+                            "Septiembre", "Octubre", "Noviembre", "Diciembre"};
+    String [] days = {"D", "L", "M", "M", "J", "V", "S"};    
 
     int ilday = current.getDay();
     int ilmonth = current.getMonth();
