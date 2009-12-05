@@ -188,6 +188,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             else if ("getSpam".equals(action))
             {
                 getSpam(request, response);
+                return;
             }
             else if ("addComment".equals(action))
             {
