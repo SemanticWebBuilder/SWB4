@@ -2276,21 +2276,21 @@ public class SWBPortal {
         return content;
     }
 
-    public static boolean InstallZip(String zipName) {
-        return InstallZip(zipName, null, null, null);
+    public static boolean InstallZip(File zipFile) {
+        return InstallZip(zipFile, null, null, null);
     }
 
-    public static boolean InstallZip(String zipName, String file2read) {
-        return InstallZip(zipName, file2read, null, null);
+    public static boolean InstallZip(File zipFile, String file2read) {
+        return InstallZip(zipFile, file2read, null, null);
     }
 
-    public static boolean InstallZip(String zipName, String file2read, String newWebSiteid, String newWebSiteTitle) {
+    public static boolean InstallZip(File zipFile, String file2read, String newWebSiteid, String newWebSiteTitle) {
         try {
             String modelspath=SWBPortal.getWorkPath() + "/models/";
             if (file2read == null) {
                 file2read = "siteInfo.xml";
             }
-            String siteInfo = SWBUtils.IO.readFileFromZipAsString(zipName, file2read);
+            String siteInfo = SWBUtils.IO.readFileFromZipAsString(zipFile.getAbsolutePath(), file2read);
             String oldIDModel = null, oldNamespace = null, oldTitle = null, oldDescription = null;
             Document dom = SWBUtils.XML.xmlToDom(siteInfo);
             Node nodeModel = dom.getFirstChild();
@@ -2323,10 +2323,9 @@ public class SWBPortal {
                 if (newTitle == null) {
                     newTitle = oldTitle;
                 }
-                File zip = new File(zipName);
                 java.io.File extractTo = new File(modelspath + newId);
                 //Descomprimir zip
-                org.semanticwb.SWBUtils.IO.unzip(zip, extractTo);
+                org.semanticwb.SWBUtils.IO.unzip(zipFile, extractTo);
                 //Mover directorios de modelos a directorio work leyendo rdfs
                 File[] fieldsUnziped = extractTo.listFiles();
                 for (int i = 0; i < fieldsUnziped.length; i++) {
