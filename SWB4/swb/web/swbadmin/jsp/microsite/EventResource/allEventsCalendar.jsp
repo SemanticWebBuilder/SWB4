@@ -54,18 +54,27 @@
             int sDay = ee.getStartDate().getDate();
             int eDay = ee.getEndDate().getDate();
 
-            if (ee.getStartDate().before(startOfMonth) && ee.getEndDate().after(startOfMonth)) {
-                sDay = 1;
-                isNow = true;
-            }
+            if(ee.getStartDate().getMonth() == startOfMonth.getMonth() && ee.getEndDate().getMonth() == startOfMonth.getMonth() ){
+                if(ee.getStartDate().getYear() == startOfMonth.getYear() && ee.getEndDate().getYear() == startOfMonth.getYear())
+                    sDay = ee.getStartDate().getDate();
+                    eDay = ee.getEndDate().getDate();
+                    System.out.println("====El evento " + ee.getTitle() + "se esta llevando a cabo");
+                    isNow = true;
 
-            if (ee.getEndDate().after(endOfMonth)) {
-                eDay = (int)daysInMonth;
-                isNow = true;
+                    if (ee.getStartDate().before(startOfMonth) && ee.getEndDate().after(startOfMonth)) {
+                        sDay = 1;
+                        isNow = true;
+                    }
+
+                    if (ee.getEndDate().after(endOfMonth)) {
+                        eDay = (int)daysInMonth;
+                        isNow = true;
+                    }
             }
             
+            
             System.out.println("====>Verificando " + ee.getTitle() + "[" + sDay + " - " + eDay + "] - ["
-                    + dateFormat.format(ee.getStartDate())+" - " + ee.getEndDate() + "]");
+                    + dateFormat.format(ee.getStartDate())+" - " + dateFormat.format(ee.getEndDate()) + "]");
             for (int i = sDay; i <= eDay; i++) {
                 if (isNow) {
                     reserved.add(i);
