@@ -29,6 +29,7 @@
     String uri = (String) request.getAttribute("suri");
     long lpage = (Long) request.getAttribute("page");
     long totalPages = totalPagesNumber(mse);
+    boolean hasCommensts=mse.listComments().hasNext();
 %>
 <div>
     <div id="commentsList">
@@ -71,7 +72,8 @@
                 ini = totalPages - PAGE_INDEXES_TO_SHOW + 1;
             }
         }
-
+ if(hasCommensts)
+            {
         for (long i = ini; i <= fin; i++)
         {
             if (i != lpage)
@@ -92,6 +94,7 @@
         %>
                 <span class="commentPageLink"><a href="<%=url.toString()%>&pn=<%=(lpage + 1)%>" title="P&aacute;gina siguiente">&gt;&gt;</a></span>
         <%
+        }
         }
 }
 %>
