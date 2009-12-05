@@ -6,32 +6,19 @@
     SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss a");
     String year = request.getParameter("year");
     String month = request.getParameter("month");
+    String day = request.getParameter("day");
+    Date current = new Date(System.currentTimeMillis());
+    
+    System.out.println("====Mostrando eventos en " + dateFormat.format(current));
     int imonth = 0;
     String [] months = {"Enero", "Febrero", "Marzo", "Abril",
                             "Mayo", "Junio", "Julio", "Agosto",
                             "Septiembre", "Octubre", "Noviembre", "Diciembre"};
-    String [] days = {"D", "L", "M", "M", "J", "V", "S"};
-    String day = request.getParameter("day");
-    Date current = new Date(System.currentTimeMillis());
+    String [] days = {"D", "L", "M", "M", "J", "V", "S"};    
 
     if(day != null && month != null && day != null) {
         current = new Date(Integer.valueOf(year) - 1900, Integer.valueOf(month), Integer.valueOf(day));
         imonth = Integer.parseInt(month);
-    }
-
-    Set<Integer> reserved = new TreeSet<Integer>();
-    Iterator<EventElement> itev = EventElement.ClassMgr.listEventElements();
-    while(itev.hasNext()) {
-        EventElement ee = itev.next();
-        System.out.println("====>Verificando " + ee.getTitle() + "[" + ee.getStartDate().getDate() + "]");
-        if (ee.getStartDate().getMonth() == current.getMonth()) {
-            reserved.add(ee.getStartDate().getDate());
-        }
-    }
-
-    Iterator<Integer> it = reserved.iterator();
-    while (it.hasNext()) {
-        System.out.println("===Hay evento el " + it.next());
     }
 
     int ilday = current.getDay();
@@ -44,6 +31,29 @@
     //Find out when this mont starts and ends
     int firstWeekDay = thisMonth.getDay();
     long daysInMonth = Math.round((nextMonth.getTime() - thisMonth.getTime()) / (1000 * 60 * 60 * 24));
+
+    Set<Integer> reserved = new TreeSet<Integer>();
+    Iterator<EventElement> itev = EventElement.ClassMgr.listEventElements();
+    while(itev.hasNext()) {
+        EventElement ee = itev.next();
+        int sDay = ee.getStartDate().getDate();
+        int eDay = ee.getEndDate().getDate();
+        //Termina despues de este mes?
+        if (ee.getEndDate().getMonth() > ee.getStartDate().getDate()) {
+            eDay = Integer.parseInt(String.valueOf(daysInMonth));
+        }
+        System.out.println("====>Verificando " + ee.getTitle() + "[" + ee.getStartDate().getDate() + " - " + ee.getEndDate().getDate() + "]");
+        if (ee.getStartDate().getMonth() == current.getMonth()) {
+            for (int i = sDay; i <= eDay; i++) {
+                reserved.add(i);
+            }
+        }
+    }
+
+    Iterator<Integer> it = reserved.iterator();
+    while (it.hasNext()) {
+        System.out.println("===Hay evento el " + it.next());
+    }
 
     %>
     <h2>Eventos del mes</h2>
