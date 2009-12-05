@@ -61,7 +61,7 @@ public class SWBUserMgr
 {
     private static Logger log = SWBUtils.getLogger(SWBUserMgr.class);
     private HashMap<String, SWBSessionObject> sessionobjects;
-    private HashMap<String, HttpSession> sessions;
+    //private HashMap<String, HttpSession> sessions;
     
     public static final String SUBJECTATT = "_swbsubject";
     
@@ -73,7 +73,7 @@ public class SWBUserMgr
     public void init() {
         log.event("Initializing SWBUserMgr...");
         sessionobjects=new HashMap<String, SWBSessionObject>();
-        sessions=new HashMap<String, HttpSession>();
+        //sessions=new HashMap<String, HttpSession>();
     }
     
     /**
@@ -92,7 +92,7 @@ public class SWBUserMgr
             if(SWBPlatform.getEnv("swb/usersTrace","false").equals("true"))
             {
                 sessionobjects.put(ses.getId(), sessobj);
-                sessions.put(ses.getId(), ses);
+                //sessions.put(ses.getId(), ses);
             }
         }
         return  sessobj.getSubject(website);
@@ -101,7 +101,7 @@ public class SWBUserMgr
     public void unboundSessionObject(String sessID)
     {
         sessionobjects.remove(sessID);
-        sessions.remove(sessID);
+        //sessions.remove(sessID);
     }
     
     public User getUser(HttpServletRequest request, WebSite site)
@@ -132,7 +132,7 @@ public class SWBUserMgr
                 sub.getPrincipals().add(ret);
             }catch(Exception e){log.error(e);}
             ret.setLanguage(language);
-            //TODO: validar dispositivo
+            //validar dispositivo
             Device dev=getDevice(request, site);
             if(dev!=null)
             {
@@ -201,18 +201,6 @@ public class SWBUserMgr
                     {
                         coincide = cont;
                         ret=dev;
-                        //System.out.println("ret:"+ret);
-                        //TODO: Detectar Navegador
-    //                    if (recDevice.getUserAgent().indexOf("Mozilla") != -1)
-    //                    {
-    //                        if (device1.indexOf("MSIE") != -1 || device1.indexOf("Opera") != -1)
-    //                        {
-    //                            usr.setNavegador("Explorer");
-    //                        } else if (device1.indexOf("en") != -1 || device1.indexOf("Netscape") != -1)
-    //                        {
-    //                            usr.setNavegador("Netscape");
-    //                        }
-    //                    }
                     }
                 }
             }
@@ -233,21 +221,21 @@ public class SWBUserMgr
             }
         }
         CallbackHandler callback = (CallbackHandler) constructor[method].newInstance(request, response, ur.getAuthMethod(), website.getId());
-        LoginContext lc;
         Subject subject = SWBPortal.getUserMgr().getSubject(request, website.getId());
-                log.trace("Sending calback:"+callback);
-               // request.getSession(true).invalidate();
-                lc = new LoginContext(ur.getLoginContext(), subject, callback);
-                lc.login();
-                User user = null;
-                Iterator it = subject.getPrincipals().iterator();
-                if (it.hasNext())
-                {
-                    user = (User) it.next();
-                    log.trace("user checked?:"+user.hashCode()+":"+user.isSigned());
-                }
+        log.trace("Sending calback:"+callback);
+       // request.getSession(true).invalidate();
+        LoginContext lc = new LoginContext(ur.getLoginContext(), subject, callback);
+        lc.login();
+        Iterator it = subject.getPrincipals().iterator();
+        if (it.hasNext())
+        {
+            User user = (User) it.next();
+            if(user.getUserRepository().equals(ur))
+            {
+                log.trace("user checked?:"+user.hashCode()+":"+user.isSigned());
                 Login.sendLoginLog(request, user);
-
+            }
+        }
     }
 
 }
