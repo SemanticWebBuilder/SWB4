@@ -100,9 +100,8 @@
                 int weekDay = firstWeekDay;
                 for (int i = 1; i < daysInMonth; i++) {
                     if (reserved.contains(i)) {
-                        String dayUrl = "#";
-                        //String dayUrl = paramRequest.getWebPage().getWebSite().getWebPage("Eventos_del_dia").getUrl().toString();
-                        //dayUrl += "?act=daily&y=" + (ilyear + 1900) + "&m=" + ilmonth + "&d=" + i;
+                        String dayUrl = paramRequest.getWebPage().getWebSite().getWebPage("Eventos_del_dia").getUrl().toString();
+                        dayUrl += "?act=daily&y=" + (ilyear + 1900) + "&m=" + ilmonth + "&d=" + i;
                         %><li><a href="<%=dayUrl%>"><%=i%></a></li><%
                     } else {
                         %><li><%=i%></li><%
@@ -130,74 +129,58 @@
                 }
             }
 
-
-%>
-<div class="columnaIzquierda">
-<%
-    Iterator<EventElement> eit = events.iterator();
-    while(eit.hasNext()) {
-        EventElement event = eit.next();        
-        if(event.canView(member)) {
-            //System.out.println("||===>>" + event.getTitle());
-            String viewUrl = event.getURL();
-
-            java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
-            String rank = df.format(event.getRank());
-
-            String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/EventResource/noevent.jpg";
-            String path = event.getWorkPath();
-            if (event.getEventThumbnail() != null)
-            {
-                int pos = event.getEventThumbnail().lastIndexOf("/");
-                if (pos != -1)
-                {
-                    String sphoto = event.getEventThumbnail().substring(pos + 1);
-                    event.setEventThumbnail(sphoto);
-                }
-                pathPhoto = SWBPortal.getWebWorkPath() + path + "/" + event.getEventThumbnail();
-            }
-            String postAuthor = "Usuario dado de baja";
-            if (event.getCreator() != null)
-            {
-                postAuthor = event.getCreator().getFirstName();
-            }
-            String editEventURL = event.getWebPage().getUrl();
-            editEventURL += "?act=edit&uri=" + event.getEncodedURI();
-            //paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", event.getURI()).toString();
-            String removeUrl = event.getWebPage().getUrl();
-            removeUrl += "?act=remove&uri=" + event.getEncodedURI();
-            //removeUrl.setParameter("act", "remove");
-            //removeUrl.setParameter("uri", event.getEncodedURI());
-            String jsremoveurl = "javascript:validateremove('" + removeUrl + "','" + event.getTitle() + "')";
-%>
-    <div class="noticia">
-        <img src="<%=pathPhoto%>" alt="<%= event.getTitle()%>">
-        <div class="noticiaTexto">
-            <h2><%=event.getTitle()%></h2>
-            <p>&nbsp;<br>Por: <%=postAuthor%><br><%=dateFormat.format(event.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%></p>
-            <p>
-                <%=event.getDescription()%> | <a href="<%=viewUrl%>">Ver más</a>
-                <%
-                        if (event.canModify(member))
-                        {
+            Iterator<EventElement> eit = events.iterator();
+            if (eit.hasNext()) {
                 %>
-                | <a href="<%=editEventURL%>">Editar</a> | <a href="<%=jsremoveurl%>">Eliminar</a>
-                <%
+                <div class="columnaIzquierda">
+                    <h1>Eventos del <%=dateFormat.format(current)%></h1>
+                    <%
+                    while(eit.hasNext()) {
+                        EventElement ev = eit.next();
+                        if(ev.canView(member)) {
+                            java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
+                            String rank = df.format(ev.getRank());
+
+                            String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/EventResource/noevent.jpg";
+                            String path = ev.getWorkPath();
+                            if (ev.getEventThumbnail() != null)
+                            {
+                                int pos = ev.getEventThumbnail().lastIndexOf("/");
+                                if (pos != -1)
+                                {
+                                    String sphoto = ev.getEventThumbnail().substring(pos + 1);
+                                    ev.setEventThumbnail(sphoto);
+                                }
+                                pathPhoto = SWBPortal.getWebWorkPath() + path + "/" + ev.getEventThumbnail();
+                            }
+                            String postAuthor = "Usuario dado de baja";
+                            if (ev.getCreator() != null)
+                            {
+                                postAuthor = ev.getCreator().getFirstName();
+                            }
+
+                            String viewUrl = ev.getURL();
+                            %>
+                            <div class="noticia">
+                                <img src="<%=pathPhoto%>" alt="<%= ev.getTitle()%>">
+                                <div class="noticiaTexto">
+                                    <h2><%=ev.getTitle()%></h2>
+                                    <p>&nbsp;<br>Por: <%=postAuthor%><br><%=dateFormat.format(ev.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(ev.getCreated(), user.getLanguage())%></p>
+                                    <p>
+                                    <%=ev.getDescription()%> | <a href="<%=viewUrl%>">Ver m&aacute;s</a>
+                                    </p>
+                                    <p class="stats">
+                                        Puntuación: <%=rank%><br>
+                                        <%=ev.getViews()%> vistas
+                                    </p>
+                                </div>
+                            </div>
+                            <%
                         }
+                    }
                 %>
-
-            </p>
-            <p class="stats">
-            	Puntuación: <%=rank%><br>
-                <%=event.getViews()%> vistas
-            </p>
-        </div>
-    </div>
-<%
-        }
-    }
-%>
-</div>
-<%
+                </div>
+            <%
+            }
 }
 %>
