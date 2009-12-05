@@ -126,7 +126,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
         String suri = request.getParameter("uri");
         String commentId = request.getParameter("commentId");
         SemanticObject so = null;
-        //System.out.println("suri:" + suri + ", id:" + commentId );
+        
         if (commentId == null)
         {
             return;
@@ -167,7 +167,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             return;                                       //si el usuario no pertenece a la red sale;
         }
         String action = request.getParameter("act");
-        //System.out.println("===act:" + action);
+        
 
         String action2 = response.getAction();
         try
@@ -386,7 +386,6 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
 
                         try
                         {
-                            System.out.println("fichero:"+fichero.getAbsolutePath());
                             item.write(fichero);
                             ImageResizer.resize(fichero, 180, true, fichero, ext);
                         }
@@ -473,7 +472,6 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
     private void rank(HttpServletRequest request, SWBActionResponse response)
     {
         String suri = request.getParameter("uri");
-        System.out.println("====URI: " + suri);
         SemanticObject so = null;
         if (null != suri)
         {
@@ -482,20 +480,18 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
         if (so.getGenericInstance() instanceof DirectoryObject)
         {
             DirectoryObject mse = (DirectoryObject) so.createGenericInstance();
-            System.out.println("====Calificando: " + mse.getTitle());
             int vote = 0;
             try
             {
                 vote = Integer.parseInt(request.getParameter("value"));
-                System.out.println("====Valor del voto: " + vote);
             }
             catch (Exception ne)
             {
             }
             double rank = mse.getRank();
-            System.out.println("====Ranking actual: " + rank);
+            
             long rev = mse.getReviews();
-            System.out.println("====Revisiones: " + rev);
+           
             response.setRenderParameter("uri", suri);
 
             rank = rank * rev;
@@ -503,8 +499,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             rank = rank + vote;
             rank = rank / rev;
 
-            //System.out.println("rank a almacenar:" + rank);
-            System.out.println("====Nuevo Ranking: " + rank);
+            
             mse.setRank(rank);
             mse.setReviews(rev);
         }
@@ -569,7 +564,6 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
         String suri = request.getParameter("uri");
         String commentId = request.getParameter("commentId");
         SemanticObject so = null;
-        //System.out.println("suri:" + suri + ", id:" + commentId );
         if (commentId == null)
         {
             return;
@@ -607,9 +601,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
     }
 
     private void returnRank(HttpServletRequest request, HttpServletResponse response)
-    {
-
-        System.out.println("====Entrando a returnRank");
+    {       
         String message = null;
         String suri = request.getParameter("uri");
         SemanticObject so = null;
@@ -621,12 +613,10 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
         {
             DirectoryObject mse = (DirectoryObject) so.createGenericInstance();
             message = mse.getRank() + "|" + mse.getReviews();
-            System.out.println("====Building message: " + message);
+            
         }
         try
         {
-            //System.out.println("message:"+message);
-            System.out.println("====Sending message: " + message);
             response.getWriter().print(message != null ? message : "Not OK");
         }
         catch (IOException ioe)
@@ -639,7 +629,6 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
     {
 
         String message = request.getParameter("message");
-        //System.out.println("message en returnStateMessage:" + message);
         try
         {
             response.getWriter().print(message != null ? message : "Not OK");
