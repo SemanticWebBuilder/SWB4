@@ -6,9 +6,11 @@ package org.semanticwb.portal.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.logging.Level;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
@@ -16,6 +18,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.SFBase64;
+import org.semanticwb.model.User;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -47,15 +50,19 @@ public class PasswordManager extends GenericResource {
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        if (null != request.getParameter("message")) {
-            String message = (String) request.getParameter("message");
-            response.getWriter().println(message);
-        } else if (paramRequest.getUser().isSigned()) {
-            showPasswordChange(request, response, paramRequest);
-        } else if (gotValidToken(request)) {
-            showNewPassword(request, response, paramRequest);
-        } else {
-            showLoginRequest(request, response, paramRequest);
+        try {
+            if (null != request.getParameter("message")) {
+                String message = (String) request.getParameter("message");
+                response.getWriter().println(message);
+            } else if (null != gotValidTokenLogin(request)) {
+                showNewPassword(request, response, paramRequest, gotValidTokenLogin(request));
+            } else if (paramRequest.getUser().isSigned()) {
+                showPasswordChange(request, response, paramRequest);
+            } else {
+                showLoginRequest(request, response, paramRequest);
+            }
+        } catch (GeneralSecurityException ex) {
+            log.error(ex);
         }
     }
 
@@ -82,15 +89,17 @@ public class PasswordManager extends GenericResource {
             }
             if (response.getAction().equals("ADD")) {
                 System.out.println("en ADD");
-                if (gotValidToken(request)) {
+                String login = (String) request.getSession(true).getAttribute("login");
+                if (null != login) {
+                    User usr = response.getWebPage().getWebSite().getUserRepository().getUserByLogin(login);
                     String pwd1 = request.getParameter("swb_newPassword");
                     String pwd2 = request.getParameter("swb_newPassword2");
                     if (pwd2.equals(pwd1)) {
-                        response.getUser().setPassword(pwd2);
+                        usr.setPassword(pwd2);
                         response.setRenderParameter("message", "password actualizado");
-                    } else {
-                        response.setRenderParameter("message", "passwords no corresponden");
                     }
+                } else {
+                    response.setRenderParameter("message", "passwords no corresponden");
                 }
             }
             if (response.getAction().equals("SML")) {
@@ -99,10 +108,24 @@ public class PasswordManager extends GenericResource {
                 if (null == frmmailms) {
                     frmmailms = TXT_mailms;
                 }
-                String email = response.getWebPage().getWebSite().getUserRepository().getUserByLogin(request.getParameter("swb_login")).getEmail();
-                String texto = replaceTags(frmmailms, request, null, generateToken());
-                System.out.println(texto);
-                SWBUtils.EMAIL.sendBGEmail(email, "Recuperar password", texto);
+                String login = request.getParameter("swb_login");
+                if (null != login) {
+                    User usr = response.getWebPage().getWebSite().getUserRepository().getUserByLogin(login);
+                    if (null != usr) {
+                        try {
+                            String email = usr.getEmail();
+                            String token = (request.isSecure() ? "HTTPS://" : "HTTP://") +
+                                    request.getServerName() +
+                                    (request.getServerPort() == 80 ? "" : ":" + request.getServerPort()) + response.getWebPage().getRealUrl() + "/_tkn/" + generateToken(usr.getLogin());
+                            String texto = replaceTags(frmmailms, request, null, token);
+                            System.out.println("URL:" + texto);
+                            SWBUtils.EMAIL.sendBGEmail(email, "Recuperar password", texto);
+                        } catch (GeneralSecurityException ex) {
+                            log.error(ex);
+                            response.setRenderParameter("message", "Error procesando informaci&oacute;n");
+                        }
+                    }
+                }
             //Send Mail
             }
         } else {
@@ -134,7 +157,7 @@ public class PasswordManager extends GenericResource {
         out.println(replaceTags(frmcontent, request, paramRequest, cadcontrol));
     }
 
-    void showNewPassword(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    void showNewPassword(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, String login) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         String frmcontent = getResourceBase().getAttribute(FRM_NEWPWD);
         if (null == frmcontent) {
@@ -142,12 +165,8 @@ public class PasswordManager extends GenericResource {
         }
         String cadcontrol = getCadControl();
         request.getSession(true).setAttribute("cadcontrol", cadcontrol);
+        request.getSession(true).setAttribute("login", login);
         out.println(replaceTags(frmcontent, request, paramRequest, cadcontrol));
-    }
-
-    boolean gotValidToken(HttpServletRequest request) {
-        boolean ret = false;
-        return ret;
     }
 
     String replaceTags(String str, HttpServletRequest request, SWBParamRequest paramRequest, String url) {
@@ -205,7 +224,7 @@ public class PasswordManager extends GenericResource {
             str = SWBUtils.TEXT.replaceAll(str, "{actionurlADD}", paramRequest.getActionUrl().setAction("ADD").toString());
             str = SWBUtils.TEXT.replaceAll(str, "{actionurlSML}", paramRequest.getActionUrl().setAction("SML").toString());
         }
-        str = SWBUtils.TEXT.replaceAll(str, "{?url}", generateToken());
+        str = SWBUtils.TEXT.replaceAll(str, "{?url}", url);
         //System.out.println(str);
         return str;
     }
@@ -326,7 +345,30 @@ public class PasswordManager extends GenericResource {
         return sb.toString();
     }
 
-    String generateToken() {
-        return "TOKEN";
+    String generateToken(String login) throws GeneralSecurityException {
+        String value = login + "|" + (System.currentTimeMillis() + 1000L * 60 * 60 * 48) + "|" +
+                SWBPlatform.getVersion();
+        value = SFBase64.encodeBytes(SWBUtils.CryptoWrapper.PBEAES128Cipher("TOO MANY SECRETS", value.getBytes()), false);
+        return value;
+    }
+
+    String gotValidTokenLogin(HttpServletRequest request) throws GeneralSecurityException {
+        StringBuffer url = request.getRequestURL();
+        String ret = null;
+        if (url.lastIndexOf("_tkn/") > 1) {
+            String value = url.substring(url.lastIndexOf("_tkn/") + 5);
+            System.out.println("val:" + value);
+            value = new String(SWBUtils.CryptoWrapper.PBEAES128Decipher("TOO MANY SECRETS", SFBase64.decode(value)));
+            String[] lista = value.split("\\|");
+
+            if (System.currentTimeMillis() < Long.valueOf(lista[1]) && SWBPlatform.getVersion().equals(lista[2])) {
+                ret = lista[0];
+            }
+            System.out.println(value);
+            System.out.println(lista[0]);
+            System.out.println(lista[1]);
+            System.out.println(lista[2]);
+        }
+        return ret;
     }
 }
