@@ -23,10 +23,10 @@
             imonth = Integer.parseInt(month);
         }
 
-        System.out.println("====act:" + act +" " + dateFormat.format(current));
+        //System.out.println("====act:" + act +" " + dateFormat.format(current));
         
     if (!act.equals("daily")) {
-        System.out.println("====Mostrando eventos en " + dateFormat.format(current));
+        //System.out.println("====Mostrando eventos en " + dateFormat.format(current));
 
         String [] months = {"Enero", "Febrero", "Marzo", "Abril",
                                 "Mayo", "Junio", "Julio", "Agosto",
@@ -84,7 +84,7 @@
         %>
         <h2>Eventos del mes</h2>
         <div id ="calendario" style="margin:10px">
-            <h2><%=months[ilmonth]%>&nbsp;&nbsp;<%=ilyear+1900%></h2>
+            <h2><a href="<%=pm.toString()+"#anchorDays"%>">&lt;</a>&nbsp;<%=months[ilmonth]%>&nbsp;&nbsp;<%=ilyear+1900%>&nbsp;<a href="<%=nm.toString()+"#anchorDays"%>">&gt;</a></h2>
             <ul id="anchorDays" class="dias semana">
                 <%
                 for(int i = 0; i < 7; i++) {
@@ -98,7 +98,7 @@
                 }
 
                 int weekDay = firstWeekDay;
-                for (int i = 1; i < daysInMonth; i++) {
+                for (int i = 1; i <= daysInMonth; i++) {
                     if (reserved.contains(i)) {
                         String dayUrl = paramRequest.getWebPage().getWebSite().getWebPage("Eventos_del_dia").getUrl().toString();
                         dayUrl += "?act=daily&y=" + (ilyear + 1900) + "&m=" + ilmonth + "&d=" + i;
@@ -116,12 +116,14 @@
         </div>
         <div class="clear">&nbsp;</div>
     <%} else {
+            System.out.println("===En el else");
             ArrayList<EventElement> events = new ArrayList<EventElement>();
             Iterator<EventElement> itev = EventElement.ClassMgr.listEventElements();
             while(itev.hasNext()) {
                 EventElement ee = itev.next();
                 //El evento inicia o termina en esta fecha
                 if (ee.getStartDate().equals(current) || ee.getEndDate().equals(current)) {
+                    System.out.println("===El evento " + ee.getTitle() + " inicia o termina en esta fecha");
                     events.add(ee);
                 } else if (current.after(ee.getStartDate()) && current.before(ee.getEndDate())) { //El evento se lleva a cabo en esta fecha
                     System.out.println("===El evento " + ee.getTitle() + " se lleva a cabo en esta fecha");
@@ -181,6 +183,8 @@
                 %>
                 </div>
             <%
+            } else {
+            %><h2>No existen eventos para este d&iacute;a</h2><%
             }
 }
 %>
