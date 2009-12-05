@@ -450,7 +450,6 @@ public class SWBModelAdmin extends GenericResource {
                 log.debug(e);
             }
         }else if (response.getAction().equals("install")) {
-            //System.out.println("ENTRA A INSTALAR");
             try{
             String siteInfo = SWBUtils.IO.readFileFromZipAsString(request.getParameter("zipName"), "siteInfo.xml");
             String oldIDModel = null, oldNamespace = null, oldTitle = null, oldDescription = null;
@@ -477,19 +476,16 @@ public class SWBModelAdmin extends GenericResource {
                         iteraModels(node, smodels);
                     }
                 }
-                //System.out.println("ENTRA A INSTALAR-2");
-
+                
                 String newId = request.getParameter("wsid");
                 String newTitle = request.getParameter("wstitle");
                 File zip = new File(ZIPDIRECTORY + oldIDModel + ".zip");
                 java.io.File extractTo = new File(MODELS + newId);
                 //Descomprimir zip
                 org.semanticwb.SWBUtils.IO.unzip(zip, extractTo);
-                //System.out.println("ENTRA A INSTALAR-DESCOMPRIMIO");
                 //Mover directorios de modelos a directorio work leyendo rdfs
                 File[] fieldsUnziped = extractTo.listFiles();
                 for (int i = 0; i < fieldsUnziped.length; i++) {
-                    //System.out.println("ENTRA A INSTALAR-COPIA");
                     File file = fieldsUnziped[i];
                     if (file.isDirectory()) { //
                         if (file.getName().equals(oldIDModel)) { //Es la carpeta del modelo principal a cargar
@@ -519,7 +515,6 @@ public class SWBModelAdmin extends GenericResource {
                             }
                     }
                 }
-                 //System.out.println("ENTRA A INSTALAR-PARSEA-1");
                 //Parseo de nombre de NameSpace anteriores por nuevos
                 String newNs = "http://www." + newId + ".swb#";
                 File fileModel = new File(MODELS + newId + "/" + oldIDModel + ".nt");
@@ -531,7 +526,6 @@ public class SWBModelAdmin extends GenericResource {
                 rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent,newNs+oldIDModel, newNs+newId); //Reempplazar namespace y id anterior x nuevos
 
                 rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent,"<topicmap id=\\\""+oldIDModel+"\\\">", "<topicmap id=\\\""+newId+"\\\">"); // Rempalzar el tag: <topicmap id=\"[oldIDModel]\"> del xml de filtros de recursos
-                //System.out.println("ENTRA A INSTALAR-PARSEA-2");
                 //Reemplaza ids de repositorios de usuarios y documentos x nuevos
                 rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent,oldIDModel + "_usr", newId + "_usr");
                 rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent,"http://user." + oldIDModel + ".swb#", "http://user." + newId + ".swb#");
@@ -541,7 +535,6 @@ public class SWBModelAdmin extends GenericResource {
                 //rdfcontent = SWBUtils.TEXT.replaceAllIgnoreCase(rdfcontent, oldName, newName); //Reemplazar nombre anterior x nuevo nombre
                 //rdfcontent = parseRdfContent(rdfcontent, oldTitle, newTitle, oldIDModel, newId, newNs);
 
-                //System.out.println("ENTRA A INSTALAR-genera nuevo sitio:"+newId);
                 //Mediante inputStream creado generar sitio
                 InputStream io = SWBUtils.IO.getStreamFromString(rdfcontent);
                 SemanticModel model = SWBPlatform.getSemanticMgr().createModelByRDF(newId, newNs, io, "N-TRIPLE");
@@ -549,16 +542,13 @@ public class SWBModelAdmin extends GenericResource {
                 website.setTitle(newTitle);
                 website.setDescription(oldDescription);
                 String xmodelID = null, xmodelNS = null, xmodelTitle = null, xmodelDescr = null;
-                //System.out.println("ENTRA A INSTALAR-antes de entrar a generar submodelos");
                 Iterator smodelsKeys = smodels.keySet().iterator();
                 while (smodelsKeys.hasNext()) { // Por c/submodelo que exista
                     String key = (String) smodelsKeys.next();
-                    //System.out.println("ENTRA A INSTALAR-generar submodelo:"+key);
                     HashMap smodelValues = (HashMap) smodels.get(key);
                     Iterator itkVaues = smodelValues.keySet().iterator();
                     while (itkVaues.hasNext()) {
                         String kvalue = (String) itkVaues.next();
-                        //System.out.println("ENTRA A INSTALAR-generar submodelo mas adentro:"+kvalue);
                         if (kvalue.equals("id")) {
                             xmodelID = (String) smodelValues.get(kvalue);
                         }
@@ -572,7 +562,6 @@ public class SWBModelAdmin extends GenericResource {
                             xmodelDescr = (String) smodelValues.get(kvalue);
                         }
                     }
-                    //System.out.println("ENTRA A INSTALAR-antes de generar submodelos");
                     //Buscar rdf del submodelo
                     fileModel = new File(MODELS + newId + "/" + xmodelID + ".nt");
                     if (fileModel != null && fileModel.exists()) {
@@ -584,7 +573,6 @@ public class SWBModelAdmin extends GenericResource {
                                 xmodelID = xmodelID.substring(0, pos);
                                 rdfmodel = SWBUtils.TEXT.replaceAll(rdfmodel,xmodelID, newId);
                                 io = SWBUtils.IO.getStreamFromString(rdfmodel);
-                                //System.out.println("ENTRA A INSTALAR-crea repositorio de usuarios:"+newId);
                                 SWBPlatform.getSemanticMgr().createModelByRDF(newId + "_usr", "http://user." + newId + ".swb#", io, "N-TRIPLE");
                             }
                         }if (key.endsWith("_rep")) { //Para los submodelos de dosumentos
@@ -593,7 +581,6 @@ public class SWBModelAdmin extends GenericResource {
                                 xmodelID = xmodelID.substring(0, pos);
                                 rdfmodel = SWBUtils.TEXT.replaceAll(rdfmodel,xmodelID, newId);
                                 io = SWBUtils.IO.getStreamFromString(rdfmodel);
-                                //System.out.println("ENTRA A INSTALAR-crea repositorio de usuarios:"+newId);
                                 SWBPlatform.getSemanticMgr().createModelByRDF(newId + "_rep", "http://repository." + newId + ".swb#", io, "N-TRIPLE");
                             }
                         }
@@ -603,7 +590,6 @@ public class SWBModelAdmin extends GenericResource {
                 response.setMode(response.Mode_VIEW);
                 response.setRenderParameter("msgKey", "siteCreated");
                 response.setRenderParameter("wsUri", website.getURI());
-                //System.out.println("ENTRA A INSTALAR-Termina");
             }
         }catch(Exception e){
             log.error(e);
