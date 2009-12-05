@@ -137,7 +137,7 @@
 
 <script type="text/javascript">    
     function sendClaim() {
-        if (document.getElementById("justify").value.trim() == "") {
+        if (document.getElementById("justify").value == "") {
             alert("Debe escribir una justificación.");
         } else {
             document.addJustifyForm.submit();
@@ -199,7 +199,7 @@
     </div>
     <div class="commentBox">
     <div id="addJustify" style="display:none;">
-        <form name="addJustifyForm" name="addJustifyForm" action="<%=aUrl%>">
+        <form id="addJustifyForm" name="addJustifyForm" action="<%=aUrl%>">
             <label for="justify">Justificaci&oacute;n</label>
                 <textarea style="border:1px solid #CACACA;" name="justify" id="justify" cols="45" rows="5"></textarea>
                 <input type="hidden" name="uri" value="<%=semObject.getURI()%>">
