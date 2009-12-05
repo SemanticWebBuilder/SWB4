@@ -683,21 +683,21 @@ public class SWBImportWebSite extends GenericResource {
             out.println("<fieldset>");
             out.println("<table>");
             out.append("<tr><td align=\"right\">");
-            out.println(paramRequest.getLocaleLogString("msgwsTitle")+" <em>*</em>");
+            out.println(paramRequest.getLocaleString("msgwsTitle")+" <em>*</em>");
             out.println("</td>");
             out.append("<td>");
             out.println("<input type=\"text\" name=\"wstitle\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Titulo.\" invalidMessage=\"Titulo es requerido.\" onkeyup=\"dojo.byId('swb_create_id').value=replaceChars4Id(this.textbox.value);dijit.byId('swb_create_id').validate()\" trim=\"true\" >");
             out.println("</td>");
             out.append("</tr>");
             out.append("<tr><td align=\"right\">");
-            out.println(paramRequest.getLocaleLogString("msgwsID")+" <em>*</em>");
+            out.println(paramRequest.getLocaleString("msgwsID")+" <em>*</em>");
             out.println("</td>");
             out.append("<td>");
             out.println("<input type=\"text\" id=\"swb_create_id\" name=\"wsid\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Identificador.\" isValid=\"return canCreateSemanticObject(this.textbox.value);\" invalidMessage=\"Identificador invalido.\" trim=\"true\" >");
             out.println("</td>");
             out.append("</tr>");
             out.append("<tr><td align=\"right\">");
-            out.println(paramRequest.getLocaleLogString("usrRep")+" <em>*</em>");
+            out.println(paramRequest.getLocaleString("usrRep")+" <em>*</em>");
             out.println("</td><td>");
             out.println("<select name=\"wsrepository\">");
             out.println("<option value=\"0\">" + paramRequest.getLocaleLogString("Exclusive") + "</option>");
@@ -713,7 +713,7 @@ public class SWBImportWebSite extends GenericResource {
             if(itcls.hasNext())
             {
                 out.append("<tr><td align=\"right\">");
-                out.println(paramRequest.getLocaleLogString("wstype")+" <em>*</em>");
+                out.println(paramRequest.getLocaleString("wstype")+" <em>*</em>");
                 out.println("</td><td>");
                 out.println("<select name=\"wstype\">");
                 out.println("<option value=\""+WebSite.sclass.getClassId()+"\">" + WebSite.sclass.getDisplayName(lang) + "</option>");
