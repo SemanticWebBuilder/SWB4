@@ -127,6 +127,7 @@
         if (request.readyState != 4) return;
         if (request.status == 200) {
             var response = request.responseText;
+       
             if ('' != response)
             {
                 document.getElementById("labelabused").innerHTML=response+' veces marcado como inapropiado';
