@@ -50,18 +50,24 @@
         Iterator<EventElement> itev = EventElement.ClassMgr.listEventElements();
         while(itev.hasNext()) {            
             EventElement ee = itev.next();
+            boolean isNow = false;
             int sDay = ee.getStartDate().getDate();
             int eDay = ee.getEndDate().getDate();
 
-            if (ee.getStartDate().before(startOfMonth))
+            if (ee.getStartDate().before(startOfMonth) && ee.getEndDate().after(startOfMonth)) {
                 sDay = 1;
+                isNow = true;
+            }
 
-            if (ee.getEndDate().after(endOfMonth))
+            if (ee.getEndDate().after(endOfMonth)) {
                 eDay = (int)daysInMonth;
+                isNow = true;
+            }
             
-            //System.out.println("====>Verificando " + ee.getTitle() + "[" + ee.getStartDate().getDate() + " - " + ee.getEndDate().getDate() + "]");
-            if (ee.getStartDate().getMonth() == current.getMonth()) {
-                for (int i = sDay; i <= eDay; i++) {
+            System.out.println("====>Verificando " + ee.getTitle() + "[" + sDay + " - " + eDay + "] - ["
+                    + dateFormat.format(ee.getStartDate())+" - " + ee.getEndDate() + "]");
+            for (int i = sDay; i <= eDay; i++) {
+                if (isNow) {
                     reserved.add(i);
                 }
             }
@@ -69,10 +75,8 @@
 
         //Build URL for next month
         SWBResourceURL nm = paramRequest.getRenderUrl();
-        
         nm.setParameter("d", "1");
         if (ilmonth == 11) {
-            System.out.println("=====Estoy en diciembre ");
             nm.setParameter("m", "0");
             nm.setParameter("y", String.valueOf((ilyear + 1) + 1900));
         } else {
@@ -83,7 +87,6 @@
         SWBResourceURL pm = paramRequest.getRenderUrl();
         pm.setParameter("d", "1");
         if (ilmonth == 0) {
-            System.out.println("=====Estoy en enero ");
             pm.setParameter("m", "11");
             pm.setParameter("y", String.valueOf((ilyear - 1) + 1900));
         } else {
@@ -205,6 +208,39 @@ private boolean same(Date d1, Date d2) {
 
     if (d1.getYear() == d2.getYear() && d1.getMonth() == d2.getMonth() && d1.getDate() == d2.getDate()) {
         ret = true;
+    }
+
+    return ret;
+}
+%>
+
+<%!
+private  boolean isThisMonth(EventElement event, Date startOfM, Date endOfM) {
+    boolean ret = false;
+
+    //El evento se lleva a cabo este mes?
+
+    //La fecha de inicio del evento es igual o menor al inicio de mes
+       //La fecha de fin del evento es mayor o igual al fin de mes
+          //Se lleva a cabo
+
+    if(same(event.getStartDate(), startOfM) || event.getStartDate().before(startOfM)) {
+        if(same(event.getEndDate(), endOfM) || event.getEndDate().after(endOfM)) {
+            ret = true;
+       } else {
+            if(same(event.getEndDate(), endOfM) || event.getEndDate().before(endOfM)) {
+                ret = true;
+            }
+        }
+    }
+
+    //La fecha de inicio del evento es mayor o igual a la fecha de inicio de mes
+      //La fecha de fin del evento es menor o igual a la fecha de fin de mes
+
+    if(same(event.getStartDate(), startOfM) || event.getStartDate().after(startOfM)) {
+        if(same(event.getEndDate(), endOfM) || event.getEndDate().before(endOfM)) {
+            ret = true;
+        }
     }
 
     return ret;
