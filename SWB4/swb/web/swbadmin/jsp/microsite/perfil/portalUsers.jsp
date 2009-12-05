@@ -50,7 +50,6 @@ private final int I_INIT_PAGE = 1;
                 existFilter = true;
                 txtFind=request.getParameter("txtFind");
             }
-
             //Empieza paginación
             SWBResourceURL urlPag = paramRequest.getRenderUrl();
             SWBResourceURL urlAlphabetic = paramRequest.getRenderUrl();
@@ -102,7 +101,7 @@ private final int I_INIT_PAGE = 1;
                 {
                     iTotPage = Integer.parseInt(token);
                 }
-            }
+            }         
 %>
 <%-- <b>Resultado:</b> <%=setResult.size()%> usuarios --%>
 <ul id="listaAlfabet">
@@ -244,7 +243,7 @@ private final int I_INIT_PAGE = 1;
                 if (userprosp.getPhoto() != null)
                 {
                     photo = SWBPortal.getWebWorkPath() + userprosp.getPhoto();
-                }
+                }                 
     %>
     <div class="friendCard">
         <a href="<%=perfilPath%>?user=<%=userprosp.getEncodedURI()%>">
@@ -261,13 +260,14 @@ private final int I_INIT_PAGE = 1;
 
             <a class="ico" href="<%=perfilPath%>?user=<%=userprosp.getEncodedURI()%>"><img src="<%=SWBPortal.getWebWorkPath()%>/models/<%=website.getId()%>/css/images/icoUser.png" alt="ir al perfil"></a>
                 <%
+                 try{
                 if (!user.getURI().equals(userprosp.getURI()) && !Friendship.areFriends(user, userprosp, website) && !FriendshipProspect.findFriendProspectedByRequester(user, userprosp, website))
                 {
                     urlAction.setAction("createProspect");
                     urlAction.setParameter("user", userprosp.getURI());
                 %>
             <a class="ico" href="<%=urlAction%>"><img src="<%=SWBPortal.getWebWorkPath()%>/models/<%=website.getId()%>/css/images/icoMas.png" alt="agregar"></a>
-                <%}%>
+                <%} }catch(Exception e){}%>
             <div class="friendCardName">
                 <p><%=userprosp.getFullName()%></p>
             </div>
