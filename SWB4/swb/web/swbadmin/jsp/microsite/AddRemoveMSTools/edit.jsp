@@ -53,7 +53,7 @@
                 
                 SWBResourceURL urla = paramRequest.getActionUrl();
                 urla.setParameter("act","update");
-                out.println("<div class=\"groupInteres\">");
+                out.println("<div id=\"admintools\">"); // antes tenía class=groupInteres
                 
                 out.println("<form action=\""+urla+"\" method=\"post\" name=\"frm_adminTools\">");
                 out.println("<table >");
