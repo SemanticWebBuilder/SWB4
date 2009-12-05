@@ -63,14 +63,16 @@
 <h3>Las m&aacute;s activas</h3>
 <ul class="comunidades">
     <%
-            WebPage webpage = (WebPage) request.getAttribute("webpage");
+            SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
+            //WebPage webpage = (WebPage) request.getAttribute("webpage");
+            WebPage webpage = paramRequest.getWebPage();
             WebSite site = webpage.getWebSite();
             Iterator communities = sortByViews(MicroSite.ClassMgr.listMicroSites(site), false);
             if (!communities.hasNext())
             {
     %>
     <li>&nbsp;</li>
-    <%            }
+    <%      }
             communities = sortByViews(MicroSite.ClassMgr.listMicroSites(site), false);
             int i = 0;
             while (communities.hasNext())
