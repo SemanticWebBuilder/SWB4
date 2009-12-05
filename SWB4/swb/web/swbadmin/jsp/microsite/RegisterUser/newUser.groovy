@@ -55,7 +55,7 @@ method="POST">
 			</td>
 			<td><input type="text" name="login" dojoType="dijit.form.ValidationTextBox"
                         required="true" promptMessage="Captura identificador de usuario."
-                        invalidMessage="El clave de usuario ya existe."
+                        invalidMessage="El identificador de usuario es invalido o ya existe."
                         isValid="return canAddLogin('$repository',this.textbox.value);" trim="true" />
 			</td>
 		</tr>
