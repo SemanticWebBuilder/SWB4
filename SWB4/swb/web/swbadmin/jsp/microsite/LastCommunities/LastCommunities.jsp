@@ -4,7 +4,9 @@
 <ul class="comunidades">
     <%
             //User user=(User)request.getAttribute("user");
-            WebPage webpage = (WebPage) request.getAttribute("webpage");
+            SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
+            //WebPage webpage = (WebPage) request.getAttribute("webpage");
+            WebPage webpage = paramRequest.getWebPage();
             WebSite site = webpage.getWebSite();
             TreeSet<SemanticObject> setVals = new TreeSet<SemanticObject>(new Comparator()
             {
