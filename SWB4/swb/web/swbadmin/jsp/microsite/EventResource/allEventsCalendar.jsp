@@ -116,13 +116,13 @@
         </div>
         <div class="clear">&nbsp;</div>
     <%} else {
-            System.out.println("===En el else");
+            //System.out.println("===En el else");
             ArrayList<EventElement> events = new ArrayList<EventElement>();
             Iterator<EventElement> itev = EventElement.ClassMgr.listEventElements();
             while(itev.hasNext()) {
                 EventElement ee = itev.next();
                 //El evento inicia o termina en esta fecha
-                if (ee.getStartDate().equals(current) || ee.getEndDate().equals(current)) {
+                if (same(ee.getStartDate(), current) || same(ee.getEndDate(), current)) {
                     System.out.println("===El evento " + ee.getTitle() + " inicia o termina en esta fecha");
                     events.add(ee);
                 } else if (current.after(ee.getStartDate()) && current.before(ee.getEndDate())) { //El evento se lleva a cabo en esta fecha
@@ -186,5 +186,17 @@
             } else {
             %><h2>No existen eventos para este d&iacute;a</h2><%
             }
+}
+%>
+
+<%!
+private boolean same(Date d1, Date d2) {
+    boolean ret = false;
+
+    if (d1.getYear() == d2.getYear() && d1.getMonth() == d2.getMonth() && d1.getDate() == d2.getDate()) {
+        ret = true;
+    }
+
+    return ret;
 }
 %>
