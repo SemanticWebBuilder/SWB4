@@ -7,7 +7,9 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.User;
+import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
@@ -84,8 +86,7 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
             request.setAttribute("paramRequest", paramRequest);
             request.setAttribute("blog", blog);
             dis.include(request, response);
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             log.error(e);
         }
@@ -109,12 +110,40 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
-        Member mem = Member.getMember(response.getUser(), response.getWebPage());
-        if (!mem.canView())
+        User user = response.getUser();
+        boolean isAdministrator = false;
+        if (user != null)
         {
-            return;
+            GenericIterator<UserGroup> groups = user.listUserGroups();
+            while (groups.hasNext())
+            {
+                UserGroup group = groups.next();
+                if (group != null && group.getId().equals("admin"))
+                {
+                    isAdministrator = true;
+                    break;
+                }
+            }
         }
+        Member mem = Member.getMember(response.getUser(), response.getWebPage());
         String action = request.getParameter("act");
+       if ("remove".equals(action))
+        {
+            if (!isAdministrator)
+            {
+                if (!mem.canView())
+                {
+                    return;
+                }
+            }
+        } else
+        {
+            if (!mem.canView())
+            {
+                return;                                       //si el usuario no pertenece a la red sale;
+            }
+        }
+        
         if ("add".equals(action) && mem.canAdd())
         {
             String title = request.getParameter("title");
@@ -131,18 +160,16 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
                     {
                         int level = Integer.parseInt(request.getParameter("level"));
                         addPost(title, description, content, response.getUser(), blog, level);
-                    }
-                    catch (Exception e)
+                    } catch (Exception e)
                     {
                         log.error(e);
                     }
                 }
 
             }
-        }
-        else if ("edit".equals(action) && "editpost".equals(request.getParameter("mode")))
+        } else if ("edit".equals(action) && "editpost".equals(request.getParameter("mode")))
         {
-            User user = response.getUser();
+            
             String uri = request.getParameter("uri");
             if (uri != null)
             {
@@ -164,17 +191,15 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
                             Date date = new Date(System.currentTimeMillis());
                             rec.setUpdated(date);
                         }
-                    }
-                    catch (Exception e)
+                    } catch (Exception e)
                     {
                         log.error(e);
                     }
                 }
             }
-        }
-        else if ("edit".equals(action) && "editblog".equals(request.getParameter("mode")))
+        } else if ("edit".equals(action) && "editblog".equals(request.getParameter("mode")))
         {
-            User user = response.getUser();
+            
             Member member = Member.getMember(user, response.getWebPage());
             Iterator<Blog> blogs = Blog.ClassMgr.listBlogByWebPage(response.getWebPage());
             Blog blog = null;
@@ -199,27 +224,25 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
                 }
             }
 
-        }
-        else if ("remove".equals(action))
+        } else if ("remove".equals(action))
         {
+
             String uri = request.getParameter("uri");
             if (uri != null)
             {
                 try
                 {
                     PostElement rec = (PostElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
-                    if (rec != null && rec.canModify(mem))
+                    if (rec != null && (rec.canModify(mem) || isAdministrator))
                     {
                         rec.remove();                                       //elimina el registro
                     }
-                }
-                catch(Throwable e)
+                } catch (Throwable e)
                 {
                     log.error(e);
                 }
             }
-        }
-        else
+        } else
         {
             super.processAction(request, response);
         }

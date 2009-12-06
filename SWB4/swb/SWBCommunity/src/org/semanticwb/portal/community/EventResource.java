@@ -44,7 +44,9 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.User;
+import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
@@ -91,10 +93,38 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
         WebPage page = response.getWebPage();
         final String realpath = SWBPortal.getWorkPath();
         Member mem = Member.getMember(response.getUser(), page);
-        if (!mem.canView())
+        User user = response.getUser();
+        boolean isAdministrator = false;
+        if (user != null)
         {
-            return;                                       //si el usuario no pertenece a la red sale;
+            GenericIterator<UserGroup> groups = user.listUserGroups();
+            while (groups.hasNext())
+            {
+                UserGroup group = groups.next();
+                if (group != null && group.getId().equals("admin"))
+                {
+                    isAdministrator = true;
+                    break;
+                }
+            }
         }
+        if ("remove".equals(action))
+        {
+            if (!isAdministrator)
+            {
+                if (!mem.canView())
+                {
+                    return;                                      
+                }
+            }
+        } else
+        {
+            if (!mem.canView())
+            {
+                return;                                       //si el usuario no pertenece a la red sale;
+            }
+        }
+
 
         if (action == null)
         {
@@ -120,8 +150,7 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                         params.put("filename", finalpath + filename);
                     }
                     rec.setEventImage(file.getName());
-                }
-                else
+                } else
                 {
                     rec.setEventImage(null);
                 }
@@ -142,8 +171,7 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                         params.put("thumbnail", finalpath + filename);
                     }
                     rec.setEventThumbnail(file.getName());
-                }
-                else
+                } else
                 {
                     rec.setEventThumbnail(null);
                 }
@@ -164,8 +192,7 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                     rec.setEndDate(dateFormat.parse(endDate.trim()));
                     rec.setStartTime(new Timestamp(timeFormat.parse(startTime).getTime()));
                     rec.setEndTime(new Timestamp(timeFormat.parse(endTime).getTime()));
-                }
-                catch (Exception e)
+                } catch (Exception e)
                 {
                     log.error(e);
                 }
@@ -176,15 +203,13 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                 {
                     response.setRenderParameter("act", "edit");
                     response.setRenderParameter("uri", rec.getURI());
-                }
-                catch (Exception e)
+                } catch (Exception e)
                 {
                     log.error(e);
                     response.setRenderParameter("act", "add");
                     response.setRenderParameter("err", "true");
                 }
-            }
-            else if (params.containsValue("edit"))
+            } else if (params.containsValue("edit"))
             {
                 String uri = params.get("uri");
                 EventElement rec = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
@@ -243,8 +268,7 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                         rec.setEndDate(dateFormat.parse(endDate.trim()));
                         rec.setStartTime(new Timestamp(timeFormat.parse(startTime).getTime()));
                         rec.setEndTime(new Timestamp(timeFormat.parse(endTime).getTime()));
-                    }
-                    catch (Exception e)
+                    } catch (Exception e)
                     {
                         log.error(e);
                     }
@@ -253,20 +277,19 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                     rec.setEventWebPage(page);
                 }
             }
-        }
-        else if (action.equals("remove"))
+        } else if (action.equals("remove"))
         {
             //Get event object
+
             String uri = request.getParameter("uri");
             EventElement rec = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
 
             //Remove event object
-            if (rec != null && rec.canModify(mem))
+            if (rec != null && (rec.canModify(mem) || isAdministrator))
             {
                 rec.remove();                                       //elimina el registro
             }
-        }
-        else if (action.equals("attend"))
+        } else if (action.equals("attend"))
         {
             //Get event object
             String uri = request.getParameter("uri");
@@ -292,8 +315,7 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
             }
             response.setRenderParameter("uri", uri);
             response.setRenderParameter("act", "detail");
-        }
-        else
+        } else
         {
             super.processAction(request, response);
         }
@@ -346,8 +368,7 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                         String name = item.getFieldName();
                         String value = item.getString();
                         params.put(name, value);
-                    }
-                    else
+                    } else
                     {
                         currentFile = item;
                         File file = new File(path);
@@ -373,15 +394,13 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                             ImageResizer.resizeCrop(image, 150, thumbnail, "jpeg");
                             params.put("filename", path + filename);
                             params.put("thumbnail", path + "thumbn_" + filename);
-                        }
-                        catch (StringIndexOutOfBoundsException iobe)
+                        } catch (StringIndexOutOfBoundsException iobe)
                         {
                         }
                     }
                 }
             }
-        }
-        catch (Exception ex)
+        } catch (Exception ex)
         {
             ex.printStackTrace();
         }
@@ -394,7 +413,7 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
         String path = "/swbadmin/jsp/microsite/EventResource/eventView.jsp";
         String action = request.getParameter("act");
 
-            
+
         if (action == null)
         {
             action = "view";
@@ -403,31 +422,26 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
         if (action.equals("calendar"))
         {
             path = "/swbadmin/jsp/microsite/EventResource/eventsCalendar.jsp";
-        }
-        else if (action.equals("add"))
+        } else if (action.equals("add"))
         {
             path = "/swbadmin/jsp/microsite/EventResource/eventAdd.jsp";
-        }
-        else if (action.equals("edit"))
+        } else if (action.equals("edit"))
         {
             path = "/swbadmin/jsp/microsite/EventResource/eventEdit.jsp";
-        }
-        else if (action.equals("detail"))
+        } else if (action.equals("detail"))
         {
             path = "/swbadmin/jsp/microsite/EventResource/eventDetail.jsp";
-        }
-        else if (action.equals("daily"))
+        } else if (action.equals("daily"))
         {
             path = "/swbadmin/jsp/microsite/EventResource/eventDailyView.jsp";
         }
-        
+
         RequestDispatcher dis = request.getRequestDispatcher(path);
         try
         {
             request.setAttribute("paramRequest", paramRequest);
             dis.include(request, response);
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             log.error(e);
         }
