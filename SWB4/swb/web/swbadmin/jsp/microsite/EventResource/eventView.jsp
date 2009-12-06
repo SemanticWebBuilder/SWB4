@@ -14,6 +14,7 @@
 %>
 <%
             java.text.SimpleDateFormat dateFormat;
+            java.text.SimpleDateFormat timeFormat=new java.text.SimpleDateFormat("HH:mm");
 
 
             String lang = "es";
@@ -36,6 +37,20 @@
             MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
             Member member = Member.getMember(user, wpage);
             String addEventURL = paramRequest.getRenderUrl().setParameter("act", "add").toString();
+            boolean isAdministrator = false;
+            if (user != null)
+            {
+                GenericIterator<UserGroup> groups = user.listUserGroups();
+                while (groups.hasNext())
+                {
+                    UserGroup group = groups.next();
+                    if (group != null && group.getId().equals("admin"))
+                    {
+                        isAdministrator = true;
+                        break;
+                    }
+                }
+            }
 
             java.util.Calendar today = java.util.Calendar.getInstance();
             today.setTime(new Date(System.currentTimeMillis()));
@@ -54,7 +69,7 @@
                 EventElement event = it.next();
                 try
                 {
-                    if (event!=null && event.getEndDate() != null)
+                    if (event != null && event.getEndDate() != null)
                     {
                         end.setTime(event.getEndDate());
                         end.add(end.MONTH, 1);
@@ -63,15 +78,14 @@
                             event.remove();
                         }
                     }
-                }
-                catch (RuntimeException e)
-                {                    
+                } catch (RuntimeException e)
+                {
                     SWBUtils.getLogger(this.getClass()).error(e);
                 }
             }
             ArrayList<EventElement> elements = new ArrayList();
             int elementos = 0;
-          
+
             it = EventElement.ClassMgr.listEventElementByEventWebPage(wpage, wpage.getWebSite());
             it = SWBComparator.sortByCreated(it, false);
             while (it.hasNext())
@@ -79,7 +93,7 @@
                 EventElement event = it.next();
                 try
                 {
-                    if (event!=null && event.getEndDate() != null)
+                    if (event != null && event.getEndDate() != null)
                     {
                         end.setTime(event.getEndDate());
                         end.set(end.HOUR_OF_DAY, 23);
@@ -92,18 +106,17 @@
                             elementos++;
                         }
                     }
-                }
-                catch (RuntimeException e)
+                } catch (RuntimeException e)
                 {
                     if (event.canView(member))
                     {
-                            elements.add(event);
-                            elementos++;
+                        elements.add(event);
+                        elementos++;
                     }
                     SWBUtils.getLogger(this.getClass()).error(e);
                 }
 
-            }            
+            }
             int paginas = elementos / ELEMENETS_BY_PAGE;
             if (elementos % ELEMENETS_BY_PAGE != 0)
             {
@@ -119,8 +132,7 @@
                     ipage = Integer.parseInt(request.getParameter("ipage"));
                     inicio = (ipage * ELEMENETS_BY_PAGE) - ELEMENETS_BY_PAGE;
                     fin = (ipage * ELEMENETS_BY_PAGE);
-                }
-                catch (NumberFormatException nfe)
+                } catch (NumberFormatException nfe)
                 {
                     ipage = 1;
                 }
@@ -238,7 +250,7 @@
             int iElement = 0;
             for (EventElement event : elements)
             {
-                
+
                 SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", event.getURI());
                 if (event.canView(member))
                 {
@@ -249,6 +261,20 @@
                     }
                     if (iElement >= inicio && iElement <= fin)
                     {
+                        String fechaEvento = "Sin determinar";
+                        try
+                        {
+                            fechaEvento = dateFormat.format(event.getStartDate());
+                        } catch (Exception e)
+                        {
+                        }
+                        String hfechaEvento = "Sin determinar";
+                        try
+                        {
+                            hfechaEvento = timeFormat.format(event.getStartTime());
+                        } catch (Exception e)
+                        {
+                        }
                         String rank = df.format(event.getRank());
                         String editEventURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", event.getURI()).toString();
                         SWBResourceURL removeUrl = paramRequest.getActionUrl();
@@ -278,14 +304,23 @@
         <img src="<%=pathPhoto%>" alt="<%= event.getTitle()%>">
         <div class="noticiaTexto">
             <h2><%=event.getTitle()%></h2>
-            <p>&nbsp;<br>Por: <%=postAuthor%><br><%=dateFormat.format(event.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%></p>
+            <p>Fecha del evento: <%=fechaEvento%> a las <%=hfechaEvento%><br>
+            &nbsp;<br>Por: <%=postAuthor%><br>Creado el: <%=dateFormat.format(event.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%></p>
             <p>
                 <%=event.getDescription()%> | <a href="<%=viewUrl%>">Ver más</a>
                 <%
                         if (event.canModify(member))
                         {
                 %>
-                | <a href="<%=editEventURL%>">Editar</a> | <a href="<%=removeurl%>">Eliminar</a>
+                | <a href="<%=editEventURL%>">Editar</a>
+                <%
+                        }
+                %>
+                <%
+                        if (event.canModify(member) || isAdministrator)
+                        {
+                %>
+                | <a href="<%=removeurl%>">Eliminar</a>
                 <%
                         }
                 %>
@@ -384,8 +419,7 @@
         %>
         <li><a href="<%=urla%>">Suscribirse a eventos</a></li>
         <%
-                }
-                else
+                } else
                 {
                     urla.setParameter("act", "unsubscribe");
         %>

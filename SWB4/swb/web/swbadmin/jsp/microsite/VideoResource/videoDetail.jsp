@@ -6,6 +6,20 @@
             User user = paramRequest.getUser();
             WebPage wpage = paramRequest.getWebPage();
             Member member = Member.getMember(user, wpage);
+            boolean isAdministrator = false;
+            if (user != null)
+            {
+                GenericIterator<UserGroup> groups = user.listUserGroups();
+                while (groups.hasNext())
+                {
+                    UserGroup group = groups.next();
+                    if (group != null && group.getId().equals("admin"))
+                    {
+                        isAdministrator = true;
+                        break;
+                    }
+                }
+            }
             java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
 %>
 <%
@@ -68,7 +82,7 @@
     <p><a href="<%=paramRequest.getRenderUrl()%>">[Ver todos los videos]</a></p>    
     <%if (rec.canModify(member))
             {%><p><a href="<%=paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", rec.getURI())%>">[Editar Información]</a></p><%}%>
-    <%if (rec.canModify(member))
+    <%if (rec.canModify(member) || isAdministrator)
             {%><p><a href="<%=paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", rec.getURI())%>">[Eliminar]</a></p><%}%>
 
     <ul class="miContenido">

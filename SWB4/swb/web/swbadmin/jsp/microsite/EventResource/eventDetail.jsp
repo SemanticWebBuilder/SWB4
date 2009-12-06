@@ -6,7 +6,20 @@
             User user = paramRequest.getUser();
             WebPage wpage = paramRequest.getWebPage();
             Member member = Member.getMember(user, wpage);
-
+            boolean isAdministrator = false;
+            if (user != null)
+            {
+                GenericIterator<UserGroup> groups = user.listUserGroups();
+                while (groups.hasNext())
+                {
+                    UserGroup group = groups.next();
+                    if (group != null && group.getId().equals("admin"))
+                    {
+                        isAdministrator = true;
+                        break;
+                    }
+                }
+            }
             String uri = request.getParameter("uri");
             EventElement event = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
             java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
@@ -24,32 +37,28 @@
                 {
                     comienza = event.getStartDate() == null ? "Sin determinar" : dateFormat.format(event.getStartDate());
 
-                }
-                catch (Exception e)
+                } catch (Exception e)
                 {
                 }
                 try
                 {
 
                     termina = event.getEndDate() == null ? "Sin determinar" : dateFormat.format(event.getEndDate());
-                }
-                catch (Exception e)
+                } catch (Exception e)
                 {
                 }
                 try
                 {
                     hcomienza = event.getStartTime() == null ? "Sin determinar" : timeFormat.format(event.getStartTime());
 
-                }
-                catch (Exception e)
+                } catch (Exception e)
                 {
                 }
                 try
                 {
 
                     htermina = event.getEndTime() == null ? "Sin determinar" : timeFormat.format(event.getEndTime());
-                }
-                catch (Exception e)
+                } catch (Exception e)
                 {
                 }
                 String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/EventResource/noevent.jpg";
@@ -108,14 +117,14 @@
 
 
     <%
-    try
+            try
             {
-            GregorianCalendar cal = new GregorianCalendar(new Locale("es"));
-            SimpleDateFormat sf = new SimpleDateFormat("MMMM", new Locale("es"));
-            String smonth = sf.format(event.getStartDate());
-            smonth = smonth.substring(0, 1).toUpperCase() + smonth.substring(1);
-            cal.setTime(event.getStartDate());
-            int year = cal.get(cal.YEAR);
+                GregorianCalendar cal = new GregorianCalendar(new Locale("es"));
+                SimpleDateFormat sf = new SimpleDateFormat("MMMM", new Locale("es"));
+                String smonth = sf.format(event.getStartDate());
+                smonth = smonth.substring(0, 1).toUpperCase() + smonth.substring(1);
+                cal.setTime(event.getStartDate());
+                int year = cal.get(cal.YEAR);
     %>
     <div id="calendario">
         <h2><%=smonth%> del <%=year%></h2>
@@ -123,7 +132,7 @@
             <li>D</li><li>L</li><li>M</li><li>M</li><li>J</li><li>V</li><li>S</li>
         </ul>
         <%
-            
+
                 cal.setTime(event.getStartDate());
                 java.util.Calendar cend = java.util.Calendar.getInstance();
                 cend.setTime(event.getEndDate());
@@ -140,8 +149,7 @@
                 {
             %>
             <li>&nbsp;</li>
-            <%
-                }
+            <%                }
                 for (int i = inicio; i <= fin; i++)
                 {
                     boolean active = false;
@@ -155,9 +163,8 @@
             %>
             <li><a href="#"><%=i%></a></li>
             <%
-                            }
-                            else
-                            {
+                    } else
+                    {
             %>
             <li><%=i%></li>
             <%
@@ -166,15 +173,14 @@
                 }
             %>            
         </ul>
-       
+
         <div class="clear">&nbsp;</div>
     </div>
-         <%
-            }
-            catch (Exception e)
-            {
-            }
-        %>
+    <%
+       } catch (Exception e)
+       {
+       }
+    %>
     <p>Audiencia: <%= event.getAudienceType()%></p>
     <p>Lugar: <strong><%= event.getPlace()%></strong></p>
     <p>Asistentes:
@@ -231,7 +237,7 @@
     <p><a href="<%= back%>">[Editar información]</a></p>
     <%
             }
-            if (event.canModify(member))
+            if (event.canModify(member) || isAdministrator)
             {
     %>
     <p><a href="<%= paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", event.getURI())%>">[Eliminar]</a></p>
@@ -249,8 +255,7 @@
         %>
         <li><a href="<%=urla%>">Suscribirse a esta comunidad a comunidad</a></li>
         <%
-                }
-                else
+                } else
                 {
                     urla.setParameter("act", "unsubscribe");
         %>

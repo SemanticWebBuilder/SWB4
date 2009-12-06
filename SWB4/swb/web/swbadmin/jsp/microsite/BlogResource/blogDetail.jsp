@@ -22,6 +22,20 @@
             WebPage wpage = paramRequest.getWebPage();
             PostElement post = (PostElement) request.getAttribute("post");
             Member member = Member.getMember(user, wpage);
+            boolean isAdministrator = false;
+            if (user != null)
+            {
+                GenericIterator<UserGroup> groups = user.listUserGroups();
+                while (groups.hasNext())
+                {
+                    UserGroup group = groups.next();
+                    if (group != null && group.getId().equals("admin"))
+                    {
+                        isAdministrator = true;
+                        break;
+                    }
+                }
+            }
             if (!post.canView(member) || post == null)
             {
 %>
@@ -73,9 +87,18 @@
             {
     %>
     <p><a href="<%=editURL%>">[Editar Entrada]</a></p>
+
+    <%
+            }
+    %>
+    <%
+            if (canadd || isAdministrator)
+            {
+    %>
+
     <p><a href="<%=deleteUrl%>">[Eliminar Entrada]</a></p>
     <%
-        }
+            }
     %>
     <ul class="miContenido">
         <%
@@ -88,8 +111,7 @@
         %>
         <li><a href="<%=urla%>">Suscribirse a esta comunidad</a></li>
         <%
-                }
-                else
+                } else
                 {
                     urla.setParameter("act", "unsubscribe");
         %>

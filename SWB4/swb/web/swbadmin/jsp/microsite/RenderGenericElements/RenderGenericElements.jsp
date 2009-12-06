@@ -67,6 +67,30 @@
     var invoke = true;
     var count = 0;
 
+    function deletecomment(uri,text,commentId)
+    {
+        if(confirm('¿Esta seguro de borrar el comentario: '+text+'?'))
+        {
+            spamId = commentId;
+            var uri='<%=suri%>';
+            uri=escape(uri);
+            var url = '<%=url%>?act=deletecomment&commentId='+ commentId +'&uricomment='+uri;
+            alert(url);
+            request.open("GET", url, true);
+            request.onreadystatechange = deleted;
+            request.send(null);
+        }
+    }
+    function deleted() {
+            if(request.readyState!=4) return;
+            if(request.status==200) {
+                var response = request.responseText;
+                if ('Not OK'!=response && ''!=response) {
+                  window.location.reload(true);
+                }
+            }
+
+    }
     function vote(val) {
         if (!invoke) return;
         //alert('En funcion para votar');

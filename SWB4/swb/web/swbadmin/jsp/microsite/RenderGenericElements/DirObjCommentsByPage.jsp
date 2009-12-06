@@ -8,6 +8,21 @@
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             WebPage webPage = paramRequest.getWebPage();
             User mem = paramRequest.getUser();
+            boolean isAdministrator = false;
+            User user = paramRequest.getUser();
+            if (user != null)
+            {
+                GenericIterator<UserGroup> groups = user.listUserGroups();
+                while (groups.hasNext())
+                {
+                    UserGroup group = groups.next();
+                    if (group != null && group.getId().equals("admin"))
+                    {
+                        isAdministrator = true;
+                        break;
+                    }
+                }
+            }
             long lpage = (Long) request.getAttribute("page");
             String perfilPath = paramRequest.getWebPage().getWebSite().getWebPage("perfil").getUrl();
 
@@ -26,8 +41,7 @@
                 if (ordinal < firstInPage)
                 {
                     continue;
-                }
-                else if (ordinal > lastInPage)
+                } else if (ordinal > lastInPage)
                 {
                     break;
                 }
@@ -37,43 +51,39 @@
     <%
                 try
                 {
-                    if (comment.getCreator()!=null && comment.getCreator().getPhoto() != null)
+                    if (comment.getCreator() != null && comment.getCreator().getPhoto() != null)
                     {
     %>
     <img src="<%=SWBPortal.getWebWorkPath()%><%=comment.getCreator().getPhoto()%>" alt="foto">
     <%
-                    }
-                    else
+                    } else
                     {
     %>
     <img src="<%=SWBPortal.getContextPath()%>/swbadmin/images/defaultPhoto.jpg" alt="foto">
     <%
                     }
-                }
-                catch (NullPointerException npe)
+                } catch (NullPointerException npe)
                 {
                     npe.printStackTrace();
                 }
                 //out.write("<span class="comment-auth">");
-    %>
+%>
     <div class="commentText">
         <p>Escrito por
             <%
                 try
                 {
-                    if (comment.getCreator()!=null && !comment.getCreator().getFullName().equals(""))
+                    if (comment.getCreator() != null && !comment.getCreator().getFullName().equals(""))
                     {
             %>
             <a href="<%=perfilPath%>?user=<%=comment.getCreator().getEncodedURI()%>"><%=comment.getCreator().getFullName()%></a>
             <%
-                    }
-                    else
+                    } else
                     {
             %>
             Desconocido
             <%        }
-                }
-                catch (NullPointerException npe)
+                } catch (NullPointerException npe)
                 {
             %>
             Desconocido
@@ -86,11 +96,11 @@
                 try
                 {
                     spam = comment.getSpam();
-                }
-                catch (Exception e)
+                } catch (Exception e)
                 {
                     comment.setSpam(0);
                     e.printStackTrace();
+
                 }
         %>
         <div id="labeldivspamMark<%=comment.getId()%>"><p><b><%=spam%> veces marcado como spam</b></p></div>
@@ -105,6 +115,15 @@
                 }
 
         %>
+        <%
+                if (isAdministrator)
+                {
+        %>
+        <div><p><a href="javascript:deletecomment('<%=comment.getEncodedURI()%>','<%=comment.getDescription()%>',<%=comment.getId()%>)" id="delspamMark<%=comment.getId()%>">[Eliminar]</a></p></div>
+        <%
+        }
+        %>
+
 
     </div>
 </div>
