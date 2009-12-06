@@ -957,7 +957,7 @@ public class SemanticObject
         if (m_virtual)
         {
             //TODO:
-            return null;
+            return new ArrayList().iterator();
         }
         return new SemanticLiteralIterator(m_res.listProperties(prop.getRDFProperty()));
     }
