@@ -18,7 +18,21 @@
             Resource base = paramRequest.getResourceBase();
             User user = paramRequest.getUser();
             WebPage wpage = paramRequest.getWebPage();
-            Member member = Member.getMember(user, wpage);            
+            Member member = Member.getMember(user, wpage);
+            boolean isAdministrator = false;
+            if (user != null)
+            {
+                GenericIterator<UserGroup> groups = user.listUserGroups();
+                while (groups.hasNext())
+                {
+                    UserGroup group = groups.next();
+                    if (group != null && group.getId().equals("admin"))
+                    {
+                        isAdministrator = true;
+                        break;
+                    }
+                }
+            }
             java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
             String uri = request.getParameter("uri");
             NewsElement anew = (NewsElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
@@ -78,7 +92,7 @@
             {%>
     <p><a href="<%=paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", anew.getURI())%>">[Editar Información]</a></p>
     <%}%>
-    <%if (anew.canModify(member))
+    <%if (anew.canModify(member) || isAdministrator)
             {%>
     <p><a href="<%=paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", anew.getURI())%>">[Eliminar]</a></p>
     <%}%>

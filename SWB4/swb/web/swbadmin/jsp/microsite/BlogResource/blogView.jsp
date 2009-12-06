@@ -51,6 +51,20 @@
             urleditar.setParameter("act", "edit");
             urleditar.setParameter("mode", "editblog");
             boolean editarblog = false;
+            boolean isAdministrator = false;
+            if (user != null)
+            {
+                GenericIterator<UserGroup> groups = user.listUserGroups();
+                while (groups.hasNext())
+                {
+                    UserGroup group = groups.next();
+                    if (group != null && group.getId().equals("admin"))
+                    {
+                        isAdministrator = true;
+                        break;
+                    }
+                }
+            }
             if (member.getAccessLevel() == member.LEVEL_OWNER)
             {
                 editarblog = true;
@@ -87,8 +101,7 @@
                     ipage = Integer.parseInt(request.getParameter("ipage"));
                     inicio = (ipage * ELEMENETS_BY_PAGE) - ELEMENETS_BY_PAGE;
                     fin = (ipage * ELEMENETS_BY_PAGE);
-                }
-                catch (NumberFormatException nfe)
+                } catch (NumberFormatException nfe)
                 {
                     ipage = 1;
                 }
@@ -268,7 +281,16 @@
                         if (canEditPost)
                         {
         %>
-        <a class="editar" href="<%=removeurl%>">[eliminar]</a> <a class="editar" href="<%=urlEditPost%>">[editar]</a>
+        <a class="editar" href="<%=urlEditPost%>">[editar]</a>
+        <%
+                        }
+        %>
+
+        <%
+                        if (canEditPost || isAdministrator)
+                        {
+        %>
+        <a class="editar" href="<%=removeurl%>">[eliminar]</a>
         <%
                         }
         %>
@@ -352,6 +374,7 @@
     %>
     <!-- fin paginacion -->
 </div>
+    
 <div class="columnaCentro">
     <%
             if (paginas > 1)
@@ -377,8 +400,7 @@
         %>
         <li><a href="<%=urla%>">Suscribirse a blog</a></li>
         <%
-                }
-                else
+                } else
                 {
                     urla.setParameter("act", "unsubscribe");
         %>

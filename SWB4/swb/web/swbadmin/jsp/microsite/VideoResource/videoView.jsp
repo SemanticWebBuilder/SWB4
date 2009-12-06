@@ -34,6 +34,20 @@
             WebPage wpage = paramRequest.getWebPage();
             MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
             Member member = Member.getMember(user, wpage);
+            boolean isAdministrator = false;
+            if (user != null)
+            {
+                GenericIterator<UserGroup> groups = user.listUserGroups();
+                while (groups.hasNext())
+                {
+                    UserGroup group = groups.next();
+                    if (group != null && group.getId().equals("admin"))
+                    {
+                        isAdministrator = true;
+                        break;
+                    }
+                }
+            }
             String suscribeURL = paramRequest.getActionUrl().setParameter("act", "subscribe").toString();
             String unsuscribeURL = paramRequest.getActionUrl().setParameter("act", "unsubscribe").toString();
             String urlAddVideo = paramRequest.getRenderUrl().setParameter("act", "add").toString();
@@ -230,7 +244,15 @@
                         if (video.canModify(member))
                         {
                 %>
-                | <a href="<%=editEventURL%>">Editar</a> | <a href="<%=removeurl%>">Eliminar</a>
+                | <a href="<%=editEventURL%>">Editar</a>
+                <%
+                        }
+                %>
+                 <%
+                        if (video.canModify(member) || isAdministrator)
+                        {
+                %>
+                | <a href="<%=removeurl%>">Eliminar</a>
                 <%
                         }
                 %>

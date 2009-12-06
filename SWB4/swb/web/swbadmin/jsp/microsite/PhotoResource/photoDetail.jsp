@@ -20,7 +20,20 @@
             User user = paramRequest.getUser();
             WebPage wpage = paramRequest.getWebPage();
             Member member = Member.getMember(user, wpage);
-
+boolean isAdministrator = false;
+            if (user != null)
+            {
+                GenericIterator<UserGroup> groups = user.listUserGroups();
+                while (groups.hasNext())
+                {
+                    UserGroup group = groups.next();
+                    if (group != null && group.getId().equals("admin"))
+                    {
+                        isAdministrator = true;
+                        break;
+                    }
+                }
+            }
             //String lang = user.getLanguage();
 
             String uri = request.getParameter("uri");
@@ -98,7 +111,7 @@
             {%>
     <p><a href="<%=paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", photo.getURI())%>">[Editar información]</a></p>
     <%}%>
-    <%if (photo.canModify(member))
+    <%if (photo.canModify(member) || isAdministrator)
             {%>
     <p><a href="<%=paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", photo.getURI())%>">[Eliminar]</a></p>
     <%}%>

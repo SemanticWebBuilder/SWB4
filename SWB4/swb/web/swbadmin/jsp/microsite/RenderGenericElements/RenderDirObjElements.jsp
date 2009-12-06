@@ -23,8 +23,7 @@
             {
                 pageNumber = Long.parseLong(request.getParameter("pn"));
                 showComments = true;
-            }
-            catch (Exception e)
+            } catch (Exception e)
             {
                 pageNumber = 1;
             }
@@ -66,6 +65,33 @@
         alert("Error al inicializar XMLHttpRequest!");
     var invoke = true;
     var count = 0;
+
+
+
+    function deletecomment(uri,text,commentId)
+    {
+        if(confirm('¿Esta seguro de borrar el comentario: '+text+'?'))
+        {
+            spamId = commentId;
+            var uri='<%=suri%>';
+            uri=escape(uri);
+            var url = '<%=url%>?act=deletecomment&commentId='+ commentId +'&uricomment='+uri;
+            alert(url);
+            request.open("GET", url, true);
+            request.onreadystatechange = deleted;
+            request.send(null);
+        }
+    }
+    function deleted() {
+            if(request.readyState!=4) return;
+            if(request.status==200) {
+                var response = request.responseText;
+                if ('Not OK'!=response && ''!=response) {
+                    window.location.reload(true);
+                }
+            }
+        
+    }
 
     function vote(val) {
         console.log("---votando con valor: " + escape(val));
@@ -239,23 +265,22 @@
 
     <div class="rank_label">Calificar:</div>
     <%
-        if (mem.isSigned())
-        {
+            if (mem.isSigned())
+            {
     %>
     <div class="rank_stars" dojoType="dojox.form.Rating" numStars="5" value="<%=rank%>">
         <script type="dojo/event" event="onChange">vote(this.value);return;</script>
     </div>
     <%
-    }
-    else
-    {
+        } else
+        {
     %>
     <div class="rank_stars" dojoType="dojox.form.Rating" numStars="5" value="<%=rank%>">
         <script type="dojo/event" event="_onMouse">return;</script>
         <script type="dojo/event" event="onStarClick">return;</script>
     </div>
     <%
-        }
+            }
     %>
 
     <div class="rec_votes">
@@ -264,8 +289,8 @@
     </div>
     <div  class="rank_label">
         <%
-        java.text.DecimalFormat df = new java.text.DecimalFormat("###,###");
-        String data = df.format(mse.getAbused());
+            java.text.DecimalFormat df = new java.text.DecimalFormat("###,###");
+            String data = df.format(mse.getAbused());
         %>
         <div id="labelabused"><%=data%> veces marcado como inapropiado</div>
     </div>
@@ -281,8 +306,7 @@
                 <a class="userTool" href="javascript:changeAbusedState();">Marcar como inapropiado</a></p>
         </div>
     </div>
-    <%
-            }
+    <%            }
     %>
 </div><br/><br/>
 <div class="commentBox">
@@ -323,8 +347,8 @@
 </div>
 <h2>Comentarios</h2>
 <%
-    request.setAttribute("page", pageNumber);
-    request.setAttribute("suri", suri);
+            request.setAttribute("page", pageNumber);
+            request.setAttribute("suri", suri);
 %>
 <jsp:include flush="true" page="ListDirObjComments.jsp"></jsp:include>
 <%
