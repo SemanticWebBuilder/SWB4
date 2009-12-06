@@ -6,6 +6,8 @@ import javax.servlet.http.*;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.User;
+import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
@@ -35,12 +37,10 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
         if (paramRequest.getMode().equals("returnRank"))
         {
             returnRank(request, response);
-        }
-        else if (paramRequest.getMode().equals("returnStateMessage"))
+        } else if (paramRequest.getMode().equals("returnStateMessage"))
         {
             returnStateMessage(request, response, paramRequest);
-        }
-        else
+        } else
         {
             super.processRequest(request, response, paramRequest);
         }
@@ -51,6 +51,21 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
     {
         WebPage page = response.getWebPage();
         Member mem = Member.getMember(response.getUser(), page);
+        boolean isAdministrator = false;
+        User user=response.getUser();
+        if (user != null)
+        {
+            GenericIterator<UserGroup> groups = user.listUserGroups();
+            while (groups.hasNext())
+            {
+                UserGroup group = groups.next();
+                if (group != null && group.getId().equals("admin"))
+                {
+                    isAdministrator = true;
+                    break;
+                }
+            }
+        }
         if (!mem.canView())
         {
             return;                                       //si el usuario no pertenece a la red sale;
@@ -63,41 +78,62 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
             {
                 ((MicroSiteWebPageUtil) page).subscribeToElement(mem);
             }
-        }
-        else if ("unsubscribe".equals(action))
+        } else if ("unsubscribe".equals(action))
         {
             if (page instanceof MicroSiteWebPageUtil)
             {
                 ((MicroSiteWebPageUtil) page).unSubscribeFromElement(mem);
             }
-        }
-        else if ("vote".equals(action))
+        } else if ("deletecomment".equals(action))
         {
-            rank(request, response);
+            String suri = request.getParameter("uricomment");
+            String commentId = request.getParameter("commentId");
+            SemanticObject so = null;
+            if (null != suri && commentId!=null)
+            {
+                so = SemanticObject.createSemanticObject(suri);
+            }
+            if (so.getGenericInstance() instanceof MicroSiteElement && isAdministrator)
+            {
+                MicroSiteElement element = (MicroSiteElement) so.getGenericInstance();
+                if (element != null)
+                {
+                    GenericIterator<Comment> comments=element.listComments();
+                    while(comments.hasNext())
+                    {
+                        Comment comment=comments.next();
+                        if(comment.getId().equals(commentId))
+                        {
+                            comment.remove();
+                            break;
+                        }
+                    }
+                }
+            }
+        }else if ("vote".equals(action))
+            {
+                rank(request, response);
+            } else if ("abuseReport".equals(action))
+            {
+                abusedStateChange(request, response);
+            } else if ("getAbused".equals(action))
+            {
+                getAbused(request, response);
+            } else if ("getSpam".equals(action))
+            {
+                getSpam(request, response);
+            } else if ("addComment".equals(action))
+            {
+                addComment(request, response, mem);
+            } else if ("spamReport".equals(action))
+            {
+                spamStateChange(request, response);
+            }
         }
-        else if ("abuseReport".equals(action))
-        {
-            abusedStateChange(request, response);
-        }
-        else if ("getAbused".equals(action))
-        {
-            getAbused(request, response);
-        }
-        else if ("getSpam".equals(action))
-        {
-            getSpam(request, response);
-        }
-        else if ("addComment".equals(action))
-        {
-            addComment(request, response, mem);
-        }
-        else if ("spamReport".equals(action))
-        {
-            spamStateChange(request, response);
-        }
-    }
 
-    private void rank(HttpServletRequest request, SWBActionResponse response)
+    private
+
+     void rank(HttpServletRequest request, SWBActionResponse response)
     {
 
         String suri = request.getParameter("uri");
@@ -113,8 +149,7 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
             try
             {
                 vote = Integer.parseInt(request.getParameter("value"));
-            }
-            catch (Exception ne)
+            } catch (Exception ne)
             {
             }
             double rank = mse.getRank();
@@ -232,8 +267,7 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
                     try
                     {
                         comment.setSpam(comment.getSpam() + 1);
-                    }
-                    catch(Exception e)
+                    } catch (Exception e)
                     {
                         comment.setSpam(1);
                     }
@@ -305,8 +339,7 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
         {
             //System.out.println("message:"+message);
             response.getWriter().print(message != null ? message : "Not OK");
-        }
-        catch (IOException ioe)
+        } catch (IOException ioe)
         {
         }
     }
@@ -320,8 +353,7 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
         try
         {
             response.getWriter().print(message != null ? message : "Not OK");
-        }
-        catch (IOException ioe)
+        } catch (IOException ioe)
         {
         }
     }

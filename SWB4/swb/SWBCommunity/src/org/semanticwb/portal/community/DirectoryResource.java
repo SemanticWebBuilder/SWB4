@@ -162,6 +162,21 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
     {
         User mem = response.getUser();
         Resource base = response.getResourceBase();
+        boolean isAdministrator = false;
+        User user=response.getUser();
+        if (user != null)
+        {
+            GenericIterator<UserGroup> groups = user.listUserGroups();
+            while (groups.hasNext())
+            {
+                UserGroup group = groups.next();
+                if (group != null && group.getId().equals("admin"))
+                {
+                    isAdministrator = true;
+                    break;
+                }
+            }
+        }
         if (!mem.isSigned())
         {
             return;                                       //si el usuario no pertenece a la red sale;
@@ -182,6 +197,33 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
                 abusedStateChange(request, response);
                 return;
             }
+            else if ("deletecomment".equals(action))
+        {
+            String suri = request.getParameter("uricomment");
+            String commentId = request.getParameter("commentId");
+            SemanticObject so = null;
+            if (null != suri && commentId!=null)
+            {
+                so = SemanticObject.createSemanticObject(suri);
+            }
+            if (so.getGenericInstance() instanceof DirectoryObject && isAdministrator)
+            {
+                DirectoryObject element = (DirectoryObject) so.getGenericInstance();
+                if (element != null)
+                {
+                    GenericIterator<Comment> comments=element.listComments();
+                    while(comments.hasNext())
+                    {
+                        Comment comment=comments.next();
+                        if(comment.getId().equals(commentId))
+                        {
+                            comment.remove();
+                            break;
+                        }
+                    }
+                }
+            }
+        }
             else if ("getAbused".equals(action))
             {
                 getAbused(request, response);

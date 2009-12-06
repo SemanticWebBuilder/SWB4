@@ -37,9 +37,11 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.GenericIterator;
+import org.semanticwb.model.User;
+import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
@@ -93,8 +95,7 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
         {
             request.setAttribute("paramRequest", paramRequest);
             dis.include(request, response);
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             log.error(e);
         }
@@ -107,11 +108,39 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
         WebPage page = response.getWebPage();
         Member mem = Member.getMember(response.getUser(), response.getWebPage());
         final String realpath = SWBPortal.getWorkPath();
-        if (!mem.canView())
+        User user = response.getUser();
+        boolean isAdministrator = false;
+        if (user != null)
         {
-            return;  //si el usuario no pertenece a la red sale;
+            GenericIterator<UserGroup> groups = user.listUserGroups();
+            while (groups.hasNext())
+            {
+                UserGroup group = groups.next();
+                if (group != null && group.getId().equals("admin"))
+                {
+                    isAdministrator = true;
+                    break;
+                }
+            }
         }
         String action = request.getParameter("act");
+        if ("remove".equals(action))
+        {
+            if (!isAdministrator)
+            {
+                if (!mem.canView())
+                {
+                    return;
+                }
+            }
+        } else
+        {
+            if (!mem.canView())
+            {
+                return;                                       //si el usuario no pertenece a la red sale;
+            }
+        }
+
         if (action == null)
         {
             HashMap<String, String> params = upload(request);
@@ -138,8 +167,7 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                         params.put("filename", finalpath + filename);
                     }
                     rec.setImageURL(file.getName());
-                }
-                else
+                } else
                 {
                     rec.setImageURL(null);
                 }
@@ -162,8 +190,7 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                         params.put("thumbnail", finalpath + filename);
                     }
                     rec.setPhotoThumbnail(file.getName());
-                }
-                else
+                } else
                 {
                     rec.setPhotoThumbnail(null);
                 }
@@ -176,8 +203,7 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                     ((MicroSiteWebPageUtil) page).sendNotification(rec);
                 }
                 rec.setPhotoWebPage(page);
-            }
-            else if (params.containsValue("edit"))
+            } else if (params.containsValue("edit"))
             {
                 String uri = params.get("uri");
                 PhotoElement rec = (PhotoElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
@@ -265,9 +291,11 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
         response.setRenderParameter("act", "view");
         }*/ else if ("remove".equals(action))
         {
+
+
             String uri = request.getParameter("uri");
             PhotoElement rec = (PhotoElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
-            if (rec != null && rec.canModify(mem))
+            if (rec != null && (rec.canModify(mem) || isAdministrator))
             {
                 File f = new File(SWBPortal.getWorkPath() + rec.getImageURL());
                 if (f != null && f.exists())
@@ -281,8 +309,7 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                 }
                 rec.remove();  //elimina el registro
             }
-        }
-        else
+        } else
         {
             super.processAction(request, response);
         }
@@ -307,13 +334,11 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                 {
                     path = path.substring(pos + 1);
                     rec.setImageURL(path);
-                }
-                else
+                } else
                 {
                     rec.setImageURL(path);
                 }
-            }
-            else
+            } else
             {
                 rec.setImageURL(null);
             }
@@ -378,8 +403,7 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                         String name = item.getFieldName();
                         String value = item.getString();
                         params.put(name, value);
-                    }
-                    else
+                    } else
                     {
                         currentFile = item;
                         File file = new File(path);
@@ -406,15 +430,13 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
 
                             params.put("filename", path + filename);
                             params.put("thumbnail", path + "thumbn_" + filename);
-                        }
-                        catch (StringIndexOutOfBoundsException iobe)
+                        } catch (StringIndexOutOfBoundsException iobe)
                         {
                         }
                     }
                 }
             }
-        }
-        catch (Exception ex)
+        } catch (Exception ex)
         {
             ex.printStackTrace();
         }
