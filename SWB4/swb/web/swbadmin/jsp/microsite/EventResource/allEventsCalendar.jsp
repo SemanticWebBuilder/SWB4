@@ -1,5 +1,10 @@
 <%@page contentType="text/html"%>
 <%@page import="java.util.Date, java.util.Calendar, java.util.GregorianCalendar, java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+
+<%!
+private static final int ELEMENETS_BY_PAGE = 2;
+%>
+
 <%
     SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
     User user = paramRequest.getUser();
@@ -21,6 +26,7 @@
             current = new Date(Integer.valueOf(year) - 1900, Integer.valueOf(month), Integer.valueOf(day));
             imonth = Integer.parseInt(month);
         }
+        String cssPath = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/images/";
 
         //System.out.println("====act:" + request.getParameter("act") +" " + dateFormat.format(current));
 
@@ -43,7 +49,7 @@
         Date startOfMonth = new Date(current.getYear(), current.getMonth(), 1);
         Date endOfMonth = new Date(current.getYear(), current.getMonth(), (int)daysInMonth);
 
-    if (act.equals("calendar")) {
+    if (act.equals("calendar") && paramRequest.getCallMethod() != paramRequest.Call_CONTENT) {
         //System.out.println("====Mostrando eventos en " + dateFormat.format(current));
 
         
@@ -139,7 +145,8 @@
             </ul>
         </div>
         <div class="clear">&nbsp;</div>
-    <%} else {
+    <%} else if (act.equals("daily")) {
+            java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
         //System.out.println("======Mostrando eventos del " + dateFormat.format(current));
             ArrayList<EventElement> events = new ArrayList<EventElement>();
             Iterator<EventElement> itev = EventElement.ClassMgr.listEventElements();
@@ -158,56 +165,250 @@
                 }
             }
 
-            Iterator<EventElement> eit = events.iterator();
-            if (eit.hasNext()) {
+            int elementos = events.size();
+            int paginas = elementos / ELEMENETS_BY_PAGE;
+            if (elementos % ELEMENETS_BY_PAGE != 0)
+            {
+                paginas++;
+            }
+            int inicio = 0;
+            int fin = ELEMENETS_BY_PAGE;
+            int ipage = 1;
+            if (request.getParameter("ipage") != null)
+            {
+                try
+                {
+                    ipage = Integer.parseInt(request.getParameter("ipage"));
+                    inicio = (ipage * ELEMENETS_BY_PAGE) - ELEMENETS_BY_PAGE;
+                    fin = (ipage * ELEMENETS_BY_PAGE);
+                } catch (NumberFormatException nfe)
+                {
+                    ipage = 1;
+                }
+            }
+            if (ipage < 1 || ipage > paginas)
+            {
+                ipage = 1;
+            }
+            if (inicio < 0)
+            {
+                inicio = 0;
+            }
+            if (fin < 0)
+            {
+                fin = ELEMENETS_BY_PAGE;
+            }
+            if (fin > elementos)
+            {
+                fin = elementos;
+            }
+            if (inicio > fin)
+            {
+                inicio = 0;
+                fin = ELEMENETS_BY_PAGE;
+            }
+            if (fin - inicio > ELEMENETS_BY_PAGE)
+            {
+                inicio = 0;
+                fin = ELEMENETS_BY_PAGE;
+            }
+            inicio++;
+
+            
+            if (events.size() > 0) {
                 %>
                 <div class="columnaIzquierda">
+                    <%
+            if (paginas > 1)
+            {
+    %>
+    <div id="paginacion">
+
+
+        <%
+                String nextURL = "#";
+                String previusURL = "#";
+                if (ipage < paginas)
+                {
+                    nextURL = paramRequest.getWebPage().getUrl() + "?act=daily&y=" + (current.getYear() + 1900) + "&m=" +
+                            current.getMonth() + "&d=" + current.getDate() + "&ipage=" + (ipage + 1);
+                }
+                if (ipage > 1)
+                {
+                    previusURL = paramRequest.getWebPage().getUrl() + "?act=daily&y=" + (current.getYear() + 1900) + "&m=" +
+                            current.getMonth() + "&d=" + current.getDate() + "&ipage=" + (ipage - 1);
+                }
+                if (ipage > 1)
+                {
+        %>
+        <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
+            <%
+                }
+                for (int i = 1; i <= paginas; i++)
+                {
+            %>
+        <a href="<%=wpage.getUrl()%>?act=daily&y=<%=current.getYear() + 1900%>&m=<%=current.getMonth()%>&d=<%=current.getDate()%>&ipage=<%=i%>"><%
+                    if (i == ipage)
+                    {
+            %>
+            <strong>
+                <%                    }
+                %>
+                <%=i%>
+                <%
+                    if (i == ipage)
+                    {
+                %>
+            </strong>
+            <%                    }
+            %></a>
+        <%
+                }
+        %>
+
+        <%
+                if (ipage != paginas)
+                {
+        %>
+        <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
+            <%
+                }
+            %>
+    </div>
+    <%
+            }
+    %>
                     <h1>Eventos del <%=dateFormat.format(current)%></h1>
                     <%
-                    while(eit.hasNext()) {
-                        EventElement ev = eit.next();
+                    int iElement = 0;
+                    for(EventElement ev : events) {
+                        //EventElement ev = eit.next();
                         if(ev.canView(member)) {
-                            java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
-                            String rank = df.format(ev.getRank());
-
-                            String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/EventResource/noevent.jpg";
-                            String path = ev.getWorkPath();
-                            if (ev.getEventThumbnail() != null)
+                            iElement++;
+                            if (iElement > fin)
                             {
-                                int pos = ev.getEventThumbnail().lastIndexOf("/");
-                                if (pos != -1)
+                                break;
+                            }
+
+                            if (iElement >= inicio && iElement <= fin)
+                            {
+                                String fechaEvento = "Sin determinar";
+                                try
                                 {
-                                    String sphoto = ev.getEventThumbnail().substring(pos + 1);
-                                    ev.setEventThumbnail(sphoto);
+                                    fechaEvento = dateFormat.format(ev.getStartDate());
+                                } catch (Exception e)
+                                {
                                 }
-                                pathPhoto = SWBPortal.getWebWorkPath() + path + "/" + ev.getEventThumbnail();
-                            }
-                            String postAuthor = "Usuario dado de baja";
-                            if (ev.getCreator() != null)
-                            {
-                                postAuthor = ev.getCreator().getFirstName();
-                            }
+                                String hfechaEvento = "Sin determinar";
+                                try
+                                {
+                                    hfechaEvento = timeFormat.format(ev.getStartTime());
+                                } catch (Exception e)
+                                {
+                                }
+                                String rank = df.format(ev.getRank());
+                                String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/EventResource/noevent.jpg";
+                                String path = ev.getWorkPath();
+                                if (ev.getEventThumbnail() != null)
+                                {
+                                    int pos = ev.getEventThumbnail().lastIndexOf("/");
+                                    if (pos != -1)
+                                    {
+                                        String sphoto = ev.getEventThumbnail().substring(pos + 1);
+                                        ev.setEventThumbnail(sphoto);
+                                    }
+                                    pathPhoto = SWBPortal.getWebWorkPath() + path + "/" + ev.getEventThumbnail();
+                                }
+                                String postAuthor = "Usuario dado de baja";
+                                if (ev.getCreator() != null)
+                                {
+                                    postAuthor = ev.getCreator().getFirstName();
+                                }
 
-                            String viewUrl = ev.getURL();
-                            %>
-                            <div class="noticia">
-                                <img src="<%=pathPhoto%>" alt="<%= ev.getTitle()%>">
-                                <div class="noticiaTexto">
-                                    <h2><%=ev.getTitle()%></h2>
-                                    <p>&nbsp;<br>Por: <%=postAuthor%><br><%=dateFormat.format(ev.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(ev.getCreated(), user.getLanguage())%></p>
-                                    <p>
-                                    <%=ev.getDescription()%> | <a href="<%=viewUrl%>">Ver m&aacute;s</a>
-                                    </p>
-                                    <p class="stats">
-                                        Puntuación: <%=rank%><br>
-                                        <%=ev.getViews()%> vistas
-                                    </p>
+                                String viewUrl = ev.getURL();
+                                %>
+                                <div class="noticia">
+                                    <img src="<%=pathPhoto%>" alt="<%= ev.getTitle()%>">
+                                    <div class="noticiaTexto">
+                                        <h2><%=ev.getTitle()%></h2>
+                                        <p>&nbsp;<br>Por: <%=postAuthor%><br><%=dateFormat.format(ev.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(ev.getCreated(), user.getLanguage())%></p>
+                                        <p>
+                                        <%=ev.getDescription()%> | <a href="<%=viewUrl%>">Ver m&aacute;s</a>
+                                        </p>
+                                        <p class="stats">
+                                            Puntuación: <%=rank%><br>
+                                            <%=ev.getViews()%> vistas
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
-                            <%
+                                <%
+                                }
                         }
                     }
                 %>
+                <!-- paginacion -->
+    <%
+            if (paginas > 1)
+            {
+    %>
+    <div id="paginacion">
+
+
+        <%
+                String nextURL = "#";
+                String previusURL = "#";
+                if (ipage < paginas)
+                {
+                    nextURL = paramRequest.getWebPage().getUrl() + "?act=daily&y=" + (current.getYear() + 1900) + "&m=" +
+                            current.getMonth() + "&d=" + current.getDate() + "&ipage=" + (ipage + 1);
+                }
+                if (ipage > 1)
+                {
+                    previusURL = paramRequest.getWebPage().getUrl() + "?act=daily&y=" + (current.getYear() + 1900) + "&m=" +
+                            current.getMonth() + "&d=" + current.getDate() + "&ipage=" + (ipage - 1);
+                }
+                if (ipage > 1)
+                {
+        %>
+        <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
+            <%
+                }
+                for (int i = 1; i <= paginas; i++)
+                {
+            %>
+        <a href="<%=wpage.getUrl()%>?act=daily&y=<%=current.getYear()+1900%>&m=<%=current.getMonth()%>&d=<%=current.getDate()%>&ipage=<%=i%>"><%
+                    if (i == ipage)
+                    {
+            %>
+            <strong>
+                <%                            }
+                %>
+                <%=i%>
+                <%
+                    if (i == ipage)
+                    {
+                %>
+            </strong>
+            <%                            }
+            %></a>
+        <%
+                }
+        %>
+
+
+        <%
+                if (ipage != paginas)
+                {
+        %>
+        <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
+            <%
+                }
+            %>
+    </div>
+    <%
+            }
+    %>
+    <!-- fin paginacion -->
                 </div>
             <%
             } else {
