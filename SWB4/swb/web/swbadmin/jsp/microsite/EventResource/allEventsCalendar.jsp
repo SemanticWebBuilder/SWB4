@@ -22,10 +22,7 @@
             imonth = Integer.parseInt(month);
         }
 
-        //System.out.println("====act:" + act +" " + dateFormat.format(current));
-        
-    if (!act.equals("daily")) {
-        //System.out.println("====Mostrando eventos en " + dateFormat.format(current));
+        //System.out.println("====act:" + request.getParameter("act") +" " + dateFormat.format(current));
 
         String [] months = {"Enero", "Febrero", "Marzo", "Abril",
                                 "Mayo", "Junio", "Julio", "Agosto",
@@ -46,35 +43,40 @@
         Date startOfMonth = new Date(current.getYear(), current.getMonth(), 1);
         Date endOfMonth = new Date(current.getYear(), current.getMonth(), (int)daysInMonth);
 
+    if (act.equals("calendar")) {
+        //System.out.println("====Mostrando eventos en " + dateFormat.format(current));
+
+        
+
         Set<Integer> reserved = new TreeSet<Integer>();
         Iterator<EventElement> itev = EventElement.ClassMgr.listEventElements();
-        while(itev.hasNext()) {            
+        while(itev.hasNext()) {
             EventElement ee = itev.next();
             boolean isNow = false;
             int sDay = ee.getStartDate().getDate();
             int eDay = ee.getEndDate().getDate();
 
-            if(ee.getStartDate().getMonth() == startOfMonth.getMonth() && ee.getEndDate().getMonth() == startOfMonth.getMonth() ){
-                if(ee.getStartDate().getYear() == startOfMonth.getYear() && ee.getEndDate().getYear() == startOfMonth.getYear())
+            //if(ee.getStartDate().getMonth() == startOfMonth.getMonth() && ee.getEndDate().getMonth() == startOfMonth.getMonth()) {
+                //if(ee.getStartDate().getYear() == startOfMonth.getYear() && ee.getEndDate().getYear() == startOfMonth.getYear())
+            if(ee.canView(member)) {
+                if(isThisMonth(ee, startOfMonth, endOfMonth)) {
+                    /*System.out.println("====El evento " + ee.getTitle() + " que inicia el "
+                            + dateFormat.format(ee.getStartDate()) + " y termina el " +
+                            dateFormat.format(ee.getEndDate()) + " se está llevando a cabo");*/
                     sDay = ee.getStartDate().getDate();
                     eDay = ee.getEndDate().getDate();
-                    System.out.println("====El evento " + ee.getTitle() + "se esta llevando a cabo");
                     isNow = true;
 
                     if (ee.getStartDate().before(startOfMonth) && ee.getEndDate().after(startOfMonth)) {
                         sDay = 1;
-                        isNow = true;
                     }
 
                     if (ee.getEndDate().after(endOfMonth)) {
                         eDay = (int)daysInMonth;
-                        isNow = true;
                     }
+                  }
             }
-            
-            
-            System.out.println("====>Verificando " + ee.getTitle() + "[" + sDay + " - " + eDay + "] - ["
-                    + dateFormat.format(ee.getStartDate())+" - " + dateFormat.format(ee.getEndDate()) + "]");
+
             for (int i = sDay; i <= eDay; i++) {
                 if (isNow) {
                     reserved.add(i);
@@ -105,7 +107,7 @@
 
         %>
         <h2>Eventos del mes</h2>
-        <div id ="calendario" style="margin:10px">
+        <div id ="calendario" style="margin:10px; height:220px;">
             <h2><a href="<%=pm.toString()+"#anchorDays"%>">&lt;</a>&nbsp;<%=months[ilmonth]%>&nbsp;&nbsp;<%=ilyear+1900%>&nbsp;<a href="<%=nm.toString()+"#anchorDays"%>">&gt;</a></h2>
             <ul id="anchorDays" class="dias semana">
                 <%
@@ -138,18 +140,21 @@
         </div>
         <div class="clear">&nbsp;</div>
     <%} else {
-            //System.out.println("===En el else");
+        //System.out.println("======Mostrando eventos del " + dateFormat.format(current));
             ArrayList<EventElement> events = new ArrayList<EventElement>();
             Iterator<EventElement> itev = EventElement.ClassMgr.listEventElements();
             while(itev.hasNext()) {
                 EventElement ee = itev.next();
                 //El evento inicia o termina en esta fecha
-                if (same(ee.getStartDate(), current) || same(ee.getEndDate(), current)) {
-                    System.out.println("===El evento " + ee.getTitle() + " inicia o termina en esta fecha");
+                /*if (same(ee.getStartDate(), current) || same(ee.getEndDate(), current)) {
                     events.add(ee);
                 } else if (current.after(ee.getStartDate()) && current.before(ee.getEndDate())) { //El evento se lleva a cabo en esta fecha
-                    System.out.println("===El evento " + ee.getTitle() + " se lleva a cabo en esta fecha");
                     events.add(ee);
+                }*/
+                if (ee.canView(member)) {
+                    if (isThisMonth(ee, startOfMonth, endOfMonth)) {
+                        events.add(ee);
+                    }
                 }
             }
 
@@ -234,10 +239,13 @@ private  boolean isThisMonth(EventElement event, Date startOfM, Date endOfM) {
           //Se lleva a cabo
 
     if(same(event.getStartDate(), startOfM) || event.getStartDate().before(startOfM)) {
+        //System.out.println("====>>El evento " + event.getTitle() + " inicio este mes o antes");
         if(same(event.getEndDate(), endOfM) || event.getEndDate().after(endOfM)) {
+            //System.out.println("====>>El evento " + event.getTitle() + " termina este mes o despues");
             ret = true;
        } else {
-            if(same(event.getEndDate(), endOfM) || event.getEndDate().before(endOfM)) {
+            if(same(event.getEndDate(), endOfM) || (event.getEndDate().before(endOfM) && event.getEndDate().after(startOfM))) {
+                //System.out.println("====>>El evento " + event.getTitle() + " termina en este mes");
                 ret = true;
             }
         }
