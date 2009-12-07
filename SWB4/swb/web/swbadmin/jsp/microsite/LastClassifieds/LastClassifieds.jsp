@@ -7,9 +7,9 @@
         SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
         //WebPage webpage = (WebPage) request.getAttribute("webpage");
         WebPage webpage = paramRequest.getWebPage();
-        WebPage clasificados = webpage.getWebSite().getWebPage("Clasificados");
+        //WebPage clasificados = webpage.getWebSite().getWebPage("Clasificados");
         ArrayList<Clasified> elements = new ArrayList<Clasified>();
-
+        User user = paramRequest.getUser();
 
         int limit = 10;
         Connection con = null;
@@ -79,7 +79,8 @@
         String created = "Sin fecha";
         if (obj.getCreated() != null && obj != null)
         {
-            created = iso8601dateFormat.format(obj.getCreated());
+            //created = iso8601dateFormat.format(obj.getCreated());
+            created = SWBUtils.TEXT.getTimeAgo(obj.getCreated(), user.getLanguage());
         }
         String name = "Usuario desconocido";
         if (obj.getCreator() != null)
