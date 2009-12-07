@@ -268,9 +268,11 @@
 
     <%
             }
+
     %>
     <ul class="miContenido">
         <%
+
             SWBResourceURL urla = paramRequest.getActionUrl();
             if (user.isRegistered())
             {
@@ -281,7 +283,7 @@
         <li><a href="<%=urla%>">Suscribirse a esta comunidad</a></li>
         <%
                 }
-                else
+                else if (null != member && member.getAccessLevel() != Member.LEVEL_OWNER && user.isRegistered())
                 {
                     urla.setParameter("act", "unsubscribe");
         %>
