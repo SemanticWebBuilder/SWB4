@@ -115,6 +115,32 @@ Error: Elemento no encontrado...
         }
         document.frmaeditevent.submit();
     }
+    function changeStartDate()
+    {
+        var value=dijit.byID(event_endDate).getValue();
+        if(value)
+        {
+            dijit.byId('event_endDate').constraints.min = arguments[0];
+        }
+        else
+        {
+            var today=new Date()
+            dijit.byId('event_endDate').constraints.min = today;
+        }
+    }
+    function changeEndDate()
+    {
+        var value=dijit.byID(event_startDate).getValue();
+        if(value)
+        {
+            dijit.byId('event_startDate').constraints.max = arguments[0];
+        }
+        else
+        {
+            var today=new Date()
+            dijit.byId('event_startDate').constraints.min = today;
+        }
+    }
 </script>
 
 
@@ -177,11 +203,11 @@ Error: Elemento no encontrado...
                     </p>
                     <p>
                         <label for="event_startDate">Fecha de inicio:&nbsp;</label><br />
-                        <input dojoType="dijit.form.DateTextBox" type="text" id="event_startDate" name="event_startDate" value="<%=(rec.getStartDate() == null ? "" : dateFormat.format(rec.getStartDate()))%>" constraints="{datePattern:'dd/MM/yyyy'}" onchange="dijit.byId('event_endDate').constraints.min = arguments[0];"/>
+                        <input dojoType="dijit.form.DateTextBox" type="text" id="event_startDate" name="event_startDate" value="<%=(rec.getStartDate() == null ? "" : dateFormat.format(rec.getStartDate()))%>" constraints="{datePattern:'dd/MM/yyyy'}" onchange="changeStartDate()"/>
                     </p>
                     <p>
                         <label for="event_endDate">Fecha de término:&nbsp;</label><br />
-                        <input dojoType="dijit.form.DateTextBox" type="text" id="event_endDate" name="event_endDate" value="<%=(rec.getEndDate() == null ? "" : dateFormat.format(rec.getEndDate()))%>" constraints="{datePattern:'dd/MM/yyyy'}" onchange="dijit.byId('event_startDate').constraints.max = arguments[0];"/>
+                        <input dojoType="dijit.form.DateTextBox" type="text" id="event_endDate" name="event_endDate" value="<%=(rec.getEndDate() == null ? "" : dateFormat.format(rec.getEndDate()))%>" constraints="{datePattern:'dd/MM/yyyy'}" onchange="changeEndDate()"/>
                     </p>
                     <p>
                         <label for="event_startTime">Hora de inicio:&nbsp;</label><br />
