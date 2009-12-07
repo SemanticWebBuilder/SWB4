@@ -61,6 +61,10 @@ if (null!=microsite){
         Member mem_curr = lista.next()
         elementos++
     }
+    if(elementos==0)
+    {
+         println """<p>Esta comunidad no tiene miembros suscritos</p>"""
+    }
     int paginas = elementos / ELEMENETS_BY_PAGE;
     if (elementos % ELEMENETS_BY_PAGE != 0)
     {
