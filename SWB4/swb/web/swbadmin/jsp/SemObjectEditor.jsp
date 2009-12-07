@@ -39,6 +39,7 @@
     String smode=request.getParameter("smode");
 try
 {
+
     //System.out.println("debug:2");
     SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
     if(suri==null) //es una creacion
@@ -46,6 +47,10 @@ try
         //System.out.println("debug:3");
         SemanticClass cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(scls);
         SemanticObject ref=SWBPlatform.getSemanticMgr().getOntology().getSemanticObject(sref);
+
+        boolean canAdd=SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_ADD);
+        if(!canAdd)return;
+
         SWBFormMgr frm=new SWBFormMgr(cls,ref,null);
         frm.setLang(lang);
         frm.addHiddenParameter("sprop", sprop);
@@ -116,12 +121,17 @@ try
         SemanticObject obj=ont.getSemanticObject(suri);
         SemanticClass cls=obj.getSemanticClass();
 
+        boolean canEdit=SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_EDIT) && SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(user, obj);
+
         //out.println("<fieldset>");
         //out.println("<div class=\"swbIcon2"+cls.getName()+"\"></div>");
         //out.println("</fieldset>");
 
         String mode=SWBFormMgr.MODE_EDIT;
-        if(!SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_EDIT))mode=SWBFormMgr.MODE_VIEW;
+        if(!canEdit)
+        {
+            mode=SWBFormMgr.MODE_VIEW;
+        }
 
 
         //TODO: revisar mejor opcion
@@ -161,7 +171,7 @@ try
 
         //frm.addButton("<button dojoType='dijit.form.Button' type=\"submit\">Guardar</button>");
 
-        if(SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_EDIT))
+        if(canEdit)
         {
             frm.addButton(SWBFormButton.newSaveButton());
         }
@@ -180,7 +190,7 @@ try
             }
         }
 
-        if(SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_DELETE))
+        if(canEdit && SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_DELETE))
         {
             if(obj.getBooleanProperty(Undeleteable.swb_undeleteable)==false)
             {
