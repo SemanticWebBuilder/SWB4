@@ -222,7 +222,6 @@ public class SWBAFilters extends SWBATree {
                     Element etp = addNode("topic", topic.getId(), topic.getDisplayName(user.getLanguage()), etopic);
                     etp.setAttribute("topicmap", map.getId());
 
-
                     //TODO: AdmFilterMgr.getInstance().haveAccess2Menu4Filter(user, topic);
 
                     boolean canModify = true; //AdmFilterMgr.getInstance().haveAccess2Menu4Filter(user, topic);
@@ -738,7 +737,7 @@ public class SWBAFilters extends SWBATree {
                 Element newnode = (Element) xmlfilter.importNode(efilter, true);
                 xmlfilter.appendChild(newnode);
 
-                System.out.println("XML Applet: "+SWBUtils.XML.domToXml(xmlfilter,true));
+                //System.out.println("XML Applet: "+SWBUtils.XML.domToXml(xmlfilter,true));
 
                 filter.setXml(SWBUtils.XML.domToXml(xmlfilter));
                 try {
@@ -1099,6 +1098,17 @@ public class SWBAFilters extends SWBATree {
                 //addTopicMap(user, tm, root, access, false, isFilter);
             }
         }
+
+        Iterator<UserRepository> it2 = SWBContext.listUserRepositories();
+        while (it2.hasNext())
+        {
+            UserRepository tm = it2.next();
+            if (tm.getParentWebSite()==null)
+            {
+                addSemanticObject(user, tm.getSemanticObject(), root, false);
+            }
+        }
+
 
 //        Iterator itex = ext.iterator();
 //        while (itex.hasNext()) {

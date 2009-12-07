@@ -42,6 +42,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -504,18 +505,38 @@ public class SWBPortal {
             user.setEmail("admin@semanticwb.org");
             user.setFirstName("Admin");
             user.setLanguage("es");
+            user.setCreated(new Date());
+            user.setUpdated(new Date());
             user.setActive(true);
 
             UserGroup grp1 = urep.createUserGroup("admin");
             grp1.setTitle("Administrator", "en");
             grp1.setTitle("Administrador", "es");
+            grp1.setCreated(new Date());
+            grp1.setUpdated(new Date());
+            grp1.setCreator(user);
+            grp1.setModifiedBy(user);
             grp1.setUndeleteable(true);
             UserGroup grp2 = urep.createUserGroup("su");
             grp2.setTitle("Super User", "en");
             grp2.setTitle("Super Usuario", "es");
+            grp2.setCreated(new Date());
+            grp2.setUpdated(new Date());
+            grp2.setCreator(user);
+            grp2.setModifiedBy(user);
             grp2.setUndeleteable(true);
             grp2.setParent(grp1);
             user.addUserGroup(grp1);
+
+            try
+            {
+                site = SWBContext.getWebSite("demo");
+                if (site == null)
+                {
+                    log.event("Creating Demo WebSite...");
+                    InstallZip(new File(getWorkPath()+"/sitetemplates/demo.zip"));
+                }
+            }catch(Exception e){log.error(e);}
         }
 
         //Check for GlobalWebSite

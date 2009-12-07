@@ -35,6 +35,8 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.Template;
+import org.semanticwb.portal.TemplateImp;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -123,6 +125,12 @@ public class StaticText extends GenericAdmResource {
         str=SWBUtils.TEXT.replaceAll(str, "{webworkpath}", SWBPortal.getWebWorkPath());
         str=SWBUtils.TEXT.replaceAll(str, "{workpath}", SWBPortal.getWorkPath());
         str=SWBUtils.TEXT.replaceAll(str, "{websiteid}", paramRequest.getWebPage().getWebSiteId());
+        if(str.indexOf("{templatepath}")>-1)
+        {
+            //TODO:pasar template por paramrequest
+            TemplateImp template=(TemplateImp)SWBPortal.getTemplateMgr().getTemplate(paramRequest.getUser(), paramRequest.getWebPage());
+            str=SWBUtils.TEXT.replaceAll(str, "{templatepath}", template.getActualPath());
+        }
         return str;
     }
     
