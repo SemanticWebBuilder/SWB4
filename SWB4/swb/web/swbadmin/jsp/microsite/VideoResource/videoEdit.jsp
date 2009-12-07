@@ -119,10 +119,10 @@ String cancelurl=paramRequest.getRenderUrl().toString();
             {
                 out.println(chk);
             }%>/> Sólo los miembros</label><br>
-                            <label><input type="radio" class="radio" name="level" value="3" <%if (rec.getVisibility() == 3)
+            <%--<label><input type="radio" class="radio" name="level" value="3" <%if (rec.getVisibility() == 3)
             {
                 out.println(chk);
-            }%>/> Sólo yo</label>
+            }%>/> Sólo yo</label> --%>
 
                         </fieldset>
                     </div>

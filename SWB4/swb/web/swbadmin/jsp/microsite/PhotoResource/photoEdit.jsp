@@ -77,9 +77,9 @@ function validaForma()
                 <p>
                     <label for="level"><input type="radio" name="level" value="1" <%if(rec.getVisibility()==1)out.println(chk);%> />&nbsp;Sólo los miembros</label>
                 </p>
-                <p>
+                <%-- <p>
                     <label for="level"><input type="radio" name="level" value="3" <%if(rec.getVisibility()==3)out.println(chk);%> />&nbsp;Sólo yo</label>
-                </p>
+                </p> --%>
             </div>
         </fieldset>
         <fieldset>
