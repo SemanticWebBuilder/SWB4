@@ -98,44 +98,38 @@
             
         }
         document.frmaddevent.submit();
-    }
-    function validatestarDate()
-    {
-        var value=dijit.byID(event_endDate).getValue();
-        if(value)
-        {
-            dijit.byId('event_endDate').constraints.min = arguments[0];
-        }
-        else
-        {
-            var today=new Date()
-            dijit.byId('event_endDate').constraints.min = today;
-        }
-    }
+    }    
     function changeStartDate()
     {
-        var value=dijit.byID(event_endDate).getValue();
+        var value=dijit.byId('event_startDate').getValue(false);        
         if(value)
         {
-            dijit.byId('event_endDate').constraints.min = arguments[0];
+            dijit.byId('event_endDate').constraints.min = value;            
         }
         else
         {
-            var today=new Date()
-            dijit.byId('event_endDate').constraints.min = today;
+            var max=new Date();
+            max.setFullYear(max.getYear()+50,max.getMonth(),max.getDate());
+            var min=new Date();
+            dijit.byId('event_endDate').constraints.min = min;
+            dijit.byId('event_endDate').constraints.max = max;
         }
+       
     }
     function changeEndDate()
     {
-        var value=dijit.byID(event_startDate).getValue();
+        var value=dijit.byId('event_endDate').getValue(false);        
         if(value)
         {
-            dijit.byId('event_startDate').constraints.max = arguments[0];
+            dijit.byId('event_startDate').constraints.max = value;       
         }
         else
         {
-            var today=new Date()
-            dijit.byId('event_startDate').constraints.min = today;
+            var max=new Date();
+            max.setFullYear(max.getYear()+50,max.getMonth(),max.getDate());
+            var min=new Date();
+            dijit.byId('event_startDate').constraints.max = max;
+            dijit.byId('event_startDate').constraints.min = min;
         }
     }
 </script>
@@ -171,11 +165,11 @@
                 </p>
                 <p>
                     <label for="event_startDate">Fecha de inicio:&nbsp;</label><br />
-                    <input dojoType="dijit.form.DateTextBox" type="text" id="event_startDate" name="event_startDate" constraints="{datePattern:'dd/MM/yyyy'}" onchange="changeStartDate()"/>
+                    <input dojoType="dijit.form.DateTextBox" type="text" id="event_startDate" name="event_startDate" constraints="{datePattern:'dd/MM/yyyy'}" onChange="javascript:changeStartDate();"/>
                 </p>
                 <p>
                     <label for="event_endDate">Fecha de término:&nbsp;</label><br />
-                    <input dojoType="dijit.form.DateTextBox" type="text" id="event_endDate" name="event_endDate" constraints="{datePattern:'dd/MM/yyyy'}" onchange="changeEndDate()"/>
+                    <input dojoType="dijit.form.DateTextBox" type="text" id="event_endDate" name="event_endDate" constraints="{datePattern:'dd/MM/yyyy'}" onChange="javascript:changeEndDate();"/>
                 </p>
                 <p>
                     <label for="event_startTime">Hora de inicio:&nbsp;</label><br />
