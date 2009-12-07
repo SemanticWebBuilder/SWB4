@@ -73,9 +73,11 @@ Error: Elemento no encontrado...
     }
 </script>
 <div class="columnaIzquierda">
+    <div class="adminTools">
             <a class="adminTool" onclick="validaForma()" href="#">Guardar</a>
         <a class="adminTool" href="<%=paramRequest.getRenderUrl()%>">Cancelar</a>
     <form name="frmaeditnews" id="frmaeditnews" class="swbform" enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
+        </div>
         <div>
             <fieldset>
                 <legend>Editar noticia</legend>
