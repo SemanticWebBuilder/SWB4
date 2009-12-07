@@ -97,7 +97,7 @@
     <p><%= event.getDescription()%></p>
     <p align="center">
         <a href="<%= imgPhoto%>" target="_self">
-            <img id="img_<%=event.getId()%>" src="<%= pathPhoto%>" alt="<%=event.getTitle()%>" border="0" width="50%" height="50%" />
+            <img id="img_<%=event.getId()%>" src="<%= pathPhoto%>" alt="<%=event.getTitle()%>" border="0" width="195" height="180" />
         </a>
     </p>
     <p><span class="itemTitle">Comienza:</span> <%= comienza%> a las <%= hcomienza%><br>

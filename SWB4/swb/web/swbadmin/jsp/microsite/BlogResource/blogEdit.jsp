@@ -75,10 +75,11 @@
                 {
                     out.println(chk);
                 }%>/> Sólo los miembros</label></li>
-                    <li><label><input type="radio" class="radio" name="level" value="3" <%if (post.getVisibility() == 3)
+                    <%--<li><label><input type="radio" class="radio" name="level" value="3"
+                                      <%if (post.getVisibility() == 3)
                 {
                     out.println(chk);
-                }%>/> Sólo yo</label></li>
+            }%>/> Sólo yo</label></li> --%>
                 </ul>
             </fieldset>
             <br>

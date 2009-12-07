@@ -75,9 +75,9 @@
                     <p>
                         <label for="level"><input type="radio" name="level" value="1" />&nbsp;Sólo los miembros</label>
                     </p>
-                    <p>
+                    <%--<p>
                         <label for="level"><input type="radio" name="level" value="3" />&nbsp;Sólo yo</label>
-                    </p>
+                    </p> --%>
                 </div>
             </fieldset>
 

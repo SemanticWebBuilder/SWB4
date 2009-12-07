@@ -84,7 +84,7 @@
                             <%String chk="checked=\"checked\"";%>
                             <li><label><input type="radio" checked class="radio" name="level" value="0" /> Cualquiera</label></li>
                             <li><label><input type="radio" class="radio" name="level" value="1" /> Sólo los miembros</label></li>
-                            <li><label><input type="radio" class="radio" name="level" value="3" /> Sólo yo</label></li>
+                            <%-- <li><label><input type="radio" class="radio" name="level" value="3" /> Sólo yo</label></li> --%>
                         </ul>
                     </fieldset>
                             <br>
