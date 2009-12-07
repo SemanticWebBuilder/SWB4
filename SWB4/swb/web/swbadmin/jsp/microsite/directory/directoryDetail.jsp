@@ -34,10 +34,19 @@
     User user = paramRequest.getUser();
 
     boolean isAdmin = false;
-    if (user.hasUserGroup(wpage.getWebSite().getUserRepository().getUserGroup("admin"))) {
-        isAdmin = true;
+    if (user != null)
+    {
+        GenericIterator<UserGroup> groups = user.listUserGroups();
+        while (groups.hasNext())
+        {
+            UserGroup group = groups.next();
+            if (group != null && group.getId().equals("admin"))
+            {
+                isAdmin = true;
+                break;
+            }
+        }
     }
-
     
     String perfilPath = wpage.getWebSite().getWebPage("perfil").getUrl();
     String path = SWBPortal.getWebWorkPath() + "/" + semObject.getWorkPath() + "/";
@@ -157,7 +166,7 @@
 
 <div class="columnaIzquierda">
     <div class="adminTools">
-        <a class="adminTool" onclick="javascript:history.go(-1);" href="#">Regresar al indice</a>
+        <a class="adminTool" onclick="javascript:history.go(-1);" href="#">Ir al &iacute;ndice</a>
         <%
         url.setParameter("uri", semObject.getURI());
         url.setAction(url.Action_REMOVE);
@@ -169,7 +178,7 @@
             if((dirObj.getCreator() != null && dirObj.getCreator().getURI().equals(user.getURI())) || group != null && user.hasUserGroup(group)) {
                 %>
                 <a class="adminTool" href="<%=url%>"><%=paramRequest.getLocaleString("remove")%></a>
-                <a class="adminTool" href="<%=urlEdit%>"><%=paramRequest.getLocaleString("editInfo")%></a>
+                <a class="adminTool" href="<%=urlEdit%>">Editar</a>
                 <%
             }
         }
@@ -180,21 +189,21 @@
             claimer = (User)semObject.getObjectProperty(Claimable.swbcomm_claimer).createGenericInstance();
             claimJustify = semObject.getProperty(Claimable.swbcomm_claimJustify);
             if (isAdmin || dirObj.getCreator().getURI().equals(user.getURI())) {
-                SWBResourceURL aUrl = paramRequest.getActionUrl().setAction("accept").setParameter("uri", request.getParameter("uri"));
-                SWBResourceURL cUrl = paramRequest.getActionUrl().setAction("reject").setParameter("uri", request.getParameter("uri"));
+                SWBResourceURL aUrl = paramRequest.getActionUrl().setParameter("act","accept").setParameter("uri", request.getParameter("uri"));
+                SWBResourceURL cUrl = paramRequest.getActionUrl().setParameter("act","reject").setParameter("uri", request.getParameter("uri"));
                 %>
                 <a class="adminTool" href="<%=aUrl%>">Aceptar reclamo</a>
                 <a class="adminTool" href="<%=cUrl%>">Rechazar reclamo</a>
                 <%
             } else if (claimer.equals(user)) {
-                SWBResourceURL fUrl = paramRequest.getActionUrl().setAction("unclaim").setParameter("uri", request.getParameter("uri"));
+                SWBResourceURL fUrl = paramRequest.getActionUrl().setParameter("act", "unclaim").setParameter("uri", request.getParameter("uri"));
                 %><a class="adminTool" href="<%=fUrl%>">Liberar elemento</a><%
             }
         } else if (dirObj.canClaim(user) && !isAdmin) {
-            %><a class="adminTool" onclick="javascript:showClaimForm();">Reclamar elemento</a><%
+            %><a class="adminTool" href="#" onclick="javascript:showClaimForm();">Reclamar elemento</a><%
         }
 
-        SWBResourceURL aUrl = paramRequest.getActionUrl().setAction("claim").setParameter("uri", request.getParameter("uri"));
+        SWBResourceURL aUrl = paramRequest.getActionUrl();//.setParameter("uri", request.getParameter("uri"));
         %>
     </div>
     <div class="commentBox">
@@ -203,6 +212,7 @@
             <label for="justify">Justificaci&oacute;n</label>
                 <textarea style="border:1px solid #CACACA;" name="justify" id="justify" cols="45" rows="5"></textarea>
                 <input type="hidden" name="uri" value="<%=semObject.getURI()%>">
+                <input type="hidden" name="act" value="claim"/>
         </form>
         <a class="userTool" href="javascript:sendClaim()">Reclamar</a>
         <a class="userTool" href="javascript:hideClaimForm()">Cancelar</a>
