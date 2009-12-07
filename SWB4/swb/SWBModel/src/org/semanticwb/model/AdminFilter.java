@@ -106,7 +106,7 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase
                             }
                         }
                         arr.add(act);
-                        System.out.println(cls+":"+act);
+                        //System.out.println(cls+":"+act);
                     }
                 }else if(val.startsWith("getTopic.SC|"))  //Es un submenu de una clase
                 {
@@ -131,7 +131,7 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase
                         arr.add("edit");
                         arr.add("delete");
                         arr.add("active");
-                        System.out.println(cls+":todo");
+                        //System.out.println(cls+":todo");
                     }
                 }else if(val.startsWith("getTopic."))  //es un menu
                 {
