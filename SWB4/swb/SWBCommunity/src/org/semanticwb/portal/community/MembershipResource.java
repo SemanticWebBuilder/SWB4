@@ -125,9 +125,11 @@ public class MembershipResource extends org.semanticwb.portal.community.base.Mem
         if("subscribe".equals(action))
         {
             Member member=Member.ClassMgr.createMember(page.getWebSite());
-            member.setAccessLevel(Member.LEVEL_EDIT);
+            MicroSite micro = MicroSite.getMicroSite(page);
+            if(micro.getCreator().equals(user)) member.setAccessLevel(Member.LEVEL_OWNER);
+            else member.setAccessLevel(Member.LEVEL_EDIT);
             member.setUser(user);
-            member.setMicroSite(MicroSite.getMicroSite(page));
+            member.setMicroSite(micro);
             //System.out.println("member:"+member);
         }else if("unsubscribe".equals(action))
         {
