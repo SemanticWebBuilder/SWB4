@@ -120,6 +120,7 @@ public class PasswordManager extends GenericResource {
                             String texto = replaceTags(frmmailms, request, null, token);
                             System.out.println("URL:" + texto);
                             SWBUtils.EMAIL.sendBGEmail(email, "Recuperar password", texto);
+                            response.setRenderParameter("message", "<br /><p>Te llegar&aacute; un correo electr&oacute;nico a tu cuenta, indic&aacute;ndote c&oacute;mo recuperarla.</p>");
                         } catch (GeneralSecurityException ex) {
                             log.error(ex);
                             response.setRenderParameter("message", "Error procesando informaci&oacute;n");
