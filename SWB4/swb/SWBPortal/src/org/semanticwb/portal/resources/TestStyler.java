@@ -42,58 +42,19 @@ public class TestStyler extends GenericResource {
             User user = paramRequest.getUser();
 
             if(base.getAttribute("css")!=null) {
-
-out.println("<script type=\"text/javascript\">");
-out.println("function createStyleSheet(title) {");
-out.println("	var sheet = document.createElement('style');");
-out.println("	sheet.type = 'text/css';");
-out.println("	sheet.title = title;");
-out.println("	document.getElementsByTagName('head')[0].appendChild(sheet);");
-out.println("	return sheet;");
-out.println("}");
-out.println("function getStyleSheetByTitle(title) {");
-out.println("	for(i=0; i<document.styleSheets.length; i++) {");
-out.println("		if (document.styleSheets[i].title == title) {");
-//out.println("alert('title='+title);");
-out.println("			return document.styleSheets[i];");
-out.println("		}");
-out.println("	}");
-out.println("	return null;");
-out.println("}");
-out.println("function removeAllRules(sheet) {");
-out.println("	var rules = sheet.cssRules? sheet.cssRules: sheet.rules;");
-out.println("	sheet.crossdelete = sheet.deleteRule? sheet.deleteRule : sheet.removeRule;");
-out.println("	while(rules.length > 0) {");
-out.println("		sheet.crossdelete(0);");
-out.println("	}");
-out.println("}");
-out.println("function addRules(sheet, rules) {");
-out.println("	if(sheet.cssText) {");
-out.println("		sheet.cssText = rules;");
-out.println("	}else {");
-out.println("		sheet.innerHTML = rules;");
-out.println("	}");
-out.println("}");
-out.println("function setStyleSheetByResource(title, rules) {");
-out.println("	var sheet = getStyleSheetByTitle(title);");
-out.println("	if(sheet == null) {");
-out.println("		sheet = createStyleSheet(title);");
-out.println("	}");
-out.println("	addRules(sheet, rules);");
-out.println("}");
-out.println("setStyleSheetByResource('"+base.getId()+"','"+base.getAttribute("css")+"');");
-out.println("</script>");
-
-                /*out.println("<style type=\"text/css\">");
-                out.println(base.getAttribute("css"));
-                out.println("</style>");*/
+                out.println("<script type=\"text/javascript\">");
+                out.println("   dojo.require(\"dojox.html.styles\");");
+                out.println("   function setStyleSheetByResource(title, rules) {");
+                String[] rules = base.getAttribute("css").split("}");
+                for(int i=0; i<rules.length; i++) {
+                    String[] rule = rules[i].split("\\{");
+                    out.println("   dojox.html.insertCssRule('"+rule[0]+"','"+rule[1]+"');");
+                }
+                out.println("   }");
+                out.println("   setStyleSheetByResource('"+base.getId()+"','"+base.getAttribute("css")+"');");
+                out.println("</script>");
             }
-            
 
-//var myCars=new Array();
-//myCars[0]="Saab";
-//myCars[1]="Volvo";
-//myCars[2]="BMW";
 
             if(userCanEdit(paramRequest)) {
                 String style = base.getAttribute("style")==null?"width: 99%;":base.getAttribute("style");
@@ -265,7 +226,6 @@ out.println("</script>");
         System.out.println("tkns[2]="+tkns[2]);
         System.out.println("\n");*/
 
-        //HashMap matriz = (HashMap)mm.get(base.getId());
         HashMap tabs = (HashMap)si.getMm(base.getId());
         if(tabs != null) {
             try {
@@ -286,6 +246,7 @@ out.println("</script>");
                     }
                     css.append("}");
                 }
+
                 System.out.println(css+"\n");
 
                 base.setAttribute("css", css.toString());
