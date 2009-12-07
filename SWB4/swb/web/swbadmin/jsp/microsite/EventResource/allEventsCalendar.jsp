@@ -19,69 +19,68 @@ private static final int ELEMENETS_BY_PAGE = 5;
     String month = request.getParameter("m");
     String day = request.getParameter("d");
 
-    Date current = new Date(System.currentTimeMillis());
-    int imonth = 0;
+    //Create calendar for today
+    Calendar currCal = new GregorianCalendar();
 
+    //If specific date required, update calendar
     if(day != null && month != null && year != null) {
-        current = new Date(Integer.valueOf(year) - 1900, Integer.valueOf(month), Integer.valueOf(day));
-        imonth = Integer.parseInt(month);
+        currCal = new GregorianCalendar();
+        currCal.set(Calendar.YEAR, Integer.valueOf(year));
+        currCal.set(Calendar.MONTH, Integer.valueOf(month));
+        currCal.set(Calendar.DAY_OF_MONTH, Integer.valueOf(day));
     }
 
     String cssPath = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/images/";
-
-    //System.out.println("====act:" + request.getParameter("act") +" " + dateFormat.format(current));
-
     String [] months = {"Enero", "Febrero", "Marzo", "Abril",
                             "Mayo", "Junio", "Julio", "Agosto",
                             "Septiembre", "Octubre", "Noviembre", "Diciembre"};
     String [] days = {"D", "L", "M", "M", "J", "V", "S"};
 
-    int ilmonth = current.getMonth();
-    int ilyear = current.getYear();
+    //Get current day, month and year as a number
+    int ilyear = currCal.get(Calendar.YEAR);
+    int ilmonth = currCal.get(Calendar.MONTH);
+    int ilday = currCal.get(Calendar.DAY_OF_MONTH);
 
-    Date thisMonth = new Date(ilyear, ilmonth, 1);
-    Date nextMonth = new Date(ilyear, ilmonth + 1, 1);
+    //Create calendar for start of month
+    Calendar startOfMonth = new GregorianCalendar();
+    startOfMonth.setTime(currCal.getTime());
+    startOfMonth.set(Calendar.DAY_OF_MONTH, 1);
+
+    //Create calendar for end of month
+    Calendar endOfMonth = new GregorianCalendar();
+    endOfMonth.setTime(currCal.getTime());
+    endOfMonth.set(Calendar.DAY_OF_MONTH, currCal.getActualMaximum(Calendar.DAY_OF_MONTH));
 
     //Find out when this mont starts and ends
-    int firstWeekDay = thisMonth.getDay();
-    long daysInMonth = Math.round((nextMonth.getTime() - thisMonth.getTime()) / (1000 * 60 * 60 * 24));
-    Calendar cal = Calendar.getInstance();
-
-    /*cal.get(Calendar.DAY_OF_MONTH);
-    System.out.println("===Primer dia de la semana: " + firstWeekDay);
-    System.out.println("===Primer dia de la semana2: " + (cal.getActualMaximum(cal.DAY_OF_WEEK) - cal.DAY_OF_WEEK_IN_MONTH));
-    System.out.println("===Dia del mes: " + cal.get(Calendar.DAY_OF_MONTH));
-    System.out.println("===Dia del mes2: " + current.getDate());
-    System.out.println("===Mes: " + cal.get(Calendar.MONTH));
-    System.out.println("===Mes2: " + current.getMonth());*/
-
-    Date startOfMonth = new Date(current.getYear(), current.getMonth(), 1);
-    Date endOfMonth = new Date(current.getYear(), current.getMonth(), (int)daysInMonth);
+    int firstWeekDay = startOfMonth.getFirstDayOfWeek();
+    int daysInMonth = currCal.getActualMaximum(Calendar.DAY_OF_MONTH);
 
     if (act.equals("calendar") && paramRequest.getCallMethod() != paramRequest.Call_CONTENT) {
-        //Get reserved days of the month
         Set<Integer> reserved = new TreeSet<Integer>();
+
+        //Get all events
         Iterator<EventElement> itev = EventElement.ClassMgr.listEventElements();
         while(itev.hasNext()) {
             EventElement ee = itev.next();
             boolean isNow = false;
+
+            //Get event's start and end days
             int sDay = ee.getStartDate().getDate();
             int eDay = ee.getEndDate().getDate();
 
+            //If member can view the event
             if(ee.canView(member)) {
                 //If the event is active this month
                 if(isThisMonth(ee, startOfMonth, endOfMonth)) {
-                    sDay = ee.getStartDate().getDate();
-                    eDay = ee.getEndDate().getDate();
                     isNow = true;
 
                     //If the event started before this month, the month is reserved from its first day
-                    if (ee.getStartDate().before(startOfMonth) && ee.getEndDate().after(startOfMonth)) {
+                    if (ee.getStartDate().before(startOfMonth.getTime()) && ee.getEndDate().after(startOfMonth.getTime())) {
                         sDay = 1;
                     }
 
                     //If the event ends after this month, the month is reserved to its last day
-                    if (ee.getEndDate().after(endOfMonth)) {
+                    if (ee.getEndDate().after(endOfMonth.getTime())) {
                         eDay = (int)daysInMonth;
                     }
                 }
@@ -92,7 +91,7 @@ private static final int ELEMENETS_BY_PAGE = 5;
                 if (isNow) {
                     reserved.add(i);
                 }
-            }
+            }            
         }
 
         //Build URL for next month
@@ -100,10 +99,10 @@ private static final int ELEMENETS_BY_PAGE = 5;
         nm.setParameter("d", "1");
         if (ilmonth == 11) {
             nm.setParameter("m", "0");
-            nm.setParameter("y", String.valueOf((ilyear + 1) + 1900));
+            nm.setParameter("y", String.valueOf(ilyear + 1));
         } else {
             nm.setParameter("m", String.valueOf(ilmonth + 1));
-            nm.setParameter("y", String.valueOf(ilyear + 1900));
+            nm.setParameter("y", String.valueOf(ilyear));
         }
 
         //Build URL for previous month
@@ -111,17 +110,17 @@ private static final int ELEMENETS_BY_PAGE = 5;
         pm.setParameter("d", "1");
         if (ilmonth == 0) {
             pm.setParameter("m", "11");
-            pm.setParameter("y", String.valueOf((ilyear - 1) + 1900));
+            pm.setParameter("y", String.valueOf(ilyear - 1));
         } else {
             pm.setParameter("m", String.valueOf(ilmonth - 1));
-            pm.setParameter("y", String.valueOf(ilyear + 1900));
+            pm.setParameter("y", String.valueOf(ilyear));
         }
 
         %>
         <h2>Eventos del mes</h2>
         <div id ="calendario" style="margin:10px; height:220px;">
             <h2>
-                <a href="<%=pm.toString()+"#anchorDays"%>">&lt;</a>&nbsp;<%=months[ilmonth]%>&nbsp;&nbsp;<%=ilyear+1900%>&nbsp;<a href="<%=nm.toString()+"#anchorDays"%>">&gt;</a>
+                <a href="<%=pm.toString()+"#anchorDays"%>">&lt;</a>&nbsp;<%=months[ilmonth]%>&nbsp;&nbsp;<%=ilyear%>&nbsp;<a href="<%=nm.toString()+"#anchorDays"%>">&gt;</a>
             </h2>
             <ul id="anchorDays" class="dias semana">
                 <%
@@ -139,7 +138,7 @@ private static final int ELEMENETS_BY_PAGE = 5;
                 for (int i = 1; i <= daysInMonth; i++) {
                     if (reserved.contains(i)) {
                         String dayUrl = paramRequest.getWebPage().getWebSite().getWebPage("Eventos_del_dia").getUrl().toString();
-                        dayUrl += "?act=daily&y=" + (ilyear + 1900) + "&m=" + ilmonth + "&d=" + i;
+                        dayUrl += "?act=daily&y=" + ilyear + "&m=" + ilmonth + "&d=" + i;
                         %><li><a href="<%=dayUrl%>"><%=i%></a></li><%
                     } else {
                         %><li><%=i%></li><%
@@ -156,15 +155,25 @@ private static final int ELEMENETS_BY_PAGE = 5;
   <%} else if (act.equals("daily")) {
         java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
         ArrayList<EventElement> events = new ArrayList<EventElement>();
+
+        //Get all events
         Iterator<EventElement> itev = EventElement.ClassMgr.listEventElements();
         while(itev.hasNext()) {
             EventElement ee = itev.next();
+
+            //Get event's start and end dates
+            Calendar sD = new GregorianCalendar();
+            Calendar eD = new GregorianCalendar();
+            sD.setTime(ee.getStartDate());
+            eD.setTime(ee.getEndDate());
+
+            //If member can view event
             if (ee.canView(member)) {
-                //El evento inicia o termina en este día?
-                if (same(ee.getStartDate(), current) || same(ee.getEndDate(), current)) {
+                //Does the event start or end this day?
+                if (same(sD, currCal) || same(eD, currCal)) {
                     events.add(ee);
-                //El evento inició antes de este día y termina después de este día?
-                } else if (ee.getStartDate().before(current) && ee.getEndDate().after(current)) {
+                //Did event start before today and ends after today?
+                } else if (sD.before(currCal) && eD.after(currCal)) {
                     events.add(ee);
                 }
             }
@@ -208,18 +217,18 @@ private static final int ELEMENETS_BY_PAGE = 5;
                 String nextURL = "#";
                 String previusURL = "#";
                 if (ipage < paginas) {
-                    nextURL = paramRequest.getWebPage().getUrl() + "?act=daily&y=" + (current.getYear() + 1900) + "&m=" +
-                            current.getMonth() + "&d=" + current.getDate() + "&ipage=" + (ipage + 1);
+                    nextURL = paramRequest.getWebPage().getUrl() + "?act=daily&y=" + ilyear + "&m=" +
+                            ilmonth + "&d=" + ilday + "&ipage=" + (ipage + 1);
                 }
                 if (ipage > 1) {
-                    previusURL = paramRequest.getWebPage().getUrl() + "?act=daily&y=" + (current.getYear() + 1900) + "&m=" +
-                            current.getMonth() + "&d=" + current.getDate() + "&ipage=" + (ipage - 1);
+                    previusURL = paramRequest.getWebPage().getUrl() + "?act=daily&y=" + ilyear + "&m=" +
+                            ilmonth + "&d=" + ilday + "&ipage=" + (ipage - 1);
                 }
                 if (ipage > 1) {
                     %><a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a><%
                 }
                 for (int i = 1; i <= paginas; i++) {
-                    %><a href="<%=wpage.getUrl()%>?act=daily&y=<%=current.getYear() + 1900%>&m=<%=current.getMonth()%>&d=<%=current.getDate()%>&ipage=<%=i%>"><%
+                    %><a href="<%=wpage.getUrl()%>?act=daily&y=<%=ilyear%>&m=<%=ilmonth%>&d=<%=ilday%>&ipage=<%=i%>"><%
                     if (i == ipage) {
                         %><strong><%
                     }%>
@@ -237,7 +246,7 @@ private static final int ELEMENETS_BY_PAGE = 5;
                 }
                 %></div><%
             }%>
-            <h1>Eventos del <%=dateFormat.format(current)%></h1>
+            <h1>Eventos del <%=dateFormat.format(currCal.getTime())%></h1>
             <%
             int iElement = 0;
             for (EventElement ev : events) {
@@ -300,19 +309,19 @@ private static final int ELEMENETS_BY_PAGE = 5;
                 String nextURL = "#";
                 String previusURL = "#";
                 if (ipage < paginas) {
-                    nextURL = paramRequest.getWebPage().getUrl() + "?act=daily&y=" + (current.getYear() + 1900) + "&m=" +
-                            current.getMonth() + "&d=" + current.getDate() + "&ipage=" + (ipage + 1);
+                    nextURL = paramRequest.getWebPage().getUrl() + "?act=daily&y=" + ilyear + "&m=" +
+                            ilmonth + "&d=" + ilday + "&ipage=" + (ipage + 1);
                 }
                 if (ipage > 1) {
-                    previusURL = paramRequest.getWebPage().getUrl() + "?act=daily&y=" + (current.getYear() + 1900) + "&m=" +
-                            current.getMonth() + "&d=" + current.getDate() + "&ipage=" + (ipage - 1);
+                    previusURL = paramRequest.getWebPage().getUrl() + "?act=daily&y=" + ilyear + "&m=" +
+                            ilmonth + "&d=" + ilday + "&ipage=" + (ipage - 1);
                 }
                 if (ipage > 1) {
                     %><a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a><%
                 }
 
                 for (int i = 1; i <= paginas; i++) {
-                    %><a href="<%=wpage.getUrl()%>?act=daily&y=<%=current.getYear()+1900%>&m=<%=current.getMonth()%>&d=<%=current.getDate()%>&ipage=<%=i%>"><%
+                    %><a href="<%=wpage.getUrl()%>?act=daily&y=<%=ilyear%>&m=<%=ilmonth%>&d=<%=ilday%>&ipage=<%=i%>"><%
                     if (i == ipage) {
                         %><strong><%
                     }
@@ -340,10 +349,12 @@ private static final int ELEMENETS_BY_PAGE = 5;
 %>
 
 <%!
-private boolean same(Date d1, Date d2) {
+private boolean same(Calendar d1, Calendar d2) {
     boolean ret = false;
 
-    if (d1.getYear() == d2.getYear() && d1.getMonth() == d2.getMonth() && d1.getDate() == d2.getDate()) {
+    if (d1.get(Calendar.YEAR) == d2.get(Calendar.YEAR) &&
+            d1.get(Calendar.MONTH) == d2.get(Calendar.MONTH) &&
+            d1.get(Calendar.DAY_OF_MONTH) == d2.get(Calendar.DAY_OF_MONTH)) {
         ret = true;
     }
 
@@ -352,23 +363,29 @@ private boolean same(Date d1, Date d2) {
 %>
 
 <%!
-private  boolean isThisMonth(EventElement event, Date startOfM, Date endOfM) {
+private  boolean isThisMonth(EventElement event, Calendar startOfM, Calendar endOfM) {
     boolean ret = false;
 
+    Calendar sD = new GregorianCalendar();
+    Calendar eD = new GregorianCalendar();
+    sD.setTime(event.getStartDate());
+    eD.setTime(event.getEndDate());
+
+
     //El evento inició algun día de este mes?
-    if ((same(event.getStartDate(), startOfM) || event.getStartDate().after(startOfM)) &&
-            (same(event.getStartDate(), endOfM) || event.getStartDate().before(endOfM))) {
+    if ((same(sD, startOfM) || sD.after(startOfM)) &&
+            (same(sD, endOfM) || sD.before(endOfM))) {
         ret = true;
     }
 
     //El evento inició algun día de este mes?
-    if ((same(event.getEndDate(), startOfM) || event.getEndDate().after(startOfM)) &&
-            (same(event.getEndDate(), endOfM) || event.getEndDate().before(endOfM))) {
+    if ((same(eD, startOfM) || eD.after(startOfM)) &&
+            (same(eD, endOfM) || eD.before(endOfM))) {
         ret = true;
     }
 
     //El evento inició antes del mes y termina despues del mes?
-    if (event.getStartDate().before(startOfM) && event.getEndDate().after(endOfM)) {
+    if (sD.before(startOfM) && eD.after(endOfM)) {
         ret = true;
     }
 
