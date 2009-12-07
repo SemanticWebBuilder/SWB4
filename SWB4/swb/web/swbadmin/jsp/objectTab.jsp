@@ -102,7 +102,14 @@
         }
         if(addDiv)
         {
-            if(!SWBPortal.getAdminFilterMgr().haveAccessToWebPage(user, ob))
+            //System.out.println(SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(user, obj));
+            if(!SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(user, obj))
+            {
+                if(!ob.getId().equals("bh_Information"))
+                {
+                    addDiv=false;
+                }
+            } else if(!SWBPortal.getAdminFilterMgr().haveAccessToWebPage(user, ob))
             {
                 addDiv=false;
             }
