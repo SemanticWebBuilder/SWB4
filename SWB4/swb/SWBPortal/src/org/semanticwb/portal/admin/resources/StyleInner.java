@@ -41,23 +41,22 @@ public class StyleInner {
             BufferedInputStream bin = new BufferedInputStream(is);
             byte[] contents = new byte[1024];
             int bytesRead=0;
-            while( (bytesRead=bin.read(contents)) != -1 ){
-                c.append(new String(contents, 0, bytesRead));
+            try{
+                while( (bytesRead=bin.read(contents)) != -1 )
+                    c.append(new String(contents, 0, bytesRead));
+            }catch(IOException ioe) {
+                c.delete(0, c.length());
+                c.append(".title{background-color:white; border: 1px solid blue;}");
+                c.append(".subtitle{}");
+                c.append(".header{background-color:#20b2aa;}");
+                c.append(".content .parrafo{text-decoration:none;display:block;}");
+                c.append(".extra{}");
+                c.append(".footer{color:#cccccc;text-decoration:none;display:block;}");
             }
             css = c.toString();
         }
 
-        /*css = ".title {\n" +
-                "background-color:white;\n" +
-                "border: 1px solid blue;\n" +
-                "}\n" +
-                ".header {\n" +
-                "background-image:url('mi/imagen.jpg');\n" +
-                "}\n" +
-                ".cuerpo .parrafo {\n" +
-                "text-decoration:none;\n" +
-                "display:block;\n" +
-                "}";*/
+
 
         SWBCssToXmlTranslator csst = new SWBCssToXmlTranslator();
         handler = new StylerDomParser(csst.translateCSS(css), base);
