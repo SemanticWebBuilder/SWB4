@@ -6,9 +6,9 @@
             {
                 return;
             }
-            int numrec = (Integer) request.getAttribute("numrec");            
+            int numrec = (Integer) request.getAttribute("numrec");
             Iterator<CommunityActivity> it = (Iterator<CommunityActivity>) request.getAttribute("activities");
-            
+
 %>
 
 <h2>Contenidos recientes</h2>
@@ -17,7 +17,7 @@
 
             CommunityActivity ca = null;
             MicroSiteElement mse = null;
-            MicroSite ms = null;            
+            MicroSite ms = null;
             if (it.hasNext())
             {
                 int num = 0;
@@ -31,25 +31,28 @@
                     ca = it.next();
                     user = ca.getUser();
                     mse = ca.getElement();
-                    ms = ca.getCommunity();
-                    Date updated=new Date(ca.getModified().getTime());
-                    if (mse != null && user != null && ms != null)
+                    if (mse != null && ca.getCommunity()!=null && ms!=null)
                     {
-                        String sActualized="actualizó";
-                        if(SWBUtils.TEXT.getTimeAgo(updated, user.getLanguage()).equals(SWBUtils.TEXT.getTimeAgo(mse.getCreated(), user.getLanguage())))
+                        ms = ca.getCommunity();
+                        Date updated = new Date(ca.getModified().getTime());
+                        if (mse != null && user != null && ms != null)
                         {
-                        sActualized="registró";
-                        }
+                            String sActualized = "actualizó";
+                            if (SWBUtils.TEXT.getTimeAgo(updated, user.getLanguage()).equals(SWBUtils.TEXT.getTimeAgo(mse.getCreated(), user.getLanguage())))
+                            {
+                                sActualized = "registró";
+                            }
     %>
-    
+
     <li> <%=user.getFullName()%> <%=sActualized%> <a class="elemento" href="<%=mse.getURL()%>" ><%=mse.getDisplayTitle(user.getLanguage())%></a>
         <%=SWBUtils.TEXT.getTimeAgo(updated, user.getLanguage())%>.</li>
         <%
+                        }
+                    }
                 }
             }
-        }
-        else
-        {
+            else
+            {
         %>
     <li>No hay actividades que reportar.</li>
     <%            }
