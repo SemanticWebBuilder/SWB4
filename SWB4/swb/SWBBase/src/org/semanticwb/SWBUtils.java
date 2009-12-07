@@ -108,38 +108,97 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 //import sun.misc.BASE64Encoder;
 
+
 /**
- * Clase que contiene utilerias para manejo de log de errores, texto, base de datos, IO, Zip, Email, Xml, Colecciones y encriptaciones
- * Class that contains utils for management of errors, text, database, IO, Zip files, emails, Xml, Xslt , Dom, Collections and encriptions
- * @author  Javier Solis Gonzalez (jsolis@infotec.com.mx), Jorge Jiménez (george24@infotec.com.mx)
+ * Contains utileries for managing error logs, text, database, IO, Zip files, emails,
+ * Xml, Xslt , Dom, Collections and encriptions
+ * <p>Contiene utilerias para manejo de log de errores, texto, base de datos, IO,
+ * Zip, Email, Xml, colecciones y encripciones</p>
+ * @author  Javier Solis Gonzalez (jsolis@infotec.com.mx)
+ * @author Jorge Jiménez (george24@infotec.com.mx)
  * @version 1.0
  */
 public class SWBUtils {
 
+
+    /**
+     * Holds a reference to a log utility.
+     * <p>Mantiene una referencia a la utiler&iacute;a de generaci&oacute;n de bit&aacute;coras.</p>
+     */
     private static Logger log = getLogger(SWBUtils.class);
+
+    /**
+     * Holds a reference to an object of this class.
+     * <p>Mantiene una referencia a un objeto de esta clase.</p>
+     */
     static private SWBUtils instance;
+
+    /**
+     * The string representing this application's physical path.
+     * <p>La cadena que representa la ruta f&iacute;sica de esta aplicaci&oacute;n</p>
+     */
     private static String applicationPath = SWBUtils.class.getResource("/").toString();
+
+    /**
+     * Defines the size used for creating arrays that will be used in I/O operations.
+     * <p>Define el tama&ntilde;o utilizado en la creaci&oacute;n de arrays que
+     * ser&aacute;n utilizados en operaciones de entrada/salida.</p>
+     */
     private static int bufferSize = 8192;
+
+    /**
+     * Indicates wheater or not the logger services have been iniciated.
+     * <p>Indica si los servicios del generador de bit&aacute;coras se han iniciado o no.</p>
+     */
     private static boolean initLogger = false;
+
+    /**
+     * Specifies a default language to use.
+     * <p>Especifica un lenguaje a usar por defecto.</p>
+     */
     private static Locale locale = Locale.ENGLISH;
     public static String LOCALE_SERVICES = null;
+
+    /**
+     * Stablishes the logger's output as the one used for {@link System.err}
+     * <p>Establece la salida del generador de bit&aacute;coras, como el mismo que usa {@code System.err}</p>
+     */
     private static PrintWriter log2File = new PrintWriter(System.err);
 
+    /**
+     * Contains the error elements to show in the administration site's error viewer.
+     * <p>Contiene los elementos de error a mostrar en el visor de errores del sitio
+     * de administraci&oacute;n.</p>
+     */
     private static Vector errorElement=new Vector();
+
+    /**
+     * Specifies the number of error elements to show in the administration site's error viewer.
+     * <p>Indica el n&uacute;mero de elementos de error a mostrar en el visor de
+     * errores del sitio de administraci&oacute;n.</p>
+     */
     private static int errorElementSize=200;
 
-    /** Creates new utils */
+
+    /**
+     * Creates a new object of this class
+     */
     private SWBUtils() {
+
         log.event("Initializing SemanticWebBuilder Base...");
         log.event("-->AppicationPath: " + applicationPath);
         init();
         log.event("-->Default Encoding: "+TEXT.getDafaultEncoding());
     }
 
-    /** Get Instance.
-     * @param applicationPath 
-     * @return  */
+    /**
+     * Retrieves a reference to the only one existing object of this class.
+     * <p>Obtiene una referencia al &uacute;nico objeto existente de esta clase.</p>
+     * @param applicationPath a string representing the path for this application
+     * @return a reference to the only one existing object of this class
+     */
     static public synchronized SWBUtils createInstance(String applicationPath) {
+
         SWBUtils.applicationPath = IO.normalizePath(applicationPath);
         if (instance == null) {
             initFileLogger();
@@ -149,31 +208,43 @@ public class SWBUtils {
     }
 
     /*
-     * Inicializa SWBUtils
+     * Initializes the class variables needed to provide this object's services
+     * <p>Inicializa las variables de clase necesarias para proveer los servicios de este objeto.</p>
      */
     private void init() {
+
         LOCALE_SERVICES = "locale_services";
     }
 
-    /*
-     * Regresa ruta fisica de la Aplicacion WEB
-     * ejemplo: /tomcat/webapps/swb
-     */
     /**
-     * 
-     * @return
+     * Gets the physical path for the Web application to serve. For example: <br/>/tomcat/webapps/swb
+     * <p>Obtiene la ruta f&iacute;sica de la aplicaci&oacute;n Web a servir.</p>
+     * @return a string representing the physical path for the Web application to serve
      */
     public static String getApplicationPath() {
+
         return applicationPath;
     }
 
-    //default Logger
+    /**
+     * Initializes the configuration fot the default logger for SWB. The following
+     * is the configuration set:
+     * <br/>{@code log4j.rootLogger=info, stdout}
+     * <br/>{@code log4j.appender.stdout=org.apache.log4j.ConsoleAppender}
+     * <br/>{@code log4j.appender.stdout.layout=org.apache.log4j.PatternLayout}
+     * <br/>{@code log4j.appender.stdout.layout.ConversionPattern=%d %p - %m%n}
+     * <br/>{@code log4j.logger.org.semanticwb=trace}
+     * <p>Inicializa el generador de bit&aacute;coras por defecto de SWB, con la
+     * configuraci&oacute;n descrita anteriormente.</p>
+     */
     private static void initLogger() {
+
         String log_conf = "log4j.rootLogger=info, stdout" + "\n" +
                 "log4j.appender.stdout=org.apache.log4j.ConsoleAppender" + "\n" +
                 "log4j.appender.stdout.layout=org.apache.log4j.PatternLayout" + "\n" +
                 "log4j.appender.stdout.layout.ConversionPattern=%d %p - %m%n" + "\n" +
                 "log4j.logger.org.semanticwb=trace";
+
         try {
             Properties proper = new Properties();
             proper.load(IO.getStreamFromString(log_conf));
@@ -185,9 +256,21 @@ public class SWBUtils {
         initLogger = true;
     }
 
+    /**
+     * Initializes the configuration fot the SWB's logger according to
+     * the content of a file. The file which stores the configuration to set is
+     * located in the directory {@literal /WEB-INF/classes/logging.properties} within
+     * the current application path.
+     * <p>Inicializa la configuraci&oacute;n del generador de bit&aacute;coras de
+     * SWB de acuerdo al contenido de un archivo. El archivo que almacena la
+     * configuraci&oacute;n a usar se ubica en el directorio {@literal /WEB-INF/classes/logging.properties}
+     * dentro de la ruta f&iacute;sica de la aplicaci&oacute;n.</p>
+     */
     private static void initFileLogger() {
+
         try {
-            FileInputStream in = new FileInputStream(applicationPath + "/WEB-INF/classes/logging.properties");
+            FileInputStream in = new FileInputStream(applicationPath
+                    + "/WEB-INF/classes/logging.properties");
             String log_conf = IO.readInputStream(in);
             log_conf = SWBUtils.TEXT.replaceAll(log_conf, "{apppath}", applicationPath);
             Properties proper = new Properties();
@@ -200,13 +283,12 @@ public class SWBUtils {
         initLogger = true;
     }
 
-    /*
-     * Regresa el Logger de acuerdo a el nombre de la clase
-     */
     /**
-     * 
-     * @param cls
-     * @return
+     * Creates a logger's instance and relates it to the class received.
+     * <p>Crea una instancia de un generador de archivos de bit&aacute;cora y
+     * la relaciona con la clase recibida.</p>
+     * @param cls a class to relate to the creating instance
+     * @return a logger related to the class specified
      */
     public static Logger getLogger(Class cls) {
         if (!initLogger) {
@@ -216,43 +298,64 @@ public class SWBUtils {
     }
     
     /**
-     * 
+     * Manages the element errors that are shown in the error viewer.
+     * <p>Administra los elementos que se muestran en el visor de errores.</p>
      */
     public static class ERROR 
     {
 
+
+        /**
+         * Adds an element to the class variable {@link SWBUtils.errorElement}.
+         * If the quantity of elements exceeds the {@link SWBUtils.errorElementSize}'s
+         * value, the last element of {@code SWBUtils.errorElement} is removed. Every
+         * element is added at the beggining of {@code SWBUtils.errorElement}.
+         * <p>Agrega un elemento a la variable de clase {@code SWBUtils.errorElement}.
+         * Si la cantidad de elementos excede el valor de {@code SWBUtils.errorElementSize},
+         * el &uacute;ltimo elemento de {@code SWBUtils.errorElement} es eliminado.
+         * Cada elemento se agrega al inicio de {@code SWBUtils.errorElement}.</p>
+         * @param msg a string containing the error's description
+         * @param e the throwable object generated by the error
+         * @param cls the class asociated to the logger
+         * @param level a string representing the error element's level
+         */
         public static void addError(String msg, Throwable e, Class cls, String level)
         {
             try
             {
-                errorElement.add(0,new ErrorElement(e, msg, cls, level));
-                if(errorElement.size()>errorElementSize)
+                SWBUtils.errorElement.add(0, new ErrorElement(e, msg, cls, level));
+                if (SWBUtils.errorElement.size() > SWBUtils.errorElementSize)
                 {
-                    errorElement.remove(errorElementSize);
+                    SWBUtils.errorElement.remove(SWBUtils.errorElementSize);
                 }
-            }catch(Exception noe){}
+            } catch (Exception noe) {}
         }
+
         /**
-         * Regresa iterador con los errores que se han enviado al log, 
-         * este iterador tiene un cierto tamaño el cual como maximo puede ser el que tiene la variable de clase errorElementSize.
+         * Retrieves the {@code SWBUtils.errorElement}'s iterator, whose size
+         * is defined by the class member {@code SWBUtils.errorElementSize}.
+         * <p>Regresa el iterador de {@code SWBUtils.errorElement}, cuyo tamaño
+         * est&aacute; definido por la variable de clase {@code SWBUtils.errorElementSize}.
          */
         public static Iterator getErrorElements()
         {
-            return new Vector(errorElement).iterator();
+            return new Vector(SWBUtils.errorElement).iterator();
         }
 
         /**
-         * Getter for property errorElementSize.
-         * @return Value of property errorElementSize.
+         * Gets the value of the class member {@code SWBUtils.errorElementSize}.
+         * <p>Obtiene el valor de la variable de clase {@code SWBUtils.errorElementSize}.</p>
+         * @return the value of the class member {@code SWBUtils.errorElementSize}.
          */
         public static int getErrorElementSize()
         {
-            return errorElementSize;
+            return SWBUtils.errorElementSize;
         }    
 
         /**
-         * Setter for property errorElementSize.
-         * @param errorElementSize New value of property errorElementSize.
+         * Sets the value of the class member {@code SWBUtils.errorElementSize}.
+         * <p>Asigna el valor de la variable de clase {@code SWBUtils.errorElementSize}.</p>
+         * @param errorElementSize the new value of the class member {@code SWBUtils.errorElementSize}.
          */
         public static void setErrorElementSize(int errorElementSize)
         {
@@ -262,20 +365,49 @@ public class SWBUtils {
 
 
     /**
-     * 
+     * Supplies several functions for handling strings commonly used, like: encoding,
+     * parsing, formatting, replacement, i18n and localization.
+     * <p>Provee varias funciones para la manipulaci&oacute;n de cadenas de texto
+     * utilizadas com&uacute;nmente, como: codificaci&oacute;n, an&aacute;lisis
+     * sint&aacute;ctico, formato y reemplazo, internacionalizaci&oacute;n y localizaci&oacute;n.</p>
      */
     public static class TEXT {
 
-        public static final String CHARSET_ISO8859_1="ISO8859_1";
-        public static final String CHARSET_UTF8="UTF8";
-
-        private static String defencoding=null;
 
         /**
-         * Homologa los codigos de caracter a uno solo por tipo
-         * Ejemplo: ISO-8859-1, ISO8859-1, 8859-1 = ISO8859_1
-         * @param charset
-         * @return
+         * Specifies the value for the charset ISO8859-1.
+         * <p>Especifica el valor para el c&oacute;digo de caracteres ISO8859-1.</p>
+         */
+        public static final String CHARSET_ISO8859_1="ISO8859_1";
+
+        /**
+         * Specifies the value for the charset UTF-8
+         * <p>Especifica el valor para el c&oacute;digo de caracteres UTF-8.</p>
+         */
+        public static final String CHARSET_UTF8="UTF8";
+
+        /**
+         * Stores the name of the character encoding used by default.
+         * <p>Almacena el nombre del c&oacute;digo de caracteres utilizado por defecto.</p>
+         */
+        private static String defencoding=null;
+
+
+        /**
+         * Given a string specifying a charset, returns the value of {@code SWBUtils.TEXT.CHARSET_ISO8859_1}
+         * or the value of {@code SWBUtils.TEXT.CHARSET_UTF8}. If {@code charset} contains <quote>UTF</quote> anywhere
+         * the value returned will be {@value #CHARSET_UTF8} otherwise the value returned
+         * will be {@value #CHARSET_ISO8859_1}. For example: <br>if {@code charset} contains <quote>UTF-8</quote>
+         * or <quote>UTF-2</quote>, the value returned will be {@value #CHARSET_UTF8}.
+         * <p>Dada una cadena especificando un c&oacute;digo de caracteres, regresa el valor de
+         * {@code SWBUtils.TEXT.CHARSET_ISO8859_1} o el valor de {@code SWBUtils.TEXT.CHARSET_UTF8}.
+         * Ejemplo: <br>si {@code charset} contiene <quote>ISO-8859-1</quote> o <quote>ISO8859-1</quote> o
+         * <quote>8859-1</quote> el valor regresado, ser&aacute; {@value #CHARSET_ISO8859_1}</p>
+         * @param charset a string representing the name of a charset (like <quote>ISO-8859-1</quote> or
+         * <quote>ISO8859-1</quote> or <quote>8859-1</quote> or <quote>UTF-8</quote> or <quote>UTF_8</quote>
+         * @return the string contained in {@code SWBUtils.TEXT.CHARSET_ISO8859_1}
+         *         or in {@code SWBUtils.TEXT.CHARSET_UTF8}, depending on the value
+         *         received in {@code charset}.
          */
         public static String getHomCharSet(String charset)
         {
@@ -287,6 +419,25 @@ public class SWBUtils {
             return ret;
         }
 
+        /**
+         * Returns the number corresponding to the month's full name specified according
+         * to the language received.
+         * <p>Regresa el n&uacute;mero correspondiente al nombre (completo) del mes
+         * especificado, el nombre del mes debe ser especificado en el lenguaje indicado
+         * en {@code language}.</p>
+         * @param month a string representing the month's full name in the specified {@code language}
+         * @param language a string representing the language in which the month's name is specified
+         * @return the number of month corresponding to the specified month's name.
+         *         If there is no match found between the name received and a month's name
+         *         in the specified language, a value of -1 is returned. If the language
+         *         specified is not accepted by {@link java.util.Locale}, the English language
+         *         will be used.
+         *         <p>el n&uacute;mero de mes correspondiente al nombre de mes especificado.
+         *         Si no hay correspondencia entre el nombre recibido y un nombre de mes
+         *         en el lenguaje especificado, un valor de -1, ser&aacute; regresado.
+         *         Si el lenguage especificado no es aceptado por {@code Locale}, el lenguaje
+         *         Ingl&eacute;s sera utilizado.</p>
+         */
         public static int monthToInt(String month, String language) {
             Locale loc;
             try {
@@ -303,14 +454,20 @@ public class SWBUtils {
                 if( formatter.format(gc.getTime()).equalsIgnoreCase(month) ) {
                     return i;
                 }
-                gc. add(Calendar.MONTH, 1);
+                gc.add(Calendar.MONTH, 1);
             }
             return -1;
         }
 
+        /**
+         * Returns the name of the character encoding used by default.
+         * <p>Regresa el nombre del c&oacute;digo de caracteres utilizado por defecto.</p>
+         * @return a string representing the character encoding used by default.
+         *         <p>una cadena que representa el c&oacute;digo de caracteres utilizado por defecto.</p>
+         */
         public static String getDafaultEncoding()
         {
-            if(defencoding==null)
+            if (defencoding == null)
             {
                 OutputStreamWriter out = new OutputStreamWriter(new ByteArrayOutputStream());
                 defencoding=out.getEncoding();
@@ -319,26 +476,30 @@ public class SWBUtils {
         }
 
         /**
-         * Remplaza en una cadena (str) las coincidencias encontradas (match) con otra cadena (replace).
-         * Raplace match words in a String object
-         * @param str 
-         * @param match
-         * @param replace
-         * @return 
+         * Replaces from {@code str} all the occurrences of {@code match} with the
+         * content in {@code replace}. <p>Reemplaza en {@code str} las ocurrencias
+         * encontradas de {@code match} con el contenido de {@code replace}.</p>
+         * @param str a string with the original content to modify
+         * @param match a string with the content to find in {@code str}
+         * @param replace a string with the replacing text
+         * @return a string with all the occurrences of {@code match} found  in {@code str}
+         *         substituted by {@code replace}.
+         *         <p>una cadena con todas las ocurrencias de {@code match} encontradas
+         *         en {@code str} substituidas por {@code replace}.</p>
          */
         public static String replaceAll(String str, String match, String replace) {
+
             if (match == null || match.length() == 0) {
                 return str;
             }
             if (replace == null) {
                 replace = "";
             }
-            if(match.equals(replace))return str;
-            StringBuffer ret=new StringBuffer();
+            if (match.equals(replace)) return str;
+            StringBuffer ret = new StringBuffer();
             int i = str.indexOf(match);
             int y = 0;
-            while (i >= 0) 
-            {
+            while (i >= 0) {
                 //System.out.println("i:"+i+" y:"+y);
                 ret.append(str.substring(y, i));
                 ret.append(replace);
@@ -351,12 +512,18 @@ public class SWBUtils {
         }
 
         /**
-         * @param str
-         * @param match
-         * @param replace
-         * @param ignoreCase
-         * @Autor Jorge Jiménez
-         * @return
+         * Replaces from {@code str} all the occurrences of {@code match} with the
+         * content in {@code replace} ignoring case. <p>Reemplaza en {@code str} las ocurrencias
+         * encontradas de {@code match} con el contenido de {@code replace} sin
+         * sensibilidad a las may&uacute;sculas.</p>
+         * @param str a string with the original content to modify
+         * @param match a string with the content to find in {@code str}
+         * @param replace a string with the replacing text
+         * @return a string with all the occurrences of {@code match} found in {@code str}
+         *         substituted by {@code replace}.
+         *         <p>una cadena con todas las ocurrencias de {@code match} encontradas
+         *         en {@code str} substituidas por {@code replace}.</p>
+         * @author Jorge Jim&eacute;nez
          */
         public static String replaceAllIgnoreCase(String str, String match, String replace) {
             if (match == null || match.length() == 0) {
@@ -376,12 +543,18 @@ public class SWBUtils {
         }
 
         /**
-         * @param str
-         * @param match
-         * @param replace
-         * @param ignoreCase
-         * @Autor Jorge Jiménez
-         * @return
+         * Replaces the first occurrence of {@code match} in {@code str} with the
+         * content of {@code replace} ignoring case.
+         * <p>Reemplaza la primera ocurrencia de {@code match} en {@code str} con
+         * el contenido de {@code replace} ignorando las may&uacute;sculas.</p>
+         * @param str a string with the original content to modify
+         * @param match a string with the content to find in {@code str}
+         * @param replace a string with the replacing text
+         * @return a string with the first occurrence of {@code match} found in {@code str}
+         *         substituted by {@code replace}.
+         *         <p>una cadena con la primer ocurrencia de {@code match} encontrada
+         *         en {@code str} substituida por {@code replace}.</p>
+         * @author Jorge Jim&eacute;nez
          */
         public static String replaceFirstIgnoreCase(String str, String match, String replace) {
             if (match == null || match.length() == 0) {
@@ -397,12 +570,30 @@ public class SWBUtils {
             return str;
         }
 
+        /**
+         * Converts a date into a string with the format {@literal yyyy-MM-dd'T'HH:mm:ss'.'SSS}.
+         * <p>Convierte un objeto date a uno string con el formato {@literal yyyy-MM-dd'T'HH:mm:ss'.'SSS}.</p>
+         * @param date a date to convert
+         * @return a string representing the date received with the format {@literal yyyy-MM-dd'T'HH:mm:ss'.'SSS}.
+         *         <p>un objeto string que representa al date recibido, con el
+         *         formato {@literal yyyy-MM-dd'T'HH:mm:ss'.'SSS}.</p>
+         */
         public static String iso8601DateFormat(Date date) 
         {
             SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'.'SSS");
             return iso8601dateFormat.format(date);
         }
 
+        /**
+         * Converts a string representing a date with the format {@literal yyyy-MM-dd'T'HH:mm:ss'.'SSS}
+         * into a date. <p>Convierte un objeto string que representa una fecha con formato
+         * {@literal yyyy-MM-dd'T'HH:mm:ss'.'SSS}, en un objeto date.</p>
+         * @param date a string representing a date with the format {@literal yyyy-MM-dd'T'HH:mm:ss'.'SSS}
+         * @return a date equivalent to the value of to the string received.
+         *         <p>un objeto date equivalente al valor representado por el string recibido.</p>
+         * @throws java.text.ParseException if the value received does not represent a valid date.
+         *         <p>Si el valor recibido no representa una fecha valida.</p>
+         */
         public static Date iso8601DateParse(String date) throws ParseException
         {
             SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'.'SSS");
@@ -410,7 +601,16 @@ public class SWBUtils {
         }
 
         /**
-         * Convierte un String a entero, si el estring es nulo o esta mal formado regresa el valor de defecto.
+         * Converts a string in an integer value; if this is not possible, it returns
+         * the integer received. <p>Convierte un objeto string en un valor entero;
+         * si no es posible, devuelve el valor entero recibido.</p>
+         * @param val a string representing a valid integer
+         * @param defa a value to return in case the convertion is not possible
+         * @return an integer equivalent to the value represented by {@code val}, or {@code defa}
+         *         if the convertion is not possible or if {@code val} is {@code null}.
+         *         <p>un entero equivalente al valor representado por {@code val},
+         *         o {@code defa}, si la conversi&oacute;n no es posible o si {@code val}
+         *         es {@code null}.</p>
          */
         public static int getInt(String val, int defa) {
             if (val == null) {
@@ -424,14 +624,23 @@ public class SWBUtils {
         }
 
         /**
-         * Le pone a un objeto String el tipo de codificación especificado por parámetro.
-         * Encodes a String object
-         * @param data
-         * @param enc
-         * @throws java.io.UnsupportedEncodingException
-         * @throws java.io.IOException
-         * @return  */
-        public static String encode(String data, String enc) throws java.io.UnsupportedEncodingException, java.io.IOException {
+         * Applies the charset specified in {@code enc} to the {@code data} received.
+         * <p>Aplica el conjunto de caracteres especificado en {@code enc} a la
+         * informaci&oacute;n recibida en {@code data}.</p>
+         * @param data a string with the information to apply the charset
+         * @param enc the charset to apply
+         * @return the string containing the {@code data} received with the charset applied.
+         *         <p>el objeto string que contiene la informaci&oacute;n recibida
+         *         con el conjunto de caracteres aplicado.</p>
+         * @throws java.io.UnsupportedEncodingException If the specified charset's
+         *         name is not supported. <p>Si el nombre del conjunto de caracteres
+         *         especificado no es soportado.</p>
+         * @throws java.io.IOException If there is a problem when applying the charset.
+         *         <p>Si ocurre un problema al aplicar el conjunto de caracteres.</p>
+         */
+        public static String encode(String data, String enc) 
+                throws java.io.UnsupportedEncodingException, java.io.IOException {
+
             ByteArrayOutputStream sw = new java.io.ByteArrayOutputStream();
             OutputStreamWriter out = new OutputStreamWriter(sw, enc);
             out.write(data);
@@ -440,14 +649,23 @@ public class SWBUtils {
         }
 
         /**
-         * Decodifica un objeto String poniéndole cierta codificación.
-         * Decodes a string object
-         * @param data
-         * @param enc
-         * @throws java.io.UnsupportedEncodingException
-         * @throws java.io.IOException
-         * @return  */
-        public static String decode(String data, String enc) throws java.io.UnsupportedEncodingException, java.io.IOException {
+         * Decodes a string applying the specified charset in {@code enc}.
+         * <p>Decodifica el contenido de {@code data} aplicando el conjunto de caracteres
+         * especificado en {@code enc}.</p>
+         * @param data the string to decode
+         * @param enc the charset to apply
+         * @return a string resulting from applying the charset specified on {@code data}.
+         *         <p>el objeto string que contiene la informaci&oacute;n recibida
+         *         con el conjunto de caracteres aplicado.</p>
+         * @throws java.io.UnsupportedEncodingException If the specified charset's
+         *         name is not supported. <p>Si el nombre del conjunto de caracteres
+         *         especificado no es soportado.</p>
+         * @throws java.io.IOException If there is a problem when applying the charset.
+         *         <p>Si ocurre un problema al aplicar el conjunto de caracteres.</p>
+         */
+        public static String decode(String data, String enc)
+                throws java.io.UnsupportedEncodingException, java.io.IOException {
+
             ByteArrayInputStream sw = new ByteArrayInputStream(data.getBytes());
             InputStreamReader in = new InputStreamReader(sw, enc);
 
@@ -462,22 +680,42 @@ public class SWBUtils {
             return ret.toString();
         }
 
+        /**
+         * Encodes an regular ASCII string into the corresponding values in Base 64.
+         * <p>Codifica un objeto string en los valores correspondientes en Base 64.</p>
+         * @param txt a string to convert to Base 64 encoding
+         * @return a string equivalent to {@code txt} with the content represented in Base 64.
+         *         <p>un objeto string equivalente a {@code txt} con el contenido
+         *         representado en Base 64.</p>
+         */
         public static String encodeBase64(String txt) {
             return SFBase64.encodeString(txt);
         }
 
+        /**
+         * Decodes an ASCII Base 64 represented string into the corresponding values
+         * in regular ASCII. <p>Decodifica un objeto string representado en ASCII en Base 64
+         * en los valores correspondientes en c&oacute;digo ASCII regular.</p>
+         * @param txt a string to convert from Base 64 encoding
+         * @return a string equivalent to {@code txt} with the content represented in ASCII encoding.
+         *         <p>un objeto string equivalente a {@code txt} con el contenido
+         *         representado en c&oacute;digo ASCII.</p>
+         */
         public static String decodeBase64(String txt) {
             return SFBase64.decodeToString(txt);
         }
 
         /**
-         * Convierte un string a una cadena de caracteres en donde la primera letra despues de cada separacion
-         * con cualquiera de los caracteres ' ',.,- y _ , sera convertida a mayuscula
-         *
-         * Converts to UpperCase the firts letter in a word 
-         * 
-         * @param str String a convertir
-         * @return
+         * Converts to upper case the first letter of each word in {@code str}. Every
+         * blank space, period, hyphen and underscore is considered a word separator.
+         * <p>Convierte a may&uacute;scula la primera letra de cada palabra en {@code str}.
+         * Cada espacio en blanco, punto, gui&oacute;n y gui&oacute;n bajo se considera como
+         * separador de palabras.</p>
+         * @param str a string whose content is going to be modified
+         * @return a string with the same content as {@code str} but with every word's
+         *         first letter turned to upper case.
+         *         <p>un objeto string con el mismo contenido de {@code str} pero con
+         *         cada inicial de palabra convertida a may&uacute;scula.</p>
          */
         public static String toUpperCaseFL(String str) {
             boolean b = true;
@@ -498,13 +736,26 @@ public class SWBUtils {
         }
 
         /**
-         *  Reemplaza caracteres acentuados y espacios en blanco.
-         *  caracteres adicionales son eliminados.
-         *  Replace special characters and blank spaces
-         *
-         * @param txt String a remplazar
-         * @param replaceSpaces Si se desea que se remplacen caracteres acentuados
-         * @return
+         * Replaces accented characters and blank spaces in the string given.
+         * Makes the changes in a case sensitive manner, the following are some examples
+         * of the changes this method makes: <br>
+         * {@literal Á} is replaced by {@literal A} <br>
+         * {@literal Ê} is replaced by {@literal E} <br>
+         * {@literal Ï} is replaced by {@literal I} <br>
+         * {@literal â} is replaced by {@literal a} <br>
+         * {@literal ç} is replaced by {@literal c} <br>
+         * {@literal ñ} is replaced by {@literal n} <br>
+         * and blank spaces are replaced by underscore characters, any symbol in
+         * {@code txt} other than underscore is eliminated.
+         * <p>Reemplaza caracteres acentuados y espacios en blanco en {@code txt}.
+         * Realiza los cambios respetando caracteres en may&uacute;sculas o min&uacute;sculas
+         * los caracteres en blanco son reemplazados por guiones bajos, cualquier s&iacute;mbolo
+         * diferente a gui&oacute;n bajo es eliminado.</p>
+         * @param txt a string in which the characters are going to be replaced
+         * @param replaceSpaces a {@code boolean} indicating if blank spaces are going to be replaced or not
+         * @return a string similar to {@code txt} but with neither accented or
+         *         special characters nor symbols in it. <p>un objeto string similar
+         *         a {@code txt} pero sin caracteres acentuados o especiales y sin s&iacute;mbolos</p>
          */
         public static String replaceSpecialCharacters(String txt, boolean replaceSpaces) {
             StringBuffer ret = new StringBuffer();
@@ -592,16 +843,51 @@ public class SWBUtils {
             return aux;
         }
 
+        /**
+         * Gets the value for a {@code key} in the specified {@code Bundle} with
+         * the default {@code locale}. <p>Obtiene el valor correspondiente al {@code key}
+         * especificado con el objeto {@code locale} utilizado por defecto.</p>
+         * @param Bundle a string specifying the bundle that contains the data to retrieve
+         * @param key a string indicating the key name whose value is required
+         * @return a string representing the specified {@code key}'s value stored in {@code Bundle}.
+         *         <p>un objeto string que representa el valor del elemento {@code key}
+         *         especificado almacenado en {@code Bundle}.</p>
+         */
         public static String getLocaleString(String Bundle, String key)
         {
             return getLocaleString(Bundle, key, locale);
         }
 
+        /**
+         * Gets the value for a {@code key} in the specified {@code Bundle} with
+         * the indicated {@code locale}. <p>Obtiene el valor correspondiente al {@code key}
+         * especificado con el objeto {@code locale} indicado.</p>
+         * @param Bundle a string specifying the bundle that contains the data to retrieve
+         * @param key a string indicating the key name whose value is required
+         * @param locale the locale that will be used to retrieve the {@code key} specified
+         * @return a string representing the specified {@code key}'s value stored in {@code Bundle}
+         *         in the language indicated by {@code locale}.
+         *         <p>un objeto string que representa el valor del elemento {@code key}
+         *         especificado almacenado en {@code Bundle}.</p>
+         */
         public static String getLocaleString(String Bundle, String key, Locale locale)
         {
             return getLocaleString(Bundle, key, locale, null);
         }
 
+        /**
+         * Gets the value for a {@code key} in the specified {@code Bundle} with
+         * the indicated {@code locale} and class loader. <p>Obtiene el valor correspondiente
+         * al {@code key} especificado con los objetos {@code locale} y {@code loader} indicados.</p>
+         * @param Bundle a string specifying the bundle that contains the data to retrieve
+         * @param key a string indicating the key name whose value is required
+         * @param locale the locale that will be used to retrieve the {@code key} specified
+         * @param loader the class loader from which the resource bundle is loaded
+         * @return a string representing the specified {@code key}'s value stored in {@code Bundle}
+         *         in the language indicated by {@code locale}.
+         *         <p>un objeto string que representa el valor del elemento {@code key}
+         *         especificado almacenado en {@code Bundle}.</p>
+         */
         public static String getLocaleString(String Bundle, String key, Locale locale, ClassLoader loader)
         {
             String cad = "";
@@ -620,14 +906,28 @@ public class SWBUtils {
         }
 
         /**
-         * Regresa el lenguaje con el que se este trabajando en la clase (SWBUtils).
+         * Returns the language which this object is working with.
+         * <p>Regresa el lenguaje con el que est&aacute; trabajando este objeto.</p>
+         * return the {@code locale} which this object is working with.
+         *        <p>el objeto {@code locale} con el que est&aacute; trabajando este objeto.</p>
          */
         public static Locale getLocale() {
             return locale;
         }
 
         /**
-         * Regresa un arraylist de strings que fueron delimitados por un delimitador (regexp)
+         * Splits a string according to a regular expression which is treated as a
+         * delimiter. All the splits and the delimiters found in {@code txt} are stored
+         * in an array list which is then returned.
+         * <p>Divide un objeto string de acuerdo a una expresi&oacute;n regular que es
+         * tratada como delimitador. Todas las divisiones (subcadenas) y los delimitadores
+         * encontrados se almacenan en un array list para al final ser devuelto.</p>
+         * @param txt a string to be split
+         * @param regexp a regular expression used as a delimeter to split {@code txt}
+         * @return an array list containing the substrings delimited by {@code regexp}
+         *         and all the substrings that complied with {@code regexp}
+         *         <p>un objeto array list que contiene las subcadenas delimitadas
+         *         por {@code regexp} y todas las subcadenas que cumplen con {@code regexp}.</p>
          */
         //version 1.4
         public static ArrayList regExpSplit(String txt, String regexp) {
@@ -655,16 +955,14 @@ public class SWBUtils {
         }
 
         /**
-         *   Regresa iterador con los string que se encuentren estre las cadenas pre y pos
-         *   Ejemplo:
-         *   String str="Tag uno:{request.getParameter(\"param1\") tag dos:{request.getParameter(\"param2\")}";
-         *   
-         *   Iterator it=AFUtils.findInterStr(str, "{request.getParameter(\"","\")");
-         *   while(it.hasNext())
-         *   {
-         *       System.out.println("param:("+it.next()+")");
-         *   }
-         * 
+         * Finds the substrings delimited by two given strings, inside another string.
+         * <p>Encuentra las subcadenas delimitadas por dos objetos string dados, dentro
+         * de otro objeto string.</p>
+         * @param str a string into which the substrings are going to be looked for
+         * @param pre a string that precedes the substring to extract from {@code str}
+         * @param pos pos a string that goes immediatly after the substring to extract from {@code str}
+         * @return an iterator with all the substrings found.
+         *         <p>un objeto iterator con todas las subcadenas encontradas.</p>
          */
         public static Iterator<String> findInterStr(String str, String pre, String pos) {
             ArrayList<String> ret = new ArrayList();
@@ -676,7 +974,21 @@ public class SWBUtils {
         }
 
         /**
-         * Regresa iterador con los string que se encuentren estre las cadenas pre y pos.
+         * Finds a substring in {@code str} which position must be after {@code index}
+         * and is delimited by {@code pre} and {@code pos} strings.
+         * The substring found is then stored in {@code arr}.
+         * <p>Encuentra una subcadena en {@code str} cuya posici&oacute;n debe ser
+         * posterior a {@code index} y es delimitada por las cadenas {@code pre} y {@code pos}.
+         * La subcadena encontrada se almacena en {@code arr}.</p>
+         * @param str a string from which a substring is going to be extracted
+         * @param pre a string that precedes the substring to extract from {@code str}
+         * @param pos a string that goes immediatly after the substring to extract from {@code str}
+         * @param index the position in {@code str} from which {@code pre} is looked for
+         * @param arr the object in which the substring extracted is going to be stored
+         * @return the index in {@code str} immediatly after {@code pos}, or -1
+         *         if {@code pre} is not found in {@code str}.
+         *         <p>El &iacute;ndice en {@code str} inmediatamente despu&eacute;s de
+         *         {@code pos}, o -1 si {@code pre} no es encontrado en {@code str}.</p>
          */
         private static int findInterStr(String str, String pre, String pos, int index, ArrayList arr) {
             int i = str.indexOf(pre, index);
@@ -691,31 +1003,63 @@ public class SWBUtils {
             return -1;
         }
 
-        /*
-         *Regresa un objeto String conteniendo el nombre del número de día en el lenguaje pasado por parámetro., 
-        el número de de día se envía por parámetro y comienza con 0 (Domingo).
+        /**
+         * Obtains the day's name corresponding to the number received specifying
+         * the day of the week. The first day of the week is Sunday and its day number is zero.
+         * <p>Obtiene el nombre del d&iacute;a correspondiente al n&uacute;mero recibido
+         * especificando el d&iacute;a de la semana. El primer d&iacute;a de la
+         * semana es Domingo y le corresponde el n&uacute;mero cero.</p>
+         * @param day the number of the day of the week
+         * @param lang a string representing a language for obtaining the corresponding name
+         * @return a string representing the name of the day specified.
+         *         <p>un objeto string que representa el nombre del d&iacute;a de la
+         *         semana especificado.</p>
          */
         public static String getStrDay(int day, String lang) {
             return getLocaleString("locale_date", "day_" + day, new Locale(lang));
         }
 
         /**
-         * Regresa un objeto String conteniendo el nombre del número de mes en el lenguaje pasado por parámetro., 
-         * el número de de mes se envía por parámetro y comienza con 0 (Enero).
+         * Obtains the month's name corresponding to the number received specifying
+         * the month of the year. The first month of the year is January and its corresponding number is zero.
+         * <p>Obtiene el nombre del mes correspondiente al n&uacute;mero recibido
+         * especificando el mes del a&ntilde;o. El primer mes del a&ntilde;o es
+         * Enero y le corresponde el n&uacute;mero cero.</p>
+         * @param month the number of the month of the year
+         * @param lang a string representing a language for obtaining the corresponding name
+         * @return a string representing the name of the month specified.
+         *         <p>un objeto string que representa el nombre del mes especificado.</p>
          */
         public static String getStrMonth(int month, String lang) {
             return getLocaleString("locale_date", "month_" + month, new Locale(lang));
         }
 
         /**
-         * Da formato a una fecha y la regresa en el lenguaje deseado.
+         * Converts a given date into a string in the language specified.
+         * <p>Convierte un objeto date dado en un objeto string en el lenguaje especificado.</p>
+         * @param date a date to be converted
+         * @param lang a string representing the language to use in the convertion
+         * @return a string representing the date specified writen in the language specified.
+         *         <p>un objeto string representando el objeto date especificado, escrito en el
+         *         lenguaje especificado.</p>
          */
         public static String getStrDate(Date date, String lang) {
             return getStrDate(date, lang, null);
         }
 
-        /**
+        /*
          * Da formato a una fecha y la regresa en el lenguaje deseado.
+         */
+        /**
+         * Converts a date into a string with the format and in the language specified.
+         * <p>Convierte una fecha en una cadena con el formato y en el lenguaje especificados.</p>
+         * @param date a date to convert to a string
+         * @param lang a string representing the language of the string to return
+         * @param format a string representing the date format to show in the string to return
+         * @return a string representing the date received, in the language and with
+         *         the format specified.
+         *         <p>un objeto string que representa la fecha recibida, en el lenguaje y
+         *         con el formato especificados.</p>
          */
         public static String getStrDate(Date date, String lang, String format) {
             String ret = "";
@@ -739,13 +1083,24 @@ public class SWBUtils {
         }
 
         /**
-         * Use:
-         *   Day:     DAY, Day, day, dd
-         *   Month:   MONTH, Month, month, mm
-         *   Year:    yyyy, yy
-         *   Hours:   hh
-         *   Minutes: %m
+         * Formats a given {@code date} according to the specified {@code format} and language.
+         * The valid patterns for each field in the date, are as follows:<br/>
+         *   Day:     DAY, Day, day, dd<br/>
+         *   Month:   MONTH, Month, month, mm<br/>
+         *   Year:    yyyy, yy<br/>
+         *   Hours:   hh<br/>
+         *   Minutes: %m<br/>
          *   Seconds: ss
+         * <p>Da formato a una fecha proporcionada de acuerdo al patr&oacute;n de formato
+         * y lenguaje especificado. Los patrones v&aacute;lidos para cada uno de los campos
+         * de la fecha se describen arriba.</p>
+         * @param date a date to format
+         * @param format a string representing the pattern to use in the convertion
+         * @param lang a string representing the language of the string to return
+         * @return a string representing the date received expressed in the format
+         *         and language specified.
+         *         <p>un objeto string que representa la fecha recibida, expresada
+         *         en el formato y lenguaje especificados.</p>
          */
         private static String getStrFormat(Date date, String format, String lang) {
             String ret = format;
@@ -757,24 +1112,73 @@ public class SWBUtils {
             ret = replaceAll(ret, "MONTH", getStrMonth(date.getMonth(), lang).toUpperCase());
             ret = replaceAll(ret, "month", getStrMonth(date.getMonth(), lang).toLowerCase());
             ret = replaceAll(ret, "mm", dateCeroComp(date.getMonth() + 1));
-            ret = replaceAll(ret, "yyyy", dateCeroComp(date.getYear() + 1900));
             ret = replaceAll(ret, "yy", dateCeroComp(date.getYear() - 100));
+            ret = replaceAll(ret, "yyyy", dateCeroComp(date.getYear() + 1900));
             ret = replaceAll(ret, "hh", dateCeroComp(date.getHours()));
             ret = replaceAll(ret, "%m", dateCeroComp(date.getMinutes()));
             ret = replaceAll(ret, "ss", dateCeroComp(date.getSeconds()));
             return ret;
         }
 
+        /**
+         * Gets the difference in time between one date given and the system date.
+         * This difference is expressed in the biggest unit of time possible.
+         * These units of time being: seconds, minutes, hours, days, months
+         * and years.
+         * <p>Obtiene la diferencia en tiempo entre una fecha dada y la fecha del sistema.
+         * Esta diferencia se expresa en la unidad de tiempo m&aacute;s grande posible.
+         * Las unidades de tiempo manejadas son: segundos, minutos, horas,
+         * d&iacute;s, meses y a&ntilde;os.</p>
+         * @param CreationDate the date to compare
+         * @param lang a string indicating the language in which the date is going to be presented
+         * @return a string representing the difference between the date given and
+         *         the system's date, expressed in the biggest unit of time possible.
+         *         <p>un objeto string que representa la diferencia entre la fecha dada
+         *         y la fecha del sistema, expresada en la unidad de tiempo
+         *         m&aacute;s grande posible.</p>
+         */
         public static String getTimeAgo(Date CreationDate, String lang)
         {
             return getTimeAgo(new Date(), CreationDate, lang);
         }
 
+        /**
+         * Gets the difference in time between two dates given. This difference is expressed
+         * in the biggest unit of time possible. These units of time being: seconds, minutes,
+         * hours, days, months and years.
+         * <p>Obtiene la diferencia en tiempo entre dos fechas dadas. Esta diferencia se
+         * expresa en la unidad de tiempo m&aacute;s grande posible. Las unidades de
+         * tiempo manejadas son: segundos, minutos, horas, d&iacute;s, meses y a&ntilde;os.</p>
+         * @param CurrentDate the most recent date to compare
+         * @param CreationDate the oldest date to compare
+         * @param lang a string indicating the language in which the date is going to be presented
+         * @return a string representing the difference between the two dates given,
+         *         expressed in the biggest unit of time possible.
+         *         <p>un objeto string que representa la diferencia entre dos fechas
+         *         dadas, expresada en la unidad de tiempo m&aacute;s grande posible.</p>
+         */
         public static String getTimeAgo(Date CurrentDate, Date CreationDate, String lang)
         {
-            String ret="";
-            int second, secondCurrent, secondCreation, minute, minuteCurrent, minuteCreation, hour, hourCurrent, hourCreation;
-            int day, dayCurrent, dayCreation, month, monthCurrent, monthCreation, year, yearCurrent, yearCreation, dayMonth;
+            String ret = "";
+            int second;
+            int secondCurrent;
+            int secondCreation;
+            int minute;
+            int minuteCurrent;
+            int minuteCreation;
+            int hour;
+            int hourCurrent;
+            int hourCreation;
+            int day;
+            int dayCurrent;
+            int dayCreation;
+            int month;
+            int monthCurrent;
+            int monthCreation;
+            int year;
+            int yearCurrent;
+            int yearCreation;
+            int dayMonth;
 
             secondCurrent = CurrentDate.getSeconds();
             secondCreation = CreationDate.getSeconds();
@@ -789,9 +1193,9 @@ public class SWBUtils {
             yearCurrent = CurrentDate.getYear();
             yearCreation = CreationDate.getYear();
 
-            boolean leapYear=false;
-            if(monthCurrent>1||(dayCreation==29&&monthCreation==1))
-                leapYear=(yearCreation%4==0)&&(yearCreation%100!=0 || yearCreation%400==0);
+            boolean leapYear = false;
+            if (monthCurrent > 1 || (dayCreation == 29 && monthCreation == 1))
+                leapYear = (yearCreation % 4 == 0) && (yearCreation % 100 != 0 || yearCreation % 400 == 0);
             dayMonth = 0;
             day = 0;
             switch (monthCreation) {
@@ -868,8 +1272,7 @@ public class SWBUtils {
             }
 
             year = yearCurrent - yearCreation;
-            if("en".equals(lang))
-            {
+            if ("en".equals(lang)) {
                 if (year > 0) {
                     ret=(year + " years ago");
                 } else if (month > 0) {
@@ -883,12 +1286,11 @@ public class SWBUtils {
                 } else {
                     ret=(second + " second ago");
                 }
-            }else
-            {
+            } else {
                 if (year > 0) {
                     ret=(year + " año(s) atrás");
                 } else if (month > 0) {
-                    ret=(month + " mese(s) atrás");
+                    ret=(month + " mes(es) atrás");
                 } else if (day > 0) {
                     ret=(day + " día(s) atrás");
                 } else if (hour > 0) {
@@ -902,7 +1304,18 @@ public class SWBUtils {
             return ret;
         }
 
-
+        /**
+         * Converts an integer into a string and adds a zero to the left if that
+         * integer has only one digit.
+         * <p>Convierte un entero en un objeto string y le agrega un cero a la izquierda
+         * si ese entero est&aacute; formado por un solo d&iacute;gito.</p>
+         * @param num an integer to convert to a string
+         * @return a string representing the integer received, with a zero preceding
+         *         the integer if it is formed by only one digit.
+         *         <p>un objeto string que representa el entero recibido, con un cero
+         *         precediendo al valor entero si &eacute;ste est&aacute; formado
+         *         solo por un d&iacute;gito.</p>
+         */
         private static String dateCeroComp(int num) {
             String ret = "" + num;
             if (ret.length() == 1) {
@@ -912,10 +1325,16 @@ public class SWBUtils {
         }
 
         /**
-         * Optiene parametros de un url
-         * Regresa Map con parametros 
-         *  Keys: Strings
-         *  Vals: Strings [] 
+         * Finds in {@code path} the query string contained and extracts all the
+         * parameters and their corrresponding values. Every parameter has associated
+         * an array of strings containing all its values.
+         * <p>Encuentra en {@code path} la cadena de consulta contenida y extrae
+         * todos los par&aacute;metros y sus valores correspondientes. Cada par&aacute;metro
+         * tiene asociado un array de objetos string conteniendo todos sus valores.</p>
+         * @param path a string representing a path that contains a query string
+         * @return a map that matches every parameter's name with its values.
+         *         <p>un objeto map que relaciona el nombre de cada par&aacute;metro
+         *         con el conjunto de sus valores almacenados en un array de objetos string.</p>
          */
         public static Map parseQueryParams(String path) {
             Map map = new java.util.HashMap();
@@ -930,48 +1349,61 @@ public class SWBUtils {
                 if (pair.indexOf("=") > 0) {
                     String key = pair.substring(0, pair.indexOf("="));
                     String val = pair.substring(pair.indexOf("=") + 1);
-                    map.put(key, new String[]{val});
+                    map.put(key, new String[] {val});
                 }
             }
             return map;
         }
 
         /**
-         * Regresa un objeto Properties a partir de un nombre de archivo de propiedades enviado por parametro.
+         * Creates a properties object from the file whose name equals the value of
+         * the parameter {@code name}.
+         * <p>Crea un objeto properties a partir de un archivo cuyo nombre sea el mismo
+         * que el valor del par&aacute;metro {@code name}.</p>
+         * @param name a string representing the name of the file from which the 
+         *             object properties is going to be created.
+         * @return a properties object whose name equals the value of the parameter
+         *         {@code name}.
+         *         <p>un objeto properties cuyo nombre es el mismo que el valor
+         *         del par&aacute;metro {@code name}.</p>
          */
-        public static Properties getPropertyFile(String name)
-        {
-            Properties p=null;
-            try
-            {
+        public static Properties getPropertyFile(String name) {
+            
+            Properties p = null;
+            try {
                 p = new SWBProperties();
                 InputStream in = SWBUtils.class.getResourceAsStream(name);
-                try
-                {
+                try {
                     log.info("-->Loading Property File:"+name);
                     p.load(in);
-                } catch (Exception e)
-                {
+                } catch (Exception e) {
                     log.error("Error reading property file:"+name,e);
                 }
-            } catch (Exception e)
-            {
+            } catch (Exception e) {
                 log.error("Error loading property file:"+name,e);
             }
             return p;
         }
 
         /**
-         * Reemplaza caracteres superiores al 127 por &#[NUM];
-         * @param str
-         * @return string codificado, si el parametro es nulo, regresa cadena vacia.
+         * Encodes from {@code str} those characters whose ASCII code is greater than 127.
+         * If a character has an ASCII code greater than 127, that character is replaced by
+         * {@literal &#[ASCIIcode];} in {@code str}.
+         * <p>Codifica aquellos caracteres cuyo c&oacute;digo ASCII es superior a 127 en {@code str}.
+         * Si un caracter tiene un c&oacute;digo ASCII superior a 127, ese caracter
+         * es reemplazado por {@literal &#[codigoASCII];}</p>
+         * @param str a string to be parsed and modified
+         * @return a string with those characters whose ASCII code is greater than
+         *         127 replaced. If {@code str} is {@code null}, the empty string is returned.
+         *         <p>un objeto string con aquellos caracteres cuyo c&oacute;digo ASCII
+         *         es superior a 127 reemplazados. Si {@code str} es nulo, regresa cadena vacia.
          */
         public static String encodeExtendedCharacters(String str)
         {
             StringBuffer ret = new StringBuffer();
-            if(str!=null)
+            if (str != null)
             {
-                for(int x = 0; x < str.length(); x++)
+                for (int x = 0; x < str.length(); x++)
                 {
                     char ch = str.charAt(x);
                     if (ch > 127) {
@@ -984,15 +1416,24 @@ public class SWBUtils {
             return ret.toString();
         }
 
+        /**
+         * Decodes a string like the ones returned by {@link #encodeExtendedCharacters(java.lang.String)}.
+         * <p>Decodifica una cadena como las que regresa el m&eacute;todo
+         * {@code encodeExtendedCharacters(java.lang.String)}.</p>
+         * @param str a string with those characters whose ASCII code is greater than 127
+         *            encoded as {@literal &#[ASCIIcode];}
+         * @return a string with no characters encoded.
+         *         <p>un objeto string sin caracteres codificados como en el objeto original.</p>
+         */
         public static String decodeExtendedCharacters(String str)
         {
             StringBuffer ret = new StringBuffer();
-            int l=str.length();
+            int l = str.length();
             for (int x = 0; x < l; x++)
             {
                 char ch = str.charAt(x);
-                boolean addch=false;
-                if (ch == '&' && (x+1)<l && str.charAt(x+1)=='#')
+                boolean addch = false;
+                if (ch == '&' && (x + 1) < l && str.charAt(x + 1) == '#')
                 {
                     int i = str.indexOf(";", x);
                     if (i > 2)
@@ -1000,25 +1441,25 @@ public class SWBUtils {
                         try
                         {
                             int v = Integer.parseInt(str.substring(x + 2, i));
-                            if(v>255)
+                            if (v > 255)
                             {
-                                ret.append((char)v);
+                                ret.append((char) v);
                                 x = i;
-                                addch=true;
+                                addch = true;
                             }
-                        }catch(NumberFormatException e){}
+                        } catch (NumberFormatException e) {}
                     }
                 }
-                if(!addch)ret.append(ch);
+                if (!addch) ret.append(ch);
             }
             return ret.toString();
         }
-        
+
 
         public static String getOfficeFileText(File file) throws InvalidFormatException, OpenXML4JException, XmlException, java.io.IOException {
              POITextExtractor textExtractor = ExtractorFactory.createExtractor(file);
              return textExtractor.getText();
-        }
+    }
 
         public String pdfExtractor(File file) throws java.io.IOException {
         FileInputStream is=new FileInputStream(file);
@@ -1061,21 +1502,30 @@ public class SWBUtils {
     }
 
     /**
-     * 
+     * Supplies several I/O functions commonly used, involving streams, files, strings and
+     * entire file system structures.
+     * <p>Provee varias funciones de E/S utilizadas com&uacute;nmente, involucrando flujos,
+     * arhcivos, cadenas y estructuras completas del sistema de archivos.</p>
      */
     public static class IO {
-        /*
-         * Obtiene un objeto InputStream dado un objeto String.
-         */
 
+
+        /**
+         * Gets the value for the class variable {@code SWBUtils.bufferSize}.
+         * <p>Obtiene el valor de la variable de clase {@code SWBUtils.bufferSize}.</p>
+         * @return the integer value for the class variable {@code SWBUtils.bufferSize}.
+         *         <p>el valor de la variable de clase {@code SWBUtils.bufferSize}.</p>
+         */
         public static int getBufferSize() {
             return bufferSize;
         }
 
         /**
-         * 
-         * @param str
-         * @return
+         * Creates an inputStream from the string received.
+         * <p>Crea un objeto inputStream con el contenido del objeto string recibido.</p>
+         * @param str a string from which an input stream is created
+         * @return the input stream created from the string received.
+         *         <p>el objeto inputStream creado a partir del objeto string recibido.</p>
          */
         public static InputStream getStreamFromString(String str) {
             if (str == null) {
@@ -1085,25 +1535,30 @@ public class SWBUtils {
         }
 
         /**
-         *  Copia el InputStream al OutputStream y al final cierra los streams
-         * 
-         *  Copy a InputStream to OutputStream
-         * 
-         * @param in 
-         * @param out 
-         * @throws IOException
+         * Copies an input stream into an output stream using the buffer size
+         * defined by {@code SWBUtils.bufferSize} in the reading/writing operations.
+         * <p>Copia un flujo de entrada en uno de salida utilizando el tama&ntilde;o
+         * de buffer definido por {@code SWBUtils.bufferSize} en las operaciones
+         * de lectura/escritura.</p>
+         * @param in the input stream to read from
+         * @param out the output stream to write to
+         * @throws IOException if either the input or the output stream is {@code null}.
+         *         <p>Si el flujo de entrada o el de salida es {@code null}.</p>
          */
         public static void copyStream(InputStream in, OutputStream out) throws IOException {
             copyStream(in, out, bufferSize);
         }
 
         /**
-         *  Copia el InputStream al OutputStream y al final cierra los streams
-         *  Copy a InputStream to OutputStream
-         * @param in 
-         * @param out
-         * @param bufferSize 
-         * @throws IOException
+         * Copies an input stream into an output stream using the specified buffer size
+         * in the reading/writing operations.
+         * <p>Copia un flujo de entrada en uno de salida utilizando el tama&ntilde;o
+         * de buffer especificado en las operaciones de lectura/escritura.</p>
+         * @param in the input stream to read from
+         * @param out the output stream to write to
+         * @param bufferSize the number of bytes read/writen at the same time in each I/O operation
+         * @throws IOException if either the input or the output stream is {@code null}.
+         *         <p>Si el flujo de entrada o el de salida es {@code null}.</p>
          */
         public static void copyStream(InputStream in, OutputStream out, int bufferSize) throws IOException {
             if (in == null) {
@@ -1123,11 +1578,14 @@ public class SWBUtils {
         }
 
         /**
-         * Regresa un objeto String resultante de un objeto InputStream
-         * Returns a String object as a result of InputStream Object
-         * @param in 
-         * @return
-         * @throws IOException 
+         * Reads an input stream and creates a string with that content.
+         * <p>Lee un objeto inputStream y crea un objeto string con el contenido le&iacute;do.</p>
+         * @param in an input stream to read its content
+         * @return a string whose content is the same as for the input stream read.
+         *         <p>un objeto string cuyo contenido es el mismo que el del objeto
+         *         inputStream le&iacute;do.</p>
+         * @throws IOException if the input stream received is {@code null}.
+         *                     <p>Si el objeto inputStream recibido tiene un valor {@code null}.</p>
          */
         public static String readInputStream(InputStream in) throws IOException {
             if (in == null) {
@@ -1145,15 +1603,25 @@ public class SWBUtils {
         }
 
         /**
-         * Regresa un objeto String codificado resultante de un objeto InputStream
-         * y un tipo de codificación.
-         * @param inp 
-         * @param enc 
-         * @return
-         * @throws java.io.UnsupportedEncodingException
-         * @throws java.io.IOException 
+         * Reads an input stream and creates a string with the content read using
+         * the charset especified by name through {@code enc}.
+         * <p>Lee un objeto inputStream y crea una cadena con el contenido le&iacute;do
+         * utilizando el conjunto de caracteres especificado por nombre a trav&eacute;s de
+         * {@code enc}.
+         * @param inp the input stream to read
+         * @param enc the charset's name to use for representing the input stream's content
+         * @return a string representing the input stream's content with the charset
+         *         specified.
+         *         <p>un objeto string que representa el contenido del objeto inputStream
+         *         con el conjunto de caracteres especificado.</p>
+         * @throws java.io.UnsupportedEncodingException if {@code enc} is {@code null}.
+         *         <p>si el valor de {@code enc} es {@code null}.</p>
+         * @throws java.io.IOException if {@code inp} is {@code null}.
+         *         <p>si el valor de {@code inp} es {@code null}.</p>
          */
-        public static String readInputStream(InputStream inp, String enc) throws java.io.UnsupportedEncodingException, java.io.IOException {
+        public static String readInputStream(InputStream inp, String enc)
+                throws java.io.UnsupportedEncodingException, java.io.IOException {
+
             if (inp == null) {
                 throw new IOException("Input Stream null");
             }
@@ -1174,14 +1642,22 @@ public class SWBUtils {
         }
 
         /**
-         * Normaliza rutas, sustituyendo  el carácter “\” por el carácter “/” y eliminando rutas relativas.
-         * 
-         * Normalice path, replace the "\" character by “/” and remove relative paths
-         * 
-         * @param path
-         * @return 
+         * Normalizes the {@code path} received. Substitutes the following characters:<br/>
+         * <quote> \ </quote> for <quote>/</quote><br/>
+         * <quote> \\ </quote> for <quote>/</quote><br/>
+         * <quote> // </quote> for <quote>/</quote><br/>
+         * <quote> /./ </quote> for <quote>/</quote><br/>
+         * and removes any relative path.
+         * <p>Normaliza la ruta descrita por {@code path}. Sustituyendo algunos
+         * caracteres como se describe arriba y eliminando las rutas relativas encontradas.
+         * @param path a string representing a path
+         * @return a string representing the path received normalized according to
+         *         the rules described above.
+         *         <p>un objeto string que representa la ruta recibida, normalizada de
+         *         acuerdo a las reglas descritas anteriormente.</p>
          */
         public static String normalizePath(String path) {
+
             if (path == null) {
                 return null;
             }
@@ -1224,13 +1700,18 @@ public class SWBUtils {
         }
 
         /**
-         * Elimina directorios completos
-         * Remove complete directories
+         * Deletes from file system the directory (with all its files and subdirectories)
+         * whose {@code path} is specified.
+         * <p>Elimina del sistema de archivos, el directorio (con todos sus archivos
+         * y subdirectorios) cuya ruta es especificada por {@code path}.</p>
+         * @param path a string representing the directory's path
+         * @return a {@code boolean} indicating wheather the directory was eliminated or not.
+         *         <p>un booleano indicando si el directorio fue eliminado o no.</p>
          */
         public static boolean removeDirectory(String path) {
             try {
                 File dir = new File(path);
-                if (dir != null && dir.exists()) {
+                if (dir != null && dir.exists() && dir.isDirectory()) {
                     File[] listado = dir.listFiles();
                     for (int i = 0; i < listado.length; i++) {
                         if (listado[i].isFile()) {
@@ -1245,7 +1726,7 @@ public class SWBUtils {
                         }
                     }
                 }
-                if (dir.delete()) {
+                if (dir.isDirectory() && dir.delete()) {
                     return true;
                 }
             } catch (Exception e) {
@@ -1254,18 +1735,20 @@ public class SWBUtils {
         }
 
         /**
-         * Return a file from a path
-         * @param path
-         * @return
+         * Reads the file corresponding to the {@code path} specified.
+         * <p>Lee el archivo correspondiente a la ruta especificada por {@code path}.</p>
+         * @param path a string representing the path of the file to read.
+         * @return a string with the file's content read.
+         *         <p>un objeto string con el contenido del archivo le&iacute;do</p>
          */
         public static String getFileFromPath(String path) {
-            StringBuffer ret = new StringBuffer(8192);
+            StringBuffer ret = new StringBuffer(bufferSize);
             try {
                 InputStream file = null;
                 file = new FileInputStream(path);
-                byte[] bfile = new byte[8192];
+                byte[] bfile = new byte[bufferSize];
                 int x;
-                while ((x = file.read(bfile, 0, 8192)) > -1) {
+                while ((x = file.read(bfile, 0, bufferSize)) > -1) {
                     ret.append(new String(bfile, 0, x));
                 }
                 file.close();
@@ -1274,32 +1757,65 @@ public class SWBUtils {
             return ret.toString();
         }
 
+        /**
+         * Calculates the number of bytes occupied by the abstract pathname specified.
+         * If the pathname corresponds to a directory, the size of each file the directory
+         * contains its considered and added to the result.
+         * <p>Calcula el n&uacute;mero de bytes ocupados por la ruta abstracta especificada.
+         * Si la ruta corresponde a un directorio, se considera el tama&ntilde;o de
+         * cada archivo que contiene el directorio y se agrega al resultado.</p>
+         * @param path a string representing the abstract pathname
+         * @return a {@code long} value representing (in bytes) the length of the file, or the
+         *         size of the directory represented by the pathname received.
+         *         <p>un valor {@code long} que representa (en bytes) la longitud del archivo,
+         *         o el tama&ntilde;o del directorio representado por la ruta recibida.</p>
+         * @throws NullPointerException if the pathname received is {@code null}.
+         *         <p>si la ruta recibida es {@code null}.</p>
+         */
         public static long getFileSize(String path)
         {
             return getFileSize(new File(path));
         }
 
+        /**
+         * Calculates the number of bytes occupied by the file or directory specified.
+         * If it's a directory, the size of each file the directory
+         * contains its considered and added to the result.
+         * <p>Calcula el n&uacute;mero de bytes ocupados por el archivo o directorio especificado.
+         * Si la ruta corresponde a un directorio, se considera el tama&ntilde;o de
+         * cada archivo que contiene el directorio y se agrega al resultado.</p>
+         * @param file a file representing an abstract pathname
+         * @return a {@code long} value representing (in bytes) the length of the file, or the
+         *         size of the directory represented by the pathname received.
+         *         <p>un valor {@code long} que representa (en bytes) la longitud del archivo,
+         *         o el tama&ntilde;o del directorio representado por la ruta recibida.</p>
+         * @throws NullPointerException if the {@code file} received is {@code null}.
+         *         <p>si el objeto {@code file} recibido es {@code null}.</p>
+         */
         public static long getFileSize(File file)
         {
-            long ret=0;
-            if(file.isFile())ret=file.length();
-            else if(file.isDirectory())
+            long ret = 0;
+            if (file.isFile()) ret = file.length();
+            else if (file.isDirectory())
             {
-                File files[]=file.listFiles();
-                for(int x=0;x<files.length;x++)
+                File files[] = file.listFiles();
+                for (int x = 0; x < files.length; x++)
                 {
-                    File ch=files[x];
-                    ret+=getFileSize(ch);
+                    File ch = files[x];
+                    ret += getFileSize(ch);
                 }
             }
             return ret;
         }
 
         /**
-         * Crea un directorio con el nombre de ruta especificada
-         * Creates a directory with specified path name
-         * @param path
-         * @return
+         * Creates a directory in the specified pathname.
+         * <p>Crea un directorio en el nombre de ruta especificado</p>
+         * @param path a string representing the pathname in which the new directory
+         *        will reside. If this parameter's value is {@code null} the directory
+         *        won't be created.
+         * @return a {@code boolean} indicating wheather the directory was crated or not.
+         *         <p>un valor booleano indicando si el directorio fue creado o no.</p>
          */
         public static boolean createDirectory(String path) {
             try {
@@ -1315,11 +1831,16 @@ public class SWBUtils {
         }
 
         /**
-         * Copia una estructura de directorios completa
-         * Copy a complete fyle system path
-         * @param source path to copy
-         * @param target path where the fyle system in the source parameter will be copied
-         * @return if the source was copied
+         * Creates a copy of the given pathname's file system substructure. The origen
+         * pathname ({@code source}) must represent a directory's path in the file system.
+         * <p>Crea una copia de la subestructura del sistema de archivos de la ruta dada.
+         * La ruta de origen ({@code source}) debe representar la ruta de un directorio
+         * en el sistema de archivos.</p>
+         * @param source pathname of the directory to copy. Must not be null.
+         * @param target pathname of the new directory where file system's substructure
+         *               will be copied. Must not be null.
+         * @return a {@code boolean} indicating if the source directory was copied succefully or not.
+         *         <p>un valor booleano indicando si el directorio fuente fue copiado exitosamente o no.</p>
          */
         public static boolean copyStructure(String source, String target) {
             try {
@@ -1332,16 +1853,26 @@ public class SWBUtils {
         }
 
         /**
-         * Copia una estructura de directorios completa
-         * Copy a complete fyle system path
-         * @param source path to copy
-         * @param target path where the fyle system in the source parameter will be copied
-         * @param ChangePath indicates if the target files will be parsed
-         * @param sourcePath Indicates a path string in the source files to be changed (parsed)
-         * @param targetPath Indicates the path string to be included in the target files in place of source path
-         * @return if the source directory was copied succefully
+         * Creates a copy of the given pathname's file system substructure and replaces
+         * a specified path located within the files of that substructure. The origen
+         * pathname ({@code source}) must represent a directory's path in the file system.
+         * <p>Crea una copia de la subestructura del sistema de archivos de la ruta dada y
+         * reemplaza una ruta especificada por {@code sourcePath} en el contenido de los
+         * archivos a copiar. La ruta de origen ({@code source}) debe representar la
+         * ruta de un directorio en el sistema de archivos.</p>
+         * @param source pathname of the directory to copy. Must not be null.
+         * @param target pathname of the new directory where file system's substructure
+         *               will be copied. Must not be null.
+         * @param ChangePath a {@code boolean} that indicates if the files' content
+         *               will be parsed. Must not be null.
+         * @param sourcePath a pathname string located in the source files to be
+         *               replaced by {@code targetPath}. Must not be null.
+         * @param targetPath the pathname string to write in the target files in replacement of {@code sourcePath}
+         * @return a {@code boolean} indicating if the source directory was copied succefully or not.
+         *         <p>un valor booleano indicando si el directorio fuente fue copiado exitosamente o no.</p>
          */
-        public static boolean copyStructure(String source, String target, boolean ChangePath, String sourcePath, String targetPath) {
+        public static boolean copyStructure(String source, String target,
+                boolean ChangePath, String sourcePath, String targetPath) {
             try {
                 File ftarget = new File(target);
                 if (!ftarget.exists()) {
@@ -1381,23 +1912,39 @@ public class SWBUtils {
         }
 
         /**
-         * Copia un archivo a otro directorio
-         * Copy a fyle to an other directory
-         * @param source_name File to copy
-         * @param dest_name path where the fyle will be copied
-         * @param ChangePath indicates if the target files will be parsed
-         * @param sourcePath Indicates a path string in the source files to be changed (parsed)
-         * @param targetPath Indicates the path string to be included in the target files in place of source path
+         * Copies a file to another directory, modifying a path in its content.
+         * If indicated through {@code ChangePath} the string represented by
+         * {@code sourcePath} is looked for in the file's content and replaced by
+         * {@code targetPath}, only if the file to copy has an extension like: {@literal html},
+         * {@literal html}, {@literal htm.orig} or {@literal html.orig}.
+         * <p>Copia un archivo a otro directorio, modificando una ruta en su contenido.
+         * Si se indica a trav&eacute;s de {@code ChangePath} el objeto string representado
+         * en {@code sourcePath} se busca en el contenido del archivo y se reemplaza por
+         * el representado en {@code targetPath}, solo si el archivo a copiar tiene
+         * por extensi&oacute;n: {@literal html}, {@literal html}, {@literal htm.orig}
+         * o {@literal html.orig}.</p>
+         * @param source_name pathname of the file to copy. Must not be null.
+         * @param dest_name pathname of the new location of the file to copy. Must not be null.
+         * @param ChangePath a {@code boolean} indicating if the file will be parsed to modify its content
+         * @param sourcePath a pathname string in the source file to be replaced
+         * @param targetPath a pathname string that will replace {@code sourcePath}
          */
-        public static void copy(String source_name, String dest_name, boolean ChangePath, String sourcePath, String targetPath) throws IOException {
+        public static void copy(String source_name, String dest_name, 
+                boolean ChangePath, String sourcePath, String targetPath)
+                throws IOException {
+
             File source_file = new File(source_name);
             File destination_file = new File(dest_name);
             FileInputStream source = null;
             java.io.FileOutputStream destination = null;
+
             try {
                 source = new FileInputStream(source_file);
                 destination = new FileOutputStream(destination_file);
-                if (ChangePath && (source_file.getName().endsWith(".htm") || source_file.getName().endsWith(".html") || source_file.getName().endsWith(".html.orig") || source_file.getName().endsWith(".htm.orig"))) {
+                if (ChangePath && (source_file.getName().endsWith(".htm") || 
+                                   source_file.getName().endsWith(".html") ||
+                                   source_file.getName().endsWith(".html.orig") ||
+                                   source_file.getName().endsWith(".htm.orig"))) {
                     String content = readInputStream(source);
                     content = content.replaceAll(sourcePath, targetPath);
                     copyStream(getStreamFromString(content), destination);
@@ -1423,7 +1970,17 @@ public class SWBUtils {
         }
 
         /**
-         *  Deserializa y decodifica una objeto (de String Hexadecimal a objeto)
+         * Decodes the hexadecimal formatted string received and deserializes the result
+         * to create an object.
+         * <p>Decodifica el objeto string con formato hexadecimal recibido y deserealiza
+         * el resultado para crear un objeto.</p>
+         * @param txt a hexadecimal formatted string representing an object's state
+         * @return a deserialized object
+         *         <p>un objeto deserializado</p>
+         * @throws IOException if an I/O error occurs while reading stream header
+         *         <p>si un error de E/S ocurre mientras se lee el encabezado del objeto stream</p>
+         * @throws ClassNotFoundException if the Class of a serialized object cannot be found
+         *         <p>si la clase de un objeto serializado no puede encontrarse</p>
          */
         public static Object decodeObject(String txt) throws IOException, ClassNotFoundException {
             byte arr[] = new byte[txt.length() / 2];
@@ -1441,7 +1998,17 @@ public class SWBUtils {
         }
 
         /**
-         *  Serializa y codifica una objeto a Hexadecimal
+         * Serializes the object received and generates a hexadecimal formatted
+         * string with the object's state.
+         * <p>Serializa el objeto recibido y genera un objeto string con el estado del
+         * objeto en formato hexadecimal.</p>
+         * @param obj an object to serialize
+         * @return a hexadecimal formatted string representing the received object's state
+         *         <p>un objeto string con formato hexadecimal que representa el
+         *         estado del objeto recibido.</p>
+         * @throws IOException if any I/O problem occurs while serializing the object.
+         *         <p>si cualquier problema de E/S ocurre mientras se serializa el
+         *         objeto.</p>
          */
         public static String encodeObject(Object obj) throws IOException {
             ByteArrayOutputStream f = new ByteArrayOutputStream();
@@ -1465,12 +2032,16 @@ public class SWBUtils {
             return hex;
         }
 
-        /**
-         * 
-         * @param file file to read
-         * @return array
-         * @throws java.io.FileNotFoundException
-         * @throws java.io.IOException
+        /*
+         * Reads a file and stores the content in an array of bytes.
+         * <p>Lee un archivo y almacena el contenido en un arreglo de bytes</p>
+         * @param file the {@code file} to read. Must not be {@code null}
+         * @return an array of bytes that stores the content of the file specified.
+         *         <p>un arreglo de bytes que almecena el contenido del archivo especificado.</p>
+         * @throws java.io.FileNotFoundException if the specified file does not exists.
+         *         <p>si el archivo especificado no existe.</p>
+         * @throws java.io.IOException if an I/O error occurs while reading the file's content.
+         *         <p>si un error de E/S ocurre durante la lectura del contenido del archivo.</p>
          */
         public static byte[] readFile(File file) throws FileNotFoundException, IOException {
             if (!file.exists()) {
@@ -1496,7 +2067,20 @@ public class SWBUtils {
             return bfile;
         }
 
-        public static Iterator<FileItem> fileUpload(javax.servlet.http.HttpServletRequest request, String path2Save) {
+        /**
+         * Extracts the files included in an HTTP request and stores them in the pathname
+         * indicated.
+         * <p>Extrae los archivos incluidos en una petici&oacute;n HTTP y los almacena
+         * en la ruta especificada.</p>
+         * @param request an HTTP request that contains the files to store.
+         * @param path2Save the string representing the pathname where the files are to be stored
+         * @return an iterator containing the file items detected in the HTTP request.
+         *         <p>un objeto iterador que contiene los archivos detectados en la
+         *         petici&oacute;n HTTP.</p>
+         */
+        public static Iterator<FileItem> fileUpload(javax.servlet.http.HttpServletRequest request,
+                String path2Save) {
+
             DiskFileItemFactory factory = new DiskFileItemFactory();
             ServletFileUpload fu = new ServletFileUpload(factory);
             java.util.List items = null;
@@ -1512,7 +2096,8 @@ public class SWBUtils {
                 Iterator<FileItem> iter = items.iterator();
                 while (iter.hasNext()) {
                     FileItem item = (FileItem) iter.next();
-                    if (!item.isFormField()) { //Si No es un campo de forma comun, es un campo tipo file, grabarlo
+                    //Si No es un campo de forma comun, es un campo tipo file, grabarlo
+                    if (!item.isFormField()) {
                         File fichero = new File(path2Save + item.getName());
                         try {
                             item.write(fichero);
@@ -1526,34 +2111,60 @@ public class SWBUtils {
             return null;
         }
 
-        public static void log2File(String pathFile, String msg) throws IOException {
+        /**
+         * Logs the message indicated in {@code msg} into the {@code filePath} received.
+         * <p>Registra el mensaje indicado en {@code msg} dentro del archivo definido 
+         * por la ruta recibida en {@code filePath}.</p>
+         * @param pathFile a string representing a file path to register the message.
+         *        Must not be {@code null}.
+         * @param msg a string containing the message to register
+         * @throws java.io.IOException if an I/O error occurs, which is possible
+         *         because the construction of the canonical pathname may require
+         *         filesystem queries or while writing the message into the file.
+         *         <p>si un error de E/S ocurre, lo que es posible debido a que la
+         *         construcci&oacute;n de la ruta de archivo can&oacute;nica puede
+         *         requerir consultas del sistema de archivos o que ocurra durante
+         *         la escritura del mensaje en el archivo.</p>
+         * @throws NullPointerException if the pathname argument is {@code null}.
+         *         <p>si el argumento de la ruta del archivo es {@code null}.</p>
+         */
+        public static void log2File(String filePath, String msg) throws IOException {
             String path = null;
-            int pos = pathFile.lastIndexOf("/");
+            int pos = filePath.lastIndexOf("/");
             if (pos > -1) {
-                path = pathFile.substring(0, pos - 1);
+                path = filePath.substring(0, pos - 1);
             }
             File file = new File(path);
             if (!file.exists()) {
                 file.mkdirs();
             }
-            String logFile = new File(pathFile).getCanonicalPath().replace('\\', '/');
+            String logFile = new File(filePath).getCanonicalPath().replace('\\', '/');
             log2File = new PrintWriter(new FileWriter(logFile, true), true);
             log2File.println(msg);
         }
 
         /**
-         * Zips a directory
-         * @param directory
-         * @param base
-         * @param zos
-         * @Autor:Jorge Jiménez
-         * @throws java.io.IOException
+         * Compress a directory's content into the zip output stream indicated.
+         * <p>Comprime el contenido de un directorio en el objeto zip output stream indicado.</p>
+         * @param directory the {@code file} denoting the directory to compress.
+         *        If it is {@code null} or non-existent, no operation is done.
+         * @param base the {@code file} denoting the directory base whose path is
+         *        treated as the base path for the files contained in the zip output stream.
+         * @param zos the zip output stream to contain the directory's content
+         * @throws java.io.IOException if there is any I/O error during: ZIP formatting,
+         *         file inclusion in the zip output stream, data writing in the zip
+         *         output stream or closure of the streams used to read or to write data.
+         *         <p>si hay alg&uacute;n error de E/S durante: el formato en zip
+         *         de la informaci&oacute;n, la inclusi&oacute;n en el objeto {@code zip
+         *         output stream}; o el cierre de los flujos utilizados para para leer o
+         *         escribir informaci&oacute;n.</p>
+         * @author Jorge Jim&eacute;nez
          */
         public static final void zip(File directory, File base, ZipOutputStream zos) throws IOException {
             if (directory == null || !directory.exists()) {
                 return;
             }
-            byte[] buffer = new byte[8192];
+            byte[] buffer = new byte[SWBUtils.bufferSize];
             int read = 0;
             File[] files = directory.listFiles();
             for (int i = 0, n = files.length; i < n; i++) {
@@ -1573,21 +2184,28 @@ public class SWBUtils {
         }
 
         /**
-         * Adds files to existing zip
-         * @param zipFile
-         * @param files
-         * @Autor:Jorge Jiménez
-         * @throws java.io.IOException
+         * Adds the files received to the specified zip file.
+         * <p>Agrega los archivos recibidos al archivo comprimido especificado.</p>
+         * @param zipFile a compressed file to include some files at
+         * @param files an array of files that will be added to {@code zipFile}
+         * @throws java.io.IOException if some I/O error occurs during data reading
+         *         or writing.
+         *         <p>si alg&uacute;n error de E/S ocurre durante la lectura o
+         *         escritura de informaci&oacute;n.</p>
+         * @author Jorge Jim&eacute;nez
          */
         public static void addFilesToExistingZip(File zipFile, File[] files) throws IOException {
             // get a temp file
-            File tempFile = File.createTempFile(zipFile.getName(), null, zipFile.getParentFile()); //MAPS74 En Solaris no se vale renombrar un archivo hacia /var/tmp
+            //MAPS74 En Solaris no se vale renombrar un archivo hacia /var/tmp
+            File tempFile = File.createTempFile(zipFile.getName(), null, zipFile.getParentFile());
             // delete it, otherwise you cannot rename your existing zip to it.
             tempFile.delete();
 
             boolean renameOk = zipFile.renameTo(tempFile);
             if (!renameOk) {
-                throw new RuntimeException("could not rename the file " + zipFile.getAbsolutePath() + " to " + tempFile.getAbsolutePath());
+                throw new RuntimeException("could not rename the file " 
+                        + zipFile.getAbsolutePath() + " to "
+                        + tempFile.getAbsolutePath());
             }
             byte[] buf = new byte[1024];
 
@@ -1637,22 +2255,32 @@ public class SWBUtils {
         }
 
         /**
-         * Unzip a file to specific directory
-         * @param zip
-         * @Autor:Jorge Jiménez
-         * @param extractTo
-         * @throws java.io.IOException
+         * Unzips a zipped file to a specific directory.
+         * <p>Descomprime un archivo comprimido en un directorio espec&iacute;fico.</p>
+         * @param zip a zipped file
+         * @param extractTo a file that denotes a directory path
+         * @throws java.io.IOException if an I/O error occurs during reading or writing data.
+         *         <p>si un error ocurre durante la lectura o escritura de informaci&oacute;n.</p>
+         * @author Jorge Jim&eacute;nez
          */
         public static final void unzip(File zip, File extractTo) throws IOException {
             unzip(zip, extractTo, new ArrayList(), null, null);
         }
 
         /**
-         * Unzip a file to specific directory with the option of parse files that ends with specifed extensions
-         * @param zip
-         * @Autor:Jorge Jiménez
-         * @param extractTo
-         * @throws java.io.IOException
+         * Unzips a zipped file to a specific directory with the option of replacing
+         * a string in those files whose names end with specified extensions.
+         * <p>Descomprime un archivo comprimido a un directorio espec&iacute;fico
+         * con la opci&oacute;n de reemplazar una cadena en aquellos archivos
+         * cuyos nombres tengan las extensiones especificadas.</p>
+         * @param zip the zipped file to unzip
+         * @param extractTo the directory in which the file will be unzipped
+         * @param fext2parse list of the file extensions to consider for replacing a string in file's content
+         * @param parse a string to look for in the file's content
+         * @param parse2 a string that will replace {@code parse} in file's content
+         * @throws java.io.IOException if an I/O error occurs during reading or writing data.
+         *         <p>si un error ocurre durante la lectura o escritura de informaci&oacute;n.</p>
+         * @author Jorge Jim&eacute;nez
          */
         public static final void unzip(File zip, File extractTo, ArrayList fext2parse, String parse, String parse2) throws IOException {
             ZipFile archive = new ZipFile(zip);
@@ -1697,7 +2325,16 @@ public class SWBUtils {
             archive.close();
         }
 
-
+        /**
+         * Reads a zipped file's content and returns all files in an {@link java.util.Iterator}
+         * <p>Lee el contenido de un archivo comprimido y regresa todos los archivos
+         * en un {@code java.util.Iterator}</p>
+         * @param zipName a string representing the name of the zipped file to read
+         * @return an {@code java.util.Iterator} containing all the entries (files)
+         *         in the zipped file specified.
+         *         <p>un objeto {@code java.util.Iterator} que contiene todas las
+         *         entradas (archivos) contenidas en el archivo comprimido.</p>
+         */
         public static final Iterator<ZipEntry> readZip(String zipName) {
             ArrayList itFiles = new ArrayList();
             ZipFile zf = null;
@@ -1726,11 +2363,13 @@ public class SWBUtils {
         }
 
         /**
-         * returns the content of specific file in a zip
-         * @param zipName
-         * @Autor:Jorge Jiménez
-         * @param file2Read
-         * @throws java.io.IOException
+         * Reads a specific file contained in a zipped file.
+         * <p>Lee un archivo espec&iacute;fico contenido en un archivo comprimido.</p>
+         * @param zipName a string representing the pathname of a zipped file
+         * @param file2Read a string representing the pathname of a file inside the zipped file
+         * @return a string with the specified file's content.
+         *         <p>un objeto string con el contenido del archivo especificado.</p>
+         * @author Jorge Jim&eacute;nez
          */
         public static final String readFileFromZipAsString(String zipName, String file2Read) {
             String content = null;
@@ -1750,61 +2389,120 @@ public class SWBUtils {
         }
     }
 
+
     /**
-     * specialiced email class
-     * Jorge Jiménez
+     * Supplies several functions commonly used for sending e-mails.
+     * <p>Provee varias funciones para env&iacute;o de correos electr&oacute;nicos
+     * utilizadas com&uacute;nmente.</p>
+     * @author Jorge Jim&eacute;nez
      */
     public static class EMAIL {
 
+
+        /**
+         * Represents the domain name or IP addres for the SMTP server to use.
+         * <p>Reresenta el nombre de dominio o direcci&oacute;n IP del servidor
+         * SMTP a usar.</p>
+         */
         private static String smtpserver = null;
+
+        /**
+         * Represents the user name registered in the SMTP server for sending messages.
+         * <p>Representa el nombre de usuario registrado en el servidor SMTP para
+         * enviar mensajes.</p>
+         */
         private static String smtpuser = null;
+
+        /**
+         * Represents the user's password registered in the SMTP server for sending messages.
+         * <p>Representa la contrase&ntilde;a del usuario registrada en el servidor
+         * SMTP para enviar mensajes.</p>
+         */
         private static String smtppassword = null;
+
+        /**
+         * Represents the e-mail account designated to receive e-mail communications.
+         * <p>Representa la cuenta de correo designada para recibir las comunicaciones
+         * por correo electr&oacute;nico.</p>
+         */
         private static String adminEmail = null;
 
         /**
-         * Setter for property smtpserver
-         * @param smtpserver 
+         * Sets the domain name or IP address for the SMTP server to use.
+         * <p>Fija el nombre de dominio o la direcci&oacute;n IP del servidor
+         * SMTP a usar.</p>
+         * @param smtpserver a string representing the domain name or the IP address
+         *        for the SMTP server.
+         *        <p>un objeto string que representa el nombre de dominio o la direcci&oacute;n
+         *        IP del servidor SMTP.</p>
          */
         public static void setSMTPServer(String smtpserver) {
             EMAIL.smtpserver = smtpserver;
         }
 
         /**
-         * Getter for property smtpserver
-         * @param smtpserver 
+         * Gets the domain name or IP address for the SMTP server in use.
+         * <p>Obtiene el nombre de dominio o la direcci&oacute;n IP del servidor
+         * SMTP en uso.</p>
+         * @return a string representing the domain name or IP address for the SMTP
+         *         server in use.
+         *         <p>un objeto string que representa el nombre de dominio o la
+         *         direcci&oacute;n IP del servidor SMTP en uso.</p>
          */
         public static String getSMTPServer() {
-            return smtpserver;
+            return EMAIL.smtpserver;
         }
 
-         /**
-         * Setter for property smtpserver
-         * @param smtpserver
+        /**
+         * Sets an e-mail account to generate e-mail messages.
+         * <p>Fija una cuenta de correo para generar mensajes de correo electr&oacute;nico.</p>
+         * @param adminEmail a string representing a valid e-mail account.
+         *        <p>un objeto string que representa una cuenta de correo electr&oacute;nico
+         *        v&aacute;lida.</p>
          */
         public static void setAdminEmail(String adminEmail) {
             EMAIL.adminEmail = adminEmail;
         }
 
-
-
         /**
-         * 
-         * Send an email
-         * 
-         * @param fromEmail Address which send the email
-         * @param fromName  Name who send the email
-         * @param address   Collection of addresses to send the email
-         * @param ccEmail   Collection of addresses to send the email as copy
-         * @param bccEmail  Collection of addresses to send the email as bgCopy
-         * @param subject   Subject of email
-         * @param data      Email Body Text Data
-         * @param contentType HTML sends the body in html format, else it will be send in text format
-         * @param login     Login for SMTP server authentication
-         * @param password  password for SMTP server authentication
-         * @return
+         * Sends an e-mail with the information supplied. The e-mail body can be
+         * formatted as HTML or plain text.
+         * <p>Env&iacute;a un correo electr&oacute;nico con la informaci&oacute;n
+         * proporcionada. El cuerpo del correo puede ser enviado en formato HTML
+         * o en texto plano.</p>
+         * @param fromEmail a string representing the sender's e-mail account.
+         *        Must be a valid e-mail account, otherwise the mail will not be sent.
+         * @param fromName  a string representing the sender's name
+         * @param address   a collection of the recipients' e-mail accounts. Every
+         *        element in the collection is expected to be a valid {@link java.mail.internet.InternetAddress}.
+         *        Must not be null, otherwise the mail will not be sent.
+         * @param ccEmail   a collection of e-mail accounts to send the email as a copy. Every
+         *        element in the collection is expected to be a valid {@literal java.mail.internet.InternetAddress}.
+         *        If it is {@code null}, the mail won't be sent as a carbon copy to anyone.
+         * @param bccEmail  a collection of e-mail accounts to send the email as a blind carbon copy. Every
+         *        element in the collection is expected to be a valid {@literal java.mail.internet.InternetAddress}.
+         *        If it is {@code null}, the mail won't be sent as a blind carbon copy to anyone.
+         * @param subject   a string indicating the e-mail's subject
+         * @param contentType a string indicating the content type of the mail. {@literal HTML}
+         *        indicates the body has an HTML format, otherwise it will be send
+         *        in text plain format. Must not be {@code null}.
+         * @param data      a string containing the e-mail body's text
+         * @param login     a string representing a login name for SMTP server
+         *        authentication. If it is {@code null} authentication will not be performed.
+         * @param password  a string representing a password for SMTP server
+         *        authentication. If it is {@code null} authentication will not be performed.
+         * @param attachments a list containing all the attachments for the e-mail. Every
+         *        element in the collection is expected to be of type {@literal org.apache.commons.mail.EmailAttachment}.
+         * @return a string that at the moment of writing this documentation is
+         *         equal to {@code null}.
+         *         <p>un objeto string que al momento de escribir esta documentaci&oacute;n
+         *         es igual a {@code null}.</p>
          */
-        public static String sendMail(String fromEmail, String fromName, Collection address, Collection ccEmail, Collection bccEmail,
-                String subject, String contentType, String data, String login, String password, ArrayList<EmailAttachment> attachments) {
+        public static String sendMail(String fromEmail, String fromName, 
+                Collection address, Collection ccEmail, Collection bccEmail,
+                String subject, String contentType, String data, String login, 
+                String password, ArrayList<EmailAttachment> attachments) {
+
             try {
                 HtmlEmail email = new HtmlEmail();
 
@@ -1816,7 +2514,7 @@ public class SWBUtils {
                     }
                 }
 
-                email.setHostName(smtpserver);
+                email.setHostName(EMAIL.smtpserver);
                 email.setFrom(fromEmail, fromName);
                 email.setTo(address);
                 if (ccEmail != null) {
@@ -1845,20 +2543,17 @@ public class SWBUtils {
         }
 
         /**
-         * 
-         * Send an email
-         * 
-         * @param fromEmail Address which send the email
-         * @param fromName  Name who send the email
-         * @param address   Collection of addresses to send the email
-         * @param ccEmail   Collection of addresses to send the email as copy
-         * @param bccEmail  Collection of addresses to send the email as bgCopy
-         * @param subject   Subject of email
-         * @param data      Email Body Text Data
-         * @param contentType HTML sends the body in html format, else it will be send in text format
-         * @param login     Login for SMTP server authentication
-         * @param password  password for SMTP server authentication
-         * @return
+         * Sends an e-mail with the information supplied through {@code message}.
+         * The e-mail body can be formatted as HTML or plain text.
+         * <p>Env&iacute;a un correo electr&oacute;nico con la informaci&oacute;n
+         * proporcionada a trav&eacute;s de {@code message}. El cuerpo del correo
+         * puede ser enviado en formato HTML o en texto plano.</p>
+         * @param message an object of type {@link org.semanticwb.base.util.SWBMail}
+         * @return a string that at the moment of writing this documentation is
+         *         equal to {@code null}.
+         *         <p>un objeto string que al momento de escribir esta documentaci&oacute;n
+         *         es igual a {@code null}.</p>
+         * @throws java.net.SocketException
          */
         public static String sendMail(SWBMail message) throws java.net.SocketException {
             try {
@@ -1870,7 +2565,7 @@ public class SWBUtils {
                     email.attach(attchment);
                 }
 
-                email.setHostName(smtpserver);
+                email.setHostName(EMAIL.smtpserver);
                 email.setFrom(message.getFromEmail(), message.getFromName());
                 email.setTo(message.getAddresses());
                 if (message.getCcEmail() != null) {
@@ -1898,57 +2593,94 @@ public class SWBUtils {
         }
 
         /**
-         * Sends an email in background
-         * @param toEmail
-         * @param subject
-         * @param body
-         * @throws java.net.SocketException
+         * Sends an e-mail in background mode with the sender address as the one
+         * set in {@code EMAIL.adminEmail}.
+         * <p>Env&iacute;a un correo electr&oacute;nico en segundo plano con la
+         * cuenta de correo del remitente como la asignada a {@code EMAIL.adminEmail}.</p>
+         * @param toEmail a string representing the repicients' e-mail accounts.
+         *        This string can contain more than one e-mail accounts, semicolon-separated.
+         *        If it is {@code null} the e-mail will not be sent.
+         * @param subject a string representing the message's subject
+         * @param body a string containing the message's body
+         * @throws java.net.SocketException if an error occurs while creating the mail sender.
+         *         <p>si ocurre alg&uacute;n error en la creaci&oacute;n del remitente
+         *         de correos.</p>
          */
-        public static void sendBGEmail(String toEmail, String subject, String body) throws java.net.SocketException{
-             ArrayList acol=new ArrayList();
-             if(toEmail!=null && toEmail.indexOf(";")>0)
-             {
-                 StringTokenizer strTokens=new StringTokenizer(toEmail,";");
-                 while(strTokens.hasMoreTokens()){
-                     String token=strTokens.nextToken();
-                     if(token==null) continue;
+        public static void sendBGEmail(String toEmail, String subject, String body)
+                throws java.net.SocketException {
+
+             ArrayList acol = new ArrayList();
+             if (toEmail != null && toEmail.indexOf(";") > 0) {
+                 StringTokenizer strTokens = new StringTokenizer(toEmail, ";");
+                 while (strTokens.hasMoreTokens()) {
+                     String token = strTokens.nextToken();
+                     if (token == null) continue;
                      javax.mail.internet.InternetAddress address = new javax.mail.internet.InternetAddress();
                      address.setAddress(token);
                      acol.add(address);
                  }
-             }else if(toEmail!=null)
-             {
+             } else if (toEmail != null) {
                  javax.mail.internet.InternetAddress address = new javax.mail.internet.InternetAddress();
                  address.setAddress(toEmail);
                  acol.add(address);
              }
-
-             EMAIL.sendBGEmail(adminEmail, null, acol, null, null, subject, null, body, null, null, null);
+             EMAIL.sendBGEmail(EMAIL.adminEmail, null, acol, null, null, subject,
+                     null, body, null, null, null);
         }
-
         
-
         /**
-         * Sends an email in background
-         * @param message class
-         * @throws java.net.SocketException
+         * Sends an e-mail in background mode with the information supplied.
+         * <p>Env&iacute;a un correo electr&oacute;nico en segundo plano con
+         * la informaci&oacute;n proporcionada.</p>
+         * @param fromEmail a string representing the sender's e-mail account.
+         *        Must be a valid e-mail account, if it is equal to {@code null},
+         *        the value of {@code EMAIL.adminEmail} will be used.
+         * @param fromName  a string representing the sender's name
+         * @param address   a collection of the recipients' e-mail accounts. Every
+         *        element in the collection is expected to be a valid {@link java.mail.internet.InternetAddress}.
+         *        Must not be null, otherwise the mail will not be sent.
+         * @param ccEmail   a collection of e-mail accounts to send the email as a copy. Every
+         *        element in the collection is expected to be a valid {@literal java.mail.internet.InternetAddress}.
+         *        If it is {@code null}, the mail won't be sent as a carbon copy to anyone.
+         * @param bccEmail  a collection of e-mail accounts to send the email as a blind carbon copy. Every
+         *        element in the collection is expected to be a valid {@literal java.mail.internet.InternetAddress}.
+         *        If it is {@code null}, the mail won't be sent as a blind carbon copy to anyone.
+         * @param subject   a string indicating the e-mail's subject
+         * @param contentType a string indicating the content type of the mail. {@literal HTML}
+         *        indicates the body has an HTML format, otherwise it will be send
+         *        in text plain format. Must not be {@code null}.
+         * @param data      a string containing the e-mail body's text
+         * @param login     a string representing a login name for SMTP server
+         *        authentication. If it is {@code null} authentication will not be performed.
+         * @param password  a string representing a password for SMTP server
+         *        authentication. If it is {@code null} authentication will not be performed.
+         * @param attachments a list containing all the attachments for the e-mail. Every
+         *        element in the collection is expected to be of type {@literal org.apache.commons.mail.EmailAttachment}.
+         * @throws java.net.SocketException if an error occurs during new thread's
+         *         creation for working in background mode.
+         *         <p>si ocurre un error durante la creaci&oacute;n del nuevo
+         *         thread para trabajar en segundo plano.</p>
          */
-        public static void sendBGEmail(String fromEmail, String fromName, Collection address, Collection ccEmail, Collection bccEmail,
-                String subject, String contentType, String data, String login, String password, ArrayList<EmailAttachment> attachments) throws java.net.SocketException {
+        public static void sendBGEmail(String fromEmail, String fromName,
+                Collection address, Collection ccEmail, Collection bccEmail,
+                String subject, String contentType, String data, String login,
+                String password, ArrayList<EmailAttachment> attachments)
+                throws java.net.SocketException {
+            
             SWBMail message = new SWBMail();
-            if(fromEmail==null && adminEmail!=null) fromEmail=adminEmail;
-            if(fromEmail!=null) message.setFromEmail(fromEmail);
-            if(fromName!=null) message.setFromName(fromName);
-            if(address!=null) message.setAddress((ArrayList) address);
-            if(ccEmail!=null) message.setCcEmail(ccEmail);
-            if(bccEmail!=null) message.setBccEmail(bccEmail);
-            if(subject!=null) message.setSubject(subject);
-            if(contentType==null) contentType="HTML";
-            if(contentType!=null) message.setContentType(contentType);
-            if(data!=null) message.setData(data);
-            if(login!=null) message.setLogin(login);
-            if(password!=null) message.setPassword(password);
-            if(attachments!=null) message.setAttachments(attachments);
+            if (fromEmail == null && EMAIL.adminEmail != null) fromEmail = EMAIL.adminEmail;
+            if (fromEmail != null) message.setFromEmail(fromEmail);
+            if (fromName != null) message.setFromName(fromName);
+            if (address != null) message.setAddress((ArrayList) address);
+            if (ccEmail != null) message.setCcEmail(ccEmail);
+            if (bccEmail != null) message.setBccEmail(bccEmail);
+            if (subject != null) message.setSubject(subject);
+            if (contentType == null) contentType = "HTML";
+            if (contentType != null) message.setContentType(contentType);
+            if (data != null) message.setData(data);
+            if (login != null) message.setLogin(login);
+            if (password != null) message.setPassword(password);
+            if (attachments != null) message.setAttachments(attachments);
 
             SWBMailSender swbMailSender = new SWBMailSender();
             swbMailSender.addEMail(message);
@@ -1956,9 +2688,15 @@ public class SWBUtils {
         }
 
         /**
-         * Sends an email in background
-         * @param message class
-         * @throws java.net.SocketException
+         * Sends an e-mail in background mode with the information supplied
+         * through {@code message}.
+         * <p>Env&iacute;a un correo electr&oacute;nico en segundo plano con
+         * la informaci&oacute;n proporcionada a trav&eacute;s de {@code message}.</p>
+         * @param message an object of type {@link org.semanticwb.base.util.SWBMail}
+         * @throws java.net.SocketException if an error occurs during new thread's
+         *         creation for working in background mode.
+         *         <p>si ocurre un error durante la creaci&oacute;n del nuevo
+         *         thread para trabajar en segundo plano.</p>
          */
         public static void sendBGEmail(SWBMail message) throws java.net.SocketException {
             SWBMailSender swbMailSender = new SWBMailSender();
@@ -1966,37 +2704,98 @@ public class SWBUtils {
             swbMailSender.start();
         }
 
+        /**
+         * Sets the value for the user's name registered in the SMTP server for
+         * sending messages.
+         * <p>Asigna el valor del nombre de usuario registrado en el servidor SMTP para
+         * enviar mensajes.</p>
+         * @param smtpuser a string representing a user's name registered in the SMTP server.
+         */
         public static void setSMTPUser(String smtpuser) {
             EMAIL.smtpuser = smtpuser;
         }
 
+        /**
+         * Sets the value for the user's password registered in the SMTP server for
+         * sending messages.
+         * <p>Asigna el valor de la contrase&ntilde;a de usuario registrado en el servidor SMTP para
+         * enviar mensajes.</p>
+         * @param smtppassword a string representing a user's password registered in the SMTP server.
+         */
         public static void setSMTPPassword(String smtppassword) {
             EMAIL.smtppassword = smtppassword;
         }
 
     }
 
+
     /**
      * 
      */
     public static class XML {
 
+
+        /**
+         * The only one instance of this object for the entire application.
+         * <p>La &uacute;nica instancia de este objeto para toda la aplicaci&oacute;n.</p>
+         */
         private static XML m_xml = null;
+
+        /**
+         * A DOM object trees producer.
+         * <p>Un generador de &aacute;rboles de objetos DOM.</p>
+         */
         private DocumentBuilderFactory m_dbf = null;
+
+        /**
+         * Creator of objects of type {@link javax.xml.transform.Transformer} and
+         * {@link javax.xml.transform.Templates}.
+         * <p>Creador de objetos de tipo {@link javax.xml.transform.Transformer}
+         * y {@link javax.xml.transform.Templates}.</p>
+         */
         private TransformerFactory m_tFactory = null;        // 1. Instantiate an XPathFactory.
+
+        /**
+         * Creator of {@link javax.xml.xpath.XPath} objects.
+         * <p>Creador de objetos {@code javax.xml.xpath.XPath}</p>
+         */
         private XPathFactory xpath_factory = null;
+
+        /**
+         * Evaluator of XPath expressions.
+         * <p>Evaluador de expresiones XPath.</p>
+         */
         private XPath xpathObj = null;
 
+        
+        /**
+         * Gets the factory object of {@code javax.xml.xpath.XPath} objects.
+         * <p>Obtiene el objeto f&aacute;brica de objetos {@code javax.xml.xpath.XPath}.</p>
+         * @return the factory object of {@code javax.xml.xpath.XPath} objects.
+         *         <p>el objeto f&aacute;brica de objetos {@code javax.xml.xpath.XPath}.</p>
+         */
         public static XPathFactory getXPathFactory() {
             XML xml = getInstance();
             return xml.xpath_factory;
         }
 
+        /**
+         * Gets the {@code XPath} object of this object.
+         * <p>Obtiene el objeto {@code XPath} de este objeto.</p>
+         * @return the {@code XPath} object of this object.
+         *         <p>el objeto {@code XPath} de este objeto.</p>
+         */
         public static XPath getXPathObject() {
             XML xml = getInstance();
             return xml.xpathObj;
         }
 
+        /**
+         * Gets a reference for the only one instance of this object.
+         * <p>Obtiene una referencia para la &uacute;nica instancia de este objeto.</p>
+         * @return a reference for the only one instance of this object.
+         *         <p>una referencia para la &uacute;nica instancia de este objeto.</p>
+         */
         private static XML getInstance() {
             if (m_xml == null) {
                 m_xml = new XML();
@@ -2004,16 +2803,39 @@ public class SWBUtils {
             return m_xml;
         }
 
+        /**
+         * Gets this object's document builder factory.
+         * <p>Obtiene la f&aacute;brica constructora de documentos
+         * de este objeto.</p>
+         * @return this object's document builder factory.
+         *         <p>la f&aacute;brica constructora de documentos
+         *         de este objeto.</p>
+         */
         public static DocumentBuilderFactory getDocumentBuilderFactory() {
             XML xml = getInstance();
             return xml.m_dbf;
         }
 
+        /**
+         * Gets this object's transformer factory.
+         * <p>Obtiene la f&aacute;brica transformadora de este objeto.</p>
+         * @return this object's transformer factory.
+         *         <p>la f&aacute;brica transformadora de este objeto.</p>
+         */
         public static TransformerFactory getTransformerFactory() {
             XML xml = getInstance();
             return xml.m_tFactory;
         }
 
+        /**
+         * Creates an instance of this object. The instance's document builder factory
+         * will provide support for XML namespaces, and its parsers created must
+         * eliminate whitespace in element content.
+         * <p>Crea una instancia de este objeto. La f&aacute;brica constructora de
+         * documentos de esta instancia proveer&aacute; de soporte para namespaces
+         * de XML, y los analizadores sint&aacute;cticos que cree deber&aacute;n
+         * eliminar los espacios en blanco del contenido de los elementos.</p>
+         */
         private XML() {
             try {
                 m_dbf = DocumentBuilderFactory.newInstance();
@@ -2036,13 +2858,18 @@ public class SWBUtils {
         }
 
         /**
+         * Transforms a DOM document into a XML formatted string.
+         * <p>Transforma un documento DOM en un objeto string con formato XML.</p>
          *Crea un objeto String a partir de un objeto Document con cierta codificación especificada y 
          * teniendo la posibilidad de identar la salida, la identación que se tiene especificada en el método es 2.
-         * @param dom
-         * @param encode
-         * @param ident
-         * @return  */
-        public static String domToXml(Document dom, String encode, boolean ident) {
+         * @param dom a DOM document to transform. Must not be {@code null}.
+         * @param encode a string representing the preferred character encoding
+         *        to use in the transformation. Must not be {@code null}.
+         * @param indent a {@code boolean} indicating wheather or not to indent the XML to generate.
+         * @return a string representing the DOM document received.
+         *         <p>un objeto string que representa el documento DOM recibido.</p>
+         */
+        public static String domToXml(Document dom, String encode, boolean indent) {
             ByteArrayOutputStream sw = new java.io.ByteArrayOutputStream();
             OutputStreamWriter osw = null;
             try {
@@ -2054,7 +2881,7 @@ public class SWBUtils {
                     transformer = tFactory.newTransformer();
                 }
                 transformer.setOutputProperty(OutputKeys.ENCODING, encode);
-                if (ident) {
+                if (indent) {
                     transformer.setOutputProperty(OutputKeys.INDENT, "yes");
                     try {
                         transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
@@ -2071,9 +2898,14 @@ public class SWBUtils {
         }
 
         /**
-         * Crea un objeto String a partir de un objeto Document con codificación UTF-8 y sin identación.
-         * @param dom
-         * @return  */
+         * Transforms a DOM document into a XML formatted string using the UTF-8
+         * character encoding with no indentation.
+         * <p>Transforma un documento DOM en un objeto string con formato XML
+         * utilizando codificaci&oacute;n UTF-8 sin sangr&iacute;as.</p>
+         * @param dom a DOM document to transform. Must not be {@code null}.
+         * @return a XML formatted, UTF-8 encodedstring representing the DOM document received.
+         *         <p>un objeto string que representa el documento DOM recibido.</p>
+         */
         public static String domToXml(Document dom) {
             return domToXml(dom, "UTF-8", false);
         }
@@ -2400,7 +3232,7 @@ public class SWBUtils {
 
         /**
          * Replace special characters in xml String
-         * @param str Remplaza caracteres especiales en un xml
+         * @param str Reemplaza caracteres especiales en un xml
          * @return
          */
         static public String replaceXMLChars(String str) {
@@ -2577,6 +3409,8 @@ public class SWBUtils {
      */
     public static class DB 
     {
+
+
         public static final String DBTYPE_HSQL="HSQL";
         public static final String DBTYPE_MySQL="MySQL";
         public static final String DBTYPE_MsSQL="MsSQL";
@@ -2741,6 +3575,7 @@ public class SWBUtils {
 
     public static class CryptoWrapper {
 
+
         public static String passwordDigest(String toEncode) throws NoSuchAlgorithmException, UnsupportedEncodingException {
             if (toEncode.startsWith("{SHA-512}") ||
                     toEncode.startsWith("{SHA}") ||
@@ -2796,6 +3631,7 @@ public class SWBUtils {
 
     public static class Collections {
 
+        
         public static List copyIterator(Iterator it) {
             ArrayList ret = new ArrayList();
             while (it.hasNext()) {
