@@ -7,6 +7,7 @@
         SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
         //WebPage webpage = (WebPage) request.getAttribute("webpage");
         WebPage webpage = paramRequest.getWebPage();
+        
         //WebPage clasificados = webpage.getWebSite().getWebPage("Clasificados");
         ArrayList<Clasified> elements = new ArrayList<Clasified>();
         User user = paramRequest.getUser();
