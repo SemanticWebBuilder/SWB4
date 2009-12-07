@@ -50,7 +50,7 @@ panels.each{
     println """        <div class="contentPanel">
         <img class="fakeBackground" src="$path${panel.getId()}_bk.jpg" alt="${panel.getDisplayName("es")}">
           <div class="columnaIzquierda">
-            <h2>${panel.getDisplayName("es")}</h2>
+            <h2 class="panelTitle">${panel.getDisplayName("es")}</h2>
             <img src="$path${panel.getId()}.jpg" alt="${panel.getDisplayName("es")}">
             <!--p class="botonesAux"> <a href="#"><img src="images/icoAvion.png" alt="Transporte aereo"></a> <a href="#"><img src="images/icoAuto.png" alt="Transporte terrestre"></a> </p-->
             ${panel.getDescription()}
