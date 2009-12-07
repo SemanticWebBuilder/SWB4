@@ -67,7 +67,7 @@ public class SWBContext extends SWBContextBase
         log.event("Initializing SemanticWebBuilder Context...");
         filtered.add(WEBSITE_ADMIN);
         filtered.add(WEBSITE_ONTEDITOR);
-        //filtered.add(WEBSITE_GLOBAL);
+        filtered.add(WEBSITE_GLOBAL);
     }
     
     private SWBContext()

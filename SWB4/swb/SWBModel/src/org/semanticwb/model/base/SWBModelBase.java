@@ -3,6 +3,8 @@ package org.semanticwb.model.base;
 
 public abstract class SWBModelBase extends org.semanticwb.model.base.GenericObjectBase 
 {
+       public static final org.semanticwb.platform.SemanticClass swb_WebSite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebSite");
+       public static final org.semanticwb.platform.SemanticProperty swb_parentWebSite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#parentWebSite");
        public static final org.semanticwb.platform.SemanticClass swb_SWBModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#SWBModel");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#SWBModel");
     public static class ClassMgr
@@ -39,11 +41,44 @@ public abstract class SWBModelBase extends org.semanticwb.model.base.GenericObje
        {
            return (getSWBModel(id, model)!=null);
        }
+   public static java.util.Iterator<org.semanticwb.model.SWBModel> listSWBModelByParentWebSite(org.semanticwb.model.WebSite parentwebsite,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.SWBModel> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_parentWebSite, parentwebsite.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.model.SWBModel> listSWBModelByParentWebSite(org.semanticwb.model.WebSite parentwebsite)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.SWBModel> it=new org.semanticwb.model.GenericIterator(parentwebsite.getSemanticObject().getModel().listSubjects(swb_parentWebSite,parentwebsite.getSemanticObject()));
+       return it;
+   }
     }
 
     public SWBModelBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public void setParentWebSite(org.semanticwb.model.WebSite value)
+    {
+        getSemanticObject().setObjectProperty(swb_parentWebSite, value.getSemanticObject());
+    }
+
+    public void removeParentWebSite()
+    {
+        getSemanticObject().removeProperty(swb_parentWebSite);
+    }
+
+
+    public org.semanticwb.model.WebSite getParentWebSite()
+    {
+         org.semanticwb.model.WebSite ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_parentWebSite);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.WebSite)obj.createGenericInstance();
+         }
+         return ret;
     }
 
     public void remove()
