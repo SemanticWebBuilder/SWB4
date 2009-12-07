@@ -637,7 +637,8 @@ public class SemanticObject
             if(xml!=null)
             {
                 dom=SWBUtils.XML.xmlToDom(xml);
-            }else
+            }
+            if(dom==null)
             {
                 dom=SWBUtils.XML.getNewDocument();
             }
