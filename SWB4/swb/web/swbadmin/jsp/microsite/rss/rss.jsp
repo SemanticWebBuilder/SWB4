@@ -392,7 +392,7 @@
                         WebPage commWebpage = (WebPage) eventObj.createGenericInstance();
 
 
-                        response.setContentType("application/rss+xml");
+                        response.setContentType("application/rss+xml;charset=utf-8");
                         Document doc = org.semanticwb.SWBUtils.XML.getNewDocument();
                         Element rss = doc.createElement("rss");
                         rss.setAttribute("version", "2.0");
@@ -441,7 +441,7 @@
                             }
                         }
 
-                        out.write(org.semanticwb.SWBUtils.XML.domToXml(doc));
+                        out.write(new String(org.semanticwb.SWBUtils.XML.domToXml(doc).getBytes("iso-8859-1"),"utf-8"));
 
                     }
                     else
