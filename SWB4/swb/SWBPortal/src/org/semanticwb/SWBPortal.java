@@ -2297,15 +2297,15 @@ public class SWBPortal {
         return content;
     }
 
-    public static boolean InstallZip(File zipFile) {
+    public static WebSite InstallZip(File zipFile) {
         return InstallZip(zipFile, null, null, null);
     }
 
-    public static boolean InstallZip(File zipFile, String file2read) {
+    public static WebSite InstallZip(File zipFile, String file2read) {
         return InstallZip(zipFile, file2read, null, null);
     }
 
-    public static boolean InstallZip(File zipFile, String file2read, String newWebSiteid, String newWebSiteTitle) {
+    public static WebSite InstallZip(File zipFile, String file2read, String newWebSiteid, String newWebSiteTitle) {
         try {
             String modelspath=SWBPortal.getWorkPath() + "/models/";
             if (file2read == null) {
@@ -2443,12 +2443,12 @@ public class SWBPortal {
                         fileModel.delete();
                     }
                 }
-                return true;
+                return website;
             }
         } catch (Exception e) {
             log.error(e);
         }
-        return false;
+        return null;
     }
 
     /**
