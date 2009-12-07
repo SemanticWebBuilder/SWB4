@@ -45,7 +45,7 @@ public class Resource extends org.semanticwb.model.base.ResourceBase
     private String siteid=null;
     protected int randpriority;
 
-    private Document m_dom=null;
+//    private Document m_dom=null;
     private Document m_filter=null;
     private NodeList m_filternode=null;
 
@@ -138,17 +138,18 @@ public class Resource extends org.semanticwb.model.base.ResourceBase
 
     public Document getDom() throws SWBException
     {
-       if(m_dom==null)
-       {
-           if(swb_xml!=null)
-           {
-               m_dom=getSemanticObject().getDomProperty(swb_xml);
-           }else
-           {
-               m_dom=SWBUtils.XML.getNewDocument();
-           }
-       }
-       return m_dom;
+//       if(m_dom==null)
+//       {
+//           if(getXml()!=null)
+//           {
+//               m_dom=getSemanticObject().getDomProperty(swb_xml);
+//           }else
+//           {
+//               m_dom=SWBUtils.XML.getNewDocument();
+//           }
+//       }
+//       return m_dom;
+        return getSemanticObject().getDomProperty(swb_xml);
     }
 
 
@@ -259,14 +260,14 @@ public class Resource extends org.semanticwb.model.base.ResourceBase
         }
     }
 
-    @Override
-    public void setXml(String xml)
-    {
-        //Garantiza que se borren las propiedades
-        getSemanticObject().getRDFResource().removeAll(swb_xml.getRDFProperty());
-        super.setXml(xml);
-        m_dom=null;
-    }
+//    @Override
+//    public void setXml(String xml)
+//    {
+//        //Garantiza que se borren las propiedades
+//        getSemanticObject().getRDFResource().removeAll(swb_xml.getRDFProperty());
+//        super.setXml(xml);
+//        m_dom=null;
+//    }
 
     public void addHit(HttpServletRequest request, User user, WebPage page)
     {
