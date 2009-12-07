@@ -179,7 +179,7 @@
         if (dirObj.isClaimed()) {
             claimer = (User)semObject.getObjectProperty(Claimable.swbcomm_claimer).createGenericInstance();
             claimJustify = semObject.getProperty(Claimable.swbcomm_claimJustify);
-            if (isAdmin) {
+            if (isAdmin || dirObj.getCreator().getURI().equals(user.getURI())) {
                 SWBResourceURL aUrl = paramRequest.getActionUrl().setAction("accept").setParameter("uri", request.getParameter("uri"));
                 SWBResourceURL cUrl = paramRequest.getActionUrl().setAction("reject").setParameter("uri", request.getParameter("uri"));
                 %>
