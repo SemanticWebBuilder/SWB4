@@ -36,7 +36,6 @@ private static final int ELEMENETS_BY_PAGE = 5;
                             "Septiembre", "Octubre", "Noviembre", "Diciembre"};
     String [] days = {"D", "L", "M", "M", "J", "V", "S"};
 
-    int ilday = current.getDay();
     int ilmonth = current.getMonth();
     int ilyear = current.getYear();
 
@@ -46,6 +45,15 @@ private static final int ELEMENETS_BY_PAGE = 5;
     //Find out when this mont starts and ends
     int firstWeekDay = thisMonth.getDay();
     long daysInMonth = Math.round((nextMonth.getTime() - thisMonth.getTime()) / (1000 * 60 * 60 * 24));
+    Calendar cal = Calendar.getInstance();
+
+    /*cal.get(Calendar.DAY_OF_MONTH);
+    System.out.println("===Primer dia de la semana: " + firstWeekDay);
+    System.out.println("===Primer dia de la semana2: " + (cal.getActualMaximum(cal.DAY_OF_WEEK) - cal.DAY_OF_WEEK_IN_MONTH));
+    System.out.println("===Dia del mes: " + cal.get(Calendar.DAY_OF_MONTH));
+    System.out.println("===Dia del mes2: " + current.getDate());
+    System.out.println("===Mes: " + cal.get(Calendar.MONTH));
+    System.out.println("===Mes2: " + current.getMonth());*/
 
     Date startOfMonth = new Date(current.getYear(), current.getMonth(), 1);
     Date endOfMonth = new Date(current.getYear(), current.getMonth(), (int)daysInMonth);
@@ -152,7 +160,11 @@ private static final int ELEMENETS_BY_PAGE = 5;
         while(itev.hasNext()) {
             EventElement ee = itev.next();
             if (ee.canView(member)) {
-                if (isThisMonth(ee, startOfMonth, endOfMonth)) {
+                //El evento inicia o termina en este día?
+                if (same(ee.getStartDate(), current) || same(ee.getEndDate(), current)) {
+                    events.add(ee);
+                //El evento inició antes de este día y termina después de este día?
+                } else if (ee.getStartDate().before(current) && ee.getEndDate().after(current)) {
                     events.add(ee);
                 }
             }
@@ -343,32 +355,21 @@ private boolean same(Date d1, Date d2) {
 private  boolean isThisMonth(EventElement event, Date startOfM, Date endOfM) {
     boolean ret = false;
 
-    //El evento se lleva a cabo este mes?
-
-    //La fecha de inicio del evento es igual o menor al inicio de mes
-       //La fecha de fin del evento es mayor o igual al fin de mes
-          //Se lleva a cabo
-
-    if(same(event.getStartDate(), startOfM) || event.getStartDate().before(startOfM)) {
-        //System.out.println("====>>El evento " + event.getTitle() + " inicio este mes o antes");
-        if(same(event.getEndDate(), endOfM) || event.getEndDate().after(endOfM)) {
-            //System.out.println("====>>El evento " + event.getTitle() + " termina este mes o despues");
-            ret = true;
-       } else {
-            if(same(event.getEndDate(), endOfM) || (event.getEndDate().before(endOfM) && event.getEndDate().after(startOfM))) {
-                //System.out.println("====>>El evento " + event.getTitle() + " termina en este mes");
-                ret = true;
-            }
-        }
+    //El evento inició algun día de este mes?
+    if ((same(event.getStartDate(), startOfM) || event.getStartDate().after(startOfM)) &&
+            (same(event.getStartDate(), endOfM) || event.getStartDate().before(endOfM))) {
+        ret = true;
     }
 
-    //La fecha de inicio del evento es mayor o igual a la fecha de inicio de mes
-      //La fecha de fin del evento es menor o igual a la fecha de fin de mes
+    //El evento inició algun día de este mes?
+    if ((same(event.getEndDate(), startOfM) || event.getEndDate().after(startOfM)) &&
+            (same(event.getEndDate(), endOfM) || event.getEndDate().before(endOfM))) {
+        ret = true;
+    }
 
-    if(same(event.getStartDate(), startOfM) || event.getStartDate().after(startOfM)) {
-        if(same(event.getEndDate(), endOfM) || event.getEndDate().before(endOfM)) {
-            ret = true;
-        }
+    //El evento inició antes del mes y termina despues del mes?
+    if (event.getStartDate().before(startOfM) && event.getEndDate().after(endOfM)) {
+        ret = true;
     }
 
     return ret;
