@@ -403,19 +403,18 @@ if (sobj != null) {
                     <p><b><font color="#B40000">Este elemento ha sido reclamado por <a href="<%=claimerUrl%>"><%=claimer.getFullName()%></a></font></b></p><%
                     }
                     %>
-                    <p class="tituloRojo"><p class="vermas"><a href="<%=urlDetail%>"><%=paramRequest.getLocaleString("seeMore")%></a></p>
-                    <%
-                    if(user.isRegistered() && user.isSigned()) {
-                        UserGroup group=user.getUserRepository().getUserGroup("admin");
-                        if((userObj!=null && userObj.getURI().equals(user.getURI())) || group!=null && user.hasUserGroup(group)){
-                    %>
-                        <div>
-                            <p><a href="<%=urlEdit%>"><%=paramRequest.getLocaleString("editInfo")%></a></p>
-                            <p><a href="<%=urlRemove.setAction(urlRemove.Action_REMOVE)%>"><%=paramRequest.getLocaleString("remove")%></a></p>
-                        </div>
-                    <%  }
-                    }
-                    %>
+                    <p class="vermas">
+                        <%
+                        if(user.isRegistered() && user.isSigned()) {
+                            UserGroup group=user.getUserRepository().getUserGroup("admin");
+                            if((userObj!=null && userObj.getURI().equals(user.getURI())) || group!=null && user.hasUserGroup(group)){
+                        %>
+                                <a href="<%=urlEdit%>">Editar</a>&nbsp;|&nbsp;<a href="<%=urlRemove.setAction(urlRemove.Action_REMOVE)%>"><%=paramRequest.getLocaleString("remove")%></a>&nbsp;|&nbsp;
+                        <%  }
+                        }
+                        %>
+                    <a href="<%=urlDetail%>"><%=paramRequest.getLocaleString("seeMore")%></a>
+                    </p>
                     <div class="clear">&nbsp;</div>
               </div>
              </div>
@@ -435,7 +434,7 @@ if (sobj != null) {
                         <p><span class="itemTitle">Palabras clave: </span>Palabras clave</p>
                         <p><span class="itemTitle">Creado por: </span>Tu nombre aquí</p>
 
-                        <div class="vermasFloat"><p class="tituloNaranja"><p class="vermas"><%=paramRequest.getLocaleString("seeMore")%></p></div>
+                        <p class="tituloNaranja"><p class="vermas"><%=paramRequest.getLocaleString("seeMore")%></p>
                         <div class="clear">&nbsp;</div>
                    </div>
                 </div>
