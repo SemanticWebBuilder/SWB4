@@ -73,6 +73,8 @@ Error: Elemento no encontrado...
     }
 </script>
 <div class="columnaIzquierda">
+            <a class="adminTool" onclick="validaForma()" href="#">Guardar</a>
+        <a class="adminTool" href="<%=paramRequest.getRenderUrl()%>">Cancelar</a>
     <form name="frmaeditnews" id="frmaeditnews" class="swbform" enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
         <div>
             <fieldset>
@@ -164,15 +166,15 @@ Error: Elemento no encontrado...
                     </p>
                 </div>
             </fieldset>
-            <fieldset>
-                <legend></legend>
+            <%--<fieldset>
+                                <legend></legend>
                 <div>
                     <p>
                     <div class="editarInfo"><p><a onclick="validaForma()" href="#">[Guardar]</a></p></div>
                     <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">[Cancelar]</a></p></div>
                     </p>
                 </div>
-            </fieldset>
+            </fieldset> --%>
         </div>
         <input type="hidden" name="uri" value="<%=rec.getURI()%>"/>
         <input type="hidden" name="act" value="edit"/>
