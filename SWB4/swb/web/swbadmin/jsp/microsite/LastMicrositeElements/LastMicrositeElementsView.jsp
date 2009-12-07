@@ -19,10 +19,9 @@
     %>
     <li>No hay actividad durante las últimas dos semanas</li>
     <%                }
-
+    User user = paramRequest.getUser();
     for (MicroSiteElement element : elements)
-    {
-        User user = paramRequest.getUser();
+    {        
         boolean canview = false;
         if (element.getWebPage() != null && user != null)
         {
