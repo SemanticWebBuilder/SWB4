@@ -23,15 +23,15 @@
 
 import org.semanticwb.model.User
 import org.semanticwb.model.WebPage
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.portal.api.SWBResourceURL
 
 def paramRequest=request.getAttribute("paramRequest")
 User user = paramRequest.getUser()
 WebPage wpage=paramRequest.getWebPage()
+String contextPath=SWBPlatform.getContextPath();
 def url = paramRequest.getActionUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setAction("create").setMode(SWBResourceURL.Mode_EDIT)
 def repository = wpage.getWebSite().getUserRepository().getId()
-
-
 
 println """<script type="text/javascript">
            dojo.require("dojo.parser");
@@ -87,6 +87,19 @@ method="POST">
                         isValid="return canAddEmail('$repository',this.textbox.value);"
                         style="width:300px;"  trim="true"/></td>
                 </tr>
+
+                <tr><td colspan="2" align="center">&nbsp;</td></tr>
+                <tr><td colspan="2" align="center">&nbsp;</td></tr>
+
+                <tr><td colspan="2" align="center">
+                <img src="/swbadmin/jsp/securecode.jsp?sAttr=cdlog" id="imgseccode" width="155" height="65" /><br/>
+                <a href="#" onclick="changeSecureCodeImage('imgseccode');">Cambiar imagen</a><br/>
+                </td></tr>
+                <tr><td width="200px" align="right">
+                <label for="cmnt_seccode">El texto de la imagen es:</label></td>
+                <td><input type="text" id="cmnt_seccode" name="cmnt_seccode" size="45" /></td>
+                </tr>
+
 	<tr>
 		<td align="center" colspan="2">
                     
@@ -97,12 +110,33 @@ method="POST">
     var objd=dijit.byId('org.semanticwb.community.User/com/create');
     if (objd.isValid())
     {
-        x.submit();
+        if(isEmpty('cmnt_seccode')) {
+            alert('Para poder agregar tu comentario es necesario que ingreses el código de la imagen.\\nEn caso de no ser claro puedes cambiarlo haciendo clic en <<Cambiar imagen>>.');
+        }else{
+            x.submit();
+        }
     } else {
         alert("Datos incompletos o erroneos");
     }
 
  }
+
+   function changeSecureCodeImage(imgid) {
+     var img = dojo.byId(imgid);
+     if(img) {
+        var rn = Math.floor(Math.random()*99999);
+        img.src = "/swbadmin/jsp/securecode.jsp?sAttr=cdlog&nc="+rn;
+     }
+   }
+
+    function isEmpty(objid) {
+        var obj = dojo.byId(objid);
+        if (obj==null || obj.value=='' || !isNaN(obj.value) || obj.value.charAt(0) == ' ') {
+            return true;
+        }else {
+            return false;
+        }
+    }
 /*
     function enviar()
     {
