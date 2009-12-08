@@ -65,7 +65,7 @@
 
 
 
-    <p><img id="img_<%=anew.getId()%>" src="<%= pathPhoto%>" alt="<%= anew.getTitle()%>" border="0" width="380" height="100%" /></p>
+    <p><img id="img_<%=anew.getId()%>" src="<%= pathPhoto%>" alt="<%= anew.getTitle()%>" width="380" height="100%" /></p>
 
 
 

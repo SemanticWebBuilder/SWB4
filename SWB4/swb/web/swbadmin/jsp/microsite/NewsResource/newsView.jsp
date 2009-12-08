@@ -233,7 +233,7 @@
             <h2><%=anew.getTitle()%></h2>
             <p>&nbsp;<br>Por: <%=anew.getAuthor()%><br><%=dateFormat.format(anew.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(anew.getCreated(), user.getLanguage())%></p>
             <p>
-                <%=anew.getDescription()%> | <a href="<%=viewUrl%>">Ver más</a>
+                <%=anew.getDescription()%> | <a href="<%=viewUrl.toString(true)%>">Ver más</a>
                 <%
                         if (anew.canModify(member))
                         {
