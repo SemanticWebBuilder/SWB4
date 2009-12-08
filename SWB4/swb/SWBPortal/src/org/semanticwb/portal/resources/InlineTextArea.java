@@ -77,13 +77,13 @@ public class InlineTextArea extends GenericResource {
                 out.println("dojo.require(\"dijit.form.Textarea\");");
                 out.println("var iledit_"+base.getId()+";");
                 out.println("dojo.addOnLoad( function() {");
-                out.println("  iledit_"+base.getId()+" = new dijit.InlineEditBox({");
-                out.println("    id: \"inline_"+base.getId()+"\",");
+                out.println("    iledit_"+base.getId()+" = new dijit.InlineEditBox({");
+                out.println("    id: \"ilta_"+base.getId()+"\",");
                 out.println("    autoSave: false,");
                 out.println("    editor: \"dijit.form.Textarea\",");
                 out.println("    style: \""+style+"\",");
                 out.println("    onChange: function(value){");
-                out.println("        postHtml('"+url+"?txt='+value,'inline_"+base.getId()+"');");
+                out.println("        postHtml('"+url+"?txt='+value,'ilta_"+base.getId()+"');");
                 out.println("      }");
                 out.println("    }, 'ta_"+base.getId()+"');");
                 out.println("  }");
