@@ -85,7 +85,7 @@ public class InlineTextArea extends GenericResource {
                 out.println("    onChange: function(value){");
                 out.println("        postHtml('"+url+"?txt='+value,'inline_"+base.getId()+"');");
                 out.println("      }");
-                out.println("    }, 'tb_"+base.getId()+"');");
+                out.println("    }, 'ta_"+base.getId()+"');");
                 out.println("  }");
                 out.println(");");
                 out.println("</script>");
@@ -108,7 +108,7 @@ public class InlineTextArea extends GenericResource {
         if( action!=null && action.equalsIgnoreCase("update") ) {
             base.setAttribute("text", request.getParameter("ta_"+base.getId()));
 
-            String editaccess = request.getParameter("editar");
+            String editaccess = request.getParameter("editar_"+base.getId());
             if(editaccess!=null) {
                 base.setAttribute("editRole", editaccess);
             }
@@ -179,7 +179,7 @@ public class InlineTextArea extends GenericResource {
 
         out.println("<tr>");
         out.println("<td align=\"right\" width=\"150\">" + paramRequest.getLocaleString("usrmsg_Inline_doAdmin_RollGroup") + ":</td>");
-        out.println("<td><select name=\"editar\">" + strTemp + "</select></td>");
+        out.println("<td><select name=\"editar_"+base.getId()+"\">" + strTemp + "</select></td>");
         out.println("</tr>");
 
         out.println("<tr>");
