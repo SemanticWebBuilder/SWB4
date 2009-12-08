@@ -241,11 +241,11 @@
     </div>
     <div class="commentBox">
     <div id="addJustify" style="display:none;">
-        <form id="addJustifyForm" name="addJustifyForm" action="<%=aUrl%>">
+        <form id="addJustifyForm" name="addJustifyForm" action="<%=aUrl.toString(true)%>">
             <label for="justify">Justificaci&oacute;n</label>
                 <textarea style="border:1px solid #CACACA;" name="justify" id="justify" cols="45" rows="5"></textarea>
                 <input type="hidden" name="uri" value="<%=semObject.getURI()%>">
-                <input type="hidden" name="act" value="claim"/>
+                <input type="hidden" name="act" value="claim">
         </form>
         <a class="userTool" href="javascript:sendClaim()">Reclamar</a>
         <a class="userTool" href="javascript:hideClaimForm()">Cancelar</a>
