@@ -176,6 +176,23 @@ public class TemplateImp extends Template
         //busca el tipo de recurso en el topicmap del template
         //ResourceSubType rt=getWebSite().getResourceSubType((type+"_"+stype));
         ResourceSubType rt=getWebSite().getResourceSubType(stype);
+        if(rt==null)
+        {
+            ResourceType t=getWebSite().getResourceType(type);
+            if(t!=null)
+            {
+                Iterator<ResourceSubType> it=t.listSubTypes();
+                while (it.hasNext())
+                {
+                    ResourceSubType resourceSubType = it.next();
+                    if(resourceSubType.getTitle().equalsIgnoreCase(stype))
+                    {
+                        rt=resourceSubType;
+                        break;
+                    }
+                }
+            }
+        }
         //busca el tipo de recurso en el topicmap global
         //if(rt==null)rt=SWBContext.getGlobalWebSite().getResourceSubType((type+"_"+stype));
         return rt;
