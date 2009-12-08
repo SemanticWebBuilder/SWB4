@@ -451,12 +451,14 @@ public class SWBModelAdmin extends GenericResource {
             }
         }else if (response.getAction().equals("install")) {
             try{
+                /*
                 File file= new File(request.getParameter("zipName"));
                 WebSite website=SWBPortal.InstallZip(file, "siteInfo.xml", request.getParameter("wsid"), request.getParameter("wstitle"));
                 response.setMode(response.Mode_VIEW);
                 response.setRenderParameter("msgKey", "siteCreated");
                 response.setRenderParameter("wsUri", website.getURI());
-                /*
+                 * */
+                
                 String siteInfo = SWBUtils.IO.readFileFromZipAsString(request.getParameter("zipName"), "siteInfo.xml");
                 String oldIDModel = null, oldNamespace = null, oldTitle = null, oldDescription = null;
                 Document dom = SWBUtils.XML.xmlToDom(siteInfo);
@@ -596,7 +598,7 @@ public class SWBModelAdmin extends GenericResource {
                     response.setMode(response.Mode_VIEW);
                     response.setRenderParameter("msgKey", "siteCreated");
                     response.setRenderParameter("wsUri", website.getURI());
-                }*/
+                }
         }catch(Exception e){
             log.error(e);
         }
