@@ -305,6 +305,37 @@ public class UserRepository extends UserRepositoryBase
         return ret;
     }
 
+    public User getUserByEmail(String email)
+    {
+        User ret = null;
+        log.debug("Email a buscar: "+email+" External:"+EXTERNAL);
+        if (null != email)
+        {
+            Iterator aux = getSemanticObject().getRDFResource().getModel().listStatements(null, User.swb_usrEmail.getRDFProperty(), getSemanticObject().getModel().getRDFModel().createLiteral(email));
+            Iterator it = new GenericIterator(aux, true);
+            if (it.hasNext())
+            {
+                ret = (User) it.next();
+            }
+            if (EXTERNAL)
+            {
+                if (bridge.syncUser(email, ret))
+                {
+                    if (null == ret)
+                    {
+                        aux = getSemanticObject().getRDFResource().getModel().listStatements(null, User.swb_usrEmail.getRDFProperty(), getSemanticObject().getModel().getRDFModel().createLiteral(email));
+                        it = new GenericIterator(aux, true);
+                        if (it.hasNext())
+                        {
+                            ret = (User) it.next();
+                        }
+                    }
+                }
+            }
+        }
+        return ret;
+    }
+
     public void syncUsers()
     {
         if (EXTERNAL)
