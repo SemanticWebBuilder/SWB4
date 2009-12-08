@@ -36,7 +36,7 @@
 %>
 <div>
     <div id="commentsList">
-        <jsp:include flush="true" page="DirObjCommentsByPage.jsp" />
+        <jsp:include flush="true" page="DirObjCommentsByPage.jsp"></jsp:include>
         <%
             if (totalPages > 0)
             {
