@@ -88,15 +88,18 @@
             }
 
     }
-    function vote(val) {        
-        if (!invoke) return;
-        //alert('En funcion para votar');
-        var uri='<%=suri%>';
-        uri=escape(uri);
-        var url = '<%=url%>?act=vote&value='+escape(val)+'&uri='+uri;
-        request.open("GET", url, true);
-        request.onreadystatechange = ranked;
-        request.send(null);
+    function vote(val) {
+        if (count == 0) {
+                if (!invoke) return;
+                //alert('En funcion para votar');
+                var uri='<%=suri%>';
+                uri=escape(uri);
+                var url = '<%=url%>?act=vote&value='+escape(val)+'&uri='+uri;
+                request.open("GET", url, true);
+                request.onreadystatechange = ranked;
+                request.send(null);
+        }
+
     }
 
     function ranked() {        

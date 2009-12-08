@@ -91,6 +91,7 @@
     }
 
     function vote(val) {
+        if (count == 0) {
         console.log("---votando con valor: " + escape(val));
         if (!invoke) return;
         //alert('En funcion para votar');
@@ -100,6 +101,7 @@
         request.open("GET", url, true);
         request.onreadystatechange = ranked;
         request.send(null);
+        }
     }
 
     function ranked() {
