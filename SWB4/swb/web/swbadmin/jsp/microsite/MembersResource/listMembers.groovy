@@ -227,7 +227,7 @@ if (null!=microsite){
 
                     println """
                 <div class="noticia">
-                        <img src="$img" width="121" heiht="121" alt="Foto de $name">
+                        <img src="$img" width="121" height="121" alt="Foto de $name">
                   <div class="noticiaTexto">
                         <h2>$name</h2>
                     <p class="stats">
