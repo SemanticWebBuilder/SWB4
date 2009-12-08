@@ -81,8 +81,11 @@ method="POST">
                     <td><input name="secondLastName" dojoType="dijit.form.ValidationTextBox" required="false" promptMessage="Captura Segundo Apellido" invalidMessage="Dato Invalido" style="width:300px;"  trim="true"/></td>
                 </tr>
                 <tr>
-                    <td width="200px" align="right"><label for="usrEmail">Correo Electr&oacute;nico <em>*</em></label></td>
-                    <td><input name="email" dojoType="dijit.form.ValidationTextBox" required="true" promptMessage="Captura Correo Electr&oacute;nico" invalidMessage="Correo Electr&oacute;nico es requerido" style="width:300px;"  trim="true"/></td>
+                    <td width="200px" align="right"><label for="usrEmail">Correo Electr&oacute;nico<em>*</em></label></td>
+                    <td><input name="email" dojoType="dijit.form.ValidationTextBox" required="true" promptMessage="Captura Correo Electr&oacute;nico" 
+                        invalidMessage="El correo electr&oacute;nico de usuario es invalido o ya existe."
+                        isValid="return canAddEmail('$repository',this.textbox.value);"
+                        style="width:300px;"  trim="true"/></td>
                 </tr>
 	<tr>
 		<td align="center" colspan="2">
