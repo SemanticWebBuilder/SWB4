@@ -60,7 +60,7 @@
                 String code="Video no definido";
                 if(rec.getCode()!=null)
                     {
-                    code=rec.getCode();
+                    code=rec.getCode().replaceAll("&", "&amp;");
                     }
 %>
 <div class="columnaIzquierda">    
