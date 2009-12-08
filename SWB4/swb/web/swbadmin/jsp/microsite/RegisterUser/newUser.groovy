@@ -30,6 +30,7 @@ def paramRequest=request.getAttribute("paramRequest")
 User user = paramRequest.getUser()
 WebPage wpage=paramRequest.getWebPage()
 String contextPath=SWBPlatform.getContextPath();
+System.out.println("contextPath:"+contextPath);
 def url = paramRequest.getActionUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setAction("create").setMode(SWBResourceURL.Mode_EDIT)
 def repository = wpage.getWebSite().getUserRepository().getId()
 
@@ -84,6 +85,7 @@ method="POST">
                     <td width="200px" align="right"><label for="usrEmail">Correo Electr&oacute;nico<em>*</em></label></td>
                     <td><input name="email" dojoType="dijit.form.ValidationTextBox" required="true" promptMessage="Captura Correo Electr&oacute;nico" 
                         invalidMessage="El correo electr&oacute;nico de usuario es invalido o ya existe."
+                        isValid="return canAddEmail('$repository',this.textbox.value);"
                         style="width:300px;"  trim="true"/></td>
                 </tr>
 
