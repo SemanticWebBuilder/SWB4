@@ -36,10 +36,10 @@ if (sobj != null) {
     <div class="twoColContent">
       <div class="adminTools">
           <%if(user.isRegistered() && user.isSigned()){%>
-            <a class="adminTool" href="<%=url%>">Agregar elemento al indice</a>
+            <a class="adminTool" href="<%=url.toString(true)%>">Agregar elemento al indice</a>
           <%}
             if (itObjs.hasNext()) {%>
-                <span class="adminTool "id="toggle_link" href="#" onclick="toggle('togle_div')">Mostrar Filtros</span>
+                <a class="adminTool "id="toggle_link" href="#" onclick="toggle('togle_div')">Mostrar Filtros</a>
           <%}%>
       </div>
           <%if (!user.isRegistered() && !user.isSigned()) {%>
@@ -182,7 +182,7 @@ if (sobj != null) {
         }
 
         %>
-        <p align="center">
+        <p>
         <%
         if(iTotPage>1)%>Página(<%
         if (actualPage > 1) {
@@ -190,7 +190,7 @@ if (sobj != null) {
              urlPag.setParameter("actualPage", ""+gotop);
 
              %>
-                <a class="link" href="<%=urlPag%><%=sparams%>"><<</a>&nbsp;
+                <a class="link" href="<%=urlPag.toString(true)%><%=sparams%>"><<</a>&nbsp;
              <%
         }
         if(iTotPage>1){
@@ -200,7 +200,7 @@ if (sobj != null) {
                 } else {
                     urlPag.setParameter("actualPage", "" + i);
                     %>
-                        <a href="<%=urlPag%><%=sparams%>"><%=i%></a>
+                        <a href="<%=urlPag.toString(true)%><%=sparams%>"><%=i%></a>
                     <%
                 }
             }
@@ -209,7 +209,7 @@ if (sobj != null) {
              int gotop = (actualPage + 1);
              urlPag.setParameter("actualPage", ""+gotop);
              %>
-                <a class="link" href="<%=urlPag%><%=sparams%>">>></a>&nbsp;
+                <a class="link" href="<%=urlPag.toString(true)%><%=sparams%>">>></a>&nbsp;
              <%
         }
         if(iTotPage>1)%>)
@@ -254,17 +254,16 @@ if (sobj != null) {
             }
         </script>
         <div id="togle_div" style="display:none">
-        <form action="<%=urlOrder.setAction("filter")%>" method="post">
-            <fieldset>
-        <table align="center">
-        <tr><td>
-        Solo anuncios con foto  </td><td><input type="checkbox" name="dirPhoto" <%=dirPhotoCheck%>></td>
+                            
+        <form action="<%=urlOrder.setAction("filter")%>" method="post">            
+            <fieldset ><legend>Filtros a aplicar</legend>
+                <input type="hidden" name="swbdirParam_dirNotAbused" value="1">
+                    Solo anuncios con foto  &nbsp;<input type="checkbox" name="dirPhoto" <%=dirPhotoCheck%>>
         <input type="hidden" name="swbdirParam_dirPhoto" value="1">
-        </tr>
-        <tr><td>
-        Solo apropiados  </td><td><input type="checkbox" name="dirNotAbused" <%=dirNotAbusedCheck%>></td>
-        <input type="hidden" name="swbdirParam_dirNotAbused" value="1">
-        </tr>
+        <br>
+        Solo apropiados  &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="dirNotAbused" <%=dirNotAbusedCheck%>>
+        
+        <br>
         <%
         SWBFormMgr mgr = new SWBFormMgr(cls, wpage.getSemanticObject(), null);
         mgr.setFilterRequired(false);
@@ -272,11 +271,10 @@ if (sobj != null) {
         while(itProps.hasNext()){
              SemanticProperty semProp1=itProps.next();
              if(semProp1.isBoolean()){
-                %>
-                <tr><td>
-                <%=semProp1.getDisplayName(user.getLanguage())%>  </td><td><%=mgr.renderElement(request, semProp1,mgr.MODE_CREATE)%></td>
+                %>                
+                <%=semProp1.getDisplayName(user.getLanguage())%>  <%=mgr.renderElement(request, semProp1,mgr.MODE_CREATE)%>
                     <input type="hidden" name="swbdirParam_<%=semProp1.getName()%>" value="1">
-                </tr>
+                <br>
                 <%
               }
              FormElement element=mgr.getFormElement(semProp1);
@@ -284,22 +282,24 @@ if (sobj != null) {
                 if(element.getId().indexOf("selectOne")>-1){
                     mgr.setType(mgr.TYPE_XHTML);
                     %>
-                     <tr><td><%=semProp1.getDisplayName(user.getLanguage())%></td><td><%=mgr.renderElement(request, semProp1,mgr.MODE_CREATE)%></td>
+                     <%=semProp1.getDisplayName(user.getLanguage())%>&nbsp;<%=mgr.renderElement(request, semProp1,mgr.MODE_CREATE)%>
                     <input type="hidden" name="swbdirParam_<%=semProp1.getName()%>" value="1">
-                    </tr>
+                    <br>
                    <%
                    continue;
                 }
              }
         }
         %>
-        <tr><td colspan="2" align="center"><input type="submit" value="Filtrar"></td></tr>
-        </table>
+        <input type="submit" value="Filtrar"><br>
+        
             </fieldset>
+        
         </form>
+        
                    </div>
         <%if (setResult.iterator().hasNext()) {%>
-        <p align="right">Ordenar por
+        <p style="text-align:right">Ordenar por
             <%if (cls.equals(ClasifiedBuySell.sclass)) {
                 if (toggleOrder) {
                 %>
@@ -355,7 +355,7 @@ if (sobj != null) {
                    if(propValue!=null && !propValue.equals("null")){
                         if(semProp==DirectoryObject.swbcomm_dirPhoto)
                         {
-                            img="<img src=\""+SWBPortal.getWebWorkPath()+"/"+semObject.getWorkPath()+"/"+propValue+ "\" width=\"90\" height=\"90\">";
+                            img="<img alt=\"\" src=\""+SWBPortal.getWebWorkPath()+"/"+semObject.getWorkPath()+"/"+propValue+ "\" width=\"90\" height=\"90\">";
                         }if(semProp==DirectoryObject.swb_title) {
                              title=propValue;
                         }else if(semProp==DirectoryObject.swb_description){
@@ -409,11 +409,11 @@ if (sobj != null) {
                             UserGroup group=user.getUserRepository().getUserGroup("admin");
                             if((userObj!=null && userObj.getURI().equals(user.getURI())) || group!=null && user.hasUserGroup(group)){
                         %>
-                                <a href="<%=urlEdit%>">Editar</a>&nbsp;|&nbsp;<a href="<%=urlRemove.setAction(urlRemove.Action_REMOVE)%>"><%=paramRequest.getLocaleString("remove")%></a>&nbsp;|&nbsp;
+                                <a href="<%=urlEdit.toString(true)%>">Editar</a>&nbsp;|&nbsp;<a href="<%=urlRemove.setAction(urlRemove.Action_REMOVE)%>"><%=paramRequest.getLocaleString("remove")%></a>&nbsp;|&nbsp;
                         <%  }
                         }
                         %>
-                    <a href="<%=urlDetail%>"><%=paramRequest.getLocaleString("seeMore")%></a>
+                    <a href="<%=urlDetail.toString(true)%>"><%=paramRequest.getLocaleString("seeMore")%></a>
                     </p>
                     <div class="clear">&nbsp;</div>
               </div>
