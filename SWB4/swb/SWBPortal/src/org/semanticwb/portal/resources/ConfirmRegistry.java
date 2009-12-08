@@ -1,0 +1,53 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package org.semanticwb.portal.resources;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.security.auth.Subject;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBPortal;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.model.User;
+import org.semanticwb.model.WebSite;
+import org.semanticwb.portal.api.GenericResource;
+import org.semanticwb.portal.api.SWBParamRequest;
+import org.semanticwb.portal.api.SWBResourceException;
+
+/**
+ *
+ * @author jorge.jimenez
+ */
+public class ConfirmRegistry extends GenericResource {
+    private static Logger log = SWBUtils.getLogger(ConfirmRegistry.class);
+
+    @Override
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
+        try{
+            PrintWriter out=response.getWriter();
+            WebSite website = paramsRequest.getWebPage().getWebSite();
+            String login=request.getParameter("login");
+            User user = paramsRequest.getWebPage().getWebSite().getUserRepository().getUserByLogin(login);
+            user.setActive(true);
+            user.setRequireConfirm(false);
+            Subject subject = SWBPortal.getUserMgr().getSubject(request, website.getId());
+            subject.getPrincipals().clear();
+            subject.getPrincipals().add(user);
+
+            request.setAttribute("2confirm","1");
+            request.setAttribute("user",user);
+            request.setAttribute("paramRequest", paramsRequest);
+            RequestDispatcher dis = request.getRequestDispatcher("/swbadmin/jsp/microsite/RegisterUser/messages.jsp");
+            dis.include(request, response);
+         }catch(Exception e){
+            log.error(e);
+        }
+    }
+
+}
