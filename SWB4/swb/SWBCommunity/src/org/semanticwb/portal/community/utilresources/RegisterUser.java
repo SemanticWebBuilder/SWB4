@@ -33,12 +33,15 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import javax.mail.internet.InternetAddress;
 import javax.security.auth.Subject;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -49,11 +52,12 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
+import org.semanticwb.model.WebPage;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
@@ -85,17 +89,20 @@ public class RegisterUser extends GenericResource
         }
 
         String path = "/swbadmin/jsp/microsite/RegisterUser/linkNewUser.groovy";
-        if (act.equals("add"))
-        {
-            path = "/swbadmin/jsp/microsite/RegisterUser/newUser.groovy";
-        }
-        if (act.equals("edit"))
-        {
-            path = "/swbadmin/jsp/microsite/RegisterUser/userEditForm.groovy";
-        }
-        if (act.equals("detail"))
-        {
-            path = "/swbadmin/jsp/microsite/RegisterUser/userDetail.groovy";
+        String msg=request.getParameter("msg");
+        if(msg!=null){
+             path = "/swbadmin/jsp/microsite/RegisterUser/messages.jsp";
+        }else{
+            if (act.equals("add"))
+            {
+                path = "/swbadmin/jsp/microsite/RegisterUser/newUser.groovy";
+            }else if (act.equals("edit"))
+            {
+                path = "/swbadmin/jsp/microsite/RegisterUser/userEditForm.groovy";
+            }else if (act.equals("detail"))
+            {
+                path = "/swbadmin/jsp/microsite/RegisterUser/userDetail.groovy";
+            }
         }
 
         RequestDispatcher dis = request.getRequestDispatcher(path);
@@ -121,14 +128,15 @@ public class RegisterUser extends GenericResource
             String securCodeCreated = (String)request.getSession(true).getAttribute("cdlog");
             if(securCodeCreated!=null && securCodeCreated.equalsIgnoreCase(securCodeSent)) {
                 request.getSession(true).removeAttribute("cdlog");
-                Subject subject = SWBPortal.getUserMgr().getSubject(request, response.getWebPage().getWebSiteId());
+                //Subject subject = SWBPortal.getUserMgr().getSubject(request, response.getWebPage().getWebSiteId());
                 User newUser = ur.createUser();
                 newUser.setLogin(login.trim());
-                subject.getPrincipals().clear();
-                subject.getPrincipals().add(newUser);
+                //subject.getPrincipals().clear();
+                //subject.getPrincipals().add(newUser);
                 newUser.setLanguage(user.getLanguage());
                 newUser.setIp(user.getIp());
-                newUser.setActive(true);
+                newUser.setActive(false);
+                newUser.setRequireConfirm(true);
                 newUser.setDevice(user.getDevice());
                 String pwd = request.getParameter("passwd");
                 newUser.setFirstName(request.getParameter("firstName"));
@@ -142,12 +150,31 @@ public class RegisterUser extends GenericResource
                 } catch (Exception ne)
                 {
                 }
-                user = newUser;
-                response.sendRedirect(response.getWebPage().getRealUrl());
+                //user = newUser;
+                //response.sendRedirect(response.getWebPage().getRealUrl());
+                //Envío de correo
+                WebSite website = response.getWebPage().getWebSite();
+                String siteName=website.getDisplayTitle(response.getUser().getLanguage());
+                String server="http://"+request.getServerName()+":"+request.getServerPort();
+                WebPage page2Confirm=website.getWebPage("confirmRegistry");
+                String msg="Hola <b>"+newUser.getFullName()+"</b>,<br/><br/><br/>" +
+                        "nos complace su registro en el portal de <b>"+siteName+"</b>,<br/>" +
+                        "son muchos los beneficios que usted recibirá.<br/><br/><br/>"+
+                        "Para completar su registro, solo de click en el siguiente hipervinculo:<br/><br/><a href=\""+server+page2Confirm.getUrl()+"?login="+newUser.getLogin()+"\">"+server+page2Confirm.getUrl()+"?login="+newUser.getLogin()+"</a></br><br/><br>" +
+                        "Atentamente sus amigos de:<br/><br/>"+siteName;
+                InternetAddress address1 = new InternetAddress();
+                address1.setAddress(newUser.getEmail());
+                ArrayList<InternetAddress> aAddress = new ArrayList<InternetAddress>();
+                aAddress.add(address1);
+                SWBUtils.EMAIL.sendMail(siteName+"@infotec.com.mx", siteName, aAddress, null, null, "Contacto del Sitio - Confirmación de registro", "text/html", msg, null, null, null);
+                response.setRenderParameter("msg", "ok");
+                response.setMode(response.Mode_VIEW);
+                response.setCallMethod(response.Call_CONTENT);
                 return;
             }else {
                 response.setMode(response.Mode_VIEW);
                 response.setCallMethod(response.Call_CONTENT);
+                response.setRenderParameter("msg", "regfail");
             }
         }
         if ("edit".equals(response.getAction()) && user.isSigned())
