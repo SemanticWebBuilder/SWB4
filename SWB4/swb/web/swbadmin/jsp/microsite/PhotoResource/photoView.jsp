@@ -119,6 +119,7 @@
 <script type="text/javascript">
     dojo.require("dojox.image.Lightbox");
     dojo.require("dojo.parser");
+
 </script>
 
 <div class="columnaIzquierda">
@@ -224,7 +225,7 @@
                         urlDetail.setParameter("uri", photo.getURI());
                         SWBResourceURL viewurl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", photo.getURI());
                         String rank = df.format(photo.getRank());
-                        String editEventURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", photo.getURI()).toString();
+                        String editEventURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", photo.getURI()).toString(true);
                         SWBResourceURL removeUrl = paramRequest.getActionUrl();
                         removeUrl.setParameter("act", "remove");
                         removeUrl.setParameter("uri", photo.getEncodedURI());
@@ -256,15 +257,22 @@
                         }
 
     %>
-    <div class="noticia">        
-        <a dojoType="dojox.image.Lightbox" title="<%= photo.getTitle()%>" href="<%= imgPhoto%>">
+    <div class="noticia">
+        <script type="text/javascript">
+            dojo.addOnLoad(function(){
+        var props={href:'<%=imgPhoto%>'};
+        var a=new dojox.image.Lightbox(props,"aimg_<%=iElement + base.getId()%>");
+        a.startup();
+        });
+        </script>
+        <a href="<%=imgPhoto%>" id="aimg_<%=iElement + base.getId()%>" title="<%= photo.getTitle()%>" >
             <img id="img_<%=iElement + base.getId()%>" src="<%=pathPhoto%>" alt="<%= photo.getTitle()%>" width="140" height="140" />
         </a>
         <div class="noticiaTexto">
             <h2><%=photo.getTitle()%></h2>
             <p>&nbsp;<br>Por: <%=postAuthor%><br><%=dateFormat.format(photo.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(photo.getCreated(), user.getLanguage())%></p>
             <p>
-                <%=photo.getDescription()%> | <a href="<%=viewurl%>">Ver más</a>
+                <%=photo.getDescription()%> | <a href="<%=viewurl.toString(true)%>">Ver más</a>
                 <%
                         if (photo.canModify(member))
                         {
