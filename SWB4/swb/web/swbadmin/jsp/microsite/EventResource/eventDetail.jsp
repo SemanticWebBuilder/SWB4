@@ -95,9 +95,9 @@
     %>
     <h2><%= event.getTitle()%></h2>
     <p><%= event.getDescription()%></p>
-    <p align="center">
-        <a href="<%= imgPhoto%>" target="_self">
-            <img id="img_<%=event.getId()%>" src="<%= pathPhoto%>" alt="<%=event.getTitle()%>" border="0" width="195" height="180" />
+    <p>
+        <a href="<%= imgPhoto%>">
+            <img id="img_<%=event.getId()%>" src="<%= pathPhoto%>" alt="<%=event.getTitle()%>" width="195" height="180" />
         </a>
     </p>
     <p><span class="itemTitle">Comienza:</span> <%= comienza%> a las <%= hcomienza%><br>
@@ -227,7 +227,7 @@
 
 
     %>
-    <p><a href="<%=paramRequest.getActionUrl().setParameter("act", "attend").setParameter("uri", event.getURI())%>">[Asistir al evento]</a></p>
+    <p><a href="<%=paramRequest.getActionUrl().setParameter("act", "attend").setParameter("uri", event.getURI()).toString(true)%>">[Asistir al evento]</a></p>
     <%  }
     %>
     <%
