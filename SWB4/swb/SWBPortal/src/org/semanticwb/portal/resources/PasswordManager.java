@@ -69,27 +69,27 @@ public class PasswordManager extends GenericResource {
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        System.out.println("En ProcessAction");
+        //System.out.println("En ProcessAction");
         Enumeration enumera = request.getSession(true).getAttributeNames();
         while (enumera.hasMoreElements()) {
             String name = (String) enumera.nextElement();
-            System.out.println("" + name + ":" + request.getSession(true).getAttribute(name));
+            //System.out.println("" + name + ":" + request.getSession(true).getAttribute(name));
         }
         String cadcontrol = (String) request.getSession(true).getAttribute("cadcontrol");
         if (cadcontrol != null && cadcontrol.equals(request.getParameter("cadcontrol"))) {
             if (response.getAction().equals("UPG")) {
-                System.out.println("en UPG");
+                //System.out.println("en UPG");
                 String pwd1 = request.getParameter("swb_newPassword");
                 String pwd2 = request.getParameter("swb_newPassword2");
                 if (pwd2.equals(pwd1)) {
                     response.getUser().setPassword(pwd2);
-                    response.setRenderParameter("message", "password actualizado");
+                    response.setRenderParameter("message", "<p>Contrase&ntilde;a actualizada</p>");
                 } else {
-                    response.setRenderParameter("message", "passwords no corresponden");
+                    response.setRenderParameter("message", "<p>Contrase&ntilde;s no corresponden.</p>");
                 }
             }
             if (response.getAction().equals("ADD")) {
-                System.out.println("en ADD");
+                //System.out.println("en ADD");
                 String login = (String) request.getSession(true).getAttribute("login");
                 if (null != login) {
                     User usr = response.getWebPage().getWebSite().getUserRepository().getUserByLogin(login);
@@ -97,14 +97,14 @@ public class PasswordManager extends GenericResource {
                     String pwd2 = request.getParameter("swb_newPassword2");
                     if (pwd2.equals(pwd1)) {
                         usr.setPassword(pwd2);
-                        response.setRenderParameter("message", "password actualizado");
+                        response.setRenderParameter("message", "<p>Contrase&ntilde;a actualizada</p>");
                     }
                 } else {
-                    response.setRenderParameter("message", "passwords no corresponden");
+                    response.setRenderParameter("message", "<p>Contrase&ntilde;s no corresponden.</p>");
                 }
             }
             if (response.getAction().equals("SML")) {
-                System.out.println("en SML");
+                //System.out.println("en SML");
                 String frmmailms = getResourceBase().getAttribute(FRM_MAILMS);
                 if (null == frmmailms) {
                     frmmailms = TXT_mailms;
@@ -121,7 +121,7 @@ public class PasswordManager extends GenericResource {
                                     (request.getServerPort() == 80 ? "" : ":" + request.getServerPort()) + response.getWebPage().getRealUrl() + "/_tkn/" + generateToken(usr.getLogin());
                             SWBParamRequestImp paramRequest = new SWBParamRequestImp(request, getResourceBase(),response.getWebPage(), usr);
                             String texto = replaceTags(frmmailms, request, paramRequest, token);
-                            System.out.println("URL:" + texto);
+                            //System.out.println("URL:" + texto);
                             SWBUtils.EMAIL.sendBGEmail(email, "Recuperar password", texto);
                             response.setRenderParameter("message", "<br /><p>Te llegar&aacute; un correo electr&oacute;nico a tu cuenta, indic&aacute;ndote c&oacute;mo recuperarla.</p>");
                         } catch (GeneralSecurityException ex) {
@@ -214,12 +214,6 @@ public class PasswordManager extends GenericResource {
         str = SWBUtils.TEXT.replaceAll(str, "{exec.time}", (String) request.getAttribute("extime"));
         if (null != paramRequest) {
             User usr = paramRequest.getUser();
-            String login = request.getParameter("swb_login");
-            if(null!=login)
-            {
-                usr = paramRequest.getWebPage().getWebSite().getUserRepository().getUserByLogin(login);
-                if (null == usr) usr = paramRequest.getWebPage().getWebSite().getUserRepository().getUserByEmail(login);
-            }
             str = SWBUtils.TEXT.replaceAll(str, "{user.login}", usr.getLogin());
             str = SWBUtils.TEXT.replaceAll(str, "{user.email}", usr.getEmail());
             str = SWBUtils.TEXT.replaceAll(str, "{user.language}", usr.getLanguage());
@@ -368,17 +362,17 @@ public class PasswordManager extends GenericResource {
         String ret = null;
         if (url.lastIndexOf("_tkn/") > 1) {
             String value = url.substring(url.lastIndexOf("_tkn/") + 5);
-            System.out.println("val:" + value);
+            //System.out.println("val:" + value);
             value = new String(SWBUtils.CryptoWrapper.PBEAES128Decipher("TOO MANY SECRETS", SFBase64.decode(value)));
             String[] lista = value.split("\\|");
 
             if (System.currentTimeMillis() < Long.valueOf(lista[1]) && SWBPlatform.getVersion().equals(lista[2])) {
                 ret = lista[0];
             }
-            System.out.println(value);
-            System.out.println(lista[0]);
-            System.out.println(lista[1]);
-            System.out.println(lista[2]);
+            //System.out.println(value);
+            //System.out.println(lista[0]);
+            //System.out.println(lista[1]);
+            //System.out.println(lista[2]);
         }
         return ret;
     }
