@@ -22,6 +22,7 @@ import org.semanticwb.model.User;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
+import org.semanticwb.portal.api.SWBParamRequestImp;
 import org.semanticwb.portal.api.SWBResourceException;
 
 /**
@@ -111,15 +112,17 @@ public class PasswordManager extends GenericResource {
                 String login = request.getParameter("swb_login");
                 if (null != login) {
                     User usr = response.getWebPage().getWebSite().getUserRepository().getUserByLogin(login);
+                    if (null == usr) usr = response.getWebPage().getWebSite().getUserRepository().getUserByEmail(login);
                     if (null != usr) {
                         try {
                             String email = usr.getEmail();
                             String token = (request.isSecure() ? "HTTPS://" : "HTTP://") +
                                     request.getServerName() +
                                     (request.getServerPort() == 80 ? "" : ":" + request.getServerPort()) + response.getWebPage().getRealUrl() + "/_tkn/" + generateToken(usr.getLogin());
-                            String texto = replaceTags(frmmailms, request, null, token);
+                            SWBParamRequestImp paramRequest = new SWBParamRequestImp(request, getResourceBase(),response.getWebPage(), usr);
+                            String texto = replaceTags(frmmailms, request, paramRequest, token);
                             System.out.println("URL:" + texto);
-                            SWBUtils.EMAIL.sendBGEmail(email, "Recuperar password", texto);
+                            SWBUtils.EMAIL.sendBGEmail(email, "Recuperar password", texto+"<br /> Con Login de usuario:"+usr.getLogin());
                             response.setRenderParameter("message", "<br /><p>Te llegar&aacute; un correo electr&oacute;nico a tu cuenta, indic&aacute;ndote c&oacute;mo recuperarla.</p>");
                         } catch (GeneralSecurityException ex) {
                             log.error(ex);
@@ -210,9 +213,16 @@ public class PasswordManager extends GenericResource {
         str = SWBUtils.TEXT.replaceAll(str, "{rows.number}", request.getAttribute("rowsnum") != null ? (String) request.getAttribute("rowsnum") : "N/A");
         str = SWBUtils.TEXT.replaceAll(str, "{exec.time}", (String) request.getAttribute("extime"));
         if (null != paramRequest) {
-            str = SWBUtils.TEXT.replaceAll(str, "{user.login}", paramRequest.getUser().getLogin());
-            str = SWBUtils.TEXT.replaceAll(str, "{user.email}", paramRequest.getUser().getEmail());
-            str = SWBUtils.TEXT.replaceAll(str, "{user.language}", paramRequest.getUser().getLanguage());
+            User usr = paramRequest.getUser();
+            String login = request.getParameter("swb_login");
+            if(null!=login)
+            {
+                usr = paramRequest.getWebPage().getWebSite().getUserRepository().getUserByLogin(login);
+                if (null == usr) usr = paramRequest.getWebPage().getWebSite().getUserRepository().getUserByEmail(login);
+            }
+            str = SWBUtils.TEXT.replaceAll(str, "{user.login}", usr.getLogin());
+            str = SWBUtils.TEXT.replaceAll(str, "{user.email}", usr.getEmail());
+            str = SWBUtils.TEXT.replaceAll(str, "{user.language}", usr.getLanguage());
         }
         str = SWBUtils.TEXT.replaceAll(str, "{webpath}", SWBPortal.getContextPath());
         str = SWBUtils.TEXT.replaceAll(str, "{distpath}", SWBPortal.getDistributorPath());
