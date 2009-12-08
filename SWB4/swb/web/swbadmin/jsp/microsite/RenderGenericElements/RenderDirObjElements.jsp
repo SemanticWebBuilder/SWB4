@@ -40,7 +40,6 @@
             url.setCallMethod(SWBResourceURL.Call_DIRECT);
 %>
 <link rel='stylesheet' type='text/css' href="<%=SWBPortal.getContextPath()%>/swbadmin/jsp/microsite/css/ciudad_digital.css" />
-<script type="text/javascript" src="<%=SWBPortal.getContextPath()%>/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: false"></script>
 <link rel='stylesheet' type='text/css' media='all' href="<%=SWBPortal.getContextPath()%>/swbadmin/js/dojo/dojox/form/resources/Rating.css" />
 <script type="text/javascript">
     dojo.require("dojo.parser");
@@ -268,17 +267,46 @@
             if (mem.isSigned())
             {
     %>
-    <div class="rank_stars" dojoType="dojox.form.Rating" numStars="5" value="<%=rank%>">
+    <%-- <div class="rank_stars" dojoType="dojox.form.Rating" numStars="5" value="<%=rank%>">
         <script type="dojo/event" event="onChange">vote(this.value);return;</script>
-    </div>
+    </div> --%>
+
+    <script type="text/javascript">
+        dojo.addOnLoad(function(){
+        var props={numStars:5,value:<%=rank%>,onChange:function()
+        {
+            vote(this.value);
+            return;
+        }
+
+        };
+        var rank_stars=new dojox.form.Rating(props,"rank_stars");        
+
+        });
+        </script>
+    <div class="rank_stars" id="rank_stars"></div>
     <%
         } else
         {
     %>
-    <div class="rank_stars" dojoType="dojox.form.Rating" numStars="5" value="<%=rank%>">
+    <%-- <div class="rank_stars" dojoType="dojox.form.Rating" numStars="5" value="<%=rank%>">
         <script type="dojo/event" event="_onMouse">return;</script>
         <script type="dojo/event" event="onStarClick">return;</script>
-    </div>
+    </div> --%>
+    <script type="text/javascript">
+        dojo.addOnLoad(function(){
+        var props={numStars:5,value:<%=rank%>,_onMouse:function()
+        {
+
+            return;
+        },onStarClick:function(){return;}
+
+        };
+        var rank_stars=new dojox.form.Rating(props,"rank_stars");        
+
+        });
+        </script>
+    <div class="rank_stars" id="rank_stars"></div>
     <%
             }
     %>
