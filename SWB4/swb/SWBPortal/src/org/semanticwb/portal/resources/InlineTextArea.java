@@ -92,7 +92,7 @@ public class InlineTextArea extends GenericResource {
             }
 
             String cssClass = base.getAttribute("cssClass")==null?"":" class=\""+base.getAttribute("cssClass")+"\" ";
-            out.println("<div id=\"tb_"+base.getId()+"\""+cssClass+">");
+            out.println("<div id=\"ta_"+base.getId()+"\""+cssClass+">");
             out.println(base.getAttribute("text", ""));
             out.println("</div>");
 
@@ -104,20 +104,19 @@ public class InlineTextArea extends GenericResource {
     @Override
     public void processAction(javax.servlet.http.HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         Resource base = response.getResourceBase();
-        base.setAttribute("text", request.getParameter("txt"));
-
         String action = response.getAction();
-        if( action!=null && action.equalsIgnoreCase("admin_update") ) {
+        if( action!=null && action.equalsIgnoreCase("update") ) {
+            base.setAttribute("text", request.getParameter("ta_"+base.getId()));
+
             String editaccess = request.getParameter("editar");
             if(editaccess!=null) {
                 base.setAttribute("editRole", editaccess);
             }
-        }
-
-        try{
-            base.updateAttributesToDB();
-        }catch(Exception e){
-            log.error("Error al guardar atributos del InlineTextArea. ",e);
+            try{
+                base.updateAttributesToDB();
+            }catch(Exception e){
+                log.error("Error al guardar atributos del InlineTextArea. ",e);
+            }
         }
     }
 
@@ -137,8 +136,8 @@ public class InlineTextArea extends GenericResource {
         String str_role = base.getAttribute("editRole","0");
         out.println("<div class=\"swbform\">");
         SWBResourceURL urlA = paramRequest.getActionUrl();
-        urlA.setAction("admin_update");
-        out.println("<form id=\"" + base.getId() + "/InLineEditRes\" name=\"" + getResourceBase().getId() + "/InLineEditRes\" action=\"" + urlA + "\" method=\"post\" >");
+        urlA.setAction("update");
+        out.println("<form id=ilta_\""+base.getId()+"\" name=\"ilta_"+base.getId()+"\" action=\"" + urlA + "\" method=\"post\" >");
         out.println("<fieldset>");
         out.println("<legend>");
         out.println(paramRequest.getLocaleString("usrmsg_Inline_doAdmin_Data"));
@@ -185,7 +184,7 @@ public class InlineTextArea extends GenericResource {
 
         out.println("<tr>");
         out.println("<td align=\"right\" width=\"150\">" + paramRequest.getLocaleString("usrmsg_Inline_doAdmin_Texto") + ":</td>");
-        out.println("<td><textarea rows=\"4\" cols=\"50\">" + base.getAttribute("text", "") + "</textarea></td>");
+        out.println("<td><textarea name=\"ta_"+base.getId()+"\" rows=\"4\" cols=\"50\">" + base.getAttribute("text", "gr") + "</textarea></td>");
         out.println("</tr>");
 
         out.println("</table>");
