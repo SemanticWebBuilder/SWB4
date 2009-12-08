@@ -117,30 +117,38 @@ public class RegisterUser extends GenericResource
         String login = request.getParameter("login");
         if ("create".equals(response.getAction()) && (null != login) && (!"".equals(login.trim())) && (!user.isSigned()) && (null == ur.getUserByLogin(login)))
         {
-            Subject subject = SWBPortal.getUserMgr().getSubject(request, response.getWebPage().getWebSiteId());
-            User newUser = ur.createUser();
-            newUser.setLogin(login.trim());
-            subject.getPrincipals().clear();
-            subject.getPrincipals().add(newUser);
-            newUser.setLanguage(user.getLanguage());
-            newUser.setIp(user.getIp());
-            newUser.setActive(true);
-            newUser.setDevice(user.getDevice());
-            String pwd = request.getParameter("passwd");
-            newUser.setFirstName(request.getParameter("firstName"));
-            newUser.setLastName(request.getParameter("lastName"));
-            newUser.setSecondLastName(request.getParameter("secondLastName"));
-            newUser.setEmail(request.getParameter("email"));
-            newUser.setPassword(pwd);
-            try
-            {
-                newUser.checkCredential(pwd.toCharArray());
-            } catch (Exception ne)
-            {
+            String securCodeSent = request.getParameter("cmnt_seccode");
+            String securCodeCreated = (String)request.getSession(true).getAttribute("cdlog");
+            if(securCodeCreated!=null && securCodeCreated.equalsIgnoreCase(securCodeSent)) {
+                request.getSession(true).removeAttribute("cdlog");
+                Subject subject = SWBPortal.getUserMgr().getSubject(request, response.getWebPage().getWebSiteId());
+                User newUser = ur.createUser();
+                newUser.setLogin(login.trim());
+                subject.getPrincipals().clear();
+                subject.getPrincipals().add(newUser);
+                newUser.setLanguage(user.getLanguage());
+                newUser.setIp(user.getIp());
+                newUser.setActive(true);
+                newUser.setDevice(user.getDevice());
+                String pwd = request.getParameter("passwd");
+                newUser.setFirstName(request.getParameter("firstName"));
+                newUser.setLastName(request.getParameter("lastName"));
+                newUser.setSecondLastName(request.getParameter("secondLastName"));
+                newUser.setEmail(request.getParameter("email"));
+                newUser.setPassword(pwd);
+                try
+                {
+                    newUser.checkCredential(pwd.toCharArray());
+                } catch (Exception ne)
+                {
+                }
+                user = newUser;
+                response.sendRedirect(response.getWebPage().getRealUrl());
+                return;
+            }else {
+                response.setMode(response.Mode_VIEW);
+                response.setCallMethod(response.Call_CONTENT);
             }
-            user = newUser;
-            response.sendRedirect(response.getWebPage().getRealUrl());
-            return;
         }
         if ("edit".equals(response.getAction()) && user.isSigned())
         {
