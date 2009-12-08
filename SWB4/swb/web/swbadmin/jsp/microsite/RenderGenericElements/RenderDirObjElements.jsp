@@ -190,6 +190,10 @@
     function addComment() {
         document.getElementById("addComment").style.display="inline";
     }
+    function cancelComment() {
+        document.getElementById("addComment").style.display="none";
+        document.getElementById("comentario").value="";
+    }
     function showComments() {
         var x = document.getElementById("commentsList").style.display;
         if (x == 'none') {
@@ -358,7 +362,7 @@
             if (mem.isSigned())
             {
     %>
-    <div id="addComment">
+    <div id="addComment" style="display:none">
         <form name="addCommentForm" id="addCommentForm" action="<%=url%>" method="post">
             <div>
                 <label for="comentario">Comentario</label>
@@ -369,6 +373,7 @@
         </form>
 
         <a class="userTool" href="javascript:sendComment()">Publicar</a>
+        <a class="userTool" href="javascript:cancelComment()">Cancelar</a>
 
     </div>
     <%
