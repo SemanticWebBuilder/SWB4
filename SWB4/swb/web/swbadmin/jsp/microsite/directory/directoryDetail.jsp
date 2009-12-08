@@ -37,10 +37,9 @@
 
     if (user.getLanguage() != null)
         lang = user.getLanguage();
-System.out.println("--------0");
+
     boolean isAdmin = false;
-    if (user != null)
-    {
+    if (user != null) {
         GenericIterator<UserGroup> groups = user.listUserGroups();
         while (groups.hasNext())
         {
@@ -56,7 +55,6 @@ System.out.println("--------0");
     String path = SWBPortal.getWebWorkPath() + "/" + semObject.getWorkPath() + "/";
 
     DirectoryObject dirObj = (DirectoryObject) semObject.createGenericInstance();
-    System.out.println("===URL http://" + request.getServerName() + request.getServerPort()  +SWBPortal.getContextPath() + dirObj.getWebPage().getUrl() + "?act=view&uri=" + dirObj.getURI());
     String defaultFormat = "dd/MM/yy HH:mm";
     SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
 
@@ -195,23 +193,30 @@ System.out.println("--------0");
         document.getElementById("addJustify").style.display="none";
         document.getElementById("justify").value = "";
     }
+
+    function validateRemoveDirElement(url, title) {
+        if(confirm('¿Esta seguro de borrar el elemento '+title+'?')) {
+            window.location.href=url;
+        }
+    }
 </script>
 
 <div class="columnaIzquierda">
     <div class="adminTools">
-        <a class="adminTool" href="<%=viewUrl%>">Ir al &iacute;ndice</a>
+        <a class="adminTool" href="<%=viewUrl.toString(true)%>">Ir al &iacute;ndice</a>
         <%
-        url.setParameter("uri", semObject.getURI());
+        url.setParameter("uri", semObject.getEncodedURI());
         url.setAction(url.Action_REMOVE);
+        String removeUrl = "javascript:validateRemoveDirElement('"+url.toString(true) + "', '" + dirObj.getTitle() +"');";
         SWBResourceURL urlEdit = paramRequest.getRenderUrl();
         urlEdit.setParameter("act", "edit");
-        urlEdit.setParameter("uri", dirObj.getURI());
+        urlEdit.setParameter("uri", dirObj.getEncodedURI());
         if(user.isRegistered() && user.isSigned()) {
             UserGroup group = user.getUserRepository().getUserGroup("admin");
             if((dirObj.getCreator() != null && dirObj.getCreator().getURI().equals(user.getURI())) || group != null && user.hasUserGroup(group)) {
                 %>
-                <a class="adminTool" href="<%=url%>"><%=paramRequest.getLocaleString("remove")%></a>
-                <a class="adminTool" href="<%=urlEdit%>">Editar</a>
+                <a class="adminTool" href="<%=removeUrl%>"><%=paramRequest.getLocaleString("remove")%></a>
+                <a class="adminTool" href="<%=urlEdit.toString(true)%>">Editar</a>
                 <%
             }
         }
@@ -225,12 +230,12 @@ System.out.println("--------0");
                 SWBResourceURL aUrl = paramRequest.getActionUrl().setParameter("act","accept").setParameter("uri", request.getParameter("uri"));
                 SWBResourceURL cUrl = paramRequest.getActionUrl().setParameter("act","reject").setParameter("uri", request.getParameter("uri"));
                 %>
-                <a class="adminTool" href="<%=aUrl%>">Aceptar reclamo</a>
-                <a class="adminTool" href="<%=cUrl%>">Rechazar reclamo</a>
+                <a class="adminTool" href="<%=aUrl.toString(true)%>">Aceptar reclamo</a>
+                <a class="adminTool" href="<%=cUrl.toString(true)%>">Rechazar reclamo</a>
                 <%
             } else if (claimer.equals(user)) {
                 SWBResourceURL fUrl = paramRequest.getActionUrl().setParameter("act", "unclaim").setParameter("uri", request.getParameter("uri"));
-                %><a class="adminTool" href="<%=fUrl%>">Liberar elemento</a><%
+                %><a class="adminTool" href="<%=fUrl.toString(true)%>">Liberar elemento</a><%
             }
         } else if (dirObj.canClaim(user) && !isAdmin) {
             %><a class="adminTool" href="#" onclick="javascript:showClaimForm();">Reclamar elemento</a><%
@@ -240,11 +245,11 @@ System.out.println("--------0");
         %>
     </div>
     <div class="commentBox">
-        <form id="addJustifyForm" name="addJustifyForm" action="<%=aUrl%>">
+        <form id="addJustifyForm" name="addJustifyForm" action="<%=aUrl.toString(true)%>">
             <div id="addJustify" style="display:none;">
                 <label for="justify">Justificaci&oacute;n</label>
                 <textarea style="border:1px solid #CACACA;" name="justify" id="justify" cols="45" rows="5"></textarea>
-                <input type="hidden" name="uri" value="<%=semObject.getURI()%>">
+                <input type="hidden" name="uri" value="<%=semObject.getEncodedURI()%>">
                 <input type="hidden" name="act" value="claim"/>
             </div>
         </form>
