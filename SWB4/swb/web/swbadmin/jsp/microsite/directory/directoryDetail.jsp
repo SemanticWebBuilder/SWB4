@@ -142,6 +142,7 @@
     String serviceHours = semObject.getProperty(Commerce.swbcomm_serviceHours);
 
     SWBResourceURL url = paramRequest.getActionUrl();
+    SWBResourceURL viewUrl = paramRequest.getRenderUrl();
 %>
 
 <script type="text/javascript">    
@@ -161,12 +162,11 @@
         document.getElementById("addJustify").style.display="none";
         document.getElementById("justify").value = "";
     }
-
 </script>
 
 <div class="columnaIzquierda">
     <div class="adminTools">
-        <a class="adminTool" onclick="javascript:history.go(-1);" href="#">Ir al &iacute;ndice</a>
+        <a class="adminTool" href="<%=viewUrl%>">Ir al &iacute;ndice</a>
         <%
         url.setParameter("uri", semObject.getURI());
         url.setAction(url.Action_REMOVE);
