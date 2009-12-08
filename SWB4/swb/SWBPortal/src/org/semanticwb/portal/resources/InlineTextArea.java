@@ -67,11 +67,8 @@ public class InlineTextArea extends GenericResource {
         Resource base = getResourceBase();
         try {
             SWBResourceURL url=paramRequest.getActionUrl();
-            User user = paramRequest.getUser();
-
+            
             if(userCanEdit(paramRequest)) {
-                String style = base.getAttribute("style")==null?"width: 99%;":base.getAttribute("style");
-                
                 out.println("<script type=\"text/javascript\">");
                 out.println("dojo.require(\"dijit.InlineEditBox\");");
                 out.println("dojo.require(\"dijit.form.Textarea\");");
@@ -81,7 +78,6 @@ public class InlineTextArea extends GenericResource {
                 out.println("    id: \"ilta_"+base.getId()+"\",");
                 out.println("    autoSave: false,");
                 out.println("    editor: \"dijit.form.Textarea\",");
-                out.println("    style: \""+style+"\",");
                 out.println("    onChange: function(value){");
                 out.println("        postHtml('"+url+"?txt='+value,'ilta_"+base.getId()+"');");
                 out.println("      }");
@@ -90,9 +86,7 @@ public class InlineTextArea extends GenericResource {
                 out.println(");");
                 out.println("</script>");
             }
-
-            String cssClass = base.getAttribute("cssClass")==null?"":" class=\""+base.getAttribute("cssClass")+"\" ";
-            out.println("<div id=\"ta_"+base.getId()+"\""+cssClass+">");
+            out.println("<div id=\"ta_"+base.getId()+"\" class=\"ilta_"+base.getId()+"\">");
             out.println(base.getAttribute("text", ""));
             out.println("</div>");
 
@@ -104,19 +98,20 @@ public class InlineTextArea extends GenericResource {
     @Override
     public void processAction(javax.servlet.http.HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         Resource base = response.getResourceBase();
+
+        base.setAttribute("text", request.getParameter("txt")==null?"":request.getParameter("txt"));
+
         String action = response.getAction();
         if( action!=null && action.equalsIgnoreCase("update") ) {
-            base.setAttribute("text", request.getParameter("ta_"+base.getId()));
-
-            String editaccess = request.getParameter("editar_"+base.getId());
+            String editaccess = request.getParameter("editar");
             if(editaccess!=null) {
                 base.setAttribute("editRole", editaccess);
             }
-            try{
-                base.updateAttributesToDB();
-            }catch(Exception e){
-                log.error("Error al guardar atributos del InlineTextArea. ",e);
-            }
+        }
+        try{
+            base.updateAttributesToDB();
+        }catch(Exception e){
+            log.error("Error al guardar atributos del InlineTextArea. ",e);
         }
     }
 
@@ -135,9 +130,9 @@ public class InlineTextArea extends GenericResource {
 
         String str_role = base.getAttribute("editRole","0");
         out.println("<div class=\"swbform\">");
-        SWBResourceURL urlA = paramRequest.getActionUrl();
-        urlA.setAction("update");
-        out.println("<form id=ilta_\""+base.getId()+"\" name=\"ilta_"+base.getId()+"\" action=\"" + urlA + "\" method=\"post\" >");
+        SWBResourceURL url = paramRequest.getActionUrl();
+        url.setAction("update");
+        out.println("<form id=ilta_\""+base.getId()+"\" name=\"ilta_"+base.getId()+"\" action=\"" + url + "\" method=\"post\" >");
         out.println("<fieldset>");
         out.println("<legend>");
         out.println(paramRequest.getLocaleString("usrmsg_Inline_doAdmin_Data"));
@@ -179,12 +174,12 @@ public class InlineTextArea extends GenericResource {
 
         out.println("<tr>");
         out.println("<td align=\"right\" width=\"150\">" + paramRequest.getLocaleString("usrmsg_Inline_doAdmin_RollGroup") + ":</td>");
-        out.println("<td><select name=\"editar_"+base.getId()+"\">" + strTemp + "</select></td>");
+        out.println("<td><select name=\"editar\">" + strTemp + "</select></td>");
         out.println("</tr>");
 
         out.println("<tr>");
         out.println("<td align=\"right\" width=\"150\">" + paramRequest.getLocaleString("usrmsg_Inline_doAdmin_Texto") + ":</td>");
-        out.println("<td><textarea name=\"ta_"+base.getId()+"\" rows=\"4\" cols=\"50\">" + base.getAttribute("text", "gr") + "</textarea></td>");
+        out.println("<td><textarea name=\"txt\" rows=\"4\" cols=\"50\">" + base.getAttribute("text", "") + "</textarea></td>");
         out.println("</tr>");
 
         out.println("</table>");
