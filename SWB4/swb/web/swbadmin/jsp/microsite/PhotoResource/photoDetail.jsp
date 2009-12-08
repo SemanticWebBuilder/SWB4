@@ -83,7 +83,7 @@ boolean isAdministrator = false;
 <div class="columnaIzquierda">
     <h2><%=title%></h2><br>
     <p><%= description%></p>
-    <p align="center"><a title="<%= title%>" href="<%= imgPhoto%>">
+    <p><a title="<%= title%>" href="<%= imgPhoto%>">
             <img id="img_<%=photo.getId()%>" src="<%= pathPhoto%>" alt="<%=title%>" width="195" height="180" />
         </a></p>            
 
