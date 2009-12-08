@@ -32,7 +32,6 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
@@ -40,7 +39,7 @@ import org.semanticwb.model.SWBContext;
 /**
  * CallbackHandler for login password credentials
  * CallbackHandler para credenciales login password
- * @author Sergio Martínez  sergio.martinez@acm.org
+ * @author Sergio Martínez sergio.martinez@acm.org
  */
 public class SWB4CallbackHandlerLoginPasswordImp extends SWB4CallbackHandler {
 private static Logger log = SWBUtils.getLogger(SWB4CallbackHandlerLoginPasswordImp.class);
