@@ -39,51 +39,42 @@ public class TestStyler extends GenericResource {
         Resource base = getResourceBase();
         try {
             SWBResourceURL url=paramRequest.getActionUrl();
-            User user = paramRequest.getUser();
 
             if(base.getAttribute("css")!=null) {
                 out.println("<script type=\"text/javascript\">");
-                out.println("   dojo.require(\"dojox.html.styles\");");
-                out.println("   function setStyleSheetByResource(title, rules) {");
+                out.println("dojo.require(\"dojox.html.styles\");");
+                out.println("function setStyleSheetByInstance(title, rules) {");
                 String[] rules = base.getAttribute("css").split("}");
                 for(int i=0; i<rules.length; i++) {
                     String[] rule = rules[i].split("\\{");
-                    out.println("   dojox.html.insertCssRule('"+rule[0]+"','"+rule[1]+"');");
+                    out.println("   dojox.html.insertCssRule('"+rule[0]+"_"+base.getId()+"','"+rule[1]+"');");
                 }
-                out.println("   }");
-                out.println("   setStyleSheetByResource('"+base.getId()+"','"+base.getAttribute("css")+"');");
+                out.println("}");
+                out.println("dojo.addOnLoad( setStyleSheetByInstance('"+base.getId()+"','"+base.getAttribute("css")+"'); );");
                 out.println("</script>");
             }
 
-
             if(userCanEdit(paramRequest)) {
-                String style = base.getAttribute("style")==null?"width: 99%;":base.getAttribute("style");
-
                 out.println("<script type=\"text/javascript\">");
                 out.println("dojo.require(\"dijit.InlineEditBox\");");
                 out.println("dojo.require(\"dijit.form.Textarea\");");
                 out.println("var iledit_"+base.getId()+";");
                 out.println("dojo.addOnLoad( function() {");
-                out.println("  iledit_"+base.getId()+" = new dijit.InlineEditBox({");
-                out.println("    id: \"inline_"+base.getId()+"\",");
+                out.println("    iledit_"+base.getId()+" = new dijit.InlineEditBox({");
+                out.println("    id: \"ilta_"+base.getId()+"\",");
                 out.println("    autoSave: false,");
                 out.println("    editor: \"dijit.form.Textarea\",");
-                out.println("    style: \""+style+"\",");
                 out.println("    onChange: function(value){");
-                out.println("        postHtml('"+url+"?txt='+value,'inline_"+base.getId()+"');");
+                out.println("        postHtml('"+url+"?txt='+value,'ilta_"+base.getId()+"');");
                 out.println("      }");
-                out.println("    }, 'tb_"+base.getId()+"');");
+                out.println("    }, 'ta_"+base.getId()+"');");
                 out.println("  }");
                 out.println(");");
                 out.println("</script>");
             }
-
-            //String cssClass = base.getAttribute("cssClass")==null?"":" class=\""+base.getAttribute("cssClass")+"\" ";
-            //out.println("<div id=\"tb_"+base.getId()+"\""+cssClass+">");
-            out.println("<div id=\"tb_"+base.getId()+"\" class=\"ilta\">");
+            out.println("<div id=\"ta_"+base.getId()+"\" class=\"ilta_"+base.getId()+"\">");
             out.println(base.getAttribute("text", ""));
             out.println("</div>");
-
         }catch (Exception e) {
             log.error("Error in resource Banner while bringing HTML", e);
         }
@@ -105,8 +96,8 @@ public class TestStyler extends GenericResource {
         String str_role = base.getAttribute("editRole","0");
         out.println("<div class=\"swbform\">");
         SWBResourceURL urlA = paramRequest.getActionUrl();
-        urlA.setAction("admin_update");
-        out.println("<form id=\"" + base.getId() + "/InLineEditRes\" name=\"" + getResourceBase().getId() + "/InLineEditRes\" action=\"" + urlA + "\" method=\"post\" >");
+        urlA.setAction("update");
+        out.println("<form id=ilta_\""+base.getId()+"\" name=\"ilta_"+base.getId()+"\" action=\"" + urlA + "\" method=\"post\" >");
         out.println("<fieldset>");
         out.println("<legend>");
         out.println("Datos");
@@ -148,35 +139,16 @@ public class TestStyler extends GenericResource {
 
         out.println("<tr>");
         out.println("<td align=\"right\" width=\"150\">Rol o grupo:</td>");
-        out.println("<td><select name=\"editar\">" + strTemp + "</select></td>");
+        out.println("<td><select name=\"editar_"+base.getId()+"\">" + strTemp + "</select></td>");
         out.println("</tr>");
 
         out.println("<tr>");
         out.println("<td align=\"right\" width=\"150\">Texto:</td>");
-        out.println("<td><textarea rows=\"4\" cols=\"50\">" + base.getAttribute("text", "") + "</textarea></td>");
+        out.println("<td><textarea name=\"txt\" rows=\"4\" cols=\"50\">" + base.getAttribute("text", "") + "</textarea></td>");
         out.println("</tr>");
 
         out.println("</table>");
         out.println("</fieldset>");
-
-        /*out.println("<fieldset>");
-        out.println("<legend>");
-        out.println("Estilo");
-        out.println("</legend>");
-
-        out.println("<table width=\"100%\" border=\"0\" >");
-        out.println("<tr>");
-        out.println("<td align=\"right\" width=\"150\">Clase de estilo css:</td>");
-        out.println("<td><input type=\"text\" name=\"cssClass\" value=\"" + base.getAttribute("cssClass", "") + "\" size=\"40\" /></td>");
-        out.println("</tr>");
-
-        out.println("<tr>");
-        out.println("<td align=\"right\" width=\"150\">Atributo de estilo:</td>");
-        out.println("<td><input type=\"text\" name=\"style\" value=\"" + base.getAttribute("style", "") + "\" size=\"40\" /></td>");
-        out.println("</tr>");
-        out.println("</table>");
-        out.println("</fieldset>");*/
-
 
         out.println("<fieldset>");
         out.println("<legend>");
@@ -204,6 +176,26 @@ public class TestStyler extends GenericResource {
         out.println("</form>");
         out.println("</div>");
         out.flush();
+    }
+
+    @Override
+    public void processAction(javax.servlet.http.HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+        Resource base = response.getResourceBase();
+        
+        base.setAttribute("text", request.getParameter("txt")==null?"":request.getParameter("txt"));
+
+        String action = response.getAction();
+        if( action!=null && action.equalsIgnoreCase("update") ) {
+            String editaccess = request.getParameter("editar_"+base.getId());
+            if(editaccess!=null) {
+                base.setAttribute("editRole", editaccess);
+            }
+        }
+        try{
+            base.updateAttributesToDB();
+        }catch(Exception e){
+            log.error("Error al guardar atributos del InlineTextArea. ",e);
+        }
     }
 
     @Override
@@ -247,7 +239,7 @@ public class TestStyler extends GenericResource {
                     css.append("}");
                 }
 
-                System.out.println(css+"\n");
+                //System.out.println(css+"\n");
 
                 base.setAttribute("css", css.toString());
                 try{
@@ -267,26 +259,6 @@ public class TestStyler extends GenericResource {
 
     private void printMatriz() {
         si.printMatriz(getResourceBase().getId());
-    }
-
-    @Override
-    public void processAction(javax.servlet.http.HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        Resource base = response.getResourceBase();
-        base.setAttribute("text", request.getParameter("txt"));
-
-        String action = response.getAction();
-        if( action!=null && action.equalsIgnoreCase("admin_update") ) {
-            String editaccess = request.getParameter("editar");
-            if(editaccess!=null) {
-                base.setAttribute("editRole", editaccess);
-            }
-        }
-
-        try{
-            base.updateAttributesToDB();
-        }catch(Exception e){
-            log.error("Error al guardar atributos del InlineTextArea. ",e);
-        }
     }
 
     private boolean userCanEdit(SWBParamRequest paramrequest) {
