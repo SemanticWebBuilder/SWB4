@@ -239,7 +239,7 @@
             <h2><%=title%></h2>
             <p>&nbsp;<br>Por: <%=postAuthor%><br><%=dateFormat.format(video.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(video.getCreated(), user.getLanguage())%></p>
             <p>
-                <%=description%> | <a href="<%=viewUrl%>">Ver más</a>
+                <%=description%> | <a href="<%=viewUrl.toString(true)%>">Ver más</a>
                 <%
                         if (video.canModify(member))
                         {
