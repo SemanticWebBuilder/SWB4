@@ -2,6 +2,8 @@ package org.semanticwb.portal.community;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
@@ -11,6 +13,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Descriptiveable;
 import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.GenericObject;
@@ -321,11 +324,15 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
                     dirObj.setDirectoryResource(this);
                     dirObj.setWebPage(response.getWebPage());
                     processFiles(request, dirObj.getSemanticObject(), null);
+
+                    response.setRenderParameter("act", "detail");
+                    response.setRenderParameter("msgCreated", "OK");
+                    response.setRenderParameter("uri", dirObj.getURI());
                 }
                 catch (FormValidateException e)
                 {
                     log.event(e);
-                }
+                }                
             }
             else if (action.equals("removeAttach"))
             {
@@ -466,7 +473,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
         response.setMode(SWBParamRequest.Mode_VIEW);
     }
 
-    private void claim (HttpServletRequest request, SWBActionResponse response) {
+    private void claim (HttpServletRequest request, SWBActionResponse response) throws SocketException {
         String suri = request.getParameter("uri");
         SemanticObject sobj = null;
         User user = response.getUser();
@@ -479,31 +486,56 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
         if (suri != null && !suri.equals("null")) {
             sobj = SemanticObject.createSemanticObject(suri);
         }
-                
+
+        String messageBody = "";
         if (sobj.getGenericInstance() instanceof DirectoryObject) {
+            DirectoryObject dob = (DirectoryObject)sobj.createGenericInstance();
             Organization org = (Organization)sobj.createGenericInstance();
             org.setClaimer(user);
             org.setClaimJustify(justify);
+
+            messageBody = "El elemento " + dob.getTitle() + " ha sido reclamado por el usuario " +
+                    user.getFullName() + " con la siguiente justificación:\n\n" +
+                    "\"" + sobj.getProperty(Claimable.swbcomm_claimJustify) + "\".\n\n" +
+                    "Para aceptar o rechazar el reclamo visite la siguiente liga: " +
+                    "<a href=\"" + dob.getWebPage() + "?act=detail&uri=" + sobj.getURI() +
+                    "\">" + dob.getWebPage() + "?act=detail&uri=" + sobj.getURI() + "</a>";
+
+            String addressList = getAdminEMails(request, response);
+            if (org.getCreator().getEmail() != null && !org.getCreator().getEmail().trim().equals("")) {
+                addressList += ";" + org.getCreator().getEmail();
+            }
+            SWBUtils.EMAIL.sendBGEmail(addressList, "Notificación de reclamo", messageBody);
         }
-        
+
         response.setRenderParameter("uri", suri);
         response.setRenderParameter("act", "detail");
         response.setMode(SWBParamRequest.Mode_VIEW);
     }
 
-    private void acceptClaim(HttpServletRequest request, SWBActionResponse response) {
+    private void acceptClaim(HttpServletRequest request, SWBActionResponse response) throws SocketException {
         String suri = request.getParameter("uri");
         SemanticObject sobj = null;
 
         if (suri != null && !suri.equals("null")) {
             sobj = SemanticObject.createSemanticObject(suri);
         }
-         
+
+        String messageBody = "";        
         if (sobj.getGenericInstance() instanceof DirectoryObject) {
-            User claimer = (User)sobj.getObjectProperty(Claimable.swbcomm_claimer).createGenericInstance();
+            DirectoryObject dob = (DirectoryObject)sobj.createGenericInstance();
+            User claimer = (User)sobj.getObjectProperty(Claimable.swbcomm_claimer).createGenericInstance();                       
+
+            messageBody = "Su reclamo sobre el elemento " + dob.getTitle() + " ha sido aceptado. Ahora usted " +
+                    "es responsable de la administración del mismo. Para ver los detalles del elemento, visite la" +
+                    "siguiente liga:\n\n" + "<a href=\"" + dob.getWebPage() + "?act=detail&uri=" + sobj.getURI() +
+                    "\">" + dob.getWebPage() + "?act=detail&uri=" + sobj.getURI() + "</a>";
+            
             sobj.setObjectProperty(Traceable.swb_creator, claimer.getSemanticObject());
             sobj.removeProperty(Claimable.swbcomm_claimer);
             sobj.removeProperty(Claimable.swbcomm_claimJustify);
+
+            SWBUtils.EMAIL.sendBGEmail(claimer.getEmail(), "Notificación de reclamo", messageBody);
         }
 
         response.setRenderParameter("uri", suri);
@@ -678,5 +710,24 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
         catch (IOException ioe)
         {
         }
+    }
+
+    private String getAdminEMails(HttpServletRequest request, SWBActionResponse response) {
+        String res ="";
+        UserGroup ag = response.getWebPage().getWebSite().getUserRepository().getUserGroup("admin");
+
+        if (ag != null) {
+            Iterator<User> admUsers = ag.listUsers();
+            while(admUsers.hasNext()) {
+                User usr = admUsers.next();
+                if (usr.getEmail() != null && !usr.getEmail().trim().equals("")) {
+                    res += usr.getEmail();
+                    if (admUsers.hasNext()) {
+                        res += ";";
+                    }
+                }
+            }
+        }
+        return res;
     }
 }
