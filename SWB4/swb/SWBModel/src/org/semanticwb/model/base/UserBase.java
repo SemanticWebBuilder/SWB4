@@ -8,6 +8,7 @@ public abstract class UserBase extends org.semanticwb.model.SWBClass implements 
        public static final org.semanticwb.platform.SemanticProperty swb_usrLastName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrLastName");
        public static final org.semanticwb.platform.SemanticProperty swb_externalID=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#externalID");
        public static final org.semanticwb.platform.SemanticProperty swb_usrPhoto=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrPhoto");
+       public static final org.semanticwb.platform.SemanticProperty swb_usrReqConfirm=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrReqConfirm");
        public static final org.semanticwb.platform.SemanticProperty swb_usrSecondLastName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrSecondLastName");
        public static final org.semanticwb.platform.SemanticClass swb_UserFavorite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserFavorite");
        public static final org.semanticwb.platform.SemanticProperty swb_usrFavorite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrFavorite");
@@ -258,6 +259,16 @@ public abstract class UserBase extends org.semanticwb.model.SWBClass implements 
              ret=(org.semanticwb.model.CalendarRef)obj.createGenericInstance();
          }
          return ret;
+    }
+
+    public boolean isRequireConfirm()
+    {
+        return getSemanticObject().getBooleanProperty(swb_usrReqConfirm);
+    }
+
+    public void setRequireConfirm(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_usrReqConfirm, value);
     }
 
     public java.util.Date getCreated()
