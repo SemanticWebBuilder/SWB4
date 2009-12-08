@@ -494,12 +494,12 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             org.setClaimer(user);
             org.setClaimJustify(justify);
 
-            messageBody = "El elemento " + dob.getTitle() + " ha sido reclamado por el usuario " +
-                    user.getFullName() + " con la siguiente justificación:\n\n" +
+            messageBody = "El elemento \"" + dob.getTitle() + "\" ha sido reclamado por el usuario " +
+                    user.getFullName() + " con la siguiente justificación:<br><br>\n\n" +
                     "\"" + sobj.getProperty(Claimable.swbcomm_claimJustify) + "\".\n\n" +
                     "Para aceptar o rechazar el reclamo visite la siguiente liga: " +
-                    "<a href=\"" + dob.getWebPage() + "?act=detail&uri=" + sobj.getURI() +
-                    "\">" + dob.getWebPage() + "?act=detail&uri=" + sobj.getURI() + "</a>";
+                    "<a href=\"" + dob.getWebPage().getUrl() + "?act=detail&uri=" + sobj.getURI() +
+                    "\">" + dob.getWebPage().getUrl() + "?act=detail&uri=" + sobj.getURI() + "</a>";
 
             String addressList = getAdminEMails(request, response);
             if (org.getCreator().getEmail() != null && !org.getCreator().getEmail().trim().equals("")) {
@@ -526,10 +526,10 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             DirectoryObject dob = (DirectoryObject)sobj.createGenericInstance();
             User claimer = (User)sobj.getObjectProperty(Claimable.swbcomm_claimer).createGenericInstance();                       
 
-            messageBody = "Su reclamo sobre el elemento " + dob.getTitle() + " ha sido aceptado. Ahora usted " +
+            messageBody = "Su reclamo sobre el elemento \"" + dob.getTitle() + "\" ha sido aceptado. Ahora usted " +
                     "es responsable de la administración del mismo. Para ver los detalles del elemento, visite la" +
                     "siguiente liga:\n\n" + "<a href=\"" + dob.getWebPage() + "?act=detail&uri=" + sobj.getURI() +
-                    "\">" + dob.getWebPage() + "?act=detail&uri=" + sobj.getURI() + "</a>";
+                    "\">" + dob.getWebPage().getUrl() + "?act=detail&uri=" + sobj.getURI() + "</a>";
             
             sobj.setObjectProperty(Traceable.swb_creator, claimer.getSemanticObject());
             sobj.removeProperty(Claimable.swbcomm_claimer);
