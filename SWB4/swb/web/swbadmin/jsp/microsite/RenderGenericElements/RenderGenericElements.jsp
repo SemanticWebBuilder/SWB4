@@ -44,7 +44,8 @@
     dojo.require("dojo.parser");
     dojo.require("dojox.form.Rating");
 </script>
-<script type="text/javascript">  //dojo.require("dojo.parser");
+<script type="text/javascript">
+    <!--
     var request = false;
     try {
         request = new XMLHttpRequest();
@@ -228,7 +229,7 @@
         if (request.status == 200) {
             var response = request.responseText;
             if ('' != response ) {
-                document.getElementById("labeldivspamMark"+spamId).innerHTML='<p>'+response +' marcas como spam</p>';
+                document.getElementById("labeldivspamMark"+spamId).innerHTML='<p>'+response +' marcas como spam<'+'/p>';
             }
         }
     }
@@ -249,6 +250,7 @@
         }
         invokeSpam = true;
     }
+    -->
 </script>
 
 <div class="common_funcs">
