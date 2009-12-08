@@ -307,7 +307,7 @@
             <p>Fecha del evento: <%=fechaEvento%> a las <%=hfechaEvento%><br>
             &nbsp;<br>Por: <%=postAuthor%><br>Creado el: <%=dateFormat.format(event.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%></p>
             <p>
-                <%=event.getDescription()%> | <a href="<%=viewUrl%>">Ver más</a>
+                <%=event.getDescription()%> | <a href="<%=viewUrl.toString(true)%>">Ver más</a>
                 <%
                         if (event.canModify(member))
                         {
