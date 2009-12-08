@@ -302,7 +302,7 @@
             <span class="itemTitle">Visitada:</span> <%=visited%> veces
         </p>
         <p><%=description%></p>
-        <p><a href="<%=urlDetail%>">Leer entrada completa</a>&nbsp;<span class="notificaciones"><%=comments%> comentarios</span> </p>
+        <p><a href="<%=urlDetail.toString(true)%>">Leer entrada completa</a>&nbsp;<span class="notificaciones"><%=comments%> comentarios</span> </p>
 
 
     </div>
