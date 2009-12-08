@@ -495,15 +495,15 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             org.setClaimer(user);
             org.setClaimJustify(justify);
 
-            /*String realURL = "http://" + request.getServerName() + request.getServerPort() +
-                    SWBPortal.getContextPath() + dob.getWebPage().getUrl() + "?act=view&uri=" + dob.getURI();*/
+            String realURL = "http://" + request.getServerName() + ":" + request.getServerPort() +
+                    SWBPortal.getContextPath() + dob.getWebPage().getUrl() + "?act=detail&uri=" + dob.getEncodedURI();
 
             System.out.println("===" + dob.getWebPage().getRealUrl());
             messageBody = "El elemento \"" + dob.getTitle() + "\" ha sido reclamado por el usuario " +
                     user.getFullName() + " con la siguiente justificación:<br><br>\n\n" +
-                    "\"" + sobj.getProperty(Claimable.swbcomm_claimJustify) + "\".\n\n";// +
-                    /*"Para aceptar o rechazar el reclamo visite la siguiente liga: " +
-                    "<a href=\"" + realURL + "\">" + realURL + "</a>";*/
+                    "\"" + sobj.getProperty(Claimable.swbcomm_claimJustify) + "\".<br><br>\n\n" +
+                    "Para aceptar o rechazar el reclamo visite la siguiente liga: " +
+                    "<a href=\"" + realURL + "\">" + realURL + "</a>";
 
             String addressList = getAdminEMails(request, response);
             if (org.getCreator().getEmail() != null && !org.getCreator().getEmail().trim().equals("")) {
@@ -530,12 +530,12 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             DirectoryObject dob = (DirectoryObject)sobj.createGenericInstance();
             User claimer = (User)sobj.getObjectProperty(Claimable.swbcomm_claimer).createGenericInstance();                       
 
-            /*String realURL = "http://" + request.getServerName() + request.getServerPort() +
-                    SWBPortal.getContextPath() + dob.getWebPage().getUrl() + "?act=view&uri=" + dob.getURI();*/
+            String realURL = "http://" + request.getServerName() + ":" + request.getServerPort() +
+                    SWBPortal.getContextPath() + dob.getWebPage().getUrl() + "?act=detail&uri=" + dob.getEncodedURI();
             
             messageBody = "Su reclamo sobre el elemento \"" + dob.getTitle() + "\" ha sido aceptado. Ahora usted " +
-                    "es responsable de la administración del mismo.";/* Para ver los detalles del elemento, visite la" +
-                    "siguiente liga:\n\n" + "<a href=\"" + realURL + "\">" + realURL + "</a>";*/
+                    "es responsable de la administración del mismo. Para ver los detalles del elemento, visite la" +
+                    "siguiente liga:\n\n" + "<a href=\"" + realURL + "\">" + realURL + "</a>";
             
             sobj.setObjectProperty(Traceable.swb_creator, claimer.getSemanticObject());
             sobj.removeProperty(Claimable.swbcomm_claimer);
