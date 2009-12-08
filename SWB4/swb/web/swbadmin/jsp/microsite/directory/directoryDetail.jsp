@@ -37,7 +37,7 @@
 
     if (user.getLanguage() != null)
         lang = user.getLanguage();
-
+System.out.println("--------0");
     boolean isAdmin = false;
     if (user != null)
     {
@@ -167,11 +167,11 @@
                 val = tok.substring(ind + 1);
             }
             if(vals.contains(id)) {
-                paymentType += val + ", ";
-            
+                paymentType += val + ", ";            
             }
         }
-        paymentType = paymentType.trim().substring(0, paymentType.length() - 2);
+        if (!paymentType.equals(""))
+            paymentType = paymentType.trim().substring(0, paymentType.length() - 2);
     }
 
     SWBResourceURL url = paramRequest.getActionUrl();
