@@ -68,6 +68,22 @@ method="POST">
                         invalidMessage="La contrase&ntilde;a de usuario es requerida." trim="true" />
 			</td>
 		</tr>
+                <tr>
+                    <td width="200px" align="right"><label for="usrFirstName">Nombre(s) <em>*</em></label></td>
+                    <td><input name="firstName" dojoType="dijit.form.ValidationTextBox" required="true" promptMessage="Captura Nombre(s)" invalidMessage="Nombre(s) es requerido" style="width:300px;"  trim="true"/></td>
+                </tr>
+                <tr>
+                    <td width="200px" align="right"><label for="usrLastName">Primer Apellido <em>*</em></label></td>
+                    <td><input name="lastName" dojoType="dijit.form.ValidationTextBox" required="true" promptMessage="Captura Primer Apellido" invalidMessage="Primer Apellido es requerido" style="width:300px;"  trim="true"/></td>
+                </tr>
+                <tr>
+                    <td width="200px" align="right"><label for="usrSecondLastName">Segundo Apellido &nbsp;</label></td>
+                    <td><input name="secondLastName" dojoType="dijit.form.ValidationTextBox" required="false" promptMessage="Captura Segundo Apellido" invalidMessage="Dato Invalido" style="width:300px;"  trim="true"/></td>
+                </tr>
+                <tr>
+                    <td width="200px" align="right"><label for="usrEmail">Correo Electr&oacute;nico <em>*</em></label></td>
+                    <td><input name="email" dojoType="dijit.form.ValidationTextBox" required="true" promptMessage="Captura Correo Electr&oacute;nico" invalidMessage="Correo Electr&oacute;nico es requerido" style="width:300px;"  trim="true"/></td>
+                </tr>
 	<tr>
 		<td align="center" colspan="2">
                     
