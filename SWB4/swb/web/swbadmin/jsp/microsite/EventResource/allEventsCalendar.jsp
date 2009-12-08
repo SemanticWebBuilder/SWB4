@@ -115,12 +115,12 @@ private static final int ELEMENETS_BY_PAGE = 5;
             pm.setParameter("m", String.valueOf(ilmonth - 1));
             pm.setParameter("y", String.valueOf(ilyear));
         }
-
+        
         %>
         <h2>Eventos del mes</h2>
         <div id ="calendario" style="margin:10px; height:220px;">
             <h2>
-                <a href="<%=pm.toString()+"#anchorDays"%>">&lt;</a>&nbsp;<%=months[ilmonth]%>&nbsp;&nbsp;<%=ilyear%>&nbsp;<a href="<%=nm.toString()+"#anchorDays"%>">&gt;</a>
+                <a href="<%=pm.toString(true)+"#anchorDays"%>">&lt;</a>&nbsp;<%=months[ilmonth]%>&nbsp;&nbsp;<%=ilyear%>&nbsp;<a href="<%=nm.toString(true)+"#anchorDays"%>">&gt;</a>
             </h2>
             <ul id="anchorDays" class="dias semana">
                 <%
@@ -138,7 +138,7 @@ private static final int ELEMENETS_BY_PAGE = 5;
                 for (int i = 1; i <= daysInMonth; i++) {
                     if (reserved.contains(i)) {
                         String dayUrl = paramRequest.getWebPage().getWebSite().getWebPage("Eventos_del_dia").getUrl().toString();
-                        dayUrl += "?act=daily&y=" + ilyear + "&m=" + ilmonth + "&d=" + i;
+                        dayUrl += "?act=daily&amp;y=" + ilyear + "&amp;m=" + ilmonth + "&amp;d=" + i;
                         %><li><a href="<%=dayUrl%>"><%=i%></a></li><%
                     } else {
                         %><li><%=i%></li><%
@@ -151,6 +151,7 @@ private static final int ELEMENETS_BY_PAGE = 5;
                 %>
             </ul>
         </div>
+
         <div class="clear">&nbsp;</div>
   <%} else if (act.equals("daily")) {
         java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
@@ -217,18 +218,18 @@ private static final int ELEMENETS_BY_PAGE = 5;
                 String nextURL = "#";
                 String previusURL = "#";
                 if (ipage < paginas) {
-                    nextURL = paramRequest.getWebPage().getUrl() + "?act=daily&y=" + ilyear + "&m=" +
+                    nextURL = paramRequest.getWebPage().getUrl() + "?act=daily&amp;y=" + ilyear + "&amp;m=" +
                             ilmonth + "&d=" + ilday + "&ipage=" + (ipage + 1);
                 }
                 if (ipage > 1) {
-                    previusURL = paramRequest.getWebPage().getUrl() + "?act=daily&y=" + ilyear + "&m=" +
+                    previusURL = paramRequest.getWebPage().getUrl() + "?act=daily&amp;y=" + ilyear + "&amp;m=" +
                             ilmonth + "&d=" + ilday + "&ipage=" + (ipage - 1);
                 }
                 if (ipage > 1) {
                     %><a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a><%
                 }
                 for (int i = 1; i <= paginas; i++) {
-                    %><a href="<%=wpage.getUrl()%>?act=daily&y=<%=ilyear%>&m=<%=ilmonth%>&d=<%=ilday%>&ipage=<%=i%>"><%
+                    %><a href="<%=wpage.getUrl()%>?act=daily&amp;y=<%=ilyear%>&amp;m=<%=ilmonth%>&d=<%=ilday%>&amp;ipage=<%=i%>"><%
                     if (i == ipage) {
                         %><strong><%
                     }%>
@@ -309,19 +310,19 @@ private static final int ELEMENETS_BY_PAGE = 5;
                 String nextURL = "#";
                 String previusURL = "#";
                 if (ipage < paginas) {
-                    nextURL = paramRequest.getWebPage().getUrl() + "?act=daily&y=" + ilyear + "&m=" +
-                            ilmonth + "&d=" + ilday + "&ipage=" + (ipage + 1);
+                    nextURL = paramRequest.getWebPage().getUrl() + "?act=daily&amp;y=" + ilyear + "&amp;m=" +
+                            ilmonth + "&amp;d=" + ilday + "&amp;ipage=" + (ipage + 1);
                 }
                 if (ipage > 1) {
-                    previusURL = paramRequest.getWebPage().getUrl() + "?act=daily&y=" + ilyear + "&m=" +
-                            ilmonth + "&d=" + ilday + "&ipage=" + (ipage - 1);
+                    previusURL = paramRequest.getWebPage().getUrl() + "?act=daily&amp;y=" + ilyear + "&amp;m=" +
+                            ilmonth + "&amp;d=" + ilday + "&amp;ipage=" + (ipage - 1);
                 }
                 if (ipage > 1) {
                     %><a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a><%
                 }
 
                 for (int i = 1; i <= paginas; i++) {
-                    %><a href="<%=wpage.getUrl()%>?act=daily&y=<%=ilyear%>&m=<%=ilmonth%>&d=<%=ilday%>&ipage=<%=i%>"><%
+                    %><a href="<%=wpage.getUrl()%>?act=daily&amp;y=<%=ilyear%>&amp;m=<%=ilmonth%>&amp;d=<%=ilday%>&amp;ipage=<%=i%>"><%
                     if (i == ipage) {
                         %><strong><%
                     }
