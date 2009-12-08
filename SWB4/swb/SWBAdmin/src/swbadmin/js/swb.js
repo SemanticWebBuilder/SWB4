@@ -1181,6 +1181,18 @@ function canAddLogin(model, slogin)
     return oldlret;
 }
 
+var emailoldlog="";
+var emailoldlret=false;
+function canAddEmail(model, semail)
+{
+    if (emailoldlog!=(model+semail))
+    {
+        emailoldlret=getJSON(context+'/swbadmin/jsp/canAddEmail.jsp?email='+semail+'&model='+model);
+        emailoldlog=(model+semail);
+    }
+    return emailoldlret;
+}
+
 /**
  * value: texto
  */
