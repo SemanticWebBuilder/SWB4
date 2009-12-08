@@ -15,7 +15,7 @@ public class VideoElement extends org.semanticwb.portal.community.base.VideoElem
     {
         String url = "#";
         url=this.getWebPage().getUrl();
-        url+="?&act=detail&amp;uri="+this.getEncodedURI();
+        url+="?act=detail&amp;uri="+this.getEncodedURI();
         return url;
     }
     @Override
