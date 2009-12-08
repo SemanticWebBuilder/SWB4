@@ -21,6 +21,7 @@
 <%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="org.semanticwb.model.Descriptiveable"%>
 <%@page import="org.semanticwb.platform.SemanticClass"%>
+<%@page import="org.semanticwb.platform.SemanticLiteral"%>
 <%@page import="org.semanticwb.portal.SWBFormMgr"%>
 <%@page import="org.semanticwb.model.FormElement"%>
 <%@page import="org.semanticwb.portal.SWBFormButton"%>
@@ -32,6 +33,10 @@
     SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
     WebPage wpage = paramRequest.getWebPage();
     User user = paramRequest.getUser();
+    String lang = "es";
+
+    if (user.getLanguage() != null)
+        lang = user.getLanguage();
 
     boolean isAdmin = false;
     if (user != null)
@@ -46,13 +51,12 @@
                 break;
             }
         }
-    }
-    
+    }    
     String perfilPath = wpage.getWebSite().getWebPage("perfil").getUrl();
     String path = SWBPortal.getWebWorkPath() + "/" + semObject.getWorkPath() + "/";
 
     DirectoryObject dirObj = (DirectoryObject) semObject.createGenericInstance();
-
+    System.out.println("===URL http://" + request.getServerName() + request.getServerPort()  +SWBPortal.getContextPath() + dirObj.getWebPage().getUrl() + "?act=view&uri=" + dirObj.getURI());
     String defaultFormat = "dd/MM/yy HH:mm";
     SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
 
@@ -107,8 +111,6 @@
         creator = "<a href=\"" + perfilPath + "?user=" + semUser.getEncodedURI() + "\">" + semUser.getFullName() + "</a>";
     }
 
-
-
     boolean showLocation = false;
     if (semObject.instanceOf(Geolocalizable.swb_Geolocalizable)) {
         showLocation = true;
@@ -134,12 +136,43 @@
     String website = semObject.getProperty(Commerce.swbcomm_webSite);
     /*---------- Facilities ------------*/
     String price = semObject.getProperty(ClasifiedBuySell.swbcomm_Price);
-    String paymentType = semObject.getProperty(Commerce.swbcomm_paymentType);
     String impairedPeopleAccessible = semObject.getProperty(Commerce.swbcomm_impairedPeopleAccessible);
     String parkingLot = semObject.getProperty(Commerce.swbcomm_parkingLot);
     String elevator = semObject.getProperty(Commerce.swbcomm_elevator);
     String foodCourt = semObject.getProperty(Commerce.swbcomm_foodCourt);
     String serviceHours = semObject.getProperty(Commerce.swbcomm_serviceHours);
+
+    String paymentType = "";
+    if (semObject.instanceOf(Commerce.sclass)) {
+        ArrayList<String> vals = new ArrayList<String>();
+        SemanticObject dpo = Commerce.swbcomm_paymentType.getDisplayProperty();
+        DisplayProperty dobj=new DisplayProperty(dpo);
+        String selectValues = dobj.getDisplaySelectValues(lang);
+
+        Iterator<SemanticLiteral> it = semObject.listLiteralProperties(Commerce.swbcomm_paymentType);
+        while(it.hasNext()) {
+            SemanticLiteral lit = it.next();
+            vals.add(lit.getString());
+        }
+
+        StringTokenizer st = new StringTokenizer(selectValues,"|");
+        while(st.hasMoreTokens()) {
+            String tok = st.nextToken();
+            int ind = tok.indexOf(':');
+            String id = tok;
+            String val = tok;
+            if(ind > 0)
+            {
+                id = tok.substring(0,ind);
+                val = tok.substring(ind + 1);
+            }
+            if(vals.contains(id)) {
+                paymentType += val + ", ";
+            
+            }
+        }
+        paymentType = paymentType.trim().substring(0, paymentType.length() - 2);
+    }
 
     SWBResourceURL url = paramRequest.getActionUrl();
     SWBResourceURL viewUrl = paramRequest.getRenderUrl();
@@ -224,7 +257,7 @@
         <%if (creator != null) {%><p><span class="itemTitle">Creado por: </span><%=creator%></p><%}%>
         <%if (created != null) {%><p><span class="itemTitle">Fecha de publicaci&oacute;n: </span><%=iso8601dateFormat.format(created)%></p><%}%>
         <%if (expiration != null) {%><p><span class="itemTitle">Fecha de expiraci&oacute;n: </span><%=iso8601dateFormat.format(expiration)%></p><%}%>
-        <%if (paymentType != null) {%><p><span class="itemTitle">Forma de pago: </span><%=paymentType%></p><%}%>
+        <%if (!paymentType.equals("")) {%><p><span class="itemTitle">Forma de pago: </span><%=paymentType%></p><%}%>
         <%
           if (impairedPeopleAccessible != null) {
             String sPeopleAccessible = (impairedPeopleAccessible.equals("true")?"Si":"No");
