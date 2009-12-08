@@ -552,4 +552,12 @@ public class User extends UserBase implements Principal
         return lista.iterator();
     }
 
+    public void setDefaultData(User user)
+    {
+        if(getDevice()==null)setDevice(user.getDevice());
+        if(getIp()==null)setIp(user.getIp());
+        if(getLanguage()==null)setLanguage(user.getLanguage());
+        if(getCountry()==null)setCountry(user.getCountry());
+    }
+
 }
