@@ -95,7 +95,7 @@
     if (sImgs.length > 0) {
         imggalery = SWBPortal.UTIL.getGalleryScript(sImgs);
     } else {
-        imggalery = "<img src=\"" + SWBPortal.getContextPath() + "/swbadmin/images/noDisponible.gif\" style=\"margin-left:0px;\"/>";
+        imggalery = "<img src=\"" + SWBPortal.getContextPath() + "/swbadmin/images/noDisponible.gif\" style=\"margin-left:0px;\">";
     }
 
     String title = dirObj.getTitle();
