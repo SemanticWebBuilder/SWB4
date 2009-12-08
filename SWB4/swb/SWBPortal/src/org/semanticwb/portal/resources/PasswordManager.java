@@ -133,7 +133,7 @@ public class PasswordManager extends GenericResource {
             //Send Mail
             }
         } else {
-            response.setRenderParameter("message", "session inv&acute;lida!");
+            response.setRenderParameter("message", "session inv&aacute;lida!");
         }
 
     }
