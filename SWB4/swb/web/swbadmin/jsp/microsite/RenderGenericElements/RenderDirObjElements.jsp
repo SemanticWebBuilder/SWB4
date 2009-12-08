@@ -39,8 +39,6 @@
             url.setMode(paramRequest.getMode());
             url.setCallMethod(SWBResourceURL.Call_DIRECT);
 %>
-<link rel='stylesheet' type='text/css' href="<%=SWBPortal.getContextPath()%>/swbadmin/jsp/microsite/css/ciudad_digital.css" />
-<link rel='stylesheet' type='text/css' media='all' href="<%=SWBPortal.getContextPath()%>/swbadmin/js/dojo/dojox/form/resources/Rating.css" />
 <script type="text/javascript">
     dojo.require("dojo.parser");
     dojo.require("dojox.form.Rating");
