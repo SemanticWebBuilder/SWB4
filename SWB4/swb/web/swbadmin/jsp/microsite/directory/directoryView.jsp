@@ -66,7 +66,6 @@ if (sobj != null) {
                 String param = pname.substring(12);
                 if(request.getParameter(param) != null){
                      hdirParams.put(param, request.getParameter(param));
-                     System.out.println("====Recibido " + param);
                 }
             }
         }
@@ -181,44 +180,36 @@ if (sobj != null) {
             else if(contTokens==3) iTotPage=Integer.parseInt(token);
         }
 
-        %>
-        <p>
-        <%
-        if(iTotPage>1)%>Página(<%
+        %><p><%
+        if(iTotPage>1)
+            %>Página(<%
         if (actualPage > 1) {
              int gotop = (actualPage - 1);
              urlPag.setParameter("actualPage", ""+gotop);
-
-             %>
-                <a class="link" href="<%=urlPag.toString(true)%><%=sparams%>"><<</a>&nbsp;
-             <%
+             %><a class="link" href="<%=urlPag.toString(true)%><%=sparams%>"><<</a>&nbsp;<%
         }
-        if(iTotPage>1){
+        if(iTotPage>1) {
             for (int i = 1; i <= iTotPage; i++) {
                 if (i == actualPage) {
                     %><strong><%=i%></strong><%;
                 } else {
                     urlPag.setParameter("actualPage", "" + i);
-                    %>
-                        <a href="<%=urlPag.toString(true)%><%=sparams%>"><%=i%></a>
-                    <%
+                    %><a href="<%=urlPag.toString(true)%><%=sparams%>"><%=i%></a><%
                 }
             }
         }
         if (actualPage > 0 && (actualPage + 1 <= iTotPage)) {
              int gotop = (actualPage + 1);
              urlPag.setParameter("actualPage", ""+gotop);
-             %>
-                <a class="link" href="<%=urlPag.toString(true)%><%=sparams%>">>></a>&nbsp;
-             <%
+             %><a class="link" href="<%=urlPag.toString(true)%><%=sparams%>">>></a>&nbsp;<%
         }
-        if(iTotPage>1)%>)
-        </p>
-        <%
+        if(iTotPage > 1) {
+            %>)
+            </p>
+      <%}
+        SWBResourceURL urlOrder = paramRequest.getRenderUrl();
         //Termina paginación
         //Comienza criterios de busqueda y ordenamiento (x los elementos que el usuario puede filtrar en sus busquedas, dependiendo del tipo de objeto)
-
-        SWBResourceURL urlOrder = paramRequest.getRenderUrl();
         String dirPhotoCheck="";
         if(request.getParameter("dirPhoto")!=null) dirPhotoCheck="checked";
 
@@ -253,51 +244,49 @@ if (sobj != null) {
                 }
             }
         </script>
-        <div id="togle_div" style="display:none">
-                            
-        <form action="<%=urlOrder.setAction("filter")%>" method="post">            
-            <fieldset ><legend>Filtros a aplicar</legend>
-                <input type="hidden" name="swbdirParam_dirNotAbused" value="1">
+        
+        <div id="togle_div" style="display:none">                            
+            <form action="<%=urlOrder.setAction("filter").toString(true)%>" method="post">
+                <fieldset ><legend>Filtrar por</legend>
+                    <input type="hidden" name="swbdirParam_dirNotAbused" value="1">
+                    <input type="hidden" name="swbdirParam_dirPhoto" value="1">
                     Solo anuncios con foto  &nbsp;<input type="checkbox" name="dirPhoto" <%=dirPhotoCheck%>>
-        <input type="hidden" name="swbdirParam_dirPhoto" value="1">
-        <br>
-        Solo apropiados  &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="dirNotAbused" <%=dirNotAbusedCheck%>>
-        
-        <br>
-        <%
-        SWBFormMgr mgr = new SWBFormMgr(cls, wpage.getSemanticObject(), null);
-        mgr.setFilterRequired(false);
-        Iterator<SemanticProperty> itProps=cls.listProperties();
-        while(itProps.hasNext()){
-             SemanticProperty semProp1=itProps.next();
-             if(semProp1.isBoolean()){
-                %>                
-                <%=semProp1.getDisplayName(user.getLanguage())%>  <%=mgr.renderElement(request, semProp1,mgr.MODE_CREATE)%>
-                    <input type="hidden" name="swbdirParam_<%=semProp1.getName()%>" value="1">
-                <br>
-                <%
-              }
-             FormElement element=mgr.getFormElement(semProp1);
-             if(element!=null && element.getId()!=null){
-                if(element.getId().indexOf("selectOne")>-1){
-                    mgr.setType(mgr.TYPE_XHTML);
-                    %>
-                     <%=semProp1.getDisplayName(user.getLanguage())%>&nbsp;<%=mgr.renderElement(request, semProp1,mgr.MODE_CREATE)%>
-                    <input type="hidden" name="swbdirParam_<%=semProp1.getName()%>" value="1">
+
                     <br>
-                   <%
-                   continue;
-                }
-             }
-        }
-        %>
-        <input type="submit" value="Filtrar"><br>
-        
-            </fieldset>
-        
-        </form>
-        
-                   </div>
+                    Solo apropiados  &nbsp; &nbsp; &nbsp; &nbsp;<input type="checkbox" name="dirNotAbused" <%=dirNotAbusedCheck%>>
+
+                    <br>
+                    <%
+                    SWBFormMgr mgr = new SWBFormMgr(cls, wpage.getSemanticObject(), null);
+                    mgr.setFilterRequired(false);
+                    Iterator<SemanticProperty> itProps=cls.listProperties();
+                    while(itProps.hasNext()){
+                         SemanticProperty semProp1=itProps.next();
+                         if(semProp1.isBoolean()){
+                            %>
+                            <%=semProp1.getDisplayName(user.getLanguage())%>  <%=mgr.renderElement(request, semProp1,mgr.MODE_CREATE)%>
+                                <input type="hidden" name="swbdirParam_<%=semProp1.getName()%>" value="1">
+                            <br>
+                            <%
+                          }
+                          FormElement element=mgr.getFormElement(semProp1);
+                          if(element!=null && element.getId()!=null){
+                            if(element.getId().indexOf("selectOne")>-1){
+                                mgr.setType(mgr.TYPE_XHTML);
+                                %>
+                                 <%=semProp1.getDisplayName(user.getLanguage())%>&nbsp;<%=mgr.renderElement(request, semProp1,mgr.MODE_CREATE)%>
+                                <input type="hidden" name="swbdirParam_<%=semProp1.getName()%>" value="1">
+                                <br>
+                               <%
+                               continue;
+                            }
+                         }
+                    }
+                    %>
+                    <input type="submit" value="Filtrar"><br>
+                </fieldset>
+            </form>
+        </div>
         <%if (setResult.iterator().hasNext()) {%>
         <p style="text-align:right">Ordenar por
             <%if (cls.equals(ClasifiedBuySell.sclass)) {
