@@ -102,15 +102,17 @@
         }
 
     }
-
+    function f()
+    {
+        return;
+    }
     function ranked() {        
         
             if(request.readyState!=4) return;
             if(request.status==200) {
                 var response = request.responseText;                
                 if ('Not OK'!=response && ''!=response) {
-                    var ranking = Math.floor(response.split('|')[0]);
-                    //dojo.byId("rank_stars").attr("value",ranking);
+                    var ranking = Math.floor(response.split('|')[0]);                    
                     var votes = response.split('|')[1];                    
                     document.getElementById("reviews").innerHTML = votes;
                     invoke = false;
