@@ -30,10 +30,12 @@
                 <b>
                 Hola <%=user.getFullName()%>,<br/>
                 te damos la más cordial bienvenida a este sitio y te informamos<br>
-                que haz quedado registrado en el portal de <%=website.getDisplayTitle(user.getLanguage())%>
+                que haz quedado registrado en el portal de <%=website.getDisplayTitle(user.getLanguage())%>.
+                Es importante que te firmes en el portal con tu clave y password que nos proporcionaste e
+                ingreses a la página de tu perfil a actualizar tus datos.
                 </b>
             </pre>
-            <meta http-equiv="refresh" content="3;url=<%=website.getHomePage().getUrl()%>" />
+            <meta http-equiv="refresh" content="5;url=<%=website.getHomePage().getUrl()%>" />
 
         <%
     }
