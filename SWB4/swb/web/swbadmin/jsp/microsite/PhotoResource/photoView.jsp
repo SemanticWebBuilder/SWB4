@@ -145,7 +145,7 @@
                 if (ipage > 1)
                 {
         %>
-        <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
+        <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"/></a>
             <%
                 }
                 for (int i = 1; i <= paginas; i++)
@@ -175,7 +175,7 @@
                 if (ipage != paginas)
                 {
         %>
-        <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
+        <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"/></a>
             <%
                 }
             %>
@@ -323,7 +323,7 @@
                 if (ipage > 1)
                 {
         %>
-        <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
+        <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"/></a>
             <%
                 }
                 for (int i = 1; i <= paginas; i++)
@@ -353,7 +353,7 @@
                 if (ipage != paginas)
                 {
         %>
-        <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
+        <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"/></a>
             <%
                 }
             %>

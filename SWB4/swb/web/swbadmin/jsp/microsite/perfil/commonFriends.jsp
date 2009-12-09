@@ -67,7 +67,7 @@
                 if(commonfriend.getLastName()!=null) lastName=commonfriend.getLastName();
                   %>
                     <div class="moreUser">
-                        <a href="<%=wsite.getWebPage("perfil").getUrl()%>?user=<%=commonfriend.getEncodedURI()%>"><img src="<%=SWBPortal.getWebWorkPath()+photo%>" <%=imgSize%> title="<%=firstName%> <%=lastName%>">
+                        <a href="<%=wsite.getWebPage("perfil").getUrl()%>?user=<%=commonfriend.getEncodedURI()%>"><img src="<%=SWBPortal.getWebWorkPath()+photo%>" <%=imgSize%> title="<%=firstName%> <%=lastName%>"/>
                     <%if(!isStrategy){%>
                         <br>
                         <%=firstName%>

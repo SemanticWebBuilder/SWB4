@@ -202,7 +202,7 @@
                     }
     %>
     <li>
-        <a href="<%=perfilPath%>?user=<%=friendUser.getEncodedURI()%>"><img alt="Foto de <%=friendUser.getFullName()%>" src="<%=photo%>" <%=imgSize%> title="<%=friendUser.getFullName()%>">
+        <a href="<%=perfilPath%>?user=<%=friendUser.getEncodedURI()%>"><img alt="Foto de <%=friendUser.getFullName()%>" src="<%=photo%>" <%=imgSize%> title="<%=friendUser.getFullName()%>"/>
             <%if (!isStrategy)
                     {%>
             <br>
@@ -267,7 +267,7 @@
                     if (ipage > 1)
                     {
     %>
-    <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
+    <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"/></a>
         <%
                     }
                     for (int i = 1; i <= paginas; i++)
@@ -297,7 +297,7 @@
                     if (ipage != paginas)
                     {
     %>
-    <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
+    <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"/></a>
         <%
                     }
         %>
@@ -395,10 +395,10 @@
 
     %>
     <div class="friendCard">
-        <img class="profilePic" width="121" height="121" src="<%=photo%>" alt="<%=friendUser.getFullName()%>">
+        <img class="profilePic" width="121" height="121" src="<%=photo%>" alt="<%=friendUser.getFullName()%>"/>
         <div class="friendCardInfo">
-            <a class="ico" href="mailto:<%=email%>"><img src="<%=path%>icoMail.png" alt="enviar un mensaje"></a>
-            <a class="ico" href="<%=perfilurl%>?user=<%=urluser%>"><img src="<%=path%>icoUser.png" alt="ir al perfil"></a>
+            <a class="ico" href="mailto:<%=email%>"><img src="<%=path%>icoMail.png" alt="enviar un mensaje"/></a>
+            <a class="ico" href="<%=perfilurl%>?user=<%=urluser%>"><img src="<%=path%>icoUser.png" alt="ir al perfil"/></a>
             <div class="friendCardName">
                 <p><%=friendUser.getFullName()%></p>
             </div>

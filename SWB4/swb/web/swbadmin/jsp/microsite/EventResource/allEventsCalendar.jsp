@@ -226,7 +226,7 @@ private static final int ELEMENETS_BY_PAGE = 5;
                             ilmonth + "&d=" + ilday + "&ipage=" + (ipage - 1);
                 }
                 if (ipage > 1) {
-                    %><a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a><%
+                    %><a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"/></a><%
                 }
                 for (int i = 1; i <= paginas; i++) {
                     %><a href="<%=wpage.getUrl()%>?act=daily&amp;y=<%=ilyear%>&amp;m=<%=ilmonth%>&d=<%=ilday%>&amp;ipage=<%=i%>"><%
@@ -243,7 +243,7 @@ private static final int ELEMENETS_BY_PAGE = 5;
                 }
 
                 if (ipage != paginas) {
-                    %><a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a><%
+                    %><a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"/></a><%
                 }
                 %></div><%
             }%>
@@ -285,7 +285,7 @@ private static final int ELEMENETS_BY_PAGE = 5;
                             String viewUrl = ev.getURL();
                             %>
                             <div class="noticia">
-                                <img src="<%=pathPhoto%>" alt="<%= ev.getTitle()%>">
+                                <img src="<%=pathPhoto%>" alt="<%= ev.getTitle()%>"/>
                                 <div class="noticiaTexto">
                                     <h2><%=ev.getTitle()%></h2>
                                     <p>&nbsp;<br>Por: <%=postAuthor%><br><%=dateFormat.format(ev.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(ev.getCreated(), user.getLanguage())%></p>
@@ -318,7 +318,7 @@ private static final int ELEMENETS_BY_PAGE = 5;
                             ilmonth + "&amp;d=" + ilday + "&amp;ipage=" + (ipage - 1);
                 }
                 if (ipage > 1) {
-                    %><a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a><%
+                    %><a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"/></a><%
                 }
 
                 for (int i = 1; i <= paginas; i++) {
@@ -335,7 +335,7 @@ private static final int ELEMENETS_BY_PAGE = 5;
                     %></a><%
                 }
                 if (ipage != paginas) {
-                    %><a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a><%
+                    %><a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"/></a><%
                 }
                 %></div><%
             }

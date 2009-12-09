@@ -53,12 +53,12 @@
                     if (comment.getCreator() != null && comment.getCreator().getPhoto() != null)
                     {
     %>
-    <img src="<%=SWBPortal.getWebWorkPath()%><%=comment.getCreator().getPhoto()%>" alt="foto">
+    <img src="<%=SWBPortal.getWebWorkPath()%><%=comment.getCreator().getPhoto()%>" alt="foto"/>
     <%
                     } else
                     {
     %>
-    <img src="<%=SWBPortal.getContextPath()%>/swbadmin/images/defaultPhoto.jpg" alt="foto">
+    <img src="<%=SWBPortal.getContextPath()%>/swbadmin/images/defaultPhoto.jpg" alt="foto"/>
     <%
                     }
                 } catch (NullPointerException npe)

@@ -76,7 +76,7 @@ if(site.getPhoto()!=null)
 }
 %>
 <div class="columnaIzquierda">
-<p><img src="<%=pathPhoto%>" alt="Imagen comunidad" ></p>
+<p><img src="<%=pathPhoto%>" alt="Imagen comunidad" /></p>
 
 <div id="clear">&nbsp;</div>
 
