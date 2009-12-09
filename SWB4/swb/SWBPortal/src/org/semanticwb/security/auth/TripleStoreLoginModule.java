@@ -160,9 +160,12 @@ public class TripleStoreLoginModule implements LoginModule
         }
         if (null != tmp)
         {
-            //tmp.getSemanticObject().setRDFResource(principal.getSemanticObject().getRDFResource());
-            tmp.setSemanticObject(principal.getSemanticObject());
+            tmp.getSemanticObject().setRDFResource(principal.getSemanticObject().getRDFResource());
             flag = true;
+            //TODO: Pendiente
+            //subject.getPrincipals().clear();
+            //principal.setDefaultData(tmp);
+            //subject.getPrincipals().add(principal);
         } else
         {
             subject.getPrincipals().add(principal);
