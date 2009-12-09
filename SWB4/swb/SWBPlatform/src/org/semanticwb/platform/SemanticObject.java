@@ -162,8 +162,7 @@ public class SemanticObject
     }
 
     /**
-     * Regresa una instancia del GenericObject asociado
-     * Si ya existe una instancia la regresa, de lo contrario regresa null
+     * Asigna una instancia GenericObject del objeto
      * @return
      */
     private void setGenericInstance(GenericObject gen)
