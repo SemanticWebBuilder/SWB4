@@ -47,10 +47,11 @@ public class TestStyler extends GenericResource {
                 String[] rules = base.getAttribute("css").split("}");
                 for(int i=0; i<rules.length; i++) {
                     String[] rule = rules[i].split("\\{");
-                    out.println("   dojox.html.insertCssRule('"+rule[0]+"_"+base.getId()+"','"+rule[1]+"');");
+                    if(rule[1].length()>0)
+                        out.println("   dojox.html.insertCssRule('"+rule[0]+"_"+base.getId()+"','"+rule[1]+"');");
                 }
                 out.println("}");
-                out.println("dojo.addOnLoad( setStyleSheetByInstance('"+base.getId()+"','"+base.getAttribute("css")+"'); );");
+                out.println("setStyleSheetByInstance('"+base.getAttribute("css")+"','"+base.getId()+"');");
                 out.println("</script>");
             }
 
@@ -82,12 +83,20 @@ public class TestStyler extends GenericResource {
 
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        response.setContentType("text/html; charset=ISO-8859-1");
+        /*response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
-        response.setHeader("Pragma", "no-cache");
-
+        response.setHeader("Pragma", "no-cache");*/
         Resource base = getResourceBase();
         PrintWriter out = response.getWriter();
+
+        String action = request.getParameter("action");
+        if(action!=null) {
+            out.println("<script type=\"text/javascript\">");
+            out.println("   alert('recurso actualizado con identificador "+ base.getId()+"');");
+            out.println("   location='"+paramRequest.getRenderUrl().toString()+"';");
+            out.println("</script>");
+        }
+        
         User user = paramRequest.getUser();
 
         WebPage wpage = paramRequest.getWebPage();
@@ -151,8 +160,7 @@ public class TestStyler extends GenericResource {
         out.println("</fieldset>");
 
         out.println("<fieldset>");
-        out.println("<legend>");
-        out.println("Estilo");
+        out.println("<legend>Estilo</legend>");
         String cssResPath = "/"+SWBUtils.TEXT.replaceAll(getClass().getName(), ".", "/")+".css";
         si = new StyleInner(getResourceBase());
         String script = null;
@@ -163,11 +171,10 @@ public class TestStyler extends GenericResource {
         }catch(IOException e) {
             log.error("Error al leer el archivo "+cssResPath+" en el recurso: "+base.getId() +"-"+ base.getTitle(), e);
         }catch(Exception e) {
-            log.error("Error in resource: "+base.getId() +"-"+ base.getTitle(), e);
+            log.error("Error en el recurso: "+base.getId() +"-"+ base.getTitle(), e);
         }
         out.println(script);
         out.println("</fieldset>");
-
 
         out.println("<fieldset>");
         out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">Guardar</button>");
@@ -175,11 +182,11 @@ public class TestStyler extends GenericResource {
         out.println("</fieldset>");
         out.println("</form>");
         out.println("</div>");
-        out.flush();
     }
 
     @Override
     public void processAction(javax.servlet.http.HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+        System.out.println("\n************ processAction ************");
         Resource base = response.getResourceBase();
         
         base.setAttribute("text", request.getParameter("txt")==null?"":request.getParameter("txt"));
@@ -190,6 +197,7 @@ public class TestStyler extends GenericResource {
             if(editaccess!=null) {
                 base.setAttribute("editRole", editaccess);
             }
+            response.setRenderParameter("action", "edit");
         }
         try{
             base.updateAttributesToDB();
@@ -211,24 +219,28 @@ public class TestStyler extends GenericResource {
         System.out.println("\n************ doEditStyle ************");
         Resource base = getResourceBase();
         String stel = request.getParameter("stel");
-        System.out.println("stel="+stel);
+        //System.out.println("stel="+stel);
         String[] tkns = stel.split("@",3);
-        /*System.out.println("tkns[0]="+tkns[0]);
-        System.out.println("tkns[1]="+tkns[1]);
-        System.out.println("tkns[2]="+tkns[2]);
-        System.out.println("\n");*/
+        //System.out.println("tkns[0]="+tkns[0]);
+        System.out.println("tkns[1]="+tkns[1]+"----");
+        System.out.println("tkns[2]="+tkns[2]+"----");
+        //System.out.println("\n");
 
         HashMap tabs = (HashMap)si.getMm(base.getId());
-        if(tabs != null) {
+        if( tabs!=null && tkns[1].length()>0 && tkns[2].length()>0) {
             try {
+                System.out.println("tkns[0]="+tkns[0]);
                 HashMap t = (HashMap)tabs.get(tkns[0]);
-                t.put(tkns[1], tkns[2]);
-                //printMatriz();
+                if(tkns[2].equalsIgnoreCase("empty"))
+                    t.remove(tkns[1]);
+                else
+                    t.put(tkns[1], tkns[2]);
                 StringBuilder css = new StringBuilder();
                 Iterator<String> ittabs = tabs.keySet().iterator();
                 while(ittabs.hasNext()) {
                     String tab = ittabs.next();
-                    css.append("."+tab);
+                    //css.append("."+tab);
+                    css.append(tab);
                     css.append("{");
                     HashMap selectors = (HashMap)tabs.get(tab);
                     Iterator<String> its = selectors.keySet().iterator();
@@ -238,9 +250,7 @@ public class TestStyler extends GenericResource {
                     }
                     css.append("}");
                 }
-
-                //System.out.println(css+"\n");
-
+                System.out.println("css="+css);
                 base.setAttribute("css", css.toString());
                 try{
                     base.updateAttributesToDB();
@@ -252,8 +262,6 @@ public class TestStyler extends GenericResource {
             }catch(IndexOutOfBoundsException iobe) {
                 System.out.println("\n error... "+iobe);
             }
-        }else {
-            System.out.println("matriz es nulo");
         }
     }
 
