@@ -4,15 +4,21 @@
         boolean ret=true;
         if(id!=null)
         {
-            for(int x=0;x<id.length();x++)
+            if(id.length()<6)
             {
-                char ch=id.charAt(x);
-                if (!((ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || ch == '_' || ch == '.' || ch == '@'))
+                ret=false;
+            }else
+            {
+                for(int x=0;x<id.length();x++)
                 {
-                    ret=false;
-                    break;
+                    char ch=id.charAt(x);
+                    if (!((ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || ch == '_' || ch == '.' || ch == '@'))
+                    {
+                        ret=false;
+                        break;
+                    }
                 }
-            }
+             }
         }else
         {
             ret=false;
