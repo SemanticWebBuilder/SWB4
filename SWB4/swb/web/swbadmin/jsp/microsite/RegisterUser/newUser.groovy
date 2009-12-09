@@ -26,6 +26,15 @@ import org.semanticwb.model.WebPage
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.portal.api.SWBResourceURL
 
+
+
+def login="";if(request.getParameter("login")!=null) login=request.getParameter("login");
+def pwd="";if(request.getParameter("pwd")!=null) pwd=request.getParameter("pwd");
+def firstName="";if(request.getParameter("firstName")!=null) firstName=request.getParameter("firstName");
+def lastName="";if(request.getParameter("lastName")!=null) lastName=request.getParameter("lastName");
+def secondLastName="";if(request.getParameter("secondLastName")!=null) secondLastName=request.getParameter("secondLastName");
+def email="";if(request.getParameter("email")!=null) email=request.getParameter("email");
+
 def paramRequest=request.getAttribute("paramRequest")
 User user = paramRequest.getUser()
 WebPage wpage=paramRequest.getWebPage()
@@ -53,7 +62,7 @@ method="POST">
 			<td align="right">
 				<label>Usuario <em>*</em></label>
 			</td>
-			<td><input type="text" name="login" dojoType="dijit.form.ValidationTextBox"
+			<td><input type="text" name="login" dojoType="dijit.form.ValidationTextBox" value="$login"
                         required="true" promptMessage="Captura identificador de usuario."
                         invalidMessage="El identificador de usuario es invalido o ya existe."
                         isValid="return canAddLogin('$repository',this.textbox.value);" trim="true" />
@@ -63,29 +72,29 @@ method="POST">
 			<td align="right">
 				<label>Contrase&ntilde;a <em>*</em></label>
 			</td>
-			<td><input type="password" name="passwd" dojoType="dijit.form.ValidationTextBox" 
+			<td><input type="password" name="passwd" dojoType="dijit.form.ValidationTextBox" value="$pwd"
                         required="true" promptMessage="Captura contrase&ntilde;a de usuario."
                         invalidMessage="La contrase&ntilde;a de usuario es requerida." trim="true" />
 			</td>
 		</tr>
                 <tr>
                     <td width="200px" align="right"><label for="usrFirstName">Nombre(s) <em>*</em></label></td>
-                    <td><input name="firstName" dojoType="dijit.form.ValidationTextBox" required="true" promptMessage="Captura Nombre(s)" invalidMessage="Nombre(s) es requerido" style="width:300px;"  trim="true"/></td>
+                    <td><input name="firstName" value="$firstName" dojoType="dijit.form.ValidationTextBox" required="true" promptMessage="Captura Nombre(s)" invalidMessage="Nombre(s) es requerido" style="width:300px;"  trim="true"/></td>
                 </tr>
                 <tr>
                     <td width="200px" align="right"><label for="usrLastName">Primer Apellido <em>*</em></label></td>
-                    <td><input name="lastName" dojoType="dijit.form.ValidationTextBox" required="true" promptMessage="Captura Primer Apellido" invalidMessage="Primer Apellido es requerido" style="width:300px;"  trim="true"/></td>
+                    <td><input name="lastName" value="$lastName" dojoType="dijit.form.ValidationTextBox" required="true" promptMessage="Captura Primer Apellido" invalidMessage="Primer Apellido es requerido" style="width:300px;"  trim="true"/></td>
                 </tr>
                 <tr>
                     <td width="200px" align="right"><label for="usrSecondLastName">Segundo Apellido &nbsp;</label></td>
-                    <td><input name="secondLastName" dojoType="dijit.form.ValidationTextBox" required="false" promptMessage="Captura Segundo Apellido" invalidMessage="Dato Invalido" style="width:300px;"  trim="true"/></td>
+                    <td><input name="secondLastName" value="$secondLastName" dojoType="dijit.form.ValidationTextBox" required="false" promptMessage="Captura Segundo Apellido" invalidMessage="Dato Invalido" style="width:300px;"  trim="true"/></td>
                 </tr>
                 <tr>
                     <td width="200px" align="right"><label for="usrEmail">Correo Electr&oacute;nico<em>*</em></label></td>
                     <td><input name="email" dojoType="dijit.form.ValidationTextBox" required="true" promptMessage="Captura Correo Electr&oacute;nico" 
                         invalidMessage="El correo electr&oacute;nico de usuario es invalido o ya existe."
                         isValid="return canAddEmail('$repository',this.textbox.value);"
-                        style="width:300px;"  trim="true"/></td>
+                        style="width:300px;"  value="$email" trim="true"/></td>
                 </tr>
 
 
