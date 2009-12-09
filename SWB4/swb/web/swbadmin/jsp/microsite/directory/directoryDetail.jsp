@@ -216,7 +216,7 @@
             if((dirObj.getCreator() != null && dirObj.getCreator().getURI().equals(user.getURI())) || group != null && user.hasUserGroup(group)) {
                 %>
                 <a class="adminTool" href="<%=removeUrl%>"><%=paramRequest.getLocaleString("remove")%></a>
-                <a class="adminTool" href="<%=urlEdit.toString(true)%>">Editar</a>
+                <a class="adminTool" href="<%=urlEdit%>">Editar</a>
                 <%
             }
         }
