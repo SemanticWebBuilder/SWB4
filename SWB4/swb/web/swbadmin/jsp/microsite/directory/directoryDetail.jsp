@@ -210,13 +210,13 @@
         String removeUrl = "javascript:validateRemoveDirElement('"+url.toString(true) + "', '" + dirObj.getTitle() +"');";
         SWBResourceURL urlEdit = paramRequest.getRenderUrl();
         urlEdit.setParameter("act", "edit");
-        urlEdit.setParameter("uri", dirObj.getEncodedURI());
+        urlEdit.setParameter("uri", dirObj.getURI());
         if(user.isRegistered() && user.isSigned()) {
             UserGroup group = user.getUserRepository().getUserGroup("admin");
             if((dirObj.getCreator() != null && dirObj.getCreator().getURI().equals(user.getURI())) || group != null && user.hasUserGroup(group)) {
                 %>
                 <a class="adminTool" href="<%=removeUrl%>"><%=paramRequest.getLocaleString("remove")%></a>
-                <a class="adminTool" href="<%=urlEdit%>">Editar</a>
+                <a class="adminTool" href="<%=urlEdit.toString(true)%>">Editar</a>
                 <%
             }
         }
