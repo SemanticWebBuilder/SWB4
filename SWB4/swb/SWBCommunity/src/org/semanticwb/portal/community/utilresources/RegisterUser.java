@@ -78,6 +78,7 @@ public class RegisterUser extends GenericAdmResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
+        PrintWriter out=response.getWriter();
         String act = request.getParameter("act");
         if (act == null)
         {
@@ -90,30 +91,34 @@ public class RegisterUser extends GenericAdmResource
 
         String path = "/swbadmin/jsp/microsite/RegisterUser/linkNewUser.groovy";
         String msg=request.getParameter("msg");
-        if(msg!=null){
-             path = "/swbadmin/jsp/microsite/RegisterUser/messages.jsp";
-        }else{
-            if (act.equals("add"))
-            {
-                path = "/swbadmin/jsp/microsite/RegisterUser/newUser.groovy";
-            }else if (act.equals("edit"))
-            {
-                path = "/swbadmin/jsp/microsite/RegisterUser/userEditForm.groovy";
-            }else if (act.equals("detail"))
-            {
-                path = "/swbadmin/jsp/microsite/RegisterUser/userDetail.groovy";
+            if(msg!=null && msg.equals("ok")){
+                 path = "/swbadmin/jsp/microsite/RegisterUser/messages.jsp";
+            }else {
+                if(msg!=null && msg.equals("regfail")){
+                    out.println("<pre>"+
+                    "<b><font color=\"red\">Error al registrar el usuario, favor de volverlo a intentar" +
+                    "</b></font></pre>");
+                }
+                if (act.equals("add"))
+                {
+                    path = "/swbadmin/jsp/microsite/RegisterUser/newUser.groovy";
+                }else if (act.equals("edit"))
+                {
+                    path = "/swbadmin/jsp/microsite/RegisterUser/userEditForm.groovy";
+                }else if (act.equals("detail"))
+                {
+                    path = "/swbadmin/jsp/microsite/RegisterUser/userDetail.groovy";
+                }
             }
-        }
-
-        RequestDispatcher dis = request.getRequestDispatcher(path);
-        try
-        {
-            request.setAttribute("paramRequest", paramRequest);
-            dis.include(request, response);
-        } catch (Exception e)
-        {
-            log.error(e);
-        }
+            RequestDispatcher dis = request.getRequestDispatcher(path);
+            try
+            {
+                request.setAttribute("paramRequest", paramRequest);
+                dis.include(request, response);
+            } catch (Exception e)
+            {
+                log.error(e);
+            }
     }
 
     @Override
