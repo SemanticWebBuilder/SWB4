@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public abstract class ClasifiedRealStateBase extends org.semanticwb.portal.community.ClasifiedBuySell implements org.semanticwb.model.Traceable,org.semanticwb.model.Searchable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Rankable,org.semanticwb.portal.community.Addressable,org.semanticwb.portal.community.Interactiveable,org.semanticwb.model.Geolocalizable,org.semanticwb.portal.community.Contactable
+public abstract class ClasifiedRealStateBase extends org.semanticwb.portal.community.ClasifiedBuySell implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Geolocalizable,org.semanticwb.model.Rankable,org.semanticwb.portal.community.Addressable,org.semanticwb.portal.community.Interactiveable,org.semanticwb.model.Tagable,org.semanticwb.model.Searchable,org.semanticwb.portal.community.Contactable
 {
        public static final org.semanticwb.platform.SemanticProperty swbcomm_surface=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#surface");
        public static final org.semanticwb.platform.SemanticProperty swbcomm_yearBuilt=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#yearBuilt");

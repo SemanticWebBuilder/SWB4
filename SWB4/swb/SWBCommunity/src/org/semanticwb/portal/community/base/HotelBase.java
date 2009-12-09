@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public abstract class HotelBase extends org.semanticwb.portal.community.Commerce implements org.semanticwb.portal.community.Claimable,org.semanticwb.model.Traceable,org.semanticwb.model.Searchable,org.semanticwb.portal.community.FacilitiesEnable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Rankable,org.semanticwb.portal.community.Addressable,org.semanticwb.portal.community.Interactiveable,org.semanticwb.model.Geolocalizable,org.semanticwb.portal.community.Contactable
+public abstract class HotelBase extends org.semanticwb.portal.community.Commerce implements org.semanticwb.portal.community.Claimable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.portal.community.FacilitiesEnable,org.semanticwb.model.Geolocalizable,org.semanticwb.model.Rankable,org.semanticwb.portal.community.Addressable,org.semanticwb.portal.community.Interactiveable,org.semanticwb.model.Tagable,org.semanticwb.model.Searchable,org.semanticwb.portal.community.Contactable
 {
        public static final org.semanticwb.platform.SemanticClass swbcomm_Hotel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Hotel");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Hotel");

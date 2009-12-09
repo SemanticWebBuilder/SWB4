@@ -117,4 +117,8 @@ public class DirectoryObject extends org.semanticwb.portal.community.base.Direct
         }
         return false;
     }
+
+    public boolean isValid() {
+        return true;
+    }
 }
