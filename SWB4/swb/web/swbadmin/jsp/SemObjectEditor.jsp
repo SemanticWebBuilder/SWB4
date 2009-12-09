@@ -59,7 +59,11 @@ try
         frm.setType(SWBFormMgr.TYPE_DOJO);
 
         //System.out.println("scls"+scls+" sref"+sref+" sprop:"+sprop);
-        SemanticObject obj=frm.processForm(request);
+        SemanticObject obj=null;
+        //if(smode!=null)
+        {
+            obj=frm.processForm(request);
+        }
         if(obj!=null)
         {
             if(smode.equals(SWBFormMgr.MODE_CREATE))
