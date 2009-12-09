@@ -39,9 +39,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import javax.mail.internet.InternetAddress;
-import javax.security.auth.Subject;
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -52,14 +50,16 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
-import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticProperty;
-import org.semanticwb.portal.api.GenericResource;
+import org.semanticwb.portal.TemplateImp;
+import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -70,7 +70,7 @@ import org.semanticwb.security.auth.SWB4FacebookBridge;
  *
  * @author serch
  */
-public class RegisterUser extends GenericResource
+public class RegisterUser extends GenericAdmResource
 {
 
     private static Logger log = SWBUtils.getLogger(RegisterUser.class);
@@ -119,6 +119,7 @@ public class RegisterUser extends GenericResource
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
+        Resource base=response.getResourceBase();
         UserRepository ur = response.getWebPage().getWebSite().getUserRepository();
         User user = response.getUser();
         String login = request.getParameter("login");
@@ -156,17 +157,19 @@ public class RegisterUser extends GenericResource
                 WebSite website = response.getWebPage().getWebSite();
                 String siteName=website.getDisplayTitle(response.getUser().getLanguage());
                 String server="http://"+request.getServerName()+":"+request.getServerPort();
-                WebPage page2Confirm=website.getWebPage("confirmRegistry");
-                String msg="Hola <b>"+newUser.getFullName()+"</b>,<br/><br/><br/>" +
-                        "nos complace su registro en el portal de <b>"+siteName+"</b>,<br/>" +
-                        "son muchos los beneficios que usted recibirá.<br/><br/><br/>"+
-                        "Para completar su registro, solo de click en el siguiente hipervinculo:<br/><br/><a href=\""+server+page2Confirm.getUrl()+"?login="+newUser.getLogin()+"\">"+server+page2Confirm.getUrl()+"?login="+newUser.getLogin()+"</a></br><br/><br>" +
-                        "Atentamente sus amigos de:<br/><br/>"+siteName;
+                String page2Confirm=server+website.getWebPage("confirmRegistry").getUrl()+"?login="+newUser.getLogin();
+
+                String staticText = replaceTags(base.getAttribute("emailMsg"), request, response, newUser, siteName, page2Confirm);
+
+                /*
                 InternetAddress address1 = new InternetAddress();
                 address1.setAddress(newUser.getEmail());
                 ArrayList<InternetAddress> aAddress = new ArrayList<InternetAddress>();
-                aAddress.add(address1);
-                SWBUtils.EMAIL.sendMail(siteName+"@infotec.com.mx", siteName, aAddress, null, null, "Contacto del Sitio - Confirmación de registro", "text/html", msg, null, null, null);
+                aAddress.add(address1);*/
+                
+                //SWBUtils.EMAIL.sendMail(siteName+"@infotec.com.mx", siteName, aAddress, null, null, "Contacto del Sitio - Confirmación de registro", "text/html", staticText, null, null, null);
+                SWBUtils.EMAIL.sendBGEmail(newUser.getEmail(), "Contacto del Sitio - Confirmación de registro", staticText);
+
                 response.setRenderParameter("msg", "ok");
                 response.setMode(response.Mode_VIEW);
                 response.setCallMethod(response.Call_CONTENT);
@@ -412,6 +415,55 @@ public class RegisterUser extends GenericResource
         {
             return per;
         }
+    }
+
+    public String replaceTags(String str, HttpServletRequest request, SWBActionResponse paramRequest, User newUser, String siteName, String page2Confirm)
+    {
+        if(str==null || str.trim().length()==0)
+            return "";
+
+        str=str.trim();
+        //TODO: codificar cualquier atributo o texto
+
+        Iterator it=SWBUtils.TEXT.findInterStr(str, "{request.getParameter(\"", "\")}");
+        while(it.hasNext())
+        {
+            String s=(String)it.next();
+            str=SWBUtils.TEXT.replaceAll(str, "{request.getParameter(\""+s+"\")}", request.getParameter(replaceTags(s,request,paramRequest, newUser, siteName, page2Confirm)));
+        }
+
+        it=SWBUtils.TEXT.findInterStr(str, "{session.getAttribute(\"", "\")}");
+        while(it.hasNext())
+        {
+            String s=(String)it.next();
+            str=SWBUtils.TEXT.replaceAll(str, "{session.getAttribute(\""+s+"\")}", (String)request.getSession().getAttribute(replaceTags(s,request,paramRequest, newUser, siteName, page2Confirm)));
+        }
+
+        it=SWBUtils.TEXT.findInterStr(str, "{getEnv(\"", "\")}");
+        while(it.hasNext())
+        {
+            String s=(String)it.next();
+            str=SWBUtils.TEXT.replaceAll(str, "{getEnv(\""+s+"\")}", SWBPlatform.getEnv(replaceTags(s,request,paramRequest, newUser, siteName, page2Confirm)));
+        }
+
+        str=SWBUtils.TEXT.replaceAll(str, "{user.login}", paramRequest.getUser().getLogin());
+        str=SWBUtils.TEXT.replaceAll(str, "{user.email}", paramRequest.getUser().getEmail());
+        str=SWBUtils.TEXT.replaceAll(str, "{user.language}", paramRequest.getUser().getLanguage());
+        str=SWBUtils.TEXT.replaceAll(str, "{webpath}", SWBPortal.getContextPath());
+        str=SWBUtils.TEXT.replaceAll(str, "{distpath}", SWBPortal.getDistributorPath());
+        str=SWBUtils.TEXT.replaceAll(str, "{webworkpath}", SWBPortal.getWebWorkPath());
+        str=SWBUtils.TEXT.replaceAll(str, "{workpath}", SWBPortal.getWorkPath());
+        str=SWBUtils.TEXT.replaceAll(str, "{websiteid}", paramRequest.getWebPage().getWebSiteId());
+        str=SWBUtils.TEXT.replaceAll(str, "{user}", newUser.getFullName());
+        str=SWBUtils.TEXT.replaceAll(str, "{siteName}", siteName);
+        str=SWBUtils.TEXT.replaceAll(str, "{page2Confirm}", page2Confirm);
+        if(str.indexOf("{templatepath}")>-1)
+        {
+            //TODO:pasar template por paramrequest
+            TemplateImp template=(TemplateImp)SWBPortal.getTemplateMgr().getTemplate(paramRequest.getUser(), paramRequest.getWebPage());
+            str=SWBUtils.TEXT.replaceAll(str, "{templatepath}", template.getActualPath());
+        }
+        return str;
     }
 }
 
