@@ -130,7 +130,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
         String suri = request.getParameter("uri");
         String commentId = request.getParameter("commentId");
         SemanticObject so = null;
-        
+
         if (commentId == null)
         {
             return;
@@ -159,15 +159,13 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
                 ? message : "");
     }
 
-    
-
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
         User mem = response.getUser();
         Resource base = response.getResourceBase();
         boolean isAdministrator = false;
-        User user=response.getUser();
+        User user = response.getUser();
         if (user != null)
         {
             GenericIterator<UserGroup> groups = user.listUserGroups();
@@ -186,7 +184,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             return;                                       //si el usuario no pertenece a la red sale;
         }
         String action = request.getParameter("act");
-        
+
 
         String action2 = response.getAction();
         try
@@ -202,32 +200,32 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
                 return;
             }
             else if ("deletecomment".equals(action))
-        {
-            String suri = request.getParameter("uricomment");
-            String commentId = request.getParameter("commentId");
-            SemanticObject so = null;
-            if (null != suri && commentId!=null)
             {
-                so = SemanticObject.createSemanticObject(suri);
-            }
-            if (so.getGenericInstance() instanceof DirectoryObject && isAdministrator)
-            {
-                DirectoryObject element = (DirectoryObject) so.getGenericInstance();
-                if (element != null)
+                String suri = request.getParameter("uricomment");
+                String commentId = request.getParameter("commentId");
+                SemanticObject so = null;
+                if (null != suri && commentId != null)
                 {
-                    GenericIterator<Comment> comments=element.listComments();
-                    while(comments.hasNext())
+                    so = SemanticObject.createSemanticObject(suri);
+                }
+                if (so.getGenericInstance() instanceof DirectoryObject && isAdministrator)
+                {
+                    DirectoryObject element = (DirectoryObject) so.getGenericInstance();
+                    if (element != null)
                     {
-                        Comment comment=comments.next();
-                        if(comment.getId().equals(commentId))
+                        GenericIterator<Comment> comments = element.listComments();
+                        while (comments.hasNext())
                         {
-                            comment.remove();
-                            break;
+                            Comment comment = comments.next();
+                            if (comment.getId().equals(commentId))
+                            {
+                                comment.remove();
+                                break;
+                            }
                         }
                     }
                 }
             }
-        }
             else if ("getAbused".equals(action))
             {
                 getAbused(request, response);
@@ -255,30 +253,10 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             {
                 acceptClaim(request, response);
             }
-            else if("reject".equals(action) || "unclaim".equals(action))
+            else if ("reject".equals(action) || "unclaim".equals(action))
             {
                 unClaim(request, response);
-            }
-            else if ("getAbused".equals(action))
-            {
-                getAbused(request, response);
-            }
-            else if ("abuseReport".equals(action))
-            {
-                abusedStateChange(request, response);
-            }
-            else if ("addComment".equals(action))
-            {
-                addComment(request, response, mem);
-            }
-            else if ("getSpam".equals(action))
-            {
-                getSpam(request, response);
-            }
-            else if ("spamReport".equals(action))
-            {
-                spamStateChange(request, response);
-            }
+            }                                             
             else if (action2.equals(response.Action_EDIT))
             {
                 SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
@@ -333,7 +311,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
                 catch (FormValidateException e)
                 {
                     log.event(e);
-                }                
+                }
             }
             else if (action.equals("removeAttach"))
             {
@@ -346,7 +324,8 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
                     file.delete();
 
                 }
-            } else if (action.equals("admin_update"))
+            }
+            else if (action.equals("admin_update"))
             {
                 String editaccess = request.getParameter("editar");
                 if (editaccess != null)
@@ -451,18 +430,23 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
         }
     }
 
-    private void unClaim (HttpServletRequest request, SWBActionResponse response) {
+    private void unClaim(HttpServletRequest request, SWBActionResponse response)
+    {
         String suri = request.getParameter("uri");
         SemanticObject sobj = null;
         User user = response.getUser();
 
-        if (suri != null && !suri.equals("null")) {
+        if (suri != null && !suri.equals("null"))
+        {
             sobj = SemanticObject.createSemanticObject(suri);
         }
 
-        if (sobj.getGenericInstance() instanceof DirectoryObject) {
-            if (user.isSigned()) {
-                if (sobj != null) {
+        if (sobj.getGenericInstance() instanceof DirectoryObject)
+        {
+            if (user.isSigned())
+            {
+                if (sobj != null)
+                {
                     sobj.removeProperty(Claimable.swbcomm_claimJustify);
                     sobj.removeProperty(Claimable.swbcomm_claimer);
                 }
@@ -474,24 +458,28 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
         response.setMode(SWBParamRequest.Mode_VIEW);
     }
 
-    private void claim (HttpServletRequest request, SWBActionResponse response) throws SocketException {
+    private void claim(HttpServletRequest request, SWBActionResponse response) throws SocketException
+    {
         String suri = request.getParameter("uri");
         SemanticObject sobj = null;
         User user = response.getUser();
 
         String justify = request.getParameter("justify");
-        if (justify == null || justify.equals("null")) {
+        if (justify == null || justify.equals("null"))
+        {
             justify = "";
         }
-        
-        if (suri != null && !suri.equals("null")) {
+
+        if (suri != null && !suri.equals("null"))
+        {
             sobj = SemanticObject.createSemanticObject(suri);
         }
 
         String messageBody = "";
-        if (sobj.getGenericInstance() instanceof DirectoryObject) {
-            DirectoryObject dob = (DirectoryObject)sobj.createGenericInstance();
-            Organization org = (Organization)sobj.createGenericInstance();
+        if (sobj.getGenericInstance() instanceof DirectoryObject)
+        {
+            DirectoryObject dob = (DirectoryObject) sobj.createGenericInstance();
+            Organization org = (Organization) sobj.createGenericInstance();
             org.setClaimer(user);
             org.setClaimJustify(justify);
 
@@ -506,7 +494,8 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
                     "<a href=\"" + realURL + "\">" + realURL + "</a>";
 
             String addressList = getAdminEMails(request, response);
-            if (org.getCreator().getEmail() != null && !org.getCreator().getEmail().trim().equals("")) {
+            if (org.getCreator().getEmail() != null && !org.getCreator().getEmail().trim().equals(""))
+            {
                 addressList += ";" + org.getCreator().getEmail();
             }
             SWBUtils.EMAIL.sendBGEmail(addressList, "Notificación de reclamo", messageBody);
@@ -517,26 +506,29 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
         response.setMode(SWBParamRequest.Mode_VIEW);
     }
 
-    private void acceptClaim(HttpServletRequest request, SWBActionResponse response) throws SocketException {
+    private void acceptClaim(HttpServletRequest request, SWBActionResponse response) throws SocketException
+    {
         String suri = request.getParameter("uri");
         SemanticObject sobj = null;
 
-        if (suri != null && !suri.equals("null")) {
+        if (suri != null && !suri.equals("null"))
+        {
             sobj = SemanticObject.createSemanticObject(suri);
         }
 
-        String messageBody = "";        
-        if (sobj.getGenericInstance() instanceof DirectoryObject) {
-            DirectoryObject dob = (DirectoryObject)sobj.createGenericInstance();
-            User claimer = (User)sobj.getObjectProperty(Claimable.swbcomm_claimer).createGenericInstance();                       
+        String messageBody = "";
+        if (sobj.getGenericInstance() instanceof DirectoryObject)
+        {
+            DirectoryObject dob = (DirectoryObject) sobj.createGenericInstance();
+            User claimer = (User) sobj.getObjectProperty(Claimable.swbcomm_claimer).createGenericInstance();
 
             String realURL = "http://" + request.getServerName() + ":" + request.getServerPort() +
                     SWBPortal.getContextPath() + dob.getWebPage().getUrl() + "?act=detail&uri=" + dob.getEncodedURI();
-            
+
             messageBody = "Su reclamo sobre el elemento \"" + dob.getTitle() + "\" ha sido aceptado. Ahora usted " +
                     "es responsable de la administración del mismo. Para ver los detalles del elemento, visite la" +
                     "siguiente liga:\n\n" + "<a href=\"" + realURL + "\">" + realURL + "</a>";
-            
+
             sobj.setObjectProperty(Traceable.swb_creator, claimer.getSemanticObject());
             sobj.removeProperty(Claimable.swbcomm_claimer);
             sobj.removeProperty(Claimable.swbcomm_claimJustify);
@@ -569,9 +561,9 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             {
             }
             double rank = mse.getRank();
-            
+
             long rev = mse.getReviews();
-           
+
             response.setRenderParameter("uri", suri);
 
             rank = rank * rev;
@@ -579,7 +571,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             rank = rank + vote;
             rank = rank / rev;
 
-            
+            request.getSession().setAttribute("vote"+suri, true);
             mse.setRank(rank);
             mse.setReviews(rev);
         }
@@ -665,7 +657,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
                     {
                         comment.setSpam(comment.getSpam() + 1);
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         comment.setSpam(1);
                     }
@@ -681,7 +673,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
     }
 
     private void returnRank(HttpServletRequest request, HttpServletResponse response)
-    {       
+    {
         String message = null;
         String suri = request.getParameter("uri");
         SemanticObject so = null;
@@ -693,7 +685,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
         {
             DirectoryObject mse = (DirectoryObject) so.createGenericInstance();
             message = mse.getRank() + "|" + mse.getReviews();
-            
+
         }
         try
         {
@@ -718,17 +710,22 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
         }
     }
 
-    private String getAdminEMails(HttpServletRequest request, SWBActionResponse response) {
-        String res ="";
+    private String getAdminEMails(HttpServletRequest request, SWBActionResponse response)
+    {
+        String res = "";
         UserGroup ag = response.getWebPage().getWebSite().getUserRepository().getUserGroup("admin");
 
-        if (ag != null) {
+        if (ag != null)
+        {
             Iterator<User> admUsers = ag.listUsers();
-            while(admUsers.hasNext()) {
+            while (admUsers.hasNext())
+            {
                 User usr = admUsers.next();
-                if (usr.getEmail() != null && !usr.getEmail().trim().equals("")) {
+                if (usr.getEmail() != null && !usr.getEmail().trim().equals(""))
+                {
                     res += usr.getEmail();
-                    if (admUsers.hasNext()) {
+                    if (admUsers.hasNext())
+                    {
                         res += ";";
                     }
                 }
