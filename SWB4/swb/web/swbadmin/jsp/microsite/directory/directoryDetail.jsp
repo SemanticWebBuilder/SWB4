@@ -251,10 +251,10 @@
                 <textarea style="border:1px solid #CACACA;" name="justify" id="justify" cols="45" rows="5"></textarea>
                 <input type="hidden" name="uri" value="<%=semObject.getEncodedURI()%>">
                 <input type="hidden" name="act" value="claim"/>
+                <a class="userTool" href="javascript:sendClaim()">Reclamar</a>
+                <a class="userTool" href="javascript:hideClaimForm()">Cancelar</a>
             </div>
-        </form>
-        <a class="userTool" href="javascript:sendClaim()">Reclamar</a>
-        <a class="userTool" href="javascript:hideClaimForm()">Cancelar</a>
+        </form>        
     </div>
     <p class="tituloRojo"><%=title%> <%if (dirObj.isClaimed()) {%><i>(Reclamado por <%=claimer.getFullName()%>)</i><%}%></p>
     <div class="resumenText">
