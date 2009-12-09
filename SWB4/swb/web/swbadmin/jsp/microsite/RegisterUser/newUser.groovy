@@ -30,7 +30,6 @@ def paramRequest=request.getAttribute("paramRequest")
 User user = paramRequest.getUser()
 WebPage wpage=paramRequest.getWebPage()
 String contextPath=SWBPlatform.getContextPath();
-System.out.println("contextPath:"+contextPath);
 def url = paramRequest.getActionUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setAction("create").setMode(SWBResourceURL.Mode_EDIT)
 def repository = wpage.getWebSite().getUserRepository().getId()
 
