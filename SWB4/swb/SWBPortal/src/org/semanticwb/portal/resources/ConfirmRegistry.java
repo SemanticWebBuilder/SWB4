@@ -31,7 +31,6 @@ public class ConfirmRegistry extends GenericResource {
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         try{
             User olduser=paramsRequest.getUser();
-            WebSite website = paramsRequest.getWebPage().getWebSite();
             String login=request.getParameter("login");
             User user = paramsRequest.getWebPage().getWebSite().getUserRepository().getUserByLogin(login);
             user.setActive(true);
