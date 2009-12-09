@@ -2542,6 +2542,10 @@ public class SWBUtils {
             return null;
         }
 
+
+
+
+
         /**
          * Sends an e-mail with the information supplied through {@code message}.
          * The e-mail body can be formatted as HTML or plain text.
@@ -2591,6 +2595,33 @@ public class SWBUtils {
             }
             return null;
         }
+
+
+        public static String sendMail(String toEmail, String subject, String msg) throws java.net.SocketException {
+            try {
+                ArrayList acol = new ArrayList();
+                 if (toEmail != null && toEmail.indexOf(";") > 0) {
+                     StringTokenizer strTokens = new StringTokenizer(toEmail, ";");
+                     while (strTokens.hasMoreTokens()) {
+                         String token = strTokens.nextToken();
+                         if (token == null) continue;
+                         javax.mail.internet.InternetAddress address = new javax.mail.internet.InternetAddress();
+                         address.setAddress(token);
+                         acol.add(address);
+                     }
+                 } else if (toEmail != null) {
+                     javax.mail.internet.InternetAddress address = new javax.mail.internet.InternetAddress();
+                     address.setAddress(toEmail);
+                     acol.add(address);
+                 }
+                EMAIL.sendMail(EMAIL.adminEmail, "", acol, null, null, subject, null, msg, null, null, null);
+            } catch (Exception e) {
+                log.error(e);
+            }
+            return null;
+        }
+
+
 
         /**
          * Sends an e-mail in background mode with the sender address as the one
