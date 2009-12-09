@@ -13,13 +13,6 @@
     </b>
  </pre>
             <%
-        }else if(msg.equals("regfail")){
-            %>
-                <pre>
-                    <b><font color="red">Error al registrar el usuario, favor de volverlo a intentar
-                    <a href="javascript:history.go(-1);">Regresar</a></font></b>
-                </pre>
-            <%
         }
     }else if(request.getAttribute("2confirm")!=null){
         SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
@@ -30,9 +23,9 @@
                 <b>
                 Hola <%=user.getFullName()%>,<br/>
                 te damos la más cordial bienvenida a este sitio y te informamos<br>
-                que haz quedado registrado en el portal de <%=website.getDisplayTitle(user.getLanguage())%>.
-                Es importante que te firmes en el portal con tu clave y password que nos proporcionaste e
-                ingreses a la página de tu perfil a actualizar tus datos.
+                que haz quedado registrado en el portal de <%=website.getDisplayTitle(user.getLanguage())%>.<br/><br/>
+                Es importante que te firmes en el portal con tu clave y password que nos 
+                proporcionaste e ingreses a la página de tu perfil a actualizar tus datos.
                 </b>
             </pre>
             <meta http-equiv="refresh" content="5;url=<%=website.getHomePage().getUrl()%>" />
