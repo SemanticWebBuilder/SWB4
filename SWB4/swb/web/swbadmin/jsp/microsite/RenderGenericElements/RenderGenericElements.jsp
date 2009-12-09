@@ -64,7 +64,7 @@
         alert("Error al inicializar XMLHttpRequest!");
     var invoke = true;
     var count = 0;
-
+    
     function deletecomment(uri,text,commentId)
     {
         if(confirm('¿Esta seguro de borrar el comentario: '+text+'?'))
@@ -72,8 +72,7 @@
             spamId = commentId;
             var uri='<%=suri%>';
             uri=escape(uri);
-            var url = '<%=url%>?act=deletecomment&commentId='+ commentId +'&uricomment='+uri;
-            alert(url);
+            var url = '<%=url%>?act=deletecomment&commentId='+ commentId +'&uricomment='+uri;            
             request.open("GET", url, true);
             request.onreadystatechange = deleted;
             request.send(null);
@@ -91,12 +90,13 @@
     }
     function vote(val) {
         if (count == 0) {
-                if (!invoke) return;
-                //alert('En funcion para votar');
+                if (!invoke) return;                
                 var uri='<%=suri%>';
-                uri=escape(uri);
+                uri=escape(uri);                
                 var url = '<%=url%>?act=vote&value='+escape(val)+'&uri='+uri;
+                console.log(url);
                 request.open("GET", url, true);
+                count++;                
                 request.onreadystatechange = ranked;
                 request.send(null);
         }
@@ -104,21 +104,22 @@
     }
 
     function ranked() {        
-        if (count == 0) {
+        
             if(request.readyState!=4) return;
             if(request.status==200) {
                 var response = request.responseText;
+                alert(response);
                 if ('Not OK'!=response && ''!=response) {
                     var ranking = Math.floor(response.split('|')[0]);
+                    //dojo.byId("rank_stars").attr("value",ranking);
                     var votes = response.split('|')[1];                    
                     document.getElementById("reviews").innerHTML = votes;
                     invoke = false;
                 } else {
                     alert('Lo sentimos, ha ocurrido un problema al contabilizar la calificación!');
-                }
-                count++;
+                }                
             }
-        }
+        
     }
     var invokeAbused = true;
 
@@ -257,7 +258,7 @@
     
     <div class="rank_label">Calificar:</div>
     <%
-            if (mem.canView())
+            if (mem.canView() && request.getSession().getAttribute("vote"+mse.getURI())==null)
             {
     %>
     <%-- <div class="rank_stars" dojoType="dojox.form.Rating" numStars="5" value="<%=rank%>">
@@ -273,8 +274,7 @@
         }
 
         };
-        var rank_stars=new dojox.form.Rating(props,"rank_stars");
-        //dojo.connect(rank_stars,"onChange","vote");
+        new dojox.form.Rating(props,"rank_stars");        
 
         });
         </script>
@@ -282,11 +282,7 @@
     <%
         } else
         {
-    %>
-    <%-- <div class="rank_stars" dojoType="dojox.form.Rating" numStars="5" value="<%=rank%>">
-        <script type="dojo/event" event="_onMouse">return;</script>
-        <script type="dojo/event" event="onStarClick">return;</script>
-    </div> --%>
+    %>   
     <script type="text/javascript">
         dojo.addOnLoad(function(){
         var props={numStars:5,value:<%=rank%>,_onMouse:function()
@@ -296,7 +292,7 @@
         },onStarClick:function(){return;}
 
         };
-        var rank_stars=new dojox.form.Rating(props,"rank_stars");
+        new dojox.form.Rating(props,"rank_stars");
 
         });
         </script>
