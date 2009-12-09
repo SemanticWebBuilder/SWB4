@@ -98,6 +98,10 @@
                 var url = '<%=url%>?act=vote&value='+escape(val)+'&uri='+uri;
                 console.log(url);
                 request.open("GET", url, true);
+                var obj=dijit.byId("rank_stars");
+                obj.onChange=function(){return;};
+                obj._onMouse=function(){return;};
+                obj.onStarClick=function(){return;};
                 count++;
                 request.onreadystatechange = ranked;
                 request.send(null);
@@ -112,9 +116,11 @@
                 var response = request.responseText;
                 if ('Not OK'!=response && ''!=response) {
                     var ranking = Math.floor(response.split('|')[0]);
-                    //dojo.byId("rank_stars").attr("value",ranking);
-                    var votes = response.split('|')[1];
+                    var obj=dijit.byId("rank_stars");
+                    obj.attr("value",ranking);
+                    var votes = response.split('|')[1];                    
                     document.getElementById("reviews").innerHTML = votes;
+                    alert('¡Gracias por su voto!');
                     invoke = false;
                 } else {
                     alert('Lo sentimos, ha ocurrido un problema al contabilizar la calificación!');
@@ -270,9 +276,7 @@
             if (mem.isSigned() && request.getSession().getAttribute("vote"+mse.getURI())==null)
             {
     %>
-    <%-- <div class="rank_stars" dojoType="dojox.form.Rating" numStars="5" value="<%=rank%>">
-        <script type="dojo/event" event="onChange">vote(this.value);return;</script>
-    </div> --%>
+   
 
     <script type="text/javascript">
         dojo.addOnLoad(function(){
@@ -292,10 +296,7 @@
         } else
         {
     %>
-    <%-- <div class="rank_stars" dojoType="dojox.form.Rating" numStars="5" value="<%=rank%>">
-        <script type="dojo/event" event="_onMouse">return;</script>
-        <script type="dojo/event" event="onStarClick">return;</script>
-    </div> --%>
+    
     <script type="text/javascript">
         dojo.addOnLoad(function(){
         var props={numStars:5,value:<%=rank%>,_onMouse:function()

@@ -96,16 +96,20 @@
                 var url = '<%=url%>?act=vote&value='+escape(val)+'&uri='+uri;
                 console.log(url);
                 request.open("GET", url, true);
+                var obj=dijit.byId("rank_stars");                
+                obj.onChange=function(){return;};
+                obj._onMouse=function(){return;};
+                obj.onStarClick=function(){return;};
                 count++;                
                 request.onreadystatechange = ranked;
                 request.send(null);
         }
+        else
+        {
+            alert('¡Sólo es posible votar una vez!');
+        }
 
-    }
-    function f()
-    {
-        return;
-    }
+    }    
     function ranked() {        
         
             if(request.readyState!=4) return;
@@ -113,8 +117,11 @@
                 var response = request.responseText;                
                 if ('Not OK'!=response && ''!=response) {
                     var ranking = Math.floor(response.split('|')[0]);                    
-                    var votes = response.split('|')[1];                    
+                    var votes = response.split('|')[1];
+                    var obj=dijit.byId("rank_stars");
+                    obj.attr("value",ranking);
                     document.getElementById("reviews").innerHTML = votes;
+                    alert('¡Gracias por su voto!');
                     invoke = false;
                 } else {
                     alert('Lo sentimos, ha ocurrido un problema al contabilizar la calificación!');
@@ -262,9 +269,7 @@
             if (mem.canView() && request.getSession().getAttribute("vote"+mse.getURI())==null)
             {
     %>
-    <%-- <div class="rank_stars" dojoType="dojox.form.Rating" numStars="5" value="<%=rank%>">
-        <script type="dojo/event" event="onChange">vote(this.value);return;</script>
-    </div> --%>
+    
 
     <script type="text/javascript">
         dojo.addOnLoad(function(){
@@ -275,8 +280,8 @@
         }
 
         };
-        new dojox.form.Rating(props,"rank_stars");        
-
+        new dojox.form.Rating(props,"rank_stars");
+        
         });
         </script>
     <div class="rank_stars" id="rank_stars"></div>
