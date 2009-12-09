@@ -362,6 +362,23 @@ public class SWBFormMgr
         return arr;
     }
 
+    private Iterator<SemanticProperty> listProperties()
+    {
+        ArrayList<SemanticProperty> arr=new ArrayList();
+        Iterator<PropertyGroup> itgp=SWBComparator.sortSortableObject(groups.keySet().iterator());
+        while(itgp.hasNext())
+        {
+            PropertyGroup group=itgp.next();
+            Iterator<SemanticProperty> it=groups.get(group).iterator();
+            while(it.hasNext())
+            {
+                SemanticProperty prop=it.next();
+                arr.add(prop);
+            }
+        }
+        return arr.iterator();
+    }
+
     /**
      * Genera HTML de la forma del tipo de objeto especificado en el constructor
      * @param request
@@ -507,7 +524,7 @@ public class SWBFormMgr
         String smode=request.getParameter(PRM_MODE);
         if(smode!=null)
         {
-            Iterator<SemanticProperty> it=m_cls.listProperties();
+            Iterator<SemanticProperty> it=listProperties();
             while(it.hasNext())
             {
                 SemanticProperty prop=it.next();
@@ -515,7 +532,7 @@ public class SWBFormMgr
             }
         }
         return ret;
-    } 
+    }
 
     public SemanticObject processForm(HttpServletRequest request) throws FormValidateException
     {
@@ -540,7 +557,7 @@ public class SWBFormMgr
             }
             //else
             {
-                Iterator<SemanticProperty> it=m_cls.listProperties();
+                Iterator<SemanticProperty> it=listProperties();
                 while(it.hasNext())
                 {
                     SemanticProperty prop=it.next();
