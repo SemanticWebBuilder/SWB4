@@ -30,15 +30,19 @@ public class ConfirmRegistry extends GenericResource {
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         try{
-            PrintWriter out=response.getWriter();
+            User olduser=paramsRequest.getUser();
             WebSite website = paramsRequest.getWebPage().getWebSite();
             String login=request.getParameter("login");
             User user = paramsRequest.getWebPage().getWebSite().getUserRepository().getUserByLogin(login);
             user.setActive(true);
             user.setRequireConfirm(false);
-            Subject subject = SWBPortal.getUserMgr().getSubject(request, website.getId());
-            subject.getPrincipals().clear();
-            subject.getPrincipals().add(user);
+
+            olduser.getSemanticObject().setRDFResource(user.getSemanticObject().getRDFResource());
+            //TODO:
+            //Subject subject = SWBPortal.getUserMgr().getSubject(request, website.getId());
+            //subject.getPrincipals().clear();
+            //user.setDefaultData(user);
+            //subject.getPrincipals().add(user);
 
             request.setAttribute("2confirm","1");
             request.setAttribute("user",user);
