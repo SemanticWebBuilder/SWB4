@@ -186,8 +186,10 @@ public class SWBCssToXmlTranslator {
     //Crea el nodo para las propiedades de estilo del CSS
     private ArrayList<Element> processStyle(Document doc, CommonTree node) {
         ArrayList<Element> res = new ArrayList<Element>();
-        for(CommonTree t : (List<CommonTree>) node.getChildren()) {
-            res.add(processProperty(doc, t));
+        if(node.getChildren()!=null) {
+            for(CommonTree t : (List<CommonTree>) node.getChildren()) {
+                res.add(processProperty(doc, t));
+            }
         }
         return res;
     }
