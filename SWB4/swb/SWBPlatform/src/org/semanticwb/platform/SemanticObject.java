@@ -709,6 +709,8 @@ public class SemanticObject
 
     private void setLiteralProperty(SemanticProperty prop, SemanticLiteral literal, boolean replace)
     {
+        //System.out.println(prop+" "+literal.getValue());
+        //Thread.currentThread().dumpStack();
         if(!m_virtual)
         {
             Object obj=literal.getValue();
@@ -1333,7 +1335,7 @@ public class SemanticObject
             {
                 log.error(e);
             }
-        System.out.println("externalInvoker:"+ret);
+        //System.out.println("externalInvoker:"+ret);
         }
         return ret;
     }
