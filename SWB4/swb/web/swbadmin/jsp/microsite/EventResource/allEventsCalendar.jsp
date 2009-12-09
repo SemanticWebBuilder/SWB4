@@ -146,7 +146,7 @@ private static final int ELEMENETS_BY_PAGE = 5;
                 }
 
                 for(int i = 0; i < (7-weekDay); i++) {
-                    %><li>&nbsp</li><%
+                    %><li>&nbsp;</li><%
                 }
                 %>
             </ul>
