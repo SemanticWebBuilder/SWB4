@@ -107,6 +107,7 @@ public class InlineTextArea extends GenericResource {
             if(editaccess!=null) {
                 base.setAttribute("editRole", editaccess);
             }
+            response.setRenderParameter("action", "edit");
         }
         try{
             base.updateAttributesToDB();
@@ -117,12 +118,20 @@ public class InlineTextArea extends GenericResource {
 
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        response.setContentType("text/html; charset=ISO-8859-1");
+        /*response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
-        response.setHeader("Pragma", "no-cache");
-
+        response.setHeader("Pragma", "no-cache");*/
         Resource base = getResourceBase();
         PrintWriter out = response.getWriter();
+
+        String action = request.getParameter("action");
+        if(action!=null && action.equalsIgnoreCase("edit")) {
+            out.println("<script type=\"text/javascript\">");
+            out.println("   alert('"+paramRequest.getLocaleString("usrmsg_Inline_doAdmin_msgRecursoActualizado")+" "+base.getId()+"');");
+            out.println("   location='"+paramRequest.getRenderUrl().toString()+"';");
+            out.println("</script>");
+        }
+
         User user = paramRequest.getUser();
 
         WebPage wpage = paramRequest.getWebPage();
