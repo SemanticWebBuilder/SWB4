@@ -175,7 +175,7 @@ private final int I_INIT_PAGE = 1;
 
    %>
    <a class="link" href="<%=urlPag%><%if (existFilter && sparams!=null)
-               {%>&alphabet=<%=sparams%><%}if (existFilter && txtFind!=null){%>&txtFind=<%=txtFind%><%}%>"><img src="<%=SWBPortal.getWebWorkPath()%>/models/<%=website.getId()%>/css/images/pageArrowLeft.gif" alt="anterior"></a>
+               {%>&alphabet=<%=sparams%><%}if (existFilter && txtFind!=null){%>&txtFind=<%=txtFind%><%}%>"><img src="<%=SWBPortal.getWebWorkPath()%>/models/<%=website.getId()%>/css/images/pageArrowLeft.gif" alt="anterior"/></a>
         <%
             }
             if (iTotPage > 1)
@@ -202,7 +202,7 @@ private final int I_INIT_PAGE = 1;
                 urlPag.setParameter("actualPage", "" + gotop);
     %>
     <a class="link" href="<%=urlPag%><%if (existFilter && sparams!=null)
-                {%>&alphabet=<%=sparams%><%}if (existFilter && txtFind!=null){%>&txtFind=<%=txtFind%><%}%>"><img src="<%=SWBPortal.getWebWorkPath()%>/models/<%=website.getId()%>/css/images/pageArrowRight.gif" alt="anterior"></a>
+                {%>&alphabet=<%=sparams%><%}if (existFilter && txtFind!=null){%>&txtFind=<%=txtFind%><%}%>"><img src="<%=SWBPortal.getWebWorkPath()%>/models/<%=website.getId()%>/css/images/pageArrowRight.gif" alt="anterior"/></a>
         <%
             }
 
@@ -247,18 +247,18 @@ private final int I_INIT_PAGE = 1;
     %>
     <div class="friendCard">
         <a href="<%=perfilPath%>?user=<%=userprosp.getEncodedURI()%>">
-            <img class="profilePic" src="<%=photo%>" alt="usuario"></a>
+            <img class="profilePic" src="<%=photo%>" alt="usuario"/></a>
         <div class="friendCardInfo">
             <%
                 if (userprosp.getEmail() != null && !userprosp.getEmail().trim().equals(""))
                 {
             %>
-            <a class="ico" href="mailto:<%=userprosp.getEmail()%>"><img src="<%=SWBPortal.getWebWorkPath()%>/models/<%=website.getId()%>/css/images/icoMail.png" alt="enviar un mensaje"></a>
+            <a class="ico" href="mailto:<%=userprosp.getEmail()%>"><img src="<%=SWBPortal.getWebWorkPath()%>/models/<%=website.getId()%>/css/images/icoMail.png" alt="enviar un mensaje"/></a>
                 <%
                 }
                 %>
 
-            <a class="ico" href="<%=perfilPath%>?user=<%=userprosp.getEncodedURI()%>"><img src="<%=SWBPortal.getWebWorkPath()%>/models/<%=website.getId()%>/css/images/icoUser.png" alt="ir al perfil"></a>
+            <a class="ico" href="<%=perfilPath%>?user=<%=userprosp.getEncodedURI()%>"><img src="<%=SWBPortal.getWebWorkPath()%>/models/<%=website.getId()%>/css/images/icoUser.png" alt="ir al perfil"/></a>
                 <%
                  try{
                 if (!user.getURI().equals(userprosp.getURI()) && !Friendship.areFriends(user, userprosp, website) && !FriendshipProspect.findFriendProspectedByRequester(user, userprosp, website))
@@ -266,7 +266,7 @@ private final int I_INIT_PAGE = 1;
                     urlAction.setAction("createProspect");
                     urlAction.setParameter("user", userprosp.getURI());
                 %>
-            <a class="ico" href="<%=urlAction%>"><img src="<%=SWBPortal.getWebWorkPath()%>/models/<%=website.getId()%>/css/images/icoMas.png" alt="agregar"></a>
+            <a class="ico" href="<%=urlAction%>"><img src="<%=SWBPortal.getWebWorkPath()%>/models/<%=website.getId()%>/css/images/icoMas.png" alt="agregar"/></a>
                 <%} }catch(Exception e){}%>
             <div class="friendCardName">
                 <p><%=userprosp.getFullName()%></p>

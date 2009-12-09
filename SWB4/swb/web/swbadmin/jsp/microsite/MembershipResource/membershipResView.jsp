@@ -110,7 +110,7 @@
                                 }
                             }
         %>
-        <li><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Blog").getUrl()%>"><img src="<%=cssPath%>icoBlog.png" alt="blog"><span class="elemento">Blog:</span> <%=entradas%> entradas</a> <a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Blog").getUrl()%>" class="verMas">ver</a></li>
+        <li><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Blog").getUrl()%>"><img src="<%=cssPath%>icoBlog.png" alt="blog"/><span class="elemento">Blog:</span> <%=entradas%> entradas</a> <a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Blog").getUrl()%>" class="verMas">ver</a></li>
                 <%
                         }
                     }
@@ -135,7 +135,7 @@
                     }
 
         %>
-        <li><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Events").getUrl()%>"><img src="<%=cssPath%>icoEventos.png" alt="eventos"><span class="elemento">Eventos:</span> <%=eventos%> entradas</a><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Events").getUrl()%>" class="verMas">ver</a></li>
+        <li><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Events").getUrl()%>"><img src="<%=cssPath%>icoEventos.png" alt="eventos"/><span class="elemento">Eventos:</span> <%=eventos%> entradas</a><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Events").getUrl()%>" class="verMas">ver</a></li>
                 <%
 
                 }
@@ -159,7 +159,7 @@
                     }
 
         %>
-        <li><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Photos").getUrl()%>"><img src="<%=cssPath%>icoFotos.png" alt="fotos"><span class="elemento">Fotos</span> <%=fotos%> entradas</a><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Photos").getUrl()%>" class="verMas">ver</a></li>
+        <li><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Photos").getUrl()%>"><img src="<%=cssPath%>icoFotos.png" alt="fotos"/><span class="elemento">Fotos</span> <%=fotos%> entradas</a><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Photos").getUrl()%>" class="verMas">ver</a></li>
                 <%
 
 
@@ -186,7 +186,7 @@
                         }
 
         %>
-        <li><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Members").getUrl()%>"><img src="<%=cssPath%>icoUsuario.png" alt="miembros"><span class="elemento">Miembros:</span> <%=miembros%> entradas</a><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Members").getUrl()%>" class="verMas">ver</a></li>
+        <li><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Members").getUrl()%>"><img src="<%=cssPath%>icoUsuario.png" alt="miembros"/><span class="elemento">Miembros:</span> <%=miembros%> entradas</a><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Members").getUrl()%>" class="verMas">ver</a></li>
                 <%
 
                     }
@@ -211,7 +211,7 @@
                     }
 
         %>
-        <li><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_News").getUrl()%>"><img src="<%=cssPath%>icoNoticias.png" alt="noticias"><span class="elemento">Noticias:</span> <%=noticias%> entradas</a><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_News").getUrl()%>" class="verMas">ver</a></li>
+        <li><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_News").getUrl()%>"><img src="<%=cssPath%>icoNoticias.png" alt="noticias"/><span class="elemento">Noticias:</span> <%=noticias%> entradas</a><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_News").getUrl()%>" class="verMas">ver</a></li>
                 <%
 
 
@@ -236,7 +236,7 @@
                     }
 
         %>
-        <li><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Videos").getUrl()%>"><img src="<%=cssPath%>icoVideo.png" alt="videos"><span class="elemento">Videos:</span> <%=videos%> entradas</a><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Videos").getUrl()%>" class="verMas">ver</a></li>
+        <li><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Videos").getUrl()%>"><img src="<%=cssPath%>icoVideo.png" alt="videos"/><span class="elemento">Videos:</span> <%=videos%> entradas</a><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Videos").getUrl()%>" class="verMas">ver</a></li>
                 <%
 
 
@@ -258,7 +258,7 @@
 
 <div class="columnaCentro">
     <h2 class="blogTitle"><%=site.getTitle()%></h2>
-    <p><img src="<%=pathPhoto%>" alt="Imagen comunidad"  ></p>
+    <p><img src="<%=pathPhoto%>" alt="Imagen comunidad"  /></p>
         <%
             if (null != member && member.getAccessLevel() == Member.LEVEL_OWNER && user.isRegistered())
             {

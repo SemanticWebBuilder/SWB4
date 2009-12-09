@@ -165,7 +165,7 @@
                 if (ipage > 1)
                 {
         %>
-        <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
+        <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"/></a>
             <%
                 }
                 for (int i = 1; i <= paginas; i++)
@@ -195,7 +195,7 @@
                 if (ipage != paginas)
                 {
         %>
-        <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
+        <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"/></a>
             <%
                 }
             %>
@@ -240,7 +240,7 @@
                         }
     %>
     <div class="noticia">
-        <img src="<%=pathPhoto%>" alt="<%= event.getTitle()%>">
+        <img src="<%=pathPhoto%>" alt="<%= event.getTitle()%>"/>
         <div class="noticiaTexto">
             <h2><%=event.getTitle()%></h2>
             <p>&nbsp;<br>Por: <%=postAuthor%><br><%=dateFormat.format(event.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%></p>
@@ -287,7 +287,7 @@
                 if (ipage > 1)
                 {
         %>
-        <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"></a>
+        <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"/></a>
             <%
                 }
                 for (int i = 1; i <= paginas; i++)
@@ -317,7 +317,7 @@
                 if (ipage != paginas)
                 {
         %>
-        <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"></a>
+        <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"/></a>
             <%
                 }
             %>

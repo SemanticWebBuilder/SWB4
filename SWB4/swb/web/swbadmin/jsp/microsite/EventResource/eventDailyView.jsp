@@ -77,7 +77,7 @@ private static final int ELEMENETS_BY_PAGE = 5;
                         }
 %>
     <div class="noticia">
-        <img src="<%=pathPhoto%>" alt="<%= event.getTitle()%>">
+        <img src="<%=pathPhoto%>" alt="<%= event.getTitle()%>"/>
         <div class="noticiaTexto">
             <h2><%=event.getTitle()%></h2>
             <p>&nbsp;<br>Por: <%=postAuthor%><br><%=dateFormat.format(event.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%></p>
