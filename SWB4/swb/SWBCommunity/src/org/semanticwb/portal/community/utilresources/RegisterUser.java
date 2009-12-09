@@ -33,12 +33,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import javax.mail.internet.InternetAddress;
+import javax.security.auth.Subject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -134,14 +133,15 @@ public class RegisterUser extends GenericAdmResource
             String securCodeCreated = (String)request.getSession(true).getAttribute("cdlog");
             if(securCodeCreated!=null && securCodeCreated.equalsIgnoreCase(securCodeSent)) {
                 request.getSession(true).removeAttribute("cdlog");
-                //Subject subject = SWBPortal.getUserMgr().getSubject(request, response.getWebPage().getWebSiteId());
+                Subject subject = SWBPortal.getUserMgr().getSubject(request, response.getWebPage().getWebSiteId()); //comentar para 2 pasos
                 User newUser = ur.createUser();
                 newUser.setLogin(login.trim());
-                //subject.getPrincipals().clear();
-                //subject.getPrincipals().add(newUser);
+                subject.getPrincipals().clear(); //comentar para 2 pasos
+                subject.getPrincipals().add(newUser); //comentar para 2 pasos
                 newUser.setLanguage(user.getLanguage());
                 newUser.setIp(user.getIp());
-                newUser.setActive(false);
+                //newUser.setActive(false); //descomentar para 2 pasos
+                newUser.setActive(true);//comentar para 2 pasos
                 newUser.setRequireConfirm(true);
                 newUser.setDevice(user.getDevice());
                 String pwd = request.getParameter("passwd");
@@ -156,29 +156,26 @@ public class RegisterUser extends GenericAdmResource
                 } catch (Exception ne)
                 {
                 }
-                //user = newUser;
-                //response.sendRedirect(response.getWebPage().getRealUrl());
+                user = newUser; //comentar para 2 pasos
+                response.sendRedirect(response.getWebPage().getRealUrl()); //comentar para 2 pasos
+                return; //comentar para 2 pasos
                 //Envío de correo
+                /*
                 WebSite website = response.getWebPage().getWebSite();
                 String siteName=website.getDisplayTitle(response.getUser().getLanguage());
                 String server="http://"+request.getServerName()+":"+request.getServerPort();
                 String page2Confirm=server+website.getWebPage("confirmRegistry").getUrl()+"?login="+newUser.getLogin();
-
+                */
+                /*
                 String staticText = replaceTags(base.getAttribute("emailMsg"), request, response, newUser, siteName, page2Confirm);
 
-                /*
-                InternetAddress address1 = new InternetAddress();
-                address1.setAddress(newUser.getEmail());
-                ArrayList<InternetAddress> aAddress = new ArrayList<InternetAddress>();
-                aAddress.add(address1);*/
-                
-                //SWBUtils.EMAIL.sendMail(siteName+"@infotec.com.mx", siteName, aAddress, null, null, "Contacto del Sitio - Confirmación de registro", "text/html", staticText, null, null, null);
                 SWBUtils.EMAIL.sendBGEmail(newUser.getEmail(), "Contacto del Sitio - Confirmación de registro", staticText);
 
                 response.setRenderParameter("msg", "ok");
                 response.setMode(response.Mode_VIEW);
                 response.setCallMethod(response.Call_CONTENT);
                 return;
+                */
             }else {
                 response.setMode(response.Mode_VIEW);
                 response.setCallMethod(response.Call_CONTENT);
