@@ -93,37 +93,35 @@
 
     function vote(val) {
         if (count == 0) {
-        console.log("---votando con valor: " + escape(val));
-        if (!invoke) return;
-        //alert('En funcion para votar');
-        var uri='<%=suri%>';
-        uri=escape(uri);
-        var url = '<%=url%>?act=vote&value='+escape(val)+'&uri='+uri;
-        request.open("GET", url, true);
-        request.onreadystatechange = ranked;
-        request.send(null);
+                if (!invoke) return;
+                var uri='<%=suri%>';
+                uri=escape(uri);
+                var url = '<%=url%>?act=vote&value='+escape(val)+'&uri='+uri;
+                console.log(url);
+                request.open("GET", url, true);
+                count++;
+                request.onreadystatechange = ranked;
+                request.send(null);
         }
+
     }
 
     function ranked() {
-        if (count == 0) {
+
             if(request.readyState!=4) return;
             if(request.status==200) {
                 var response = request.responseText;
                 if ('Not OK'!=response && ''!=response) {
-                    
                     var ranking = Math.floor(response.split('|')[0]);
-                   
+                    //dojo.byId("rank_stars").attr("value",ranking);
                     var votes = response.split('|')[1];
-                    
                     document.getElementById("reviews").innerHTML = votes;
                     invoke = false;
                 } else {
                     alert('Lo sentimos, ha ocurrido un problema al contabilizar la calificación!');
                 }
-                count++;
             }
-        }
+
     }
     var invokeAbused = true;
 
@@ -270,7 +268,7 @@
 
     <div class="rank_label">Calificar:</div>
     <%
-            if (mem.isSigned())
+            if (mem.isSigned() && request.getSession().getAttribute("vote"+mse.getURI())==null)
             {
     %>
     <%-- <div class="rank_stars" dojoType="dojox.form.Rating" numStars="5" value="<%=rank%>">
