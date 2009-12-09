@@ -73,8 +73,7 @@
             spamId = commentId;
             var uri='<%=suri%>';
             uri=escape(uri);
-            var url = '<%=url%>?act=deletecomment&commentId='+ commentId +'&uricomment='+uri;
-            alert(url);
+            var url = '<%=url%>?act=deletecomment&commentId='+ commentId +'&uricomment='+uri;            
             request.open("GET", url, true);
             request.onreadystatechange = deleted;
             request.send(null);
