@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public abstract class MicroSiteUtilBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Resourceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.Sortable
+public abstract class MicroSiteUtilBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Sortable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Resourceable,org.semanticwb.model.Activeable
 {
        public static final org.semanticwb.platform.SemanticClass swbcomm_MicroSiteWebPageUtil=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#MicroSiteWebPageUtil");
        public static final org.semanticwb.platform.SemanticProperty swbcomm_hasCommSiteUtilsInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasCommSiteUtilsInv");
@@ -125,16 +125,6 @@ public abstract class MicroSiteUtilBase extends org.semanticwb.model.SWBClass im
          return ret;
     }
 
-    public java.util.Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(swb_created);
-    }
-
-    public void setCreated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_created, value);
-    }
-
     public int getIndex()
     {
         return getSemanticObject().getIntProperty(swb_index);
@@ -143,6 +133,16 @@ public abstract class MicroSiteUtilBase extends org.semanticwb.model.SWBClass im
     public void setIndex(int value)
     {
         getSemanticObject().setIntProperty(swb_index, value);
+    }
+
+    public java.util.Date getCreated()
+    {
+        return getSemanticObject().getDateProperty(swb_created);
+    }
+
+    public void setCreated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_created, value);
     }
 
     public void setModifiedBy(org.semanticwb.model.User value)
