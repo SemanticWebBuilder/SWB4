@@ -43,13 +43,13 @@ public class TestStyler extends GenericResource {
             if(base.getAttribute("css")!=null) {
                 out.println("<script type=\"text/javascript\">");
                 out.println("dojo.require(\"dojox.html.styles\");");
-                out.println("function setStyleSheetByInstance(title, rules) {");
-                String[] rules = base.getAttribute("css").split("}");
-                for(int i=0; i<rules.length; i++) {
-                    String[] rule = rules[i].split("\\{");
-                    if(rule[1].length()>0)
-                        out.println("   dojox.html.insertCssRule('"+rule[0]+"_"+base.getId()+"','"+rule[1]+"');");
-                }
+                out.println("function setStyleSheetByInstance(rules, sufix, title) {");
+                out.println("  rules = rules.split('}');");
+                out.println("  for(i=0; i<rules.length; i++) {");
+                out.println("    rule = rules[i].split('{');");
+                out.println("    if(rule[1])");
+                out.println("      dojox.html.insertCssRule(rule[0]+'_'+sufix, rule[1]);");
+                out.println("  }");
                 out.println("}");
                 out.println("setStyleSheetByInstance('"+base.getAttribute("css")+"','"+base.getId()+"');");
                 out.println("</script>");
@@ -83,9 +83,6 @@ public class TestStyler extends GenericResource {
 
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        /*response.setContentType("text/html; charset=ISO-8859-1");
-        response.setHeader("Cache-Control", "no-cache");
-        response.setHeader("Pragma", "no-cache");*/
         Resource base = getResourceBase();
         PrintWriter out = response.getWriter();
 
@@ -186,7 +183,6 @@ public class TestStyler extends GenericResource {
 
     @Override
     public void processAction(javax.servlet.http.HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        System.out.println("\n************ processAction ************");
         Resource base = response.getResourceBase();
         
         base.setAttribute("text", request.getParameter("txt")==null?"":request.getParameter("txt"));
@@ -216,22 +212,15 @@ public class TestStyler extends GenericResource {
     }
 
     public void doEditStyle(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        System.out.println("\n************ doEditStyle ************");
         Resource base = getResourceBase();
         String stel = request.getParameter("stel");
-        //System.out.println("stel="+stel);
         String[] tkns = stel.split("@",3);
-        //System.out.println("tkns[0]="+tkns[0]);
-        System.out.println("tkns[1]="+tkns[1]+"----");
-        System.out.println("tkns[2]="+tkns[2]+"----");
-        //System.out.println("\n");
 
         HashMap tabs = (HashMap)si.getMm(base.getId());
-        if( tabs!=null && tkns[1].length()>0 && tkns[2].length()>0) {
+        if( tabs!=null && tkns[1].length()>0 ) {
             try {
-                System.out.println("tkns[0]="+tkns[0]);
                 HashMap t = (HashMap)tabs.get(tkns[0]);
-                if(tkns[2].equalsIgnoreCase("empty"))
+                if(tkns[2].equalsIgnoreCase("empty") || tkns[2].length()==0)
                     t.remove(tkns[1]);
                 else
                     t.put(tkns[1], tkns[2]);
@@ -239,7 +228,6 @@ public class TestStyler extends GenericResource {
                 Iterator<String> ittabs = tabs.keySet().iterator();
                 while(ittabs.hasNext()) {
                     String tab = ittabs.next();
-                    //css.append("."+tab);
                     css.append(tab);
                     css.append("{");
                     HashMap selectors = (HashMap)tabs.get(tab);
@@ -250,17 +238,14 @@ public class TestStyler extends GenericResource {
                     }
                     css.append("}");
                 }
-                System.out.println("css="+css);
                 base.setAttribute("css", css.toString());
                 try{
                     base.updateAttributesToDB();
                 }catch(Exception e){
-                    log.error("Error al guardar atributos en el recurso: "+base.getId() +"-"+ base.getTitle(), e);
-                    System.out.println("\n error....."+e);
+                    log.error("Error al guardar la hoja de estilos del recurso: "+base.getId() +"-"+ base.getTitle(), e);
                 }
-
             }catch(IndexOutOfBoundsException iobe) {
-                System.out.println("\n error... "+iobe);
+                log.error("Error al editar la hoja de estilos del recurso: "+base.getId() +"-"+ base.getTitle(), iobe);
             }
         }
     }
