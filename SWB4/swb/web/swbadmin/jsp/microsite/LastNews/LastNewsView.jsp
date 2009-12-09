@@ -94,7 +94,7 @@
                                 if(src!=null)
                                 {
                                     %>
-                                    <p><img src="<%=src%>" alt="<%=title%>" width="49" height="49" ></p>
+                                    <p><img src="<%=src%>" alt="<%=title%>" width="49" height="49" /></p>
                                     <%
                                 }
                               %>
