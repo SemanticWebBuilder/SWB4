@@ -498,7 +498,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             String realURL = "http://" + request.getServerName() + ":" + request.getServerPort() +
                     SWBPortal.getContextPath() + dob.getWebPage().getUrl() + "?act=detail&uri=" + dob.getEncodedURI();
 
-            System.out.println("===" + dob.getWebPage().getRealUrl());
+            //System.out.println("===" + dob.getWebPage().getRealUrl());
             messageBody = "El elemento \"" + dob.getTitle() + "\" ha sido reclamado por el usuario " +
                     user.getFullName() + " con la siguiente justificación:<br><br>\n\n" +
                     "\"" + sobj.getProperty(Claimable.swbcomm_claimJustify) + "\".<br><br>\n\n" +
