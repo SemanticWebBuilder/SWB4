@@ -52,7 +52,7 @@
                 if (lpage > 1)
                 {
                 %>
-                <span class="commentPageLink"><a href="<%=url.toString()%>&pn=<%=(lpage - 1)%>" title="P&aacute;gina anterior">&lt;&lt;</a></span>
+                <span class="commentPageLink"><a href="<%=url.toString(true)%>&amp;pn=<%=(lpage - 1)%>" title="P&aacute;gina anterior">&lt;&lt;</a></span>
                 <%
                 }
                 long ini = 1L;
@@ -83,7 +83,7 @@
                         if (i != lpage)
                         {
                 %>
-                <span class="commentPageLink"><a href="<%=url.toString()%>&pn=<%=i%>"><%=String.valueOf(i)%></a></span>
+                <span class="commentPageLink"><a href="<%=url.toString(true)%>&amp;pn=<%=i%>"><%=String.valueOf(i)%></a></span>
                 <%
                             }
                             else
@@ -96,7 +96,7 @@
                         if (lpage < totalPages)
                         {
                 %>
-                <span class="commentPageLink"><a href="<%=url.toString()%>&pn=<%=(lpage + 1)%>" title="P&aacute;gina siguiente">&gt;&gt;</a></span>
+                <span class="commentPageLink"><a href="<%=url.toString(true)%>&amp;pn=<%=(lpage + 1)%>" title="P&aacute;gina siguiente">&gt;&gt;</a></span>
                 <%
                     }
                 }
