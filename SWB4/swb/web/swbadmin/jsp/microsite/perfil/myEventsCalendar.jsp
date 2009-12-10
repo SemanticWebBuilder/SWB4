@@ -20,7 +20,7 @@ if (year != null && month != null && day != null) {
     current = new Date(Integer.valueOf(year), Integer.valueOf(month), Integer.valueOf(day));
 }
 
-%><div align="center"><%=renderCalendar(user, current, wpage, paramRequest)%>
+%><div style="text-align:center"><%=renderCalendar(user, current, wpage, paramRequest)%>
     <p class="vermas">
     <a href ="<%=request.getAttribute("admurl")%>">Ver todos</a>
 </p>
