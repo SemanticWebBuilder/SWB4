@@ -295,15 +295,14 @@
                         }
         %>
 
-        <p><span class="itemTitle">Por:</span> <%=postAuthor%><br>
-            <span class="itemTitle">Creada:</span> <%=dateFormat.format(post.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(post.getCreated(), user.getLanguage())%><br>
-            <span class="itemTitle">Modificada:</span> <%=dateFormat.format(post.getUpdated())%> - <%=SWBUtils.TEXT.getTimeAgo(post.getUpdated(), user.getLanguage())%><br>
-            <span class="itemTitle">Calificación:</span> <%=rank%><br>
+        <p><span class="itemTitle">Por:</span> <%=postAuthor%><br/>
+            <span class="itemTitle">Creada:</span> <%=dateFormat.format(post.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(post.getCreated(), user.getLanguage())%><br/>
+            <span class="itemTitle">Modificada:</span> <%=dateFormat.format(post.getUpdated())%> - <%=SWBUtils.TEXT.getTimeAgo(post.getUpdated(), user.getLanguage())%><br/>
+            <span class="itemTitle">Calificación:</span> <%=rank%><br/>
             <span class="itemTitle">Visitada:</span> <%=visited%> veces
         </p>
         <p><%=description%></p>
         <p><a href="<%=urlDetail.toString(true)%>">Leer entrada completa</a>&nbsp;<span class="notificaciones"><%=comments%> comentarios</span> </p>
-
 
     </div>
     <%
@@ -380,7 +379,7 @@
             if (paginas > 1)
             {
     %>
-    <br><br>
+    <br/><br/>
     <%            }
     %>
     <h2 class="blogTitle"><%=titleBlog%></h2>
@@ -416,7 +415,7 @@
             if (!editarblog)
             {
     %>
-    <br><br><p><span class="tituloRojo">NOTA: </span>Sólo el dueño de la comunidad puede cambiar la información básica del blog.</p>
+    <br/><br/><p><span class="tituloRojo">NOTA: </span>Sólo el dueño de la comunidad puede cambiar la información básica del blog.</p>
     <%            }
     %>
 </div>
