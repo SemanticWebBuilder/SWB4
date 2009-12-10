@@ -24,11 +24,11 @@
             <img src="<%=basepath+rec.getSmallPhoto()%>" width="125" border="0">
         </a>
         </td><td valign="top"><small>
-        <%=rec.getTitle()%> <BR>
-        <%=rec.getProdDescription()%> <BR>
-        <%=rec.getCreated()%> <BR>
+        <%=rec.getTitle()%> <br/>
+        <%=rec.getProdDescription()%> <br/>
+        <%=rec.getCreated()%> <br/>
         <!--</small></td><td valign="top"><small>-->
-        <%=rec.getViews()%> vistas<BR>
+        <%=rec.getViews()%> vistas<br/>
         </small></td></tr>
       </table>
 <%
