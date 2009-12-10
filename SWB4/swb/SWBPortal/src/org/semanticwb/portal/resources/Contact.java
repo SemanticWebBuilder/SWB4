@@ -167,14 +167,14 @@ public class Contact extends GenericAdmResource {
         }else if(email.equals("missdata")) {
             out.println("<pre>");
             out.println("Lo sentimos, por el momento no fue posible enviar su comentario.<br>");
-            out.println("Falta información para el envío de su correo:<br>");
-            out.println("Debe escribir su correo electrónico y mensaje como minimo<br><br>");
+            out.println("Falta información para el envío de su correo:<br/>");
+            out.println("Debe escribir su correo electrónico y mensaje como minimo<br/><br/>");
             out.println("<pre>");
         }else {
             String site = paramsRequest.getWebPage().getWebSite().getDisplayTitle(paramsRequest.getUser().getLanguage());
             out.println("Lo sentimos, por el momento no fue posible enviar su comentario, ");
-            out.println("le agradeceremos intentarlo más tarde o bien utilizar otro medio.<br><br>");
-            out.println("Por su atención, muchas gracias.<br>");
+            out.println("le agradeceremos intentarlo más tarde o bien utilizar otro medio.<br/><br/>");
+            out.println("Por su atención, muchas gracias.<br/>");
             out.println(site);
         }
     }
