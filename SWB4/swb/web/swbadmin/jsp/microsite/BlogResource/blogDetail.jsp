@@ -2,6 +2,7 @@
 <%@page import="org.semanticwb.portal.lib.*,java.text.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 
 <script type="text/javascript">
+    <!--
     function validateremove(url, title,uri)
     {
         if(confirm('¿Esta seguro de borrar la entrada '+title+'?'))
@@ -10,6 +11,7 @@
             window.location.href=url;
         }
     }
+    -->
 </script>
 
 <%
@@ -64,7 +66,14 @@
 <div class="columnaIzquierda">    
     <h2 class="hidden"><%=post.getTitle()%></h2>
 
-    <p><%=post.getContent()%></p>
+    <p>
+        <script type="text/javascript">
+            <!--
+            document.write('<%=post.getContent()%>');
+            -->
+        </script>
+
+    </p>
     <br/>
     <br/>
 
