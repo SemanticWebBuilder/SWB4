@@ -64,14 +64,14 @@
                     }
 %>
 <div class="columnaIzquierda">    
-    <br>
+    <br/>
     <script type="text/javascript">
             <!--
             document.write('<%=code%>');
             -->
         </script>
 
-    <br>
+    <br/>
     <%
                 SWBResponse res = new SWBResponse(response);
                 rec.renderGenericElements(request, res, paramRequest);
@@ -79,7 +79,7 @@
     %>
 </div>
 <div class="columnaCentro">
-    <h2 class="blogTitle"><%=title%></h2><br>
+    <h2 class="blogTitle"><%=title%></h2><br/>
     <p><%=description%></p>
     <p>Creado el: <%=dateFormat.format(rec.getCreated())%></p>
     <p>Etiquetas: <%=tags%></p>

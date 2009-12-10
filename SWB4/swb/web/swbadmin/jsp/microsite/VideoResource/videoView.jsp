@@ -237,7 +237,7 @@
         <img src="<%=video.getPreview()%>" alt="<%=title%>"/>
         <div class="noticiaTexto">
             <h2><%=title%></h2>
-            <p>&nbsp;<br>Por: <%=postAuthor%><br><%=dateFormat.format(video.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(video.getCreated(), user.getLanguage())%></p>
+            <p>&nbsp;<br/>Por: <%=postAuthor%><br/><%=dateFormat.format(video.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(video.getCreated(), user.getLanguage())%></p>
             <p>
                 <%=description%> | <a href="<%=viewUrl.toString(true)%>">Ver más</a>
                 <%
@@ -258,7 +258,7 @@
                 %>
             </p>            
             <p class="stats">
-            	Puntuación: <%=rank%><br>
+            	Puntuación: <%=rank%><br/>
                 <%=video.getViews()%> vistas
             </p>
         </div>
