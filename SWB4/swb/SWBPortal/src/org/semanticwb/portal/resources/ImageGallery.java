@@ -95,7 +95,7 @@ public class ImageGallery extends GenericResource {
         }
         String[] ip = new String[imgpath.size()];
         imgpath.toArray(ip);
-        String script = getGalleryScript(base.getId(), Integer.parseInt(base.getAttribute("imgwidth","220")), Integer.parseInt(base.getAttribute("imgheight","220")), Boolean.getBoolean(base.getAttribute("autoplay","false")), Integer.parseInt(base.getAttribute("pause","2500")), Integer.parseInt(base.getAttribute("fadetime","500")), Integer.parseInt(base.getAttribute("fullwidth","380")), Integer.parseInt(base.getAttribute("fullheight","270")), base.getAttribute("title",""), base.getAttribute("titlestyle",""), ip);
+        String script = getGalleryScript(base.getId(), Integer.parseInt(base.getAttribute("imgwidth","220")), Integer.parseInt(base.getAttribute("imgheight","220")), Boolean.valueOf(base.getAttribute("autoplay")), Integer.parseInt(base.getAttribute("pause","2500")), Integer.parseInt(base.getAttribute("fadetime","500")), Integer.parseInt(base.getAttribute("fullwidth","380")), Integer.parseInt(base.getAttribute("fullheight","270")), base.getAttribute("title",""), base.getAttribute("titlestyle",""), ip);
         out.print(script);
         out.flush();
     }
@@ -336,7 +336,7 @@ public class ImageGallery extends GenericResource {
             ret.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_autoplay") + "</td>");
             ret.append("\n<td>");
             ret.append("\n<input type=\"checkbox\" value=\"true\" name=\"autoplay\" ");
-            if ("true".equals(base.getAttribute("autoplay", "false"))) {
+            if ("true".equalsIgnoreCase(base.getAttribute("autoplay", "false"))) {
                 ret.append("\n checked=\"checked\"");
             }
             ret.append("\n/>");
