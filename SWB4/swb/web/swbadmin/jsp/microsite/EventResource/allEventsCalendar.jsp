@@ -214,7 +214,7 @@ private static final int ELEMENETS_BY_PAGE = 5;
             <div class="columnaIzquierda">
             <%
             if (paginas > 1) {
-                %><div id="paginacion"><%
+                %><div class="paginacion"><%
                 String nextURL = "#";
                 String previusURL = "#";
                 if (ipage < paginas) {
@@ -306,7 +306,7 @@ private static final int ELEMENETS_BY_PAGE = 5;
                 <!-- paginacion -->
             <%
             if (paginas > 1) {
-                %><div id="paginacion"><%
+                %><div class="paginacion"><%
                 String nextURL = "#";
                 String previusURL = "#";
                 if (ipage < paginas) {
