@@ -27,7 +27,7 @@
             fs.setShortMonths(months);
             dateFormat.setDateFormatSymbols(fs);
 
-            java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");            
+            java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             String cssPath = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/images/";
             User user = paramRequest.getUser();
@@ -242,9 +242,9 @@
                 <%
                         }
                 %>
-                 <%
-                        if (anew.canModify(member) || isAdministrator)
-                        {
+                <%
+                       if (anew.canModify(member) || isAdministrator)
+                       {
                 %>
                 | <a href="<%=removeurl%>">Eliminar</a>
                 <%
@@ -293,16 +293,16 @@
                 {
             %>
         <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%
-                        if (i == ipage)
-                        {
+                    if (i == ipage)
+                    {
             %>
             <strong>
                 <%                        }
                 %>
                 <%=i%>
                 <%
-                        if (i == ipage)
-                        {
+                    if (i == ipage)
+                    {
                 %>
             </strong>
             <%                        }
@@ -358,6 +358,14 @@
         %>
         <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS al canal de noticias de la comunidad</a></li>
     </ul>
+    <%
+        if (!wputil.isSubscribed(member))
+        {
+    %>
     <br/><br/><p><span class="tituloRojo">NOTA: </span>Si se suscribe a las noticias de la comunidad, recibirá una notificación por correo electrónico cuando algún miembro agrege o modifique alguna noticia.</p>
+    <%            }
+    %>
+
+
 </div>
 
