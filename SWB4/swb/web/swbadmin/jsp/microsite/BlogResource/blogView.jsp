@@ -444,6 +444,11 @@
     <%            }
             if (!wputil.isSubscribed(member))
             {
+                if (editarblog)
+                {
+    %>
+    <br/><br/>
+    <%                }
     %>
     <p><span class="tituloRojo">NOTA: </span>Si se suscribe al blog de la comunidad, recibirá una notificación por correo electrónico cuando algún miembro agrege o modifique alguna entrada.</p>
     <%            }
