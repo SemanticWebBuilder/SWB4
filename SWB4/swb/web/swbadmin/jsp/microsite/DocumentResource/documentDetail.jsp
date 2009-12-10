@@ -42,7 +42,7 @@
 <div class="columnaCentro">
     <h2 class="blogTitle">
         <a href="/swbadmin/jsp/microsite/DocumentResource/displayDoc.jsp?uri=<%=java.net.URLEncoder.encode(doc.getURI())%>" target="new"><%= doc.getTitle()%></a>
-    </h2><br>
+    </h2><br/>
     <p><%= doc.getDescription()%></p>
     <p>Autor: <%= postAuthor%></p>
     <p>Creado el: <%=dateFormat.format(doc.getCreated())%></p>
