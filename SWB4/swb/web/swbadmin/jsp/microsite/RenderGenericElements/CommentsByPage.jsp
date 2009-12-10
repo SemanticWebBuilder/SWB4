@@ -40,7 +40,8 @@
                 if (ordinal < firstInPage)
                 {
                     continue;
-                } else if (ordinal > lastInPage)
+                }
+                else if (ordinal > lastInPage)
                 {
                     break;
                 }
@@ -54,24 +55,26 @@
                     {
     %>
     <script type="text/javascript">
-                <!--
-                document.write('<img src="<%=SWBPortal.getWebWorkPath()%><%=comment.getCreator().getPhoto()%>" alt="foto"/>');
-                -->
-            </script>
-    
+        <!--
+        document.write('<img src="<%=SWBPortal.getWebWorkPath()%><%=comment.getCreator().getPhoto()%>" alt="foto"/>');
+        -->
+    </script>
+
     <%
-                    } else
+                    }
+                    else
                     {
     %>
     <img src="<%=SWBPortal.getContextPath()%>/swbadmin/images/defaultPhoto.jpg" alt="foto"/>
     <%
                     }
-                } catch (NullPointerException npe)
+                }
+                catch (NullPointerException npe)
                 {
                     npe.printStackTrace();
                 }
                 //out.write("<span class="comment-auth">");
-    %>
+%>
     <div class="commentText">
         <p>Escrito por
             <%
@@ -82,12 +85,14 @@
             %>
             <a href="<%=perfilPath%>?user=<%=comment.getCreator().getEncodedURI()%>"><%=comment.getCreator().getFullName()%></a>
             <%
-                    } else
+                    }
+                    else
                     {
             %>
             Desconocido
             <%        }
-                } catch (NullPointerException npe)
+                }
+                catch (NullPointerException npe)
                 {
             %>
             Desconocido
@@ -95,12 +100,20 @@
             %>
             <%=SWBUtils.TEXT.getTimeAgo(comment.getCreated(), mem.getUser().getLanguage())%>
         </p>
-        <p><%=comment.getDescription()%></p>
+        <p>
+            <script type="text/javascript">
+                <!--
+                document.write('<%=comment.getDescription()%>');
+                -->
+            </script>
+
+        </p>
         <% int spam = 0;
                 try
                 {
                     spam = comment.getSpam();
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                     comment.setSpam(0);
                     e.printStackTrace();
@@ -124,7 +137,7 @@
         %>
         <div><p><a href="javascript:deletecomment('<%=comment.getEncodedURI()%>','<%=comment.getDescription()%>',<%=comment.getId()%>)" id="delspamMark<%=comment.getId()%>">[Eliminar]</a></p></div>
         <%
-        }
+                }
         %>
 
     </div>
