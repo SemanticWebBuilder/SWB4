@@ -105,7 +105,7 @@
                         %>
                                  <a href="<%=twitter.getBaseURL()%><%=poster%>" target="_new"><img src="<%=imgPath%>" valign="top" width="40" height="40"/></a>
                                  <div class=twitEntryInfo>
-                                    <p><a id="aPoster" href="<%=twitter.getBaseURL()%>"><%=poster%></a>&nbsp;<%=text%><br><a href="<%=twitter.getBaseURL()%><%=poster%>/status/<%=twitt.getId()%>" target="_new" id="postTime"><%=timeAgo%></a></p>
+                                    <p><a id="aPoster" href="<%=twitter.getBaseURL()%>"><%=poster%></a>&nbsp;<%=text%><br/><a href="<%=twitter.getBaseURL()%><%=poster%>/status/<%=twitt.getId()%>" target="_new" id="postTime"><%=timeAgo%></a></p>
                                  </div>
                       <%
                                 cont++;
