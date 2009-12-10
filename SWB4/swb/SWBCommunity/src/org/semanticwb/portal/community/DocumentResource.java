@@ -42,7 +42,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
-import org.semanticwb.portal.community.utilresources.ImageResizer;
+import org.semanticwb.base.util.ImageResizer;
 
 public class DocumentResource extends org.semanticwb.portal.community.base.DocumentResourceBase {
     private static Logger log = SWBUtils.getLogger(PhotoResource.class);

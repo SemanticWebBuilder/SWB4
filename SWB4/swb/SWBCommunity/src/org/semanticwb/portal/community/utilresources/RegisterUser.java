@@ -52,6 +52,7 @@ import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.base.util.ImageResizer;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;

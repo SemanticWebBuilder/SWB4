@@ -44,7 +44,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
-import org.semanticwb.portal.community.utilresources.ImageResizer;
+import org.semanticwb.base.util.ImageResizer;
 
 public class MembershipResource extends org.semanticwb.portal.community.base.MembershipResourceBase 
 {

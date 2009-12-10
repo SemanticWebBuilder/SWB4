@@ -48,7 +48,7 @@ import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
-import org.semanticwb.portal.community.utilresources.ImageResizer;
+import org.semanticwb.base.util.ImageResizer;
 
 public class NewsResource extends org.semanticwb.portal.community.base.NewsResourceBase
 {
