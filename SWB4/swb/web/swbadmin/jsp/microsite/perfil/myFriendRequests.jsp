@@ -113,7 +113,7 @@
             if (paginas > 1 && !isStrategy)
             {
 %>
-<div id="paginacion">
+<div class="paginacion">
 
 
     <%
