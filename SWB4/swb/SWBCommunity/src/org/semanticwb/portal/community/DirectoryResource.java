@@ -26,7 +26,7 @@ import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
-import org.semanticwb.portal.community.utilresources.ImageResizer;
+import org.semanticwb.base.util.ImageResizer;
 import org.semanticwb.servlet.internal.UploadFormElement;
 
 /**
