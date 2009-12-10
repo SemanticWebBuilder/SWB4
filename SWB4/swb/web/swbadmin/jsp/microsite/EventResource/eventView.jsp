@@ -431,4 +431,5 @@
         %>
         <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS al canal de eventos de la comunidad</a></li>
     </ul>
+    <br/><br/><p><span class="tituloRojo">NOTA: </span>Si se suscribe a los eventos de la comunidad, recibirá una notificación por correo electrónico cuando algún miembro agrege o modifique algún evento.</p>
 </div>
