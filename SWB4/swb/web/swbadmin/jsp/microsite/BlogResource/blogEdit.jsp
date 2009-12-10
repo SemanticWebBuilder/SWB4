@@ -54,7 +54,7 @@
             <fieldset><legend>Editar entrada</legend>
                 <div>
                     <p>
-                        <br><label for="title">Título:&nbsp;&nbsp;&nbsp;&nbsp;</label><br><input size="50" id="title" name="title" value="<%=post.getTitle()%>" maxlength="50"><br><br>
+                        <br/><label for="title">Título:&nbsp;&nbsp;&nbsp;&nbsp;</label><br/><input size="50" id="title" name="title" value="<%=post.getTitle()%>" maxlength="50"><br/><br/>
                         <label for="description">Descripción:&nbsp;&nbsp;&nbsp;&nbsp;</label><br>
                         <textarea size="50" rows="10" cols="45" id="description" name="description" maxlength="255" ><%=post.getDescription()%></textarea><br><br>
                         <label for="editor">Contenido de entrada:</label><br><br>
