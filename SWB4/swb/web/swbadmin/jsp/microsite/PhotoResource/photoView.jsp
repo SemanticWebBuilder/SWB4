@@ -379,7 +379,7 @@
                 {
                     urla.setParameter("act", "subscribe");
         %>
-        <li><a href="<%=urla%>">Suscribirse a fotos de la comunidad</a></li>
+        <li><a href="<%=urla%>">Suscribirse a las fotos de la comunidad</a></li>
         <%
                 } else
                 {
@@ -393,4 +393,5 @@
         %>
         <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS al canal de fotos de la comunidad</a></li>
     </ul>
+    <br/><br/><p><span class="tituloRojo">NOTA: </span>Si se suscribe a las fotos de la comunidad, recibirá una notificación por correo electrónico cuando algún miembro agrege o modifique alguna foto.</p>
 </div>
