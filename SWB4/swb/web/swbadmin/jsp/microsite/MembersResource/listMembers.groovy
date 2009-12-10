@@ -132,7 +132,7 @@ if (null!=microsite){
         def imageurlright=cssPath +"""pageArrowRight.gif"""
         if(ipage>1)
         {
-            println """<a href="$previusURL"><img src="$imageurlleft" alt="anterior"></a>"""
+            println """<a href="$previusURL"><img src="$imageurlleft" alt="anterior"/></a>"""
         }
         for (int i = 1; i <= paginas; i++)
         {
@@ -150,7 +150,7 @@ if (null!=microsite){
         }
         if(ipage!=paginas)
         {
-            println """<a href="$nextURL"><img src="$imageurlright" alt="siguiente"></a>"""
+            println """<a href="$nextURL"><img src="$imageurlright" alt="siguiente"/></a>"""
         }
         println """</div><!-- fin paginacion -->"""
     }
@@ -227,15 +227,15 @@ if (null!=microsite){
 
                     println """
                 <div class="noticia">
-                        <img src="$img" width="121" height="121" alt="Foto de $name">
+                        <img src="$img" width="121" height="121" alt="Foto de $name"/>
                   <div class="noticiaTexto">
                         <h2>$name</h2>
                     <p class="stats">
-                        Edad: $usr_age<br><br>
-                        Sexo: $usr_sex<br><br>
+                        Edad: $usr_age<br/><br/>
+                        Sexo: $usr_sex<br/><br/>
                     <a href="$perfil?user=$uri">Ver m&aacute;s</a>
                     </p>                    
-                    <br><br>
+                    <br/><br/>
                   </div>
                 </div>           
               
@@ -263,7 +263,7 @@ if (null!=microsite){
             if(ipage>1)
             {
                 println """
-        <a href="$previusURL"><img src="$imageurlleft" alt="anterior"></a>"""
+        <a href="$previusURL"><img src="$imageurlleft" alt="anterior"/></a>"""
             }
             for (int i = 1; i <= paginas; i++)
             {
@@ -281,7 +281,7 @@ if (null!=microsite){
             }
             if(ipage!=paginas)
             {
-                println """<a href="$nextURL"><img src="$imageurlright" alt="siguiente"></a>"""
+                println """<a href="$nextURL"><img src="$imageurlright" alt="siguiente"/></a>"""
             }
             println """</div><!-- fin paginacion -->"""
         }
