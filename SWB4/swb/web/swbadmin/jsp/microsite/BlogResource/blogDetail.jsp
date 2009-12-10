@@ -65,8 +65,8 @@
     <h2 class="hidden"><%=post.getTitle()%></h2>
 
     <p><%=post.getContent()%></p>
-    <br>
-    <br>
+    <br/>
+    <br/>
 
     <%
             SWBResponse res = new SWBResponse(response);
