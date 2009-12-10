@@ -294,7 +294,7 @@
             if (paginas > 1)
             {
     %>
-    <br><br>
+    <br/><br/>
     <%            }
     %>
     <ul class="miContenido">
