@@ -400,7 +400,15 @@
     <h2 class="blogTitle"><%=titleBlog%></h2>
     <p> <%=descriptionBlog%> </p>
     <p> Creado el: <%=createdBlog%> </p>
+    <%
+            if (!updatedBlog.equals(createdBlog))
+            {
+    %>
     <p> Actualizado el: <%=updatedBlog%> </p>
+    <%
+    }
+    %>
+
 
     <ul class="miContenido">
 
