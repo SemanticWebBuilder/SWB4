@@ -61,10 +61,22 @@
             boolean canadd = post.canModify(member);
             String editURL = paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", post.getURI()).setParameter("mode", "editpost").toString();
             String deleteUrl = "javascript:validateremove('" + removeUrl + "','" + post.getTitle() + "','" + post.getURI() + "')";
+            String title = "Sin titulo";
+            if (post.getTitle() != null)
+            {
+                title = post.getTitle();
+            }
 %>
 
 <div class="columnaIzquierda">    
-    <h2 class="hidden"><%=post.getTitle()%></h2>
+    <h2 class="hidden">
+        <script type="text/javascript">
+            <!--
+            document.write('<%=title%>');
+            -->
+        </script>
+
+    </h2>
 
     <p>
         <script type="text/javascript">
@@ -85,7 +97,12 @@
 </div>
 <div class="columnaCentro">
     <h2 class="blogTitle"><%=post.getTitle()%></h2>
-    <p> <%=post.getDescription()%> </p>
+    <p>
+    <script type="text/javascript">
+            <!--
+            document.write('<%=post.getDescription()%>');
+            -->
+        </script> </p>
     <p> Autor: <%=postAuthor%> </p>
     <p> Actualizado: <%=updated%> </p>
     <p> Calificación: <%=rank%> </p>
@@ -120,7 +137,8 @@
         %>
         <li><a href="<%=urla%>">Suscribirse a esta comunidad</a></li>
         <%
-                } else
+                }
+                else
                 {
                     urla.setParameter("act", "unsubscribe");
         %>
