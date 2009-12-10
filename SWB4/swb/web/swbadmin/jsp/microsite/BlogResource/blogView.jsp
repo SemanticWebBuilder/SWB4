@@ -101,7 +101,8 @@
                     ipage = Integer.parseInt(request.getParameter("ipage"));
                     inicio = (ipage * ELEMENETS_BY_PAGE) - ELEMENETS_BY_PAGE;
                     fin = (ipage * ELEMENETS_BY_PAGE);
-                } catch (NumberFormatException nfe)
+                }
+                catch (NumberFormatException nfe)
                 {
                     ipage = 1;
                 }
@@ -219,7 +220,14 @@
 
     </div>
 
-    <h2 class="hidden"><%=titleBlog%></h2>
+    <h2 class="hidden">
+        <script type="text/javascript">
+            <!--
+            document.write('<%=titleBlog%>');
+            -->
+        </script>
+
+    </h2>
     <%
 
             if (elements.size() == 0)
@@ -302,11 +310,11 @@
             <span class="itemTitle">Visitada:</span> <%=visited%> veces
         </p>
         <p>
-             <script type="text/javascript">
-            <!--
-            document.write('<%=description%>');
-            -->
-        </script>
+            <script type="text/javascript">
+                <!--
+                document.write('<%=description%>');
+                -->
+            </script>
 
         </p>
         <p><a href="<%=urlDetail.toString(true)%>">Leer entrada completa</a>&nbsp;<span class="notificaciones"><%=comments%> comentarios</span> </p>
@@ -380,7 +388,7 @@
     %>
     <!-- fin paginacion -->
 </div>
-    
+
 <div class="columnaCentro">
     <%
             if (paginas > 1)
@@ -406,7 +414,8 @@
         %>
         <li><a href="<%=urla%>">Suscribirse a blog</a></li>
         <%
-                } else
+                }
+                else
                 {
                     urla.setParameter("act", "unsubscribe");
         %>
