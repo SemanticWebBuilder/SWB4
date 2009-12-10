@@ -13,7 +13,7 @@ private static final int ELEMENETS_BY_PAGE = 5;
     String act = "calendar";
     if (request.getParameter("act") != null) act = request.getParameter("act");
 
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss a");
     String year = request.getParameter("y");
     String month = request.getParameter("m");
