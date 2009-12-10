@@ -203,7 +203,7 @@
 
         <div class="noticiaTexto">
             <h2><%= doc.getDescription()%></h2>
-            <p>&nbsp;<br>Por: <%= postAuthor%><br><%= dateFormat.format(doc.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(doc.getCreated(), user.getLanguage())%></p>
+            <p>&nbsp;<br/>Por: <%= postAuthor%><br/><%= dateFormat.format(doc.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(doc.getCreated(), user.getLanguage())%></p>
             <p>
                 <%=doc.getDescription()%> | <a href="<%= viewurl%>">Ver más</a>
                 <%
@@ -216,7 +216,7 @@
                 %>
             </p>
             <p class="stats">
-            	Puntuación: <%=rank%><br>
+            	Puntuación: <%=rank%><br/>
                 <%=doc.getViews()%> vistas
             </p>
         </div>
