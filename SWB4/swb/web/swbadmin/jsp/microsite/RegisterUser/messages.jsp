@@ -22,7 +22,7 @@
             <pre>
                 <b>
                 Hola <%=user.getFullName()%>,<br/>
-                te damos la más cordial bienvenida a este sitio y te informamos<br>
+                te damos la más cordial bienvenida a este sitio y te informamos<br/>
                 que haz quedado registrado en el portal de <%=website.getDisplayTitle(user.getLanguage())%>.<br/><br/>
                 Es importante que te firmes en el portal con tu clave y password que nos 
                 proporcionaste e ingreses a la página de tu perfil a actualizar tus datos.
