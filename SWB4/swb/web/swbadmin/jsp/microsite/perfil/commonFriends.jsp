@@ -69,7 +69,7 @@
                     <div class="moreUser">
                         <a href="<%=wsite.getWebPage("perfil").getUrl()%>?user=<%=commonfriend.getEncodedURI()%>"><img src="<%=SWBPortal.getWebWorkPath()+photo%>" <%=imgSize%> title="<%=firstName%> <%=lastName%>"/>
                     <%if(!isStrategy){%>
-                        <br>
+                        <br/>
                         <%=firstName%>
                         <%=lastName%>
                     <%}%>
