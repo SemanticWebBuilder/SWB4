@@ -100,7 +100,7 @@ public class WBSiteMap extends GenericAdmResource
             String name = names.nextElement();
             params.put(name, request.getParameter(name));
         }
-        SelectTree tree = new SelectTree(paramRequest.getWebPage().getWebSite().getId(), url.toString(), false, base.getAttribute("title"), paramRequest.getUser().getLanguage());
+        SelectTree tree = new SelectTree(paramRequest.getWebPage().getWebSite().getId(), url.toString(true), false, base.getAttribute("title"), paramRequest.getUser().getLanguage());
         String x = tree.renderXHTML(params);
         out.println(x);
         out.flush();
@@ -201,7 +201,7 @@ public class WBSiteMap extends GenericAdmResource
             if(!"".equals(base.getAttribute("url", "").trim())) {
                 surl += base.getAttribute("url").trim();
             }else {
-                surl += paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW).toString();
+                surl += paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW).toString(true);
             }
             
             if( base.getAttribute("img")!=null ) {
