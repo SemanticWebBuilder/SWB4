@@ -109,7 +109,7 @@ public int calcularEdad(java.util.Calendar fechaNaci, java.util.Calendar fechaAl
                 </td></tr>
             <tr><td colspan="2" align="center"><br/><br/>
                     <!-- <input type="submit" value="enviar"> -->
-                    <br>
+                    <br/>
                     <div class="editarInfo">
                         <p><a href="javascript:enviar();">Cambiar imagen</a></p>
                     </div>
