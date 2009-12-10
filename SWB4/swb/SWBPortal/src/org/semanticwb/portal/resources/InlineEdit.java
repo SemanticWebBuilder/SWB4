@@ -100,8 +100,9 @@ public class InlineEdit extends GenericResource
         PrintWriter out = response.getWriter();
         if(userCanEdit(paramRequest))
         {
-            if(data==null)data=paramRequest.getLocaleString("click4edit");
-            out.println(
+            if(data==null)
+                data=paramRequest.getLocaleString("click4edit");            
+            /*out.println(
                     "<script type=\"text/javascript\">" +
                     "  dojo.require(\"dijit.InlineEditBox\");" +
                     "  function editableHeaderOnChange"+id+"(arg)" +
@@ -109,8 +110,27 @@ public class InlineEdit extends GenericResource
                     "      getSyncHtml(\""+url2+"txt=\"+arg);"+
                     "  }" +
                     "</script>"
-            );
-            out.println("<span onChange=\"editableHeaderOnChange"+id+"(arguments[0])\" autosave=\"true\" dojotype=\"dijit.InlineEditBox\">"+data+"</span>");
+            );*/
+            out.println("<script type=\"text/javascript\">");
+            out.println("dojo.require(\"dijit.InlineEditBox\");");
+            //out.println("dojo.require(\"dijit.form.Textarea\");");
+            out.println("dojo.require(\"dijit.form.TextBox\");");
+            out.println("var iledit_"+base.getId()+";");
+            out.println("dojo.addOnLoad( function() {");
+            out.println("    iledit_"+base.getId()+" = new dijit.InlineEditBox({");
+            out.println("    id: \"ile_"+base.getId()+"\",");
+            out.println("    autoSave: true,");
+            out.println("    editor: \"dijit.form.TextBox\",");
+            out.println("    onChange: function(value){");
+            //out.println("        postHtml('"+url+"?txt='+value,'ile_"+base.getId()+"');");
+            out.println("           getSyncHtml('"+url2+"txt='+value);");
+            out.println("      }");
+            out.println("    }, 'eb_"+base.getId()+"');");
+            out.println("  }");
+            out.println(");");
+            out.println("</script>");
+            /*out.println("<span onChange=\"editableHeaderOnChange"+id+"(arguments[0])\" autosave=\"true\" dojotype=\"dijit.InlineEditBox\">"+data+"</span>");*/
+            out.println("<span id=\"eb_"+base.getId()+"\" class=\"ile_"+base.getId()+"\">"+data+"</span>");
         }else
         {
             if(data!=null)out.println(data);
