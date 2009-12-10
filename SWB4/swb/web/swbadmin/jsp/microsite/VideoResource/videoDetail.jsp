@@ -64,7 +64,13 @@
                     }
 %>
 <div class="columnaIzquierda">    
-    <br><%=code%>
+    <br>
+    <script type="text/javascript">
+            <!--
+            document.write('<%=code%>');
+            -->
+        </script>
+
     <br>
     <%
                 SWBResponse res = new SWBResponse(response);
