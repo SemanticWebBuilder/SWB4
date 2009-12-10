@@ -301,7 +301,14 @@
             <span class="itemTitle">Calificación:</span> <%=rank%><br/>
             <span class="itemTitle">Visitada:</span> <%=visited%> veces
         </p>
-        <p><%=description%></p>
+        <p>
+             <script type="text/javascript">
+            <!--
+            document.write('<%=description%>');
+            -->
+        </script>
+
+        </p>
         <p><a href="<%=urlDetail.toString(true)%>">Leer entrada completa</a>&nbsp;<span class="notificaciones"><%=comments%> comentarios</span> </p>
 
     </div>
