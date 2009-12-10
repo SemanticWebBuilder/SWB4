@@ -160,7 +160,7 @@ else if ("editblog".equals(request.getParameter("mode")))
                     </p>
                 </div>
             </fieldset>
-            <br>
+            <br/>
             <%-- <div class="editarInfo"><p><a onclick="validaForma()" href="<%=%>">Guardar</a></p></div>
             <div class="editarInfo"><p><a class="button" href="<%=paramRequest.getRenderUrl()%>">Cancelar</a></p></div> --%>
             <script type="text/javascript">
