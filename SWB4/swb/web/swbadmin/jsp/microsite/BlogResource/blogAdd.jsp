@@ -38,9 +38,9 @@
         <fieldset><legend>Agregar entrada</legend>
             <div>
                 <p>
-                    <br><label for="title">Título:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><br><input id="title" size="50" maxlength="50" name="title" value=""><br><br>
-                    <label for="description">Descripción:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><br><textarea rows="10" cols="45" id="description" name="description"></textarea><br><br>
-                    <label for="editor">Contenido de la entrada:&nbsp;&nbsp;&nbsp;</label><br><br>
+                    <br/><label for="title">Título:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><br/><input id="title" size="50" maxlength="50" name="title" value=""><br/><br/>
+                    <label for="description">Descripción:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><br/><textarea rows="10" cols="45" id="description" name="description"></textarea><br/><br/>
+                    <label for="editor">Contenido de la entrada:&nbsp;&nbsp;&nbsp;</label><br/><br/>
                     <textarea id="editor" plugins="['undo', 'redo', 'cut', 'copy', 'paste','|','bold','italic','underline', 'strikethrough','forecolor', 'hilitecolor','|','insertUnorderedList','insertOrderedList','|','createLink','unlink','|','indent', 'outdent','justifyCenter', 'justifyFull', 'justifyLeft', 'justifyRight', 'delete', 'selectall']" dojoType="dijit.Editor" rows="5" cols="23" name="editor"></textarea>
                     <script type="text/javascript">
                         function validaForma()
@@ -77,7 +77,7 @@
                 </p>
             </div>
         </fieldset>
-        <br>
+        <br/>
                     <fieldset>
                         <legend><strong>¿Quién puede ver esta entrada?</strong></legend>
                         <ul class="options">
@@ -87,13 +87,11 @@
                             <%-- <li><label><input type="radio" class="radio" name="level" value="3" /> Sólo yo</label></li> --%>
                         </ul>
                     </fieldset>
-                            <br>
-            <%-- <div class="editarInfo"><p><a onclick="validaForma()" href="#">Guardar</a></p></div>
-            <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Cancelar</a></p></div>         --%>
+                            <br/>
     </div>    
 </form>
-    <br>
-    <br>
+    <br/>
+    <br/>
         </div>
         <div class="columnaCentro">
 
