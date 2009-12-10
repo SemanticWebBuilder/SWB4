@@ -53,7 +53,7 @@
 <div class="twoColContent">
 <div id="busquedaAvanzada">
       	<div class="buscador" id="busquedaPalabraClave">
-            <form name="busquedaKeyWords" method="post" action="{topic@getUrl}/../Busqueda" >
+            <form id="busquedaKeyWords" method="post" action="{topic@getUrl}/../Busqueda" >
           	    <div>
                 <label for="buscadorKeywords">Busca por palabra clave</label>
                 <input name="q" type="text" id="buscadorKeywords" value="B&uacute;squeda por palabra clave" >
