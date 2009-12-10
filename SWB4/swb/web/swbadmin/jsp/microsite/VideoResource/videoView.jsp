@@ -27,7 +27,7 @@
             fs.setShortMonths(months);
             dateFormat.setDateFormatSymbols(fs);
 
-            java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");            
+            java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             String cssPath = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/images/";
             User user = paramRequest.getUser();
@@ -226,7 +226,7 @@
                         {
                             description = video.getDescription();
                         }
-                         String postAuthor = "Usuario dado de baja";
+                        String postAuthor = "Usuario dado de baja";
                         if (video.getCreator() != null)
                         {
                             postAuthor = video.getCreator().getFirstName();
@@ -248,9 +248,9 @@
                 <%
                         }
                 %>
-                 <%
-                        if (video.canModify(member) || isAdministrator)
-                        {
+                <%
+                       if (video.canModify(member) || isAdministrator)
+                       {
                 %>
                 | <a href="<%=removeurl%>">Eliminar</a>
                 <%
@@ -362,5 +362,12 @@
         %>
         <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS al canal de videos de la comunidad</a></li>
     </ul>
+    <%
+        if (!wputil.isSubscribed(member))
+        {
+    %>
     <br/><br/><p><span class="tituloRojo">NOTA: </span>Si se suscribe a los videos de la comunidad, recibirá una notificación por correo electrónico cuando algún miembro agrege o modifique algún video.</p>
+    <%            }
+    %>
+
 </div>
