@@ -54,7 +54,12 @@
                     if (comment.getCreator() != null && comment.getCreator().getPhoto() != null)
                     {
     %>
-    <img src="<%=SWBPortal.getWebWorkPath()%><%=comment.getCreator().getPhoto()%>" alt="foto">
+    <script type="text/javascript">
+                <!--
+                document.write('<img src="<%=SWBPortal.getWebWorkPath()%><%=comment.getCreator().getPhoto()%>" alt="foto">');
+                -->
+            </script>
+
     <%
                     } else
                     {
