@@ -33,7 +33,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -49,7 +51,6 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Descriptiveable;
 import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
@@ -106,6 +107,16 @@ public class SWBModelAdmin extends GenericResource {
             urlAction.setAction("upload");
             //out.println("<iframe id=\"templates\">");
             //out.println("<div id=\"vtemplates\" dojoType=\"dijit.TitlePane\" title=\"Templates existentes de Sitios \" class=\"admViewTemplates\" open=\"true\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
+
+            
+            out.println("<script type=\"text/javascript\">"+
+                   "dojo.require(\"dojo.parser\");" +
+                   "dojo.require(\"dijit.layout.ContentPane\");"+
+                   "dojo.require(\"dijit.form.Form\");"+
+                   "dojo.require(\"dijit.form.ValidationTextBox\");"+
+                   "dojo.require(\"dijit.form.Button\");"+
+                   "</script>");
+          
             out.println("<div class=\"swbform\">");
             out.println("<fieldset>");
             out.println("<legend>" + paramRequest.getLocaleString("existTpls") + "</legend>");
@@ -114,6 +125,7 @@ public class SWBModelAdmin extends GenericResource {
             out.println("<tr align=\"left\">");
             out.println("<th><b>" + paramRequest.getLocaleString("tpl") + "</b></th>");
             out.println("<th><b>" + paramRequest.getLocaleString("size") + "</b></th>");
+            out.println("<th><b>" + paramRequest.getLocaleString("date") + "</b></th>");
             out.println("<th><b>"+paramRequest.getLocaleString("install") +"</b></th>");
             out.println("<th><b>"+paramRequest.getLocaleString("download") + "</b></th>");
             out.println("<th><b>"+paramRequest.getLocaleString("delete") + "</b></th>");
@@ -133,7 +145,11 @@ public class SWBModelAdmin extends GenericResource {
                     out.println("<a href=\"" + url.toString() + "\" onclick=\"submitUrl('" + url.toString() + "',this);return false;\">" + fileName + "</a>");
                     out.println("</td><td>");
                     out.println(filex.length() + " bytes");
-                    out.println("</td>");
+                    out.println("</td><td>");
+                    Date date=new Date(filex.lastModified());
+                    SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy");
+                    out.println(sdf.format(date));
+                    out.println("</td></td>");
                     url.setMode("installmodel");
                     url.setAction("form");
                     url.setParameter("fileName", fileName);
@@ -150,7 +166,8 @@ public class SWBModelAdmin extends GenericResource {
             out.println("</fieldset>");
             out.println("<fieldset><span align=\"center\">");
             out.println("" + paramRequest.getLocaleString("upload") + "<input type=\"file\" name=\"zipmodel\" value=\"" + paramRequest.getLocaleString("new") + "\"/><br/>");
-            out.println("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button id=\"send\" dojoType=\"dijit.form.Button\" type=\"submit\">"+paramRequest.getLocaleString("up")+"</button>");
+            //out.println("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button id=\"send\" type=\"submit\"dojoType=\"dijit.form.Button\">"+paramRequest.getLocaleString("up")+"</button>");
+            out.println("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"submit\" id=\"send\" value=\""+paramRequest.getLocaleString("up")+"\"/>");
             out.println("</fieldset>");
             out.println("</form>");
             out.println("</div>");
@@ -179,6 +196,7 @@ public class SWBModelAdmin extends GenericResource {
             out.println(strbf.toString());
         } catch (Exception e) {
             log.debug(e);
+            e.printStackTrace();
         }
     }
 
