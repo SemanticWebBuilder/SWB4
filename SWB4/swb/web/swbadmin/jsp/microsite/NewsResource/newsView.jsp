@@ -358,5 +358,6 @@
         %>
         <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS al canal de noticias de la comunidad</a></li>
     </ul>
+    <br/><br/><p><span class="tituloRojo">NOTA: </span>Si se suscribe a las noticias de la comunidad, recibirá una notificación por correo electrónico cuando algún miembro agrege o modifique alguna noticia.</p>
 </div>
 
