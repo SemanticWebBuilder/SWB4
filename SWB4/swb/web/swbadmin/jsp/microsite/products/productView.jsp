@@ -30,11 +30,11 @@
             <img src="<%=basepath+product.getSmallPhoto()%>" width="125" border="0">
         </a>
         </td><td valign="top" align="left"><small>
-        <b><%=product.getTitle()%></b> <BR>
-        <%=product.getProdDescription()%> <BR>
-        <%=product.getCreated()%> <BR>
+        <b><%=product.getTitle()%></b> <br/>
+        <%=product.getProdDescription()%> <br/>
+        <%=product.getCreated()%> <br/>
         <!--</small></td><td valign="top"><small>-->
-        <%=product.getViews()%> vistas<BR>
+        <%=product.getViews()%> vistas<br/>
         </small></td></tr>
       </table>
     </td>
