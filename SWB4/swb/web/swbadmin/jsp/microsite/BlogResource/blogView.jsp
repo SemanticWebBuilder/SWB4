@@ -431,8 +431,8 @@
             if (!editarblog)
             {
     %>
-    <br/><br/><p><span class="tituloRojo">NOTA: </span>Sólo el dueño de la comunidad puede cambiar la información básica del blog.</p>
-    <br/><br/><p><span class="tituloRojo">NOTA: </span>Si se suscribe al blog de la comunidad, recibirá una notificación por correo electrónico cuando algún miembro agrege o modifique alguna entrada.</p>
+    <br/><br/><p><span class="tituloRojo">NOTA: </span>Sólo el dueño de la comunidad puede cambiar el título y descripción del blog.</p>
+    <p><span class="tituloRojo">NOTA: </span>Si se suscribe al blog de la comunidad, recibirá una notificación por correo electrónico cuando algún miembro agrege o modifique alguna entrada.</p>
     <%            }
     %>
 </div>
