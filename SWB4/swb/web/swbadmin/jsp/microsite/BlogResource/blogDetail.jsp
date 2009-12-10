@@ -6,7 +6,7 @@
     {
         if(confirm('¿Esta seguro de borrar la entrada '+title+'?'))
         {
-            var url=url+'&uri='+escape(uri);
+            var url=url+'&amp;uri='+escape(uri);
             window.location.href=url;
         }
     }
