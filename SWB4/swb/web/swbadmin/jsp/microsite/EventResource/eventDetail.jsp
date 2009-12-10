@@ -100,7 +100,7 @@
             <img id="img_<%=event.getId()%>" src="<%= pathPhoto%>" alt="<%=event.getTitle()%>" width="195" height="180" />
         </a>
     </p>
-    <p><span class="itemTitle">Comienza:</span> <%= comienza%> a las <%= hcomienza%><br>
+    <p><span class="itemTitle">Comienza:</span> <%= comienza%> a las <%= hcomienza%><br/>
         <span class="itemTitle">Termina:&nbsp;&nbsp;&nbsp;</span> <%= termina%> a las <%= htermina%></p>
 
     <br/>

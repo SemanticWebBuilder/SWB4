@@ -304,8 +304,8 @@
         <img src="<%=pathPhoto%>" alt="<%= event.getTitle()%>"/>
         <div class="noticiaTexto">
             <h2><%=event.getTitle()%></h2>
-            <p>Fecha del evento: <%=fechaEvento%> a las <%=hfechaEvento%><br>
-            &nbsp;<br>Por: <%=postAuthor%><br>Creado el: <%=dateFormat.format(event.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%></p>
+            <p>Fecha del evento: <%=fechaEvento%> a las <%=hfechaEvento%><br/>
+            &nbsp;<br/>Por: <%=postAuthor%><br/>Creado el: <%=dateFormat.format(event.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%></p>
             <p>
                 <%=event.getDescription()%> | <a href="<%=viewUrl.toString(true)%>">Ver más</a>
                 <%
@@ -327,7 +327,7 @@
 
             </p>
             <p class="stats">
-            	Puntuación: <%=rank%><br>
+            	Puntuación: <%=rank%><br/>
                 <%=event.getViews()%> vistas
             </p>
         </div>
@@ -404,7 +404,7 @@
             if (paginas > 1)
             {
     %>
-    <br><br>
+    <br/><br/>
     <%            }
     %>
     <ul class="miContenido">
