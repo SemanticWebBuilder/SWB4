@@ -14,7 +14,7 @@
 %>
 <%
             java.text.SimpleDateFormat dateFormat;
-            java.text.SimpleDateFormat timeFormat=new java.text.SimpleDateFormat("HH:mm");
+            java.text.SimpleDateFormat timeFormat = new java.text.SimpleDateFormat("HH:mm");
 
 
             String lang = "es";
@@ -78,7 +78,8 @@
                             event.remove();
                         }
                     }
-                } catch (RuntimeException e)
+                }
+                catch (RuntimeException e)
                 {
                     SWBUtils.getLogger(this.getClass()).error(e);
                 }
@@ -106,7 +107,8 @@
                             elementos++;
                         }
                     }
-                } catch (RuntimeException e)
+                }
+                catch (RuntimeException e)
                 {
                     if (event.canView(member))
                     {
@@ -132,7 +134,8 @@
                     ipage = Integer.parseInt(request.getParameter("ipage"));
                     inicio = (ipage * ELEMENETS_BY_PAGE) - ELEMENETS_BY_PAGE;
                     fin = (ipage * ELEMENETS_BY_PAGE);
-                } catch (NumberFormatException nfe)
+                }
+                catch (NumberFormatException nfe)
                 {
                     ipage = 1;
                 }
@@ -265,14 +268,16 @@
                         try
                         {
                             fechaEvento = dateFormat.format(event.getStartDate());
-                        } catch (Exception e)
+                        }
+                        catch (Exception e)
                         {
                         }
                         String hfechaEvento = "Sin determinar";
                         try
                         {
                             hfechaEvento = timeFormat.format(event.getStartTime());
-                        } catch (Exception e)
+                        }
+                        catch (Exception e)
                         {
                         }
                         String rank = df.format(event.getRank());
@@ -305,7 +310,7 @@
         <div class="noticiaTexto">
             <h2><%=event.getTitle()%></h2>
             <p>Fecha del evento: <%=fechaEvento%> a las <%=hfechaEvento%><br/>
-            &nbsp;<br/>Por: <%=postAuthor%><br/>Creado el: <%=dateFormat.format(event.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%></p>
+                &nbsp;<br/>Por: <%=postAuthor%><br/>Creado el: <%=dateFormat.format(event.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%></p>
             <p>
                 <%=event.getDescription()%> | <a href="<%=viewUrl.toString(true)%>">Ver más</a>
                 <%
@@ -419,7 +424,8 @@
         %>
         <li><a href="<%=urla%>">Suscribirse a eventos de la comunidad</a></li>
         <%
-                } else
+                }
+                else
                 {
                     urla.setParameter("act", "unsubscribe");
         %>
@@ -431,5 +437,12 @@
         %>
         <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS al canal de eventos de la comunidad</a></li>
     </ul>
+    <%
+        if (!wputil.isSubscribed(member))
+        {
+    %>
     <br/><br/><p><span class="tituloRojo">NOTA: </span>Si se suscribe a los eventos de la comunidad, recibirá una notificación por correo electrónico cuando algún miembro agrege o modifique algún evento.</p>
+    <%            }
+    %>
+
 </div>
