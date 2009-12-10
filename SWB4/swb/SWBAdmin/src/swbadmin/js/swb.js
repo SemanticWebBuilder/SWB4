@@ -1365,3 +1365,19 @@ function replaceChars4Id(value, lowercase)
               handleAs: "text"
           });
       }
+
+
+
+
+    dojo.require("dojox.html.styles");
+    function setStyleSheetByInstance(rules, sufix, title) {
+        rules = rules.split('}');
+        for(i=0; i<rules.length; i++) {
+            rule = rules[i].split('{');
+            if(rule[1])
+                if(arguments.length==3)
+                    dojox.html.insertCssRule(rule[0]+'_'+sufix, rule[1], title);
+                else
+                    dojox.html.insertCssRule(rule[0]+'_'+sufix, rule[1]);
+        }
+    }
