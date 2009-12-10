@@ -192,7 +192,7 @@ public class StylerDomParser {
             script.append("<tr>");
             script.append("<td class=\"label\">vertical-align :</td>");
             script.append("<td>");
-            script.append("<select dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\"Valor inválido\" id=\"fs_"+(++serial)+"\" name=\"cursor\" style=\"width:100px\" onchange=\"sendData(dojo.byId('stel').value, this.name, this.value);\">");
+            script.append("<select dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\"Valor inválido\" id=\"fs_"+(++serial)+"\" name=\"vertical-align\" style=\"width:100px\" onchange=\"sendData(dojo.byId('stel').value, this.name, this.value);\">");
             script.append("<option value=\"empty\"></option>");
             script.append("<option value=\"baseline\">default</option>");
             script.append("<option value=\"top\">pointer</option>");
