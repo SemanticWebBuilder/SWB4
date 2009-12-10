@@ -56,10 +56,10 @@
             <form id="busquedaKeyWords" method="post" action="{topic@getUrl}/../Busqueda" >
           	    <div>
                 <label for="buscadorKeywords">Busca por palabra clave</label>
-                <input type="text" id="buscadorKeywords" value="B&uacute;squeda por palabra clave" ></input>
+                <input type="text" id="buscadorKeywords" value="B&uacute;squeda por palabra clave" />
                 <label for="buscarKeywords">Buscar</label>
-                <input type="submit" id="buscarKeywords" value="Buscar" /></input>
-                <input type="hidden" name="what" id="what" value="All"/></input>
+                <input type="submit" id="buscarKeywords" value="Buscar" />
+                <input type="hidden" name="what" id="what" value="All"/>
               </div>
             </form>
           </div>
@@ -82,7 +82,7 @@
 <script type="text/javascript">
     var MenuBar3 = new Spry.Widget.MenuBar("MenuBar3");
 </script>
-<br>
+<br/>
 <%
 if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
     if (results != null && results.size() > 0) {
@@ -96,10 +96,10 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
             if (so.getSemanticClass().isSubClass(Geolocalizable.swb_Geolocalizable)) {                
                 DirectoryObject dob = (DirectoryObject) so.createGenericInstance();
                 so.getProperty(Addressable.swbcomm_streetName);
-                String html = "<b><font color=\"blue\">" + dob.getTitle() + "</font></b><br>" +
+                String html = "<b><font color=\"blue\">" + dob.getTitle() + "</font></b><br/>" +
                     getAddressString(so) +
-                    "<br><b>Contacto:</b> " + so.getProperty(Contactable.swbcomm_contactName) +
-                    "<br><b>Teléfono:</b> " + so.getProperty(Contactable.swbcomm_contactPhoneNumber);
+                    "<br/><b>Contacto:</b> " + so.getProperty(Contactable.swbcomm_contactName) +
+                    "<br/><b>Teléfono:</b> " + so.getProperty(Contactable.swbcomm_contactPhoneNumber);
                 //System.out.println(html);
                 objs.add(new GeoLocation(
                     so.getDoubleProperty(Geolocalizable.swb_latitude),
@@ -173,7 +173,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
             <div id="map_container">
                     <div id="map_canvas" style="border:1px solid black; width: 480px; height: 300px;"></div>
             </div>
-            <br>
+            <br/>
 
             <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<%=SWBPortal.getEnv("key/gmap","")%>" type="text/javascript"></script>
             <script type="text/javascript">
@@ -420,7 +420,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
         <%
     } else if (request.getParameter("q") != null && !request.getParameter("q").equals("")) {
         %><h3>Resultados de la b&uacute;squeda <i><%=request.getParameter("q")%></i></h3>
-        <br>
+        <br/>
         <hr/>
         <p>
             No hay resultados.
@@ -451,7 +451,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
         if (extNumber == null || extNumber.equals("null")) {
             extNumber = "";
         } else {
-            extNumber = " exterior " + extNumber + ",<br>";
+            extNumber = " exterior " + extNumber + ",<br/>";
         }
         String council = o.getProperty(Addressable.swbcomm_cityCouncil);
         if (council == null || council.equals("null")) council = "";
