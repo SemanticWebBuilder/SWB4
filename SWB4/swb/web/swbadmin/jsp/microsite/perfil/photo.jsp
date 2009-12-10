@@ -29,8 +29,8 @@
                 photo = SWBPortal.getWebWorkPath() + user.getPhoto();
             }
 %>
-<br>
-<img src="<%=photo%>" width="150" height="150" alt="<%=user.getFullName()%>" /><br>
+<br/>
+<img src="<%=photo%>" width="150" height="150" alt="<%=user.getFullName()%>" /><br/>
 <%if (owner.equals(user))
             {%>
 <a class="cambiarFoto" href="<%=wpage.getUrl()%>?changePhoto=1">[cambiar foto]</a>
