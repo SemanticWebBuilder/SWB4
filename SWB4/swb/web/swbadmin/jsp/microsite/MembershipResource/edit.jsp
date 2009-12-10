@@ -90,7 +90,7 @@ if(site.getPhoto()!=null)
                     <br/><div style="width:200px; height: 2px; border: 0px solid #BBB; text-align: center; float: left;"><div id="picture_progress" style=" height: 1px; position: relative; margin: 0px; padding: 1px; background: #9DC0F4; width: 0; float: left;" ></div></div>
                 </td></tr>
             <tr><td colspan="2" align="center"><br/><br/>
-                                    <br>
+                                    <br/>
                                 <div class="editarInfo">
                                 <p><a href="javascript:enviar();">[Cambiar imagen]</a></p>
                                 </div>
