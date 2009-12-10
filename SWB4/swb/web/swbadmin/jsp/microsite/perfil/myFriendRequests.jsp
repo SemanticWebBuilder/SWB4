@@ -319,7 +319,7 @@ if (!hasRequest)
                 else if (elementos == 0)
                 {
 %>
-<!-- <br><ul class="listaElementos">
+<!-- <ul class="listaElementos">
     <li>
         <a class="contactos_nombre" href="#">No has solicitado personas que se unan a ti como amigos.</a>
     </li>
@@ -333,7 +333,7 @@ if (!hasRequest)
         else
         {
 %>
-<!-- <br><ul class="listaElementos">
+<!-- <ul class="listaElementos">
     <li>
         <a class="contactos_nombre" href="#">No has solicitado personas que se unan a ti como amigos.</a>
     </li>
