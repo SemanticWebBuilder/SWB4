@@ -245,7 +245,7 @@
         %>
     </div>
     <div class="commentBox">
-        <form id="addJustifyForm" name="addJustifyForm" action="<%=aUrl%>">
+        <form id="addJustifyForm" action="<%=aUrl%>">
             <div id="addJustify" style="display:none;">
                 <label for="justify">Justificaci&oacute;n</label>
                 <textarea style="border:1px solid #CACACA;" name="justify" id="justify" cols="45" rows="5"></textarea>
