@@ -56,10 +56,10 @@
             <form id="busquedaKeyWords" method="post" action="{topic@getUrl}/../Busqueda" >
           	    <div>
                 <label for="buscadorKeywords">Busca por palabra clave</label>
-                <input name="q" type="text" id="buscadorKeywords" value="B&uacute;squeda por palabra clave" >
+                <input type="text" id="buscadorKeywords" value="B&uacute;squeda por palabra clave" ></input>
                 <label for="buscarKeywords">Buscar</label>
-                <input type="submit" id="buscarKeywords" value="Buscar" />
-                <input type="hidden" name="what" id="what" value="All"/>
+                <input type="submit" id="buscarKeywords" value="Buscar" /></input>
+                <input type="hidden" name="what" id="what" value="All"/></input>
               </div>
             </form>
           </div>
