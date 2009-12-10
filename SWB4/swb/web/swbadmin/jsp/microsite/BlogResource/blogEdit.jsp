@@ -55,14 +55,14 @@
                 <div>
                     <p>
                         <br/><label for="title">Título:&nbsp;&nbsp;&nbsp;&nbsp;</label><br/><input size="50" id="title" name="title" value="<%=post.getTitle()%>" maxlength="50"><br/><br/>
-                        <label for="description">Descripción:&nbsp;&nbsp;&nbsp;&nbsp;</label><br>
-                        <textarea size="50" rows="10" cols="45" id="description" name="description" maxlength="255" ><%=post.getDescription()%></textarea><br><br>
-                        <label for="editor">Contenido de entrada:</label><br><br>
+                        <label for="description">Descripción:&nbsp;&nbsp;&nbsp;&nbsp;</label><br/>
+                        <textarea size="50" rows="10" cols="45" id="description" name="description" maxlength="255" ><%=post.getDescription()%></textarea><br/><br/>
+                        <label for="editor">Contenido de entrada:</label><br/><br/>
                         <textarea plugins="['undo', 'redo', 'cut', 'copy', 'paste','|','bold','italic','underline', 'strikethrough','forecolor', 'hilitecolor','|','insertUnorderedList','insertOrderedList','|','createLink','unlink','|','indent', 'outdent','justifyCenter', 'justifyFull', 'justifyLeft', 'justifyRight', 'delete', 'selectall']" dojoType="dijit.Editor" id="editor" rows="5" cols="23" name="editor"><%=post.getContent()%></textarea>
                     </p>
                 </div>
             </fieldset>
-            <br>
+            <br/>
             <fieldset>
                 <legend><strong>¿Quién puede ver esta entrada?</strong></legend>
                 <ul class="options">
@@ -82,7 +82,7 @@
             }%>/> Sólo yo</label></li> --%>
                 </ul>
             </fieldset>
-            <br>
+            <br/>
             <%-- <div class="editarInfo"><p><a onclick="validaForma()" href="#">Guardar</a></p></div>
             <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Cancelar</a></p></div>                     --%>
             <script type="text/javascript">
@@ -153,9 +153,9 @@ else if ("editblog".equals(request.getParameter("mode")))
             <fieldset><legend></legend>
                 <div>
                     <p>
-                        <label for="title">Título del blog:</label><br>
-                        <input id="title" name="title" value="<%=blog.getTitle()%>" size="40" maxlength="50"><br><br>
-                        <label for="description">Descripción del blog:</label><br>
+                        <label for="title">Título del blog:</label><br/>
+                        <input id="title" name="title" value="<%=blog.getTitle()%>" size="40" maxlength="50"><br/><br/>
+                        <label for="description">Descripción del blog:</label><br/>
                         <textarea id="description" rows="10" cols="45"  name="description"><%=blog.getDescription()%></textarea>
                     </p>
                 </div>
