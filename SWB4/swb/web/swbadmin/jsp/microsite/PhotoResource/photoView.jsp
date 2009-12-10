@@ -268,7 +268,7 @@
         </a>
         <div class="noticiaTexto">
             <h2><%=photo.getTitle()%></h2>
-            <p>&nbsp;<br>Por: <%=postAuthor%><br><%=dateFormat.format(photo.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(photo.getCreated(), user.getLanguage())%></p>
+            <p>&nbsp;<br/>Por: <%=postAuthor%><br/><%=dateFormat.format(photo.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(photo.getCreated(), user.getLanguage())%></p>
             <p>
                 <%=photo.getDescription()%> | <a href="<%=viewurl.toString(true)%>">Ver más</a>
                 <%
@@ -289,7 +289,7 @@
                 %>
             </p>
             <p class="stats">
-            	Puntuación: <%=rank%><br>
+            	Puntuación: <%=rank%><br/>
                 <%=photo.getViews()%> vistas
             </p>
         </div>
@@ -367,7 +367,7 @@
             if (paginas > 1)
             {
     %>
-    <br><br>
+    <br/><br/>
     <%            }
     %>
     <ul class="miContenido">
