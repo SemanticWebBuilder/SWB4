@@ -288,12 +288,12 @@ private static final int ELEMENETS_BY_PAGE = 5;
                                 <img src="<%=pathPhoto%>" alt="<%= ev.getTitle()%>"/>
                                 <div class="noticiaTexto">
                                     <h2><%=ev.getTitle()%></h2>
-                                    <p>&nbsp;<br>Por: <%=postAuthor%><br><%=dateFormat.format(ev.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(ev.getCreated(), user.getLanguage())%></p>
+                                    <p>&nbsp;<br/>Por: <%=postAuthor%><br/><%=dateFormat.format(ev.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(ev.getCreated(), user.getLanguage())%></p>
                                     <p>
                                         <%=ev.getDescription()%> | <a href="<%=viewUrl%>">Ver m&aacute;s</a>
                                     </p>
                                     <p class="stats">
-                                        Puntuación: <%=rank%><br>
+                                        Puntuación: <%=rank%><br/>
                                         <%=ev.getViews()%> vistas
                                     </p>
                                 </div>
