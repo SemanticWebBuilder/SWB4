@@ -96,7 +96,12 @@
             %>
             <%=SWBUtils.TEXT.getTimeAgo(comment.getCreated(), mem.getLanguage())%>
         </p>
-        <p><%=comment.getDescription()%></p>
+        <p> <script type="text/javascript">
+                <!--
+                document.write('<%=comment.getDescription()%>');
+                -->
+            </script>
+        </p>
         <% int spam = 0;
                 try
                 {
