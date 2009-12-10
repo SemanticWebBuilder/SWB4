@@ -205,7 +205,7 @@
         <a href="<%=perfilPath%>?user=<%=friendUser.getEncodedURI()%>"><img alt="Foto de <%=friendUser.getFullName()%>" src="<%=photo%>" <%=imgSize%> title="<%=friendUser.getFullName()%>"/>
             <%if (!isStrategy)
                     {%>
-            <br>
+            <br/>
             <%=firstName%>
             <%=lastName%>
             <%}%>
