@@ -231,7 +231,7 @@
         <img src="<%= pathPhoto%>" alt="<%= anew.getTitle()%>"/>
         <div class="noticiaTexto">
             <h2><%=anew.getTitle()%></h2>
-            <p>&nbsp;<br>Por: <%=anew.getAuthor()%><br><%=dateFormat.format(anew.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(anew.getCreated(), user.getLanguage())%></p>
+            <p>&nbsp;<br/>Por: <%=anew.getAuthor()%><br/><%=dateFormat.format(anew.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(anew.getCreated(), user.getLanguage())%></p>
             <p>
                 <%=anew.getDescription()%> | <a href="<%=viewUrl.toString(true)%>">Ver más</a>
                 <%
@@ -252,7 +252,7 @@
                 %>
             </p>
             <p class="stats">
-            	Puntuación: <%=rank%><br>
+            	Puntuación: <%=rank%><br/>
                 <%=anew.getViews()%> vistas
             </p>
         </div>
@@ -331,7 +331,7 @@
             if (paginas > 1)
             {
     %>
-    <br><br>
+    <br/><br/>
     <%            }
     %>
     <ul class="miContenido">

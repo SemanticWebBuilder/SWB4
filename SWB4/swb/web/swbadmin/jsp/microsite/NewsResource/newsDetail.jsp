@@ -80,7 +80,7 @@
     %>
 </div>
 <div class="columnaCentro">
-    <h2 class="blogTitle"><%=anew.getTitle()%></h2><br>
+    <h2 class="blogTitle"><%=anew.getTitle()%></h2><br/>
     <p><%=anew.getDescription()%></p>
     <p>Por: <%= anew.getAuthor()%></p>
     <p>Fuente: <%= anew.getCitation()%></p>
