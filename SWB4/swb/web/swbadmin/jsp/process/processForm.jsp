@@ -101,7 +101,7 @@
                 out.println(">View</option>");
                 out.println("</select>");
                 out.println(prop.getDisplayName(lang));
-                out.println("<BR>");
+                out.println("<br/>");
             }
             out.println("<input type=\"submit\" value=\"Guardar\">");
         }
