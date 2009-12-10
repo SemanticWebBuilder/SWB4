@@ -23,6 +23,11 @@
             User user = paramRequest.getUser();
             WebPage wpage = paramRequest.getWebPage();
             PostElement post = (PostElement) request.getAttribute("post");
+            if (post == null)
+            {
+                response.sendError(404);
+                return;
+            }
             Member member = Member.getMember(user, wpage);
             boolean isAdministrator = false;
             if (user != null)
@@ -98,7 +103,7 @@
 <div class="columnaCentro">
     <h2 class="blogTitle"><%=post.getTitle()%></h2>
     <p>
-    <script type="text/javascript">
+        <script type="text/javascript">
             <!--
             document.write('<%=post.getDescription()%>');
             -->
