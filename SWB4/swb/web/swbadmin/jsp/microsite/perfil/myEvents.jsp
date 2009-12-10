@@ -243,12 +243,12 @@
         <img src="<%=pathPhoto%>" alt="<%= event.getTitle()%>"/>
         <div class="noticiaTexto">
             <h2><%=event.getTitle()%></h2>
-            <p>&nbsp;<br>Por: <%=postAuthor%><br><%=dateFormat.format(event.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%></p>
+            <p>&nbsp;<br/>Por: <%=postAuthor%><br/><%=dateFormat.format(event.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%></p>
             <p>
                 <%=event.getDescription()%> | <a href="<%=viewUrl%>">Ver más</a>
             </p>
             <p class="stats">
-            	Puntuación: <%=rank%><br>
+            	Puntuación: <%=rank%><br/>
                 <%=event.getViews()%> vistas
             </p>
         </div>
