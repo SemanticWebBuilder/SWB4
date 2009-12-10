@@ -417,7 +417,7 @@
                 {
                     urla.setParameter("act", "subscribe");
         %>
-        <li><a href="<%=urla%>">Suscribirse a eventos</a></li>
+        <li><a href="<%=urla%>">Suscribirse a eventos de la comunidad</a></li>
         <%
                 } else
                 {
