@@ -42,15 +42,15 @@ public class TestStyler extends GenericResource {
 
             if(base.getAttribute("css")!=null) {
                 out.println("<script type=\"text/javascript\">");
-                out.println("dojo.require(\"dojox.html.styles\");");
-                out.println("function setStyleSheetByInstance(rules, sufix, title) {");
-                out.println("  rules = rules.split('}');");
-                out.println("  for(i=0; i<rules.length; i++) {");
-                out.println("    rule = rules[i].split('{');");
-                out.println("    if(rule[1])");
-                out.println("      dojox.html.insertCssRule(rule[0]+'_'+sufix, rule[1]);");
-                out.println("  }");
-                out.println("}");
+//                out.println("dojo.require(\"dojox.html.styles\");");
+//                out.println("function setStyleSheetByInstance(rules, sufix, title) {");
+//                out.println("  rules = rules.split('}');");
+//                out.println("  for(i=0; i<rules.length; i++) {");
+//                out.println("    rule = rules[i].split('{');");
+//                out.println("    if(rule[1])");
+//                out.println("      dojox.html.insertCssRule(rule[0]+'_'+sufix, rule[1]);");
+//                out.println("  }");
+//                out.println("}");
                 out.println("setStyleSheetByInstance('"+base.getAttribute("css")+"','"+base.getId()+"');");
                 out.println("</script>");
             }
