@@ -81,7 +81,8 @@
                     ipage = Integer.parseInt(request.getParameter("ipage"));
                     inicio = (ipage * ELEMENETS_BY_PAGE) - ELEMENETS_BY_PAGE;
                     fin = (ipage * ELEMENETS_BY_PAGE);
-                } catch (NumberFormatException nfe)
+                }
+                catch (NumberFormatException nfe)
                 {
                     ipage = 1;
                 }
@@ -258,10 +259,10 @@
     <div class="noticia">
         <script type="text/javascript">
             dojo.addOnLoad(function(){
-        var props={href:'<%=imgPhoto%>'};
-        var a=new dojox.image.Lightbox(props,"aimg_<%=iElement + base.getId()%>");
-        a.startup();
-        });
+                var props={href:'<%=imgPhoto%>'};
+                var a=new dojox.image.Lightbox(props,"aimg_<%=iElement + base.getId()%>");
+                a.startup();
+            });
         </script>
         <a href="<%=imgPhoto%>" id="aimg_<%=iElement + base.getId()%>" title="<%= photo.getTitle()%>" >
             <img id="img_<%=iElement + base.getId()%>" src="<%=pathPhoto%>" alt="<%= photo.getTitle()%>" width="140" height="140" />
@@ -381,7 +382,8 @@
         %>
         <li><a href="<%=urla%>">Suscribirse a las fotos de la comunidad</a></li>
         <%
-                } else
+                }
+                else
                 {
                     urla.setParameter("act", "unsubscribe");
         %>
@@ -393,5 +395,12 @@
         %>
         <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS al canal de fotos de la comunidad</a></li>
     </ul>
+    <%
+        if (!wputil.isSubscribed(member))
+        {
+    %>
     <br/><br/><p><span class="tituloRojo">NOTA: </span>Si se suscribe a las fotos de la comunidad, recibirá una notificación por correo electrónico cuando algún miembro agrege o modifique alguna foto.</p>
+    <%            }
+    %>
+
 </div>
