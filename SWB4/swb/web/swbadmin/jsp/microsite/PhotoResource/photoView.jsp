@@ -6,9 +6,7 @@
     function validateremove(url, title)
     {
         if(confirm('¿Esta seguro de borrar la foto: '+title+'?'))
-        {
-            //var url=url+'&uri='+escape(uri);
-            //alert(url);
+        {            
             window.location.href=url;
         }
     }
