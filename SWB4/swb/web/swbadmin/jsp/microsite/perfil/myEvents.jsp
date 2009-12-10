@@ -148,7 +148,7 @@
             if (paginas > 1)
             {
     %>
-    <div id="paginacion">
+    <div class="paginacion">
 
 
         <%
@@ -270,7 +270,7 @@
             if (paginas > 1)
             {
     %>
-    <div id="paginacion">
+    <div class="paginacion">
 
 
         <%
