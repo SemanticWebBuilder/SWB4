@@ -115,7 +115,7 @@ if (null!=microsite){
     inicio++;
     if (paginas > 1)
     {
-        println """<div id="paginacion">"""
+        println """<div class="paginacion">"""
 
         String nextURL = "#";
         String previusURL = "#";        
@@ -246,7 +246,7 @@ if (null!=microsite){
         }    
         if (paginas > 1)
         {
-            println """<div id="paginacion">"""
+            println """<div class="paginacion">"""
             String nextURL = "#";
             String previusURL = "#";
             if (ipage < paginas)
