@@ -45,22 +45,22 @@
                 String title = "Sin título";
                 if (rec.getTitle() != null)
                 {
-                    title = rec.getTitle();
+                    title = rec.getTitle().replace("'", "\\'");
                 }
                 String description = "Sin descripción";
                 if (rec.getDescription() != null)
                 {
-                    description = rec.getDescription();
+                    description = rec.getDescription().replace("'", "\\'");
                 }
                 String tags = "Sin etiquetas";
                 if (rec.getTags() != null)
                 {
-                    tags = rec.getTags();
+                    tags = rec.getTags().replace("'", "\\'");
                 }
                 String code="Video no definido";
                 if(rec.getCode()!=null)
                     {
-                    code=rec.getCode().replaceAll("&", "&amp;");
+                    code=rec.getCode().replaceAll("&", "&amp;").replace("'", "\\'");
                     }
 %>
 <div class="columnaIzquierda">    
@@ -79,10 +79,24 @@
     %>
 </div>
 <div class="columnaCentro">
-    <h2 class="blogTitle"><%=title%></h2><br/>
-    <p><%=description%></p>
+    <h2 class="blogTitle">
+    <script type="text/javascript">
+            <!--
+            document.write('<%=title%>');
+            -->
+        </script></h2><br/>
+    <p>
+    <script type="text/javascript">
+            <!--
+            document.write('<%=description%>');
+            -->
+        </script></p>
     <p>Creado el: <%=dateFormat.format(rec.getCreated())%></p>
-    <p>Etiquetas: <%=tags%></p>
+    <p>Etiquetas: <script type="text/javascript">
+            <!--
+            document.write('<%=tags%>');
+            -->
+        </script></p>
     <p><%=rec.getViews()%> vistas</p>
     <p>Calificación: <%=rank%></p>
     <p><a href="<%=paramRequest.getRenderUrl()%>">[Ver todos los videos]</a></p>    
