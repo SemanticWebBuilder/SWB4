@@ -219,12 +219,12 @@
                         String title = "Sin título";
                         if (video.getTitle() != null)
                         {
-                            title = video.getTitle();
+                            title = video.getTitle().replace("'", "\\'");
                         }
                         String description = "Sin descripción";
                         if (video.getDescription() != null)
                         {
-                            description = video.getDescription();
+                            description = video.getDescription().replace("'", "\\'");
                         }
                         String postAuthor = "Usuario dado de baja";
                         if (video.getCreator() != null)
