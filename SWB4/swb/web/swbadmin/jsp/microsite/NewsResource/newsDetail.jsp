@@ -80,10 +80,24 @@
     %>
 </div>
 <div class="columnaCentro">
-    <h2 class="blogTitle"><%=anew.getTitle()%></h2><br/>
-    <p><%=anew.getDescription()%></p>
+    <h2 class="blogTitle">
+        <script type="text/javascript">
+            <!--
+            document.write('<%=anew.getTitle()%>');
+            -->
+        </script></h2><br/>
+    <p>
+    <script type="text/javascript">
+            <!--
+            document.write('<%=anew.getDescription()%>');
+            -->
+        </script></p>
     <p>Por: <%= anew.getAuthor()%></p>
-    <p>Fuente: <%= anew.getCitation()%></p>
+    <p>Fuente: <script type="text/javascript">
+            <!--
+            document.write('<%= anew.getCitation()%>');
+            -->
+        </script></p>
     <p>Creado el: <%=dateFormat.format(anew.getCreated())%></p>
     <p><%=anew.getViews()%> vistas</p>
     <p>Calificación: <%=rank%></p>
@@ -107,10 +121,10 @@
         %>
         <li><a href="<%=urla%>">Suscribirse a esta comunidad</a></li>
         <%
-                    }
-                    else
-                    {
-                        urla.setParameter("act", "unsubscribe");
+                }
+                else
+                {
+                    urla.setParameter("act", "unsubscribe");
         %>
         <li><a href="<%=urla%>">Cancelar suscripción a comunidad</a></li>
         <%
