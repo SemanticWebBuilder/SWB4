@@ -2,8 +2,7 @@
 <h2>Clasificados m&aacute;s recientes</h2>
 <ul class="listaElementos">
     <%
-        String defaultFormat = "dd/MM/yy HH:mm";
-        SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
+        String defaultFormat = "dd/MM/yy HH:mm";        
         SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
         //WebPage webpage = (WebPage) request.getAttribute("webpage");
         WebPage webpage = paramRequest.getWebPage();
@@ -93,7 +92,7 @@
         String url = obj.getWebPage().getUrl();
     %>
     <li><%=name%> agregó el anuncio <a href="<%=url%>"><%=obj.getTitle()%></a>
-        (<%=created%>)</li>
+        , <%=created%></li>
         <%
             count++;
             if (count == 10)
@@ -105,5 +104,3 @@
 
         %>
 </ul>
-<%--
-<p class="vermas"><a href="<%=clasificados.getUrl()%>" >Ver m&aacute;s</a></p> --%>
