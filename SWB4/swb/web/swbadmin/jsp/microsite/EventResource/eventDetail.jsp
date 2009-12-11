@@ -26,6 +26,26 @@
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");
             String rank = df.format(event.getRank());
+            String title = "";
+            if (event != null && event.getTitle() != null)
+            {
+                title = event.getTitle().replace("'", "\\'");
+            }
+            String description = "";
+            if (event != null && event.getDescription() != null)
+            {
+                description = event.getDescription().replace("'", "\\'");
+            }
+            String place = "";
+            if (event != null && event.getPlace() != null)
+            {
+                place = event.getPlace().replace("'", "\\'");
+            }
+            String audience = "";
+            if (event != null && event.getAudienceType() != null)
+            {
+                audience = event.getAudienceType().replace("'", "\\'");
+            }
             if (event != null && event.canView(member))
             {
                 String comienza = "Sin determinar";
@@ -89,6 +109,8 @@
                     imgPhoto = SWBPortal.getWebWorkPath() + path + "/" + event.getEventImage();
                 }
 
+
+
 %>
 <div class="columnaIzquierda">
     <%
@@ -100,14 +122,14 @@
     <h2>
         <script type="text/javascript">
             <!--
-            document.write('<%= event.getTitle()%>');
+            document.write('<%= title%>');
             -->
         </script>
     </h2>
     <p>
         <script type="text/javascript">
             <!--
-            document.write('<%= event.getDescription()%>');
+            document.write('<%= description%>');
             -->
         </script></p>
     <p>
@@ -200,15 +222,15 @@
     %>
     <p>Audiencia:  <script type="text/javascript">
         <!--
-        document.write('<%= event.getAudienceType()%>');
+        document.write('<%= audience%>');
         -->
         </script></p>
     <p>Lugar: <strong>
-        <script type="text/javascript">
-        <!--
-        document.write('<%= event.getPlace()%>');
-        -->
-        </script></strong></p>
+            <script type="text/javascript">
+                <!--
+                document.write('<%= place%>');
+                -->
+            </script></strong></p>
     <p>Asistentes:
         <%
             Iterator<User> users = event.listAttendants();
