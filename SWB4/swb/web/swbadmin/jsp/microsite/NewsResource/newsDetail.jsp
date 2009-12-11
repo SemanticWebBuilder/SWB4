@@ -51,20 +51,20 @@
                 pathPhoto = SWBPortal.getWebWorkPath() + path + "/" + anew.getNewsThumbnail();
             }
             String title = "";
-                if (anew.getTitle() != null)
-                {
-                    title = anew.getTitle().replace("'", "\\'");
-                }
-                String description = "";
-                if (anew.getDescription() != null)
-                {
-                    description = anew.getDescription().replace("'", "\\'");
-                }
-                String citation="";
-                if (anew.getCitation() != null)
-                {
-                    citation = anew.getCitation().replace("'", "\\'");
-                }
+            if (anew.getTitle() != null)
+            {
+                title = anew.getTitle().replace("'", "\\'");
+            }
+            String description = "";
+            if (anew.getDescription() != null)
+            {
+                description = anew.getDescription().replace("'", "\\'");
+            }
+            String citation = "";
+            if (anew.getCitation() != null)
+            {
+                citation = anew.getCitation().replace("'", "\\'");
+            }
 %>
 
 <div class="columnaIzquierda">
@@ -102,16 +102,16 @@
             -->
         </script></h2><br/>
     <p>
-    <script type="text/javascript">
+        <script type="text/javascript">
             <!--
             document.write('<%=description%>');
             -->
         </script></p>
     <p>Por: <%= anew.getAuthor()%></p>
     <p>Fuente: <script type="text/javascript">
-            <!--
-            document.write('<%=citation%>');
-            -->
+        <!--
+        document.write('<%=citation%>');
+        -->
         </script></p>
     <p>Creado el: <%=dateFormat.format(anew.getCreated())%></p>
     <p><%=anew.getViews()%> vistas</p>
