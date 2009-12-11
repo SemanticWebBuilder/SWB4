@@ -39,6 +39,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.portal.util.FileUpload;
+import org.semanticwb.base.util.ImageResizer;
 import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
 
 /**
@@ -61,7 +62,7 @@ public class ImageGallery extends GenericResource {
     private String workPath;
     private String webWorkPath;
 
-    private static int idx = 1;
+    private static final String _thumbnail = "thumbn_";
 
     @Override
     public void setResourceBase(Resource base)
@@ -69,8 +70,8 @@ public class ImageGallery extends GenericResource {
         try
         {
             super.setResourceBase(base);
-            workPath = (String) SWBPortal.getWorkPath() +  base.getWorkPath();
-            webWorkPath = (String) SWBPortal.getWebWorkPath() +  base.getWorkPath();
+            workPath = SWBPortal.getWorkPath() +  base.getWorkPath() + "/";
+            webWorkPath = SWBPortal.getWebWorkPath() +  base.getWorkPath() + "/";
         }
         catch(Exception e) { log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);  }
     }
@@ -84,13 +85,13 @@ public class ImageGallery extends GenericResource {
         PrintWriter out = response.getWriter();
 
         Resource base = getResourceBase();
-        Iterator<String> it = base.getAttributeNames();
         ArrayList<String> imgpath = new ArrayList<String>();
+        Iterator<String> it = base.getAttributeNames();        
         while(it.hasNext()) {
             String attname = it.next();
             String attval = base.getAttribute(attname);
-            if(attval!=null && attname.startsWith("imggallery_" + base.getId())) {
-                imgpath.add(webWorkPath +"/"+attval);
+            if( attval!=null && attname.startsWith("imggallery_") ) {
+                imgpath.add(webWorkPath + attval);
             }
         }
         String[] ip = new String[imgpath.size()];
@@ -100,7 +101,7 @@ public class ImageGallery extends GenericResource {
         out.flush();
     }
 
-    public String getGalleryScript(String oid, int twidth, int theight, boolean autoplay, int pause, int fadetime, int fullwidth, int fullheight, String title, String titlestyle, String[] imgpath) {
+    public String getGalleryScript(String oid, int twidth, int theight, boolean autoplay, int pause, int fadetime, int fullwidth, int fullheight, String title, String titlestyle, String[] imagepath) {
         StringBuilder out = new StringBuilder();
 
         out.append("\n<script type=\"text/javascript\" src=\""+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/jquery-imagegallery.js\"></script>");
@@ -125,10 +126,10 @@ public class ImageGallery extends GenericResource {
         out.append("	dimensions: ["+ twidth +", "+ theight +"], ");
         out.append("\n	imagearray: [ ");
 
-        for(String img : imgpath) {
-            out.append("\n['"+img+"','',''],");
+        for(String image : imagepath) {
+            out.append("\n['"+image+"','"+image.substring(0, image.lastIndexOf("/"))+"/"+_thumbnail+image.substring(image.lastIndexOf("/")+1)+"',''],");
         }
-        if(imgpath.length>0)
+        if(imagepath.length>0)
             out.deleteCharAt(out.length()-1);
 
         out.append("\n	], ");
@@ -195,9 +196,9 @@ public class ImageGallery extends GenericResource {
         String msg=paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_undefinedOperation");
         String action = null != request.getParameter("act") && !"".equals(request.getParameter("act").trim()) ? request.getParameter("act").trim() : paramRequest.getAction();
 
-        if(action.equals("add") || action.equals("edit")) {
+        if(action.equalsIgnoreCase("add") || action.equalsIgnoreCase("edit")) {
             out.println(getForm(request, paramRequest));
-        }else if(action.equals("update")) {
+        }else if(action.equalsIgnoreCase("update")) {
             FileUpload fup = new FileUpload();
             try {
                 fup.getFiles(request, response);
@@ -222,28 +223,33 @@ public class ImageGallery extends GenericResource {
                 base.setAttribute("titlestyle", value);
 
                 int i = 1;
-                String fileInput, filename, removeChk;
+                String filenameAttr, removeChk;
                 do {
                 //for(int j=0; j<15; j++) {
-                    fileInput = "imggallery_" + base.getId() + "_" + i;
+                    filenameAttr = "imggallery_" + base.getId() + "_" + i;
                     removeChk = "remove_" + base.getId() + "_" + i;
                     value = null!=fup.getValue(removeChk) && !"".equals(fup.getValue(removeChk).trim()) ? fup.getValue(removeChk).trim() : "0";
 
-                    if("1".equals(value) && base.getAttribute(fileInput)!=null) {
-                        File imgFile = new File(workPath + "/" + base.getAttribute(fileInput).trim());
-                        imgFile.delete();
-                        base.removeAttribute(fileInput);
+                    if("1".equals(value) && base.getAttribute(filenameAttr)!=null) {
+                        File file = new File(workPath + base.getAttribute(filenameAttr));
+                        file.delete();
+                        file = new File(workPath + _thumbnail + base.getAttribute(filenameAttr));
+                        file.delete();
+                        base.removeAttribute(filenameAttr);
                     }else {
-                        value = null!=fup.getFileName(fileInput) && !"".equals(fup.getFileName(fileInput).trim()) ? fup.getFileName(fileInput).trim() : null;
+                        value = null!=fup.getFileName(filenameAttr) && !"".equals(fup.getFileName(filenameAttr).trim()) ? fup.getFileName(filenameAttr).trim() : null;
                         if(value!=null) {
-                            filename = admResUtils.getFileName(base, value);
-                            if(filename!=null && !filename.trim().equals(""))
+                            String filename = admResUtils.getFileName(base, value);
+                            if(filename!=null && !filename.trim().equals(""))                            
                             {
                                 if (!admResUtils.isFileType(filename, "bmp|jpg|jpeg|gif|png")){
-                                    msg=paramRequest.getLocaleString("msgErrFileType") +" <i>bmp, jpg, jpeg, gif, png</i>: " + filename;
+                                    msg = paramRequest.getLocaleString("msgErrFileType") +" <i>bmp, jpg, jpeg, gif, png</i>: " + filename;
                                 }else {
-                                    if (admResUtils.uploadFile(base, fup, fileInput)){
-                                        base.setAttribute(fileInput, filename);
+                                    if (admResUtils.uploadFile(base, fup, filenameAttr)){                                        
+                                        File image = new File(workPath + filename);
+                                        File thumbnail = new File(workPath + _thumbnail + filename);
+                                        ImageResizer.resizeCrop(image, 180, thumbnail, "jpeg");
+                                        base.setAttribute(filenameAttr, filename);
                                     }else {
                                         msg=paramRequest.getLocaleString("msgErrUploadFile") +" <i>" + value + "</i>.";
                                     }
@@ -255,7 +261,7 @@ public class ImageGallery extends GenericResource {
                     }
                     i++;
                 //}
-                } while(value!=null || base.getAttribute(fileInput)!=null);
+                } while(value!=null || base.getAttribute(filenameAttr)!=null);
 
                 base.updateAttributesToDB();
 
