@@ -48,12 +48,12 @@
                 String title = "";
                 if (photo.getTitle() != null)
                 {
-                    title = photo.getTitle();
+                    title = photo.getTitle().replace("'", "\\'");
                 }
                 String description = "";
                 if (photo.getDescription() != null)
                 {
-                    description = photo.getDescription();
+                    description = photo.getDescription().replace("'", "\\'");
                 }
                 String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/PhotoResource/sinfoto.png";
                 String path = photo.getWorkPath();
