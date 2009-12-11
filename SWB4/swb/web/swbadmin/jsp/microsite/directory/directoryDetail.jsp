@@ -128,7 +128,6 @@
         expiration = semObject.getDateProperty(Clasified.swbcomm_expirationDate);
     }
     /*----------  Personal Data ---------*/
-    String contactName = semObject.getProperty(Commerce.swbcomm_contactName);
     String contactPhoneNumber = semObject.getProperty(Commerce.swbcomm_contactPhoneNumber);
     String contactEmail = semObject.getProperty(Commerce.swbcomm_contactEmail);
     String website = semObject.getProperty(Commerce.swbcomm_webSite);
@@ -261,6 +260,7 @@
         <%if (price != null) {%><p><span class="itemTitle">Precio: </span><%=price%></p><%}%>
         <%if (creator != null) {%><p><span class="itemTitle">Creado por: </span><%=creator%></p><%}%>
         <%if (created != null) {%><p><span class="itemTitle">Fecha de publicaci&oacute;n: </span><%=iso8601dateFormat.format(created)%></p><%}%>
+        <%if (website != null) {%><p><span class="itemTitle">P&aacute;gina web: </span><a href="<%=website%>"><%=website%></a></p><%}%>
         <%if (expiration != null) {%><p><span class="itemTitle">Fecha de expiraci&oacute;n: </span><%=iso8601dateFormat.format(expiration)%></p><%}%>
         <%if (!paymentType.equals("")) {%><p><span class="itemTitle">Forma de pago: </span><%=paymentType%></p><%}%>
         <%
