@@ -20,7 +20,7 @@
             User user = paramRequest.getUser();
             WebPage wpage = paramRequest.getWebPage();
             Member member = Member.getMember(user, wpage);
-boolean isAdministrator = false;
+            boolean isAdministrator = false;
             if (user != null)
             {
                 GenericIterator<UserGroup> groups = user.listUserGroups();
@@ -81,8 +81,17 @@ boolean isAdministrator = false;
                 }
 %>
 <div class="columnaIzquierda">
-    <h2><%=title%></h2><br/>
-    <p><%= description%></p>
+    <h2>
+        <script type="text/javascript">
+            <!--
+            document.write('<%=title%>');
+            -->
+        </script></h2><br/>
+    <p><script type="text/javascript">
+            <!--
+            document.write('<%= description%>');
+            -->
+        </script></p>
     <p><a title="<%= title%>" href="<%= imgPhoto%>">
             <img id="img_<%=photo.getId()%>" src="<%= pathPhoto%>" alt="<%=title%>" width="195" height="180" />
         </a></p>            
