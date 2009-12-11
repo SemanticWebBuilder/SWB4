@@ -72,6 +72,7 @@ import org.semanticwb.portal.db.SWBDBAdmLog;
 import org.semanticwb.portal.indexer.SWBIndexMgr;
 import org.semanticwb.portal.resources.ImageGallery;
 import org.semanticwb.portal.util.ContentStyles;
+import org.semanticwb.repository.Workspace;
 import org.semanticwb.util.JarFile;
 import org.semanticwb.util.db.GenericDB;
 import org.w3c.dom.Document;
@@ -2428,7 +2429,13 @@ public class SWBPortal {
                                 xmodelID = xmodelID.substring(0, pos);
                                 rdfmodel = SWBUtils.TEXT.replaceAll(rdfmodel, xmodelID, newId);
                                 io = SWBUtils.IO.getStreamFromString(rdfmodel);
-                                SWBPlatform.getSemanticMgr().createModelByRDF(newId + "_usr", "http://user." + newId + ".swb#", io, "N-TRIPLE");
+                                SemanticModel usermodel = SWBPlatform.getSemanticMgr().createModelByRDF(newId + "_usr", "http://user." + newId + ".swb#", io, "N-TRIPLE");
+                                if(usermodel!=null)
+                                {
+                                    UserRepository userRep=SWBContext.getUserRepository(usermodel.getName());
+                                    userRep.setTitle("Repositorio de Usuarios ("+newWebSiteTitle+")","es");
+                                    userRep.setTitle("Users Repository ("+newWebSiteTitle+")","en");
+                                }
                             }
                         }
                         if (key.endsWith("_rep")) { //Para los submodelos de dosumentos
@@ -2437,7 +2444,13 @@ public class SWBPortal {
                                 xmodelID = xmodelID.substring(0, pos);
                                 rdfmodel = SWBUtils.TEXT.replaceAll(rdfmodel, xmodelID, newId);
                                 io = SWBUtils.IO.getStreamFromString(rdfmodel);
-                                SWBPlatform.getSemanticMgr().createModelByRDF(newId + "_rep", "http://repository." + newId + ".swb#", io, "N-TRIPLE");
+                                SemanticModel repomodel = SWBPlatform.getSemanticMgr().createModelByRDF(newId + "_rep", "http://repository." + newId + ".swb#", io, "N-TRIPLE");
+                                if(repomodel!=null)
+                                {
+                                    Workspace repo=SWBContext.getWorkspace(repomodel.getName());
+                                    repo.setTitle("Repositorio de Documentos ("+newWebSiteTitle+")","es");
+                                    repo.setTitle("Documents Repository ("+newWebSiteTitle+")","en");
+                                }
                             }
                         }
                         fileModel.delete();
