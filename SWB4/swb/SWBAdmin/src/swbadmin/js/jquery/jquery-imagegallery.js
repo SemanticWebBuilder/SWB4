@@ -102,10 +102,10 @@ simpleGallery.prototype={
 		var slideshow=this
 		var setting=slideshow.setting
 		var totalimages=setting.imagearray.length
-		var imgindex=(keyword=="next")? (setting.curimage<totalimages-1? setting.curimage+1 : 0)
-			: (keyword=="prev")? (setting.curimage>0? setting.curimage-1 : totalimages-1)
-			: Math.min(keyword, totalimages-1)
-		setting.gallerylayers[setting.bglayer].innerHTML=simpleGallery.routines.getSlideHTML(setting.imagearray[imgindex],setting.dimensions[0],setting.dimensions[1],setting.fullwidth,setting.fullheight,setting.imageClosing)
+		var imgindex=(keyword=="next")? (setting.curimage<totalimages-1? setting.curimage+1 : 0) : (keyword=="prev")? (setting.curimage>0? setting.curimage-1 : totalimages-1) : Math.min(keyword, totalimages-1)
+
+                //setting.gallerylayers[setting.bglayer].innerHTML=simpleGallery.routines.getSlideHTML(setting.imagearray[imgindex],setting.dimensions[0],setting.dimensions[1],setting.fullwidth,setting.fullheight,setting.imageClosing)
+                setting.gallerylayers[setting.bglayer].innerHTML=simpleGallery.routines.getSlideHTML(setting.imagearray[imgindex]);
 		setting.$gallerylayers.eq(setting.bglayer).css({zIndex:1000, opacity:0}) //background layer becomes foreground
 			.stop().css({opacity:0}).animate({opacity:1}, setting.fadeduration, function(){ //Callback function after fade animation is complete:
 				clearTimeout(setting.playtimer)
@@ -134,9 +134,9 @@ simpleGallery.prototype={
 }
 
 simpleGallery.routines={
-  getSlideHTML:function(imgelement,miniwidth,miniheight,fullwidth,fullheight,imgclosing){
-    var layerHTML='<a href="#" onclick="simpleGallery.routines.generateCoverDiv(\'cover01\',\'#000000\',80,\''+imgelement[0]+'\','+fullwidth+','+fullheight+',\''+imgclosing+'\')">';
-    layerHTML+='<img src="'+imgelement[0]+'" style="border-width:0" width="'+miniwidth+'" height="'+miniheight+'"/>'
+  getSlideHTML:function(imgelement){
+    var layerHTML='<a href="#" onclick="simpleGallery.routines.displayImage(\'cover01\',\'#000000\',80,\''+imgelement[0]+'\')" style="outline:none">';
+    layerHTML+='<img src="'+imgelement[1]+'" style="border:none" />';
     layerHTML+='</a>';
     return layerHTML;
 
@@ -180,56 +180,57 @@ simpleGallery.routines={
     document.cookie = name+"=" + value + ";path=/"
   }
 
-  ,removeCoverDiv:function(divid) {
-    var layer=document.getElementById(divid);
-    var superlayer=document.getElementById('s_'+divid);
-    if(layer && superlayer) {
-    //if(superlayer) {
-        document.body.removeChild(superlayer);
-        document.body.removeChild(layer);
-    }            
-  }
-
-  ,generateCoverDiv:function(divid, bgcolor, opacity, imgsrc, width, height, imgclosing) {
+  ,createCoverDiv:function(divId, bgcolor, opacity) {
     var layer=document.createElement('div');
-    layer.id=divid;
+    layer.id=divId;
     layer.style.width='100%';
     layer.style.height='100%';
     layer.style.backgroundColor=bgcolor;
     layer.style.position='absolute';
     layer.style.top=0;
-    layer.style.left=0;		
+    layer.style.left=0;
     layer.style.zIndex=1000;
     layer.style.filter='alpha(opacity='+opacity+')';
     layer.style.opacity=opacity/100;
     document.body.appendChild(layer);
+  }
+
+  ,removeCoverDiv:function(divId) {
+    var layer=document.getElementById(divId);
+    var superlayer=document.getElementById('s_'+divId);
+    if(layer && superlayer) {
+        document.body.removeChild(superlayer);
+        document.body.removeChild(layer);
+    }            
+  }
+
+  ,displayImage:function(divId, bgcolor, opacity, imgsrc) {
+    simpleGallery.routines.createCoverDiv(divId, bgcolor, opacity);
 
     var foto=document.createElement('img');
     foto.src=imgsrc;
-    //foto.width=width;
-    //foto.height=height;
     foto.border='2px solid #FFFFFF';
-    //foto.setAttribute('onclick', 'simpleGallery.routines.removeCoverDiv("cover01")');
-    foto.onclick=function() {simpleGallery.routines.removeCoverDiv('cover01')};
+    foto.onclick=function() {simpleGallery.routines.removeCoverDiv(divId)};
+    if( foto.width>=screen.width || foto.height>=screen.height ) {
+        foto.width = foto.width*0.60;
+        foto.height = foto.height*0.60;
+    }
     
-    //var cwidth=width+50;
     var cwidth=foto.width;
-    //var cheight=height+50;
-    var cheight=foto.height;
+    var cheight=foto.height+60;
+    
     var superlayer=document.createElement('div');
-    superlayer.id='s_'+divid;
+    superlayer.id='s_'+divId;
     superlayer.style.zIndex=1001;
     superlayer.style.position='absolute';
-    superlayer.style.styleFloat='left';
     superlayer.style.top='50%';
-    superlayer.style.left='50%';    
+    superlayer.style.left='50%';
     superlayer.style.marginLeft=-cwidth/2+'px';
     superlayer.style.marginTop=-cheight/2+'px';
     superlayer.style.width=cwidth+'px';
-    superlayer.style.height=cheight+'px';
-    superlayer.onclick='function(){simpleGallery.routines.removeCoverDiv("cover01");}';
+    superlayer.style.height=cheight+'px';    
+    superlayer.onclick='function(){simpleGallery.routines.removeCoverDiv(divId);}';    
 
-    superlayer.innerHTML='<input type="image" src="'+imgclosing+'" name="cancel" id="cancel" onclick="simpleGallery.routines.removeCoverDiv(\'cover01\');"/><br /><br />';
     superlayer.appendChild(foto);
     document.body.appendChild(superlayer);
   }
