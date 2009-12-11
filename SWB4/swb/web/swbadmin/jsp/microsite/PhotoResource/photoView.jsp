@@ -268,10 +268,21 @@
             <img id="img_<%=iElement + base.getId()%>" src="<%=pathPhoto%>" alt="<%= photo.getTitle()%>" width="140" height="140" />
         </a>
         <div class="noticiaTexto">
-            <h2><%=photo.getTitle()%></h2>
+            <h2>
+            <script type="text/javascript">
+                    <!--
+                    document.write('<%=photo.getTitle()%>');
+                    -->
+                </script>
+            </h2>
             <p>&nbsp;<br/>Por: <%=postAuthor%><br/><%=dateFormat.format(photo.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(photo.getCreated(), user.getLanguage())%></p>
             <p>
-                <%=photo.getDescription()%> | <a href="<%=viewurl.toString(true)%>">Ver más</a>
+                <script type="text/javascript">
+                    <!--
+                    document.write('<%=photo.getDescription()%>');
+                    -->
+                </script>
+                | <a href="<%=viewurl.toString(true)%>">Ver más</a>
                 <%
                         if (photo.canModify(member))
                         {
