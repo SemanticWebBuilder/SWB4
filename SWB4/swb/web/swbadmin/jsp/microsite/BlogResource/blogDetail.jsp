@@ -69,7 +69,17 @@
             String title = "Sin titulo";
             if (post.getTitle() != null)
             {
-                title = post.getTitle();
+                title = post.getTitle().replace("'", "\\'");
+            }
+            String description = "";
+            if (post != null && post.getDescription() != null)
+            {
+                description = post.getDescription().replace("'", "\\'");
+            }
+            String content = "";
+            if (post != null && post.getContent() != null)
+            {
+                content = post.getContent().replace("'", "\\'");
             }
 %>
 
@@ -86,7 +96,7 @@
     <p>
         <script type="text/javascript">
             <!--
-            document.write('<%=post.getContent()%>');
+            document.write('<%=content%>');
             -->
         </script>
 
@@ -110,7 +120,7 @@
     <p>
         <script type="text/javascript">
             <!--
-            document.write('<%=post.getDescription()%>');
+            document.write('<%=description%>');
             -->
         </script> </p>
     <p> Autor: <%=postAuthor%> </p>
