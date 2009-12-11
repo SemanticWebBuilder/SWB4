@@ -81,7 +81,7 @@
         if (obj.getCreated() != null && obj != null)
         {
             //created = iso8601dateFormat.format(obj.getCreated());
-            created = SWBUtils.TEXT.getTimeAgo(obj.getCreated(), user.getLanguage());
+            created = SWBUtils.TEXT.getTimeAgo(obj.getCreated(), "es");
         }
         String name = "Usuario desconocido";
         if (obj.getCreator() != null)

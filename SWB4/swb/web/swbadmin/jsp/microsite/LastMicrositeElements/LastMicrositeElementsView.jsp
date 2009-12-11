@@ -34,8 +34,7 @@
         String created = "Sin fecha";
         if (element.getCreated() != null)
         {
-            //created = iso8601dateFormat.format(element.getCreated());
-            created = SWBUtils.TEXT.getTimeAgo(element.getCreated(), user.getLanguage());
+            created = SWBUtils.TEXT.getTimeAgo(element.getCreated(), "es");
         }
         String title = element.getTitle();
         String textcreated = "creó el elemento ";
