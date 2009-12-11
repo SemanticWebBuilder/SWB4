@@ -236,10 +236,20 @@
     <div class="noticia">
         <img src="<%=video.getPreview()%>" alt="<%=title%>"/>
         <div class="noticiaTexto">
-            <h2><%=title%></h2>
+            <h2>
+                <script type="text/javascript">
+                    <!--
+                    document.write('<%=title%>');
+                    -->
+                </script></h2>
             <p>&nbsp;<br/>Por: <%=postAuthor%><br/><%=dateFormat.format(video.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(video.getCreated(), user.getLanguage())%></p>
             <p>
-                <%=description%> | <a href="<%=viewUrl.toString(true)%>">Ver más</a>
+                <script type="text/javascript">
+                    <!--
+                    document.write('<%=description%>');
+                    -->
+                </script>
+                | <a href="<%=viewUrl.toString(true)%>">Ver más</a>
                 <%
                         if (video.canModify(member))
                         {
@@ -249,8 +259,8 @@
                         }
                 %>
                 <%
-                       if (video.canModify(member) || isAdministrator)
-                       {
+                        if (video.canModify(member) || isAdministrator)
+                        {
                 %>
                 | <a href="<%=removeurl%>">Eliminar</a>
                 <%
@@ -363,8 +373,8 @@
         <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS al canal de videos de la comunidad</a></li>
     </ul>
     <%
-        if (!wputil.isSubscribed(member))
-        {
+            if (!wputil.isSubscribed(member))
+            {
     %>
     <br/><br/><p><span class="tituloRojo">NOTA: </span>Si se suscribe a los videos de la comunidad, recibirá una notificación por correo electrónico cuando algún miembro agrege o modifique algún video.</p>
     <%            }
