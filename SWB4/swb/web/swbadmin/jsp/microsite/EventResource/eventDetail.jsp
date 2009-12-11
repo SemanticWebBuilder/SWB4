@@ -37,28 +37,32 @@
                 {
                     comienza = event.getStartDate() == null ? "Sin determinar" : dateFormat.format(event.getStartDate());
 
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                 }
                 try
                 {
 
                     termina = event.getEndDate() == null ? "Sin determinar" : dateFormat.format(event.getEndDate());
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                 }
                 try
                 {
                     hcomienza = event.getStartTime() == null ? "Sin determinar" : timeFormat.format(event.getStartTime());
 
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                 }
                 try
                 {
 
                     htermina = event.getEndTime() == null ? "Sin determinar" : timeFormat.format(event.getEndTime());
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                 }
                 String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/EventResource/noevent.jpg";
@@ -93,8 +97,19 @@
                     event.incViews();
 
     %>
-    <h2><%= event.getTitle()%></h2>
-    <p><%= event.getDescription()%></p>
+    <h2>
+        <script type="text/javascript">
+            <!--
+            document.write('<%= event.getTitle()%>');
+            -->
+        </script>
+    </h2>
+    <p>
+        <script type="text/javascript">
+            <!--
+            document.write('<%= event.getDescription()%>');
+            -->
+        </script></p>
     <p>
         <a href="<%= imgPhoto%>">
             <img id="img_<%=event.getId()%>" src="<%= pathPhoto%>" alt="<%=event.getTitle()%>" width="195" height="180" />
@@ -163,7 +178,8 @@
             %>
             <li><a href="#"><%=i%></a></li>
             <%
-                    } else
+                    }
+                    else
                     {
             %>
             <li><%=i%></li>
@@ -177,12 +193,22 @@
         <div class="clear">&nbsp;</div>
     </div>
     <%
-       } catch (Exception e)
-       {
-       }
+            }
+            catch (Exception e)
+            {
+            }
     %>
-    <p>Audiencia: <%= event.getAudienceType()%></p>
-    <p>Lugar: <strong><%= event.getPlace()%></strong></p>
+    <p>Audiencia:  <script type="text/javascript">
+        <!--
+        document.write('<%= event.getAudienceType()%>');
+        -->
+        </script></p>
+    <p>Lugar: <strong>
+        <script type="text/javascript">
+        <!--
+        document.write('<%= event.getPlace()%>');
+        -->
+        </script></strong></p>
     <p>Asistentes:
         <%
             Iterator<User> users = event.listAttendants();
@@ -255,7 +281,8 @@
         %>
         <li><a href="<%=urla%>">Suscribirse a esta comunidad a comunidad</a></li>
         <%
-                } else
+                }
+                else
                 {
                     urla.setParameter("act", "unsubscribe");
         %>
