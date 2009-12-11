@@ -22,6 +22,11 @@
             }
             String uri = request.getParameter("uri");
             EventElement event = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
+            if (event == null)
+            {
+                response.sendError(404);
+                return;
+            }
             java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");

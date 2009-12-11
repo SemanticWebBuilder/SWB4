@@ -36,6 +36,11 @@
             java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
             String uri = request.getParameter("uri");
             NewsElement anew = (NewsElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
+            if (anew == null)
+            {
+                response.sendError(404);
+                return;
+            }
             String rank = df.format(anew.getRank());
 
             String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
