@@ -50,7 +50,7 @@ println """<script type="text/javascript">
                    dojo.require("dijit.form.Button");
 
         </script>
-<form id="org.semanticwb.community.User/com/create" dojoType="dijit.form.Form" class="swbform"
+<form id="org.semanticwb.community.User.com.create" dojoType="dijit.form.Form" class="swbform"
 action="$url" 
 method="POST">
 <div class="adminTools">
@@ -116,8 +116,8 @@ method="POST">
 <script type="text/javascript">
 
  function enviar(){
-    var x=document.getElementById('org.semanticwb.community.User/com/create');
-    var objd=dijit.byId('org.semanticwb.community.User/com/create');
+    var x=document.getElementById('org.semanticwb.community.User.com.create');
+    var objd=dijit.byId('org.semanticwb.community.User.com.create');
     if (objd.isValid())
     {
         if(isEmpty('cmnt_seccode')) {
@@ -150,7 +150,7 @@ method="POST">
 /*
     function enviar()
     {
-        var x=document.getElementById('org.semanticwb.community.User/com/create');        
+        var x=document.getElementById('org.semanticwb.community.User.com.create');
         if(!x.login.value)
         {
             alert('El identificador de usuario es requerido.');
