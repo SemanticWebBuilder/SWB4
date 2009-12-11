@@ -512,7 +512,7 @@ if (!exist)
 {
         %>
         <div class="listEntry" onmouseover="this.className='listEntryHover'" onmouseout="this.className='listEntry'">
-            <img src="<%=SWBPortal.getContextPath()%>/swbadmin/images/anunciate.gif"></img>
+            <img src="<%=SWBPortal.getContextPath()%>/swbadmin/images/anunciate.gif" alt="Anunciate"></img>
             <div class="listEntryInfo">
                 <p class="tituloRojo">
                     Título de tu anuncio
