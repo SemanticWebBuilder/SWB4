@@ -254,6 +254,16 @@
                             }
                             imgPhoto = SWBPortal.getWebWorkPath() + path + "/" + photo.getImageURL();
                         }
+                        String title = "";
+                        if (photo.getTitle() != null)
+                        {
+                            title = photo.getTitle().replace("'", "\\'");
+                        }
+                        String description = "";
+                        if (photo.getDescription() != null)
+                        {
+                            description = photo.getDescription().replace("'", "\\'");
+                        }
 
     %>
     <div class="noticia">
@@ -271,7 +281,7 @@
             <h2>
                 <script type="text/javascript">
                     <!--
-                    document.write('<%=photo.getTitle()%>');
+                    document.write('<%=title%>');
                     -->
                 </script>
             </h2>
@@ -279,7 +289,7 @@
             <p>
                 <script type="text/javascript">
                     <!--
-                    document.write('<%=photo.getDescription()%>');
+                    document.write('<%=description%>');
                     -->
                 </script>
                 | <a href="<%=viewurl.toString(true)%>">Ver más</a>
@@ -407,8 +417,8 @@
         <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS al canal de fotos de la comunidad</a></li>
     </ul>
     <%
-        if (!wputil.isSubscribed(member))
-        {
+            if (!wputil.isSubscribed(member))
+            {
     %>
     <br/><br/><p><span class="tituloRojo">NOTA: </span>Si se suscribe a las fotos de la comunidad, recibirá una notificación por correo electrónico cuando algún miembro agrege o modifique alguna foto.</p>
     <%            }
