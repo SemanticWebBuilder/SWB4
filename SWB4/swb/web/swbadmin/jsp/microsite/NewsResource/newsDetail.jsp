@@ -50,6 +50,21 @@
                 }
                 pathPhoto = SWBPortal.getWebWorkPath() + path + "/" + anew.getNewsThumbnail();
             }
+            String title = "";
+                if (anew.getTitle() != null)
+                {
+                    title = anew.getTitle().replace("'", "\\'");
+                }
+                String description = "";
+                if (anew.getDescription() != null)
+                {
+                    description = anew.getDescription().replace("'", "\\'");
+                }
+                String citation="";
+                if (anew.getCitation() != null)
+                {
+                    citation = anew.getCitation().replace("'", "\\'");
+                }
 %>
 
 <div class="columnaIzquierda">
@@ -83,19 +98,19 @@
     <h2 class="blogTitle">
         <script type="text/javascript">
             <!--
-            document.write('<%=anew.getTitle()%>');
+            document.write('<%=title%>');
             -->
         </script></h2><br/>
     <p>
     <script type="text/javascript">
             <!--
-            document.write('<%=anew.getDescription()%>');
+            document.write('<%=description%>');
             -->
         </script></p>
     <p>Por: <%= anew.getAuthor()%></p>
     <p>Fuente: <script type="text/javascript">
             <!--
-            document.write('<%= anew.getCitation()%>');
+            document.write('<%=citation%>');
             -->
         </script></p>
     <p>Creado el: <%=dateFormat.format(anew.getCreated())%></p>
