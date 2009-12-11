@@ -304,15 +304,36 @@
                         {
                             postAuthor = event.getCreator().getFirstName();
                         }
+                        String title = "";
+                        if (event != null && event.getTitle() != null)
+                        {
+                            title = event.getTitle().replace("'", "\\'");
+                        }
+                        String description = "";
+                        if (event != null && event.getDescription() != null)
+                        {
+                            description = event.getDescription().replace("'", "\\'");
+                        }
     %>
     <div class="noticia">
         <img src="<%=pathPhoto%>" alt="<%= event.getTitle()%>"/>
         <div class="noticiaTexto">
-            <h2><%=event.getTitle()%></h2>
+            <h2>
+                <script type="text/javascript">
+                    <!--
+                    document.write('<%=title%>');
+                    -->
+                </script>
+
+            </h2>
             <p>Fecha del evento: <%=fechaEvento%> a las <%=hfechaEvento%><br/>
                 &nbsp;<br/>Por: <%=postAuthor%><br/>Creado el: <%=dateFormat.format(event.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%></p>
             <p>
-                <%=event.getDescription()%> | <a href="<%=viewUrl.toString(true)%>">Ver más</a>
+                <script type="text/javascript">
+                    <!--
+                    document.write('<%=description%>');
+                    -->
+                </script> | <a href="<%=viewUrl.toString(true)%>">Ver más</a>
                 <%
                         if (event.canModify(member))
                         {
@@ -438,8 +459,8 @@
         <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS al canal de eventos de la comunidad</a></li>
     </ul>
     <%
-        if (!wputil.isSubscribed(member))
-        {
+            if (!wputil.isSubscribed(member))
+            {
     %>
     <br/><br/><p><span class="tituloRojo">NOTA: </span>Si se suscribe a los eventos de la comunidad, recibirá una notificación por correo electrónico cuando algún miembro agrege o modifique algún evento.</p>
     <%            }
