@@ -101,7 +101,12 @@
     %>
 </div>
 <div class="columnaCentro">
-    <h2 class="blogTitle"><%=post.getTitle()%></h2>
+    <h2 class="blogTitle">
+    <script type="text/javascript">
+            <!--
+            document.write('<%=title%>');
+            -->
+        </script></h2>
     <p>
         <script type="text/javascript">
             <!--
