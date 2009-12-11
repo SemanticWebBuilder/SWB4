@@ -230,10 +230,22 @@
     <div class="noticia">
         <img src="<%= pathPhoto%>" alt="<%= anew.getTitle()%>"/>
         <div class="noticiaTexto">
-            <h2><%=anew.getTitle()%></h2>
+            <h2>
+                <script type="text/javascript">
+                    <!--
+                    document.write('<%=anew.getTitle()%>');
+                    -->
+                </script></h2>
+
             <p>&nbsp;<br/>Por: <%=anew.getAuthor()%><br/><%=dateFormat.format(anew.getCreated())%> - <%=SWBUtils.TEXT.getTimeAgo(anew.getCreated(), user.getLanguage())%></p>
             <p>
-                <%=anew.getDescription()%> | <a href="<%=viewUrl.toString(true)%>">Ver más</a>
+                <script type="text/javascript">
+                    <!--
+                    document.write('<%=anew.getDescription()%>');
+                    -->
+                </script>
+
+                | <a href="<%=viewUrl.toString(true)%>">Ver más</a>
                 <%
                         if (anew.canModify(member))
                         {
@@ -243,8 +255,8 @@
                         }
                 %>
                 <%
-                       if (anew.canModify(member) || isAdministrator)
-                       {
+                        if (anew.canModify(member) || isAdministrator)
+                        {
                 %>
                 | <a href="<%=removeurl%>">Eliminar</a>
                 <%
@@ -359,8 +371,8 @@
         <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS al canal de noticias de la comunidad</a></li>
     </ul>
     <%
-        if (!wputil.isSubscribed(member))
-        {
+            if (!wputil.isSubscribed(member))
+            {
     %>
     <br/><br/><p><span class="tituloRojo">NOTA: </span>Si se suscribe a las noticias de la comunidad, recibirá una notificación por correo electrónico cuando algún miembro agrege o modifique alguna noticia.</p>
     <%            }
