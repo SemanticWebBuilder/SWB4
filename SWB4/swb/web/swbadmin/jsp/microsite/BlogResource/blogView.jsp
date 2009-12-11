@@ -45,8 +45,8 @@
             Member member = Member.getMember(user, wpage);
             SWBResourceURL urlAdd = paramRequest.getRenderUrl();
             urlAdd.setParameter("act", "add");
-            String titleBlog = blog.getTitle();
-            String descriptionBlog = blog.getDescription();
+            String titleBlog = blog.getTitle().replace("'", "\\'");
+            String descriptionBlog = blog.getDescription().replace("'", "\\'");
             SWBResourceURL urleditar = paramRequest.getRenderUrl();
             urleditar.setParameter("act", "edit");
             urleditar.setParameter("mode", "editblog");
@@ -248,8 +248,8 @@
                     }
                     if (iElement >= inicio && iElement <= fin)
                     {
-                        String description = post.getDescription();
-                        String title = post.getTitle();
+                        String description = post.getDescription().replace("'", "\\'");
+                        String title = post.getTitle().replace("'", "\\'");
                         if (description == null)
                         {
                             description = "";
@@ -397,8 +397,17 @@
     <br/><br/>
     <%            }
     %>
-    <h2 class="blogTitle"><%=titleBlog%></h2>
-    <p> <%=descriptionBlog%> </p>
+    <h2 class="blogTitle">
+    <script type="text/javascript">
+            <!--
+            document.write('<%=titleBlog%>');
+            -->
+        </script></h2>
+    <p> <script type="text/javascript">
+            <!--
+            document.write('<%=descriptionBlog%>');
+            -->
+        </script> </p>
     <p> Creado el: <%=createdBlog%> </p>
     <%
             if (!updatedBlog.equals(createdBlog))
