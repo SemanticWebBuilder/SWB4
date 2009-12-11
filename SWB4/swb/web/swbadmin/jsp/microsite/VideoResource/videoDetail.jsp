@@ -38,6 +38,11 @@
 
             String uri = request.getParameter("uri");
             VideoElement rec = (VideoElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
+            if (rec == null)
+            {
+                response.sendError(404);
+                return;
+            }
             rec.incViews();                             //Incrementar apariciones
             if (rec != null)
             {

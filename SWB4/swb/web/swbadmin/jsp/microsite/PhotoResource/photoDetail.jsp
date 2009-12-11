@@ -38,8 +38,11 @@
 
             String uri = request.getParameter("uri");
             PhotoElement photo = (PhotoElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
-
-
+            if (photo == null)
+            {
+                response.sendError(404);
+                return;
+            }
             DecimalFormat df = new DecimalFormat("#0.0#");
             String rank = df.format(photo.getRank());
             if (photo != null && photo.canView(member))
@@ -88,9 +91,9 @@
             -->
         </script></h2><br/>
     <p><script type="text/javascript">
-            <!--
-            document.write('<%= description%>');
-            -->
+        <!--
+        document.write('<%= description%>');
+        -->
         </script></p>
     <p><a title="<%= title%>" href="<%= imgPhoto%>">
             <img id="img_<%=photo.getId()%>" src="<%= pathPhoto%>" alt="<%=title%>" width="195" height="180" />
