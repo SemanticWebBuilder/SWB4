@@ -524,7 +524,7 @@ if (!exist)
                 <p><span class="itemTitle">Creado por: </span>Tu nombre aquí</p>
 
                 
-                <p class="vermas"><%=paramRequest.getLocaleString("seeMore")%></p>
+                <%-- <p class="vermas"><%=paramRequest.getLocaleString("seeMore")%></p> --%>
                 
                 <div class="clear">&nbsp;</div>
             </div>
