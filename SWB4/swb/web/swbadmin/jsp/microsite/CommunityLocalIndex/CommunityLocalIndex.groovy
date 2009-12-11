@@ -34,15 +34,17 @@ Set<MicroSite> localCom = new TreeSet<MicroSite>(new SWBComparator("es"))
 //if (localCom.size()>0){
     println """<h2>Comunidades relacionadas</h2>
         <ul class="itemsComunidades">"""
+
+    if(localCom.size()==0)
+    {
+        println """<li>No hay comunidades relacionadas</li>"""
+    }
     localCom.each{
                 WebPage curr = (WebPage)it
                 println "        <li><a href=\"${curr.getRealUrl()}\">${curr.getDisplayName("es")}</a></li>"
     }
     println "</ul>"
-    if(localCom.size()==0)
-    {
-        println """<li>&nbsp;&nbsp;&nbsp;No hay comunidades relacionadas</li>"""
-    }
+    
 //}
 
 
