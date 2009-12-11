@@ -226,6 +226,16 @@
                             }
                             pathPhoto = SWBPortal.getWebWorkPath() + path + "/" + anew.getNewsThumbnail();
                         }
+                        String title = "";
+                        if (anew.getTitle() != null)
+                        {
+                            title = anew.getTitle().replace("'", "\\'");
+                        }
+                        String description = "";
+                        if (anew.getDescription() != null)
+                        {
+                            description = anew.getDescription().replace("'", "\\'");
+                        }
     %>
     <div class="noticia">
         <img src="<%= pathPhoto%>" alt="<%= anew.getTitle()%>"/>
@@ -233,7 +243,7 @@
             <h2>
                 <script type="text/javascript">
                     <!--
-                    document.write('<%=anew.getTitle()%>');
+                    document.write('<%=title%>');
                     -->
                 </script></h2>
 
@@ -241,7 +251,7 @@
             <p>
                 <script type="text/javascript">
                     <!--
-                    document.write('<%=anew.getDescription()%>');
+                    document.write('<%=description%>');
                     -->
                 </script>
 
