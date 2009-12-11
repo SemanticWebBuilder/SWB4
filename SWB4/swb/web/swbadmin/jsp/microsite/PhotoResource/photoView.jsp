@@ -269,7 +269,7 @@
         </a>
         <div class="noticiaTexto">
             <h2>
-            <script type="text/javascript">
+                <script type="text/javascript">
                     <!--
                     document.write('<%=photo.getTitle()%>');
                     -->
