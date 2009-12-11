@@ -523,7 +523,9 @@ if (!exist)
                 <p><span class="itemTitle">Palabras clave: </span>Palabras clave</p>
                 <p><span class="itemTitle">Creado por: </span>Tu nombre aquí</p>
 
-                <p class="tituloNaranja"><p class="vermas"><%=paramRequest.getLocaleString("seeMore")%></p>
+                
+                <p class="vermas"><%=paramRequest.getLocaleString("seeMore")%>
+                
                 <div class="clear">&nbsp;</div>
             </div>
         </div>
