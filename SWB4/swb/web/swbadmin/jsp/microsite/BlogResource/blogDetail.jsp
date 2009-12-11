@@ -102,7 +102,7 @@
 </div>
 <div class="columnaCentro">
     <h2 class="blogTitle">
-    <script type="text/javascript">
+        <script type="text/javascript">
             <!--
             document.write('<%=title%>');
             -->
