@@ -33,8 +33,9 @@
                     if (uri != null)
                     {
                         PostElement post = (PostElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
-                        if (!post.canModify(member))
+                        if (post==null || !post.canModify(member))
                         {
+                            response.sendError(404);
                             return;
                         }
     %>

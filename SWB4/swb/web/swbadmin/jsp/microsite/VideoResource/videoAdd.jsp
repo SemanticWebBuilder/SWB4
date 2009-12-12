@@ -7,6 +7,7 @@
             Member member = Member.getMember(user, wpage);
             if (!member.canAdd())
             {
+                response.sendError(404);
                 return;
             }
 %>
@@ -20,24 +21,24 @@
 </script>
 <script type="text/javascript">
     function validaForma()
-{
-    var foto = document.frmeditvideo.video_code.value;
-    if(!foto)
     {
-        alert('¡Debe ingresar el código de youtube!');
-        document.frmaddfoto.foto.focus();
-        return;
+        var foto = document.frmeditvideo.video_code.value;
+        if(!foto)
+        {
+            alert('¡Debe ingresar el código de youtube!');
+            document.frmaddfoto.foto.focus();
+            return;
+        }
+        document.frmeditvideo.submit();
     }
-    document.frmeditvideo.submit();
-}
 </script>
 <%
-String cancelurl=paramRequest.getRenderUrl().toString();
+            String cancelurl = paramRequest.getRenderUrl().toString();
 %>
 <div class="columnaIzquierda">
     <div class="adminTools">
-    <a class="adminTool" onclick="validaForma()" href="#">Guardar</a>
-    <a class="adminTool" href="<%=cancelurl%>">Cancelar</a>
+        <a class="adminTool" onclick="validaForma()" href="#">Guardar</a>
+        <a class="adminTool" href="<%=cancelurl%>">Cancelar</a>
     </div>
     <form class="swbform" name="frmeditvideo" method="post" action="<%=paramRequest.getActionUrl()%>">
         <div>

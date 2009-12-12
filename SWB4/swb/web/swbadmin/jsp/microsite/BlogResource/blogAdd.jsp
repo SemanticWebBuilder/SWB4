@@ -19,6 +19,7 @@
     Member member=Member.getMember(user,wpage);
     if(!member.canAdd())
     {
+        response.sendError(404);
         return;
     }
     String cancelurl = paramRequest.getRenderUrl().toString();
