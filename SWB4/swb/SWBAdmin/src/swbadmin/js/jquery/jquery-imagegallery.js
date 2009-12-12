@@ -24,9 +24,7 @@ function simpleGallery(settingarg){
 	for (var i=0; i<setting.imagearray.length; i++){
 		preloadimages[i]=new Image()
 		preloadimages[i].src=setting.imagearray[i][0]
-	}        
-        setting.fullwidth=parseInt(setting.fullwidth);
-        setting.fullheight=parseInt(setting.fullheight);        
+	}
         
 	var slideshow=this
 	jQuery(document).ready(function($){
@@ -103,8 +101,7 @@ simpleGallery.prototype={
 		var setting=slideshow.setting
 		var totalimages=setting.imagearray.length
 		var imgindex=(keyword=="next")? (setting.curimage<totalimages-1? setting.curimage+1 : 0) : (keyword=="prev")? (setting.curimage>0? setting.curimage-1 : totalimages-1) : Math.min(keyword, totalimages-1)
-
-                //setting.gallerylayers[setting.bglayer].innerHTML=simpleGallery.routines.getSlideHTML(setting.imagearray[imgindex],setting.dimensions[0],setting.dimensions[1],setting.fullwidth,setting.fullheight,setting.imageClosing)
+                
                 setting.gallerylayers[setting.bglayer].innerHTML=simpleGallery.routines.getSlideHTML(setting.imagearray[imgindex]);
 		setting.$gallerylayers.eq(setting.bglayer).css({zIndex:1000, opacity:0}) //background layer becomes foreground
 			.stop().css({opacity:0}).animate({opacity:1}, setting.fadeduration, function(){ //Callback function after fade animation is complete:
@@ -141,7 +138,7 @@ simpleGallery.routines={
     return layerHTML;
 
     /*
-    * Este cÃ³digo pertenece a la versiÃ³n original de esta libreria
+    * Este codigo pertenece a la version original de esta libreria
     */
     /*var layerHTML=(imgelement[1])? '<a href="'+imgelement[1]+'" target="'+imgelement[2]+'">\n' : '' //hyperlink slide?
     layerHTML+='<img src="'+imgelement[0]+'" style="border-width:0" />'
