@@ -12,13 +12,12 @@
             NewsElement rec = (NewsElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
             if (rec == null)
             {
-%>
-Error: Elemento no encontrado...
-<%
+                response.sendError(404);
                 return;
             }
             if (!rec.canModify(member))
             {
+                response.sendError(404);
                 return;
             }
 %>
