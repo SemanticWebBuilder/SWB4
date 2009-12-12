@@ -96,12 +96,12 @@ public class ImageGallery extends GenericResource {
         }
         String[] ip = new String[imgpath.size()];
         imgpath.toArray(ip);
-        String script = getGalleryScript(base.getId(), Integer.parseInt(base.getAttribute("imgwidth","220")), Integer.parseInt(base.getAttribute("imgheight","220")), Boolean.valueOf(base.getAttribute("autoplay")), Integer.parseInt(base.getAttribute("pause","2500")), Integer.parseInt(base.getAttribute("fadetime","500")), Integer.parseInt(base.getAttribute("fullwidth","380")), Integer.parseInt(base.getAttribute("fullheight","270")), base.getAttribute("title",""), base.getAttribute("titlestyle",""), ip);
+        String script = getGalleryScript(base.getId(), Integer.parseInt(base.getAttribute("width","220")), Integer.parseInt(base.getAttribute("height","220")), Boolean.valueOf(base.getAttribute("autoplay")), Integer.parseInt(base.getAttribute("pause","2500")), Integer.parseInt(base.getAttribute("fadetime","500")), Integer.parseInt(base.getAttribute("fullwidth","380")), Integer.parseInt(base.getAttribute("fullheight","270")), base.getAttribute("title",""), base.getAttribute("titlestyle",""), ip);
         out.print(script);
         out.flush();
     }
 
-    public String getGalleryScript(String oid, int twidth, int theight, boolean autoplay, int pause, int fadetime, int fullwidth, int fullheight, String title, String titlestyle, String[] imagepath) {
+    public String getGalleryScript(String oid, int width, int height, boolean autoplay, int pause, int fadetime, int fullwidth, int fullheight, String title, String titlestyle, String[] imagepath) {
         StringBuilder out = new StringBuilder();
 
         out.append("\n<script type=\"text/javascript\" src=\""+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/jquery-imagegallery.js\"></script>");
@@ -119,12 +119,12 @@ public class ImageGallery extends GenericResource {
         out.append("        slideduration: 500 ");
         out.append("    }; ");
 
-        out.append("   var mygallery=new simpleGallery( { ");
+        out.append("    var mygallery=new simpleGallery( { ");
         //ID of main gallery container
-        out.append("	wrapperid: 'imggallery_"+ oid +"', ");
+        out.append("        wrapperid: 'imggallery_"+ oid +"', ");
         //width/height of gallery in pixels. Should reflect dimensions of the images exactly
-        out.append("	dimensions: ["+ twidth +", "+ theight +"], ");
-        out.append("\n	imagearray: [ ");
+        out.append("        dimensions: ["+ width +", "+ height +"], ");
+        out.append("        imagearray: [ ");
 
         for(String image : imagepath) {
             out.append("\n['"+image+"','"+image.substring(0, image.lastIndexOf("/"))+"/"+_thumbnail+image.substring(image.lastIndexOf("/")+1)+"',''],");
@@ -132,29 +132,23 @@ public class ImageGallery extends GenericResource {
         if(imagepath.length>0)
             out.deleteCharAt(out.length()-1);
 
-        out.append("\n	], ");
-        out.append("	autoplay: "+ autoplay +", ");
-        out.append("	persist: false, ");
+        out.append("\n      ], ");
+        out.append("        autoplay: "+ autoplay +", ");
+        out.append("        persist: false, ");
         //pause between slides (milliseconds)
-        out.append("	pause: "+ pause +", ");
+        out.append("        pause: "+ pause +", ");
         //transition duration (milliseconds)
-        out.append("	fadeduration: "+ fadetime +", ");
+        out.append("        fadeduration: "+ fadetime +", ");
         //event that fires when gallery has initialized/ ready to run
-        out.append("	oninit:function(){ ");
-        out.append("	}, ");
+        out.append("        oninit:function(){}, ");
         //event that fires after each slide is shown
         //curslide: returns DOM reference to current slide's DIV (ie: try alert(curslide.innerHTML)
         //i: integer reflecting current image within collection being shown (0=1st image, 1=2nd etc)
-        out.append("	onslide:function(curslide, i){ ");
-        out.append("	} ");
-        out.append("        ,fullwidth:"+ fullwidth +" ");
-        out.append("        ,fullheight:"+ fullheight +" ");
-        out.append("        ,imageClosing: '"+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/themes/cancel.png'");
-        out.append("    } ");
-        out.append("); ");
+        out.append("        onslide:function(curslide, i){} ");
+        out.append("        } ");
+        out.append("    ); ");
         out.append("</script> ");
 
-        /*out.append("<div style=\"width:"+base.getAttribute("imgwidth")+"px;\"> ");*/
         out.append("<div> ");
         out.append("<div class=\"swb-galeria\"> ");
         out.append("<div style=\""+ titlestyle +"\">"+ title +"</div> ");
@@ -177,17 +171,16 @@ public class ImageGallery extends GenericResource {
         return getGalleryScript(Integer.toString((int)Math.random()*100), 220, 170, autoplay, 2500, 500, 420, 370, "", "", imgpath);
     }
 
-    public String getGalleryScript(int twidth, int theight, String[] imgpath) {
-        return getGalleryScript(Integer.toString((int)Math.random()*100), twidth, theight, false, 2500, 500, 420, 370, "", "", imgpath);
+    public String getGalleryScript(int width, int height, String[] imgpath) {
+        return getGalleryScript(Integer.toString((int)Math.random()*100), width, height, false, 2500, 500, 420, 370, "", "", imgpath);
     }
 
-    public String getGalleryScript(int twidth, int theight, boolean autoplay, String[] imgpath) {
-        return getGalleryScript(Integer.toString((int)Math.random()*100), twidth, theight, autoplay, 2500, 500, 420, 370, "", "", imgpath);
+    public String getGalleryScript(int width, int height, boolean autoplay, String[] imgpath) {
+        return getGalleryScript(Integer.toString((int)Math.random()*100), width, height, autoplay, 2500, 500, 420, 370, "", "", imgpath);
     }
 
     @Override
-    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
+    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html;charset=iso-8859-1");
         PrintWriter out = response.getWriter();
 
@@ -205,14 +198,10 @@ public class ImageGallery extends GenericResource {
 
                 String value = null!=fup.getValue("title") && !"".equals(fup.getValue("title").trim()) ? fup.getValue("title").trim() : null;
                 base.setAttribute("title", value);
-                value = null!=fup.getValue("imgwidth") && !"".equals(fup.getValue("imgwidth").trim()) ? fup.getValue("imgwidth").trim() : null;
-                base.setAttribute("imgwidth", value);
-                value = null!=fup.getValue("imgheight") && !"".equals(fup.getValue("imgheight").trim()) ? fup.getValue("imgheight").trim() : null;
-                base.setAttribute("imgheight", value);
-                value = null!=fup.getValue("fullwidth") && !"".equals(fup.getValue("fullwidth").trim()) ? fup.getValue("fullwidth").trim() : null;
-                base.setAttribute("fullwidth", value);
-                value = null!=fup.getValue("fullheight") && !"".equals(fup.getValue("fullheight").trim()) ? fup.getValue("fullheight").trim() : null;
-                base.setAttribute("fullheight", value);
+                value = null!=fup.getValue("width") && !"".equals(fup.getValue("width").trim()) ? fup.getValue("width").trim() : "180";
+                base.setAttribute("width", value);
+                value = null!=fup.getValue("height") && !"".equals(fup.getValue("height").trim()) ? fup.getValue("height").trim() : null;
+                base.setAttribute("height", value);
                 value = null!=fup.getValue("autoplay") && !"".equals(fup.getValue("autoplay").trim()) ? fup.getValue("autoplay").trim() : null;
                 base.setAttribute("autoplay", value);
                 value = null!=fup.getValue("pause") && !"".equals(fup.getValue("pause").trim()) ? fup.getValue("pause").trim() : null;
@@ -223,6 +212,7 @@ public class ImageGallery extends GenericResource {
                 base.setAttribute("titlestyle", value);
 
                 int i = 1;
+                int width = Integer.parseInt(base.getAttribute("width"));
                 String filenameAttr, removeChk;
                 do {
                 //for(int j=0; j<15; j++) {
@@ -248,7 +238,7 @@ public class ImageGallery extends GenericResource {
                                     if (admResUtils.uploadFile(base, fup, filenameAttr)){                                        
                                         File image = new File(workPath + filename);
                                         File thumbnail = new File(workPath + _thumbnail + filename);
-                                        ImageResizer.resizeCrop(image, 180, thumbnail, "jpeg");
+                                        ImageResizer.resizeCrop(image, width, thumbnail, "jpeg");
                                         base.setAttribute(filenameAttr, filename);
                                     }else {
                                         msg=paramRequest.getLocaleString("msgErrUploadFile") +" <i>" + value + "</i>.";
@@ -351,16 +341,12 @@ public class ImageGallery extends GenericResource {
             ret.append("\n<tr>");
             ret.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_pause") + "</td>");
             ret.append("\n<td>");
-            //ret.append("\n<input type=\"text\" size=\"50\" maxlength=\"50\" name=\"pause\" ");
-            //ret.append("\n value=\"" + base.getAttribute("pause", "2500").replaceAll("\"", "&#34;") + "\" />");
             ret.append("\n<input id=\"pause\" name=\"pause\" type=\"text\" dojoType=\"dijit.form.NumberTextBox\" value=\""+base.getAttribute("pause", "2500")+"\" invalidMessage=\""+paramRequest.getLocaleString("invmsg_ImageGallery_doAdmin")+"\" size=\"5\" maxlength=\"4\" constraints=\"{min:1,max:9999, pattern:'####'}\" />");
             ret.append("\n</td>");
             ret.append("\n</tr>");
             ret.append("\n<tr>");
             ret.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_fadetime") + "</td>");
             ret.append("\n<td>");
-            //ret.append("\n<input type=\"text\" size=\"50\" maxlength=\"50\" name=\"fadetime\" ");
-            //ret.append("\n value=\"" + base.getAttribute("fadetime", "500").replaceAll("\"", "&#34;") + "\" />");
             ret.append("\n<input id=\"fadetime\" name=\"fadetime\" type=\"text\" dojoType=\"dijit.form.NumberTextBox\" value=\""+base.getAttribute("fadetime", "500")+"\" invalidMessage=\""+paramRequest.getLocaleString("invmsg_ImageGallery_doAdmin")+"\" size=\"5\" maxlength=\"4\" constraints=\"{min:1,max:9999, pattern:'####'}\" />");
             ret.append("\n</td>");
             ret.append("\n</tr>");
@@ -378,37 +364,21 @@ public class ImageGallery extends GenericResource {
             ret.append("\n</td>");
             ret.append("\n</tr>");
 
+            String width = base.getAttribute("width", "220");
             ret.append("\n<tr>");
-            ret.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_imgwidth") + "</td>");
+            ret.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_width") + "</td>");
             ret.append("\n<td>");
-            ret.append("\n<input id=\"imgwidth\" name=\"imgwidth\" type=\"text\" dojoType=\"dijit.form.NumberTextBox\" value=\""+base.getAttribute("imgwidth", "220")+"\" invalidMessage=\""+paramRequest.getLocaleString("invmsg_ImageGallery_doAdmin")+"\" size=\"5\" maxlength=\"4\" constraints=\"{min:1, pattern:'####'}\" />");
+            ret.append("\n<input id=\"width\" name=\"width\" type=\"text\" dojoType=\"dijit.form.NumberTextBox\" value=\""+width+"\" invalidMessage=\""+paramRequest.getLocaleString("invmsg_ImageGallery_doAdmin")+"\" size=\"5\" maxlength=\"4\" constraints=\"{min:1, pattern:'####'}\" />");
             ret.append("\n</td>");
             ret.append("\n</tr>");
+            String height = base.getAttribute("height", "150");
             ret.append("\n<tr>");
-            ret.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_imgheight") + "</td>");
+            ret.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_height") + "</td>");
             ret.append("\n<td>");
-            //ret.append("\n<input type=\"text\" size=\"50\" maxlength=\"50\" name=\"imgheight\" ");
-            //ret.append("\n value=\"" + base.getAttribute("imgheight", "150").replaceAll("\"", "&#34;") + "\" />");
-            ret.append("\n<input id=\"imgheight\" name=\"imgheight\" type=\"text\" dojoType=\"dijit.form.NumberTextBox\" value=\""+base.getAttribute("imgheight", "150")+"\" invalidMessage=\""+paramRequest.getLocaleString("invmsg_ImageGallery_doAdmin")+"\" size=\"5\" maxlength=\"4\" constraints=\"{min:1, pattern:'####'}\" />");
+            ret.append("\n<input id=\"height\" name=\"height\" type=\"text\" dojoType=\"dijit.form.NumberTextBox\" value=\""+height+"\" invalidMessage=\""+paramRequest.getLocaleString("invmsg_ImageGallery_doAdmin")+"\" size=\"5\" maxlength=\"4\" constraints=\"{min:1, pattern:'####'}\" />");
             ret.append("\n</td>");
             ret.append("\n</tr>");
 
-            ret.append("\n<tr>");
-            ret.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_fullwidth") + "</td>");
-            ret.append("\n<td>");
-            //ret.append("\n<input type=\"text\" size=\"50\" maxlength=\"50\" name=\"fullwidth\" ");
-            //ret.append("\n value=\"" + base.getAttribute("fullwidth", "350").replaceAll("\"", "&#34;") + "\" />");
-            ret.append("\n<input id=\"fullwidth\" name=\"fullwidth\" type=\"text\" dojoType=\"dijit.form.NumberTextBox\" value=\""+base.getAttribute("fullwidth", "350")+"\" invalidMessage=\""+paramRequest.getLocaleString("invmsg_ImageGallery_doAdmin")+"\" size=\"5\" maxlength=\"4\" constraints=\"{min:1, pattern:'####'}\" />");
-            ret.append("\n</td>");
-            ret.append("\n</tr>");
-            ret.append("\n<tr>");
-            ret.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_fullheight") + "</td>");
-            ret.append("\n<td>");
-            //ret.append("\n<input type=\"text\" size=\"50\" maxlength=\"50\" name=\"fullheight\" ");
-            //ret.append("\n value=\"" + base.getAttribute("fullheight", "280").replaceAll("\"", "&#34;") + "\" />");
-            ret.append("\n<input id=\"fullheight\" name=\"fullheight\" type=\"text\" dojoType=\"dijit.form.NumberTextBox\" value=\""+base.getAttribute("fullheight", "280")+"\" invalidMessage=\""+paramRequest.getLocaleString("invmsg_ImageGallery_doAdmin")+"\" size=\"5\" maxlength=\"4\" constraints=\"{min:1, pattern:'####'}\" />");
-            ret.append("\n</td>");
-            ret.append("\n</tr>");
             ret.append("\n</table> ");
             ret.append("\n</fieldset> ");
 
@@ -510,22 +480,24 @@ public class ImageGallery extends GenericResource {
 
             ret.append("\n ");
             ret.append("\nfunction removeRowFromTable(tblId) { ");
-            ret.append("\n    var tbl = document.getElementById(tblId); ");
-            ret.append("\n    var lastRow = tbl.rows.length; ");
-            ret.append("\n    if(lastRow >= 2) { ");
-            ret.append("\n        tbl.deleteRow(lastRow - 1); ");
-            ret.append("\n    } ");
-            ret.append("\n} ");
+            ret.append("    var tbl = document.getElementById(tblId); ");
+            ret.append("    var lastRow = tbl.rows.length; ");
+            ret.append("    if(lastRow >= 2) { ");
+            ret.append("        tbl.deleteRow(lastRow - 1); ");
+            ret.append("    } ");
+            ret.append("}\n");
+
 
             Iterator<String> it = base.getAttributeNames();
             while(it.hasNext()) {
                 String attname = it.next();
                 String attval = base.getAttribute(attname);
-                if(attval!=null && attname.startsWith("imggallery_" + base.getId())) {
-                    ret.append("\naddRowToTable('igtbl_"+base.getId()+"', '"+base.getAttribute(attname)+"', '"+admResUtils.displayImage(base, base.getAttribute(attname), attname)+"', '"+attname.substring(11)+"'); ");
+                if(attval!=null && attname.startsWith("imggallery_")) {
+                    //String img = "<img src=\""+webWorkPath+_thumbnail+attval+"\" width=\""+width+"\" height=\""+height+"\" alt=\""+attname+"\" border=\"0\" />";
+                    String img = "<img src=\""+webWorkPath+_thumbnail+attval+"\" alt=\""+attname+"\" border=\"0\" />";
+                    ret.append("\naddRowToTable('igtbl_"+base.getId()+"', '"+base.getAttribute(attname)+"', '"+img+"', '"+attname.substring(11)+"'); ");
                 }
             }
-
             ret.append("\n</script>");
             ret.append(getScript());
         }catch(Exception e) {
@@ -538,17 +510,15 @@ public class ImageGallery extends GenericResource {
         StringBuffer ret = new StringBuffer();
         try {
             ret.append("\n<script type=\"text/javascript\">");
-            ret.append("\nfunction jsValida() {");
-            ret.append("\n    if(!isInt(dojo.byId('pause'))) return false;");
-            ret.append("\n    if(!isInt(dojo.byId('fadetime'))) return false;");
-            ret.append("\n    if(!isInt(dojo.byId('imgwidth'))) return false;");
-            ret.append("\n    if(!isInt(dojo.byId('imgheight'))) return false;");
-            ret.append("\n    if(!isInt(dojo.byId('fullwidth'))) return false;");
-            ret.append("\n    if(!isInt(dojo.byId('fullheight'))) return false;");
-            ret.append("\n    return true;");
-            ret.append("\n }");
+            ret.append("function jsValida() {");
+            ret.append("    if(!isInt(dojo.byId('pause'))) return false;");
+            ret.append("    if(!isInt(dojo.byId('fadetime'))) return false;");
+            ret.append("    if(!isInt(dojo.byId('width'))) return false;");
+            ret.append("    if(!isInt(dojo.byId('height'))) return false;");
+            ret.append("    return true;");
+            ret.append("}");
             ret.append(admResUtils.loadIsNumber(10));
-            ret.append("\n</script>");
+            ret.append("</script>\n");
         }catch(Exception e) {
             log.error(e);
         }
