@@ -12,6 +12,11 @@
 
 <%
             String uri = request.getParameter("uri");
+            if (uri == null || uri.equals(""))
+            {
+                response.sendError(404);
+                return;
+            }
             EventElement rec = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
 
             if (rec == null)
@@ -163,9 +168,9 @@
                     <p>
                         <label for="foto">Imagen del evento:&nbsp;</label>
                         <%
-                String path = rec.getWorkPath();
+            String path = rec.getWorkPath();
 
-                String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
+            String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
 
             if (rec.getEventThumbnail() != null)
             {
@@ -178,17 +183,17 @@
                 pathPhoto = SWBPortal.getWebWorkPath() + path + "/" + rec.getEventThumbnail();
             }
 
-                String imgPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
-                if (rec.getEventImage() != null)
+            String imgPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
+            if (rec.getEventImage() != null)
+            {
+                int pos = rec.getEventImage().lastIndexOf("/");
+                if (pos != -1)
                 {
-                    int pos = rec.getEventImage().lastIndexOf("/");
-                    if (pos != -1)
-                    {
-                        String sphoto = rec.getEventImage().substring(pos + 1);
-                        rec.setEventImage(sphoto);
-                    }
-                    imgPhoto = SWBPortal.getWebWorkPath() + path + "/" + rec.getEventImage();
+                    String sphoto = rec.getEventImage().substring(pos + 1);
+                    rec.setEventImage(sphoto);
                 }
+                imgPhoto = SWBPortal.getWebWorkPath() + path + "/" + rec.getEventImage();
+            }
                         %>
                         <a href="<%= imgPhoto%>" target="_self">
                             <img id="img_<%=rec.getId()%>" src="<%= pathPhoto%>" alt="<%= rec.getTitle()%>" border="0" />
@@ -259,11 +264,11 @@
             </fieldset>
 
             <%
-                        SWBResourceURL back = paramRequest.getRenderUrl().setParameter("act", "detail");
-                        back.setParameter("uri", uri);
-                        back.setParameter("day", request.getParameter("day"));
-                        back.setParameter("month", request.getParameter("month"));
-                        back.setParameter("year", request.getParameter("year"));
+            SWBResourceURL back = paramRequest.getRenderUrl().setParameter("act", "detail");
+            back.setParameter("uri", uri);
+            back.setParameter("day", request.getParameter("day"));
+            back.setParameter("month", request.getParameter("month"));
+            back.setParameter("year", request.getParameter("year"));
             %>
 
         </div>

@@ -7,6 +7,11 @@
             WebPage wpage = paramRequest.getWebPage();
             Member member = Member.getMember(user, wpage);
             String uri = request.getParameter("uri");
+            if (uri == null || uri.equals(""))
+            {
+                response.sendError(404);
+                return;
+            }
             VideoElement rec = (VideoElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
             if (rec == null)
             {

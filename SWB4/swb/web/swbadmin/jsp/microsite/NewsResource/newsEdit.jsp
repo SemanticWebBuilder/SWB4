@@ -9,6 +9,11 @@
 %>
 <%
             String uri = request.getParameter("uri");
+            if (uri == null || uri.equals(""))
+            {
+                response.sendError(404);
+                return;
+            }
             NewsElement rec = (NewsElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
             if (rec == null)
             {
