@@ -7,17 +7,15 @@
 		<td align="left" width="100%">
 			<xsl:if test="SEARCH/@size">
 		      <font size="2" face="verdana">Resultado de la búsqueda <b><font color="#0000FF"><xsl:value-of select="SEARCH/@words" /></font></b>
-			<br/>
-	      	  Resultados: <xsl:value-of select="SEARCH/@off" /> - <xsl:value-of select="SEARCH/@seg" /> de <xsl:value-of select="SEARCH/@size" />
+                            Resultados: <xsl:value-of select="SEARCH/@off" /> - <xsl:value-of select="SEARCH/@seg" /> de <xsl:value-of select="SEARCH/@size" />
 			<br/>
 			</font>
 		      <xsl:if test="SEARCH/Object">
-		        <hr color="#16458D" width="100%" size="1" />
+		        <hr color="#16458D" width="100%" size="1" /><br/>
 			</xsl:if>  
 		<xsl:for-each select="SEARCH/Object">
-		  <BR/> 
 		  <xsl:choose>
-			  <xsl:when test="objType='content'">
+			  <xsl:when test="objType='Resource'">
 				 <font size="2" face="verdana"><B><IMG src="{/SEARCH/@path}images/i_content.gif" width="29" height="24"/></B><a href="{objUrl}" ><xsl:value-of select="objTitle" /></a></font>
 				 <i><FONT size="1" face="verdana">(contenido)</FONT></i><BR/>
 			  </xsl:when>
@@ -41,22 +39,25 @@
 				 <font size="2" face="verdana"><B><IMG src="{/SEARCH/@path}images/i_user.gif" width="29" height="24"/></B><a href="{objUrl}" ><xsl:value-of select="objTitle" /></a></font>
 				 <i><FONT size="1" face="verdana">(html)</FONT></i><BR/>
 			  </xsl:when>			
+			  <xsl:when test="objType='WebPage'">
+				 <font size="2" face="verdana"><B><IMG src="{/SEARCH/@path}images/i_topic.gif" width="29" height="24"/></B><a href="{objUrl}" ><xsl:value-of select="objTitle" /></a></font>
+				 <i><FONT size="1" face="verdana">(secci<xsl:text disable-output-escaping="yes">&amp;oacute;</xsl:text>n)</FONT></i><BR/>
+			  </xsl:when>
 		    	  <xsl:otherwise>
-				<font size="2" face="verdana"><B><IMG src="{/SEARCH/@path}images/i_topic.gif" width="29" height="24"/></B><a href="{objUrl}" ><xsl:value-of select="objTitle" /></a></font>
+				<font size="2" face="verdana"><B><IMG src="{/SEARCH/@path}images/i_data.gif" width="29" height="24"/></B><a href="{objUrl}" ><xsl:value-of select="objTitle" /></a></font>
 				<i><FONT size="1" face="verdana">
-					(secci<xsl:text disable-output-escaping="yes">&amp;oacute;</xsl:text>n)
+					(generico)
 				</FONT></i><BR/>
 		        </xsl:otherwise>
 		  </xsl:choose>			
 			<xsl:if test="navPath">	
-		        	<I><FONT color="#FF0000" size="1"><xsl:value-of select="navPath" /></FONT></I>
+		        	<I><FONT color="#FF0000" size="1"><xsl:value-of select="navPath" /></FONT></I><BR/>
 			</xsl:if>
 
 			<xsl:if test="objSummary">
-				<BR/>
-				<font face="verdana" size="2"><xsl:value-of select="objSummary" /></font>
+				<font face="verdana" size="2"><xsl:value-of select="objSummary" /></font><BR/>
 			</xsl:if>
-			<BR/>
+
 			<table width="250" border="0" cellpadding="0" cellspacing="0" >
 			<tr>
       		  <td ><font color="#707070" size="1" face="Verdana">Puntuación: <xsl:value-of select="objScore" /></font>
