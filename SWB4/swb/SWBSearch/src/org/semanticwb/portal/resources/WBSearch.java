@@ -41,14 +41,19 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.URLEncoder;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.Searchable;
+import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
-import org.semanticwb.portal.indexer.SWBIndexObj;
-import org.semanticwb.portal.indexer.SWBIndexObjList;
 import org.semanticwb.portal.indexer.SWBIndexer;
+import org.semanticwb.portal.indexer.parser.GenericParser;
+import org.semanticwb.portal.indexer.searcher.SearchDocument;
+import org.semanticwb.portal.indexer.searcher.SearchQuery;
+import org.semanticwb.portal.indexer.searcher.SearchResults;
+import org.semanticwb.portal.indexer.searcher.SearchTerm;
 
 
 /**
@@ -122,6 +127,7 @@ public class WBSearch extends GenericAdmResource
         try {
             Document doc = SWBUtils.XML.getNewDocument();
             WebSite tm = reqParams.getWebPage().getWebSite();
+            User user=reqParams.getUser();
             
             String lang=reqParams.getUser().getLanguage();
 
@@ -149,80 +155,72 @@ public class WBSearch extends GenericAdmResource
                 search.setAttribute("wordsEnc", java.net.URLEncoder.encode(q));
                 search.setAttribute("work", SWBPortal.getWebWorkPath());
                 search.setAttribute("url", reqParams.getWebPage().getUrl());
+
                 
                 String smap=reqParams.getResourceBase().getAttribute("amaps","0");
                 //System.out.println("amaps:"+reqParams.getResourceBase().getAttribute("amaps","0"));
-                SWBIndexObj wbIndexObj=null;
-                if(!smap.trim().equals("1")){
-                    String stpini=null;
-                    wbIndexObj=new SWBIndexObj();
-                    wbIndexObj.setTopicMapID(reqParams.getResourceBase().getWebSiteId());
-                    stpini=reqParams.getResourceBase().getAttribute("tpini","");
-                    if(stpini.trim().length()>0){
-                        wbIndexObj.setCategory(stpini);
-                    }
+                SearchQuery query=new SearchQuery();
+                SearchQuery tquery=new SearchQuery(SearchQuery.OPER_AND);
+                query.addQuery(tquery);
+                tquery.addTerm(new SearchTerm(SWBIndexer.ATT_TITLE, q, SearchTerm.OPER_OR));
+                tquery.addTerm(new SearchTerm(SWBIndexer.ATT_DESCRIPTION, q, SearchTerm.OPER_OR));
+                tquery.addTerm(new SearchTerm(SWBIndexer.ATT_TAGS, q, SearchTerm.OPER_OR));
+                tquery.addTerm(new SearchTerm(SWBIndexer.ATT_DATA, q, SearchTerm.OPER_OR));
+                if(!smap.trim().equals("1"))
+                {
+                    query.addTerm(new SearchTerm(SWBIndexer.ATT_MODEL, tm.getId(), SearchTerm.OPER_AND));
                 }
-                
-                SWBIndexer indexer=SWBPortal.getIndexMgr().getTopicMapIndexer(reqParams.getWebPage().getWebSiteId());
+                String stpini=reqParams.getResourceBase().getAttribute("tpini",null);
+                if(stpini!=null)
+                {
+                    query.addTerm(new SearchTerm(SWBIndexer.ATT_CATEGORY, stpini, SearchTerm.OPER_AND));
+                }
+
+                SWBIndexer indexer=SWBPortal.getIndexMgr().getModelIndexer(reqParams.getWebPage().getWebSite());
                 //System.out.println("indexer:"+indexer);
 
                 if(indexer!=null)
                 {
-                    SWBIndexObjList list=indexer.search(q,wbIndexObj,reqParams.getUser(),ipage,ipindex);
-                    max=list.getHits();
-                    ipageLength=list.getPageLength();
+                    SearchResults results=indexer.search(query, user);
+                    max=results.size();
+                    ipageLength=results.getPageLength();
                     search.setAttribute("size", ""+max);
                 
-                    String st = "";
-                    HashMap arg = new HashMap();
-                    arg.put("separator", " | ");
-                    arg.put("links", "false");
-                    arg.put("language", reqParams.getUser().getLanguage());
+                    Iterator<SearchDocument>it=results.listDocuments(ipage);
+                    while(it.hasNext())
+                    {
+                        SearchDocument obj=it.next();
+                        Searchable srch=obj.getSearchable();
+                        GenericParser parser=indexer.getParser(srch);
 
-                    int apage=-1;
-                    Iterator it=list.iterator();
-                    while(it.hasNext()) {
-                        SWBIndexObj obj=(SWBIndexObj)it.next();
-                        //System.out.println("WBIndexObj:"+obj.getPage()+" "+obj.getPageIndex());
-                        if(apage!=obj.getPage()){
-                            apage=obj.getPage();
-                            aPages.add(obj);
-                        }
-                        if(ipage==obj.getPage()){
-                            i++;
-                            Element eobj=doc.createElement("Object");
-                            search.appendChild(eobj);
-                            addElem(doc, eobj, "objTitle", obj.getTitle());
-                            addElem(doc, eobj, "objId", obj.getId());
-                            addElem(doc, eobj, "objType", obj.getType());
-                            addElem(doc, eobj, "objCategory", obj.getCategory());
-                            addElem(doc, eobj, "objTopicid", obj.getTopicID());
-                            addElem(doc, eobj, "objSummary", obj.getSummary());
-                            addElem(doc, eobj, "objUrl", obj.getUrl());
-                            addElem(doc, eobj, "objScore", (int)(obj.getScore()*100) + "%");
-                            if(obj.getTopicMapID()!=null && obj.getTopicID()!=null){
-                                WebSite objTM=SWBContext.getWebSite(obj.getTopicMapID());
-                                WebPage tp=objTM.getWebPage(obj.getTopicID());
-                                if(tp!=null){
-                                    st=tp.getPath(arg);
-                                    addElem(doc, eobj, "navPath", st);
-                                }
-                            }
-                        }
+                        Element eobj=doc.createElement("Object");
+                        search.appendChild(eobj);
+                        addElem(doc, eobj, "objTitle", parser.getTitle(srch, lang));
+                        addElem(doc, eobj, "objId", srch.getURI());
+                        addElem(doc, eobj, "objType", parser.getType(srch));
+                        //addElem(doc, eobj, "objCategory", obj.getCategory());
+                        //addElem(doc, eobj, "objTopicid", obj.getTopicID());
+                        String summary=obj.getSummary();
+                        if(summary==null)summary=parser.getSummary(srch, user.getLanguage());
+                        addElem(doc, eobj, "objSummary", summary);
+                        addElem(doc, eobj, "objUrl", parser.getUrl(srch));
+                        addElem(doc, eobj, "objScore", (int)(obj.getScore()*100) + "%");
+                        addElem(doc, eobj, "navPath", parser.getPath(srch,lang));
                     }
                 }
             }
-            
-            search.setAttribute("seg", "" + ((ipage * ipageLength) + i));
-            if (max == 0) search.setAttribute("off", "0");
-            else {
-                if(ipage>0 && i<ipageLength){
-                    search.setAttribute("off", "" + ((ipage * ipageLength) + 1));
-                }else{
-                    search.setAttribute("off", "" + ((ipage * i) + 1));
-                }
+
+            int off=0;
+            int seg=0;
+            if(max>0)
+            {
+                off=(ipage * ipageLength)+1;
+                seg=(ipage+1) * ipageLength;
+                if(seg>max)seg=max;
             }
-            
+            search.setAttribute("off", "" + off);
+            search.setAttribute("seg", "" + seg);
+/*
             if(aPages.size()>1){
                 search.setAttribute("bPagination", "1");
             }
@@ -254,6 +252,7 @@ public class WBSearch extends GenericAdmResource
                 addElem(doc, epage, "spageview", spageview);
                 addElem(doc, epage, "ipindex", ""+obj.getPageIndex());
             }
+ */
             return doc;
         }
         catch (Exception e)
@@ -341,11 +340,14 @@ public class WBSearch extends GenericAdmResource
      * @param elemValue
      */
     private void addElem(Document doc, Element parent, String elemName, String elemValue) {
-        Element elem = doc.createElement(elemName);
-        if(elemValue!=null){
-            elem.appendChild(doc.createTextNode(elemValue));
+        if(elemValue!=null)
+        {
+            Element elem = doc.createElement(elemName);
+            if(elemValue!=null){
+                elem.appendChild(doc.createTextNode(elemValue));
+            }
+            parent.appendChild(elem);
         }
-        parent.appendChild(elem);
     }
     
 }
