@@ -99,7 +99,7 @@ public final class LocaleTokenizer extends LetterTokenizer
     {
         super(in);
     }
-
+    
     /** Collects only characters which satisfy
      * {@link Character#isLetter(char)}.*/
     @Override
@@ -135,6 +135,7 @@ public final class LocaleTokenizer extends LetterTokenizer
                 aux = 'u';
                 break;
         }
+        //System.out.print(aux);
         return aux;
     }
 }
