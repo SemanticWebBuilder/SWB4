@@ -65,6 +65,8 @@ import java.io.FileWriter;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.io.Reader;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
@@ -104,6 +106,7 @@ import org.semanticwb.base.util.SFBase64;
 import org.semanticwb.base.util.SWBMailSender;
 import org.semanticwb.base.util.SWBMail;
 import org.semanticwb.base.util.SWBProperties;
+import org.semanticwb.base.util.parser.html.HTMLParser;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 //import sun.misc.BASE64Encoder;
@@ -1455,49 +1458,63 @@ public class SWBUtils {
             return ret.toString();
         }
 
+        public static String parseHTML(String txt) throws IOException, InterruptedException
+        {
+            String ret=null;
+            //String summ=null;
+            if(txt!=null)
+            {
+                HTMLParser parser = new HTMLParser(new StringReader(txt));
+                ret=parser.getText();
+            }
+            //System.out.println("txt:"+ret);
+            return ret;
+        }
 
-        public static String getOfficeFileText(File file) throws InvalidFormatException, OpenXML4JException, XmlException, java.io.IOException {
+        public static String parseOfficeFile(File file) throws InvalidFormatException, OpenXML4JException, XmlException, java.io.IOException
+        {
              POITextExtractor textExtractor = ExtractorFactory.createExtractor(file);
              return textExtractor.getText();
-    }
+        }
 
-        public String pdfExtractor(File file) throws java.io.IOException {
-        FileInputStream is=new FileInputStream(file);
-        org.pdfbox.pdmodel.PDDocument pdfDocument = null;
-        try {
-            pdfDocument = org.pdfbox.pdmodel.PDDocument.load( is );
+        public String parserPDF(File file) throws java.io.IOException
+        {
+            FileInputStream is=new FileInputStream(file);
+            org.pdfbox.pdmodel.PDDocument pdfDocument = null;
+            try {
+                pdfDocument = org.pdfbox.pdmodel.PDDocument.load( is );
 
 
-            if( pdfDocument.isEncrypted() ) {
-                //Just try using the default password and move on
-                pdfDocument.decrypt( "" );
+                if( pdfDocument.isEncrypted() ) {
+                    //Just try using the default password and move on
+                    pdfDocument.decrypt( "" );
+                }
+
+                //create a writer where to append the text content.
+                StringWriter writer = new StringWriter();
+                org.pdfbox.util.PDFTextStripper stripper = new org.pdfbox.util.PDFTextStripper();
+                stripper.writeText( pdfDocument, writer );
+
+                // Note: the buffer to string operation is costless;
+                // the char array value of the writer buffer and the content string
+                // is shared as long as the buffer content is not modified, which will
+                // not occur here.
+                String contents = writer.getBuffer().toString();
+                return contents;
             }
-
-            //create a writer where to append the text content.
-            StringWriter writer = new StringWriter();
-            org.pdfbox.util.PDFTextStripper stripper = new org.pdfbox.util.PDFTextStripper();
-            stripper.writeText( pdfDocument, writer );
-
-            // Note: the buffer to string operation is costless;
-            // the char array value of the writer buffer and the content string
-            // is shared as long as the buffer content is not modified, which will
-            // not occur here.
-            String contents = writer.getBuffer().toString();
-            return contents;
-        }
-        catch( org.pdfbox.exceptions.CryptographyException e ) {
-            throw new IOException( "Error decrypting document(" + file.getPath() + "): " + e );
-        }
-        catch( org.pdfbox.exceptions.InvalidPasswordException e ) {
-            //they didn't suppply a password and the default of "" was wrong.
-            throw new IOException( "Error: The document(" + file.getPath() + ") is encrypted and will not be indexed." );
-        }
-        finally {
-            if( pdfDocument != null ) {
-                pdfDocument.close();
+            catch( org.pdfbox.exceptions.CryptographyException e ) {
+                throw new IOException( "Error decrypting document(" + file.getPath() + "): " + e );
+            }
+            catch( org.pdfbox.exceptions.InvalidPasswordException e ) {
+                //they didn't suppply a password and the default of "" was wrong.
+                throw new IOException( "Error: The document(" + file.getPath() + ") is encrypted and will not be indexed." );
+            }
+            finally {
+                if( pdfDocument != null ) {
+                    pdfDocument.close();
+                }
             }
         }
-    }
 
     }
 
@@ -1601,6 +1618,31 @@ public class SWBUtils {
             in.close();
             return buf.toString();
         }
+
+        /**
+         * Reads an Reader and creates a string with that content.
+         * <p>Lee un objeto Reader y crea un objeto string con el contenido le&iacute;do.</p>
+         * @param in an input stream to read its content
+         * @return a string whose content is the same as for the input stream read.
+         *         <p>un objeto string cuyo contenido es el mismo que el del objeto
+         *         inputStream le&iacute;do.</p>
+         * @throws IOException if the input stream received is {@code null}.
+         *                     <p>Si el objeto inputStream recibido tiene un valor {@code null}.</p>
+         */
+        public static String readReader(Reader in) throws IOException {
+            if (in == null) {
+                throw new IOException("Input Stream null");
+            }
+            StringBuffer buf = new StringBuffer();
+            char[] bfile = new char[bufferSize];
+            int x;
+            while ((x = in.read(bfile, 0, bufferSize)) > -1) {
+                String aux = new String(bfile, 0, x);
+                buf.append(aux);
+            }
+            in.close();
+            return buf.toString();
+        }        
 
         /**
          * Reads an input stream and creates a string with the content read using
