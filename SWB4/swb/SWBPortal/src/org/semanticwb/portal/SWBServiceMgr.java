@@ -40,6 +40,7 @@ import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
+import org.semanticwb.model.Searchable;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.Traceable;
 import org.semanticwb.model.User;
@@ -155,11 +156,11 @@ public class SWBServiceMgr implements SemanticObserver {
                     }
                     if(obj.instanceOf(WebPage.sclass))
                     {
-                        SWBPortal.getIndexMgr().getDefaultIndexer().removeTopic(obj.getModel().getName(), obj.getId());
+                    //    SWBPortal.getIndexMgr().getDefaultIndexer().removeTopic(obj.getModel().getName(), obj.getId());
                     }
                     if(obj.instanceOf(WebSite.sclass))
                     {
-                        SWBPortal.getIndexMgr().getDefaultIndexer().removeWebSite(obj.getId());
+                    //    SWBPortal.getIndexMgr().getDefaultIndexer().removeWebSite(obj.getId());
                     }
                     if(obj.instanceOf(ResourceType.sclass))
                     {
@@ -169,7 +170,10 @@ public class SWBServiceMgr implements SemanticObserver {
                             ((SWBResource)cls2.newInstance()).uninstall((ResourceType)obj.createGenericInstance());
                         }catch(Exception e){log.error(e);}
                     }
-                    SWBPortal.getIndexMgr().getDefaultIndexer().removeSemanticObject(obj);
+                    if(obj.instanceOf(Searchable.swb_Searchable))
+                    {
+                        SWBPortal.getIndexMgr().getDefaultIndexer().removeSearchable(obj.getURI());
+                    }
                 }
             } else if (prop instanceof SemanticProperty)
             {
@@ -235,41 +239,14 @@ public class SWBServiceMgr implements SemanticObserver {
                 lasttime=System.currentTimeMillis();
                 updateTraceable(obj,usr);
 
-                if(obj.instanceOf(WebPage.sclass))
+                if(obj.instanceOf(Searchable.swb_Searchable))
                 {
-                    SWBIndexer indexer=SWBPortal.getIndexMgr().getDefaultIndexer();
-                    indexer.removeTopic(obj.getModel().getName(),obj.getId());
-                    indexer.indexWebPage((WebPage)obj.createGenericInstance());
-                }
-                if(obj.instanceOf(Resource.sclass))
-                {
-                    //System.out.println("Resource modificado");
-                    Resource res=(Resource)obj.createGenericInstance();
-                    if(res.getResourceType()!=null && res.getResourceType().getResourceMode()==ResourceType.MODE_CONTENT)
-                    {
-                        //System.out.println("Resource tipo contenido");
-                        SWBIndexer indexer=SWBPortal.getIndexMgr().getDefaultIndexer();
-                        indexer.removeContent(obj.getId(),obj.getModel().getName());
-                        Iterator<Resourceable> it=res.listResourceables();
-                        while(it.hasNext())
-                        {
-                            Resourceable ob=it.next();
-                            if(ob instanceof WebPage)
-                            {
-                                //System.out.println("Contenido en la pagina ob");
-                                indexer.indexContent(res,(WebPage)ob);
-                            }
-                        }
-                    }
-                }
+                    Searchable searchable=(Searchable)obj.createGenericInstance();
 
-                //Indexar semanticObjects
-                {
                     SWBIndexer indexer=SWBPortal.getIndexMgr().getDefaultIndexer();
-                    indexer.removeSemanticObject(obj);
-                    indexer.indexSemanticObject(obj);
+                    indexer.removeSearchable(searchable.getURI());
+                    indexer.indexSerchable(searchable);
                 }
-
 
             }
         }catch(Exception e){log.error(e);}
