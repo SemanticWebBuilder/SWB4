@@ -284,8 +284,9 @@ public class SWBAIndexer extends GenericResource {
                 for (int i = 0; i < tmarr.length; i++) {
                     String tmid = tmarr[i];
                     if (null != hmtmind && hmtmind.get(tmid) == null) {
-                        WebSite tm_o = SWBContext.getWebSite(tmid);
-                        tmindexer.indexWebSite(tm_o);
+                        //WebSite tm_o = SWBContext.getWebSite(tmid);
+                        //tmindexer.indexWebSite(tm_o);
+                        tmindexer.indexModel(tmid);
                     }
                     if (null != hmtmind && hmtmind.get(tmid) != null) {
                         hmtmind.remove(tmid);
@@ -301,8 +302,8 @@ public class SWBAIndexer extends GenericResource {
                     Iterator ite = hmtmind.keySet().iterator();
                     while (ite.hasNext()) {
                         String tm_del = (String) ite.next();
-                        tmindexer.removeWebSite(tm_del); //
-
+                        //tmindexer.removeWebSite(tm_del); //
+                        tmindexer.removeModel(tm_del); //
                     }
                 }
                 log.debug("cadena: " + tmids + ", name: " + indexName);

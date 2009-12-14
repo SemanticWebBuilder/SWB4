@@ -41,7 +41,9 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.SWBAppObject;
+import org.semanticwb.model.Indexable;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.WebSite;
 
 /**
@@ -285,16 +287,24 @@ public class SWBIndexMgr implements SWBAppObject
         return (SWBIndexer)indexers.get(name);
     }    
     
-    public SWBIndexer getTopicMapIndexer(String tmid)
+    public SWBIndexer getModelIndexer(SWBModel model)
     {
+        SWBIndexer ret=null;
         //System.out.println("getTopicMapIndexer:"+tmid);
-        WebSite tm=SWBContext.getWebSite(tmid);
-        if(tm==null)return null;
-        //System.out.println("isIndeable:"+tm.isIndexable());
-        //TODO:Agregar indexador al modelo
-        //return (SWBIndexer)indexers.get(tm.getIndexer());
-        if(tm.isIndexable())return getDefaultIndexer();
-        return null;
+        if(model!=null)
+        {
+            //System.out.println("isIndeable:"+tm.isIndexable());
+            //TODO:Agregar indexador al modelo
+            //return (SWBIndexer)indexers.get(tm.getIndexer());
+            if(model instanceof Indexable)
+            {
+                if(((Indexable)model).isIndexable())
+                {
+                    ret=getDefaultIndexer();
+                }
+            }
+        }
+        return ret;
     }        
 
     public SWBIndexer getDefaultIndexer()
