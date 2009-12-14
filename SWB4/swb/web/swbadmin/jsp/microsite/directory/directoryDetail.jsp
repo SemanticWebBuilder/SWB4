@@ -204,7 +204,7 @@
         if (document.getElementById("justify").value == "") {
             alert("Debe escribir una justificación.");
         } else {
-            document.addJustifyForm.submit();
+            document.getElementById('addJustifyForm').submit();
         }
     }
 
