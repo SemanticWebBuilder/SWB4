@@ -91,7 +91,7 @@
 				  <FONT face="Verdana, Arial, Helvetica, sans-serif" size="2">Páginas de Resultados:</FONT>
 				  <xsl:if test="SEARCH/@backPage">	
 					<font size="2" face="verdana">
-						<b><a href="?q={/SEARCH/@wordsEnc}{/SEARCH/@params}&amp;wbSpage={/SEARCH/@backPage}&amp;wbSIpage={/SEARCH/@backPIndex}" ><FONT face="Verdana, Arial, Helvetica, sans-serif" size="2">Anterior</FONT></a></b>
+						<b><a href="?q={/SEARCH/@wordsEnc}{/SEARCH/@params}&amp;wbSpage={/SEARCH/@backPage}" ><FONT face="Verdana, Arial, Helvetica, sans-serif" size="2">Anterior</FONT></a></b>
 					</font>
 				  </xsl:if>	 	
 				  <xsl:for-each select="SEARCH/pagination/page">
@@ -102,14 +102,14 @@
 			   		      </xsl:when>
  		     		    	      <xsl:otherwise>
 							<xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
-							<b><a href="?q={/SEARCH/@wordsEnc}&amp;wbSpage={ipage}&amp;wbSIpage={ipindex}"><FONT face="Verdana, Arial, Helvetica, sans-serif" size="2"><xsl:value-of select="spageview"/></FONT></a></b>
+							<b><a href="?q={/SEARCH/@wordsEnc}&amp;wbSpage={ipage}"><FONT face="Verdana, Arial, Helvetica, sans-serif" size="2"><xsl:value-of select="spageview"/></FONT></a></b>
 		          	      	</xsl:otherwise>
   				     </xsl:choose>
 				  </xsl:for-each>
 				  <xsl:if test="SEARCH/@nextPage">	
 					<xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
 					<font size="2" face="verdana">
-						<b><a href="?q={/SEARCH/@wordsEnc}{/SEARCH/@params}&amp;wbSpage={/SEARCH/@nextPage}&amp;wbSIpage={/SEARCH/@nextPIndex}" ><FONT face="Verdana, Arial, Helvetica, sans-serif" size="2">Siguiente</FONT></a></b>
+						<b><a href="?q={/SEARCH/@wordsEnc}{/SEARCH/@params}&amp;wbSpage={/SEARCH/@nextPage}" ><FONT face="Verdana, Arial, Helvetica, sans-serif" size="2">Siguiente</FONT></a></b>
 					</font>
 				  </xsl:if>				
 
