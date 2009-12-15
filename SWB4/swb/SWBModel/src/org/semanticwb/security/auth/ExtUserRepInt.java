@@ -33,4 +33,10 @@ public abstract class ExtUserRepInt {
     public abstract void syncUsers();
     public abstract boolean validateCredential(String login, Object credential);
     public abstract boolean syncUser(String login, User user);
+    public boolean doRedirect(){
+        return false;
+    }
+    public String getRedirectURL(){
+        return null;
+    }
 }

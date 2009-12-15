@@ -179,6 +179,12 @@ public class Login implements InternalServlet
 
         //
         String url = request.getParameter("wb_goto");
+        if (user.getUserRepository().isExternal()){
+            if ((url == null || url.equals("/")) && user.getUserRepository().getBridge().doRedirect())
+            {
+                url = user.getUserRepository().getBridge().getRedirectURL();
+            }
+        }
         if ((url == null || url.equals("/")))
         {
             log.debug("PATHs: Path:" + path + " - " + dparams.getWebPage().getWebSiteId() + " - " + dparams.getWebPage().getId());
