@@ -39,12 +39,14 @@ public class RemoteURLLoginBridge extends ExtUserRepInt {
     private UserRepository userRep;
     private Properties props;
     private String URL;
+    private String RedirectURL;
 
     public RemoteURLLoginBridge(UserRepository UserRep, Properties props)
     {
         this.userRep = UserRep;
         this.props = props;
         this.URL = props.getProperty("urlBase", null);
+        this.RedirectURL = props.getProperty("urlRedirec", null);
     }
     
     @Override
@@ -60,6 +62,16 @@ public class RemoteURLLoginBridge extends ExtUserRepInt {
     @Override
     public boolean syncUser(String login, User user) {
         return true;
+    }
+
+    @Override
+    public boolean doRedirect() {
+        return true;
+    }
+
+    @Override
+    public String getRedirectURL() {
+        return RedirectURL;
     }
 
     public String getURL(){
