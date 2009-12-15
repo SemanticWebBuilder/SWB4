@@ -24,11 +24,13 @@
 package org.semanticwb.portal.resources.sem;
 
 
+import java.io.BufferedWriter;
 import java.util.ArrayList;
 import java.io.File;
 import java.io.IOException;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.io.Writer;
 import javax.servlet.http.HttpSession;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
@@ -40,9 +42,12 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
+import org.semanticwb.model.Versionable;
 import org.semanticwb.model.WebPage;
+import org.semanticwb.portal.api.SWBResource;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.portal.util.ContentUtils;
 import org.semanticwb.portal.util.WBFileUpload;
@@ -90,7 +95,46 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
     {
         WebPage page = paramRequest.getWebPage();
         Resource resource = getResourceBase();
+
         VersionInfo vi = getActualVersion();
+
+        //System.out.println("Revisando version..."+vi);
+
+        // Genera la version inicial si no existe
+        if(null==vi){
+            GenericObject go = SWBPlatform.getSemanticMgr().getOntology().getGenericObject(resource.getResourceData().getURI());
+            int vnum=1;
+            SWBResource swres = (SWBResource) go;
+            vi = swres.getResourceBase().getWebSite().createVersionInfo();
+            vi.setVersionFile("index.html");
+            vi.setVersionNumber(vnum);
+            vi.setVersionComment("Versión Inicial");
+
+            Versionable vswres = (Versionable) go;
+            vswres.setActualVersion(vi);
+            vswres.setLastVersion(vi);
+
+
+            String rutaFS_target_path = SWBPortal.getWorkPath() + resource.getWorkPath() + "/" + vnum + "/";
+            File f = new File(rutaFS_target_path);
+            if (!f.exists()) {
+                f.mkdirs();
+            }
+
+            File ftmpl = new File(SWBPortal.getWorkPath() + resource.getWorkPath() + "/" + vnum + "/index.html");
+            Writer output = null;
+            try {
+                output = new BufferedWriter(new FileWriter(ftmpl));
+                output.write(" ");
+            } catch(Exception e){}
+            finally {
+                try{
+                    output.close();
+                }
+                catch(Exception ex){}
+            }
+        }
+
         String numversion=request.getParameter("numversion");
         if (numversion != null && numversion.length()>0)
         {
