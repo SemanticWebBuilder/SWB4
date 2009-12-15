@@ -141,11 +141,12 @@ public class WBSearch extends GenericAdmResource
             search.setAttribute("path", path);
             
             
-            int ipage=0,ipindex=0;
+            int ipage=0;
+            //int ipindex=0;
             String q = request.getParameter("q");
             if(request.getParameter("wbSpage")!=null) ipage=Integer.parseInt(request.getParameter("wbSpage"));
-            if(request.getParameter("wbSIpage")!=null) ipindex=Integer.parseInt(request.getParameter("wbSIpage"));
-            ArrayList aPages=new ArrayList();
+            //if(request.getParameter("wbSIpage")!=null) ipindex=Integer.parseInt(request.getParameter("wbSIpage"));
+            //ArrayList aPages=new ArrayList();
             
             int max=0;
             int i = 0;        //contador del segmento
@@ -170,11 +171,21 @@ public class WBSearch extends GenericAdmResource
                 {
                     query.addTerm(new SearchTerm(SWBIndexer.ATT_MODEL, tm.getId(), SearchTerm.OPER_AND));
                 }
+
                 String stpini=reqParams.getResourceBase().getAttribute("tpini",null);
+                if(stpini==null)stpini=request.getParameter("cat");
                 if(stpini!=null)
                 {
                     query.addTerm(new SearchTerm(SWBIndexer.ATT_CATEGORY, stpini, SearchTerm.OPER_AND));
                 }
+
+                String cls=reqParams.getResourceBase().getAttribute("cls",null);
+                if(cls==null)stpini=request.getParameter("cls");
+                if(cls!=null)
+                {
+                    query.addTerm(new SearchTerm(SWBIndexer.ATT_CLASS, cls, SearchTerm.OPER_AND));
+                }
+
 
                 SWBIndexer indexer=SWBPortal.getIndexMgr().getModelIndexer(reqParams.getWebPage().getWebSite());
                 //System.out.println("indexer:"+indexer);
@@ -220,39 +231,39 @@ public class WBSearch extends GenericAdmResource
             }
             search.setAttribute("off", "" + off);
             search.setAttribute("seg", "" + seg);
-/*
-            if(aPages.size()>1){
-                search.setAttribute("bPagination", "1");
+
+            if(off!= 0 || seg!=max)
+            {
+                search.setAttribute("bPagination", "true");
             }
-            boolean bnext=false,bback=false;
             Element epagination=doc.createElement("pagination");
             search.appendChild(epagination);
-            Iterator itPages=aPages.iterator();
-            while(itPages.hasNext()){
-                SWBIndexObj obj=(SWBIndexObj)itPages.next();
+
+            int pm=(max-1)/ipageLength;
+            int pi=ipage-5;if(pi<0)pi=0;
+            int pf=ipage+5;if(pf>pm)pf=pm;
+
+            if(ipage+1<=pf){
+                search.setAttribute("nextPage", ""+(ipage+1));
+            }
+            if(ipage-1>=pi){
+                search.setAttribute("backPage", ""+(ipage-1));
+            }
+
+            for(int x=pi;x<=pf;x++)
+            {
                 Element epage=doc.createElement("page");
                 epagination.appendChild(epage);
-                if(ipage==obj.getPage()) {
+                if(ipage==x) {
                     addElem(doc, epage, "actualPage", "1");
                 }else{
                     addElem(doc, epage, "actualPage", "0");
                 }
-                if(obj.getPage()>ipage && !bnext){
-                    search.setAttribute("nextPage", ""+obj.getPage());
-                    search.setAttribute("nextPIndex", ""+obj.getPageIndex());
-                    bnext=true;
-                }
-                if(obj.getPage()+1==ipage && !bback){
-                    search.setAttribute("backPage", ""+obj.getPage());
-                    search.setAttribute("backPIndex", ""+obj.getPageIndex());
-                    bback=true;
-                }
-                String spageview=""+(obj.getPage()+1);
-                addElem(doc, epage, "ipage", ""+obj.getPage());
-                addElem(doc, epage, "spageview", spageview);
-                addElem(doc, epage, "ipindex", ""+obj.getPageIndex());
+                addElem(doc, epage, "ipage", ""+x);
+                addElem(doc, epage, "spageview", ""+(x+1));
             }
- */
+
+ 
             return doc;
         }
         catch (Exception e)
