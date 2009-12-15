@@ -37,6 +37,7 @@ import javax.servlet.http.HttpSession;
 import org.semanticwb.*;
 import org.semanticwb.model.*;
 import org.semanticwb.portal.SWBMonitor;
+import org.semanticwb.portal.SWBSessionObject;
 import org.semanticwb.portal.api.*;
 
 /**
@@ -58,41 +59,44 @@ public class SWBAListActiveUsers extends GenericResource {
      * @throws AFException an exception of type AFException
      * @throws IOException an exception of type IOException
      */    
-//    @Override
-//    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-//        PrintWriter out = response.getWriter();
-//        String act=request.getParameter("act");
-//
-//        out.println("<div class=\"swbform\">");
-//        out.println("<fieldset>");
-//        //if(AFUtils.getEnv("wb/systemMonitor","false").equals("true"))
-//        if(SWBPlatform.getEnv("swb/usersTrace","false").equals("true"))
-//        {
-//            out.println("<table width=100% cellpadding=10 cellspacing=0 border=0>");
-//            if(act==null)
-//            {
-//                out.println("<tr><td colspan='2'>");
-//                out.println("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+SWBPlatform.getContextPath()+"swbadmin/lib/SWBAplGraph.jar\" width=\"100%\" height=\"200\">");
-//                SWBResourceURL url=paramRequest.getRenderUrl();
-//                url.setCallMethod(SWBResourceURL.Call_DIRECT);
-//                url.setMode("getData");
-//                out.println("<param name=\"cgi\" value=\""+url+"\">");
-//                out.println("<param name=\"reload\" value=\"5\">");
-//                out.println("</APPLET>");
-//
-//                out.println("</td></tr>");
-//                out.println("<tr><td colspan='2'><HR size=\"1\" noshade></td></tr>");
-//                out.println("<tr><td colspan='2' align=right>");
+    @Override
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        PrintWriter out = response.getWriter();
+        String act=request.getParameter("act");
+
+        out.println("<div class=\"swbform\">");
+        out.println("<fieldset>");
+        //if(AFUtils.getEnv("wb/systemMonitor","false").equals("true"))
+        if(SWBPlatform.getEnv("swb/usersTrace","false").equals("true"))
+        {
+            out.println("<table width=100% cellpadding=10 cellspacing=0 border=0>");
+            if(act==null)
+            {
+                out.println("<tr><td colspan='2'>");
+                out.println("<div class=\"applet\">");
+                out.println("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+SWBPlatform.getContextPath()+"/swbadmin/lib/SWBAplGraph.jar\" width=\"100%\" height=\"200\">");
+                SWBResourceURL url=paramRequest.getRenderUrl();
+                url.setCallMethod(SWBResourceURL.Call_DIRECT);
+                url.setMode("getData");
+                out.println("<param name=\"cgi\" value=\""+url+"\">");
+                out.println("<param name=\"reload\" value=\"5\">");
+                out.println("</APPLET>");
+                out.println("</div>");
+                out.println("</td></tr>");
+                out.println("<tr><td colspan='2'><HR size=\"1\" noshade></td></tr>");
+                out.println("<tr><td colspan='2' align=right>");
 //                out.println("<form action=\""+paramRequest.getRenderUrl()+"\" method=\"post\">");
 //                out.println("<input class=\"boton\" type=\"submit\" name=\"list\" value=\""+paramRequest.getLocaleString("listUsers")+"\">");
 //                out.println("<input type=hidden name=\"act\" value=\"list\">");
 //                out.println("</form>");
-//                out.println("</td></tr>");
-//
-//
-//            }else if(act.equals("list")){
+                out.println("</td></tr>");
+
+
+            }
+//            else if(act.equals("list"))
+//            {
 //                //SWBPortal.getUserMgr()
-//                Iterator<User> iteUsers = SWBPortal.getUserMgr().getEnumUsers();
+//                Iterator<SWBSessionObject> iteUsers = SWBPortal.getUserMgr().listSessionObjects();
 //                out.println("<tr>");
 //                out.println("<th>"+paramRequest.getLocaleString("msgTHIdentifier")+"</th>");
 //                out.println("<th>"+paramRequest.getLocaleString("msgTHUser")+"</th>");
@@ -107,8 +111,11 @@ public class SWBAListActiveUsers extends GenericResource {
 //                String rowColor="";
 //                boolean cambiaColor = true;
 //                while(iteUsers.hasNext()) {
-//                    User wUser = (User) iteUsers.next();
-//                    User rUser = wUser;
+//                    SWBSessionObject wUser = iteUsers.next();
+//                    User rUser = null;
+//                    
+//                    if(wUser instanceof User)
+//                     rUser = (User)wUser;
 //                    rowColor="#EFEDEC";
 //                    if(!cambiaColor) rowColor="#FFFFFF";
 //                    cambiaColor = !(cambiaColor);
@@ -142,7 +149,8 @@ public class SWBAListActiveUsers extends GenericResource {
 //                out.println("<tr><td colspan='10' align=right><HR size=\"1\" noshade><input type=button name=\"btn_enddall\" value=\"Cerrar todas las sesiones\" onclick=\"if(confirm('Estás seguro de cerrar todas las sesiones de usuario?')){window.location='"+urlendsess+"';} else {return false;}\"></td></tr>");
 //
 //            }
-//            else{
+//            else
+//            {
 //                if(act.equals("detail")) {
 //                    String idusr = request.getParameter("idusr");
 //                    String sessionid = request.getParameter("sessionid");
@@ -340,21 +348,21 @@ public class SWBAListActiveUsers extends GenericResource {
 //                }
 //
 //            }
-//            out.println("</table>");
-//        }else
-//        {
-//            out.println(paramRequest.getLocaleString("msgIsNotActive"));
-//        }
-//        out.println("</fieldset>");
-//        out.println("</div>");
-//    }
-//
-//    /** Process the requested action of the WBAListActiveUsers resource
-//     * @param request the input parameters
-//     * @param response the answer to the user request and a list of objects (topic, user, action, ...)
-//     * @throws AFException an exception of type AFException
-//     * @throws IOException an exception of type IOException
-//     */
+            out.println("</table>");
+        }else
+        {
+            out.println(paramRequest.getLocaleString("msgIsNotActive"));
+        }
+        out.println("</fieldset>");
+        out.println("</div>");
+    }
+
+    /** Process the requested action of the WBAListActiveUsers resource
+     * @param request the input parameters
+     * @param response the answer to the user request and a list of objects (topic, user, action, ...)
+     * @throws AFException an exception of type AFException
+     * @throws IOException an exception of type IOException
+     */
 //    @Override
 //    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
 //        String act="";
@@ -378,67 +386,70 @@ public class SWBAListActiveUsers extends GenericResource {
 //            response.setRenderParameter("act","list");
 //        }
 //    }
-//
-//
-//
-//    public void getData(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-//    {
-//        PrintWriter out = response.getWriter();
-//
-//        int max=100;
-//        int ratio=((SWBMonitor.getMonitorRecords().size()-1)/max)+1;
-//        Vector data=SWBMonitor.getAverageMonitorRecords(ratio);
-//        int labc=data.size()/10;
-//        if(labc==0)labc=1;
-//
-//        out.println("GraphType=Lines");
-//        out.println("ncdata=1");
-//        out.println("percent=false");
-//        out.println("BrakeLabels=false");
-//        out.println("Title="+paramRequest.getLocaleString("msgTotalUsers")+"");
-//        out.println("SubTitle="+SWBPortal.getUserMgr().getUsers().size()+"");
-//        Enumeration en=data.elements();
-//        int x=-1;
-//
-//        while(en.hasMoreElements())
-//        {
-//            SWBMonitor.MonitorRecord mr=(SWBMonitor.MonitorRecord)en.nextElement();
-//            long musers=mr.getMaxUsers();
-//            if(x>=0)
-//            {
-//                java.util.Date dt=mr.getDate();
-//                String date=""+dt.getHours()+":"+dt.getMinutes()+":"+dt.getSeconds();
-//                out.println("label"+x+"=_"+date+"");
-//                out.println("data"+x+"="+musers+"");
-//            }
-//            x++;
-//        }
-//        out.println("ndata="+x+"");
-//        out.println("color0=237,100,100");
-//        out.println("color1=229,243,50");
-//        out.println("color2=150,150,150");
-//        out.println("barname0="+paramRequest.getLocaleString("msgUsers")+"");
-//        out.println("zoom=true");
-//    }
-//
-//    /** Process the user request
-//     * @param request the input parameters
-//     * @param response the answer to the user request
-//     * @param paramRequest a list of objects (topic, user, action, ...)
-//     * @throws AFException an exception of type AFException
-//     * @throws IOException an exception of type IOException
-//     */
-//    @Override
-//    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-//        if(paramRequest.getMode().equals("getData"))
-//        {
-//            getData(request,response,paramRequest);
-//        }else super.processRequest(request,response,paramRequest);
-//    }
-//
-//    public String stringNullValidate(Object obj)
-//    {
-//        if(obj==null)return "";
-//        else return obj.toString();
-//    }
+
+
+
+    public void getData(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        PrintWriter out = response.getWriter();
+
+        SWBMonitor monitor = SWBPortal.getMonitor();
+
+        int max=100;
+        int ratio=((monitor.getMonitorRecords().size()-1)/max)+1;
+        Vector data=monitor.getAverageMonitorRecords(ratio);
+
+        int labc=data.size()/10;
+        if(labc==0)labc=1;
+
+        out.println("GraphType=Lines");
+        out.println("ncdata=1");
+        out.println("percent=false");
+        out.println("BrakeLabels=false");
+        out.println("Title="+paramRequest.getLocaleString("msgTotalUsers")+"");
+        out.println("SubTitle="+SWBPortal.getUserMgr().getNumberOfSessionObjects()+"");
+        Enumeration en=data.elements();
+        int x=-1;
+
+        while(en.hasMoreElements())
+        {
+            SWBMonitor.MonitorRecord mr=(SWBMonitor.MonitorRecord)en.nextElement();
+            long musers=mr.getMaxUsers();
+            if(x>=0)
+            {
+                java.util.Date dt=mr.getDate();
+                String date=""+dt.getHours()+":"+dt.getMinutes()+":"+dt.getSeconds();
+                out.println("label"+x+"=_"+date+"");
+                out.println("data"+x+"="+musers+"");
+            }
+            x++;
+        }
+        out.println("ndata="+x+"");
+        out.println("color0=237,100,100");
+        out.println("color1=229,243,50");
+        out.println("color2=150,150,150");
+        out.println("barname0="+paramRequest.getLocaleString("msgUsers")+"");
+        out.println("zoom=true");
+    }
+
+    /** Process the user request
+     * @param request the input parameters
+     * @param response the answer to the user request
+     * @param paramRequest a list of objects (topic, user, action, ...)
+     * @throws AFException an exception of type AFException
+     * @throws IOException an exception of type IOException
+     */
+    @Override
+    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        if(paramRequest.getMode().equals("getData"))
+        {
+            getData(request,response,paramRequest);
+        }else super.processRequest(request,response,paramRequest);
+    }
+
+    public String stringNullValidate(Object obj)
+    {
+        if(obj==null)return "";
+        else return obj.toString();
+    }
 }
