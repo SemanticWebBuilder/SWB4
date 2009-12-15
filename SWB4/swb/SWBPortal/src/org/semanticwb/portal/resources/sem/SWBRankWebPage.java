@@ -156,13 +156,20 @@ function votedPage(){
         url.setAction("vote");
         url.setMode(SWBResourceURL.Mode_HELP);
         url.setCallMethod(SWBResourceURL.Call_DIRECT);
-        out.println("\n<script language=\"javascript\" type=\"text/javascript\">\nvar request = false;\ntry {\n  request = new XMLHttpRequest();\n} " +
-                "catch (trymicrosoft) {\n  try {\n    request = new ActiveXObject(\"Msxml2.XMLHTTP\");\n  } catch (othermicrosoft) {\n    try {\n " +
-                "      request = new ActiveXObject(\"Microsoft.XMLHTTP\");\n    } catch (failed) {\n      request = false;\n    }\n  }\n}\nif " +
-                "(!request)\n  alert(\"Error initializing XMLHttpRequest!\");\n\nfunction vote(val){\n    if (!invoke) return;\n    var url = \""+url+"?value=\"+escape(val)"+tmpUrl+";\n" +
-                "    request.open(\"GET\", url, true);\n    request.onreadystatechange = votedPage;\n    request.send(null);\n}\n\nfunction votedPage(){\n" +
-                "    var response = request.responseText;\n    if ('OK'==response)\n        alert('Vote acepted!');\n\n    invoke = false;}\nvar invoke = true;\n</script>\n");
-        out.print("<table boder=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr>");
+        out.println("\n<script type=\"text/javascript\">\nvar request = false;\ntry {\n" +
+                "  request = new XMLHttpRequest();\n} " +
+                "catch (trymicrosoft) {\n  try {\n    request = new ActiveXObject(\"Msxml2.XMLHTTP\");\n" +
+                "  } catch (othermicrosoft) {\n    try {\n " +
+                "      request = new ActiveXObject(\"Microsoft.XMLHTTP\");\n    } catch (failed) {\n" +
+                "      request = false;\n    }\n  }\n}\nif " +
+                "(!request)\n  alert(\"Error initializing XMLHttpRequest!\");\n\nfunction vote(val){\n" +
+                "    if (!invoke) return;\n    var url = \""+url+"?value=\"+escape(val)"+tmpUrl+";\n" +
+                "    request.onreadystatechange = votedPage;\n    request.open(\"GET\", url, true);\n" +
+                "    request.send(null);\n}\n\nfunction votedPage(){\n" +
+                "    if (request.readyState==4){\n"+
+                "    var response = request.responseText;\n    if ('OK'==response)\n" +
+                "        alert('Vote acepted!');\n\n    invoke = false;}\nvar invoke = true;\n</script>\n");
+        out.print("<table summary=\"Califica contenido\"><tr>");
         for (int i =1;i<=5;i++)
         printStar(i, rank, out, paramRequest);
         out.print("</tr></table>");
@@ -175,13 +182,14 @@ function votedPage(){
         url.setAction("vote");
         url.setParameter("value", "" + current);
         */
-        String url = "javascript:vote("+current+");";
+        String url = "vote("+current+");";
         int midl = (current*10)-7;
         int midt = (current*10)-2;
         String imgRank = emptyStarPath;
         if (rank>=midl&&rank<=midt) imgRank = halfStarPath;
         if (rank>midt) imgRank = fullStarPath;
-        out.print("<td><a href=\"" + url + "\" title=\"Give "+current+" star(s)\"><img border=\"0\" src=\"" + SWBPlatform.getContextPath()+imgRank +"\" alt=\"has "+((0.0f + rank)/10.0f)+" star(s)\"/></a></td>");
+        out.print("<td><a href=\"#\" onclick=\"" + url + "\" title=\"Give "+current+" star(s)\">" +
+                "<img src=\"" + SWBPlatform.getContextPath()+imgRank +"\" alt=\"has "+((0.0f + rank)/10.0f)+" star(s)\"/></a></td>");
 
     }
 
