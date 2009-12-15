@@ -233,6 +233,44 @@ public class SWBAResourceVersion extends GenericResource {
                 ver = ver.getPreviousVersion();
             }
         }
+        else
+            {
+                //create Initial Version
+
+                GenericObject go = obj;
+                int vnum=1;
+                SWBResource swres = (SWBResource) go;
+                VersionInfo vi = swres.getResourceBase().getWebSite().createVersionInfo();
+                vi.setVersionFile("index.html");
+                vi.setVersionNumber(vnum);
+                vi.setVersionComment("Versión Inicial");
+
+                Versionable vswres = (Versionable) go;
+                vswres.setActualVersion(vi);
+                vswres.setLastVersion(vi);
+
+
+                String rutaFS_target_path = SWBPortal.getWorkPath() + swres.getResourceBase().getWorkPath() + "/" + vnum + "/";
+                File f = new File(rutaFS_target_path);
+                if (!f.exists()) {
+                    f.mkdirs();
+                }
+
+                File ftmpl = new File(SWBPortal.getWorkPath() + swres.getResourceBase().getWorkPath() + "/" + vnum + "/index.html");
+                Writer output = null;
+                try {
+                    output = new BufferedWriter(new FileWriter(ftmpl));
+                    output.write(" ");
+                } catch(Exception e){}
+                finally {
+                    try{
+                        output.close();
+                    }
+                    catch(Exception ex){}
+                }
+                ver = vi;
+            }
+
         return ver;
     }
 
