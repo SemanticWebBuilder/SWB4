@@ -250,12 +250,12 @@ public abstract class SWBIndexer
         if(model!=null)
         {
             Iterator<Statement> it=model.getRDFModel().listStatements(null, RDF.type, (RDFNode)null);
-            while(it.hasNext())
+            while(it != null && it.hasNext())
             {
                 Statement st=it.next();
                 SemanticClass cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(st.getResource().getURI());
                 //out.println(cls);
-                if(cls.isSubClass(Searchable.swb_Searchable))
+                if(cls != null && cls.isSubClass(Searchable.swb_Searchable))
                 {
                     SemanticObject obj=SemanticObject.createSemanticObject(st.getSubject());
                     indexSerchable((Searchable)obj.createGenericInstance());
