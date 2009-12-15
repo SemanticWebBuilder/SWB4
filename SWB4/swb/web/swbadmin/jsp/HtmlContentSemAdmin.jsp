@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8" import="net.fckeditor.*" %>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1" import="net.fckeditor.*" %>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%@page import="java.util.Enumeration"%>
 <%@page import="java.util.Iterator"%>
@@ -14,7 +14,6 @@
 <%@page import="org.semanticwb.portal.api.SWBResourceURLImp"%>
 <%--@ taglib uri="http://java.fckeditor.net" prefix="FCK" --%>
 <%
-
     SWBResourceURLImp url = (SWBResourceURLImp) paramRequest.getRenderUrl();
     url.setCallMethod(SWBResourceURLImp.Call_DIRECT);
     url.setMode("saveContent");
@@ -54,7 +53,10 @@
  * == END LICENSE ==
  * @version: $Id: sample01.jsp 2167 2008-07-03 21:33:15Z mosipov $
 --%>
-    <link href="/swbadmin/js/fckeditor/editor/css/sample.css" rel="stylesheet" type="text/css" />
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es">
+    <head>
+	<title>HTML Editor</title>
+        <link href="/swbadmin/js/fckeditor/editor/css/sample.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript">
       function FCKeditor_OnComplete(editorInstance) {
         window.status = editorInstance.Description;
@@ -93,6 +95,8 @@
           document.newFileForm.submit();
       }
     </script>
+    </head>
+    <body>
     <form action="<%=url.toString()%>" method="post">
     <%
         out.println(fckEditor);
@@ -121,3 +125,5 @@ if (message != null && !"".equals(message)) {
 <%
 }
 %>
+    </body>
+</html>
