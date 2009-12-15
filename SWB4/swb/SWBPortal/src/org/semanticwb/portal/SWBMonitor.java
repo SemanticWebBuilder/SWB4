@@ -33,6 +33,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.db.DBConnectionPool;
 
@@ -74,7 +75,7 @@ public class SWBMonitor
         long maxm=Runtime.getRuntime().maxMemory();
         long totalm=Runtime.getRuntime().totalMemory();
         long freem=Runtime.getRuntime().freeMemory();
-        int maxUsers=0;//WBUserMgr.getInstance().getUsers().size();
+        int maxUsers=SWBPortal.getUserMgr().getNumberOfSessionObjects();
         long hits=instanceHits;     //WBAccessLog.getInstance().getInstanceHits();
         long hitsTime=instanceHitTime/100;
         long resourceHits=0;//ResourceMgr.getInstance().getResourceCacheMgr().getResourceHits();

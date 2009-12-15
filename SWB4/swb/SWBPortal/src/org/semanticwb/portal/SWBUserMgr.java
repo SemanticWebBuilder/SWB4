@@ -98,6 +98,16 @@ public class SWBUserMgr
         return  sessobj.getSubject(website);
     }
 
+    public int getNumberOfSessionObjects()
+    {
+        return sessionobjects.size();
+    }
+
+    public Iterator<SWBSessionObject> listSessionObjects()
+    {
+        return sessionobjects.values().iterator();
+    }
+
     public void unboundSessionObject(String sessID)
     {
         sessionobjects.remove(sessID);
