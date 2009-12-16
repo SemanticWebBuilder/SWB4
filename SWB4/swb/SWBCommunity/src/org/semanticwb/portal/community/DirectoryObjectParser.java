@@ -18,4 +18,16 @@ public class DirectoryObjectParser extends GenericParser {
     public String getType(Searchable gen) {
         return "DirectoryObject";
     }
+
+    @Override
+    public String getSummary(Searchable gen, String lang) {
+        return ((DirectoryObject)gen).getDescription();
+    }
+
+    @Override
+    public String getUrl(Searchable gen) {
+        return ((DirectoryObject)gen).getWebPage().getUrl() + "?act=detail&uri=" +gen.getURI();
+    }
+
+
 }
