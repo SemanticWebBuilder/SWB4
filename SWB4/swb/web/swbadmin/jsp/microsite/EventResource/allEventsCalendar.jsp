@@ -61,8 +61,12 @@
         Iterator<EventElement> itev = EventElement.ClassMgr.listEventElements();
         while(itev.hasNext()) {
             EventElement ee = itev.next();
-            boolean isNow = false;
 
+            boolean isNow = false;
+            try
+                    {
+            if(ee!=null && ee.getStartDate()!=null && ee.getEndDate()!=null)
+                {
             //Get event's start and end days
             int sDay = ee.getStartDate().getDate();
             int eDay = ee.getEndDate().getDate();
@@ -84,13 +88,19 @@
                     }
                 }
             }
-
+            
+            
             //Add reserved days to the set
             for (int i = sDay; i <= eDay; i++) {
                 if (isNow) {
                     reserved.add(i);
                 }
-            }            
+            }
+}
+}
+            
+
+            catch(Exception e){}
         }
 
         //Build URL for next month
@@ -132,23 +142,23 @@
         <%for(int i = 0; i < firstWeekDay; i++) {
         %><li>&nbsp;</li><%        }
 
-int weekDay = firstWeekDay;
-for (int i = 1; i <= daysInMonth; i++)
-{
-if (reserved.contains(i))
-{
-    String dayUrl = paramRequest.getWebPage().getWebSite().getWebPage("Eventos_del_dia").getUrl().toString();
-    dayUrl += "?act=daily&amp;y=" + ilyear + "&amp;m=" + ilmonth + "&amp;d=" + i;
-        %><li><a href="<%=dayUrl%>"><%=i%></a></li><%
-        }
-        else
+        int weekDay = firstWeekDay;
+        for (int i = 1; i <= daysInMonth; i++)
         {
+            if (reserved.contains(i))
+            {
+                String dayUrl = paramRequest.getWebPage().getWebSite().getWebPage("Eventos_del_dia").getUrl().toString();
+                dayUrl += "?act=daily&amp;y=" + ilyear + "&amp;m=" + ilmonth + "&amp;d=" + i;
+        %><li><a href="<%=dayUrl%>"><%=i%></a></li><%
+            }
+            else
+            {
         %><li><%=i%></li><%
-}
-}
+            }
+        }
 
-for (int i = 0; i < (7 - weekDay); i++)
-{
+        for (int i = 0; i < (7 - weekDay); i++)
+        {
         %><li>&nbsp;</li><%        }
         %>
     </ul>
@@ -156,188 +166,188 @@ for (int i = 0; i < (7 - weekDay); i++)
 
 <div class="clear">&nbsp;</div>
 <%}
-  else if (act.equals("daily"))
-  {
-      java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
-      ArrayList<EventElement> events = new ArrayList<EventElement>();
+    else if (act.equals("daily"))
+    {
+        java.text.DecimalFormat df = new java.text.DecimalFormat("#0.0#");
+        ArrayList<EventElement> events = new ArrayList<EventElement>();
 
-      //Get all events
-      Iterator<EventElement> itev = EventElement.ClassMgr.listEventElements();
-      while (itev.hasNext())
-      {
-          EventElement ee = itev.next();
+        //Get all events
+        Iterator<EventElement> itev = EventElement.ClassMgr.listEventElements();
+        while (itev.hasNext())
+        {
+            EventElement ee = itev.next();
 
-          //Get event's start and end dates
-          Calendar sD = new GregorianCalendar();
-          Calendar eD = new GregorianCalendar();
-          sD.setTime(ee.getStartDate());
-          eD.setTime(ee.getEndDate());
+            //Get event's start and end dates
+            Calendar sD = new GregorianCalendar();
+            Calendar eD = new GregorianCalendar();
+            sD.setTime(ee.getStartDate());
+            eD.setTime(ee.getEndDate());
 
-          //If member can view event
-          if (ee.canView(member))
-          {
-              //Does the event start or end this day?
-              if (same(sD, currCal) || same(eD, currCal))
-              {
-                  events.add(ee);
-                  //Did event start before today and ends after today?
-              }
-              else if (sD.before(currCal) && eD.after(currCal))
-              {
-                  events.add(ee);
-              }
-          }
-      }
+            //If member can view event
+            if (ee.canView(member))
+            {
+                //Does the event start or end this day?
+                if (same(sD, currCal) || same(eD, currCal))
+                {
+                    events.add(ee);
+                    //Did event start before today and ends after today?
+                }
+                else if (sD.before(currCal) && eD.after(currCal))
+                {
+                    events.add(ee);
+                }
+            }
+        }
 
-      int elementos = events.size();
-      int paginas = elementos / ELEMENETS_BY_PAGE;
-      if (elementos % ELEMENETS_BY_PAGE != 0)
-      {
-          paginas++;
-      }
-      int inicio = 0;
-      int fin = ELEMENETS_BY_PAGE;
-      int ipage = 1;
-      if (request.getParameter("ipage") != null)
-      {
-          try
-          {
-              ipage = Integer.parseInt(request.getParameter("ipage"));
-              inicio = (ipage * ELEMENETS_BY_PAGE) - ELEMENETS_BY_PAGE;
-              fin = (ipage * ELEMENETS_BY_PAGE);
-          }
-          catch (NumberFormatException nfe)
-          {
-              ipage = 1;
-          }
-      }
-      if (ipage < 1 || ipage > paginas)
-      {
-          ipage = 1;
-      }
-      if (inicio < 0)
-      {
-          inicio = 0;
-      }
-      if (fin < 0)
-      {
-          fin = ELEMENETS_BY_PAGE;
-      }
-      if (fin > elementos)
-      {
-          fin = elementos;
-      }
-      if (inicio > fin)
-      {
-          inicio = 0;
-          fin = ELEMENETS_BY_PAGE;
-      }
-      if (fin - inicio > ELEMENETS_BY_PAGE)
-      {
-          inicio = 0;
-          fin = ELEMENETS_BY_PAGE;
-      }
-      inicio++;
+        int elementos = events.size();
+        int paginas = elementos / ELEMENETS_BY_PAGE;
+        if (elementos % ELEMENETS_BY_PAGE != 0)
+        {
+            paginas++;
+        }
+        int inicio = 0;
+        int fin = ELEMENETS_BY_PAGE;
+        int ipage = 1;
+        if (request.getParameter("ipage") != null)
+        {
+            try
+            {
+                ipage = Integer.parseInt(request.getParameter("ipage"));
+                inicio = (ipage * ELEMENETS_BY_PAGE) - ELEMENETS_BY_PAGE;
+                fin = (ipage * ELEMENETS_BY_PAGE);
+            }
+            catch (NumberFormatException nfe)
+            {
+                ipage = 1;
+            }
+        }
+        if (ipage < 1 || ipage > paginas)
+        {
+            ipage = 1;
+        }
+        if (inicio < 0)
+        {
+            inicio = 0;
+        }
+        if (fin < 0)
+        {
+            fin = ELEMENETS_BY_PAGE;
+        }
+        if (fin > elementos)
+        {
+            fin = elementos;
+        }
+        if (inicio > fin)
+        {
+            inicio = 0;
+            fin = ELEMENETS_BY_PAGE;
+        }
+        if (fin - inicio > ELEMENETS_BY_PAGE)
+        {
+            inicio = 0;
+            fin = ELEMENETS_BY_PAGE;
+        }
+        inicio++;
 
-      if (events.size() > 0)
-      {
+        if (events.size() > 0)
+        {
 %>
 <div class="columnaIzquierda">
     <%
-    if (paginas > 1)
-    {
-    %><div class="paginacion"><%
-        String nextURL = "#";
-        String previusURL = "#";
-        if (ipage < paginas)
-        {
-            nextURL = paramRequest.getWebPage().getUrl() + "?act=daily&amp;y=" + ilyear + "&amp;m=" +
-                    ilmonth + "&d=" + ilday + "&ipage=" + (ipage + 1);
-        }
-        if (ipage > 1)
-        {
-            previusURL = paramRequest.getWebPage().getUrl() + "?act=daily&amp;y=" + ilyear + "&amp;m=" +
-                    ilmonth + "&d=" + ilday + "&ipage=" + (ipage - 1);
-        }
-        if (ipage > 1)
-        {
-        %><a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"/></a><%
-        }
-        for (int i = 1; i <= paginas; i++)
-        {
-            %><a href="<%=wpage.getUrl()%>?act=daily&amp;y=<%=ilyear%>&amp;m=<%=ilmonth%>&d=<%=ilday%>&amp;ipage=<%=i%>"><%
-            if (i == ipage)
+            if (paginas > 1)
             {
+    %><div class="paginacion"><%
+                String nextURL = "#";
+                String previusURL = "#";
+                if (ipage < paginas)
+                {
+                    nextURL = paramRequest.getWebPage().getUrl() + "?act=daily&amp;y=" + ilyear + "&amp;m=" +
+                            ilmonth + "&d=" + ilday + "&ipage=" + (ipage + 1);
+                }
+                if (ipage > 1)
+                {
+                    previusURL = paramRequest.getWebPage().getUrl() + "?act=daily&amp;y=" + ilyear + "&amp;m=" +
+                            ilmonth + "&d=" + ilday + "&ipage=" + (ipage - 1);
+                }
+                if (ipage > 1)
+                {
+        %><a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"/></a><%
+                }
+                for (int i = 1; i <= paginas; i++)
+                {
+            %><a href="<%=wpage.getUrl()%>?act=daily&amp;y=<%=ilyear%>&amp;m=<%=ilmonth%>&d=<%=ilday%>&amp;ipage=<%=i%>"><%
+                    if (i == ipage)
+                    {
             %><strong><%                    }%>
                 <%=i%>
                 <%
-                if (i == ipage)
-                {
+                    if (i == ipage)
+                    {
                 %></strong><%                    }%>
         </a>
         <%
-    }
+                }
 
-    if (ipage != paginas)
-    {
+                if (ipage != paginas)
+                {
         %><a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"/></a><%
-    }
+                }
             %></div><%
             }%>
     <h1>Eventos del <%=dateFormat.format(currCal.getTime())%></h1>
     <%
-    int iElement = 0;
-    for (EventElement ev : events)
-    {
-        if (ev.canView(member))
-        {
-            iElement++;
-            if (iElement > fin)
+            int iElement = 0;
+            for (EventElement ev : events)
             {
-                break;
-            }
-            if (iElement >= inicio && iElement <= fin)
-            {
-                String fechaEvento = "Sin determinar";
-                try
+                if (ev.canView(member))
                 {
-                    fechaEvento = dateFormat.format(ev.getStartDate());
-                }
-                catch (Exception e)
-                {
-                }
-
-                String hfechaEvento = "Sin determinar";
-                try
-                {
-                    hfechaEvento = timeFormat.format(ev.getStartTime());
-                }
-                catch (Exception e)
-                {
-                }
-
-                String rank = df.format(ev.getRank());
-                String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/EventResource/noevent.jpg";
-                String path = ev.getWorkPath();
-                if (ev.getEventThumbnail() != null)
-                {
-                    int pos = ev.getEventThumbnail().lastIndexOf("/");
-                    if (pos != -1)
+                    iElement++;
+                    if (iElement > fin)
                     {
-                        String sphoto = ev.getEventThumbnail().substring(pos + 1);
-                        ev.setEventThumbnail(sphoto);
+                        break;
                     }
-                    pathPhoto = SWBPortal.getWebWorkPath() + path + "/" + ev.getEventThumbnail();
-                }
+                    if (iElement >= inicio && iElement <= fin)
+                    {
+                        String fechaEvento = "Sin determinar";
+                        try
+                        {
+                            fechaEvento = dateFormat.format(ev.getStartDate());
+                        }
+                        catch (Exception e)
+                        {
+                        }
 
-                String postAuthor = "Usuario dado de baja";
-                if (ev.getCreator() != null)
-                {
-                    postAuthor = ev.getCreator().getFirstName();
-                }
-                
+                        String hfechaEvento = "Sin determinar";
+                        try
+                        {
+                            hfechaEvento = timeFormat.format(ev.getStartTime());
+                        }
+                        catch (Exception e)
+                        {
+                        }
 
-                String viewUrl = ev.getURL();
+                        String rank = df.format(ev.getRank());
+                        String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/EventResource/noevent.jpg";
+                        String path = ev.getWorkPath();
+                        if (ev.getEventThumbnail() != null)
+                        {
+                            int pos = ev.getEventThumbnail().lastIndexOf("/");
+                            if (pos != -1)
+                            {
+                                String sphoto = ev.getEventThumbnail().substring(pos + 1);
+                                ev.setEventThumbnail(sphoto);
+                            }
+                            pathPhoto = SWBPortal.getWebWorkPath() + path + "/" + ev.getEventThumbnail();
+                        }
+
+                        String postAuthor = "Usuario dado de baja";
+                        if (ev.getCreator() != null)
+                        {
+                            postAuthor = ev.getCreator().getFirstName();
+                        }
+
+
+                        String viewUrl = ev.getURL();
     %>
     <div class="noticia">
         <img src="<%=pathPhoto%>" alt="<%= ev.getTitle()%>"/>
@@ -355,61 +365,61 @@ for (int i = 0; i < (7 - weekDay); i++)
         </div>
     </div>
     <%
-}
-}
-}
+                    }
+                }
+            }
     %>
     <!-- paginacion -->
     <%
-    if (paginas > 1)
-    {
-    %><div class="paginacion"><%
-        String nextURL = "#";
-        String previusURL = "#";
-        if (ipage < paginas)
-        {
-            nextURL = paramRequest.getWebPage().getUrl() + "?act=daily&amp;y=" + ilyear + "&amp;m=" +
-                    ilmonth + "&amp;d=" + ilday + "&amp;ipage=" + (ipage + 1);
-        }
-        if (ipage > 1)
-        {
-            previusURL = paramRequest.getWebPage().getUrl() + "?act=daily&amp;y=" + ilyear + "&amp;m=" +
-                    ilmonth + "&amp;d=" + ilday + "&amp;ipage=" + (ipage - 1);
-        }
-        if (ipage > 1)
-        {
-        %><a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"/></a><%
-        }
-
-        for (int i = 1; i <= paginas; i++)
-        {
-            %><a href="<%=wpage.getUrl()%>?act=daily&amp;y=<%=ilyear%>&amp;m=<%=ilmonth%>&amp;d=<%=ilday%>&amp;ipage=<%=i%>"><%
-            if (i == ipage)
+            if (paginas > 1)
             {
+    %><div class="paginacion"><%
+                String nextURL = "#";
+                String previusURL = "#";
+                if (ipage < paginas)
+                {
+                    nextURL = paramRequest.getWebPage().getUrl() + "?act=daily&amp;y=" + ilyear + "&amp;m=" +
+                            ilmonth + "&amp;d=" + ilday + "&amp;ipage=" + (ipage + 1);
+                }
+                if (ipage > 1)
+                {
+                    previusURL = paramRequest.getWebPage().getUrl() + "?act=daily&amp;y=" + ilyear + "&amp;m=" +
+                            ilmonth + "&amp;d=" + ilday + "&amp;ipage=" + (ipage - 1);
+                }
+                if (ipage > 1)
+                {
+        %><a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"/></a><%
+                }
+
+                for (int i = 1; i <= paginas; i++)
+                {
+            %><a href="<%=wpage.getUrl()%>?act=daily&amp;y=<%=ilyear%>&amp;m=<%=ilmonth%>&amp;d=<%=ilday%>&amp;ipage=<%=i%>"><%
+                    if (i == ipage)
+                    {
             %><strong><%                    }
                 %>
                 <%=i%>
                 <%
-                if (i == ipage)
-                {
+                    if (i == ipage)
+                    {
                 %></strong><%                    }
         %></a><%
-    }
-    if (ipage != paginas)
-    {
+                }
+                if (ipage != paginas)
+                {
         %><a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"/></a><%
-    }
+                }
             %></div><%
-}
+            }
     %>
     <!-- fin paginacion -->
 </div>
 <%
-}
-else
-{
+        }
+        else
+        {
 %><h2>No existen eventos para este d&iacute;a</h2><%        }
-}
+    }
 %>
 
 <%!
