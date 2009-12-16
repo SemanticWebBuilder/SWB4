@@ -142,7 +142,7 @@ class LocalCache{
     static  Contenedor inicio = null
     static long timer = 0
     //static long cache_time = 1000L*60*60*12
-    static long cache_time = 1000L*10 //1000L*60*15
+    static long cache_time = 1000L*60*15 // 1000L*10 //1000L*60*15
 
     static public Contenedor getInicio(WebSite wsid){
         if (null==inicio || System.currentTimeMillis()>timer+cache_time) {
