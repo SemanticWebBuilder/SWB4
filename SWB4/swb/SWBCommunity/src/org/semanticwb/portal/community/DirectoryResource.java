@@ -3,8 +3,6 @@ package org.semanticwb.portal.community;
 import java.io.File;
 import java.io.IOException;
 import java.net.SocketException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
@@ -14,7 +12,6 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Descriptiveable;
 import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.GenericObject;
@@ -27,6 +24,7 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.base.util.ImageResizer;
+import org.semanticwb.model.Searchable;
 import org.semanticwb.servlet.internal.UploadFormElement;
 
 /**
@@ -36,16 +34,23 @@ import org.semanticwb.servlet.internal.UploadFormElement;
  */
 public class DirectoryResource extends org.semanticwb.portal.community.base.DirectoryResourceBase
 {
-
+    private static DirectoryObjectParser parser = null;
     private static Logger log = SWBUtils.getLogger(ProductResource.class);
 
     public DirectoryResource()
     {
+      
     }
 
     public DirectoryResource(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+        try {
+            if(parser == null) {
+                parser = new DirectoryObjectParser();
+               SWBPortal.getIndexMgr().getDefaultIndexer().registerParser(DirectoryObject.class, new DirectoryObjectParser());
+            }
+        } catch(Exception e){log.error(e);}
     }
 
     @Override
