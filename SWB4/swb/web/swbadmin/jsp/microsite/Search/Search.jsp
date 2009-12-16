@@ -12,6 +12,11 @@
     }
     String imgDefaultPath = "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
 
+
+    Iterator<SemanticObject>rit = allRes.iterator();
+    while(rit.hasNext()) {
+        System.out.println("---Encontrado " + rit.next().getDisplayName());
+    }
     //System.out.println("what: " + what);
 %>
 
@@ -36,44 +41,49 @@
 %>
 
 <script type="text/javascript">
-    function setSearchCategory(what) {
+    function setSearchClass(what) {
         document.getElementById("what").value = what;
         var catLabel = "Todas";
         if (what == "Clasified") catLabel = "Clasificados";
         if (what == "All") catLabel = "Todas";
-        if (what == "Place") catLabel = "Lugares";
-        if (what == "Topic") catLabel = "Temas";
         if (what == "Member") catLabel = "Personas";
-        if (what == "Service") catLabel = "Servicios";
         if (what == "Organization") catLabel = "Organizaciones";
-        if (what == "Community") catLabel = "Comunidades";
+        if (what == "MicroSite") catLabel = "Comunidades";
+        document.getElementById("catLabel").innerHTML = catLabel;
+    }
+
+    function setSearchCategory(what) {
+        document.getElementById("scategory").value = what;
+        var catLabel = "Todas";
+        if (what == "Sitios_de_Interes") catLabel = "Lugares";
+        if (what == "Servicios") catLabel = "Servicios";
         document.getElementById("catLabel").innerHTML = catLabel;
     }
 </script>
 <div class="twoColContent">
 <div id="busquedaAvanzada">
       	<div class="buscador" id="busquedaPalabraClave">
-            <form id="busquedaKeyWords" method="post" action="{topic@getUrl}/../Busqueda" >
+            <form id="busquedaKeyWords" method="get" action="<%=paramRequest.getWebPage().getWebSite().getWebPage("Busqueda").getUrl()%>" >
           	    <div>
                 <label for="buscadorKeywords">Busca por palabra clave</label>
-                <input type="text" id="buscadorKeywords" value="B&uacute;squeda por palabra clave" />
+                <input type="text" name="q" id="buscadorKeywords" value="B&uacute;squeda por palabra clave" />
                 <label for="buscarKeywords">Buscar</label>
                 <input type="submit" id="buscarKeywords" value="Buscar" />
                 <input type="hidden" name="what" id="what" value="All"/>
+                <input type="hidden" name="scategory" id="scategory" value=""/>
               </div>
             </form>
           </div>
           <ul id="MenuBar3" class="MenuBarHorizontal">
 	  <li class="selectTitle"><p id="catLabel">Categor&iacute;a</p>
               <ul>
-	      <li><a onclick="setSearchCategory('All');">Todas</a></li>
-	      <li><a onclick="setSearchCategory('Topic');">Temas</a></li>
-	      <li><a onclick="setSearchCategory('Place');">Lugares</a></li>
-              <li><a onclick="setSearchCategory('Member');">Personas</a></li>
-              <li><a onclick="setSearchCategory('Service');" >Servicios</a></li>
-              <li><a onclick="setSearchCategory('Organization');">Organizaciones</a></li>
-              <li><a onclick="setSearchCategory('Clasified');">Clasificados</a></li>
-              <li><a onclick="setSearchCategory('Community');">Comunidades</a></li>
+	      <li><a onclick="setSearchClass('All');">Todas</a></li>
+	      <li><a onclick="setSearchCategory('Sitios_de_Interes');">Lugares</a></li>
+              <li><a onclick="setSearchClass('Member');">Personas</a></li>
+              <li><a onclick="setSearchCategory('Servicios');" >Servicios</a></li>
+              <li><a onclick="setSearchClass('Organization');">Organizaciones</a></li>
+              <li><a onclick="setSearchClass('Clasified');">Clasificados</a></li>
+              <li><a onclick="setSearchClass('MicroSite');">Comunidades</a></li>
               </ul>
 	  </li>
 	</ul>
@@ -245,13 +255,14 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                         count++;
                         members.next();
                     }
-                    String imgPath = imgDefaultPath;
+                    String imgPath = "";
                     //String imgPath = "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
                     if (site.getPhoto() != null)
                     {
                         imgPath = SWBPortal.getContextPath() + SWBPortal.getWebWorkPath() + site.getPhoto();
                     }
                     %>
+
                     <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
                         <img alt="<%=site.getTitle()%>" src="<%=imgPath%>" height="95" width="95"/>
                         <div class="listEntryInfo">
@@ -332,12 +343,17 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                     <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
                     <%
                     DirectoryObject c = (DirectoryObject) obj.createGenericInstance();
-                    String photo = imgDefaultPath; //obj.getProperty(swbcomm_dirPhoto);
-                    if (obj.getProperty(swbcomm_dirPhoto) != null) {
-                        photo = SWBPortal.getWebWorkPath()+c.getDirectoryResource().getWorkPath()+"/"+obj.getId()+"/"+obj.getProperty(swbcomm_dirPhoto);
+                    String img="";
+                    if (obj.getProperty(DirectoryObject.swbcomm_dirPhoto) != null) {
+                        img = SWBPortal.getWebWorkPath() + "/" + obj.getWorkPath() + "/" + obj.getProperty(DirectoryObject.swbcomm_dirPhoto);
                     }
                     %>
-                        <img height="95" alt="<%=c.getTitle()%>" width="95" src="<%=photo%>" />
+                        <%if(!img.equals("")){
+                            %><img height="95" alt="<%=c.getTitle()%>" width="95" src="<%=img%>"/><%
+                        } else {
+                            %><img height="95" alt="Imagen no disponible" width="95" src="<%=SWBPortal.getContextPath()%>/swbadmin/images/noDisponible.gif" /><%
+                        }
+                        %>
                         <div class="listEntryInfo">
                         <p class="tituloRojo"><%=c.getTitle()%>&nbsp;(<%=resultType%>)</p>
                         <p>
@@ -374,9 +390,56 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                     <div class="clear"> </div>
                     </div>
                     <%
+                } else if (obj.instanceOf(EventElement.sclass)) {
+                    resultType = "Evento";
+                    EventElement ev = (EventElement)obj.createGenericInstance();
+                    String img="";
+                    if (ev.getEventImage() != null) {
+                        img = SWBPortal.getWebWorkPath() + "/" + obj.getWorkPath() + "/" + ev.getEventImage();
+                    }
+                    %>
+                    <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
+                        <%if(!img.equals("")){
+                            %><img height="95" alt="<%=ev.getTitle()%>" width="95" src="<%=img%>"/><%
+                        } else {
+                            %><img height="95" alt="Imagen no disponible" width="95" src="<%=SWBPortal.getContextPath()%>/swbadmin/images/noDisponible.gif" /><%
+                        }
+                        %>
+                        <div class="listEntryInfo">
+                            <p class="tituloRojo"><%=ev.getTitle()%>&nbsp;(<%=resultType%>)</p>
+                            <p>
+                                <%=(ev.getDescription()==null)?"":ev.getDescription()%>
+                            </p>
+                            <p class="vermas"><a href ="<%=ev.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(ev.getURI())%>">Ver mas</a></p>
+                        </div>
+                        <div class="clear"> </div>
+                    </div>
+                    <%
+                } else if (obj.instanceOf(PhotoElement.sclass)) {
+                    resultType = "Foto";
+                    PhotoElement ph = (PhotoElement)obj.createGenericInstance();
+                    String img="";
+                    if (ph.getImageURL() != null) {
+                        img = SWBPortal.getWebWorkPath() + "/" + obj.getWorkPath() + "/" + ph.getImageURL();
+                    }
+                    %>
+                    <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
+                        <%if(!img.equals("")){
+                            %><img height="95" alt="<%=ph.getTitle()%>" width="95" src="<%=img%>"/><%
+                        } else {
+                            %><img height="95" alt="Imagen no disponible" width="95" src="<%=SWBPortal.getContextPath()%>/swbadmin/images/noDisponible.gif" /><%
+                        }
+                        %>
+                        <div class="listEntryInfo">
+                            <p class="tituloRojo"><%=ph.getTitle()%>&nbsp;(<%=resultType%>)</p>
+                            <p>
+                                <%=(ph.getDescription()==null)?"":ph.getDescription()%>
+                            </p>                            
+                        </div>
+                        <div class="clear"> </div>
+                    </div>
+                    <%
                 }
-                %>
-            <%
         }
         %>
         </div>
