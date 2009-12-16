@@ -104,7 +104,7 @@
             String imggalery = null;
             if (sImgs.length > 0)
             {
-                imggalery = SWBPortal.UTIL.getGalleryScript(sImgs);
+                imggalery = SWBPortal.UTIL.renderGallery(sImgs);
             }
             else
             {
