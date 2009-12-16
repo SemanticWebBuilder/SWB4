@@ -77,7 +77,7 @@ public class ImageGallery extends GenericResource {
             webWorkPath = SWBPortal.getWebWorkPath() +  base.getWorkPath() + "/";
             
             // Si no existe el thumbnail se crea
-            /*int width = Integer.parseInt(base.getAttribute("width"));
+            int width = Integer.parseInt(base.getAttribute("width"));
             Iterator<String> it = base.getAttributeNames();
             while(it.hasNext()) {
                 String attname = it.next();
@@ -93,7 +93,7 @@ public class ImageGallery extends GenericResource {
                         }
                     }
                 }
-            }*/
+            }
             
         }
         catch(Exception e) { 
@@ -652,14 +652,7 @@ ret.append("\n  </tr> ");
     }
 
     public String renderGallery(String oid, int width, int height, boolean autoplay, int pause, int fadetime, int fullwidth, int fullheight, String title, String titlestyle, String[] imagepath) {
-        Resource base = getResourceBase();
         StringBuilder out = new StringBuilder();
-
-        if(base.getAttribute("css")!=null) {
-            out.append("<script type=\"text/javascript\">");
-            out.append("    setStyleSheetByInstance('"+base.getAttribute("css")+"','"+base.getId()+"');");
-            out.append("</script>");
-        }
 
         out.append("\n<script type=\"text/javascript\" src=\""+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/jquery-imagegallery.js\"></script>");
         out.append("<script type=\"text/javascript\" src=\""+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/jquery-1.3.js\"></script>");
@@ -707,10 +700,8 @@ ret.append("\n  </tr> ");
         out.append("    ); ");
         out.append("</script> ");
 
-        //out.append("<div class=\"swb-galeria\"> ");
-        //out.append("<div style=\""+ titlestyle +"\">"+ title +"</div> ");
-        out.append("<div class=\"swb-galeria_"+base.getId()+"\"> ");
-        out.append("<div class=\"title_"+base.getId()+"\">"+ title +"</div> ");
+        out.append("<div class=\"swb-galeria\"> ");
+        out.append("<div class=\"title\">"+ title +"</div> ");
         out.append("<div id=\"imggallery_"+ oid +"\" style=\"position:relative; visibility:hidden\"></div> ");
         out.append("</div> ");
         out.append("</div>\n");
