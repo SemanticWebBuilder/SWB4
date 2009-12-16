@@ -69,8 +69,9 @@ public class StylerDomParser {
                 script.append("</script>\n");
                 fstel = true;
             }
-            script.append("<div dojoType=\"dijit.layout.ContentPane\" title=\""+name+"\" id=\""+name+"\">");
+            script.append("<div dojoType=\"dijit.layout.ContentPane\" title=\""+name+"\" id=\""+name+"\" style=\"position:relative;\" >");
             script.append("<table border=\"0\" width=\"100%\" bgcolor=\"#F4F4DD\" >");
+            script.append("<tr><td width=\"35%\"></td><td width=\"65%\"></td></tr>");
 
             script.append("<tr>");
             script.append("<td class=\"label\">border-style :");
@@ -387,11 +388,6 @@ public class StylerDomParser {
 
     private String processStartDocument() {
         StringBuilder script = new StringBuilder();
-        script.append("<style type=\"text/css\">\n");
-        script.append("  body, div, table, input, select { font-family:helvetica,arial,sans-serif; font-size:10pt; }\n");
-        script.append("  td { vertical-align:top; }\n");
-        script.append("  .label { text-align:left; vertical-align:top; width:95px;}");
-        script.append("</style>\n");
 
         script.append("<script type=\"text/javascript\">\n");
         script.append(" dojo.require(\"dijit.layout.TabContainer\");\n");
@@ -432,10 +428,9 @@ public class StylerDomParser {
         script.append("});\n");
 
         script.append("</script>\n");
-
+        
         script.append("<input id=\"stel\" type=\"hidden\" />");
-        script.append("<div dojoType=\"dijit.layout.TabContainer\" id=\"tc_"+client.getId()+"\" style=\"width:400px;height:510px;\" tabPosition=\"left-h\" tabStrip=\"true\">\n");
-
+        script.append("<div dojoType=\"dijit.layout.TabContainer\" id=\"tc_"+client.getId()+"\" style=\"position:relative;margin-left:15px; width:480px;height:250px;\" tabStrip=\"true\" tabPosition=\"right-h\" >\n");
         return script.toString();
     }
 
