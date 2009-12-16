@@ -23,6 +23,8 @@
                 }catch(Exception e){e.printStackTrace();}
                 if (obj != null && obj instanceof MicroSite)
                 {
+                    try
+                            {
                     MicroSite comm = (MicroSite) communities.next();
                     if (comm != null && comm.getUrl() != null && comm.getTitle() != null && comm.isActive())
                     {
@@ -35,6 +37,7 @@
                             break;
                         }
                     }
+                    }catch(Exception e){}
                 }
             }
 
