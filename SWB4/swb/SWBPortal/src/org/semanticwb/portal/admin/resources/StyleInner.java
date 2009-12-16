@@ -69,22 +69,9 @@ public class StyleInner {
         script.append("    var deferred = dojo.xhrPost(xhrArgs);\n");
         script.append("}\n");
         script.append("</script>\n");
-
-        //url = paramRequest.getActionUrl();
-        script.append("<div class=\"soria\" style=\"float:left; padding:10px;\">\n");
-        //script.append("<form id=\"frmResource_0999\" name=\"frmResource\" method=\"post\" action=\""+ url+"\"> ");
         script.append(handler.parse());
-        /*script.append("<table width=\"100%\" align=\"left\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\">\n");
-        script.append("  <tr><td>\n");
-        script.append("  <button dojoType=\"dijit.form.Button\" type=\"submit\">Guardar</button>\n");
-        script.append("  <button dojoType=\"dijit.form.Button\" type=\"reset\">Restablecer</button>\n");
-        script.append("  </td></tr>\n");
-        script.append("</table>\n");*/
-        //script.append("</form>\n");
-        script.append("</div>\n");
-
+        
         mm.put(base.getId(), handler.getTabs());
-
         return script.toString();
     }
 
@@ -94,12 +81,10 @@ public class StyleInner {
             Iterator<String> it1 = matriz.keySet().iterator();
             while(it1.hasNext()) {
                 String k = it1.next();
-                System.out.println("k="+k);
                 HashMap hm = (HashMap)matriz.get(k);
                 Iterator<String> it2 = hm.keySet().iterator();
                 while(it2.hasNext()) {
                     String l = it2.next();
-                    System.out.println("key="+l+", value="+hm.get(l));
                 }
             }
         }
