@@ -87,7 +87,7 @@ panels.each{
                 baseeletext2="""publicados"""
             }
             println """${linea}</p>
-            <p>${elecount} ${basecommtext} y ${elements} ${baseeletext} ${baseeletext2}</p>"""
+            <p>Cuentan con ${elecount} ${basecommtext} y ${elements} ${baseeletext} ${baseeletext2}</p>"""
         }
     }
    
@@ -195,7 +195,7 @@ class LocalCache{
                         if(db!=null)
                         {
                             elementos2++;
-                            System.out.println("elementos2: "+elementos2);
+                            
                         }
                     }
                     clugar.addElements(elementos2)
@@ -212,7 +212,7 @@ class LocalCache{
                     int elementos2=0;
                     def elements=DirectoryObjectBase.ClassMgr.listDirectoryObjectByWebPage(topic);
 
-                    //System.out.println("clugar.addElements(elementos1): "+clugar.addElements(elementos1).getURI());
+                    
                     
                     elements.each
                     {
@@ -220,7 +220,7 @@ class LocalCache{
                         if(db!=null)
                         {
                             elementos2++;
-                            System.out.println("elementos2: "+elementos2);
+                            
                         }
                     }
                     cservicio.addElements(elementos2)                
@@ -235,9 +235,7 @@ class LocalCache{
 
                     WebPage topic=(WebPage)it;
                     int elementos2=0;
-                    def elements=DirectoryObjectBase.ClassMgr.listDirectoryObjectByWebPage(topic);
-
-                    //System.out.println("clugar.addElements(elementos1): "+clugar.addElements(elementos1).getURI());
+                    def elements=DirectoryObjectBase.ClassMgr.listDirectoryObjectByWebPage(topic);                   
 
                     elements.each
                     {
@@ -245,7 +243,7 @@ class LocalCache{
                         if(db!=null)
                         {
                             elementos2++;
-                            System.out.println("elementos2: "+elementos2);
+                            
                         }
                     }
                     corganizacion.addElements(elementos2)
