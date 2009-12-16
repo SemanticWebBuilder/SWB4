@@ -29,10 +29,10 @@ public class UserParser extends GenericParser {
     }
 
     public String getName(User user) {
-        return (user.getFullName()==null?"":user.getFullName());
+        return user.getFullName();
     }
 
     public String getEmail (User user) {
-        return (user.getEmail()==null?"":user.getEmail());
+        return user.getEmail();
     }
 }
