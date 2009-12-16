@@ -12,11 +12,10 @@
     }
     String imgDefaultPath = "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
 
-
-    Iterator<SemanticObject>rit = allRes.iterator();
+    /*Iterator<SemanticObject>rit = allRes.iterator();
     while(rit.hasNext()) {
         System.out.println("---Encontrado " + rit.next().getDisplayName());
-    }
+    }*/
     //System.out.println("what: " + what);
 %>
 
@@ -45,8 +44,8 @@
         document.getElementById("what").value = what;
         var catLabel = "Todas";
         if (what == "Clasified") catLabel = "Clasificados";
-        if (what == "All") catLabel = "Todas";
-        if (what == "Member") catLabel = "Personas";
+        if (what == "") catLabel = "Todas";
+        if (what == "User") catLabel = "Personas";
         if (what == "Organization") catLabel = "Organizaciones";
         if (what == "MicroSite") catLabel = "Comunidades";
         document.getElementById("catLabel").innerHTML = catLabel;
@@ -54,7 +53,6 @@
 
     function setSearchCategory(what) {
         document.getElementById("scategory").value = what;
-        var catLabel = "Todas";
         if (what == "Sitios_de_Interes") catLabel = "Lugares";
         if (what == "Servicios") catLabel = "Servicios";
         document.getElementById("catLabel").innerHTML = catLabel;
@@ -77,9 +75,9 @@
           <ul id="MenuBar3" class="MenuBarHorizontal">
 	  <li class="selectTitle"><p id="catLabel">Categor&iacute;a</p>
               <ul>
-	      <li><a onclick="setSearchClass('All');">Todas</a></li>
+	      <li><a onclick="setSearchClass('');">Todas</a></li>
 	      <li><a onclick="setSearchCategory('Sitios_de_Interes');">Lugares</a></li>
-              <li><a onclick="setSearchClass('Member');">Personas</a></li>
+              <li><a onclick="setSearchClass('User');">Personas</a></li>
               <li><a onclick="setSearchCategory('Servicios');" >Servicios</a></li>
               <li><a onclick="setSearchClass('Organization');">Organizaciones</a></li>
               <li><a onclick="setSearchClass('Clasified');">Clasificados</a></li>
@@ -339,10 +337,17 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                     if (obj.instanceOf(Organization.sclass)) {
                         resultType = "Organizaci&oacute;n";
                     }
+                    DirectoryObject c = (DirectoryObject) obj.createGenericInstance();
+
+                    User creator = c.getCreator();
+                    String perfilPath = wpage.getWebSite().getWebPage("perfil").getUrl();
+                    String profile = "<a href=\"" + perfilPath + "?user=" + creator.getEncodedURI() + "\">"+creator.getFullName()+"</a>";
+
+                    System.out.println(profile);
                     %>
                     <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
                     <%
-                    DirectoryObject c = (DirectoryObject) obj.createGenericInstance();
+                    
                     String img="";
                     if (obj.getProperty(DirectoryObject.swbcomm_dirPhoto) != null) {
                         img = SWBPortal.getWebWorkPath() + "/" + obj.getWorkPath() + "/" + obj.getProperty(DirectoryObject.swbcomm_dirPhoto);
@@ -357,7 +362,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                         <div class="listEntryInfo">
                         <p class="tituloRojo"><%=c.getTitle()%>&nbsp;(<%=resultType%>)</p>
                         <p>
-                            <b><%=(c.getDescription()==null)?"":c.getDescription()%></b>
+                           <%=(c.getDescription()==null)?"":c.getDescription()%>
                         </p>
                         <%
                         if (obj.instanceOf(Addressable.swbcomm_Addressable)) {
@@ -383,7 +388,8 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                             <%
                         }
                         %>
-                        <p><%=(c.getTags()==null?"":"Palabras clave: " + c.getTags())%></p>
+                        <p><%=(c.getCreator()==null?"":"<b>Creado por: </b>" + profile)%></p>
+                        <p><%=(c.getTags()==null?"":"<b>Palabras clave: </b>" + c.getTags())%></p>
                        
                         <p class="vermas"><a href ="<%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>">Ver mas</a></p>
                     </div>
@@ -410,6 +416,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                             <p>
                                 <%=(ev.getDescription()==null)?"":ev.getDescription()%>
                             </p>
+                            <p><%=(ev.getTags()==null?"":"<b>Palabras clave: </b>" + ev.getTags())%></p>
                             <p class="vermas"><a href ="<%=ev.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(ev.getURI())%>">Ver mas</a></p>
                         </div>
                         <div class="clear"> </div>
@@ -434,7 +441,25 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                             <p class="tituloRojo"><%=ph.getTitle()%>&nbsp;(<%=resultType%>)</p>
                             <p>
                                 <%=(ph.getDescription()==null)?"":ph.getDescription()%>
-                            </p>                            
+                            </p>
+                            <p><%=(ph.getTags()==null?"":"<b>Palabras clave: </b>" + ph.getTags())%></p>
+                        </div>
+                        <div class="clear"> </div>
+                    </div>
+                    <%
+                } else if (obj.instanceOf(WebPage.sclass)) {
+                    resultType="Página Web";
+                    WebPage wp = (WebPage)obj.createGenericInstance();
+                    %>
+                    <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
+                        <img height="95" alt="Imagen no disponible" width="95" src="<%=SWBPortal.getContextPath()%>/swbadmin/images/noDisponible.gif" />
+                        <div class="listEntryInfo">
+                            <p class="tituloRojo"><%=wp.getTitle()%>&nbsp;(<%=resultType%>)</p>
+                            <p>
+                                <%=(wp.getDescription()==null)?"":wp.getDescription()%>
+                            </p>
+                            <p><%=(wp.getTags()==null?"":"<b>Palabras clave: </b>" + wp.getTags())%></p>
+                            <p class="vermas"><a href ="<%=wp.getUrl()%>">Ver mas</a></p>
                         </div>
                         <div class="clear"> </div>
                     </div>
