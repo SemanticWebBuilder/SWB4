@@ -35,16 +35,12 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.Timer;
-import java.util.TimerTask;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.SWBAppObject;
 import org.semanticwb.model.Indexable;
-import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
-import org.semanticwb.model.WebSite;
 
 /**
  *
