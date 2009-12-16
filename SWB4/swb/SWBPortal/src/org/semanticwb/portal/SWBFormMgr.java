@@ -83,6 +83,7 @@ public class SWBFormMgr
     private ArrayList<Object> buttons=null;
 
     private boolean filterRequired=true;
+    private boolean filterHTMLTags=true;
     
     private HashMap<PropertyGroup, TreeSet> groups=null;
 
@@ -800,6 +801,20 @@ public class SWBFormMgr
     public void clearProperties()
     {
         groups=new HashMap();
+    }
+
+    /**
+     * @return the filterHTMLTags
+     */
+    public boolean isFilterHTMLTags() {
+        return filterHTMLTags;
+    }
+
+    /**
+     * @param filterHTMLTags the filterHTMLTags to set
+     */
+    public void setFilterHTMLTags(boolean filterHTMLTags) {
+        this.filterHTMLTags = filterHTMLTags;
     }
 
 }
