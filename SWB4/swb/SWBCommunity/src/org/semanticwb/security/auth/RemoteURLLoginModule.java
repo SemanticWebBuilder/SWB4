@@ -103,6 +103,7 @@ public class RemoteURLLoginModule implements LoginModule {
                 User us = ur.createUser();
                 us.setLogin(login);
                 us.setActive(true);
+                us.setLanguage("es");
                 principal = us;
             }
             principal.setFirstName(mapa.get("firstName"));
