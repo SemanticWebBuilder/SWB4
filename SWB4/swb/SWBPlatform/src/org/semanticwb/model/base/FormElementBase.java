@@ -54,6 +54,7 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
 
     protected HashMap attributes=null;
     private SemanticModel model=null;
+    private boolean filterHTMLTags=true;
 
     public FormElementBase(SemanticObject obj)
     {
@@ -100,7 +101,7 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
                         if(prop.isInt() || prop.isShort() || prop.isByte())obj.setIntProperty(prop, Integer.parseInt(value));
                         if(prop.isLong())obj.setLongProperty(prop, Long.parseLong(value));
                         if(prop.isDate())obj.setDateProperty(prop, new java.util.Date(value));
-                        if(prop.isString())obj.setProperty(prop, value);
+                        if(prop.isString())obj.setProperty(prop, SWBUtils.XML.replaceXMLChars(value));
                     }else if(value.length()==0 && old!=null)
                     {
                         obj.removeProperty(prop);
@@ -220,6 +221,20 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
      */
     public void setModel(SemanticModel model) {
         this.model = model;
+    }
+
+    /**
+     * @return the filterHTMLTags
+     */
+    public boolean isFilterHTMLTags() {
+        return filterHTMLTags;
+    }
+
+    /**
+     * @param filterHTMLTags the filterHTMLTags to set
+     */
+    public void setFilterHTMLTags(boolean filterHTMLTags) {
+        this.filterHTMLTags = filterHTMLTags;
     }
 
 
