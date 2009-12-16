@@ -20,7 +20,6 @@
  * dirección electrónica:
  *  http://www.semanticwebbuilder.org
  **/
-
 package org.semanticwb.security.auth;
 
 import java.util.Properties;
@@ -33,48 +32,69 @@ import org.semanticwb.model.UserRepository;
  *
  * @author Serch
  */
-public class RemoteURLLoginBridge extends ExtUserRepInt {
-    
+public class RemoteURLLoginBridge extends ExtUserRepInt
+{
+
     static Logger log = SWBUtils.getLogger(RemoteURLLoginBridge.class);
     private UserRepository userRep;
     private Properties props;
     private String URL;
+    private String host;
+    private String soapAction;
     private String RedirectURL;
 
     public RemoteURLLoginBridge(UserRepository UserRep, Properties props)
     {
         this.userRep = UserRep;
         this.props = props;
-        this.URL = props.getProperty("urlBase", null);
+        this.URL = props.getProperty("url", null);
+        this.host = props.getProperty("host", null);
+        this.soapAction = props.getProperty("soapAction", null);
         this.RedirectURL = props.getProperty("urlRedirec", null);
     }
-    
+
     @Override
-    public void syncUsers() {
+    public void syncUsers()
+    {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public boolean validateCredential(String login, Object credential) {
-        return (RemoteURLLoginUtil.getUserAttributes(login, new String((char[])credential), URL)!=null);
+    public boolean validateCredential(String login, Object credential)
+    {
+        return (RemoteURLLoginUtil.getUserAttributes(login, new String((char[]) credential), host, URL, soapAction) != null);
     }
 
     @Override
-    public boolean syncUser(String login, User user) {
+    public boolean syncUser(String login, User user)
+    {
         return true;
     }
 
     @Override
-    public boolean doRedirect() {
+    public boolean doRedirect()
+    {
         return true;
     }
 
     @Override
-    public String getRedirectURL() {
+    public String getRedirectURL()
+    {
         return RedirectURL;
     }
 
-    public String getURL(){
+    public String getURL()
+    {
         return URL;
+    }
+
+    public String getHost()
+    {
+        return host;
+    }
+
+    public String getSoapAction()
+    {
+        return soapAction;
     }
 }

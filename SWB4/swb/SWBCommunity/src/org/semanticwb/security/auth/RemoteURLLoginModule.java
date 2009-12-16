@@ -47,7 +47,8 @@ import org.semanticwb.model.WebSite;
  *
  * @author Serch
  */
-public class RemoteURLLoginModule implements LoginModule {
+public class RemoteURLLoginModule implements LoginModule
+{
 
     static Logger log = SWBUtils.getLogger(RemoteURLLoginModule.class);
     protected Subject subject;
@@ -58,7 +59,8 @@ public class RemoteURLLoginModule implements LoginModule {
     protected Object credential = null;
     protected String website = null;
 
-    public void initialize(Subject subject, CallbackHandler callbackHandler, Map<String, ?> sharedState, Map<String, ?> options) {
+    public void initialize(Subject subject, CallbackHandler callbackHandler, Map<String, ?> sharedState, Map<String, ?> options)
+    {
         this.subject = subject;
         this.callbackHandler = callbackHandler;
         this.sharedState = sharedState;
@@ -66,9 +68,11 @@ public class RemoteURLLoginModule implements LoginModule {
         log.debug("Initialized...");
     }
 
-    public boolean login() throws LoginException {
-        boolean ret =false;
-        if (callbackHandler == null) {
+    public boolean login() throws LoginException
+    {
+        boolean ret = false;
+        if (callbackHandler == null)
+        {
             throw new LoginException("No callbackHandler or not adecuate callbackHandler supplied");
         }
 
@@ -78,16 +82,19 @@ public class RemoteURLLoginModule implements LoginModule {
         callbacks[1] = new PasswordCallback("password", false);
         callbacks[2] = new TextInputCallback("Site");
 
-        try {
+        try
+        {
             callbackHandler.handle(callbacks);
             login = ((NameCallback) callbacks[0]).getName();
             credential = ((PasswordCallback) callbacks[1]).getPassword();
             ((PasswordCallback) callbacks[1]).clearPassword();
             website = ((TextInputCallback) callbacks[2]).getText();
-        } catch (IOException ex) {
+        } catch (IOException ex)
+        {
             log.error("IO Error Login a user", ex);
             throw new LoginException("IO Error: " + ex.getMessage());
-        } catch (UnsupportedCallbackException ex) {
+        } catch (UnsupportedCallbackException ex)
+        {
             log.error("UnsupportedCallbackException Error Login a user", ex);
             throw new LoginException("UnsupportedCallbackException Error: " + ex.getMessage());
         }
@@ -95,11 +102,17 @@ public class RemoteURLLoginModule implements LoginModule {
         WebSite ws = SWBContext.getWebSite(website);
         UserRepository ur = ws.getUserRepository();
         principal = ur.getUserByLogin(login);
-        
-        HashMap<String, String> mapa =RemoteURLLoginUtil.getUserAttributes(login, new String((char[])credential), ((RemoteURLLoginBridge)ur.getBridge()).getURL());
-        if (null!=mapa) {
+
+        HashMap<String, String> mapa = RemoteURLLoginUtil.getUserAttributes(login,
+                new String((char[]) credential),
+                ((RemoteURLLoginBridge) ur.getBridge()).getHost(),
+                ((RemoteURLLoginBridge) ur.getBridge()).getURL(),
+                ((RemoteURLLoginBridge) ur.getBridge()).getSoapAction());
+        if (null != mapa)
+        {
             ret = true;
-            if (null==principal){
+            if (null == principal)
+            {
                 User us = ur.createUser();
                 us.setLogin(login);
                 us.setActive(true);
@@ -111,18 +124,19 @@ public class RemoteURLLoginModule implements LoginModule {
             principal.setSecondLastName(mapa.get("middleName"));
             principal.setEmail(mapa.get("email"));
             //todo Gender
-            
+
         }
         return ret;
     }
 
-    public boolean commit() throws LoginException {
+    public boolean commit() throws LoginException
+    {
         boolean flag = false;
-        
+
         subject.getPrincipals().clear();
-        
+
         subject.getPrincipals().add(principal);
-        
+
         subject.getPrivateCredentials().add(credential);
         try
         {
@@ -130,17 +144,19 @@ public class RemoteURLLoginModule implements LoginModule {
             flag = true;
             principal.setLastLogin(new Date());
         } catch (Exception ex)
-                //NoSuchAlgorithmException & UnsupportedEncodingException,
-                //Wrapped up, it doesn't matter which one, we just can't do anything else
+        //NoSuchAlgorithmException & UnsupportedEncodingException,
+        //Wrapped up, it doesn't matter which one, we just can't do anything else
         {
             log.error("Can't set Signed status", ex);
         }
-        
+
         return flag;
     }
 
-    public boolean abort() throws LoginException {
-        if (subject != null) {
+    public boolean abort() throws LoginException
+    {
+        if (subject != null)
+        {
             subject.getPrincipals().clear();
             subject.getPrivateCredentials().clear();
             subject.getPublicCredentials().clear();
@@ -148,8 +164,10 @@ public class RemoteURLLoginModule implements LoginModule {
         return true;
     }
 
-    public boolean logout() throws LoginException {
-        if (subject != null) {
+    public boolean logout() throws LoginException
+    {
+        if (subject != null)
+        {
             subject.getPrincipals().clear();
             subject.getPrivateCredentials().clear();
             subject.getPublicCredentials().clear();
