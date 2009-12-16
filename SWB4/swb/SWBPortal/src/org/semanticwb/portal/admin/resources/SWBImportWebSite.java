@@ -413,6 +413,14 @@ public class SWBImportWebSite extends GenericResource {
                     ptype.setTitle("CommentSwf");
                 }
 
+                if (site.getResourceType("Comment") == null) {
+                    ResourceType ptype = site.createResourceType("Comment");
+                    ptype.setResourceClassName("org.semanticwb.portal.resources.Comment");
+                    ptype.setResourceBundle("org.semanticwb.portal.resources.Comment");
+                    ptype.setResourceMode(2);
+                    ptype.setTitle("Comment");
+                }
+
                 if (site.getResourceType("RemoteWebApp") == null) {
                     ResourceType ptype = site.createResourceType("RemoteWebApp");
                     ptype.setResourceClassName("org.semanticwb.portal.resources.RemoteWebApp");
@@ -509,13 +517,13 @@ public class SWBImportWebSite extends GenericResource {
                     ptype.setTitle("Blog");
                 }
 
-                if (site.getResourceType("Comments") == null) {
-                    ResourceType ptype = site.createResourceType("Comments");
+                if (site.getResourceType("WebPageComments") == null) {
+                    ResourceType ptype = site.createResourceType("WebPageComments");
                     ptype.setResourceClassName("org.semanticwb.portal.resources.sem.SWBComments");
                     ptype.setResourceBundle("org.semanticwb.portal.resources.sem.SWBComments");
                     ptype.setResourceOWL("org.semanticwb.portal.resources.sem.SWBComments");
                     ptype.setResourceMode(ResourceType.MODE_SYSTEM);
-                    ptype.setTitle("Comments");
+                    ptype.setTitle("WebPageComments");
                 }
 
                 if (site.getResourceType("Forum") == null) {
@@ -536,14 +544,14 @@ public class SWBImportWebSite extends GenericResource {
                     ptype.setTitle("Directory");
                 }
 
-                if (site.getResourceType("Events") == null) {
-                    ResourceType ptype = site.createResourceType("Events");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.sem.events.Events");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.sem.events.Events");
-                    ptype.setResourceOWL("org.semanticwb.portal.resources.sem.events.Events");
-                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
-                    ptype.setTitle("Events");
-                }
+//                if (site.getResourceType("Events") == null) {
+//                    ResourceType ptype = site.createResourceType("Events");
+//                    ptype.setResourceClassName("org.semanticwb.portal.resources.sem.events.Events");
+//                    ptype.setResourceBundle("org.semanticwb.portal.resources.sem.events.Events");
+//                    ptype.setResourceOWL("org.semanticwb.portal.resources.sem.events.Events");
+//                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
+//                    ptype.setTitle("Events");
+//                }
 
                 if (site.getResourceType("WebPageOnLineCreate") == null) {
                     ResourceType ptype = site.createResourceType("WebPageOnLineCreate");
