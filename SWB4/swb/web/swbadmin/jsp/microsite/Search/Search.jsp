@@ -478,7 +478,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
         <%
             if (pageNumber - 1 >= 1) {
                 %>
-                <a href="<%=sliceUrl + "&p=" + (pageNumber - 1)%>">&lt;&nbsp;</a>
+                <a href="<%=sliceUrl + "&p=" + (pageNumber - 1) + "&what=" + (request.getParameter("q")) + "&o=" + (request.getParameter("o"))%>">&lt;&nbsp;</a>
                 <%
             }
             double pages = Math.ceil((double) total / (double) maxr);
@@ -495,13 +495,13 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                         <%
                     } else {
                         %>
-                        <a href="<%=sliceUrl + "&p=" + i%>"><%=i%></a>
+                        <a href="<%=sliceUrl + "&p=" + i + "&what=" + (request.getParameter("q")) + "&o=" + (request.getParameter("o"))%>"><%=i%></a>
                         <%
                     }
                 }
             if (pageNumber + 1 <= pages) {
                 %>
-                <a href="<%=sliceUrl + "&p=" + (pageNumber + 1)%>">&nbsp;&gt;</a>
+                <a href="<%=sliceUrl + "&p=" + (pageNumber + 1) + "&what=" + (request.getParameter("q")) + "&o=" + (request.getParameter("o"))%>">&nbsp;&gt;</a>
                 <%
             }
         %>
