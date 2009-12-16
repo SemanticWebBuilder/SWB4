@@ -158,7 +158,7 @@ public class Search extends GenericAdmResource {
             if (what.trim().equalsIgnoreCase("Member")) {
                 solutions=search4Members(q, language);
             } else {
-                //System.out.println("---Buscando " + q);
+                System.out.println("---Buscando " + q);
                 SearchQuery query=new SearchQuery();
                 SearchQuery tquery=new SearchQuery(SearchQuery.OPER_AND);
                 query.addQuery(tquery);
@@ -167,12 +167,12 @@ public class Search extends GenericAdmResource {
                 tquery.addTerm(new SearchTerm(SWBIndexer.ATT_TAGS, q, SearchTerm.OPER_OR));
 
                 if (!what.trim().equalsIgnoreCase("") && !what.trim().equalsIgnoreCase("All")) {
-                    //System.out.println("---Filtrando por clase " + what);
+                    System.out.println("---Filtrando por clase " + what);
                     query.addTerm(new SearchTerm(SWBIndexer.ATT_CLASS, what, SearchTerm.OPER_AND));
                 }
 
                 if (!cat.trim().equals("")) {
-                    //System.out.println("---Filtrando por categoría " + cat);
+                    System.out.println("---Filtrando por categoría " + cat);
                     query.addTerm(new SearchTerm(SWBIndexer.ATT_CATEGORY, cat, SearchTerm.OPER_AND));
                 }
 
