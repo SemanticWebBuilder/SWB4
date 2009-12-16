@@ -53,6 +53,7 @@ import org.semanticwb.model.Resource;
 import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.Traceable;
+import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
@@ -155,37 +156,13 @@ public class Search extends GenericAdmResource {
             String cat = request.getParameter("scategory");
             if (cat == null) cat = "";
 
-            if (what.trim().equalsIgnoreCase("Member")) {
+            if (what.trim().equalsIgnoreCase("All")) {
+                solutions = search4Members(q, language);
+                solutions.addAll(executeSearch(q, "", cat, paramRequest.getUser()));
+            } else if (what.trim().equalsIgnoreCase("Member")) {
                 solutions=search4Members(q, language);
             } else {
-                System.out.println("---Buscando " + q);
-                SearchQuery query=new SearchQuery();
-                SearchQuery tquery=new SearchQuery(SearchQuery.OPER_AND);
-                query.addQuery(tquery);
-                tquery.addTerm(new SearchTerm(SWBIndexer.ATT_TITLE, q, SearchTerm.OPER_OR));
-                tquery.addTerm(new SearchTerm(SWBIndexer.ATT_DESCRIPTION, q, SearchTerm.OPER_OR));
-                tquery.addTerm(new SearchTerm(SWBIndexer.ATT_TAGS, q, SearchTerm.OPER_OR));
-
-                if (!what.trim().equalsIgnoreCase("") && !what.trim().equalsIgnoreCase("All")) {
-                    System.out.println("---Filtrando por clase " + what);
-                    query.addTerm(new SearchTerm(SWBIndexer.ATT_CLASS, what, SearchTerm.OPER_AND));
-                }
-
-                if (!cat.trim().equals("")) {
-                    System.out.println("---Filtrando por categoría " + cat);
-                    query.addTerm(new SearchTerm(SWBIndexer.ATT_CATEGORY, cat, SearchTerm.OPER_AND));
-                }
-
-                SearchResults res = SWBPortal.getIndexMgr().getDefaultIndexer().search(query, paramRequest.getUser());
-
-                solutions = new ArrayList<SemanticObject>();
-                Iterator<SearchDocument> docs = res.listDocuments();
-                while(docs.hasNext()) {
-                    SearchDocument doc = docs.next();
-                    if (doc.getSearchable() != null) {
-                        solutions.add(doc.getSearchable().getSemanticObject());
-                    }
-                }
+                solutions = executeSearch(q, what, cat, paramRequest.getUser());
             }
 
             if (solutions != null && solutions.size() > 0)
@@ -267,6 +244,40 @@ public class Search extends GenericAdmResource {
         return pageData;
     }
 
+    private ArrayList<SemanticObject> executeSearch(String q, String cls, String category, User user) {
+        ArrayList<SemanticObject> res = new ArrayList<SemanticObject>();
+
+        //System.out.println("---Buscando " + q);
+        SearchQuery query=new SearchQuery();
+        SearchQuery tquery=new SearchQuery(SearchQuery.OPER_AND);
+        query.addQuery(tquery);
+        tquery.addTerm(new SearchTerm(SWBIndexer.ATT_TITLE, q, SearchTerm.OPER_OR));
+        tquery.addTerm(new SearchTerm(SWBIndexer.ATT_DESCRIPTION, q, SearchTerm.OPER_OR));
+        tquery.addTerm(new SearchTerm(SWBIndexer.ATT_TAGS, q, SearchTerm.OPER_OR));
+
+        if (!cls.trim().equalsIgnoreCase("")) {
+            //System.out.println("---Filtrando por clase " + cls);
+            query.addTerm(new SearchTerm(SWBIndexer.ATT_CLASS, cls, SearchTerm.OPER_AND));
+        }
+
+        if (!category.trim().equals("")) {
+            //System.out.println("---Filtrando por categoría " + category);
+            query.addTerm(new SearchTerm(SWBIndexer.ATT_CATEGORY, category, SearchTerm.OPER_AND));
+        }
+
+        SearchResults sres = SWBPortal.getIndexMgr().getDefaultIndexer().search(query, user);
+
+        Iterator<SearchDocument> docs = sres.listDocuments();
+        while(docs.hasNext()) {
+            SearchDocument doc = docs.next();
+            if (doc.getSearchable() != null) {
+                res.add(doc.getSearchable().getSemanticObject());
+            }
+        }
+        
+        return res;
+    }
+
     public ArrayList<SemanticObject> search4Members(String q, String lang) {
         ArrayList<SemanticObject> res = new ArrayList<SemanticObject>();
 
@@ -316,9 +327,9 @@ public class Search extends GenericAdmResource {
                     "}"
                 });
 
-        System.out.println("---------------------------------");
+        /*System.out.println("---------------------------------");
         System.out.println(queryString);
-        System.out.println("---------------------------------");
+        System.out.println("---------------------------------");*/
 
         res = executeSparQlQuery(queryString, "user");
         return res;
