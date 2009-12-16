@@ -23,12 +23,9 @@
 package org.semanticwb.portal.community;
 
 import com.hp.hpl.jena.query.QueryExecution;
-import com.hp.hpl.jena.query.QueryExecutionFactory;
-import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.larq.IndexLARQ;
-import com.hp.hpl.jena.query.larq.LARQ;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.sparql.util.StringUtils;
@@ -38,7 +35,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import javax.servlet.RequestDispatcher;
@@ -48,16 +44,7 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.Token;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.snowball.SnowballAnalyzer;
-import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CorruptIndexException;
-import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.search.BooleanClause.Occur;
-import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.CachingWrapperFilter;
-import org.apache.lucene.search.Hits;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.QueryWrapperFilter;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
@@ -67,14 +54,16 @@ import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.Traceable;
 import org.semanticwb.model.WebPage;
-import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
-import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
-import org.semanticwb.portal.integration.lucene.analyzer.LocaleAnalyzer;
+import org.semanticwb.portal.indexer.SWBIndexer;
+import org.semanticwb.portal.indexer.searcher.SearchDocument;
+import org.semanticwb.portal.indexer.searcher.SearchQuery;
+import org.semanticwb.portal.indexer.searcher.SearchResults;
+import org.semanticwb.portal.indexer.searcher.SearchTerm;
 
 /**
  * Search resource for communities. Searchs for {@link DirectoryObject}s and
@@ -162,26 +151,41 @@ public class Search extends GenericAdmResource {
 
             String what = request.getParameter("what");
             if (what == null) what = "";
-            
-            //---- if you want to perform search using LARQ
-            String indexpath = SWBPortal.getIndexMgr().getDefaultIndexer().getIndexPath();
-            IndexReader reader = IndexReader.open(indexpath);
-            index = new IndexLARQ(reader);
-            //solutions = performQuery(q, lang);
 
-            if (what.equalsIgnoreCase("All")) {
-                solutions = new ArrayList<SemanticObject>();
-                solutions.addAll(search4Members(q, language));
-                solutions.addAll(performQuery(q, "Organization"));
-                solutions.addAll(performQuery(q, "Clasified"));
-                solutions.addAll(search4Communities(q, language));
-            } else if (what.trim().equalsIgnoreCase("Member")) {
-                solutions = search4Members(q, language);
-            } else if (what.equalsIgnoreCase("Community")) {
-                solutions = search4Communities(q, language);
+            String cat = request.getParameter("scategory");
+            if (cat == null) cat = "";
+
+            if (what.trim().equalsIgnoreCase("Member")) {
+                solutions=search4Members(q, language);
             } else {
-            //---- if you want to perform search using lucene index
-                solutions = performQuery(q, what);
+                //System.out.println("---Buscando " + q);
+                SearchQuery query=new SearchQuery();
+                SearchQuery tquery=new SearchQuery(SearchQuery.OPER_AND);
+                query.addQuery(tquery);
+                tquery.addTerm(new SearchTerm(SWBIndexer.ATT_TITLE, q, SearchTerm.OPER_OR));
+                tquery.addTerm(new SearchTerm(SWBIndexer.ATT_DESCRIPTION, q, SearchTerm.OPER_OR));
+                tquery.addTerm(new SearchTerm(SWBIndexer.ATT_TAGS, q, SearchTerm.OPER_OR));
+
+                if (!what.trim().equalsIgnoreCase("") && !what.trim().equalsIgnoreCase("All")) {
+                    //System.out.println("---Filtrando por clase " + what);
+                    query.addTerm(new SearchTerm(SWBIndexer.ATT_CLASS, what, SearchTerm.OPER_AND));
+                }
+
+                if (!cat.trim().equals("")) {
+                    //System.out.println("---Filtrando por categoría " + cat);
+                    query.addTerm(new SearchTerm(SWBIndexer.ATT_CATEGORY, cat, SearchTerm.OPER_AND));
+                }
+
+                SearchResults res = SWBPortal.getIndexMgr().getDefaultIndexer().search(query, paramRequest.getUser());
+
+                solutions = new ArrayList<SemanticObject>();
+                Iterator<SearchDocument> docs = res.listDocuments();
+                while(docs.hasNext()) {
+                    SearchDocument doc = docs.next();
+                    if (doc.getSearchable() != null) {
+                        solutions.add(doc.getSearchable().getSemanticObject());
+                    }
+                }
             }
 
             if (solutions != null && solutions.size() > 0)
@@ -200,80 +204,6 @@ public class Search extends GenericAdmResource {
         } catch (Exception e) {
             log.error(e);
         }
-    }
-
-    /**
-     * Executes a free-text lucene search query. Search for words in <b>title</b>,
-     * <b>description</b> and <b>tags</b> fields in the index. Additionally,
-     * searches the field <b>types</b> only for Web Pages and types defined by
-     * <b>what</b> argument.
-     * <p>
-     * Ejecuta una búsqueda a texto abierto con lucene. Busca coincidencias con
-     * las palabras en los campos <b>title</b>, <b>description</b> y <b>tags</b>
-     * del índice de documentos. Adicionalmente busca en el campo <b>types</b>
-     * las palabras WebPage y el tipo definido en el argumento <b>what</b>.
-     *
-     * @param   query the query. La consulta.
-     * @param   what types to search for (WebPage, Clasified, etc.). Tipos de
-     *          objeto a buscar (WebPage, Clasified, etc.).
-     * @return  set of URIs of the objects that match the search criteria.
-     *          Conjunto de URIs de los objetos que cumplen con los criterios de
-     *          búsqueda.
-     */
-    public ArrayList<SemanticObject> performQuery(String query, String what) {
-        ArrayList<SemanticObject> res = new ArrayList<SemanticObject>();
-        String indexPath = SWBPortal.getIndexMgr().getDefaultIndexer().getIndexPath();
-
-        try {
-            IndexSearcher searcher = new IndexSearcher(indexPath);
-
-            //Create query for 'title' field
-            QueryParser qp = new QueryParser("title", new LocaleAnalyzer());
-            org.apache.lucene.search.Query q = qp.parse(query);
-
-            //Create query for 'description' field
-            qp = new QueryParser("description", new LocaleAnalyzer());
-            org.apache.lucene.search.Query q2 = qp.parse(query);
-
-            //Create query for 'tags' field
-            qp = new QueryParser("tags", new LocaleAnalyzer());
-            org.apache.lucene.search.Query q3 = qp.parse(query);
-
-            //Create boolean query
-            BooleanQuery bq = new BooleanQuery();
-            bq.add(q, Occur.SHOULD);
-            bq.add(q2, Occur.SHOULD);
-            bq.add(q3, Occur.SHOULD);
-
-            Hits hits = null;
-
-            //Add queries to search for a specific type
-            if (!what.equals("")) {
-                //Create query for 'types' field (what to search for)
-                qp = new QueryParser("types", new LocaleAnalyzer());
-                org.apache.lucene.search.Query q4 = qp.parse(what);
-
-                //Create filter to query by types
-                CachingWrapperFilter filter = new CachingWrapperFilter(new QueryWrapperFilter(q4));
-                hits = searcher.search(bq, filter);
-            } else {
-                hits = searcher.search(bq);
-            }
-
-            for (int i =0; i<hits.length(); i++) {
-                Document doc = hits.doc(i);
-                String uri = doc.get("uri");
-                if (uri != null && !uri.equals("null")) {
-                    SemanticObject so = SemanticObject.createSemanticObject(uri);
-                    if (so != null) {
-                        res.add(so);
-                    }
-                }
-            }
-        } catch (Exception ex) {
-            log.error(ex);
-        }
-        return res;
     }
 
     /**
@@ -337,64 +267,6 @@ public class Search extends GenericAdmResource {
         return pageData;
     }
 
-    public ArrayList<SemanticObject> search4Communities(String q, String lang) {
-        ArrayList<SemanticObject> res = new ArrayList<SemanticObject>();
-
-        //Assert query string
-        if(q.trim().equals("")) return null;
-
-        String [] words = getSnowballForm(q, lang, stopWords).trim().split(" ");
-
-
-        q = "    {\n" +
-            "        ?obj a swbcomm:MicroSite.\n" +
-            "        ?obj swb:title ?title.\n" +
-            "        FILTER regex(?title, \"" + words[0] + "\", \"i\")\n" +
-            "        OPTIONAL {\n" +
-            "          ?obj swb:description ?desc.\n" +
-            "          FILTER regex(?obj, \"" + words[0] + "\", \"i\")\n" +
-            "        }\n" +
-            "    }\n";
-
-        for (int i = 1; i < words.length; i++) {
-            q += " UNION\n" +
-                "    {\n" +
-            "        ?obj a swbcomm:MicroSite.\n" +
-            "        ?obj swb:title ?title.\n" +
-            "        FILTER regex(?title, \"" + words[i] + "\", \"i\")\n" +
-            "        OPTIONAL {\n" +
-            "          ?obj swb:description ?desc.\n" +
-            "          FILTER regex(?obj, \"" + words[i] + "\", \"i\")\n" +
-            "        }\n" +
-            "    }\n";
-        }
-
-        /*q = "";
-        for (String s : words) {
-            q = q + "+" + s + " ";
-        }*/
-
-        //Build query to return classes with literal values in their properties
-        String queryString = StringUtils.join("\n", new String[]{
-                    "PREFIX swb:     <http://www.semanticwebbuilder.org/swb4/ontology#>",
-                    "PREFIX rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
-                    "PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>",
-                    "PREFIX owl:     <http://www.w3.org/2002/07/owl#>",
-                    "PREFIX swbcomm: <http://www.semanticwebbuilder.org/swb4/community#>",
-                    "SELECT DISTINCT ?obj WHERE {",
-                    q,
-                    "}"
-                });
-
-        System.out.println("---------------------------------");
-        System.out.println(queryString);
-        System.out.println("---------------------------------");
-
-        res = executeSparQlQuery(queryString, "obj");
-        return res;
-    }
-
-
     public ArrayList<SemanticObject> search4Members(String q, String lang) {
         ArrayList<SemanticObject> res = new ArrayList<SemanticObject>();
 
@@ -450,93 +322,7 @@ public class Search extends GenericAdmResource {
 
         res = executeSparQlQuery(queryString, "user");
         return res;
-    }
-
-
-    /**
-     * Executes a SparQl query to find directory objects. Uses LARQ to perform
-     * a free-text search into a snow-balled terms index.
-     * <p>
-     * Ejecuta una consulta en SparQl para buscar DirectoryObjects. Usa LARQ
-     * para realizar una búsqueda a texto abierto sobre un indide de lucene.
-     *
-     * @param q     query string. Cadena de consulta.
-     * @param lang  language for snowball analyzer. Idioma del analizador
-     *              snowball.
-     * @return      list of URIs matching the query. Lista de URIs que satisfacen
-     *              los criterios de búsqueda.
-     */
-    public ArrayList<String> performQuery(String q, String lang, String what, HashMap<String, String> searchTerms) {
-        ArrayList<String> res = new ArrayList<String>();
-
-        //Assert query string
-        if (q.trim().equals("")) return null;
-
-        //Get what to search
-        String wh = "    {?obj a swbcomm:DirectoryObject}";
-        if(what != null && !what.equals("")) {
-            wh = "{?obj a swbcomm:" + what + "}";
-        }
-
-        String [] words = getSnowballForm(q, lang, stopWords).trim().split(" ");
-
-        q = "";
-        for (String s : words) {
-            q = q + "+" + s + " ";
-        }
-
-        //Build query to return classes with literal values in their properties
-        String queryString = StringUtils.join("\n", new String[]{
-                    "PREFIX xsd:     <http://www.w3.org/2001/XMLSchema#>",
-                    "PREFIX pf:      <http://jena.hpl.hp.com/ARQ/property#>",
-                    "PREFIX swb:     <http://www.semanticwebbuilder.org/swb4/ontology#>",
-                    "PREFIX rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
-                    "PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>",
-                    "PREFIX owl:     <http://www.w3.org/2002/07/owl#>",
-                    "PREFIX swbcomm: <http://www.semanticwebbuilder.org/swb4/community#>",
-                    "SELECT DISTINCT ?obj WHERE {",
-                    "    ?lit pf:textMatch '" + q.trim() + "'.",
-                    wh,//"    {?obj a swbcomm:DirectoryObject}",
-                    "    UNION {?obj a swb:WebPage}.",
-                    "    {?obj swb:title ?lit}",
-                    "    UNION {?obj swb:tags ?lit}",
-                    "    UNION {?obj swb:description ?lit}",
-                    "}"
-                });
-
-        //        System.out.println("....................");
-        //        System.out.println(queryString);
-        //        System.out.println("....................");
-
-        // Make globally available
-        LARQ.setDefaultIndex(index);
-        com.hp.hpl.jena.query.Query query = QueryFactory.create(queryString);
-
-        QueryExecution qExec = QueryExecutionFactory.create(query, smodel);
-        ResultSet rs = qExec.execSelect();
-
-        //If there are results
-        if (rs != null && rs.hasNext()) {
-            //Get next result set
-            while (rs.hasNext()) {
-
-                //Get next solution of the result set (var set)
-                QuerySolution qs = rs.nextSolution();
-
-                //Get node object from solution
-                RDFNode x = qs.get("obj");
-
-                //If node is not null
-                if (x != null && x.isResource()) {
-                    res.add(x.asNode().getURI());
-                    //System.out.println("---Agregado " + x.toString());
-                }
-            }
-        }
-        qExec.close();
-        index.close();
-        return res;
-    }
+    }   
 
     /**
      * Gets the snowball-ed form of an input text. Applies the snowball algorithm
@@ -601,10 +387,7 @@ public class Search extends GenericAdmResource {
                     //If node is not null
                     if (x != null && x.isResource()) {
                         res.add(SemanticObject.createSemanticObject(x.asNode().getURI()));
-                        System.out.println("---Agregado " + x.toString());
                     }
-
-                    System.out.println("-----" + x.toString());
                 }
             }
             return res;
