@@ -102,7 +102,7 @@ simpleGallery.prototype={
 		var totalimages=setting.imagearray.length
 		var imgindex=(keyword=="next")? (setting.curimage<totalimages-1? setting.curimage+1 : 0) : (keyword=="prev")? (setting.curimage>0? setting.curimage-1 : totalimages-1) : Math.min(keyword, totalimages-1)
                 
-                setting.gallerylayers[setting.bglayer].innerHTML=simpleGallery.routines.getSlideHTML(setting.imagearray[imgindex]);
+                setting.gallerylayers[setting.bglayer].innerHTML=simpleGallery.routines.getSlideHTML(setting.imagearray[imgindex], setting.dimensions[0], setting.dimensions[1] );
 		setting.$gallerylayers.eq(setting.bglayer).css({zIndex:1000, opacity:0}) //background layer becomes foreground
 			.stop().css({opacity:0}).animate({opacity:1}, setting.fadeduration, function(){ //Callback function after fade animation is complete:
 				clearTimeout(setting.playtimer)
@@ -131,9 +131,9 @@ simpleGallery.prototype={
 }
 
 simpleGallery.routines={
-  getSlideHTML:function(imgelement){
+  getSlideHTML:function(imgelement, width, height){
     var layerHTML='<a href="#" onclick="simpleGallery.routines.displayImage(\'cover01\',\'#000000\',80,\''+imgelement[0]+'\')" style="outline:none">';
-    layerHTML+='<img src="'+imgelement[1]+'" style="border:none" />';
+    layerHTML+='<img src="'+imgelement[1]+'" style="border:none" width="'+width+'" height="'+height+'" />';
     layerHTML+='</a>';
     return layerHTML;
 
