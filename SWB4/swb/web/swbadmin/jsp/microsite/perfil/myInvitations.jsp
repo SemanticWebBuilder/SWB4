@@ -183,6 +183,7 @@
                     }
                     if (iElement >= inicio && iElement <= fin)
                     {
+                        photo = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/perfil/profilePlaceholder.jpg";
                         if (userRequester.getPhoto() != null)
                         {
                             photo = SWBPortal.getWebWorkPath() + userRequester.getPhoto();
