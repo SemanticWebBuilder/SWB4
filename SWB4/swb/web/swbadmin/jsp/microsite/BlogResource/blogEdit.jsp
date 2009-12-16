@@ -27,29 +27,27 @@
 
 
 <%
-        if ("editpost".equals(request.getParameter("mode")))
-        {
-            String uri = request.getParameter("uri");
-            if (uri == null || uri.equals(""))
+            if ("editpost".equals(request.getParameter("mode")))
             {
-                response.sendError(404);
-                return;
-            }
-            if (uri != null)
-            {
-                PostElement post = (PostElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
-                if (post == null || !post.canModify(member))
+                String uri = request.getParameter("uri");
+                if (uri == null || uri.equals(""))
                 {
                     response.sendError(404);
                     return;
                 }
+                if (uri != null)
+                {
+                    PostElement post = (PostElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
+                    if (post == null || !post.canModify(member))
+                    {
+                        response.sendError(404);
+                        return;
+                    }
 %>
 <div class="columnaIzquierda">
     <div class="adminTools">
-
         <a class="adminTool" onclick="validaForma()" href="#">Guardar</a>
         <a class="adminTool" href="<%=cancelurl%>">Cancelar</a>
-
     </div>
     <form style="margin-left:10px; margin-right:10px" name="frmaddpost" id="frmaddpost" method="post" action="<%=paramRequest.getActionUrl()%>">
         <input type="hidden" name="act" value="edit">
@@ -74,13 +72,13 @@
                 <ul class="options">
                     <%String chk = "checked=\"checked\"";%>
                     <li><label><input type="radio" class="radio" name="level" value="0" <%if (post.getVisibility() == 0)
-                        {
-                            out.println(chk);
-                        }%>/> Cualquiera</label></li>
+      {
+          out.println(chk);
+                    }%>/> Cualquiera</label></li>
                     <li><label><input type="radio" class="radio" name="level" value="1" <%if (post.getVisibility() == 1)
-                        {
-                            out.println(chk);
-                        }%>/> Sólo los miembros</label></li>
+  {
+      out.println(chk);
+                    }%>/> Sólo los miembros</label></li>
                             <%--<li><label><input type="radio" class="radio" name="level" value="3"
                                               <%if (post.getVisibility() == 3)
                         {
@@ -194,7 +192,12 @@
         </div>
 
     </form>
+    <div class="adminTools">
+        <a class="adminTool" onclick="validaForma()" href="#">Guardar</a>
+        <a class="adminTool" href="<%=cancelurl%>">Cancelar</a>
+    </div>
 </div>
+
 <div class="columnaCentro">
 
 </div>
