@@ -623,7 +623,10 @@ public class Comment extends GenericResource {
         String action = (null != request.getParameter("com_act")
                 && !"".equals(request.getParameter("com_act").trim())
                 ? request.getParameter("com_act").trim()
-                : "com_step1");
+                : (reqParams.getCallMethod() == SWBParamRequest.Call_CONTENT) ? "com_step2" : "com_step1");
+        System.out.println("reqParams.getCallMethod(): " + reqParams.getCallMethod()
+                + "\nSWBParamRequest.Call_DIRECT: " + SWBParamRequest.Call_DIRECT
+                + "\naction:" + action);
         Logger log = SWBUtils.getLogger(Comment.class);
         
         if ("com_step1".equals(action)) {
