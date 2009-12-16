@@ -41,18 +41,25 @@
         <a class="adminTool" href="<%=cancelurl%>">Cancelar</a>
     </div>
     <form class="swbform" name="frmeditvideo" method="post" action="<%=paramRequest.getActionUrl()%>">
-        <div>
-            <fieldset>
-                <table>
-                    <tr>
-                        <td align="right" valign="center"><label for="video_code">Código youTube&nbsp;<em>*</em></label></td>
-                        <td>
-                            <textarea id="video_code" style_="width: 98%" rows="2" cols="23" name="video_code"></textarea>
-                        </td>
-                    </tr>
-                </table>
-            </fieldset>
-        </div>
+
+        <fieldset><legend></legend>
+            <table>
+                <tr>
+                    <td align="right" valign="center"><label for="video_code">Código youTube&nbsp;<em>*</em></label></td>
+                    <td>
+                        <textarea id="video_code" rows="10" cols="60" name="video_code"></textarea>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+
         <input type="hidden" name="act" value="add"/>
     </form>
+    <div class="adminTools">
+        <a class="adminTool" onclick="validaForma()" href="#">Guardar</a>
+        <a class="adminTool" href="<%=cancelurl%>">Cancelar</a>
+    </div>
+</div>
+<div class="columnaCentro">
+
 </div>

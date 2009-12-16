@@ -93,7 +93,7 @@
                     <div>
                         <p>
                             <label for="video_code">Código youTube&nbsp;<em>*</em></label><br/>
-                            <textarea id="video_code" style_="width: 98%" rows="2" cols="23" name="video_code"><%=rec.getCode()%></textarea>
+                            <textarea id="video_code" rows="10" cols="60" name="video_code"><%=rec.getCode()%></textarea>
                         </p>
                         <p>
                             <label for="video_title">Título:</label><br/>
@@ -136,5 +136,9 @@
         <input type="hidden" name="uri" value="<%=rec.getURI()%>"/>
         <input type="hidden" name="act" value="edit"/>
     </form>
+         <div class="adminTools">
+        <a class="adminTool" onclick="validaForma()" href="#">Guardar</a>
+        <a class="adminTool" href="<%=cancelurl%>">Cancelar</a>
+    </div>
 </div>
 <div class="columnaCentro"></div>
