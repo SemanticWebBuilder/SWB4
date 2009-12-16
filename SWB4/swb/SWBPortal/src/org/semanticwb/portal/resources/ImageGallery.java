@@ -121,12 +121,12 @@ public class ImageGallery extends GenericResource {
         }
         String[] ip = new String[imgpath.size()];
         imgpath.toArray(ip);
-        String script = getGalleryScript(base.getId(), Integer.parseInt(base.getAttribute("width","220")), Integer.parseInt(base.getAttribute("height","220")), Boolean.valueOf(base.getAttribute("autoplay")), Integer.parseInt(base.getAttribute("pause","2500")), Integer.parseInt(base.getAttribute("fadetime","500")), Integer.parseInt(base.getAttribute("fullwidth","380")), Integer.parseInt(base.getAttribute("fullheight","270")), base.getAttribute("title",""), base.getAttribute("titlestyle",""), ip);
+        String script = getGalleryScript(base.getId(), Integer.parseInt(base.getAttribute("width","220")), Integer.parseInt(base.getAttribute("height","220")), Boolean.valueOf(base.getAttribute("autoplay")), Integer.parseInt(base.getAttribute("pause","2500")), Integer.parseInt(base.getAttribute("fadetime","500")), base.getAttribute("title",""), ip);
         out.print(script);
         out.flush();
     }
 
-    public String getGalleryScript(String oid, int width, int height, boolean autoplay, int pause, int fadetime, int fullwidth, int fullheight, String title, String titlestyle, String[] imagepath) {
+    public String getGalleryScript(String oid, int width, int height, boolean autoplay, int pause, int fadetime, String title, String[] imagepath) {
         Resource base = getResourceBase();
         StringBuilder out = new StringBuilder();
 
@@ -193,24 +193,24 @@ public class ImageGallery extends GenericResource {
         return out.toString();
     }
 
-    public String getGalleryScript(String divId, String title, String titlestyle, String[] imgpath) {
-        return getGalleryScript(divId, 220, 170, false, 2500, 500, 420, 370, title, titlestyle, imgpath);
+    public String getGalleryScript(String divId, String title, String[] imgpath) {
+        return getGalleryScript(divId, 220, 170, false, 2500, 500, title, imgpath);
     }
 
     public String getGalleryScript(String[] imgpath) {
-        return getGalleryScript(Integer.toString((int)Math.random()*100), 220, 170, false, 2500, 500, 420, 370, "", "", imgpath);
+        return getGalleryScript(Integer.toString((int)Math.random()*100), 220, 170, false, 2500, 500, "", imgpath);
     }
 
     public String getGalleryScript(boolean autoplay, String[] imgpath) {
-        return getGalleryScript(Integer.toString((int)Math.random()*100), 220, 170, autoplay, 2500, 500, 420, 370, "", "", imgpath);
+        return getGalleryScript(Integer.toString((int)Math.random()*100), 220, 170, autoplay, 2500, 500, "", imgpath);
     }
 
     public String getGalleryScript(int width, int height, String[] imgpath) {
-        return getGalleryScript(Integer.toString((int)Math.random()*100), width, height, false, 2500, 500, 420, 370, "", "", imgpath);
+        return getGalleryScript(Integer.toString((int)Math.random()*100), width, height, false, 2500, 500, "", imgpath);
     }
 
     public String getGalleryScript(int width, int height, boolean autoplay, String[] imgpath) {
-        return getGalleryScript(Integer.toString((int)Math.random()*100), width, height, autoplay, 2500, 500, 420, 370, "", "", imgpath);
+        return getGalleryScript(Integer.toString((int)Math.random()*100), width, height, autoplay, 2500, 500, "", imgpath);
     }
 
     @Override
