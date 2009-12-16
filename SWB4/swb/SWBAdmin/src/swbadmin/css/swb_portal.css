@@ -487,67 +487,121 @@ color: #ff0000; /* Dummy definition to overcome IE bug */
 
 
 /*------------------- Comentarios semánticos  ----*/
-.cmnts {
-    padding:0px;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 11px;
-    color: #000000;
-    border: 1px solid #CCCCCC;
+.swb-comentario-sem-lista{
+	font-family:Arial, Helvetica, sans-serif;
+}
+.swb-comentario-sem-lista h1 {
+	font-size:16px;
+	text-transform:capitalize;
+	padding:30px 0px 10px 10px;
+	margin-bottom:20px;
+	display:block;
+	border-top: dashed #efefef 1px;
+	border-bottom:solid #CCCCCC 1px;
+	color:#369;
+}
+.swb-comentario-sem-lista li {
+	list-style:none;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size:12px;
+	color:#999;
+	margin-bottom:20px;
+	padding-bottom:10px;
+	border-bottom:solid #CCCCCC 1px;
+}
+.swb-comentario-sem-lista span {
+	font-size:15px;
+	font-weight:bold;
+	color:#369;
+	margin-right: 15px;
+}
+.swb-comentario-sem-lista p {
+	margin:0;
+	margin-top:5px;
+	font-size:12px;
+	color:#333333;
+	text-align:justify;
+}
+.swb-comentario-sem {
+	border:solid 1px #CCCCCC;
+	background: #F9F9F9;
+	font-family:Arial, Helvetica, sans-serif;
+	margin-left:40px;
+}
+.swb-comentario-sem * {
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:14px;
+	margin:0px;
+	padding:0px;
+	color:#333333;
+}
+.swb-comentario-sem h2 {
+	font-size:14px;
+	padding:5px 0px 5px 10px;
+	margin-bottom:10px;
+	display:block;
+	color:#369;
+	background: #EEE;
+}
+.swb-comentario-sem label {
+	width:160px;
+	text-align:right;
+	border:solid gray 0px;
+	display:block;
+	float:left;
+	margin-right:10px;
+	padding:2px;
+	font-size:12px;
+}
+.swb-comentario-sem input {
+	width:220px;
+	border:#369 solid 1px;
+	padding:2px;
+}
+.swb-comentario-sem textarea {
+	width:224px;
+	height:100px;
+	border:#369 solid 1px;
+	font-size:12px;
+}
+.swb-comentario-sem-nombre, .swb-comentario-sem-correo, .swb-comentario-sem-comenta, .swb-comentario-sem-captcha, .swb-comentario-sem-imagen, .swb-comentario-sem-boton {
+	display:table;
+	width:400px;
+	padding:6px 0px 6px 0px;
+	margin:0px;
+	border:dotted red 0px;        
+}
+.swb-comentario-sem-captcha input{
+	width:220px;
+}
+.swb-comentario-sem-boton{
+	text-align:right;
 }
 
-.cmntimg {
-    background-color:#FFFFFF;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 11px;
-    color: #000000;
-    text-align:center;
-    vertical-align:middle;
-    border-top-width: 1px;
-    border-top-style: solid;
-    border-top-color: #CCCCCC;
-    border-right-width: 1px;
-    border-right-style: solid;
-    border-right-color: #CCCCCC;
+.swb-comentario-sem-imagen{
+	text-align:right;
+}
+.swb-comentario-sem-imagen a{
+	outline:none;
+}
+.swb-comentario-sem img {
+	border:solid 1px #666666;
+	width:224px;
+	height:65px;
+}
+.swb-comentario-sem a {
+	font-size:11px;
+	display: table-row;
+	text-align:right;
 }
 
-.cmnt {
-    background-color:#FFFFFF;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 11px;
-    color: #000000;
-    text-align:justify;
-    border-top-width: 1px;
-    border-top-style: solid;
-    border-top-color: #CCCCCC;
-    padding-left: 8px;
-}
-
-.creacmnt {
-    background-color:#F8F8FA;
-    width:640px;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 11px;
-    color: #000000;
-    border-top-width: 1px;
-    border-top-style: solid;
-    border-top-color: #CCCCCC;
-    padding: 8px;
-}
-
-.limcmnt {
-    border: 1px solid #CCCCCC;
-}
-
-.espcmnt {
-    background-color:#FFFFFF;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 11px;
-    color: #000000;
-    text-align:center;
-    vertical-align:middle;
-    border-top-width: 1px;
-    border-top-style: solid;
-    border-top-color: #CCCCCC;
+.swb-comentario-sem-boton input {
+	margin:0px;
+	padding:5px 0px 5px 0px;
+	background:#369;
+	color:#FFFFFF;
+	font-weight:bold;
+	width:225px;
 }
 /*------------------- Comentarios semánticos  ----*/
 
