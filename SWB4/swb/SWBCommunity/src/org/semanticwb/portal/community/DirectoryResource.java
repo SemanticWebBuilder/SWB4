@@ -34,7 +34,6 @@ import org.semanticwb.servlet.internal.UploadFormElement;
  */
 public class DirectoryResource extends org.semanticwb.portal.community.base.DirectoryResourceBase
 {
-    private static DirectoryObjectParser parser = null;
     private static Logger log = SWBUtils.getLogger(ProductResource.class);
 
     public DirectoryResource()
@@ -45,12 +44,6 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
     public DirectoryResource(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-        try {
-            if(parser == null) {
-                parser = new DirectoryObjectParser();
-               SWBPortal.getIndexMgr().getDefaultIndexer().registerParser(DirectoryObject.class, new DirectoryObjectParser());
-            }
-        } catch(Exception e){log.error(e);}
     }
 
     @Override
