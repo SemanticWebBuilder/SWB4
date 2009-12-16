@@ -47,7 +47,11 @@
 </script>
 
 <br />
-<div id="panorama">
+<div class="columnaIzquierda">
+    <div class="adminTools">
+        <a class="adminTool" onclick="validaForma()" href="#">Guardar</a>
+        <a class="adminTool" href="<%=paramRequest.getRenderUrl()%>">Cancelar</a>
+    </div>
     <form name="frmaddfoto" id="frmaddfoto" enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
         <div>
             <fieldset>
@@ -91,18 +95,16 @@
                         <label for="level"><input type="radio" name="level" value="3" <%if(rec.getVisibility()==3)out.println(chk);%> />&nbsp;Sólo yo</label>
                     </p> --%>
                 </div>
-            </fieldset>
-            <fieldset>
-                <legend></legend>
-                <div>
-                    <p>
-                    <div class="editarInfo"><p><a onclick="validaForma()" href="#">Guardar</a></p></div>
-                    <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Cancelar</a></p></div>
-                    </p>
-                </div>
-            </fieldset>
+            </fieldset>            
         </div>
         <input type="hidden" name="uri" value="<%=rec.getURI()%>"/>
         <input type="hidden" name="act" value="edit"/>
     </form>
+        <div class="adminTools">
+        <a class="adminTool" onclick="validaForma()" href="#">Guardar</a>
+        <a class="adminTool" href="<%=paramRequest.getRenderUrl()%>">Cancelar</a>
+    </div>
+</div>
+    <div class="columnaCentro">
+
 </div>
