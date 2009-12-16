@@ -2043,9 +2043,9 @@ public class SWBPortal {
             }
         }
 
-        public static String getGalleryScript(String... imgurl) {
+        public static String renderGallery(String... imgurl) {
             ImageGallery ig = new ImageGallery();
-            return ig.getGalleryScript(imgurl);
+            return ig.renderGallery(imgurl);
         }
     }
 
