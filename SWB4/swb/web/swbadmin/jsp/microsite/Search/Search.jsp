@@ -253,29 +253,32 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                         count++;
                         members.next();
                     }
+
                     String imgPath = "";
-                    //String imgPath = "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
                     if (site.getPhoto() != null)
                     {
                         imgPath = SWBPortal.getContextPath() + SWBPortal.getWebWorkPath() + site.getPhoto();
                     }
+
+                    User creator = site.getCreator();
+                    String perfilPath = wpage.getWebSite().getWebPage("perfil").getUrl();
+                    String profile = "<a href=\"" + perfilPath + "?user=" + creator.getEncodedURI() + "\">"+creator.getFullName()+"</a>";
                     %>
 
                     <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
-                        <img alt="<%=site.getTitle()%>" src="<%=imgPath%>" height="95" width="95"/>
+                        <%if (imgPath.equals("")) {
+                            %><img height="95" alt="Imagen no disponible" width="95" src="<%=SWBPortal.getContextPath()%>/swbadmin/images/noDisponible.gif" /><%
+                        } else {
+                            %><img alt="Imagen de comunidad" src="<%=imgPath%>" height="95" width="95"/><%
+                        }%>
+                        
                         <div class="listEntryInfo">
-                            <p class="tituloRojo">
-                                <%=site.getTitle()%> (<%=resultType%>)
-                            </p>
-                            <p>
-                                <%=site.getDescription()%>
-                            </p>
-                            <p>
-                                <span class="itemTitle">Miembros: </span><%=count%>
-                            </p>
-                            <p class="vermas">
-                                <a href="<%=site.getUrl()%>">Ver comunidad</a>
-                            </p>
+                            <p class="tituloRojo"><%=site.getTitle()%> (<%=resultType%>)</p>
+                            <p><%=site.getDescription()%></p>
+                            <p><span class="itemTitle">Miembros: </span><%=count%></p>
+                            <%if(site.getCreator()!=null){%><p><b>Creado por: </b> <%=profile%></p><%}%>
+                            <p><%=(site.getTags()==null?"":"<b>Palabras clave: </b>" + site.getTags())%></p>
+                            <p class="vermas"><a href="<%=site.getUrl()%>">Ver comunidad</a></p>
                         </div>
                         <div class="clear">&nbsp;</div>
                     </div>
@@ -394,8 +397,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                         }
                         %>
                         <p><%=(c.getCreator()==null?"":"<b>Creado por: </b>" + profile)%></p>
-                        <p><%=(c.getTags()==null?"":"<b>Palabras clave: </b>" + c.getTags())%></p>
-                       
+                        <p><%=(c.getTags()==null?"":"<b>Palabras clave: </b>" + c.getTags())%></p>                       
                         <p class="vermas"><a href ="<%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>">Ver mas</a></p>
                     </div>
                     <div class="clear"> </div>
