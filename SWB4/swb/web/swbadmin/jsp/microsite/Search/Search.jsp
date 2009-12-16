@@ -45,7 +45,7 @@
         var catLabel = "Todas";
         if (what == "Clasified") catLabel = "Clasificados";
         if (what == "") catLabel = "Todas";
-        if (what == "User") catLabel = "Personas";
+        if (what == "Member") catLabel = "Personas";
         if (what == "Organization") catLabel = "Organizaciones";
         if (what == "MicroSite") catLabel = "Comunidades";
         document.getElementById("catLabel").innerHTML = catLabel;
@@ -77,7 +77,7 @@
               <ul>
 	      <li><a onclick="setSearchClass('');">Todas</a></li>
 	      <li><a onclick="setSearchCategory('Sitios_de_Interes');">Lugares</a></li>
-              <li><a onclick="setSearchClass('User');">Personas</a></li>
+              <li><a onclick="setSearchClass('Member');">Personas</a></li>
               <li><a onclick="setSearchCategory('Servicios');" >Servicios</a></li>
               <li><a onclick="setSearchClass('Organization');">Organizaciones</a></li>
               <li><a onclick="setSearchClass('Clasified');">Clasificados</a></li>
@@ -283,7 +283,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                 } else if (obj.instanceOf(User.sclass)) {
                     resultType = "Persona";
                     User usr = (User)obj.createGenericInstance();
-                    String photo = imgDefaultPath;//SWBPortal.getContextPath() + "/swbadmin/images/defaultPhoto.jpg";
+                    String photo="";
                     if(usr.getPhoto() != null) photo = SWBPortal.getWebWorkPath() + usr.getPhoto();
                     HashMap<String, SemanticProperty> extProperties = new HashMap<String, SemanticProperty>();
                     Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#_ExtendedAttributes").listProperties();
@@ -291,12 +291,20 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                         SemanticProperty sp = list.next();
                         extProperties.put(sp.getName(), sp);
                     }
-                    String usr_sex = (String) usr.getExtendedAttribute(extProperties.get("userSex"));
-                    int usr_age = (Integer) usr.getExtendedAttribute(extProperties.get("userAge"));
-                    //if (null == usr_age) usr_age = "";
-                    if (usr_sex.equals("M")) usr_sex = "Hombre";
-                    if (usr_sex.equals("F")) usr_sex = "Mujer";
 
+                    String usr_sex = (String) usr.getExtendedAttribute(extProperties.get("userSex"));
+                    int usr_ageTxt = 0;
+                    Date usr_age = (Date) usr.getExtendedAttribute(extProperties.get("userBirthDate"));
+                    if (usr_age != null) {
+                        java.util.Calendar cal1 = java.util.Calendar.getInstance();
+                        cal1.setTime(usr_age);
+
+                        java.util.Calendar cal2 = java.util.Calendar.getInstance();
+                        cal2.setTime(new Date(System.currentTimeMillis()));
+                        usr_ageTxt = calcularEdad(cal1, cal2);
+                    }
+                    if (usr_sex != null && (usr_sex.equalsIgnoreCase("male") || usr_sex.equalsIgnoreCase("m"))) usr_sex = "Hombre";
+                    if (usr_sex != null && (usr_sex.equalsIgnoreCase("female") || usr_sex.equalsIgnoreCase("f"))) usr_sex = "Mujer";
                     String perfilPath = wpage.getWebSite().getWebPage("perfil").getUrl();
                     String profile = "<a href=\"" + perfilPath + "?user=" + usr.getEncodedURI() + "\">Ver perfil</a>";
                 %>
@@ -308,15 +316,12 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                         </p>
                         <%
                         if (paramRequest.getUser().isRegistered() && paramRequest.getUser().isSigned()) {
-                        %>
-                            <p>
-                                <%=usr.getFullName()%>
-                            </p>
+                        %>                            
                             <p>
                                 <span class="itemTitle">Sexo: </span><%=usr_sex%>
                             </p>
                             <p>
-                                <span class="itemTitle">Edad: </span><%=usr_age%>
+                                <span class="itemTitle">Edad: </span><%=(usr_ageTxt==0?"":usr_ageTxt)%>
                             </p>
                             <p class="vermas">
                                 <%=profile%>
@@ -514,9 +519,6 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
             No hay resultados.
         </p><%
     }
-    %>
-    
-    <%
 }
 %>
 
@@ -554,4 +556,18 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
 
         return streetName + intNumber + extNumber + council + city + state;
     }
+%>
+
+<%!
+private int calcularEdad(java.util.Calendar fechaNaci, java.util.Calendar fechaAlta) {
+    int diff_ano = fechaAlta.get(java.util.Calendar.YEAR) - fechaNaci.get(java.util.Calendar.YEAR);
+    int diff_mes = fechaAlta.get(java.util.Calendar.MONTH)- fechaNaci.get(java.util.Calendar.MONTH);
+    int diff_dia = fechaAlta.get(java.util.Calendar.DATE)-fechaNaci.get(java.util.Calendar.DATE);
+    if(diff_mes < 0 || (diff_mes == 0 && diff_dia < 0)) {
+            diff_ano =diff_ano-1;
+        return diff_ano;
+    }
+
+    return diff_ano;
+}
 %>
