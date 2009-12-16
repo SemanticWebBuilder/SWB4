@@ -79,12 +79,12 @@ panels.each{
             {
                 basecommtext="""comunidades"""
             }
-            def baseeletext="""elemento"""
-            def baseeletext2="""publicado"""
+            def baseeletext="""entrada"""
+            def baseeletext2="""publicada"""
             if(elements>1 || elements==0)
             {
-                baseeletext="""elementos"""
-                baseeletext2="""publicados"""
+                baseeletext="""entradas"""
+                baseeletext2="""publicadas"""
             }
             println """${linea}</p>
             <p>Cuentan con ${elecount} ${basecommtext} y ${elements} ${baseeletext} ${baseeletext2}</p>"""
