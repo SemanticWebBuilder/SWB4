@@ -27,17 +27,19 @@ package org.semanticwb.portal.resources.sem;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
 import javax.servlet.http.*;
+
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.*;
 
 public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCommentsBase {
-    private static final String action_ADD = "ADDNEW";
+    private static final String Action_ADD = "add";
     private static final int secureCodeLength = 7;
 
     public SWBComments() {
@@ -51,7 +53,7 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String action = response.getAction();
         
-        if(action.equalsIgnoreCase(action_ADD)) {
+        if(action.equalsIgnoreCase(Action_ADD)) {
             String securCodeSent = request.getParameter("cmnt_seccode");
             String securCodeCreated = (String)request.getSession(true).getAttribute("cs");
             if(securCodeCreated!=null && securCodeCreated.equalsIgnoreCase(securCodeSent)) {
@@ -82,13 +84,13 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
         PrintWriter out=response.getWriter();
         StringBuilder ret = new StringBuilder();
         SWBResourceURL rUrl = paramRequest.getActionUrl();
-        rUrl.setAction(action_ADD);
+        rUrl.setAction(Action_ADD);
 
-        String name = request.getParameter("cmnt_name")==null?"":request.getParameter("cmnt_name");
-        String email = request.getParameter("cmnt_email")==null?"":request.getParameter("cmnt_email");
+        /*String name = request.getParameter("cmnt_name")==null?"":request.getParameter("cmnt_name");
+        String email = request.getParameter("cmnt_email")==null?"":request.getParameter("cmnt_email");*/
         String comment = request.getParameter("cmnt_comment")==null?"":request.getParameter("cmnt_comment");
-        String securCodeSent = request.getParameter("cmnt_seccode");
-        String securCodeCreated = (String)request.getSession(true).getAttribute("cs");
+        /*String securCodeSent = request.getParameter("cmnt_seccode");
+        String securCodeCreated = (String)request.getSession(true).getAttribute("cs");*/
         
         ret.append("<script type=\"text/javascript\">");
 
@@ -112,12 +114,6 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
 
         ret.append("function doApply() { ");
         ret.append("    var msgs = new Array();");
-        /*ret.append("    if(isEmpty('cmnt_name')) {\n");
-        ret.append("        msgs.push('Ingresa tu nombre.');\n");
-        ret.append("    }\n");*/
-        /*ret.append("    if(!isValidEmail(dojo.byId('cmnt_email').value)) {\n");
-        ret.append("        msgs.push('Ingresa un correo electrónico válida.');\n");
-        ret.append("    }\n");*/
         ret.append("    if(isEmpty('cmnt_comment')) { ");
         ret.append("        msgs.push('Tienes que ingresar un comentario u opinión.'); ");
         ret.append("    } ");
@@ -144,10 +140,10 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
         
         ret.append(renderListComments(paramRequest));
         User user = paramRequest.getUser();
-        ret.append("<div class=\"swb-comenta\">");
-        ret.append("<h1>"+paramRequest.getLocaleString("add")+"</h1>");
+        ret.append("<div class=\"swb-comentario-sem\">");
+        ret.append("<h2>"+paramRequest.getLocaleString("add")+"</h2>");
         ret.append("<form name=\"cmnt\" id=\"cmnt\" action=\""+rUrl+"\" method=\"post\">\n");
-        if(user.isSigned()) {
+        /*if(user.isSigned()) {
             ret.append("<div class=\"swb-comenta-nombre\">");
             ret.append("  <label for=\"cmnt_name\">"+paramRequest.getLocaleString("nameLabel")+":</label>");
             ret.append("  <input type=\"text\" id=\"cmnt_name\" name=\"cmnt_name\" value=\""+user.getFullName()+"\" size=\"34\" />");
@@ -156,20 +152,20 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
             ret.append("  <label for=\"cmnt_email\">"+paramRequest.getLocaleString("emailLabel")+":</label>");
             ret.append("  <input type=\"text\" id=\"cmnt_email\" name=\"cmnt_email\" value=\""+user.getEmail()+"\" size=\"34\" />");
             ret.append("</div>");
-        }
-        ret.append("<div class=\"swb-comenta-comenta\">");
+        }*/
+        ret.append("<div class=\"swb-comentario-sem-comenta\">");
         ret.append("  <label for=\"comment\">"+paramRequest.getLocaleString("comment")+":</label>");
         ret.append("  <textarea id=\"cmnt_comment\" name=\"cmnt_comment\" cols=\"32\" rows=\"3\" >"+comment+"</textarea>");
         ret.append("</div>");
-        ret.append("<div class=\"swb-comenta-imagen\">");
-        ret.append("  <img src=\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/securecode.jsp\" id=\"imgseccode\" width=\"155\" height=\"65\" />");
+        ret.append("<div class=\"swb-comentario-sem-imagen\">");
+        ret.append("  <img src=\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/securecode.jsp\" id=\"imgseccode\" width=\"155\" height=\"65\" /><br/>");
         ret.append("  <a href=\"#\" onclick=\"changeSecureCodeImage('imgseccode');\">"+paramRequest.getLocaleString("anotherCode")+"</a>");
         ret.append("</div>");
-        ret.append("<div class=\"swb-comenta-captcha\">");
+        ret.append("<div class=\"swb-comentario-sem-captcha\">");
         ret.append("  <label for=\"cmnt_seccode\">El texto de la imagen es:</label>");
-        ret.append("  <input type=\"text\" id=\"cmnt_seccode\" name=\"cmnt_seccode\" size=\"45\" />");
+        ret.append("  <input type=\"text\" id=\"cmnt_seccode\" name=\"cmnt_seccode\" />");
         ret.append("</div>");
-        ret.append("<div class=\"swb-comenta-boton\">");
+        ret.append("<div class=\"swb-comentario-sem-boton\">");
         ret.append("  <input type=\"button\" id=\"cmnt_send\" name=\"cmnt_send\" value=\""+paramRequest.getLocaleString("publish")+"\" onClick=\"doApply();\" />");
         ret.append("</div>");
         ret.append("</form>");
@@ -180,23 +176,26 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
     }
 
     private String renderListComments(SWBParamRequest paramRequest) throws SWBResourceException{
-        StringBuilder ret = new StringBuilder();
+        StringBuilder script = new StringBuilder();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy | HH:mm");
-        //long ordinal = SWBUtils.sizeOf(listComments());
-        int ordinal = 1;
+        //long ordinal = SWBUtils.Collections.sizeOf(listComments());
+        //int ordinal = 1;
 
-        Iterator<Comment> itComments = listComments();
+        Iterator<Comment> itComments = SWBComparator.sortByCreated(listComments(),false);
+        script.append("<div class=\"swb-comentario-sem-lista\">");
+        script.append("<h1>comentarios</h1>");
         if(itComments.hasNext()) {
-            ret.append("<div class=\"swb-comenta-lista\"><ul>");
+            script.append("<ul>");
         }
         while(itComments.hasNext()) {
             Comment comment = itComments.next();
-            ret.append("<li>"+(ordinal++)+". <strong>"+(comment.getCreator()==null?"Anonimo":comment.getCreator().getFullName())+" "+paramRequest.getLocaleString("writeAtLabel")+"</strong> "+sdf.format(comment.getCreated())+"<br />"+comment.getComment()+"</li>");
+            script.append("<li><span>"+(comment.getCreator()==null?"An&oacute;nimo":comment.getCreator().getFullName())+"</span> "+sdf.format(comment.getCreated())+"<p>"+comment.getComment()+"</p></li>");
         }
         if(itComments.hasNext()) {
-            ret.append("</ul></div>");
+            script.append("</ul>");
         }
-        return ret.toString();
+        script.append("</div>");
+        return script.toString();
     }
 
 
