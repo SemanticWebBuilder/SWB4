@@ -5,6 +5,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
@@ -15,6 +16,9 @@ import org.semanticwb.portal.api.SWBResourceException;
 public class DirectoryObject extends org.semanticwb.portal.community.base.DirectoryObjectBase 
 {
     private static Logger log = SWBUtils.getLogger(DirectoryObject.class);
+    static {
+        SWBPortal.getIndexMgr().getDefaultIndexer().registerParser(DirectoryObject.class, new DirectoryObjectParser());
+    }
     
     public DirectoryObject(org.semanticwb.platform.SemanticObject base)
     {
