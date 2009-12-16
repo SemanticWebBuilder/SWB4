@@ -78,10 +78,10 @@
 </script>
 <div class="columnaIzquierda">
     <div class="adminTools">
-            <a class="adminTool" onclick="validaForma()" href="#">Guardar</a>
+        <a class="adminTool" onclick="validaForma()" href="#">Guardar</a>
         <a class="adminTool" href="<%=paramRequest.getRenderUrl()%>">Cancelar</a>
+    </div>
     <form name="frmaeditnews" id="frmaeditnews" class="swbform" enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
-        </div>
         <div>
             <fieldset>
                 <legend>Editar noticia</legend>
@@ -185,6 +185,10 @@
         <input type="hidden" name="uri" value="<%=rec.getURI()%>"/>
         <input type="hidden" name="act" value="edit"/>
     </form>
+         <div class="adminTools">
+        <a class="adminTool" onclick="validaForma()" href="#">Guardar</a>
+        <a class="adminTool" href="<%=paramRequest.getRenderUrl()%>">Cancelar</a>
+    </div>
 </div>
 <div class="columnaCentro">
 
