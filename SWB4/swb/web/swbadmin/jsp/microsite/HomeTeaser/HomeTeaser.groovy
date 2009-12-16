@@ -181,25 +181,29 @@ class LocalCache{
 
                 def topics=child.listWebPageVirtualChilds()
 
+                
                 topics.each{
 
                     WebPage topic=(WebPage)it;
-                    int elementos2=0;
-                    def elements=DirectoryObjectBase.ClassMgr.listDirectoryObjectByWebPage(topic);
-
-                    //System.out.println("clugar.addElements(elementos1): "+clugar.addElements(elementos1).getURI());
-
-                    elements.each
+                    if (findif(topic, lugar))
                     {
-                        DirectoryObjectBase db=(DirectoryObjectBase)it;
-                        if(db!=null)
+                        int elementos1=0;
+                        def elements=DirectoryObjectBase.ClassMgr.listDirectoryObjectByWebPage(topic);
+
+                        elements.each
                         {
-                            elementos2++;
+                            DirectoryObjectBase db=(DirectoryObjectBase)it;
+                            if(db!=null)
+                            {
+                                elementos1++;
                             
-                        }
+                            }
+                        }                        
+                        clugar.addElements(elementos1)
                     }
-                    clugar.addElements(elementos2)
                 }
+                
+
 
                 def cservicio = new Contenedor(servicio, new TreeSet<Contenedor>(new CompContenedor()))
                 cCont.getHijos().add(cservicio)
@@ -209,21 +213,20 @@ class LocalCache{
                 topics.each{
                     
                     WebPage topic=(WebPage)it;
-                    int elementos2=0;
-                    def elements=DirectoryObjectBase.ClassMgr.listDirectoryObjectByWebPage(topic);
-
-                    
-                    
-                    elements.each
+                    if (findif(topic, servicio))
                     {
-                        DirectoryObjectBase db=(DirectoryObjectBase)it;
-                        if(db!=null)
+                        int elementos2=0;
+                        def elements=DirectoryObjectBase.ClassMgr.listDirectoryObjectByWebPage(topic);
+                        elements.each
                         {
-                            elementos2++;
-                            
+                            DirectoryObjectBase db=(DirectoryObjectBase)it;
+                            if(db!=null)
+                            {
+                                elementos2++;
+                            }
                         }
+                        cservicio.addElements(elementos2)
                     }
-                    cservicio.addElements(elementos2)                
                 }
 
                 def corganizacion = new Contenedor(organizacion, new TreeSet<Contenedor>(new CompContenedor()))
@@ -234,19 +237,22 @@ class LocalCache{
                 topics.each{
 
                     WebPage topic=(WebPage)it;
-                    int elementos2=0;
-                    def elements=DirectoryObjectBase.ClassMgr.listDirectoryObjectByWebPage(topic);                   
-
-                    elements.each
+                    if (findif(topic, organizacion))
                     {
-                        DirectoryObjectBase db=(DirectoryObjectBase)it;
-                        if(db!=null)
+                        int elementos3=0;
+                        def elements=DirectoryObjectBase.ClassMgr.listDirectoryObjectByWebPage(topic);
+
+                        elements.each
                         {
-                            elementos2++;
+                            DirectoryObjectBase db=(DirectoryObjectBase)it;
+                            if(db!=null)
+                            {
+                                elementos3++;
                             
+                            }
                         }
+                        corganizacion.addElements(elementos3)
                     }
-                    corganizacion.addElements(elementos2)
                 }
                 
 
