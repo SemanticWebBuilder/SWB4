@@ -33,8 +33,8 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
     {
         Blog blog = Blog.ClassMgr.createBlog(site);
         blog.setWebPage(page);
-        blog.setTitle(title);
-        blog.setDescription(description);
+        blog.setTitle(SWBUtils.XML.replaceXMLChars(title));
+        blog.setDescription(SWBUtils.XML.replaceXMLChars(description));
         Date date = new Date(System.currentTimeMillis());
         blog.setCreated(date);
         blog.setUpdated(date);
@@ -101,8 +101,8 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
     private void addPost(String title, String description, String content, User user, Blog blog, int level)
     {
         PostElement rec = PostElement.ClassMgr.createPostElement(getResourceBase().getWebSite());
-        rec.setTitle(title);
-        rec.setDescription(description);
+        rec.setTitle(SWBUtils.XML.replaceXMLChars(title));
+        rec.setDescription(SWBUtils.XML.replaceXMLChars(description));
         Date date = new Date(System.currentTimeMillis());
         rec.setCreated(date);
         rec.setCreator(user);
@@ -193,9 +193,9 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
                         int level = Integer.parseInt(request.getParameter("level"));
                         if (rec != null && rec.canModify(mem) && title != null && description != null && user.getLogin().equals(rec.getCreator().getLogin()))
                         {
-                            rec.setTitle(title);
+                            rec.setTitle(SWBUtils.XML.replaceXMLChars(title));
                             rec.setVisibility(level);
-                            rec.setDescription(description);
+                            rec.setDescription(SWBUtils.XML.replaceXMLChars(description));
                             rec.setContent(content);
                             Date date = new Date(System.currentTimeMillis());
                             rec.setUpdated(date);
@@ -228,8 +228,8 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
                 String description = request.getParameter("description");
                 if (blog != null && title != null && description != null && member.getAccessLevel() == Member.LEVEL_OWNER)
                 {
-                    blog.setTitle(title);
-                    blog.setDescription(description);
+                    blog.setTitle(SWBUtils.XML.replaceXMLChars(title));
+                    blog.setDescription(SWBUtils.XML.replaceXMLChars(description));
                     Date date = new Date(System.currentTimeMillis());
                     blog.setUpdated(date);
                 }

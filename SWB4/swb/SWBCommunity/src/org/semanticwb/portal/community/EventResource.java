@@ -175,9 +175,9 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                 {
                     rec.setEventThumbnail(null);
                 }
-                rec.setTitle(params.get("event_title"));
-                rec.setDescription(params.get("event_description"));
-                rec.setAudienceType(params.get("event_audience"));
+                rec.setTitle(SWBUtils.XML.replaceXMLChars(params.get("event_title")));
+                rec.setDescription(SWBUtils.XML.replaceXMLChars(params.get("event_description")));
+                rec.setAudienceType(SWBUtils.XML.replaceXMLChars(params.get("event_audience")));
                 try
                 {
                     String startDate = params.get("event_startDate");
@@ -196,8 +196,8 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                 {
                     log.error(e);
                 }
-                rec.setPlace(params.get("event_place"));
-                rec.setTags(params.get("event_tags"));
+                rec.setPlace(SWBUtils.XML.replaceXMLChars(params.get("event_place")));
+                rec.setTags(SWBUtils.XML.replaceXMLChars(params.get("event_tags")));
                 rec.setEventWebPage(page);
                 try
                 {
@@ -251,9 +251,9 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                         }
                         rec.setEventThumbnail(file.getName());
                     }
-                    rec.setTitle(params.get("event_title"));
-                    rec.setDescription(params.get("event_description"));
-                    rec.setAudienceType(params.get("event_audience"));
+                    rec.setTitle(SWBUtils.XML.replaceXMLChars(params.get("event_title")));
+                    rec.setDescription(SWBUtils.XML.replaceXMLChars(params.get("event_description")));
+                    rec.setAudienceType(SWBUtils.XML.replaceXMLChars(params.get("event_audience")));
                     try
                     {
                         String startDate = params.get("event_startDate");
@@ -272,8 +272,8 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                     {
                         log.error(e);
                     }
-                    rec.setPlace(params.get("event_place"));
-                    rec.setTags(params.get("event_tags"));
+                    rec.setPlace(SWBUtils.XML.replaceXMLChars(params.get("event_place")));
+                    rec.setTags(SWBUtils.XML.replaceXMLChars(params.get("event_tags")));
                     rec.setEventWebPage(page);
                 }
             }

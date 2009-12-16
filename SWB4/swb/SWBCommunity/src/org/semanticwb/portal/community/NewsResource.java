@@ -173,12 +173,12 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
                 rec.setNewsThumbnail(file.getName());
 
 
-                rec.setTitle(params.get("new_title"));
-                rec.setAuthor(params.get("new_author"));
-                rec.setDescription(params.get("new_abstract"));
-                rec.setFullText(params.get("new_fulltext"));
-                rec.setCitation(params.get("new_citation"));
-                rec.setTags(params.get("new_tags"));
+                rec.setTitle(SWBUtils.XML.replaceXMLChars(params.get("new_title")));
+                rec.setAuthor(SWBUtils.XML.replaceXMLChars(params.get("new_author")));
+                rec.setDescription(SWBUtils.XML.replaceXMLChars(params.get("new_abstract")));
+                rec.setFullText(SWBUtils.XML.replaceXMLChars(params.get("new_fulltext")));
+                rec.setCitation(SWBUtils.XML.replaceXMLChars(params.get("new_citation")));
+                rec.setTags(SWBUtils.XML.replaceXMLChars(params.get("new_tags")));
                 rec.setNewsWebPage(page);
                 try
                 {
@@ -233,12 +233,12 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
                         }
                         rec.setNewsThumbnail(file.getName());
                     }
-                    rec.setTitle(params.get("new_title"));
-                    rec.setAuthor(params.get("new_author"));
-                    rec.setDescription(params.get("new_abstract"));
-                    rec.setFullText(params.get("new_fulltext"));
-                    rec.setCitation(params.get("new_citation"));
-                    rec.setTags(params.get("new_tags"));
+                    rec.setTitle(SWBUtils.XML.replaceXMLChars(params.get("new_title")));
+                    rec.setAuthor(SWBUtils.XML.replaceXMLChars(params.get("new_author")));
+                    rec.setDescription(SWBUtils.XML.replaceXMLChars(params.get("new_abstract")));
+                    rec.setFullText(SWBUtils.XML.replaceXMLChars(params.get("new_fulltext")));
+                    rec.setCitation(SWBUtils.XML.replaceXMLChars(params.get("new_citation")));
+                    rec.setTags(SWBUtils.XML.replaceXMLChars(params.get("new_tags")));
                     rec.setNewsWebPage(page);
                 }
             }
