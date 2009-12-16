@@ -172,9 +172,9 @@ public class VideoResource extends org.semanticwb.portal.community.base.VideoRes
             if (rec != null && rec.canModify(mem))
             {
                 rec.setCode(request.getParameter("video_code"));
-                rec.setTitle(request.getParameter("video_title"));
-                rec.setDescription(request.getParameter("video_description"));
-                rec.setTags(request.getParameter("video_tags"));
+                rec.setTitle(SWBUtils.XML.replaceXMLChars(request.getParameter("video_title")));
+                rec.setDescription(SWBUtils.XML.replaceXMLChars(request.getParameter("video_description")));
+                rec.setTags(SWBUtils.XML.replaceXMLChars(request.getParameter("video_tags")));
                 rec.setVisibility(Integer.parseInt(request.getParameter("level")));   //hace convercion a int en automatico
                 if (page instanceof MicroSiteWebPageUtil)
                 {

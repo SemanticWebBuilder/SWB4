@@ -194,9 +194,9 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                 {
                     rec.setPhotoThumbnail(null);
                 }
-                rec.setTitle(params.get("title"));
-                rec.setDescription(params.get("description"));
-                rec.setTags(params.get("tags"));
+                rec.setTitle(SWBUtils.XML.replaceXMLChars(params.get("title")));
+                rec.setDescription(SWBUtils.XML.replaceXMLChars(params.get("description")));
+                rec.setTags(SWBUtils.XML.replaceXMLChars(params.get("tags")));
                 rec.setVisibility(Integer.parseInt(params.get("level")));
                 if (page instanceof MicroSiteWebPageUtil)
                 {
@@ -256,15 +256,15 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                     }
                     if (params.containsKey("title"))
                     {
-                        rec.setTitle(params.get("title"));
+                        rec.setTitle(SWBUtils.XML.replaceXMLChars(params.get("title")));
                     }
                     if (params.containsKey("description"))
                     {
-                        rec.setDescription(params.get("description"));
+                        rec.setDescription(SWBUtils.XML.replaceXMLChars(params.get("description")));
                     }
                     if (params.containsKey("tags"))
                     {
-                        rec.setTags(params.get("tags"));
+                        rec.setTags(SWBUtils.XML.replaceXMLChars(params.get("tags")));
                     }
                     if (params.containsKey("level"))
                     {
@@ -344,9 +344,9 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
             }
 
 
-            rec.setTitle(params.get("title"));
-            rec.setDescription(params.get("description"));
-            rec.setTags(params.get("tags"));
+            rec.setTitle(SWBUtils.XML.replaceXMLChars(params.get("title")));
+            rec.setDescription(SWBUtils.XML.replaceXMLChars(params.get("description")));
+            rec.setTags(SWBUtils.XML.replaceXMLChars(params.get("tags")));
             rec.setVisibility(Integer.parseInt(params.get("level")));
             if (page instanceof MicroSiteWebPageUtil)
             {

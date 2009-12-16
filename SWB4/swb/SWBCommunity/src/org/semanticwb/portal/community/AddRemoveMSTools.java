@@ -146,9 +146,9 @@ public class AddRemoveMSTools extends GenericResource {
                 String description = request.getParameter("description");
                 String tags = request.getParameter("tags");
 
-                if(title!=null&&title.trim().length()>0) wp.setTitle(title);
-                if(description!=null&&description.trim().length()>0) wp.setDescription(description);
-                if(tags!=null&&tags.trim().length()>0) wp.setTags(tags);
+                if(title!=null&&title.trim().length()>0) wp.setTitle(SWBUtils.XML.replaceXMLChars(title));
+                if(description!=null&&description.trim().length()>0) wp.setDescription(SWBUtils.XML.replaceXMLChars(description));
+                if(tags!=null&&tags.trim().length()>0) wp.setTags(SWBUtils.XML.replaceXMLChars(tags));
 
                 Iterator<WebPage> itwp = wp.listChilds(user.getLanguage(), true, false, false, false);
                 while(itwp.hasNext())
