@@ -26,6 +26,7 @@ import org.semanticwb.model.*
 import org.semanticwb.portal.community.*
 import org.semanticwb.*
 import org.semanticwb.platform.*
+import org.semanticwb.portal.community.base.*
 import java.util.*
 
 //long time1 = System.currentTimeMillis()
@@ -72,8 +73,21 @@ panels.each{
             }
             if (linea.length()>0)
             linea = linea.substring(0,linea.length()-2)
+            def elements=test.getElements()
+            def basecommtext="""comunidad"""
+            if(elecount>1 || elecount==0)
+            {
+                basecommtext="""comunidades"""
+            }
+            def baseeletext="""elemento"""
+            def baseeletext2="""publicado"""
+            if(elements>1 || elements==0)
+            {
+                baseeletext="""elementos"""
+                baseeletext2="""publicados"""
+            }
             println """${linea}</p>
-            <p>Con un total de ${elecount} elementos publicados</p>"""
+            <p>${elecount} ${basecommtext} y ${elements} ${baseeletext} ${baseeletext2}</p>"""
         }
     }
    
@@ -140,14 +154,14 @@ class LocalCache{
     static private synchronized void init(WebSite wsid){
         if (null!=inicio && (System.currentTimeMillis()<timer+cache_time)) return
         timer = System.currentTimeMillis()
-//        WebPage homeTeaser = org.semanticwb.model.SWBContext.getWebSite("Ciudad_Digital").getWebPage("HomeTeasers")
+        //        WebPage homeTeaser = org.semanticwb.model.SWBContext.getWebSite("Ciudad_Digital").getWebPage("HomeTeasers")
         WebPage homeTeaser = wsid.getWebPage("HomeTeasers")
         inicio = new Contenedor(homeTeaser, new TreeSet<Contenedor>(new CompContenedor()))
         WebPage lugar = wsid.getWebPage("Sitios_de_Interes")
         WebPage servicio = wsid.getWebPage("Servicios")
         WebPage organizacion = wsid.getWebPage("Organizaciones")
-        //wpage.getWebSite().getWebPage("HomeTeasers")
-        //println homeTeaser
+        WebPage clasificados = wsid.getWebPage("Clasificados")
+      
 
         def mains = homeTeaser.listChilds()
         mains.each{
@@ -161,28 +175,118 @@ class LocalCache{
                 WebPage child = (WebPage)it
                 def cCont = new Contenedor(child, new TreeSet<Contenedor>(new CompContenedor()))
                 mCont.getHijos().add(cCont)
-                //          println "at child"
-                //          println child
+
                 def clugar = new Contenedor(lugar, new TreeSet<Contenedor>(new CompContenedor()))
                 cCont.getHijos().add(clugar)
+
+                def topics=child.listWebPageVirtualChilds()
+
+                topics.each{
+
+                    WebPage topic=(WebPage)it;
+                    int elementos2=0;
+                    def elements=DirectoryObjectBase.ClassMgr.listDirectoryObjectByWebPage(topic);
+
+                    //System.out.println("clugar.addElements(elementos1): "+clugar.addElements(elementos1).getURI());
+
+                    elements.each
+                    {
+                        DirectoryObjectBase db=(DirectoryObjectBase)it;
+                        if(db!=null)
+                        {
+                            elementos2++;
+                            System.out.println("elementos2: "+elementos2);
+                        }
+                    }
+                    clugar.addElements(elementos2)
+                }
+
                 def cservicio = new Contenedor(servicio, new TreeSet<Contenedor>(new CompContenedor()))
                 cCont.getHijos().add(cservicio)
+                
+                topics=child.listWebPageVirtualChilds()
+                
+                topics.each{
+                    
+                    WebPage topic=(WebPage)it;
+                    int elementos2=0;
+                    def elements=DirectoryObjectBase.ClassMgr.listDirectoryObjectByWebPage(topic);
+
+                    //System.out.println("clugar.addElements(elementos1): "+clugar.addElements(elementos1).getURI());
+                    
+                    elements.each
+                    {
+                        DirectoryObjectBase db=(DirectoryObjectBase)it;
+                        if(db!=null)
+                        {
+                            elementos2++;
+                            System.out.println("elementos2: "+elementos2);
+                        }
+                    }
+                    cservicio.addElements(elementos2)                
+                }
+
                 def corganizacion = new Contenedor(organizacion, new TreeSet<Contenedor>(new CompContenedor()))
                 cCont.getHijos().add(corganizacion)
-                def temes = child.listWebPageVirtualChilds()
+                
+                topics=child.listWebPageVirtualChilds()
 
+                topics.each{
+
+                    WebPage topic=(WebPage)it;
+                    int elementos2=0;
+                    def elements=DirectoryObjectBase.ClassMgr.listDirectoryObjectByWebPage(topic);
+
+                    //System.out.println("clugar.addElements(elementos1): "+clugar.addElements(elementos1).getURI());
+
+                    elements.each
+                    {
+                        DirectoryObjectBase db=(DirectoryObjectBase)it;
+                        if(db!=null)
+                        {
+                            elementos2++;
+                            System.out.println("elementos2: "+elementos2);
+                        }
+                    }
+                    corganizacion.addElements(elementos2)
+                }
+                
+
+                def temes = child.listWebPageVirtualChilds()
+                
+                def cclasificados = new Contenedor(clasificados, new TreeSet<Contenedor>(new CompContenedor()))
+                cCont.getHijos().add(cclasificados)
+                def cats=child.listWebPageVirtualChilds()
+                int elementos=0;
+                cats.each{
+                    WebPage cat = (WebPage)it                    
+                    if(cat.getParent()!=null && cat.getParent().getParent()!=null && cat.getParent().getParent().getURI().equals(clasificados.getURI()))
+                    {
+                        def elements=DirectoryObjectBase.ClassMgr.listDirectoryObjectByWebPage(cat);
+                        
+                        
+                        elements.each
+                        {
+                            DirectoryObjectBase db=(DirectoryObjectBase)it;
+                            if(db!=null)
+                            {
+                                elementos++;
+                            }
+                        }
+                        cclasificados.addElements(elementos)
+                        cclasificados.getHijos().add(new Contenedor(cat, null))
+                    }
+                }
                 temes.each{
                     WebPage teme = (WebPage)it
                     if (findif(teme, lugar)) clugar.getHijos().add(new Contenedor(teme, null))
                     if (findif(teme, servicio)) cservicio.getHijos().add(new Contenedor(teme, null))
                     if (findif(teme, organizacion)) corganizacion.getHijos().add(new Contenedor(teme, null))
-                    //              println "at teme"
-                    //              println teme
-                    //              println "en lugar: " + findif(teme, lugar)
-                    //              println "en servicio: " +findif(teme, servicio)
-                    //              println "en organizacion: " +findif(teme, organizacion)
+                    //if (true)
                 }
             }
+           
+            
         }
     }
 
@@ -223,10 +327,21 @@ class LocalCache{
 class Contenedor {
     String yoid
     Set<Contenedor> hijos
+    int elementos=0    
     Contenedor (WebPage yo, Set<Contenedor> hijos){
         this.yoid = yo.getURI()
-        this.hijos = hijos
+        this.hijos = hijos      
+        this.elementos=elementos
     }
+   
+    int getElements()
+    {
+        return elementos
+    }
+    void addElements(int elementos)
+    {
+        this.elementos+=elementos;
+    }    
 
     WebPage getWebPage(){
         SemanticObject obj=SemanticObject.createSemanticObject(yoid)
