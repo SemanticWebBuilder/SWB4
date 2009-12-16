@@ -76,15 +76,7 @@ panels.each{
             <p>Con un total de ${elecount} elementos publicados</p>"""
         }
     }
-    //            <h2>Lugares</h2>
-    //            <p class="itemsRelacionados"><a href="#">Playas</a>, <a href="#">Zonas Arquelógicas</a> y <a href="#">Museos</a></p>
-    //            <p>Con un total de 62 elementos publicados</p>
-    //            <h2>Servicios</h2>
-    //            <p class="itemsRelacionados"><a href="#">Playas</a>, <a href="#">Zonas Arquelógicas</a> y <a href="#">Museos</a></p>
-    //            <p>Con un total de 62 elementos publicados</p>
-    //            <h2>Organizaciones</h2>
-    //            <p class="itemsRelacionados"><a href="#">Playas</a>, <a href="#">Zonas Arquelógicas</a> y <a href="#">Museos</a></p>
-    //            <p>Con un total de 62 elementos publicados</p>
+   
     println """          </div>
           </div>"""
 }
@@ -118,20 +110,7 @@ println """            </div>
       </div>
     </div>
 """
-//System.out.println "HT -->"+(System.currentTimeMillis()-time1)
 
-//System.out.println("Listo")
-//def paramRequest=request.getAttributeNames()
-//paramRequest.each{
-//    System.out.println it
-//
-//}
-
-//WebSite ws = org.semanticwb.model.SWBContext.getWebSite("Ciudad_Digital")
-//System.out.println topic.getWorkPath()
-//System.out.println topic.getWebSite().getWorkPath()
-//
-//println "Ready"
 
 def recurseContenedor(Contenedor home, int level){
     level.times {
@@ -149,7 +128,7 @@ class LocalCache{
     static  Contenedor inicio = null
     static long timer = 0
     //static long cache_time = 1000L*60*60*12
-    static long cache_time = 1000L*60*15
+    static long cache_time = 1000L*10 //1000L*60*15
 
     static public Contenedor getInicio(WebSite wsid){
         if (null==inicio || System.currentTimeMillis()>timer+cache_time) {
