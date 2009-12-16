@@ -36,6 +36,15 @@ public class RichText extends org.semanticwb.model.base.RichTextBase
     }
 
     @Override
+    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop)
+    {
+        if(isFilterHTMLTags())setFilterHTMLTags(false);
+        super.process(request, obj, prop);
+    }
+
+
+
+    @Override
     public String renderXHTML(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
         String ret="";
         String name=prop.getName();
