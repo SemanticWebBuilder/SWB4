@@ -535,14 +535,14 @@ public class SWBImportWebSite extends GenericResource {
                     ptype.setTitle("Forum");
                 }
 
-                if (site.getResourceType("Directory") == null) {
-                    ResourceType ptype = site.createResourceType("Directory");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.sem.directory.Directory");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.sem.directory.Directory");
-                    ptype.setResourceOWL("org.semanticwb.portal.resources.sem.directory.Directory");
-                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
-                    ptype.setTitle("Directory");
-                }
+//                if (site.getResourceType("Directory") == null) {
+//                    ResourceType ptype = site.createResourceType("Directory");
+//                    ptype.setResourceClassName("org.semanticwb.portal.resources.sem.directory.Directory");
+//                    ptype.setResourceBundle("org.semanticwb.portal.resources.sem.directory.Directory");
+//                    ptype.setResourceOWL("org.semanticwb.portal.resources.sem.directory.Directory");
+//                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
+//                    ptype.setTitle("Directory");
+//                }
 
 //                if (site.getResourceType("Events") == null) {
 //                    ResourceType ptype = site.createResourceType("Events");

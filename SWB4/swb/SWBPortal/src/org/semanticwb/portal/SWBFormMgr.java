@@ -42,6 +42,7 @@ import org.semanticwb.model.GenericFormElement;
 import org.semanticwb.model.PropertyGroup;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.base.FormElementBase;
 import org.semanticwb.platform.*;
 
 /**
@@ -704,6 +705,7 @@ public class SWBFormMgr
                 ele.setModel(m_obj.getModel());
             else if(m_ref!=null)
                 ele.setModel(m_ref.getModel());
+            ((FormElementBase)ele).setFilterHTMLTags(filterHTMLTags);
         }
         return ele;
     }
