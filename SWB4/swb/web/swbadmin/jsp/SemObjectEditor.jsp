@@ -53,6 +53,7 @@ try
 
         SWBFormMgr frm=new SWBFormMgr(cls,ref,null);
         frm.setLang(lang);
+        frm.setFilterHTMLTags(false);
         frm.addHiddenParameter("sprop", sprop);
         if(reloadTab!=null)frm.addHiddenParameter("reloadTab",reloadTab);
         frm.setSubmitByAjax(true);
@@ -150,6 +151,7 @@ try
         //System.out.println("debug:6");
         SWBFormMgr frm=new SWBFormMgr(obj, view,mode);
         frm.setLang(lang);
+        frm.setFilterHTMLTags(false);
         frm.setSubmitByAjax(true);
         frm.setType(SWBFormMgr.TYPE_DOJO);
 
