@@ -17,8 +17,8 @@
 		<input type="RADIO" name="pcont" label="Si" value="1"/>
 		<input type="RADIO" name="pcont" label="No" value="0"/>
 -->                
-		<input type="TEXT" name="tmid" label="Identificador del sitio:" size="50" maxlength="50"/>                
-		<input type="TEXT" name="resid" label="Identificador del recurso:" size="10" maxlength="10" jsvaltype="js_numbers"/>                
+		<input type="TEXT" name="tmid" label="Identificador del sitio:" size="50"/>                
+		<input type="TEXT" name="resid" label="Identificador del recurso:" size="50" jsvaltype="js_numbers"/>
                 </fieldset>
                 <fieldset>
 		<input type="SUBMIT" name="btnSave"  moreattr="class=&#34;botones&#34;" value="Guardar"/>
