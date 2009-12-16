@@ -6,6 +6,7 @@
 package org.semanticwb.portal.community;
 
 import java.util.HashMap;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.model.Searchable;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.indexer.parser.GenericParser;
@@ -53,5 +54,12 @@ public class DirectoryObjectParser extends GenericParser {
     @Override
     public String getIndexTags(Searchable gen) {
         return ((DirectoryObject)gen).getTags();
+    }
+
+    @Override
+    public String getImage(Searchable gen) {
+        return SWBPortal.getWebWorkPath() + "/" + 
+                gen.getSemanticObject().getWorkPath() + "/" +
+                gen.getSemanticObject().getProperty(DirectoryObject.swbcomm_dirPhoto);
     }
 }
