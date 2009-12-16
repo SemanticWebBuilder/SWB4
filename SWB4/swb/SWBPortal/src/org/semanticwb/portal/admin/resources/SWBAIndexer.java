@@ -31,6 +31,7 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.*;
@@ -117,8 +118,10 @@ public class SWBAIndexer extends GenericResource {
                 Iterator ittm = SWBContext.listWebSites();
                 while (ittm.hasNext()) {
                     WebSite tmp = (WebSite) ittm.next();
-//                    if(indexName.equals(tmp.getDbdata().getIndexer()) && SWBAdmFilterMgr.getInstance().haveAccess2WebSite(user,tmp.getId())>0)
+                    //if(indexName.equals(tmp.getDbdata().getIndexer()) && SWBAdmFilterMgr.getInstance().haveAccess2WebSite(user,tmp.getId())>0)
+                    if(SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(user,tmp.getSemanticObject()))
                     {
+
                         out.println("<tr><td align=right >");
                         String tmid = tmp.getId();
                         String str_check = "";
@@ -130,6 +133,21 @@ public class SWBAIndexer extends GenericResource {
                         out.println(tmp.getDisplayTitle(user.getLanguage()));
                         out.println("</td>");
                         out.println("</tr>");
+                        Iterator<SWBModel> it = tmp.listSubModels();
+                        while (it.hasNext()) {
+                            SWBModel sWBModel = it.next();
+                            out.println("<tr><td align=right >");
+                            tmid = sWBModel.getId();
+                            str_check = "";
+                            if (null != hmtmind && hmtmind.get(tmid) != null) {
+                                str_check = "checked";
+                            }
+                            out.println("<input type=\"checkbox\" name=\"tmids\" value=\"" + tmid + "\" " + str_check + ">");
+                            out.println("</td><td align=left>");
+                            out.println(sWBModel.getSemanticObject().getDisplayName(user.getLanguage()));
+                            out.println("</td>");
+                            out.println("</tr>");
+                        }
                     }
                 }
 
