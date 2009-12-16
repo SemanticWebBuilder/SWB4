@@ -104,6 +104,10 @@
         </div>
         <input type="hidden" name="act" value="add"/>
     </form>
+        <div class="adminTools">
+        <a class="adminTool" onclick="validaForma()" href="#">Guardar</a>
+        <a class="adminTool" href="<%=paramRequest.getRenderUrl()%>">Cancelar</a>
+    </div>
 </div>
 <div class="columnaCentro">
 
