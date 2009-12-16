@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package org.semanticwb.portal.indexer.parser;
 
 import java.util.Map;
@@ -11,11 +6,10 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Searchable;
 import org.semanticwb.model.User;
 import org.semanticwb.portal.indexer.IndexTerm;
-import org.semanticwb.portal.indexer.SWBIndexer;
 
 /**
  *
- * @author hasdai
+ * @author Hasdai pacheco {haxdai@gmail.com}
  */
 public class UserParser extends GenericParser {
     private static Logger log = SWBUtils.getLogger(UserParser.class);
@@ -41,5 +35,4 @@ public class UserParser extends GenericParser {
     public String getEmail (User user) {
         return (user.getEmail()==null?"":user.getEmail());
     }
-
 }
