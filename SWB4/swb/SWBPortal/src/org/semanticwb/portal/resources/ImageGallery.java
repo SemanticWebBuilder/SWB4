@@ -75,8 +75,30 @@ public class ImageGallery extends GenericResource {
             super.setResourceBase(base);
             workPath = SWBPortal.getWorkPath() +  base.getWorkPath() + "/";
             webWorkPath = SWBPortal.getWebWorkPath() +  base.getWorkPath() + "/";
+            
+            // Si no existe el thumbnail se crea
+            int width = Integer.parseInt(base.getAttribute("width"));
+            Iterator<String> it = base.getAttributeNames();
+            while(it.hasNext()) {
+                String attname = it.next();
+                String attval = base.getAttribute(attname);
+                if( attname.startsWith("imggallery_") && attval!=null ) {
+                    String fn = attval.substring(attval.lastIndexOf("/")+1);
+                    File img = new File(workPath + fn);
+                    File thumbnail = new File(workPath + _thumbnail + fn);
+                    if( !thumbnail.exists() ) {
+                        try {
+                            ImageResizer.resizeCrop(img, width , thumbnail, "jpeg");
+                        }catch(IOException ioe) {
+                        }
+                    }
+                }
+            }
+            
         }
-        catch(Exception e) { log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);  }
+        catch(Exception e) { 
+            log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);
+        }
     }
 
     @Override
@@ -138,17 +160,6 @@ public class ImageGallery extends GenericResource {
 
 
         for(String image : imagepath) {
-            // Si no existe el thumbnail se crea
-            String fn = image.substring(image.lastIndexOf("/")+1);
-            File img = new File(workPath + fn);
-            File thumbnail = new File(workPath + _thumbnail + fn);
-            if( !thumbnail.exists() ) {
-                try {
-                    ImageResizer.resizeCrop(img, width , thumbnail, "jpeg");
-                }catch(IOException ioe) {
-                }
-            }
-
             out.append("\n['"+image+"','"+image.substring(0, image.lastIndexOf("/"))+"/"+_thumbnail+image.substring(image.lastIndexOf("/")+1)+"',''],");
         }
         if(imagepath.length>0)
