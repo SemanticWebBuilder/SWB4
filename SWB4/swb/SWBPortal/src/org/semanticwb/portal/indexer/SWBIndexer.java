@@ -33,7 +33,6 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.vocabulary.RDF;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -54,6 +53,7 @@ import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.indexer.parser.GenericParser;
 import org.semanticwb.portal.indexer.parser.ResourceParser;
+import org.semanticwb.portal.indexer.parser.UserParser;
 import org.semanticwb.portal.indexer.parser.WebPageParser;
 import org.semanticwb.portal.indexer.searcher.SearchQuery;
 import org.semanticwb.portal.indexer.searcher.SearchResults;
@@ -143,6 +143,7 @@ public abstract class SWBIndexer
 
         registerParser(Resource.class, new ResourceParser());
         registerParser(WebPage.class, new WebPageParser());
+        registerParser(User.class, new UserParser());
     }
 
     public static void addNoAnalyzedIndexTerm(IndexTerm term)
@@ -257,7 +258,7 @@ public abstract class SWBIndexer
                 //out.println(cls);
                 if(cls != null && cls.isSubClass(Searchable.swb_Searchable))
                 {
-                    SemanticObject obj=SemanticObject.createSemanticObject(st.getSubject());
+                    SemanticObject obj=SemanticObject.createSemanticObject(st.getSubject());                    
                     indexSerchable((Searchable)obj.createGenericInstance());
                     //out.println("searchable:"+obj);
                 }
@@ -273,7 +274,7 @@ public abstract class SWBIndexer
     public void indexSerchable(Searchable serchable)
     {
         if(!m_add.contains(serchable) && getParser(serchable).canIndex(serchable))
-        {
+        {            
             //m_remove.add(serchable.getURI());
             m_add.add(serchable);
         }
