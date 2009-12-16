@@ -71,7 +71,7 @@ public class SWBASiteLog extends GenericResource {
         out.println("<th align=\"left\">"+paramRequest.getLocaleString("date")+"</th>");
         out.println("<tbody>");
         int cont = 0;
-        String sql = "select * from swb_admlog where log_user='" + user.getURI() + "' order by log_date";
+        String sql = "select * from swb_admlog where log_user='" + user.getURI() + "' order by log_date desc";
         Connection con = SWBUtils.DB.getDefaultConnection("SiteLog:doView");
         if (con != null) {
             try {
@@ -79,7 +79,6 @@ public class SWBASiteLog extends GenericResource {
                 ResultSet rs = st.executeQuery(sql);
                 while (rs.next()) {
                     SemanticObject swbobj=SemanticObject.createSemanticObject(rs.getString("log_objuri"));
-                    //System.out.println("swbobj:"+swbobj);
                     if(swbobj!=null){
                         String fecha=""+rs.getTimestamp("log_date");
                         String strObj="";
