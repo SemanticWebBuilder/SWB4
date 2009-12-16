@@ -117,7 +117,7 @@ public class RegisterUser extends GenericAdmResource {
         Resource base = response.getResourceBase();
         UserRepository ur = response.getWebPage().getWebSite().getUserRepository();
         User user = response.getUser();
-        String login = request.getParameter("login");
+        String login = SWBUtils.XML.replaceXMLChars(request.getParameter("login"));
         String pwd = request.getParameter("passwd");
         boolean isTwoSteps = false;
         if (base.getAttribute("twosteps") != null && base.getAttribute("twosteps").equals("1")) {
@@ -143,10 +143,10 @@ public class RegisterUser extends GenericAdmResource {
                 newUser.setLanguage(user.getLanguage());
                 newUser.setIp(user.getIp());
                 newUser.setDevice(user.getDevice());
-                newUser.setFirstName(request.getParameter("firstName"));
-                newUser.setLastName(request.getParameter("lastName"));
-                newUser.setSecondLastName(request.getParameter("secondLastName"));
-                newUser.setEmail(request.getParameter("email"));
+                newUser.setFirstName(SWBUtils.XML.replaceXMLChars(request.getParameter("firstName")));
+                newUser.setLastName(SWBUtils.XML.replaceXMLChars(request.getParameter("lastName")));
+                newUser.setSecondLastName(SWBUtils.XML.replaceXMLChars(request.getParameter("secondLastName")));
+                newUser.setEmail(SWBUtils.XML.replaceXMLChars(request.getParameter("email")));
                 newUser.setPassword(pwd);
                 try {
                     newUser.checkCredential(pwd.toCharArray());
@@ -174,20 +174,20 @@ public class RegisterUser extends GenericAdmResource {
             } else {
                 response.setRenderParameter("login", login);
                 response.setRenderParameter("pwd", pwd);
-                response.setRenderParameter("firstName", request.getParameter("firstName"));
-                response.setRenderParameter("lastName", request.getParameter("lastName"));
-                response.setRenderParameter("secondLastName", request.getParameter("secondLastName"));
-                response.setRenderParameter("email", request.getParameter("email"));
+                response.setRenderParameter("firstName", SWBUtils.XML.replaceXMLChars(request.getParameter("firstName")));
+                response.setRenderParameter("lastName", SWBUtils.XML.replaceXMLChars(request.getParameter("lastName")));
+                response.setRenderParameter("secondLastName", SWBUtils.XML.replaceXMLChars(request.getParameter("secondLastName")));
+                response.setRenderParameter("email", SWBUtils.XML.replaceXMLChars(request.getParameter("email")));
                 response.setRenderParameter("msg", "regfail");
                 response.setMode(response.Mode_VIEW);
                 response.setCallMethod(response.Call_CONTENT);
             }
         }
         if ("edit".equals(response.getAction()) && user.isSigned()) {
-            user.setFirstName(request.getParameter("usrFirstName"));
-            user.setLastName(request.getParameter("usrLastName"));
-            user.setSecondLastName(request.getParameter("usrSecondLastName"));
-            user.setEmail(request.getParameter("usrEmail"));
+            user.setFirstName(SWBUtils.XML.replaceXMLChars(request.getParameter("usrFirstName")));
+            user.setLastName(SWBUtils.XML.replaceXMLChars(request.getParameter("usrLastName")));
+            user.setSecondLastName(SWBUtils.XML.replaceXMLChars(request.getParameter("usrSecondLastName")));
+            user.setEmail(SWBUtils.XML.replaceXMLChars(request.getParameter("usrEmail")));
             try {
                 Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#_ExtendedAttributes").listProperties();
                 while (list.hasNext()) {
@@ -197,7 +197,7 @@ public class RegisterUser extends GenericAdmResource {
                         user.removeExtendedAttribute(sp);
                     } else {
                         if (sp.isString()) {
-                            user.setExtendedAttribute(sp, request.getParameter(sp.getName()));
+                            user.setExtendedAttribute(sp, SWBUtils.XML.replaceXMLChars(request.getParameter(sp.getName())));
                         }
                         if (sp.isInt()) {
                             try {
