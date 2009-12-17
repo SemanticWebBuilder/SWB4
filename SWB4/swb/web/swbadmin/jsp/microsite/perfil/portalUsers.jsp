@@ -40,15 +40,17 @@ private final int I_INIT_PAGE = 1;
 
 
             String sparams = null;
-            String txtFind=null;
+            String txtFind = null;
             boolean existFilter = false;
             if (request.getParameter("alphabet") != null)
             {
                 existFilter = true;
-                sparams=request.getParameter("alphabet");
-            }else if(request.getParameter("txtFind")!=null){
+                sparams = request.getParameter("alphabet");
+            }
+            else if (request.getParameter("txtFind") != null)
+            {
                 existFilter = true;
-                txtFind=request.getParameter("txtFind");
+                txtFind = request.getParameter("txtFind");
             }
             //Empieza paginación
             SWBResourceURL urlPag = paramRequest.getRenderUrl();
@@ -61,12 +63,15 @@ private final int I_INIT_PAGE = 1;
             while (itUsers.hasNext())
             {
                 User oneUser = (User) itUsers.next();
-                if (existFilter && sparams!=null && sparams.trim().length()>0 && oneUser.getFullName().toLowerCase().startsWith(sparams.toLowerCase()))
+                if (existFilter && sparams != null && sparams.trim().length() > 0 && oneUser.getFullName().toLowerCase().startsWith(sparams.toLowerCase()))
                 {
                     aUsers.add(oneUser);
-                }else if(existFilter && txtFind!=null && oneUser.getFullName().toLowerCase().indexOf(txtFind.toLowerCase())>-1){
-                     aUsers.add(oneUser);
-                }else if (!existFilter)
+                }
+                else if (existFilter && txtFind != null && oneUser.getFullName().toLowerCase().indexOf(txtFind.toLowerCase()) > -1)
+                {
+                    aUsers.add(oneUser);
+                }
+                else if (!existFilter)
                 {
                     aUsers.add(oneUser);
                 }
@@ -101,81 +106,83 @@ private final int I_INIT_PAGE = 1;
                 {
                     iTotPage = Integer.parseInt(token);
                 }
-            }         
+            }
 %>
 <%-- <b>Resultado:</b> <%=setResult.size()%> usuarios --%>
 <ul id="listaAlfabet">
     <li><a <%if (!existFilter)
             {%>class="active"<%}%> href="<%=urlAlphabetic%>">Todos&nbsp;&nbsp;&nbsp;</a></li>
-    <li><a <%if (sparams!=null && sparams.equals("a"))
+    <li><a <%if (sparams != null && sparams.equals("a"))
             {%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "a")%>">A</a></li>
-    <li><a <%if (sparams!=null && sparams.equals("b"))
+    <li><a <%if (sparams != null && sparams.equals("b"))
             {%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "b")%>">B</a></li>
-    <li><a <%if (sparams!=null && sparams.equals("c"))
+    <li><a <%if (sparams != null && sparams.equals("c"))
             {%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "c")%>">C</a></li>
-    <li><a <%if (sparams!=null && sparams.equals("d"))
+    <li><a <%if (sparams != null && sparams.equals("d"))
             {%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "d")%>">D</a></li>
-    <li><a <%if (sparams!=null && sparams.equals("e"))
+    <li><a <%if (sparams != null && sparams.equals("e"))
             {%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "e")%>">E</a></li>
-    <li><a <%if (sparams!=null && sparams.equals("f"))
+    <li><a <%if (sparams != null && sparams.equals("f"))
             {%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "f")%>">F</a></li>
-    <li><a <%if (sparams!=null && sparams.equals("g"))
+    <li><a <%if (sparams != null && sparams.equals("g"))
             {%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "g")%>">G</a></li>
-    <li><a <%if (sparams!=null && sparams.equals("h"))
+    <li><a <%if (sparams != null && sparams.equals("h"))
             {%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "h")%>">H</a></li>
-    <li><a <%if (sparams!=null && sparams.equals("i"))
+    <li><a <%if (sparams != null && sparams.equals("i"))
             {%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "i")%>">I</a></li>
-    <li><a <%if (sparams!=null && sparams.equals("j"))
+    <li><a <%if (sparams != null && sparams.equals("j"))
             {%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "j")%>">J</a></li>
-    <li><a <%if (sparams!=null && sparams.equals("k"))
+    <li><a <%if (sparams != null && sparams.equals("k"))
             {%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "k")%>">K</a></li>
-    <li><a <%if (sparams!=null && sparams.equals("l"))
+    <li><a <%if (sparams != null && sparams.equals("l"))
             {%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "l")%>">L</a></li>
-    <li><a <%if (sparams!=null && sparams.equals("m"))
+    <li><a <%if (sparams != null && sparams.equals("m"))
             {%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "m")%>">M</a></li>
-    <li><a <%if (sparams!=null && sparams.equals("n"))
+    <li><a <%if (sparams != null && sparams.equals("n"))
             {%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "n")%>">N</a></li>
-    <li><a <%if (sparams!=null && sparams.equals("ñ"))
+    <li><a <%if (sparams != null && sparams.equals("ñ"))
             {%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "ñ")%>">&Ntilde;</a></li>
-    <li><a <%if (sparams!=null && sparams.equals("o"))
+    <li><a <%if (sparams != null && sparams.equals("o"))
             {%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "o")%>">O</a></li>
-    <li><a <%if (sparams!=null && sparams.equals("p"))
+    <li><a <%if (sparams != null && sparams.equals("p"))
             {%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "p")%>">P</a></li>
-    <li><a <%if (sparams!=null && sparams.equals("q"))
+    <li><a <%if (sparams != null && sparams.equals("q"))
             {%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "q")%>">Q</a></li>
-    <li><a <%if (sparams!=null && sparams.equals("r"))
+    <li><a <%if (sparams != null && sparams.equals("r"))
             {%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "r")%>">R</a></li>
-    <li><a <%if (sparams!=null && sparams.equals("s"))
+    <li><a <%if (sparams != null && sparams.equals("s"))
             {%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "s")%>">S</a></li>
-    <li><a <%if (sparams!=null && sparams.equals("t"))
+    <li><a <%if (sparams != null && sparams.equals("t"))
             {%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "t")%>">T</a></li>
-    <li><a <%if (sparams!=null && sparams.equals("u"))
+    <li><a <%if (sparams != null && sparams.equals("u"))
             {%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "u")%>">U</a></li>
-    <li><a <%if (sparams!=null && sparams.equals("v"))
+    <li><a <%if (sparams != null && sparams.equals("v"))
             {%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "v")%>">V</a></li>
-    <li><a <%if (sparams!=null && sparams.equals("w"))
+    <li><a <%if (sparams != null && sparams.equals("w"))
             {%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "w")%>">W</a></li>
-    <li><a <%if (sparams!=null && sparams.equals("x"))
+    <li><a <%if (sparams != null && sparams.equals("x"))
             {%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "x")%>">X</a></li>
-    <li><a <%if (sparams!=null && sparams.equals("y"))
+    <li><a <%if (sparams != null && sparams.equals("y"))
             {%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "y")%>">Y</a></li>
-    <li><a <%if (sparams!=null && sparams.equals("z"))
+    <li><a <%if (sparams != null && sparams.equals("z"))
             {%>class="active"<%}%> href="<%=urlAlphabetic.setParameter("alphabet", "z")%>">Z </a></li>
 </ul>
 <div class="paginacion">
-<%SWBResourceURL url=paramRequest.getRenderUrl();%>
-<form id="user_portal" action="<%=url.toString()%>">
- Buscar:<input type="text" name="txtFind"/><button type="submit">ir</button>
-</form>
-   <%
-            if (actualPage > 1)
-            {
-                int gotop = (actualPage - 1);
-                urlPag.setParameter("actualPage", "" + gotop);
+    <%SWBResourceURL url = paramRequest.getRenderUrl();%>
+    <form id="user_portal" action="<%=url.toString()%>">
+        Buscar:<input type="text" name="txtFind"/><button type="submit">ir</button>
+    </form>
+    <%
+             if (actualPage > 1)
+             {
+                 int gotop = (actualPage - 1);
+                 urlPag.setParameter("actualPage", "" + gotop);
 
-   %>
-   <a class="link" href="<%=urlPag%><%if (existFilter && sparams!=null)
-               {%>&alphabet=<%=sparams%><%}if (existFilter && txtFind!=null){%>&txtFind=<%=txtFind%><%}%>"><img src="<%=SWBPortal.getWebWorkPath()%>/models/<%=website.getId()%>/css/images/pageArrowLeft.gif" alt="anterior"/></a>
+    %>
+       <a class="link" href="<%=urlPag%><%if (existFilter && sparams != null)
+                {%>&alphabet=<%=sparams%><%}
+                if (existFilter && txtFind != null)
+                {%>&txtFind=<%=txtFind%><%}%>"><img src="<%=SWBPortal.getWebWorkPath()%>/models/<%=website.getId()%>/css/images/pageArrowLeft.gif" alt="anterior"/></a>
         <%
             }
             if (iTotPage > 1)
@@ -190,8 +197,10 @@ private final int I_INIT_PAGE = 1;
                     {
                         urlPag.setParameter("actualPage", "" + i);
     %>
-    <a href="<%=urlPag%><%if (existFilter && sparams!=null)
-                        {%>&alphabet=<%=sparams%><%}if (existFilter && txtFind!=null){%>&txtFind=<%=txtFind%><%}%>"><%=i%></a>
+    <a href="<%=urlPag%><%if (existFilter && sparams != null)
+                        {%>&alphabet=<%=sparams%><%}
+                        if (existFilter && txtFind != null)
+                        {%>&txtFind=<%=txtFind%><%}%>"><%=i%></a>
     <%
                     }
                 }
@@ -201,8 +210,10 @@ private final int I_INIT_PAGE = 1;
                 int gotop = (actualPage + 1);
                 urlPag.setParameter("actualPage", "" + gotop);
     %>
-    <a class="link" href="<%=urlPag%><%if (existFilter && sparams!=null)
-                {%>&alphabet=<%=sparams%><%}if (existFilter && txtFind!=null){%>&txtFind=<%=txtFind%><%}%>"><img src="<%=SWBPortal.getWebWorkPath()%>/models/<%=website.getId()%>/css/images/pageArrowRight.gif" alt="anterior"/></a>
+    <a class="link" href="<%=urlPag%><%if (existFilter && sparams != null)
+                {%>&alphabet=<%=sparams%><%}
+                if (existFilter && txtFind != null)
+                {%>&txtFind=<%=txtFind%><%}%>"><img src="<%=SWBPortal.getWebWorkPath()%>/models/<%=website.getId()%>/css/images/pageArrowRight.gif" alt="anterior"/></a>
         <%
             }
 
@@ -243,7 +254,7 @@ private final int I_INIT_PAGE = 1;
                 if (userprosp.getPhoto() != null)
                 {
                     photo = SWBPortal.getWebWorkPath() + userprosp.getPhoto();
-                }                 
+                }
     %>
     <div class="friendCard">
         <a href="<%=perfilPath%>?user=<%=userprosp.getEncodedURI()%>">
@@ -260,14 +271,19 @@ private final int I_INIT_PAGE = 1;
 
             <a class="ico" href="<%=perfilPath%>?user=<%=userprosp.getEncodedURI()%>"><img src="<%=SWBPortal.getWebWorkPath()%>/models/<%=website.getId()%>/css/images/icoUser.png" alt="ir al perfil"/></a>
                 <%
-                 try{
-                if (!user.getURI().equals(userprosp.getURI()) && !Friendship.areFriends(user, userprosp, website) && !FriendshipProspect.findFriendProspectedByRequester(user, userprosp, website))
+                try
                 {
-                    urlAction.setAction("createProspect");
-                    urlAction.setParameter("user", userprosp.getURI());
+                    if (!user.getURI().equals(userprosp.getURI()) && !Friendship.areFriends(user, userprosp, website) && !FriendshipProspect.findFriendProspectedByRequester(user, userprosp, website))
+                    {
+                        urlAction.setAction("createProspect");
+                        urlAction.setParameter("user", userprosp.getURI());
                 %>
             <a class="ico" href="<%=urlAction%>"><img src="<%=SWBPortal.getWebWorkPath()%>/models/<%=website.getId()%>/css/images/icoMas.png" alt="agregar"/></a>
-                <%} }catch(Exception e){}%>
+                <%}
+                }
+                catch (Exception e)
+                {
+                }%>
             <div class="friendCardName">
                 <p><%=userprosp.getFullName()%></p>
             </div>
@@ -308,6 +324,10 @@ private final int I_INIT_PAGE = 1;
                     java.util.Calendar cal2 = java.util.Calendar.getInstance();
                     cal2.setTime(new Date(System.currentTimeMillis()));
                     age = "" + calcularEdad(cal1, cal2);
+                }
+                if (age.toString().equals("0") || age.toString().equals(""))
+                {
+                    age = "No indicó el usuario";
                 }
             %>
             <p>Sexo:<%=gender%></p>
