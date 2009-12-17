@@ -13,7 +13,7 @@ import org.semanticwb.portal.indexer.parser.GenericParser;
 
 /**
  *
- * @author hasdai
+ * @author Hasdai Pacheco {haxdai@gmail.com}
  */
 public class DirectoryObjectParser extends GenericParser {
 
@@ -61,5 +61,21 @@ public class DirectoryObjectParser extends GenericParser {
         return SWBPortal.getWebWorkPath() + "/" + 
                 gen.getSemanticObject().getWorkPath() + "/" +
                 gen.getSemanticObject().getProperty(DirectoryObject.swbcomm_dirPhoto);
+    }
+
+    private WebPage getWebPage(Searchable gen) {
+        return ((DirectoryObject)gen).getWebPage();
+    }
+
+    @Override
+    public String getIndexCategory(Searchable gen)
+    {
+        String ret="";
+        WebPage page=getWebPage(gen);
+        if(page!=null)
+        {
+            ret=super.getIndexCategory(page);
+        }
+        return ret;
     }
 }
