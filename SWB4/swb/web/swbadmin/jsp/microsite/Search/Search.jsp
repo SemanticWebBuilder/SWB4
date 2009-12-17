@@ -102,7 +102,6 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                     getAddressString(so) +
                     "<br/><b>Contacto:</b> " + so.getProperty(Contactable.swbcomm_contactName) +
                     "<br/><b>Teléfono:</b> " + so.getProperty(Contactable.swbcomm_contactPhoneNumber);
-                //System.out.println(html);
                 objs.add(new GeoLocation(
                     so.getDoubleProperty(Geolocalizable.swb_latitude),
                     so.getDoubleProperty(Geolocalizable.swb_longitude),
@@ -304,34 +303,20 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                     if (usr_sex != null && (usr_sex.equalsIgnoreCase("female") || usr_sex.equalsIgnoreCase("f"))) usr_sex = "Mujer";
                     String perfilPath = wpage.getWebSite().getWebPage("perfil").getUrl();
                     String profile = "<a href=\"" + perfilPath + "?user=" + usr.getEncodedURI() + "\">Ver perfil</a>";
-                %>
+                    %>
                     <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
                     <img alt="<%=usr.getLogin()%>"src="<%=photo%>" height="95" width="95"/>
-                    <div class="listEntryInfo">
-                        <p class="tituloRojo">
-                            <%=usr.getFullName()%>
-                        </p>
-                        <%
-                        if (paramRequest.getUser().isRegistered() && paramRequest.getUser().isSigned()) {
-                        %>                            
-                            <p>
-                                <span class="itemTitle">Sexo: </span><%=usr_sex%>
-                            </p>
-                            <p>
-                                <span class="itemTitle">Edad: </span><%=(usr_ageTxt==0?"":usr_ageTxt)%>
-                            </p>
-                            <p class="vermas">
-                                <%=profile%>
-                            </p>
-                        <%
-                        } else {
-                        %>
-                            <p>Registrese para ver los datos del usuario</p>
-                        <%
-                        }
-                        %>
-                    </div>
-                    <div class="clear">&nbsp;</div>
+                        <div class="listEntryInfo">
+                            <p class="tituloRojo"><%=usr.getFullName()%></p>
+                            <%if (paramRequest.getUser().isRegistered() && paramRequest.getUser().isSigned()) {%>
+                                <p><span class="itemTitle">Sexo: </span><%=usr_sex%></p>
+                                <p><span class="itemTitle">Edad: </span><%=(usr_ageTxt==0?"":usr_ageTxt)%></p>
+                                <p class="vermas"><%=profile%></p>
+                            <%} else {%>
+                                <p>Registrese para ver los datos del usuario</p>
+                            <%}%>
+                        </div>
+                        <div class="clear">&nbsp;</div>
                     </div>
                 <%
                 } else if (obj.instanceOf(DirectoryObject.sclass)) {
@@ -344,57 +329,38 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                     User creator = c.getCreator();
                     String perfilPath = wpage.getWebSite().getWebPage("perfil").getUrl();
                     String profile = "<a href=\"" + perfilPath + "?user=" + creator.getEncodedURI() + "\">"+creator.getFullName()+"</a>";
-
-                    System.out.println(profile);
-                    %>
-                    <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
-                    <%
-                    
-                    String img="";
-                    if (obj.getProperty(DirectoryObject.swbcomm_dirPhoto) != null) {
-                        img = SWBPortal.getWebWorkPath() + "/" + obj.getWorkPath() + "/" + obj.getProperty(DirectoryObject.swbcomm_dirPhoto);
-                    }
-                    %>
-                        <%if(!img.equals("")){
-                            %><img height="95" alt="<%=c.getTitle()%>" width="95" src="<%=img%>"/><%
-                        } else {
-                            %><img height="95" alt="Imagen no disponible" width="95" src="<%=SWBPortal.getContextPath()%>/swbadmin/images/noDisponible.gif" /><%
+                    %><div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'"><%
+                        String img="";
+                        if (obj.getProperty(DirectoryObject.swbcomm_dirPhoto) != null) {
+                            img = SWBPortal.getWebWorkPath() + "/" + obj.getWorkPath() + "/" + obj.getProperty(DirectoryObject.swbcomm_dirPhoto);
                         }
                         %>
+                        <%if(!img.equals("")) {%>
+                            <img height="95" alt="<%=c.getTitle()%>" width="95" src="<%=img%>"/>
+                        <%} else {%>
+                            <img height="95" alt="Imagen no disponible" width="95" src="<%=SWBPortal.getContextPath()%>/swbadmin/images/noDisponible.gif" />
+                        <%}%>
                         <div class="listEntryInfo">
-                        <p class="tituloRojo"><%=c.getTitle()%>&nbsp;(<%=resultType%>)</p>
-                        <p>
-                           <%=(c.getDescription()==null)?"":c.getDescription()%>
-                        </p>
-                        <%
-                        if (obj.instanceOf(Addressable.swbcomm_Addressable)) {
-                            %>
-                            <p>
-                                <%=(getAddressString(obj).trim().equals(""))?"":getAddressString(obj)%>
-                            </p>
-                            <%
-                        }
-
-                        if (obj.instanceOf(Contactable.swbcomm_Contactable)) {
-                            SemanticClass obclass = obj.getSemanticClass();
-                            String email = obj.getProperty(obclass.getProperty("contactEmail"));
-                            String phone = obj.getProperty(obclass.getProperty("contactPhoneNumber"));
-                            String name = obj.getProperty(obclass.getProperty("contactName"));
-                            %>
-                            <p>
-                                <%=(phone==null)?"":"Tel.: " + phone%>
-                            </p>
-                            <p>
-                                <%=(name==null)?"":"Contacto: " + name + ((email==null)?"":"[" + email + "]")%>
-                            </p>
-                            <%
-                        }
-                        %>
-                        <p><%=(c.getCreator()==null?"":"<b>Creado por: </b>" + profile)%></p>
-                        <p><%=(c.getTags()==null?"":"<b>Palabras clave: </b>" + c.getTags())%></p>                       
-                        <p class="vermas"><a href ="<%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>">Ver mas</a></p>
-                    </div>
-                    <div class="clear"> </div>
+                            <p class="tituloRojo"><%=c.getTitle()%>&nbsp;(<%=resultType%>)</p>
+                            <p><%=(c.getDescription()==null)?"":c.getDescription()%></p>
+                            <%if (obj.instanceOf(Addressable.swbcomm_Addressable)) {%>
+                                <p><%=(getAddressString(obj).trim().equals(""))?"":getAddressString(obj)%></p>
+                            <%}
+                            if (obj.instanceOf(Contactable.swbcomm_Contactable)) {
+                                SemanticClass obclass = obj.getSemanticClass();
+                                String email = obj.getProperty(obclass.getProperty("contactEmail"));
+                                String phone = obj.getProperty(obclass.getProperty("contactPhoneNumber"));
+                                String name = obj.getProperty(obclass.getProperty("contactName"));
+                                %>
+                                <p><%=(phone==null)?"":"Tel.: " + phone%></p>
+                                <p><%=(name==null)?"":"Contacto: " + name + ((email==null)?"":"[" + email + "]")%></p>
+                                <%
+                            }%>
+                            <p><%=(c.getCreator()==null?"":"<b>Creado por: </b>" + profile)%></p>
+                            <p><%=(c.getTags()==null?"":"<b>Palabras clave: </b>" + c.getTags())%></p>
+                            <p class="vermas"><a href ="<%=c.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(c.getURI())%>">Ver mas</a></p>
+                        </div>
+                        <div class="clear"> </div>
                     </div>
                     <%
                 } else if (obj.instanceOf(EventElement.sclass)) {
@@ -403,20 +369,16 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                     String img="";
                     if (ev.getEventImage() != null) {
                         img = SWBPortal.getWebWorkPath() + "/" + obj.getWorkPath() + "/" + ev.getEventImage();
-                    }
-                    %>
+                    }%>
                     <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
-                        <%if(!img.equals("")){
-                            %><img height="95" alt="<%=ev.getTitle()%>" width="95" src="<%=img%>"/><%
-                        } else {
-                            %><img height="95" alt="Imagen no disponible" width="95" src="<%=SWBPortal.getContextPath()%>/swbadmin/images/noDisponible.gif" /><%
-                        }
-                        %>
+                        <%if(!img.equals("")) {%>
+                            <img height="95" alt="<%=ev.getTitle()%>" width="95" src="<%=img%>"/>
+                        <%} else {%>
+                            <img height="95" alt="Imagen no disponible" width="95" src="<%=SWBPortal.getContextPath()%>/swbadmin/images/noDisponible.gif" />
+                        <%}%>
                         <div class="listEntryInfo">
                             <p class="tituloRojo"><%=ev.getTitle()%>&nbsp;(<%=resultType%>)</p>
-                            <p>
-                                <%=(ev.getDescription()==null)?"":ev.getDescription()%>
-                            </p>
+                            <p><%=(ev.getDescription()==null)?"":ev.getDescription()%></p>
                             <p><%=(ev.getTags()==null?"":"<b>Palabras clave: </b>" + ev.getTags())%></p>
                             <p class="vermas"><a href ="<%=ev.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(ev.getURI())%>">Ver mas</a></p>
                         </div>
