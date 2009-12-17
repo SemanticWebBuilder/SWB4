@@ -195,7 +195,7 @@ public int calcularEdad(java.util.Calendar fechaNaci, java.util.Calendar fechaAl
                     }
                     /*if (user.getExtendedAttribute(mapa.get("userInciso")) != null)
                     {
-                        userInciso = "" + user.getExtendedAttribute(mapa.get("userInciso"));
+                    userInciso = "" + user.getExtendedAttribute(mapa.get("userInciso"));
                     }*/
                     if (sex.equalsIgnoreCase("male"))
                     {
@@ -224,10 +224,10 @@ public int calcularEdad(java.util.Calendar fechaNaci, java.util.Calendar fechaAl
                         cal2.setTime(new Date(System.currentTimeMillis()));
                         age = "" + calcularEdad(cal1, cal2);
                     }
-                    if (userStatus==null)
-                        {
-                        userStatus="";
-                        }
+                    if (userStatus == null)
+                    {
+                        userStatus = "";
+                    }
                     if (userStatus.equals("single"))
                     {
                         userStatus = "Soltero";
@@ -244,7 +244,11 @@ public int calcularEdad(java.util.Calendar fechaNaci, java.util.Calendar fechaAl
                     {
                         userStatus = "Viudo";
                     }
-                    
+                    if (age.toString().equals("0") || age.toString().equals(""))
+                    {
+                        age = "No indicó el usuario";
+                    }
+
 %>
 
 
@@ -260,13 +264,13 @@ public int calcularEdad(java.util.Calendar fechaNaci, java.util.Calendar fechaAl
 %>
 <div class="resumenText">
     <p><span class="itemTitle">Nombre:</span>&nbsp;<%=user.getFullName()%></p>
-    <p><span class="itemTitle">Edad:</span> &nbsp;<%=age%> años</p>
+    <p><span class="itemTitle">Edad:</span> &nbsp;<%=age%></p>
     <p><span class="itemTitle">Sexo:</span> <%=sex%></p>
     <%
 
                     if (owner == user || areFriends)
                     { //Agregar datos privados (email, s fotos, etc)
-%>
+    %>
     <%
                         if (user.getEmail() != null && !user.getEmail().trim().equals(""))
                         {
