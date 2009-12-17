@@ -77,25 +77,28 @@ public class ImageGallery extends GenericResource {
             webWorkPath = SWBPortal.getWebWorkPath() +  base.getWorkPath() + "/";
             
             // Si no existen thumbnails se crean
+            int width;
             try {
-                int width = Integer.parseInt(base.getAttribute("width"));
-                Iterator<String> it = base.getAttributeNames();
-                while(it.hasNext()) {
-                    String attname = it.next();
-                    String attval = base.getAttribute(attname);
-                    if( attname.startsWith("imggallery_") && attval!=null ) {
-                        String fn = attval.substring(attval.lastIndexOf("/")+1);
-                        File img = new File(workPath + fn);
-                        File thumbnail = new File(workPath + _thumbnail + fn);
-                        if( !thumbnail.exists() ) {
-                            try {
-                                ImageResizer.resizeCrop(img, width , thumbnail, "jpeg");
-                            }catch(IOException ioe) {
-                            }
+                width = Integer.parseInt(base.getAttribute("width"));
+            }catch(Exception e) {
+                width = 180;
+            }
+            Iterator<String> it = base.getAttributeNames();
+            while(it.hasNext()) {
+                String attname = it.next();
+                String attval = base.getAttribute(attname);
+                if( attname.startsWith("imggallery_") && attval!=null ) {
+                    String fn = attval.substring(attval.lastIndexOf("/")+1);
+                    File img = new File(workPath + fn);
+                    File thumbnail = new File(workPath + _thumbnail + fn);
+                    if( !thumbnail.exists() ) {
+                        try {
+                            ImageResizer.resizeCrop(img, width , thumbnail, "jpeg");
+                        }catch(IOException ioe) {
+                            log.error("Error while setting thumbnail for image: "+img+" in resource "   +base.getId() +"-"+ base.getTitle(), ioe);
                         }
                     }
                 }
-            }catch(Exception e) {
             }
         }
         catch(Exception e) { 
@@ -704,7 +707,6 @@ ret.append("\n  </tr> ");
         out.append("<div class=\"swb-galeria\"> ");
         out.append("<div class=\"title\">"+ title +"</div> ");
         out.append("<div id=\"imggallery_"+ oid +"\" style=\"position:relative; visibility:hidden\"></div> ");
-        out.append("</div> ");
         out.append("</div>\n");
 
         return out.toString();
