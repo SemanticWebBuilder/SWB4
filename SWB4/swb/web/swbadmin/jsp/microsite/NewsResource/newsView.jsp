@@ -238,7 +238,7 @@
                         }
     %>
     <div class="noticia">
-        <img src="<%= pathPhoto%>" alt="<%= anew.getTitle()%>"/>
+        <img src="<%= pathPhoto%>" alt="<%= anew.getTitle()%>" width="150" height="150"/>
         <div class="noticiaTexto">
             <h2>
                 <script type="text/javascript">
