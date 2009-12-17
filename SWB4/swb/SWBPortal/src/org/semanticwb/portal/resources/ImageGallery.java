@@ -477,7 +477,7 @@ ret.append("\n  </tr> ");
             ret.append("\nfunction addRowToTable(tblId, filename, img, cellSufix) { ");
             ret.append("\n    var tbl = document.getElementById(tblId); ");
             ret.append("\n    var lastRow = tbl.rows.length; ");
-            ret.append("\n    var iteration = lastRow; ");
+            ret.append("\n    var iteration = lastRow-1; // descontar el renglon de titulo ");
             ret.append("\n    var row = tbl.insertRow(lastRow); ");
             ret.append("\n    row.style.backgroundColor = '#F4F4DD'; ");
             ret.append("\n ");
