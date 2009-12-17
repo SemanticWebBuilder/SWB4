@@ -9,6 +9,21 @@
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%!    private static final int ELEMENETS_BY_PAGE = 5;
 %>
+<%!
+
+public int calcularEdad(java.util.Calendar fechaNaci, java.util.Calendar fechaAlta){
+
+        int diff_año =fechaAlta.get(java.util.Calendar.YEAR)-
+        fechaNaci.get(java.util.Calendar.YEAR);
+        int diff_mes = fechaAlta.get(java.util.Calendar.MONTH)- fechaNaci.get(java.util.Calendar.MONTH);
+        int diff_dia = fechaAlta.get(java.util.Calendar.DATE)-fechaNaci.get(java.util.Calendar.DATE);
+        if(diff_mes<0 ||(diff_mes==0 && diff_dia<0)){
+            diff_año =diff_año-1;
+        }
+        return diff_año;
+    }
+
+%>
 <%
             User owner = paramRequest.getUser();
             User user = owner;
@@ -207,14 +222,31 @@
                                 perfilurl += "?user=" + java.net.URLEncoder.encode(request.getParameter("user"));
                             }
                             String usr_sex = (String) userRequester.getExtendedAttribute(mapa.get("userSex"));
-                            Object usr_age = (Object) userRequester.getExtendedAttribute(mapa.get("userAge"));
+                            
                             if (usr_sex == null)
                             {
                                 usr_sex = "No indicó el usuario su sexo";
                             }
-                            if (null == usr_age)
+                            String age = "";
+                            if (userRequester.getExtendedAttribute(mapa.get("userBirthDate")) != null)
                             {
-                                usr_age = "";
+                                age = "" + userRequester.getExtendedAttribute(mapa.get("userBirthDate"));
+                            }
+
+                            if (age == null)
+                            {
+                                age = "Sin edad";
+                            }
+                            if (!age.equals(""))
+                            {
+                                java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                                Date date = df.parse(age.toString());
+                                java.util.Calendar cal1 = java.util.Calendar.getInstance();
+                                cal1.setTime(date);
+
+                                java.util.Calendar cal2 = java.util.Calendar.getInstance();
+                                cal2.setTime(new Date(System.currentTimeMillis()));
+                                age = "" + calcularEdad(cal1, cal2);
                             }
                             if ("M".equals(usr_sex))
                             {
@@ -224,9 +256,9 @@
                             {
                                 usr_sex = "Mujer";
                             }
-                            if (usr_age.toString().equals("0") || usr_age.toString().equals(""))
+                            if (age.toString().equals("0") || age.toString().equals(""))
                             {
-                                usr_age = "No indicó el usuario";
+                                age = "No indicó el usuario";
                             }
 
     %>
@@ -250,7 +282,7 @@
                 <p><%=userRequester.getFullName()%></p>
             </div>
             <p>Sexo:<%=usr_sex%></p>
-            <p>Edad:<%=usr_age%></p>
+            <p>Edad:<%=age%></p>
             <%urlAction.setAction("acceptfriend");%>
             <p><a href="<%=urlAction%>">[Aceptar]</a></p>
             <%urlAction.setAction("noacceptfriend");%>

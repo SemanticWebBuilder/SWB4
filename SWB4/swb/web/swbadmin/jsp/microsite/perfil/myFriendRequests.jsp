@@ -261,7 +261,7 @@ public int calcularEdad(java.util.Calendar fechaNaci, java.util.Calendar fechaAl
                             {
                                 age = "" + userRequested.getExtendedAttribute(mapa.get("userBirthDate"));
                             }
-                            //Object age = (Object) userRequested.getExtendedAttribute(mapa.get("userBirthDate"));
+                            
                             if (age == null)
                             {
                                 age = "Sin edad";
