@@ -3715,12 +3715,13 @@ public class SWBUtils {
         }
 
         public static long sizeOf(Iterator it) {
-            long size = 0;
+            /*long size = 0;
             while (it.hasNext()) {
                 it.next();
                 size++;
             }
-            return size;
+            return size;*/
+            return Collections.sizeOf(it);
         }
 
     }
