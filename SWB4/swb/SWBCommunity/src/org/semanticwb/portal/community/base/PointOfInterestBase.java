@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public abstract class PointOfInterestBase extends org.semanticwb.portal.community.DirectoryObject implements org.semanticwb.model.Rankable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.portal.community.Interactiveable,org.semanticwb.model.Tagable,org.semanticwb.model.Searchable
+public abstract class PointOfInterestBase extends org.semanticwb.portal.community.Organization implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.portal.community.Contactable,org.semanticwb.portal.community.Interactiveable,org.semanticwb.portal.community.Claimable,org.semanticwb.model.Geolocalizable,org.semanticwb.portal.community.Addressable,org.semanticwb.model.Rankable,org.semanticwb.model.Tagable,org.semanticwb.model.Searchable
 {
        public static final org.semanticwb.platform.SemanticClass swbcomm_PointOfInterest=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#PointOfInterest");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#PointOfInterest");
@@ -114,6 +114,17 @@ public abstract class PointOfInterestBase extends org.semanticwb.portal.communit
    public static java.util.Iterator<org.semanticwb.portal.community.PointOfInterest> listPointOfInterestByComment(org.semanticwb.portal.community.Comment hascomment)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.PointOfInterest> it=new org.semanticwb.model.GenericIterator(hascomment.getSemanticObject().getModel().listSubjects(swbcomm_hasComment,hascomment.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.portal.community.PointOfInterest> listPointOfInterestByClaimer(org.semanticwb.model.User claimer,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.PointOfInterest> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_claimer, claimer.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.PointOfInterest> listPointOfInterestByClaimer(org.semanticwb.model.User claimer)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.PointOfInterest> it=new org.semanticwb.model.GenericIterator(claimer.getSemanticObject().getModel().listSubjects(swbcomm_claimer,claimer.getSemanticObject()));
        return it;
    }
     }
