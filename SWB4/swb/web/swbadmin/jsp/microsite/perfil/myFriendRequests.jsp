@@ -10,7 +10,21 @@
 <%!    private static final int ELEMENETS_BY_PAGE = 5;
 %>
 
+<%!
 
+public int calcularEdad(java.util.Calendar fechaNaci, java.util.Calendar fechaAlta){
+
+        int diff_año =fechaAlta.get(java.util.Calendar.YEAR)-
+        fechaNaci.get(java.util.Calendar.YEAR);
+        int diff_mes = fechaAlta.get(java.util.Calendar.MONTH)- fechaNaci.get(java.util.Calendar.MONTH);
+        int diff_dia = fechaAlta.get(java.util.Calendar.DATE)-fechaNaci.get(java.util.Calendar.DATE);
+        if(diff_mes<0 ||(diff_mes==0 && diff_dia<0)){
+            diff_año =diff_año-1;
+        }
+        return diff_año;
+    }
+
+%>
 
 <%
             User owner = paramRequest.getUser();
@@ -39,11 +53,11 @@
             {
                 isStrategy = true;
             }
-            
-            
 
-            HashMap<String,User> elements = new HashMap();
-            
+
+
+            HashMap<String, User> elements = new HashMap();
+
 
 
             Iterator<FriendshipProspect> itFriendshipProspect = FriendshipProspect.ClassMgr.listFriendshipProspectByFriendShipRequester(owner, wpage.getWebSite());
@@ -51,10 +65,10 @@
             {
                 FriendshipProspect friendshipProspect = itFriendshipProspect.next();
                 User userRequested = friendshipProspect.getFriendShipRequested();
-                elements.put(userRequested.getURI(),userRequested);            
-            }      
-            int elementos=elements.size();
-            boolean hasRequest = elements.size()>0;
+                elements.put(userRequested.getURI(), userRequested);
+            }
+            int elementos = elements.size();
+            boolean hasRequest = elements.size() > 0;
             int paginas = elementos / ELEMENETS_BY_PAGE;
             if (elementos % ELEMENETS_BY_PAGE != 0)
             {
@@ -117,52 +131,52 @@
 
 
     <%
-            String nextURL = "#";
-            String previusURL = "#";
-            if (ipage < paginas)
-            {
-                nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
-            }
-            if (ipage > 1)
-            {
-                previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
-            }
-            if (ipage > 1)
-            {
+                String nextURL = "#";
+                String previusURL = "#";
+                if (ipage < paginas)
+                {
+                    nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
+                }
+                if (ipage > 1)
+                {
+                    previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
+                }
+                if (ipage > 1)
+                {
     %>
     <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"/></a>
         <%
-            }
-            for (int i = 1; i <= paginas; i++)
-            {
+                }
+                for (int i = 1; i <= paginas; i++)
+                {
         %>
     <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%
-                if (i == ipage)
-                {
+                    if (i == ipage)
+                    {
         %>
         <strong>
             <%                            }
             %>
             <%=i%>
             <%
-                if (i == ipage)
-                {
+                    if (i == ipage)
+                    {
             %>
         </strong>
         <%                            }
         %></a>
     <%
-            }
+                }
     %>
 
 
     <%
-            if (ipage != paginas)
-            {
+                if (ipage != paginas)
+                {
     %>
     <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"/></a>
         <%
-            }
+                }
         %>
 </div>
 <%
@@ -178,16 +192,15 @@
 
 <h2>Mis solicitudes</h2>
 <%
-if (!hasRequest)
-    {
-        %>
-        <ul class="listaElementos">
+                if (!hasRequest)
+                {
+%>
+<ul class="listaElementos">
     <li>
         <a class="contactos_nombre" href="#">No has solicitado personas que se unan a ti como amigos.</a>
     </li>
 </ul>
-        <%
-    }
+<%                }
             }
 %>
 
@@ -198,68 +211,84 @@ if (!hasRequest)
 
 
 <%
-            //itFriendshipProspect = FriendshipProspect.ClassMgr.listFriendshipProspectByFriendShipRequester(owner, wpage.getWebSite());
-            if (!isStrategy)
-            {
+                //itFriendshipProspect = FriendshipProspect.ClassMgr.listFriendshipProspectByFriendShipRequester(owner, wpage.getWebSite());
+                if (!isStrategy)
+                {
 %>
 <div id="friendCards">
     <%                }
-            int iElement = 0;
-            Collection<User> users=elements.values();
-            for (User userRequested : users)
-            {
-                iElement++;
-                if (iElement > fin)
+                int iElement = 0;
+                Collection<User> users = elements.values();
+                for (User userRequested : users)
                 {
-                    break;
-                }
-                if (iElement >= inicio && iElement <= fin)
-                {
-                    photo = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/perfil/profilePlaceholder.jpg";
-                    if (userRequested.getPhoto() != null)
+                    iElement++;
+                    if (iElement > fin)
                     {
-                        photo = SWBPortal.getWebWorkPath() + userRequested.getPhoto();
+                        break;
                     }
-                    urlAction.setParameter("user", userRequested.getURI());
-                    if (!isStrategy)
+                    if (iElement >= inicio && iElement <= fin)
                     {
-                        String path = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSite().getId() + "/css/images/";
-                        String urluser = java.net.URLEncoder.encode(userRequested.getURI());
-                        String email = userRequested.getEmail();
-                        HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
-                        Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#_ExtendedAttributes").listProperties();
-                        while (list.hasNext())
+                        photo = SWBPortal.getContextPath() + "/swbadmin/jsp/microsite/perfil/profilePlaceholder.jpg";
+                        if (userRequested.getPhoto() != null)
                         {
-                            SemanticProperty prop = list.next();
-                            mapa.put(prop.getName(), prop);
+                            photo = SWBPortal.getWebWorkPath() + userRequested.getPhoto();
                         }
-                        String perfilurl = paramRequest.getWebPage().getWebSite().getWebPage("perfil").getUrl();
-                        if (request.getParameter("user") != null)
+                        urlAction.setParameter("user", userRequested.getURI());
+                        if (!isStrategy)
                         {
-                            perfilurl += "?user=" + java.net.URLEncoder.encode(request.getParameter("user"));
-                        }
-                        String usr_sex = (String) userRequested.getExtendedAttribute(mapa.get("userSex"));
-                        if (usr_sex == null)
-                        {
-                            usr_sex = "No indicó el usuario su sexo";
-                        }
-                        Object usr_age = (Object) userRequested.getExtendedAttribute(mapa.get("userAge"));
-                        if (null == usr_age)
-                        {
-                            usr_age = "";
-                        }
-                        if ("M".equals(usr_sex))
-                        {
-                            usr_sex = "Hombre";
-                        }
-                        if ("F".equals(usr_sex))
-                        {
-                            usr_sex = "Mujer";
-                        }
-                        if (usr_age.toString().equals("0") || usr_age.toString().equals(""))
-                        {
-                            usr_age = "No indicó el usuario";
-                        }
+                            String path = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSite().getId() + "/css/images/";
+                            String urluser = java.net.URLEncoder.encode(userRequested.getURI());
+                            String email = userRequested.getEmail();
+                            HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
+                            Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#_ExtendedAttributes").listProperties();
+                            while (list.hasNext())
+                            {
+                                SemanticProperty prop = list.next();
+                                mapa.put(prop.getName(), prop);
+                            }
+                            String perfilurl = paramRequest.getWebPage().getWebSite().getWebPage("perfil").getUrl();
+                            if (request.getParameter("user") != null)
+                            {
+                                perfilurl += "?user=" + java.net.URLEncoder.encode(request.getParameter("user"));
+                            }
+                            String usr_sex = (String) userRequested.getExtendedAttribute(mapa.get("userSex"));
+                            if (usr_sex == null)
+                            {
+                                usr_sex = "No indicó el usuario su sexo";
+                            }
+                            String age = "";
+                            if (userRequested.getExtendedAttribute(mapa.get("userBirthDate")) != null)
+                            {
+                                age = "" + userRequested.getExtendedAttribute(mapa.get("userBirthDate"));
+                            }
+                            //Object age = (Object) userRequested.getExtendedAttribute(mapa.get("userBirthDate"));
+                            if (age == null)
+                            {
+                                age = "Sin edad";
+                            }
+                            if (!age.equals(""))
+                            {
+                                java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                                Date date = df.parse(age.toString());
+                                java.util.Calendar cal1 = java.util.Calendar.getInstance();
+                                cal1.setTime(date);
+
+                                java.util.Calendar cal2 = java.util.Calendar.getInstance();
+                                cal2.setTime(new Date(System.currentTimeMillis()));
+                                age = "" + calcularEdad(cal1, cal2);
+                            }
+                            if ("M".equals(usr_sex))
+                            {
+                                usr_sex = "Hombre";
+                            }
+                            if ("F".equals(usr_sex))
+                            {
+                                usr_sex = "Mujer";
+                            }
+                            if (age.toString().equals("0") || age.toString().equals(""))
+                            {
+                                age = "No indicó el usuario";
+                            }
 
     %>
 
@@ -281,25 +310,25 @@ if (!hasRequest)
                 <p><%=userRequested.getFullName()%></p>
             </div>
             <p>Sexo:<%=usr_sex%></p>
-            <p>Edad:<%=usr_age%></p>
+            <p>Edad:<%=age%></p>
             <%urlAction.setAction("removeRequest");%>
             <p><a href="<%=urlAction%>">[Eliminar solicitud]</a></p>
         </div>
     </div>
 
     <%
-                    }                    
+                        }
+                    }
                 }
-            }
-            if (!isStrategy)
-            {
+                if (!isStrategy)
+                {
     %>
 </div>
 
-    
+
 <%                }
-            if (isStrategy && elementos > 0)
-            {
+                if (isStrategy && elementos > 0)
+                {
 %>
 
 <%
@@ -330,9 +359,9 @@ if (!hasRequest)
 %>
 
 <%
-        }
-        else
-        {
+            }
+            else
+            {
 %>
 <!-- <ul class="listaElementos">
     <li>
