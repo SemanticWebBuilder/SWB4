@@ -76,25 +76,27 @@ public class ImageGallery extends GenericResource {
             workPath = SWBPortal.getWorkPath() +  base.getWorkPath() + "/";
             webWorkPath = SWBPortal.getWebWorkPath() +  base.getWorkPath() + "/";
             
-            // Si no existe el thumbnail se crea
-            int width = Integer.parseInt(base.getAttribute("width"));
-            Iterator<String> it = base.getAttributeNames();
-            while(it.hasNext()) {
-                String attname = it.next();
-                String attval = base.getAttribute(attname);
-                if( attname.startsWith("imggallery_") && attval!=null ) {
-                    String fn = attval.substring(attval.lastIndexOf("/")+1);
-                    File img = new File(workPath + fn);
-                    File thumbnail = new File(workPath + _thumbnail + fn);
-                    if( !thumbnail.exists() ) {
-                        try {
-                            ImageResizer.resizeCrop(img, width , thumbnail, "jpeg");
-                        }catch(IOException ioe) {
+            // Si no existen thumbnails se crean
+            try {
+                int width = Integer.parseInt(base.getAttribute("width"));
+                Iterator<String> it = base.getAttributeNames();
+                while(it.hasNext()) {
+                    String attname = it.next();
+                    String attval = base.getAttribute(attname);
+                    if( attname.startsWith("imggallery_") && attval!=null ) {
+                        String fn = attval.substring(attval.lastIndexOf("/")+1);
+                        File img = new File(workPath + fn);
+                        File thumbnail = new File(workPath + _thumbnail + fn);
+                        if( !thumbnail.exists() ) {
+                            try {
+                                ImageResizer.resizeCrop(img, width , thumbnail, "jpeg");
+                            }catch(IOException ioe) {
+                            }
                         }
                     }
                 }
+            }catch(Exception e) {
             }
-            
         }
         catch(Exception e) { 
             log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);
@@ -187,7 +189,6 @@ public class ImageGallery extends GenericResource {
         out.append("<div class=\"swb-galeria_"+base.getId()+"\"> ");
         out.append("<div class=\"title_"+base.getId()+"\">"+ title +"</div> ");
         out.append("<div id=\"imggallery_"+ oid +"\" style=\"position:relative; visibility:hidden\"></div> ");
-        out.append("</div> ");
         out.append("</div>\n");
 
         return out.toString();
@@ -415,7 +416,7 @@ ret.append("\n</fieldset> ");
 
 ret.append("\n  <tr bgcolor=\"#E1EAF7\"> ");
 ret.append("\n    <td align=\"center\" colspan=\"4\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_imggrid") + "</td> ");
-ret.append("\n    <td align=\"right\">");
+ret.append("\n    <td align=\"center\">");
 ret.append("\n    <input type=\"button\" value=\"Agregar\" onclick=\"addRowToTable('igtbl_"+base.getId()+"');\" />&nbsp;  ");
 ret.append("\n    <input type=\"button\" value=\"Cancelar\" onclick=\"removeRowFromTable('igtbl_"+base.getId()+"');\"/></td> ");
 ret.append("\n    </td>");
