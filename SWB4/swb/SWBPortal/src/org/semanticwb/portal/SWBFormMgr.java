@@ -90,6 +90,8 @@ public class SWBFormMgr
 
     private boolean submitByAjax=false;
 
+    private ArrayList<SemanticProperty> removed=null;
+
     public static String DOJO_REQUIRED=
         "    <script type=\"text/javascript\">"+"\n"+
         "      // scan page for widgets and instantiate them"+"\n"+
@@ -152,6 +154,7 @@ public class SWBFormMgr
         groups=new HashMap();
         hidden=new HashMap();
         buttons=new ArrayList();
+        removed=new ArrayList();
         Iterator<SemanticProperty> it=m_cls.listProperties();
         while(it.hasNext())
         {
@@ -159,6 +162,11 @@ public class SWBFormMgr
             //System.out.println("add:"+prop);
             addProperty(prop,filterRequired);
         }
+    }
+
+    public void hideProperty(SemanticProperty prop)
+    {
+        removed.add(prop);
     }
 
     public HashMap<PropertyGroup, TreeSet> getGroups()
@@ -593,6 +601,7 @@ public class SWBFormMgr
      */
     public void renderProp(HttpServletRequest request, StringBuffer ret, SemanticProperty prop, FormElement ele, String mode)
     {
+        if(removed.contains(prop))return;
         String label=null;
         String element=null;
         boolean hidden=false;
