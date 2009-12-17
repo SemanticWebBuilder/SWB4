@@ -275,7 +275,7 @@
             });
         </script>
         <a href="<%=imgPhoto%>" id="aimg_<%=iElement + base.getId()%>" title="<%= photo.getTitle()%>" >
-            <img id="img_<%=iElement + base.getId()%>" src="<%=pathPhoto%>" alt="<%= photo.getTitle()%>" width="140" height="140" />
+            <img id="img_<%=iElement + base.getId()%>" src="<%=pathPhoto%>" alt="<%= photo.getTitle()%>" width="150" height="150" />
         </a>
         <div class="noticiaTexto">
             <h2>
