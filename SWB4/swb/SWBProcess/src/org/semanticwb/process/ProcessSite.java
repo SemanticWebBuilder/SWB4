@@ -7,4 +7,9 @@ public class ProcessSite extends org.semanticwb.process.base.ProcessSiteBase
     {
         super(base);
     }
+
+    public boolean isValid()
+    {
+        return true;
+    }
 }
