@@ -88,7 +88,6 @@
 <%
 if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
     if (results != null && results.size() > 0) {
-
         String resultType = "";
         //Get all DirectoryObject's GeoLocations as arrayList
         ArrayList<GeoLocation> objs = new ArrayList<GeoLocation>();
@@ -319,16 +318,21 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                         <div class="clear">&nbsp;</div>
                     </div>
                 <%
-                } else if (obj.instanceOf(DirectoryObject.sclass)) {
+                } else if (obj.instanceOf(DirectoryObject.sclass)) {                    
                     resultType = "Clasificado";
                     if (obj.instanceOf(Organization.sclass)) {
+                        //System.out.println("----___ORGANIZACION");
                         resultType = "Organizaci&oacute;n";
                     }
                     DirectoryObject c = (DirectoryObject) obj.createGenericInstance();
 
-                    User creator = c.getCreator();
+                    User creator = c.getCreator();                    
+                    String fName = creator.getFullName();
+                    //System.out.println("::::::");
+                    if (fName == null) fName="";
                     String perfilPath = wpage.getWebSite().getWebPage("perfil").getUrl();
-                    String profile = "<a href=\"" + perfilPath + "?user=" + creator.getEncodedURI() + "\">"+creator.getFullName()+"</a>";
+                    String profile = "<a href=\"" + perfilPath + "?user=" + creator.getEncodedURI() + "\">"+fName+"</a>";
+                    
                     %><div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'"><%
                         String img="";
                         if (obj.getProperty(DirectoryObject.swbcomm_dirPhoto) != null) {
@@ -420,18 +424,16 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                     </div>
                     <%
                 } else if (obj.instanceOf(WebPage.sclass)) {
-                    resultType="Página Web";
+                    resultType="Sección";
                     WebPage wp = (WebPage)obj.createGenericInstance();
                     %>
                     <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
                         <img height="95" alt="Imagen no disponible" width="95" src="<%=SWBPortal.getContextPath()%>/swbadmin/images/noDisponible.gif" />
                         <div class="listEntryInfo">
                             <p class="tituloRojo"><%=wp.getTitle()%>&nbsp;(<%=resultType%>)</p>
-                            <p>
-                                <%=(wp.getDescription()==null)?"":wp.getDescription()%>
-                            </p>
+                            <p><%=(wp.getDescription()==null)?"":wp.getDescription()%></p>
                             <p><%=(wp.getTags()==null?"":"<b>Palabras clave: </b>" + wp.getTags())%></p>
-                            <p class="vermas"><a href ="<%=wp.getUrl()%>">Ver mas</a></p>
+                            <p class="vermas"><a href ="<%=wp.getUrl()%>">Ir a secci&oacute;n</a></p>
                         </div>
                         <div class="clear"> </div>
                     </div>
