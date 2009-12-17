@@ -22,7 +22,6 @@
 <%@page import="org.semanticwb.model.Descriptiveable"%>
 <%@page import="org.semanticwb.platform.SemanticClass"%>
 <%@page import="org.semanticwb.platform.SemanticLiteral"%>
-<%@page import="org.semanticwb.portal.SWBFormMgr"%>
 <%@page import="org.semanticwb.model.FormElement"%>
 <%@page import="org.semanticwb.portal.SWBFormButton"%>
 <%@page import="org.semanticwb.portal.community.*"%>
@@ -31,11 +30,13 @@
 <%
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
+            
             if (semObject == null)
             {
                 response.sendError(404);
                 return;
             }
+
             WebPage wpage = paramRequest.getWebPage();
             User user = paramRequest.getUser();
             String lang = "es";
@@ -236,8 +237,7 @@
             urlEdit.setParameter("uri", dirObj.getURI());
             if (user.isRegistered() && user.isSigned())
             {
-                UserGroup group = user.getUserRepository().getUserGroup("admin");
-                if ((dirObj.getCreator() != null && dirObj.getCreator().getURI().equals(user.getURI())) || group != null && user.hasUserGroup(group))
+                if ((dirObj.getCreator() != null && dirObj.getCreator().getURI().equals(user.getURI())) || isAdmin)
                 {
         %>
         <a class="adminTool" href="<%=removeUrl%>"><%=paramRequest.getLocaleString("remove")%></a>
@@ -248,29 +248,26 @@
 
     User claimer = null;
     String claimJustify = "";
-    if (dirObj.isClaimed())
-    {
-        claimer = (User) semObject.getObjectProperty(Claimable.swbcomm_claimer).createGenericInstance();
-        claimJustify = semObject.getProperty(Claimable.swbcomm_claimJustify);
-        if (isAdmin || dirObj.getCreator().getURI().equals(user.getURI()))
-        {
-            SWBResourceURL aUrl = paramRequest.getActionUrl().setParameter("act", "accept").setParameter("uri", request.getParameter("uri"));
-            SWBResourceURL cUrl = paramRequest.getActionUrl().setParameter("act", "reject").setParameter("uri", request.getParameter("uri"));
-        %>
-        <a class="adminTool" href="<%=aUrl.toString(true)%>">Aceptar reclamo</a>
-        <a class="adminTool" href="<%=cUrl.toString(true)%>">Rechazar reclamo</a>
-        <%
-    }
-    else if (claimer.equals(user))
-    {
-        SWBResourceURL fUrl = paramRequest.getActionUrl().setParameter("act", "unclaim").setParameter("uri", request.getParameter("uri"));
-        %><a class="adminTool" href="<%=fUrl.toString(true)%>">Liberar elemento</a><%
-    }
-}
-else if (dirObj.canClaim(user) && !isAdmin)
-{
-        %><a class="adminTool" href="#" onclick="javascript:showClaimForm();">Reclamar elemento</a><%            }
+    if (dirObj.isClaimable()) {
+        if (dirObj.isClaimed()){
+            claimer = (User)dirObj.getSemanticObject().getObjectProperty(Claimable.swbcomm_claimer).createGenericInstance();
+            claimJustify = dirObj.getSemanticObject().getProperty(Claimable.swbcomm_claimJustify);
 
+            if (isAdmin || dirObj.getCreator().equals(user)) {
+                SWBResourceURL aUrl = paramRequest.getActionUrl().setParameter("act", "accept").setParameter("uri", request.getParameter("uri"));
+                SWBResourceURL cUrl = paramRequest.getActionUrl().setParameter("act", "reject").setParameter("uri", request.getParameter("uri"));
+                %>
+                <a class="adminTool" href="<%=aUrl.toString(true)%>">Aceptar reclamo</a>
+                <a class="adminTool" href="<%=cUrl.toString(true)%>">Rechazar reclamo</a>
+                <%
+            } else if (claimer.equals(user)) {
+                SWBResourceURL fUrl = paramRequest.getActionUrl().setParameter("act", "unclaim").setParameter("uri", request.getParameter("uri"));
+                %><a class="adminTool" href="<%=fUrl.toString(true)%>">Liberar elemento</a><%
+            }
+        } else if (dirObj.canClaim(user) && !isAdmin) {
+            %><a class="adminTool" href="#" onclick="javascript:showClaimForm();">Reclamar elemento</a><%
+        }
+    } 
     SWBResourceURL aUrl = paramRequest.getActionUrl();//.setParameter("uri", request.getParameter("uri"));
 %>
     </div>
