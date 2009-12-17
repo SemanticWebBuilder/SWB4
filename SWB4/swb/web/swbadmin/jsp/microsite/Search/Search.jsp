@@ -10,13 +10,6 @@
     if (paramRequest.getUser().getLanguage() != null) {
         lang = paramRequest.getUser().getLanguage();
     }
-    String imgDefaultPath = "/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg";
-
-    /*Iterator<SemanticObject>rit = allRes.iterator();
-    while(rit.hasNext()) {
-        System.out.println("---Encontrado " + rit.next().getDisplayName());
-    }*/
-    //System.out.println("what: " + what);
 %>
 
 <%!
@@ -58,6 +51,7 @@
         document.getElementById("catLabel").innerHTML = catLabel;
     }
 </script>
+
 <div class="twoColContent">
 <div id="busquedaAvanzada">
       	<div class="buscador" id="busquedaPalabraClave">
