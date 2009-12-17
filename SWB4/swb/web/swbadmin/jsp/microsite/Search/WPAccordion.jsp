@@ -11,6 +11,59 @@
 
     boolean showChilds = Boolean.valueOf(paramRequest.getArgument("showchilds", "true"));
     %>
+    <script type="text/javascript">
+    function setSearchClass(what) {
+        document.getElementById("what").value = what;
+        var catLabel = "Todas";
+        if (what == "Clasified") catLabel = "Clasificados";
+        if (what == "") catLabel = "Todas";
+        if (what == "Member") catLabel = "Personas";
+        if (what == "Organization") catLabel = "Organizaciones";
+        if (what == "MicroSite") catLabel = "Comunidades";
+        document.getElementById("catLabel").innerHTML = catLabel;
+    }
+
+    function setSearchCategory(what) {
+        document.getElementById("scategory").value = what;
+        if (what == "Sitios_de_Interes") catLabel = "Lugares";
+        if (what == "Servicios") catLabel = "Servicios";
+        document.getElementById("catLabel").innerHTML = catLabel;
+    }
+</script>
+
+<div class="twoColContent">
+<div id="busquedaAvanzada">
+      	<div class="buscador" id="busquedaPalabraClave">
+            <form id="busquedaKeyWords" method="get" action="<%=paramRequest.getWebPage().getWebSite().getWebPage("Busqueda").getUrl()%>" >
+          	    <div>
+                <label for="buscadorKeywords">Busca por palabra clave</label>
+                <input type="text" name="q" id="buscadorKeywords" value="B&uacute;squeda por palabra clave" />
+                <label for="buscarKeywords">Buscar</label>
+                <input type="submit" id="buscarKeywords" value="Buscar" />
+                <input type="hidden" name="what" id="what" value="All"/>
+                <input type="hidden" name="scategory" id="scategory" value=""/>
+              </div>
+            </form>
+          </div>
+          <ul id="MenuBar3" class="MenuBarHorizontal">
+	  <li class="selectTitle"><p id="catLabel">Categor&iacute;a</p>
+              <ul>                  
+	      <li><a onclick="setSearchClass('');">Todas</a></li>
+	      <li><a onclick="setSearchCategory('Sitios_de_Interes');">Lugares</a></li>
+              <li><a onclick="setSearchClass('Member');">Personas</a></li>
+              <li><a onclick="setSearchCategory('Servicios');" >Servicios</a></li>
+              <li><a onclick="setSearchClass('Organization');">Organizaciones</a></li>
+              <li><a onclick="setSearchClass('Clasified');">Clasificados</a></li>
+              <li><a onclick="setSearchClass('MicroSite');">Comunidades</a></li>
+              </ul>
+	  </li>
+	</ul>
+        </div>
+</div>
+<script type="text/javascript">
+    var MenuBar3 = new Spry.Widget.MenuBar("MenuBar3");
+</script>
+<br/>
     <div id="Accordion1" class="Accordion">
     <%
     if (showChilds) {
