@@ -266,7 +266,7 @@ public class Search extends GenericAdmResource {
             query.addTerm(new SearchTerm(SWBIndexer.ATT_CATEGORY, category, SearchTerm.OPER_AND));
         }
 
-        if(!scope.trim().contains("")) {
+        if(!scope.trim().equals("")) {
             //System.out.println("---Filtrando por categoría " + category);
             query.addTerm(new SearchTerm(SWBIndexer.ATT_MODEL, scope, SearchTerm.OPER_AND));
         }
