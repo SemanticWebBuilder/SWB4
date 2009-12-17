@@ -247,6 +247,7 @@ public class Search extends GenericAdmResource {
     private ArrayList<SemanticObject> executeSearch(String q, String cls, String category, User user) {
         ArrayList<SemanticObject> res = new ArrayList<SemanticObject>();
 
+        String scope = getResourceBase().getAttribute("modelScope", "");
         //System.out.println("---Buscando " + q);
         SearchQuery query=new SearchQuery();
         SearchQuery tquery=new SearchQuery(SearchQuery.OPER_AND);
@@ -263,6 +264,11 @@ public class Search extends GenericAdmResource {
         if (!category.trim().equals("")) {
             //System.out.println("---Filtrando por categoría " + category);
             query.addTerm(new SearchTerm(SWBIndexer.ATT_CATEGORY, category, SearchTerm.OPER_AND));
+        }
+
+        if(!scope.trim().contains("")) {
+            //System.out.println("---Filtrando por categoría " + category);
+            query.addTerm(new SearchTerm(SWBIndexer.ATT_MODEL, scope, SearchTerm.OPER_AND));
         }
 
         SearchResults sres = SWBPortal.getIndexMgr().getDefaultIndexer().search(query, user);
