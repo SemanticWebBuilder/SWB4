@@ -139,7 +139,7 @@
         </script></p>
     <p>
         <a href="<%= imgPhoto%>">
-            <img id="img_<%=event.getId()%>" src="<%= pathPhoto%>" alt="<%=event.getTitle()%>" width="195" height="180" />
+            <img id="img_<%=event.getId()%>" src="<%= pathPhoto%>" alt="<%=event.getTitle()%>" width="150" height="150" />
         </a>
     </p>
     <p><span class="itemTitle">Comienza:</span> <%= comienza%> a las <%= hcomienza%><br/>

@@ -316,7 +316,7 @@
                         }
     %>
     <div class="noticia">
-        <img src="<%=pathPhoto%>" alt="<%= event.getTitle()%>"/>
+        <img src="<%=pathPhoto%>" width="150" height="150" alt="<%= event.getTitle()%>"/>
         <div class="noticiaTexto">
             <h2>
                 <script type="text/javascript">
