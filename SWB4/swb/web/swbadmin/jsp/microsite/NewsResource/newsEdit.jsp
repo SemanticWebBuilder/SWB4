@@ -81,7 +81,7 @@
         <a class="adminTool" onclick="validaForma()" href="#">Guardar</a>
         <a class="adminTool" href="<%=paramRequest.getRenderUrl()%>">Cancelar</a>
     </div>
-    <p><span class="tituloRojo">NOTA: </span>Se recomienda subir imagenes de 150 x 150.</p>
+    <p><span class="tituloRojo">NOTA: </span>Se recomienda subir imagenes de 150 x 150 pixeles.</p>
     <form name="frmaeditnews" id="frmaeditnews" class="swbform" enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
         <div>
             <fieldset>
@@ -173,15 +173,7 @@
                     </p> --%>
                 </div>
             </fieldset>
-            <%--<fieldset>
-                                <legend></legend>
-                <div>
-                    <p>
-                    <div class="editarInfo"><p><a onclick="validaForma()" href="#">[Guardar]</a></p></div>
-                    <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">[Cancelar]</a></p></div>
-                    </p>
-                </div>
-            </fieldset> --%>
+            
         </div>
         <input type="hidden" name="uri" value="<%=rec.getURI()%>"/>
         <input type="hidden" name="act" value="edit"/>
