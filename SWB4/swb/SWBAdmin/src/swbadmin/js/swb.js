@@ -1337,14 +1337,12 @@ function replaceChars4Id(value, lowercase)
     }
 
 
-     function indexcheck(url, tagid)
+    function indexcheck(url, tagid)
      {
-          var indx =  dijit.byId(tagid);
-          var indsize= indexrefresh(url,tagid);
-          while(eval(indsize)>0)
+          var indx =  dijit.byId(tagid).value;
+          if(indx > 0)
           {
-            sleep(5000);
-            indsize=indexrefresh(url,tagid);
+            indx = eval(indexrefresh(url,tagid));
           }
       }
 
@@ -1365,9 +1363,6 @@ function replaceChars4Id(value, lowercase)
               handleAs: "text"
           });
       }
-
-
-
 
     dojo.require("dojox.html.styles");
     function setStyleSheetByInstance(rules, sufix, title) {
