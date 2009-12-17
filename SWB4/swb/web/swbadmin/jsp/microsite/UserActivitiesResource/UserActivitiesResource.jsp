@@ -23,16 +23,18 @@
                 int num = 0;
                 while (it.hasNext())
                 {
+                    ca = it.next();
+                    user = ca.getUser();
+                    mse = ca.getElement();
+                    if (mse != null && ca.getCommunity() != null && ms != null)
+                    {
                     num++;
                     if (num > numrec)
                     {
                         break;
                     }
-                    ca = it.next();
-                    user = ca.getUser();
-                    mse = ca.getElement();
-                    if (mse != null && ca.getCommunity()!=null && ms!=null)
-                    {
+                   
+                    
                         ms = ca.getCommunity();
                         Date updated = new Date(ca.getModified().getTime());
                         if (mse != null && user != null && ms != null)
@@ -50,10 +52,15 @@
                         }
                     }
                 }
+                if (num == 0)
+                {
+        %>
+    <li>No hay actividades que reportar.</li>
+    <%                }
             }
             else
             {
-        %>
+    %>
     <li>No hay actividades que reportar.</li>
     <%            }
     %>
