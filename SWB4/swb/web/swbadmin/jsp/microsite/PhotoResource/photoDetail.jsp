@@ -96,7 +96,7 @@
         -->
         </script></p>
     <p><a title="<%= title%>" href="<%= imgPhoto%>">
-            <img id="img_<%=photo.getId()%>" src="<%= pathPhoto%>" alt="<%=title%>" width="195" height="180" />
+            <img id="img_<%=photo.getId()%>" src="<%= pathPhoto%>" alt="<%=title%>" width="150" height="150" />
         </a></p>            
 
     <%
