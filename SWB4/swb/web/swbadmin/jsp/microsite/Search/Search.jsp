@@ -369,7 +369,11 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                     String img="";
                     if (ev.getEventImage() != null) {
                         img = SWBPortal.getWebWorkPath() + "/" + obj.getWorkPath() + "/" + ev.getEventImage();
-                    }%>
+                    }
+                    User creator = ev.getCreator();
+                    String perfilPath = wpage.getWebSite().getWebPage("perfil").getUrl();
+                    String profile = "<a href=\"" + perfilPath + "?user=" + creator.getEncodedURI() + "\">"+creator.getFullName()+"</a>";
+                    %>
                     <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
                         <%if(!img.equals("")) {%>
                             <img height="95" alt="<%=ev.getTitle()%>" width="95" src="<%=img%>"/>
@@ -379,6 +383,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                         <div class="listEntryInfo">
                             <p class="tituloRojo"><%=ev.getTitle()%>&nbsp;(<%=resultType%>)</p>
                             <p><%=(ev.getDescription()==null)?"":ev.getDescription()%></p>
+                            <p><%=(ev.getCreator()==null?"":"<b>Creado por: </b>" + profile)%></p>
                             <p><%=(ev.getTags()==null?"":"<b>Palabras clave: </b>" + ev.getTags())%></p>
                             <p class="vermas"><a href ="<%=ev.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(ev.getURI())%>">Ver mas</a></p>
                         </div>
@@ -392,6 +397,10 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                     if (ph.getImageURL() != null) {
                         img = SWBPortal.getWebWorkPath() + "/" + obj.getWorkPath() + "/" + ph.getImageURL();
                     }
+
+                    User creator = ph.getCreator();
+                    String perfilPath = wpage.getWebSite().getWebPage("perfil").getUrl();
+                    String profile = "<a href=\"" + perfilPath + "?user=" + creator.getEncodedURI() + "\">"+creator.getFullName()+"</a>";
                     %>
                     <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
                         <%if(!img.equals("")){
@@ -402,10 +411,10 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                         %>
                         <div class="listEntryInfo">
                             <p class="tituloRojo"><%=ph.getTitle()%>&nbsp;(<%=resultType%>)</p>
-                            <p>
-                                <%=(ph.getDescription()==null)?"":ph.getDescription()%>
-                            </p>
+                            <p><%=(ph.getDescription()==null)?"":ph.getDescription()%></p>
+                            <p><%=(ph.getCreator()==null?"":"<b>Creado por: </b>" + profile)%></p>
                             <p><%=(ph.getTags()==null?"":"<b>Palabras clave: </b>" + ph.getTags())%></p>
+                            <p class="vermas"><a href ="<%=ph.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(ph.getURI())%>">Ver mas</a></p>
                         </div>
                         <div class="clear"> </div>
                     </div>
@@ -427,6 +436,35 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                         <div class="clear"> </div>
                     </div>
                     <%
+                } else if (obj.instanceOf(VideoElement.sclass)) {
+                    resultType = "Video";
+                    PhotoElement ve = (PhotoElement)obj.createGenericInstance();
+                    String img="";
+                    if (ve.getImageURL() != null) {
+                        img = SWBPortal.getWebWorkPath() + "/" + obj.getWorkPath() + "/" + ve.getImageURL();
+                    }
+
+                    User creator = ve.getCreator();
+                    String perfilPath = wpage.getWebSite().getWebPage("perfil").getUrl();
+                    String profile = "<a href=\"" + perfilPath + "?user=" + creator.getEncodedURI() + "\">"+creator.getFullName()+"</a>";
+                    %>
+                    <div class="listEntry" onmouseout="this.className='listEntry'" onmouseover="this.className='listEntryHover'">
+                        <%if(!img.equals("")){
+                            %><img height="95" alt="<%=ve.getTitle()%>" width="95" src="<%=img%>"/><%
+                        } else {
+                            %><img height="95" alt="Imagen no disponible" width="95" src="<%=SWBPortal.getContextPath()%>/swbadmin/images/noDisponible.gif" /><%
+                        }
+                        %>
+                        <div class="listEntryInfo">
+                            <p class="tituloRojo"><%=ve.getTitle()%>&nbsp;(<%=resultType%>)</p>
+                            <p><%=(ve.getDescription()==null)?"":ve.getDescription()%></p>
+                            <p><%=(ve.getCreator()==null?"":"<b>Creado por: </b>" + profile)%></p>
+                            <p><%=(ve.getTags()==null?"":"<b>Palabras clave: </b>" + ve.getTags())%></p>
+                            <p class="vermas"><a href ="<%=ve.getWebPage().getUrl() + "?act=detail&uri=" + URLEncoder.encode(ve.getURI())%>">Ver mas</a></p>
+                        </div>
+                        <div class="clear"> </div>
+                    </div>
+                    <%
                 }
         }
         %>
@@ -436,7 +474,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
         <%
             if (pageNumber - 1 >= 1) {
                 %>
-                <a href="<%=sliceUrl + "&p=" + (pageNumber - 1) + "&what=" + (request.getParameter("q")) + "&o=" + (request.getParameter("o"))%>">&lt;&nbsp;</a>
+                <a href="<%=sliceUrl + "&p=" + (pageNumber - 1) + "&what=" + (request.getParameter("q")) + "&o=" + (request.getParameter("o")==null?"0":request.getParameter("o"))%>">&lt;&nbsp;</a>
                 <%
             }
             double pages = Math.ceil((double) total / (double) maxr);
@@ -453,13 +491,13 @@ if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
                         <%
                     } else {
                         %>
-                        <a href="<%=sliceUrl + "&p=" + i + "&what=" + (request.getParameter("q")) + "&o=" + (request.getParameter("o"))%>"><%=i%></a>
+                        <a href="<%=sliceUrl + "&p=" + i + "&what=" + (request.getParameter("q")) + "&o=" + (request.getParameter("o")==null?"0":request.getParameter("o"))%>"><%=i%></a>
                         <%
                     }
                 }
             if (pageNumber + 1 <= pages) {
                 %>
-                <a href="<%=sliceUrl + "&p=" + (pageNumber + 1) + "&what=" + (request.getParameter("q")) + "&o=" + (request.getParameter("o"))%>">&nbsp;&gt;</a>
+                <a href="<%=sliceUrl + "&p=" + (pageNumber + 1) + "&what=" + (request.getParameter("q")) + "&o=" + (request.getParameter("o")==null?"0":request.getParameter("o"))%>">&nbsp;&gt;</a>
                 <%
             }
         %>
