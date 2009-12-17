@@ -160,6 +160,7 @@
         <a class="adminTool" onclick="validaForma()" href="#">Guardar</a>
         <a class="adminTool" href="<%=paramRequest.getRenderUrl()%>">Cancelar</a>
     </div>
+    <p><span class="tituloRojo">NOTA: </span>Se recomienda subir imagenes de 195 x 185.</p>
     <form name="frmaeditevent" id="frmaeditevent" class="swbform" enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
         <div>
             <fieldset>
