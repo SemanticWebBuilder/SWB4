@@ -34,21 +34,19 @@ public class StyleInner {
 
         String css = base.getAttribute("css");        
         if(css==null) {
-            StringBuilder c = new StringBuilder();
-            InputStream is = getClass().getResourceAsStream(path);
-            BufferedInputStream bin = new BufferedInputStream(is);
-            byte[] contents = new byte[1024];
-            int bytesRead=0;
+            StringBuilder c = new StringBuilder();            
             try{
+                byte[] contents = new byte[1024];
+                int bytesRead=0;
+                InputStream is = getClass().getResourceAsStream(path);
+                BufferedInputStream bin = new BufferedInputStream(is);
                 while( (bytesRead=bin.read(contents)) != -1 )
                     c.append(new String(contents, 0, bytesRead));
             }catch(IOException ioe) {
+                log.error("Error while getting css resource attribute: "+base.getId() +"-"+ base.getTitle(), ioe);
                 c.delete(0, c.length());
                 c.append(".title{}");
-                c.append(".subtitle{}");
-                c.append(".header{}");
-                c.append(".content .parrafo{}");
-                c.append(".extra{}");
+                c.append(".content{}");
                 c.append(".footer{}");
             }
             css = c.toString();
