@@ -167,7 +167,7 @@ public class SemanticOntology
             }
         }
         //System.out.println("ret:"+ret);
-        if(ret==null)log.warn("Uri not Found:"+uri,new AssertionError());
+        //if(ret==null)log.warn("Uri not Found:"+uri,new AssertionError());
         return ret;
     }
     
