@@ -522,7 +522,9 @@ namespace WBOffice4.Steps
                     }
                     this.Wizard.Close();
                     this.Wizard.SetProgressBarInit(5, 3, "Abriendo contenido...");
+                    this.Wizard.Visible = false;
                     OfficeDocument document = application.Open(contentfile);
+                    this.Wizard.Visible = true;
                     this.Wizard.SetProgressBarInit(5, 4, "Guardando contenido...");
                     document.SaveContentProperties(version.contentId, rep);
                     document.Save();
