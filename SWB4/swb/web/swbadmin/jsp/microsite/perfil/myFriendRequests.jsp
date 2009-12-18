@@ -64,8 +64,14 @@ public int calcularEdad(java.util.Calendar fechaNaci, java.util.Calendar fechaAl
             while (itFriendshipProspect.hasNext())
             {
                 FriendshipProspect friendshipProspect = itFriendshipProspect.next();
-                User userRequested = friendshipProspect.getFriendShipRequested();
-                elements.put(userRequested.getURI(), userRequested);
+                if (friendshipProspect != null)
+                {
+                    User userRequested = friendshipProspect.getFriendShipRequested();
+                    if (userRequested != null && userRequested.getURI() != null)
+                    {
+                        elements.put(userRequested.getURI(), userRequested);
+                    }
+                }
             }
             int elementos = elements.size();
             boolean hasRequest = elements.size() > 0;
@@ -261,7 +267,7 @@ public int calcularEdad(java.util.Calendar fechaNaci, java.util.Calendar fechaAl
                             {
                                 age = "" + userRequested.getExtendedAttribute(mapa.get("userBirthDate"));
                             }
-                            
+
                             if (age == null)
                             {
                                 age = "Sin edad";

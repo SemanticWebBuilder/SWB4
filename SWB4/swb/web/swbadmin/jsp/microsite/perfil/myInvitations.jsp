@@ -51,18 +51,24 @@ public int calcularEdad(java.util.Calendar fechaNaci, java.util.Calendar fechaAl
             }
             boolean hasInvitations = false;
 
-            HashMap<String,User> elements = new HashMap();
-            
+            HashMap<String, User> elements = new HashMap();
+
 
             Iterator<FriendshipProspect> itFriendshipProspect = FriendshipProspect.ClassMgr.listFriendshipProspectByFriendShipRequested(owner, wpage.getWebSite());
             while (itFriendshipProspect.hasNext())
             {
                 FriendshipProspect friendshipProspect = itFriendshipProspect.next();
-                User userRequester = friendshipProspect.getFriendShipRequester();
-                elements.put(user.getURI(),userRequester);            
+                if (friendshipProspect != null)
+                {
+                    User userRequester = friendshipProspect.getFriendShipRequester();
+                    if (userRequester != null && user.getURI() != null)
+                    {
+                        elements.put(user.getURI(), userRequester);
+                    }
+                }
             }
             hasInvitations = elements.size() > 0;
-            int elementos=elements.size();
+            int elementos = elements.size();
             int paginas = elements.size() / ELEMENETS_BY_PAGE;
             if (elements.size() % ELEMENETS_BY_PAGE != 0)
             {
@@ -118,31 +124,31 @@ public int calcularEdad(java.util.Calendar fechaNaci, java.util.Calendar fechaAl
 %>
 <!-- paginacion -->
 <%
-            if (paginas > 1 && !isStrategy)
-            {
+                    if (paginas > 1 && !isStrategy)
+                    {
 %>
 <div class="paginacion">
 
 
     <%
-            String nextURL = "#";
-            String previusURL = "#";
-            if (ipage < paginas)
-            {
-                nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
-            }
-            if (ipage > 1)
-            {
-                previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
-            }
-            if (ipage > 1)
-            {
+                String nextURL = "#";
+                String previusURL = "#";
+                if (ipage < paginas)
+                {
+                    nextURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage + 1);
+                }
+                if (ipage > 1)
+                {
+                    previusURL = paramRequest.getWebPage().getUrl() + "?ipage=" + (ipage - 1);
+                }
+                if (ipage > 1)
+                {
     %>
     <a href="<%=previusURL%>"><img src="<%=cssPath%>pageArrowLeft.gif" alt="anterior"/></a>
         <%
-            }
-            for (int i = 1; i <= paginas; i++)
-            {
+                }
+                for (int i = 1; i <= paginas; i++)
+                {
         %>
     <a href="<%=wpage.getUrl()%>?ipage=<%=i%>"><%
                 if (i == ipage)
@@ -160,21 +166,21 @@ public int calcularEdad(java.util.Calendar fechaNaci, java.util.Calendar fechaAl
         <%                            }
         %></a>
     <%
-            }
+                }
     %>
 
 
     <%
-            if (ipage != paginas)
-            {
+                if (ipage != paginas)
+                {
     %>
     <a href="<%=nextURL%>"><img src="<%=cssPath%>pageArrowRight.gif" alt="siguiente"/></a>
         <%
-            }
+                }
         %>
 </div>
 <%
-            }
+                    }
 %>
 <!-- fin paginacion -->
 <h2>Mis invitaciones</h2>
@@ -187,7 +193,7 @@ public int calcularEdad(java.util.Calendar fechaNaci, java.util.Calendar fechaAl
                 {
 %>
 <div id="friendCards">
-    <%                }                
+    <%                }
                 int iElement = 0;
                 for (User userRequester : elements.values())
                 {
@@ -222,7 +228,7 @@ public int calcularEdad(java.util.Calendar fechaNaci, java.util.Calendar fechaAl
                                 perfilurl += "?user=" + java.net.URLEncoder.encode(request.getParameter("user"));
                             }
                             String usr_sex = (String) userRequester.getExtendedAttribute(mapa.get("userSex"));
-                            
+
                             if (usr_sex == null)
                             {
                                 usr_sex = "No indicó el usuario su sexo";
@@ -267,12 +273,12 @@ public int calcularEdad(java.util.Calendar fechaNaci, java.util.Calendar fechaAl
         <img class="profilePic" width="121" height="121" src="<%=photo%>" alt="<%=userRequester.getFullName()%>"/>
         <div class="friendCardInfo">
             <%
-                        if (userRequester.getEmail() != null)
-                        {
+                            if (userRequester.getEmail() != null)
+                            {
             %>
             <a class="ico" href="mailto:<%=email%>"><img src="<%=path%>icoMail.png" alt="enviar un mensaje"/></a>
                 <%
-                        }
+                            }
                 %>
 
 
@@ -290,7 +296,7 @@ public int calcularEdad(java.util.Calendar fechaNaci, java.util.Calendar fechaAl
         </div>
     </div>
     <%
-                        }                        
+                        }
                     }
                 }
                 if (!isStrategy)
