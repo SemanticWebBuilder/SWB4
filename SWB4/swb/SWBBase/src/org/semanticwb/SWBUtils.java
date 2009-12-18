@@ -1115,8 +1115,8 @@ public class SWBUtils {
             ret = replaceAll(ret, "MONTH", getStrMonth(date.getMonth(), lang).toUpperCase());
             ret = replaceAll(ret, "month", getStrMonth(date.getMonth(), lang).toLowerCase());
             ret = replaceAll(ret, "mm", dateCeroComp(date.getMonth() + 1));
-            ret = replaceAll(ret, "yy", dateCeroComp(date.getYear() - 100));
             ret = replaceAll(ret, "yyyy", dateCeroComp(date.getYear() + 1900));
+            ret = replaceAll(ret, "yy", dateCeroComp(date.getYear() - 100));            
             ret = replaceAll(ret, "hh", dateCeroComp(date.getHours()));
             ret = replaceAll(ret, "%m", dateCeroComp(date.getMinutes()));
             ret = replaceAll(ret, "ss", dateCeroComp(date.getSeconds()));
