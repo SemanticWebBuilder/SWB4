@@ -349,7 +349,9 @@ is divided into following sections:
         <ant antfile="${project.SWBAplModeler}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBAplRules}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBAplTMAdmin}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.SWBAplTMView}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBAplWorkFlowAdmin}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.SWBAppBPMNModeler}/build.xml" inheritall="false" target="jar"/>
     </target>
     <target depends="init,-check-automatic-build,-clean-after-automatic-build" name="-verify-automatic-build"/>
     <target depends="init" name="-check-automatic-build">
@@ -714,7 +716,9 @@ is divided into following sections:
         <ant antfile="${project.SWBAplModeler}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBAplRules}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBAplTMAdmin}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBAplTMView}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBAplWorkFlowAdmin}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBAppBPMNModeler}/build.xml" inheritall="false" target="clean"/>
     </target>
     <target depends="init" name="-do-clean">
         <delete dir="${build.dir}"/>
