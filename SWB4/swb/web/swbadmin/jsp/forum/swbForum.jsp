@@ -85,45 +85,22 @@ a:hover {text-decoration: underline;}
               <p>&nbsp;</p>
             </div>
             <%
-                actionURL.setParameter("threadUri", thread.getURI());
-                actionURL.setAction("replyPost");
-                request.setAttribute("formName", "postThread");
-                %>
-            <table>
-            <form id="postThread" name="postThread" action="<%=actionURL%>" onSubmit="return valida(this);" method="post">
-                <tr>
-                    <td><%=paramRequest.getLocaleString("msg")%>:</td><td><textarea name="pstBody"></textarea></td>
-                </tr>
-                <tr>
-                 <td>I<%=paramRequest.getLocaleString("img")%>:</td><td><%=SWBPortal.getFileUploadCtrlString("hasAttachments", request)%></td>
-                </tr>
-                <tr>
-                 <td colspan="2"><input type="submit" value="<%=paramRequest.getLocaleString("send")%>"/></td>
-                </tr>
-            </form>
-            </table>    
-            <script language="javascript" type="text/javascript">
-                function vacio(q) {
-                     for ( i = 0; i < q.length; i++ ) {
-                             if ( q.charAt(i) != " " ) {
-                                   return true
-                             }
-                     }
-                    return false
-                }
-
-                //valida que el campo no este vacio y no tenga solo espacios en blanco
-                 function valida(F) {
-                     if( vacio(F.pstBody.value) == false ) {
-                             alert('<%=paramRequest.getLocaleString("msgField")%>')
-                             F.pstBody.focus();
-                             return false
-                     }
-                     return true
-                 }
-            </script>
-            <%
                 String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.png";
+                SWBFormMgr mgr = new SWBFormMgr(Post.frm_Post, thread.getSemanticObject(), null);
+                actionURL.setParameter("threadUri", thread.getURI());
+                lang = user.getLanguage();
+                mgr.setLang(lang);
+                mgr.setSubmitByAjax(false);
+                mgr.setType(mgr.TYPE_DOJO);
+                //mgr.setType(mgr.TYPE_XHTML);
+                actionURL.setAction("replyPost");
+                mgr.setAction(actionURL.toString());
+                mgr.addButton(SWBFormButton.newSaveButton());
+                mgr.addButton(SWBFormButton.newCancelButton());
+                request.setAttribute("formName", mgr.getFormName());
+            %>
+                <%=mgr.renderForm(request)%>
+            <%
                 boolean cambiaColor = true;
                 GenericIterator<Post> itPost = thread.listPosts();
                 while (itPost.hasNext()) {
@@ -437,7 +414,7 @@ a:hover {text-decoration: underline;}
                             <div class="vistasForo">
                                 <p> (<%=thread.getReplyCount()%>) <%=paramRequest.getLocaleString("responses")%> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/commentsForo.png" alt="<%=paramRequest.getLocaleString("responses")%>" width="14" height="12" /> |  (<%=thread.getViewCount()%>) <%=paramRequest.getLocaleString("visites")%> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/viewsForo.png" alt="<%=paramRequest.getLocaleString("visites")%>" width="10" height="9" /></p>
                             </div>
-                            <div class="clearNosp">&nbsp;</div>                        
+                            <div class="clearNosp">&nbsp;</div>
                        </div>
                  <%
                         }
