@@ -93,7 +93,6 @@ import org.w3c.dom.NodeList;
  */
 public class SWBPortal {
 
-   
     /**
      * Holds the names and values for the variables declared in {@literal web.properties} file.
      * <p>Almacena los nombres y valores de las variables declaradas en el archivo {@literal web.properties}.</p>
@@ -529,15 +528,15 @@ public class SWBPortal {
             grp2.setParent(grp1);
             user.addUserGroup(grp1);
 
-            try
-            {
+            try {
                 site = SWBContext.getWebSite("demo");
-                if (site == null)
-                {
+                if (site == null) {
                     log.event("Creating Demo WebSite...");
-                    InstallZip(new File(getWorkPath()+"/sitetemplates/demo.zip"));
+                    InstallZip(new File(getWorkPath() + "/sitetemplates/demo.zip"));
                 }
-            }catch(Exception e){log.error(e);}
+            } catch (Exception e) {
+                log.error(e);
+            }
         }
 
         //Check for GlobalWebSite
@@ -2308,7 +2307,7 @@ public class SWBPortal {
 
     public static WebSite InstallZip(File zipFile, String file2read, String newWebSiteid, String newWebSiteTitle) {
         try {
-            String modelspath=SWBPortal.getWorkPath() + "/models/";
+            String modelspath = SWBPortal.getWorkPath() + "/models/";
             if (file2read == null) {
                 file2read = "siteInfo.xml";
             }
@@ -2326,7 +2325,8 @@ public class SWBPortal {
                     }
                     if (node.getNodeName().equals("namespace")) {
                         oldNamespace = node.getFirstChild().getNodeValue();
-                    }if (node.getNodeName().equals("title")) {
+                    }
+                    if (node.getNodeName().equals("title")) {
                         oldTitle = node.getFirstChild().getNodeValue();
                     }
                     if (node.getNodeName().equals("description")) {
@@ -2430,11 +2430,10 @@ public class SWBPortal {
                                 rdfmodel = SWBUtils.TEXT.replaceAll(rdfmodel, xmodelID, newId);
                                 io = SWBUtils.IO.getStreamFromString(rdfmodel);
                                 SemanticModel usermodel = SWBPlatform.getSemanticMgr().createModelByRDF(newId + "_usr", "http://user." + newId + ".swb#", io, "N-TRIPLE");
-                                if(usermodel!=null)
-                                {
-                                    UserRepository userRep=SWBContext.getUserRepository(usermodel.getName());
-                                    userRep.setTitle("Repositorio de Usuarios ("+newWebSiteTitle+")","es");
-                                    userRep.setTitle("Users Repository ("+newWebSiteTitle+")","en");
+                                if (usermodel != null) {
+                                    UserRepository userRep = SWBContext.getUserRepository(usermodel.getName());
+                                    userRep.setTitle("Repositorio de Usuarios (" + newWebSiteTitle + ")", "es");
+                                    userRep.setTitle("Users Repository (" + newWebSiteTitle + ")", "en");
                                 }
                             }
                         }
@@ -2445,11 +2444,10 @@ public class SWBPortal {
                                 rdfmodel = SWBUtils.TEXT.replaceAll(rdfmodel, xmodelID, newId);
                                 io = SWBUtils.IO.getStreamFromString(rdfmodel);
                                 SemanticModel repomodel = SWBPlatform.getSemanticMgr().createModelByRDF(newId + "_rep", "http://repository." + newId + ".swb#", io, "N-TRIPLE");
-                                if(repomodel!=null)
-                                {
-                                    Workspace repo=SWBContext.getWorkspace(repomodel.getName());
-                                    repo.setTitle("Repositorio de Documentos ("+newWebSiteTitle+")","es");
-                                    repo.setTitle("Documents Repository ("+newWebSiteTitle+")","en");
+                                if (repomodel != null) {
+                                    Workspace repo = SWBContext.getWorkspace(repomodel.getName());
+                                    repo.setTitle("Repositorio de Documentos (" + newWebSiteTitle + ")", "es");
+                                    repo.setTitle("Documents Repository (" + newWebSiteTitle + ")", "en");
                                 }
                             }
                         }
@@ -2491,5 +2489,72 @@ public class SWBPortal {
                 submodel.put("description", nodeSModel.getFirstChild().getNodeValue());
             }
         }
+    }
+
+    public static String getFileUploadCtrlString(String name, HttpServletRequest request) {
+        String ret = "";
+        String attchMsg = "";
+        if (name != null && request.getAttribute("attachCount_" + name) != null) {
+            attchMsg = "Archivo(s) existentes:<br/>";
+            int count = Integer.parseInt((String) request.getAttribute("attachCount_" + name));
+            for (int i = 1; i <= count; i++) {
+                String fileName = (String) request.getAttribute("attach_" + name + "_" + i);
+                int pos = fileName.lastIndexOf("/");
+                if (pos > -1) {
+                    fileName = fileName.substring(pos + 1);
+                }
+                String target = "";
+                if (request.getAttribute("attachTarget_" + name + "_" + i) != null) {
+                    target = (String) request.getAttribute("attachTarget_" + name + "_" + i);
+                }
+
+                if (request.getAttribute("attachRemovePath_" + name + "_" + i) != null) {
+                    attchMsg += "<a href=\"" + request.getAttribute("attachRemovePath_" + name + "_" + i) + "\">X</a> ";
+                }
+                attchMsg += i + ")<a href=\"" + request.getAttribute("attach_" + name + "_" + i) + "\" target=\"" + target + "\">" + fileName + "</a>";
+                attchMsg += "<br/>";
+            }
+        }
+
+        String formName = (String) request.getAttribute("formName");
+        //Página ejemplo de implementación:http://blog.tremend.ro/2007/03/01/ajax-file-upload-monitoring-monitor-your-file-upload-with-dwr-and-commons-fileupload/
+        //Fecha de implemetación:26/Febrero/2009
+        //TODO:Haecer que este Bloque solo sea puesto una vez, independientemente de cuantos fileuploads tiene mi forma
+        ret = "<link rel=\"stylesheet\" type=\"text/css\" media=\"screen\" href=\"" + SWBPlatform.getContextPath() + "/swbadmin/css/upload/upload.css\"/>\n" +
+                "<script type='text/javascript' src=\"" + SWBPlatform.getContextPath() + "/dwr/util.js\"></script>\n" +
+                "<script type='text/javascript' src=\"" + SWBPlatform.getContextPath() + "/dwr/engine.js\"></script>\n" +
+                "<script type=\"text/javascript\" src=\"" + SWBPlatform.getContextPath() + "/dwr/interface/uploadProxy.js\"></script>\n" +
+                "<script type='text/javascript' src=\"" + SWBPlatform.getContextPath() + "/swbadmin/js/upload/upload.js\"></script>\n";
+        //TODO:Haecer que esta linea solo sea puesta una vez, independientemente de cuantos fileuploads tiene mi forma
+        ret += "<iframe id='target_upload_" + name + "' name='target_upload_" + name + "' src='' style='display: none'></iframe><br/>" + //
+                attchMsg +
+                "<input id=\"" + name + "\" name=\"" + name + "\" type=\"file\" onChange=\"javascript:if(uploadjs_" + name + "(document.getElementById('" + formName + "'))) {return startUploadMonitoring('" + name + "');}\"> <br/>" +
+                "<div id=\"uploadStatus_" + name + "\" style=\"width:230px\">\n" +
+                "   <div id=\"uploadProgressBar_" + name + "\" style=\"width:200px; height: 2px; border: 0px solid #BBB; text-align: center; float: left;\">\n" +
+                "       <div id=\"uploadIndicator_" + name + "\" style=\" height: 1px; position: relative; margin: 0px; padding: 1px; background: #9DC0F4; width: 0; float: left;\"></div>\n" +
+                "   </div>\n" +
+                "   <div id=\"uploadPercentage_" + name + "\" style=\"width:5px; float: right;\"></div>\n" +
+                "</div>\n";
+
+        ret += "<script type=\"text/javascript\">\n" +
+                "function uploadjs_" + name + "(forma){\n" +
+                "if(forma." + name + ".value==''){alert('El campo archivo no debe estar vacio');forma." + name + ".focus(); return false;}" + //TODO:Internacionalizar
+                "  var encoding=forma.encoding;\n" +
+                "  forma.encoding='multipart/form-data';\n" +
+                "  var method=forma.method;\n" +
+                "  forma.method='post';\n" +
+                "  var action=forma.action;\n" +
+                "  forma.action='" + SWBPlatform.getContextPath() + "/Upload';\n" +
+                "  var target=forma.target;\n" +
+                "  forma.target='target_upload_" + name + "';\n" +
+                "  forma.submit();\n" +
+                "  forma.encoding=encoding;\n" +
+                "  forma.method=method;\n" +
+                "  forma.action=action;\n" +
+                "  forma.target=target;\n" +
+                "  return true;\n" +
+                "}\n" +
+                "</script>\n";
+        return ret;
     }
 }
