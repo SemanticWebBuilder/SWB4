@@ -74,9 +74,9 @@
             // label1
             // 
             this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Location = new System.Drawing.Point(362, 202);
+            this.label1.Location = new System.Drawing.Point(152, 202);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(100, 23);
+            this.label1.Size = new System.Drawing.Size(310, 23);
             this.label1.TabIndex = 9;
             this.label1.Text = "Build: ";
             // 
