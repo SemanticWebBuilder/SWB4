@@ -37,7 +37,21 @@ namespace WBOffice4.Forms
         public AboutBox()
         {
             InitializeComponent();
-            this.label1.Text += OfficeApplication.m_version.ToString();
+            Assembly asm = Assembly.GetAssembly((new WBOffice4.SWBConfiguration().GetType()));
+            char[] sep = { ',', '=' };
+            string[] data = asm.FullName.Split(sep);
+            String version = "";
+            int i = 0;
+            foreach (String s in data)
+            {
+                if (s.IndexOf("Version") != -1)
+                {
+                    version = data[i + 1];
+                }
+                i++;
+            }
+
+            this.label1.Text += version + " server api:" + OfficeApplication.m_version.ToString();
         }
 
         #region Assembly Attribute Accessors
