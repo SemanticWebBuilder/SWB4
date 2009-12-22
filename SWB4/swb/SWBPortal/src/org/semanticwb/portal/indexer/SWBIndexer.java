@@ -66,27 +66,41 @@ public abstract class SWBIndexer
 {
     private static Logger log=SWBUtils.getLogger(SWBIndexer.class);
 
+    /**Field name for the URI of a {@link Searchable} object.*/
     public static final String ATT_URI="uri";
+    /**Field name for the Class of a {@link Searchable} object.*/
     public static final String ATT_CLASS="class";
+    /**Field name for the hierarchical path of a {@link Searchable} object.*/
     public static final String ATT_CATEGORY="category";
+    /**Field name for the {@link SemanticModel} of a {@link Searchable} object.*/
     public static final String ATT_MODEL="model";
+    /**Field name for the title of a {@link Searchable} object.*/
     public static final String ATT_TITLE="title";
+    /**Field name for the description of a {@link Searchable} object.*/
     public static final String ATT_DESCRIPTION="description";
+    /**Field name for the tags of a {@link Searchable} object.*/
     public static final String ATT_TAGS="tags";
+    /**Field name for the data of a {@link Searchable} object.*/
     public static final String ATT_DATA="data";
-
+    /**Field name for the summary of a {@link Searchable} object.*/
     public static final String ATT_SUMMARY="summary";
+    /**Field name for the URL of a {@link Searchable} object.*/
     public static final String ATT_URL="url";
 
     private Properties props = null;
     private String name = null;
     private Timer timer=null;
 
+    /**List of {@link Searchable} objects to add to the index.*/
     private List<Searchable> m_add=null;
+    /**List of {@link Searchable} objects to remove from the index.*/
     private List<String> m_remove=null;
+    /**Map for registered parsers of {@link Searchable} objects.*/
     private HashMap<Class, GenericParser> m_parsers=null;
+    /**Default parser instance.*/
     private GenericParser m_gen=new GenericParser();
-
+    /**Map of {@link Indexterm}s that are going to be indexed in a
+     * not-analyzed way.*/
     private static HashMap<String,IndexTerm> m_noAnalyzedTerms=new HashMap();
 
     public abstract void init();
@@ -131,41 +145,60 @@ public abstract class SWBIndexer
 
         init();
 
-//        m_noAnalyzedTerms=new HashMap();
-//        terms.put(ATT_URI, new IndexTerm(ATT_URI,true,IndexTerm.INDEXED_NO_ANALYZED));
-//        terms.put(ATT_CLASS, new IndexTerm(ATT_CLASS,false,IndexTerm.INDEXED_NO_ANALYZED));
-//        terms.put(ATT_CATEGORY, new IndexTerm(ATT_CATEGORY,false,IndexTerm.INDEXED_NO_ANALYZED));
-//        terms.put(ATT_MODEL, new IndexTerm(ATT_MODEL,false,IndexTerm.INDEXED_NO_ANALYZED));
-//        terms.put(ATT_TITLE, new IndexTerm(ATT_TITLE,false,IndexTerm.INDEXED_NO_ANALYZED));
-//        terms.put(ATT_DESCRIPTION, new IndexTerm(ATT_DESCRIPTION,false,IndexTerm.INDEXED_NO_ANALYZED));
-//        terms.put(ATT_TAGS, new IndexTerm(ATT_TAGS,false,IndexTerm.INDEXED_NO_ANALYZED));
-//        terms.put(ATT_DATA, new IndexTerm(ATT_DATA,false,IndexTerm.INDEXED_NO_ANALYZED));
+        /*Add here the required default not-analyzed fields, for example,
+        /to store a term for the uri field without being indexed see the
+         following line.*/
+        //terms.put(ATT_URI, new IndexTerm(ATT_URI,true,IndexTerm.INDEXED_NO_ANALYZED));
 
+        /*Register the required Searchable parsers. Add here the required
+         registerParser sentences for new default parsers.*/
         registerParser(Resource.class, new ResourceParser());
         registerParser(WebPage.class, new WebPageParser());
         registerParser(User.class, new UserParser());
     }
 
+    /**
+     * Adds an {@link IndexTerm} to the not-analyzed map.
+     * @param term {@link IndexTerm} to be stored but not analyzed.
+     */
     public static void addNoAnalyzedIndexTerm(IndexTerm term)
     {
         m_noAnalyzedTerms.put(term.getField(),term);
     }
 
+    /**
+     * Removes an {@link IndexTerm} from the not-analyzed map.
+     * @param term {@link IndexTerm} to be removed.
+     */
     public static void removeNoAnalyzedIndexTerm(String field)
     {
         m_noAnalyzedTerms.remove(field);
     }
 
+    /**
+     * Checks wheter an {@link IndexTerm} already exists in the not-analyzed map.
+     * @param term {@link IndexTerm} to be stored but not analyzed.
+     */
     public static boolean containsNoAnalyzedIndexTerm(String field)
     {
         return m_noAnalyzedTerms.containsKey(field);
     }
 
+    /**
+     * Registers a new {@link Searchable} parser for a given object.
+     * @param cls Java class of the {@link Searchable} object.
+     * @param parser Parser object for the {@link Searchable} object.
+     */
     public void registerParser(Class cls, GenericParser parser)
     {
         m_parsers.put(cls, parser);
     }
 
+    /**
+     * Gets the parser associated to the specified {@link Searchable} object.
+     * @param obj {@link Searchable} object to get parser for.
+     * @return {@link GenericParser} for the {@link Searchable} object.
+     */
     public GenericParser getParser(Searchable obj)
     {
         GenericParser ret=null;
@@ -186,6 +219,7 @@ public abstract class SWBIndexer
         return ret;
     }
 
+    /**Task for removing {@link Searchable} objets from the index.*/
     protected void removeRun()
     {
         while(m_remove.size()>0)
@@ -202,9 +236,10 @@ public abstract class SWBIndexer
         }
     }
 
+    /**Task for adding {@link Searchable} objets from the index.*/
     protected void writeRun()
     {
-        int z=m_add.size();  //Para sono indexar los que ya traia en la pila
+        int z=m_add.size();  //Para solo indexar los que ya traia en la pila
         while(m_add.size()>0 && z>0)
         {
             Searchable obj=m_add.remove(0);
@@ -243,6 +278,11 @@ public abstract class SWBIndexer
         return props;
     }
 
+    /**
+     * Index a complete model. Index all {@link Searchable} objects that belongs
+     * to the model with the specified id.
+     * @param modelid ID of the model to index.
+     */
     public void indexModel(String modelid)
     {
         //System.out.println("indexModel:"+modelid);
@@ -255,7 +295,6 @@ public abstract class SWBIndexer
             {
                 Statement st=it.next();
                 SemanticClass cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(st.getResource().getURI());
-                //out.println(cls);
                 if(cls != null && cls.isSubClass(Searchable.swb_Searchable))
                 {
                     SemanticObject obj=SemanticObject.createSemanticObject(st.getSubject());                    
@@ -266,11 +305,21 @@ public abstract class SWBIndexer
         }
     }
 
+    /**
+     * Adds a {@link Searchable} object to the remove list for future deletion
+     * from the index.
+     * @param uri URI of the {@link Searchable} object to remove from the index.
+     */
     public void removeSearchable(String uri)
     {
         m_remove.add(uri);
     }
 
+    /**
+     * Adds a {@link Searchable} object to the add list for future indexing
+     * in the index.
+     * @param uri URI of the {@link Searchable} object to remove from the index.
+     */
     public void indexSerchable(Searchable serchable)
     {
         if(!m_add.contains(serchable) && getParser(serchable).canIndex(serchable))
