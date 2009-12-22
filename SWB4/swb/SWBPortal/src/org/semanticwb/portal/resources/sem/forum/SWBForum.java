@@ -131,7 +131,6 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
 
         mgr.hideProperty(Post.swb_active);
 
-        Resource base = paramRequest.getResourceBase();
         WebSite website = paramRequest.getWebPage().getWebSite();
         Post post = Post.getPost(semObject.getId(), website);
         String basepath = "";
