@@ -160,6 +160,11 @@ public class SWBUtils {
      * <p>Especifica un lenguaje a usar por defecto.</p>
      */
     private static Locale locale = Locale.ENGLISH;
+
+    /**
+     * Indicates the services used to provide localized messages.
+     * <p>Indica los servcios utilizados para proveer mensajes localizados.</p>
+     */
     public static String LOCALE_SERVICES = null;
 
     /**
@@ -188,10 +193,10 @@ public class SWBUtils {
      */
     private SWBUtils() {
 
-        log.event("Initializing SemanticWebBuilder Base...");
-        log.event("-->AppicationPath: " + applicationPath);
+        SWBUtils.log.event("Initializing SemanticWebBuilder Base...");
+        SWBUtils.log.event("-->AppicationPath: " + SWBUtils.applicationPath);
         init();
-        log.event("-->Default Encoding: "+TEXT.getDafaultEncoding());
+        SWBUtils.log.event("-->Default Encoding: " + TEXT.getDafaultEncoding());
     }
 
     /**
@@ -203,11 +208,11 @@ public class SWBUtils {
     static public synchronized SWBUtils createInstance(String applicationPath) {
 
         SWBUtils.applicationPath = IO.normalizePath(applicationPath);
-        if (instance == null) {
+        if (SWBUtils.instance == null) {
             initFileLogger();
-            instance = new SWBUtils();
+            SWBUtils.instance = new SWBUtils();
         }
-        return instance;
+        return SWBUtils.instance;
     }
 
     /*
@@ -216,7 +221,7 @@ public class SWBUtils {
      */
     private void init() {
 
-        LOCALE_SERVICES = "locale_services";
+        SWBUtils.LOCALE_SERVICES = "locale_services";
     }
 
     /**
@@ -226,7 +231,7 @@ public class SWBUtils {
      */
     public static String getApplicationPath() {
 
-        return applicationPath;
+        return SWBUtils.applicationPath;
     }
 
     /**
@@ -256,7 +261,7 @@ public class SWBUtils {
             e.printStackTrace();
         }
         //org.apache.log4j.Logger.getLogger("org.semanticwb").setLevel(Level.TRACE);
-        initLogger = true;
+        SWBUtils.initLogger = true;
     }
 
     /**
@@ -272,18 +277,18 @@ public class SWBUtils {
     private static void initFileLogger() {
 
         try {
-            FileInputStream in = new FileInputStream(applicationPath
+            FileInputStream in = new FileInputStream(SWBUtils.applicationPath
                     + "/WEB-INF/classes/logging.properties");
             String log_conf = IO.readInputStream(in);
-            log_conf = SWBUtils.TEXT.replaceAll(log_conf, "{apppath}", applicationPath);
+            log_conf = SWBUtils.TEXT.replaceAll(log_conf, "{apppath}", SWBUtils.applicationPath);
             Properties proper = new Properties();
             proper.load(IO.getStreamFromString(log_conf));
             PropertyConfigurator.configure(proper);
         } catch (Exception e) {
-            log.error("Error: logging.properties not found...", e);
+            SWBUtils.log.error("Error: logging.properties not found...", e);
         }
         //org.apache.log4j.Logger.getLogger("org.semanticwb").setLevel(Level.TRACE);
-        initLogger = true;
+        SWBUtils.initLogger = true;
     }
 
     /**
@@ -294,7 +299,7 @@ public class SWBUtils {
      * @return a logger related to the class specified
      */
     public static Logger getLogger(Class cls) {
-        if (!initLogger) {
+        if (!SWBUtils.initLogger) {
             initLogger();
         }
         return new Logger4jImpl(cls);
@@ -304,8 +309,7 @@ public class SWBUtils {
      * Manages the element errors that are shown in the error viewer.
      * <p>Administra los elementos que se muestran en el visor de errores.</p>
      */
-    public static class ERROR 
-    {
+    public static class ERROR {
 
 
         /**
@@ -322,13 +326,10 @@ public class SWBUtils {
          * @param cls the class asociated to the logger
          * @param level a string representing the error element's level
          */
-        public static void addError(String msg, Throwable e, Class cls, String level)
-        {
-            try
-            {
+        public static void addError(String msg, Throwable e, Class cls, String level) {
+            try {
                 SWBUtils.errorElement.add(0, new ErrorElement(e, msg, cls, level));
-                if (SWBUtils.errorElement.size() > SWBUtils.errorElementSize)
-                {
+                if (SWBUtils.errorElement.size() > SWBUtils.errorElementSize) {
                     SWBUtils.errorElement.remove(SWBUtils.errorElementSize);
                 }
             } catch (Exception noe) {}
@@ -340,8 +341,7 @@ public class SWBUtils {
          * <p>Regresa el iterador de {@code SWBUtils.errorElement}, cuyo tamaño
          * est&aacute; definido por la variable de clase {@code SWBUtils.errorElementSize}.
          */
-        public static Iterator getErrorElements()
-        {
+        public static Iterator getErrorElements() {
             return new Vector(SWBUtils.errorElement).iterator();
         }
 
@@ -350,8 +350,7 @@ public class SWBUtils {
          * <p>Obtiene el valor de la variable de clase {@code SWBUtils.errorElementSize}.</p>
          * @return the value of the class member {@code SWBUtils.errorElementSize}.
          */
-        public static int getErrorElementSize()
-        {
+        public static int getErrorElementSize() {
             return SWBUtils.errorElementSize;
         }    
 
@@ -360,8 +359,7 @@ public class SWBUtils {
          * <p>Asigna el valor de la variable de clase {@code SWBUtils.errorElementSize}.</p>
          * @param errorElementSize the new value of the class member {@code SWBUtils.errorElementSize}.
          */
-        public static void setErrorElementSize(int errorElementSize)
-        {
+        public static void setErrorElementSize(int errorElementSize) {
             SWBUtils.errorElementSize = errorElementSize;
         }            
     }
@@ -381,43 +379,42 @@ public class SWBUtils {
          * Specifies the value for the charset ISO8859-1.
          * <p>Especifica el valor para el c&oacute;digo de caracteres ISO8859-1.</p>
          */
-        public static final String CHARSET_ISO8859_1="ISO8859_1";
+        public static final String CHARSET_ISO8859_1 = "ISO8859_1";
 
         /**
          * Specifies the value for the charset UTF-8
          * <p>Especifica el valor para el c&oacute;digo de caracteres UTF-8.</p>
          */
-        public static final String CHARSET_UTF8="UTF8";
+        public static final String CHARSET_UTF8 = "UTF8";
 
         /**
          * Stores the name of the character encoding used by default.
          * <p>Almacena el nombre del c&oacute;digo de caracteres utilizado por defecto.</p>
          */
-        private static String defencoding=null;
+        private static String defencoding = null;
 
 
         /**
          * Given a string specifying a charset, returns the value of {@code SWBUtils.TEXT.CHARSET_ISO8859_1}
-         * or the value of {@code SWBUtils.TEXT.CHARSET_UTF8}. If {@code charset} contains <quote>UTF</quote> anywhere
+         * or the value of {@code SWBUtils.TEXT.CHARSET_UTF8}. If {@code charset} contains <q>UTF</q> anywhere
          * the value returned will be {@value #CHARSET_UTF8} otherwise the value returned
-         * will be {@value #CHARSET_ISO8859_1}. For example: <br>if {@code charset} contains <quote>UTF-8</quote>
-         * or <quote>UTF-2</quote>, the value returned will be {@value #CHARSET_UTF8}.
+         * will be {@value #CHARSET_ISO8859_1}. For example: <br>if {@code charset} contains <q>UTF-8</q>
+         * or <q>UTF-2</q>, the value returned will be {@value #CHARSET_UTF8}.
          * <p>Dada una cadena especificando un c&oacute;digo de caracteres, regresa el valor de
          * {@code SWBUtils.TEXT.CHARSET_ISO8859_1} o el valor de {@code SWBUtils.TEXT.CHARSET_UTF8}.
-         * Ejemplo: <br>si {@code charset} contiene <quote>ISO-8859-1</quote> o <quote>ISO8859-1</quote> o
-         * <quote>8859-1</quote> el valor regresado, ser&aacute; {@value #CHARSET_ISO8859_1}</p>
-         * @param charset a string representing the name of a charset (like <quote>ISO-8859-1</quote> or
-         * <quote>ISO8859-1</quote> or <quote>8859-1</quote> or <quote>UTF-8</quote> or <quote>UTF_8</quote>
+         * Ejemplo: <br>si {@code charset} contiene <q>ISO-8859-1</q> o <q>ISO8859-1</q> o
+         * <q>8859-1</q> el valor regresado, ser&aacute; {@value #CHARSET_ISO8859_1}</p>
+         * @param charset a string representing the name of a charset (like <q>ISO-8859-1</q> or
+         * <q>ISO8859-1</q> or <q>8859-1</q> or <q>UTF-8</q> or <q>UTF_8</q>
          * @return the string contained in {@code SWBUtils.TEXT.CHARSET_ISO8859_1}
          *         or in {@code SWBUtils.TEXT.CHARSET_UTF8}, depending on the value
          *         received in {@code charset}.
          */
-        public static String getHomCharSet(String charset)
-        {
-            String ret=CHARSET_ISO8859_1;
-            if(charset.toUpperCase().indexOf("UTF")>-1)
-            {
-                ret=CHARSET_UTF8;
+        public static String getHomCharSet(String charset) {
+
+            String ret = SWBUtils.TEXT.CHARSET_ISO8859_1;
+            if (charset.toUpperCase().indexOf("UTF") >- 1) {
+                ret = SWBUtils.TEXT.CHARSET_UTF8;
             }
             return ret;
         }
@@ -445,16 +442,16 @@ public class SWBUtils {
             Locale loc;
             try {
                 loc = new Locale(language);
-            }catch(Exception e) {
-                loc = locale;
+            } catch (Exception e) {
+                loc = SWBUtils.locale;
             }
             SimpleDateFormat formatter = new SimpleDateFormat("MMMM");
             GregorianCalendar gc = new GregorianCalendar(loc);
             gc.set(Calendar.MONTH, Calendar.JANUARY);
             gc.set(Calendar.DATE, 1);
             int i;
-            for(i=1; i<=12; i++) {
-                if( formatter.format(gc.getTime()).equalsIgnoreCase(month) ) {
+            for (i = 1; i <= 12; i++) {
+                if (formatter.format(gc.getTime()).equalsIgnoreCase(month)) {
                     return i;
                 }
                 gc.add(Calendar.MONTH, 1);
@@ -468,14 +465,13 @@ public class SWBUtils {
          * @return a string representing the character encoding used by default.
          *         <p>una cadena que representa el c&oacute;digo de caracteres utilizado por defecto.</p>
          */
-        public static String getDafaultEncoding()
-        {
-            if (defencoding == null)
-            {
+        public static String getDafaultEncoding() {
+
+            if (SWBUtils.TEXT.defencoding == null) {
                 OutputStreamWriter out = new OutputStreamWriter(new ByteArrayOutputStream());
-                defencoding=out.getEncoding();
+                SWBUtils.TEXT.defencoding = out.getEncoding();
             }
-            return defencoding;
+            return SWBUtils.TEXT.defencoding;
         }
 
         /**
@@ -674,9 +670,9 @@ public class SWBUtils {
 
             StringBuffer ret = new StringBuffer(data.length());
 
-            char[] bfile = new char[bufferSize];
+            char[] bfile = new char[SWBUtils.bufferSize];
             int x;
-            while ((x = in.read(bfile, 0, bufferSize)) > -1) {
+            while ((x = in.read(bfile, 0, SWBUtils.bufferSize)) > -1) {
                 ret.append(new String(bfile, 0, x));
             }
             in.close();
@@ -838,7 +834,8 @@ public class SWBUtils {
             int l = aux.length();
             for (int x = 0; x < l; x++) {
                 char ch = aux.charAt(x);
-                if ((ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || ch == '_') {
+                if ((ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'z') ||
+                        (ch >= 'A' && ch <= 'Z') || ch == '_') {
                     ret.append(ch);
                 }
             }
@@ -856,9 +853,8 @@ public class SWBUtils {
          *         <p>un objeto string que representa el valor del elemento {@code key}
          *         especificado almacenado en {@code Bundle}.</p>
          */
-        public static String getLocaleString(String Bundle, String key)
-        {
-            return getLocaleString(Bundle, key, locale);
+        public static String getLocaleString(String Bundle, String key) {
+            return getLocaleString(Bundle, key, SWBUtils.locale);
         }
 
         /**
@@ -873,8 +869,7 @@ public class SWBUtils {
          *         <p>un objeto string que representa el valor del elemento {@code key}
          *         especificado almacenado en {@code Bundle}.</p>
          */
-        public static String getLocaleString(String Bundle, String key, Locale locale)
-        {
+        public static String getLocaleString(String Bundle, String key, Locale locale) {
             return getLocaleString(Bundle, key, locale, null);
         }
 
@@ -891,8 +886,9 @@ public class SWBUtils {
          *         <p>un objeto string que representa el valor del elemento {@code key}
          *         especificado almacenado en {@code Bundle}.</p>
          */
-        public static String getLocaleString(String Bundle, String key, Locale locale, ClassLoader loader)
-        {
+        public static String getLocaleString(String Bundle, String key,
+                Locale locale, ClassLoader loader) {
+
             String cad = "";
             try {
                 if (loader == null) {
@@ -902,7 +898,7 @@ public class SWBUtils {
                 }
             //System.out.println("cad:" + cad);
             } catch (Exception e) {
-                log.error("Error while looking for properties key", e);
+                SWBUtils.log.error("Error while looking for properties key", e);
                 return "";
             }
             return cad;
@@ -915,7 +911,7 @@ public class SWBUtils {
          *        <p>el objeto {@code locale} con el que est&aacute; trabajando este objeto.</p>
          */
         public static Locale getLocale() {
-            return locale;
+            return SWBUtils.locale;
         }
 
         /**
@@ -993,7 +989,9 @@ public class SWBUtils {
          *         <p>El &iacute;ndice en {@code str} inmediatamente despu&eacute;s de
          *         {@code pos}, o -1 si {@code pre} no es encontrado en {@code str}.</p>
          */
-        private static int findInterStr(String str, String pre, String pos, int index, ArrayList arr) {
+        private static int findInterStr(String str, String pre, String pos,
+                int index, ArrayList arr) {
+
             int i = str.indexOf(pre, index);
             if (i > -1) {
                 i = i + pre.length();
@@ -1050,9 +1048,6 @@ public class SWBUtils {
             return getStrDate(date, lang, null);
         }
 
-        /*
-         * Da formato a una fecha y la regresa en el lenguaje deseado.
-         */
         /**
          * Converts a date into a string with the format and in the language specified.
          * <p>Convierte una fecha en una cadena con el formato y en el lenguaje especificados.</p>
@@ -1070,11 +1065,17 @@ public class SWBUtils {
                 ret = getStrFormat(date, format, lang);
             } else if (lang != null) {
                 if (lang.equalsIgnoreCase("es")) {
-                    ret = getStrDay(date.getDay(), lang) + " " + date.getDate() + " de " + getStrMonth(date.getMonth(), lang).toLowerCase() + " de " + (date.getYear() + 1900);
+                    ret = getStrDay(date.getDay(), lang) + " " + date.getDate()
+                            + " de " + getStrMonth(date.getMonth(), lang).toLowerCase()
+                            + " de " + (date.getYear() + 1900);
                 } else if (lang.equalsIgnoreCase("en")) {
-                    ret = getStrDay(date.getDay(), lang) + ", " + getStrMonth(date.getMonth(), lang) + " " + date.getDate() + ", " + (date.getYear() + 1900);
+                    ret = getStrDay(date.getDay(), lang) + ", "
+                            + getStrMonth(date.getMonth(), lang) + " "
+                            + date.getDate() + ", " + (date.getYear() + 1900);
                 } else {
-                    ret = getStrDay(date.getDay(), lang) + ", " + getStrMonth(date.getMonth(), lang) + " " + date.getDate() + ", " + (date.getYear() + 1900);
+                    ret = getStrDay(date.getDay(), lang) + ", "
+                            + getStrMonth(date.getMonth(), lang) + " "
+                            + date.getDate() + ", " + (date.getYear() + 1900);
                 }
             } else {
                 ret = date.toLocaleString();
@@ -1160,8 +1161,7 @@ public class SWBUtils {
          *         <p>un objeto string que representa la diferencia entre dos fechas
          *         dadas, expresada en la unidad de tiempo m&aacute;s grande posible.</p>
          */
-        public static String getTimeAgo(Date CurrentDate, Date CreationDate, String lang)
-        {
+        public static String getTimeAgo(Date CurrentDate, Date CreationDate, String lang) {
             String ret = "";
             int second;
             int secondCurrent;
@@ -1197,8 +1197,9 @@ public class SWBUtils {
             yearCreation = CreationDate.getYear();
 
             boolean leapYear = false;
-            if (monthCurrent > 1 || (dayCreation == 29 && monthCreation == 1))
+            if (monthCurrent > 1 || (dayCreation == 29 && monthCreation == 1)) {
                 leapYear = (yearCreation % 4 == 0) && (yearCreation % 100 != 0 || yearCreation % 400 == 0);
+            }
             dayMonth = 0;
             day = 0;
             switch (monthCreation) {
@@ -1377,13 +1378,13 @@ public class SWBUtils {
                 p = new SWBProperties();
                 InputStream in = SWBUtils.class.getResourceAsStream(name);
                 try {
-                    log.info("-->Loading Property File:"+name);
+                    SWBUtils.log.info("-->Loading Property File:" + name);
                     p.load(in);
                 } catch (Exception e) {
-                    log.error("Error reading property file:"+name,e);
+                    SWBUtils.log.error("Error reading property file:" + name, e);
                 }
             } catch (Exception e) {
-                log.error("Error loading property file:"+name,e);
+                SWBUtils.log.error("Error loading property file:" + name, e);
             }
             return p;
         }
@@ -1401,13 +1402,10 @@ public class SWBUtils {
          *         <p>un objeto string con aquellos caracteres cuyo c&oacute;digo ASCII
          *         es superior a 127 reemplazados. Si {@code str} es nulo, regresa cadena vacia.
          */
-        public static String encodeExtendedCharacters(String str)
-        {
+        public static String encodeExtendedCharacters(String str) {
             StringBuffer ret = new StringBuffer();
-            if (str != null)
-            {
-                for (int x = 0; x < str.length(); x++)
-                {
+            if (str != null) {
+                for (int x = 0; x < str.length(); x++) {
                     char ch = str.charAt(x);
                     if (ch > 127) {
                         ret.append("&#" + (int)ch + ";");
@@ -1428,24 +1426,18 @@ public class SWBUtils {
          * @return a string with no characters encoded.
          *         <p>un objeto string sin caracteres codificados como en el objeto original.</p>
          */
-        public static String decodeExtendedCharacters(String str)
-        {
+        public static String decodeExtendedCharacters(String str) {
             StringBuffer ret = new StringBuffer();
             int l = str.length();
-            for (int x = 0; x < l; x++)
-            {
+            for (int x = 0; x < l; x++) {
                 char ch = str.charAt(x);
                 boolean addch = false;
-                if (ch == '&' && (x + 1) < l && str.charAt(x + 1) == '#')
-                {
+                if (ch == '&' && (x + 1) < l && str.charAt(x + 1) == '#') {
                     int i = str.indexOf(";", x);
-                    if (i > 2)
-                    {
-                        try
-                        {
+                    if (i > 2) {
+                        try {
                             int v = Integer.parseInt(str.substring(x + 2, i));
-                            if (v > 255)
-                            {
+                            if (v > 255) {
                                 ret.append((char) v);
                                 x = i;
                                 addch = true;
@@ -1453,47 +1445,93 @@ public class SWBUtils {
                         } catch (NumberFormatException e) {}
                     }
                 }
-                if (!addch) ret.append(ch);
+                if (!addch) {
+                    ret.append(ch);
+                }
             }
             return ret.toString();
         }
 
-        public static String parseHTML(String txt) throws IOException, InterruptedException
-        {
-            String ret=null;
+        /**
+         * Extracts all the text in a HTML document.
+         * <p>Extrae todo el texto de un documento HTML.</p>
+         * @param txt a string representing the content of a HTML document
+         * @return a string representing all the text in the HTML document.
+         *         <p>un objeto string que representa todo el texto contenido en
+         *         el documento HTML.</p>
+         * @throws java.io.IOException if an I/O error occurs.
+         *         <p>si ocurre cualquier error de E/S.</p>
+         * @throws java.lang.InterruptedException if this execution thread is
+         *         interrupted by another thread.
+         *         <p>si este hilo de ejecuci&oacute;n es interrumpido por otro hilo.</p>
+         */
+        public static String parseHTML(String txt) throws IOException,
+                InterruptedException {
+
+            String ret = null;
             //String summ=null;
-            if(txt!=null)
-            {
+            if (txt != null) {
                 HTMLParser parser = new HTMLParser(new StringReader(txt));
-                ret=parser.getText();
+                ret = parser.getText();
             }
             //System.out.println("txt:"+ret);
             return ret;
         }
 
-        public static String parseOfficeFile(File file) throws InvalidFormatException, OpenXML4JException, XmlException, java.io.IOException
-        {
+        /**
+         * Extracts all the text in the Office document.
+         * <p>Extrae todo el texto del documento de Office.</p>
+         * @param file a file pathname referencing the office document
+         * @return a string representing all the text in the indicated Office document.
+         *         <p>un objeto string que representa todo el texto contenido en
+         *         el documento de Office indicado.</p>
+         * @throws org.apache.poi.openxml4j.exceptions.InvalidFormatException if
+         *         there is a problem with the document's format.
+         *         <p>si ocurre un problema con el formato del documento.</p>
+         * @throws org.apache.poi.openxml4j.exceptions.OpenXML4JException if a
+         *         critical error occurs.
+         *         <p>si ocurre un error cr&iacute;tico.</p>
+         * @throws org.apache.xmlbeans.XmlException if an error occurs while
+         *         processing, parsing, or compiling XML.
+         *         <p>si ocurre un error durante el proceso, an&aacute;lisis o
+         *         compilaci&oacute;n de XML</p>
+         * @throws java.io.IOException if an I/O error occurs.
+         *         <p>si ocurre cualquier error de E/S.</p>
+         */
+        public static String parseOfficeFile(File file)
+                throws InvalidFormatException, OpenXML4JException, XmlException,
+                java.io.IOException {
+
              POITextExtractor textExtractor = ExtractorFactory.createExtractor(file);
              return textExtractor.getText();
         }
 
-        public String parserPDF(File file) throws java.io.IOException
-        {
-            FileInputStream is=new FileInputStream(file);
+        /**
+         * Extracts all the text from a PDF formatted file.
+         * <p>Extrae todo el texto de un archivo con formato PDF.</p>
+         * @param file a file pathname referencing the PDF document
+         * @return a string representing all the text in the indicated PDF document.
+         *         <p>un objeto string que representa todo el texto contenido en
+         *         el documento indicado con formato PDF.</p>
+         * @throws java.io.IOException if an I/O error occurs.
+         *         <p>si ocurre cualquier error de E/S.</p>
+         */
+        public String parserPDF(File file) throws java.io.IOException {
+
+            FileInputStream is = new FileInputStream(file);
             org.pdfbox.pdmodel.PDDocument pdfDocument = null;
             try {
                 pdfDocument = org.pdfbox.pdmodel.PDDocument.load( is );
 
-
-                if( pdfDocument.isEncrypted() ) {
+                if (pdfDocument.isEncrypted()) {
                     //Just try using the default password and move on
-                    pdfDocument.decrypt( "" );
+                    pdfDocument.decrypt("");
                 }
 
                 //create a writer where to append the text content.
                 StringWriter writer = new StringWriter();
                 org.pdfbox.util.PDFTextStripper stripper = new org.pdfbox.util.PDFTextStripper();
-                stripper.writeText( pdfDocument, writer );
+                stripper.writeText(pdfDocument, writer);
 
                 // Note: the buffer to string operation is costless;
                 // the char array value of the writer buffer and the content string
@@ -1501,22 +1539,22 @@ public class SWBUtils {
                 // not occur here.
                 String contents = writer.getBuffer().toString();
                 return contents;
-            }
-            catch( org.pdfbox.exceptions.CryptographyException e ) {
-                throw new IOException( "Error decrypting document(" + file.getPath() + "): " + e );
-            }
-            catch( org.pdfbox.exceptions.InvalidPasswordException e ) {
+            } catch( org.pdfbox.exceptions.CryptographyException e ) {
+                throw new IOException( "Error decrypting document("
+                        + file.getPath() + "): " + e );
+            } catch( org.pdfbox.exceptions.InvalidPasswordException e ) {
                 //they didn't suppply a password and the default of "" was wrong.
-                throw new IOException( "Error: The document(" + file.getPath() + ") is encrypted and will not be indexed." );
-            }
-            finally {
-                if( pdfDocument != null ) {
+                throw new IOException( "Error: The document(" + file.getPath()
+                        + ") is encrypted and will not be indexed." );
+            } finally {
+                if (pdfDocument != null) {
                     pdfDocument.close();
                 }
             }
         }
 
     }
+
 
     /**
      * Supplies several I/O functions commonly used, involving streams, files, strings and
@@ -1534,7 +1572,7 @@ public class SWBUtils {
          *         <p>el valor de la variable de clase {@code SWBUtils.bufferSize}.</p>
          */
         public static int getBufferSize() {
-            return bufferSize;
+            return SWBUtils.bufferSize;
         }
 
         /**
@@ -1563,7 +1601,7 @@ public class SWBUtils {
          *         <p>Si el flujo de entrada o el de salida es {@code null}.</p>
          */
         public static void copyStream(InputStream in, OutputStream out) throws IOException {
-            copyStream(in, out, bufferSize);
+            copyStream(in, out, SWBUtils.bufferSize);
         }
 
         /**
@@ -1609,9 +1647,9 @@ public class SWBUtils {
                 throw new IOException("Input Stream null");
             }
             StringBuffer buf = new StringBuffer();
-            byte[] bfile = new byte[bufferSize];
+            byte[] bfile = new byte[SWBUtils.bufferSize];
             int x;
-            while ((x = in.read(bfile, 0, bufferSize)) > -1) {
+            while ((x = in.read(bfile, 0, SWBUtils.bufferSize)) > -1) {
                 String aux = new String(bfile, 0, x);
                 buf.append(aux);
             }
@@ -1620,7 +1658,7 @@ public class SWBUtils {
         }
 
         /**
-         * Reads an Reader and creates a string with that content.
+         * Reads a reader and creates a string with that content.
          * <p>Lee un objeto Reader y crea un objeto string con el contenido le&iacute;do.</p>
          * @param in an input stream to read its content
          * @return a string whose content is the same as for the input stream read.
@@ -1634,9 +1672,9 @@ public class SWBUtils {
                 throw new IOException("Input Stream null");
             }
             StringBuffer buf = new StringBuffer();
-            char[] bfile = new char[bufferSize];
+            char[] bfile = new char[SWBUtils.bufferSize];
             int x;
-            while ((x = in.read(bfile, 0, bufferSize)) > -1) {
+            while ((x = in.read(bfile, 0, SWBUtils.bufferSize)) > -1) {
                 String aux = new String(bfile, 0, x);
                 buf.append(aux);
             }
@@ -1674,9 +1712,9 @@ public class SWBUtils {
 
             StringBuffer ret = new StringBuffer();
 
-            char[] bfile = new char[bufferSize];
+            char[] bfile = new char[SWBUtils.bufferSize];
             int x;
-            while ((x = in.read(bfile, 0, bufferSize)) > -1) {
+            while ((x = in.read(bfile, 0, SWBUtils.bufferSize)) > -1) {
                 ret.append(new String(bfile, 0, x));
             }
             in.close();
@@ -1685,10 +1723,10 @@ public class SWBUtils {
 
         /**
          * Normalizes the {@code path} received. Substitutes the following characters:<br/>
-         * <quote> \ </quote> for <quote>/</quote><br/>
-         * <quote> \\ </quote> for <quote>/</quote><br/>
-         * <quote> // </quote> for <quote>/</quote><br/>
-         * <quote> /./ </quote> for <quote>/</quote><br/>
+         * <q> \ </q> for <q>/</q><br/>
+         * <q> \\ </q> for <q>/</q><br/>
+         * <q> // </q> for <q>/</q><br/>
+         * <q> /./ </q> for <q>/</q><br/>
          * and removes any relative path.
          * <p>Normaliza la ruta descrita por {@code path}. Sustituyendo algunos
          * caracteres como se describe arriba y eliminando las rutas relativas encontradas.
@@ -1784,13 +1822,13 @@ public class SWBUtils {
          *         <p>un objeto string con el contenido del archivo le&iacute;do</p>
          */
         public static String getFileFromPath(String path) {
-            StringBuffer ret = new StringBuffer(bufferSize);
+            StringBuffer ret = new StringBuffer(SWBUtils.bufferSize);
             try {
                 InputStream file = null;
                 file = new FileInputStream(path);
-                byte[] bfile = new byte[bufferSize];
+                byte[] bfile = new byte[SWBUtils.bufferSize];
                 int x;
-                while ((x = file.read(bfile, 0, bufferSize)) > -1) {
+                while ((x = file.read(bfile, 0, SWBUtils.bufferSize)) > -1) {
                     ret.append(new String(bfile, 0, x));
                 }
                 file.close();
@@ -1814,8 +1852,7 @@ public class SWBUtils {
          * @throws NullPointerException if the pathname received is {@code null}.
          *         <p>si la ruta recibida es {@code null}.</p>
          */
-        public static long getFileSize(String path)
-        {
+        public static long getFileSize(String path) {
             return getFileSize(new File(path));
         }
 
@@ -1834,15 +1871,13 @@ public class SWBUtils {
          * @throws NullPointerException if the {@code file} received is {@code null}.
          *         <p>si el objeto {@code file} recibido es {@code null}.</p>
          */
-        public static long getFileSize(File file)
-        {
+        public static long getFileSize(File file) {
             long ret = 0;
-            if (file.isFile()) ret = file.length();
-            else if (file.isDirectory())
-            {
+            if (file.isFile()) {
+                ret = file.length();
+            } else if (file.isDirectory()) {
                 File files[] = file.listFiles();
-                for (int x = 0; x < files.length; x++)
-                {
+                for (int x = 0; x < files.length; x++) {
                     File ch = files[x];
                     ret += getFileSize(ch);
                 }
@@ -1867,7 +1902,7 @@ public class SWBUtils {
                 }
                 return true;
             } catch (Exception e) {
-                log.error(e);
+                SWBUtils.log.error(e);
             }
             return false;
         }
@@ -1889,7 +1924,7 @@ public class SWBUtils {
                 copyStructure(source, target, false, "", "");
                 return true;
             } catch (Exception e) {
-                log.error(e);
+                SWBUtils.log.error(e);
             }
             return false;
         }
@@ -1941,13 +1976,13 @@ public class SWBUtils {
                                 }
                             }
                         } catch (Exception e) {
-                            log.error(e);
+                            SWBUtils.log.error(e);
                             return false;
                         }
                     }
                 }
             } catch (Exception e) {
-                log.error(e);
+                SWBUtils.log.error(e);
                 return false;
             }
             return true;
@@ -1994,7 +2029,7 @@ public class SWBUtils {
                     copyStream(source, destination);
                 }
             } catch (Exception e) {
-                log.error(e);
+                SWBUtils.log.error(e);
             } finally {
                 if (source != null) {
                     try {
@@ -2144,7 +2179,7 @@ public class SWBUtils {
                         try {
                             item.write(fichero);
                         } catch (Exception e) {
-                            log.error(e);
+                            SWBUtils.log.error(e);
                         }
                     }
                 }
@@ -2181,8 +2216,8 @@ public class SWBUtils {
                 file.mkdirs();
             }
             String logFile = new File(filePath).getCanonicalPath().replace('\\', '/');
-            log2File = new PrintWriter(new FileWriter(logFile, true), true);
-            log2File.println(msg);
+            SWBUtils.log2File = new PrintWriter(new FileWriter(logFile, true), true);
+            SWBUtils.log2File.println(msg);
         }
 
         /**
@@ -2202,7 +2237,9 @@ public class SWBUtils {
          *         escribir informaci&oacute;n.</p>
          * @author Jorge Jim&eacute;nez
          */
-        public static final void zip(File directory, File base, ZipOutputStream zos) throws IOException {
+        public static final void zip(File directory, File base, ZipOutputStream zos)
+                throws IOException {
+
             if (directory == null || !directory.exists()) {
                 return;
             }
@@ -2236,7 +2273,8 @@ public class SWBUtils {
          *         escritura de informaci&oacute;n.</p>
          * @author Jorge Jim&eacute;nez
          */
-        public static void addFilesToExistingZip(File zipFile, File[] files) throws IOException {
+        public static void addFilesToExistingZip(File zipFile, File[] files)
+                throws IOException {
             // get a temp file
             //MAPS74 En Solaris no se vale renombrar un archivo hacia /var/tmp
             File tempFile = File.createTempFile(zipFile.getName(), null, zipFile.getParentFile());
@@ -2324,7 +2362,10 @@ public class SWBUtils {
          *         <p>si un error ocurre durante la lectura o escritura de informaci&oacute;n.</p>
          * @author Jorge Jim&eacute;nez
          */
-        public static final void unzip(File zip, File extractTo, ArrayList fext2parse, String parse, String parse2) throws IOException {
+        public static final void unzip(File zip, File extractTo,
+                ArrayList fext2parse, String parse, String parse2)
+                throws IOException {
+
             ZipFile archive = new ZipFile(zip);
             Enumeration e = archive.entries();
             while (e.hasMoreElements()) {
@@ -2360,7 +2401,7 @@ public class SWBUtils {
                         out.close();
                         in.close();
                     } catch (Exception ex) {
-                        log.debug(ex);
+                        SWBUtils.log.debug(ex);
                     }
                 }
             }
@@ -2392,7 +2433,7 @@ public class SWBUtils {
                     }
                 }
             } catch (Exception ex) {
-                log.error(ex); //MAPS74
+                SWBUtils.log.error(ex); //MAPS74
             } finally {
                 if (zf != null) {
                     try {
@@ -2421,11 +2462,11 @@ public class SWBUtils {
                     ZipEntry entry = (ZipEntry) e.nextElement();
                     if (entry.getName() != null && entry.getName().equals(file2Read)) {
                         InputStream is = zip.getInputStream(entry);
-                        content=readInputStream(is);
+                        content = readInputStream(is);
                     }
                 }
             } catch (Exception e) {
-                log.debug(e);
+                SWBUtils.log.debug(e);
             }
             return content;
         }
@@ -2479,7 +2520,7 @@ public class SWBUtils {
          *        IP del servidor SMTP.</p>
          */
         public static void setSMTPServer(String smtpserver) {
-            EMAIL.smtpserver = smtpserver;
+            SWBUtils.EMAIL.smtpserver = smtpserver;
         }
 
         /**
@@ -2492,7 +2533,7 @@ public class SWBUtils {
          *         direcci&oacute;n IP del servidor SMTP en uso.</p>
          */
         public static String getSMTPServer() {
-            return EMAIL.smtpserver;
+            return SWBUtils.EMAIL.smtpserver;
         }
 
         /**
@@ -2503,7 +2544,7 @@ public class SWBUtils {
          *        v&aacute;lida.</p>
          */
         public static void setAdminEmail(String adminEmail) {
-            EMAIL.adminEmail = adminEmail;
+            SWBUtils.EMAIL.adminEmail = adminEmail;
         }
 
         /**
@@ -2556,7 +2597,7 @@ public class SWBUtils {
                     }
                 }
 
-                email.setHostName(EMAIL.smtpserver);
+                email.setHostName(SWBUtils.EMAIL.smtpserver);
                 email.setFrom(fromEmail, fromName);
                 email.setTo(address);
                 if (ccEmail != null) {
@@ -2579,14 +2620,10 @@ public class SWBUtils {
                 }
                 return email.send();
             } catch (Exception e) {
-                log.error(e);
+                SWBUtils.log.error(e);
             }
             return null;
         }
-
-
-
-
 
         /**
          * Sends an e-mail with the information supplied through {@code message}.
@@ -2611,7 +2648,7 @@ public class SWBUtils {
                     email.attach(attchment);
                 }
 
-                email.setHostName(EMAIL.smtpserver);
+                email.setHostName(SWBUtils.EMAIL.smtpserver);
                 email.setFrom(message.getFromEmail(), message.getFromName());
                 email.setTo(message.getAddresses());
                 if (message.getCcEmail() != null) {
@@ -2633,37 +2670,55 @@ public class SWBUtils {
                 }
                 return email.send();
             } catch (Exception e) {
-                log.error(e);
+                SWBUtils.log.error(e);
             }
             return null;
         }
 
-
-        public static String sendMail(String toEmail, String subject, String msg) throws java.net.SocketException {
+        /**
+         * Sends an e-mail to the account in {@code EMAIL.adminEmail}, requiring
+         * minimal information to be supplied.
+         * <p>Env&iacute;a un correo electr&oacute;nico a la cuenta de {@code EMAIL.adminEmail},
+         * requiriendo la informaci&oacute;n m&iacute;nima.</p>
+         * @param toEmail toEmail a string representing the repicients' e-mail accounts.
+         *        This string can contain more than one e-mail accounts, semicolon-separated.
+         *        If it is {@code null} the e-mail will not be sent.
+         * @param subject a string representing the message's subject
+         * @param msg a string containing the message's body
+         * @return by the time this documentation comments were included, this value
+         *         is always {@code null}.
+         *         <p>para cuando estos comentarios de documentaci&oacute;n fueron
+         *         incluidos, este valor siempre es {@code null}.</p>
+         * @throws java.net.SocketException is never thrown
+         */
+        public static String sendMail(String toEmail, String subject, String msg)
+                throws java.net.SocketException {
             try {
                 ArrayList acol = new ArrayList();
-                 if (toEmail != null && toEmail.indexOf(";") > 0) {
-                     StringTokenizer strTokens = new StringTokenizer(toEmail, ";");
-                     while (strTokens.hasMoreTokens()) {
-                         String token = strTokens.nextToken();
-                         if (token == null) continue;
-                         javax.mail.internet.InternetAddress address = new javax.mail.internet.InternetAddress();
-                         address.setAddress(token);
-                         acol.add(address);
-                     }
-                 } else if (toEmail != null) {
-                     javax.mail.internet.InternetAddress address = new javax.mail.internet.InternetAddress();
-                     address.setAddress(toEmail);
-                     acol.add(address);
-                 }
-                EMAIL.sendMail(EMAIL.adminEmail, "", acol, null, null, subject, null, msg, null, null, null);
+                if (toEmail != null && toEmail.indexOf(";") > 0) {
+                    StringTokenizer strTokens = new StringTokenizer(toEmail, ";");
+                    while (strTokens.hasMoreTokens()) {
+                        String token = strTokens.nextToken();
+                        if (token == null) {
+                            continue;
+                        }
+                        javax.mail.internet.InternetAddress address = new javax.mail.internet.InternetAddress();
+                        address.setAddress(token);
+                        acol.add(address);
+                    }
+                } else if (toEmail != null) {
+                    javax.mail.internet.InternetAddress address = new javax.mail.internet.InternetAddress();
+                    address.setAddress(toEmail);
+                    acol.add(address);
+                }
+                SWBUtils.EMAIL.sendMail(SWBUtils.EMAIL.adminEmail, "", acol,
+                                        null, null, subject, null, msg, null,
+                                        null, null);
             } catch (Exception e) {
-                log.error(e);
+                SWBUtils.log.error(e);
             }
             return null;
         }
-
-
 
         /**
          * Sends an e-mail in background mode with the sender address as the one
@@ -2697,8 +2752,9 @@ public class SWBUtils {
                  address.setAddress(toEmail);
                  acol.add(address);
              }
-             EMAIL.sendBGEmail(EMAIL.adminEmail, null, acol, null, null, subject,
-                     null, body, null, null, null);
+             SWBUtils.EMAIL.sendBGEmail(SWBUtils.EMAIL.adminEmail, null, acol,
+                                        null, null, subject, null, body, null,
+                                        null, null);
         }
         
         /**
@@ -2741,19 +2797,45 @@ public class SWBUtils {
                 throws java.net.SocketException {
             
             SWBMail message = new SWBMail();
-            if (fromEmail == null && EMAIL.adminEmail != null) fromEmail = EMAIL.adminEmail;
-            if (fromEmail != null) message.setFromEmail(fromEmail);
-            if (fromName != null) message.setFromName(fromName);
-            if (address != null) message.setAddress((ArrayList) address);
-            if (ccEmail != null) message.setCcEmail(ccEmail);
-            if (bccEmail != null) message.setBccEmail(bccEmail);
-            if (subject != null) message.setSubject(subject);
-            if (contentType == null) contentType = "HTML";
-            if (contentType != null) message.setContentType(contentType);
-            if (data != null) message.setData(data);
-            if (login != null) message.setLogin(login);
-            if (password != null) message.setPassword(password);
-            if (attachments != null) message.setAttachments(attachments);
+            if (fromEmail == null && SWBUtils.EMAIL.adminEmail != null) {
+                fromEmail = SWBUtils.EMAIL.adminEmail;
+            }
+            if (fromEmail != null) {
+                message.setFromEmail(fromEmail);
+            }
+            if (fromName != null) {
+                message.setFromName(fromName);
+            }
+            if (address != null) {
+                message.setAddress((ArrayList) address);
+            }
+            if (ccEmail != null) {
+                message.setCcEmail(ccEmail);
+            }
+            if (bccEmail != null) {
+                message.setBccEmail(bccEmail);
+            }
+            if (subject != null) {
+                message.setSubject(subject);
+            }
+            if (contentType == null) {
+                contentType = "HTML";
+            }
+            if (contentType != null) {
+                message.setContentType(contentType);
+            }
+            if (data != null) {
+                message.setData(data);
+            }
+            if (login != null) {
+                message.setLogin(login);
+            }
+            if (password != null) {
+                message.setPassword(password);
+            }
+            if (attachments != null) {
+                message.setAttachments(attachments);
+            }
 
             SWBMailSender swbMailSender = new SWBMailSender();
             swbMailSender.addEMail(message);
@@ -2785,7 +2867,7 @@ public class SWBUtils {
          * @param smtpuser a string representing a user's name registered in the SMTP server.
          */
         public static void setSMTPUser(String smtpuser) {
-            EMAIL.smtpuser = smtpuser;
+            SWBUtils.EMAIL.smtpuser = smtpuser;
         }
 
         /**
@@ -2796,14 +2878,17 @@ public class SWBUtils {
          * @param smtppassword a string representing a user's password registered in the SMTP server.
          */
         public static void setSMTPPassword(String smtppassword) {
-            EMAIL.smtppassword = smtppassword;
+            SWBUtils.EMAIL.smtppassword = smtppassword;
         }
 
     }
 
 
     /**
-     * 
+     * Provides several common operations to perform involving DOM documents and
+     * their contents.
+     * <p>Provee varias operaciones comunes que involucran documentos DOM y su
+     * contenido.</p>
      */
     public static class XML {
 
@@ -2815,7 +2900,7 @@ public class SWBUtils {
         private static XML m_xml = null;
 
         /**
-         * A DOM object trees producer.
+         * A DOM object tree producer.
          * <p>Un generador de &aacute;rboles de objetos DOM.</p>
          */
         private DocumentBuilderFactory m_dbf = null;
@@ -2870,10 +2955,10 @@ public class SWBUtils {
          *         <p>una referencia para la &uacute;nica instancia de este objeto.</p>
          */
         private static XML getInstance() {
-            if (m_xml == null) {
-                m_xml = new XML();
+            if (SWBUtils.XML.m_xml == null) {
+                SWBUtils.XML.m_xml = new XML();
             }
-            return m_xml;
+            return SWBUtils.XML.m_xml;
         }
 
         /**
@@ -2933,12 +3018,11 @@ public class SWBUtils {
         /**
          * Transforms a DOM document into a XML formatted string.
          * <p>Transforma un documento DOM en un objeto string con formato XML.</p>
-         *Crea un objeto String a partir de un objeto Document con cierta codificación especificada y 
-         * teniendo la posibilidad de identar la salida, la identación que se tiene especificada en el método es 2.
          * @param dom a DOM document to transform. Must not be {@code null}.
          * @param encode a string representing the preferred character encoding
          *        to use in the transformation. Must not be {@code null}.
-         * @param indent a {@code boolean} indicating wheather or not to indent the XML to generate.
+         * @param indent a {@code boolean} indicating wheather or not to indent
+         *        (by 2 blank spaces) the XML to generate.
          * @return a string representing the DOM document received.
          *         <p>un objeto string que representa el documento DOM recibido.</p>
          */
@@ -2965,7 +3049,7 @@ public class SWBUtils {
                 transformer.setOutputProperty(OutputKeys.METHOD, "xml");
                 transformer.transform(new DOMSource(dom), streamResult);
             } catch (Exception e) {
-                log.error(e);
+                SWBUtils.log.error(e);
             }
             return sw.toString();
         }
@@ -2984,21 +3068,32 @@ public class SWBUtils {
         }
 
         /**
-         * Crea un objeto String a partir de un objeto Document con codificación UTF-8 y teniendo la posibilidad de
-         * identar la salida, la identación que se tiene especificada en el método es 2.
-         * @param dom
-         * @param ident
-         * @return  */
+         * Transforms a DOM document into a XML formatted string using the UTF-8
+         * character encoding with or whithout indentation.
+         * <p>Transforma un documento DOM en un objeto string con formato XML
+         * utilizando codificaci&oacute;n UTF-8 con o sin sangr&iacute;as.</p>
+         * @param dom a DOM document to transform. Must not be {@code null}.
+         * @param ident a {@code boolean} indicating wheather or not to indent
+         *        (by 2 blank spaces) the XML to generate.
+         * @return a XML formatted, UTF-8 encodedstring representing the DOM document received.
+         *         <p>un objeto string que representa el documento DOM recibido.</p>
+         */
         public static String domToXml(Document dom, boolean ident) {
             return domToXml(dom, "UTF-8", ident);
         }
 
         /**
-         * Crea una copia exacta de un objeto Document
-         * Creates an exactly copy of Document object
-         * @param dom
-         * @throws org.w3c.dom.DOMException
-         * @return  */
+         * Creates an exact copy of the document received.
+         * <p>Crea una copia exacta del objeto document recibido.</p>
+         * @param dom a DOM document to copy.
+         * @return a document with the same content as the document received.
+         *         <p>un objeto document con el mismo contenido que el objeto
+         *         document recibido.</p>
+         * @throws org.w3c.dom.DOMException if an exceptional circumstance occurs
+         *         while DOM operations are performed.
+         *         <p>si una circunstancia excepcional ocurre mientras se ejecutan
+         *         operaciones DOM.</p>
+         */
         public static Document copyDom(Document dom) throws SWBException {
             Document n = getNewDocument();
             if (dom != null && dom.hasChildNodes()) {
@@ -3009,10 +3104,13 @@ public class SWBUtils {
         }
 
         /**
-         * Crea un objeto Document a partir de un objeto String.
-         * Creates a document object in base of String object
-         * @param xml
-         * @return  */
+         * Creates a document object from the string received.
+         * <p>Crea un objeto document a partir del objeto string recibido.</p>
+         * @param xml a string representing the content for a DOM document.
+         * @return a document created with the received string's content.
+         *         <p>un objeto document creado con el contenido del objeto string
+         *         recibido.</p>
+         */
         public static Document xmlToDom(String xml) {
             if (xml == null || xml.length() == 0) {
                 return null;
@@ -3022,32 +3120,38 @@ public class SWBUtils {
                 ByteArrayInputStream sr = new java.io.ByteArrayInputStream(xml.getBytes());
                 dom = xmlToDom(sr);
             } catch (Exception e) {
-                log.error(e);
+                SWBUtils.log.error(e);
             }
             return dom;
         }
 
         /**
-         * Crea un objeto Document a partir de un objeto InputStream.
-         * Creates a document object in base of InputStream object
-         * @param xml
-         * @return  */
+         * Creates a document object from the input stream received.
+         * <p>Crea un objeto document a partir de un flujo de entrada recibido.</p>
+         * @param xml an input stream from which the DOM document will be created.
+         * @return a document containing the data provided by the input stream received.
+         *         <p>un objeto document que contiene la informaci&oacute;n proporcionada
+         *         por el flujo de entrada recibido.</p>
+         */
         public static Document xmlToDom(InputStream xml) {
             Document dom = null;
             try {
                 dom = xmlToDom(new InputSource(xml));
             //xml.close();
             } catch (Exception e) {
-                log.error(e);
+                SWBUtils.log.error(e);
             }
             return dom;
         }
 
         /**
-         * Crea un objeto Document a partir de un objeto InputSource.
-         * Creates a document object in base of InputSource object
-         * @param xml
-         * @return  */
+         * Creates a document from the input source received.
+         * <p>Crea un objeto document a partir de la fuente de entrada recibida.</p>
+         * @param xml an input source from which the DOM document will be created.
+         * @return a document containing the data provided by the input source received.
+         *         <p>un objeto document que contiene la informaci&oacute;n proporcionada
+         *         por la fuente de entrada recibida.</p>
+         */
         public static Document xmlToDom(InputSource xml) {
             DocumentBuilderFactory dbf = null;
             DocumentBuilder db = null;
@@ -3065,16 +3169,17 @@ public class SWBUtils {
                     }
                 }
             } catch (Exception e) {
-                log.error(e);
+                SWBUtils.log.error(e);
             }
             return dom;
         }
 
         /**
-         * Crea un nuevo objeto Document.
-         * Creates a new object document
-         * @throws com.infotec.appfw.exception.AFException
-         * @return  */
+         * Creates a new DOM document object.
+         * <p>Crea un nuevo objeto document.</p>
+         * @return a brand new (empty) DOM document.
+         *         <p>un objeto document <q>nuevecito</q> (vac&iacute;o).</p>
+         */
         public static Document getNewDocument() //throws SWBException
         {
             DocumentBuilderFactory dbf = getDocumentBuilderFactory();
@@ -3086,29 +3191,48 @@ public class SWBUtils {
                 }
                 dom = db.newDocument();
             } catch (Exception e) {
-                log.error(e);
+                SWBUtils.log.error(e);
             //throw new SWBException("Error getting new XML Document", e);
             }
             return dom;
         }
 
         /**
-         * Carga un objeto InputStream de un xslt para ser utilizado como plantilla.
-         * @param stream
-         * @throws javax.xml.transform.TransformerConfigurationException
-         * @return  */
-        public static Templates loadTemplateXSLT(InputStream stream) throws TransformerConfigurationException {
+         * Generates a template from the input stream received whose content represents
+         * a XSLT.
+         * <p>Genera un objeto template con el contenido del flujo de entrada
+         * recibido, que representa el c&oacute;digo de un XSLT.</p>
+         * @param stream an input stream with an XSLT file's content
+         * @return a template which is a compiled representation of the input
+         *         source's content.
+         *         <p>un objeto template que es una representaci&oacute;n compilada
+         *         del contenido del flujo de entrada recibido.</p>
+         * @throws javax.xml.transform.TransformerConfigurationException if it fails the
+         *         construction of the template during parsing.
+         *         <p>si falla la construcci&oacute;n de la plantilla durante el
+         *         an&aacute;lisis sint&aacute;ctico.</p>
+         */
+        public static Templates loadTemplateXSLT(InputStream stream)
+                throws TransformerConfigurationException {
             TransformerFactory transFact = getTransformerFactory();
             return transFact.newTemplates(new StreamSource(stream));
         }
 
         /**
-         * Transforma un objeto Document con un Template (xslt) especificado, 
-         * regresando un objeto String con dicha transformación y listo para ser desplegado.
-         * @param tpl
-         * @param doc
-         * @throws javax.xml.transform.TransformerException
-         * @return  a String object ready to be displayed
+         * Transforms a document by applying the specified template.
+         * <p>Transforma un objeto document aplicando la plantilla de transformaciones
+         * especificada.</p>
+         * @param tpl a transformations template
+         * @param doc a DOM document to apply the transformations on
+         * @return  a string representing the document's data transformed by
+         *          the template and ready to be displayed in a web browser.
+         *          <p>un objeto string que representa la informaci&oacute;n del
+         *          documento DOM con las transformaciones contenidas en la plantilla
+         *          y listo para ser desplegado en un navegador Web.</p>
+         * @throws javax.xml.transform.TransformerException if an exceptional
+         *         condition occurs during the transformation process.
+         *         <p>si una condici&oacute;n excepcional ocurre durante el 
+         *         proceso de transformaci&oacute;n.</p>
          */
         public static String transformDom(Templates tpl, Document doc) throws TransformerException {
             ByteArrayOutputStream sw = new java.io.ByteArrayOutputStream();
@@ -3117,17 +3241,49 @@ public class SWBUtils {
             return sw.toString();
         }
 
-        public static boolean xmlVerifier(org.xml.sax.InputSource schema, org.xml.sax.InputSource xml) {
+        /**
+         * Verifies if the document represented in the input source is valid
+         * according to the schema provided.
+         * <p>Verifica si el documento DOM representado en la fuente de entrada
+         * es v&aacute;lido de acuerdo al esquema provisto.</p>
+         * @param schema a represented schema to validate a document
+         * @param xml an input source containing a DOM document
+         * @return a {@code boolean} indicating if the document is valid or not,
+         *         according to the schema provided.
+         *         <p>un {@code boolean} que indica si el documento DOM recibido
+         *         es o no v&aacute;lido, de acuerdo al esquema proporcionado.</p>
+         */
+        public static boolean xmlVerifier(org.xml.sax.InputSource schema,
+                                          org.xml.sax.InputSource xml) {
             return xmlVerifier(null, schema, null, xml);
         }
 
-        public static boolean xmlVerifier(String idschema, org.xml.sax.InputSource schema, String idxml, org.xml.sax.InputSource xml) {
+        /**
+         * Verifies if the document represented in the input source is valid
+         * according to the schema provided through another input source.
+         * <p>Verifica si el documento DOM representado en la fuente de entrada
+         * es v&aacute;lido de acuerdo al esquema provisto a trav&eacute;s de otra
+         * fuente de entrada.</p>
+         * @param idschema a string representing a system id of the schema's input source
+         * @param schema an input source containing a schema to validate a document
+         * @param idxml a string representing a system id of the document's input source
+         * @param xml an input source containing a document
+         * @return a {@code boolean} indicating if the document is valid or not,
+         *         according to the schema provided.
+         *         <p>un {@code boolean} que indica si el documento DOM recibido
+         *         es o no v&aacute;lido, de acuerdo al esquema proporcionado.</p>
+         */
+        public static boolean xmlVerifier(String idschema,
+                                          org.xml.sax.InputSource schema,
+                                          String idxml,
+                                          org.xml.sax.InputSource xml) {
+
             boolean bOk = false;
             if (schema == null || xml == null) {
                 if (schema == null) {
-                    log.error("Error WBAdmResourceUtils.XMLVerifier(): Schema source is null.");
+                    SWBUtils.log.error("Error SWBUtils.XMLVerifier(): Schema source is null.");
                 } else {
-                    log.event("Error WBAdmResourceUtils.XMLVerifier(): The input document source is null.");
+                    SWBUtils.log.event("Error SWBUtils.XMLVerifier(): The input document source is null.");
                 }
                 return bOk;
             }
@@ -3142,17 +3298,46 @@ public class SWBUtils {
             return bOk;
         }
 
+        /**
+         * Verifies if the document represented in the input stream is valid
+         * according to the schema provided through another input stream.
+         * <p>Verifica si el documento DOM representado en el flujo de entrada
+         * es v&aacute;lido de acuerdo al esquema provisto a trav&eacute;s de otro
+         * flujo de entrada.</p>
+         * @param schema an input stream containing a schema to validate a document
+         * @param xml an input stream containing a document
+         * @return a {@code boolean} indicating if the document is valid or not,
+         *         according to the schema provided.
+         *         <p>un {@code boolean} que indica si el documento DOM recibido
+         *         es o no v&aacute;lido, de acuerdo al esquema proporcionado.</p>
+         */
         public static boolean xmlVerifier(java.io.InputStream schema, java.io.InputStream xml) {
             return xmlVerifier(null, schema, xml);
         }
 
-        public static boolean xmlVerifier(String idschema, java.io.InputStream schema, java.io.InputStream xml) {
+        /**
+         * Verifies if the document represented in the input stream is valid
+         * according to the schema provided through another input stream.
+         * <p>Verifica si el documento DOM representado en el flujo de entrada
+         * es v&aacute;lido de acuerdo al esquema provisto a trav&eacute;s de otro
+         * flujo de entrada.</p>
+         * @param idschema a string representing a system id of the schema's input source
+         * @param schema an input stream containing a schema to validate a document
+         * @param xml an input stream containing a document
+         * @return a {@code boolean} indicating if the document is valid or not,
+         *         according to the schema provided.
+         *         <p>un {@code boolean} que indica si el documento DOM recibido
+         *         es o no v&aacute;lido, de acuerdo al esquema proporcionado.</p>
+         */
+        public static boolean xmlVerifier(String idschema, java.io.InputStream schema,
+                java.io.InputStream xml) {
+
             boolean bOk = false;
             if (schema == null || xml == null) {
                 if (schema == null) {
-                    log.error("Error WBAdmResourceUtils.XMLVerifier(): Schema stream is null.");
+                    SWBUtils.log.error("Error SWBUtils.XMLVerifier(): Schema stream is null.");
                 } else {
-                    log.error("Error WBAdmResourceUtils.XMLVerifier(): The input document stream is null.");
+                    SWBUtils.log.error("Error SWBUtils.XMLVerifier(): The input document stream is null.");
                 }
                 return bOk;
             }
@@ -3162,22 +3347,30 @@ public class SWBUtils {
         }
 
         /**
-         * Transforma un objeto Document con un Template (xslt) especificado, 
-         * regresando un objeto String con dicha transformación y listo para ser desplegado.
-         * 
-         * Transforms a Document object with specified template (xslt)
-         * @param sysid
-         * @param objschema
-         * @param objxml
-         * @return a String object ready to be displayed
+         * Verifies if a document is valid according to the schema provided.
+         * <p>Verifica si un documento DOM es v&aacute;lido de acuerdo al esquema provisto.</p>
+         * @param sysid a string representing a system id of the input stream,
+         *        in case {@code objschema} being an input stream.
+         * @param objschema a schema to validate a document. This object can be an instance of
+         *        {@code java.io.File}, {@code org.xml.sax.InputSource}, {@code java.io.InputStream}
+         *        or even {@code java.lang.String}.
+         * @param objxml a document to validate against the schema provided. This
+         *        document can be contained in an instance of the following classes:
+         *        {@code java.io.File}, {@code org.xml.sax.InputSource}, {@code org.w3c.dom.Node}
+         *        or even {@code java.lang.String}.
+         * @return a {@code boolean} indicating if the document received is valid
+         *         or not, according to the schema provided.
+         *         <p>un {@code boolean} indicando si el documento DOM recibido
+         *         es v&aacute;lido o no, de acuerdo al esquema provisto.</p>
          */
         private static boolean xmlVerifierImpl(String sysid, Object objschema, Object objxml) {
+
             boolean bOk = false;
             if (objschema == null || objxml == null) {
                 if (objschema == null) {
-                    log.error("Error WBAdmResourceUtils.XMLVerifier(): Schema is null.");
+                    SWBUtils.log.error("Error SWBUtils.XMLVerifier(): Schema is null.");
                 } else {
-                    log.error("Error WBAdmResourceUtils.XMLVerifier(): The input document is null.");
+                    SWBUtils.log.error("Error SWBUtils.XMLVerifier(): The input document is null.");
                 }
                 return bOk;
             }
@@ -3199,7 +3392,7 @@ public class SWBUtils {
                 }
                 try {
                     org.iso_relax.verifier.Verifier verifier = schema.newVerifier();
-                    verifier.setErrorHandler(silentErrorHandler);
+                    verifier.setErrorHandler(SWBUtils.XML.silentErrorHandler);
 
                     if (objxml instanceof java.io.File) {
                         bOk = verifier.verify((java.io.File) objxml);
@@ -3211,31 +3404,64 @@ public class SWBUtils {
                         bOk = verifier.verify((java.lang.String) objxml);
                     }
                 } catch (org.iso_relax.verifier.VerifierConfigurationException e) {
-                    log.error("Error WBAdmResourceUtils.XMLVerifier(): Unable to create a new verifier.", e);
+                    SWBUtils.log.error("Error SWBUtils.XMLVerifier(): Unable to create a new verifier.", e);
                 } catch (org.xml.sax.SAXException e) {
-                    log.event("Error WBAdmResourceUtils.XMLVerifier(): The input document is not wellformed.", e);
+                    SWBUtils.log.event("Error SWBUtils.XMLVerifier(): Input document is not wellformed.", e);
                 }
             } catch (Exception e) {
-                log.event("Error WBAdmResourceUtils.XMLVerifier(): Unable to parse the schema file.", e);
+                SWBUtils.log.event("Error SWBUtils.XMLVerifier(): Unable to parse schema file.", e);
             }
             return bOk;
         }
 
+        /**
+         * Verifies if the document represented by a string is valid
+         * according to the schema provided through another string.
+         * <p>Verifica si el documento DOM representado por una cadena
+         * es v&aacute;lido de acuerdo al esquema provisto a trav&eacute;s de otra
+         * cadena.</p>
+         * @param schema a string containing a schema to validate a document
+         * @param xml a string containing a  DOM document
+         * @return a {@code boolean} indicating if the document received is valid
+         *         or not, according to the schema provided.
+         *         <p>un {@code boolean} indicando si el documento DOM recibido
+         *         es v&aacute;lido o no, de acuerdo al esquema provisto.</p>
+         */
         public static boolean xmlVerifier(String schema, String xml) {
             return xmlVerifierByURL(null, schema, xml);
         }
 
+        /**
+         * Verifies if the document represented by a string is valid
+         * according to the schema provided through another string.
+         * <p>Verifica si el documento DOM representado por una cadena
+         * es v&aacute;lido de acuerdo al esquema provisto a trav&eacute;s de otra
+         * cadena.</p>
+         * @param sysid a string representing a system id for constructing the schema.
+         * @param schema a string containing a schema to validate a document
+         * @param xml a string containing a DOM document
+         * @return a {@code boolean} indicating if the document received is valid
+         *         or not, according to the schema provided.
+         *         <p>un {@code boolean} indicando si el documento DOM recibido
+         *         es v&aacute;lido o no, de acuerdo al esquema provisto.</p>
+         */
         public static boolean xmlVerifierByURL(String sysid, String schema, String xml) {
             return xmlVerifierImpl(sysid, schema, xml);
         }
 
         /**
-         * Comvierte un Node a Document
-         * Converts Node to Document object
-         * Todo: Meter en AFUtils
+         * Converts a node into a document.
+         * <p>Convierte un objeto node en un objeto document</p>
+         * @param node a node to convert
+         * @return a document containing the node's content.
+         *         <p>un objeto document que contiene el contenido del objeto node.</p>
+         * @throws SWBException if an exceptional situation occurs during creation
+         *         of the new document.
+         *         <p>si una situaci&oacute;n excepcional ocurre durante la creaci&oacute;n
+         *         del nuevo documento.</p>
          */
         public static Document node2Document(Node node) throws SWBException {
-            // ensure xerces dom
+            // ensures xerces dom
             if (node instanceof org.apache.xerces.dom.DocumentImpl) {
                 return (Document) node;
             }
@@ -3248,25 +3474,33 @@ public class SWBUtils {
         }
 
         /**
-         * Obtiene el contenido del objeto Document como xml y 
-         * lo envía a un archivo especificado (serialización) con codificación UTF-8 e identación de 2.
-         * @param dom
-         * @param file  */
+         * Serializes a document using the UTF-8 character encoding. Gets a
+         * document's content and writes it down into a file with a 2 blank space indentation.
+         * <p>Serializa un objeto document utilizando el c&oacute;digo de caracteres
+         * UTF-8. Obtiene el contenido de un objeto document y lo escribe
+         * en un archivo con 2 espacios en blanco como sangr&iacute;a.</p>
+         * @param dom a document to serialize
+         * @param file a string representing a file's pathname. Where the file is
+         *        going to be created.
+         */
         public static void DomtoFile(Document dom, String file) {
             domtoFile(dom, file, "UTF-8");
         }
 
         /**
-         * Obtiene el contenido del objeto Document como xml y 
-         * lo envía a un archivo especificado (serialización) bajo cierta codificación que se especifique e identación de 2.
-         * 
-         * Serialize a document object
-         * 
-         * @param dom
-         * @param file
-         * @param encode  
+         * Serializes a document using the specified character encoding. Gets a
+         * document's content and writes it down into a file with a 2 blank space indentation.
+         * <p>Serializa un objeto document utilizando el c&oacute;digo de caracteres 
+         * especificado. Obtiene el contenido de un objeto document y lo escribe
+         * en un archivo con 2 espacios en blanco como sangr&iacute;a.</p>
+         * @param dom a document to serialize
+         * @param file a string representing a file's pathname. Where the file is
+         *        going to be created.
+         * @param encode a string representing a character encoding. This will be
+         *        used for writing the file's content.
          */
         public static void domtoFile(Document dom, String file, String encode) {
+
             java.io.FileOutputStream osw = null;
             try {
                 osw = new FileOutputStream(new java.io.File(file));
@@ -3285,34 +3519,60 @@ public class SWBUtils {
                 osw.flush();
                 osw.close();
             } catch (Exception e) {
-                log.error(e);
+                SWBUtils.log.error(e);
             }
         }
+
         /**
          * An error handler implementation that doesn't report any error.
+         * <p>Una implementaci&oacute;n de manejador de errores que no reporta error alguno.</p>
          */
         private static final org.xml.sax.ErrorHandler silentErrorHandler = new org.xml.sax.ErrorHandler() {
 
+            /**
+             * Method with an empty body.
+             * <p>M&eacute;todo con cuerpo vac&iacute;o.</p>
+             */
             public void fatalError(org.xml.sax.SAXParseException e) {
             }
 
+            /**
+             * Method with an empty body.
+             * <p>M&eacute;todo con cuerpo vac&iacute;o.</p>
+             */
             public void error(org.xml.sax.SAXParseException e) {
             }
 
+            /**
+             * Method with an empty body.
+             * <p>M&eacute;todo con cuerpo vac&iacute;o.</p>
+             */
             public void warning(org.xml.sax.SAXParseException e) {
             }
         };
 
         /**
-         * Replace special characters in xml String
-         * @param str Reemplaza caracteres especiales en un xml
-         * @return
+         * Replaces some special characters in a XML-formatted string by their 
+         * entity names. The characters to replace are: {@literal \t, &, <, y >}.
+         * <p>Reemplaza algunos de los caracteres especiales presentes en una
+         * cadena con formato XML por su equivalente en nombre de entidad.
+         * Los caracteres a reemplazar son: {@literal \t, &, <, y >.}</p>
+         * @param str an XML-formatted string with some replaceable characters
+         * @return a string representing the same content that {@code str}, but with
+         *         some characters replaced according to the following relations:
+         *         <br>{@literal \t} replaced by 4 blank spaces
+         *         <br>{@literal &} replaced by {@literal &amp;}
+         *         <br>{@literal <} replaced by {@literal &lt;}
+         *         <br>{@literal >} replaced by {@literal &gt;}
+         *         <p>un objeto string que representa el mismo contenido que {@code str},
+         *         pero con algunos caracteres reemplazados de acuerdo a las
+         *         relaciones anteriormente mostradas.</p>
          */
         static public String replaceXMLChars(String str) {
             if (str == null) {
                 return null;
             }
-            StringBuffer ret = new StringBuffer();
+            StringBuffer ret = new StringBuffer(500);
 
             // split tokens
             StringTokenizer tokenizer = new StringTokenizer(str, " \t@%^&()-+=|\\{}[].;\"<>", true);
@@ -3350,39 +3610,58 @@ public class SWBUtils {
         }
 
         /**
-         * Reemplaza caracteres especiales de tags en un xml
-         * @param txt
-         * @return  */
-        static public String replaceXMLTags(String txt)
-        {
-            if(txt==null)return null;
+         * Replaces the entity name of some special characters by their representation
+         * in HTML code. The entity names to replace are: {@literal &lt;, &gt;, y &amp;}.
+         * <p>Reemplaza el nombre de entidad de algunos caracteres especiales, por
+         * su equivalente en HTML. Los nombres de entidad a reemplazar son:
+         * {@literal &lt;, &gt;, y &amp;}.</p>
+         * @param txt a string containing the text to replace
+         * @return a string with the entity names of some special characters replaced
+         *         by their representation in HTML code. The entity names to look for are:
+         *         <br>{@literal &amp;} replaced by {@literal &}
+         *         <br>{@literal &lt;} replaced by {@literal <}
+         *         <br>{@literal &gt;} replaced by {@literal >}
+         *         <p>un objeto string con los nombres de entidad de algunos 
+         *         caracteres especiales reemplazados por su representaci&oacute;n
+         *         en c&oacute;digo HTML, arriba se mencionan los reemplazos realizados.</p>
+         */
+        static public String replaceXMLTags(String txt) {
+
+            if (txt == null) return null;
             StringBuffer str = new StringBuffer(txt);
-            for (int x = 0; x < str.length(); x++)
-            {
+            for (int x = 0; x < str.length(); x++) {
                 char ch = str.charAt(x);
-                if (ch == '&')
-                {
-                    if (str.substring(x, x + 4).equals("&lt;"))
-                    {
+                if (ch == '&') {
+                    if (str.substring(x, x + 4).equals("&lt;")) {
                         str.replace(x, x + 4, "<");
-                    } else if (str.substring(x, x + 4).equals("&gt;"))
-                    {
+                    } else if (str.substring(x, x + 4).equals("&gt;")) {
                         str.replace(x, x + 4, ">");
-                    } else if (str.substring(x, x + 5).equals("&amp;"))
-                    {
+                    } else if (str.substring(x, x + 5).equals("&amp;")) {
                         str.replace(x, x + 5, "&");
                     }
                 }
             }
             return str.toString();
-    }
-
+        }
 
         /**
-         * Creates a node as child of other one
-         * @param ele Node pather
-         * @param name Node name to create
-         * @return a new Element (Node)
+         * Creates an empty child node for the one specified.
+         * <p>Crea un nodo hijo vac&iacute;o al nodo especificado.</p>
+         * @param ele father node. Must not be {@code null}.
+         * @param name a string representing the name for the node to create.
+         *        Must not be {@code null}.
+         * @return a new {@code element} (node) that is a child of {@code ele} and
+         *         has the name indicated by {@code name}.
+         *         <p>un nuevo objeto {@code element} (nodo) que es hijo de {@code ele}
+         *         y tiene por nombre, el indicado por {@code name}.</p>
+         * @throws org.w3c.dom.DOMException if the name specified for the new node
+         *         is not an XML name according to the XML version in use specified in the
+         *         {@code Document.xmlVersion} attribute.
+         *         <p>si el nombre especificado para el nuevo nodo no es un nombre
+         *         de XML de acuerdo a la versi&oacute; en uso de XML especificada
+         *         en el atributo {@code Document.xmlVersion}.</p>
+         * @throws java.lang.NullPointerException if {@code ele} is {@code null}.
+         *         <p>si {@code ele} es {@code null}.</p>
          */
         static public Element appendChild(Element ele, String name) {
             Document doc = ele.getOwnerDocument();
@@ -3392,11 +3671,18 @@ public class SWBUtils {
         }
 
         /**
-         * Creates a node as child of other one and assign a value to it
-         * @param ele Node pather
-         * @param name Node name to create
-         * @param value Node Value to create
-         * @return a new Element (Node)
+         * Creates a child text node for the one specified. The new node will
+         * contain the text received through {@code value}.
+         * <p>Crea un nodo hijo de texto al nodo especificado. El nuevo nodo
+         * contendr&aacute; el texto recibido a trav&eacute;s de {@code value}.</p>
+         * @param ele father node. This node will contain the new node.
+         * @param name a string representing the name for the new node
+         * @param value a string representing the new node's content
+         * @return a new DOM {@code element} whose properties: name, value and father are
+         *         the same as the parameters received.
+         *         <p>un nuevo objeto {@code element} de DOM cuyas propiedades:
+         *         nombre, valor y padre tendr&aacute;n como valores los par&aacute;metros
+         *         recibidos.</p>
          */
         static public Element appendChild(Element ele, String name, String value) {
             Document doc = ele.getOwnerDocument();
@@ -3407,23 +3693,40 @@ public class SWBUtils {
         }
 
         /**
-         * Eval a xpath expression in an input source
-         * @param expression xpath xpression
-         * @param input input to eval
-         * @param resultType Object type to return
-         * @return a specified object QName according to XPathConstants object, ej. XPathConstants.NODE)
-         * @throws javax.xml.xpath.XPathExpressionException
+         * Evaluates a XPath expression in the context of the specified input
+         * source and returns the result as the type specified in {@code resultType}.
+         * @param expression a string representing a XPath expression
+         * @param input the input source that contains the context for the
+         *        expression to evaluate
+         * @param resultType the qualified name for the result type to retutrn
+         * @return the specified object QName according to {@link XPathConstants},
+         *         for example {@code XPathConstants.NODE}.
+         *         <p>el objeto especificado QName de acuerdo a {@code XPathConstants},
+         *         por ejemplo {@code XPathConstants.NODE}.</p>
+         * @throws javax.xml.xpath.XPathExpressionException if the expression cannot
+         *         be compiled.
+         *         <p>si la expresi&oacute;n no se puede compilar.</p>
          */
-        public static Object getXpathEval(String expression, InputSource input, QName resultType) throws javax.xml.xpath.XPathExpressionException {
+        public static Object getXpathEval(String expression, InputSource input,
+                QName resultType) throws javax.xml.xpath.XPathExpressionException {
             XPath xpathObj = getXPathObject();
             javax.xml.xpath.XPathExpression xpathExpression = xpathObj.compile(expression);
             return xpathExpression.evaluate(input, resultType);
         }
 
-        /** Asigna un atributo al DOM del recurso.
-         * Si no existe el atributo, lo crea y si existe lo modifica
-         * @param name String nombre del atributo
-         * @param value String valor del atributo
+        /**
+         * Sets the value for the first element identified by {@code name}, as the 
+         * tag name, in the DOM document received. If the tag name specified does
+         * not exist, it is created; if it exists, its value is modified.
+         * <p>Fija el valor del primer elemento identificado por {@code name},
+         * como el nombre de la etiqueta, en el documento DOM recibido. Si no
+         * existe el elemento con el nombre especificado, lo crea; si existe,
+         * modifica su valor.</p>
+         * @param dom the document to modify
+         * @param name a string representing the element's name to look for
+         * @param value a string representing the element's new value. If it is
+         * {@literal null} and the element identified by {@code name} exists, the
+         * element is removed.
          */
         public static void setAttribute(Document dom, String name, String value) {
             NodeList data = dom.getElementsByTagName(name);
@@ -3450,8 +3753,22 @@ public class SWBUtils {
             }
         }
 
-        /** Lee un atributo del DOM del Recurso
-         * Si el atributo no esta declarado regresa el valor por defecto defvalue.
+        /**
+         * Gets the value for the first occurence of a specified element {@code name} or
+         * the default value. If the element name is not found, the default value is returned.
+         * <p>Obtiene el valor de la primera ocurrencia de un elemento especificado
+         * por su nombre de etiqueta a trav&eacute;s de {@code name}, o el valor
+         * por defecto. Si el elemento no es encontrado, regresa {@code null}.</p>
+         * @param dom the DOM document which contains the data
+         * @param name a string representing the name of the element to look for
+         * @param defvalue a string to return if specified element is not found
+         * @return a string containing the value asociated to the first element with
+         *         tag name {@code name} whithin the DOM document {@code dom}; or
+         *         the value of {@code defvalue} if the specified element does not exist.
+         *         <p>un objeto string que contiene el valor asociado al primer elemento
+         *         con nombre de etiqueta {@code name} dentro del documento DOM
+         *         {@code dom}; o el valor de {@code defvalue} si el elemento especificado
+         *         no existe.</p>
          */
         public static String getAttribute(Document dom, String name, String defvalue) {
             String ret = getAttribute(dom, name);
@@ -3461,8 +3778,19 @@ public class SWBUtils {
             return ret;
         }
 
-        /** Lee un atributo del DOM del Recurso
-         * Si el atributo no esta declarado regresa null.
+        /**
+         * Gets the value for the first occurence of a specified element {@code name}. If
+         * the element name is not found, {@code null} is returned.
+         * <p>Obtiene el valor de la primera ocurrencia de un elemento especificado
+         * por su nombre de etiqueta a trav&eacute;s de {@code name}. Si el elemento
+         * no es encontrado, regresa {@code null}.</p>
+         * @param dom the DOM document which contains the data
+         * @param name a string representing the name of the element to look for
+         * @return a string containing the value asociated to the first element with
+         *         tag name {@code name} whithin the DOM document {@code dom}.
+         *         <p>un objeto string que contiene el valor asociado al primer elemento
+         *         con nombre de etiqueta {@code name} dentro del documento DOM
+         *         {@code dom}.</p>
          */
         public static String getAttribute(Document dom, String name) {
             String ret = null;
@@ -3477,118 +3805,231 @@ public class SWBUtils {
         }
     }
 
+
     /**
-     * 
+     * Manager of database connection operations and characteristics.
+     * All the connection pool names that <u>can be used</u> with this operations <strong>must be
+     * registered</strong> in the db.properties file.
+     * <p>Administrador de operaciones y caracter&iacute;sticas de conexiones a base
+     * de datos. Todos los nombres de pool de conexiones que <u>pueden utilizarse</u> con
+     * estas operaciones <strong>deben estar registrados</strong> en el archivo db.properties.</p>
      */
-    public static class DB 
-    {
+    public static class DB {
 
 
-        public static final String DBTYPE_HSQL="HSQL";
-        public static final String DBTYPE_MySQL="MySQL";
-        public static final String DBTYPE_MsSQL="MsSQL";
-        public static final String DBTYPE_Oracle="Oracle";
-        public static final String DBTYPE_PostgreSQL="PostgreSQL";
-        public static final String DBTYPE_Derby="Derby";
+        /**
+         * Identifier for the Hypersonic database.
+         * <p>Identificador para la base de datos Hypersonic.</p>
+         */
+        public static final String DBTYPE_HSQL = "HSQL";
 
+        /**
+         * Identifier for the MySQL database.
+         * <p>Identificador para la base de datos MySQL.</p>
+         */
+        public static final String DBTYPE_MySQL = "MySQL";
+
+        /**
+         * Identifier for the Microsoft SQL Server database.
+         * <p>Identificador para la base de datos de Microsoft SQL Server.</p>
+         */
+        public static final String DBTYPE_MsSQL = "MsSQL";
+
+        /**
+         * Identifier for the Oracle database.
+         * <p>Identificador para la base de datos de Oracle.</p>
+         */
+        public static final String DBTYPE_Oracle = "Oracle";
+
+        /**
+         * Identifier for the PostgreSQL database.
+         * <p>Identificador para la base de datos de PostgreSQL.</p>
+         */
+        public static final String DBTYPE_PostgreSQL = "PostgreSQL";
+
+        /**
+         * Identifier for the Derby database.
+         * <p>Identificador para la base de datos de Derby.</p>
+         */
+        public static final String DBTYPE_Derby = "Derby";
+
+        /**
+         * Database connection manager.
+         * <p>Administrador de conexiones a base de datos.</p>
+         */
         private static DBConnectionManager manager = null;
+
+        /**
+         * Identifier for the default database pool.
+         * <p>Identificador para el pool de conexiones a base de datos por
+         * defecto.</p>
+         */
         private static String defaultPoolName = "swb";
 
+        /**
+         * Gets a reference to the database connection manager of this object.
+         * <p>Obtiene una referencia al administrador de conexiones a base de datos
+         * de este objeto.</p>
+         * @return a reference to the database connection manager of this object.
+         *         <p>una referencia al administrador de conexiones a base de datos
+         *         de este objeto.</p>
+         */
         private static DBConnectionManager getConnectionManager() {
-            if (manager == null) {
-                manager = new DBConnectionManager();
+            if (SWBUtils.DB.manager == null) {
+                SWBUtils.DB.manager = new DBConnectionManager();
             }
-            return manager;
+            return SWBUtils.DB.manager;
         }
 
-        /** Returns an enumeration of DBConnectionPool
-         * @return an enumeration of DBConnectionPool
+        /**
+         * Gets all the database connection pools available.
+         * <p>Obtiene todos los pools de conexiones a base de datos disponibles.</p>
+         * @return an enumeration of the database connection pools found.
+         *         <p>una enumeraci&oacute;n de los pools de conexi&oacute;n a
+         *         base de datos encontrados.</p>
          */
         public static Enumeration<DBConnectionPool> getPools() {
             return getConnectionManager().getPools().elements();
         }
 
-        /** Returns a DBConnectionPool
-         * @return a DBConnectionPool
+        /**
+         * Retrieves the database connection pool whose name matches {@code name}.
+         * <p>Recupera el pool de conexiones a base de datos cuyo nombre concuerda
+         * con {@code name}.</p>
+         * @param name a string representing a registered connection pool name to retrieve
+         * @return a database connection pool whose name matches {@code name}.
+         *         <p>un pool de conexiones a base de datos cuyo nombre concuerda
+         *         con {@code name}.</p>
          */
         public static DBConnectionPool getPool(String name) {
             return (DBConnectionPool) getConnectionManager().getPools().get(name);
         }
 
-        /** Returns a default DBConnectionPool
-         * @return a default DBConnectionPool
+        /**
+         * Retrieves the database connection pool whose name matches {@code SWBUtils.DB.defaultPoolName}.
+         * <p>Recupera el pool de conexiones a base de datos cuyo nombre concuerda
+         * con {@code SWBUtils.DB.defaultPoolName} whose name matches {@code SWBUtils.DB.defaultPoolName}.</p>
+         * @return the database connection pool whose name matches {@code SWBUtils.DB.defaultPoolName}.
+         *         <p>el pool de conexiones a base de datos cuyo nombre concuerda
+         *         con {@code SWBUtils.DB.defaultPoolName}.</p>
          */
         public static DBConnectionPool getDefaultPool() {
-            return (DBConnectionPool) getConnectionManager().getPools().get(defaultPoolName);
-        }
-
-        /** Returns a ConnectionPoolName
-         * @return a ConnectionPoolName
-         */
-        public static String getDefaultPoolName() {
-            return defaultPoolName;
+            return (DBConnectionPool) getConnectionManager().getPools().get(SWBUtils.DB.defaultPoolName);
         }
 
         /**
-         * 
-         * @param poolName
+         * Gets the name for the default database connection pool.
+         * <p>Obtiene el nombre del pool de conexiones a base de datos por defecto.</p>
+         * @return a string representing the name for the default database connection pool.
+         *         <p>un objeto string que representa el nombre del pool de
+         *         conexiones a base de datos por defecto.</p>
          */
-        public static void setDefaultPool(String poolName) {
-            defaultPoolName = poolName;
+        public static String getDefaultPoolName() {
+            return SWBUtils.DB.defaultPoolName;
         }
 
-        /** Getter for Connection form DBPool.
-         * @return Connection from DBPool.
-         * @param poolName 
+        /**
+         * Sets the name for the default database connection pool.
+         * <p>Fija el nombre del pool de conexiones a base de datos por defecto.</p>
+         * @param poolName a string representing the new name for the default
+         *        database connection pool. Must not be {@code null}.
+         */
+        public static void setDefaultPool(String poolName) {
+            SWBUtils.DB.defaultPoolName = poolName;
+        }
+
+        /**
+         * Gets a database connection which does not belong to the connection pool specified.
+         * <p>Obtiene una conexi&oacute;n a base de datos que no pertenece al pool de
+         * conexiones especificado.</p>
+         * @param poolName a string representing the name of a registered connection pool
+         * @return a database connection that does not belong to the connection 
+         *         pool whose name matches {@code poolName}.
+         *         <p>una conexi&oacute;n a base de datos que no pertenece al pool
+         *         de conexiones cuyo nombre concuerda con {@code poolName}.</p>
          */
         public static Connection getNoPoolConnection(String poolName) {
             return getConnectionManager().getNoPoolConnection(poolName);
         }
 
-        /** Getter for Connection form DBPool.
+        /**
+         * Gets a database connection from the default database connection pool
+         * setting the description indicated to the database connection.
+         * <p>Obtiene una conexi&oacute;n a base de datos del pool de conexiones
+         * por defecto, fijando la descripci&oacute;n indicada a la conexi&oacute;n
+         * de base de datos.</p>
          * @param description 
          * @return Connection from DBPool.
          */
         public static Connection getDefaultConnection(String description) {
-            return getConnection(defaultPoolName, description);
+            return getConnection(SWBUtils.DB.defaultPoolName, description);
         }
 
-        /** Getter for Connection form DBPool.
-         * @return Connection from DBPool.
+        /**
+         * Gets a database connection from the default database connection pool
+         * with no description.
+         * <p>Obtiene una conexi&oacute;n a base de datos del pool de conexiones
+         * por defecto, sin descripci&oacute;n.</p>
+         * @return a database connection from the default database connection pool.
+         *         <p>una conexi&oacute;n a base de datos del pool de conexiones
+         *         por defecto.</p>
          */
         public static Connection getDefaultConnection() {
-            return getConnection(defaultPoolName);
+            return getConnection(SWBUtils.DB.defaultPoolName);
         }
 
-        /** Getter for Connection form DBPool.
-         * @return Connection from DBPool.
-         * @param poolName 
-         * @param description 
+        /**
+         * Gets a database connection from the connection pool specified, setting
+         * a description for that connection.
+         * <p>Obtiene una conexi&oacute;n a base de datos del pool de conexiones
+         * especificado, fijando una descripci&oacute;n para esa conexi&oacute;n.</p>
+         * @param poolName a string representing the name of a registered connection pool
+         *        from which a connection will be obtained
+         * @param description a string with the description for the database connection
+         * @return a database connection from the connection pool specified.
+         *         <p>una conexi&oacute;n a base de datos del pool de conexiones especificado.</p>
          */
         public static Connection getConnection(String poolName, String description) {
             return getConnectionManager().getConnection(poolName, description);
         //return dbPool.getNoPoolConnection(name);
         }
 
-        /** Getter for Connection form DBPool.
-         * @return Connection from DBPool.
-         * @param name  */
+        /**
+         * Gets a database connection (descriptionless) from the connection pool specified.
+         * <p>Obtiene una conexi&oacute;n a base de datos (sin descripci&oacute;n) del pool de conexiones
+         * especificado.</p>
+         * @param name a string representing the name of a registered connection pool
+         *        from which a connection will be obtained
+         * @return a database connection from the connection pool specified.
+         *         <p>una conexi&oacute;n a base de datos del pool de conexiones especificado.</p>
+         */
         public static Connection getConnection(String name) {
             return getConnectionManager().getConnection(name);
         }
 
-        /** Nombre de base de datos.
-         * DataBase name
-         *  @return String nombre de la base de datos.
+        /**
+         * Gets the database name used by the default database connection pool.
+         * <p>Obtiene el nombre de base de datos utilizado por el pool de conexiones
+         * a base de datos por defecto.</p>
+         * @return a string containing the database name used by the default
+         *         database connection pool.
+         *         <p>un objeto string que contiene el nombre de base de datos
+         *         utilizado por el pool de conexiones a base de datos por defecto.</p>
          */
         public static String getDatabaseName() {
-            return getDatabaseName(defaultPoolName);
+            return getDatabaseName(SWBUtils.DB.defaultPoolName);
         }
 
-        /** Nombre de base de datos.
-         * DataBase name
-         *  @param poolName 
-         * @return String nombre de la base de datos.
+        /**
+         * Gets the database name used by the database connection pool specified.
+         * <p>Obtiene el nombre de base de datos utilizado por el pool de conexiones
+         * a base de datos especificado.</p>
+         * @param poolName a string indicating a registered connection pool name to use.
+         *        If it is {@code null}, the same is returned.
+         * @return a string containing the database name used by the database 
+         *         connection pool specified.
+         *         <p>un objeto string que contiene el nombre de base de datos
+         *         utilizado por el pool de conexiones especificado.</p>
          */
         public static String getDatabaseName(String poolName) {
             String ret = null;
@@ -3600,56 +4041,148 @@ public class SWBUtils {
                     con.close();
                 }
             } catch (Exception e) {
-                log.error("Not Database Found...", e);
+                SWBUtils.log.error("Not Database Found...", e);
             }
             return ret;
         }
 
-        /** Tipo de base de datos.
-         * DataBase type
+        /**
+         * Gets the database type used by the default connection pool. This database
+         * type is determined by the connected database's name, according to this name, one
+         * of the database identifiers ({@code SWBUtils.DB.DBTYPE_HSQL}, {@code SWBUtils.DB.DBTYPE_MySQL},
+         * {@code SWBUtils.DB.DBTYPE_MsSQL}, {@code SWBUtils.DB.DBTYPE_Oracle},
+         * {@code SWBUtils.DB.DBTYPE_PostgreSQL}, {@code SWBUtils.DB.DBTYPE_Derby}) is returned.
+         * <p>Obtiene el tipo de base de datos utilizado por el pool de conexiones
+         * por defecto. Este tipo de base de datos est&aacute; determinado por el nombre de la base
+         * de datos en uso, de acuerdo a este nombre, uno de los identificadores de
+         * base de datos ({@code SWBUtils.DB.DBTYPE_HSQL}, {@code SWBUtils.DB.DBTYPE_MySQL},
+         * {@code SWBUtils.DB.DBTYPE_MsSQL}, {@code SWBUtils.DB.DBTYPE_Oracle},
+         * {@code SWBUtils.DB.DBTYPE_PostgreSQL}, {@code SWBUtils.DB.DBTYPE_Derby}) es devuelto.</p>
+         * @return a string representing the identified database type used by the
+         *         default connection pool.
+         *         <p>un objeto string que representa el tipo de base de datos
+         *         identificado que es utilizado por el pool de conexiones por defecto.</p>
          */
         public static String getDatabaseType() {
-            return getDatabaseType(defaultPoolName);
+            return getDatabaseType(SWBUtils.DB.defaultPoolName);
         }
 
-        /** Tipo de base de datos.
-         * DataBase type
-         *  @param poolName
-         * @return String nombre de la base de datos.
+        /**
+         * Gets the database type used by the connection pool specified. This database
+         * type is determined by the connected database's name, according to this name, one
+         * of the database identifiers ({@code SWBUtils.DB.DBTYPE_HSQL}, {@code SWBUtils.DB.DBTYPE_MySQL},
+         * {@code SWBUtils.DB.DBTYPE_MsSQL}, {@code SWBUtils.DB.DBTYPE_Oracle},
+         * {@code SWBUtils.DB.DBTYPE_PostgreSQL}, {@code SWBUtils.DB.DBTYPE_Derby}) is returned.
+         * <p>Obtiene el tipo de base de datos utilizado por el pool de conexiones
+         * especificado. Este tipo de base de datos est&aacute; determinado por el nombre de la base
+         * de datos en uso, de acuerdo a este nombre, uno de los identificadores de
+         * base de datos ({@code SWBUtils.DB.DBTYPE_HSQL}, {@code SWBUtils.DB.DBTYPE_MySQL},
+         * {@code SWBUtils.DB.DBTYPE_MsSQL}, {@code SWBUtils.DB.DBTYPE_Oracle},
+         * {@code SWBUtils.DB.DBTYPE_PostgreSQL}, {@code SWBUtils.DB.DBTYPE_Derby}) es devuelto.</p>
+         * @param poolName a string representing a registered connection pool name
+         * @return a string representing the identified database type used by the
+         *         specified connection pool.
+         *         <p>un objeto string que representa el tipo de base de datos
+         *         identificado que es utilizado por el pool de conexiones especificado.</p>
          */
         public static String getDatabaseType(String poolName) {
+            
             String ret = getDatabaseName(poolName);
-            if(ret.toLowerCase().indexOf("hsql")>-1)ret=DBTYPE_HSQL;
-            else if(ret.toLowerCase().indexOf("mysql")>-1)ret=DBTYPE_MySQL;
-            else if(ret.toLowerCase().indexOf("mssql")>-1)ret=DBTYPE_MsSQL;
-            else if(ret.toLowerCase().indexOf("oracle")>-1)ret=DBTYPE_Oracle;
-            else if(ret.toLowerCase().indexOf("postgresql")>-1)ret=DBTYPE_PostgreSQL;
-            else if(ret.toLowerCase().indexOf("derby")>-1)ret=DBTYPE_Derby;
+            if (ret.toLowerCase().indexOf("hsql") >- 1) {
+                ret = SWBUtils.DB.DBTYPE_HSQL;
+            } else if (ret.toLowerCase().indexOf("mysql") >- 1) {
+                ret = SWBUtils.DB.DBTYPE_MySQL;
+            } else if (ret.toLowerCase().indexOf("mssql") >- 1) {
+                ret = SWBUtils.DB.DBTYPE_MsSQL;
+            } else if (ret.toLowerCase().indexOf("oracle") >- 1) {
+                ret = SWBUtils.DB.DBTYPE_Oracle;
+            } else if (ret.toLowerCase().indexOf("postgresql") >- 1) {
+                ret = SWBUtils.DB.DBTYPE_PostgreSQL;
+            } else if (ret.toLowerCase().indexOf("derby") >- 1) {
+                ret = SWBUtils.DB.DBTYPE_Derby;
+            }
             return ret;
         }
 
-
+        /**
+         * Gets the number of opened database connections belonging to a certain connection pool.
+         * <p>Obtiene el n&uacute;mero de conexiones a base de datos abiertas, pertenecientes
+         * a un cierto pool de conexiones.</p>
+         * @param poolName a string representing a registered connection pool name.
+         * @return the number of opened database connections belonging to a certain
+         *         connection pool.
+         *         <p>el n&uacute;mero de conexiones a base de datos abiertas,
+         *         pertenecientes a un cierto pool de conexiones.</p>
+         */
         public static int getConnections(String poolName) {
             return getConnectionManager().getConnections(poolName);
         }
 
+        /**
+         * Gets the number of free database connections into the specified connection pool.
+         * <p>Obtiene el n&uacute;mero de conexiones a base de datos libres en el 
+         * pool de conexiones especificado.</p>
+         * @param poolName a string representing a registered connection pool name.
+         * @return the number of free database connections belonging to the
+         *         connection pool with name like {@code poolName}.
+         *         <p>el n&uacute;mero de conexiones a base de datos libres,
+         *         pertenecientes al pool de conexiones con nombre igual a {@code poolName}.</p>
+         */
         public static int getFreeConnections(String poolName) {
             return getConnectionManager().getFreeConnections(poolName);
         }
 
         /**
-         * Obtains the DBConnectionManager's PoolConnectionTimeLock.
-         * @return a reference to the PoolConnectionTimeLock used by the DBConnectionManager
+         * Obtains a reference to the pool connection time-lock associated to the
+         * connection manager.
+         * <p>Obtiene una referencia al administrador del mecanismo de time-lock
+         * del pool de conexiones asociado al administrador de conexiones.</p>
+         * @return a reference to the pool connection time-lock associated to the
+         *         connection manager.
+         *         <p>una referencia al administrador del mecanismo de time-lock
+         *         del pool de conexiones asociado al administrador de conexiones.</p>
          */
         public static PoolConnectionTimeLock getTimeLock() {
             return getConnectionManager().getTimeLock();
         }
     }
-
+    
+    
+    /**
+     * Wrapper for several criptographic operations.
+     * <p>Contenedor de varias operaciones criptogr&aacute;ficas.</p>
+     */
     public static class CryptoWrapper {
 
 
-        public static String passwordDigest(String toEncode) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        /**
+         * Performs the diggestion of the message in {@code toEncode} through the
+         * SHA-512 algorithm, with a previous validation.
+         * <p>Realiza la digesti&oacute;n del mensaje en {@code toEncode} utilizando
+         * el algoritmo SHA-512, con una validaci&oacute;n previa.</p>
+         * @param toEncode a string containing the message to digest. If it starts
+         *         with any of the following prefixes: {@literal "{SHA-512}"},
+         *         {@literal "{SHA}"}, {@literal "{SSHA}"}, {@literal "{CRYPT}"},
+         *         {@literal "{SMD5}"} OR {@literal "{MD5}"},  the resulting
+         *         string is this same parameter.
+         * @return a string representing the received message digested with an implementation
+         *         of the SHA-512 algorithm. This string starts with the prefix "{SHA-512}".
+         *         <p>un objeto string que representa el mensaje recibido digerido
+         *         con una implementaci&oacute;n del algoritmo SHA-512. Este string
+         *         comienza con el prefijo "{SHA-512}".</p>
+         * @throws java.security.NoSuchAlgorithmException if there is no implementation
+         *         of the SHA-512 algorithm available in the environment.
+         *         <p>si no hay una implementaci&oacute;n del algoritmo SHA-512
+         *         disponible en el ambiente.</p>
+         * @throws java.io.UnsupportedEncodingException if the character encoding
+         *         used to obtain the bytes from the message received (ISO8859-1)
+         *         is not supported.
+         *         <p>si el c&oacute;digo de caracteres utilizado para obtener los
+         *         bytes del mensaje recibido (ISO8859-1) no es soportado.</p>
+         */
+        public static String passwordDigest(String toEncode)
+                throws NoSuchAlgorithmException, UnsupportedEncodingException {
+            
             if (toEncode.startsWith("{SHA-512}") ||
                     toEncode.startsWith("{SHA}") ||
                     toEncode.startsWith("{SSHA}") ||
@@ -3660,22 +4193,87 @@ public class SWBUtils {
             }
             MessageDigest messageDigest = MessageDigest.getInstance("SHA-512");
             //return "{SHA-512}" + new BASE64Encoder().encode(messageDigest.digest(toEncode.getBytes()));
-            return "{SHA-512}" + SFBase64.encodeBytes(messageDigest.digest(toEncode.getBytes("ISO8859-1")), false);
+            return "{SHA-512}"
+                    + SFBase64.encodeBytes(messageDigest.digest(toEncode.getBytes("ISO8859-1")),
+                                           false);
         }
 
-        public static String comparablePassword(String toEncode) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        /**
+         * Performs the diggestion of the message in {@code toEncode} through the
+         * SHA-512 algorithm.
+         * <p>Realiza la digesti&oacute;n del mensaje en {@code toEncode} utilizando
+         * el algoritmo SHA-512.</p>
+         * @param toEncode a string containing the message to digest
+         * @return a string representing the received message digested with an implementation
+         *         of the SHA-512 algorithm. This string starts with the prefix "{SHA-512}".
+         *         <p>un objeto string que representa el mensaje recibido digerido
+         *         con una implementaci&oacute;n del algoritmo SHA-512. Este string
+         *         comienza con el prefijo "{SHA-512}".</p>
+         * @throws java.security.NoSuchAlgorithmException if there is no implementation
+         *         of the SHA-512 algorithm available in the environment.
+         *         <p>si no hay una implementaci&oacute;n del algoritmo SHA-512
+         *         disponible en el ambiente.</p>
+         * @throws java.io.UnsupportedEncodingException if the character encoding
+         *         used to obtain the bytes from the message received (ISO8859-1)
+         *         is not supported.
+         *         <p>si el c&oacute;digo de caracteres utilizado para obtener los
+         *         bytes del mensaje recibido (ISO8859-1) no es soportado.</p>
+         */
+        public static String comparablePassword(String toEncode)
+                throws NoSuchAlgorithmException, UnsupportedEncodingException {
             return comparablePassword(toEncode, "SHA-512");
         }
 
-        public static String comparablePassword(String toEncode, String digestAlgorithm) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        /**
+         * Performs the diggestion of the message in {@code toEncode} through the
+         * algorithm specified by {@code digestAlgorithm}.
+         * <p>Realiza la digesti&oacute;n del mensaje en {@code toEncode} utilizando
+         * el algoritmo especificado por {@code digestAlgorithm}.</p>
+         * @param toEncode a string containing the message to digest
+         * @param digestAlgorithm a string containing the algorithm's name to use
+         * @return a string representing the received message digested with an implementation
+         *         of the specified algorithm. This string starts with the prefix "{SHA-512}".
+         *         <p>un objeto string que representa el mensaje recibido digerido
+         *         con una implementaci&oacute;n del algoritmo especificado. Este string
+         *         comienza con el prefijo "{SHA-512}".</p>
+         * @throws java.security.NoSuchAlgorithmException if there is no implementation
+         *         of the specified algorithm available in the environment.
+         *         <p>si no hay una implementaci&oacute;n del algoritmo especificado
+         *         disponible en el ambiente.</p>
+         * @throws java.io.UnsupportedEncodingException if the character encoding
+         *         used to obtain the bytes from the message received (ISO8859-1)
+         *         is not supported.
+         *         <p>si el c&oacute;digo de caracteres utilizado para obtener los
+         *         bytes del mensaje recibido (ISO8859-1) no es soportado.</p>
+         */
+        public static String comparablePassword(String toEncode, String digestAlgorithm)
+                throws NoSuchAlgorithmException, UnsupportedEncodingException {
             MessageDigest messageDigest = MessageDigest.getInstance(digestAlgorithm);
             //return "{SHA-512}" + new BASE64Encoder().encode(messageDigest.digest(toEncode.getBytes()));
-            return "{SHA-512}" + SFBase64.encodeBytes(messageDigest.digest(toEncode.getBytes("ISO8859-1")), false);
+            return "{SHA-512}"
+                    + SFBase64.encodeBytes(messageDigest.digest(toEncode.getBytes("ISO8859-1")),
+                                           false);
         }
 
-        public static byte[] PBEAES128Cipher(String passPhrese, byte[] data) throws GeneralSecurityException {
+        /**
+         * Encrypts data applying the Advanced Encryption Standard (AES) algorithm
+         * and a provided phrase as a password.
+         * <p>Encripta informaci&oacute;n aplicando el algoritmo Advanced Encryption
+         * Standard (AES) y una frase proporcionada a manera de contrase&ntilde;a.</p>
+         * @param passPhrase a string used as a password for decrypting the data afterward.
+         * @param data an array of bytes containing the information to encrypt
+         * @return an array of bytes containing the encrypted information.
+         *         <p>un arreglo de bytes que contiene la informaci&oacute;n encriptada.</p>
+         * @throws java.security.GeneralSecurityException if the key, derived from
+         *         {@code passPhrase}, used in the encryption process is not valid.
+         *         <p>si la llave, derivada de {@code passPhrase}, utilizada en el
+         *         proceso de encripci&oacute;n no es v&aacute;lida.</p>
+         */
+        public static byte[] PBEAES128Cipher(String passPhrase, byte[] data)
+                throws GeneralSecurityException {
+
             byte[] key = new byte[16];
-            byte[] tmp = passPhrese.getBytes();
+            byte[] tmp = passPhrase.getBytes();
             int pos = 0;
             while (pos < 16) {
                 System.arraycopy(tmp, 0, key, pos, Math.min(16 - pos, tmp.length));
@@ -3687,9 +4285,27 @@ public class SWBUtils {
             return cipher.doFinal(data);
         }
 
-        public static byte[] PBEAES128Decipher(String passPhrese, byte[] data) throws GeneralSecurityException {
+        /**
+         * Decrypts data applying the Advanced Encryption Standard (AES) algorithm
+         * and a provided phrase as a password, used previously for the encryption process.
+         * <p>Decripta informaci&oacute;n aplicando el algoritmo Advanced Encryption
+         * Standard (AES) y una frase proporcionada a manera de contrase&ntilde;a, que
+         * debi&oacute; ser usada durante el proceso de encriptaci&oacute;n.</p>
+         * @param passPhrase a string used as a password for decrypting the data.
+         *        This string must be the same that was used for encrypting {@code data}.
+         * @param data an array of bytes containing the information to decrypt
+         * @return an array of bytes containing the decrypted information.
+         *         <p>un arreglo de bytes que contiene la informaci&oacute;n decriptada.</p>
+         * @throws java.security.GeneralSecurityException if the key, derived from
+         *         {@code passPhrase}, used in the decryption process is not valid.
+         *         <p>si la llave, derivada de {@code passPhrase}, utilizada en el
+         *         proceso de decripci&oacute;n no es v&aacute;lida.</p>
+         */
+        public static byte[] PBEAES128Decipher(String passPhrase, byte[] data)
+                throws GeneralSecurityException {
+
             byte[] key = new byte[16];
-            byte[] tmp = passPhrese.getBytes();
+            byte[] tmp = passPhrase.getBytes();
             int pos = 0;
             while (pos < 16) {
                 System.arraycopy(tmp, 0, key, pos, Math.min(16 - pos, tmp.length));
@@ -3702,9 +4318,22 @@ public class SWBUtils {
         }
     }
 
+
+    /**
+     * Container for operations on collections of data.
+     * <p>Contenedor de operaciones sobre colecciones de informaci&oacute;n.</p>
+     */
     public static class Collections {
 
-        
+
+        /**
+         * Copies the elements in an {@code iterator} into an {@code arrayList}.
+         * <p>Copia los elementos de un objeto {@code iterator} en un objeto {@code arrayList}.</p>
+         * @param it an {@code iterator} from which the elements will be copied.
+         * @return a {@code list} formed by the same elements {@code it} has.
+         *         <p>un objeto {@code list} formado por los mismos elementos que
+         *         tiene {@code it}.</p>
+         */
         public static List copyIterator(Iterator it) {
             ArrayList ret = new ArrayList();
             while (it.hasNext()) {
@@ -3714,6 +4343,14 @@ public class SWBUtils {
             return ret;
         }
 
+        /**
+         * Calculates the number of elements in an {@code iterator} and returns that number.
+         * <p>Calcula el n&uacute;mero de elementos en un objeto {@code iterator}
+         * y regresa ese n&uacute;mero.</p>
+         * @param it an {@code iterator} from which the number of elements will be calculated.
+         * @return the number of elements in the {@code iterator} received.
+         *         <p>el n&uacute;mero de elementos en el objeto {@code iterator} recibido.</p>
+         */
         public static long sizeOf(Iterator it) {
             long size = 0;
             while (it.hasNext()) {
@@ -3722,6 +4359,5 @@ public class SWBUtils {
             }
             return size;
         }
-
     }
 }
