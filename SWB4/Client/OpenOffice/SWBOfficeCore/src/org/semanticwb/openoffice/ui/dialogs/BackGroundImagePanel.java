@@ -301,7 +301,7 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
                         this.jPassword.requestFocus();
                         return;
                     }
-                    configurationListURI.addUserConfiguration(uri, this.jTextFieldClave.getText());
+                    //configurationListURI.addUserConfiguration(uri, this.jTextFieldClave.getText());
                     parent.webAddress = uri;
                     parent.login = this.jTextFieldClave.getText();
                     parent.password = new String(this.jPassword.getPassword());
