@@ -288,10 +288,10 @@ public final class wb4writeraddon extends WeakBase
             com.sun.star.beans.PropertyValue[] aArguments)
     {
         try
-        {
+        {            
             if (aURL.Protocol.compareTo("org.semanticwb.openoffice.writer.wb4writeraddon:") == 0)
             {
-
+                
                 OfficeDocument document = new WB4Writer(this.m_xContext);
                 if (aURL.Path.compareTo("save") == 0)
                 {
@@ -371,7 +371,7 @@ public final class wb4writeraddon extends WeakBase
 
                 }
                 if (aURL.Path.compareTo("closeSession") == 0)
-                {
+                {                    
                     OfficeApplication.closeSession();
                     JOptionPane.showMessageDialog(null, "¡Se ha cerrado la sesión!", "Cerrar sesión", JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
                     return;
