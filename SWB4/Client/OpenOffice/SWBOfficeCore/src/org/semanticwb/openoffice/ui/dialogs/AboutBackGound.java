@@ -48,11 +48,13 @@ public class AboutBackGound extends javax.swing.JPanel {
 
     private Image imgFondo=ImageLoader.images.get("splash").getImage();
     Dialog parent;
+    private static final String version="4.0.1.0";
     /** Creates new form AboutBackGound */
     public AboutBackGound(Dialog parent) {
         this.parent=parent;        
         initComponents();
-        this.jLabelVersion.setText(this.jLabelVersion.getText()+IOfficeApplication.version);
+        this.jLabelVersionAPI.setText(this.jLabelVersionAPI.getText()+IOfficeApplication.version);
+        this.jLabelVersion.setText(this.jLabelVersion.getText()+version);
     }    
 
     /** This method is called from within the constructor to
@@ -66,6 +68,7 @@ public class AboutBackGound extends javax.swing.JPanel {
 
         jButtonClose = new javax.swing.JButton();
         jButtonCloseLicense = new javax.swing.JButton();
+        jLabelVersionAPI = new javax.swing.JLabel();
         jLabelVersion = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(500, 300));
@@ -96,7 +99,9 @@ public class AboutBackGound extends javax.swing.JPanel {
             }
         });
 
-        jLabelVersion.setText("Build: ");
+        jLabelVersionAPI.setText("API server versión: ");
+
+        jLabelVersion.setText("Version:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -104,19 +109,23 @@ public class AboutBackGound extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(273, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jLabelVersion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButtonCloseLicense, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButtonClose, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabelVersion)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jLabelVersionAPI, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jButtonCloseLicense, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jButtonClose, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(33, 33, 33))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(203, Short.MAX_VALUE)
+                .addContainerGap(171, Short.MAX_VALUE)
                 .addComponent(jLabelVersion)
+                .addGap(18, 18, 18)
+                .addComponent(jLabelVersionAPI)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonClose, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -142,6 +151,7 @@ public class AboutBackGound extends javax.swing.JPanel {
     private javax.swing.JButton jButtonClose;
     private javax.swing.JButton jButtonCloseLicense;
     private javax.swing.JLabel jLabelVersion;
+    private javax.swing.JLabel jLabelVersionAPI;
     // End of variables declaration//GEN-END:variables
 
    
