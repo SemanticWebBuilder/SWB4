@@ -24,268 +24,240 @@
 
 package org.semanticwb.base.util.imp;
 
+
 import org.semanticwb.Logger;
 import org.apache.log4j.Level;
 import org.semanticwb.SWBUtils;
 
+
+/* Se eliminan los comentarios de documentaci&oacute;n de esta clase, para que
+ * se hereden los de la clase padre. */
 /**
- *
  * @author Jei
  */
 public class Logger4jImpl implements Logger
 {
-    //Definir objetos para ambos Loggers
-    private org.apache.log4j.Logger log=null;
-    //Definir objetos para ambos Loggers
-    private Class cls=null;
 
-    private static final String TRACE= "trace";
-    private static final String DEBUG= "debug";
-    private static final String INFO= "info";
-    private static final String WARN= "warn";
-    private static final String ERROR= "error";
-    private static final String FATAL= "fatal";
-    private static final String EVENT= "event";
+
+    //Definir objetos para ambos Loggers
+    /**
+     * Instance of a Logger.
+     * <p>Instancia de un logger.</p>
+     */
+    private org.apache.log4j.Logger log = null;
+
+    //Definir objetos para ambos Loggers
+    /**
+     * Reference to the object class from which the logger will be used.
+     * <p>Referencia a la clase (tipo) del objeto desde la que se usar&aacute; el
+     * logger.</p>
+     */
+    private Class cls = null;
+
+    /**
+     * Identifier for the <q>TRACE</q> kind of message in the log. This kind of
+     * message must provide the information needed to trace an error or exceptional condition.
+     * <p>Identificador para el tipo de mensaje <q>TRACE</q> en la bit&aacute;cora.
+     * Este tipo de mensaje debe proveer la informaci&oacute;n necesaria para rastrear
+     * un error o condici&oacute;n excepcional.</p>
+     */
+    private static final String TRACE = "trace";
+
+    /**
+     * Identifier for the <q>DEBUG</q> kind of message in the log. This kind of
+     * message must provide information for bug identification and resolution.
+     * <p>Identificador para el tipo de mensaje <q>DEBUG</q> en la bit&aacute;cora.
+     * Este tipo de mensaje debe mostrar informaci&oacute;n para identificaci&oacute;n
+     * y resoluci&oacute;n de bugs.</p>
+     */
+    private static final String DEBUG = "debug";
+
+    /**
+     * Identifier for the <q>INFO</q> kind of message in the log. This kind of
+     * message provides information in a general manner.
+     * <p>Identificador para el tipo de mensaje <q>INFO</q> en la bit&aacute;cora.
+     * Este tipo de mensaje muestra informaci&oacute;n de manera general.</p>
+     */
+    private static final String INFO = "info";
+
+    /**
+     * Identifier for the <q>WARN</q> kind of message in the log. This kind of
+     * message provides a warning about a certain situation.
+     * <p>Identificador para el tipo de mensaje <q>WARN</q> en la bit&aacute;cora.
+     * Este tipo de mensaje provee una advertencia sobre cierta situaci&oacute.</p>
+     */
+    private static final String WARN = "warn";
+
+    /**
+     * Identifier for the <q>ERROR</q> kind of message in the log. This kind of
+     * message provides notice of an error and information related to that error.
+     * <p>Identificador para el tipo de mensaje <q>ERROR</q> en la bit&aacute;cora.
+     * Este tipo de mensaje provee notificaci&oacute;n sobre un error e informaci&oacute;n
+     * relacionada a ese error.</p>
+     */
+    private static final String ERROR = "error";
+
+    /**
+     * Identifier for the <q>FATAL</q> kind of message in the log. This kind of
+     * message provides notice of a situation from which the application cannot recover.
+     * <p>Identificador para el tipo de mensaje <q>FATAL</q> en la bit&aacute;cora.
+     * Este tipo de mensaje provee notificaci&oacute;n de una situaci&oacute;n de
+     * la que la aplicaci&oacute;n no se puede recuperar.</p>
+     */
+    private static final String FATAL = "fatal";
+
+    /**
+     * Identifier for the <q>EVENT</q> kind of message in the log. This kind of
+     * message provides notice of the happening of a specific event.
+     * <p>Identificador para el tipo de mensaje <q>EVENT</q> en la bit&aacute;cora.
+     * Este tipo de mensaje provee notificaci&oacute;n de la ocurrencia de un evento
+     * espec&iacute;fico.</p>
+     */
+    private static final String EVENT = "event";
 
     
     /**
-     * 
-     * @param logger
+     * Creates an instance of this logger associating the class that will use it.
+     * <p>Crea una instancia de este logger asociando la clase que lo usar&aacute;.</p>
+     * @param cls the object class from which the logger will be used
      */
     public Logger4jImpl(Class cls)
     {
-        this.log=org.apache.log4j.Logger.getLogger(cls);
-        this.cls=cls;
+        this.log = org.apache.log4j.Logger.getLogger(cls);
+        this.cls = cls;
     }
     
-    /*
-     * Usado para debugueos mas profundos
-     */
-    /**
-     * 
-     * @param txt
-     * @param t
-     */
     public void trace(String txt, Throwable t)
     {
         log.trace(txt,t);
-        SWBUtils.ERROR.addError(txt, t, cls, TRACE);
+        SWBUtils.ERROR.addError(txt, t, cls, Logger4jImpl.TRACE);
     }
     
-    /**
-     * 
-     * @param txt
-     */
     public void trace(String txt)
     {
         log.trace(txt);
     }
     
-    /**
-     * 
-     * @param t
-     */
     public void trace(Throwable t)
     {
         log.trace(null,t);
-        SWBUtils.ERROR.addError(null, t, cls, TRACE);
+        SWBUtils.ERROR.addError(null, t, cls, Logger4jImpl.TRACE);
     }
     
     /*
      * Usado para debugueos
      */
-    /**
-     * 
-     * @param txt
-     * @param t
-     */
     public void debug(String txt, Throwable t)
     {
         log.debug(txt,t);
-        SWBUtils.ERROR.addError(txt, t, cls, DEBUG);
+        SWBUtils.ERROR.addError(txt, t, cls, Logger4jImpl.DEBUG);
     }
     
-    /**
-     * 
-     * @param txt
-     */
     public void debug(String txt)
     {
         log.debug(txt);
     }
     
-    /**
-     * 
-     * @param t
-     */
     public void debug(Throwable t)
     {
         log.debug(null,t);
-        SWBUtils.ERROR.addError(null, t, cls, DEBUG);
+        SWBUtils.ERROR.addError(null, t, cls, Logger4jImpl.DEBUG);
     }
     
     /*
      * Usado para Informacion del Sistema 
      */
-    /**
-     * 
-     * @param txt
-     * @param t
-     */
     public void info(String txt, Throwable t)
     {
         log.info(txt,t);
-        SWBUtils.ERROR.addError(txt, t, cls, INFO);
+        SWBUtils.ERROR.addError(txt, t, cls, Logger4jImpl.INFO);
     }
     
-    /**
-     * 
-     * @param txt
-     */
     public void info(String txt)
     {
         log.info(txt);
     }
     
-    /**
-     * 
-     * @param t
-     */
     public void info(Throwable t)
     {
         log.info(null,t);
-        SWBUtils.ERROR.addError(null, t, cls, INFO);
+        SWBUtils.ERROR.addError(null, t, cls, Logger4jImpl.INFO);
     }
     
-    /*
-     * Usado para Warnings
-     */
-    /**
-     * 
-     * @param txt
-     * @param t
-     */
     public void warn(String txt, Throwable t)
     {
         log.warn(txt,t);
-        SWBUtils.ERROR.addError(txt, t, cls, WARN);
+        SWBUtils.ERROR.addError(txt, t, cls, Logger4jImpl.WARN);
     }
     
-    /**
-     * 
-     * @param txt
-     */
     public void warn(String txt)
     {
         log.warn(txt);
     }
     
-    /**
-     * 
-     * @param t
-     */
     public void warn(Throwable t)
     {
         log.warn(null,t);
-        SWBUtils.ERROR.addError(null, t, cls, WARN);
+        SWBUtils.ERROR.addError(null, t, cls, Logger4jImpl.WARN);
     }
     
     /*
      * Usado para Errores
      */    
-    /**
-     * 
-     * @param txt
-     * @param t
-     */
     public void error(String txt, Throwable t)
     {
         log.error(txt,t);
-        SWBUtils.ERROR.addError(txt, t, cls, ERROR);
+        SWBUtils.ERROR.addError(txt, t, cls, Logger4jImpl.ERROR);
     }
     
-    /**
-     * 
-     * @param txt
-     */
     public void error(String txt)
     {
         log.error(txt);
     }
     
-    /**
-     * 
-     * @param t
-     */
     public void error(Throwable t)
     {
         log.error(null,t);
-        SWBUtils.ERROR.addError(null, t, cls, ERROR);
+        SWBUtils.ERROR.addError(null, t, cls, Logger4jImpl.ERROR);
     }    
 
     /*
      * Usado para Errores RunTime Exceptions
      */
-    /**
-     * 
-     * @param txt
-     * @param t
-     */
     public void fatal(String txt, Throwable t)
     {
         log.fatal(txt,t);
-        SWBUtils.ERROR.addError(txt, t, cls, FATAL);
+        SWBUtils.ERROR.addError(txt, t, cls, Logger4jImpl.FATAL);
     }
     
-    /**
-     * 
-     * @param txt
-     */
     public void fatal(String txt)
     {
         log.fatal(txt);
     }
     
-    /**
-     * 
-     * @param t
-     */
     public void fatal(Throwable t)
     {
         log.fatal(null,t);
-        SWBUtils.ERROR.addError(null, t, cls, FATAL);
+        SWBUtils.ERROR.addError(null, t, cls, Logger4jImpl.FATAL);
     }   
     
     /*
      * Usado para notificacion de eventos
      */
-    /**
-     * 
-     * @param txt
-     * @param t
-     */
     public void event(String txt, Throwable t)
     {
         log.log(Level.OFF, txt, t);
-        SWBUtils.ERROR.addError(txt, t, cls, EVENT);
+        SWBUtils.ERROR.addError(txt, t, cls, Logger4jImpl.EVENT);
     }
     
-    /**
-     * 
-     * @param txt
-     */
     public void event(String txt)
     {
         log.log(Level.OFF, txt);
     }
     
-    /**
-     * 
-     * @param t
-     */
     public void event(Throwable t)
     {
         log.log(Level.OFF, null, t);
-        SWBUtils.ERROR.addError(null, t, cls, EVENT);
+        SWBUtils.ERROR.addError(null, t, cls, Logger4jImpl.EVENT);
     }       
 }
