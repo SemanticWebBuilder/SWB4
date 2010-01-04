@@ -17,7 +17,7 @@
         <name lang="en" xlink:href="http://www.infotec.com.mx">INFOTEC</name>
     </publisher>
     <extension-description>
-        <src lang="en" xlink:href="description/Licencia_SWB.txt"/>
+        <src lang="en" xlink:href="description/description.txt"/>
     </extension-description>
     <registration>
         <simple-license accept-by="user" default-license-id="en">
