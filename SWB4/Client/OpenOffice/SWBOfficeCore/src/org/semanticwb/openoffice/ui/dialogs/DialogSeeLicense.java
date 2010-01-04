@@ -91,7 +91,7 @@ public class DialogSeeLicense extends javax.swing.JDialog
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Acuerdo de Licencia Semantic WebBuilder 4.0");
 
-        jPanel1.setPreferredSize(new java.awt.Dimension(400, 40));
+        jPanel1.setPreferredSize(new java.awt.Dimension(500, 40));
 
         jButtonClose.setText("Cerrar");
         jButtonClose.addActionListener(new java.awt.event.ActionListener() {
