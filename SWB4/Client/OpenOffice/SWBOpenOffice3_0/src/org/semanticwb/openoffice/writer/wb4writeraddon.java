@@ -1,26 +1,25 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 package org.semanticwb.openoffice.writer;
 
 import com.sun.star.frame.FeatureStateEvent;
@@ -96,6 +95,7 @@ public final class wb4writeraddon extends WeakBase
         }
         return false;
     }
+
     @Override
     public String[] getSupportedServiceNames()
     {
@@ -107,150 +107,7 @@ public final class wb4writeraddon extends WeakBase
             String sTargetFrameName,
             int iSearchFlags)
     {
-        try
-        {
-            if (aURL.Protocol.compareTo("org.semanticwb.openoffice.writer.wb4writeraddon:") == 0)
-            {
-
-                try
-                {
-                    OfficeDocument document = new WB4Writer(this.m_xContext);
-                    if (aURL.Path.compareTo("save") == 0)
-                    {
-                        return this;
-                    }
-                    if (aURL.Path.compareTo("open") == 0)
-                    {
-                        return this;
-                    }
-                    if (aURL.Path.compareTo("publish") == 0)
-                    {
-                        if (document.isPublicated())
-                        {
-                            return this;
-                        }
-                        else
-                        {
-                            return null;
-                        }
-                    }
-                    if (aURL.Path.compareTo("delete") == 0)
-                    {
-                        if (document.isPublicated())
-                        {
-                            return this;
-                        }
-                        else
-                        {
-                            return null;
-                        }
-                    }
-                    if (aURL.Path.compareTo("view") == 0)
-                    {
-                        if (document.isPublicated())
-                        {
-                            return this;
-                        }
-                        else
-                        {
-                            return null;
-                        }
-                    }
-                    if (aURL.Path.compareTo("information") == 0)
-                    {
-
-                        if (document.isPublicated())
-                        {
-                            return this;
-                        }
-                        else
-                        {
-                            return null;
-                        }
-                    }
-                    if (aURL.Path.compareTo("rules") == 0)
-                    {
-                        if (document.isPublicated())
-                        {
-                            return this;
-                        }
-                        else
-                        {
-                            return null;
-                        }
-                    }
-                    if (aURL.Path.compareTo("showDocumentsToAuthorize") == 0)
-                    {
-                        return this;
-                    }
-                    if (aURL.Path.compareTo("deleteAssociation") == 0)
-                    {
-                        if (document.isPublicated())
-                        {
-                            return this;
-                        }
-                        else
-                        {
-                            return null;
-                        }
-                    }
-                    if (aURL.Path.compareTo("addLink") == 0)
-                    {
-                        return this;
-                    }
-                    if (aURL.Path.compareTo("createSection") == 0)
-                    {
-                        return this;
-                    }
-                    if (aURL.Path.compareTo("changePassword") == 0)
-                    {
-                        if (WB4WriterApplication.isLogged())
-                        {
-                            return this;
-                        }
-                    }
-                    if (aURL.Path.compareTo("help") == 0)
-                    {
-                        return this;
-                    }
-                    if (aURL.Path.compareTo("about") == 0)
-                    {
-                        return this;
-                    }
-                    if (aURL.Path.compareTo("openSession") == 0)
-                    {
-                        if (OfficeApplication.isLogged())
-                        {
-                            return null;
-                        }
-                        else
-                        {
-                            return this;
-                        }
-                    }
-
-                    if (aURL.Path.compareTo("closeSession") == 0)
-                    {
-                        if (!OfficeApplication.isLogged())
-                        {
-                            return null;
-                        }
-                        else
-                        {
-                            return this;
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                }
-            }
-        }
-        catch (Throwable e)
-        {
-            e.printStackTrace();
-        }
-        return null;
+        return this;
     }
 
     // com.sun.star.frame.XDispatchProvider:
@@ -283,15 +140,16 @@ public final class wb4writeraddon extends WeakBase
         }
     }
     // com.sun.star.frame.XDispatch:
+
     @Override
     public void dispatch(com.sun.star.util.URL aURL,
             com.sun.star.beans.PropertyValue[] aArguments)
     {
         try
-        {            
+        {
             if (aURL.Protocol.compareTo("org.semanticwb.openoffice.writer.wb4writeraddon:") == 0)
             {
-                
+
                 OfficeDocument document = new WB4Writer(this.m_xContext);
                 if (aURL.Path.compareTo("save") == 0)
                 {
@@ -371,7 +229,7 @@ public final class wb4writeraddon extends WeakBase
 
                 }
                 if (aURL.Path.compareTo("closeSession") == 0)
-                {                    
+                {
                     OfficeApplication.closeSession();
                     JOptionPane.showMessageDialog(null, "¡Se ha cerrado la sesión!", "Cerrar sesión", JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
                     return;
@@ -390,22 +248,139 @@ public final class wb4writeraddon extends WeakBase
             return;
         }
     }
+
     @Override
     public void addStatusListener(com.sun.star.frame.XStatusListener xControl,
             com.sun.star.util.URL aURL)
     {
-        FeatureStateEvent aState = new FeatureStateEvent();
-        aState.FeatureURL = aURL;
-        if (queryDispatch(aURL, "", 0) == null)
+        try
         {
-            aState.IsEnabled = false;
+            OfficeDocument document = new WB4Writer(this.m_xContext);
+            //JOptionPane.showMessageDialog(null, aURL.Path, "addStatusListener", JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+            FeatureStateEvent aState = new FeatureStateEvent();
+            aState.FeatureURL = aURL;
+            if (aURL.Path.compareTo("deleteAssociation") == 0)
+            {
+                if (document.isPublicated())
+                {
+                    aState.IsEnabled = true;
+                }
+                else
+                {
+                    aState.IsEnabled = false;
+                }
+            }
+            else if (aURL.Path.compareTo("changePassword") == 0)
+            {
+                if (WB4WriterApplication.isLogged())
+                {
+                    aState.IsEnabled = true;
+                }
+                else
+                {
+                    aState.IsEnabled = false;
+                }
+            }
+            else if (aURL.Path.compareTo("information") == 0)
+            {
+
+                if (document.isPublicated())
+                {
+                    aState.IsEnabled = true;
+                }
+                else
+                {
+                    aState.IsEnabled = false;
+                }
+            }
+            else if (aURL.Path.compareTo("publish") == 0)
+            {
+                if (document.isPublicated())
+                {
+                    aState.IsEnabled = true;
+                }
+                else
+                {
+                    aState.IsEnabled = false;
+                }
+            }
+            else if (aURL.Path.compareTo("view") == 0)
+            {
+                if (document.isPublicated())
+                {
+                    aState.IsEnabled = true;
+                }
+                else
+                {
+                    aState.IsEnabled = false;
+                }
+            }
+            else if (aURL.Path.compareTo("delete") == 0)
+            {
+                if (document.isPublicated())
+                {
+                    aState.IsEnabled = true;
+                }
+                else
+                {
+                    aState.IsEnabled = false;
+                }
+            }
+            else if (aURL.Path.compareTo("rules") == 0)
+            {
+                if (document.isPublicated())
+                {
+                    aState.IsEnabled = true;
+                }
+                else
+                {
+                    aState.IsEnabled = false;
+                }
+            }
+            else if (aURL.Path.compareTo("deleteAssociation") == 0)
+            {
+                if (document.isPublicated())
+                {
+                    aState.IsEnabled = true;
+                }
+                else
+                {
+                    aState.IsEnabled = false;
+                }
+            }
+            else if (aURL.Path.compareTo("openSession") == 0)
+            {
+                if (OfficeApplication.isLogged())
+                {
+                    aState.IsEnabled = false;
+                }
+                else
+                {
+                    aState.IsEnabled = true;
+                }
+            }
+            else if (aURL.Path.compareTo("closeSession") == 0)
+            {
+                if (!OfficeApplication.isLogged())
+                {
+                    aState.IsEnabled = false;
+                }
+                else
+                {
+                    aState.IsEnabled = true;
+                }
+            }
+            else
+            {
+                aState.IsEnabled = true;
+            }
+            xControl.statusChanged(aState);
         }
-        else
+        catch (Exception e)
         {
-            aState.IsEnabled = true;
         }
-        xControl.statusChanged(aState);
     }
+
     @Override
     public void removeStatusListener(com.sun.star.frame.XStatusListener xControl,
             com.sun.star.util.URL aURL)

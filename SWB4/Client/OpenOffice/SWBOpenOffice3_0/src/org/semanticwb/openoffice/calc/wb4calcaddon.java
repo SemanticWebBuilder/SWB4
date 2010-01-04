@@ -1,26 +1,25 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 package org.semanticwb.openoffice.calc;
 
 import com.sun.star.frame.FeatureStateEvent;
@@ -41,7 +40,6 @@ public final class wb4calcaddon extends WeakBase
         com.sun.star.lang.XInitialization,
         com.sun.star.frame.XDispatch
 {
-    
 
     private final XComponentContext m_xContext;
     private com.sun.star.frame.XFrame m_xFrame;
@@ -104,121 +102,8 @@ public final class wb4calcaddon extends WeakBase
             String sTargetFrameName,
             int iSearchFlags)
     {
-        if (aURL.Protocol.compareTo("org.semanticwb.openoffice.calc.wb4calcaddon:") == 0)
-        {
-            try
-            {
-                WB4Calc document = new WB4Calc(this.m_xContext);
-                if (aURL.Path.compareTo("publish") == 0)
-                {
-                    if (document.isPublicated())
-                    {
-                        return this;
-                    }
-                }
-                if (aURL.Path.compareTo("save") == 0)
-                {
-                    return this;
-                }
-                if (aURL.Path.compareTo("open") == 0)
-                {
-                    return this;
-                }
-                if (aURL.Path.compareTo("delete") == 0)
-                {
-                    if (document.isPublicated())
-                    {
-                        return this;
-                    }
-                }
-                if (aURL.Path.compareTo("view") == 0)
-                {
-                    if (document.isPublicated())
-                    {
-                        return this;
-                    }
-                }
-                if (aURL.Path.compareTo("information") == 0)
-                {
-                    if (document.isPublicated())
-                    {
-                        return this;
-                    }
-                }
-                if (aURL.Path.compareTo("rules") == 0)
-                {
-                    if (document.isPublicated())
-                    {
-                        return this;
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                }
-                if (aURL.Path.compareTo("deleteAssociation") == 0)
-                {
-                    if (document.isPublicated())
-                    {
-                        return this;
-                    }
-                }
-                if (aURL.Path.compareTo("addLink") == 0)
-                {
-                    return this;
-                }
-                if (aURL.Path.compareTo("createSection") == 0)
-                {
-                    return this;
-                }
-                if (aURL.Path.compareTo("changePassword") == 0)
-                {
-                    if (WB4CalcApplication.isLogged())
-                    {
-                        return this;
-                    }
-                }
-                if (aURL.Path.compareTo("help") == 0)
-                {
-                    return this;
-                }
-                if (aURL.Path.compareTo("about") == 0)
-                {
-                    return this;
-                }
-                if (aURL.Path.compareTo("openSession") == 0)
-                {
-                    if (OfficeApplication.isLogged())
-                    {
-                        return null;
-                    }
-                    else
-                    {
-                        return this;
-                    }
-                }
 
-                if (aURL.Path.compareTo("closeSession") == 0)
-                {
-                    if (!OfficeApplication.isLogged())
-                    {
-                        return null;
-                    }
-                    else
-                    {
-                        return this;
-                    }
-                }
-                if (aURL.Path.compareTo("showDocumentsToAuthorize") == 0)
-                {
-                    return this;
-                }
-            }
-            catch (Exception e)
-            {
-            }
-        }
-        return null;
+        return this;
     }
 
     // com.sun.star.frame.XDispatchProvider:
@@ -253,6 +138,7 @@ public final class wb4calcaddon extends WeakBase
     public void dispatch(com.sun.star.util.URL aURL,
             com.sun.star.beans.PropertyValue[] aArguments)
     {
+
         if (aURL.Protocol.compareTo("org.semanticwb.openoffice.calc.wb4calcaddon:") == 0)
         {
             try
@@ -330,7 +216,7 @@ public final class wb4calcaddon extends WeakBase
                     OfficeApplication.openSession();
                     if (OfficeApplication.isLogged() == true && logged == false)
                     {
-                        JOptionPane.showMessageDialog(null,"¡Se ha iniciado una sesión!", "Iniciar sesión", JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "¡Se ha iniciado una sesión!", "Iniciar sesión", JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
                 if (aURL.Path.compareTo("closeSession") == 0)
@@ -356,14 +242,119 @@ public final class wb4calcaddon extends WeakBase
     {
         FeatureStateEvent aState = new FeatureStateEvent();
         aState.FeatureURL = aURL;
-        if (queryDispatch(aURL, "", 0) == null)
+        if (aURL.Protocol.compareTo("org.semanticwb.openoffice.calc.wb4calcaddon:") == 0)
         {
-            aState.IsEnabled = false;
-        }
-        else
-        {
-            aState.IsEnabled = true;
-        }
+            try
+            {
+                WB4Calc document = new WB4Calc(this.m_xContext);
+                if (aURL.Path.compareTo("publish") == 0)
+                {
+                    if (document.isPublicated())
+                    {
+                        aState.IsEnabled = true;
+                    }
+                    else
+                    {
+                        aState.IsEnabled = false;
+                    }
+                }
+                else if (aURL.Path.compareTo("delete") == 0)
+                {
+                    if (document.isPublicated())
+                    {
+                        aState.IsEnabled = true;
+                    }
+                    else
+                    {
+                        aState.IsEnabled = false;
+                    }
+                }
+                else if (aURL.Path.compareTo("view") == 0)
+                {
+                    if (document.isPublicated())
+                    {
+                        aState.IsEnabled = true;
+                    }
+                    else
+                    {
+                        aState.IsEnabled = false;
+                    }
+                }
+                else  if (aURL.Path.compareTo("information") == 0)
+                {
+                    if (document.isPublicated())
+                    {
+                        aState.IsEnabled = true;
+                    }
+                    else
+                    {
+                        aState.IsEnabled = false;
+                    }
+                }
+                else  if (aURL.Path.compareTo("rules") == 0)
+                {
+                    if (document.isPublicated())
+                    {
+                        aState.IsEnabled = true;
+                    }
+                    else
+                    {
+                        aState.IsEnabled = false;
+                    }
+                }
+                else if (aURL.Path.compareTo("deleteAssociation") == 0)
+                {
+                    if (document.isPublicated())
+                    {
+                        aState.IsEnabled = true;
+                    }
+                    else
+                    {
+                        aState.IsEnabled = false;
+                    }
+                }
+                else if (aURL.Path.compareTo("changePassword") == 0)
+                {
+                    if (WB4CalcApplication.isLogged())
+                    {
+                        aState.IsEnabled = true;
+                    }
+                    else
+                    {
+                        aState.IsEnabled = false;
+                    }
+                }
+                else if (aURL.Path.compareTo("openSession") == 0)
+                {
+                    if (OfficeApplication.isLogged())
+                    {
+                        aState.IsEnabled = false;
+                    }
+                    else
+                    {
+                        aState.IsEnabled = true;
+                    }
+                }
+                else if (aURL.Path.compareTo("closeSession") == 0)
+                {
+                    if (!OfficeApplication.isLogged())
+                    {
+                        aState.IsEnabled = false;
+                    }
+                    else
+                    {
+                        aState.IsEnabled = true;
+                    }
+                }
+                else
+                {
+                    aState.IsEnabled = true;
+                }
+            }
+            catch (Exception e)
+            {
+            }
+        }        
         xControl.statusChanged(aState);
     }
 
