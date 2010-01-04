@@ -170,7 +170,7 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
         });
 
         jButtonAccept.setBackground(new java.awt.Color(51, 102, 153));
-        jButtonAccept.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jButtonAccept.setFont(new java.awt.Font("Tahoma", 0, 14));
         jButtonAccept.setText("Aceptar");
         jButtonAccept.setBorder(null);
         jButtonAccept.setBorderPainted(false);
@@ -185,6 +185,7 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
         jButtonDelete.setContentAreaFilled(false);
         jButtonDelete.setEnabled(false);
         jButtonDelete.setFocusPainted(false);
+        jButtonDelete.setFocusable(false);
         jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonDeleteActionPerformed(evt);
