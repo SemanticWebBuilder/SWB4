@@ -66,7 +66,7 @@ public class WB4WriterTest
     XComponentContext xContext;
     XComponent xCompDest = null;
     XDesktop oDesktop = null;
-    File sUrlDestiny = new File("C:\\temp\\demo4.odt");
+    File sUrlDestiny = new File("C:\\temp\\Prueba_Jordi.odt");
     File tempDir = new File("c:/temp/demo/");
 
     public WB4WriterTest()
@@ -316,7 +316,7 @@ public class WB4WriterTest
     }
 
     @Test
-    @Ignore
+    //@Ignore
     public void saveToSiteTest()
     {
         try
@@ -362,7 +362,7 @@ public class WB4WriterTest
     }
 
     @Test
-    //@Ignore
+    @Ignore
     public void showDocumentInfoTest()
     {
         try
