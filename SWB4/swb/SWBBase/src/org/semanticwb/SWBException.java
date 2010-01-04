@@ -29,25 +29,42 @@
 
 package org.semanticwb;
 
+
 /**
- * SemanticWebBuilder Exception
+ * Generic exception in the SemanticWebBuilder API.
+ * <p>La excepci&oacute;n gen&eacute;rica en el API de SemanticWebBuilder.</p>
  * @author Javier Solis Gonzalez
  * @version 1.1
  */
 public class SWBException extends java.lang.Exception
 {
-    /**
-     *
-     **/
 
+
+    /**
+     * Generates an instance of this exception with a specified detail message.
+     * <p>Genera una instancia de esta excepci&oacute;n con un mensaje de detalle
+     * especificado.</p>
+     * @param msg the detail message (which is saved for later retrieval by the
+     *            {@link Throwable.getMessage() Throwable.getMessage()} method)
+     */
     public SWBException(String msg)
     {
         super(msg);
     }
 
+    /**
+     * Generates an instance of this exception with the specified detail message and cause.
+     * <p>Genera una instancia de esta excepci&oacute;n con el mensaje de detalle
+     * y causa especificados.</p>
+     * @param msg the detail message (which is saved for later retrieval by the
+     *            Throwable.getMessage() method)
+     * @param e the cause (which is saved for later retrieval by the {@link Throwable.getCause() Throwable.getCause()}
+     *          method). (A {@code null} value is permitted, and indicates that
+     *          the cause is nonexistent or unknown.)
+     */
     public SWBException(String msg, Exception e)
     {
-        super(msg,e);
+        super(msg, e);
     }
 
 }
