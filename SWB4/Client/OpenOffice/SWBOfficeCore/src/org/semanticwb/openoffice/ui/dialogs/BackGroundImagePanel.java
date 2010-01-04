@@ -259,7 +259,7 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
             }
             catch (URISyntaxException use)
             {
-                JOptionPane.showMessageDialog(this, "Error al escribir la dirección web", "", JOptionPane.ERROR);
+                JOptionPane.showMessageDialog(this, "Error al escribir la dirección web", "Dirección Web", JOptionPane.ERROR_MESSAGE);
             }
         }
 }//GEN-LAST:event_jComboBoxWebAddressActionPerformed
