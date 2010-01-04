@@ -380,7 +380,7 @@ is divided into following sections:
             -->
     <target depends="init" name="deps-jar" unless="no.deps">
         <ant antfile="${project.SWBOfficeComunicationInterfaces}/build.xml" inheritall="false" target="jar"/>
-        <ant antfile="${project.SWBOfficeCore}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.SWBOfficeCore}/build.xml" inheritall="false" target="jar"/>        
         <ant antfile="${project.SWBOpenOffice3_0Implementation}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBXMLRPCClient}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBXMLRPCCommon}/build.xml" inheritall="false" target="jar"/>
@@ -737,7 +737,7 @@ is divided into following sections:
             -->
     <target depends="init" name="deps-clean" unless="no.deps">
         <ant antfile="${project.SWBOfficeComunicationInterfaces}/build.xml" inheritall="false" target="clean"/>
-        <ant antfile="${project.SWBOfficeCore}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBOfficeCore}/build.xml" inheritall="false" target="clean"/>        
         <ant antfile="${project.SWBOpenOffice3_0Implementation}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBXMLRPCClient}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBXMLRPCCommon}/build.xml" inheritall="false" target="clean"/>
