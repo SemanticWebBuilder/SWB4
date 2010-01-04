@@ -143,7 +143,7 @@ public class WB4WriterApplicationTest
     }
 
     @Test
-    @Ignore
+    //@Ignore
     public void openSessionTest()
     {
         try
