@@ -428,6 +428,8 @@ public abstract class OfficeApplication
                 {
                     OfficeApplication.getOfficeApplicationProxy().isValidVersion(IOpenOfficeApplication.version);
                     tryLogin = true;
+                    ConfigurationListURI configurationListURI = new ConfigurationListURI();
+                    configurationListURI.addUserConfiguration(webAddress,userInfo.getLogin());
                 }
                 catch (Exception e)
                 {                    
