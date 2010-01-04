@@ -105,129 +105,9 @@ public final class wb4impressaddon extends WeakBase
             String sTargetFrameName,
             int iSearchFlags)
     {
-        if (aURL.Protocol.compareTo("org.semanticwb.openoffice.impress.wb4impressaddon:") == 0)
-        {
-            try
-            {
-                WB4Impress document = new WB4Impress(this.m_xContext);
-                if (aURL.Path.compareTo("save") == 0)
-                {
-                    return this;
-                }
-                if (aURL.Path.compareTo("publish") == 0)
-                {
-                    if (document.isPublicated())
-                    {
-                        return this;
-                    }
-                }
-                if (aURL.Path.compareTo("open") == 0)
-                {
-                    return this;
-                }
-                if (aURL.Path.compareTo("delete") == 0)
-                {
-                    if (document.isPublicated())
-                    {
-                        return this;
-                    }
-
-                }
-                if (aURL.Path.compareTo("view") == 0)
-                {
-                    if (document.isPublicated())
-                    {
-                        return this;
-                    }
-                }
-                if (aURL.Path.compareTo("information") == 0)
-                {
-                    if (document.isPublicated())
-                    {
-                        return this;
-                    }
-                }
-                if (aURL.Path.compareTo("rules") == 0)
-                {
-                    if (document.isPublicated())
-                    {
-                        return this;
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                }
-                if (aURL.Path.compareTo("deleteAssociation") == 0)
-                {
-                    if (document.isPublicated())
-                    {
-                        return this;
-                    }
-                }
-                if (aURL.Path.compareTo("addLink") == 0)
-                {
-                    return this;
-                }
-                if (aURL.Path.compareTo("createSection") == 0)
-                {
-                    return this;
-                }
-                if (aURL.Path.compareTo("changePassword") == 0)
-                {
-                    if (WB4ImpressApplication.isLogged())
-                    {
-                        return this;
-                    }
-                }
-                if (aURL.Path.compareTo("help") == 0)
-                {
-                    return this;
-                }
-                if (aURL.Path.compareTo("about") == 0)
-                {
-                    return this;
-                }
-                if (aURL.Path.compareTo("closeSession") == 0)
-                {
-                    if (WB4ImpressApplication.isLogged())
-                    {
-                        return this;
-                    }
-                }
-                if (aURL.Path.compareTo("openSession") == 0)
-                {
-                    if (OfficeApplication.isLogged())
-                    {
-                        return null;
-                    }
-                    else
-                    {
-                        return this;
-                    }
-                }
-
-                if (aURL.Path.compareTo("closeSession") == 0)
-                {
-                    if (!OfficeApplication.isLogged())
-                    {
-                        return null;
-                    }
-                    else
-                    {
-                        return this;
-                    }
-                }
-                if (aURL.Path.compareTo("showDocumentsToAuthorize") == 0)
-                {
-                    return this;
-                }
-            }
-            catch (Exception e)
-            {
-            }
-        }
-        return null;
+        return this;
+        
+        
     }
 
     // com.sun.star.frame.XDispatchProvider:
@@ -364,14 +244,142 @@ public final class wb4impressaddon extends WeakBase
     {
         FeatureStateEvent aState = new FeatureStateEvent();
         aState.FeatureURL = aURL;
-        if (queryDispatch(aURL, "", 0) == null)
+        if (aURL.Protocol.compareTo("org.semanticwb.openoffice.impress.wb4impressaddon:") == 0)
+        {
+            try
+            {
+                WB4Impress document = new WB4Impress(this.m_xContext);
+
+                if (aURL.Path.compareTo("publish") == 0)
+                {
+                    if (document.isPublicated())
+                    {
+                        aState.IsEnabled = true;
+                    }
+                    else
+                    {
+                        aState.IsEnabled = false;
+                    }
+                }
+                else if (aURL.Path.compareTo("delete") == 0)
+                {
+                    if (document.isPublicated())
+                    {
+                        aState.IsEnabled = true;
+                    }
+                    else
+                    {
+                        aState.IsEnabled = false;
+
+                    }
+
+                }
+                else if (aURL.Path.compareTo("view") == 0)
+                {
+                    if (document.isPublicated())
+                    {
+                        aState.IsEnabled = true;
+                    }
+                    else
+                    {
+                        aState.IsEnabled = false;
+
+                    }
+                }
+                else if (aURL.Path.compareTo("information") == 0)
+                {
+                    if (document.isPublicated())
+                    {
+                        aState.IsEnabled = true;
+                    }
+                    else
+                    {
+                        aState.IsEnabled = false;
+                    }
+                }
+                else if (aURL.Path.compareTo("rules") == 0)
+                {
+                    if (document.isPublicated())
+                    {
+                        aState.IsEnabled = true;
+                    }
+                    else
+                    {
+                        aState.IsEnabled = false;
+                    }
+                }
+                else if (aURL.Path.compareTo("deleteAssociation") == 0)
+                {
+                    if (document.isPublicated())
+                    {
+                        aState.IsEnabled = true;
+                    }
+                    else
+                    {
+                        aState.IsEnabled = false;
+                    }
+                }
+                else if (aURL.Path.compareTo("changePassword") == 0)
+                {
+                    if (WB4ImpressApplication.isLogged())
+                    {
+                        aState.IsEnabled = true;
+                    }
+                    else
+                    {
+                        aState.IsEnabled = false;
+                    }
+                }
+                else if (aURL.Path.compareTo("closeSession") == 0)
+                {
+                    if (WB4ImpressApplication.isLogged())
+                    {
+                        aState.IsEnabled = true;
+                    }
+                    else
+                    {
+                        aState.IsEnabled = false;
+                    }
+                }
+                else if (aURL.Path.compareTo("openSession") == 0)
+                {
+                    if (OfficeApplication.isLogged())
+                    {
+                        aState.IsEnabled = false;
+                    }
+                    else
+                    {
+                        aState.IsEnabled = true;
+                    }
+                }
+                else if (aURL.Path.compareTo("closeSession") == 0)
+                {
+                    if (!OfficeApplication.isLogged())
+                    {
+                        aState.IsEnabled = false;
+                    }
+                    else
+                    {
+                        aState.IsEnabled = true;
+                    }
+                }
+                else
+                {
+                    aState.IsEnabled = true;
+                }
+            }
+            catch (Exception e)
+            {
+            }
+        }
+        /*if (queryDispatch(aURL, "", 0) == null)
         {
             aState.IsEnabled = false;
         }
         else
         {
             aState.IsEnabled = true;
-        }
+        }*/
         xControl.statusChanged(aState);
     }
 
