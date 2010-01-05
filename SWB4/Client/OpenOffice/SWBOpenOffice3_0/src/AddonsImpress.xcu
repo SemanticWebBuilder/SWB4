@@ -206,34 +206,7 @@
                                 <prop oor:name="Context" oor:type="xs:string">
                                     <value>com.sun.star.presentation.PresentationDocument</value>
                                 </prop>
-                            </node>
-                            <node oor:name="m18" oor:op="replace">
-                                <prop oor:name="URL" oor:type="xs:string">
-                                    <value>org.semanticwb.openoffice.impress.wb4impressaddon:rules</value>
-                                </prop>
-                                <prop oor:name="ImageIdentifier" oor:type="xs:string">
-                                    <value/>
-                                </prop>
-                                <prop oor:name="Target" oor:type="xs:string">
-                                    <value>_self</value>
-                                </prop>
-                                <prop oor:name="Context" oor:type="xs:string">
-                                    <value>com.sun.star.presentation.PresentationDocument</value>
-                                </prop>
-                                <prop oor:name="Title" oor:type="xs:string">
-                                    <value/>
-                                    <value xml:lang="en">Add rules</value>
-                                    <value xml:lang="es">Agregar reglas</value>
-                                </prop>
-                            </node>
-                            <node oor:name="m19" oor:op="replace">
-                                <prop oor:name="URL" oor:type="xs:string">
-                                    <value>private:separator</value>
-                                </prop>
-                                <prop oor:name="Context" oor:type="xs:string">
-                                    <value>com.sun.star.presentation.PresentationDocument</value>
-                                </prop>
-                            </node>
+                            </node>                            
                             <node oor:name="m20" oor:op="replace">
                                 <prop oor:name="URL" oor:type="xs:string">
                                     <value>org.semanticwb.openoffice.impress.wb4impressaddon:deleteAssociation</value>
@@ -487,17 +460,7 @@
                         <value/>
                     </prop>
                 </node>
-            </node>
-            <node oor:name="org.semanticwb.openoffice.impress.wb4impressaddon.rules.images" oor:op="replace">
-                <prop oor:name="URL" oor:type="xs:string">
-                    <value>org.semanticwb.openoffice.impress.wb4impressaddon:rules</value>
-                </prop>
-                <node oor:name="UserDefinedImages">
-                    <prop oor:name="ImageSmallURL">
-                        <value/>
-                    </prop>
-                </node>
-            </node>
+            </node>            
             <node oor:name="org.semanticwb.openoffice.impress.wb4impressaddon.deleteassociation.images" oor:op="replace">
                 <prop oor:name="URL" oor:type="xs:string">
                     <value>org.semanticwb.openoffice.impress.wb4impressaddon:deleteAssociation</value>
