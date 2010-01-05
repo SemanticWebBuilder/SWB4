@@ -1,22 +1,22 @@
 /*
- * INFOTEC WebBuilder es una herramienta para el desarrollo de portales de conocimiento, colaboración e integración para Internet,
- * la cual, es una creación original del Fondo de Información y Documentación para la Industria INFOTEC, misma que se encuentra
- * debidamente registrada ante el Registro Público del Derecho de Autor de los Estados Unidos Mexicanos con el
- * No. 03-2002-052312015400-14, para la versión 1; No. 03-2003-012112473900 para la versión 2, y No. 03-2006-012012004000-01
- * para la versión 3, respectivamente.
+ * INFOTEC WebBuilder es una herramienta para el desarrollo de portales de conocimiento, colaboraciï¿½n e integraciï¿½n para Internet,
+ * la cual, es una creaciï¿½n original del Fondo de Informaciï¿½n y Documentaciï¿½n para la Industria INFOTEC, misma que se encuentra
+ * debidamente registrada ante el Registro Pï¿½blico del Derecho de Autor de los Estados Unidos Mexicanos con el
+ * No. 03-2002-052312015400-14, para la versiï¿½n 1; No. 03-2003-012112473900 para la versiï¿½n 2, y No. 03-2006-012012004000-01
+ * para la versiï¿½n 3, respectivamente.
  *
- * INFOTEC pone a su disposición la herramienta INFOTEC WebBuilder a través de su licenciamiento abierto al público (‘open source’),
- * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
- * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
- * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * INFOTEC pone a su disposiciï¿½n la herramienta INFOTEC WebBuilder a travï¿½s de su licenciamiento abierto al pï¿½blico (ï¿½open sourceï¿½),
+ * en virtud del cual, usted podrï¿½ usarlo en las mismas condiciones con que INFOTEC lo ha diseï¿½ado y puesto a su disposiciï¿½n;
+ * aprender de ï¿½l; distribuirlo a terceros; acceder a su cï¿½digo fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los tï¿½rminos y condiciones de la LICENCIA ABIERTA AL Pï¿½BLICO que otorga INFOTEC para la utilizaciï¿½n
  * de INFOTEC WebBuilder 3.2.
  *
- * INFOTEC no otorga garantía sobre INFOTEC WebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
- * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * INFOTEC no otorga garantï¿½a sobre INFOTEC WebBuilder, de ninguna especie y naturaleza, ni implï¿½cita ni explï¿½cita,
+ * siendo usted completamente responsable de la utilizaciï¿½n que le dï¿½ y asumiendo la totalidad de los riesgos que puedan derivar
  * de la misma.
  *
- * Si usted tiene cualquier duda o comentario sobre INFOTEC WebBuilder, INFOTEC pone a su disposición la siguiente
- * dirección electrónica:
+ * Si usted tiene cualquier duda o comentario sobre INFOTEC WebBuilder, INFOTEC pone a su disposiciï¿½n la siguiente
+ * direcciï¿½n electrï¿½nica:
  *
  *                                          http://www.webbuilder.org.mx
  */
@@ -31,7 +31,7 @@ package com.infotec.wb.core;
  *
  * @author JAJSoftware(2004)
  * @version
- * @author Sergio Martínez Rediseño Nov 2004
+ * @author Sergio Martï¿½nez Rediseï¿½o Nov 2004
  */
 
 import com.infotec.appfw.exception.AFException;
@@ -57,6 +57,12 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Vector;
+import org.semanticwb.SWBPortal;
+import org.semanticwb.model.AdminFilter;
+import org.semanticwb.model.Role;
+import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.User;
+import org.semanticwb.model.UserRepository;
 
 /**
  * Objeto user: Este objeto se encarga de administrar los datos de un
@@ -66,6 +72,20 @@ import java.util.Vector;
  * who enters in session.
  */
 public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.Serializable {
+
+    org.semanticwb.model.User usr = null;
+
+    public WBUser(org.semanticwb.model.User user)
+    {
+        usr = user;
+    }
+
+    public org.semanticwb.model.User getNative()
+    {
+        return usr;
+    }
+
+
     private RecUser recUser = null;
     private String device;
     private String languageU;
@@ -87,7 +107,8 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
         //this.usm = null;
         this.sesid = null;
         this.repository = repository;
-        this.setRecUser(DBUser.getInstance(repository).getNewRecUser());
+        //TODO:
+        //this.setRecUser(DBUser.getInstance(repository).getNewRecUser());
     }
 
     public WBUser(RecUser recuser) {
@@ -106,7 +127,7 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
      * registrado carga todos sus datos, de lo contrario, solo crea el objeto
      *
      * @param usm     <PRE>Este es un objeto referencia de la clase <I>WBUserMgr</I></PRE>
-     * @param request <PRE>Número de sesion</PRE>
+     * @param request <PRE>Nï¿½mero de sesion</PRE>
      */
     public WBUser(String sessid, String repository) {
         device = null;
@@ -115,7 +136,8 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
         //this.usm = usm;
         this.sesid = sessid;
         this.repository = repository;
-        this.setRecUser(DBUser.getInstance(repository).getNewRecUser());
+        //TODO:
+        //this.setRecUser(DBUser.getInstance(repository).getNewRecUser());
     }
 
     /**
@@ -123,7 +145,7 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
      * registrado carga todos sus datos, de lo contrario, solo crea el objeto
      *
      * @param usm     <PRE>Este es un objeto referencia de la clase <I>WBUserMgr</I></PRE>
-     * @param request <PRE>Número de sesion</PRE>
+     * @param request <PRE>Nï¿½mero de sesion</PRE>
      */
     public WBUser(HttpServletRequest request, String repository) {
         device = null;
@@ -132,7 +154,8 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
         //this.usm = usm;
         this.sesid = request.getSession().getId();
         this.repository = repository;
-        this.setRecUser(DBUser.getInstance(repository).getNewRecUser(request));
+        //TODO:
+        //this.setRecUser(DBUser.getInstance(repository).getNewRecUser(request));
     }
 
 
@@ -274,7 +297,7 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
      * @param navegador <PRE>Graba en el objeto el Navegador que esta siendo utilizado
      *                  por el usuario de la sesion, esto, en caso de estar utilizando
      *                  algun navegador de PC</PRE>
-     * @deprecated el uso del device debería ser más que suficiente
+     * @deprecated el uso del device deberï¿½a ser mï¿½s que suficiente
      */
     public void setNavegador(String navegador) {
         this.navegador = navegador;
@@ -287,7 +310,7 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
      * @return <PRE>Regresa el Navegador que esta siendo utilizado por el usuario de
      *         la sesion, en caso de estar en una pc.
      *         </PRE>
-     * @deprecated el uso del device debería ser más que suficiente
+     * @deprecated el uso del device deberï¿½a ser mï¿½s que suficiente
      */
     public String getNavegador() {
         return navegador;
@@ -321,9 +344,10 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
         isloged = false;
         isregistered = false;
         setAttribute("isloged", "false");
-        request.getSession().removeAttribute(WBUserMgr.UserAtt + "-" + getRepository());
-        WBUserMgr.getInstance().removeUser(request.getSession().getId(), getRepository());
-        setRecUser(DBUser.getInstance(getRepository()).getNewRecUser());
+        //TODO:
+        //request.getSession().removeAttribute(WBUserMgr.UserAtt + "-" + getRepository());
+        //WBUserMgr.getInstance().removeUser(request.getSession().getId(), getRepository());
+        //setRecUser(DBUser.getInstance(getRepository()).getNewRecUser());
     }
 
     /**
@@ -360,11 +384,11 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
 
 
     public boolean loginUser(String login, Object credential, HttpServletRequest request, HttpServletResponse response, String repository) {
-        RecUser recordUser = null;
+        User recordUser = null;
         try {
-            recordUser = DBUser.getInstance(repository).getLoginUser(login, credential);
+            recordUser = UserRepository.ClassMgr.getUserRepository(repository).getUserByLogin(login); //, credential);
         }
-        catch (AFException e) {
+        catch (Exception e) {
             //The user wasn't authenticated so we just pass along the exception
         }
 /*      if(usm.getUser(this,request, response,login,credential,repository)!=null){
@@ -377,8 +401,8 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
  */
         if (null != recordUser) {
 
-            if (1 == recordUser.getActive()) {
-                this.setRecUser(recordUser);
+            if (recordUser.isActive()) {
+                //this.setRecUser(recordUser);
                 isloged = true;
                 isregistered = true;
                 setAttribute("isloged", "true");
@@ -464,7 +488,7 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
 
 
     /**
-     * Metodo que obtiene el valor de una propiedad del xml de configuración
+     * Metodo que obtiene el valor de una propiedad del xml de configuraciï¿½n
      * de un usuario final
      *
      * @param propertyname <PRE>Paso un nombre de propiedad a ser buscado por este metodo
@@ -490,7 +514,7 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
 
     /**
      * Metodo que obtine los nombres de los tags de propiedades de el
-     * xml de configuración de un usuario final.
+     * xml de configuraciï¿½n de un usuario final.
      *
      * @return <PRE>Regresa Enumeration con los nombres de todas
      *         las propiedades contenidadas en el DOM</PRE>
@@ -512,7 +536,7 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
     }
 
     /**
-     * Metodo que obtiene el xml de configuarción de un usuario final.
+     * Metodo que obtiene el xml de configuarciï¿½n de un usuario final.
      *
      * @return <PRE>Regresa string de xml</PRE>
      */
@@ -548,7 +572,7 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
     }
 
     /**
-     * Metodo que inserta o remplaza el dom de configuración de un
+     * Metodo que inserta o remplaza el dom de configuraciï¿½n de un
      * usuario en especifico que este en sesion.
      *
      * @param doc <PRE>Recibe un DOM, el cual remplazara al del usuario de
@@ -559,7 +583,7 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
     }
 
     /**
-     * Metodo que obtiene el dom de configuración de un usuario final que
+     * Metodo que obtiene el dom de configuraciï¿½n de un usuario final que
      * este em sesion.
      *
      * @return <PRE>Regresa el DOM del usuario que este en la sesion</PRE>
@@ -569,10 +593,11 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
     }
 
     /**
-     * @param e <PRE>Recibe el evento de terminación de la sesion</PRE>
+     * @param e <PRE>Recibe el evento de terminaciï¿½n de la sesion</PRE>
      */
     public void valueUnbound(HttpSessionBindingEvent e) {
-        WBUserMgr.getInstance().removeUser(sesid, repository);
+        //TODO:
+        //WBUserMgr.getInstance().removeUser(sesid, repository);
         AFUtils.debug(this + " logged out or timed out.");
     }
 
@@ -587,7 +612,7 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
      * return user roles Iterator of Integer (Roles IDs)
      */
     public Iterator getRoles() {
-        return recUser.getRoles();
+        return recUser.getNative().listRoles();
     }
 
     /**
@@ -609,21 +634,21 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
     *check if the user have roles asigned
     */
     public boolean haveRoles() {
-        return recUser.haveRoles();
+        return recUser.getNative().listRoles()!=null;
     }
 
     /*/
     *check if the user have roles asigned
     */
     public boolean haveRole(int role) {
-        return recUser.haveRole(role);
+        return recUser.getNative().hasRole(Role.ClassMgr.getRole(Integer.toString(role), UserRepository.ClassMgr.getUserRepository(repository)));
     }
 
     /**
      * return Integer AdmFilter iterator
      */
     public Iterator getAdmFilters(String topicmap) {
-        return recUser.getAdmFilters(topicmap);
+        return recUser.getNative().listAdminFilters();
     }
 
     /**
@@ -645,22 +670,22 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
     *check if the user have roles asigned
     */
     public boolean haveAdmFilters(String topicmap) {
-        return recUser.haveAdmFilters(topicmap);
+        return recUser.getNative().listAdminFilters()!=null;
     }
 
     /*
     *check if the user have roles asigned
     */
     public boolean haveAdmFilter(String topicmap, int filter) {
-        return recUser.haveAdmFilter(topicmap, filter);
+        return recUser.getNative().hasAdminFilter(AdminFilter.ClassMgr.getAdminFilter(Integer.toString(filter), UserRepository.ClassMgr.getUserRepository(repository)));
     }
 
     public boolean havePermission(Topic permission) {
         Iterator it = getRoles();
         while (it.hasNext()) {
             Integer val = (Integer) it.next();
-            Role role = RoleMgr.getInstance().getRole(getRepository(), val.intValue());
-            if (role != null && role.havePermission(permission)) return true;
+            Role role = UserRepository.ClassMgr.getUserRepository(repository).getRole(Integer.toString(val.intValue()));
+            if (role != null && getNative().hasRole(role)) return true;
         }
         return false;
     }
@@ -685,7 +710,8 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
      */
     public boolean icooklanguage(HttpServletRequest request, HttpServletResponse response, String slanguage) {
         boolean regresa = false;
-        if (WBUserMgr.getInstance().addcooklang(request, response, slanguage)) ;
+        //TODO:
+        //if (WBUserMgr.getInstance().addcooklang(request, response, slanguage)) ;
         regresa = true;
         return regresa;
     }
@@ -829,7 +855,8 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
     }
 
     public boolean isAdministrator() {
-        return havePermission(TopicMgr.getInstance().getAdminTopicMap().getTopic("WBAd_per_Administrator"));
+        return getNative().getUserRepository().equals(SWBContext.getAdminRepository());
+        //return havePermission(TopicMgr.getInstance().getAdminTopicMap().getTopic("WBAd_per_Administrator"));
     }
 
     /**
@@ -859,9 +886,10 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
      *
      * @return boolean
      */
-    public boolean haveAccess(Template tpl) {
-        return tpl.haveAccess(this);
-    }
+    //TODO:
+//    public boolean haveAccess(Template tpl) {
+//        return tpl.haveAccess(this);
+//    }
 
     /**
      * Verifica si el usuario tiene permisos de acceso al recurso.
@@ -869,7 +897,8 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
      * @return boolean
      */
     public boolean haveAccess(Resource base) {
-        return base.haveAccess(this);
+        return getNative().haveAccess(base.getNative());
+        //return base.haveAccess(this);
     }
 
     /**
@@ -906,7 +935,7 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
      * Verifica si el usuario tiene permisos de acceso al topico, hereda reglas o no dependiendo
      * del paremetro ruleInherit
      *
-     * @return boolean
+     * @return boolean 
      */
     public boolean checkRules(Topic topic, boolean ruleInherit) {
         boolean passrule = true;
@@ -1186,79 +1215,79 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
     /**
      * Writes this object out to a stream (i.e., serializes it).
      */
-    private synchronized void writeObject(java.io.ObjectOutputStream oos) throws java.io.IOException {
-        //System.out.println("writeObject");
-        //oos.defaultWriteObject();
-        oos.writeObject(recUser.getRepository());
-        oos.writeLong(recUser.getId());
-        oos.writeObject(recUser.getLogin());
-        oos.writeObject(device);
-        oos.writeObject(languageU);
-        oos.writeObject(navegador);
-        oos.writeObject(ip);
-        oos.writeBoolean(isloged);
-        oos.writeBoolean(isregistered);
-        if (sesid != null) {
-            oos.writeObject(sesid);
-        } else {
-            oos.writeObject("_");
-        }
-
-        if (dom == null) {
-            setRecUser(recUser);
-        }
-        if (dom != null) {
-            AFUtils.validateNullNode(dom.getFirstChild());
-            oos.writeObject(AFUtils.getInstance().DomtoXml(dom));
-        } else {
-            oos.writeObject("_");
-        }
-        oos.writeObject(tipousu);
-        oos.writeObject(repository);
-        oos.writeObject(authSubject);
-    }
-
-    /**
-     * Reads this object from a stream (i.e., deserializes it)
-     */
-    private void readObject(java.io.ObjectInputStream s) throws
-            java.io.IOException,
-            ClassNotFoundException {
-
-        //System.out.println("readObject");
-        //s.defaultReadObject();
-
-        String rep = (String) s.readObject();
-        long id = s.readLong();
-        String login = (String) s.readObject();
-
-        if (!"nologin".equals(login)) {
-            recUser = DBUser.getInstance(rep).getUserByLogin(login);
-        } else if (id > 0) {
-            recUser = DBUser.getInstance(rep).getUserById(id);
-        }
-
-        if (recUser == null) {
-            recUser = DBUser.getInstance(rep).getNewRecUser();
-        }
-
-        device = (String) s.readObject();
-        languageU = (String) s.readObject();
-        navegador = (String) s.readObject();
-        ip = (String) s.readObject();
-        isloged = s.readBoolean();
-        isregistered = s.readBoolean();
-        sesid = (String) s.readObject();
-        if ("_".equals(sesid)) sesid = null;
-        String xm = (String) s.readObject();
-        if ("_".equals(xm)) {
-            setRecUser(recUser);
-        } else {
-            dom = AFUtils.getInstance().XmltoDom(xm);
-        }
-        //System.out.println(dom);
-        tipousu = (String) s.readObject();
-        repository = (String) s.readObject();
-        authSubject = (Subject) s.readObject();
-    }
+//    private synchronized void writeObject(java.io.ObjectOutputStream oos) throws java.io.IOException {
+//        //System.out.println("writeObject");
+//        //oos.defaultWriteObject();
+//        oos.writeObject(recUser.getRepository());
+//        oos.writeLong(recUser.getId());
+//        oos.writeObject(recUser.getLogin());
+//        oos.writeObject(device);
+//        oos.writeObject(languageU);
+//        oos.writeObject(navegador);
+//        oos.writeObject(ip);
+//        oos.writeBoolean(isloged);
+//        oos.writeBoolean(isregistered);
+//        if (sesid != null) {
+//            oos.writeObject(sesid);
+//        } else {
+//            oos.writeObject("_");
+//        }
+//
+//        if (dom == null) {
+//            setRecUser(recUser);
+//        }
+//        if (dom != null) {
+//            AFUtils.validateNullNode(dom.getFirstChild());
+//            oos.writeObject(AFUtils.getInstance().DomtoXml(dom));
+//        } else {
+//            oos.writeObject("_");
+//        }
+//        oos.writeObject(tipousu);
+//        oos.writeObject(repository);
+//        oos.writeObject(authSubject);
+//    }
+//
+//    /**
+//     * Reads this object from a stream (i.e., deserializes it)
+//     */
+//    private void readObject(java.io.ObjectInputStream s) throws
+//            java.io.IOException,
+//            ClassNotFoundException {
+//
+//        //System.out.println("readObject");
+//        //s.defaultReadObject();
+//
+//        String rep = (String) s.readObject();
+//        long id = s.readLong();
+//        String login = (String) s.readObject();
+//
+//        if (!"nologin".equals(login)) {
+//            recUser = DBUser.getInstance(rep).getUserByLogin(login);
+//        } else if (id > 0) {
+//            recUser = DBUser.getInstance(rep).getUserById(id);
+//        }
+//
+//        if (recUser == null) {
+//            recUser = DBUser.getInstance(rep).getNewRecUser();
+//        }
+//
+//        device = (String) s.readObject();
+//        languageU = (String) s.readObject();
+//        navegador = (String) s.readObject();
+//        ip = (String) s.readObject();
+//        isloged = s.readBoolean();
+//        isregistered = s.readBoolean();
+//        sesid = (String) s.readObject();
+//        if ("_".equals(sesid)) sesid = null;
+//        String xm = (String) s.readObject();
+//        if ("_".equals(xm)) {
+//            setRecUser(recUser);
+//        } else {
+//            dom = AFUtils.getInstance().XmltoDom(xm);
+//        }
+//        //System.out.println(dom);
+//        tipousu = (String) s.readObject();
+//        repository = (String) s.readObject();
+//        authSubject = (Subject) s.readObject();
+//    }
 }

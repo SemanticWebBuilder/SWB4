@@ -64,6 +64,18 @@ import org.semanticwb.portal.api.SWBResourceException;
 public class RecResource //implements WBDBRecord
 {
 
+    org.semanticwb.model.Resource res = null;
+
+    public RecResource(org.semanticwb.model.Resource resource)
+    {
+        res = resource;
+    }
+
+    public org.semanticwb.model.Resource getNative()
+    {
+        return res;
+    }
+
     /** Objeto utilizado para generacion de mensajes en el log */
     private static Logger log = SWBUtils.getLogger(RecResource.class);
 

@@ -31,20 +31,11 @@
 package com.infotec.wb.core.db;
 
 import java.sql.*;
-
-import com.infotec.wb.lib.*;
-
 import java.util.*;
 
 import com.infotec.appfw.exception.*;
 import com.infotec.appfw.lib.DBPool.DBConnectionManager;
 import com.infotec.appfw.lib.AFObserver;
-import com.infotec.wb.lib.WBDBRecord;
-import com.infotec.appfw.util.AFUtils;
-import com.infotec.wb.util.*;
-import com.infotec.wb.core.*;
-
-import java.io.*;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.api.SWBResourceException;
 
@@ -277,7 +268,7 @@ public class RecResourceData //implements WBDBRecord
 
         } catch (Exception e)
         {
-            throw new SWBResourceException(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_RecResourceData_remove_removeElementError") + "...", "RecResourceData:remove()", e);
+            throw new SWBResourceException(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_RecResourceData_remove_removeElementError") + "...RecResourceData:remove()", e);
         } finally
         {
             if (mgr != null) mgr.release();
@@ -321,7 +312,7 @@ public class RecResourceData //implements WBDBRecord
         } catch (Exception e)
         {
             //AFUtils.log(e,"No fue posible actualizar el elemento...",true);
-            throw new AFException(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_RecResourceData_update_updateElementError") + "...", "RecResourceData:update()", e);
+            throw new SWBResourceException(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_RecResourceData_update_updateElementError") + "...RecResourceData:update()", e);
         } finally
         {
             if (mgr != null) mgr.release();
@@ -377,7 +368,7 @@ public class RecResourceData //implements WBDBRecord
 
         } catch (Exception e)
         {
-            throw new SWBResourceException(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_RecResourceData_create_createElementError") + "...", "RecResourceData:create()", e);
+            throw new SWBResourceException(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_RecResourceData_create_createElementError") + "...RecResourceData:create()", e);
         } finally
         {
             if (mgr != null) mgr.release();
@@ -423,7 +414,7 @@ public class RecResourceData //implements WBDBRecord
             }
         } catch (Exception e)
         {
-            throw new SWBResourceException(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_RecResourceData_load_loadElementError") + "...", "RecResourceData:load()", e);
+            throw new SWBResourceException(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_RecResourceData_load_loadElementError") + "...RecResourceData:load()", e);
         } finally
         {
             if (mgr != null) mgr.release();
