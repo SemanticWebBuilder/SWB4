@@ -28,7 +28,6 @@
 package org.semanticwb.openoffice.write.test;
 
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.comp.helper.Bootstrap;
 import com.sun.star.comp.helper.BootstrapException;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XDesktop;
@@ -41,6 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import junit.framework.Assert;
+import ooo.connector.BootstrapSocketConnector;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -92,10 +92,10 @@ public class WB4WriterTest
     {
         try
         {
-            //String oooExeFolder = "C:/Program Files/OpenOffice.org 3/program";
-            //xContext =  BootstrapSocketConnector.bootstrap(oooExeFolder);
+            String oooExeFolder = "C:/Archivos de programa/OpenOffice.org 3/program";
+            xContext =  BootstrapSocketConnector.bootstrap(oooExeFolder);
 
-            xContext = Bootstrap.bootstrap();
+            //xContext = Bootstrap.bootstrap();
             // Obtener la factoria de servicios de OpenOffice   
             XMultiComponentFactory xMCF = xContext.getServiceManager();
 
