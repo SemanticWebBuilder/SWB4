@@ -1,22 +1,22 @@
 /*
- * INFOTEC WebBuilder es una herramienta para el desarrollo de portales de conocimiento, colaboración e integración para Internet,
- * la cual, es una creación original del Fondo de Información y Documentación para la Industria INFOTEC, misma que se encuentra
- * debidamente registrada ante el Registro Público del Derecho de Autor de los Estados Unidos Mexicanos con el
- * No. 03-2002-052312015400-14, para la versión 1; No. 03-2003-012112473900 para la versión 2, y No. 03-2006-012012004000-01
- * para la versión 3, respectivamente.
+ * INFOTEC WebBuilder es una herramienta para el desarrollo de portales de conocimiento, colaboraciï¿½n e integraciï¿½n para Internet,
+ * la cual, es una creaciï¿½n original del Fondo de Informaciï¿½n y Documentaciï¿½n para la Industria INFOTEC, misma que se encuentra
+ * debidamente registrada ante el Registro Pï¿½blico del Derecho de Autor de los Estados Unidos Mexicanos con el
+ * No. 03-2002-052312015400-14, para la versiï¿½n 1; No. 03-2003-012112473900 para la versiï¿½n 2, y No. 03-2006-012012004000-01
+ * para la versiï¿½n 3, respectivamente.
  *
- * INFOTEC pone a su disposición la herramienta INFOTEC WebBuilder a través de su licenciamiento abierto al público (‘open source’),
- * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
- * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
- * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * INFOTEC pone a su disposiciï¿½n la herramienta INFOTEC WebBuilder a travï¿½s de su licenciamiento abierto al pï¿½blico (ï¿½open sourceï¿½),
+ * en virtud del cual, usted podrï¿½ usarlo en las mismas condiciones con que INFOTEC lo ha diseï¿½ado y puesto a su disposiciï¿½n;
+ * aprender de ï¿½l; distribuirlo a terceros; acceder a su cï¿½digo fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los tï¿½rminos y condiciones de la LICENCIA ABIERTA AL Pï¿½BLICO que otorga INFOTEC para la utilizaciï¿½n
  * de INFOTEC WebBuilder 3.2.
  *
- * INFOTEC no otorga garantía sobre INFOTEC WebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
- * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * INFOTEC no otorga garantï¿½a sobre INFOTEC WebBuilder, de ninguna especie y naturaleza, ni implï¿½cita ni explï¿½cita,
+ * siendo usted completamente responsable de la utilizaciï¿½n que le dï¿½ y asumiendo la totalidad de los riesgos que puedan derivar
  * de la misma.
  *
- * Si usted tiene cualquier duda o comentario sobre INFOTEC WebBuilder, INFOTEC pone a su disposición la siguiente
- * dirección electrónica:
+ * Si usted tiene cualquier duda o comentario sobre INFOTEC WebBuilder, INFOTEC pone a su disposiciï¿½n la siguiente
+ * direcciï¿½n electrï¿½nica:
  *
  *                                          http://www.webbuilder.org.mx
  */
@@ -57,12 +57,25 @@ import com.infotec.wb.core.db.RecResource;
  * Reification of a subject allows topic characteristics to be assigned to the topic that reifies it.
  * <BR>
  * Each individual topic is an instance of one or more classes of topics (also known as topic types)
- * that may or may not be indicated explicitly. The default topic type is defined by the “topic” published subject.
+ * that may or may not be indicated explicitly. The default topic type is defined by the ï¿½topicï¿½ published subject.
  * @author Javier Solis Gonzalez
  * @version 1.1
  */
 public class Topic
 {
+
+    org.semanticwb.model.WebPage wp = null;
+
+    public Topic(org.semanticwb.model.WebPage webpage)
+    {
+        wp = webpage;
+    }
+
+    public org.semanticwb.model.WebPage getNative()
+    {
+        return wp;
+    }
+
     public static final String CONFIG_DATA_AND_CRITERIAL="_criterial_and";
 
     protected String m_id;
@@ -116,7 +129,7 @@ public class Topic
         dbdata.setIdtm(parent.getId());
     }
 
-    /** Método que crea un tópico en base a un objeto <B>RecTopic</B>
+    /** Mï¿½todo que crea un tï¿½pico en base a un objeto <B>RecTopic</B>
      * @param rec RecTopic
      * @throws UnsupportedEncodingException Error de codificacion del XML
      * @throws SAXException Error al Transformar XML
@@ -139,7 +152,7 @@ public class Topic
         return tp;
     }
 
-    /** Método que actualiza el tópico en base a un objeto <B>RecTopic</B>
+    /** Mï¿½todo que actualiza el tï¿½pico en base a un objeto <B>RecTopic</B>
      * @param rec RecTopic
      * @throws Exception Error de al actualizar topico.
      */
@@ -290,7 +303,7 @@ public class Topic
         return (getId().compareTo(other.getId()) == 0);
     }
 
-    /** Regresa un <B>ArrayList</B> de objetos <B>BaseName</B> que representan los nombres del tópico.
+    /** Regresa un <B>ArrayList</B> de objetos <B>BaseName</B> que representan los nombres del tï¿½pico.
      * @return ArrayList de objetos <B>BaseName</B>
      */
     public ArrayList getBaseNames()
@@ -298,8 +311,8 @@ public class Topic
         return m_basenames;
     }
 
-    /** Assigna un <B>ArrayList</B> de objetos <B>BaseName</B> que representan los nombres del tópico.
-     * @param basenames ArrayList de objetos BaseName que representan los nombres del tópico.
+    /** Assigna un <B>ArrayList</B> de objetos <B>BaseName</B> que representan los nombres del tï¿½pico.
+     * @param basenames ArrayList de objetos BaseName que representan los nombres del tï¿½pico.
      */
     public void setBaseNames(ArrayList basenames)
     {
@@ -329,7 +342,7 @@ public class Topic
     }
 
     /** regresa un <B>ArrayList</B> de objetos <B>Occurrence</B> que representan las ocurrencias o
-     * elementos del tópico.
+     * elementos del tï¿½pico.
      * @return ArrayList
      */
     public ArrayList getOccurrences()
@@ -338,7 +351,7 @@ public class Topic
     }
 
     /** asigna un <B>ArrayList</B> de objetos <B>Occurrence</B> que representan las ocurrencias o
-     * elementos del tópico.
+     * elementos del tï¿½pico.
      * @param occurs New value of property m_occurs.
      */
     public void setOccurrences(ArrayList occurs)
@@ -347,7 +360,7 @@ public class Topic
     }
 
     /** regresa un <B>ArrayList</B> de objetos <B>Association</B> que representan las
-     * asociaciones del tópico con otros topicos.
+     * asociaciones del tï¿½pico con otros topicos.
      * @return ArrayList
      */
     public ArrayList getAssociations()
@@ -356,7 +369,7 @@ public class Topic
     }
 
     /** Asigna un <B>ArrayList</B> de objetos <B>Association</B> que representan las
-     * asociaciones del tópico con otros topicos.
+     * asociaciones del tï¿½pico con otros topicos.
      * @param associations ArrayList
      */
     public void setAssociations(ArrayList associations)
@@ -365,7 +378,7 @@ public class Topic
     }
 
     /** regresa un <B>ArrayList</B> de objetos <B>InstanceOf</B> que representan los
-     * tipos o padres del tópico.
+     * tipos o padres del tï¿½pico.
      * @return ArrayList
      */
     public ArrayList getInstanceOf()
@@ -374,7 +387,7 @@ public class Topic
     }
 
     /** Asigna un <B>ArrayList</B> de objetos <B>InstanceOf</B> que representan los
-     * tipos o padres del tópico.
+     * tipos o padres del tï¿½pico.
      * @param instanceOf ArrayList
      */
     public void setInstanceOf(ArrayList instanceOf)
@@ -382,7 +395,7 @@ public class Topic
         this.m_instanceof = instanceOf;
     }
 
-    /** regresa objeto <B>SubjectIdentity</B> del tópico.
+    /** regresa objeto <B>SubjectIdentity</B> del tï¿½pico.
      * @return Subjectidentity
      */
     public com.infotec.topicmaps.SubjectIdentity getSubjectIdentity()
@@ -390,7 +403,7 @@ public class Topic
         return m_subjectidentity;
     }
 
-    /** Asigna objeto <B>SubjectIdentity</B> del tópico.
+    /** Asigna objeto <B>SubjectIdentity</B> del tï¿½pico.
      * @param subjectidentity SubjectIdentity
      */
     public void setSubjectIdentity(com.infotec.topicmaps.SubjectIdentity subjectidentity)
@@ -399,7 +412,7 @@ public class Topic
         if (isDBSyncronized()) getMap().changes.add("ut:" + getId());
     }
 
-    /** regresa un <B>ArrayList</B> de objetos <B>Topic</B> que representan todos los hijos inmediatos del tópico, no importando si están activos o borrados.
+    /** regresa un <B>ArrayList</B> de objetos <B>Topic</B> que representan todos los hijos inmediatos del tï¿½pico, no importando si estï¿½n activos o borrados.
      * @return ArrayList
      */
     public ArrayList getChild()
@@ -1261,7 +1274,7 @@ public class Topic
      *      -   selectcolor: color de la seccion seleccionada.
      *      -   links: true/false, si tendra links en la ruta.
      *      -   language: lenguaje en el que se quiere presentar la ruta.
-     *      -   home: Identificador de la sección home (si se quiere definir un home
+     *      -   home: Identificador de la secciï¿½n home (si se quiere definir un home
      *          diferente al de defecto).
      *      -   target: Definicion del frame destino.
      *          diferente al de defecto).
@@ -1856,7 +1869,7 @@ public class Topic
         return isActive() && getDbdata().getHidden()==0;
     }    
     
-   /** Verifica si la calendarizacion del topico sen encuentra en tiempo, hereda calensarización o no dependiendo
+   /** Verifica si la calendarizacion del topico sen encuentra en tiempo, hereda calensarizaciï¿½n o no dependiendo
      * del paremetro ruleInherit
      * @return boolean
      */
