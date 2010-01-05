@@ -591,7 +591,7 @@ public class Resource
     {
         try
         {
-            res.setData(usr.getNative(),topic.getNativoe(),data);
+            res.setData(usr.getNative(),topic.getNative(),data);
         } catch (Exception e)
         {
             throw new AFException(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_Resource_setData") + e.getMessage(), "Resource:getData");
