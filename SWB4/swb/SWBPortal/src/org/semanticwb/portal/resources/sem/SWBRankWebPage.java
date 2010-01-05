@@ -22,7 +22,7 @@
 **/ 
  
 package org.semanticwb.portal.resources.sem;
-//org.semanticwb.portal.resources.sem.SWBRankWebPage
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -168,15 +168,15 @@ function votedPage(){
                 "    request.send(null);\n}\n\nfunction votedPage(){\n" +
                 "    if (request.readyState==4){\n"+
                 "    var response = request.responseText;\n    if ('OK'==response)\n" +
-                "        alert('Vote acepted!');\n\n    invoke = false;}\nvar invoke = true;\n</script>\n");
-        out.print("<table summary=\"Califica contenido\"><tr>");
+                "        alert('"+paramRequest.getLocaleString("votoAceptado")+"');\n\n    invoke = false;}\nvar invoke = true;\n</script>\n");
+        out.print("<table summary=\""+paramRequest.getLocaleString("califCont")+"\"><tr>");
         for (int i =1;i<=5;i++)
         printStar(i, rank, out, paramRequest);
         out.print("</tr></table>");
 
     }
 
-    private void printStar(int current, int rank, PrintWriter out, SWBParamRequest paramRequest)
+    private void printStar(int current, int rank, PrintWriter out, SWBParamRequest paramRequest) throws SWBResourceException
     {
         /*SWBResourceURL url = paramRequest.getActionUrl();
         url.setAction("vote");
@@ -188,8 +188,8 @@ function votedPage(){
         String imgRank = emptyStarPath;
         if (rank>=midl&&rank<=midt) imgRank = halfStarPath;
         if (rank>midt) imgRank = fullStarPath;
-        out.print("<td><a href=\"#\" onclick=\"" + url + "\" title=\"Give "+current+" star(s)\">" +
-                "<img src=\"" + SWBPlatform.getContextPath()+imgRank +"\" alt=\"has "+((0.0f + rank)/10.0f)+" star(s)\"/></a></td>");
+        out.print("<td><a href=\"#\" onclick=\"" + url + "\" title=\""+paramRequest.getLocaleString("dar")+" "+current+" "+paramRequest.getLocaleString("estrellas")+"\">" +
+                "<img src=\"" + SWBPlatform.getContextPath()+imgRank +"\" alt=\""+paramRequest.getLocaleString("tiene")+" "+((0.0f + rank)/10.0f)+" "+paramRequest.getLocaleString("estrellas")+"\"/></a></td>");
 
     }
 
@@ -275,100 +275,100 @@ function votedPage(){
              out.print("Not OK");
     }
 
-    @Override
-    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
-            PrintWriter out = response.getWriter();
-
-            out.println("            <script language=\"javascript\" type=\"text/javascript\" src=\"" + SWBPlatform.getContextPath() + "/swbadmin/js/upload.js\"></script>");
-            out.println("	<style type=\"text/css\">\n @import \"" + SWBPlatform.getContextPath() + "/swbadmin/css/upload.css\";\n </style>");
-            out.println("    <script type=\"text/javascript\">");
-           // out.println("  dojo.require(\"dojo.parser\");");
-            out.println("    var uploads_in_progress = 0;");
-            out.println();
-            out.println("    function beginAsyncUpload(ul,sid) {");
-            out.println("      ul.form.submit();");
-            out.println("    	uploads_in_progress = uploads_in_progress + 1;");
-            out.println("    	var pb = document.getElementById(ul.name + \"_progress\");");
-            out.println("    	pb.parentNode.style.display='block';");
-            out.println("    	new ProgressTracker(sid,{");
-            out.println("    		progressBar: pb,");
-            out.println("    		onComplete: function() {");
-            out.println("    			var inp_id = pb.id.replace(\"_progress\",\"\");");
-            out.println("    			uploads_in_progress = uploads_in_progress - 1;");
-            out.println("    			var inp = document.getElementById(inp_id);");
-            out.println("    			if(inp) {");
-            out.println("    				inp.value = sid;");
-            out.println("    			}");
-            out.println("    			pb.parentNode.style.display='none';");
-            out.println("    		},");
-            out.println("    		onFailure: function(msg) {");
-            out.println("    			pb.parentNode.style.display='none';");
-            out.println("    			alert(msg);");
-            out.println("    			uploads_in_progress = uploads_in_progress - 1;");
-            out.println("    		},");
-            out.println("            url: '"+paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_ADMHLP)
-                    .setCallMethod(SWBResourceURL.Call_DIRECT).setAction(SWBResourceURL.Action_EDIT)+"'");
-            out.println("    	});");
-            out.println("    }");
-            out.println();
-            out.println("	</script>");
-            out.println("<div class=\"swbform\">");
-            out.println("    <fieldset>");
-            out.println("    <table>");
-            out.println("                <tr><td width=\"200px\" align=\"right\">");
-            out.println("                    <label>Identificador &nbsp;</label>");
-            out.println("                </td><td>");
-            out.println("                    <span>"+getResourceBase().getId()+"</span>");
-            out.println("                </td></tr>");
-            out.println("            </table>");
-            out.println("            </fieldset>");
-            out.println("            <fieldset>");
-            out.println("                <legend>Datos Generales</legend>");
-            out.println("                <table>");
-            out.println("                    <tr><td width=\"200px\" align=\"right\"><label for=\"fullStar\">Imagen Estrella Completa &nbsp;</label></td>");
-            out.println("                    <td><iframe id=\"fullStarTransferFrame\" name=\"fullStarTransferFrame\" src=\"\" style=\"display:none\" ></iframe>");
-            out.println("                        <form enctype=\"multipart/form-data\"");
-            out.println("                        action=\""+paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_ADMHLP)
-                    .setCallMethod(SWBResourceURL.Call_DIRECT).setAction(SWBResourceURL.Action_ADD)+"\"");
-            out.println("                        method=\"post\" target=\"fullStarTransferFrame\" >");
-            out.println("                        <input type=\"file\" name=\"fullStar\"");
-            out.println("                        onchange=\"beginAsyncUpload(this,'fullStar');\" />");
-            out.println("                        <div class=\"progresscontainer\" style=\"display: none;\"><div class=\"progressbar\" id=\"fullStar_progress\"></div></div>");
-            out.println("                        </form>");
-            out.println("                    </td></tr>");
-            out.println("                    <tr><td width=\"200px\" align=\"right\"><label for=\"halfStar\">Imagen de Media Estrella &nbsp;</label></td>");
-            out.println("                    <td><iframe id=\"halfStarTransferFrame\" name=\"halfStarTransferFrame\" src=\"\" style=\"display:none\" ></iframe>");
-            out.println("                        <form enctype=\"multipart/form-data\"");
-            out.println("                        action=\""+paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_ADMHLP)
-                    .setCallMethod(SWBResourceURL.Call_DIRECT).setAction(SWBResourceURL.Action_ADD)+"\"");
-            out.println("                        method=\"post\" target=\"halfStarTransferFrame\" >");
-            out.println("                        <input type=\"file\" name=\"halfStar\"");
-            out.println("                        onchange=\"beginAsyncUpload(this,'halfStar');\" />");
-            out.println("                        <div class=\"progresscontainer\" style=\"display: none;\"><div class=\"progressbar\" id=\"halfStar_progress\"></div></div>");
-            out.println("                        </form>");
-            out.println("                    </td></tr>");
-            out.println("                    <tr><td width=\"200px\" align=\"right\"><label for=\"emptyStar\">Imagen de Estrella vacía &nbsp;</label></td>");
-            out.println("                    <td><iframe id=\"emptyStarTransferFrame\" name=\"emptyStarTransferFrame\" src=\"\" style=\"display:none\" ></iframe>");
-            out.println("                        <form enctype=\"multipart/form-data\"");
-            out.println("                        action=\""+paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_ADMHLP)
-                    .setCallMethod(SWBResourceURL.Call_DIRECT).setAction(SWBResourceURL.Action_ADD)+"\"");
-            out.println("                        method=\"post\" target=\"emptyStarTransferFrame\" >");
-            out.println("                        <input type=\"file\" name=\"emptyStar\"");
-            out.println("                        onchange=\"beginAsyncUpload(this,'emptyStar');\" />");
-            out.println("                        <div class=\"progresscontainer\" style=\"display: none;\"><div class=\"progressbar\" id=\"emptyStar_progress\"></div></div>");
-            out.println("                        </form>");
-            out.println("                    </td></tr>");
-            out.println("                    <tr><td width=\"200px\" align=\"right\"><label for=\"cleanStars\">Limpiar estrellas &nbsp;</label></td>");
-            out.println("                    <td><form action=\""+paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_ADMHLP)
-                    .setCallMethod(SWBResourceURL.Call_DIRECT).setAction(SWBResourceURL.Action_REMOVE)+"\">");
-            out.println("                    <button type=\"submit\">Limpiar</button></form></td></tr>");
-            out.println("                </table>");
-            out.println("            </fieldset>");
-            out.println("</div>");
-
-
-    }
+//    @Override
+//    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+//    {
+//            PrintWriter out = response.getWriter();
+//
+//            out.println("            <script language=\"javascript\" type=\"text/javascript\" src=\"" + SWBPlatform.getContextPath() + "/swbadmin/js/upload.js\"></script>");
+//            out.println("	<style type=\"text/css\">\n @import \"" + SWBPlatform.getContextPath() + "/swbadmin/css/upload.css\";\n </style>");
+//            out.println("    <script type=\"text/javascript\">");
+//           // out.println("  dojo.require(\"dojo.parser\");");
+//            out.println("    var uploads_in_progress = 0;");
+//            out.println();
+//            out.println("    function beginAsyncUpload(ul,sid) {");
+//            out.println("      ul.form.submit();");
+//            out.println("    	uploads_in_progress = uploads_in_progress + 1;");
+//            out.println("    	var pb = document.getElementById(ul.name + \"_progress\");");
+//            out.println("    	pb.parentNode.style.display='block';");
+//            out.println("    	new ProgressTracker(sid,{");
+//            out.println("    		progressBar: pb,");
+//            out.println("    		onComplete: function() {");
+//            out.println("    			var inp_id = pb.id.replace(\"_progress\",\"\");");
+//            out.println("    			uploads_in_progress = uploads_in_progress - 1;");
+//            out.println("    			var inp = document.getElementById(inp_id);");
+//            out.println("    			if(inp) {");
+//            out.println("    				inp.value = sid;");
+//            out.println("    			}");
+//            out.println("    			pb.parentNode.style.display='none';");
+//            out.println("    		},");
+//            out.println("    		onFailure: function(msg) {");
+//            out.println("    			pb.parentNode.style.display='none';");
+//            out.println("    			alert(msg);");
+//            out.println("    			uploads_in_progress = uploads_in_progress - 1;");
+//            out.println("    		},");
+//            out.println("            url: '"+paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_ADMHLP)
+//                    .setCallMethod(SWBResourceURL.Call_DIRECT).setAction(SWBResourceURL.Action_EDIT)+"'");
+//            out.println("    	});");
+//            out.println("    }");
+//            out.println();
+//            out.println("	</script>");
+//            out.println("<div class=\"swbform\">");
+//            out.println("    <fieldset>");
+//            out.println("    <table>");
+//            out.println("                <tr><td width=\"200px\" align=\"right\">");
+//            out.println("                    <label>Identificador &nbsp;</label>");
+//            out.println("                </td><td>");
+//            out.println("                    <span>"+getResourceBase().getId()+"</span>");
+//            out.println("                </td></tr>");
+//            out.println("            </table>");
+//            out.println("            </fieldset>");
+//            out.println("            <fieldset>");
+//            out.println("                <legend>Datos Generales</legend>");
+//            out.println("                <table>");
+//            out.println("                    <tr><td width=\"200px\" align=\"right\"><label for=\"fullStar\">Imagen Estrella Completa &nbsp;</label></td>");
+//            out.println("                    <td><iframe id=\"fullStarTransferFrame\" name=\"fullStarTransferFrame\" src=\"\" style=\"display:none\" ></iframe>");
+//            out.println("                        <form enctype=\"multipart/form-data\"");
+//            out.println("                        action=\""+paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_ADMHLP)
+//                    .setCallMethod(SWBResourceURL.Call_DIRECT).setAction(SWBResourceURL.Action_ADD)+"\"");
+//            out.println("                        method=\"post\" target=\"fullStarTransferFrame\" >");
+//            out.println("                        <input type=\"file\" name=\"fullStar\"");
+//            out.println("                        onchange=\"beginAsyncUpload(this,'fullStar');\" />");
+//            out.println("                        <div class=\"progresscontainer\" style=\"display: none;\"><div class=\"progressbar\" id=\"fullStar_progress\"></div></div>");
+//            out.println("                        </form>");
+//            out.println("                    </td></tr>");
+//            out.println("                    <tr><td width=\"200px\" align=\"right\"><label for=\"halfStar\">Imagen de Media Estrella &nbsp;</label></td>");
+//            out.println("                    <td><iframe id=\"halfStarTransferFrame\" name=\"halfStarTransferFrame\" src=\"\" style=\"display:none\" ></iframe>");
+//            out.println("                        <form enctype=\"multipart/form-data\"");
+//            out.println("                        action=\""+paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_ADMHLP)
+//                    .setCallMethod(SWBResourceURL.Call_DIRECT).setAction(SWBResourceURL.Action_ADD)+"\"");
+//            out.println("                        method=\"post\" target=\"halfStarTransferFrame\" >");
+//            out.println("                        <input type=\"file\" name=\"halfStar\"");
+//            out.println("                        onchange=\"beginAsyncUpload(this,'halfStar');\" />");
+//            out.println("                        <div class=\"progresscontainer\" style=\"display: none;\"><div class=\"progressbar\" id=\"halfStar_progress\"></div></div>");
+//            out.println("                        </form>");
+//            out.println("                    </td></tr>");
+//            out.println("                    <tr><td width=\"200px\" align=\"right\"><label for=\"emptyStar\">Imagen de Estrella vacía &nbsp;</label></td>");
+//            out.println("                    <td><iframe id=\"emptyStarTransferFrame\" name=\"emptyStarTransferFrame\" src=\"\" style=\"display:none\" ></iframe>");
+//            out.println("                        <form enctype=\"multipart/form-data\"");
+//            out.println("                        action=\""+paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_ADMHLP)
+//                    .setCallMethod(SWBResourceURL.Call_DIRECT).setAction(SWBResourceURL.Action_ADD)+"\"");
+//            out.println("                        method=\"post\" target=\"emptyStarTransferFrame\" >");
+//            out.println("                        <input type=\"file\" name=\"emptyStar\"");
+//            out.println("                        onchange=\"beginAsyncUpload(this,'emptyStar');\" />");
+//            out.println("                        <div class=\"progresscontainer\" style=\"display: none;\"><div class=\"progressbar\" id=\"emptyStar_progress\"></div></div>");
+//            out.println("                        </form>");
+//            out.println("                    </td></tr>");
+//            out.println("                    <tr><td width=\"200px\" align=\"right\"><label for=\"cleanStars\">Limpiar estrellas &nbsp;</label></td>");
+//            out.println("                    <td><form action=\""+paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_ADMHLP)
+//                    .setCallMethod(SWBResourceURL.Call_DIRECT).setAction(SWBResourceURL.Action_REMOVE)+"\">");
+//            out.println("                    <button type=\"submit\">Limpiar</button></form></td></tr>");
+//            out.println("                </table>");
+//            out.println("            </fieldset>");
+//            out.println("</div>");
+//
+//
+//    }
 
     @Override
     public void doAdminHlp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
