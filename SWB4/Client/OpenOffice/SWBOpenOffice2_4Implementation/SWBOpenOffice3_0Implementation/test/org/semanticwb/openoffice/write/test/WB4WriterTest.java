@@ -92,6 +92,9 @@ public class WB4WriterTest
     {
         try
         {
+            //String oooExeFolder = "C:/Program Files/OpenOffice.org 3/program";
+            //xContext =  BootstrapSocketConnector.bootstrap(oooExeFolder);
+
             xContext = Bootstrap.bootstrap();
             // Obtener la factoria de servicios de OpenOffice   
             XMultiComponentFactory xMCF = xContext.getServiceManager();
