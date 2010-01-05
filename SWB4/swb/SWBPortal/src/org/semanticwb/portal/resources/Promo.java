@@ -61,7 +61,6 @@ public class Promo extends GenericAdmResource {
      */    
     @Override
     public void setResourceBase(Resource base) {
-        //System.out.println("setResourceBase");
         try {
             super.setResourceBase(base);
             webWorkPath = (String) SWBPortal.getWebWorkPath() +  base.getWorkPath();
@@ -72,7 +71,6 @@ public class Promo extends GenericAdmResource {
     
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        //System.out.println("doView");
         response.setContentType("text/html; charset=utf-8");
         Resource base=getResourceBase();
         String out;
@@ -116,19 +114,17 @@ public class Promo extends GenericAdmResource {
         String imgfile = base.getAttribute("imgfile");
         String caption = base.getAttribute("caption");
         String captionStyle = base.getAttribute("captionStyle","");
-        int imgWidth;
-        try {
-            imgWidth = Integer.parseInt(base.getAttribute("imgWidth"));
-        }catch(NumberFormatException nfe) {
-            imgWidth = 150;
-        }
-        int imgHeight;
-        try {
-            imgHeight = Integer.parseInt(base.getAttribute("imgHeight"));
-        }catch(NumberFormatException nfe) {
-            imgHeight = 180;
-        }
 
+        String imgWidth="";
+        if(base.getAttribute("imgWidth")!=null){
+            imgWidth = "width=\"" + base.getAttribute("imgWidth")+"\"";
+        }
+        
+        String imgHeight="";
+        if(base.getAttribute("imgHeight")!=null){
+            imgHeight = "height=\"" + base.getAttribute("imgHeight")+"\"";
+        }
+        
         String text = base.getAttribute("text");
         String textStyle = base.getAttribute("textStyle","");
 
@@ -170,7 +166,7 @@ public class Promo extends GenericAdmResource {
             if(imgfile != null) {
                 if(imgPos == 3) {
                     img.append("<div style=\"text-align:center; float:right; margin:10px\"> \n");
-                    img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" width=\""+imgWidth+"\" height=\""+imgHeight+"\" /></span> \n");
+                    img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +" /></span> \n");
                     if(caption != null) {
                         img.append("<h6 style=\""+captionStyle+"\"><span>"+caption+"</span></h6> \n");
                     }
@@ -179,7 +175,7 @@ public class Promo extends GenericAdmResource {
                     out.append(img);
                 }else if(imgPos == 4) {
                     img.append("<div style=\"text-align:center; float:left; margin:10px\"> \n");
-                    img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" width=\""+imgWidth+"\" height=\""+imgHeight+"\" /></span> \n");
+                    img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +" /></span> \n");
                     if(caption != null) {
                         img.append("<h6 style=\""+captionStyle+"\"><span>"+caption+"</span></h6> \n");
                     }
@@ -188,7 +184,7 @@ public class Promo extends GenericAdmResource {
                     out.append(img);
                 }else if(imgPos == 2) {
                     img.append("<div style=\"text-align:center; float:right; margin:10px;\"> \n");
-                    img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" width=\""+imgWidth+"\" height=\""+imgHeight+"\" /></span> \n");
+                    img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +" /></span> \n");
                     if(caption != null) {
                         img.append("<h6 style=\""+captionStyle+"\"><span>"+caption+"</span></h6> \n");
                     }
@@ -196,7 +192,7 @@ public class Promo extends GenericAdmResource {
                     out.append(img);
                 }else if(imgPos == 1) {
                     img.append("<div style=\"text-align:center; float:left; margin:10px;\"> \n");
-                    img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" width=\""+imgWidth+"\" height=\""+imgHeight+"\" /></span> \n");
+                    img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +" /></span> \n");
                     if(caption != null) {
                         img.append("<h6 style=\""+captionStyle+"\"><span>"+caption+"</span></h6> \n");
                     }
@@ -204,7 +200,7 @@ public class Promo extends GenericAdmResource {
                     out.append(img);
                 }else if(imgPos == 5) {
                     img.append("<div style=\"text-align:center\"> \n");
-                    img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" width=\""+imgWidth+"\" height=\""+imgHeight+"\" /></span> \n");
+                    img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +" /></span> \n");
                     if(caption != null) {
                         img.append("<h6 style=\""+captionStyle+"\"><span>"+caption+"</span></h6> \n");
                     }
@@ -213,7 +209,7 @@ public class Promo extends GenericAdmResource {
                 }else {
                     imgPos = 6;
                     img.append("<div style=\"text-align:center\"> \n");
-                    img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" width=\""+imgWidth+"\" height=\""+imgHeight+"\" /></span> \n");
+                    img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +" /></span> \n");
                     if(caption != null) {
                         img.append("<h6 style=\""+captionStyle+"\"><span>"+caption+"</span></h6> \n");
                     }
@@ -290,18 +286,18 @@ public class Promo extends GenericAdmResource {
         String subtitle = base.getAttribute("subtitle");
         String imgfile = base.getAttribute("imgfile");
         String caption = base.getAttribute("caption");
-        int imgWidth;
-        try {
-            imgWidth = Integer.parseInt(base.getAttribute("imgWidth"));
-        }catch(NumberFormatException nfe) {
-            imgWidth = 150;
+
+
+         String imgWidth="";
+        if(base.getAttribute("imgWidth")!=null){
+            imgWidth = "width=\"" + base.getAttribute("imgWidth")+"\"";
         }
-        int imgHeight;
-        try {
-            imgHeight = Integer.parseInt(base.getAttribute("imgHeight"));
-        }catch(NumberFormatException nfe) {
-            imgHeight = 180;
+
+        String imgHeight="";
+        if(base.getAttribute("imgHeight")!=null){
+            imgHeight = "height=\"" + base.getAttribute("imgHeight")+"\"";
         }
+
 
         String text = base.getAttribute("text");
         String more = base.getAttribute("more");
@@ -330,7 +326,7 @@ public class Promo extends GenericAdmResource {
             if(imgfile != null) {
                 if(imgPos != 6) {
                     img.append("<div> \n");
-                    img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" width=\""+imgWidth+"\" height=\""+imgHeight+"\" /></span> \n");
+                    img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +" /></span> \n");
                     if(caption != null) {
                         img.append("<h6><span>"+caption+"</span></h6> \n");
                     }
@@ -339,7 +335,7 @@ public class Promo extends GenericAdmResource {
                 }else {
                     imgPos = 6;
                     img.append("<div> \n");
-                    img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" width=\""+imgWidth+"\" height=\""+imgHeight+"\" /></span> \n");
+                    img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +" /></span> \n");
                     if(caption != null) {
                         img.append("<h6><span>"+caption+"</span></h6> \n");
                     }
