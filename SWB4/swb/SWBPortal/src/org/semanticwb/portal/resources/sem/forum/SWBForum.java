@@ -1,26 +1,26 @@
-/**
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
-*
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
-* del SemanticWebBuilder 4.0.
-*
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
-* de la misma.
-*
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
-* dirección electrónica:
+/**  
+* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
+* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
+* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
+* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
+* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
+* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
+* 
+* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
+* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
+* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
+* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
+* del SemanticWebBuilder 4.0. 
+* 
+* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
+* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
+* de la misma. 
+* 
+* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
+* dirección electrónica: 
 *  http://www.semanticwebbuilder.org
-**/
-
+**/ 
+ 
 package org.semanticwb.portal.resources.sem.forum;
 
 
@@ -45,6 +45,7 @@ import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.SWBFormButton;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.SWBActionResponse;
@@ -64,7 +65,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
 
     public SWBForum()
     {
-
+       
     }
 
     public SWBForum(org.semanticwb.platform.SemanticObject base)
@@ -113,6 +114,8 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setAction("addThread");
         mgr.setAction(url.toString());
+        
+        mgr.hideProperty(Thread.frm_hasThAttachments);
 
         request.setAttribute("formName", mgr.getFormName());
         mgr.addButton(SWBFormButton.newSaveButton());
@@ -137,6 +140,10 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         } else {
             mgr = new SWBFormMgr(Post.frm_Post, soThread, null);
         }
+
+        mgr.hideProperty(Post.frm_hasAttachments);
+
+
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setParameter("threadUri", request.getParameter("threadUri"));
         url.setParameter("postUri", request.getParameter("postUri"));
@@ -182,6 +189,10 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         url.setAction("editPost");
         mgr.setAction(url.toString());
 
+        mgr.hideProperty(Post.swb_active);
+        mgr.hideProperty(Post.frm_hasAttachments);
+
+        /* Para mostrar attaches
         Resource base = paramRequest.getResourceBase();
         WebSite website = paramRequest.getWebPage().getWebSite();
         Post post = Post.getPost(semObject.getId(), website);
@@ -202,6 +213,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         if (count > 0) {
             request.setAttribute("attachCount_hasThAttachments", "" + count);
         }
+         * */
         mgr.addButton(SWBFormButton.newSaveButton());
         mgr.addButton(SWBFormButton.newCancelButton());
         request.setAttribute("formName", mgr.getFormName());
@@ -215,6 +227,22 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         if (paramRequest.getUser() != null) {
             lang = paramRequest.getUser().getLanguage();
         }
+
+        Iterator<SemanticProperty> itSemProps=semObject.getSemanticClass().listProperties();
+        while(itSemProps.hasNext()){
+            SemanticProperty semProp=itSemProps.next();
+            if(semProp!=null)
+            {
+              if(semProp != Thread.swb_title && semProp != Thread.frm_thBody //&& semProp != Thread.frm_hasThAttachments
+                && semProp != Thread.swb_created && semProp != Thread.swb_creator && semProp != Thread.swb_updated
+                && semProp != Thread.swb_modifiedBy)
+                {
+                       mgr.hideProperty(semProp);
+                }
+            }
+        }
+
+
         mgr.setLang(lang);
         mgr.setSubmitByAjax(false);
         mgr.setType(mgr.TYPE_XHTML);
@@ -223,7 +251,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         url.setAction("editThread");
         mgr.setAction(url.toString());
 
-
+        /* Para mostrar attaches
         Resource base = paramRequest.getResourceBase();
         WebSite website = paramRequest.getWebPage().getWebSite();
         Thread thread= Thread.getThread(semObject.getId(), website);
@@ -243,6 +271,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         if (count > 0) {
             request.setAttribute("attachCount_hasThAttachments", "" + count);
         }
+         * */
         mgr.addButton(SWBFormButton.newSaveButton());
         mgr.addButton(SWBFormButton.newCancelButton());
         request.setAttribute("formName", mgr.getFormName());
@@ -270,7 +299,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
                 }
                 thread.setForum(this);
 
-                processFiles(request, response, thread.getSemanticObject());
+                //processFiles(request, response, thread.getSemanticObject());
             }catch(FormValidateException e)
             {
                 //TODO:Validar
@@ -303,7 +332,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
                         newPost.setParentPost(post);
                     }
 
-                    processFiles(request, response, newPost.getSemanticObject());
+                    //processFiles(request, response, newPost.getSemanticObject());
 
                     thread.setReplyCount(thread.getReplyCount() + 1);
                     thread.setLastPostDate(date);
@@ -328,7 +357,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
 
                 Post newPost = Post.getPost(semObj.getId(), website);
 
-                processFiles(request, response, newPost.getSemanticObject());
+                //processFiles(request, response, newPost.getSemanticObject());
 
                 response.setMode(response.Mode_VIEW);
                 response.setRenderParameter("threadUri", request.getParameter("threadUri"));
@@ -366,7 +395,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
             semObject.remove();
 
             SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + base.getWorkPath() + "/replies/" + Post2remove.getId() + "/");
-
+            
             //Resta el post al contador del thread
             SemanticObject soThread = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
             Thread thread = Thread.getThread(soThread.getId(), website);
@@ -396,7 +425,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
                 SemanticObject semObj = mgr.processForm(request);
                 Thread thread = Thread.getThread(semObj.getId(), website);
 
-                processFiles(request, response, thread.getSemanticObject());
+                //processFiles(request, response, thread.getSemanticObject());
             }catch(FormValidateException e)
             {
                 //TODO:Validar
