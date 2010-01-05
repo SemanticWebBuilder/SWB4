@@ -58,17 +58,7 @@ import com.infotec.wb.core.WBLoader;
  */
 public abstract class RecUser implements WBDBRecord, java.io.Serializable {
 
-    org.semanticwb.model.User usr = null;
-
-    public WBUser(org.semanticwb.model.User user)
-    {
-        usr = user;
-    }
-
-    public org.semanticwb.model.User getNative()
-    {
-        return usr;
-    }
+    
 
 
     private ArrayList observers = new ArrayList();
@@ -99,6 +89,19 @@ public abstract class RecUser implements WBDBRecord, java.io.Serializable {
     private ArrayList userroles = new ArrayList();
     private HashMap admfilters = new HashMap();
 
+    org.semanticwb.model.User usr = null;
+
+    public RecUser(org.semanticwb.model.User user)
+    {
+        usr = user;
+    }
+
+    public org.semanticwb.model.User getNative()
+    {
+        return usr;
+    }
+
+
     /**
      * Creates new RecUser
      */
@@ -112,7 +115,7 @@ public abstract class RecUser implements WBDBRecord, java.io.Serializable {
         this.repository = repository;
         if(WBLoader.getInstance().haveDBTables())
         {
-            registerObserver(DBUser.getInstance(repository));
+            //registerObserver(DBUser.getInstance(repository));
             if ("true".equalsIgnoreCase(DBUser.getInstance(repository).getProperty("active", "true")))
                 this.active = 1;
         }
