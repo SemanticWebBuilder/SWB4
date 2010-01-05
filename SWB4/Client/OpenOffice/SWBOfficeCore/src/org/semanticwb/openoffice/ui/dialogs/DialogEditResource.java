@@ -423,7 +423,7 @@ public class DialogEditResource extends javax.swing.JDialog
 
         getContentPane().add(jPanelOptions, java.awt.BorderLayout.SOUTH);
 
-        jTabbedPane1.setPreferredSize(new java.awt.Dimension(500, 330));
+        jTabbedPane1.setPreferredSize(new java.awt.Dimension(530, 330));
 
         jLabel1.setText("Título por defecto:");
 
