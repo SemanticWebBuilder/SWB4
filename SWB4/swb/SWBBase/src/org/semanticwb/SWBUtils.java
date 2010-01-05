@@ -3483,8 +3483,8 @@ public class SWBUtils {
          * @param file a string representing a file's pathname. Where the file is
          *        going to be created.
          */
-        public static void DomtoFile(Document dom, String file) {
-            domtoFile(dom, file, "UTF-8");
+        public static void domToFile(Document dom, String file) {
+            domToFile(dom, file, "UTF-8");
         }
 
         /**
@@ -3499,7 +3499,7 @@ public class SWBUtils {
          * @param encode a string representing a character encoding. This will be
          *        used for writing the file's content.
          */
-        public static void domtoFile(Document dom, String file, String encode) {
+        public static void domToFile(Document dom, String file, String encode) {
 
             java.io.FileOutputStream osw = null;
             try {
