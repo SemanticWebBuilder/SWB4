@@ -173,6 +173,7 @@ public class DialogCalendar extends java.awt.Dialog
             }
         });
 
+        jPanel1.setPreferredSize(new java.awt.Dimension(530, 202));
         jPanel1.setLayout(new java.awt.BorderLayout());
 
         jPanel2.setPreferredSize(new java.awt.Dimension(100, 30));
