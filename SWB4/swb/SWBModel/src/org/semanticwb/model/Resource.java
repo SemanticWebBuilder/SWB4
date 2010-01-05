@@ -136,22 +136,15 @@ public class Resource extends org.semanticwb.model.base.ResourceBase
         return randpriority;
     }
 
-    public Document getDom() throws SWBException
+    public Document getDom() 
     {
-//       if(m_dom==null)
-//       {
-//           if(getXml()!=null)
-//           {
-//               m_dom=getSemanticObject().getDomProperty(swb_xml);
-//           }else
-//           {
-//               m_dom=SWBUtils.XML.getNewDocument();
-//           }
-//       }
-//       return m_dom;
         return getSemanticObject().getDomProperty(swb_xml);
     }
 
+    public Document getDomConf()
+    {
+        return getSemanticObject().getDomProperty(swb_xmlConf);
+    }
 
     /** Asigna un atributo al DOM del recurso.
      * Si no existe el atributo, lo crea y si existe lo modifica
