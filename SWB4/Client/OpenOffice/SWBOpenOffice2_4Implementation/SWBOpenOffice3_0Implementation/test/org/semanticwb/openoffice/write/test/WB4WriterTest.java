@@ -319,7 +319,7 @@ public class WB4WriterTest
     }
 
     @Test
-    //@Ignore
+    @Ignore
     public void saveToSiteTest()
     {
         try
@@ -365,7 +365,7 @@ public class WB4WriterTest
     }
 
     @Test
-    @Ignore
+    //@Ignore
     public void showDocumentInfoTest()
     {
         try
