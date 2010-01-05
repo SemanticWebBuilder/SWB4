@@ -101,7 +101,7 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
                         if(prop.isInt() || prop.isShort() || prop.isByte())obj.setIntProperty(prop, Integer.parseInt(value));
                         if(prop.isLong())obj.setLongProperty(prop, Long.parseLong(value));
                         if(prop.isDate())obj.setDateProperty(prop, new java.util.Date(value));
-                        if(prop.isString())obj.setProperty(prop, SWBUtils.XML.replaceXMLChars(value));
+                        if(isFilterHTMLTags() && prop.isString())obj.setProperty(prop, SWBUtils.XML.replaceXMLChars(value));
                     }else if(value.length()==0 && old!=null)
                     {
                         obj.removeProperty(prop);
