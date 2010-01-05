@@ -309,7 +309,7 @@ public class WB4Writer extends OfficeDocument
             }
             else
             {
-                throw new WBAlertException(ERROR_DOCUMENT_NOT_MODIFIED);
+                //throw new WBAlertException(ERROR_DOCUMENT_NOT_MODIFIED);
             }
         }
         catch (IOException ioe)
