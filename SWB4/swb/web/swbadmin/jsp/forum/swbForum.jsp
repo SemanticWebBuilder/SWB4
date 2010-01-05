@@ -18,7 +18,7 @@
 <%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="org.semanticwb.SWBPortal"%>
-<%@page import="org.semanticwb.model.SWBModel"%>
+<%@page import="org.semanticwb.model.*"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page import="org.semanticwb.portal.SWBFormButton"%>
 <%@page import="org.semanticwb.portal.SWBFormMgr"%>
@@ -49,6 +49,11 @@ a:hover {text-decoration: underline;}
         SWBResourceURL urlRemovePost = paramRequest.getRenderUrl();
         SWBResourceURL actionURL = paramRequest.getActionUrl();
         User user = paramRequest.getUser();
+        boolean isforumAdmin=false;
+        Role forumAdmin=website.getUserRepository().getRole("administrador_foros");
+        if(forumAdmin!=null)  {
+            isforumAdmin=user.hasRole(forumAdmin);
+        }
         String lang = user.getLanguage();
         String action = paramRequest.getAction();
         String autor = "";
@@ -60,14 +65,19 @@ a:hover {text-decoration: underline;}
             urlRemovePost.setParameter("threadUri", thread.getURI());
             urlthread.setParameter("threadUri", thread.getURI());
             urlthread.setMode("addThread");
+            boolean isTheAuthor=false;
             if (thread.getCreator() != null) {
                 autor = thread.getCreator().getFullName();
+                if(thread.getCreator().getURI().equals(user.getURI())) isTheAuthor=true;
             }
         %>
         <div id="contenido">
         <div class="innerContent">
            <div id="WBForo">
-               <p class="agregarContenido"><a href="<%=urlthread%>"><%=paramRequest.getLocaleString("publicThread")%></a></p>
+               <p class="agregarContenido">
+                   <%if(user!=null && user.isRegistered()){%><a href="<%=urlthread%>"><%=paramRequest.getLocaleString("publicThread")%></a><%}else
+                   {%>Registrese para publicar un nuevo tema<%}%>
+               </p>
             <!-- INICIA ENTRADA -->
             <div class="entradaForo">
               <div class="readNotread_foro">
@@ -78,29 +88,40 @@ a:hover {text-decoration: underline;}
               <p><%=thread.getBody()%></p>
               <div class="vistasForo">
                 <p> (<%=thread.getReplyCount()%>) <%=paramRequest.getLocaleString("responses")%> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/commentsForo.png" alt="<%=paramRequest.getLocaleString("responses")%>" width="14" height="12" /> |  (<%=thread.getViewCount()%>) <%=paramRequest.getLocaleString("visites")%> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/viewsForo.png" alt="<%=paramRequest.getLocaleString("visites")%>" width="10" height="9" />
-                 |  <%urlthread.setMode("editThread");%><a href="<%=urlthread%>"><%=paramRequest.getLocaleString("edit")%></a> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/editar_foro.png" alt="<%=paramRequest.getLocaleString("edit")%>" width="7" height="15" />
-                 |  <%url.setAction("removePost");url.setParameter("isthread", "1");
-                         %> <a href="<%=url%>"><%=paramRequest.getLocaleString("remove")%></a> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/eliminar_foro.png" alt="<%=paramRequest.getLocaleString("remove")%>" width="11" height="12" /></p>
+                 <%if(isTheAuthor){%> |  <%urlthread.setMode("editThread");%>
+                 <a href="<%=urlthread%>">
+                     <%=paramRequest.getLocaleString("edit")%>
+                 </a>
+                 <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/editar_foro.png" alt="<%=paramRequest.getLocaleString("edit")%>" width="7" height="15" />
+                 <%}%>
+                 <%if(isTheAuthor){%>|  <%url.setAction("removePost");url.setParameter("isthread", "1");
+                         %> 
+                <a href="<%=url%>">
+                    <%=paramRequest.getLocaleString("remove")%>
+                </a>
+                <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/eliminar_foro.png" alt="<%=paramRequest.getLocaleString("remove")%>" width="11" height="12" /></p>
+                <%}%>
               </div>
               <p>&nbsp;</p>
             </div>
             <%
                 String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.png";
-                SWBFormMgr mgr = new SWBFormMgr(Post.frm_Post, thread.getSemanticObject(), null);
-                actionURL.setParameter("threadUri", thread.getURI());
-                lang = user.getLanguage();
-                mgr.setLang(lang);
-                mgr.setSubmitByAjax(false);
-                mgr.setType(mgr.TYPE_DOJO);
-                //mgr.setType(mgr.TYPE_XHTML);
-                actionURL.setAction("replyPost");
-                mgr.setAction(actionURL.toString());
-                mgr.addButton(SWBFormButton.newSaveButton());
-                mgr.addButton(SWBFormButton.newCancelButton());
-                request.setAttribute("formName", mgr.getFormName());
-            %>
-                <%=mgr.renderForm(request)%>
-            <%
+                    SWBFormMgr mgr = new SWBFormMgr(Post.frm_Post, thread.getSemanticObject(), null);
+                    actionURL.setParameter("threadUri", thread.getURI());
+                    lang = user.getLanguage();
+                    mgr.setLang(lang);
+                    mgr.setSubmitByAjax(false);
+                    mgr.setType(mgr.TYPE_DOJO);
+                    mgr.hideProperty(Post.frm_hasAttachments);
+                    //mgr.setType(mgr.TYPE_XHTML);
+                    actionURL.setAction("replyPost");
+                    mgr.setAction(actionURL.toString());
+                    mgr.addButton(SWBFormButton.newSaveButton());
+                    mgr.addButton(SWBFormButton.newCancelButton());
+                    request.setAttribute("formName", mgr.getFormName());
+                %>
+                    <%=mgr.renderForm(request)%>
+                <%
                 boolean cambiaColor = true;
                 GenericIterator<Post> itPost = thread.listPosts();
                 while (itPost.hasNext()) {
@@ -109,12 +130,14 @@ a:hover {text-decoration: underline;}
                     urlRemovePost.setParameter("postUri", post.getURI());
 
                     User userPost = null;
-                    String postCreator = "";
+                    String postCreator = "Anonimo";
                     String postCreated = "";
+                    isTheAuthor=false;
                     if (post.getCreator() != null) {
                         userPost = post.getCreator();
                         postCreator = post.getCreator().getFullName();
                         if(post.getCreator().getPhoto()!=null) photo=SWBPortal.getWebWorkPath()+post.getCreator().getPhoto();
+                        if(post.getCreator().getURI().equals(user.getURI())) isTheAuthor=true;
                     }
                     String rowClass = "pluginRow2";
                     if (!cambiaColor) {
@@ -131,8 +154,18 @@ a:hover {text-decoration: underline;}
                       <%urlRemovePost.setAction("removePost");%>
                       <div class="vistasForo_comment">
                           <%urlthread.setMode("replyPost");urlthread.setParameter("postUri", post.getURI());%>
-                          <p> <a href="<%=urlthread%>"><%=paramRequest.getLocaleString("comment")%></a> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/commentsForo.png" alt="<%=paramRequest.getLocaleString("comment")%>" width="14" height="12" /> |  <%urlthread.setMode("editPost");%><a href="<%=urlthread%>"><%=paramRequest.getLocaleString("edit")%></a> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/editar_foro.png" alt="<%=paramRequest.getLocaleString("edit")%>" width="7" height="15" /> |  <%url.setAction("removePost");%>
-                                <a href="<%=urlRemovePost%>"><%=paramRequest.getLocaleString("remove")%></a> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/eliminar_foro.png" alt="<%=paramRequest.getLocaleString("remove")%>" width="11" height="12" /></p>
+                          <p> 
+                            <a href="<%=urlthread%>">
+                              <%=paramRequest.getLocaleString("comment")%>
+                            </a><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/commentsForo.png" alt="<%=paramRequest.getLocaleString("comment")%>" width="14" height="12" />
+                           <%if(isTheAuthor || isforumAdmin){%> |  <%urlthread.setMode("editPost");%>
+                          <a href="<%=urlthread%>">
+                              <%=paramRequest.getLocaleString("edit")%>
+                          </a> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/editar_foro.png" alt="<%=paramRequest.getLocaleString("edit")%>" width="7" height="15" />
+                          <%if(isTheAuthor || isforumAdmin){%> |  <%url.setAction("removePost");%><%}%>
+                          <a href="<%=urlRemovePost%>">
+                              <%=paramRequest.getLocaleString("remove")%>
+                          </a> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/eliminar_foro.png" alt="<%=paramRequest.getLocaleString("remove")%>" width="11" height="12" /></p><%}%>
                       </div>
                     </div>
                     <%
@@ -379,7 +412,10 @@ a:hover {text-decoration: underline;}
             <div id="contenido">
              <div class="innerContent">
                 <div id="WBForo">
-                    <p class="agregarContenido"><a href="<%=url%>"><%=paramRequest.getLocaleString("publicThread")%></a></p>
+                    <p class="agregarContenido">
+                        <%if(user!=null && user.isRegistered()){%><a href="<%=url%>"><%=paramRequest.getLocaleString("publicThread")%></a><%}else
+                        {%>Registrese para publicar un nuevo tema<%}%>
+                    </p>
                     <%
                     autor = "";
                     url.setMode(url.Mode_VIEW);
@@ -414,7 +450,7 @@ a:hover {text-decoration: underline;}
                             <div class="vistasForo">
                                 <p> (<%=thread.getReplyCount()%>) <%=paramRequest.getLocaleString("responses")%> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/commentsForo.png" alt="<%=paramRequest.getLocaleString("responses")%>" width="14" height="12" /> |  (<%=thread.getViewCount()%>) <%=paramRequest.getLocaleString("visites")%> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/viewsForo.png" alt="<%=paramRequest.getLocaleString("visites")%>" width="10" height="9" /></p>
                             </div>
-                            <div class="clearNosp">&nbsp;</div>
+                            <div class="clearNosp">&nbsp;</div>                        
                        </div>
                  <%
                         }
