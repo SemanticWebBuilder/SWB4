@@ -68,6 +68,7 @@ public class SelectCategory extends WizardPage
         this.getWizardDataMap().remove(CATEGORY_ID);
         this.getWizardDataMap().remove(REPOSITORY_ID);
         loadTree();
+        jTreeCategory.updateUI();
 
     }
 
@@ -309,6 +310,7 @@ private void jButtonAddCategoryActionPerformed(java.awt.event.ActionEvent evt) {
         {
             repositoryNode.removeAllChildren();
             addCategory(repositoryNode);
+            jTreeCategory.updateUI();
             jTreeCategory.expandPath(new TreePath(repositoryNode.getPath()));
         }
     }
