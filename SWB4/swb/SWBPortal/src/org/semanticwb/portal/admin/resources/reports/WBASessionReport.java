@@ -709,7 +709,6 @@ public class WBASessionReport extends GenericResource {
             
             if(rtype.equals("0")) {  // REPORTE DIARIO
                 WBAFilterReportBean filter = buildFilter(request, paramsRequest);
-                System.out.println("filter="+filter.toString());
                 JRDataSourceable dataDetail = new JRSessionDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.SESSION_DAILY;                
                 try {
@@ -847,14 +846,11 @@ public class WBASessionReport extends GenericResource {
                 filterReportBean.setType(I_REPORT_TYPE);
                 String[] numFecha = fecha11.split("-");
                 
-                for(int i=0; i<numFecha.length; i++){System.out.println("numFecha["+i+"]="+numFecha[i]);}
-                
                 filterReportBean.setYearI(Integer.parseInt(numFecha[0]));
                 filterReportBean.setMonthI(Integer.parseInt(numFecha[1]));
                 filterReportBean.setDayI(Integer.parseInt(numFecha[2]));
 
                 numFecha = fecha12.split("-");
-                for(int i=0; i<numFecha.length; i++){System.out.println("numFecha["+i+"]="+numFecha[i]);}
                 filterReportBean.setYearF(Integer.parseInt(numFecha[0]));
                 filterReportBean.setMonthF(Integer.parseInt(numFecha[1]));
                 filterReportBean.setDayF(Integer.parseInt(numFecha[2]));
