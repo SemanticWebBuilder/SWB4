@@ -604,7 +604,7 @@ public class WBFileUpload
             if(FindParemeter(cparameter.parametro.trim())==null)
                 parametros.add(cparameter);
         } while(true);
-     }catch(Exception e){log.error(e);}
+     }catch(Exception e){}
      return null;
     }
 
