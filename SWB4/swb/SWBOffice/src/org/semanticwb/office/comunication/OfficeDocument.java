@@ -2395,7 +2395,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 rinfo.id = userGroupRef.getId();
                 rinfo.title = userGroupRef.getTitle();
                 rinfo.active = ref.isActive();
-                rinfo.type = Role.sclass.getName();
+                rinfo.type = UserGroup.sclass.getName();
                 rules.add(rinfo);
             }
         }
