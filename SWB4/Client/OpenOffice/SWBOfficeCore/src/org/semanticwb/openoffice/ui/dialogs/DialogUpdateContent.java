@@ -182,7 +182,7 @@ public class DialogUpdateContent extends javax.swing.JDialog
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.SOUTH);
 
-        summaryPublish1.setPreferredSize(new java.awt.Dimension(430, 250));
+        summaryPublish1.setPreferredSize(new java.awt.Dimension(530, 250));
         getContentPane().add(summaryPublish1, java.awt.BorderLayout.CENTER);
 
         pack();
