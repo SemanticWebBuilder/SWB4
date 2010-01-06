@@ -168,7 +168,7 @@ function votedPage(){
                 "    request.send(null);\n}\n\nfunction votedPage(){\n" +
                 "    if (request.readyState==4){\n"+
                 "    var response = request.responseText;\n    if ('OK'==response)\n" +
-                "        alert('"+paramRequest.getLocaleString("votoAceptado")+"');\n\n    invoke = false;}\nvar invoke = true;\n</script>\n");
+                "        alert('"+paramRequest.getLocaleString("votoAceptado")+"');\n\n    invoke = false;}}\nvar invoke = true;\n</script>\n");
         out.print("<table summary=\""+paramRequest.getLocaleString("califCont")+"\"><tr>");
         for (int i =1;i<=5;i++)
         printStar(i, rank, out, paramRequest);
