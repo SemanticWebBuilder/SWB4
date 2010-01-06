@@ -176,7 +176,7 @@ public class DialogCalendar extends java.awt.Dialog
         jPanel1.setPreferredSize(new java.awt.Dimension(530, 202));
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        jPanel2.setPreferredSize(new java.awt.Dimension(100, 30));
+        jPanel2.setPreferredSize(new java.awt.Dimension(100, 40));
         jPanel2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         jButtonRegularPeriods.setText("Configurar por periodos regulares");
@@ -205,7 +205,7 @@ public class DialogCalendar extends java.awt.Dialog
 
         jPanel1.add(jPanel2, java.awt.BorderLayout.SOUTH);
 
-        jPanel3.setPreferredSize(new java.awt.Dimension(100, 30));
+        jPanel3.setPreferredSize(new java.awt.Dimension(100, 40));
 
         jLabel1.setText("Título:");
 
@@ -230,6 +230,8 @@ public class DialogCalendar extends java.awt.Dialog
         );
 
         jPanel1.add(jPanel3, java.awt.BorderLayout.NORTH);
+
+        jPanel4.setPreferredSize(new java.awt.Dimension(500, 160));
 
         jPanelByTime.setBorder(javax.swing.BorderFactory.createTitledBorder("Horario de Presentación"));
 
@@ -265,7 +267,7 @@ public class DialogCalendar extends java.awt.Dialog
                         .addGroup(jPanelByTimeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jSpinnerEndTime, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jSpinnerInitTime, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
         jPanelByTimeLayout.setVerticalGroup(
             jPanelByTimeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -278,8 +280,7 @@ public class DialogCalendar extends java.awt.Dialog
                 .addGap(18, 18, 18)
                 .addGroup(jPanelByTimeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jSpinnerEndTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jSpinnerEndTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Intervalo de Dias"));
@@ -324,7 +325,7 @@ public class DialogCalendar extends java.awt.Dialog
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jSpinnerEndDate, 0, 0, Short.MAX_VALUE)
                             .addComponent(jSpinnerInitDate, javax.swing.GroupLayout.PREFERRED_SIZE, 90, Short.MAX_VALUE))))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -336,7 +337,7 @@ public class DialogCalendar extends java.awt.Dialog
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jRadioButtonEndSelect)
                     .addComponent(jSpinnerEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 4, Short.MAX_VALUE)
                 .addComponent(jRadioButtonNotEndDate)
                 .addContainerGap())
         );
@@ -347,17 +348,17 @@ public class DialogCalendar extends java.awt.Dialog
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jPanelByTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(65, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
+                .addGap(28, 28, 28))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
-                    .addComponent(jPanelByTime, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(13, Short.MAX_VALUE))
+                    .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                    .addComponent(jPanelByTime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jPanel1.add(jPanel4, java.awt.BorderLayout.CENTER);

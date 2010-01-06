@@ -660,9 +660,10 @@ public class DialogRegularPeriods extends java.awt.Dialog
             }
         });
 
+        jPanelBody.setPreferredSize(new java.awt.Dimension(600, 410));
         jPanelBody.setLayout(new java.awt.BorderLayout());
 
-        jPanelCommands.setPreferredSize(new java.awt.Dimension(100, 30));
+        jPanelCommands.setPreferredSize(new java.awt.Dimension(100, 40));
         jPanelCommands.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         jButtonok.setText("Aceptar");
