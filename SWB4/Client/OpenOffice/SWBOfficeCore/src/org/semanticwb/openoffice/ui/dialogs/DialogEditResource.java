@@ -703,7 +703,7 @@ public class DialogEditResource extends javax.swing.JDialog
                 java.lang.Object.class, java.lang.Boolean.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, true, false
             };
 
             public Class getColumnClass(int columnIndex) {
