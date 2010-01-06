@@ -66,6 +66,7 @@ public class DialogAddRule extends javax.swing.JDialog
         this.siteInfo = siteInfo;
         this.resourceInfo = resourceInfo;
         loadRules();
+        this.jTableRule.updateUI();
 
     }
 
