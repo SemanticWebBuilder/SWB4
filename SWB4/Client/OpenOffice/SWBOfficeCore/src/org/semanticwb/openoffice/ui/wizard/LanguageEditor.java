@@ -67,7 +67,10 @@ public class LanguageEditor extends WizardPage {
         for(int i=0;i<rows;i++)
         {
             Object value=model.getValueAt(i,1);
-            values.add(value.toString());
+            if(value!=null)
+                values.add(value.toString());
+            else
+                values.add("");
         }
         return values.toArray(new String[values.size()]);
     }
