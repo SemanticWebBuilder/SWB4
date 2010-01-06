@@ -158,13 +158,13 @@ public class DialogUpdateContent extends javax.swing.JDialog
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jProgressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
                         .addComponent(jButtonUpdate)
                         .addGap(18, 18, 18)
-                        .addComponent(jButtonClose))
-                    .addComponent(jLabel1))
+                        .addComponent(jButtonClose)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
