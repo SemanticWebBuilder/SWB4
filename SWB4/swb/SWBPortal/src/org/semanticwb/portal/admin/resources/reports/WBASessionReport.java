@@ -204,9 +204,21 @@ public class WBASessionReport extends GenericResource {
                 out.println("   params = params + '&wb_rtype=' + dojo.byId('wb_rtype').value;");
                 out.println("   if(accion == 0) {");
                 out.println("       params = params + '&wb_rep_type=' + getTypeSelected();");
-                out.println("       params = params + '&wb_fecha1=' + dojo.byId('wb_fecha1').value;");
-                out.println("       params = params + '&wb_fecha11=' + dojo.byId('wb_fecha11').value;");
-                out.println("       params = params + '&wb_fecha12=' + dojo.byId('wb_fecha12').value;");
+                out.println("       var fecha1 = new String(dojo.byId('wb_fecha1').value);");
+                out.println("       var fecha2 = new String(dojo.byId('wb_fecha11').value);");
+                out.println("       var fecha3 = new String(dojo.byId('wb_fecha12').value);");
+                out.println("       if(fecha1.length>0) {");
+                out.println("           dp = fecha1.split('/');");
+                out.println("           params = params + '&wb_fecha1=' + dp[2]+'-'+dp[1]+'-'+dp[0];");
+                out.println("       }");
+                out.println("       if(fecha2.length>0) {");
+                out.println("           dp = fecha2.split('/');");
+                out.println("           params = params + '&wb_fecha11=' + dp[2]+'-'+dp[1]+'-'+dp[0];");
+                out.println("       }");
+                out.println("       if(fecha3.length>0) {");
+                out.println("           dp = fecha3.split('/');");
+                out.println("           params = params + '&wb_fecha12=' + dp[2]+'-'+dp[1]+'-'+dp[0];");
+                out.println("       }");
                 out.println("   }else {");
                 out.println("       params = params + '&wb_year13=' + dojo.byId('wb_year13').options[dojo.byId('wb_year13').selectedIndex].value;");
                 out.println("   }");
@@ -697,6 +709,7 @@ public class WBASessionReport extends GenericResource {
             
             if(rtype.equals("0")) {  // REPORTE DIARIO
                 WBAFilterReportBean filter = buildFilter(request, paramsRequest);
+                System.out.println("filter="+filter.toString());
                 JRDataSourceable dataDetail = new JRSessionDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.SESSION_DAILY;                
                 try {
@@ -787,7 +800,7 @@ public class WBASessionReport extends GenericResource {
 
     private WBAFilterReportBean buildFilter(HttpServletRequest request, SWBParamRequest paramsRequest) throws SWBResourceException, IncompleteFilterException {
         WBAFilterReportBean filterReportBean = null;        
-        String repositoryName = request.getParameter("wb_repository")==null ? paramsRequest.getWebPage().getWebSite().getId():request.getParameter("wb_site");
+        String repositoryName = request.getParameter("wb_repository")==null ? paramsRequest.getWebPage().getWebSite().getId():request.getParameter("wb_repository");
         int groupDates;
         try {
             groupDates = request.getParameter("wb_rep_type")==null ? 0:Integer.parseInt(request.getParameter("wb_rep_type"));
