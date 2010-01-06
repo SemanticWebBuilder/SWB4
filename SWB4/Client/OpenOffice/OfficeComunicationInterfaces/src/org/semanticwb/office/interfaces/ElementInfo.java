@@ -74,7 +74,10 @@ public class ElementInfo {
     @Override
     public String toString()
     {
-        return title.toString();
+        if(title!=null)
+            return title.toString();
+        else
+            return "No title";
     }
 
 }
