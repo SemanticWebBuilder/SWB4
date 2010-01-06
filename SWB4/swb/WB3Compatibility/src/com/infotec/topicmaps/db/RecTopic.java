@@ -116,12 +116,12 @@ public class RecTopic implements WBDBRecord
         this.views = 0;
         this.indexable = 1;
         this.hidden = 0;
-        if(WBLoader.getInstance().haveDBTables())
-        {
-            registerObserver(DBTopicMap.getInstance());
-            //registerObserver(DBVgContent.getInstance());
-            //registerObserver(UsrMgr.getInstance());
-        }
+//        if(WBLoader.getInstance().haveDBTables())
+//        {
+//            registerObserver(DBTopicMap.getInstance());
+//            //registerObserver(DBVgContent.getInstance());
+//            //registerObserver(UsrMgr.getInstance());
+//        }
         timer = System.currentTimeMillis();
         time = 600000L;
         try
