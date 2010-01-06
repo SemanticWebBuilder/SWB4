@@ -282,6 +282,7 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
 
         add(jPanelTools, java.awt.BorderLayout.NORTH);
 
+        jPanelContents.setPreferredSize(new java.awt.Dimension(500, 432));
         jPanelContents.setLayout(new java.awt.BorderLayout());
 
         jPanel4.setPreferredSize(new java.awt.Dimension(100, 30));
