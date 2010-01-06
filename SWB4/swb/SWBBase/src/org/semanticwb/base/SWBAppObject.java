@@ -24,22 +24,46 @@
 
 /*
  * SWBAppObject.java
- *
  * Created on 11 de junio de 2002, 17:42
  */
 
 package org.semanticwb.base;
 
-/** Interfaz: se utiliza para los objetos de aplicacion que se almacenan en WBBroker
+
+/**
+ * Application object that need to perform some operations constantly in time
+ * or by events that are very common in the entire application, hence will remain
+ * alive while the application is running.
+ * <p>Objeto de aplicaci&oacute;n que necesita realizar algunas operaciones constantemente
+ * en el tiempo o controlada por eventos que son muy comunes en toda la aplicaci&oacute;n,
+ * por lo que permanecer&aacute; vivo mientras la aplicaci&oacute;n est&eacute; en
+ * ejecuci&oacute;n.</p>
  * @author Javier Solis Gonzalez
  * @version 1.1
  */
-public interface SWBAppObject
-{
+public interface SWBAppObject {
+
+
+    /**
+     * Initializes the state of this object and prepares any element in the environment
+     * necesary for its proper operation.
+     * <p>Inicializa el estado de este objeto y prepara cualquier elemento en el
+     * ambiente de la aplicaci&oacute;n necesario para su adecuada operaci&oacute;n.</p>
+     */
     void init();
 
+    /**
+     * Finalizes the state of this object and prepares any element of the application
+     * environment to stop interacting with this object.
+     * <p>Finaliza el estado de este objeto y prepara cualquier elemento del ambiente
+     * de la aplicaci&oacute;n para dejar de interactuar con este objeto.</p>
+     */
     public void destroy();
 
+    /**
+     * Updates the state of this object.
+     * <p>Actualiza el estado de este objeto.</p>
+     */
     public void refresh();
 }
 
