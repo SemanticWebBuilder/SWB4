@@ -123,14 +123,7 @@ public class WBAChannelReport extends GenericResource {
                     WebSite site = webSites.next();
                     // Evaluates if TopicMap is not Global
                     if(!site.getId().equals(SWBContext.getGlobalWebSite().getId())) {
-                        // Get access level of this user on this topicmap and if level is greater than "0" then user have access
-                        // TODO
-    //                    i_access = AdmFilterMgr.getInstance().haveAccess2TopicMap(paramsRequest.getUser(),site.getDbdata().getId());
-    //                    if(I_ACCESS < i_access) {
-    //                        if(site.getDbdata().getDeleted()==0) {
-                                hm_sites.put(site.getId(), site.getDisplayTitle(paramsRequest.getUser().getLanguage()));
-    //                        }
-    //                    }
+                        hm_sites.put(site.getId(), site.getDisplayTitle(paramsRequest.getUser().getLanguage()));
                     }
                 }
 
@@ -167,9 +160,9 @@ public class WBAChannelReport extends GenericResource {
                     }
 
                     sb_ret.append("<script type=\"text/javascript\">\n");
-                    sb_ret.append("dojo.addOnLoad(doBlockade);");
+                    sb_ret.append(" dojo.addOnLoad(doBlockade);");
 
-                    sb_ret.append("function getParams() {");
+                    sb_ret.append(" function getParams() {");
                     sb_ret.append("   var dp = null;");
                     sb_ret.append("   var params = '?';");
                     sb_ret.append("   params = params + 'wb_site=' + dojo.byId('wb_site').value;");
@@ -190,7 +183,7 @@ public class WBAChannelReport extends GenericResource {
                     sb_ret.append("      params = params + '&wb_fecha12=' + dp[2]+'-'+dp[1]+'-'+dp[0];");
                     sb_ret.append("   }");
                     sb_ret.append("   return params;");
-                    sb_ret.append("}");
+                    sb_ret.append(" }\n");
 
                     /*sb_ret.append("function validate() {");
                     sb_ret.append("   var fecha1 = new String(dojo.byId('wb_fecha1').value);");
@@ -203,73 +196,73 @@ public class WBAChannelReport extends GenericResource {
                     sb_ret.append("   return true;");
                     sb_ret.append("}");*/
 
-                    sb_ret.append("function doXml(size) { ");
+                    sb_ret.append(" function doXml(size) { ");
                     /*sb_ret.append("   if(validate()) {");*/
                     sb_ret.append("      var params = getParams();");
                     sb_ret.append("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_xml")+"\"+params,\"graphWindow\",size);");
                     /*sb_ret.append("   }");*/
-                    sb_ret.append("}");
-
-                    sb_ret.append(" function getTypeSelected(){\n");
-                    sb_ret.append("     var strType = \"0\";\n");
-                    sb_ret.append("     for(i=0;i<window.document.frmrep.wb_rep_type.length;i++){\n");
-                    sb_ret.append("       if(window.document.frmrep.wb_rep_type[i].checked==true){\n");
-                    sb_ret.append("           strType=window.document.frmrep.wb_rep_type[i].value;\n");
-                    sb_ret.append("       }\n");
-                    sb_ret.append("     }\n");
-                    sb_ret.append("     return strType;\n");
                     sb_ret.append(" }\n");
 
-                    sb_ret.append("function doApply() {\n");
-                    sb_ret.append("   tmp = dojo.byId('filename').value;\n");
-                    sb_ret.append("   tmp2=tmp.replace(/ /g,'');\n");
-                    sb_ret.append("   if(tmp2.length==0) {\n");
-                    sb_ret.append("      alert('" + paramsRequest.getLocaleString("fileName") + "')\n");
-                    sb_ret.append("      dojo.byId('filename').select();\n");
-                    sb_ret.append("      dojo.byId('filename').focus();\n");
-                    sb_ret.append("      return false;\n");
-                    sb_ret.append("   }else {\n");
-                    sb_ret.append("      dojo.byId('frmrep').submit();\n");
-                    sb_ret.append("   }\n");
-                    sb_ret.append("}\n");
+                    sb_ret.append(" function getTypeSelected() {");
+                    sb_ret.append("    var strType = \"0\";");
+                    sb_ret.append("    for(i=0;i<window.document.frmrep.wb_rep_type.length;i++){");
+                    sb_ret.append("      if(window.document.frmrep.wb_rep_type[i].checked==true){");
+                    sb_ret.append("          strType=window.document.frmrep.wb_rep_type[i].value;");
+                    sb_ret.append("      }");
+                    sb_ret.append("    }");
+                    sb_ret.append("    return strType;");
+                    sb_ret.append(" }\n");
+
+                    sb_ret.append(" function doApply() {");
+                    sb_ret.append("   tmp = dojo.byId('filename').value;");
+                    sb_ret.append("   tmp2=tmp.replace(/ /g,'');");
+                    sb_ret.append("   if(tmp2.length==0) {");
+                    sb_ret.append("      alert('" + paramsRequest.getLocaleString("file_name") + "');");
+                    sb_ret.append("      dojo.byId('filename').select();");
+                    sb_ret.append("      dojo.byId('filename').focus();");
+                    sb_ret.append("      return false;");
+                    sb_ret.append("   }else {");
+                    sb_ret.append("      dojo.byId('frmrep').submit();");
+                    sb_ret.append("   }");
+                    sb_ret.append(" }\n");
                     
                     sb_ret.append(" function doBlockade() {");
                     sb_ret.append("   if(window.document.frmrep.wb_rep_type) {");
-                    sb_ret.append("     if(window.document.frmrep.wb_rep_type[0].checked){");
-                    sb_ret.append("       dojo.byId('wb_fecha1').disabled = false;");
-                    sb_ret.append("       dojo.byId('wb_fecha11').disabled = true;");
-                    sb_ret.append("       dojo.byId('wb_fecha12').disabled = true;");
-                    sb_ret.append("     }");
-                    sb_ret.append("     if(window.document.frmrep.wb_rep_type[1].checked){");
-                    sb_ret.append("       dojo.byId('wb_fecha1').disabled = true;");
-                    sb_ret.append("       dojo.byId('wb_fecha11').disabled = false;");
-                    sb_ret.append("       dojo.byId('wb_fecha12').disabled = false;");
-                    sb_ret.append("     }");
+                    sb_ret.append("      if(window.document.frmrep.wb_rep_type[0].checked){");
+                    sb_ret.append("         dojo.byId('wb_fecha1').disabled = false;");
+                    sb_ret.append("         dojo.byId('wb_fecha11').disabled = true;");
+                    sb_ret.append("         dojo.byId('wb_fecha12').disabled = true;");
+                    sb_ret.append("      }");
+                    sb_ret.append("      if(window.document.frmrep.wb_rep_type[1].checked){");
+                    sb_ret.append("         dojo.byId('wb_fecha1').disabled = true;");
+                    sb_ret.append("         dojo.byId('wb_fecha11').disabled = false;");
+                    sb_ret.append("         dojo.byId('wb_fecha12').disabled = false;");
+                    sb_ret.append("      }");
                     sb_ret.append("   }");
-                    sb_ret.append(" }");
+                    sb_ret.append(" }\n");
                     
-                    sb_ret.append("function doDownload(name,key){\n");
-                    sb_ret.append("   window.location='"+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("download")+"?filename='+name+'&key='+key;\n");
-                    sb_ret.append("}\n");
+                    sb_ret.append(" function doDownload(name,key){");
+                    sb_ret.append("   window.location='"+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("download")+"?filename='+name+'&key='+key;");
+                    sb_ret.append(" }");
 
                     sb_ret.append("</script>\n");
                     // javascript
 
-                    sb_ret.append("<div class=\"swbform\">\n");
-                    sb_ret.append("<fieldset\n>");
-                    sb_ret.append(paramsRequest.getLocaleString("description"));
-                    sb_ret.append("</fieldset\n>");
+                    sb_ret.append("<div class=\"swbform\">");
+                    sb_ret.append("<fieldset>");
+                    sb_ret.append(paramsRequest.getLocaleString("channel_report"));
+                    sb_ret.append("</fieldset>");
                     
                     SWBResourceURL url = paramsRequest.getActionUrl();
-                    sb_ret.append("<form name=\"frmrep\" id=\"frmrep\" method=\"post\" action=\""+url+"\">\n");
-                    sb_ret.append("<fieldset>\n");
-                    sb_ret.append("<legend>"+paramsRequest.getLocaleString("channel_report")+"</legend>\n");                    
-                    sb_ret.append("<table border=\"0\" width=\"95%\" align=\"center\">\n");
-                    sb_ret.append("<tr><td width=\"213\"></td><td width=\"146\"></td><td width=\"157\"></td><td width=\"413\"></td></tr>\n");
+                    sb_ret.append("<form name=\"frmrep\" id=\"frmrep\" method=\"post\" action=\""+url+"\">");
+                    sb_ret.append("<fieldset>");
+                    sb_ret.append("<legend>"+paramsRequest.getLocaleString("filter")+"</legend>");
+                    sb_ret.append("<table border=\"0\" width=\"95%\" align=\"center\">");
+                    sb_ret.append("<tr><td width=\"213\"></td><td width=\"146\"></td><td width=\"157\"></td><td width=\"413\"></td></tr>");
                     
-                    sb_ret.append("<tr>\n");
-                    sb_ret.append("<td>" + paramsRequest.getLocaleString("site") + ":</td>\n");
-                    sb_ret.append("<td colspan=\"2\"><select id=\"wb_site\" name=\"wb_site\" size=\"1\">\n");
+                    sb_ret.append("<tr>");
+                    sb_ret.append("<td>" + paramsRequest.getLocaleString("site") + ":</td>");
+                    sb_ret.append("<td colspan=\"2\"><select id=\"wb_site\" name=\"wb_site\" size=\"1\">");
                     Iterator<String> itKeys = hm_sites.keySet().iterator();
                     while(itKeys.hasNext()) {
                         String key = itKeys.next();
@@ -277,88 +270,88 @@ public class WBAChannelReport extends GenericResource {
                         if(key.equalsIgnoreCase(websiteId)) {
                             sb_ret.append(" selected=\"selected\"");
                         }
-                        sb_ret.append(">" + (String)hm_sites.get(key) + "</option>\n");
+                        sb_ret.append(">" + (String)hm_sites.get(key) + "</option>");
                     }
-                    sb_ret.append("</select>\n");
-                    sb_ret.append("</td>\n");
-                    sb_ret.append("<td>&nbsp;</td>\n");
-                    sb_ret.append("</tr>\n");
+                    sb_ret.append("</select>");
+                    sb_ret.append("</td>");
+                    sb_ret.append("<td>&nbsp;</td>");
+                    sb_ret.append("</tr>");
 
-                    sb_ret.append("<tr>\n");
-                    sb_ret.append("<td>\n");
-                    sb_ret.append("<label>\n");
+                    sb_ret.append("<tr>");
+                    sb_ret.append("<td>");
+                    sb_ret.append("<label>");
                     sb_ret.append("<input type=\"radio\" value=\"0\" name=\"wb_rep_type\" id=\"wb_rep_type_0\" onclick=\"javascript: doBlockade();\"");
                     if(groupDates==0) {
                         sb_ret.append(" checked=\"checked\"");
                     }
-                    sb_ret.append(" />\n");
+                    sb_ret.append(" />");
                     sb_ret.append("&nbsp;" + paramsRequest.getLocaleString("by_day"));
-                    sb_ret.append("</label></td>\n");
-                    sb_ret.append("<td colspan=\"2\">\n");
+                    sb_ret.append("</label></td>");
+                    sb_ret.append("<td colspan=\"2\">");
 
-                    sb_ret.append("<input type=\"text\" name=\"wb_fecha1\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha1\" dojoType=\"dijit.form.DateTextBox\" constraints=\"{datePattern:'dd/MM/yyyy'}\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha1+"\"/>\n");
+                    sb_ret.append("<input type=\"text\" name=\"wb_fecha1\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha1\" dojoType=\"dijit.form.DateTextBox\" constraints=\"{datePattern:'dd/MM/yyyy'}\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha1+"\"/>");
 
-                    sb_ret.append("</td>\n");
-                    sb_ret.append("<td><input type=\"hidden\" id=\"wb_rtype\" name=\"wb_rtype\" value=\"0\" /></td>\n");
-                    sb_ret.append("</tr>\n");
+                    sb_ret.append("</td>");
+                    sb_ret.append("<td><input type=\"hidden\" id=\"wb_rtype\" name=\"wb_rtype\" value=\"0\" /></td>");
+                    sb_ret.append("</tr>");
 
-                    sb_ret.append("<tr>\n");
-                    sb_ret.append("<td>\n");
-                    sb_ret.append("<label>\n");
+                    sb_ret.append("<tr>");
+                    sb_ret.append("<td>");
+                    sb_ret.append("<label>");
                     sb_ret.append("<input type=\"radio\" value=\"1\" name=\"wb_rep_type\" id=\"wb_rep_type_1\" onclick=\"javascript: doBlockade();\"");
                     if(groupDates!=0) {
                         sb_ret.append(" checked=\"checked\"");
                     }
-                    sb_ret.append(" />\n");
-                    sb_ret.append("&nbsp;" + paramsRequest.getLocaleString("by_interval_dates"));
-                    sb_ret.append("</label></td>\n");
-                    sb_ret.append("<td>\n");
-                    sb_ret.append("<input type=\"text\" name=\"wb_fecha11\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha11\" dojoType=\"dijit.form.DateTextBox\" constraints=\"{datePattern:'dd/MM/yyyy'}\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha11+"\"/>\n");
+                    sb_ret.append(" />");
+                    sb_ret.append("&nbsp;" + paramsRequest.getLocaleString("by_range"));
+                    sb_ret.append("</label></td>");
+                    sb_ret.append("<td>");
+                    sb_ret.append("<input type=\"text\" name=\"wb_fecha11\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha11\" dojoType=\"dijit.form.DateTextBox\" constraints=\"{datePattern:'dd/MM/yyyy'}\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha11+"\"/>");
                     sb_ret.append("</td>");
                     sb_ret.append("<td>");
-                    sb_ret.append("<input type=\"text\" name=\"wb_fecha12\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha12\" dojoType=\"dijit.form.DateTextBox\" constraints=\"{datePattern:'dd/MM/yyyy'}\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha12+"\"/>\n");
-                    sb_ret.append("</td>\n");
-                    sb_ret.append("<td>&nbsp;</td>\n");
-                    sb_ret.append("</tr>\n");
+                    sb_ret.append("<input type=\"text\" name=\"wb_fecha12\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha12\" dojoType=\"dijit.form.DateTextBox\" constraints=\"{datePattern:'dd/MM/yyyy'}\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha12+"\"/>");
+                    sb_ret.append("</td>");
+                    sb_ret.append("<td>&nbsp;</td>");
+                    sb_ret.append("</tr>");
 
-                    sb_ret.append("<tr>\n");
-                    sb_ret.append("<td>\n");
-                    sb_ret.append(paramsRequest.getLocaleString("reportName") + ":");
-                    sb_ret.append("</td>\n");
-                    sb_ret.append("<td colspan=\"3\">\n");
-                    sb_ret.append("<input type=\"text\" name=\"filename\" id=\"filename\" value=\"\"/>\n");
-                    sb_ret.append("&nbsp;<font size=\"1\">* " + paramsRequest.getLocaleString("reportFileGenerated") + " (xls)</font>\n");
-                    sb_ret.append("</td>\n");
-                    sb_ret.append("</tr>\n");
-                    sb_ret.append("</table>\n");
-                    sb_ret.append("</fieldset>\n");
+                    sb_ret.append("<tr>");
+                    sb_ret.append("<td>");
+                    sb_ret.append(paramsRequest.getLocaleString("report_name") + ":");
+                    sb_ret.append("</td>");
+                    sb_ret.append("<td colspan=\"3\">");
+                    sb_ret.append("<input type=\"text\" name=\"filename\" id=\"filename\" value=\"\"/>");
+                    sb_ret.append("&nbsp;<font size=\"1\">* " + paramsRequest.getLocaleString("report_file_generated") + "</font>");
+                    sb_ret.append("</td>");
+                    sb_ret.append("</tr>");
+                    sb_ret.append("</table>");
+                    sb_ret.append("</fieldset>");
 
-                    sb_ret.append("<fieldset>\n");
-                    sb_ret.append("<table border=\"0\" width=\"95%\" align=\"center\">\n");
-                    sb_ret.append("<tr>\n");
-                    sb_ret.append(" <td colspan=\"4\">&nbsp;&nbsp;&nbsp;\n");
-                    sb_ret.append("   <button dojoType=\"dijit.form.Button\" onclick=\"doXml('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">XML</button>&nbsp;\n");
-                    sb_ret.append("   <button dojoType=\"dijit.form.Button\" onclick=\"doApply()\">"+paramsRequest.getLocaleString("apply")+"</button>\n");
-                    sb_ret.append("   <input type=\"hidden\" name=\"wb_rfilter\" value=\""+s_rfilter+"\"/>\n");
-                    sb_ret.append(" </td>\n");
-                    sb_ret.append("</tr>\n");
-                    sb_ret.append("</table>\n");
-                    sb_ret.append("</fieldset>\n");
+                    sb_ret.append("<fieldset>");
+                    sb_ret.append("<table border=\"0\" width=\"95%\">");
+                    sb_ret.append("<tr>");
+                    sb_ret.append(" <td colspan=\"4\">&nbsp;&nbsp;&nbsp;");
+                    sb_ret.append("   <button dojoType=\"dijit.form.Button\" onclick=\"doXml('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">XML</button>&nbsp;");
+                    sb_ret.append("   <button dojoType=\"dijit.form.Button\" onclick=\"doApply()\">"+paramsRequest.getLocaleString("apply")+"</button>");
+                    sb_ret.append("   <input type=\"hidden\" name=\"wb_rfilter\" value=\""+s_rfilter+"\"/>");
+                    sb_ret.append(" </td>");
+                    sb_ret.append("</tr>");
+                    sb_ret.append("</table>");
+                    sb_ret.append("</fieldset>");
 
-                    sb_ret.append("</form>\n");                    
+                    sb_ret.append("</form>");                    
                     
-                    sb_ret.append("<fieldset>\n");
-                    sb_ret.append("<table border=\"0\" width=\"95%\" align=\"center\">\n");
-                    sb_ret.append("<tr>\n");
-                    sb_ret.append("<td colspan=\"4\">\n");
+                    sb_ret.append("<fieldset>");
+                    sb_ret.append("<table border=\"0\" width=\"95%\" align=\"center\">");
+                    sb_ret.append("<tr>");
+                    sb_ret.append("<td colspan=\"4\">");
                     
                     HashMap hm = getFileList(paramsRequest.getWebPage());
                     if (hm.size() == 0) {
-                        sb_ret.append(paramsRequest.getLocaleString("noGeneratedReports"));
+                        sb_ret.append(paramsRequest.getLocaleString("reports_not_found"));
                     } else {
-                        sb_ret.append("<table border=\"0\" cellpadding=\"5\" cellspacing=\"0\" width=\"100%\">\n");
-                        sb_ret.append("<caption align=\"top\">" + paramsRequest.getLocaleString("listReports") + "</caption>\n");
-                        sb_ret.append("<tr><th width=\"15%\">" + paramsRequest.getLocaleString("tdAction") + "</th><th width=\"35%\">" + paramsRequest.getLocaleString("tdFileName") + "</th><th width=\"25%\">" + paramsRequest.getLocaleString("tdSite") + "</th><th width=\"25%\">" + paramsRequest.getLocaleString("tdCreated") + "</th></tr>\n");
+                        sb_ret.append("<table border=\"0\" cellpadding=\"5\" cellspacing=\"0\" width=\"100%\">");
+                        sb_ret.append("<caption align=\"top\">" + paramsRequest.getLocaleString("list_reports") + "</caption>");
+                        sb_ret.append("<tr><th width=\"15%\">" + paramsRequest.getLocaleString("action") + "</th><th width=\"35%\">" + paramsRequest.getLocaleString("file_name") + "</th><th width=\"25%\">" + paramsRequest.getLocaleString("site") + "</th><th width=\"25%\">" + paramsRequest.getLocaleString("created") + "</th></tr>");
 
                         boolean toggleColor = true;
                         SWBResourceURL urlDel = paramsRequest.getActionUrl().setAction("remove");
@@ -370,42 +363,41 @@ public class WBAChannelReport extends GenericResource {
                             String site = sfn.substring(0, sfn.lastIndexOf("|"));
                             String filename = sfn.substring(sfn.lastIndexOf("|") + 1);
 
-                            sb_ret.append("<tr bgcolor=\""+(toggleColor?"#EFEDEC":"#FFFFFF")+"\">\n");
+                            sb_ret.append("<tr bgcolor=\""+(toggleColor?"#EFEDEC":"#FFFFFF")+"\">");
                             urlDel.setParameter("key", key);
-                            sb_ret.append("<td><a href=\""+urlDel+"\" onclick=\" if(confirm('" + paramsRequest.getLocaleString("alertRemoveFile") + "?')){return true;}else{return false};\"><img border=\"0\" src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" alt=\"" + paramsRequest.getLocaleString("deleteReport") + "\"></a></td>\n");
-                            sb_ret.append("<td><a href=\"javascript:doDownload('"+filename+"','"+key + "');\" alt=\"Reporte: "+filename+"\">"+filename+"</a></td>\n");
-                            sb_ret.append("<td>" + site + "</td>\n");
-                            sb_ret.append("<td>" + SWBUtils.TEXT.iso8601DateFormat(new java.sql.Timestamp(Long.parseLong(key)))+"</td>\n");
-                            sb_ret.append("</tr>\n");
+                            sb_ret.append("<td><a href=\""+urlDel+"\" onclick=\" if(confirm('" + paramsRequest.getLocaleString("alert_remove_file") + "?')){return true;}else{return false};\"><img border=\"0\" src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" alt=\"" + paramsRequest.getLocaleString("delete_report") + "\"></a></td>");
+                            sb_ret.append("<td><a href=\"javascript:doDownload('"+filename+"','"+key + "');\" alt=\"Reporte: "+filename+"\">"+filename+"</a></td>");
+                            sb_ret.append("<td>" + site + "</td>");
+                            sb_ret.append("<td>" + SWBUtils.TEXT.iso8601DateFormat(new java.sql.Timestamp(Long.parseLong(key)))+"</td>");
+                            sb_ret.append("</tr>");
                             toggleColor = !(toggleColor);
                         }
-                        sb_ret.append("</table>\n");
+                        sb_ret.append("</table>");
                     }
-                    
-                    sb_ret.append("</td></tr>\n");
-                    sb_ret.append("</table>\n");
-                    sb_ret.append("</fieldset>\n");
-                    sb_ret.append("</div>\n");
+                    sb_ret.append("</td></tr>");
+                    sb_ret.append("</table>");
+                    sb_ret.append("</fieldset>");
+                    sb_ret.append("</div>");
                 }else { // There are not sites and displays a message
                     sb_ret.append("<div class=\"swbform\">");
                     sb_ret.append("<fieldset>");
                     sb_ret.append("<legend>" + paramsRequest.getLocaleString("channel_report") + "</legend>");
-                    sb_ret.append("<form method=\"Post\" class=\"box\" action=\"" + paramsRequest.getWebPage().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">\n");
-                    sb_ret.append("<table border=0 width=\"100%\">\n");
-                    sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>\n");
-                    sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>\n");
-                    sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>\n");
-                    sb_ret.append("<tr>\n");
-                    sb_ret.append("<td>&nbsp;</td>\n");
-                    sb_ret.append("<td colspan=\"2\" align=\"center\" class=\"datos\">" + paramsRequest.getLocaleString("no_sites_found") + "</td>\n");
-                    sb_ret.append("<td>&nbsp;</td>\n");
-                    sb_ret.append("</tr>\n");
-                    sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>\n");
-                    sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>\n");
-                    sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>\n");
-                    sb_ret.append("</table></form>\n");
-                    sb_ret.append("</fieldset>\n");
-                    sb_ret.append("</div>\n");
+                    sb_ret.append("<form method=\"Post\" class=\"box\" action=\"" + paramsRequest.getWebPage().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
+                    sb_ret.append("<table border=0 width=\"100%\">");
+                    sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>");
+                    sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>");
+                    sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>");
+                    sb_ret.append("<tr>");
+                    sb_ret.append("<td>&nbsp;</td>");
+                    sb_ret.append("<td colspan=\"2\" align=\"center\" class=\"datos\">" + paramsRequest.getLocaleString("no_sites_found") + "</td>");
+                    sb_ret.append("<td>&nbsp;</td>");
+                    sb_ret.append("</tr>");
+                    sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>");
+                    sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>");
+                    sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>");
+                    sb_ret.append("</table></form>");
+                    sb_ret.append("</fieldset>");
+                    sb_ret.append("</div>");
                 }
             }catch(Exception e) {
                 log.error("Error on method DoView() resource " + " " + strRscType + " " + "with id" + " " + base.getId(),e);
@@ -416,10 +408,10 @@ public class WBAChannelReport extends GenericResource {
             ChannelReportMgr rmgr = ChannelReportMgr.getInstance();
             sb_ret.append("<table width=\"100%\" cellpadding=\"5\" cellspacing=\"0\">");
             sb_ret.append("<tr><td colspan=\"2\">");
-            sb_ret.append(paramsRequest.getLocaleString("msgTitleChRep"));
+            sb_ret.append(paramsRequest.getLocaleString("channel_report"));
             sb_ret.append("</td></tr>");
             sb_ret.append("<tr><td width=\"200\" align=\"right\">");
-            sb_ret.append(paramsRequest.getLocaleString("msgStatus") + ":</td><td>" + rmgr.getStatus());
+            sb_ret.append(paramsRequest.getLocaleString("status") + ":</td><td>" + rmgr.getStatus());
             sb_ret.append("</td></tr>");
             sb_ret.append("<tr><td width=\"200\" align=\"right\">");
 
@@ -427,17 +419,17 @@ public class WBAChannelReport extends GenericResource {
             gc.setTimeInMillis(rmgr.getInitTime());
             df = DateFormat.getTimeInstance(DateFormat.FULL);
             String s_time = df.format(gc.getTime());
-            sb_ret.append(paramsRequest.getLocaleString("msgSTime") + ":</td><td>" + s_time);
+            sb_ret.append(paramsRequest.getLocaleString("initial_time") + ":</td><td>" + s_time);
             sb_ret.append("</td></tr>");
             sb_ret.append("<tr><td width=\"200\" align=\"right\">");
-            sb_ret.append(paramsRequest.getLocaleString("msgProcTime") + ":</td><td>" + getAvailableTime(new Timestamp(gc.getTimeInMillis())));
+            sb_ret.append(paramsRequest.getLocaleString("process_time") + ":</td><td>" + getAvailableTime(new Timestamp(gc.getTimeInMillis())));
             sb_ret.append("</td></tr>");
             /*sb_ret.append("<tr><td width=\"200\" align=\"right\">");
-            sb_ret.append(paramsRequest.getLocaleString("msgLogCounter") + ":</td><td>" + rmgr.getCounter());
+            sb_ret.append(paramsRequest.getLocaleString("log_counter") + ":</td><td>" + rmgr.getCounter());
             sb_ret.append("</td></tr>");*/
-            sb_ret.append("</table>");
+            sb_ret.append("</table>\n");
 
-            sb_ret.append("<META HTTP-EQUIV=\"Refresh\" CONTENT=\"3;URL="+paramsRequest.getRenderUrl()+"\">");
+            sb_ret.append("\n<META HTTP-EQUIV=\"Refresh\" CONTENT=\"3;URL="+paramsRequest.getRenderUrl()+"\">\n");
         }
         response.getWriter().print(sb_ret.toString());
     }
@@ -448,38 +440,39 @@ public class WBAChannelReport extends GenericResource {
         Timestamp limite = new java.sql.Timestamp(System.currentTimeMillis());
 
         ret.append("\n<script language=\"JavaScript\">");
-        ret.append("\nCountActive = true;");
-        ret.append("\nDisplayFormat = \"%%H%%:%%M%%:%%S%%\";");
-        ret.append("\nfunction calcage(secs, num1, num2) {");
-        ret.append("\n  s = ((Math.floor(secs/num1))%num2).toString();");
-        ret.append("\n  if (s.length < 2)");
-        ret.append("\n    s = \"0\" + s;");
-        ret.append("\n  return \"<b>\" + s + \"</b>\";");
-        ret.append("\n}");
+        ret.append(" CountActive = true;\n");
+        ret.append(" DisplayFormat = \"%%H%%:%%M%%:%%S%%\";\n");
+        ret.append(" function calcage(secs, num1, num2) {");
+        ret.append("  s = ((Math.floor(secs/num1))%num2).toString();");
+        ret.append("  if (s.length < 2)");
+        ret.append("    s = \"0\" + s;");
+        ret.append("  return \"<strong>\" + s + \"</strong>\";");
+        ret.append(" }\n");
 
-        ret.append("\nfunction CountBack(secs) {");
-        ret.append("\n  DisplayStr = DisplayFormat.replace(/%%D%%/g, calcage(secs,86400,100000));");
-        ret.append("\n  DisplayStr = DisplayStr.replace(/%%H%%/g, calcage(secs,3600,24));");
-        ret.append("\n  DisplayStr = DisplayStr.replace(/%%M%%/g, calcage(secs,60,60));");
-        ret.append("\n  DisplayStr = DisplayStr.replace(/%%S%%/g, calcage(secs,1,60));");
-        ret.append("\n");
-        ret.append("\n  document.getElementById(\"cntdwn\").innerHTML = DisplayStr;");
-        ret.append("\n  if (CountActive)");
-        ret.append("\n    setTimeout(\"CountBack(\" + (secs+1) + \")\", 990);");
-        ret.append("\n}");
+        ret.append(" function CountBack(secs) {");
+        ret.append("  DisplayStr = DisplayFormat.replace(/%%D%%/g, calcage(secs,86400,100000));");
+        ret.append("  DisplayStr = DisplayStr.replace(/%%H%%/g, calcage(secs,3600,24));");
+        ret.append("  DisplayStr = DisplayStr.replace(/%%M%%/g, calcage(secs,60,60));");
+        ret.append("  DisplayStr = DisplayStr.replace(/%%S%%/g, calcage(secs,1,60));");
 
-        ret.append("\nfunction showTimer() {");
-        ret.append("\n document.write(\"<span id='cntdwn' class=valores></span>\");");
-        ret.append("\n}");
-        ret.append("\nshowTimer();");
-        ret.append("\nvar dthen = new Date();");
-        ret.append("\n dthen.setTime(" + limite.getTime() + ");");
-        ret.append("\nvar dnow = new Date();");
-        ret.append("\n dnow.setTime(" + min_actual.getTime() + ");");
-        ret.append("\nddiff = new Date(dthen-dnow);");
-        ret.append("\ngsecs = Math.floor(ddiff.valueOf()/1000);");
-        ret.append("\nCountBack(gsecs);");
-        ret.append("\n</script>");
+        ret.append("  document.getElementById(\"cntdwn\").innerHTML = DisplayStr;");
+        ret.append("  if (CountActive)");
+        ret.append("    setTimeout(\"CountBack(\" + (secs+1) + \")\", 990);");
+        ret.append(" }\n");
+
+        ret.append(" function showTimer() {");
+        ret.append("   document.write(\"<span id='cntdwn' class=valores></span>\");");
+        ret.append(" }\n");
+
+        ret.append(" showTimer();\n");
+        ret.append(" var dthen = new Date();\n");
+        ret.append(" dthen.setTime(" + limite.getTime() + ");\n");
+        ret.append(" var dnow = new Date();\n");
+        ret.append(" dnow.setTime(" + min_actual.getTime() + ");\n");
+        ret.append(" ddiff = new Date(dthen-dnow);\n");
+        ret.append(" gsecs = Math.floor(ddiff.valueOf()/1000);\n");
+        ret.append(" CountBack(gsecs);\n");
+        ret.append("</script>\n");
 
         return ret.toString();
     }
