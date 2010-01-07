@@ -99,6 +99,7 @@ public class SWBImportWebSite extends GenericResource {
                     if (usrRep.equals("0")) { //Utilizara un repositorio exclusivo
                         newUsrRep = SWBContext.createUserRepository(id + "_usr", "http://user." + id + ".swb#");
                         newUsrRep.getSemanticObject().getModel().setTraceable(false);
+                        newUsrRep.setTitle("Repositorio de usuarios(" + id + ")");
                         newUsrRep.setTitle("Repositorio de usuarios(" + id + ")", "es");
                         newUsrRep.setTitle("Users Repository(" + id + ")", "en");
                         newUsrRep.setUndeleteable(true);
@@ -122,6 +123,7 @@ public class SWBImportWebSite extends GenericResource {
                 //creación de repositorio de documentoss
                 Workspace workspace = SWBContext.createWorkspace(id + "_rep", "http://repository." + id + ".swb#");
                 workspace.getSemanticObject().getModel().setTraceable(false);
+                workspace.setTitle("Repositorio de documentos(" + title + ")");
                 workspace.setTitle("Repositorio de documentos(" + title + ")", "es");
                 workspace.setTitle("Documents Repository(" + title + ")", "en");
                 //TODO: undeleted repository
