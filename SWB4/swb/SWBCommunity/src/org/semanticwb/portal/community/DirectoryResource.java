@@ -2,6 +2,7 @@ package org.semanticwb.portal.community;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.SocketException;
 import java.util.Iterator;
 import java.util.List;
@@ -24,7 +25,7 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.base.util.ImageResizer;
-import org.semanticwb.model.Searchable;
+import org.semanticwb.portal.TemplateImp;
 import org.semanticwb.servlet.internal.UploadFormElement;
 
 /**
@@ -44,6 +45,73 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
     public DirectoryResource(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    @Override
+    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        PrintWriter out = response.getWriter();
+        String infoMessage = getResourceBase().getAttribute("messageBody", "");
+        String acceptMessage = getResourceBase().getAttribute("mAcceptBody", "");
+        String act = request.getParameter("act");
+        if (act != null) {
+            infoMessage = request.getParameter("mInfoBody");
+            acceptMessage = request.getParameter("mAcceptBody");
+            getResourceBase().setAttribute("messageBody", infoMessage);
+            getResourceBase().setAttribute("mAcceptBody", acceptMessage);
+            try {
+                getResourceBase().updateAttributesToDB();
+            } catch (Exception e) {
+                log.error(e);
+            }
+        }
+
+        out.println("<script type=\"text/javascript\">");
+        out.println("  dojo.require(\"dijit.form.Form\");");
+        out.println("  dojo.require(\"dijit.form.Button\");");
+        out.println("</script>");
+
+        out.println("<div class=\"swbform\">");
+        out.println("<form dojoType=\"dijit.form.Form\" id=\"" + getResourceBase().getId() + "/directory\" action=\"" + paramRequest.getRenderUrl() + "\" method=\"post\" >");
+        out.println("<input type=\"hidden\" name=\"act\" value=\"upd\">");
+
+        out.println("<fieldset>");
+        out.println("<legend>Configuraci&oacute;n</legend>");
+        out.println("Mensaje de correo de aviso:");
+        out.println("<br/>");
+        out.print("<textarea name=\"mInfoBody\" rows=10 cols=80>");
+        out.print(infoMessage);
+        out.println("</textarea>");
+        out.println("<br/>");
+        out.println("Mensaje de correo de aceptación:");
+        out.println("<br/>");
+        out.print("<textarea name=\"mAcceptBody\" rows=10 cols=80>");
+        out.print(acceptMessage);
+        out.println("</textarea>");
+        out.println("<br/>");
+        out.println("<font style=\"color: #428AD4; font-family: Verdana; font-size: 10px;\">");
+        out.println("		<b>Tags:</b><br>");
+        out.println("       &nbsp;&nbsp;{direlement.title}<BR>");
+        out.println("       &nbsp;&nbsp;{direlement.description}<BR>");
+        out.println("       &nbsp;&nbsp;{direlement.uri}<BR>");
+        out.println("       &nbsp;&nbsp;{direlement.webpage}<BR>");
+        out.println("       &nbsp;&nbsp;{direlement.encodeduri}<BR>");
+        out.println("       &nbsp;&nbsp;{direlement.claimjustify}<BR>");
+        out.println("       &nbsp;&nbsp;{user.login}<BR>");
+        out.println("       &nbsp;&nbsp;{user.fullname}<BR>");
+        out.println("       &nbsp;&nbsp;{user.email}<BR>");
+        out.println("       &nbsp;&nbsp;{user.language}<BR>");
+        out.println("       &nbsp;&nbsp;{webpath}<BR>");
+        out.println("       &nbsp;&nbsp;{distpath}<BR>");
+        out.println("       &nbsp;&nbsp;{webworkpath}<BR>");
+        out.println("       &nbsp;&nbsp;{websiteid}<BR>");
+        out.println("       &nbsp;&nbsp;{workpath}<BR>");
+        out.println("	</font>");
+        out.println("</fieldset>");
+        out.println("<fieldset>");
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"submit/btnSend\" >Enviar</button>");
+        out.println("</fieldset>");
+        out.println("</form>");
+        out.println("</div>");
     }
 
     @Override
@@ -155,6 +223,39 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
         response.setRenderParameter("message",
                 message != null || "".equals(message)
                 ? message : "");
+    }
+
+    public String replaceTags(String str, HttpServletRequest request, SWBActionResponse response)
+    {
+        DirectoryObject dob = null;
+        SemanticObject so = SemanticObject.createSemanticObject(request.getParameter("uri"));
+        if (so != null) {
+            dob = (DirectoryObject) so.createGenericInstance();
+        }
+        
+        if(str==null || str.trim().length()==0)
+            return "";
+
+        if (dob != null)
+        {
+            str=SWBUtils.TEXT.replaceAll(str, "{direlement.title}", dob.getTitle());
+            str=SWBUtils.TEXT.replaceAll(str, "{direlement.description}", dob.getDescription());
+            str=SWBUtils.TEXT.replaceAll(str, "{direlement.claimjustify}", ((Claimable)dob).getClaimJustify());
+            str=SWBUtils.TEXT.replaceAll(str, "{direlement.encodeduri}", dob.getEncodedURI());
+            str=SWBUtils.TEXT.replaceAll(str, "{direlement.uri}", dob.getURI());
+            str=SWBUtils.TEXT.replaceAll(str, "{direlement.webpage}", dob.getWebPage().getUrl());
+        }
+
+        str=SWBUtils.TEXT.replaceAll(str, "{user.login}", response.getUser().getLogin());
+        str=SWBUtils.TEXT.replaceAll(str, "{user.fullname}", response.getUser().getFullName());
+        str=SWBUtils.TEXT.replaceAll(str, "{user.email}", response.getUser().getEmail());
+        str=SWBUtils.TEXT.replaceAll(str, "{user.language}", response.getUser().getLanguage());
+        str=SWBUtils.TEXT.replaceAll(str, "{webpath}", SWBPortal.getContextPath());
+        str=SWBUtils.TEXT.replaceAll(str, "{distpath}", SWBPortal.getDistributorPath());
+        str=SWBUtils.TEXT.replaceAll(str, "{webworkpath}", SWBPortal.getWebWorkPath());
+        str=SWBUtils.TEXT.replaceAll(str, "{workpath}", SWBPortal.getWorkPath());
+        str=SWBUtils.TEXT.replaceAll(str, "{websiteid}", response.getWebPage().getWebSiteId());        
+        return str;
     }
 
     @Override
@@ -485,17 +586,26 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
                     SWBPortal.getContextPath() + dob.getWebPage().getUrl() + "?act=detail&uri=" + dob.getEncodedURI();
 
             //System.out.println("===" + dob.getWebPage().getRealUrl());
-            messageBody = "El elemento \"" + dob.getTitle() + "\" ha sido reclamado por el usuario " +
+            String defMessageBody = "El elemento \"" + dob.getTitle() + "\" ha sido reclamado por el usuario " +
                     user.getFullName() + " con la siguiente justificación:<br><br>\n\n" +
                     "\"" + sobj.getProperty(Claimable.swbcomm_claimJustify) + "\".<br><br>\n\n" +
                     "Para aceptar o rechazar el reclamo visite la siguiente liga: " +
                     "<a href=\"" + realURL + "\">" + realURL + "</a>";
 
+            messageBody = getResourceBase().getAttribute("messageBody");
+            if (messageBody == null) {
+                messageBody = defMessageBody;
+            } else {
+                messageBody = replaceTags(messageBody, request, response);
+            }
             String addressList = getAdminEMails(request, response);
             if (org.getCreator().getEmail() != null && !org.getCreator().getEmail().trim().equals(""))
             {
                 addressList += ";" + org.getCreator().getEmail();
             }
+            /*System.out.println();
+            System.out.println("----------------");
+            System.out.println(messageBody);*/
             SWBUtils.EMAIL.sendBGEmail(addressList, "Notificación de reclamo", messageBody);
         }
 
