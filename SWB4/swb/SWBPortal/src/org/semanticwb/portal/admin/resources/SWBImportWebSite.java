@@ -537,6 +537,15 @@ public class SWBImportWebSite extends GenericResource {
                     ptype.setTitle("Forum");
                 }
 
+                if (site.getResourceType("RankWebPage") == null) {
+                    ResourceType ptype = site.createResourceType("RankWebPage");
+                    ptype.setResourceClassName("org.semanticwb.portal.resources.sem.SWBRankWebPage");
+                    ptype.setResourceBundle("org.semanticwb.portal.resources.sem.SWBRankWebPage");
+                    ptype.setResourceOWL("org.semanticwb.portal.resources.sem.SWBRankWebPage");
+                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
+                    ptype.setTitle("RankWebPage");
+                }
+
 //                if (site.getResourceType("Directory") == null) {
 //                    ResourceType ptype = site.createResourceType("Directory");
 //                    ptype.setResourceClassName("org.semanticwb.portal.resources.sem.directory.Directory");
