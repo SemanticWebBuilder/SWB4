@@ -574,7 +574,6 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             sobj = SemanticObject.createSemanticObject(suri);
         }
 
-        String messageBody = "";
         if (sobj.getGenericInstance() instanceof DirectoryObject)
         {
             DirectoryObject dob = (DirectoryObject) sobj.createGenericInstance();
@@ -592,7 +591,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
                     "Para aceptar o rechazar el reclamo visite la siguiente liga: " +
                     "<a href=\"" + realURL + "\">" + realURL + "</a>";
 
-            messageBody = getResourceBase().getAttribute("messageBody");
+            String messageBody = getResourceBase().getAttribute("messageBody");
             if (messageBody == null) {
                 messageBody = defMessageBody;
             } else {
@@ -623,8 +622,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
         {
             sobj = SemanticObject.createSemanticObject(suri);
         }
-
-        String messageBody = "";
+        
         if (sobj.getGenericInstance() instanceof DirectoryObject)
         {
             DirectoryObject dob = (DirectoryObject) sobj.createGenericInstance();
@@ -633,9 +631,16 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             String realURL = "http://" + request.getServerName() + ":" + request.getServerPort() +
                     SWBPortal.getContextPath() + dob.getWebPage().getUrl() + "?act=detail&uri=" + dob.getEncodedURI();
 
-            messageBody = "Su reclamo sobre el elemento \"" + dob.getTitle() + "\" ha sido aceptado. Ahora usted " +
+            String defMessageBody = "Su reclamo sobre el elemento \"" + dob.getTitle() + "\" ha sido aceptado. Ahora usted " +
                     "es responsable de la administración del mismo. Para ver los detalles del elemento, visite la" +
                     "siguiente liga:\n\n" + "<a href=\"" + realURL + "\">" + realURL + "</a>";
+
+            String messageBody = getResourceBase().getAttribute("mAcceptBody");
+            if (messageBody == null) {
+                messageBody = defMessageBody;
+            } else {
+                messageBody = replaceTags(messageBody, request, response);
+            }
 
             sobj.setObjectProperty(Traceable.swb_creator, claimer.getSemanticObject());
             sobj.removeProperty(Claimable.swbcomm_claimer);
