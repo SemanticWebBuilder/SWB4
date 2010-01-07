@@ -470,7 +470,7 @@ public class SWBModelAdmin extends GenericResource {
         }else if (response.getAction().equals("install")) {
             try{
                 File file= new File(request.getParameter("zipName"));
-                WebSite website=SWBPortal.InstallZip(file, "siteInfo.xml", request.getParameter("wsid"), request.getParameter("wstitle"));
+                WebSite website=SWBPortal.UTIL.InstallZip(file, "siteInfo.xml", request.getParameter("wsid"), request.getParameter("wstitle"));
                 response.setMode(response.Mode_VIEW);
                 response.setRenderParameter("msgKey", "siteCreated");
                 response.setRenderParameter("wsUri", website.getURI());
