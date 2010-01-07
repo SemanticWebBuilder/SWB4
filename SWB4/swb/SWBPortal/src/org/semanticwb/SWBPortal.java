@@ -532,7 +532,7 @@ public class SWBPortal {
                 site = SWBContext.getWebSite("demo");
                 if (site == null) {
                     log.event("Creating Demo WebSite...");
-                    InstallZip(new File(getWorkPath() + "/sitetemplates/demo.zip"));
+                    UTIL.InstallZip(new File(getWorkPath() + "/sitetemplates/demo.zip"));
                 }
             } catch (Exception e) {
                 log.error(e);
@@ -2046,6 +2046,172 @@ public class SWBPortal {
             ImageGallery ig = new ImageGallery();
             return ig.renderGallery(imgurl);
         }
+
+         public static WebSite InstallZip(File zipFile) {
+             return InstallZip(zipFile, null, null, null);
+          }
+
+        public static WebSite InstallZip(File zipFile, String file2read) {
+            return InstallZip(zipFile, file2read, null, null);
+        }
+
+        public static WebSite InstallZip(File zipFile, String file2read, String newWebSiteid, String newWebSiteTitle) {
+        try {
+            String modelspath = SWBPortal.getWorkPath() + "/models/";
+            if (file2read == null) {
+                file2read = "siteInfo.xml";
+            }
+            String siteInfo = SWBUtils.IO.readFileFromZipAsString(zipFile.getAbsolutePath(), file2read);
+            String oldIDModel = null, oldNamespace = null, oldTitle = null, oldDescription = null;
+            Document dom = SWBUtils.XML.xmlToDom(siteInfo);
+            Node nodeModel = dom.getFirstChild();
+            if (nodeModel.getNodeName().equals("model")) {
+                HashMap smodels = new HashMap();
+                NodeList nlChilds = nodeModel.getChildNodes();
+                for (int i = 0; i < nlChilds.getLength(); i++) {
+                    Node node = nlChilds.item(i);
+                    if (node.getNodeName().equals("id")) {
+                        oldIDModel = node.getFirstChild().getNodeValue();
+                    }
+                    if (node.getNodeName().equals("namespace")) {
+                        oldNamespace = node.getFirstChild().getNodeValue();
+                    }
+                    if (node.getNodeName().equals("title")) {
+                        oldTitle = node.getFirstChild().getNodeValue();
+                    }
+                    if (node.getNodeName().equals("description")) {
+                        oldDescription = node.getFirstChild().getNodeValue();
+                    }
+                    if (node.getNodeName().equals("model")) { //Tiene submodelos - un submodelo puede inclusive tener submodelos, esto tiene que ser iterativo
+                        iteraModels(node, smodels);
+                    }
+                }
+
+                String newId = newWebSiteid;
+                if (newId == null) {
+                    newId = oldIDModel;
+                }
+                String newTitle = newWebSiteTitle;
+                if (newTitle == null) {
+                    newTitle = oldTitle;
+                    newWebSiteTitle = oldTitle;
+                }
+                java.io.File extractTo = new File(modelspath + newId);
+                //Descomprimir zip
+                org.semanticwb.SWBUtils.IO.unzip(zipFile, extractTo);
+                //Mover directorios de modelos a directorio work leyendo rdfs
+                File[] fieldsUnziped = extractTo.listFiles();
+                for (int i = 0; i < fieldsUnziped.length; i++) {
+                    File file = fieldsUnziped[i];
+                    if (file.isDirectory()) { //
+                        if (file.getName().equals(oldIDModel)) { //Es la carpeta del modelo principal a cargar
+                            SWBUtils.IO.copyStructure(file.getAbsolutePath() + "/", extractTo.getAbsolutePath() + "/");
+                            SWBUtils.IO.removeDirectory(file.getAbsolutePath());
+                        } else {
+                            if (file.getName().endsWith("_usr") || file.getName().endsWith("_rep")) {
+                                //las carpetas de los submodelos, predefinidos en wb
+                                String wbmodelType = "";
+                                if (file.getName().endsWith("_usr")) {
+                                    wbmodelType = "_usr";
+                                }
+                                if (file.getName().endsWith("_rep")) {
+                                    wbmodelType = "_rep";
+                                }
+
+                                SWBUtils.IO.copyStructure(file.getAbsolutePath(), extractTo.getAbsolutePath() + wbmodelType + "/");
+                                SWBUtils.IO.removeDirectory(file.getAbsolutePath());
+                            } else { //Puede ser un submodelo tipo sitio
+                                //TODO
+                            }
+                        }
+                    } else { //TODO:Archivos rdf(modelos) y xml (siteinfo) y readme, eliminarlos
+                        String fileName = file.getName();
+                        if (fileName.equalsIgnoreCase(file2read) || fileName.equals("readme.txt")) { //Archivo siteinfo
+                            file.delete();
+                        }
+                    }
+                }
+                //Parseo de nombre de NameSpace anteriores por nuevos
+                String newNs = "http://www." + newId + ".swb#";
+                File fileModel = new File(modelspath + newId + "/" + oldIDModel + ".nt");
+                FileInputStream frdfio = new FileInputStream(fileModel);
+                String rdfcontent = SWBUtils.IO.readInputStream(frdfio);
+                fileModel.delete();
+
+                rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, oldNamespace, newNs); //Reemplazar namespace anterior x nuevo
+                rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, newNs + oldIDModel, newNs + newId); //Reempplazar namespace y id anterior x nuevos
+
+                rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, "<topicmap id=\\\"" + oldIDModel + "\\\">", "<topicmap id=\\\"" + newId + "\\\">"); // Rempalzar el tag: <topicmap id=\"[oldIDModel]\"> del xml de filtros de recursos
+                //Reemplaza ids de repositorios de usuarios y documentos x nuevos
+                rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, oldIDModel + "_usr", newId + "_usr");
+                rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, "http://user." + oldIDModel + ".swb#", "http://user." + newId + ".swb#");
+                rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, oldIDModel + "_rep", newId + "_rep");
+                rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, "http://repository." + oldIDModel + ".swb#", "http://repository." + newId + ".swb#");
+
+                //rdfcontent = SWBUtils.TEXT.replaceAllIgnoreCase(rdfcontent, oldName, newName); //Reemplazar nombre anterior x nuevo nombre
+                //rdfcontent = parseRdfContent(rdfcontent, oldTitle, newTitle, oldIDModel, newId, newNs);
+
+                //Mediante inputStream creado generar sitio
+                InputStream io = SWBUtils.IO.getStreamFromString(rdfcontent);
+                SemanticModel model = SWBPlatform.getSemanticMgr().createModelByRDF(newId, newNs, io, "N-TRIPLE");
+                WebSite website = SWBContext.getWebSite(model.getName());
+                website.setTitle(newTitle);
+                website.setDescription(oldDescription);
+                String xmodelID = null;
+                Iterator smodelsKeys = smodels.keySet().iterator();
+                while (smodelsKeys.hasNext()) { // Por c/submodelo que exista
+                    String key = (String) smodelsKeys.next();
+                    HashMap smodelValues = (HashMap) smodels.get(key);
+                    Iterator itkVaues = smodelValues.keySet().iterator();
+                    while (itkVaues.hasNext()) {
+                        String kvalue = (String) itkVaues.next();
+                        if (kvalue.equals("id")) {
+                            xmodelID = (String) smodelValues.get(kvalue);
+                        }
+                    }
+                    //Buscar rdf del submodelo
+                    fileModel = new File(modelspath + newId + "/" + xmodelID + ".nt");
+                    if (fileModel != null && fileModel.exists()) {
+                        frdfio = new FileInputStream(fileModel);
+                        String rdfmodel = SWBUtils.IO.readInputStream(frdfio);
+                        if (key.endsWith("_usr")) { //Para los submodelos de usuarios
+                            int pos = xmodelID.lastIndexOf("_usr");
+                            if (pos > -1) {
+                                xmodelID = xmodelID.substring(0, pos);
+                                rdfmodel = SWBUtils.TEXT.replaceAll(rdfmodel, xmodelID, newId);
+                                io = SWBUtils.IO.getStreamFromString(rdfmodel);
+                                SemanticModel usermodel = SWBPlatform.getSemanticMgr().createModelByRDF(newId + "_usr", "http://user." + newId + ".swb#", io, "N-TRIPLE");
+                                if (usermodel != null) {
+                                    UserRepository userRep = SWBContext.getUserRepository(usermodel.getName());
+                                    userRep.setTitle("Repositorio de Usuarios (" + newWebSiteTitle + ")", "es");
+                                    userRep.setTitle("Users Repository (" + newWebSiteTitle + ")", "en");
+                                }
+                            }
+                        }
+                        if (key.endsWith("_rep")) { //Para los submodelos de dosumentos
+                            int pos = xmodelID.lastIndexOf("_rep");
+                            if (pos > -1) {
+                                xmodelID = xmodelID.substring(0, pos);
+                                rdfmodel = SWBUtils.TEXT.replaceAll(rdfmodel, xmodelID, newId);
+                                io = SWBUtils.IO.getStreamFromString(rdfmodel);
+                                SemanticModel repomodel = SWBPlatform.getSemanticMgr().createModelByRDF(newId + "_rep", "http://repository." + newId + ".swb#", io, "N-TRIPLE");
+                                if (repomodel != null) {
+                                    Workspace repo = SWBContext.getWorkspace(repomodel.getName());
+                                    repo.setTitle("Repositorio de Documentos (" + newWebSiteTitle + ")", "es");
+                                    repo.setTitle("Documents Repository (" + newWebSiteTitle + ")", "en");
+                                }
+                            }
+                        }
+                        fileModel.delete();
+                    }
+                }
+                return website;
+            }
+        } catch (Exception e) {
+            log.error(e);
+        }
+        return null;
+      }
     }
 
     /**
@@ -2297,170 +2463,7 @@ public class SWBPortal {
         return content;
     }
 
-    public static WebSite InstallZip(File zipFile) {
-        return InstallZip(zipFile, null, null, null);
-    }
-
-    public static WebSite InstallZip(File zipFile, String file2read) {
-        return InstallZip(zipFile, file2read, null, null);
-    }
-
-    public static WebSite InstallZip(File zipFile, String file2read, String newWebSiteid, String newWebSiteTitle) {
-        try {
-            String modelspath = SWBPortal.getWorkPath() + "/models/";
-            if (file2read == null) {
-                file2read = "siteInfo.xml";
-            }
-            String siteInfo = SWBUtils.IO.readFileFromZipAsString(zipFile.getAbsolutePath(), file2read);
-            String oldIDModel = null, oldNamespace = null, oldTitle = null, oldDescription = null;
-            Document dom = SWBUtils.XML.xmlToDom(siteInfo);
-            Node nodeModel = dom.getFirstChild();
-            if (nodeModel.getNodeName().equals("model")) {
-                HashMap smodels = new HashMap();
-                NodeList nlChilds = nodeModel.getChildNodes();
-                for (int i = 0; i < nlChilds.getLength(); i++) {
-                    Node node = nlChilds.item(i);
-                    if (node.getNodeName().equals("id")) {
-                        oldIDModel = node.getFirstChild().getNodeValue();
-                    }
-                    if (node.getNodeName().equals("namespace")) {
-                        oldNamespace = node.getFirstChild().getNodeValue();
-                    }
-                    if (node.getNodeName().equals("title")) {
-                        oldTitle = node.getFirstChild().getNodeValue();
-                    }
-                    if (node.getNodeName().equals("description")) {
-                        oldDescription = node.getFirstChild().getNodeValue();
-                    }
-                    if (node.getNodeName().equals("model")) { //Tiene submodelos - un submodelo puede inclusive tener submodelos, esto tiene que ser iterativo
-                        iteraModels(node, smodels);
-                    }
-                }
-
-                String newId = newWebSiteid;
-                if (newId == null) {
-                    newId = oldIDModel;
-                }
-                String newTitle = newWebSiteTitle;
-                if (newTitle == null) {
-                    newTitle = oldTitle;
-                }
-                java.io.File extractTo = new File(modelspath + newId);
-                //Descomprimir zip
-                org.semanticwb.SWBUtils.IO.unzip(zipFile, extractTo);
-                //Mover directorios de modelos a directorio work leyendo rdfs
-                File[] fieldsUnziped = extractTo.listFiles();
-                for (int i = 0; i < fieldsUnziped.length; i++) {
-                    File file = fieldsUnziped[i];
-                    if (file.isDirectory()) { //
-                        if (file.getName().equals(oldIDModel)) { //Es la carpeta del modelo principal a cargar
-                            SWBUtils.IO.copyStructure(file.getAbsolutePath() + "/", extractTo.getAbsolutePath() + "/");
-                            SWBUtils.IO.removeDirectory(file.getAbsolutePath());
-                        } else {
-                            if (file.getName().endsWith("_usr") || file.getName().endsWith("_rep")) {
-                                //las carpetas de los submodelos, predefinidos en wb
-                                String wbmodelType = "";
-                                if (file.getName().endsWith("_usr")) {
-                                    wbmodelType = "_usr";
-                                }
-                                if (file.getName().endsWith("_rep")) {
-                                    wbmodelType = "_rep";
-                                }
-
-                                SWBUtils.IO.copyStructure(file.getAbsolutePath(), extractTo.getAbsolutePath() + wbmodelType + "/");
-                                SWBUtils.IO.removeDirectory(file.getAbsolutePath());
-                            } else { //Puede ser un submodelo tipo sitio
-                                //TODO
-                            }
-                        }
-                    } else { //TODO:Archivos rdf(modelos) y xml (siteinfo) y readme, eliminarlos
-                        String fileName = file.getName();
-                        if (fileName.equalsIgnoreCase(file2read) || fileName.equals("readme.txt")) { //Archivo siteinfo
-                            file.delete();
-                        }
-                    }
-                }
-                //Parseo de nombre de NameSpace anteriores por nuevos
-                String newNs = "http://www." + newId + ".swb#";
-                File fileModel = new File(modelspath + newId + "/" + oldIDModel + ".nt");
-                FileInputStream frdfio = new FileInputStream(fileModel);
-                String rdfcontent = SWBUtils.IO.readInputStream(frdfio);
-                fileModel.delete();
-
-                rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, oldNamespace, newNs); //Reemplazar namespace anterior x nuevo
-                rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, newNs + oldIDModel, newNs + newId); //Reempplazar namespace y id anterior x nuevos
-
-                rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, "<topicmap id=\\\"" + oldIDModel + "\\\">", "<topicmap id=\\\"" + newId + "\\\">"); // Rempalzar el tag: <topicmap id=\"[oldIDModel]\"> del xml de filtros de recursos
-                //Reemplaza ids de repositorios de usuarios y documentos x nuevos
-                rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, oldIDModel + "_usr", newId + "_usr");
-                rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, "http://user." + oldIDModel + ".swb#", "http://user." + newId + ".swb#");
-                rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, oldIDModel + "_rep", newId + "_rep");
-                rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, "http://repository." + oldIDModel + ".swb#", "http://repository." + newId + ".swb#");
-
-                //rdfcontent = SWBUtils.TEXT.replaceAllIgnoreCase(rdfcontent, oldName, newName); //Reemplazar nombre anterior x nuevo nombre
-                //rdfcontent = parseRdfContent(rdfcontent, oldTitle, newTitle, oldIDModel, newId, newNs);
-
-                //Mediante inputStream creado generar sitio
-                InputStream io = SWBUtils.IO.getStreamFromString(rdfcontent);
-                SemanticModel model = SWBPlatform.getSemanticMgr().createModelByRDF(newId, newNs, io, "N-TRIPLE");
-                WebSite website = SWBContext.getWebSite(model.getName());
-                website.setTitle(newTitle);
-                website.setDescription(oldDescription);
-                String xmodelID = null;
-                Iterator smodelsKeys = smodels.keySet().iterator();
-                while (smodelsKeys.hasNext()) { // Por c/submodelo que exista
-                    String key = (String) smodelsKeys.next();
-                    HashMap smodelValues = (HashMap) smodels.get(key);
-                    Iterator itkVaues = smodelValues.keySet().iterator();
-                    while (itkVaues.hasNext()) {
-                        String kvalue = (String) itkVaues.next();
-                        if (kvalue.equals("id")) {
-                            xmodelID = (String) smodelValues.get(kvalue);
-                        }
-                    }
-                    //Buscar rdf del submodelo
-                    fileModel = new File(modelspath + newId + "/" + xmodelID + ".nt");
-                    if (fileModel != null && fileModel.exists()) {
-                        frdfio = new FileInputStream(fileModel);
-                        String rdfmodel = SWBUtils.IO.readInputStream(frdfio);
-                        if (key.endsWith("_usr")) { //Para los submodelos de usuarios
-                            int pos = xmodelID.lastIndexOf("_usr");
-                            if (pos > -1) {
-                                xmodelID = xmodelID.substring(0, pos);
-                                rdfmodel = SWBUtils.TEXT.replaceAll(rdfmodel, xmodelID, newId);
-                                io = SWBUtils.IO.getStreamFromString(rdfmodel);
-                                SemanticModel usermodel = SWBPlatform.getSemanticMgr().createModelByRDF(newId + "_usr", "http://user." + newId + ".swb#", io, "N-TRIPLE");
-                                if (usermodel != null) {
-                                    UserRepository userRep = SWBContext.getUserRepository(usermodel.getName());
-                                    userRep.setTitle("Repositorio de Usuarios (" + newWebSiteTitle + ")", "es");
-                                    userRep.setTitle("Users Repository (" + newWebSiteTitle + ")", "en");
-                                }
-                            }
-                        }
-                        if (key.endsWith("_rep")) { //Para los submodelos de dosumentos
-                            int pos = xmodelID.lastIndexOf("_rep");
-                            if (pos > -1) {
-                                xmodelID = xmodelID.substring(0, pos);
-                                rdfmodel = SWBUtils.TEXT.replaceAll(rdfmodel, xmodelID, newId);
-                                io = SWBUtils.IO.getStreamFromString(rdfmodel);
-                                SemanticModel repomodel = SWBPlatform.getSemanticMgr().createModelByRDF(newId + "_rep", "http://repository." + newId + ".swb#", io, "N-TRIPLE");
-                                if (repomodel != null) {
-                                    Workspace repo = SWBContext.getWorkspace(repomodel.getName());
-                                    repo.setTitle("Repositorio de Documentos (" + newWebSiteTitle + ")", "es");
-                                    repo.setTitle("Documents Repository (" + newWebSiteTitle + ")", "en");
-                                }
-                            }
-                        }
-                        fileModel.delete();
-                    }
-                }
-                return website;
-            }
-        } catch (Exception e) {
-            log.error(e);
-        }
-        return null;
-    }
+    
 
     /**
      * Metodo sobrado en este momento, pero servira para cuando un submodelo (sitio), tenga mas submodelos (sitios,repositorios)
