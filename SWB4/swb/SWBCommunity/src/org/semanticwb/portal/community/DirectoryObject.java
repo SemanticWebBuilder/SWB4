@@ -1,14 +1,17 @@
 package org.semanticwb.portal.community;
 
 import java.io.IOException;
+import java.util.Iterator;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.portal.TemplateImp;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
@@ -120,6 +123,73 @@ public class DirectoryObject extends org.semanticwb.portal.community.base.Direct
             }
         }
         return false;
+    }
+
+    public String replaceTags(String str, HttpServletRequest request, SWBParamRequest paramRequest)
+    {
+        DirectoryObject dob = null;
+        SemanticObject so = SemanticObject.createSemanticObject(request.getParameter("uri"));
+        if (so != null) {
+            dob = (DirectoryObject) so.createGenericInstance();
+        }
+
+        if(str==null || str.trim().length()==0)
+            return "";
+
+        str=str.trim();
+        Iterator it=SWBUtils.TEXT.findInterStr(str, "{request.getParameter(\"", "\")}");
+        while(it.hasNext())
+        {
+            String s=(String)it.next();
+            str=SWBUtils.TEXT.replaceAll(str, "{request.getParameter(\""+s+"\")}", request.getParameter(replaceTags(s,request,paramRequest)));
+        }
+
+        it=SWBUtils.TEXT.findInterStr(str, "{session.getAttribute(\"", "\")}");
+        while(it.hasNext())
+        {
+            String s=(String)it.next();
+            str=SWBUtils.TEXT.replaceAll(str, "{session.getAttribute(\""+s+"\")}", (String)request.getSession().getAttribute(replaceTags(s,request,paramRequest)));
+        }
+
+        it=SWBUtils.TEXT.findInterStr(str, "{template.getArgument(\"", "\")}");
+        while(it.hasNext())
+        {
+            String s=(String)it.next();
+            str=SWBUtils.TEXT.replaceAll(str, "{template.getArgument(\""+s+"\")}", (String)paramRequest.getArgument(replaceTags(s,request,paramRequest)));
+        }
+
+        it=SWBUtils.TEXT.findInterStr(str, "{getEnv(\"", "\")}");
+        while(it.hasNext())
+        {
+            String s=(String)it.next();
+            str=SWBUtils.TEXT.replaceAll(str, "{getEnv(\""+s+"\")}", SWBPlatform.getEnv(replaceTags(s,request,paramRequest)));
+        }
+
+        if (dob != null)
+        {
+            str=SWBUtils.TEXT.replaceAll(str, "{direlement.title}", dob.getTitle());
+            str=SWBUtils.TEXT.replaceAll(str, "{direlement.description}", dob.getDescription());
+            str=SWBUtils.TEXT.replaceAll(str, "{direlement.claimjustify}", ((Claimable)dob).getClaimJustify());
+            str=SWBUtils.TEXT.replaceAll(str, "{direlement.encodeduri}", dob.getEncodedURI());
+            str=SWBUtils.TEXT.replaceAll(str, "{direlement.uri}", dob.getURI());
+        }
+
+        str=SWBUtils.TEXT.replaceAll(str, "{user.login}", paramRequest.getUser().getLogin());
+        str=SWBUtils.TEXT.replaceAll(str, "{user.fullname}", paramRequest.getUser().getFullName());
+        str=SWBUtils.TEXT.replaceAll(str, "{user.email}", paramRequest.getUser().getEmail());
+        str=SWBUtils.TEXT.replaceAll(str, "{user.language}", paramRequest.getUser().getLanguage());
+        str=SWBUtils.TEXT.replaceAll(str, "{webpath}", SWBPortal.getContextPath());
+        str=SWBUtils.TEXT.replaceAll(str, "{distpath}", SWBPortal.getDistributorPath());
+        str=SWBUtils.TEXT.replaceAll(str, "{webworkpath}", SWBPortal.getWebWorkPath());
+        str=SWBUtils.TEXT.replaceAll(str, "{workpath}", SWBPortal.getWorkPath());
+        str=SWBUtils.TEXT.replaceAll(str, "{websiteid}", paramRequest.getWebPage().getWebSiteId());
+        if(str.indexOf("{templatepath}")>-1)
+        {
+            //TODO:pasar template por paramrequest
+            TemplateImp template=(TemplateImp)SWBPortal.getTemplateMgr().getTemplate(paramRequest.getUser(), paramRequest.getWebPage());
+            str=SWBUtils.TEXT.replaceAll(str, "{templatepath}", template.getActualPath());
+        }
+        return str;
     }
 
     public boolean isValid() {
