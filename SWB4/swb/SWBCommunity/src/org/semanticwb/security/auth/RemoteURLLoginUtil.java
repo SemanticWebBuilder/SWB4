@@ -22,16 +22,12 @@
  **/
 package org.semanticwb.security.auth;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import org.semanticwb.SWBUtils;
@@ -60,21 +56,26 @@ public class RemoteURLLoginUtil
                     "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
                     "  <soap:Body>\n" +
                     "    <Validate xmlns=\"http://wwww.PortalCiudadano.Signia.com/\">\n" +
-                    "      <Login>" + URLEncoder.encode(login, "UTF-8") + "</Login>\n" +
-                    "      <TimeStamp>" + URLEncoder.encode(stamp, "UTF-8") + "</TimeStamp>\n" +
+//                    "      <Login>" + URLEncoder.encode(login, "UTF-8") + "</Login>\n" +
+//                    "      <TimeStamp>" + URLEncoder.encode(stamp, "UTF-8") + "</TimeStamp>\n" +
+                    "      <Login>" + login + "</Login>\n" +
+                    "      <TimeStamp>" + stamp + "</TimeStamp>\n" +
+
                     "    </Validate>\n" +
                     "  </soap:Body>\n" +
                     "</soap:Envelope>";
-
+//System.out.println("WS-->"+wsdata);
             WSInvoker wsInvoker = new WSInvoker();
             wsInvoker.setHost(host);
             wsInvoker.setUrl(URL);
             wsInvoker.setSoapaction(soapAcction);
             String result = wsInvoker.invoke(wsdata);
-            System.out.println(result);
+//            System.out.println(result);
             Document doc = SWBUtils.XML.xmlToDom(result);
             result = ((Element) doc.getFirstChild()).getElementsByTagName("ValidateResult").item(0).getTextContent();
-            System.out.println("->"+result);
+           // result = SWBUtils.TEXT.decode(result, "UTF-16");
+            result = result.replaceFirst("utf-16", "iso-8859-1");
+//            System.out.println("->"+result);
 
 //            // Send data
 //            URL url = new URL(baseURL);
@@ -98,17 +99,17 @@ public class RemoteURLLoginUtil
 //            //Document
             doc = SWBUtils.XML.xmlToDom(result);
             Element root = (Element) doc.getFirstChild();
-            System.out.println("Buscando user");
+//            System.out.println("Buscando user");
             if (root.getNodeName().equals("user"))
             {
-                System.out.println("Hay user");
+//                System.out.println("Hay user");
                 NodeList nl = root.getChildNodes();
                 ret = new HashMap<String, String>();
-                System.out.println("tengo hijos " + nl.getLength());
+//                System.out.println("tengo hijos " + nl.getLength());
                 for (int i = 0; i < nl.getLength(); i++)
                 {
                     ret.put(nl.item(i).getNodeName(), nl.item(i).getTextContent());
-                    System.out.println("->" + nl.item(i).getNodeName() + ":" + nl.item(i).getTextContent());
+//                    System.out.println("->" + nl.item(i).getNodeName() + ":" + nl.item(i).getTextContent());
                 }
             }
         } catch (Exception e)
@@ -154,7 +155,7 @@ class WSInvoker
         out.close();
         int resc = con.getResponseCode();
         String resm = con.getResponseMessage();
-        System.out.println("ResponseMessage:" + resm);
+//        System.out.println("ResponseMessage:" + resm);
         InputStream in = null;
 
         try

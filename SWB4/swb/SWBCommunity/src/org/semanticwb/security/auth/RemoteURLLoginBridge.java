@@ -42,6 +42,7 @@ public class RemoteURLLoginBridge extends ExtUserRepInt
     private String host;
     private String soapAction;
     private String RedirectURL;
+    private String AlternateURL;
 
     public RemoteURLLoginBridge(UserRepository UserRep, Properties props)
     {
@@ -51,7 +52,10 @@ public class RemoteURLLoginBridge extends ExtUserRepInt
         this.host = props.getProperty("host", null);
         this.soapAction = props.getProperty("soapAction", null);
         this.RedirectURL = props.getProperty("urlRedirec", null);
+        this.AlternateURL = props.getProperty("alternateURL","/login");
+        userRep.setAlternateLoginURL(AlternateURL);
     }
+    
 
     @Override
     public void syncUsers()
