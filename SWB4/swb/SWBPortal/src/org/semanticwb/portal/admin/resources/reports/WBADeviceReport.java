@@ -193,14 +193,7 @@ public class WBADeviceReport extends GenericResource {
                 WebSite site = webSites.next();
                 // Evaluates if TopicMap is not Global
                 if(!site.getId().equals(SWBContext.getGlobalWebSite().getId())) {
-                    // Get access level of this user on this topicmap and if level is greater than "0" then user have access
-                    // TODO
-//                    i_access = AdmFilterMgr.getInstance().haveAccess2TopicMap(paramsRequest.getUser(),site.getDbdata().getId());
-//                    if(I_ACCESS < i_access) {
-//                        if(site.getDbdata().getDeleted()==0) {                            
-                            hm_sites.put(site.getId(), site.getDisplayTitle(paramsRequest.getUser().getLanguage()));
-//                        }
-//                    }
+                    hm_sites.put(site.getId(), site.getDisplayTitle(paramsRequest.getUser().getLanguage()));
                 }
             }
 
@@ -389,15 +382,15 @@ public class WBADeviceReport extends GenericResource {
                 out.println("<div class=\"swbform\">");
                 out.println("<fieldset>");
                 if(rtype.equals("0")) {
-                    out.println(paramsRequest.getLocaleString("description_daily"));
+                    out.println(paramsRequest.getLocaleString("daily_report"));
                 }else {
-                    out.println(paramsRequest.getLocaleString("description_monthly"));
+                    out.println(paramsRequest.getLocaleString("monthly_report"));
                 }                    
                 out.println("</fieldset>");
 
                 out.println("<form id=\"frmrep\" name=\"frmrep\" method=\"post\" action=\""+address+"\">");
                 out.println("<fieldset>");
-                out.println("<legend>" + paramsRequest.getLocaleString("device_report") + "</legend>");                
+                out.println("<legend>" + paramsRequest.getLocaleString("filter") + "</legend>");
                 out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
                 if(rtype.equals("0")) {
                     out.println("<tr><td width=\"183\"></td><td width=\"146\"></td><td width=\"157\"></td><td width=\"443\"></td></tr>");
@@ -455,7 +448,7 @@ public class WBADeviceReport extends GenericResource {
                         out.println(" checked=\"checked\"");
                     }
                     out.println(" />");
-                    out.println("&nbsp;" + paramsRequest.getLocaleString("by_interval_dates"));
+                    out.println("&nbsp;" + paramsRequest.getLocaleString("by_range"));
                     out.println("</label></td>");
                     out.println("<td>");
                     out.println("<input type=\"text\" name=\"wb_fecha11\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha11\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha11+"\">");
