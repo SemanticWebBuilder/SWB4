@@ -264,7 +264,7 @@
                 SWBResourceURL fUrl = paramRequest.getActionUrl().setParameter("act", "unclaim").setParameter("uri", request.getParameter("uri"));
                 %><a class="adminTool" href="<%=fUrl.toString(true)%>">Liberar elemento</a><%
             }
-        } else if (dirObj.canClaim(user) && !isAdmin) {
+        } else if (dirObj.canClaim(user) /*&& !isAdmin*/) {
             %><a class="adminTool" href="#" onclick="javascript:showClaimForm();">Reclamar elemento</a><%
         }
     } 
