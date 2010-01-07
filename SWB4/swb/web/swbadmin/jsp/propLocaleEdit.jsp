@@ -27,7 +27,22 @@
         ret.append("<form dojoType=\"dijit.form.Form\" class=\"swbform\">");
         ret.append(" <fieldset>");
         ret.append("    <table>");
-        Iterator<SemanticObject> it=sobj.getModel().listInstancesOfClass(Language.sclass);
+        SemanticModel model=sobj.getModel();
+        if(!model.getModelObject().instanceOf(WebSite.sclass))
+        {
+            SWBModel rep=(SWBModel)model.getModelObject().getGenericInstance();
+            Iterator<WebSite> wsit=SWBContext.listWebSites();
+            while(wsit.hasNext())
+            {
+                WebSite site =  wsit.next();
+                if(site.hasSubModel(rep))
+                {
+                    model=site.getSemanticObject().getModel();
+                }
+            }
+            //out.println(rep.getParentWebSite());
+        }
+        Iterator<SemanticObject> it=model.listInstancesOfClass(Language.sclass);
         while(it.hasNext())
         {
             Language lng=(Language)it.next().getGenericInstance();
