@@ -123,11 +123,9 @@ public class WBAGlobalReport extends GenericResource {
         PrintWriter out = response.getWriter();
         Resource base = getResourceBase();
 
-        final int I_ACCESS = 0;
         HashMap hm_sites = new HashMap();
         int i_access = 0;
         String rtype;
-
         try{
             // Evaluates if there are sites
             Iterator<WebSite> webSites = SWBContext.listWebSites();
@@ -135,18 +133,10 @@ public class WBAGlobalReport extends GenericResource {
                 WebSite site = webSites.next();
                 // Evaluates if TopicMap is not Global
                 if(!site.getId().equals(SWBContext.getGlobalWebSite().getId())) {
-                    // Get access level of this user on this topicmap and if level is greater than "0" then user have access
-                    // TODO
-//                    i_access = AdmFilterMgr.getInstance().haveAccess2TopicMap(paramsRequest.getUser(),site.getDbdata().getId());
-//                    if(I_ACCESS < i_access) {
-//                        if(site.getDbdata().getDeleted()==0) {
-                            hm_sites.put(site.getId(), site.getDisplayTitle(paramsRequest.getUser().getLanguage()));
-//                        }
-//                    }
+                    hm_sites.put(site.getId(), site.getDisplayTitle(paramsRequest.getUser().getLanguage()));
                 }
             }
-            // If there are sites continue
-            if(hm_sites.size() > I_ACCESS){
+            if(hm_sites.size() > 0){
                 String address = paramsRequest.getWebPage().getUrl();
                 String websiteId = request.getParameter("wb_site")==null ? (String)hm_sites.keySet().iterator().next():request.getParameter("wb_site");
 
@@ -217,7 +207,7 @@ public class WBAGlobalReport extends GenericResource {
                 out.println("       if(fecha3.length>0) {");
                 out.println("           dp = fecha3.split('/');");
                 out.println("           params = params + '&wb_fecha12=' + dp[2]+'-'+dp[1]+'-'+dp[0];");
-                out.println("       }");
+                out.println("       }");                
                 out.println("   }else {");
                 out.println("       var year = new String(dojo.byId('wb_year13').value);");
                 out.println("       params = params + '&wb_year13=' + year;");
@@ -315,15 +305,15 @@ public class WBAGlobalReport extends GenericResource {
                 out.println("<div class=\"swbform\">");
                 out.println("<fieldset>");
                 if(rtype.equals("0")) {
-                    out.println(paramsRequest.getLocaleString("description_daily"));
+                    out.println(paramsRequest.getLocaleString("daily_report"));
                 }else {
-                    out.println(paramsRequest.getLocaleString("description_monthly"));
+                    out.println(paramsRequest.getLocaleString("monthly_report"));
                 }
                 out.println("</fieldset>");
 
                 out.println("<form id=\"frmrep\" name=\"frmrep\" method=\"post\" action=\"" + address + "\">");
                 out.println("<fieldset>");
-                out.println("<legend>" + paramsRequest.getLocaleString("global_report") + "</legend>");
+                out.println("<legend>" + paramsRequest.getLocaleString("filter") + "</legend>");
                 out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
                 if(rtype.equals("0")) {
                     out.println("<tr><td width=\"183\"></td><td width=\"146\"></td><td width=\"157\"></td><td width=\"443\"></td></tr>");
@@ -373,7 +363,7 @@ public class WBAGlobalReport extends GenericResource {
                         out.println(" checked=\"checked\"");
                     }
                     out.println(" />");
-                    out.println("&nbsp;" + paramsRequest.getLocaleString("by_interval_dates"));
+                    out.println("&nbsp;" + paramsRequest.getLocaleString("by_range"));
                     out.println("</label></td>");
                     out.println("<td>");
                     out.println("<input type=\"text\" name=\"wb_fecha11\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha11\" dojoType=\"dijit.form.DateTextBox\" required=\"true\" constraints=\"{datePattern:'dd/MM/yyyy'}\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha11+"\"/>");
@@ -495,7 +485,7 @@ public class WBAGlobalReport extends GenericResource {
             else{   // There are not sites and displays a message
                 out.println("<div class=\"swbform\">");
                 out.println("<fieldset>");
-                out.println("<legend>" + paramsRequest.getLocaleString("global_report") + "</legend>");
+                out.println("<legend>" + paramsRequest.getLocaleString("filter") + "</legend>");
                 out.println("<form method=\"Post\" action=\"" + paramsRequest.getWebPage().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
                 out.println("<table border=0 width=\"100%\">");
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
@@ -516,7 +506,6 @@ public class WBAGlobalReport extends GenericResource {
         catch (Exception e){
             log.error("Error on method doView() resource " + strRscType +  " with id " + base.getId(), e);
         }
-        /*response.getWriter().print(sb_ret.toString());*/
         out.flush();
         out.close();
     }
@@ -597,6 +586,7 @@ public class WBAGlobalReport extends GenericResource {
                     jrResource.prepareReport();
                     jrResource.exportReport(response);
                 }catch (Exception e) {
+                    System.out.println("************************* error."+e);
                     throw new javax.servlet.ServletException(e);
                 }
             }else { // REPORTE MENSUAL
