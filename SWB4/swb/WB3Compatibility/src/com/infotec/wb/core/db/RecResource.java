@@ -38,7 +38,7 @@ import java.util.*;
 
 import com.infotec.appfw.exception.*;
 //import com.infotec.appfw.lib.DBPool.DBConnectionManager;
-import com.infotec.wb.core.db.DBDbSync;
+//import com.infotec.wb.core.db.DBDbSync;
 //import com.infotec.appfw.lib.AFObserver;
 //import com.infotec.wb.lib.WBDBRecord;
 //import com.infotec.appfw.util.AFUtils;
@@ -283,7 +283,7 @@ public class RecResource //implements WBDBRecord
      */
     public long getId()
     {
-        return Long.parseLong(getNative().getId());
+        return Long.parseLong(res.getId());
     }
 
     /** Setter for property id.
@@ -296,7 +296,7 @@ public class RecResource //implements WBDBRecord
 
     public String getTopicMapId()
     {
-        return getNative().getWebSite().getId();
+        return res.getWebSite().getId();
     }
     
     public void setTopicMapId(String idtm)
@@ -309,7 +309,7 @@ public class RecResource //implements WBDBRecord
      */
     public java.lang.String getTitle()
     {
-        return getNative().getTitle(); //title;
+        return res.getTitle(); //title;
     }
 
     /** Setter for property title.
@@ -317,7 +317,7 @@ public class RecResource //implements WBDBRecord
      */
     public void setTitle(java.lang.String title)
     {
-        getNative().setTitle(title);
+        res.setTitle(title);
         //this.title = title;
     }
 
@@ -326,7 +326,7 @@ public class RecResource //implements WBDBRecord
      */
     public java.lang.String getDescription()
     {
-        return getNative().getDescription(); //description;
+        return res.getDescription(); //description;
     }
 
     /** Setter for property description.
@@ -334,7 +334,7 @@ public class RecResource //implements WBDBRecord
      */
     public void setDescription(java.lang.String description)
     {
-        getNative().setDescription(description);
+        res.setDescription(description);
         //this.description = description;
     }
 
@@ -343,7 +343,7 @@ public class RecResource //implements WBDBRecord
      */
     public java.lang.String getXmlConf()
     {
-        return getNative().getXmlConf();
+        return res.getXmlConf();
         //return xmlconf;
     }
 
@@ -352,7 +352,7 @@ public class RecResource //implements WBDBRecord
      */
     public void setXmlConf(java.lang.String xmlconf)
     {
-        getNative().setXmlConf(xmlconf);
+        res.setXmlConf(xmlconf);
         //this.xmlconf = xmlconf;
     }
 
@@ -361,7 +361,7 @@ public class RecResource //implements WBDBRecord
      */
     public java.lang.String getXml()
     {
-        return  getNative().getXml();
+        return  res.getXml();
         //return xml;
     }
 
@@ -370,7 +370,7 @@ public class RecResource //implements WBDBRecord
      */
     public void setXml(java.lang.String xml)
     {
-        getNative().setXml(xml);
+        res.setXml(xml);
         //this.xml = xml;
     }
 
@@ -379,7 +379,7 @@ public class RecResource //implements WBDBRecord
      */
     public java.sql.Timestamp getLastupdate()
     {
-        return new Timestamp(getNative().getUpdated().getTime());
+        return new Timestamp(res.getUpdated().getTime());
         //return lastupdate;
     }
 
@@ -388,7 +388,7 @@ public class RecResource //implements WBDBRecord
      */
     public void setLastupdate(java.sql.Timestamp lastupdate)
     {
-        getNative().setUpdated(new java.sql.Date(lastupdate.getTime()));
+        res.setUpdated(new java.sql.Date(lastupdate.getTime()));
         //this.lastupdate = lastupdate;
     }
 
@@ -397,7 +397,7 @@ public class RecResource //implements WBDBRecord
      */
     public java.sql.Timestamp getCreated()
     {
-        return new Timestamp(getNative().getCreated().getTime());
+        return new Timestamp(res.getCreated().getTime());
         //return created;
     }
 
@@ -406,7 +406,7 @@ public class RecResource //implements WBDBRecord
      */
     public void setCreated(java.sql.Timestamp created)
     {
-        getNative().setCreated(new java.sql.Date(lastupdate.getTime()));
+        res.setCreated(new java.sql.Date(lastupdate.getTime()));
         //this.created = created;
     }
 
@@ -415,7 +415,7 @@ public class RecResource //implements WBDBRecord
      */
     public int getActive()
     {
-        return getNative().isActive()?1:0;
+        return res.isActive()?1:0;
         //return active;
     }
 
@@ -424,8 +424,8 @@ public class RecResource //implements WBDBRecord
      */
     public void setActive(int active)
     {
-        if(active==1) getNative().setActive(true);
-        else getNative().setActive(false);
+        if(active==1) res.setActive(true);
+        else res.setActive(false);
         //this.active = active;
     }
 
@@ -468,7 +468,7 @@ public class RecResource //implements WBDBRecord
      */
     public int getType()
     {
-        return Integer.parseInt(getNative().getResourceType().getId());
+        return Integer.parseInt(res.getResourceType().getId());
         //return type;
     }
 
@@ -485,7 +485,7 @@ public class RecResource //implements WBDBRecord
      */
     public String getTypeMap()
     {
-        return getNative().getWebSiteId();
+        return res.getWebSiteId();
         //return typemap;
     }
 
@@ -502,7 +502,7 @@ public class RecResource //implements WBDBRecord
      */
     public int getDeleted()
     {
-        return getNative().isDeleted()?1:0;
+        return res.isDeleted()?1:0;
         //return deleted;
     }
 
@@ -511,8 +511,8 @@ public class RecResource //implements WBDBRecord
      */
     public void setDeleted(int deleted)
     {
-        if(deleted==1) getNative().setDeleted(true);
-        else getNative().setDeleted(false);
+        if(deleted==1) res.setDeleted(true);
+        else res.setDeleted(false);
         //this.deleted = deleted;
     }
 
@@ -538,7 +538,7 @@ public class RecResource //implements WBDBRecord
      */
     public int getIdSubType()
     {
-        return Integer.parseInt(getNative().getResourceSubType().getId());
+        return Integer.parseInt(res.getResourceSubType().getId());
         //return idsubtype;
     }
 
@@ -555,7 +555,7 @@ public class RecResource //implements WBDBRecord
      */
     public String getIdSubTypeMap()
     {
-        return getNative().getResourceSubType().getWebSite().getId();
+        return res.getResourceSubType().getWebSite().getId();
         //return idsubtypemap;
     }
 
@@ -572,7 +572,7 @@ public class RecResource //implements WBDBRecord
      */
     public String getIdAdm()
     {
-        return getNative().getCreator().getId();
+        return res.getCreator().getId();
         //return idadm;
     }
 
@@ -589,7 +589,7 @@ public class RecResource //implements WBDBRecord
      */
     public int getPriority()
     {
-        return getNative().getPriority();
+        return res.getPriority();
         //return priority;
     }
 
@@ -598,7 +598,7 @@ public class RecResource //implements WBDBRecord
      */
     public void setPriority(int priority)
     {
-        getNative().setPriority(priority);
+        res.setPriority(priority);
         //this.priority = priority;
     }
     
@@ -607,7 +607,7 @@ public class RecResource //implements WBDBRecord
      */
     public long getCache()
     {
-        //return getNative().get
+        //return res.get
         return cache;
     }
 
@@ -625,7 +625,7 @@ public class RecResource //implements WBDBRecord
      */
     public long getViews()
     {
-        return getNative().getViews();
+        return res.getViews();
         //return views;
     }
 
@@ -634,7 +634,7 @@ public class RecResource //implements WBDBRecord
      */
     public void setViews(long views)
     {
-        getNative().setViews(views);
+        res.setViews(views);
         //this.views = views;
     }
 
@@ -643,7 +643,7 @@ public class RecResource //implements WBDBRecord
      */
     public long getHits()
     {
-        return getNative().getHits();
+        return res.getHits();
         //return hits;
     }
 
@@ -652,7 +652,7 @@ public class RecResource //implements WBDBRecord
      */
     public void setHits(long hits)
     {
-        getNative().setHits(hits);
+        res.setHits(hits);
         //this.hits = hits;
     }
     
@@ -662,7 +662,6 @@ public class RecResource //implements WBDBRecord
      */
     public int getHitLog()
     {
-
         return hitlog;
     }
 
@@ -718,7 +717,7 @@ public class RecResource //implements WBDBRecord
      * @throws com.infotec.appfw.exception.AFException  */
     public void remove() throws SWBResourceException
     {
-        getNative().remove();
+        res.remove();
 
 //        DBConnectionManager mgr = null;
 //        Connection con;
@@ -848,7 +847,7 @@ public class RecResource //implements WBDBRecord
      */
     public boolean incViews()
     {
-        return getNative().incViews();
+        return res.incViews();
 //        viewed = true;
 //        views++;
 //        long t = System.currentTimeMillis() - timer;
@@ -874,7 +873,7 @@ public class RecResource //implements WBDBRecord
      */
     public boolean incHits()
     {
-        return getNative().incHits();
+        return res.incHits();
 //        viewed = true;
 //        hits++;
 //        long t = System.currentTimeMillis() - timer;
