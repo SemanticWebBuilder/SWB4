@@ -78,7 +78,7 @@ public class SWBPlatform
     /**
      * 
      */
-    protected static final String version = "4.0.1.0";
+    protected static final String version = "4.0.1.1";
     
     private SWBPlatform()
     {
