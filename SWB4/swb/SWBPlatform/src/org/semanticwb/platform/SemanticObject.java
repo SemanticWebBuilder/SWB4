@@ -43,6 +43,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBResourceNotFound;
 import org.semanticwb.SWBRuntimeException;
 import org.semanticwb.base.util.URLEncoder;
 import org.semanticwb.model.GenericObject;
@@ -390,7 +391,7 @@ public class SemanticObject
         {
             //System.out.println("ns:"+ns+" "+m_res.getURI());
             Resource aux=SWBPlatform.getSemanticMgr().getOntology().getResource(m_res.getURI());
-            if(aux==null)throw new SWBRuntimeException("Resource not Found:"+m_res.getURI());
+            if(aux==null)throw new SWBResourceNotFound("Resource not Found:"+m_res.getURI());
             m_res = aux;
             m_model = null;
         }
@@ -720,53 +721,66 @@ public class SemanticObject
 //            {
             if(replace)
             {
-                stm=getLocaleStatement(prop,lang);
-            }
-//            }else
-//            {
-//                stm = m_res.getProperty(prop.getRDFProperty());  //trae la primera que encuentre sin importar el idioma
-//            }
-            if(obj==null)
-            {
-                if(stm!=null)
+                if(!prop.isLocaleable())
                 {
-                    stm.remove();
-                }
-            }else if (stm != null)
-            {
-                if(obj instanceof String)
+                    m_res.removeAll(prop.getRDFProperty());
+                }else
                 {
-                    if(lang!=null)
+                    StmtIterator stit = m_res.listProperties(prop.getRDFProperty());
+                    while (stit.hasNext())
                     {
-                        stm.changeObject((String)obj,lang);
-                    }else
-                    {
-                        stm.changeObject((String)obj);
+                        Statement staux = stit.nextStatement();
+                        String lg = staux.getLanguage();
+                        if(lg!=null && lg.length()==0)lg=null;
+                        if ((lang==null && lg==null) || (lg != null && lg.equals(lang)))
+                        {
+                            staux.remove();
+                        }
                     }
-                }else if(obj instanceof Boolean)
-                {
-                    stm.changeLiteralObject((Boolean)obj);
-                }else if(obj instanceof Character)
-                {
-                    stm.changeLiteralObject((Character)obj);
-                }else if(obj instanceof Double)
-                {
-                    stm.changeLiteralObject((Double)obj);
-                }else if(obj instanceof Float)
-                {
-                    stm.changeLiteralObject((Float)obj);
-                }else if(obj instanceof Integer)
-                {
-                    stm.changeLiteralObject((Integer)obj);
-                }else if(obj instanceof Long)
-                {
-                    stm.changeLiteralObject((Long)obj);
-                }else if(obj instanceof java.util.Date)
-                {
-                    stm.changeObject(SWBUtils.TEXT.iso8601DateFormat((java.util.Date)obj));
+                    //stm=getLocaleStatement(prop,lang);
                 }
             }
-            else
+//            if(obj==null)
+//            {
+//                if(stm!=null)
+//                {
+//                    stm.remove();
+//                }
+//            }else if (stm != null)
+//            {
+//                if(obj instanceof String)
+//                {
+//                    if(lang!=null)
+//                    {
+//                        stm.changeObject((String)obj,lang);
+//                    }else
+//                    {
+//                        stm.changeObject((String)obj);
+//                    }
+//                }else if(obj instanceof Boolean)
+//                {
+//                    stm.changeLiteralObject((Boolean)obj);
+//                }else if(obj instanceof Character)
+//                {
+//                    stm.changeLiteralObject((Character)obj);
+//                }else if(obj instanceof Double)
+//                {
+//                    stm.changeLiteralObject((Double)obj);
+//                }else if(obj instanceof Float)
+//                {
+//                    stm.changeLiteralObject((Float)obj);
+//                }else if(obj instanceof Integer)
+//                {
+//                    stm.changeLiteralObject((Integer)obj);
+//                }else if(obj instanceof Long)
+//                {
+//                    stm.changeLiteralObject((Long)obj);
+//                }else if(obj instanceof java.util.Date)
+//                {
+//                    stm.changeObject(SWBUtils.TEXT.iso8601DateFormat((java.util.Date)obj));
+//                }
+//            }
+//            else
             {
                 if(obj instanceof String)
                 {
@@ -1169,6 +1183,11 @@ public class SemanticObject
                     try
                     {
                         ret = SemanticObject.createSemanticObject(stm.getResource());
+                    }
+                    catch (SWBResourceNotFound noe)
+                    {
+                        //Recurso no encontrado
+                        log.warn(noe.getMessage()+":"+stm.getResource());
                     }
                     catch (Exception e)
                     {
