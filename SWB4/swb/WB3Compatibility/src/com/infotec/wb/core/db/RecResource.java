@@ -49,9 +49,13 @@ import com.infotec.appfw.exception.*;
 
 //import java.io.*;
 import com.infotec.appfw.lib.AFObserver;
-import com.infotec.appfw.util.db.ObjectEncoder;
+//import com.infotec.appfw.util.db.ObjectEncoder;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.ResourceSubType;
+import org.semanticwb.model.ResourceType;
+import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.WebSite;
 
 /** Objeto de referencia a un registro de la tabla wbresource de la base de datos.
  *
@@ -62,22 +66,26 @@ import org.semanticwb.SWBUtils;
  */
 public class RecResource //implements WBDBRecord
 {
+    /** Objeto utilizado para generacion de mensajes en el log */
+    private static Logger log = SWBUtils.getLogger(RecResource.class);
 
     org.semanticwb.model.Resource res = null;
 
     public RecResource(org.semanticwb.model.Resource resource)
     {
         res = resource;
-        load();
+        try {
+            load();
+        } catch (Exception e) {
+            log.error("Error al cargar el registro de la BD..",e);
+        }
+        
     }
 
     public org.semanticwb.model.Resource getNative()
     {
         return res;
     }
-
-    /** Objeto utilizado para generacion de mensajes en el log */
-    private static Logger log = SWBUtils.getLogger(RecResource.class);
 
     private ArrayList observers = new ArrayList();
     private ArrayList notifys = new ArrayList();
@@ -205,65 +213,65 @@ public class RecResource //implements WBDBRecord
         this.hitlog = hitlog;
     }
 
-    public RecResource(ObjectDecoder dec)
-    {
-        this(dec.getString(1));
-        this.id = dec.getLong(0);
-        this.idtm = dec.getString(1);
-        this.title = dec.getString(2);
-        this.description = dec.getString(3);
-        this.created = dec.getTimeStamp(4);
-        this.active = dec.getInt(5);
-        this.actualversion = dec.getInt(6);
-        this.lastversion = dec.getInt(7);
-        this.xmlconf = dec.getString(8);
-        this.xml = dec.getString(9);
-        this.type = dec.getInt(10);
-        this.typemap=dec.getString(11);
-        this.deleted = dec.getInt(12);
-        this.idcamp = dec.getInt(13);
-        this.idsubtype = dec.getInt(14);
-        this.idsubtypemap = dec.getString(15);
-        this.idadm = dec.getString(16);
-        this.priority = dec.getInt(17);
-        this.cache=dec.getLong(18);
-        this.views = dec.getLong(19);
-        this.hits = dec.getLong(20);
-        this.lastupdate = dec.getTimeStamp(21);
-        if(dec.getSize()>22)
-        {
-            this.hitlog = dec.getInt(22);
-        }
-    }
-
-    public ObjectEncoder getEncoder()
-    {
-        ObjectEncoder enc=new ObjectEncoder("RecResource");
-        enc.addLong(id);
-        enc.addString(idtm);
-        enc.addString(title);
-        enc.addString(description);
-        enc.addTimestamp(created);
-        enc.addInt(active);
-        enc.addInt(actualversion);
-        enc.addInt(lastversion);
-        enc.addString(xmlconf);
-        enc.addString(xml);
-        enc.addInt(type);
-        enc.addString(typemap);
-        enc.addInt(deleted);
-        enc.addInt(idcamp);
-        enc.addInt(idsubtype);
-        enc.addString(idsubtypemap);
-        enc.addString(idadm);
-        enc.addInt(priority);
-        enc.addLong(cache);
-        enc.addLong(views);
-        enc.addLong(hits);
-        enc.addTimestamp(lastupdate);
-        enc.addInt(hitlog);
-        return enc;
-    }
+//    public RecResource(ObjectDecoder dec)
+//    {
+//        this(dec.getString(1));
+//        this.id = dec.getLong(0);
+//        this.idtm = dec.getString(1);
+//        this.title = dec.getString(2);
+//        this.description = dec.getString(3);
+//        this.created = dec.getTimeStamp(4);
+//        this.active = dec.getInt(5);
+//        this.actualversion = dec.getInt(6);
+//        this.lastversion = dec.getInt(7);
+//        this.xmlconf = dec.getString(8);
+//        this.xml = dec.getString(9);
+//        this.type = dec.getInt(10);
+//        this.typemap=dec.getString(11);
+//        this.deleted = dec.getInt(12);
+//        this.idcamp = dec.getInt(13);
+//        this.idsubtype = dec.getInt(14);
+//        this.idsubtypemap = dec.getString(15);
+//        this.idadm = dec.getString(16);
+//        this.priority = dec.getInt(17);
+//        this.cache=dec.getLong(18);
+//        this.views = dec.getLong(19);
+//        this.hits = dec.getLong(20);
+//        this.lastupdate = dec.getTimeStamp(21);
+//        if(dec.getSize()>22)
+//        {
+//            this.hitlog = dec.getInt(22);
+//        }
+//    }
+//
+//    public ObjectEncoder getEncoder()
+//    {
+//        ObjectEncoder enc=new ObjectEncoder("RecResource");
+//        enc.addLong(id);
+//        enc.addString(idtm);
+//        enc.addString(title);
+//        enc.addString(description);
+//        enc.addTimestamp(created);
+//        enc.addInt(active);
+//        enc.addInt(actualversion);
+//        enc.addInt(lastversion);
+//        enc.addString(xmlconf);
+//        enc.addString(xml);
+//        enc.addInt(type);
+//        enc.addString(typemap);
+//        enc.addInt(deleted);
+//        enc.addInt(idcamp);
+//        enc.addInt(idsubtype);
+//        enc.addString(idsubtypemap);
+//        enc.addString(idadm);
+//        enc.addInt(priority);
+//        enc.addLong(cache);
+//        enc.addLong(views);
+//        enc.addLong(hits);
+//        enc.addTimestamp(lastupdate);
+//        enc.addInt(hitlog);
+//        return enc;
+//    }
 
     /** Getter for property id.
      * @return Value of property id.
@@ -697,52 +705,40 @@ public class RecResource //implements WBDBRecord
         lastupdate = new Timestamp(new java.util.Date().getTime());
         if(!virtual)
         {
+            WebSite ws = SWBContext.getWebSite(idtm);
+            res = ws.getResource(Long.toString(id));
             res.setTitle(title);
             res.setDescription(description);
+            //res.setCreated(new java.sql.Date(created.getTime()));
+            res.setActive(active==1?true:false);
 
-            st.setTimestamp(3, created);
-            st.setInt(4, active);
-            st.setInt(5, actualversion);
-            st.setInt(6, lastversion);
+//            st.setInt(5, actualversion);
+//            st.setInt(6, lastversion);
 
-            //st.setString(7,xmlconf);
-            if (DBResource.xmlconftp == 1)
-            {
-                st.setBytes(7, xmlconf.getBytes());
-            } else if (DBResource.xmlconftp == 2)
-            {
-                st.setString(7, xmlconf);
-            } else if (DBResource.xmlconftp == 3)
-            {
-                if (xmlconf == null)
-                    st.setString(7, null);
-                else
-                    st.setAsciiStream(7, com.infotec.appfw.util.AFUtils.getInstance().getStreamFromString(xmlconf), xmlconf.length());
-            }
+            res.setXmlConf(xmlconf);
+            res.setXml(xml);
 
-            if (xml == null)
-                st.setString(8, null);
-            else
-                st.setAsciiStream(8, com.infotec.appfw.util.AFUtils.getInstance().getStreamFromString(xml), xml.length());
-            st.setInt(9, type);
-            st.setString(10, typemap);
-            st.setInt(11, deleted);
-            st.setInt(12, idcamp);
-            st.setInt(13, idsubtype);
-            st.setString(14, idsubtypemap);
-            st.setString(15, idadm);
-            st.setInt(16, priority);
-            st.setLong(17, cache);
-            st.setLong(18, views);
-            st.setLong(19, hits);
-            st.setTimestamp(20, lastupdate);
-            st.setInt(21, hitlog);
-            st.setLong(22, id);
-            st.setString(23, idtm);
-            st.executeUpdate();
-            st.close();
-            con.close();
-            DBDbSync.getInstance().saveChange("wbresource", "update", id, idtm, lastupdate);
+            ResourceType restype = ws.getResourceType(Integer.toString(type));
+            res.setResourceType(restype);
+
+            typemap = idtm;
+            res.setDeleted(deleted==1?true:false);
+
+            //st.setInt(12, idcamp);
+            ResourceSubType ressubtype = ws.getResourceSubType(Integer.toString(idsubtype));
+            if(ressubtype!=null) res.setResourceType(restype);
+
+            idsubtypemap = typemap;
+            //res.setCreator(ws.getUserRepository().getUser(idadm));
+            res.setPriority(priority);
+            //st.setLong(17, cache);
+            res.setViews(views);
+            res.setHits(hits);
+            res.setUpdated(new java.sql.Date(lastupdate.getTime()));
+            
+            //st.setInt(21, hitlog);
+            id = Integer.parseInt(res.getId());
+            
         }
         Iterator it = observers.iterator();
         while (it.hasNext())
@@ -800,99 +796,66 @@ public class RecResource //implements WBDBRecord
     public void create(String user, String comment) throws AFException
     {
         create();
-        RecAdmLog rec = new RecAdmLog(user, "create", "Resource", getId(), getTopicMapId(), null, comment, lastupdate);
-        rec.create();
+        //RecAdmLog rec = new RecAdmLog(user, "create", "Resource", getId(), getTopicMapId(), null, comment, lastupdate);
+        //rec.create();
     }
 
     /** crea un nuevo registro en la base de datos asi como un nuevo objeto en memoria
      * @throws com.infotec.appfw.exception.AFException  */
     public void create() throws AFException
     {
-        DBConnectionManager mgr = null;
-        Connection con;
+
         try
         {
             lastupdate = new Timestamp(new java.util.Date().getTime());
             created = lastupdate;
-            mgr = DBConnectionManager.getInstance();
-            con = mgr.getConnection((String) com.infotec.appfw.util.AFUtils.getInstance().getEnv("wb/db/nameconn"), "RecResource.create()");
-            if (id == 0)
-            {
-                PreparedStatement st = con.prepareStatement("SELECT max(id) FROM wbresource where idtm=?");
-                st.setString(1, idtm);
-                ResultSet rs = st.executeQuery();
-                if (rs.next())
-                {
-                    id = rs.getLong(1) + 1;
-                } else
-                    id = 1;
-                rs.close();
-                st.close();
-                if(id<10000 && !AFUtils.getEnv("wb/adminDev","false").equalsIgnoreCase("true") && idtm.equals(com.infotec.topicmaps.bean.TopicMgr.TM_ADMIN))
-                {
-                    id=10000;
-                }
-            }
-            String query = "insert into wbresource (title,description,created,active,actualversion,lastversion,xmlconf,xml,type,typemap,deleted,idcamp,idsubtype,idsubtypemap,idadm,priority,cache,views,hits,lastupdate,hitlog,id,idtm) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-            PreparedStatement st = con.prepareStatement(query);
-            st.setString(1, title);
-            st.setString(2, description);
-            st.setTimestamp(3, created);
-            st.setInt(4, active);
-            st.setInt(5, actualversion);
-            st.setInt(6, lastversion);
 
-            //st.setString(7,xmlconf);
-            if (DBResource.xmlconftp == 1)
-            {
-                st.setBytes(7, xmlconf.getBytes());
-            } else if (DBResource.xmlconftp == 2)
-            {
-                st.setString(7, xmlconf);
-            } else if (DBResource.xmlconftp == 3)
-            {
-                if (xmlconf == null)
-                    st.setString(7, null);
-                else
-                    st.setAsciiStream(7, com.infotec.appfw.util.AFUtils.getInstance().getStreamFromString(xmlconf), xmlconf.length());
-            }
+            WebSite ws = SWBContext.getWebSite(idtm);
+            res = ws.createResource();
+            id = Long.parseLong(res.getId());
 
-            if (xml == null)
-                st.setString(8, null);
-            else
-                st.setAsciiStream(8, com.infotec.appfw.util.AFUtils.getInstance().getStreamFromString(xml), xml.length());
-            st.setInt(9, type);
-            st.setString(10, typemap);
-            st.setInt(11, deleted);
-            st.setInt(12, idcamp);
-            st.setInt(13, idsubtype);
-            st.setString(14, idsubtypemap);
-            st.setString(15, idadm);
-            st.setInt(16, priority);
-            st.setLong(17, cache);
-            st.setLong(18, views);
-            st.setLong(19, hits);
-            st.setTimestamp(20, lastupdate);
-            st.setInt(21, hitlog);
-            st.setLong(22, id);
-            st.setString(23, idtm);
-            st.executeUpdate();
-            st.close();
-            con.close();
+            res.setTitle(title);
+            res.setDescription(description);
+            res.setCreated(new java.util.Date(created.getTime()));
+            res.setActive(active==1?true:false);
+
+//            st.setInt(5, actualversion);
+//            st.setInt(6, lastversion);
+
+            res.setXmlConf(xmlconf);
+            res.setXml(xml);
+
+            ResourceType restype = ws.getResourceType(Integer.toString(type));
+            res.setResourceType(restype);
+
+            typemap = idtm;
+            res.setDeleted(deleted==1?true:false);
+
+            //st.setInt(12, idcamp);
+            ResourceSubType ressubtype = ws.getResourceSubType(Integer.toString(idsubtype));
+            if(ressubtype!=null) res.setResourceType(restype);
+
+            idsubtypemap = typemap;
+            res.setCreator(ws.getUserRepository().getUser(idadm));
+            res.setPriority(priority);
+            //st.setLong(17, cache);
+            res.setViews(views);
+            res.setHits(hits);
+            res.setUpdated(new java.sql.Date(lastupdate.getTime()));
+
+            //st.setInt(21, hitlog);
+
             Iterator it = observers.iterator();
             while (it.hasNext())
             {
                 ((AFObserver) it.next()).sendDBNotify("create", this);
             }
-            DBDbSync.getInstance().saveChange("wbresource", "create", id, idtm, lastupdate);
+            
 
         } catch (Exception e)
         {
             throw new AFException(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_RecResource_create_createElementError") + "...", "RecResource:create()", e);
-        } finally
-        {
-            if (mgr != null) mgr.release();
-        }
+        } 
     }
 
     /** refresca el objeto, esto es lo lee de la base de datos y actualiza los objetos que estan en la memoria
@@ -907,58 +870,53 @@ public class RecResource //implements WBDBRecord
      * @throws com.infotec.appfw.exception.AFException  */
     public void load(boolean notify) throws AFException
     {
-        DBConnectionManager mgr = null;
-        Connection con;
-        try
+        if(idtm!=null && id!=0)
         {
-            mgr = DBConnectionManager.getInstance();
-            con = mgr.getConnection((String) com.infotec.appfw.util.AFUtils.getInstance().getEnv("wb/db/nameconn"), "RecResource.load()");
-            String query = "select * from wbresource where id=? and idtm=?";
-            PreparedStatement st = con.prepareStatement(query);
-            st.setLong(1, id);
-            st.setString(2, idtm);
-            ResultSet rs = st.executeQuery();
-            if (rs.next())
+            try
             {
-                title = rs.getString("title");
-                description = rs.getString("description");
-                created = rs.getTimestamp("created");
-                active = rs.getInt("active");
-                actualversion = rs.getInt("actualversion");
-                lastversion = rs.getInt("lastversion");
-                xmlconf = rs.getString("xmlconf");
-                xml = com.infotec.appfw.util.AFUtils.getInstance().readInputStream(rs.getAsciiStream("xml"));
-                type = rs.getInt("type");
-                typemap = rs.getString("typemap");
-                deleted = rs.getInt("deleted");
-                idcamp = rs.getInt("idcamp");
-                idsubtype = rs.getInt("idsubtype");
-                idsubtypemap = rs.getString("idsubtypemap");
-                idadm = rs.getString("idadm");
-                priority = rs.getInt("priority");
-                cache = rs.getLong("cache");
-                views = rs.getLong("views");
-                hits = rs.getLong("hits");
-                lastupdate = rs.getTimestamp("lastupdate");
-                hitlog = rs.getInt("hitlog");
-            }
-            rs.close();
-            st.close();
-            con.close();
-            if (notify)
-            {
-                Iterator it = observers.iterator();
-                while (it.hasNext())
+                WebSite ws = SWBContext.getWebSite(idtm);
+                res = ws.getResource(Long.toString(id));
+
+                typemap=idtm;
+                idsubtypemap = typemap;
+
+                if (res!=null)
                 {
-                    ((AFObserver) it.next()).sendDBNotify("load", this);
+                    title = res.getTitle();
+                    description = res.getDescription();
+                    created = new Timestamp(res.getCreated().getTime());
+                    active = res.isActive()?1:0;
+                    actualversion = 1;
+                    lastversion = 1;
+                    xmlconf = res.getXmlConf();
+                    xml = res.getXml();
+                    type = Integer.parseInt(res.getResourceType().getId());
+                    deleted = res.isDeleted()?1:0;
+
+                    if(res.getResourceSubType()!=null)
+                        idsubtype = Integer.parseInt(res.getResourceSubType().getId());
+
+                    idadm = res.getCreator().getId();
+                    priority = res.getPriority();
+                    //cache = rs.getLong("cache");
+                    views = res.getViews();
+                    hits = res.getHits();
+                    lastupdate = new Timestamp(res.getUpdated().getTime());
+                    //hitlog = rs.getInt("hitlog");
                 }
+
+                if (notify)
+                {
+                    Iterator it = observers.iterator();
+                    while (it.hasNext())
+                    {
+                        ((AFObserver) it.next()).sendDBNotify("load", this);
+                    }
+                }
+            } catch (Exception e)
+            {
+                throw new AFException(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_RecResource_load_loadElementError") + "...", "RecResource:load()", e);
             }
-        } catch (Exception e)
-        {
-            throw new AFException(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_RecResource_load_loadElementError") + "...", "RecResource:load()", e);
-        } finally
-        {
-            if (mgr != null) mgr.release();
         }
     }
 
@@ -994,45 +952,46 @@ public class RecResource //implements WBDBRecord
      * @throws com.infotec.appfw.exception.AFException  */
     public void syncFromExternalAction(String action, Timestamp date) throws AFException
     {
-        if (getLastupdate() == null || (getLastupdate() != null && getLastupdate().before(date)))
-        {
-            if (action.equals("remove"))
-            {
-                sendNotify(action);
-                if(AFUtils.getEnv("wb/clientServer","SASC").equalsIgnoreCase("ClientFR"))
-                {
-                    String resType=DBResourceType.getInstance().getResourceType(getTypeMap(),getType()).getName();
-                    AFUtils.removeDirectory(WBUtils.getInstance().getWorkPath()+"/sites/"+getTopicMapId()+"/resources/" + resType + "/" + getId());
-                }
-            } else if (action.equals("create") || action.equals("update"))
-            {
-                if(AFUtils.getEnv("wb/clientServer","SASC").equalsIgnoreCase("ClientFR"))
-                {
-                    load(false);
-                    DownloadDirectory downdir=new DownloadDirectory(AFUtils.getEnv("wb/serverURL"),WBUtils.getInstance().getWorkPath(),"workpath");
-                    String resType=DBResourceType.getInstance().getResourceType(getTypeMap(),getType()).getName();
-                    String lc = "LocalContent";
-                    AFUtils.removeDirectory(WBUtils.getInstance().getWorkPath()+"/sites/"+getTopicMapId()+"/resources/" + resType + "/" + getId());
-                    if (lc.equals(resType))
-                    {
-                        downdir.download("/sites/"+getTopicMapId()+"/resources/" + resType + "/" + getId()+ "/" + actualversion);
-                    } else
-                    {
-                        downdir.download("/sites/"+getTopicMapId()+"/resources/" + resType + "/" + getId());
-                    }
-                    sendNotify("load");
-                }else
-                {
-                    load();
-                }
-            }
-        }
+//        if (getLastupdate() == null || (getLastupdate() != null && getLastupdate().before(date)))
+//        {
+//            if (action.equals("remove"))
+//            {
+//                sendNotify(action);
+//                if(AFUtils.getEnv("wb/clientServer","SASC").equalsIgnoreCase("ClientFR"))
+//                {
+//                    String resType=DBResourceType.getInstance().getResourceType(getTypeMap(),getType()).getName();
+//                    AFUtils.removeDirectory(WBUtils.getInstance().getWorkPath()+"/sites/"+getTopicMapId()+"/resources/" + resType + "/" + getId());
+//                }
+//            } else if (action.equals("create") || action.equals("update"))
+//            {
+//                if(AFUtils.getEnv("wb/clientServer","SASC").equalsIgnoreCase("ClientFR"))
+//                {
+//                    load(false);
+//                    DownloadDirectory downdir=new DownloadDirectory(AFUtils.getEnv("wb/serverURL"),WBUtils.getInstance().getWorkPath(),"workpath");
+//                    String resType=DBResourceType.getInstance().getResourceType(getTypeMap(),getType()).getName();
+//                    String lc = "LocalContent";
+//                    AFUtils.removeDirectory(WBUtils.getInstance().getWorkPath()+"/sites/"+getTopicMapId()+"/resources/" + resType + "/" + getId());
+//                    if (lc.equals(resType))
+//                    {
+//                        downdir.download("/sites/"+getTopicMapId()+"/resources/" + resType + "/" + getId()+ "/" + actualversion);
+//                    } else
+//                    {
+//                        downdir.download("/sites/"+getTopicMapId()+"/resources/" + resType + "/" + getId());
+//                    }
+//                    sendNotify("load");
+//                }else
+//                {
+//                    load();
+//                }
+//            }
+//        }
     }
 
     public RecResourceType getResourceType()
     {
+        return new RecResourceType(res.getResourceType());
         
-        return DBResourceType.getInstance().getResourceType(typemap, type);
+        //return DBResourceType.getInstance().getResourceType(typemap, type);
     }
 
 }
