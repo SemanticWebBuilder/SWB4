@@ -865,7 +865,7 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
      * @return Value of property repository.
      */
     public java.lang.String getRepository() {
-        return repository;
+        return getNative().getUserRepository().getId();
     }
 
     public void setSubject(Subject subject) {
