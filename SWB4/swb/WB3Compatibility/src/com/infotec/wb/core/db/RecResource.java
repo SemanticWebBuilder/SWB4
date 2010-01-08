@@ -68,6 +68,7 @@ public class RecResource //implements WBDBRecord
     public RecResource(org.semanticwb.model.Resource resource)
     {
         res = resource;
+        load();
     }
 
     public org.semanticwb.model.Resource getNative()
