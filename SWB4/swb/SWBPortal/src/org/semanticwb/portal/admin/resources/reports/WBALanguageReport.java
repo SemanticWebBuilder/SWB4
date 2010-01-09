@@ -116,6 +116,8 @@ public class WBALanguageReport extends GenericResource {
 
         String langId = request.getParameter("wb_lang")==null? "0":request.getParameter("wb_lang");
         String lang = paramsRequest.getUser().getLanguage();
+
+        System.out.println("doRenderLang. websiteId="+websiteId+" langId="+langId);
         
         out.println("<select id=\"wb_lang\" name=\"wb_lang\" size=\"1\">");
         out.println("<option value=\"0\" ");
@@ -166,15 +168,8 @@ public class WBALanguageReport extends GenericResource {
             while(webSites.hasNext()) {
                 WebSite site = webSites.next();
                 // Evaluates if TopicMap is not Global
-                if(!site.getId().equals(SWBContext.getGlobalWebSite().getId())) {
-                    // Get access level of this user on this topicmap and if level is greater than "0" then user have access
-                    // TODO
-//                    i_access = AdmFilterMgr.getInstance().haveAccess2TopicMap(paramsRequest.getUser(),site.getDbdata().getId());
-//                    if(I_ACCESS < i_access) {
-//                        if(site.getDbdata().getDeleted()==0) {                            
-                            hm_sites.put(site.getId(), site.getDisplayTitle(paramsRequest.getUser().getLanguage()));
-//                        }
-//                    }
+                if(!site.getId().equals(SWBContext.getGlobalWebSite().getId())) {                         
+                    hm_sites.put(site.getId(), site.getDisplayTitle(paramsRequest.getUser().getLanguage()));
                 }
             }
 
@@ -229,10 +224,10 @@ public class WBALanguageReport extends GenericResource {
                 url.setMode("fillLangSel");
 
                 out.println("<script type=\"text/javascript\">");
-                
                 out.println("dojo.require(\"dijit.form.DateTextBox\");");
                 out.println("dojo.addOnLoad(doBlockade);");
-                out.println("dojo.addOnLoad(function(){getHtml('"+url+"'+'?site="+websiteId+"'+'&wb_lang="+langId+"','slave')});");
+                System.out.println("websiteId="+websiteId);
+                out.println("dojo.addOnLoad(function(){getHtml('"+url.toString()+"'+'?site="+websiteId+"','slave');})");
                 
                 out.println("function getParams(accion) { ");
                 out.println("   var params = \"?\";");
@@ -299,7 +294,7 @@ public class WBALanguageReport extends GenericResource {
                 out.println("}");
 
                 out.println("function doApply() { ");
-                out.println("      window.document.frmrep.submit(); ");
+                out.println("   window.document.frmrep.submit(); ");
                 out.println("}");
 
                 out.println("function doBlockade() {");
@@ -323,25 +318,24 @@ public class WBALanguageReport extends GenericResource {
                 out.println("<div class=\"swbform\">");
                 out.println("<fieldset>");
                 if(rtype.equals("0")) {
-                    out.println(paramsRequest.getLocaleString("description_daily"));
+                    out.println(paramsRequest.getLocaleString("daily_report"));
                 }else {
-                    out.println(paramsRequest.getLocaleString("description_monthly"));
+                    out.println(paramsRequest.getLocaleString("monthly_report"));
                 }
                 out.println("</fieldset>");
 
                 out.println("<form id=\"frmrep\" name=\"frmrep\" method=\"post\" action=\"" + address + "\">");
                 out.println("<fieldset>");
-                out.println("<legend>" + paramsRequest.getLocaleString("language_report") + "</legend>");                
+                out.println("<legend>" + paramsRequest.getLocaleString("filter") + "</legend>");
                 out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
                 if(rtype.equals("0")) {
                     out.println("<tr><td width=\"183\"></td><td width=\"146\"></td><td width=\"157\"></td><td width=\"443\"></td></tr>");
                 }else {
                     out.println("<tr><td width=\"100\"></td><td width=\"196\"></td><td width=\"224\"></td><td width=\"364\"></td></tr>");
                 }
-                
                 out.println("<tr>");
                 out.println("<td>" + paramsRequest.getLocaleString("site") + ":</td>");
-                out.println("<td colspan=\"2\"><select id=\"wb_site\" name=\"wb_site\" onchange=\"getHtml('"+url.toString()+"'+'?site='+this.value,'slave');\">");
+                out.println("<td colspan=\"2\"><select id=\"wb_site\" name=\"wb_site\" onchange=\"getHtml('"+url+"'+'?site='+this.value,'slave');\">");
                 Iterator<String> itKeys = hm_sites.keySet().iterator();                    
                 while(itKeys.hasNext()) {
                     String key = itKeys.next();
@@ -379,8 +373,6 @@ public class WBALanguageReport extends GenericResource {
                     out.println("</td>");
                     out.println("<td><input type=\"hidden\" id=\"wb_rtype\" name=\"wb_rtype\" value=\"0\" /></td>");
                     out.println("</tr>");
-                    out.println("<tr>");
-                    out.println("</tr>");
 
                     out.println("<tr>");
                     out.println("<td>");
@@ -390,7 +382,7 @@ public class WBALanguageReport extends GenericResource {
                         out.println(" checked=\"checked\"");
                     }
                     out.println(" />");
-                    out.println("&nbsp;" + paramsRequest.getLocaleString("by_interval_dates"));
+                    out.println("&nbsp;" + paramsRequest.getLocaleString("by_range"));
                     out.println("</label></td>");
                     out.println("<td>");
                     out.println("<input type=\"text\" name=\"wb_fecha11\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha11\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha11+"\">");
@@ -406,12 +398,12 @@ public class WBALanguageReport extends GenericResource {
                     out.println("<table border=\"0\" width=\"95%\">");
                     out.println("<tr>");
                     out.println(" <td colspan=\"4\">&nbsp;&nbsp;&nbsp;");
-                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doXml('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">XML</button>&nbsp;");
-                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doExcel('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"Excel\">MS Excel</button>&nbsp;");
-                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doPdf('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">PDF</button>&nbsp;");
-                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doRtf('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">RTF</button>&nbsp;");
-                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doGraph('"+ rtype +"','width=600, height=550, scrollbars, resizable')\">"+paramsRequest.getLocaleString("graph")+"</button>&nbsp;");
-                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doApply()\">"+paramsRequest.getLocaleString("apply")+"</button>");
+                    out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doXml('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">XML</button>&nbsp;");
+                    out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doExcel('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"Excel\">MS Excel</button>&nbsp;");
+                    out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doPdf('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">PDF</button>&nbsp;");
+                    out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doRtf('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">RTF</button>&nbsp;");
+                    out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doGraph('"+ rtype +"','width=600, height=550, scrollbars, resizable')\">"+paramsRequest.getLocaleString("graph")+"</button>&nbsp;");
+                    out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doApply()\">"+paramsRequest.getLocaleString("apply")+"</button>");
                     out.println(" </td>");
                     out.println("</tr>");
                     out.println("</table>");
@@ -445,7 +437,8 @@ public class WBALanguageReport extends GenericResource {
                 }else { // REPORTE MENSUAL                    
                     int year13 = request.getParameter("wb_year13")==null ? gc_now.get(Calendar.YEAR):Integer.parseInt(request.getParameter("wb_year13"));
                     out.println("<tr>");
-                    out.println("<td colspan=\"3\">" + paramsRequest.getLocaleString("year") + ":&nbsp;&nbsp;<select id=\"wb_year13\" name=\"wb_year13\">");
+                    out.println("<td>" + paramsRequest.getLocaleString("year") + "</td>");
+                    out.println("<td colspan=\"2\"><select id=\"wb_year13\" name=\"wb_year13\">");
                     for (int i = 2000; i < 2021; i++) {
                         out.println("<option value=\"" + i + "\"");
                         if (year13==i) {
@@ -463,16 +456,16 @@ public class WBALanguageReport extends GenericResource {
                     out.println("<table border=\"0\" width=\"95%\">");
                     out.println("<tr>");
                     out.println(" <td colspan=\"4\">&nbsp;&nbsp;&nbsp;");
-                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doXml('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">XML</button>&nbsp;");
-                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doExcel('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"Excel\">MS Excel</button>&nbsp;");
-                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doPdf('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">PDF</button>&nbsp;");
-                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doRtf('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">RTF</button>&nbsp;");
-                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doGraph('"+ rtype +"','width=600, height=550, scrollbars, resizable')\">"+paramsRequest.getLocaleString("graph")+"</button>&nbsp;");
-                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doApply()\">"+paramsRequest.getLocaleString("apply")+"</button>");
+                    out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doXml('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">XML</button>&nbsp;");
+                    out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doExcel('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">MS Excel</button>&nbsp;");
+                    out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doPdf('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">PDF</button>&nbsp;");
+                    out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doRtf('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">RTF</button>&nbsp;");
+                    out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doGraph('"+ rtype +"','width=600, height=550, scrollbars, resizable')\">"+paramsRequest.getLocaleString("graph")+"</button>&nbsp;");
+                    out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doApply()\">"+paramsRequest.getLocaleString("apply")+"</button>");
                     out.println(" </td>");
                     out.println("</tr>");
                     out.println("</table>");
-                    out.println("<fieldset>");
+                    out.println("</fieldset>");
                     out.println("</form>");
                     if(request.getParameter("wb_rtype")!=null && websiteId!=null ) {
                         out.println("<fieldset>");
