@@ -347,12 +347,20 @@ namespace WB4Office2007Library
                         if (shape.Type == Microsoft.Office.Core.MsoShapeType.msoPicture)
                         {
                             images++;
-                        }
-                        if (shape.PlaceholderFormat.Type==PowerPoint.PpPlaceholderType.ppPlaceholderObject && shape.PlaceholderFormat.ContainedType==Microsoft.Office.Core.MsoShapeType.msoPicture)
+                        }                        
+                        else if (shape.PlaceholderFormat.Type==PowerPoint.PpPlaceholderType.ppPlaceholderObject)
                         {
                             images++;
                         }
-                        if (shape.PlaceholderFormat.Type == PowerPoint.PpPlaceholderType.ppPlaceholderPicture)
+                        else if (shape.PlaceholderFormat.Type == PowerPoint.PpPlaceholderType.ppPlaceholderPicture)
+                        {
+                            images++;
+                        }
+                        else if (shape.PlaceholderFormat.Type == PowerPoint.PpPlaceholderType.ppPlaceholderOrgChart)
+                        {
+                            images++;
+                        }
+                        if (shape.PlaceholderFormat.Type == PowerPoint.PpPlaceholderType.ppPlaceholderChart)
                         {
                             images++;
                         }
