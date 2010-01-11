@@ -73,13 +73,20 @@ namespace WBOffice4.Forms
 
 
             itemsdoc[0] = "Ligas";
-			itemsdoc[1]=""+document.Links;  
+			itemsdoc[1]=""+document.Links.Length;  
 			itemdoc=new ListViewItem(itemsdoc);
 			this.listView1.Items.Add(itemdoc);
 
 
             itemsdoc[0] = "Tamaño del archivo";
-			itemsdoc[1]=fdocword.Length+" bytes";
+            if (fdocword.Exists)
+            {
+                itemsdoc[1] = fdocword.Length + " bytes";
+            }
+            else
+            {
+                itemsdoc[1] = "Documento no esta guardado";
+            }
 			itemdoc=new ListViewItem(itemsdoc);
 			this.listView1.Items.Add(itemdoc);
 
