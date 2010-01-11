@@ -62,6 +62,7 @@
             this.separator1 = new Microsoft.Office.Tools.Ribbon.RibbonSeparator();
             this.buttonInformation = new Microsoft.Office.Tools.Ribbon.RibbonButton();
             this.buttonCleanPropeties = new Microsoft.Office.Tools.Ribbon.RibbonButton();
+            this.buttonShowDocumentDetail = new Microsoft.Office.Tools.Ribbon.RibbonButton();
             this.separator2 = new Microsoft.Office.Tools.Ribbon.RibbonSeparator();
             this.buttonDelete = new Microsoft.Office.Tools.Ribbon.RibbonButton();
             this.group3 = new Microsoft.Office.Tools.Ribbon.RibbonGroup();
@@ -123,6 +124,7 @@
             this.group2.Items.Add(this.separator1);
             this.group2.Items.Add(this.buttonInformation);
             this.group2.Items.Add(this.buttonCleanPropeties);
+            this.group2.Items.Add(this.buttonShowDocumentDetail);
             this.group2.Items.Add(this.separator2);
             this.group2.Items.Add(this.buttonDelete);
             this.group2.Label = "Contenido";
@@ -174,6 +176,13 @@
             this.buttonCleanPropeties.Name = "buttonCleanPropeties";
             this.buttonCleanPropeties.ShowImage = true;
             this.buttonCleanPropeties.Click += new System.EventHandler<Microsoft.Office.Tools.Ribbon.RibbonControlEventArgs>(this.buttonCleanPropeties_Click);
+            // 
+            // buttonShowDocumentDetail
+            // 
+            this.buttonShowDocumentDetail.Label = "Detalle de documento";
+            this.buttonShowDocumentDetail.Name = "buttonShowDocumentDetail";
+            this.buttonShowDocumentDetail.ShowImage = true;
+            this.buttonShowDocumentDetail.Click += new System.EventHandler<Microsoft.Office.Tools.Ribbon.RibbonControlEventArgs>(this.buttonShowDocumentDetail_Click);
             // 
             // separator2
             // 
@@ -295,6 +304,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonSeparator separator1;
         internal Microsoft.Office.Tools.Ribbon.RibbonSeparator separator2;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonDocsToAuthorize;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonShowDocumentDetail;
     }
 
     partial class ThisRibbonCollection : Microsoft.Office.Tools.Ribbon.RibbonReadOnlyCollection

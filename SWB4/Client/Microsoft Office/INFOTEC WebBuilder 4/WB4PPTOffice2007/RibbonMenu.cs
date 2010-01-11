@@ -194,5 +194,14 @@ namespace WB4PPTOffice2007
         {
             OfficeApplication.ShowDocumentsToAuthorize();
         }
+
+        private void buttonShowDocumentDetail_Click(object sender, RibbonControlEventArgs e)
+        {
+            if (Globals.ThisAddIn.Application.ActivePresentation != null)
+            {
+                PowerPoint2007OfficeDocument document = new PowerPoint2007OfficeDocument(Globals.ThisAddIn.Application.ActivePresentation);
+                document.showDocumentDetail();
+            }
+        }
     }
 }

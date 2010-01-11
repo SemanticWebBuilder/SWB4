@@ -672,7 +672,12 @@ namespace WBOffice4
                 FormContentInformation formContentInformation = new FormContentInformation(reporitoryID, contentID, this);
                 formContentInformation.ShowDialog();
             }
-        }        
+        }
+        public void showDocumentDetail()
+        {
+            FrmDetalleDoc formContentInformation = new FrmDetalleDoc(this);
+            formContentInformation.ShowDialog();            
+        }  
         public void DeleteAsociation()
         {
 
