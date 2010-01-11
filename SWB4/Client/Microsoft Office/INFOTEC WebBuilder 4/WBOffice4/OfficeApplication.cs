@@ -52,7 +52,7 @@ namespace WBOffice4
         private static IOfficeApplication officeApplication;
         public static readonly double m_version = 4.001;
         static OfficeApplication()
-        {
+        {            
             try
             {
                 Thread.CurrentThread.CurrentUICulture = new CultureInfo("es");

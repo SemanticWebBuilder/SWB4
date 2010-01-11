@@ -120,11 +120,13 @@ namespace WBOffice4.Forms
 								try
 								{
 									System.Uri uripagina= new Uri(archivo);							
-									System.Net.HttpWebRequest  wbpagina=(HttpWebRequest)System.Net.HttpWebRequest.Create(uripagina);							
-									if(OfficeApplication.OfficeApplicationProxy.Credentials.UserName!=null && OfficeApplication.OfficeApplicationProxy.ProxyServer!=null)
+									System.Net.HttpWebRequest  wbpagina=(HttpWebRequest)System.Net.HttpWebRequest.Create(uripagina);
+                                    SWBConfiguration configuration = new SWBConfiguration();
+
+                                    if (configuration.ProxyServer != null && configuration.ProxyServer != "")
 									{
 										// por probar
-                                        wbpagina.Proxy = new WebProxy(OfficeApplication.OfficeApplicationProxy.ProxyServer.AbsoluteUri+":"+OfficeApplication.OfficeApplicationProxy.ProxyPort);
+                                        wbpagina.Proxy = new WebProxy(new Uri(configuration.ProxyServer)+":"+int.Parse(configuration.ProxyPort, System.Globalization.CultureInfo.InvariantCulture));
 									}
 									System.Net.HttpWebResponse res=(HttpWebResponse)wbpagina.GetResponse(); 
 									if(wbpagina.HaveResponse && res.StatusCode==System.Net.HttpStatusCode.OK)
