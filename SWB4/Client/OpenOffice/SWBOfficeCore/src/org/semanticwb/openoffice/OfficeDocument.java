@@ -26,7 +26,6 @@
  */
 package org.semanticwb.openoffice;
 
-import com.sun.star.awt.MessageBoxButtons;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -241,6 +240,10 @@ public abstract class OfficeDocument
     public abstract void prepareHtmlFileToSend(File htmlFile);
 
     public abstract void insertLink(String url, String text);
+
+    public abstract String[] getLinks();
+
+    public abstract int getCountImages();
 
     protected static File getFile(URI uri)
     {
