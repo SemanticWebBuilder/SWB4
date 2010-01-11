@@ -1,34 +1,36 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package org.semanticwb.openoffice.impress;
 
+import com.sun.star.awt.XBitmap;
+import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.UnknownPropertyException;
+import com.sun.star.beans.XProperty;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XEnumeration;
@@ -112,7 +114,6 @@ public class WB4Impress extends OfficeDocument
     private static final String outline;
     private static final String script;
     private final XComponent document;
-    
 
     static
     {
@@ -131,7 +132,7 @@ public class WB4Impress extends OfficeDocument
     public WB4Impress(XComponent document)
     {
         this.document = document;
-        
+
     }
 
     /**
@@ -141,7 +142,7 @@ public class WB4Impress extends OfficeDocument
      * @see XComponentContext
      */
     public WB4Impress(XComponentContext m_xContext) throws WBOfficeException
-    {        
+    {
         XMultiComponentFactory serviceManager = m_xContext.getServiceManager();
         try
         {
@@ -252,9 +253,7 @@ public class WB4Impress extends OfficeDocument
         return attachments;
     }
 
-
     private List<String> getAttachtmentsAsString(XShape xShape) throws NoHasLocationException
-
     {
         List<String> attachments = new ArrayList<String>();
         XTextRange textRange = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, xShape);
@@ -768,7 +767,7 @@ public class WB4Impress extends OfficeDocument
         changeSlides(htmlFile.getParentFile());
 
 
-    // TODO: Falta implementar    
+        // TODO: Falta implementar
     }
 
     private void changeSlides(File dir)
@@ -1013,7 +1012,7 @@ public class WB4Impress extends OfficeDocument
 
     public void insertLink(String url, String text)
     {
-        XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class, this.document);                
+        XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class, this.document);
         XController xController = xModel.getCurrentController();
         XSelectionSupplier xSelection = (XSelectionSupplier) UnoRuntime.queryInterface(XSelectionSupplier.class, xController);
         Object temp = xSelection.getSelection();
@@ -1023,14 +1022,14 @@ public class WB4Impress extends OfficeDocument
             try
             {
                 XShape xShape = (XShape) UnoRuntime.queryInterface(XShape.class, getShapes.getByIndex(0));
-                XMultiServiceFactory xDocFactory = (XMultiServiceFactory)UnoRuntime.queryInterface(XMultiServiceFactory.class, this.document);
-                Object objtextfied=xDocFactory.createInstance("com.sun.star.text.TextField.URL");                
-                XPropertySet xTextFieldProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class,objtextfied);
+                XMultiServiceFactory xDocFactory = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, this.document);
+                Object objtextfied = xDocFactory.createInstance("com.sun.star.text.TextField.URL");
+                XPropertySet xTextFieldProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, objtextfied);
                 xTextFieldProps.setPropertyValue("Representation", text);
                 xTextFieldProps.setPropertyValue("TargetFrame", "_blank");
                 xTextFieldProps.setPropertyValue("URL", url);
-                XText xShapeText = (XText) UnoRuntime.queryInterface(XText.class, xShape);                
-                XTextContent xFieldTextContent = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, xTextFieldProps );                
+                XText xShapeText = (XText) UnoRuntime.queryInterface(XText.class, xShape);
+                XTextContent xFieldTextContent = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, xTextFieldProps);
                 xShapeText.insertTextContent(xShapeText, xFieldTextContent, false);
             }
             catch (Exception e)
@@ -1039,13 +1038,13 @@ public class WB4Impress extends OfficeDocument
             }
 
         }
-    
+
     }
-   
+
     @Override
     public String[] getLinks()
     {
-        HashSet<String> links=new HashSet<String>();
+        HashSet<String> links = new HashSet<String>();
         int pages = getDrawPageCount(document);
         for (int i = 0; i < pages; i++)
         {
@@ -1066,7 +1065,47 @@ public class WB4Impress extends OfficeDocument
     @Override
     public int getCountImages()
     {
-        int images=0;
+        int images = 0;
+        int pages = getDrawPageCount(document);
+        for (int i = 0; i < pages; i++)
+        {
+            try
+            {
+                XDrawPage xDrawPage = getDrawPageByIndex(document, i);
+                XShapes xShapes = (XShapes) UnoRuntime.queryInterface(XShapes.class, xDrawPage);
+                int shapes = xShapes.getCount();
+
+                for (int iShape = 0;
+                        iShape < shapes;
+                        iShape++)
+                {
+                    Object oShape = xShapes.getByIndex(iShape);
+                    XShape xShape = (XShape) UnoRuntime.queryInterface(XShape.class, oShape);
+                    XPropertySet xPropSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xShape);
+                    try
+                    {
+                        Object value=xPropSet.getPropertyValue("GraphicURL");
+                        images++;
+                    }
+                    catch(Exception e){}
+                    /*Property[] props= xPropSet.getPropertySetInfo().getProperties();
+                    for(Property prop : props)
+                    {
+                        Object value=xPropSet.getPropertyValue(prop.Name);
+                        XBitmap bitmap=(XBitmap) UnoRuntime.queryInterface(XBitmap.class, value);
+                        if(bitmap!=null)
+                            System.out.print(prop.Name+":"+value);
+                    }*/
+                    
+
+                }
+            }
+            catch (Exception iobe)
+            {
+                ErrorLog.log(iobe);
+            }
+
+        }
         return images;
     }
 }
