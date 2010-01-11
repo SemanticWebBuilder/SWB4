@@ -285,10 +285,10 @@ namespace WB4Office2003Library
             get
             {
                 HashSet<String> links = new HashSet<String>();
-                for (int i = 0; i < this.presentation.Slides.Count; i++)
+                for (int i = 1; i <= this.presentation.Slides.Count; i++)
                 {
                     PowerPoint.Slide slide = (PowerPoint.Slide)this.presentation.Slides[i];
-                    for (int j = 0; j < slide.Hyperlinks.Count; j++)
+                    for (int j = 1; j <= slide.Hyperlinks.Count; j++)
                     {
                         PowerPoint.Hyperlink link = (PowerPoint.Hyperlink)slide.Hyperlinks[j];
                         links.Add(link.Address);
@@ -303,10 +303,21 @@ namespace WB4Office2003Library
             get
             {
                 int images = 0;
-                for (int i = 0; i < this.presentation.Slides.Count; i++)
+                for (int i = 1; i <= this.presentation.Slides.Count; i++)
                 {
                     PowerPoint.Slide slide = (PowerPoint.Slide)this.presentation.Slides[i];
-                    images += slide.Shapes.Count;
+                    for (int j = 1; j <= slide.Shapes.Count; j++)
+                    {
+                        PowerPoint.Shape shape = (PowerPoint.Shape)slide.Shapes[j];
+                        if (shape.Type == Microsoft.Office.Core.MsoShapeType.msoPicture)
+                        {
+                            images++;
+                        }                        
+                        if (shape.PlaceholderFormat.Type == PowerPoint.PpPlaceholderType.ppPlaceholderBitmap)
+                        {
+                            images++;
+                        }                        
+                    }
                 }
                 return images;
             }
