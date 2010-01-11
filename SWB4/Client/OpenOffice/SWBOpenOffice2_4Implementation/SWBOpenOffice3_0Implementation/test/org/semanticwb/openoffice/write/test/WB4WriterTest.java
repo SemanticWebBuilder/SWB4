@@ -318,8 +318,25 @@ public class WB4WriterTest
         }
     }
 
+
     @Test
     //@Ignore
+    public void showDocumentDetail()
+    {
+        try
+        {
+            WB4Writer writer = new WB4Writer(this.xContext);
+            writer.showDocumentDetail();
+        }
+        catch (Throwable wbe)
+        {
+            wbe.printStackTrace();
+            Assert.fail(wbe.getMessage());
+        }
+    }
+
+    @Test
+    @Ignore
     public void saveToSiteTest()
     {
         try

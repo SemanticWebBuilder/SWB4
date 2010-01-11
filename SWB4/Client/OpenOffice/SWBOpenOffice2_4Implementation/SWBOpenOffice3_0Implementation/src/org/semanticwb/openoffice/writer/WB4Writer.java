@@ -53,6 +53,7 @@ import com.sun.star.util.XSearchable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import org.semanticwb.openoffice.DocumentType;
@@ -680,11 +681,6 @@ public class WB4Writer extends OfficeDocument
     public boolean isNewDocument()
     {
         XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
-
-
-
-
-
         return !xStorable.hasLocation();
     }
 
@@ -707,11 +703,6 @@ public class WB4Writer extends OfficeDocument
     public boolean isModified()
     {
         XModifiable xModified = (XModifiable) UnoRuntime.queryInterface(XModifiable.class, document);
-
-
-
-
-
         return xModified.isModified();
     }
 
@@ -781,5 +772,57 @@ public class WB4Writer extends OfficeDocument
                 }
             }
         }
+    }
+
+    @Override
+    public String[] getLinks()
+    {
+        HashSet<String> links=new HashSet<String>();
+        try
+        {
+            XSearchable xSearchable = (XSearchable) UnoRuntime.queryInterface(XSearchable.class, this.document);
+            XSearchDescriptor xUrlSearchDesc = xSearchable.createSearchDescriptor();
+
+            PropertyValue[] aSearchArgs = new PropertyValue[1];
+            aSearchArgs[0] = new PropertyValue();
+            aSearchArgs[0].Name = HYPERLINK_VALUE;
+
+            XPropertyReplace xPropSear = (XPropertyReplace) UnoRuntime.queryInterface(XPropertyReplace.class, xUrlSearchDesc);
+            xPropSear.setSearchAttributes(aSearchArgs);
+            xPropSear.setValueSearch(false);
+            Object linkResult = xSearchable.findFirst(xUrlSearchDesc);
+            while (linkResult != null)
+            {
+                try
+                {
+                    XTextRange xTextRange = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, linkResult);
+                    XTextCursor xTextCursor = xTextRange.getText().createTextCursorByRange(xTextRange);
+                    XPropertySet xPropSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xTextCursor);
+                    Object hiperlink = xPropSet.getPropertyValue(HYPERLINK_VALUE);
+                    if(hiperlink!=null)
+                    {
+                        links.add(hiperlink.toString());
+                    }
+                    linkResult = xSearchable.findNext(xTextRange.getEnd(), xUrlSearchDesc);
+                }
+                catch (com.sun.star.uno.Exception ukpe)
+                {
+                    ErrorLog.log(ukpe);
+                }
+
+            }
+        }
+        catch (com.sun.star.uno.Exception ukpe)
+        {
+            ErrorLog.log(ukpe);
+        }
+        return links.toArray(new String[links.size()]);
+    }
+
+    @Override
+    public int getCountImages()
+    {
+        int images=0;
+        return images;
     }
 }
