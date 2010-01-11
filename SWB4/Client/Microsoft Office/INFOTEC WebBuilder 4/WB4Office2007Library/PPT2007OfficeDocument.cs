@@ -314,5 +314,37 @@ namespace WB4Office2007Library
             hyperlink.Address = path;            
             hyperlink.TextToDisplay = titulo;*/
         }
+
+        public override string[] Links
+        {
+            get
+            {
+                HashSet<String> links = new HashSet<String>();
+                for (int i = 0; i < this.presentation.Slides.Count; i++)
+                {
+                    PowerPoint.Slide slide = (PowerPoint.Slide)this.presentation.Slides[i];
+                    for (int j = 0; j < slide.Hyperlinks.Count; j++)
+                    {
+                        PowerPoint.Hyperlink link = (PowerPoint.Hyperlink)slide.Hyperlinks[j];
+                        links.Add(link.Address);
+                    }
+                }
+                return links.ToArray();
+            }
+        }
+
+        public override int Images
+        {
+            get
+            {
+                int images = 0;
+                for (int i = 0; i < this.presentation.Slides.Count; i++)
+                {
+                    PowerPoint.Slide slide = (PowerPoint.Slide)this.presentation.Slides[i];
+                    images += slide.Shapes.Count;
+                }
+                return images;
+            }
+        }
     }
 }

@@ -317,6 +317,12 @@
     <EmbeddedResource Include="Forms\FormPeriodicidad.resx">
       <DependentUpon>FormPeriodicidad.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmDetalleDoc.en.resx">
+      <DependentUpon>FrmDetalleDoc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmDetalleDoc.resx">
+      <DependentUpon>FrmDetalleDoc.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Steps\ContentProperties.resx">
       <DependentUpon>ContentProperties.cs</DependentUpon>
     </EmbeddedResource>
@@ -463,6 +469,9 @@
     </Compile>
     <Compile Include="Forms\FormSendToAutorize.Designer.cs">
       <DependentUpon>FormSendToAutorize.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FrmDetalleDoc.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Interfaces\CalendarInfo.cs" />
     <Compile Include="Interfaces\ElementInfo.cs" />

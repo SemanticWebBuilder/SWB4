@@ -89,7 +89,7 @@ namespace WB4Office2007Library
         }
         protected override void CleanContentProperties()
         {
-            Office.DocumentProperties docProperties = (Office.DocumentProperties)document.CustomDocumentProperties;            
+            Office.DocumentProperties docProperties = (Office.DocumentProperties)document.CustomDocumentProperties;
             foreach (Office.DocumentProperty prop in docProperties)
             {
                 if (prop.Name.Equals(CONTENT_ID_NAME, StringComparison.InvariantCulture))
@@ -113,7 +113,7 @@ namespace WB4Office2007Library
         protected override void SaveCustomProperties(Dictionary<string, string> properties)
         {
             try
-            {                
+            {
                 Office.DocumentProperties docProperties = (Office.DocumentProperties)document.CustomDocumentProperties;
 
                 foreach (String key in properties.Keys)
@@ -128,7 +128,7 @@ namespace WB4Office2007Library
                     }
                 }
                 foreach (String key in properties.Keys)
-                {                    
+                {
                     docProperties.Add(key, false, Office.MsoDocProperties.msoPropertyTypeString, properties[key], nullObjStr);
                 }
                 document.Saved = false;
@@ -167,7 +167,7 @@ namespace WB4Office2007Library
         public override void Save()
         {
             try
-            {                
+            {
                 if (!document.Saved)
                 {
                     document.Save();
@@ -250,7 +250,7 @@ namespace WB4Office2007Library
 
         protected override void PrepareHtmlFileToSend(FileInfo htmlFile)
         {
-            
+
         }
 
         protected override bool IsNew
@@ -311,8 +311,29 @@ namespace WB4Office2007Library
         {
             object missing = Type.Missing;
             object text = titulo;
-            object address = path;            
+            object address = path;
             this.document.Hyperlinks.Add(this.document.Application.Selection.Range, ref address, ref missing, ref missing, ref text, ref missing);
+        }
+
+        public override string[] Links
+        {
+            get
+            {
+                HashSet<String> links = new HashSet<String>();
+                foreach (Word.Hyperlink link in document.Hyperlinks)
+                {
+                    links.Add(link.Address);
+                }
+                return links.ToArray();
+            }
+        }
+
+        public override int Images
+        {
+            get 
+            {
+                return document.InlineShapes.Count + document.Shapes.Count; 
+            }
         }
     }
 }
