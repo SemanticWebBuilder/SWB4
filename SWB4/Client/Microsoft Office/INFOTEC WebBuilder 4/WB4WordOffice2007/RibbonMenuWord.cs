@@ -183,5 +183,14 @@ namespace WB4WordOffice2007
         {
             OfficeApplication.ShowDocumentsToAuthorize();
         }
+
+        private void buttonShowDocumentDetail_Click(object sender, RibbonControlEventArgs e)
+        {
+            if (Globals.ThisAddIn.Application.ActiveDocument != null)
+            {
+                Word2007OfficeDocument document = new Word2007OfficeDocument(Globals.ThisAddIn.Application.ActiveDocument);
+                document.showDocumentDetail();
+            }
+        }
     }
 }

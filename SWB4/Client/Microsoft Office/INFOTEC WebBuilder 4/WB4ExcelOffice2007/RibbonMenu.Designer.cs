@@ -72,6 +72,7 @@
             this.group4 = new Microsoft.Office.Tools.Ribbon.RibbonGroup();
             this.buttonHelp = new Microsoft.Office.Tools.Ribbon.RibbonButton();
             this.buttonAbout = new Microsoft.Office.Tools.Ribbon.RibbonButton();
+            this.buttonShowDocumentDetail = new Microsoft.Office.Tools.Ribbon.RibbonButton();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
             this.group2.SuspendLayout();
@@ -123,6 +124,7 @@
             this.group2.Items.Add(this.separator1);
             this.group2.Items.Add(this.buttonInformation);
             this.group2.Items.Add(this.buttonCleanPropeties);
+            this.group2.Items.Add(this.buttonShowDocumentDetail);
             this.group2.Items.Add(this.separator2);
             this.group2.Items.Add(this.buttonDelete);
             this.group2.Label = "Contenido";
@@ -253,6 +255,12 @@
             this.buttonAbout.Name = "buttonAbout";
             this.buttonAbout.Click += new System.EventHandler<Microsoft.Office.Tools.Ribbon.RibbonControlEventArgs>(this.buttonAbout_Click);
             // 
+            // buttonShowDocumentDetail
+            // 
+            this.buttonShowDocumentDetail.Label = "Detalle de documento";
+            this.buttonShowDocumentDetail.Name = "buttonShowDocumentDetail";
+            this.buttonShowDocumentDetail.Click += new System.EventHandler<Microsoft.Office.Tools.Ribbon.RibbonControlEventArgs>(this.buttonShowDocumentDetail_Click);
+            // 
             // RibbonMenu
             // 
             this.Name = "RibbonMenu";
@@ -296,6 +304,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonInit;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonCloseSession;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonDocstoAuthorize;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonShowDocumentDetail;
     }
 
     partial class ThisRibbonCollection : Microsoft.Office.Tools.Ribbon.RibbonReadOnlyCollection

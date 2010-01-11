@@ -186,6 +186,15 @@ namespace WB4ExcelOffice2007
             OfficeApplication.ShowDocumentsToAuthorize();
         }
 
+        private void buttonShowDocumentDetail_Click(object sender, RibbonControlEventArgs e)
+        {
+            if (Globals.ThisAddIn.Application.ActiveWorkbook != null)
+            {
+                Excel2007OfficeDocument document = new Excel2007OfficeDocument(Globals.ThisAddIn.Application.ActiveWorkbook);
+                document.showDocumentDetail();
+            }
+        }
+
         
     }
 }
