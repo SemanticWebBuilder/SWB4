@@ -1,26 +1,25 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -29,18 +28,22 @@ package org.semanticwb.openoffice.writer;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XNameAccess;
 import com.sun.star.document.XDocumentInfo;
 import com.sun.star.document.XDocumentInfoSupplier;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XStorable;
+import com.sun.star.graphic.XGraphicProvider;
 import com.sun.star.io.IOException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
+import com.sun.star.text.XTextGraphicObjectsSupplier;
 import com.sun.star.text.XTextRange;
 import com.sun.star.text.XTextViewCursor;
 import com.sun.star.text.XTextViewCursorSupplier;
@@ -114,6 +117,7 @@ public class WB4Writer extends OfficeDocument
     public WB4Writer(XComponent document)
     {
         this.document = document;
+
     }
 
     /**
@@ -123,7 +127,7 @@ public class WB4Writer extends OfficeDocument
      * @see XComponentContext
      */
     public WB4Writer(XComponentContext m_xContext) throws WBOfficeException
-    {
+    {        
         XMultiComponentFactory serviceManager = m_xContext.getServiceManager();
         try
         {
@@ -200,7 +204,6 @@ public class WB4Writer extends OfficeDocument
 
         return attachments;
     }
-    
 
     /**
      * Gets al the custom properties of the document
@@ -651,7 +654,7 @@ public class WB4Writer extends OfficeDocument
         {
             this.save();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -721,6 +724,7 @@ public class WB4Writer extends OfficeDocument
     {
         return WORD_EXTENSION;
     }
+
     @Override
     public void insertLink(String url, String text)
     {
@@ -777,7 +781,7 @@ public class WB4Writer extends OfficeDocument
     @Override
     public String[] getLinks()
     {
-        HashSet<String> links=new HashSet<String>();
+        HashSet<String> links = new HashSet<String>();
         try
         {
             XSearchable xSearchable = (XSearchable) UnoRuntime.queryInterface(XSearchable.class, this.document);
@@ -799,7 +803,7 @@ public class WB4Writer extends OfficeDocument
                     XTextCursor xTextCursor = xTextRange.getText().createTextCursorByRange(xTextRange);
                     XPropertySet xPropSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xTextCursor);
                     Object hiperlink = xPropSet.getPropertyValue(HYPERLINK_VALUE);
-                    if(hiperlink!=null)
+                    if (hiperlink != null)
                     {
                         links.add(hiperlink.toString());
                     }
@@ -822,7 +826,14 @@ public class WB4Writer extends OfficeDocument
     @Override
     public int getCountImages()
     {
-        int images=0;
+        int images = 0;
+        XTextGraphicObjectsSupplier XTxtGraphObjSupplier = (XTextGraphicObjectsSupplier) UnoRuntime.queryInterface(XTextGraphicObjectsSupplier.class, this.document);        
+        XNameAccess XNameAcc = XTxtGraphObjSupplier.getGraphicObjects();
+        String[] allImages = XNameAcc.getElementNames();
+        if(allImages!=null)
+        {
+            images += allImages.length;
+        }
         return images;
     }
 }
