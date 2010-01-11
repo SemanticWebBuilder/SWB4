@@ -289,14 +289,13 @@ namespace WB4Office2003Library
         }
         public override string[] Links
         {
-
             get
             {
                 HashSet<String> links = new HashSet<String>();
-                for (int i = 0; i < this.workbook.Sheets.Count; i++)
+                for (int i = 1; i <= this.workbook.Sheets.Count; i++)
                 {
                     Excel.Worksheet sheet = (Excel.Worksheet)this.workbook.Sheets[i];
-                    for (int j = 0; j < sheet.Hyperlinks.Count; j++)
+                    for (int j = 1; j <= sheet.Hyperlinks.Count; j++)
                     {
                         Excel.Hyperlink link = (Excel.Hyperlink)sheet.Hyperlinks[j];
                         links.Add(link.Address);
@@ -311,7 +310,7 @@ namespace WB4Office2003Library
             get
             {
                 int images = 0;
-                for (int i = 0; i < this.workbook.Sheets.Count; i++)
+                for (int i = 1; i <= this.workbook.Sheets.Count; i++)
                 {
                     Excel.Worksheet sheet = (Excel.Worksheet)this.workbook.Sheets[i];
                     images += sheet.Shapes.Count;

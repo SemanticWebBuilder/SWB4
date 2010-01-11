@@ -316,7 +316,19 @@ namespace WB4Office2003Library
                         if (shape.PlaceholderFormat.Type == PowerPoint.PpPlaceholderType.ppPlaceholderBitmap)
                         {
                             images++;
-                        }                        
+                        }
+                        if (shape.PlaceholderFormat.Type == PowerPoint.PpPlaceholderType.ppPlaceholderChart)
+                        {
+                            images++;
+                        }
+                        if (shape.PlaceholderFormat.Type == PowerPoint.PpPlaceholderType.ppPlaceholderOrgChart)
+                        {
+                            images++;
+                        }
+                        if (shape.PlaceholderFormat.Type == PowerPoint.PpPlaceholderType.ppPlaceholderObject)
+                        {
+                            images++;
+                        }            
                     }
                 }
                 return images;
