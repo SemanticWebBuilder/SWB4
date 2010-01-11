@@ -60,6 +60,7 @@ import com.sun.star.view.XSelectionSupplier;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import org.semanticwb.openoffice.DocumentType;
@@ -251,6 +252,50 @@ public class WB4Impress extends OfficeDocument
         return attachments;
     }
 
+
+    private List<String> getAttachtmentsAsString(XShape xShape) throws NoHasLocationException
+
+    {
+        List<String> attachments = new ArrayList<String>();
+        XTextRange textRange = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, xShape);
+        XEnumerationAccess xParaEA = (XEnumerationAccess) UnoRuntime.queryInterface(XEnumerationAccess.class, textRange);
+        XEnumeration xParaEnum = xParaEA.createEnumeration();
+        while (xParaEnum.hasMoreElements())
+        {
+            try
+            {
+                Object aPortionObj = xParaEnum.nextElement();
+                XEnumerationAccess xPortionEA = (XEnumerationAccess) UnoRuntime.queryInterface(XEnumerationAccess.class, aPortionObj);
+                XEnumeration xPortionEnum = xPortionEA.createEnumeration();
+                while (xPortionEnum.hasMoreElements())
+                {
+                    try
+                    {
+                        XTextRange xRange = (XTextRange) UnoRuntime.queryInterface(com.sun.star.text.XTextRange.class, xPortionEnum.nextElement());
+                        XPropertySet xPropSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xRange);
+                        Object oTextfield = xPropSet.getPropertyValue(TEXTFIELD);
+                        XTextField xTextField = (XTextField) UnoRuntime.queryInterface(XTextField.class, oTextfield);
+                        if (xTextField != null)
+                        {
+                            xPropSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xTextField);
+                            String path = xPropSet.getPropertyValue(URL).toString();
+                            attachments.add(path);
+                        }
+                    }
+                    catch (com.sun.star.uno.Exception uke)
+                    {
+                        ErrorLog.log(uke);
+                    }
+                }
+            }
+            catch (com.sun.star.uno.Exception nse)
+            {
+                ErrorLog.log(nse);
+            }
+        }
+        return attachments;
+    }
+
     /**
      * Gets all the files into a Presentation Slide
      * @param xDrawPage Presentation Slide to search
@@ -283,6 +328,26 @@ public class WB4Impress extends OfficeDocument
 
 
 
+        return attachments;
+    }
+
+    private List<String> getAttachtmentsAsString(XDrawPage xDrawPage)
+            throws com.sun.star.lang.IndexOutOfBoundsException,
+            NoSuchElementException, WrappedTargetException,
+            UnknownPropertyException, NoHasLocationException
+    {
+        List<String> attachments = new ArrayList<String>();
+        XShapes xShapes = (XShapes) UnoRuntime.queryInterface(XShapes.class, xDrawPage);
+        int shapes = xShapes.getCount();
+
+        for (int iShape = 0;
+                iShape < shapes;
+                iShape++)
+        {
+            Object oShape = xShapes.getByIndex(iShape);
+            XShape xShape = (XShape) UnoRuntime.queryInterface(XShape.class, oShape);
+            attachments.addAll(this.getAttachtmentsAsString(xShape));
+        }
         return attachments;
     }
 
@@ -975,5 +1040,33 @@ public class WB4Impress extends OfficeDocument
 
         }
     
+    }
+   
+    @Override
+    public String[] getLinks()
+    {
+        HashSet<String> links=new HashSet<String>();
+        int pages = getDrawPageCount(document);
+        for (int i = 0; i < pages; i++)
+        {
+            try
+            {
+                XDrawPage xDrawPage = getDrawPageByIndex(document, i);
+                links.addAll(getAttachtmentsAsString(xDrawPage));
+            }
+            catch (Exception iobe)
+            {
+                ErrorLog.log(iobe);
+            }
+
+        }
+        return links.toArray(new String[links.size()]);
+    }
+
+    @Override
+    public int getCountImages()
+    {
+        int images=0;
+        return images;
     }
 }

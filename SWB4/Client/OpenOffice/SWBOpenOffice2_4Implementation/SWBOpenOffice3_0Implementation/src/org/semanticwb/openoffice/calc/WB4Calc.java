@@ -32,6 +32,7 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XEnumeration;
 import com.sun.star.document.XDocumentInfo;
 import com.sun.star.document.XDocumentInfoSupplier;
+import com.sun.star.drawing.XDrawPage;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XStorable;
@@ -53,6 +54,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import org.semanticwb.openoffice.DocumentType;
@@ -174,6 +176,34 @@ public class WB4Calc extends OfficeDocument
                     {
                         String path = xps.getPropertyValue("URL").toString();
                         attachments.addAll(this.addLink(path));
+                    }
+                }
+            }
+            catch (com.sun.star.uno.Exception nse)
+            {
+                ErrorLog.log(nse);
+            }
+        }
+        return attachments;
+    }
+
+    private final List<String> getAttachmentsAsString(XCell xcell) throws NoHasLocationException
+    {
+        List<String> attachments = new ArrayList<String>();
+        XTextFieldsSupplier xTextFieldsSupplier = (XTextFieldsSupplier) UnoRuntime.queryInterface(XTextFieldsSupplier.class, xcell);
+        XEnumeration textFields = xTextFieldsSupplier.getTextFields().createEnumeration();
+        while (textFields.hasMoreElements())
+        {
+            try
+            {
+                Object textField1 = textFields.nextElement();
+                if (textField1 != null)
+                {
+                    XPropertySet xps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, textField1);
+                    if (xps != null)
+                    {
+                        String path = xps.getPropertyValue("URL").toString();
+                        attachments.add(path);
                     }
                 }
             }
@@ -751,5 +781,46 @@ public class WB4Calc extends OfficeDocument
         {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public String[] getLinks()
+    {
+        HashSet<String> links=new HashSet<String>();
+        XSpreadsheetDocument xSpreadsheetDocument = (XSpreadsheetDocument) UnoRuntime.queryInterface(XSpreadsheetDocument.class, this.document);
+        XSpreadsheets xSpreadsheets = xSpreadsheetDocument.getSheets();
+        for (String name : xSpreadsheets.getElementNames())
+        {
+            try
+            {
+                Object obSpreadsheet = xSpreadsheets.getByName(name);
+                XSpreadsheet sheet = (XSpreadsheet) UnoRuntime.queryInterface(XSpreadsheet.class, obSpreadsheet);
+                XCellRangesQuery xRangesQuery = (XCellRangesQuery) UnoRuntime.queryInterface(XCellRangesQuery.class, sheet);
+                XSheetCellRanges xCellRanges = xRangesQuery.queryContentCells((short) (CellFlags.VALUE | CellFlags.STRING));
+                XEnumeration cells = xCellRanges.getCells().createEnumeration();
+                while (cells.hasMoreElements())
+                {
+                    Object ocell = cells.nextElement();
+                    XCell xcell = (XCell) UnoRuntime.queryInterface(XCell.class, ocell);
+                    links.addAll(getAttachmentsAsString(xcell));
+                }
+            }
+            catch (com.sun.star.uno.Exception upe)
+            {
+                ErrorLog.log(upe);
+            }
+            catch (Exception upe)
+            {
+                ErrorLog.log(upe);
+            }
+        }
+        return links.toArray(new String[links.size()]);
+    }
+
+    @Override
+    public int getCountImages()
+    {
+        int images=0;
+        return images;
     }
 }
