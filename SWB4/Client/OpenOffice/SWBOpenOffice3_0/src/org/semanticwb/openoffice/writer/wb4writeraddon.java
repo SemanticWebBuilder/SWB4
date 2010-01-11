@@ -213,6 +213,11 @@ public final class wb4writeraddon extends WeakBase
                     WB4WriterApplication.showHelp();
                     return;
                 }
+                if (aURL.Path.compareTo("detail") == 0)
+                {
+                    document.showDocumentDetail();
+                    return;
+                }
                 if (aURL.Path.compareTo("about") == 0)
                 {
                     WB4WriterApplication.showAbout();
