@@ -1084,20 +1084,10 @@ public class WB4Impress extends OfficeDocument
                     XPropertySet xPropSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xShape);
                     try
                     {
-                        Object value=xPropSet.getPropertyValue("GraphicURL");
+                        xPropSet.getPropertyValue("GraphicURL");
                         images++;
                     }
-                    catch(Exception e){}
-                    /*Property[] props= xPropSet.getPropertySetInfo().getProperties();
-                    for(Property prop : props)
-                    {
-                        Object value=xPropSet.getPropertyValue(prop.Name);
-                        XBitmap bitmap=(XBitmap) UnoRuntime.queryInterface(XBitmap.class, value);
-                        if(bitmap!=null)
-                            System.out.print(prop.Name+":"+value);
-                    }*/
-                    
-
+                    catch(Exception e){} 
                 }
             }
             catch (Exception iobe)
