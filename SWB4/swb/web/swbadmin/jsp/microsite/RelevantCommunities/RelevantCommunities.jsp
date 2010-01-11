@@ -11,7 +11,7 @@
             if (!communities.hasNext())
             {
     %>
-    <li>&nbsp;</li>
+    <li><p>No hay comunidades activas</p></li>
     <%      }
             int i = 0;
             while (communities.hasNext())
