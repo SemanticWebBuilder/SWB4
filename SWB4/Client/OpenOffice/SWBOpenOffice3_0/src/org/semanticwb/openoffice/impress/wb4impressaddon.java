@@ -163,6 +163,11 @@ public final class wb4impressaddon extends WeakBase
                     application.open(DocumentType.PPT);
                     return;
                 }
+                if (aURL.Path.compareTo("detail") == 0)
+                {
+                    document.showDocumentDetail();
+                    return;
+                }
                 if (aURL.Path.compareTo("delete") == 0)
                 {
                     document.delete();

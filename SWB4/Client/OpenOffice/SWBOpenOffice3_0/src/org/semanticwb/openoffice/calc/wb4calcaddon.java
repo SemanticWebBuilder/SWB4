@@ -165,6 +165,11 @@ public final class wb4calcaddon extends WeakBase
                     document.delete();
                     return;
                 }
+                if (aURL.Path.compareTo("detail") == 0)
+                {
+                    document.showDocumentDetail();
+                    return;
+                }
                 if (aURL.Path.compareTo("view") == 0)
                 {
                     // add your own code here
