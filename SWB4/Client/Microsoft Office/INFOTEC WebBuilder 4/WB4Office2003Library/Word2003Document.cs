@@ -282,5 +282,25 @@ namespace WB4Office2003Library
             object address = path;            
             this.document.Hyperlinks.Add(this.document.Application.Selection.Range, ref address, ref missing, ref missing, ref text, ref missing);
         }
+        public override string[] Links
+        {
+            get
+            {
+                HashSet<String> links = new HashSet<String>();
+                foreach (Word.Hyperlink link in document.Hyperlinks)
+                {
+                    links.Add(link.Address);
+                }
+                return links.ToArray();
+            }
+        }
+
+        public override int Images
+        {
+            get 
+            {
+                return document.InlineShapes.Count + document.Shapes.Count; 
+            }
+        }
     }
 }

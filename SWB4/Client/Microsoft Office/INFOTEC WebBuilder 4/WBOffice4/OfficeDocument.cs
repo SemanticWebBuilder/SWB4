@@ -115,6 +115,21 @@ namespace WBOffice4
             get;
         }
         /// <summary>
+        /// Gets the Links of the document
+        /// </summary> 
+        public abstract String[] Links
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Gets the Images of document
+        /// </summary> 
+        public abstract int Images
+        {
+            get;
+        }
+        /// <summary>
         /// Gets the path of the fisical document, if the document is nos saved returns a null
         /// </summary>
         public abstract FileInfo FilePath
@@ -262,6 +277,9 @@ namespace WBOffice4
                 return attachments;
             }
         }
+
+       
+
         /// <summary>
         /// Returns all the files that was found in the local disk
         /// </summary>
