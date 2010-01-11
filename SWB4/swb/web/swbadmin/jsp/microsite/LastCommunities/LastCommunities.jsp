@@ -39,8 +39,9 @@
             if (!communities.hasNext())
             {
     %>
-    <li>&nbsp;</li>
+    <li><p>No hay comunidades recientes</p></li>
     <%            }
+
             int i = 0;
             //communities = SWBComparator.sortByCreated(MicroSite.ClassMgr.listMicroSites(site), false);
             while (communities.hasNext())
@@ -69,5 +70,6 @@
                 }
 
             }
+            
     %>
 </ul>
