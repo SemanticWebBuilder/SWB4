@@ -178,10 +178,13 @@ namespace WB4Office2003Library
         private ICollection<FileInfo> GetHyperLinks(Excel.Hyperlink link)
         {
             List<FileInfo> attachments = new List<FileInfo>();
-            FileInfo file = UriToFile(link.Address);
-            if (file != null)
+            if (link.Address != null)
             {
-                attachments.Add(file);
+                FileInfo file = UriToFile(link.Address);
+                if (file != null)
+                {
+                    attachments.Add(file);
+                }
             }
             return attachments;
         }
@@ -298,7 +301,10 @@ namespace WB4Office2003Library
                     for (int j = 1; j <= sheet.Hyperlinks.Count; j++)
                     {
                         Excel.Hyperlink link = (Excel.Hyperlink)sheet.Hyperlinks[j];
-                        links.Add(link.Address);
+                        if (link.Address != null)
+                        {
+                            links.Add(link.Address);
+                        }
                     }
                 }
                 return links.ToArray();

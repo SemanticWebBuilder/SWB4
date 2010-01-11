@@ -200,10 +200,13 @@ namespace WB4Office2007Library
             List<FileInfo> attachments = new List<FileInfo>();
             foreach (Word.Hyperlink link in document.Hyperlinks)
             {
-                FileInfo file = UriToFile(link.Address);
-                if (file != null)
+                if (link.Address != null)
                 {
-                    attachments.Add(file);
+                    FileInfo file = UriToFile(link.Address);
+                    if (file != null)
+                    {
+                        attachments.Add(file);
+                    }
                 }
             }
             return attachments;
@@ -322,7 +325,10 @@ namespace WB4Office2007Library
                 HashSet<String> links = new HashSet<String>();
                 foreach (Word.Hyperlink link in document.Hyperlinks)
                 {
-                    links.Add(link.Address);
+                    if (link.Address != null)
+                    {
+                        links.Add(link.Address);
+                    }
                 }
                 return links.ToArray();
             }

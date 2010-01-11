@@ -205,10 +205,13 @@ namespace WB4Office2007Library
             Excel.Hyperlinks links = worksheet.Hyperlinks;
             foreach (Excel.Hyperlink link in links)
             {
-                String archivo = link.Address;
-                if (archivo != null && isFile(archivo))
+                if (link.Address != null)
                 {
-                    attachments.Add(this.GetLinkFile(archivo));
+                    String archivo = link.Address;
+                    if (archivo != null && isFile(archivo))
+                    {
+                        attachments.Add(this.GetLinkFile(archivo));
+                    }
                 }
             }
             return attachments;
@@ -340,7 +343,10 @@ namespace WB4Office2007Library
                     for(int j=1;j<=sheet.Hyperlinks.Count;j++)
                     {
                         Excel.Hyperlink link = (Excel.Hyperlink)sheet.Hyperlinks[j];
-                        links.Add(link.Address);
+                        if (link.Address != null)
+                        {
+                            links.Add(link.Address);
+                        }
                     }
                 }
                 return links.ToArray();
