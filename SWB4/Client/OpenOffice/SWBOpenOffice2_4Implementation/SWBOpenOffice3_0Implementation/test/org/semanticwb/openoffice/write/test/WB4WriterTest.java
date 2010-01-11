@@ -53,6 +53,8 @@ import org.semanticwb.openoffice.DocumentType;
 import org.semanticwb.openoffice.ErrorLog;
 import org.semanticwb.openoffice.SaveDocumentFormat;
 import org.semanticwb.openoffice.WBException;
+import org.semanticwb.openoffice.calc.WB4Calc;
+import org.semanticwb.openoffice.impress.WB4Impress;
 import org.semanticwb.openoffice.writer.WB4WriterApplication;
 import org.semanticwb.openoffice.writer.WB4Writer;
 
@@ -66,7 +68,7 @@ public class WB4WriterTest
     XComponentContext xContext;
     XComponent xCompDest = null;
     XDesktop oDesktop = null;
-    File sUrlDestiny = new File("C:\\temp\\Prueba_Jordi.odt");
+    File sUrlDestiny = new File("C:\\temp\\demo_presentacion.odp");
     File tempDir = new File("c:/temp/demo/");
 
     public WB4WriterTest()
@@ -325,7 +327,7 @@ public class WB4WriterTest
     {
         try
         {
-            WB4Writer writer = new WB4Writer(this.xContext);
+            WB4Impress writer = new WB4Impress(this.xContext);
             writer.showDocumentDetail();
         }
         catch (Throwable wbe)
