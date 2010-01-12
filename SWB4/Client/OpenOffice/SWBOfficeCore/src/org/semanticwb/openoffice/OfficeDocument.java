@@ -863,17 +863,17 @@ public abstract class OfficeDocument
             char letra=letras[i];
             if(Character.isWhitespace(letra))
             {
-                JOptionPane.showMessageDialog(null,"El nombre tiene espacios","Validación de nombre de archivo",JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null,"El nombre del archivo tiene espacios","Validación de nombre de archivo",JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
                 return false;
             }
             else if(!(Character.isDigit(letra) || Character.isLetter(letra)))
             {
-                JOptionPane.showMessageDialog(null,"El nombre tiene caracteres no válidos:"+letra,"Validación de nombre de archivo",JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null,"El nombre del archivo tiene caracteres no válidos:"+letra,"Validación de nombre de archivo",JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
                 return false;
             }
             else if(letra>123)
             {
-                JOptionPane.showMessageDialog(null,"El nombre tiene caracteres no válidos:"+letra,"Validación de nombre de archivo",JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null,"El nombre del archivo tiene caracteres no válidos:"+letra,"Validación de nombre de archivo",JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
                 return false;
             }
         }
