@@ -497,6 +497,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 
     public String save(String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file, PropertyInfo[] properties, String[] values, InputStream in, String filename) throws Exception
     {
+        file=java.net.URLDecoder.decode(file, "utf-8");
         Session session = null;
         Node categoryNode = null;
         try
@@ -701,6 +702,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      */
     public String updateContent(String repositoryName, String contentId, String file) throws Exception
     {
+        file=java.net.URLDecoder.decode(file, "utf-8");
         Session session = null;
         try
         {
