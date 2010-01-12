@@ -284,6 +284,42 @@ namespace WB4Office2007Library
 
         protected override void PrepareHtmlFileToSend(FileInfo htmlFile)
         {            
+            String script="<script>\r\n<!--\r\nvar ver = 0, appVer = navigator.appVersion, msie = appVer.indexOf( \"MSIE \" )\r\n" +
+            "var msieWin31 = (appVer.indexOf( \"Windows 3.1\" ) >= 0), isMac = (appVer.indexOf(\"Macintosh\") >= 0)\r\n" +
+            "if( msie >= 0 )\r\nver = parseFloat( appVer.substring( msie+5, appVer.indexOf ( \";\", msie ) ) )\r\n" +
+            "else\r\nver = parseInt( appVer )\r\n" +
+            "if( !isMac && ver >= 4 && msie >= 0 )\r\nwindow.location.replace( \"frame.html\"+document.location.hash )\r\n" +
+            "else if( ver >= 3 ) {\r\nvar path = \"v3_document.html\"\r\n" +
+            "if ( !msieWin31 && ( ( msie >= 0 && ver >= 3.02 ) || ( msie < 0 && ver >= 3 ) ) )\r\n" +
+            "window.location.replace( path )\r\nelse\r\n" +
+            "window.location.href = path\r\n}\r\n//-->\r\n</script>";
+            int pos = htmlFile.Name.LastIndexOf(htmlFile.Extension);
+            String name = htmlFile.Name;
+            if (pos > 0)
+            {
+                name = htmlFile.Name.Substring(0, pos);
+            }
+            String path = htmlFile.Directory.FullName + "/" + name + this.presentation.WebOptions.FolderSuffix+"/frame.html";
+            FileInfo framehtml = new FileInfo(path);
+            if (framehtml.Exists)
+            {
+                StreamReader fin = framehtml.OpenText();
+                String html = fin.ReadToEnd();
+                fin.Close();
+                pos = html.IndexOf("</head>");
+                if (pos > 0)
+                {
+                    String newhtml = html.Substring(0, pos);
+                    newhtml += script;
+                    newhtml += html.Substring(pos);
+                    html = newhtml;
+                }
+                FileStream fout = framehtml.OpenWrite();
+                byte[] bcont = System.Text.Encoding.Default.GetBytes(html);
+                fout.Write(bcont, 0, bcont.Length);
+                fout.Close();
+            }
+            
 
         }
 
