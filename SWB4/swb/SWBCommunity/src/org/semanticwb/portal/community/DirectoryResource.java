@@ -31,6 +31,7 @@ import org.semanticwb.servlet.internal.UploadFormElement;
 /**
  * Manage any semantic Object defined, creates a catalog or directory from it, this object is selected in the resource admin
  * @author : Jorge Alberto Jiménez
+ * @author : Hasdai Pacheco {haxdai@gmail.com}
  * @version 1.0
  */
 public class DirectoryResource extends org.semanticwb.portal.community.base.DirectoryResourceBase
