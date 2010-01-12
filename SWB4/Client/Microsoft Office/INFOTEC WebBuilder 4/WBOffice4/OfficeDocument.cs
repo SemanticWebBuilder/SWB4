@@ -556,8 +556,49 @@ namespace WBOffice4
             }
             return false;
         }
+        private bool ValidaNombre(FileInfo archivo)
+        {
+            String ext = archivo.Extension;
+            int pos = archivo.Name.LastIndexOf(ext);
+            String nombre = archivo.Name.Substring(0, pos);
+            if (nombre.Length > 40)
+            {
+                MessageBox.Show("El nombre del archivo es mayor de 40 caracteres","Validación de nombre de archivo",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                return false;
+            }
+            char[] letras = nombre.ToCharArray();
+            for (int i = 0; i < letras.Length; i++)
+            {
+                char letra = letras[i];
+                if (Char.IsPunctuation(letra))
+                {
+                    MessageBox.Show("El nombre del archivo tiene caracteres de puntuación" + ": " + letra + "", "Validación de nombre de archivo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+
+                }
+                else if (Char.IsWhiteSpace(letra))
+                {
+                    MessageBox.Show("El nombre del archivo tiene espacios", "Validación de nombre de archivo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+
+                }
+                else if (!Char.IsLetterOrDigit(letra))
+                {
+                    MessageBox.Show("El nombre del archivo tiene caracteres no válidos" + ": " + letra + "", "Validación de nombre de archivo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+                else if (letra > 123)
+                {
+                    MessageBox.Show("El nombre del archivo tiene caracteres no válidos" + ": " + letra + "", "Validación de nombre de archivo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+            }            
+            return true;
+        }
+
         public void SaveToSite()
         {
+            
             try
             {
                 if (IsReadOnly)
@@ -567,6 +608,10 @@ namespace WBOffice4
                 }
                 if (OfficeApplication.TryLogOn() && SetupDocument())
                 {
+                    if (!ValidaNombre(this.FilePath))
+                    {
+                        return;
+                    }
                     if (isOldVersion())
                     {
                         DialogResult res=RtlAwareMessageBox.Show("El documento esta publicado en una versión anterior, ¿Desea que se verifique si existe en el sitio actual?", "Publicación de contenido", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
