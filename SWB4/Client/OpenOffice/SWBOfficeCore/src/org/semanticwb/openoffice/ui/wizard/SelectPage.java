@@ -61,9 +61,10 @@ public class SelectPage extends WizardPage
     String siteId;
 
     /** Creates new form SelectPage */
-    public SelectPage()
+    public SelectPage(String siteid)
     {
         initComponents();
+        this.siteId=siteid;
         DefaultTreeSelectionModel selectionModel = new DefaultTreeSelectionModel();
         selectionModel.setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         jTreeSite.setSelectionModel(selectionModel);        
@@ -90,13 +91,7 @@ public class SelectPage extends WizardPage
         return res;
     }
 
-   
-
-    public SelectPage(String siteId)
-    {
-        this();
-        this.siteId = siteId;
-    }
+       
 
     class TreeRender extends JPanel implements TreeCellRenderer
     {
