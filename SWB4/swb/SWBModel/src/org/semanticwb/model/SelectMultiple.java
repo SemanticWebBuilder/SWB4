@@ -44,16 +44,26 @@ public class SelectMultiple extends org.semanticwb.model.base.SelectMultipleBase
     @Override
     public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop) {
         //super.process(request, obj, prop);
-        System.out.println("Process...");
-        System.out.println("Prop:"+prop);
-        System.out.println("obj:"+obj);
+        //System.out.println("Process...");
+        //System.out.println("Prop:"+prop);
+        //System.out.println("obj:"+obj);
         String vals[]=request.getParameterValues(prop.getName());
         if(vals==null)vals=new String[0];
         obj.removeProperty(prop);
-        for(int x=0;x<vals.length;x++)
+
+        if(prop.isObjectProperty())
         {
-            obj.addLiteralProperty(prop,new SemanticLiteral(vals[x]));
-            //System.out.println("val"+x+":"+vals[x]);
+            for(int x=0;x<vals.length;x++)
+            {
+                obj.addObjectProperty(prop, SemanticObject.createSemanticObject(vals[x]));
+            }
+        }else
+        {
+            for(int x=0;x<vals.length;x++)
+            {
+                obj.addLiteralProperty(prop,new SemanticLiteral(vals[x]));
+                //System.out.println("val"+x+":"+vals[x]);
+            }
         }
     }
 
@@ -144,6 +154,7 @@ public class SelectMultiple extends org.semanticwb.model.base.SelectMultipleBase
             if(mode.equals("edit") || mode.equals("create") )
             {
                 ret.append("<select name=\""+name+"\" multiple=\"true\"");
+                ret.append(" style=\"width:300px;\"");
                 if(DOJO)ret.append(" dojoType=\"dijit.form.MultiSelect\" invalidMessage=\""+imsg+"\"");
                 ret.append(" "+ext+">");
                 //onChange="dojo.byId('oc1').value=arguments[0]"
