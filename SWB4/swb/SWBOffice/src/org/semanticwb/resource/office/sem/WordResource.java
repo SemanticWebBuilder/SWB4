@@ -90,6 +90,7 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
             String file = document.getContentFile(repositoryName, contentId, version, user);
             if (file != null) {
                 file = file.replace(".doc", ".html");
+                file=java.net.URLDecoder.decode(file, "utf-8");
                 String path = SWBPortal.getWorkPath();
                 if (path.endsWith("/")) {
                     path = path.substring(0, path.length() - 1);
