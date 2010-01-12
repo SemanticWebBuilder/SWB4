@@ -462,6 +462,23 @@
         addSemanticObject(arr, obj, addChilds, addDummy, null, user);
     }
 
+    public boolean checkInverse(SemanticClass cls, SemanticClass child, SemanticProperty inv)
+    {
+        boolean ret=false;
+        if(inv!=null)
+        {
+            SemanticClass aux=inv.getAllValuesFromRestrictionClass(child);
+            if(aux!=null)
+            {
+                if(cls.equals(aux) || cls.isSubClass(aux))ret=true;
+            }else ret=true;
+        }else
+        {
+            ret=true;
+        }
+        return ret;
+    }
+
     public void addSemanticObject(JSONArray arr, SemanticObject obj, boolean addChilds, boolean addDummy, SemanticObject virparent, User user) throws JSONException
     {
         if(!SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(user, obj))return;
@@ -533,11 +550,19 @@
             while(pit.hasNext())
             {
                 SemanticProperty prop=pit.next();
-                SemanticClass rcls=prop.getRangeClass();
+                SemanticClass rcls=prop.getAllValuesFromRestrictionClass(cls);
+                if(rcls==null)rcls=prop.getRangeClass();
+                //System.out.println("cls:"+cls+" "+rcls);
+                //Restricciones inversas
+                SemanticProperty inv=prop.getInverse();
+
                 if(SWBPortal.getAdminFilterMgr().haveClassAction(user, rcls, AdminFilter.ACTION_ADD))
                 {
-                    menus.put(getMenuItem(getLocaleString("add",lang)+" "+rcls.getDisplayName(lang), getLocaleString("icon_add",null),getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+rcls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),getLocaleString("add",lang)+" "+rcls.getDisplayName(lang))));
-                    dropacc.put(rcls.getClassId());
+                    if(checkInverse(cls, rcls, inv))
+                    {
+                        menus.put(getMenuItem(getLocaleString("add",lang)+" "+rcls.getDisplayName(lang), getLocaleString("icon_add",null),getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+rcls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),getLocaleString("add",lang)+" "+rcls.getDisplayName(lang))));
+                        dropacc.put(rcls.getClassId());
+                    }
                 }
 
                 //add subclasess
@@ -549,8 +574,11 @@
                     {
                         if(SWBPortal.getAdminFilterMgr().haveClassAction(user, scls, AdminFilter.ACTION_ADD))
                         {
-                            menus.put(getMenuItem(getLocaleString("add",lang)+" "+scls.getDisplayName(lang), getLocaleString("icon_add",null),getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+scls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),getLocaleString("add",lang)+" "+scls.getDisplayName(lang))));
-                            dropacc.put(scls.getClassId());
+                            if(checkInverse(cls, scls, inv))
+                            {
+                                menus.put(getMenuItem(getLocaleString("add",lang)+" "+scls.getDisplayName(lang), getLocaleString("icon_add",null),getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+scls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),getLocaleString("add",lang)+" "+scls.getDisplayName(lang))));
+                                dropacc.put(scls.getClassId());
+                            }
                         }
                     }
                 }

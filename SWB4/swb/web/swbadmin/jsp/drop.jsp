@@ -1,92 +1,6 @@
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.portal.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
-<!--
-    String lang="es";
-    response.setHeader("Cache-Control", "no-cache");
-    response.setHeader("Pragma", "no-cache");
-
-    SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
-    SemanticObject obj=ont.getSemanticObject(request.getParameter("suri"));
-    SemanticObject newp=ont.getSemanticObject(request.getParameter("newp"));
-    SemanticObject oldp=ont.getSemanticObject(request.getParameter("oldp"));
-
-    //System.out.println("suri;"+obj+" newp:"+newp+" oldp:"+oldp);
-
-    SemanticProperty oprop=null;
-    SemanticProperty nprop=null;
-
-    Iterator<SemanticProperty> it=obj.getSemanticClass().listInverseHerarquicalProperties();
-    while(it.hasNext())
-    {
-        SemanticProperty prop=it.next();
-        if(oprop==null && obj.getObjectProperty(prop)==oldp)
-        {
-            oprop=prop;
-            if(prop.getRangeClass().equals(newp.getSemanticClass()))
-            {
-                nprop=prop;
-            }
-        }
-        if(nprop==null && prop.getRangeClass().equals(newp.getSemanticClass()))
-        {
-            nprop=prop;
-        }
-    }
-
-    if(oprop!=null && nprop!=null)
-    {
-        boolean ret=false;
-        if(oprop.isInverseOf())
-        {
-            if(oprop.getCardinality()==1)
-            {
-                obj.removeProperty(oprop);
-            }else
-            {
-                obj.removeObjectProperty(oprop, oldp);
-            }
-        }else if(oprop.hasInverse())
-        {
-            SemanticProperty iprop=oprop.getInverse();
-            if(iprop.getCardinality()==1)
-            {
-                oldp.removeProperty(iprop);
-            }else
-            {
-                oldp.removeObjectProperty(iprop,obj);
-            }
-        }
-        if(nprop.isInverseOf())
-        {
-            if(nprop.getCardinality()==1)
-            {
-                if(newp!=null)obj.setObjectProperty(nprop, newp);
-            }else
-            {
-                if(newp!=null)obj.addObjectProperty(nprop, newp);
-            }
-            ret=true;
-        }else if(nprop.hasInverse())
-        {
-            SemanticProperty iprop=nprop.getInverse();
-            if(iprop.getCardinality()==1)
-            {
-                newp.setObjectProperty(iprop, obj);
-            }else
-            {
-                newp.addObjectProperty(iprop, obj);
-            }
-            ret=true;
-        }
-        if(ret)
-        {
-            out.println("Elemento fué movido...");
-            return;
-        }
-    }
-    throw new Exception("No se encontro el elemento...");
--->
 <%
     String lang="es";
     response.setHeader("Cache-Control", "no-cache"); 
@@ -99,7 +13,6 @@
     boolean copy=Boolean.parseBoolean(request.getParameter("copy"));
 
     //System.out.println("suri;"+obj+" newp:"+newp+" oldp:"+oldp+" copy:"+copy);
-
 
     if(copy && obj.instanceOf(WebPage.sclass))
     {
@@ -119,12 +32,12 @@
         if(oprop==null && obj.getObjectProperty(prop)==oldp)
         {
             oprop=prop;
-            if(newp==null || prop.getRangeClass().equals(newp.getSemanticClass()))
+            if(newp==null)
             {
                 nprop=prop;
             }
         }
-        if(nprop==null && prop.getRangeClass().equals(newp.getSemanticClass()))
+        if(nprop==null && (prop.getRangeClass().equals(newp.getSemanticClass())||newp.getSemanticClass().isSubClass(prop.getRangeClass())))
         {
             nprop=prop;
         }
