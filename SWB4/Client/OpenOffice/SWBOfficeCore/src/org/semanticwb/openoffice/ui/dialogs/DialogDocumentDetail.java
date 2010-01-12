@@ -133,15 +133,15 @@ public class DialogDocumentDetail extends javax.swing.JDialog {
             char letra=letras[i];
             if(Character.isWhitespace(letra))
             {
-                return "El nombre tiene espacios";
+                return "El nombre del archivo tiene espacios";
             }
             else if(!(Character.isDigit(letra) || Character.isLetter(letra)))
             {
-                return "El nombre tiene caracteres no válidos:"+letra;
+                return "El nombre del archivo tiene caracteres no válidos:"+letra;
             }
             else if(letra>123)
             {
-                return "El nombre tiene caracteres no válidos:"+letra;
+                return "El nombre del archivo tiene caracteres no válidos:"+letra;
             }
         }
         return "El nombre del archivo es correcto";
