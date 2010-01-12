@@ -27,12 +27,10 @@
  */
 package org.semanticwb.openoffice;
 
-import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
 import org.netbeans.spi.wizard.DeferredWizardResult;
 import org.netbeans.spi.wizard.ResultProgressHandle;
 import org.netbeans.spi.wizard.Summary;
