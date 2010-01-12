@@ -25,7 +25,7 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.base.util.ImageResizer;
-import org.semanticwb.portal.TemplateImp;
+import org.semanticwb.portal.SWBFormButton;
 import org.semanticwb.servlet.internal.UploadFormElement;
 
 /**
@@ -49,68 +49,43 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
 
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        PrintWriter out = response.getWriter();
-        String infoMessage = getResourceBase().getAttribute("messageBody", "");
-        String acceptMessage = getResourceBase().getAttribute("mAcceptBody", "");
-        String act = request.getParameter("act");
-        if (act != null) {
-            infoMessage = request.getParameter("mInfoBody");
-            acceptMessage = request.getParameter("mAcceptBody");
-            getResourceBase().setAttribute("messageBody", infoMessage);
-            getResourceBase().setAttribute("mAcceptBody", acceptMessage);
-            try {
-                getResourceBase().updateAttributesToDB();
-            } catch (Exception e) {
-                log.error(e);
-            }
+        PrintWriter out=response.getWriter();
+        out.println("<div id=\""+getSemanticObject().getURI()+"/admform\" dojoType=\"dijit.layout.ContentPane\">");
+        SWBFormMgr mgr=new SWBFormMgr(getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
+        mgr.setSubmitByAjax(true);
+        mgr.addButton(SWBFormButton.newSaveButton());
+        mgr.setType(SWBFormMgr.TYPE_DOJO);
+        if("update".equals(paramRequest.getAction()))
+        {
+            try
+            {
+                mgr.processForm(request);
+            }catch(FormValidateException e){log.error(e);}
+            response.sendRedirect(paramRequest.getRenderUrl().setAction(null).toString());
+        }else
+        {
+            mgr.setAction(paramRequest.getRenderUrl().setAction("update").toString());
+            out.print(mgr.renderForm(request));
         }
-
-        out.println("<script type=\"text/javascript\">");
-        out.println("  dojo.require(\"dijit.form.Form\");");
-        out.println("  dojo.require(\"dijit.form.Button\");");
-        out.println("</script>");
-
-        out.println("<div class=\"swbform\">");
-        out.println("<form dojoType=\"dijit.form.Form\" id=\"" + getResourceBase().getId() + "/directory\" action=\"" + paramRequest.getRenderUrl() + "\" method=\"post\" >");
-        out.println("<input type=\"hidden\" name=\"act\" value=\"upd\">");
-
-        out.println("<fieldset>");
-        out.println("<legend>Configuraci&oacute;n</legend>");
-        out.println("Mensaje de correo de aviso:");
-        out.println("<br/>");
-        out.print("<textarea name=\"mInfoBody\" rows=10 cols=80>");
-        out.print(infoMessage);
-        out.println("</textarea>");
-        out.println("<br/>");
-        out.println("Mensaje de correo de aceptación:");
-        out.println("<br/>");
-        out.print("<textarea name=\"mAcceptBody\" rows=10 cols=80>");
-        out.print(acceptMessage);
-        out.println("</textarea>");
-        out.println("<br/>");
-        out.println("<font style=\"color: #428AD4; font-family: Verdana; font-size: 10px;\">");
-        out.println("		<b>Tags:</b><br>");
-        out.println("       &nbsp;&nbsp;{direlement.title}<BR>");
-        out.println("       &nbsp;&nbsp;{direlement.description}<BR>");
-        out.println("       &nbsp;&nbsp;{direlement.uri}<BR>");
-        out.println("       &nbsp;&nbsp;{direlement.webpage}<BR>");
-        out.println("       &nbsp;&nbsp;{direlement.encodeduri}<BR>");
-        out.println("       &nbsp;&nbsp;{direlement.claimjustify}<BR>");
-        out.println("       &nbsp;&nbsp;{user.login}<BR>");
-        out.println("       &nbsp;&nbsp;{user.fullname}<BR>");
-        out.println("       &nbsp;&nbsp;{user.email}<BR>");
-        out.println("       &nbsp;&nbsp;{user.language}<BR>");
-        out.println("       &nbsp;&nbsp;{webpath}<BR>");
-        out.println("       &nbsp;&nbsp;{distpath}<BR>");
-        out.println("       &nbsp;&nbsp;{webworkpath}<BR>");
-        out.println("       &nbsp;&nbsp;{websiteid}<BR>");
-        out.println("       &nbsp;&nbsp;{workpath}<BR>");
-        out.println("	</font>");
-        out.println("</fieldset>");
-        out.println("<fieldset>");
-        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"submit/btnSend\" >Enviar</button>");
-        out.println("</fieldset>");
-        out.println("</form>");
+        out.println("<div class=\"swbform\"\">\n" +
+                    "  <form action=\"#\"><fieldset><legend>Tags para texto de reclamos</legend>\n" +
+                    "      &nbsp;&nbsp;{direlement.title}<BR>" +
+                    "      &nbsp;&nbsp;{direlement.description}<BR>" +
+                    "      &nbsp;&nbsp;{direlement.uri}<BR>" +
+                    "      &nbsp;&nbsp;{direlement.webpage}<BR>" +
+                    "      &nbsp;&nbsp;{direlement.encodeduri}<BR>" +
+                    "      &nbsp;&nbsp;{direlement.claimjustify}<BR>" +
+                    "      &nbsp;&nbsp;{user.login}<BR>" +
+                    "      &nbsp;&nbsp;{user.fullname}<BR>" +
+                    "      &nbsp;&nbsp;{user.email}<BR>" +
+                    "      &nbsp;&nbsp;{user.language}<BR>" +
+                    "      &nbsp;&nbsp;{webpath}<BR>" +
+                    "      &nbsp;&nbsp;{distpath}<BR>" +
+                    "      &nbsp;&nbsp;{webworkpath}<BR>" +
+                    "      &nbsp;&nbsp;{websiteid}<BR>" +
+                    "      &nbsp;&nbsp;{workpath}<BR>" +
+                    "  </fieldset></form>"+
+                    "</div>");
         out.println("</div>");
     }
 
@@ -591,8 +566,8 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
                     "Para aceptar o rechazar el reclamo visite la siguiente liga: " +
                     "<a href=\"" + realURL + "\">" + realURL + "</a>";
 
-            String messageBody = getResourceBase().getAttribute("messageBody");
-            if (messageBody == null) {
+            String messageBody = getDirClaimMessage();
+            if (messageBody == null || messageBody.trim().equals("")) {
                 messageBody = defMessageBody;
             } else {
                 messageBody = replaceTags(messageBody, request, response);
@@ -635,8 +610,8 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
                     "es responsable de la administración del mismo. Para ver los detalles del elemento, visite la" +
                     "siguiente liga:\n\n" + "<a href=\"" + realURL + "\">" + realURL + "</a>";
 
-            String messageBody = getResourceBase().getAttribute("mAcceptBody");
-            if (messageBody == null) {
+            String messageBody = getDirAcceptClaimMessage();
+            if (messageBody == null || messageBody.trim().equals("")) {
                 messageBody = defMessageBody;
             } else {
                 messageBody = replaceTags(messageBody, request, response);
