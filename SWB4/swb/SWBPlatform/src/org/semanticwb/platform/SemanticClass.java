@@ -30,6 +30,8 @@ package org.semanticwb.platform;
 
 import com.hp.hpl.jena.ontology.OntClass;
 
+import com.hp.hpl.jena.ontology.OntProperty;
+import com.hp.hpl.jena.ontology.Restriction;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
