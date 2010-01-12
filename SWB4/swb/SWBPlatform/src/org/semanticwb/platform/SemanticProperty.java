@@ -28,11 +28,16 @@
 
 package org.semanticwb.platform;
 
+import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntProperty;
+import com.hp.hpl.jena.ontology.Restriction;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.base.util.URLEncoder;
 
@@ -70,18 +75,42 @@ public class SemanticProperty
 
     private boolean rangeCheck=false;
     private Resource range=null;
+
+    private HashMap<String,ArrayList<Restriction>> restrictions=null;
+    private HashMap<String,SemanticClass> allvalues=null;
     
     public SemanticProperty(Property prop)
     {
         this.m_prop=prop;
-        if(hasInverse())
+        if(m_prop instanceof OntProperty)
         {
-            if(m_prop instanceof OntProperty)
+            if(hasInverse())
             {
                 m_inverse=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(((OntProperty)m_prop).getInverse());
                 m_inverse.isInverse=true;
                 m_inverse.m_inverse=this;
                 //System.out.println(prop+" hasInverse "+m_inverse);
+            }
+
+            restrictions=new HashMap();
+            allvalues=new HashMap();
+            Iterator<Restriction> it=((OntProperty)m_prop).listReferringRestrictions();
+            while (it.hasNext())
+            {
+                Restriction restriction = it.next();
+                Iterator<OntClass>it2=restriction.listSubClasses();
+                while (it2.hasNext())
+                {
+                    OntClass ontClass = it2.next();
+                    ArrayList<Restriction> list=restrictions.get(ontClass.getURI());
+                    if(list==null)
+                    {
+                        list=new ArrayList();
+                        restrictions.put(ontClass.getURI(), list);
+                    }
+                    list.add(restriction);
+                    //System.out.println(prop+" restriction "+ontClass);
+                }
             }
         }
     }
@@ -337,7 +366,7 @@ public class SemanticProperty
 
 
     /**
-     * Si esta propiedad se utiliza para definir la relacio padre-hijo en el arbol de navegacion
+     * Si esta propiedad se utiliza para definir la relacio hijo-padre en el arbol de navegacion
      * @return
      */
     public boolean isInverseHeraquicalRelation()
@@ -679,4 +708,30 @@ public class SemanticProperty
     {
         return isInt() || isLong() || isByte() || isDouble() || isFloat() || isShort();
     }
+
+    public SemanticClass getAllValuesFromRestrictionClass(SemanticClass cls)
+    {
+        SemanticClass rcls=allvalues.get(cls.getURI());
+        if(rcls==null)
+        {
+            ArrayList list=restrictions.get(cls.getURI());
+            if(list!=null)
+            {
+                Iterator<Restriction> it=list.iterator();
+                while (it.hasNext())
+                {
+                    Restriction restriction = it.next();
+                    if(restriction.isAllValuesFromRestriction())
+                    {
+                        rcls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(restriction.getProperty(m_prop.getModel().getProperty("http://www.w3.org/2002/07/owl#allValuesFrom")).getResource().getURI());
+                    }
+                }
+            }
+            allvalues.put(cls.getURI(), rcls);
+        }
+        return rcls;
+    }
+
+
+
 }
