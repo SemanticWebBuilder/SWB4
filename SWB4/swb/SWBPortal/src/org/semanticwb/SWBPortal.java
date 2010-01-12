@@ -1407,7 +1407,12 @@ public class SWBPortal {
                                     value = SWBUtils.TEXT.replaceAll(value, "%3F", "?");
 
                                     String sruta = null;
-                                    if ((name.toLowerCase().equals("src") || name.toLowerCase().equals("href") || name.toLowerCase().equals("background") || name.toLowerCase().equals("codebase") || name.toLowerCase().equals("value")) && !value.startsWith("http://") && !value.startsWith("https://") && !value.startsWith("mailto:") && !value.startsWith("javascript:") && !value.startsWith("ftp:") && !value.startsWith("rtsp:") && !value.startsWith("telnet:") && !value.startsWith("#") && !value.startsWith("/") && !value.startsWith("../") && !value.startsWith("{")) { //Comentado Jorge Jiménez y Vic Lorenzana (30/07/2009)
+                                    if (name.toLowerCase().equals("src") && tag.getTagString().toLowerCase().equals("img")) // imagenes deben siempre parsearse, agregado por Víctor Lorenzana
+                                    {
+                                        sruta = ruta;
+                                        value = findFileName(value);
+                                    }
+                                    else if ((name.toLowerCase().equals("src") || name.toLowerCase().equals("href") || name.toLowerCase().equals("background") || name.toLowerCase().equals("codebase") || name.toLowerCase().equals("value")) && !value.startsWith("http://") && !value.startsWith("https://") && !value.startsWith("mailto:") && !value.startsWith("javascript:") && !value.startsWith("ftp:") && !value.startsWith("rtsp:") && !value.startsWith("telnet:") && !value.startsWith("#") && !value.startsWith("/") && !value.startsWith("../") && !value.startsWith("{")) { //Comentado Jorge Jiménez y Vic Lorenzana (30/07/2009)
                                         if (!tag.getTagString().toLowerCase().equals("input") && !value.toLowerCase().equals("true") && !value.toLowerCase().equals("false") && value.indexOf(".") > -1) {
                                             sruta = ruta;
                                         }
