@@ -302,7 +302,7 @@ public abstract class OfficeApplication
             CreatePageResultProducer resultProducer = new CreatePageResultProducer();            
             WizardPage[] clazz = new WizardPage[]
             {
-                new SelectPage(), new TitleAndDescription(false), new SelectWebPageID()
+                new SelectPage(null), new TitleAndDescription(false), new SelectWebPageID()
             };
             Wizard wiz = WizardPage.createWizard("Asistente de creación de página", clazz, resultProducer);            
             wiz.show();

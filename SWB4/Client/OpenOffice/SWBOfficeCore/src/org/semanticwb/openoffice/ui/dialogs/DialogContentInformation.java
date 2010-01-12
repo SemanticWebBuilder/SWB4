@@ -1,26 +1,25 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 /*
  * DialogContentInformation.java
  *
@@ -28,8 +27,6 @@
  */
 package org.semanticwb.openoffice.ui.dialogs;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Frame;
@@ -40,9 +37,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -53,6 +48,7 @@ import javax.swing.table.TableColumn;
 import org.semanticwb.office.interfaces.CategoryInfo;
 import org.semanticwb.office.interfaces.ResourceInfo;
 import org.semanticwb.office.interfaces.PropertyInfo;
+import org.semanticwb.office.interfaces.RepositoryInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.openoffice.OfficeApplication;
 import org.semanticwb.openoffice.OfficeDocument;
@@ -65,7 +61,7 @@ import org.semanticwb.openoffice.ui.icons.ImageLoader;
 public class DialogContentInformation extends javax.swing.JDialog
 {
 
-    private String contentId,  repository;
+    private String contentId, repository;
     private OfficeDocument document;
     private String type;
 
@@ -171,7 +167,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         try
         {
             PropertyInfo[] props = OfficeApplication.getOfficeDocumentProxy().getContentProperties(repositoryName, type);
-            if (props==null || props.length == 0)
+            if (props == null || props.length == 0)
             {
                 this.jTabbedPane1.remove(this.jPanelProperties);
                 /*JPanel panel = new JPanel();
@@ -250,7 +246,7 @@ public class DialogContentInformation extends javax.swing.JDialog
     class VersionRender implements TableCellRenderer
     {
 
-        private String repositoryName,  contentId;
+        private String repositoryName, contentId;
 
         public VersionRender(String repositoryName, String contentId)
         {
@@ -726,7 +722,7 @@ public class DialogContentInformation extends javax.swing.JDialog
 
     private void jButtonPublishActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonPublishActionPerformed
     {//GEN-HEADEREND:event_jButtonPublishActionPerformed
-        this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+        this.setCursor(new Cursor(Cursor.WAIT_CURSOR));        
         document.publish();
         this.repaint();
         this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
@@ -1100,11 +1096,11 @@ public class DialogContentInformation extends javax.swing.JDialog
 
     private void jTablePagesMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_jTablePagesMouseClicked
     {//GEN-HEADEREND:event_jTablePagesMouseClicked
-        if(evt.getClickCount()==2)
+        if (evt.getClickCount() == 2)
         {
             int row = jTablePages.getSelectedRow();
             //int column = jTablePages.getSelectedColumn();
-            if(row!=-1)
+            if (row != -1)
             {
                 jButtonEditActionPerformed(null);
             }
@@ -1118,7 +1114,6 @@ public class DialogContentInformation extends javax.swing.JDialog
             jButtonDeleteVersionActionPerformed(null);
         }
     }//GEN-LAST:event_jTableSummary1KeyReleased
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAccept;
     private javax.swing.JButton jButtonCancel;
