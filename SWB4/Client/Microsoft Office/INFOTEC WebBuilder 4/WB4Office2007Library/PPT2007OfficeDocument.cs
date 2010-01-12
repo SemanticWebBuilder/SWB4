@@ -241,15 +241,16 @@ namespace WB4Office2007Library
             {
                 htmlFile.Delete();
             }
-            DialogResult res=MessageBox.Show("¿Desea publicar el documento con formato compatible con todos los navegadores?", "Formato de almacenamiento", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (res == DialogResult.Yes)
+            presentation.SaveAs(htmlFile.FullName, PowerPoint.PpSaveAsFileType.ppSaveAsHTMLDual, Office.MsoTriState.msoFalse);
+            //DialogResult res=MessageBox.Show("¿Desea publicar el documento con formato compatible con todos los navegadores?", "Formato de almacenamiento", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            /*if (res == DialogResult.Yes)
             {
                 presentation.SaveAs(htmlFile.FullName, PowerPoint.PpSaveAsFileType.ppSaveAsHTMLDual, Office.MsoTriState.msoFalse);
             }
             else
             {
                 presentation.SaveAs(htmlFile.FullName, PowerPoint.PpSaveAsFileType.ppSaveAsHTML, Office.MsoTriState.msoFalse);
-            }
+            }*/
             presentation.Close();
             presentation = (PowerPoint.Presentation)application.Presentations.Open(docX.FullName, Office.MsoTriState.msoFalse, Office.MsoTriState.msoFalse, Office.MsoTriState.msoTrue);
             return htmlFile;
@@ -282,8 +283,8 @@ namespace WB4Office2007Library
         }
 
         protected override void PrepareHtmlFileToSend(FileInfo htmlFile)
-        {
-            
+        {            
+
         }
 
         protected override bool IsNew
