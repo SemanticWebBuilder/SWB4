@@ -30,7 +30,7 @@ using System.Diagnostics;
 using WBOffice4;
 using PowerPoint = Microsoft.Office.Interop.PowerPoint;
 using Office = Microsoft.Office.Core;
-
+using System.Windows.Forms;
 namespace WB4Office2007Library
 {
     public class PowerPoint2007OfficeDocument : OfficeDocument
@@ -241,7 +241,15 @@ namespace WB4Office2007Library
             {
                 htmlFile.Delete();
             }
-            presentation.SaveAs(htmlFile.FullName, PowerPoint.PpSaveAsFileType.ppSaveAsHTML, Office.MsoTriState.msoFalse);
+            DialogResult res=MessageBox.Show("¿Desea publicar el documento con formato compatible con todos los navegadores?", "Formato de almacenamiento", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (res == DialogResult.Yes)
+            {
+                presentation.SaveAs(htmlFile.FullName, PowerPoint.PpSaveAsFileType.ppSaveAsHTMLDual, Office.MsoTriState.msoFalse);
+            }
+            else
+            {
+                presentation.SaveAs(htmlFile.FullName, PowerPoint.PpSaveAsFileType.ppSaveAsHTML, Office.MsoTriState.msoFalse);
+            }
             presentation.Close();
             presentation = (PowerPoint.Presentation)application.Presentations.Open(docX.FullName, Office.MsoTriState.msoFalse, Office.MsoTriState.msoFalse, Office.MsoTriState.msoTrue);
             return htmlFile;
