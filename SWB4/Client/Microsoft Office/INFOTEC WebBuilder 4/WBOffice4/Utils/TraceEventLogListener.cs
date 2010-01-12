@@ -16,7 +16,7 @@ namespace WBOffice4.Utils
                 if (!EventLog.SourceExists(sourceEvent))
                 {
                     try
-                    {
+                    {                        
                         EventLog.CreateEventSource(sourceEvent, eventLogName);
                     }
                     catch (Exception e)
@@ -25,12 +25,13 @@ namespace WBOffice4.Utils
                         Debug.WriteLine(e.StackTrace);
                     }
                 }
-                log.Source = sourceEvent;
+                log.Source = sourceEvent;                
                 string logname = EventLog.LogNameFromSourceName(sourceEvent, ".");
                 if (logname != null)
                 {
                     log.Log = logname;
                 }
+                log.ModifyOverflowPolicy(OverflowAction.OverwriteOlder, 5);                
             }
             catch (Exception e)
             {
@@ -40,20 +41,64 @@ namespace WBOffice4.Utils
         }
         public override void Write(string message)
         {
-            log.WriteEntry(OfficeApplication.m_version+ "\r\n"+message, EventLogEntryType.Information);            
+            try
+            {
+                log.WriteEntry(OfficeApplication.m_version + "\r\n" + message, EventLogEntryType.Information);
+            }
+            catch (System.ComponentModel.Win32Exception we)
+            {
+                if (we.Message.Equals("The event log file is full",StringComparison.CurrentCultureIgnoreCase))
+                {
+                    log.Clear();
+                    log.WriteEntry(OfficeApplication.m_version + "\r\n" + message, EventLogEntryType.Information);
+                }
+            }
         }
 
         public override void WriteLine(string message)
         {
-            log.WriteEntry(OfficeApplication.m_version + "\r\n" + message, EventLogEntryType.Information);
+            try
+            {
+                log.WriteEntry(OfficeApplication.m_version + "\r\n" + message, EventLogEntryType.Information);
+            }
+            catch (System.ComponentModel.Win32Exception we)
+            {
+                if (we.Message.Equals("The event log file is full",StringComparison.CurrentCultureIgnoreCase))
+                {
+                    log.Clear();
+                    log.WriteEntry(OfficeApplication.m_version + "\r\n" + message, EventLogEntryType.Information);
+                }
+            }
         }
         public void WriteError(Exception e)
         {
-            log.WriteEntry(OfficeApplication.m_version + "\r\n\r\n" + e.Message + "\r\n" + e.StackTrace, EventLogEntryType.Error);
+            try
+            {
+                log.WriteEntry(OfficeApplication.m_version + "\r\n\r\n" + e.Message + "\r\n" + e.StackTrace, EventLogEntryType.Error);
+            }
+            catch (System.ComponentModel.Win32Exception we)
+            {
+                if (we.Message.Equals("The event log file is full",StringComparison.CurrentCultureIgnoreCase))
+                {
+                    log.Clear();
+                    log.WriteEntry(OfficeApplication.m_version + "\r\n\r\n" + e.Message + "\r\n" + e.StackTrace, EventLogEntryType.Error);
+                }
+            }
         }
         public void WriteWarning(string message)
         {
-            log.WriteEntry(OfficeApplication.m_version + "\r\n" + message, EventLogEntryType.Error);
+            try
+            {
+                log.WriteEntry(OfficeApplication.m_version + "\r\n" + message, EventLogEntryType.Error);
+            }
+             catch (System.ComponentModel.Win32Exception we)
+            {
+                if (we.Message.Equals("The event log file is full",StringComparison.CurrentCultureIgnoreCase))
+                {
+                    log.Clear();
+                    log.WriteEntry(OfficeApplication.m_version + "\r\n" + message, EventLogEntryType.Error);
+                }
+            }
         }
     }
 }
