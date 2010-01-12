@@ -6,10 +6,12 @@ public class DirectoryResourceBase extends org.semanticwb.portal.community.Commu
        public static final org.semanticwb.platform.SemanticProperty swbcomm_dirEditJsp=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#dirEditJsp");
        public static final org.semanticwb.platform.SemanticClass swbcomm_DirectoryClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#DirectoryClass");
        public static final org.semanticwb.platform.SemanticProperty swbcomm_directoryClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#directoryClass");
+       public static final org.semanticwb.platform.SemanticProperty swbcomm_dirAcceptClaimMessage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#dirAcceptClaimMessage");
        public static final org.semanticwb.platform.SemanticProperty swbcomm_dirListJsp=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#dirListJsp");
        public static final org.semanticwb.platform.SemanticClass swbcomm_DirectoryObject=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#DirectoryObject");
        public static final org.semanticwb.platform.SemanticProperty swbcomm_hasDirectoryObjectInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasDirectoryObjectInv");
        public static final org.semanticwb.platform.SemanticProperty swbcomm_dirAddJsp=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#dirAddJsp");
+       public static final org.semanticwb.platform.SemanticProperty swbcomm_dirClaimMessage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#dirClaimMessage");
        public static final org.semanticwb.platform.SemanticProperty swbcomm_dirDetailJsp=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#dirDetailJsp");
        public static final org.semanticwb.platform.SemanticClass swbcomm_DirectoryResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#DirectoryResource");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#DirectoryResource");
@@ -48,6 +50,16 @@ public class DirectoryResourceBase extends org.semanticwb.portal.community.Commu
          org.semanticwb.platform.SemanticObject ret=null;
          ret=getSemanticObject().getObjectProperty(swbcomm_directoryClass);
          return ret;
+    }
+
+    public String getDirAcceptClaimMessage()
+    {
+        return getSemanticObject().getProperty(swbcomm_dirAcceptClaimMessage);
+    }
+
+    public void setDirAcceptClaimMessage(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_dirAcceptClaimMessage, value);
     }
 
     public String getListJsp()
@@ -91,6 +103,16 @@ public class DirectoryResourceBase extends org.semanticwb.portal.community.Commu
     public void setAddJsp(String value)
     {
         getSemanticObject().setProperty(swbcomm_dirAddJsp, value);
+    }
+
+    public String getDirClaimMessage()
+    {
+        return getSemanticObject().getProperty(swbcomm_dirClaimMessage);
+    }
+
+    public void setDirClaimMessage(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_dirClaimMessage, value);
     }
 
     public String getDetailJsp()
