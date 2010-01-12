@@ -81,6 +81,7 @@ public class OpenResultProducer implements WizardResultProducer
                 String repositoryName = wizardData.get(Search.WORKSPACE).toString();
                 VersionInfo versioninfo = (VersionInfo) wizardData.get(SelectVersionToOpen.VERSION);
                 String fileName = openOfficeDocument.openContent(repositoryName, versioninfo);
+                fileName=java.net.URLDecoder.decode(fileName, "utf-8");
                 XmlProxy proxy = (XmlProxy) openOfficeDocument;
                 File dir = (File) wizardData.get(SelectDirectory.DIRECTORY);
                 contentfile = new File(dir.getAbsolutePath() + "/" + fileName);
