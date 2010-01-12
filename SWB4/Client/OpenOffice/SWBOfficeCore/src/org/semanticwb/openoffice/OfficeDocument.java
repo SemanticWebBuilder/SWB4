@@ -49,6 +49,7 @@ import javax.swing.UIManager;
 import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPage;
 import org.semanticwb.office.interfaces.ContentInfo;
+import org.semanticwb.office.interfaces.RepositoryInfo;
 import org.semanticwb.openoffice.interfaces.IOpenOfficeDocument;
 import org.semanticwb.openoffice.ui.dialogs.DialogContentInformation;
 import org.semanticwb.openoffice.ui.dialogs.DialogDocumentDetail;
@@ -86,7 +87,6 @@ public abstract class OfficeDocument
     // By default the content is not published
     private String contentID = null;
     private String workspaceID = null;
-
 
     static
     {
@@ -389,9 +389,10 @@ public abstract class OfficeDocument
 
     public final void showDocumentDetail()
     {
-        DialogDocumentDetail dlg=new DialogDocumentDetail(this);
+        DialogDocumentDetail dlg = new DialogDocumentDetail(this);
         dlg.setVisible(true);
     }
+
     public final void showDocumentInfo()
     {
         if (OfficeApplication.tryLogin())
@@ -413,7 +414,7 @@ public abstract class OfficeDocument
                             if (res == JOptionPane.YES_OPTION)
                             {
                                 cleanContentProperties();
-                                saveContentId(info.id, info.respositoryName);                                
+                                saveContentId(info.id, info.respositoryName);
                                 JOptionPane.showMessageDialog(null, "¡El documento se ha convertido a versión 4, puede continuar!", "Publicación de contenido", JOptionPane.OK_OPTION | JOptionPane.QUESTION_MESSAGE);
                             }
                             if (res == JOptionPane.CANCEL_OPTION)
@@ -683,10 +684,26 @@ public abstract class OfficeDocument
         {
             contentID = this.getCustomProperties().get(CONTENT_ID_NAME);
             String repositoryName = this.getCustomProperties().get(WORKSPACE_ID_NAME);
+            String siteid = null;
+            try
+            {
+                for (RepositoryInfo orepository : OfficeApplication.getOfficeApplicationProxy().getRepositories())
+                {
+                    if (orepository.name != null && orepository.name.equals(repositoryName))
+                    {
+                        siteid = orepository.siteInfo.id;
+                        break;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+            }
+
             PublishContentToWebPageResultProducer resultProducer = new PublishContentToWebPageResultProducer(contentID, repositoryName);
             WizardPage[] clazz = new WizardPage[]
             {
-                new TitleAndDescription(false), new SelectPage(null), new PublishVersion(contentID, repositoryName), new ViewProperties(repositoryName, contentID)
+                new TitleAndDescription(false), new SelectPage(siteid), new PublishVersion(contentID, repositoryName), new ViewProperties(repositoryName, contentID)
             };
             Wizard wiz = WizardPage.createWizard("Asistente de publicación de contenido en página web", clazz, resultProducer);
             wiz.show();
@@ -725,7 +742,7 @@ public abstract class OfficeDocument
                                 if (res == JOptionPane.YES_OPTION)
                                 {
                                     cleanContentProperties();
-                                    saveContentId(info.id, info.respositoryName);                                    
+                                    saveContentId(info.id, info.respositoryName);
                                     JOptionPane.showMessageDialog(null, "¡El documento se ha convertido a versión 4, puede continuar!", "Publicación de contenido", JOptionPane.OK_OPTION | JOptionPane.QUESTION_MESSAGE);
                                 }
                                 if (res == JOptionPane.CANCEL_OPTION)
