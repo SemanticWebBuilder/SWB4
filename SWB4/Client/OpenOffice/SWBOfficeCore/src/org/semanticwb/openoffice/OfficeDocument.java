@@ -782,6 +782,18 @@ public abstract class OfficeDocument
                 if (canbepublished)
                 {
                     try
+                    {                        
+                        if(!validaNombre(this.getLocalPath()))
+                        {
+                            return;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                    }
+
+
+                    try
                     {
                         if (isPublicated() && OfficeApplication.getOfficeDocumentProxy().exists(this.workspaceID, this.contentID))
                         {
@@ -826,6 +838,46 @@ public abstract class OfficeDocument
                 }
             }
         }
+    }
+    public static boolean validaNombre(File file)
+    {
+        String name=file.getName();
+        int pos=name.indexOf(".");        
+        if(pos!=-1)
+        {
+            name=file.getName().substring(0,pos);
+        }
+        try
+        {
+            name=java.net.URLDecoder.decode(name, "utf-8");
+        }
+        catch(Exception e){}
+        if(name.length()>40)
+        {
+            JOptionPane.showMessageDialog(null,"El nombre del archivo es mayor a 40 caracteres","Validación de nombre de archivo",JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        char[] letras=name.toCharArray();
+        for(int i=0;i<letras.length;i++)
+        {
+            char letra=letras[i];
+            if(Character.isWhitespace(letra))
+            {
+                JOptionPane.showMessageDialog(null,"El nombre tiene espacios","Validación de nombre de archivo",JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+            else if(!(Character.isDigit(letra) || Character.isLetter(letra)))
+            {
+                JOptionPane.showMessageDialog(null,"El nombre tiene caracteres no válidos:"+letra,"Validación de nombre de archivo",JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+            else if(letra>123)
+            {
+                JOptionPane.showMessageDialog(null,"El nombre tiene caracteres no válidos:"+letra,"Validación de nombre de archivo",JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+        }
+        return true;
     }
 
     void saveContentId(String contentId, String workspaceId) throws WBException

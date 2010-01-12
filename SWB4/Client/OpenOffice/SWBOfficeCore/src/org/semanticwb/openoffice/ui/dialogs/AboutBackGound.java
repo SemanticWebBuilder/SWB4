@@ -48,7 +48,7 @@ public class AboutBackGound extends javax.swing.JPanel {
 
     private Image imgFondo=ImageLoader.images.get("splash").getImage();
     Dialog parent;
-    private static final String version="4.0.1.0";
+    private static final String version="4.0.1.1";
     /** Creates new form AboutBackGound */
     public AboutBackGound(Dialog parent) {
         this.parent=parent;        
