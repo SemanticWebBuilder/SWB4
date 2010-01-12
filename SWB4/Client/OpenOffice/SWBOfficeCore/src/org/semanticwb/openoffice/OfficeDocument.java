@@ -686,7 +686,7 @@ public abstract class OfficeDocument
             PublishContentToWebPageResultProducer resultProducer = new PublishContentToWebPageResultProducer(contentID, repositoryName);
             WizardPage[] clazz = new WizardPage[]
             {
-                new TitleAndDescription(false), new SelectPage(), new PublishVersion(contentID, repositoryName), new ViewProperties(repositoryName, contentID)
+                new TitleAndDescription(false), new SelectPage(null), new PublishVersion(contentID, repositoryName), new ViewProperties(repositoryName, contentID)
             };
             Wizard wiz = WizardPage.createWizard("Asistente de publicación de contenido en página web", clazz, resultProducer);
             wiz.show();
@@ -887,7 +887,7 @@ public abstract class OfficeDocument
             AddLinkProducer resultProducer = new AddLinkProducer(this);
             WizardPage[] clazz = new WizardPage[]
             {
-                new SelectPage(), new SelectTitle()
+                new SelectPage(null), new SelectTitle()
             };
             Wizard wiz = WizardPage.createWizard("Asistente de inserción de liga de página", clazz, resultProducer);
             wiz.show();
