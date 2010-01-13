@@ -37,20 +37,19 @@ import com.infotec.wb.lib.*;
 import java.util.*;
 
 import com.infotec.appfw.exception.*;
-import com.infotec.appfw.lib.DBPool.DBConnectionManager;
-import com.infotec.wb.core.db.DBDbSync;
-import com.infotec.wb.core.db.RecAdmLog;
 import com.infotec.appfw.lib.AFObserver;
 import com.infotec.wb.lib.WBDBRecord;
 import com.infotec.appfw.util.AFUtils;
-import com.infotec.wb.util.*;
-import com.infotec.wb.core.*;
 import org.w3c.dom.*;
 
 import com.infotec.appfw.util.db.ObjectDecoder;
 import com.infotec.appfw.util.db.ObjectEncoder;
 
-import java.io.*;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.model.ResourceType;
+import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.WebSite;
 
 /** objeto: cache de registro de base de datos de la tabla wbresourcetype
  *
@@ -61,11 +60,17 @@ import java.io.*;
  */
 public class RecResourceType implements WBDBRecord
 {
+    private static Logger log = SWBUtils.getLogger(RecResourceType.class);
     org.semanticwb.model.ResourceType res = null;
 
-    public RecResourceType(org.semanticwb.model.ResourceType resource)
+    public RecResourceType(org.semanticwb.model.ResourceType resourceType)
     {
-        res = resource;
+        res = resourceType;
+        try {
+            load();
+        } catch (Exception e) {
+            log.error("Error al cargar el ResourceType de la BD...",e);
+        }
     }
 
     public org.semanticwb.model.ResourceType getNative()
@@ -109,11 +114,11 @@ public class RecResourceType implements WBDBRecord
         this.bundle = null;
         this.cache = 0;
         this.lastupdate = null;
-        if(WBLoader.getInstance().haveDBTables())
-        {
-            registerObserver(DBResourceType.getInstance());
-            //registerObserver(ObjectMgr.getInstance());
-        }
+//        if(WBLoader.getInstance().haveDBTables())
+//        {
+//            registerObserver(DBResourceType.getInstance());
+//            //registerObserver(ObjectMgr.getInstance());
+//        }
     }
 
     /**
@@ -381,46 +386,21 @@ public class RecResourceType implements WBDBRecord
     public void remove(String user, String comment) throws AFException
     {
         remove();
-        if(!virtual)
-        {
-            RecAdmLog rec = new RecAdmLog(user, "remove", "ResourceType", getId(), getTopicMapId(), null, comment, lastupdate);
-            rec.create();
-        }
+
     }
 
     /** Elimina el registro de la base de datos asi como todopublic void remove() throws AFException
      * @throws com.infotec.appfw.exception.AFException  */
     public void remove() throws AFException
     {
-        DBConnectionManager mgr = null;
-        Connection con;
-        try
+        if(!virtual)
         {
-            if(!virtual)
-            {            
-                mgr = DBConnectionManager.getInstance();
-                con = mgr.getConnection((String) com.infotec.appfw.util.AFUtils.getInstance().getEnv("wb/db/nameconn"), "RecResourceType.remove()");
-                String query = "delete from wbresourcetype where id=? and idtm=?";
-                PreparedStatement st = con.prepareStatement(query);
-                st.setInt(1, id);
-                st.setString(2, idtm);
-                st.executeUpdate();
-                st.close();
-                con.close();
-                DBDbSync.getInstance().saveChange("wbresourcetype", "remove", id, idtm, null);
-            }
-            Iterator it = observers.iterator();
-            while (it.hasNext())
-            {
-                ((AFObserver) it.next()).sendDBNotify("remove", this);
-            }
-
-        } catch (Exception e)
+            res.remove();
+        }
+        Iterator it = observers.iterator();
+        while (it.hasNext())
         {
-            throw new AFException(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_RecObject_remove_removeElementError") + "...", "RecResourceType:remove()", e);
-        } finally
-        {
-            if (mgr != null) mgr.release();
+            ((AFObserver) it.next()).sendDBNotify("remove", this);
         }
     }
 
@@ -431,60 +411,30 @@ public class RecResourceType implements WBDBRecord
     public void update(String user, String comment) throws AFException
     {
         update();
-        if(!virtual)
-        {
-            RecAdmLog rec = new RecAdmLog(user, "update", "ResourceType", getId(), getTopicMapId(), null, comment, lastupdate);
-            rec.create();
-        }
+
     }
 
     /** actualiza el objeto en la base de datos y altualiza la informacion de los objetos que esten en memoria
      * @throws com.infotec.appfw.exception.AFException  */
     public void update() throws AFException
     {
-        DBConnectionManager mgr = null;
-        Connection con;
-        try
+        lastupdate = new Timestamp(new java.util.Date().getTime());
+        if(!virtual)
         {
-            lastupdate = new Timestamp(new java.util.Date().getTime());
-            if(!virtual)
-            {            
-                mgr = DBConnectionManager.getInstance();
-                con = mgr.getConnection((String) com.infotec.appfw.util.AFUtils.getInstance().getEnv("wb/db/nameconn"), "RecResourceType.update()");
-                String query = "update wbresourcetype set name=?,displayname=?,objclass=?,description=?,xml=?,type=?,bundle=?,cache=?,lastupdate=? where id=? and idtm=?";
-                PreparedStatement st = con.prepareStatement(query);
-                st.setString(1, name);
-                st.setString(2, displayname);
-                st.setString(3, objclass);
-                st.setString(4, description);
-                if (xml == null)
-                    st.setString(5, null);
-                else
-                    st.setAsciiStream(5, com.infotec.appfw.util.AFUtils.getInstance().getStreamFromString(xml), xml.length());
-                st.setInt(6, type);
-                st.setString(7, bundle);
-                st.setInt(8, cache);
-                st.setTimestamp(9, lastupdate);
-                st.setInt(10, id);
-                st.setString(11, idtm);
-                st.executeUpdate();
-                st.close();
-                con.close();
-                DBDbSync.getInstance().saveChange("wbresourcetype", "update", id, idtm, lastupdate);
-            }
-            Iterator it = observers.iterator();
-            while (it.hasNext())
-            {
-                ((AFObserver) it.next()).sendDBNotify("update", this);
-            }
-
-        } catch (Exception e)
-        {
-            throw new AFException(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_RecObject_update_updateElementError") + "...", "RecResourceType:update()", e);
-        } finally
-        {
-            if (mgr != null) mgr.release();
+            res.setTitle(name);
+            res.setResourceClassName(objclass);
+            res.setDescription(description);
+            res.setResourceMode(type);
+            res.setResourceBundle(bundle);
+            res.setResourceCache(cache);
+            res.setUpdated(new java.util.Date(lastupdate.getTime()));
         }
+        Iterator it = observers.iterator();
+        while (it.hasNext())
+        {
+            ((AFObserver) it.next()).sendDBNotify("update", this);
+        }
+
     }
 
     /** crea un nuevo registro en la base de datos asi como un nuevo objeto en memoria
@@ -494,104 +444,71 @@ public class RecResourceType implements WBDBRecord
     public void create(String user, String comment) throws AFException
     {
         create();
-        RecAdmLog rec = new RecAdmLog(user, "create", "ResourceType", getId(), getTopicMapId(), null, comment, lastupdate);
-        rec.create();
+        //RecAdmLog rec = new RecAdmLog(user, "create", "ResourceType", getId(), getTopicMapId(), null, comment, lastupdate);
+        //rec.create();
     }
 
     /** crea un nuevo registro en la base de datos asi como un nuevo objeto en memoria
      * @throws com.infotec.appfw.exception.AFException  */
     public void create() throws AFException
     {
-        DBConnectionManager mgr = null;
-        Connection con;
-        try
-        {
+
             lastupdate = new Timestamp(new java.util.Date().getTime());
-            mgr = DBConnectionManager.getInstance();
-            con = mgr.getConnection((String) com.infotec.appfw.util.AFUtils.getInstance().getEnv("wb/db/nameconn"), "RecResourceType.create()");
-            if (id == 0)
+            
+            if (idtm!=null && id == 0)
             {
-                PreparedStatement st = con.prepareStatement("SELECT max(id) FROM wbresourcetype where idtm=?");
-                st.setString(1, idtm);
-                ResultSet rs = st.executeQuery();
-                if (rs.next())
-                {
-                    id = rs.getInt(1) + 1;
-                } else
-                    id = 1;
-                rs.close();
-                st.close();
-                if(id<1000 && !AFUtils.getEnv("wb/adminDev","false").equalsIgnoreCase("true") && idtm.equals(com.infotec.topicmaps.bean.TopicMgr.TM_ADMIN))
-                {
-                    id=1000;
-                }                
+                WebSite ws = SWBContext.getWebSite(idtm);
+                //TODO:
+                res = ws.createResourceType(Integer.toString(ResourceType.class.hashCode()));
+                id=Integer.parseInt(res.getId());
             }
-            String query = "insert into wbresourcetype (name,displayname,objclass,description,xml,type,bundle,cache,lastupdate,id,idtm) values (?,?,?,?,?,?,?,?,?,?,?)";
-            PreparedStatement st = con.prepareStatement(query);
-            st.setString(1, name);
-            st.setString(2, displayname);
-            st.setString(3, objclass);
-            st.setString(4, description);
-            if (xml == null)
-                st.setString(5, null);
-            else
-                st.setAsciiStream(5, com.infotec.appfw.util.AFUtils.getInstance().getStreamFromString(xml), xml.length());
-            st.setInt(6, type);
-            st.setString(7, bundle);
-            st.setInt(8, cache);
-            st.setTimestamp(9, lastupdate);
-            st.setInt(10, id);
-            st.setString(11, idtm);
-            st.executeUpdate();
-            st.close();
-            con.close();
+            res.setTitle(name);
+            res.setResourceClassName(objclass);
+            res.setDescription(description);
+            res.setResourceMode(type);
+            res.setResourceBundle(bundle);
+            res.setResourceCache(cache);
+            res.setUpdated(new java.util.Date(lastupdate.getTime()));
+            name=displayname;
+
+            //TODO:
+//            if (xml == null)
+//                st.setString(5, null);
+//            else
+//                st.setAsciiStream(5, com.infotec.appfw.util.AFUtils.getInstance().getStreamFromString(xml), xml.length());
+
+            
             Iterator it = observers.iterator();
             while (it.hasNext())
             {
                 ((AFObserver) it.next()).sendDBNotify("create", this);
             }
-            DBDbSync.getInstance().saveChange("wbresourcetype", "create", id, idtm, lastupdate);
-
-        } catch (Exception e)
-        {
-            throw new AFException(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_RecObject_create_createElementError") + "...", "RecResourceType:create()", e);
-        } finally
-        {
-            if (mgr != null) mgr.release();
-        }
+ 
     }
 
     /** refresca el objeto, esto es lo lee de la base de datos y actualiza los objetos que estan en la memoria
      * @throws com.infotec.appfw.exception.AFException  */
     public void load() throws AFException
     {
-        DBConnectionManager mgr = null;
-        Connection con;
         try
         {
-            mgr = DBConnectionManager.getInstance();
-            con = mgr.getConnection((String) com.infotec.appfw.util.AFUtils.getInstance().getEnv("wb/db/nameconn"), "RecResourceType.load()");
-            String query = "select * from wbresourcetype where id=? and idtm=?";
-            PreparedStatement st = con.prepareStatement(query);
-            st.setInt(1, id);
-            st.setString(2, idtm);
-            ResultSet rs = st.executeQuery();
-            if (rs.next())
+            WebSite ws = SWBContext.getWebSite(idtm);
+            res = ws.getResourceType(Integer.toString(id));
+            if (null!=res)
             {
-                name = rs.getString("name");
-                displayname = rs.getString("displayname");
-                objclass = rs.getString("objclass");
-                description = rs.getString("description");
-                xml = com.infotec.appfw.util.AFUtils.getInstance().readInputStream(rs.getAsciiStream("xml"));
+                name = res.getTitle();
+                displayname = name; //rs.getString("displayname");
+                objclass = res.getResourceClassName();
+                description = res.getDescription();
+                //TODO:
+                //xml = com.infotec.appfw.util.AFUtils.getInstance().readInputStream(rs.getAsciiStream("xml"));
                 dom=null;
-                type = rs.getInt("type");
-                bundle = rs.getString("bundle");
-                cache = rs.getInt("cache");
-                lastupdate = rs.getTimestamp("lastupdate");
+                type = res.getResourceMode();
+                bundle = res.getResourceBundle();
+                cache = res.getResourceCache();
+                lastupdate = new Timestamp(res.getUpdated().getTime());
             }
-            rs.close();
-            st.close();
-            con.close();
+
             Iterator it = observers.iterator();
             while (it.hasNext())
             {
@@ -600,10 +517,7 @@ public class RecResourceType implements WBDBRecord
         } catch (Exception e)
         {
             throw new AFException(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_RecObject_load_loadElementError") + "...", "RecResourceType:load()", e);
-        } finally
-        {
-            if (mgr != null) mgr.release();
-        }
+        } 
     }
 
     public void sendNotify()
