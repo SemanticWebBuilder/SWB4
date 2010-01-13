@@ -217,7 +217,7 @@ public class DialogConfiguration extends javax.swing.JDialog
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                true, false
+                false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -226,6 +226,7 @@ public class DialogConfiguration extends javax.swing.JDialog
         });
         jTable1.setColumnSelectionAllowed(true);
         jTable1.setName("jTable1"); // NOI18N
+        jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(jTable1);
         jTable1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jTable1.getColumnModel().getColumn(0).setHeaderValue(resourceMap.getString("jTable1.columnModel.title0")); // NOI18N
@@ -373,8 +374,12 @@ public class DialogConfiguration extends javax.swing.JDialog
             if(jTable1.getSelectedRow()!=-1)
             {
                 OWL owl=(OWL)model.getValueAt(jTable1.getSelectedRow(), 0);
-                owlsBaseCommons.remove(owl);
-                loadBaseCommonsOWL();
+                int res=JOptionPane.showConfirmDialog(this, "¿Desea eliminar el owl "+ owl +"?","Eliminar OWL",JOptionPane.YES_NO_OPTION);
+                if(res==JOptionPane.YES_OPTION)
+                {
+                    owlsBaseCommons.remove(owl);
+                    loadBaseCommonsOWL();
+                }
             }
         }
         else
@@ -383,7 +388,11 @@ public class DialogConfiguration extends javax.swing.JDialog
             if(jTable2.getSelectedRow()!=-1)
             {
                 OWL owl=(OWL)model.getValueAt(jTable2.getSelectedRow(), 0);
-                owlsProyect.remove(owl);
+                int res=JOptionPane.showConfirmDialog(this, "¿Desea eliminar el owl "+ owl +"?","Eliminar OWL",JOptionPane.YES_NO_OPTION);
+                if(res==JOptionPane.YES_OPTION)
+                {
+                    owlsProyect.remove(owl);
+                }
                 loadProyectOWL();
             }
         }
