@@ -265,12 +265,6 @@ public class WB4Writer extends OfficeDocument
 
         XTextDocument xtd = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, this.document);
         XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
-
-
-
-
-
-
         if (xStorable.hasLocation())
         {
             return getFileFromURL(xtd.getURL());
