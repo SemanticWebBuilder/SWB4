@@ -60,6 +60,11 @@ public final class FileUtil
         {
             path=path.replace('\\', '/');
         }
+        try
+        {
+            path=java.net.URLDecoder.decode(path,"utf-8");
+        }
+        catch(Exception e){}
         return new File(path);
     }
 
