@@ -320,7 +320,7 @@ public class WB4WriterTest
 
 
     @Test
-    //@Ignore
+    @Ignore
     public void showDocumentDetail()
     {
         try
@@ -442,7 +442,7 @@ public class WB4WriterTest
     }
 
     @Test
-    @Ignore
+    //@Ignore
     public void createWebPageTest()
     {
         try
