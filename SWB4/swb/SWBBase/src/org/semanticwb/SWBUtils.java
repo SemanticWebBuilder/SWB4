@@ -140,7 +140,7 @@ public class SWBUtils {
      * The string representing this application's physical path.
      * <p>La cadena que representa la ruta f&iacute;sica de esta aplicaci&oacute;n</p>
      */
-    private static String applicationPath = SWBUtils.class.getResource("/").toString();
+    private static String applicationPath = ""+SWBUtils.class.getResource("/");
 
     /**
      * Defines the size used for creating arrays that will be used in I/O operations.
