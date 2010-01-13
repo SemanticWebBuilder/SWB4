@@ -33,6 +33,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import javax.swing.JOptionPane;
 import org.semanticwb.openoffice.ErrorLog;
 
 /**
@@ -42,7 +43,7 @@ import org.semanticwb.openoffice.ErrorLog;
 public final class FileUtil
 {
 
-    private static final String SCHEMA_FILE = "file:///";
+    private static final String SCHEMA_FILE = "file://";
     private static byte[] buffer = new byte[2048];
 
     private FileUtil()
@@ -51,14 +52,14 @@ public final class FileUtil
     }
 
     public static File getFileFromURL(String path)
-    {
+    {        
         if (path.startsWith(SCHEMA_FILE))
         {
-            path = path.substring(8);
-        }
+            path = path.substring(SCHEMA_FILE.length());
+        }        
         if(path.indexOf('\\')!=-1)
         {
-            path=path.replace('\\', '/');
+            path=path.replaceAll("\\", "/");
         }
         try
         {
