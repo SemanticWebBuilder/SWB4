@@ -56,6 +56,8 @@ import org.w3c.dom.*;
 //import org.apache.xerces.parsers.*;
 
 import java.io.*;
+import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.WebSite;
 
 /** objeto: referencia al registro de la base de datos de la table wbtopic
  * @author Javier Solis Gonzalez
@@ -446,61 +448,41 @@ public class RecTopic implements WBDBRecord
     /**  Elimina el registro de la base de datos asi como todopublic void remove() throws AFException */
     public void remove() throws AFException
     {
-//        DBConnectionManager mgr = null;
-//        Connection con;
-//        try
-//        {
-//            if(!virtual)
-//            {
-//                mgr = DBConnectionManager.getInstance();
-//                con = mgr.getConnection((String) com.infotec.appfw.util.AFUtils.getInstance().getEnv("wb/db/nameconn"));
-//                String query = "delete from wbtopic where id=? and idtm=?";
-//                PreparedStatement st = con.prepareStatement(query);
-//                st.setString(1, id);
-//                st.setString(2, idtm);
-//                st.executeUpdate();
-//                st.close();
-//                con.close();
-//                DBDbSync.getInstance().saveChange("wbtopic", "remove", 0, id + " " + idtm, null);
-//            }
-//            Iterator it = observers.iterator();
-//            while (it.hasNext())
-//            {
-//                ((AFObserver) it.next()).sendDBNotify("remove", this);
-//            }
-//
-//        } catch (Exception e)
-//        {
-//            throw new AFException("No fue posible borrar el elemento...\n" + e.getMessage(), "RecTopic:remove()");
-//        } finally
-//        {
-//            if (mgr != null) mgr.release();
-//        }
+       try
+        {
+            if(!virtual)
+            {
+                wp.remove();
+                //DBDbSync.getInstance().saveChange("wbtopic", "remove", 0, id + " " + idtm, null);
+            }
+            Iterator it = observers.iterator();
+            while (it.hasNext())
+            {
+                ((AFObserver) it.next()).sendDBNotify("remove", this);
+            }
+        } catch (Exception e)
+        {
+            throw new AFException("No fue posible borrar el elemento...\n" + e.getMessage(), "RecTopic:remove()");
+        } 
     }
 
     /** actualiza el objeto en la base de datos y altualiza la informacion de los objetos que esten en memoria
      */
     public void update() throws AFException
     {
-//        DBConnectionManager mgr = null;
-//        Connection con;
-//        try
-//        {
-//            lastupdate = new Timestamp(new java.util.Date().getTime());
-//            if(!virtual)
-//            {
-//                mgr = DBConnectionManager.getInstance();
-//                con = mgr.getConnection((String) com.infotec.appfw.util.AFUtils.getInstance().getEnv("wb/db/nameconn"));
-//                String query = "update wbtopic set idadm=?,active=?,xml=?,xmlconf=?,created=?,system=?,lastupdate=?,deleted=?,views=?,indexable=?,hidden=? where id=? and idtm=?";
-//                PreparedStatement st = con.prepareStatement(query);
-//                st.setString(1, idadm);
-//                st.setInt(2, active);
+        try
+        {
+            lastupdate = new Timestamp(new java.util.Date().getTime());
+            if(!virtual)
+            {
+
+                wp.setActive(active==1?true:false);
+                //TODO:
 //                if (xml == null)
 //                    st.setString(3, null);
 //                else
 //                    st.setAsciiStream(3, com.infotec.appfw.util.AFUtils.getInstance().getStreamFromString(xml), xml.length());
-//
-//                //st.setString(4,xmlconf);
+//                st.setString(4,xmlconf);
 //                if (DBTopicMap.getInstance().xmlconftp == 1)
 //                {
 //                    st.setBytes(4, xmlconf.getBytes());
@@ -514,47 +496,37 @@ public class RecTopic implements WBDBRecord
 //                    else
 //                        st.setAsciiStream(4, com.infotec.appfw.util.AFUtils.getInstance().getStreamFromString(xmlconf), xmlconf.length());
 //                }
-//
-//                st.setTimestamp(5, created);
-//                st.setInt(6, system);
-//                st.setTimestamp(7, lastupdate);
-//                st.setInt(8, deleted);
-//                st.setLong(9, views);
-//                st.setInt(10, indexable);
-//                st.setInt(11, hidden);
-//                st.setString(12, id);
-//                st.setString(13, idtm);
-//                st.executeUpdate();
-//                st.close();
-//                con.close();
-//                DBDbSync.getInstance().saveChange("wbtopic", "update", 0, id + " " + idtm, lastupdate);
-//            }
-//            Iterator it = observers.iterator();
-//            while (it.hasNext())
-//            {
-//                ((AFObserver) it.next()).sendDBNotify("update", this);
-//            }
-//            config=AFUtils.getInstance().XmltoDom(xmlconf);
-//        } catch (Exception e)
-//        {
-//            throw new AFException("No fue posible actualizar el elemento...\n" + e.getMessage(), "RecTopic:update()");
-//        } finally
-//        {
-//            if (mgr != null) mgr.release();
-//        }
+                //st.setInt(6, system);
+                wp.setUpdated(new java.util.Date(lastupdate.getTime()));
+                wp.setDeleted(deleted==1?true:false);
+                wp.setViews(views);
+                wp.setIndexable(indexable==1?true:false);
+                wp.setHidden(hidden==1?true:false);
+            }
+            Iterator it = observers.iterator();
+            while (it.hasNext())
+            {
+                ((AFObserver) it.next()).sendDBNotify("update", this);
+            }
+            config=AFUtils.getInstance().XmltoDom(xmlconf);
+        } catch (Exception e)
+        {
+            throw new AFException("No fue posible actualizar el elemento...\n" + e.getMessage(), "RecTopic:update()");
+        } 
     }
 
 
     public boolean incViews()
     {
+
         viewed = true;
         views++;
-        long t = System.currentTimeMillis() - timer;
-        if (t > time || t < -time)
-        {
-            return true;
-        }
-        return false;
+//        long t = System.currentTimeMillis() - timer;
+//        if (t > time || t < -time)
+//        {
+//            return true;
+//        }
+        return wp.incViews();
     }
 
     /** actualiza el objeto en la base de datos y altualiza la informacion de los objetos que esten en memoria
@@ -563,30 +535,7 @@ public class RecTopic implements WBDBRecord
     {
         if (viewed)
         {
-            //System.out.println("update topic:"+getId());
-            DBConnectionManager mgr = null;
-            Connection con;
-            try
-            {
-                mgr = DBConnectionManager.getInstance();
-                con = mgr.getConnection((String) com.infotec.appfw.util.AFUtils.getInstance().getEnv("wb/db/nameconn"));
-                String query = "update wbtopic set views=?,created=? where id=? and idtm=?";
-                PreparedStatement st = con.prepareStatement(query);
-                st.setLong(1, views);
-                st.setTimestamp(2, created);
-                st.setString(3, id);
-                st.setString(4, idtm);
-                st.executeUpdate();
-                st.close();
-                con.close();                
-                timer = System.currentTimeMillis();
-            } catch (Exception e)
-            {
-                throw new AFException("No fue posible actualizar el elemento...\n" + e.getMessage(), "RecTopic:updateViews()");
-            } finally
-            {
-                if (mgr != null) mgr.release();
-            }
+            wp.updateViews();
             viewed = false;
         }
     }
@@ -595,120 +544,100 @@ public class RecTopic implements WBDBRecord
      */
     public void create() throws AFException
     {
-//        DBConnectionManager mgr = null;
-//        Connection con;
-//        try
-//        {
-//            lastupdate = new Timestamp(new java.util.Date().getTime());
-//            created = lastupdate;
-//            if(!virtual)
-//            {
-//                mgr = DBConnectionManager.getInstance();
-//                con = mgr.getConnection((String) com.infotec.appfw.util.AFUtils.getInstance().getEnv("wb/db/nameconn"));
-//                String query = "insert into wbtopic (idadm,active,xml,xmlconf,created,system,lastupdate,deleted,views,indexable,hidden,id,idtm) values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
-//                PreparedStatement st = con.prepareStatement(query);
-//                st.setString(1, idadm);
-//                st.setInt(2, active);
-//                if (xml == null)
-//                    st.setString(3, null);
-//                else
-//                    st.setAsciiStream(3, com.infotec.appfw.util.AFUtils.getInstance().getStreamFromString(xml), xml.length());
-//                //st.setString(4,xmlconf);
-//                //System.out.println("conftp:"+DBTopicMap.getInstance().xmlconftp);
-//                if (DBTopicMap.getInstance().xmlconftp == 1)
-//                {
-//                    st.setBytes(4, xmlconf.getBytes());
-//                } else if (DBTopicMap.getInstance().xmlconftp == 2)
-//                {
-//                    st.setString(4, xmlconf);
-//                } else //if (DBTopicMap.getInstance().xmlconftp == 3)
-//                {
-//                    if (xmlconf == null)
-//                        st.setString(4, null);
+        try
+        {
+            lastupdate = new Timestamp(new java.util.Date().getTime());
+            created = lastupdate;
+            if(!virtual)
+            {
+                WebSite ws = SWBContext.getWebSite(idtm);
+                if(id!=null)
+                {
+                    wp = ws.createWebPage(id);
+                    wp.setCreator(ws.getUserRepository().getUser(idadm));
+                    wp.setActive(active==1?true:false);
+                    //TODO:
+//                    if (xml == null)
+//                        st.setString(3, null);
 //                    else
-//                        st.setAsciiStream(4, com.infotec.appfw.util.AFUtils.getInstance().getStreamFromString(xmlconf), xmlconf.length());
-//                }
-//                st.setTimestamp(5, created);
-//                st.setInt(6, system);
-//                st.setTimestamp(7, lastupdate);
-//                st.setInt(8, deleted);
-//                st.setLong(9, views);
-//                st.setInt(10, indexable);
-//                st.setInt(11, hidden);
-//                st.setString(12, id);
-//                st.setString(13, idtm);
-//                st.executeUpdate();
-//                st.close();
-//                con.close();
-//            }
-//            Iterator it = observers.iterator();
-//            while (it.hasNext())
-//            {
-//                ((AFObserver) it.next()).sendDBNotify("create", this);
-//            }
-//            DBDbSync.getInstance().saveChange("wbtopic", "create", 0, id + " " + idtm, lastupdate);
-//            config=AFUtils.getInstance().XmltoDom(xmlconf);
-//        } catch (Exception e)
-//        {
-//            com.infotec.appfw.util.AFUtils.log(e);
-//            throw new AFException("No fue posible crear el elemento...\n" + e.getMessage(), "RecTopic:create()");
-//        } finally
-//        {
-//            if (mgr != null) mgr.release();
-//        }
+//                        st.setAsciiStream(3, com.infotec.appfw.util.AFUtils.getInstance().getStreamFromString(xml), xml.length());
+                    //st.setString(4,xmlconf);
+                    //System.out.println("conftp:"+DBTopicMap.getInstance().xmlconftp);
+//                    if (DBTopicMap.getInstance().xmlconftp == 1)
+//                    {
+//                        st.setBytes(4, xmlconf.getBytes());
+//                    } else if (DBTopicMap.getInstance().xmlconftp == 2)
+//                    {
+//                        st.setString(4, xmlconf);
+//                    } else //if (DBTopicMap.getInstance().xmlconftp == 3)
+//                    {
+//                        if (xmlconf == null)
+//                            st.setString(4, null);
+//                        else
+//                            st.setAsciiStream(4, com.infotec.appfw.util.AFUtils.getInstance().getStreamFromString(xmlconf), xmlconf.length());
+//                    }
+                    wp.setCreated(new java.util.Date(created.getTime()));
+                    wp.setUpdated(new java.util.Date(lastupdate.getTime()));
+                    wp.setDeleted(deleted==1?true:false);
+                    wp.setViews(views);
+                    wp.setIndexable(indexable==1?true:false);
+                    wp.setHidden(hidden==1?true:false);
+                    //st.setInt(6, system);
+                }
+            }
+            Iterator it = observers.iterator();
+            while (it.hasNext())
+            {
+                ((AFObserver) it.next()).sendDBNotify("create", this);
+            }
+
+            if(null!=xmlconf)config=AFUtils.getInstance().XmltoDom(xmlconf);
+        } catch (Exception e)
+        {
+            com.infotec.appfw.util.AFUtils.log(e);
+            throw new AFException("No fue posible crear el elemento...\n" + e.getMessage(), "RecTopic:create()");
+        } 
     }
 
     /** refresca el objeto, esto es lo lee de la base de datos y actualiza los objetos que estan en la memoria
      */
     public void load() throws AFException
     {
-        DBConnectionManager mgr = null;
-        Connection con;
-        try
+
+        if(idtm!=null && id !=null)
         {
-            mgr = DBConnectionManager.getInstance();
-            con = mgr.getConnection((String) com.infotec.appfw.util.AFUtils.getInstance().getEnv("wb/db/nameconn"));
-            String query = "select * from wbtopic where id=? and idtm=?";
-            PreparedStatement st = con.prepareStatement(query);
-            st.setString(1, id);
-            st.setString(2, idtm);
-            ResultSet rs = st.executeQuery();
-            if (rs.next())
+            WebSite ws = SWBContext.getWebSite(idtm);
+            wp = ws.getWebPage(id);
+            if (null!=wp)
             {
-                idadm = rs.getString("idadm");
-                active = rs.getInt("active");
-                xml = com.infotec.appfw.util.AFUtils.getInstance().readInputStream(rs.getAsciiStream("xml"));
-                if (DBTopicMap.getInstance().xmlconftp == 2)
-                {
-                    xmlconf = rs.getString("xmlconf");
-                }else
-                {
-                    xmlconf = com.infotec.appfw.util.AFUtils.getInstance().readInputStream(rs.getAsciiStream("xmlconf"));
-                }
-                created = rs.getTimestamp("created");
+                idadm = wp.getCreator().getId();
+                active = wp.isActive()?1:0;
+                //TODO:
+                //xml = com.infotec.appfw.util.AFUtils.getInstance().readInputStream(rs.getAsciiStream("xml"));
+//                if (DBTopicMap.getInstance().xmlconftp == 2)
+//                {
+//                    xmlconf = rs.getString("xmlconf");
+//                }else
+//                {
+//                    xmlconf = com.infotec.appfw.util.AFUtils.getInstance().readInputStream(rs.getAsciiStream("xmlconf"));
+//                }
+                created = new Timestamp(wp.getCreated().getTime());
                 //system = rs.getInt("system");
-                lastupdate = rs.getTimestamp("lastupdate");
-                deleted = rs.getInt("deleted");
-                views = rs.getInt("views");
-                indexable = rs.getInt("indexable");
-                hidden = rs.getInt("hidden");
+                lastupdate = new Timestamp(wp.getUpdated().getTime());
+                deleted = wp.isDeleted()?1:0;
+                views = wp.getViews();
+                indexable = wp.isIndexable()?1:0;
+                hidden = wp.isHidden()?1:0;
             }
-            rs.close();
-            st.close();
-            con.close();
+
             Iterator it = observers.iterator();
             while (it.hasNext())
             {
                 ((AFObserver) it.next()).sendDBNotify("load", this);
             }
-            config=AFUtils.getInstance().XmltoDom(xmlconf);
-        } catch (Exception e)
-        {
-            throw new AFException("No fue posible cargar el elemento...\n" + e.getMessage(), "RecTopic:load()");
-        } finally
-        {
-            if (mgr != null) mgr.release();
+            if(null!=xmlconf) config=AFUtils.getInstance().XmltoDom(xmlconf);
         }
+        
     }
 
     public void sendNotify()
