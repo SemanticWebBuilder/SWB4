@@ -296,7 +296,7 @@ public class WB4WriterTest
         try
         {
             WB4Writer writer = new WB4Writer(this.xContext);
-            writer.publish(null);
+            writer.publish();
         }
         catch (Throwable wbe)
         {
