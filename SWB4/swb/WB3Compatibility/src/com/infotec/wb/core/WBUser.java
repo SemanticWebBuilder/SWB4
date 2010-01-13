@@ -371,14 +371,16 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
             logbuf.append("lgn|");
             logbuf.append(request.getRemoteAddr());
             logbuf.append("|");
-            logbuf.append(WBMessageCenter.getInstance().getAddress());
+            //TODO:
+            //logbuf.append(WBMessageCenter.getInstance().getAddress());
             logbuf.append("|");
             logbuf.append(this.getRepository());
             logbuf.append("|");
             logbuf.append(this.getLogin());
             logbuf.append("|");
             logbuf.append(""+sesid.hashCode());
-            WBMessageCenter.getInstance().sendMessage(logbuf.toString());
+            //TODO:
+            //WBMessageCenter.getInstance().sendMessage(logbuf.toString());
         }
     }
 
