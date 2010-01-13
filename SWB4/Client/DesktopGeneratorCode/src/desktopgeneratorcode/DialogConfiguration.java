@@ -90,7 +90,6 @@ public class DialogConfiguration extends javax.swing.JDialog
         jMenu2 = new javax.swing.JMenu();
         jPanelButtons = new javax.swing.JPanel();
         jButtonCancel = new javax.swing.JButton();
-        jButtonSave = new javax.swing.JButton();
         jToolBar1 = new javax.swing.JToolBar();
         jButtonAdd = new javax.swing.JButton();
         jButtonRemove = new javax.swing.JButton();
@@ -141,22 +140,12 @@ public class DialogConfiguration extends javax.swing.JDialog
             }
         });
 
-        jButtonSave.setText(resourceMap.getString("jButtonSave.text")); // NOI18N
-        jButtonSave.setName("jButtonSave"); // NOI18N
-        jButtonSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonSaveActionPerformed(evt);
-            }
-        });
-
         org.jdesktop.layout.GroupLayout jPanelButtonsLayout = new org.jdesktop.layout.GroupLayout(jPanelButtons);
         jPanelButtons.setLayout(jPanelButtonsLayout);
         jPanelButtonsLayout.setHorizontalGroup(
             jPanelButtonsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanelButtonsLayout.createSequentialGroup()
-                .addContainerGap(237, Short.MAX_VALUE)
-                .add(jButtonSave)
-                .add(18, 18, 18)
+                .addContainerGap(338, Short.MAX_VALUE)
                 .add(jButtonCancel)
                 .addContainerGap())
         );
@@ -164,9 +153,7 @@ public class DialogConfiguration extends javax.swing.JDialog
             jPanelButtonsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanelButtonsLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanelButtonsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jButtonSave)
-                    .add(jButtonCancel))
+                .add(jButtonCancel)
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -272,7 +259,7 @@ public class DialogConfiguration extends javax.swing.JDialog
 
         jPanelProyect.add(jScrollPane3, java.awt.BorderLayout.CENTER);
 
-        jTabbedPane1.addTab(resourceMap.getString("jPanelProyect.TabConstraints.tabTitle"), jPanelProyect); // NOI18N
+        jTabbedPane1.addTab("OWL del proyecto", jPanelProyect);
 
         jPanelOWLS.add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
@@ -372,21 +359,6 @@ public class DialogConfiguration extends javax.swing.JDialog
     {//GEN-HEADEREND:event_jButtonCancelActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_jButtonCancelActionPerformed
-
-    private void jButtonSaveActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonSaveActionPerformed
-    {//GEN-HEADEREND:event_jButtonSaveActionPerformed
-        if (!this.jTextArea1.getText().isEmpty())
-        {
-            JOptionPane.showMessageDialog(this, "Existen errores en la salida, favor de corregirlos", "Error al guardar", JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        for (OWL owl : owlsBaseCommons)
-        {
-            config.add(owl.getLocation(), owl.getLocation());
-        }
-
-        this.setVisible(false);
-    }//GEN-LAST:event_jButtonSaveActionPerformed
     private void loadBaseCommonsOWL()
     {
         this.jTextArea1.setText("");
@@ -476,7 +448,6 @@ public class DialogConfiguration extends javax.swing.JDialog
     private javax.swing.JButton jButtonAdd;
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JButton jButtonRemove;
-    private javax.swing.JButton jButtonSave;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
