@@ -276,6 +276,11 @@ public class DesktopGeneratorCodeView extends FrameView
         jButtonDelete.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonDelete.setName("jButtonDelete"); // NOI18N
         jButtonDelete.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDeleteActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButtonDelete);
 
         jButtonGenerate.setText(resourceMap.getString("jButtonGenerate.text")); // NOI18N
@@ -608,7 +613,7 @@ public class DesktopGeneratorCodeView extends FrameView
                     {
                         Object[] data =
                         {
-                            owl.getName(), prefix, owl.getLocation(), true
+                            owl, prefix, owl.getLocation(), true
                         };
                         model.addRow(data);
                     }
@@ -674,8 +679,8 @@ public class DesktopGeneratorCodeView extends FrameView
         }
         /*if (!this.jTextArea1.getText().isEmpty())
         {
-            JOptionPane.showMessageDialog(this.getFrame(), "!Debe corregir primero los errores de la consola de salida!", "Guardar proyecto", JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
-            return;
+        JOptionPane.showMessageDialog(this.getFrame(), "!Debe corregir primero los errores de la consola de salida!", "Guardar proyecto", JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+        return;
         }*/
         jTextArea1.setText("Generando código\r\n");
 
@@ -1046,6 +1051,21 @@ public class DesktopGeneratorCodeView extends FrameView
     private void jMenuToolsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuToolsActionPerformed
     {//GEN-HEADEREND:event_jMenuToolsActionPerformed
     }//GEN-LAST:event_jMenuToolsActionPerformed
+
+    private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonDeleteActionPerformed
+    {//GEN-HEADEREND:event_jButtonDeleteActionPerformed
+        DefaultTableModel model = (DefaultTableModel) this.jTable1.getModel();
+        if (this.jTable1.getSelectedRow() != -1)
+        {
+            OWL owl = (OWL) model.getValueAt(this.jTable1.getSelectedRow(), 0);
+            int res = JOptionPane.showConfirmDialog(null,"¿Desea eliminar el owl " + owl + "?", "Eliminar OWL", JOptionPane.YES_NO_OPTION);
+            if (res == JOptionPane.YES_OPTION)
+            {
+                owls.remove(owl);
+                loadOWL();
+            }
+        }
+    }//GEN-LAST:event_jButtonDeleteActionPerformed
     private void openProyect()
     {
         JFileChooser select = new JFileChooser();
