@@ -40,14 +40,14 @@ public class DialogDocumentDetail extends javax.swing.JDialog {
         String location="Sin ubicación";
         String tam="El documento no esta guardado";
         String observacion=tam;
-        boolean oexists=false;
+        
         try
         {
             name=document.getLocalPath().getName();
             location=document.getLocalPath().getParentFile().getCanonicalPath();
             tam=""+document.getLocalPath().length()+" bytes";
             observacion=validaNombre(document.getLocalPath().getAbsoluteFile());
-            oexists=document.getLocalPath().exists();
+            
         }
         catch(Exception e){}
         Object data[]={"Nombre del archivo",name};
@@ -56,8 +56,7 @@ public class DialogDocumentDetail extends javax.swing.JDialog {
         data=new String[]{"Ubicación",location};
         model.addRow(data);
 
-        data=new String[]{"Existe",""+oexists};
-        model.addRow(data);
+        
 
         data=new String[]{"Imagenes y Dibujos",""+document.getCountImages()};
         model.addRow(data);
