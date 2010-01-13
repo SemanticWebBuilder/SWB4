@@ -53,7 +53,6 @@ import org.semanticwb.openoffice.DocumentType;
 import org.semanticwb.openoffice.ErrorLog;
 import org.semanticwb.openoffice.SaveDocumentFormat;
 import org.semanticwb.openoffice.WBException;
-import org.semanticwb.openoffice.impress.WB4Impress;
 import org.semanticwb.openoffice.writer.WB4WriterApplication;
 import org.semanticwb.openoffice.writer.WB4Writer;
 
@@ -321,12 +320,12 @@ public class WB4WriterTest
 
 
     @Test
-    @Ignore
+    //@Ignore
     public void showDocumentDetail()
     {
         try
         {
-            WB4Impress writer = new WB4Impress(this.xContext);
+            WB4Writer writer = new WB4Writer(this.xContext);
             writer.showDocumentDetail();
         }
         catch (Throwable wbe)
@@ -337,7 +336,7 @@ public class WB4WriterTest
     }
 
     @Test
-    //@Ignore
+    @Ignore
     public void saveToSiteTest()
     {
         try
