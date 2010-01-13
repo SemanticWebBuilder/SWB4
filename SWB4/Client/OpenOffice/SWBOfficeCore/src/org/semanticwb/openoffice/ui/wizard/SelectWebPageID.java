@@ -1,26 +1,25 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -39,6 +38,8 @@ import javax.swing.JOptionPane;
 import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPage;
 import org.netbeans.spi.wizard.WizardPanelNavResult;
+import org.semanticwb.office.interfaces.WebSiteInfo;
+import org.semanticwb.openoffice.OfficeApplication;
 
 /**
  *
@@ -102,7 +103,7 @@ public class SelectWebPageID extends WizardPage
                 .addContainerGap(228, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-   
+
     private String getId(String titulo)
     {
         String newtitulo = "";
@@ -185,13 +186,13 @@ public class SelectWebPageID extends WizardPage
     @Override
     protected void renderingPage()
     {
-        
-        Map map=this.getWizardDataMap();
+
+        Map map = this.getWizardDataMap();
         String titulo = map.get(TitleAndDescription.TITLE).toString();
-        this.jTextFieldWebPageID.setText(getId(titulo));        
+        this.jTextFieldWebPageID.setText(getId(titulo));
         this.jTextFieldWebPageID.requestFocus();
         super.renderingPage();
-        
+
     }
 
     private void jTextFieldWebPageIDKeyTyped(java.awt.event.KeyEvent evt)//GEN-FIRST:event_jTextFieldWebPageIDKeyTyped
@@ -250,9 +251,27 @@ public class SelectWebPageID extends WizardPage
             map.put(WEBPAGEID, jTextFieldWebPageID.getText());
             result = WizardPanelNavResult.PROCEED;
         }
+        SelectPage.WebPage pageSelected = (SelectPage.WebPage) this.getWizardDataMap().get(SelectPage.WEBPAGE);
+        WebSiteInfo site = new WebSiteInfo();
+        site.id = pageSelected.getSite();
+        boolean exists = false;
+        try
+        {
+            exists = OfficeApplication.getOfficeApplicationProxy().existsPage(site, this.jTextFieldWebPageID.getText());
+        }
+        catch (Exception e)
+        {
+            JOptionPane.showMessageDialog(this, e.getMessage(), getDescription(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            result = WizardPanelNavResult.REMAIN_ON_PAGE;
+            return result;
+        }
+        if (exists)
+        {
+            JOptionPane.showMessageDialog(this, "¡Ya existe una página con ese identificador!", getDescription(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            result = WizardPanelNavResult.REMAIN_ON_PAGE;
+        }
         return result;
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JTextField jTextFieldWebPageID;
