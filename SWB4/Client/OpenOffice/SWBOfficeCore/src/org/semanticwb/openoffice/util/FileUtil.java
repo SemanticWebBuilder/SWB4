@@ -33,7 +33,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import javax.swing.JOptionPane;
 import org.semanticwb.openoffice.ErrorLog;
 
 /**
@@ -63,7 +62,12 @@ public final class FileUtil
         }
         try
         {
-            path=java.net.URLDecoder.decode(path,"utf-8");
+            String encode=System.getenv("Dfile.encoding");
+            if(encode==null || encode.equals(""))
+            {
+                encode="utf-8";
+            }
+            path=java.net.URLDecoder.decode(path,encode);
         }
         catch(Exception e){}
         return new File(path);
