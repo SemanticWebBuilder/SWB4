@@ -51,6 +51,14 @@ import com.infotec.appfw.util.db.ObjectDecoder;
 import com.infotec.appfw.util.db.ObjectEncoder;
 
 import java.io.*;
+import org.semanticwb.SWBPortal;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Language;
+import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.UserRepository;
+import org.semanticwb.model.WebPage;
+import org.semanticwb.model.WebSite;
+import org.semanticwb.portal.indexer.SWBIndexer;
 
 /** objeto: referencia al registro de la base de datos de la table wbtopicmap
  * @author Javier Solis Gonzalez
@@ -108,12 +116,12 @@ public class RecTopicMap implements WBDBRecord
         this.system=0;
         this.repository="wb";
         this.indexer=null;
-        if(WBLoader.getInstance().haveDBTables())
-        {
-            registerObserver(DBTopicMap.getInstance());
-            //registerObserver(DBVgContent.getInstance());
-            //registerObserver(TopicMgr.getInstance());
-        }
+//        if(WBLoader.getInstance().haveDBTables())
+//        {
+//            registerObserver(DBTopicMap.getInstance());
+//            registerObserver(DBVgContent.getInstance());
+//            registerObserver(TopicMgr.getInstance());
+//        }
     }
 
     public RecTopicMap(String id)
@@ -448,21 +456,12 @@ public class RecTopicMap implements WBDBRecord
     /**  Elimina el registro de la base de datos asi como todopublic void remove() throws AFException */
     public void remove() throws AFException
     {
-        DBConnectionManager mgr = null;
-        Connection con;
         try
         {
             if(!virtual)
             {
-                mgr = DBConnectionManager.getInstance();
-                con = mgr.getConnection((String) com.infotec.appfw.util.AFUtils.getInstance().getEnv("wb/db/nameconn"));
-                String query = "delete from wbtopicmap where id=?";
-                PreparedStatement st = con.prepareStatement(query);
-                st.setString(1, id);
-                st.executeUpdate();
-                st.close();
-                con.close();
-                DBDbSync.getInstance().saveChange("wbtopicmap", "remove", 0, id, null);
+                ws.remove();
+                //DBDbSync.getInstance().saveChange("wbtopicmap", "remove", 0, id, null);
             }
             Iterator it = observers.iterator();
             while (it.hasNext())
@@ -473,27 +472,19 @@ public class RecTopicMap implements WBDBRecord
         } catch (Exception e)
         {
             throw new AFException("No fue posible borrar el elemento...\n" + e.getMessage(), "RecTopicMap:remove()");
-        } finally
-        {
-            if (mgr != null) mgr.release();
-        }
+        } 
     }
 
     /** actualiza el objeto en la base de datos y altualiza la informacion de los objetos que esten en memoria
      */
     public void update() throws AFException
     {
-        DBConnectionManager mgr = null;
-        Connection con;
         try
         {
             lastupdate = new Timestamp(new java.util.Date().getTime());
             if(!virtual)
             {
-                mgr = DBConnectionManager.getInstance();
-                con = mgr.getConnection((String) com.infotec.appfw.util.AFUtils.getInstance().getEnv("wb/db/nameconn"));
-                String query = "update wbtopicmap set idadm=?,title=?,home=?,lang=?,description=?,active=?,xml=?,created=?,lastupdate=?,deleted=?,system=?,repository=?,indexer=? where id=?";
-                PreparedStatement st = con.prepareStatement(query);
+                
                 st.setString(1, idadm);
                 st.setString(2, title);
                 st.setString(3, home);
@@ -511,10 +502,8 @@ public class RecTopicMap implements WBDBRecord
                 st.setString(12, repository);
                 st.setString(13, indexer);
                 st.setString(14, id);
-                st.executeUpdate();
-                st.close();
-                con.close();
-                DBDbSync.getInstance().saveChange("wbtopicmap", "update", 0, id, lastupdate);
+
+                //DBDbSync.getInstance().saveChange("wbtopicmap", "update", 0, id, lastupdate);
             }
             Iterator it = observers.iterator();
             while (it.hasNext())
@@ -525,95 +514,88 @@ public class RecTopicMap implements WBDBRecord
         } catch (Exception e)
         {
             throw new AFException("No fue posible actualizar el elemento...\n" + e.getMessage(), "RecTopicMap:update()");
-        } finally
-        {
-            if (mgr != null) mgr.release();
-        }
+        } 
     }
 
     /** crea un nuevo registro en la base de datos asi como un nuevo objeto en memoria
      */
     public void create() throws AFException
     {
-        DBConnectionManager mgr = null;
-        Connection con;
         try
         {
             lastupdate = new Timestamp(new java.util.Date().getTime());
             created = lastupdate;
-            mgr = DBConnectionManager.getInstance();
-            con = mgr.getConnection((String) com.infotec.appfw.util.AFUtils.getInstance().getEnv("wb/db/nameconn"));
-            String query = "insert into wbtopicmap (idadm,title,home,lang,description,active,xml,created,lastupdate,deleted,system,repository,indexer,id) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-            PreparedStatement st = con.prepareStatement(query);
-            st.setString(1, idadm);
-            st.setString(2, title);
-            st.setString(3, home);
-            st.setString(4, lang);
-            st.setString(5, description);
-            st.setInt(6, active);
-            if (xml == null)
-                st.setString(7, null);
-            else
-                st.setAsciiStream(7, com.infotec.appfw.util.AFUtils.getInstance().getStreamFromString(xml), xml.length());
-            st.setTimestamp(8, created);
-            st.setTimestamp(9, lastupdate);
-            st.setInt(10, deleted);
-            st.setInt(11, system);
-            st.setString(12, repository);
-            st.setString(13, indexer);
-            st.setString(14, id);
-            st.executeUpdate();
-            st.close();
-            con.close();
-            Iterator it = observers.iterator();
-            while (it.hasNext())
+            if(null!=id)
+                ws = WebSite.ClassMgr.createWebSite(id, "http://www."+id+".swb");
+            if(null!=ws)
             {
-                ((AFObserver) it.next()).sendDBNotify("create", this);
+                UserRepository urep = UserRepository.ClassMgr.getUserRepository(repository);
+                ws.setCreator(urep.getUser(idadm));
+                ws.setTitle(title);
+                WebPage wp = ws.createWebPage(home);
+                wp.setTitle("home");
+                ws.setHomePage(wp);
+                Language language = ws.createLanguage(lang);
+                language.setTitle(lang);
+                ws.setLanguage(language);
+                ws.setDescription(description);
+                ws.setActive(active==1?true:false);
+                ws.setUserRepository(urep);
+
+//                if (xml == null)
+//                    st.setString(7, null);
+//                else
+//                    st.setAsciiStream(7, com.infotec.appfw.util.AFUtils.getInstance().getStreamFromString(xml), xml.length());
+                ws.setCreated(new java.util.Date(lastupdate.getTime()));
+                ws.setDeleted(deleted==1?true:false);
+
+
+                SWBIndexer ind = SWBPortal.getIndexMgr().getIndexer(indexer);
+                ind.indexModel(id);
+                //TODO:
+                //st.setInt(11, system);
+                
+
+                Iterator it = observers.iterator();
+                while (it.hasNext())
+                {
+                    ((AFObserver) it.next()).sendDBNotify("create", this);
+                }
+            //DBDbSync.getInstance().saveChange("wbtopicmap", "create", 0, id, lastupdate);
             }
-            DBDbSync.getInstance().saveChange("wbtopicmap", "create", 0, id, lastupdate);
 
         } catch (Exception e)
         {
             throw new AFException("No fue posible crear el elemento...\n" + e.getMessage(), "RecTopicMap:create()");
-        } finally
-        {
-            if (mgr != null) mgr.release();
-        }
+        } 
     }
 
     /** refresca el objeto, esto es lo lee de la base de datos y actualiza los objetos que estan en la memoria
      */
     public void load() throws AFException
     {
-        DBConnectionManager mgr = null;
-        Connection con;
         try
         {
-            mgr = DBConnectionManager.getInstance();
-            con = mgr.getConnection((String) com.infotec.appfw.util.AFUtils.getInstance().getEnv("wb/db/nameconn"));
-            String query = "select * from wbtopicmap where id=?";
-            PreparedStatement st = con.prepareStatement(query);
-            st.setString(1, id);
-            ResultSet rs = st.executeQuery();
-            if (rs.next())
+            if(id!=null)
+                ws = SWBContext.getWebSite(id);
+            if(null!=ws)
             {
-                idadm = rs.getString("idadm");
-                title = rs.getString("title");
-                home = rs.getString("home");
-                lang = rs.getString("lang");
-                description = rs.getString("description");
-                active = rs.getInt("active");
-                xml = com.infotec.appfw.util.AFUtils.getInstance().readInputStream(rs.getAsciiStream("xml"));
-                created = rs.getTimestamp("created");
-                lastupdate = rs.getTimestamp("lastupdate");
-                deleted = rs.getInt("deleted");
-                system = rs.getInt("system");
-                repository = rs.getString("repository");
-                indexer = rs.getString("indexer");
+                idadm = ws.getUserRepository().getCreator().getId();
+                title = ws.getTitle();
+                home = ws.getHomePage().getId();
+                lang = ws.getLanguage().getId();
+                description = ws.getDescription();
+                active = ws.isActive()?1:0;
+                //TODO:
+                //xml = com.infotec.appfw.util.AFUtils.getInstance().readInputStream(rs.getAsciiStream("xml"));
+                created = new Timestamp(ws.getCreated().getTime());
+                lastupdate = new Timestamp(ws.getUpdated().getTime());
+                deleted = ws.isDeleted()?1:0;
+                //TODO:
+                //system = rs.getInt("system");
+                repository = ws.getUserRepository().getId();
+                indexer = SWBPortal.getIndexMgr().getModelIndexer(ws).getName();
             }
-            rs.close();
-            st.close();
-            con.close();
             Iterator it = observers.iterator();
             while (it.hasNext())
             {
@@ -622,10 +604,7 @@ public class RecTopicMap implements WBDBRecord
         } catch (Exception e)
         {
             throw new AFException("No fue posible cargar el elemento...\n" + e.getMessage(), "RecTopicMap:load()");
-        } finally
-        {
-            if (mgr != null) mgr.release();
-        }
+        } 
     }
 
     public void sendNotify()
@@ -654,20 +633,20 @@ public class RecTopicMap implements WBDBRecord
 
     public void syncFromExternalAction(String action, Timestamp date) throws AFException
     {
-        if (getLastupdate() == null || (getLastupdate() != null && getLastupdate().before(date)))
-        {
-            if (action.equals("remove"))
-            {
-                sendNotify(action);
-                TopicMgr.getInstance().syncFromExternalAction(action, this);
-            } else if (action.equals("create") || action.equals("update"))
-            {
-                String oldxml = getXml();
-                load();
-                if (action.equals("create") || (action.equals("update") && (oldxml == null || !oldxml.equals(getXml()))))
-                    TopicMgr.getInstance().syncFromExternalAction(action, this);
-            }
-        }
+//        if (getLastupdate() == null || (getLastupdate() != null && getLastupdate().before(date)))
+//        {
+//            if (action.equals("remove"))
+//            {
+//                sendNotify(action);
+//                TopicMgr.getInstance().syncFromExternalAction(action, this);
+//            } else if (action.equals("create") || action.equals("update"))
+//            {
+//                String oldxml = getXml();
+//                load();
+//                if (action.equals("create") || (action.equals("update") && (oldxml == null || !oldxml.equals(getXml()))))
+//                    TopicMgr.getInstance().syncFromExternalAction(action, this);
+//            }
+//        }
     }
     
 }
