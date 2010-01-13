@@ -706,15 +706,12 @@ public class RecResource //implements WBDBRecord
         if(!virtual)
         {
             WebSite ws = SWBContext.getWebSite(idtm);
-            res = ws.getResource(Long.toString(id));
+            
             res.setTitle(title);
             res.setDescription(description);
-            //res.setCreated(new java.sql.Date(created.getTime()));
             res.setActive(active==1?true:false);
-
 //            st.setInt(5, actualversion);
 //            st.setInt(6, lastversion);
-
             res.setXmlConf(xmlconf);
             res.setXml(xml);
 
@@ -723,22 +720,17 @@ public class RecResource //implements WBDBRecord
 
             typemap = idtm;
             res.setDeleted(deleted==1?true:false);
-
             //st.setInt(12, idcamp);
             ResourceSubType ressubtype = ws.getResourceSubType(Integer.toString(idsubtype));
             if(ressubtype!=null) res.setResourceType(restype);
-
             idsubtypemap = typemap;
-            //res.setCreator(ws.getUserRepository().getUser(idadm));
             res.setPriority(priority);
             //st.setLong(17, cache);
             res.setViews(views);
             res.setHits(hits);
-            res.setUpdated(new java.sql.Date(lastupdate.getTime()));
-            
+            res.setUpdated(new java.sql.Date(lastupdate.getTime()));            
             //st.setInt(21, hitlog);
-            id = Integer.parseInt(res.getId());
-            
+            id = Integer.parseInt(res.getId());            
         }
         Iterator it = observers.iterator();
         while (it.hasNext())
