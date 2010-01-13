@@ -183,6 +183,11 @@ public class DialogConfiguration extends javax.swing.JDialog
         jButtonRemove.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonRemove.setName("jButtonRemove"); // NOI18N
         jButtonRemove.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRemoveActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButtonRemove);
 
         getContentPane().add(jToolBar1, java.awt.BorderLayout.NORTH);
@@ -359,6 +364,30 @@ public class DialogConfiguration extends javax.swing.JDialog
     {//GEN-HEADEREND:event_jButtonCancelActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_jButtonCancelActionPerformed
+
+    private void jButtonRemoveActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonRemoveActionPerformed
+    {//GEN-HEADEREND:event_jButtonRemoveActionPerformed
+        if(this.jTabbedPane1.getSelectedIndex()==0)
+        {
+            DefaultTableModel model = (DefaultTableModel) this.jTable1.getModel();
+            if(jTable1.getSelectedRow()!=-1)
+            {
+                OWL owl=(OWL)model.getValueAt(jTable1.getSelectedRow(), 0);
+                owlsBaseCommons.remove(owl);
+                loadBaseCommonsOWL();
+            }
+        }
+        else
+        {
+            DefaultTableModel model = (DefaultTableModel) this.jTable2.getModel();
+            if(jTable2.getSelectedRow()!=-1)
+            {
+                OWL owl=(OWL)model.getValueAt(jTable2.getSelectedRow(), 0);
+                owlsProyect.remove(owl);
+                loadProyectOWL();
+            }
+        }
+    }//GEN-LAST:event_jButtonRemoveActionPerformed
     private void loadBaseCommonsOWL()
     {
         this.jTextArea1.setText("");
@@ -372,7 +401,7 @@ public class DialogConfiguration extends javax.swing.JDialog
         {
             Object[] data =
             {
-                owl.getName(), owl.getLocation()
+                owl, owl.getLocation()
             };
             model.addRow(data);
             for (String namespace : owl.getRequiredNamespaces())
@@ -439,7 +468,7 @@ public class DialogConfiguration extends javax.swing.JDialog
             }
             Object[] data =
             {
-                owl.getName(), owl.getLocation()
+                owl, owl.getLocation()
             };
             model.addRow(data);
         }

@@ -143,6 +143,9 @@
             <Property name="name" type="java.lang.String" value="jButtonRemove" noResource="true"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonRemoveActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
