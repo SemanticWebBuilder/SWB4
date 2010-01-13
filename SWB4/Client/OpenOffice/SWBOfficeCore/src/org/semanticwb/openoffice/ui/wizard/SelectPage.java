@@ -70,6 +70,7 @@ public class SelectPage extends WizardPage
         jTreeSite.setSelectionModel(selectionModel);        
         loadTree();
         jTreeSite.setRootVisible(false);
+        jTreeSite.updateUI();
     }
 
     @Override
@@ -376,6 +377,7 @@ private void jButtonAddPageActionPerformed(java.awt.event.ActionEvent evt) {//GE
         {
             jTreeSite.expandPath(this.jTreeSite.getSelectionPath());
         }
+        jTreeSite.updateUI();
     }
 }//GEN-LAST:event_jButtonAddPageActionPerformed
 
