@@ -54,7 +54,7 @@ public class CodeGeneratorPyMesTur
         try
         {
             String path = getClass().getResource("/").getPath().replaceAll("%20", " ");
-            File dir = new File(path+"../../../../../pymestur/PYMTModel/src");
+            File dir = new File(path+"../../../../../swbproys/pymestur/PYMTModel/src");
             CodeGenerator codeGeneration = new CodeGenerator();
             codeGeneration.generateCode("pymtur", false, dir);
             System.out.println("Generación de clases completa: "+dir);
