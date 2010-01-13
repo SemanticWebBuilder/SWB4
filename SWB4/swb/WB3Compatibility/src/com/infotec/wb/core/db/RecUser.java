@@ -363,10 +363,10 @@ public abstract class RecUser implements WBDBRecord, java.io.Serializable {
      */
     public void setLogin(java.lang.String login) {
         //System.out.println("setLogin:"+this.login+"-->"+login);
-        if(!this.login.equals(DEFLOGIN) && !this.login.equals(login))
-        {
-            DBUser.getInstance(getRepository()).removeUserFromCache(this);
-        }
+//        if(!this.login.equals(DEFLOGIN) && !this.login.equals(login))
+//        {
+//            DBUser.getInstance(getRepository()).removeUserFromCache(this);
+//        }
         this.login = login;
         rolesLoaded = false;
         admFiltersLoaded = false;        
@@ -655,8 +655,8 @@ public abstract class RecUser implements WBDBRecord, java.io.Serializable {
      */
     public void remove(String user, String comment) throws AFException {
         remove();
-        RecAdmLog rec = new RecAdmLog(user, "remove", "User", getId(), getRepository(), getLogin(), comment, lastupdate);
-        rec.create();
+//        RecAdmLog rec = new RecAdmLog(user, "remove", "User", getId(), getRepository(), getLogin(), comment, lastupdate);
+//        rec.create();
     }
 
     /**
@@ -667,19 +667,19 @@ public abstract class RecUser implements WBDBRecord, java.io.Serializable {
      */
     public void remove() throws AFException {
         try {
+            usr.remove();
             removeImp();
             sendNotify("remove");
-            DBDbSync.getInstance().saveChange("wbuser", "remove", id, id + "_" + repository, null);
-
-            Connection con;
-            con = AFUtils.getDBConnection(AFUtils.getEnv("wb/db/nameconn"), "RecUser.loadRoles()");
-            String query = "delete from wbuserrole where usrId=? and usrRepository=?";
-            PreparedStatement st = con.prepareStatement(query);
-            st.setLong(1, getId());
-            st.setString(2, repository);
-            st.executeUpdate();
-            st.close();
-            con.close();
+//            DBDbSync.getInstance().saveChange("wbuser", "remove", id, id + "_" + repository, null);
+//            Connection con;
+//            con = AFUtils.getDBConnection(AFUtils.getEnv("wb/db/nameconn"), "RecUser.loadRoles()");
+//            String query = "delete from wbuserrole where usrId=? and usrRepository=?";
+//            PreparedStatement st = con.prepareStatement(query);
+//            st.setLong(1, getId());
+//            st.setString(2, repository);
+//            st.executeUpdate();
+//            st.close();
+//            con.close();
 
         } catch (Exception e) {
             throw new AFException("Cannot delete element" + "...", "RecUser:remove()", e);
@@ -698,8 +698,8 @@ public abstract class RecUser implements WBDBRecord, java.io.Serializable {
      */
     public void update(String user, String comment) throws AFException {
         update();
-        RecAdmLog rec = new RecAdmLog(user, "update", "User", getId(), getRepository(), getLogin(), comment, lastupdate);
-        rec.create();
+//        RecAdmLog rec = new RecAdmLog(user, "update", "User", getId(), getRepository(), getLogin(), comment, lastupdate);
+//        rec.create();
     }
 
     /**
@@ -713,7 +713,7 @@ public abstract class RecUser implements WBDBRecord, java.io.Serializable {
             lastupdate = new Timestamp(new java.util.Date().getTime());
             updateImp();
             sendNotify("update");
-            DBDbSync.getInstance().saveChange("wbuser", "update", id, id + "_" + repository, lastupdate);
+//            DBDbSync.getInstance().saveChange("wbuser", "update", id, id + "_" + repository, lastupdate);
 
         } catch (Exception e) {
             AFUtils.log(e, "Cannot update element", true);
@@ -733,8 +733,8 @@ public abstract class RecUser implements WBDBRecord, java.io.Serializable {
      */
     public void create(String user, String comment) throws AFException {
         create();
-        RecAdmLog rec = new RecAdmLog(user, "create", "User", getId(), getRepository(), getLogin(), comment, lastupdate);
-        rec.create();
+//        RecAdmLog rec = new RecAdmLog(user, "create", "User", getId(), getRepository(), getLogin(), comment, lastupdate);
+//        rec.create();
     }
 
     /**
@@ -757,7 +757,7 @@ public abstract class RecUser implements WBDBRecord, java.io.Serializable {
             }
             createImp();
             sendNotify("create");
-            DBDbSync.getInstance().saveChange("wbuser", "create", id, id + "_" + repository, lastupdate);
+//            DBDbSync.getInstance().saveChange("wbuser", "create", id, id + "_" + repository, lastupdate);
 
         } catch (Exception e) {
             throw new AFException("Cannot create element" + "...", "RecUser:create()", e);
@@ -1101,34 +1101,34 @@ public abstract class RecUser implements WBDBRecord, java.io.Serializable {
     public void setRepository(String repository) {
         this.repository = repository;
         observers.clear();
-        registerObserver(DBUser.getInstance(repository));
+//        registerObserver(DBUser.getInstance(repository));
     }
 
     /**
      * Writes this object out to a stream (i.e., serializes it).
      */
-    private synchronized void writeObject(java.io.ObjectOutputStream oos) throws java.io.IOException {
-        //System.out.println("writeObject");
-        oos.writeUTF(getEncoder().toString());
-        //oos.defaultWriteObject();
-    }
-
-    /**
-     * Reads this object from a stream (i.e., deserializes it)
-     */
-    private void readObject(java.io.ObjectInputStream s) throws
-            java.io.IOException,
-            ClassNotFoundException {
-
-        //System.out.println("readObject");
-        String str = s.readUTF();
-        if (str != null) {
-            ObjectDecoder dec = new ObjectDecoder(str);
-            setDecoderValues(dec);
-        }
-        //s.defaultReadObject();
-
-    }
+//    private synchronized void writeObject(java.io.ObjectOutputStream oos) throws java.io.IOException {
+//        //System.out.println("writeObject");
+//        oos.writeUTF(getEncoder().toString());
+//        //oos.defaultWriteObject();
+//    }
+//
+//    /**
+//     * Reads this object from a stream (i.e., deserializes it)
+//     */
+//    private void readObject(java.io.ObjectInputStream s) throws
+//            java.io.IOException,
+//            ClassNotFoundException {
+//
+//        //System.out.println("readObject");
+//        String str = s.readUTF();
+//        if (str != null) {
+//            ObjectDecoder dec = new ObjectDecoder(str);
+//            setDecoderValues(dec);
+//        }
+//        //s.defaultReadObject();
+//
+//    }
 
 
 }
