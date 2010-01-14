@@ -505,7 +505,8 @@ public class ContentUtils {
 
 
     public String paginationOpenOffice(String htmlOut, WebPage page, String npage, Resource base, int snpages, String stxtant, String stxtsig, String stfont, int position) {
-        int totPages = getOpenOfficeContentPagesNumber(htmlOut);
+        String toFind="<P STYLE=\"page-break-before: always\">";
+        int totPages = getOpenOfficeContentPagesNumber(htmlOut, toFind);
         if (totPages > 1) {
             int ipage = 1;
             if (npage != null) {
@@ -513,34 +514,49 @@ public class ContentUtils {
             } else {
                 ipage = 1;
             }
-            htmlOut = getContentByPage(htmlOut, totPages, ipage, page, base, "OpenOffice", snpages, stxtant, stxtsig, stfont, position);
+            String headers=getHeaders(htmlOut);
+            if(headers!=null && htmlOut!=null && htmlOut.trim().length()>0){
+
+                htmlOut=htmlOut.substring(htmlOut.indexOf("<BODY"));
+            }
+            htmlOut = headers+getContentByPage(htmlOut, totPages, ipage, page, base, "OpenOffice", snpages, stxtant, stxtsig, stfont, position);
         }
         return htmlOut;
     }
 
+     private String getHeaders(String html) {
+         if(html!=null && html.trim().length()>0){
+            return html.substring(0, html.indexOf("<BODY"));
+         }
+         return null;
+     }
+
+
      /**
      * Metodo que regresa el número de páginas con las que cuenta el contenido
      */
-    private int getOpenOfficeContentPagesNumber(String content) {
-        int pos = content.lastIndexOf("<DIV ID=\"Section");
-        if (pos > -1) {
-            int pos1 = content.indexOf("\"", pos+16);
-            int npages = Integer.parseInt(content.substring(pos + 16, pos1).trim());
-            return npages;
-        }
-        return 1;
+    private int getOpenOfficeContentPagesNumber(String content, String toFind) {
+        int ipages=1;
+        int off = 0;
+        int f = 0;
+        do {
+            f = content.indexOf(toFind, off);
+            if (f > 0) {
+                ipages++;
+                off = f + toFind.length();
+            }
+        } while (f > 0);
+        return ipages;
     }
 
      /**
      * @param datos
      * @param ruta
      */
-    private String getContentOpenOfficeByPage(String datos, int page) {
+    private String getContentOpenOfficeByPage(String datos, int page2ret) {
         HtmlTag tag = new HtmlTag();
         StringBuffer ret = new StringBuffer();
-        StringBuffer rettmp = new StringBuffer();
-        boolean flag = false;
-        boolean flag1 = false;
+        int page=1;
         try {
             HtmlStreamTokenizer tok = new HtmlStreamTokenizer(new java.io.ByteArrayInputStream(datos.getBytes()));
             while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF) {
@@ -550,48 +566,25 @@ public class ContentUtils {
                     if (tok.getRawString().toLowerCase().startsWith("<!--[if")) {
                         continue;
                     }
-                    if (tag.getTagString().toLowerCase().equals("div")) { // Si es un tag div
-                        flag1 = true;
-                        if (!tag.isEndTag()) { //Si no es fin de tag
-                            rettmp = new StringBuffer();
-                            rettmp.append("<");
-                            rettmp.append(tag.getTagString());
-                            rettmp.append(" ");
-                            Enumeration en = tag.getParamNames();
-                            String name = "";
-                            String value = "";
-                            while (en.hasMoreElements()) { //x cada atributo
-                                name = (String) en.nextElement();
-                                value = tag.getParam(name);
-                                rettmp.append(name);
-                                rettmp.append("=\"");
-                                if (name.toLowerCase().equals("id")) { //si es atributo class
-                                    if (value.toLowerCase().equals("section" + page)) {
-                                        flag = true;
-                                        ret.append(rettmp.toString());
-                                        ret.append(value);
-                                        ret.append("\" ");
-                                        ret.append(">");
-                                    }
-                                }
-                            }
-                        } else { //si es fin de tag
-                            if (flag) { // if que pone el final
-                                ret.append(tok.getRawString());
-                                ret.append("</body>");
-                                ret.append("</html>");
+                    if (tag.getTagString().toLowerCase().equals("p"))
+                    {
+                        if(tag.getParam("STYLE")!=null && tag.getParam("STYLE").equals("page-break-before: always")) { // Si es un tag div
+                            page++;
+                            if(page>page2ret){
+                                ret.append("</BODY>");
+                                ret.append("</HTML>");
                                 break;
+                            }else{
+                                ret = new StringBuffer();
                             }
-                        }
-                    } else { //Si no es un tag div
-                        if (flag) { //Pone todas las lineas adentro del div ya encontrado
+                        }else{
                             ret.append(tok.getRawString());
                         }
+                    } else {
+                            ret.append(tok.getRawString());
                     }
                 } else if (ttype == HtmlStreamTokenizer.TT_TEXT) { //Pone todas las lineas adentro del div ya encontrado
-                    if (flag) {
                         ret.append(tok.getRawString());
-                    }
                 }
             }
         } catch (NumberFormatException f) {
@@ -601,7 +594,6 @@ public class ContentUtils {
         }
         return ret.toString();
     }
-
 
     //////////METODOS PARA MANEJO DE HTMLCONTENT////////////////////////////
 
