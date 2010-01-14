@@ -23,9 +23,7 @@
 
 package org.semanticwb.nlp;
 
-import org.semanticwb.SWBPlatform;
-import org.semanticwb.platform.SemanticClass;
-import org.semanticwb.platform.SemanticProperty;
+import java.util.ArrayList;
 
 /**
  * Word. Palabra.
@@ -56,15 +54,17 @@ public class Word {
     /** Lexical form of the word.
      * Forma léxica de la palabra.
      */
-    private String label=""; //DisplayName
+    private String lemma; //raíz de la palabra
+    private String lexicalForm;//displayname
     /**Tag for the word as a {@link WordTag} object.
      * Etiqueta de la palabra como un objeto {@link WordTag}.
      */
-    private WordTag wTag;   //POS-TAG
+    private Tag wTag;   //POS-TAG
     /**Word language.
      * Idioma de la palabra.
      */
-    private String lang = "es";
+
+    private ArrayList<String> synSet;
 
     /**
      * Creates a new instance of a Word with the given label (the word itself)
@@ -78,81 +78,26 @@ public class Word {
      * @param lbl Word label. Forma léxica de la palabra.
      * @param lan Word Language. Idioma de la palabra.
      */
-    public Word(String lbl, String lan) {
-        lang = lan;
-        label = lbl;
-        wTag = new WordTag("","", "", "", "", "");
+
+    public Word(String lexForm) {
+        lexicalForm = lexForm;
+        lemma = "";
+        wTag = new Tag();
     }
 
-    /**
-     * Creates a new instance of a Word, based on the information of a 
-     * {@link SemanticClass}. The lexical form for the new word will be the
-     * display name of the {@link SemanticClass} (for the specified language).
-     * <p>
-     * Crea una instancia de una palabra, basado en la información de un objeto 
-     * de tipo {@link SemanticClass}. La forma léxica para la nueva palabra
-     * (la palabra en sí) será el display name (para el idioma especificado) del
-     * {@link SemanticClass}.
-     * 
-     * @param cl    {@link SemanticClass} for the new Word. {@link SemanticClass}
-     *              para formar la nueva palabra.
-     * @param lan   Word Language. Idioma de la palabra.
-     */
-    public Word(SemanticClass cl, String lan) {
-        lang = lan;
-        label = cl.getDisplayName(lang);
-        //wTag = new WordTag("OBJ", cl.getPrefix() + ":" + cl.getName(), cl.getName(), cl.getClassId(), "");
+    public void addSynonym (String syn) {
+        synSet.add(syn.trim());
     }
 
-    /**
-     * Creates a new instance of a Word, based on the information of a 
-     * {@link SemanticProperty}. The lexical form for the new word will be the
-     * display name of the {@link SemanticProperty} for the specified language.
-     * <p>
-     * Crea una instancia de una palabra, basado en la información de un objeto
-     * de tipo {@link SemanticProperty}. La forma léxica para la nueva palabra
-     * será el display name (para el idioma especificado) del {@link SemanticProperty}.
-     *
-     * @param p     {@link SemanticProperty} for the new Word.
-     *              {@link SemanticProperty} para formar la nueva palabra.
-     * @param lan   Word Language. Idioma de la palabra.
-     */
-    public Word (SemanticProperty p, String lan) {
-        lang = lan;
-        label = p.getDisplayName(lang);
-
-        //If p is an ObjectProperty
-        if (p.isObjectProperty()) {
-            //Get name of property range class
-            StringBuffer bf = new StringBuffer();
-            bf.append(p.getRangeClass());
-
-            //Attempt to get range class
-            SemanticClass rg = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(bf.toString());
-            if (rg != null) {
-               // wTag = new WordTag("PRO", p.getPrefix() + ":" + p.getName(), p.getName(), p.getPropId(), rg.getClassId());
-            }
-        } else {
-           // wTag = new WordTag("PRO", p.getPrefix() + ":" + p.getName(), p.getName(), p.getPropId(), "");
-        }
+    public ArrayList<String> getSynSet () {
+        return synSet;
     }
-    
-    /**
-     * Creates a new instance of a Word with the given lexical form,
-     * {@link WordTag} and language.
-     * <p>
-     * Crea una instancia de una palabra con cierta forma léxica (la palabra en
-     * sí), etiqueta e idioma.
-     *
-     * @param lbl   Lexical form of the word. Forma léxica de la palabra.
-     * @param wt    {@link WordTag} for the word. {@link WordTag} de la palabra.
-     * @param lan   Word Language. Idioma de la palabra.
-     */
-    public Word(String lbl, WordTag wt, String lan) {
-        lang = lan;
-        label = lbl;
-        wTag = wt;
-    }
+
+    public boolean isSynonymOf(Word w) {
+        if (synSet.contains(w.getLemma()) || lemma.equals(w.getLemma()))
+            return true;
+        return false;
+    }    
 
     /**
      * Gets the lexical form of this Word.
@@ -160,7 +105,7 @@ public class Word {
      * Obtiene la forma léxica de la palabra.
      */
     public String getLexicalForm() {
-        return label;
+        return lexicalForm;
     }
 
     /**
@@ -168,8 +113,8 @@ public class Word {
      * <p>
      * Establece la forma léxica de la palabra.
      */
-    public void setLexicalForm(String label) {
-        this.label = label;
+    public void setLexicalForm(String lexForm) {
+        this.lexicalForm = lexForm;
     }
 
     /**
@@ -177,7 +122,7 @@ public class Word {
      * <p>
      * Obtiene el {@link WordTag} de la palabra.
      */
-    public WordTag getTag() {
+    public Tag getTag() {
         return wTag;
     }
 
@@ -186,25 +131,15 @@ public class Word {
      * <p>
      * Establece el {@link WordTag} de la palabra.
      */
-    public void setTag(WordTag tag) {
+    public void setTag(Tag tag) {
         wTag = tag;
     }
 
-    /**
-     * Gets the language of this Word.
-     * <p>
-     * Obtiene el idioma de la palabra.
-     */
-    public String getLanguage() {
-        return lang;
+    public void setLemma(String lem) {
+        lemma = lem;
     }
 
-    /**
-     * Sets the language for this Word.
-     * <p>
-     * Establece el idioma de la palabra.
-     */
-    public void setLanguage(String newLang) {
-        lang = newLang;
+    public String getLemma() {
+        return lemma;
     }
 }
