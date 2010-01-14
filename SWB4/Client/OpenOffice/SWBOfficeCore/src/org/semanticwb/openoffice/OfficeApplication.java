@@ -64,7 +64,7 @@ public abstract class OfficeApplication
 {
 
     public static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-    private static final String DELETE_CONFIGURATION_ERROR = "Error trying to get the proxy server, delete the file ";
+    private static final String DELETE_CONFIGURATION_ERROR = "Error tratando de obtener el proxy server, favor de borra el archivo de configuración ubicado en: ";
     private static final String HELP_URL = "http://www.webbuilder.org.mx";
     private static MenuListener menuListener;
     private static UserInfo userInfo = null;
@@ -119,7 +119,7 @@ public abstract class OfficeApplication
                 }
                 catch (NumberFormatException e)
                 {
-                    String message = "Error trying to get the proxy port, delete the file " + new Configuration().getPath();
+                    String message = DELETE_CONFIGURATION_ERROR + new Configuration().getPath();
                     throw new WBException(message, e);
                 }
             }
