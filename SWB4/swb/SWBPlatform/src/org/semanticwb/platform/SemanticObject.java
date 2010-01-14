@@ -460,11 +460,19 @@ public class SemanticObject
 
     public String getPrefix()
     {
+        if (m_virtual)
+        {
+            return null;
+        }
         return m_res.getModel().getNsURIPrefix(m_res.getNameSpace());
     }
 
     public String getResId()
     {
+        if (m_virtual)
+        {
+            return null;
+        }
         String ret=null;
         String pref=getPrefix();
         if(pref!=null)
