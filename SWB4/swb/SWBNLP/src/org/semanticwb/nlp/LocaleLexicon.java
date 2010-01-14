@@ -32,10 +32,20 @@ public class LocaleLexicon {
     private HashMap<String, Word> objHash;
     private HashMap<String, Word> propHash;
     private ArrayList<String> prefixFilters;
-    private ArrayList<String> stopWords;
     private String langCode = "es";
     private String langName = "Spanish";
     private String prefixString;
+    private String[] stopWords = {"a", "ante", "bajo", "cabe", "con",
+        "contra", "de", "desde", "durante",
+        "en", "entre", "hacia", "hasta",
+        "mediante", "para", "por", "según",
+        "sin", "sobre", "tras", "el", "la",
+        "los", "las", "ellos", "ellas", "un",
+        "uno", "unos", "una", "unas", "y", "o",
+        "pero", "si", "no", "como", "que", "su",
+        "sus", "esto", "eso", "esta", "esa",
+        "esos", "esas", "del"
+    };
 
 
     public LocaleLexicon() {
@@ -57,14 +67,19 @@ public class LocaleLexicon {
     public LocaleLexicon(String languageCode, String languageName, String prexFilter) {
         langCode = languageCode;
         langName = languageName;
-        
+
+        //System.out.println("----Creando lexicon");
         if (!prexFilter.trim().equals(""))
             prefixFilters = new ArrayList<String>(Arrays.asList(prexFilter.split(",")));
 
         prefixString = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n";
+        objHash = new HashMap<String, Word>();
+        propHash = new HashMap<String, Word>();
         buildLexicon();
-        System.out.println(objHash.values().size() + " objetos agregados");
-        System.out.println(propHash.values().size() + " propiedades agregadas");
+        /*System.out.println("---" + objHash.values().size() + " objetos agregados");
+        System.out.println("---" + propHash.values().size() + " propiedades agregadas");
+        System.out.println("---Cadena de prefijos:");
+        System.out.println(prefixString);*/
     }
 
     public void buildLexicon () {
@@ -76,13 +91,13 @@ public class LocaleLexicon {
                 addWord(sc.getDisplayName(langCode), OBJ_TAG);
 
                 String pf = buildPrefixEntry(sc.getPrefix(), sc.getOntClass().getNameSpace());
-                if (prefixString.indexOf(pf) == -1) prefixString += pf;
+                if (prefixString.indexOf(pf) == -1) prefixString += pf + "\n";
 
                 Iterator<SemanticProperty> spit = sc.listProperties();
                 while(spit.hasNext()) {
                     SemanticProperty sp = spit.next();
                     pf = buildPrefixEntry(sp.getPrefix(), sp.getRDFProperty().getNameSpace());
-                    if (prefixString.indexOf(pf) == -1) prefixString += pf;
+                    if (prefixString.indexOf(pf) == -1) prefixString += pf + "\n";
 
                     if (sp.isObjectProperty())
                         addWord(sp.getDisplayName(langCode), OBT_TAG);
@@ -115,17 +130,22 @@ public class LocaleLexicon {
     }
 
     public void addStopWord(String w) {
-        if (!stopWords.contains(w.toLowerCase()))
-            stopWords.add(w.toLowerCase());
+        if (!Arrays.asList(stopWords).contains(w.toLowerCase())) {
+            String [] tList = new String[stopWords.length+1];
+            for (int i = 0; i < stopWords.length; i++) {
+                tList[i] = stopWords[i];
+            }
+            tList[stopWords.length] = w.toLowerCase();
+            stopWords = tList;
+        }
+            
     }
 
     public String getSnowballForm(String input) {
         String res = "";
 
         //Create snowball analyzer
-        String stopW [] = new String[stopWords.size()];
-        stopW = stopWords.toArray(stopW);
-        Analyzer SnballAnalyzer = new SnowballAnalyzer(langName, stopW);
+        Analyzer SnballAnalyzer = new SnowballAnalyzer(langName, stopWords);
 
         //Create token stream for prhase composition
         TokenStream ts = SnballAnalyzer.tokenStream("sna", new StringReader(input));
@@ -170,5 +190,10 @@ public class LocaleLexicon {
 
     public String getLanguageName() {
         return langName;
+    }
+
+    public Word getWord(String lexForm, boolean asObject) {
+        if (asObject) return objHash.get(getSnowballForm(lexForm));
+        return propHash.get(getSnowballForm(lexForm));
     }
 }
