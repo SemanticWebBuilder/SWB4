@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <rdf:RDF
     xmlns:swbxf="http://www.semanticwebbuilder.org/swb4/xforms/ontology#"
+    xmlns:swbcomm="http://www.semanticwebbuilder.org/swb4/community#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
@@ -10,268 +11,287 @@
     xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
   xml:base="http://www.semanticwebbuilder.org/swb4/pymestur">
   <owl:Ontology rdf:about="">
-    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/community"/>
     <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Created with TopBraid Composer</owl:versionInfo>
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/community"/>
   </owl:Ontology>
-  <owl:Class rdf:ID="ActivityRef">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+  <owl:Class rdf:ID="Destination">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="State"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:label xml:lang="es">Destino</rdfs:label>
+    <rdfs:label xml:lang="en">Destination</rdfs:label>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Activity">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+    <rdfs:label xml:lang="es">Actividad</rdfs:label>
+    <rdfs:label xml:lang="en">Activity</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="SPCategory">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="SPType"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:label xml:lang="es">Giro</rdfs:label>
+    <rdfs:label xml:lang="en">Category</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Event">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:label xml:lang="es">Evento</rdfs:label>
+    <rdfs:label xml:lang="en">Event</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Region">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="#State"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:label xml:lang="es">Región</rdfs:label>
+    <rdfs:label xml:lang="en">Region</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="PyMesWebSite">
-    <swb:hasClass>
-      <swb:Class rdf:ID="SPCategory">
-        <rdfs:label xml:lang="en">Category</rdfs:label>
-        <rdfs:label xml:lang="es">Giro</rdfs:label>
-        <rdfs:subClassOf>
-          <owl:Restriction>
-            <owl:allValuesFrom>
-              <swb:Class rdf:ID="SPType">
-                <rdfs:label xml:lang="en">Provider Type</rdfs:label>
-                <rdfs:label xml:lang="es">Tipo de Proveedor</rdfs:label>
-                <rdfs:subClassOf>
-                  <owl:Restriction>
-                    <owl:allValuesFrom rdf:resource="#SPCategory"/>
-                    <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
-                  </owl:Restriction>
-                </rdfs:subClassOf>
-                <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
-                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-                <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
-              </swb:Class>
-            </owl:allValuesFrom>
-            <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
-          </owl:Restriction>
-        </rdfs:subClassOf>
-        <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
-      </swb:Class>
-    </swb:hasClass>
+    <swb:hasClass rdf:resource="#SPCategory"/>
     <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#do_AdminWebSite"/>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/community#hn_CommUtils"/>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTContents"/>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PFlows"/>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Languages"/>
+    <swb:hasClass rdf:resource="#Destination"/>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTSystems"/>
     <swb:hasClass>
-      <swb:Class rdf:ID="Destination">
-        <rdfs:label xml:lang="en">Destination</rdfs:label>
-        <rdfs:label xml:lang="es">Destino</rdfs:label>
-        <rdfs:subClassOf>
-          <owl:Restriction>
-            <owl:allValuesFrom>
-              <swb:Class rdf:ID="State">
-                <rdfs:label xml:lang="en">State</rdfs:label>
-                <rdfs:label xml:lang="es">Estado</rdfs:label>
-                <rdfs:subClassOf>
-                  <owl:Restriction>
-                    <owl:allValuesFrom>
-                      <swb:Class rdf:ID="Region">
-                        <rdfs:label xml:lang="en">Region</rdfs:label>
-                        <rdfs:label xml:lang="es">Región</rdfs:label>
-                        <rdfs:subClassOf>
-                          <owl:Restriction>
-                            <owl:allValuesFrom rdf:resource="#State"/>
-                            <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
-                          </owl:Restriction>
-                        </rdfs:subClassOf>
-                        <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
-                        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
-                        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-                      </swb:Class>
-                    </owl:allValuesFrom>
-                    <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
-                  </owl:Restriction>
-                </rdfs:subClassOf>
-                <rdfs:subClassOf>
-                  <owl:Restriction>
-                    <owl:allValuesFrom rdf:resource="#Destination"/>
-                    <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
-                  </owl:Restriction>
-                </rdfs:subClassOf>
-                <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
-                <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
-                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-              </swb:Class>
-            </owl:allValuesFrom>
-            <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
-          </owl:Restriction>
-        </rdfs:subClassOf>
-        <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+      <swbcomm:DirectoryClass rdf:ID="Hospedaje">
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </swb:hasClass>
-    <swb:hasClass>
-      <swb:Class rdf:ID="Hospedaje">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
         <rdfs:subClassOf>
-          <swb:Class rdf:ID="ServiceProvider">
+          <swbcomm:DirectoryClass rdf:ID="ServiceProvider">
+            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/community#DirectoryObject"/>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
             <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
             >true</swb:autogenId>
-            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/community#DirectoryObject"/>
-          </swb:Class>
+            <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+          </swbcomm:DirectoryClass>
         </rdfs:subClassOf>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </swb:hasClass>
-    <swb:hasClass rdf:resource="#SPType"/>
-    <swb:hasClass>
-      <swb:Class rdf:ID="Instalation">
-        <rdfs:label xml:lang="en">Instalation</rdfs:label>
-        <rdfs:label xml:lang="es">Instalación</rdfs:label>
-        <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:autogenId>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
+        <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+      </swbcomm:DirectoryClass>
     </swb:hasClass>
     <swb:hasClass rdf:resource="#Region"/>
+    <swb:hasClass>
+      <owl:Class rdf:ID="Instalation"/>
+    </swb:hasClass>
+    <swb:hasClass>
+      <owl:Class rdf:about="#SPType"/>
+    </swb:hasClass>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Model"/>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Rules"/>
     <rdfs:label>Sitio Pymes</rdfs:label>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Templates"/>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Devices"/>
-    <swb:hasClass rdf:resource="#ActivityRef"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Dnss"/>
-    <swb:hasClass rdf:resource="#ServiceProvider"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/community#hn_MicroSiteTypes"/>
-    <swb:hasHerarquicalNode>
-      <swbxf:HerarquicalNode rdf:ID="hn_Intalations">
-        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconTemplates</swb:iconClass>
-        <swbxf:heClass rdf:resource="#Instalation"/>
-        <swb:title xml:lang="en">Instalations</swb:title>
-        <swb:title xml:lang="es">Instalaciones</swb:title>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >97</swb:index>
-      </swbxf:HerarquicalNode>
-    </swb:hasHerarquicalNode>
-    <swb:hasHerarquicalNode>
-      <swbxf:HerarquicalNode rdf:ID="hn_Services">
-        <swb:title xml:lang="en">Services</swb:title>
-        <swb:title xml:lang="es">Servicios</swb:title>
-        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconTemplates</swb:iconClass>
-        <swbxf:heClass>
-          <swb:Class rdf:ID="Service">
-            <rdfs:label xml:lang="es">Servicio</rdfs:label>
-            <rdfs:label xml:lang="en">Service</rdfs:label>
-            <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >true</swb:autogenId>
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-          </swb:Class>
-        </swbxf:heClass>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >95</swb:index>
-      </swbxf:HerarquicalNode>
-    </swb:hasHerarquicalNode>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Calendars"/>
-    <swb:hasClass rdf:resource="#State"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTStrategies"/>
     <swb:hasClass>
-      <swb:Class rdf:ID="Event">
-        <rdfs:label xml:lang="en">Event</rdfs:label>
-        <rdfs:label xml:lang="es">Evento</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+      <swb:Class rdf:ID="ActivityRef">
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:autogenId>
         <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </swb:hasClass>
-    <swb:hasClass rdf:resource="#Service"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Countries"/>
+    <swb:hasClass rdf:resource="#ServiceProvider"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Dnss"/>
+    <swb:hasClass rdf:resource="#Event"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTStrategies"/>
     <swb:hasClass>
-      <swb:Class rdf:ID="Activity">
-        <rdfs:label xml:lang="en">Activity</rdfs:label>
-        <rdfs:label xml:lang="es">Actividad</rdfs:label>
-        <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
+      <owl:Class rdf:about="#State"/>
     </swb:hasClass>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Calendars"/>
+    <swb:hasHerarquicalNode>
+      <swbxf:HerarquicalNode rdf:ID="hn_Intalations">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >97</swb:index>
+        <swb:title xml:lang="es">Instalaciones</swb:title>
+        <swb:title xml:lang="en">Instalations</swb:title>
+        <swbxf:heClass>
+          <owl:Class rdf:about="#Instalation"/>
+        </swbxf:heClass>
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconTemplates</swb:iconClass>
+      </swbxf:HerarquicalNode>
+    </swb:hasHerarquicalNode>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/community#hn_MicroSiteTypes"/>
+    <swb:hasHerarquicalNode>
+      <swbxf:HerarquicalNode rdf:ID="hn_Services">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >95</swb:index>
+        <swbxf:heClass>
+          <owl:Class rdf:ID="Service"/>
+        </swbxf:heClass>
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconTemplates</swb:iconClass>
+        <swb:title xml:lang="es">Servicios</swb:title>
+        <swb:title xml:lang="en">Services</swb:title>
+      </swbxf:HerarquicalNode>
+    </swb:hasHerarquicalNode>
+    <swb:hasClass>
+      <owl:Class rdf:about="#Service"/>
+    </swb:hasClass>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Countries"/>
+    <swb:hasClass rdf:resource="#Activity"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebSite"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Instalation">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+    <rdfs:label xml:lang="es">Instalación</rdfs:label>
+    <rdfs:label xml:lang="en">Instalation</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Service">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+    <rdfs:label xml:lang="en">Service</rdfs:label>
+    <rdfs:label xml:lang="es">Servicio</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#SPType">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+        <owl:allValuesFrom rdf:resource="#SPCategory"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:label xml:lang="es">Tipo de Proveedor</rdfs:label>
+    <rdfs:label xml:lang="en">Provider Type</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#State">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
+        <owl:allValuesFrom rdf:resource="#Destination"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+        <owl:allValuesFrom rdf:resource="#Region"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:label xml:lang="es">Estado</rdfs:label>
+    <rdfs:label xml:lang="en">State</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:ObjectProperty rdf:ID="hasDestServiceProviderInv">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >hasServiceProvider</swb:propertyCodeName>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="destination">
-    <owl:inverseOf rdf:resource="#hasDestServiceProviderInv"/>
-    <rdfs:range rdf:resource="#Destination"/>
     <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="#Destination"/>
+    <owl:inverseOf rdf:resource="#hasDestServiceProviderInv"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasSrvServiceProviderInv">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >hasServiceProvider</swb:propertyCodeName>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasInstalation">
-    <owl:inverseOf>
-      <owl:ObjectProperty rdf:ID="hasInstServiceProviderInv"/>
-    </owl:inverseOf>
-    <rdfs:range rdf:resource="#Instalation"/>
-    <rdfs:domain rdf:resource="#ServiceProvider"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="arActivity">
-    <owl:inverseOf>
-      <owl:ObjectProperty rdf:ID="hasActivityRefInv"/>
-    </owl:inverseOf>
-    <rdfs:range rdf:resource="#Activity"/>
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >activity</swb:propertyCodeName>
-    <rdfs:domain rdf:resource="#ActivityRef"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasActivityRef">
-    <swb:cloneDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:cloneDependency>
-    <rdfs:range rdf:resource="#ActivityRef"/>
-    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:removeDependency>
-    <owl:inverseOf>
-      <owl:ObjectProperty rdf:ID="arServiceProviderInv"/>
-    </owl:inverseOf>
-    <rdfs:domain rdf:resource="#ServiceProvider"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:about="#hasActivityRefInv">
-    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:removeDependency>
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >hasActivityRef</swb:propertyCodeName>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasCategoryInstalation">
-    <rdfs:label xml:lang="en">Instalations</rdfs:label>
-    <rdfs:label xml:lang="es">Instalaciones</rdfs:label>
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_hasCategoryInstalation">
+      <swbxf:DisplayProperty rdf:ID="dp_hasInstalation">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >10</swb:index>
-        <swbxf:propGroup>
-          <swbxf:PropertyGroup rdf:ID="others">
-            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >100</swb:index>
-            <rdfs:label xml:lang="en">Others</rdfs:label>
-            <rdfs:label xml:lang="es">Otros</rdfs:label>
-          </swbxf:PropertyGroup>
-        </swbxf:propGroup>
+        >110</swb:index>
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
     <rdfs:range rdf:resource="#Instalation"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasInstServiceProviderInv"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="arActivity">
+    <rdfs:domain rdf:resource="#ActivityRef"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >activity</swb:propertyCodeName>
+    <rdfs:range rdf:resource="#Activity"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasActivityRefInv"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasActivityRef">
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="arServiceProviderInv"/>
+    </owl:inverseOf>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <rdfs:range rdf:resource="#ActivityRef"/>
+    <swb:cloneDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:cloneDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasActivityRefInv">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasActivityRef</swb:propertyCodeName>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasCategoryInstalation">
     <rdfs:domain rdf:resource="#SPCategory"/>
+    <rdfs:range rdf:resource="#Instalation"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasCategoryInstalation">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+        <swbxf:propGroup>
+          <swbxf:PropertyGroup rdf:ID="others">
+            <rdfs:label xml:lang="es">Otros</rdfs:label>
+            <rdfs:label xml:lang="en">Others</rdfs:label>
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >100</swb:index>
+          </swbxf:PropertyGroup>
+        </swbxf:propGroup>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Instalaciones</rdfs:label>
+    <rdfs:label xml:lang="en">Instalations</rdfs:label>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="#hasInstServiceProviderInv">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -282,35 +302,42 @@
     >serviceProvider</swb:propertyCodeName>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasService">
-    <owl:inverseOf rdf:resource="#hasSrvServiceProviderInv"/>
-    <rdfs:range rdf:resource="#Service"/>
-    <rdfs:domain rdf:resource="#ServiceProvider"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasCategoryService">
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_hasCategoryService">
-        <swbxf:propGroup rdf:resource="#others"/>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+      <swbxf:DisplayProperty rdf:ID="dp_hasService">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >20</swb:index>
+        >100</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:label xml:lang="en">Services</rdfs:label>
-    <rdfs:label xml:lang="es">Servicios</rdfs:label>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
     <rdfs:range rdf:resource="#Service"/>
+    <owl:inverseOf rdf:resource="#hasSrvServiceProviderInv"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasCategoryService">
     <rdfs:domain rdf:resource="#SPCategory"/>
+    <rdfs:range rdf:resource="#Service"/>
+    <rdfs:label xml:lang="es">Servicios</rdfs:label>
+    <rdfs:label xml:lang="en">Services</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasCategoryService">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >20</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+        <swbxf:propGroup rdf:resource="#others"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
   </owl:ObjectProperty>
   <owl:DatatypeProperty rdf:ID="arPriority">
+    <rdfs:domain rdf:resource="#ActivityRef"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >priority</swb:propertyCodeName>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <rdfs:domain rdf:resource="#ActivityRef"/>
   </owl:DatatypeProperty>
   <swb:CodePackage rdf:ID="pkg">
-    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.pymtur</swb:package>
     <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >pymtur</swb:prefix>
+    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.pymtur</swb:package>
   </swb:CodePackage>
 </rdf:RDF>
 
