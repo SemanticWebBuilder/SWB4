@@ -16,6 +16,8 @@ import java.io.File;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
+import java.text.NumberFormat;
+import java.util.Locale;
 import javax.swing.table.DefaultTableModel;
 import org.semanticwb.openoffice.OfficeDocument;
 import org.semanticwb.openoffice.ui.icons.ImageLoader;
@@ -44,9 +46,10 @@ public class DialogDocumentDetail extends javax.swing.JDialog {
         try
         {
             name=document.getLocalPath().getName();
-            location=document.getLocalPath().getParentFile().getCanonicalPath();
-            tam=""+document.getLocalPath().length()+" bytes";
+            location=document.getLocalPath().getParentFile().getCanonicalPath();            
             observacion=validaNombre(document.getLocalPath().getAbsoluteFile());
+            java.text.NumberFormat nf=NumberFormat.getInstance(Locale.getDefault());
+            tam=""+nf.format(document.getLocalPath().length())+" bytes";
             
         }
         catch(Exception e){}
