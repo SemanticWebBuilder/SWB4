@@ -571,6 +571,13 @@ public class ContentUtils {
                         if(tag.getParam("STYLE")!=null && tag.getParam("STYLE").equals("page-break-before: always")) { // Si es un tag div
                             page++;
                             if(page>page2ret){
+                                /*
+                                String str="<P><BR><BR>"+(char)13+(char)10+"</P>"+(char)13+(char)10;
+                                if(ret.toString().endsWith(str)){
+                                    String rettmp=ret.toString().substring(0, ret.length()-19);
+                                    ret=new StringBuffer();
+                                    ret.append(rettmp);
+                                }*/
                                 ret.append("</BODY>");
                                 ret.append("</HTML>");
                                 break;
