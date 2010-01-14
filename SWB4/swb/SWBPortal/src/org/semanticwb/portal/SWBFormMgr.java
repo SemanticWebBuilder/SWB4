@@ -601,6 +601,8 @@ public class SWBFormMgr
      */
     public void renderProp(HttpServletRequest request, StringBuffer ret, SemanticProperty prop, FormElement ele, String mode)
     {
+        SemanticObject obj=m_obj;
+        if(obj==null)obj=new SemanticObject(m_ref.getModel(),m_cls);
         if(removed.contains(prop))return;
         String label=null;
         String element=null;
@@ -617,12 +619,12 @@ public class SWBFormMgr
             {
                 if(m_propmap!=null)
                 {
-                    label=ele.renderLabel(request, m_obj, prop, m_type, m_propmap.get(prop), m_lang);
-                    element=ele.renderElement(request, m_obj, prop, m_type, m_propmap.get(prop), m_lang);
+                    label=ele.renderLabel(request, obj, prop, m_type, m_propmap.get(prop), m_lang);
+                    element=ele.renderElement(request, obj, prop, m_type, m_propmap.get(prop), m_lang);
                 }else
                 {
-                    label=ele.renderLabel(request, m_obj, prop, m_type, mode, m_lang);
-                    element=ele.renderElement(request, m_obj, prop, m_type, mode, m_lang);
+                    label=ele.renderLabel(request, obj, prop, m_type, mode, m_lang);
+                    element=ele.renderElement(request, obj, prop, m_type, mode, m_lang);
                 }
             }catch(Exception e){log.error("Element:"+ele,e);}
             if(element!=null && element.length()>0)
@@ -646,10 +648,10 @@ public class SWBFormMgr
             //Solo si el valor pasa por parametro se agrega el hidden
 //            if(prop.isDataTypeProperty())
 //            {
-//                value=m_obj.getProperty(prop);
+//                value=obj.getProperty(prop);
 //            }else
 //            {
-//                SemanticObject aux=m_obj.getObjectProperty(prop);
+//                SemanticObject aux=obj.getObjectProperty(prop);
 //                if(aux!=null)
 //                {
 //                    value=aux.getURI();
