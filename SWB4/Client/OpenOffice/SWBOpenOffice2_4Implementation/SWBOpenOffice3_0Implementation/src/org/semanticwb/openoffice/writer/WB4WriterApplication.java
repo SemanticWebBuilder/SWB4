@@ -56,9 +56,9 @@ import static org.semanticwb.openoffice.util.FileUtil.getPathURL;
 public class WB4WriterApplication extends OfficeApplication
 {
 
-    private static final String DESKTOP_NOT_FOUND = "The desktop was not found";
+    private static final String DESKTOP_NOT_FOUND = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/writer/WB4WriterApplication").getString("THE_DESKTOP_WAS_NOT_FOUND");
     private static final String DESKTOP_PATH = "com.sun.star.frame.Desktop";
-    private static final String DOCUMENT_CAN_NOT_BE_OPEN = "The document can not be open";
+    private static final String DOCUMENT_CAN_NOT_BE_OPEN = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/writer/WB4WriterApplication").getString("THE_DOCUMENT_CAN_NOT_BE_OPEN");
     private static final String TARGET_BLANK = "_blank";
     private static final String TEXTDOCUMENT_PATH = "com.sun.star.text.TextDocument";
     /**
@@ -144,12 +144,12 @@ public class WB4WriterApplication extends OfficeApplication
         }
         catch (com.sun.star.io.IOException e)
         {
-            JOptionPane.showMessageDialog(null, "e");
+            JOptionPane.showMessageDialog(null, e.getLocalizedMessage(),"Error",JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             throw new WBOfficeException(DOCUMENT_CAN_NOT_BE_OPEN, e);
         }
         catch (com.sun.star.uno.Exception e)
         {
-            JOptionPane.showMessageDialog(null, "e2");
+            JOptionPane.showMessageDialog(null, e.getLocalizedMessage(),"Error",JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             throw new WBOfficeException(DOCUMENT_CAN_NOT_BE_OPEN, e);
         }
 

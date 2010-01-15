@@ -78,24 +78,27 @@ import static org.semanticwb.openoffice.util.FileUtil.getFileFromURL;
  */
 public class WB4Calc extends OfficeDocument
 {
-
-    private static final String HYPERLINK_VALUE = "HyperLinkURL";
-    private static final String ERROR_DOCUMENT_NOT_FOUND = "There is not a document active in the desktop";
+    private static final String NL = "\r\n";
+    private static final String ERROR_DOCUMENT_NOT_FOUND = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/calc/WB4Calc").getString("THERE_IS_NOT_A_DOCUMENT_ACTIVE_IN_THE_DESKTOP");
     private static final String CALC_FORMAT = "Calc8";
-    private static final String DESKTOP_NOT_FOUND = "The desktop was not found";
+    private static final String DESKTOP_NOT_FOUND = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/calc/WB4Calc").getString("THE_DESKTOP_WAS_NOT_FOUND");
     private static final String DESKTOP_PATH = "com.sun.star.frame.Desktop";
-    private static final String ERROR_DOCUMENT_NOT_MODIFIED = "The document has not been modified";
-    private static final String ERROR_DOCUMENT_NOT_SAVED_BEFORE = "The document has not been saved before";
+    private static final String ERROR_DOCUMENT_NOT_MODIFIED = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/calc/WB4Calc").getString("THE_DOCUMENT_HAS_NOT_BEEN_MODIFIED");
+    private static final String ERROR_DOCUMENT_NOT_SAVED_BEFORE = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/calc/WB4Calc").getString("THE_DOCUMENT_HAS_NOT_BEEN_SAVED_BEFORE");
     private static final String HTML_EXPORT_FORMAT = "HTML (StarCalc)";
-    private static final String INDEXOFBOUNDERROR = "There was an error saving custom properties";
-    private static final String ERROR_DOCUMENT_READ_ONLY = "The document is read only";
+    private static final String INDEXOFBOUNDERROR = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/calc/WB4Calc").getString("THERE_WAS_AN_ERROR_SAVING_CUSTOM_PROPERTIES");
+    private static final String ERROR_DOCUMENT_READ_ONLY = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/calc/WB4Calc").getString("THE_DOCUMENT_IS_READ_ONLY");
     private static final String OFFICE97_FORMAT = "MS Excel 97";
     private static final String OPENOFFICE_EXTENSION = ".ods";
     private static final String EXCEL_EXTENSION = ".xls";
     private static final String HTML_EXTENSION = ".html";
-    private static final String ERROR_NO_SAVE = "The document can not be saved";
+    private static final String ERROR_NO_SAVE = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/calc/WB4Calc").getString("THE_DOCUMENT_CAN_NOT_BE_SAVED");
     private static final String FILTER_NAME = "FilterName";
     private static final String OVERRIDE_OPTION = "Overwrite";
+    private static final String REPRESENTATION = "Representation";
+    private static final String TARGETFRAME = "TargetFrame";
+    private static final String URL = "URL";
+    private static final String _BLANK = "_blank";
     private static final String tabstrip;
     private static final NumberFormat formatter = new DecimalFormat("000");
     private final XComponent document;
@@ -173,7 +176,7 @@ public class WB4Calc extends OfficeDocument
                     XPropertySet xps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, textField1);
                     if (xps != null)
                     {
-                        String path = xps.getPropertyValue("URL").toString();
+                        String path = xps.getPropertyValue(URL).toString();
                         attachments.addAll(this.addLink(path));
                     }
                 }
@@ -201,7 +204,7 @@ public class WB4Calc extends OfficeDocument
                     XPropertySet xps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, textField1);
                     if (xps != null)
                     {
-                        String path = xps.getPropertyValue("URL").toString();
+                        String path = xps.getPropertyValue(URL).toString();
                         attachments.add(path);
                     }
                 }
@@ -638,16 +641,16 @@ public class WB4Calc extends OfficeDocument
 
     private void changeContentToViewTabStrip(File htmlFile)
     {
-        StringBuilder content = new StringBuilder("<html>\r\n");
-        content.append("<frameset rows=\"*,39\" border=0 width=0 frameborder=no framespacing=0>\r\n");
-        content.append("<frame src=\"sheet000.html\" name=\"frSheet\">\r\n");
-        content.append("<frame src=\"tabstrip.html\" name=\"frTabs\" marginwidth=0 marginheight=0>\r\n");
-        content.append("<noframes>\r\n");
-        content.append("<body>\r\n");
-        content.append("<p>Esta página utiliza marcos que su explorador no admite.</p>\r\n");
-        content.append("</body></noframes>\r\n");
-        content.append("</frameset>\r\n");
-        content.append("</html>\r\n");
+        StringBuilder content = new StringBuilder("<html>"+ NL );
+        content.append("<frameset rows=\"*,39\" border=0 width=0 frameborder=no framespacing=0>"+ NL);
+        content.append("<frame src=\"sheet000.html\" name=\"frSheet\">"+ NL);
+        content.append("<frame src=\"tabstrip.html\" name=\"frTabs\" marginwidth=0 marginheight=0>"+ NL);
+        content.append("<noframes>"+ NL);
+        content.append("<body>"+ NL);
+        content.append(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/calc/WB4Calc").getString("<P>ESTA_PÁGINA_UTILIZA_MARCOS_QUE_SU_EXPLORADOR_NO_ADMITE.</P>")+ NL);
+        content.append("</body></noframes>"+ NL);
+        content.append("</frameset>"+ NL);
+        content.append("</html>"+ NL);
         saveContent(content, htmlFile);
     }
 
@@ -658,7 +661,7 @@ public class WB4Calc extends OfficeDocument
         for (String sheetTitle : sheets.keySet())
         {
             String sheetName = sheets.get(sheetTitle);
-            sheetstable.append("<td bgcolor=\"#FFFFFF\" nowrap><b><small><small>&nbsp;<a href=\"" + sheetName + ".html\" target=\"frSheet\"><font face=\"Arial\" color=\"#000000\">" + sheetTitle + "</font></a>&nbsp;</small></small></b></td>\r\n");
+            sheetstable.append("<td bgcolor=\"#FFFFFF\" nowrap><b><small><small>&nbsp;<a href=\"" + sheetName + ".html\" target=\"frSheet\"><font face=\"Arial\" color=\"#000000\">" + sheetTitle + "</font></a>&nbsp;</small></small></b></td>"+ NL);
         }
         String tabStripFinal = tabstrip.replace("[file]", filecontentName);
         tabStripFinal = tabStripFinal.replace("[sheetstable]", sheetstable.toString());
@@ -769,9 +772,9 @@ public class WB4Calc extends OfficeDocument
         {
             Object objtextfied = xDocFactory.createInstance("com.sun.star.text.TextField.URL");
             XPropertySet xTextFieldProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, objtextfied);
-            xTextFieldProps.setPropertyValue("Representation", text);
-            xTextFieldProps.setPropertyValue("TargetFrame", "_blank");
-            xTextFieldProps.setPropertyValue("URL", url);
+            xTextFieldProps.setPropertyValue( REPRESENTATION, text);
+            xTextFieldProps.setPropertyValue(TARGETFRAME,_BLANK);
+            xTextFieldProps.setPropertyValue( URL, url);
             XText xShapeText = (XText) UnoRuntime.queryInterface(XText.class, xCell);
             XTextContent xFieldTextContent = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, xTextFieldProps);
             xShapeText.insertTextContent(xTextCursor, xFieldTextContent, false);
