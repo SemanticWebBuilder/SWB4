@@ -40,11 +40,10 @@ import com.infotec.appfw.exception.*;
 import com.infotec.appfw.lib.AFObserver;
 import com.infotec.wb.lib.WBDBRecord;
 import com.infotec.appfw.util.AFUtils;
-import com.infotec.topicmaps.bean.*;
 
 import com.infotec.appfw.util.db.ObjectDecoder;
 import com.infotec.appfw.util.db.ObjectEncoder;
-import com.infotec.wb.core.WBLoader;
+import org.semanticwb.model.SWBContext;
 
 
 /**
@@ -113,7 +112,7 @@ public abstract class RecUser implements WBDBRecord, java.io.Serializable {
      */
     public RecUser(String repository) {
         this.repository = repository;
-        if(WBLoader.getInstance().haveDBTables())
+//        if(WBLoader.getInstance().haveDBTables())
         {
             //registerObserver(DBUser.getInstance(repository));
             if ("true".equalsIgnoreCase(DBUser.getInstance(repository).getProperty("active", "true")))
@@ -752,9 +751,10 @@ public abstract class RecUser implements WBDBRecord, java.io.Serializable {
             lastLogin = lastupdate;
             passwordChanged = lastupdate;
             created = lastupdate;
-            if (id == 0) {
-                id = DBCatalogs.getInstance().getCounter("wbuser_" + repository);
-            }
+            //TODO:
+//            if (id == 0) {
+//                id = DBCatalogs.getInstance().getCounter("wbuser_" + repository);
+//            }
             createImp();
             sendNotify("create");
 //            DBDbSync.getInstance().saveChange("wbuser", "create", id, id + "_" + repository, lastupdate);
@@ -897,7 +897,7 @@ public abstract class RecUser implements WBDBRecord, java.io.Serializable {
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 Integer fltId = new Integer(rs.getInt("fltId"));
-                String idtm = TopicMgr.TM_ADMIN;
+                String idtm = SWBContext.getAdminWebSite().getId(); //TopicMgr.TM_ADMIN;
                 try {
                     idtm = rs.getString("idtm");
                 } catch (Exception e) {

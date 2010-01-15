@@ -1,22 +1,22 @@
 /*
- * INFOTEC WebBuilder es una herramienta para el desarrollo de portales de conocimiento, colaboración e integración para Internet,
- * la cual, es una creación original del Fondo de Información y Documentación para la Industria INFOTEC, misma que se encuentra
- * debidamente registrada ante el Registro Público del Derecho de Autor de los Estados Unidos Mexicanos con el
- * No. 03-2002-052312015400-14, para la versión 1; No. 03-2003-012112473900 para la versión 2, y No. 03-2006-012012004000-01
- * para la versión 3, respectivamente.
+ * INFOTEC WebBuilder es una herramienta para el desarrollo de portales de conocimiento, colaboraciï¿½n e integraciï¿½n para Internet,
+ * la cual, es una creaciï¿½n original del Fondo de Informaciï¿½n y Documentaciï¿½n para la Industria INFOTEC, misma que se encuentra
+ * debidamente registrada ante el Registro Pï¿½blico del Derecho de Autor de los Estados Unidos Mexicanos con el
+ * No. 03-2002-052312015400-14, para la versiï¿½n 1; No. 03-2003-012112473900 para la versiï¿½n 2, y No. 03-2006-012012004000-01
+ * para la versiï¿½n 3, respectivamente.
  *
- * INFOTEC pone a su disposición la herramienta INFOTEC WebBuilder a través de su licenciamiento abierto al público (‘open source’),
- * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
- * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
- * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * INFOTEC pone a su disposiciï¿½n la herramienta INFOTEC WebBuilder a travï¿½s de su licenciamiento abierto al pï¿½blico (ï¿½open sourceï¿½),
+ * en virtud del cual, usted podrï¿½ usarlo en las mismas condiciones con que INFOTEC lo ha diseï¿½ado y puesto a su disposiciï¿½n;
+ * aprender de ï¿½l; distribuirlo a terceros; acceder a su cï¿½digo fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los tï¿½rminos y condiciones de la LICENCIA ABIERTA AL Pï¿½BLICO que otorga INFOTEC para la utilizaciï¿½n
  * de INFOTEC WebBuilder 3.2.
  *
- * INFOTEC no otorga garantía sobre INFOTEC WebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
- * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * INFOTEC no otorga garantï¿½a sobre INFOTEC WebBuilder, de ninguna especie y naturaleza, ni implï¿½cita ni explï¿½cita,
+ * siendo usted completamente responsable de la utilizaciï¿½n que le dï¿½ y asumiendo la totalidad de los riesgos que puedan derivar
  * de la misma.
  *
- * Si usted tiene cualquier duda o comentario sobre INFOTEC WebBuilder, INFOTEC pone a su disposición la siguiente
- * dirección electrónica:
+ * Si usted tiene cualquier duda o comentario sobre INFOTEC WebBuilder, INFOTEC pone a su disposiciï¿½n la siguiente
+ * direcciï¿½n electrï¿½nica:
  *
  *                                          http://www.webbuilder.org.mx
  */
@@ -75,7 +75,7 @@ public class RecAssociation implements WBDBRecord
         this.idtm = null;
         this.xml = null;
         this.lastupdate = null;
-        if(WBLoader.getInstance().haveDBTables())
+//        if(WBLoader.getInstance().haveDBTables())
         {
             registerObserver(DBTopicMap.getInstance());
             //registerObserver(UsrMgr.getInstance());
@@ -224,7 +224,7 @@ public class RecAssociation implements WBDBRecord
                 st.executeUpdate();
                 st.close();
                 con.close();
-                DBDbSync.getInstance().saveChange("wbassociation", "remove", 0, id + " " + idtm, null);
+//                DBDbSync.getInstance().saveChange("wbassociation", "remove", 0, id + " " + idtm, null);
             }
             Iterator it = observers.iterator();
             while (it.hasNext())
@@ -266,7 +266,7 @@ public class RecAssociation implements WBDBRecord
                 st.executeUpdate();
                 st.close();
                 con.close();
-                DBDbSync.getInstance().saveChange("wbassociation", "update", 0, id + " " + idtm, lastupdate);
+//                DBDbSync.getInstance().saveChange("wbassociation", "update", 0, id + " " + idtm, lastupdate);
             }
             Iterator it = observers.iterator();
             while (it.hasNext())
@@ -311,7 +311,7 @@ public class RecAssociation implements WBDBRecord
             {
                 ((AFObserver) it.next()).sendDBNotify("create", this);
             }
-            DBDbSync.getInstance().saveChange("wbassociation", "create", 0, id + " " + idtm, lastupdate);
+//            DBDbSync.getInstance().saveChange("wbassociation", "create", 0, id + " " + idtm, lastupdate);
 
         } catch (Exception e)
         {
@@ -385,20 +385,20 @@ public class RecAssociation implements WBDBRecord
 
     public void syncFromExternalAction(String action, Timestamp date) throws AFException
     {
-        if (getLastupdate() == null || (getLastupdate() != null && getLastupdate().before(date)))
-        {
-            if (action.equals("remove"))
-            {
-                sendNotify(action);
-                TopicMgr.getInstance().syncFromExternalAction(action, this);
-            } else if (action.equals("create") || action.equals("update"))
-            {
-                String oldxml = getXml();
-                load();
-                if (action.equals("create") || (action.equals("update") && (oldxml == null || !oldxml.equals(getXml()))))
-                    TopicMgr.getInstance().syncFromExternalAction(action, this);
-            }
-        }
+//        if (getLastupdate() == null || (getLastupdate() != null && getLastupdate().before(date)))
+//        {
+//            if (action.equals("remove"))
+//            {
+//                sendNotify(action);
+//                TopicMgr.getInstance().syncFromExternalAction(action, this);
+//            } else if (action.equals("create") || action.equals("update"))
+//            {
+//                String oldxml = getXml();
+//                load();
+//                if (action.equals("create") || (action.equals("update") && (oldxml == null || !oldxml.equals(getXml()))))
+//                    TopicMgr.getInstance().syncFromExternalAction(action, this);
+//            }
+//        }
     }
 
 }
