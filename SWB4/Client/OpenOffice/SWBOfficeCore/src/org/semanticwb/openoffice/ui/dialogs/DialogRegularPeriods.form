@@ -15,7 +15,9 @@
     </Property>
     <Property name="modal" type="boolean" value="true"/>
     <Property name="resizable" type="boolean" value="false"/>
-    <Property name="title" type="java.lang.String" value="Calendarizaci&#xf3;n con Periodos Regulares"/>
+    <Property name="title" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+      <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="CALENDARIZACI&#xd3;N_CON_PERIODOS_REGULARES" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+    </Property>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -70,7 +72,9 @@
           <SubComponents>
             <Component class="javax.swing.JButton" name="jButtonok">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Aceptar"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="ACEPTAR" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonokActionPerformed"/>
@@ -78,7 +82,9 @@
             </Component>
             <Component class="javax.swing.JButton" name="jButtonCancel">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Cancelar"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="CANCELAR" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonCancelActionPerformed"/>
@@ -174,42 +180,58 @@
                       <ComponentRef name="buttonGroupPeriodicidad"/>
                     </Property>
                     <Property name="selected" type="boolean" value="true"/>
-                    <Property name="text" type="java.lang.String" value="Semanal"/>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="SEMANAL" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    </Property>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="wday2">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Lunes"/>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="LUNES" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    </Property>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="wday3">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Martes"/>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="MARTES" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    </Property>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="wday4">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Mi&#xe9;rcoles"/>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="MI&#xc9;RCOLES" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    </Property>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="wday5">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Jueves"/>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="JUEVES" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    </Property>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="wday6">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Viernes"/>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="VIERNES" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    </Property>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="wday7">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Sabado"/>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="SABADO" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    </Property>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="wday1">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Domingo"/>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="DOMINGO" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    </Property>
                   </Properties>
                 </Component>
               </SubComponents>
@@ -353,12 +375,16 @@
                         <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
                           <ComponentRef name="buttonGroupPeriodicidad"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" value="Mensual"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="MENSUAL" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel1">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="El:"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="EL:" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JComboBox" name="mweek">
@@ -372,42 +398,58 @@
                             <StringItem index="4" value="&#xda;ltimo"/>
                           </StringArray>
                         </Property>
-                        <Property name="toolTipText" type="java.lang.String" value="Selecione la semana"/>
+                        <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="SELECIONE_LA_SEMANA" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JCheckBox" name="mday2">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Lu"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="LU" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JCheckBox" name="mday3">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Ma"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="MA" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JCheckBox" name="mday4">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Mi"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="MI" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JCheckBox" name="mday5">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Ju"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="JU" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JCheckBox" name="mday6">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Vi"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="VI" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JCheckBox" name="mday7">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Sa"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="SA" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JCheckBox" name="mday1">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Do"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="DO" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JRadioButton" name="periodmont2">
@@ -427,7 +469,9 @@
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel2">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="El:"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="EL:" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JSpinner" name="mday">
@@ -439,7 +483,9 @@
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel3">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="de cada:"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="DE_CADA:" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JSpinner" name="mmonth">
@@ -451,12 +497,16 @@
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel4">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Meses"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="MESES" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel5">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="de cada:"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="DE_CADA:" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JSpinner" name="mmonth2">
@@ -468,7 +518,9 @@
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel6">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Meses"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="MESES" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                     </Component>
                   </SubComponents>
@@ -639,7 +691,9 @@
                         <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
                           <ComponentRef name="buttonGroupPeriodicidad"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" value="Anual"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="ANUAL" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JRadioButton" name="periodyear2">
@@ -652,7 +706,9 @@
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel7">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="El:"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="EL:" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JComboBox" name="yweek">
@@ -666,47 +722,65 @@
                             <StringItem index="4" value="&#xda;ltimo"/>
                           </StringArray>
                         </Property>
-                        <Property name="toolTipText" type="java.lang.String" value="Seleccione la semana"/>
+                        <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="SELECCIONE_LA_SEMANA" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JCheckBox" name="yday2">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Lu"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="LU" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JCheckBox" name="yday3">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Ma"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="MA" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JCheckBox" name="yday6">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Vi"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="VI" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JCheckBox" name="yday7">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Sa"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="SA" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JCheckBox" name="yday1">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Do"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="DO" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JCheckBox" name="yday4">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Mi"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="MI" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JCheckBox" name="yday5">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Ju"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="JU" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel8">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="de:"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="DE:" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JComboBox" name="ymonth2">
@@ -738,7 +812,9 @@
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel9">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="El:"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="EL:" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JSpinner" name="yday">
@@ -750,7 +826,9 @@
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel10">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="de:"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="DE:" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JComboBox" name="ymonth">
@@ -775,7 +853,9 @@
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel11">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="de cada:"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="DE_CADA:" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JSpinner" name="yyear">
@@ -787,12 +867,16 @@
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel12">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="a&#xf1;os"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="A&#xd1;OS" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel13">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="de cada:"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="DE_CADA:" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JSpinner" name="yyear2">
@@ -804,7 +888,9 @@
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel14">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="a&#xf1;os"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="A&#xd1;OS" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                       </Properties>
                     </Component>
                   </SubComponents>
@@ -833,7 +919,9 @@
       <SubComponents>
         <Component class="javax.swing.JCheckBox" name="jCheckBoxUseRegularPeriods">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Usar Periodos Regulares"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods.properties" key="USAR_PERIODOS_REGULARES" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
           </Properties>
         </Component>
       </SubComponents>

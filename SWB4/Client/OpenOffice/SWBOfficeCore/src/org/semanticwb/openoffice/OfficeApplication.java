@@ -34,7 +34,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import org.netbeans.spi.wizard.Wizard;
@@ -64,7 +63,9 @@ public abstract class OfficeApplication
 {
 
     public static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-    private static final String DELETE_CONFIGURATION_ERROR = "Error tratando de obtener el proxy server, favor de borra el archivo de configuración ubicado en: ";
+    private static final String DELETE_CONFIGURATION_ERROR = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("ERROR_TRATANDO_DE_OBTENER_EL_PROXY_SERVER,_FAVOR_DE_BORRA_EL_ARCHIVO_DE_CONFIGURACIÓN_UBICADO_EN:_");
+    private static final String EMPTY_STRING = "";
+    private static final String NL = "\r\n";
     private static final String HELP_URL = "http://www.webbuilder.org.mx";
     private static MenuListener menuListener;
     private static UserInfo userInfo = null;
@@ -77,7 +78,7 @@ public abstract class OfficeApplication
     {       
         System.setProperty("wizard.sidebar.image", "org/semanticwb/openoffice/ui/icons/sidebar.png");
         System.setProperty("WizardDisplayer.default","org.semanticwb.openoffice.util.WBWizardDisplayerImpl");
-        Locale.setDefault(new Locale("es"));
+        
         try
         {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -99,13 +100,13 @@ public abstract class OfficeApplication
             String proxyPort = new Configuration().get(Configuration.PROXY_PORT);
             if (proxyServer == null)
             {
-                proxyServer = "";
+                proxyServer = EMPTY_STRING;
             }
             if (proxyPort == null)
             {
-                proxyServer = "";
+                proxyServer = EMPTY_STRING;
             }
-            if (!proxyServer.equals("") && !proxyPort.equals(""))
+            if (!proxyServer.equals(EMPTY_STRING) && !proxyPort.equals(EMPTY_STRING))
             {
                 try
                 {
@@ -127,31 +128,31 @@ public abstract class OfficeApplication
             {
                 if (!application.isValidVersion(IOpenOfficeApplication.version))
                 {
-                    throw new WBException("La versión entre la aplicación de publicación y el sitio no es compatible");
+                    throw new WBException(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("LA_VERSIÓN_ENTRE_LA_APLICACIÓN_DE_PUBLICACIÓN_Y_EL_SITIO_NO_ES_COMPATIBLE"));
                 }
             }
             catch (ConnectException e)
             {
-                JOptionPane.showMessageDialog(null, "No se puede conectar al servidor\r\nDetalle: "+e.getLocalizedMessage(), "Error de acceso", JOptionPane.OK_OPTION |
+                JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("NO_SE_PUEDE_CONECTAR_AL_SERVIDORDETALLE:_")+e.getLocalizedMessage(), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("ERROR_DE_ACCESO"), JOptionPane.OK_OPTION |
                             JOptionPane.ERROR_MESSAGE);
-                throw new WBException("No se puede conectar al servidor\r\nDetalle: "+e.getLocalizedMessage(), e);
+                throw new WBException(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("NO_SE_PUEDE_CONECTAR_AL_SERVIDORDETALLE:_")+e.getLocalizedMessage(), e);
             }
             catch (HttpException e)
             {
                 if (e.getCode() == 403 || e.getCode()==404)
                 {
-                    JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "Error de acceso", JOptionPane.OK_OPTION |
+                    JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("ERROR_DE_ACCESO"), JOptionPane.OK_OPTION |
                             JOptionPane.ERROR_MESSAGE);
-                    throw new WBException("No se puede validar la compatibilidad de versiones\r\n" + e.getMessage(), e);
+                    throw new WBException(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("NO_SE_PUEDE_VALIDAR_LA_COMPATIBILIDAD_DE_VERSIONES") + e.getMessage(), e);
                 }
                 else
                 {
-                    throw new WBException("No se puede validar la compatibilidad de versiones\r\n" + e.getMessage(), e);
+                    throw new WBException(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("NO_SE_PUEDE_VALIDAR_LA_COMPATIBILIDAD_DE_VERSIONES") + e.getMessage(), e);
                 }
             }
             catch (Exception e)
             {
-                throw new WBException("Error al tratar de verificar compatibilidad de versiones entre el publicador y el servidor", e);
+                throw new WBException(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("ERROR_AL_TRATAR_DE_VERIFICAR_COMPATIBILIDAD_DE_VERSIONES_ENTRE_EL_PUBLICADOR_Y_EL_SERVIDOR"), e);
 
             }
         }
@@ -164,13 +165,13 @@ public abstract class OfficeApplication
         String proxyPort = new Configuration().get(Configuration.PROXY_PORT);
         if (proxyServer == null)
         {
-            proxyServer = "";
+            proxyServer = EMPTY_STRING;
         }
         if (proxyPort == null)
         {
-            proxyServer = "";
+            proxyServer = EMPTY_STRING;
         }
-        if (!proxyServer.equals("") && !proxyPort.equals(""))
+        if (!proxyServer.equals(EMPTY_STRING) && !proxyPort.equals(EMPTY_STRING))
         {
             try
             {
@@ -179,12 +180,12 @@ public abstract class OfficeApplication
             }
             catch (URISyntaxException e)
             {
-                String message = DELETE_CONFIGURATION_ERROR + new Configuration().getPath() + " or fix it.";
+                String message = DELETE_CONFIGURATION_ERROR + new Configuration().getPath();
                 throw new WBException(message, e);
             }
             catch (NumberFormatException e)
             {
-                String message = "Error trying to get the proxy port, delete the file " + new Configuration().getPath() + " or fix it.";
+                String message = DELETE_CONFIGURATION_ERROR + new Configuration().getPath();
                 throw new WBException(message, e);
             }
         }
@@ -206,26 +207,26 @@ public abstract class OfficeApplication
             }
             catch (ConnectException e)
             {
-                JOptionPane.showMessageDialog(null, "No se puede conectar al servidor\r\nDetalle: "+e.getLocalizedMessage(), "Error de acceso", JOptionPane.OK_OPTION |
+                JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("NO_SE_PUEDE_CONECTAR_AL_SERVIDORDETALLE:_")+e.getLocalizedMessage(), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("ERROR_DE_ACCESO"), JOptionPane.OK_OPTION |
                             JOptionPane.ERROR_MESSAGE);
-                throw new WBException("No se puede conectar al servidor\r\nDetalle: "+e.getLocalizedMessage(), e);
+                throw new WBException(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("NO_SE_PUEDE_CONECTAR_AL_SERVIDORDETALLE:_")+e.getLocalizedMessage(), e);
             }
             catch (HttpException e)
             {
                 if (e.getCode() == 403)
                 {
-                    JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "Error de acceso", JOptionPane.OK_OPTION |
+                    JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("ERROR_DE_ACCESO"), JOptionPane.OK_OPTION |
                             JOptionPane.ERROR_MESSAGE);
-                    throw new WBException("No se puede validar la compatibilidad de versiones\r\n" + e.getMessage(), e);
+                    throw new WBException(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("NO_SE_PUEDE_VALIDAR_LA_COMPATIBILIDAD_DE_VERSIONES") + e.getMessage(), e);
                 }
                 else
                 {
-                    throw new WBException("No se puede validar la compatibilidad de versiones\r\n" + e.getMessage(), e);
+                    throw new WBException(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("NO_SE_PUEDE_VALIDAR_LA_COMPATIBILIDAD_DE_VERSIONES") + e.getMessage(), e);
                 }
             }
             catch (Exception e)
             {
-                throw new WBException("No se puede validar la compatibilidad de versiones\r\n" + e.getMessage(), e);
+                throw new WBException(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("NO_SE_PUEDE_VALIDAR_LA_COMPATIBILIDAD_DE_VERSIONES") + e.getMessage(), e);
             }
         }
         return document;
@@ -289,7 +290,7 @@ public abstract class OfficeApplication
                 }
                 catch (Exception e)
                 {
-                    JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "Cambiar contraseña", JOptionPane.ERROR);
+                    JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("CAMBIAR_CONTRASEÑA"), JOptionPane.ERROR);
                 }
             }
         }
@@ -304,7 +305,7 @@ public abstract class OfficeApplication
             {
                 new SelectPage(null), new TitleAndDescription(false), new SelectWebPageID()
             };
-            Wizard wiz = WizardPage.createWizard("Asistente de creación de página", clazz, resultProducer);            
+            Wizard wiz = WizardPage.createWizard(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("ASISTENTE_DE_CREACIÓN_DE_PÁGINA"), clazz, resultProducer);
             wiz.show();
         }
     }
@@ -316,7 +317,7 @@ public abstract class OfficeApplication
         {
             new TitleAndDescription(false), new SelectWebPageID()
         };
-        Wizard wiz = WizardPage.createWizard("Asistente de creación de página", clazz, resultProducer);
+        Wizard wiz = WizardPage.createWizard(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("ASISTENTE_DE_CREACIÓN_DE_PÁGINA"), clazz, resultProducer);
         wiz.show();
     }
 
@@ -329,7 +330,7 @@ public abstract class OfficeApplication
             {
                 new Search(type), new SelectVersionToOpen(type.toString().toLowerCase()), new SelectDirectory()
             };
-            Wizard wiz = WizardPage.createWizard("Asistente de apertura de contenido", clazz, resultProducer);
+            Wizard wiz = WizardPage.createWizard(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("ASISTENTE_DE_APERTURA_DE_CONTENIDO"), clazz, resultProducer);
             wiz.show();
         }
     }
@@ -352,7 +353,7 @@ public abstract class OfficeApplication
         {
             if (!tryLogin())
             {
-                throw new WBException("The user can be logged");
+                throw new WBException(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("EL_USUARIO_NO_PUEDE_ACCEDER"));
             }
         }
         return webAddress;
@@ -361,7 +362,7 @@ public abstract class OfficeApplication
     static String setupDocument(String workspace, String contentId) throws Exception
     {
         String contentIdToReturn = null;
-        if (contentId != null && !contentId.trim().equals("") && OfficeApplication.tryLogin())
+        if (contentId != null && !contentId.trim().equals(EMPTY_STRING) && OfficeApplication.tryLogin())
         {
             document = getOfficeDocumentProxy();
             try
@@ -373,7 +374,7 @@ public abstract class OfficeApplication
                 else
                 {
                     // el contenido no existe en el sitio pero indica que ya tiene un identificador
-                    JOptionPane.showMessageDialog(null, "El contenido parace haberse publicado en un sitio web.\r\nAl sitio donde se está intentando conectar, indica que este contenido no existe.\r\nSi desea continuar se perdra esta información, de lo contrario, cierre este documento.", "Verificación de contenido en sitio web", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("EL_CONTENIDO_PARACE_HABERSE_PUBLICADO_EN_UN_SITIO_WEB.")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("AL_SITIO_DONDE_SE_ESTÁ_INTENTANDO_CONECTAR,_INDICA_QUE_ESTE_CONTENIDO_NO_EXISTE.")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("SI_DESEA_CONTINUAR_SE_PERDERÁ_ESTA_INFORMACIÓN,_DE_LO_CONTRARIO,_CIERRE_ESTE_DOCUMENTO."), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("VERIFICACIÓN_DE_CONTENIDO_EN_SITIO_WEB"), JOptionPane.WARNING_MESSAGE);
                 }
             }
             catch (NumberFormatException nfe)

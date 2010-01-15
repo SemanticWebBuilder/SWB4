@@ -49,13 +49,15 @@ import org.semanticwb.openoffice.OfficeApplication;
 import org.semanticwb.openoffice.ui.dialogs.DialogAddCategory;
 import org.semanticwb.openoffice.ui.icons.ImageLoader;
 
+
 /**
  *
  * @author  victor.lorenzana
  */
 public class SelectCategory extends WizardPage
 {
-
+    private static final String EMPTY_STRING = "";
+    private static final String NL = "\r\n";
     public static Map map = null;
     public static final String CATEGORY_ID = "categoryID";
     public static final String REPOSITORY_ID = "repositoryID";
@@ -91,7 +93,7 @@ public class SelectCategory extends WizardPage
                 parent.add(categoryNode);
                 if (category.childs > 0)
                 {
-                    categoryNode.add(new DefaultMutableTreeNode(""));
+                    categoryNode.add(new DefaultMutableTreeNode(EMPTY_STRING));
                 }            
             }
         }
@@ -111,7 +113,7 @@ public class SelectCategory extends WizardPage
                 parent.add(categoryNode);
                 if (category.childs > 0)
                 {
-                    categoryNode.add(new DefaultMutableTreeNode(""));
+                    categoryNode.add(new DefaultMutableTreeNode(EMPTY_STRING));
                 }
             }
         }
@@ -147,7 +149,7 @@ public class SelectCategory extends WizardPage
             if (wbe.getCause() != null)
             {
                 Throwable cause = wbe.getCause();
-                message += "\r\n" + cause.getMessage();
+                message += NL + cause.getMessage();
             }
             JOptionPane.showMessageDialog(this, message, getDescription(), JOptionPane.OK_OPTION);
             this.setProblem(message);
@@ -171,7 +173,7 @@ public class SelectCategory extends WizardPage
 
     public static String getDescription()
     {
-        return "Ubicación del contenido";
+        return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("UBICACIÓN_DEL_CONTENIDO");
     }
 
     @Override
@@ -180,14 +182,14 @@ public class SelectCategory extends WizardPage
         WizardPanelNavResult result = WizardPanelNavResult.PROCEED;
         if (this.getWizardDataMap().get(CATEGORY_ID) == null || this.getWizardDataMap().get(REPOSITORY_ID) == null)
         {
-            javax.swing.JOptionPane.showMessageDialog(null, "¡Debe seleccionar una categoria!", getDescription(), JOptionPane.ERROR_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("¡DEBE_SELECCIONAR_UNA_CATEGORIA!"), getDescription(), JOptionPane.ERROR_MESSAGE);
             this.jTreeCategory.requestFocus();
             result = WizardPanelNavResult.REMAIN_ON_PAGE;
         }
         RepositoryInfo rep = (RepositoryInfo) this.getWizardDataMap().get(REPOSITORY_ID);
         if (rep.exclusive)
         {
-            int res = JOptionPane.showConfirmDialog(this, "¡El repositorio selecionado sólo puede publicar contenidos en el sitio " + rep.siteInfo.title + "!\r\n¿Desea continuar?", getDescription(), JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+            int res = JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("¡EL_REPOSITORIO_SELECIONADO_SÓLO_PUEDE_PUBLICAR_CONTENIDOS_EN_EL_SITIO_") + rep.siteInfo.title + "!"+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("¿DESEA_CONTINUAR?"), getDescription(), JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
             if (res == JOptionPane.NO_OPTION)
             {
                 result = WizardPanelNavResult.REMAIN_ON_PAGE;
@@ -196,7 +198,7 @@ public class SelectCategory extends WizardPage
         }
         else
         {
-            int res = JOptionPane.showConfirmDialog(this, "¡El repositorio selecionado permite publicar en cualquier sitio!\r\n¿Desea continuar?", getDescription(), JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+            int res = JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("¡EL_REPOSITORIO_SELECIONADO_PERMITE_PUBLICAR_EN_CUALQUIER_SITIO!")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("¿DESEA_CONTINUAR?"), getDescription(), JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
             if (res == JOptionPane.NO_OPTION)
             {
                 result = WizardPanelNavResult.REMAIN_ON_PAGE;
@@ -238,7 +240,8 @@ public class SelectCategory extends WizardPage
 
         jButtonAddCategory.setBackground(new java.awt.Color(255, 255, 255));
         jButtonAddCategory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/close.png"))); // NOI18N
-        jButtonAddCategory.setToolTipText("Agregar categoria");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory"); // NOI18N
+        jButtonAddCategory.setToolTipText(bundle.getString("AGREGAR_CATEGORIA")); // NOI18N
         jButtonAddCategory.setDebugGraphicsOptions(javax.swing.DebugGraphics.NONE_OPTION);
         jButtonAddCategory.setEnabled(false);
         jButtonAddCategory.setFocusable(false);
@@ -254,7 +257,7 @@ public class SelectCategory extends WizardPage
         jToolBar1.add(jSeparator1);
 
         jButtonDeletCategory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/delete.png"))); // NOI18N
-        jButtonDeletCategory.setToolTipText("Borrar categoria");
+        jButtonDeletCategory.setToolTipText(bundle.getString("BORRAR_CATEGORIA")); // NOI18N
         jButtonDeletCategory.setEnabled(false);
         jButtonDeletCategory.setFocusable(false);
         jButtonDeletCategory.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -334,7 +337,7 @@ private void jTreeCategoryValueChanged(javax.swing.event.TreeSelectionEvent evt)
             RepositoryNode rep = (RepositoryNode) selected;
             if (rep.getChildCount() == 0)
             {
-                JOptionPane.showMessageDialog(this, "¡No existen categorias en este repositorio!\r\nDebe crear una para poder publicar el contenido", getDescription(), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("¡NO_EXISTEN_CATEGORIAS_EN_ESTE_REPOSITORIO!")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("DEBE_CREAR_UNA_PARA_PODER_PUBLICAR_EL_CONTENIDO"), getDescription(), JOptionPane.ERROR_MESSAGE);
             }
             this.jButtonAddCategory.setEnabled(true);
         }
@@ -390,7 +393,7 @@ private void jButtonDeletCategoryActionPerformed(java.awt.event.ActionEvent evt)
         }
         else
         {
-            JOptionPane.showMessageDialog(this, "No se puede borrar la categoria por que tiene contenidos", getDescription(), JOptionPane.ERROR | JOptionPane.YES_NO_OPTION);
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("NO_SE_PUEDE_BORRAR_LA_CATEGORIA_POR_QUE_TIENE_CONTENIDOS"), getDescription(), JOptionPane.ERROR | JOptionPane.YES_NO_OPTION);
         }
     }
     catch (Exception e)
@@ -421,7 +424,6 @@ private void jTreeCategoryTreeWillExpand(javax.swing.event.TreeExpansionEvent ev
     private javax.swing.JTree jTreeCategory;
     // End of variables declaration//GEN-END:variables
 }
-
 interface ToolTipTreeNode
 {
 
@@ -433,7 +435,7 @@ class RepositoryRootNode extends RepositoryNode
 
     public RepositoryRootNode()
     {
-        super(new RepositoryInfo("Repositorios"));
+        super(new RepositoryInfo(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("REPOSITORIOS")));
         repositoryInfo.exclusive = false;
         component.setText(repositoryInfo.name);
         component.setOpaque(true);
@@ -448,7 +450,7 @@ class RepositoryRootNode extends RepositoryNode
     @Override
     public String getToolTipText()
     {
-        return "Este no es un repositorio";
+        return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("ESTE_NO_ES_UN_REPOSITORIO");
     }
 }
 
@@ -476,11 +478,11 @@ class RepositoryNode extends DefaultMutableTreeNode implements ToolTipTreeNode
     {
         if (repositoryInfo.exclusive)
         {
-            return "Repositorio exclusivo para el sitio " + repositoryInfo.siteInfo.title;
+            return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("REPOSITORIO_EXCLUSIVO_PARA_EL_SITIO_") + repositoryInfo.siteInfo.title;
         }
         else
         {
-            return "Repositorio compartido, puede publicar en cualquier sitio";
+            return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("REPOSITORIO_COMPARTIDO,_PUEDE_PUBLICAR_EN_CUALQUIER_SITIO");
         }
     }
 
@@ -597,11 +599,11 @@ class CategoryNode extends DefaultMutableTreeNode implements ToolTipTreeNode
 
 class TreeRender extends JPanel implements TreeCellRenderer
 {
-
+    private static final String EMPTY_STRING = "";
     public Component getTreeCellRendererComponent(JTree tree, Object object, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus)
     {
         Component component = this;
-        tree.setToolTipText("");
+        tree.setToolTipText(EMPTY_STRING);
         if (object instanceof CategoryNode)
         {
             component = ((CategoryNode) object).getComponent();

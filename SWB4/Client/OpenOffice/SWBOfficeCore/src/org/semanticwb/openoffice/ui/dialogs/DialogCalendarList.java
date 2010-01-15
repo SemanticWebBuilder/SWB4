@@ -112,19 +112,20 @@ public class DialogCalendarList extends javax.swing.JDialog
         jListCalendars = new javax.swing.JList();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Catálogo de calendarios");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogCalendarList"); // NOI18N
+        setTitle(bundle.getString("CATÁLOGO_DE_CALENDARIOS")); // NOI18N
         setResizable(false);
 
         jPanel1.setPreferredSize(new java.awt.Dimension(400, 40));
 
-        jButton1.setText("Agregar");
+        jButton1.setText(bundle.getString("AGREGAR")); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
-        jButtonClose.setText("Cerrar");
+        jButtonClose.setText(bundle.getString("CERRAR")); // NOI18N
         jButtonClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCloseActionPerformed(evt);
@@ -161,7 +162,7 @@ public class DialogCalendarList extends javax.swing.JDialog
         jToolBar1.setRollover(true);
 
         jButtonAddNewCalendar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/add.png"))); // NOI18N
-        jButtonAddNewCalendar.setToolTipText("Agregar un calenario al catálogo");
+        jButtonAddNewCalendar.setToolTipText(bundle.getString("AGREGAR_UN_CALENARIO_AL_CATÁLOGO")); // NOI18N
         jButtonAddNewCalendar.setFocusable(false);
         jButtonAddNewCalendar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonAddNewCalendar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -174,7 +175,7 @@ public class DialogCalendarList extends javax.swing.JDialog
         jToolBar1.add(jSeparator1);
 
         jButtonEditCalendar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/edit.png"))); // NOI18N
-        jButtonEditCalendar.setToolTipText("Editar un calendario");
+        jButtonEditCalendar.setToolTipText(bundle.getString("EDITAR_UN_CALENDARIO")); // NOI18N
         jButtonEditCalendar.setFocusable(false);
         jButtonEditCalendar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonEditCalendar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -187,7 +188,7 @@ public class DialogCalendarList extends javax.swing.JDialog
         jToolBar1.add(jSeparator2);
 
         jButtonDeleteCalendar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/delete.png"))); // NOI18N
-        jButtonDeleteCalendar.setToolTipText("Eliminar un calendario al catalogo");
+        jButtonDeleteCalendar.setToolTipText(bundle.getString("ELIMINAR_UN_CALENDARIO_AL_CATALOGO")); // NOI18N
         jButtonDeleteCalendar.setFocusable(false);
         jButtonDeleteCalendar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonDeleteCalendar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -325,7 +326,7 @@ public class DialogCalendarList extends javax.swing.JDialog
         {
             DefaultListModel model = (DefaultListModel) this.jListCalendars.getModel();
             CalendarInfo cal = (CalendarInfo) model.get(this.jListCalendars.getSelectedIndex());
-            int res = JOptionPane.showConfirmDialog(this, "¿Deseas eliminar la calendarización?", this.getTitle(), JOptionPane.YES_NO_OPTION);
+            int res = JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogCalendarList").getString("¿DESEAS_ELIMINAR_LA_CALENDARIZACIÓN?"), this.getTitle(), JOptionPane.YES_NO_OPTION);
             if (res == JOptionPane.YES_OPTION)
             {
                 try
@@ -350,7 +351,7 @@ public class DialogCalendarList extends javax.swing.JDialog
                     }
                     else
                     {
-                        JOptionPane.showMessageDialog(this, "¡El calendario no se puede borrar, esta siendo utilizado por otro contenido u otro elemento del portal!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogCalendarList").getString("¡EL_CALENDARIO_NO_SE_PUEDE_BORRAR,_ESTA_SIENDO_UTILIZADO_POR_OTRO_CONTENIDO_U_OTRO_ELEMENTO_DEL_PORTAL!"), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.WARNING_MESSAGE);
                     }
                 }
                 catch (Exception e)

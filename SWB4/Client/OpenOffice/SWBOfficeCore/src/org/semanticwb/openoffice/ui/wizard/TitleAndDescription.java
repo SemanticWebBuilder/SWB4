@@ -91,7 +91,7 @@ public class TitleAndDescription extends WizardPage
 
     public static String getDescription()
     {
-        return "Título y descripción";
+        return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/TitleAndDescription").getString("TÍTULO_Y_DESCRIPCIÓN");
     }
 
     @Override
@@ -112,19 +112,19 @@ public class TitleAndDescription extends WizardPage
         WizardPanelNavResult result = WizardPanelNavResult.REMAIN_ON_PAGE;
         if (this.jTextFieldName.getText().trim().equals(""))
         {
-            JOptionPane.showMessageDialog(null, "¡Debe indicar el título del contenido!", getDescription(), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/TitleAndDescription").getString("¡DEBE_INDICAR_EL_TÍTULO_DEL_CONTENIDO!"), getDescription(), JOptionPane.ERROR_MESSAGE);
             this.jTextFieldName.requestFocus();
         }
         else if (this.jTextAreaDescription.getText().trim().equals(""))
         {
-            JOptionPane.showMessageDialog(null, "¡Debe indicar la descripción del contenido!", getDescription(), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/TitleAndDescription").getString("¡DEBE_INDICAR_LA_DESCRIPCIÓN_DEL_CONTENIDO!"), getDescription(), JOptionPane.ERROR_MESSAGE);
             this.jTextAreaDescription.requestFocus();
         }
         if (showTypeOfcontent)
         {
             if (this.jComboBoxType.getSelectedItem() == null)
             {
-                JOptionPane.showMessageDialog(null, "¡Debe indicar el tipo de contenido!", getDescription(), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/TitleAndDescription").getString("¡DEBE_INDICAR_EL_TIPO_DE_CONTENIDO!"), getDescription(), JOptionPane.ERROR_MESSAGE);
                 this.jComboBoxType.requestFocus();
             }
             else
@@ -160,9 +160,10 @@ public class TitleAndDescription extends WizardPage
         jLabelType = new javax.swing.JLabel();
         jComboBoxType = new javax.swing.JComboBox();
 
-        jLabelName.setText("Título:");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/TitleAndDescription"); // NOI18N
+        jLabelName.setText(bundle.getString("TÍTULO:")); // NOI18N
 
-        jLabelDescription.setText("Descripción:");
+        jLabelDescription.setText(bundle.getString("DESCRIPCIÓN:")); // NOI18N
 
         jTextAreaDescription.setColumns(20);
         jTextAreaDescription.setLineWrap(true);
@@ -170,7 +171,7 @@ public class TitleAndDescription extends WizardPage
         jTextAreaDescription.setWrapStyleWord(true);
         jScrollPane1.setViewportView(jTextAreaDescription);
 
-        jLabelType.setText("Tipo de Contenido:");
+        jLabelType.setText(bundle.getString("TIPO_DE_CONTENIDO:")); // NOI18N
 
         jComboBoxType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 

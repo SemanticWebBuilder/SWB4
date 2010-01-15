@@ -48,7 +48,6 @@ import javax.swing.table.TableColumn;
 import org.semanticwb.office.interfaces.CategoryInfo;
 import org.semanticwb.office.interfaces.ResourceInfo;
 import org.semanticwb.office.interfaces.PropertyInfo;
-import org.semanticwb.office.interfaces.RepositoryInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.openoffice.OfficeApplication;
 import org.semanticwb.openoffice.OfficeDocument;
@@ -60,7 +59,20 @@ import org.semanticwb.openoffice.ui.icons.ImageLoader;
  */
 public class DialogContentInformation extends javax.swing.JDialog
 {
-
+    public static final String CONTENTID = "?contentId=";
+    private static final String BOOLEAN = "boolean";
+    private static final String EMPTY_STRING = "";
+    private static final String GTW = "gtw";
+    private static final String INTEGER = "integer";
+    private static final String NAME = "&name=";
+    private static final String NL = "\r\n";
+    private static final String PATH_SEPARATOR = "/";
+    private static final String PORT_SEPARATOR = ":";
+    private static final String REPOSITORYNAME = "&repositoryName=";
+    private static final String SCHEMA_SEPARATOR = "://";
+    private static final String STRING = "string";
+    private static final String TYPE = "&type=";
+    private static final String VERSIONNAME = "&versionName=";
     private String contentId, repository;
     private OfficeDocument document;
     private String type;
@@ -81,8 +93,8 @@ public class DialogContentInformation extends javax.swing.JDialog
 
         try
         {
-            String type = OfficeApplication.getOfficeDocumentProxy().getNameOfContent(repository, contentId);
-            loadProperties(repository, type);
+            String otype = OfficeApplication.getOfficeDocumentProxy().getNameOfContent(repository, contentId);
+            loadProperties(repository, otype);
         }
         catch (Exception e)
         {
@@ -129,7 +141,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         {
             this.jTextFieldTitle.setText(OfficeApplication.getOfficeDocumentProxy().getTitle(repository, contentId));
             this.jTextAreaDescription.setText(OfficeApplication.getOfficeDocumentProxy().getDescription(repository, contentId));
-            String date = "";
+            String date = EMPTY_STRING;
             try
             {
                 date = OfficeApplication.iso8601dateFormat.format(OfficeApplication.getOfficeDocumentProxy().getLastUpdate(repository, contentId));
@@ -137,7 +149,7 @@ public class DialogContentInformation extends javax.swing.JDialog
             catch (Exception e)
             {
                 e.printStackTrace();
-                date = "No fue posible obtener la fecha de actualización.";
+                date = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("NO_FUE_POSIBLE_OBTENER_LA_FECHA_DE_ACTUALIZACIÓN.");
             }
             this.jLabel1DisplayDateOfModification.setText(date);
             loadCategories();
@@ -183,15 +195,15 @@ public class DialogContentInformation extends javax.swing.JDialog
                 for (PropertyInfo info : props)
                 {
                     Object defaultValue = null;
-                    if (info.type.equalsIgnoreCase("string"))
+                    if (info.type.equalsIgnoreCase(STRING))
                     {
-                        defaultValue = "";
+                        defaultValue = EMPTY_STRING;
                     }
-                    if (info.type.equalsIgnoreCase("integer"))
+                    if (info.type.equalsIgnoreCase(INTEGER))
                     {
                         defaultValue = 0;
                     }
-                    if (info.type.equalsIgnoreCase("boolean"))
+                    if (info.type.equalsIgnoreCase(BOOLEAN))
                     {
                         defaultValue = false;
                     }
@@ -403,20 +415,21 @@ public class DialogContentInformation extends javax.swing.JDialog
         panelPropertyEditor1 = new org.semanticwb.openoffice.components.PanelPropertyEditor();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Información del Contenido");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation"); // NOI18N
+        setTitle(bundle.getString("INFORMACIÓN_DEL_CONTENIDO")); // NOI18N
         setModal(true);
         setResizable(false);
 
         jPanelButtons.setPreferredSize(new java.awt.Dimension(100, 50));
 
-        jButtonAccept.setText("Aceptar");
+        jButtonAccept.setText(bundle.getString("ACEPTAR")); // NOI18N
         jButtonAccept.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAcceptActionPerformed(evt);
             }
         });
 
-        jButtonCancel.setText("Cerrar");
+        jButtonCancel.setText(bundle.getString("CERRAR")); // NOI18N
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);
@@ -450,19 +463,19 @@ public class DialogContentInformation extends javax.swing.JDialog
 
         jPanelContentInformation.setPreferredSize(new java.awt.Dimension(650, 269));
 
-        jLabel1.setText("Título:");
+        jLabel1.setText(bundle.getString("TÍTULO:")); // NOI18N
 
-        jLabel2.setText("Descripción:");
+        jLabel2.setText(bundle.getString("DESCRIPCIÓN:")); // NOI18N
 
-        jLabel3.setText("Fecha de última modificación:");
+        jLabel3.setText(bundle.getString("FECHA_DE_ÚLTIMA_MODIFICACIÓN:")); // NOI18N
 
         jTextAreaDescription.setColumns(20);
         jTextAreaDescription.setRows(5);
         jScrollPane1.setViewportView(jTextAreaDescription);
 
-        jLabel1DisplayDateOfModification.setText("18 de Diciembre de 1973 20:30");
+        jLabel1DisplayDateOfModification.setText(bundle.getString("18_DE_DICIEMBRE_DE_1973_20:30")); // NOI18N
 
-        jLabel4.setText("Categoria");
+        jLabel4.setText(bundle.getString("CATEGORIA")); // NOI18N
 
         javax.swing.GroupLayout jPanelContentInformationLayout = new javax.swing.GroupLayout(jPanelContentInformation);
         jPanelContentInformation.setLayout(jPanelContentInformationLayout);
@@ -505,7 +518,7 @@ public class DialogContentInformation extends javax.swing.JDialog
                 .addGap(62, 62, 62))
         );
 
-        jTabbedPane1.addTab("Información del Contenido", jPanelContentInformation);
+        jTabbedPane1.addTab(bundle.getString("INFORMACIÓN_DEL_CONTENIDO"), jPanelContentInformation); // NOI18N
 
         jPanelPublishInformation.setLayout(new java.awt.BorderLayout());
 
@@ -513,7 +526,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         jToolBar1.setRollover(true);
 
         jButtonEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/edit.png"))); // NOI18N
-        jButtonEdit.setToolTipText("Editar Propiedades y Calendarización");
+        jButtonEdit.setToolTipText(bundle.getString("EDITAR_PROPIEDADES_Y_CALENDARIZACIÓN")); // NOI18N
         jButtonEdit.setEnabled(false);
         jButtonEdit.setFocusable(false);
         jButtonEdit.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -527,7 +540,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         jToolBar1.add(jSeparator5);
 
         jButtonPublish.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/envpaga.png"))); // NOI18N
-        jButtonPublish.setToolTipText("Permite publicar el contenido en una página");
+        jButtonPublish.setToolTipText(bundle.getString("PERMITE_PUBLICAR_EL_CONTENIDO_EN_UNA_PÁGINA")); // NOI18N
         jButtonPublish.setFocusable(false);
         jButtonPublish.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonPublish.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -540,7 +553,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         jToolBar1.add(jSeparator3);
 
         jButtonViewPage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/see.png"))); // NOI18N
-        jButtonViewPage.setToolTipText("Ver página");
+        jButtonViewPage.setToolTipText(bundle.getString("VER_PÁGINA")); // NOI18N
         jButtonViewPage.setEnabled(false);
         jButtonViewPage.setFocusable(false);
         jButtonViewPage.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -554,7 +567,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         jToolBar1.add(jSeparator4);
 
         jButtonDeletePage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/delete.png"))); // NOI18N
-        jButtonDeletePage.setToolTipText("Eliminar la publicación de un contenido en una página");
+        jButtonDeletePage.setToolTipText(bundle.getString("ELIMINAR_LA_PUBLICACIÓN_DE_UN_CONTENIDO_EN_UNA_PÁGINA")); // NOI18N
         jButtonDeletePage.setEnabled(false);
         jButtonDeletePage.setFocusable(false);
         jButtonDeletePage.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -591,7 +604,7 @@ public class DialogContentInformation extends javax.swing.JDialog
                 return canEdit [columnIndex];
             }
         });
-        jTablePages.setToolTipText("Puede editar la versión selecionando la columna correspondiente");
+        jTablePages.setToolTipText(bundle.getString("PUEDE_EDITAR_LA_VERSIÓN_SELECIONANDO_LA_COLUMNA_CORRESPONDIENTE")); // NOI18N
         jTablePages.setColumnSelectionAllowed(true);
         jTablePages.setRowHeight(20);
         jTablePages.setRowSelectionAllowed(false);
@@ -612,7 +625,7 @@ public class DialogContentInformation extends javax.swing.JDialog
 
         jPanelPublishInformation.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
-        jTabbedPane1.addTab("Información de Publicación", jPanelPublishInformation);
+        jTabbedPane1.addTab(bundle.getString("INFORMACIÓN_DE_PUBLICACIÓN"), jPanelPublishInformation); // NOI18N
 
         jPanelVersions.setLayout(new java.awt.BorderLayout());
 
@@ -660,7 +673,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         jToolBar2.setRollover(true);
 
         jButtonUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/save.png"))); // NOI18N
-        jButtonUpdate.setToolTipText("Actualizar el contenido, está opcion crea una nueva versión de contenido");
+        jButtonUpdate.setToolTipText(bundle.getString("ACTUALIZAR_EL_CONTENIDO,_ESTÁ_OPCION_CREA_UNA_NUEVA_VERSIÓN_DE_CONTENIDO")); // NOI18N
         jButtonUpdate.setFocusable(false);
         jButtonUpdate.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonUpdate.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -673,7 +686,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         jToolBar2.add(jSeparator2);
 
         jButtonViewVersion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/see.png"))); // NOI18N
-        jButtonViewVersion.setToolTipText("Ver versión del contenido");
+        jButtonViewVersion.setToolTipText(bundle.getString("VER_VERSIÓN_DEL_CONTENIDO")); // NOI18N
         jButtonViewVersion.setEnabled(false);
         jButtonViewVersion.setFocusable(false);
         jButtonViewVersion.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -687,7 +700,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         jToolBar2.add(jSeparator1);
 
         jButtonDeleteVersion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/delete.png"))); // NOI18N
-        jButtonDeleteVersion.setToolTipText("Borrar versión");
+        jButtonDeleteVersion.setToolTipText(bundle.getString("BORRAR_VERSIÓN")); // NOI18N
         jButtonDeleteVersion.setEnabled(false);
         jButtonDeleteVersion.setFocusable(false);
         jButtonDeleteVersion.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -703,12 +716,12 @@ public class DialogContentInformation extends javax.swing.JDialog
 
         jPanelVersions.add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
-        jTabbedPane1.addTab("Versiones del contenido", jPanelVersions);
+        jTabbedPane1.addTab(bundle.getString("VERSIONES_DEL_CONTENIDO"), jPanelVersions); // NOI18N
 
         jPanelProperties.setLayout(new java.awt.BorderLayout());
         jPanelProperties.add(panelPropertyEditor1, java.awt.BorderLayout.CENTER);
 
-        jTabbedPane1.addTab("Propiedades de contenido", jPanelProperties);
+        jTabbedPane1.addTab(bundle.getString("PROPIEDADES_DE_CONTENIDO"), jPanelProperties); // NOI18N
 
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
@@ -735,13 +748,13 @@ public class DialogContentInformation extends javax.swing.JDialog
 
         if (this.jTextFieldTitle.getText().isEmpty())
         {
-            JOptionPane.showMessageDialog(this, "¡Debe indicar un título de contenido!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("¡DEBE_INDICAR_UN_TÍTULO_DE_CONTENIDO!"), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             this.jTextFieldTitle.requestFocus();
             return;
         }
         if (this.jTextAreaDescription.getText().isEmpty())
         {
-            JOptionPane.showMessageDialog(this, "¡Debe indicar una descripción de contenido!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("¡DEBE_INDICAR_UNA_DESCRIPCIÓN_DE_CONTENIDO!"), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             this.jTextAreaDescription.requestFocus();
             return;
         }
@@ -758,8 +771,8 @@ public class DialogContentInformation extends javax.swing.JDialog
                 props[i] = prop;
                 i++;
             }
-            String type = OfficeApplication.getOfficeDocumentProxy().getNameOfContent(repository, contentId);
-            OfficeApplication.getOfficeDocumentProxy().validateContentValues(repository, props, values, type);
+            String otype = OfficeApplication.getOfficeDocumentProxy().getNameOfContent(repository, contentId);
+            OfficeApplication.getOfficeDocumentProxy().validateContentValues(repository, props, values, otype);
         }
         catch (Exception e)
         {
@@ -807,7 +820,7 @@ public class DialogContentInformation extends javax.swing.JDialog
                     {
                         if (OfficeApplication.getOfficeDocumentProxy().needsSendToPublish(resourceInfo))
                         {
-                            int res = JOptionPane.showConfirmDialog(null, "El contenido necesita ser autorizado para presentarse en el sitio.\r\n¿Desea enviarlo a autorización?", this.getTitle(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                            int res = JOptionPane.showConfirmDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("EL_CONTENIDO_NECESITA_SER_AUTORIZADO_PARA_PRESENTARSE_EN_EL_SITIO.")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("¿DESEA_ENVIARLO_A_AUTORIZACIÓN?"), this.getTitle(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                             if (res == JOptionPane.YES_OPTION)
                             {
                                 DialogSelectFlow dialogSelectFlow = new DialogSelectFlow(resourceInfo);
@@ -818,13 +831,13 @@ public class DialogContentInformation extends javax.swing.JDialog
                                 }
                                 else
                                 {
-                                    JOptionPane.showMessageDialog(null, "¡Para activar este contenido debe ser autorizado primero!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                                    JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("¡PARA_ACTIVAR_ESTE_CONTENIDO_DEBE_SER_AUTORIZADO_PRIMERO!"), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
                                 }
                             }
                         }
                         else if (OfficeApplication.getOfficeDocumentProxy().isInFlow(resourceInfo))
                         {
-                            JOptionPane.showMessageDialog(null, "¡Este contenido se encuentra en proceso de autorización, para activar este contenido debe terminar primero el proceso de autorización!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("¡ESTE_CONTENIDO_SE_ENCUENTRA_EN_PROCESO_DE_AUTORIZACIÓN,_PARA_ACTIVAR_ESTE_CONTENIDO_DEBE_TERMINAR_PRIMERO_EL_PROCESO_DE_AUTORIZACIÓN!"), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
                         }
                         else if (OfficeApplication.getOfficeDocumentProxy().isAuthorized(resourceInfo))
                         {
@@ -832,7 +845,7 @@ public class DialogContentInformation extends javax.swing.JDialog
                         }
                         else
                         {
-                            int res = JOptionPane.showConfirmDialog(null, "El contenido fue rechazado.\r\nPara activarlo necesita enviarlo a autorización de nuevo\r\n¿Desea enviarlo a autorización?", this.getTitle(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                            int res = JOptionPane.showConfirmDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("EL_CONTENIDO_FUE_RECHAZADO.")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("PARA_ACTIVARLO_NECESITA_ENVIARLO_A_AUTORIZACIÓN_DE_NUEVO")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("¿DESEA_ENVIARLO_A_AUTORIZACIÓN?"), this.getTitle(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                             if (res == JOptionPane.YES_OPTION)
                             {
                                 DialogSelectFlow dialogSelectFlow = new DialogSelectFlow(resourceInfo);
@@ -843,7 +856,7 @@ public class DialogContentInformation extends javax.swing.JDialog
                                 }
                                 else
                                 {
-                                    JOptionPane.showMessageDialog(null, "¡Para activar este contenido debe ser autorizado primero!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                                    JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("¡PARA_ACTIVAR_ESTE_CONTENIDO_DEBE_SER_AUTORIZADO_PRIMERO!"), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
                                 }
                             }
                         }
@@ -879,7 +892,7 @@ public class DialogContentInformation extends javax.swing.JDialog
             this.jLabel1DisplayDateOfModification.setText(date);
             loadPorlets();
             loadVersions();
-            JOptionPane.showMessageDialog(this, "¡Se han realizado correctamente los cambios!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("¡SE_HAN_REALIZADO_CORRECTAMENTE_LOS_CAMBIOS!"), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
         }
         catch (Exception e)
         {
@@ -907,7 +920,7 @@ public class DialogContentInformation extends javax.swing.JDialog
             ResourceInfo porlet = (ResourceInfo) jTablePages.getModel().getValueAt(jTablePages.getSelectedRow(), 0);
             try
             {
-                int res = JOptionPane.showConfirmDialog(this, "¿Desea eliminar la publicación del contenido con titulo " + porlet.title + " de la página " + porlet.page.title + "?", this.getTitle(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                int res = JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("¿DESEA_ELIMINAR_LA_PUBLICACIÓN_DEL_CONTENIDO_CON_TITULO_") + porlet.title + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("_DE_LA_PÁGINA_") + porlet.page.title + "?", this.getTitle(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (res == JOptionPane.YES_OPTION)
                 {
                     this.jButtonDeletePage.setEnabled(false);
@@ -947,7 +960,7 @@ public class DialogContentInformation extends javax.swing.JDialog
             {
                 String title = resourceInfo.title;
                 URI uri = document.getOfficeDocumentProxy().getWebAddress();
-                URL url = new URL(uri.getScheme() + "://" + uri.getHost() + ":" + uri.getPort() + resourceInfo.page.url);
+                URL url = new URL(uri.getScheme() + SCHEMA_SEPARATOR + uri.getHost() + PORT_SEPARATOR + uri.getPort() + resourceInfo.page.url);
                 DialogPreview preview = new DialogPreview(url, title);
                 preview.setVisible(true);
             }
@@ -969,16 +982,16 @@ public class DialogContentInformation extends javax.swing.JDialog
             try
             {
                 String urlproxy = OfficeApplication.getOfficeApplicationProxy().getWebAddress().toString();
-                if (!urlproxy.endsWith("/gtw"))
+                if (!urlproxy.endsWith(PATH_SEPARATOR+GTW))
                 {
-                    if (!urlproxy.endsWith("/"))
+                    if (!urlproxy.endsWith(PATH_SEPARATOR))
                     {
-                        urlproxy += "/";
+                        urlproxy += PATH_SEPARATOR;
                     }
-                    urlproxy += "gtw";
+                    urlproxy += GTW;
                 }
                 name = OfficeApplication.getOfficeDocumentProxy().createPreview(repository, contentId, version, type);
-                URL url = new URL(urlproxy + "?contentId=" + contentId + "&versionName=" + version + "&repositoryName=" + repository + "&name=" + name + "&type=" + type);
+                URL url = new URL(urlproxy + CONTENTID + contentId + VERSIONNAME + version + REPOSITORYNAME + repository + NAME + name + TYPE + type);
                 String title = OfficeApplication.getOfficeDocumentProxy().getTitle(repository, contentId) + " (" + version + ") ";
                 DialogPreview preview = new DialogPreview(url, false, title);
                 preview.setVisible(true);
@@ -1063,12 +1076,12 @@ public class DialogContentInformation extends javax.swing.JDialog
             boolean published = (Boolean) model.getValueAt(this.jTableSummary1.getSelectedRow(), 3);
             if (published)
             {
-                JOptionPane.showMessageDialog(this, "¡No se puede borrar una versión que ha sido publicada.!\r\nDebe borrar primero la publicación del contenido.", "Borrado de versión de contenido", JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("¡NO_SE_PUEDE_BORRAR_UNA_VERSIÓN_QUE_HA_SIDO_PUBLICADA.!")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("DEBE_BORRAR_PRIMERO_LA_PUBLICACIÓN_DEL_CONTENIDO."), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("BORRADO_DE_VERSIÓN_DE_CONTENIDO"), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
                 return;
             }
             try
             {
-                int res = JOptionPane.showConfirmDialog(this, "¿Desea borrar la versión " + versionInfo + "?", "Borrado de versión de contenido", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                int res = JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("¿DESEA_BORRAR_LA_VERSIÓN_") + versionInfo + "?", java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("BORRADO_DE_VERSIÓN_DE_CONTENIDO"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (res == JOptionPane.YES_OPTION)
                 {
                     try

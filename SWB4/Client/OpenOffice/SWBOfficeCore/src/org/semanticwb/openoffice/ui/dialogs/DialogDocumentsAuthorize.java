@@ -53,7 +53,14 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
 {
 
     private static final String ALL = "*";
-    private static final String SHOW_LAST_VERSION = "Mostrar la última version";
+    private static final String CONTENTID = "?contentId=";
+    private static final String GTW = "gtw";
+    private static final String NAME = "&name=";
+    private static final String PATH_SEPARATOR = "/";
+    private static final String REPOSITORYNAME = "&repositoryName=";
+    private static final String SHOW_LAST_VERSION = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentsAuthorize").getString("MOSTRAR_LA_ÚLTIMA_VERSION");
+    private static final String TYPE = "&type=";
+    private static final String VERSIONNAME = "&versionName=";
 
     /** Creates new form DialogDocumentsAtuhorize */
     public DialogDocumentsAuthorize()
@@ -213,7 +220,8 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
         jTableContents = new javax.swing.JTable();
 
         setResizable(false);
-        setTitle("Documentos por autorizar");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentsAuthorize"); // NOI18N
+        setTitle(bundle.getString("DOCUMENTOS_POR_AUTORIZAR")); // NOI18N
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 closeDialog(evt);
@@ -223,7 +231,7 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
         jPanelCommands.setPreferredSize(new java.awt.Dimension(100, 30));
         jPanelCommands.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
-        jButtonClose.setText("Cerrar");
+        jButtonClose.setText(bundle.getString("CERRAR")); // NOI18N
         jButtonClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCloseActionPerformed(evt);
@@ -240,7 +248,7 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
         jToolBar1.setRollover(true);
 
         jButtonSee.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/see.png"))); // NOI18N
-        jButtonSee.setToolTipText("Ver Contenido");
+        jButtonSee.setToolTipText(bundle.getString("VER_CONTENIDO")); // NOI18N
         jButtonSee.setEnabled(false);
         jButtonSee.setFocusable(false);
         jButtonSee.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -253,7 +261,7 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
         jToolBar1.add(jButtonSee);
 
         jButtonAuthorize.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/icono_autorizar.png"))); // NOI18N
-        jButtonAuthorize.setToolTipText("Autorizar contenido");
+        jButtonAuthorize.setToolTipText(bundle.getString("AUTORIZAR_CONTENIDO")); // NOI18N
         jButtonAuthorize.setEnabled(false);
         jButtonAuthorize.setFocusable(false);
         jButtonAuthorize.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -266,7 +274,7 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
         jToolBar1.add(jButtonAuthorize);
 
         jButtonReject.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/icon_rechazar.png"))); // NOI18N
-        jButtonReject.setToolTipText("Rechazar contenido");
+        jButtonReject.setToolTipText(bundle.getString("RECHAZAR_CONTENIDO")); // NOI18N
         jButtonReject.setEnabled(false);
         jButtonReject.setFocusable(false);
         jButtonReject.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -288,7 +296,7 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
         jPanel4.setPreferredSize(new java.awt.Dimension(100, 30));
 
         buttonGroup1.add(jRadioButtonAll);
-        jRadioButtonAll.setText("Todos");
+        jRadioButtonAll.setText(bundle.getString("TODOS")); // NOI18N
         jRadioButtonAll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButtonAllActionPerformed(evt);
@@ -297,7 +305,7 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
 
         buttonGroup1.add(jRadioButtonMyContents);
         jRadioButtonMyContents.setSelected(true);
-        jRadioButtonMyContents.setText("Mis contenidos");
+        jRadioButtonMyContents.setText(bundle.getString("MIS_CONTENIDOS")); // NOI18N
         jRadioButtonMyContents.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButtonMyContentsActionPerformed(evt);
@@ -305,7 +313,7 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
         });
 
         buttonGroup1.add(jRadioButtonForAuthorize);
-        jRadioButtonForAuthorize.setText("Por autorizar");
+        jRadioButtonForAuthorize.setText(bundle.getString("POR_AUTORIZAR")); // NOI18N
         jRadioButtonForAuthorize.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButtonForAuthorizeActionPerformed(evt);
@@ -387,7 +395,7 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
             DefaultTableModel model = (DefaultTableModel) this.jTableContents.getModel();
             ResourceInfo info = (ResourceInfo) model.getValueAt(this.jTableContents.getSelectedRow(), 0);
             String version = info.version;
-            if(version.equalsIgnoreCase("*"))
+            if(version.equalsIgnoreCase(ALL))
             {
                 version=info.lastversion;
             }
@@ -396,18 +404,18 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
             {
                 name = OfficeApplication.getOfficeDocumentProxy().createPreview(info.repository, info.contentid, version, info.type);
                 String urlproxy = OfficeApplication.getOfficeApplicationProxy().getWebAddress().toString();
-                if (!urlproxy.endsWith("/gtw"))
+                if (!urlproxy.endsWith(PATH_SEPARATOR+GTW))
                 {
-                    if (!urlproxy.endsWith("/"))
+                    if (!urlproxy.endsWith(PATH_SEPARATOR))
                     {
-                        urlproxy += "/";
+                        urlproxy += PATH_SEPARATOR;
                     }
-                    if (!urlproxy.endsWith("gtw"))
+                    if (!urlproxy.endsWith(GTW))
                     {
-                        urlproxy += "gtw";
+                        urlproxy += GTW;
                     }
                 }
-                URL url = new URL(urlproxy + "?contentId=" + info.contentid + "&versionName=" + version + "&repositoryName=" + info.repository + "&name=" + name + "&type=" + info.type);
+                URL url = new URL(urlproxy + CONTENTID + info.contentid + VERSIONNAME + version + REPOSITORYNAME + info.repository + NAME + name + TYPE + info.type);
                 String title = OfficeApplication.getOfficeDocumentProxy().getTitle(info.repository, info.contentid) + " (" + version + ") ";
                 DialogPreview dialogPreview = new DialogPreview(url, false, title);
                 dialogPreview.setVisible(true);
@@ -443,7 +451,7 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
             ResourceInfo resourceInfo = (ResourceInfo) model.getValueAt(row, 0);
             try
             {
-                DialogAuthorize dialogAuthorize = new DialogAuthorize("Autorizar contenido");
+                DialogAuthorize dialogAuthorize = new DialogAuthorize(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentsAuthorize").getString("AUTORIZAR_CONTENIDO"));
                 dialogAuthorize.setVisible(true);
                 if (!dialogAuthorize.cancel)
                 {
@@ -467,7 +475,7 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
             ResourceInfo resourceInfo = (ResourceInfo) model.getValueAt(row, 0);
             try
             {
-                DialogAuthorize dialogAuthorize = new DialogAuthorize("Rechazar contenido");
+                DialogAuthorize dialogAuthorize = new DialogAuthorize(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentsAuthorize").getString("RECHAZAR_CONTENIDO"));
                 dialogAuthorize.setVisible(true);
                 if (!dialogAuthorize.cancel)
                 {

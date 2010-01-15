@@ -68,8 +68,12 @@
               <ComponentRef name="buttonGroup1"/>
             </Property>
             <Property name="selected" type="boolean" value="true"/>
-            <Property name="text" type="java.lang.String" value="Publica la &#xfa;ltima versi&#xf3;n"/>
-            <Property name="toolTipText" type="java.lang.String" value="Esta opci&#xf3;n le permite que siempre que exista una nueva versi&#xf3;n de contenido, esta sea mostrada."/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="org/semanticwb/openoffice/ui/wizard/PublishVersion.properties" key="PUBLICA_LA_&#xda;LTIMA_VERSI&#xd3;N" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="org/semanticwb/openoffice/ui/wizard/PublishVersion.properties" key="ESTA_OPCI&#xd3;N_LE_PERMITE_QUE_SIEMPRE_QUE_EXISTA_UNA_NUEVA_VERSI&#xd3;N_DE_CONTENIDO,_ESTA_SEA_MOSTRADA." replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jRadioButtonLasVersionActionPerformed"/>
@@ -80,8 +84,12 @@
             <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
               <ComponentRef name="buttonGroup1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Publica una versi&#xf3;n"/>
-            <Property name="toolTipText" type="java.lang.String" value="Esta opci&#xf3;n permite que s&#xf3;lo una versi&#xf3;n sea mostrada en el sitio"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="org/semanticwb/openoffice/ui/wizard/PublishVersion.properties" key="PUBLICA_UNA_VERSI&#xd3;N" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="org/semanticwb/openoffice/ui/wizard/PublishVersion.properties" key="ESTA_OPCI&#xd3;N_PERMITE_QUE_S&#xd3;LO_UNA_VERSI&#xd3;N_SEA_MOSTRADA_EN_EL_SITIO" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jRadioButtonOneVersionActionPerformed"/>

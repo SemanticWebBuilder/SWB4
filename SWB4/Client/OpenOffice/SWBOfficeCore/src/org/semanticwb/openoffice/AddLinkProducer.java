@@ -62,7 +62,7 @@ public class AddLinkProducer implements WizardResultProducer {
             String url=uri.getScheme()+"://"+uri.getHost()+":"+uri.getPort()+""+page.getURL();
             String title=map.get(SelectTitle.TITLE).toString();
             document.insertLink(url, title);
-            JOptionPane.showMessageDialog(null, "Liga a la página "+ page.toString() +" insertada con éxito","Inserción liga de página",JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/AddLinkProducer").getString("LIGA_A_LA_PÁGINA_")+ page.toString() +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/AddLinkProducer").getString("_INSERTADA_CON_ÉXITO"),java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/AddLinkProducer").getString("INSERCIÓN_LIGA_DE_PÁGINA"),JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
         }
         catch(Exception e)
         {

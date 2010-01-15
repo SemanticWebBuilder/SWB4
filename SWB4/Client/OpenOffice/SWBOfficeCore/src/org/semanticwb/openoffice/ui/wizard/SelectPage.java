@@ -56,7 +56,7 @@ import org.semanticwb.openoffice.OfficeApplication;
  */
 public class SelectPage extends WizardPage
 {
-
+    private static final String NL = "\r\n";
     public static final String WEBPAGE = "WEBPAGE";
     String siteId;
 
@@ -86,7 +86,7 @@ public class SelectPage extends WizardPage
         if(map.get(WEBPAGE)==null)
         {
             res=WizardPanelNavResult.REMAIN_ON_PAGE;
-            JOptionPane.showMessageDialog(this, "¡Debe indicar una página web!", getDescription(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectPage").getString("¡DEBE_INDICAR_UNA_PÁGINA_WEB!"), getDescription(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             this.jTreeSite.requestFocus();
         }
         return res;
@@ -179,7 +179,7 @@ public class SelectPage extends WizardPage
     {
         this.jTreeSite.setCellRenderer(new TreeRender());
         this.jTreeSite.setEditable(false);
-        Root root = new Root("", "Sitios");
+        Root root = new Root("", java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectPage").getString("SITIOS"));
         DefaultTreeModel model = new DefaultTreeModel(root);
         model.setRoot(root);
         this.jTreeSite.setModel(model);
@@ -231,7 +231,7 @@ public class SelectPage extends WizardPage
             if (wbe.getCause() != null)
             {
                 Throwable cause = wbe.getCause();
-                message += "\r\n" + cause.getMessage();
+                message += NL + cause.getMessage();
             }
             JOptionPane.showMessageDialog(this, message, getDescription(), JOptionPane.OK_OPTION);
             this.setProblem(message);
@@ -266,7 +266,7 @@ public class SelectPage extends WizardPage
 
     public static String getDescription()
     {
-        return "Seleccionar Página";
+        return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectPage").getString("SELECCIONAR_PÁGINA");
     }
 
     /** This method is called from within the constructor to
@@ -311,7 +311,8 @@ public class SelectPage extends WizardPage
         jToolBar1.setRollover(true);
 
         jButtonAddPage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/icon_agregarpag.png"))); // NOI18N
-        jButtonAddPage.setToolTipText("Agregar página al sitio web");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectPage"); // NOI18N
+        jButtonAddPage.setToolTipText(bundle.getString("AGREGAR_PÁGINA_AL_SITIO_WEB")); // NOI18N
         jButtonAddPage.setEnabled(false);
         jButtonAddPage.setFocusable(false);
         jButtonAddPage.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -344,7 +345,7 @@ private void jTreeSiteValueChanged(javax.swing.event.TreeSelectionEvent evt) {//
             Site rep = (Site) selected;
             if (rep.getChildCount() == 0)
             {
-                JOptionPane.showMessageDialog(this, "¡No existen páginas en este sitio!\r\nDebe crear una pagina para poder publicar el contenido", getDescription(), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectPage").getString("¡NO_EXISTEN_PÁGINAS_EN_ESTE_SITIO!")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectPage").getString("DEBE_CREAR_UNA_PAGINA_PARA_PODER_PUBLICAR_EL_CONTENIDO"), getDescription(), JOptionPane.ERROR_MESSAGE);
             }
             this.jButtonAddPage.setEnabled(true);
         }

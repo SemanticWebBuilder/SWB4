@@ -27,6 +27,10 @@ import org.semanticwb.openoffice.ui.icons.ImageLoader;
  * @author victor.lorenzana
  */
 public class DialogDocumentDetail extends javax.swing.JDialog {
+    private static final String DOT = ".";
+    private static final String FILE_SCHEMA = "file://";
+    private static final String HTTP = "http";
+    private static final String HTTPS = "https";
     
     /** Creates new form DisloDocumentDetail */
     public DialogDocumentDetail(OfficeDocument document) {
@@ -38,9 +42,9 @@ public class DialogDocumentDetail extends javax.swing.JDialog {
 
         DefaultTableModel model=(DefaultTableModel)this.jTableInformation.getModel();
 
-        String name="Sin nombre";
-        String location="Sin ubicación";
-        String tam="El documento no esta guardado";
+        String name=java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("SIN_NOMBRE");
+        String location=java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("SIN_UBICACIÓN");
+        String tam=java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("EL_DOCUMENTO_NO_ESTA_GUARDADO");
         String observacion=tam;
         
         try
@@ -49,27 +53,27 @@ public class DialogDocumentDetail extends javax.swing.JDialog {
             location=document.getLocalPath().getParentFile().getCanonicalPath();            
             observacion=validaNombre(document.getLocalPath().getAbsoluteFile());
             java.text.NumberFormat nf=NumberFormat.getInstance(Locale.getDefault());
-            tam=""+nf.format(document.getLocalPath().length())+" bytes";
+            tam=nf.format(document.getLocalPath().length())+java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("_BYTES");
             
         }
         catch(Exception e){}
-        Object data[]={"Nombre del archivo",name};
+        Object data[]={java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("NOMBRE_DEL_ARCHIVO"),name};
         model.addRow(data);
         
-        data=new String[]{"Ubicación",location};
+        data=new String[]{java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("UBICACIÓN"),location};
         model.addRow(data);
 
         
 
-        data=new String[]{"Imagenes y Dibujos",""+document.getCountImages()};
+        data=new String[]{java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("IMAGENES_Y_DIBUJOS"),String.valueOf(document.getCountImages())};
         model.addRow(data);
 
-        data=new String[]{"Ligas",""+document.getLinks().length};
+        data=new String[]{java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("LIGAS"),String.valueOf(document.getLinks().length)};
         model.addRow(data);
-        data=new String[]{"Tamaño del archivo",tam};
+        data=new String[]{java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("TAMAÑO_DEL_ARCHIVO"),tam};
         model.addRow(data);
 
-        data=new String[]{"Observación",observacion};
+        data=new String[]{java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("OBSERVACIÓN"),observacion};
         model.addRow(data);
 
         model=(DefaultTableModel)jTableDocuments.getModel();
@@ -80,16 +84,16 @@ public class DialogDocumentDetail extends javax.swing.JDialog {
             {
                 URI uribase=new URI(archivo);
                 uribase=uribase.normalize();
-                if(uribase.getScheme().equals("file://"))
+                if(uribase.getScheme().equals(FILE_SCHEMA))
                 {
                     File file=new File(uribase.toURL().getFile());
-                    tam=file.length()+" bytes";
+                    tam=file.length()+java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("_BYTES");
                     name=file.getName();
                     location=file.getParentFile().getAbsolutePath();
-                    String exists="No";
+                    String exists=java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("NO");
                     if(file.exists())
                     {
-                        exists="Sí";
+                        exists=java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("SÍ");
                     }
                     observacion=validaNombre(file);
                     data=new Object[]{name,location,tam,exists,observacion};
@@ -105,14 +109,14 @@ public class DialogDocumentDetail extends javax.swing.JDialog {
             {
                 URI uribase=new URI(archivo);
                 uribase=uribase.normalize();
-                if(uribase.getScheme().equals("http") || uribase.getScheme().equals("https"))
+                if(uribase.getScheme().equals(HTTP) || uribase.getScheme().equals(HTTPS))
                 {
-                    String exists="No";
+                    String exists=java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("NO");
                     URL url =new URL(archivo);
                     HttpURLConnection urlCon = (HttpURLConnection) url.openConnection ();
                     if(urlCon.getResponseCode()==200)
                     {
-                        exists="Sí";
+                        exists=java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("SÍ");
                     }
                     data=new Object[]{archivo,exists};
                     model.addRow(data);
@@ -124,7 +128,7 @@ public class DialogDocumentDetail extends javax.swing.JDialog {
 
     private String validaNombre(File file)
     {
-        int pos=file.getName().indexOf(".");
+        int pos=file.getName().indexOf(DOT);
         String name=file.getName();
         if(pos!=-1)
         {
@@ -132,7 +136,7 @@ public class DialogDocumentDetail extends javax.swing.JDialog {
         }
         if(name.length()>40)
         {
-            return "El nombre del archivo es mayor a 40 caracteres";
+            return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("EL_NOMBRE_DEL_ARCHIVO_ES_MAYOR_A_40_CARACTERES");
         }
         char[] letras=name.toCharArray();
         for(int i=0;i<letras.length;i++)
@@ -140,18 +144,18 @@ public class DialogDocumentDetail extends javax.swing.JDialog {
             char letra=letras[i];
             if(Character.isWhitespace(letra))
             {
-                return "El nombre del archivo tiene espacios";
+                return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("EL_NOMBRE_DEL_ARCHIVO_TIENE_ESPACIOS");
             }
             else if(!(Character.isDigit(letra) || Character.isLetter(letra)))
             {
-                return "El nombre del archivo tiene caracteres no válidos:"+letra;
+                return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("EL_NOMBRE_DEL_ARCHIVO_TIENE_CARACTERES_NO_VÁLIDOS:")+letra;
             }
             else if(letra>123)
             {
-                return "El nombre del archivo tiene caracteres no válidos:"+letra;
+                return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("EL_NOMBRE_DEL_ARCHIVO_TIENE_CARACTERES_NO_VÁLIDOS:")+letra;
             }
         }
-        return "El nombre del archivo es correcto";
+        return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("EL_NOMBRE_DEL_ARCHIVO_ES_CORRECTO");
     }
     
     /** This method is called from within the constructor to
@@ -177,11 +181,12 @@ public class DialogDocumentDetail extends javax.swing.JDialog {
         jTablePages = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Información detalle del documento");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail"); // NOI18N
+        setTitle(bundle.getString("INFORMACIÓN_DETALLE_DEL_DOCUMENTO")); // NOI18N
 
         jPanel1.setPreferredSize(new java.awt.Dimension(400, 40));
 
-        jButtonClose.setText("Cerrar");
+        jButtonClose.setText(bundle.getString("CERRAR")); // NOI18N
         jButtonClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCloseActionPerformed(evt);
@@ -239,7 +244,7 @@ public class DialogDocumentDetail extends javax.swing.JDialog {
 
         jPanelInformation.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        jTabbedPane1.addTab("Información del documento", jPanelInformation);
+        jTabbedPane1.addTab(bundle.getString("INFORMACIÓN_DEL_DOCUMENTO"), jPanelInformation); // NOI18N
 
         jPanelDocuments.setLayout(new java.awt.BorderLayout());
 
@@ -271,7 +276,7 @@ public class DialogDocumentDetail extends javax.swing.JDialog {
 
         jPanelDocuments.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
-        jTabbedPane1.addTab("Documentos Incrustados", jPanelDocuments);
+        jTabbedPane1.addTab(bundle.getString("DOCUMENTOS_INCRUSTADOS"), jPanelDocuments); // NOI18N
 
         jPanelPages.setLayout(new java.awt.BorderLayout());
 
@@ -303,7 +308,7 @@ public class DialogDocumentDetail extends javax.swing.JDialog {
 
         jPanelPages.add(jScrollPane3, java.awt.BorderLayout.CENTER);
 
-        jTabbedPane1.addTab("Páginas incrustadas", jPanelPages);
+        jTabbedPane1.addTab(bundle.getString("PÁGINAS_INCRUSTADAS"), jPanelPages); // NOI18N
 
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 

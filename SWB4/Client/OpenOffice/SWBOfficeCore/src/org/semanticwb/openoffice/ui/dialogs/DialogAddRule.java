@@ -135,19 +135,20 @@ public class DialogAddRule extends javax.swing.JDialog
         jTableRule = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Agregar Regla / Rol ó Grupo a Contenido");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogAddRule"); // NOI18N
+        setTitle(bundle.getString("AGREGAR_REGLA_/_ROL_Ó_GRUPO_A_CONTENIDO")); // NOI18N
         setResizable(false);
 
         jPanel1.setPreferredSize(new java.awt.Dimension(200, 40));
 
-        jButtonClose.setText("Cerrar");
+        jButtonClose.setText(bundle.getString("CERRAR")); // NOI18N
         jButtonClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCloseActionPerformed(evt);
             }
         });
 
-        jButtonAdd.setText("Agregar");
+        jButtonAdd.setText(bundle.getString("AGREGAR")); // NOI18N
         jButtonAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAddActionPerformed(evt);
@@ -217,7 +218,7 @@ public class DialogAddRule extends javax.swing.JDialog
     {//GEN-HEADEREND:event_jButtonAddActionPerformed
         if (this.jTableRule.getSelectedRow() == -1)
         {
-            JOptionPane.showMessageDialog(this, "¡Debe seleccionar un elemento!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogAddRule").getString("¡DEBE_SELECCIONAR_UN_ELEMENTO!"), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             return;
         }
         this.cancel = false;

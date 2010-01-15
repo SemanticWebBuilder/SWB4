@@ -46,6 +46,12 @@ import org.semanticwb.openoffice.ui.dialogs.DialogPreview;
  */
 public class SummaryPublish extends javax.swing.JPanel
 {
+    private static final String NL = "\r\n";
+    private static final String CONTENTID = "?contentId=";
+    private static final String NAME = "&name=";
+    private static final String REPOSITORYNAME = "&repositoryName=";
+    private static final String TYPE = "&type=";
+    private static final String VERSIONNAME = "&versionName=";
 
     private String contentId,  repositoryName;
     private String type;
@@ -75,7 +81,6 @@ public class SummaryPublish extends javax.swing.JPanel
     public SummaryPublish(String contentId, String repositoryName,String type)
     {
         this();
-        this.type=type;
         this.repositoryName = repositoryName;
         this.contentId = contentId;
         loadVersions(contentId, repositoryName);
@@ -175,7 +180,8 @@ public class SummaryPublish extends javax.swing.JPanel
 
         jPanelPreview.add(jScrollPane3);
 
-        jTabbedPane1.addTab("Versiones Existentes", jPanelPreview);
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SummaryPublish"); // NOI18N
+        jTabbedPane1.addTab(bundle.getString("VERSIONES_EXISTENTES"), jPanelPreview); // NOI18N
 
         add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
@@ -186,7 +192,7 @@ public class SummaryPublish extends javax.swing.JPanel
         jToolBar1.setRollover(true);
 
         jButtonViewContent.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/see.png"))); // NOI18N
-        jButtonViewContent.setToolTipText("Ver contenido");
+        jButtonViewContent.setToolTipText(bundle.getString("VER_CONTENIDO")); // NOI18N
         jButtonViewContent.setEnabled(false);
         jButtonViewContent.setFocusable(false);
         jButtonViewContent.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -199,7 +205,7 @@ public class SummaryPublish extends javax.swing.JPanel
         jToolBar1.add(jButtonViewContent);
 
         jButtonDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/delete.png"))); // NOI18N
-        jButtonDelete.setToolTipText("Borrar version");
+        jButtonDelete.setToolTipText(bundle.getString("BORRAR_VERSION")); // NOI18N
         jButtonDelete.setEnabled(false);
         jButtonDelete.setFocusable(false);
         jButtonDelete.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -227,7 +233,7 @@ public class SummaryPublish extends javax.swing.JPanel
             {                
                 name = OfficeApplication.getOfficeDocumentProxy().createPreview(this.repositoryName, this.contentId, versionInfo,type);
                 String urlproxy = OfficeApplication.getOfficeApplicationProxy().getWebAddress().toString();
-                URL url = new URL(urlproxy + "?contentId=" + contentId+ "&versionName=" + versionInfo + "&repositoryName=" + repositoryName + "&name=" + name+"&type="+type);
+                URL url = new URL(urlproxy + CONTENTID + contentId+ VERSIONNAME + versionInfo + REPOSITORYNAME + repositoryName + NAME + name+TYPE+type);
                 String title=OfficeApplication.getOfficeDocumentProxy().getTitle(repositoryName, contentId)+" ("+ versionInfo+") ";
                 DialogPreview dialogPreview = new DialogPreview(url,false,title);
                 dialogPreview.setVisible(true);
@@ -262,12 +268,12 @@ public class SummaryPublish extends javax.swing.JPanel
             boolean published=(Boolean) model.getValueAt(this.jTableSummary1.getSelectedRow(), 3);
             if(published)
             {
-                JOptionPane.showMessageDialog(this,"¡No se puede borrar una versión que ha sido publicada.!\r\nDebe borrar primero la publicación del contenido.","Borrado de versión de contenido",JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SummaryPublish").getString("¡NO_SE_PUEDE_BORRAR_UNA_VERSIÓN_QUE_HA_SIDO_PUBLICADA!")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SummaryPublish").getString("DEBE_BORRAR_PRIMERO_LA_PUBLICACIÓN_DEL_CONTENIDO."),java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SummaryPublish").getString("BORRADO_DE_VERSIÓN_DE_CONTENIDO"),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
                 return;
             }
             try
             {
-                int res=JOptionPane.showConfirmDialog(this, "¿Desea borrar la versión "+ versionInfo +"?","Borrado de versión de contenido",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+                int res=JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SummaryPublish").getString("¿DESEA_BORRAR_LA_VERSIÓN_")+ versionInfo +"?",java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SummaryPublish").getString("BORRADO_DE_VERSIÓN_DE_CONTENIDO"),JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
                 if(res==JOptionPane.YES_OPTION)
                 {
                     try

@@ -83,7 +83,7 @@ public class CreatePageResultProducer implements WizardResultProducer
                     parent.id=pageSelected.getID();
                 }
                 openOfficeApplication.createPage(parent, pageid, title, description);
-                JOptionPane.showMessageDialog(null,"¡Se ha creado la página "+ title +"!" ,"Asistente de creación de página",JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/CreatePageResultProducer").getString("SE_HA_CREADO_LA_PÁGINA_")+ title +"!" ,java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/CreatePageResultProducer").getString("ASISTENTE_DE_CREACIÓN_DE_PÁGINA"),JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
                 progress.finished(null);
             }
             catch (Exception e)

@@ -44,7 +44,7 @@ import org.semanticwb.xmlrpc.Attachment;
  */
 public class DialogUpdateContent extends javax.swing.JDialog
 {
-
+    private static final String NL = "\r\n";
     private boolean updated = false;
     private String workspaceid,  contentid;
     private OfficeDocument document;
@@ -67,20 +67,20 @@ public class DialogUpdateContent extends javax.swing.JDialog
             try
             {
                 dialog.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-                jLabel1.setText("Enviando archivo de publicación " + zipFile.getName());
+                jLabel1.setText(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("ENVIANDO_ARCHIVO_DE_PUBLICACIÓN_") + zipFile.getName());
                 jLabel1.repaint();
                 String name = document.getLocalPath().getName().replace(document.getDefaultExtension(), document.getPublicationExtension());
                 document.getOfficeDocumentProxy().updateContent(workspaceid, contentid, name);
                 jProgressBar.setValue(2);
-                jLabel1.setText("Actualización terminada");
+                jLabel1.setText(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("ACTUALIZACIÓN_TERMINADA"));
                 summaryPublish1.loadVersions(contentid, workspaceid);
                 jButtonUpdate.setEnabled(false);
-                JOptionPane.showMessageDialog(dialog, "¡Contenido actualizado!", dialog.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(dialog, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("¡CONTENIDO_ACTUALIZADO!"), dialog.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
             }
             catch (Exception e)
             {
                 e.printStackTrace();
-                JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "Actualización de contenido", JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("ACTUALIZACIÓN_DE_CONTENIDO"), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             }
             finally
             {
@@ -124,13 +124,14 @@ public class DialogUpdateContent extends javax.swing.JDialog
         summaryPublish1 = new org.semanticwb.openoffice.ui.wizard.SummaryPublish();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Actualizacón de contenido");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent"); // NOI18N
+        setTitle(bundle.getString("ACTUALIZACÓN_DE_CONTENIDO")); // NOI18N
         setModal(true);
         setResizable(false);
 
         jPanel1.setPreferredSize(new java.awt.Dimension(350, 50));
 
-        jButtonClose.setText("Cerrar");
+        jButtonClose.setText(bundle.getString("CERRAR")); // NOI18N
         jButtonClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCloseActionPerformed(evt);
@@ -142,14 +143,14 @@ public class DialogUpdateContent extends javax.swing.JDialog
         jProgressBar.setOpaque(true);
         jProgressBar.setStringPainted(true);
 
-        jButtonUpdate.setText("Actualizar");
+        jButtonUpdate.setText(bundle.getString("ACTUALIZAR")); // NOI18N
         jButtonUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonUpdateActionPerformed(evt);
             }
         });
 
-        jLabel1.setText("Selecione la opción de actualizar");
+        jLabel1.setText(bundle.getString("SELECIONE_LA_OPCIÓN_DE_ACTUALIZAR")); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -206,7 +207,7 @@ private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                 {
                     if (versions >= limit)
                     {
-                        int resp=JOptionPane.showConfirmDialog(this, "¡El limite máximo de versiones es de " + limit + "!\r\nPuede publicar este contenido, debido a que tiene todas las versiones publicadas, pero excederá del límite de versiones\r\n¿Desea continuar?", this.getTitle(), JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+                        int resp=JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("¡EL_LIMITE_MÁXIMO_DE_VERSIONES_ES_DE_") + limit + "!"+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("PUEDE_PUBLICAR_ESTE_CONTENIDO,_DEBIDO_A_QUE_TIENE_TODAS_LAS_VERSIONES_PUBLICADAS,_PERO_EXCEDERÁ_DEL_LÍMITE_DE_VERSIONES")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("¿DESEA_CONTINUAR?"), this.getTitle(), JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
                         if(resp==JOptionPane.NO_OPTION)
                         {
                             return;
@@ -217,18 +218,18 @@ private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                 {                    
                     if (versions >= limit)
                     {
-                        JOptionPane.showMessageDialog(this, "¡El limite máximo de versiones es de " + limit + "!\r\nSi desea crear una nueva version, debe borrar alguna de las existentes, que no este publicada.", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("¡EL_LIMITE_MÁXIMO_DE_VERSIONES_ES_DE_") + limit + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("!")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("SI_DESEA_CREAR_UNA_NUEVA_VERSION,_DEBE_BORRAR_ALGUNA_DE_LAS_EXISTENTES,_QUE_NO_ESTE_PUBLICADA."), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
                         return;
                     }
                 }
             }
             jProgressBar.setMaximum(2);
-            this.jLabel1.setText("Creando archivo para publicación ...");
+            this.jLabel1.setText(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("CREANDO_ARCHIVO_PARA_PUBLICACIÓN_..."));
             jLabel1.repaint();
             this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
             jProgressBar.setValue(0);
             zipFile = document.createZipFile();
-            this.jLabel1.setText("Archivo de publicación creado");
+            this.jLabel1.setText(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("ARCHIVO_DE_PUBLICACIÓN_CREADO"));
             jLabel1.repaint();
             jProgressBar.setValue(1);
             document.getOfficeDocumentProxy().addAttachment(new Attachment(zipFile, zipFile.getName()));

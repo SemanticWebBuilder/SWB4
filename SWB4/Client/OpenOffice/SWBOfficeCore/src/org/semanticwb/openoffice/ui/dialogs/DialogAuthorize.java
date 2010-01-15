@@ -82,7 +82,8 @@ public class DialogAuthorize extends java.awt.Dialog {
         jPanel1.setPreferredSize(new java.awt.Dimension(100, 40));
         jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
-        jButtonOK.setText("Aceptar");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogAuthorize"); // NOI18N
+        jButtonOK.setText(bundle.getString("ACEPTAR")); // NOI18N
         jButtonOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonOKActionPerformed(evt);
@@ -90,7 +91,7 @@ public class DialogAuthorize extends java.awt.Dialog {
         });
         jPanel1.add(jButtonOK);
 
-        jButtonCancel.setText("Cencelar");
+        jButtonCancel.setText(bundle.getString("CENCELAR")); // NOI18N
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);
@@ -106,7 +107,7 @@ public class DialogAuthorize extends java.awt.Dialog {
         jPanel3.setPreferredSize(new java.awt.Dimension(100, 20));
         jPanel3.setLayout(new java.awt.BorderLayout());
 
-        jLabel1.setText("Mensaje:");
+        jLabel1.setText(bundle.getString("MENSAJE:")); // NOI18N
         jPanel3.add(jLabel1, java.awt.BorderLayout.CENTER);
 
         jPanel2.add(jPanel3, java.awt.BorderLayout.NORTH);
@@ -132,7 +133,7 @@ public class DialogAuthorize extends java.awt.Dialog {
     {//GEN-HEADEREND:event_jButtonOKActionPerformed
         if(this.jTextAreaMessage.getText().trim().isEmpty())
         {
-            JOptionPane.showMessageDialog(this, "¡Debe indicar el mensaje!",this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogAuthorize").getString("¡DEBE_INDICAR_EL_MENSAJE!"),this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             this.jTextAreaMessage.requestFocus();
             return;
         }

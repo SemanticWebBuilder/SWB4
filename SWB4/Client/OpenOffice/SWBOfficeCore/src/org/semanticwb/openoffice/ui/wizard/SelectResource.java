@@ -44,7 +44,7 @@ public class SelectResource extends WizardPage {
 
     public static String getDescription()
     {
-        return "Seleccionar un contenido publicado";
+        return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectResource").getString("SELECCIONAR_UN_CONTENIDO_PUBLICADO");
     }
     /** This method is called from within the constructor to
      * initialize the form.
@@ -86,7 +86,8 @@ public class SelectResource extends WizardPage {
                 return canEdit [columnIndex];
             }
         });
-        jTable1.setToolTipText("Seleccione un contenido publicado");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectResource"); // NOI18N
+        jTable1.setToolTipText(bundle.getString("SELECCIONE_UN_CONTENIDO_PUBLICADO")); // NOI18N
         jTable1.setColumnSelectionAllowed(true);
         jScrollPane1.setViewportView(jTable1);
         jTable1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);

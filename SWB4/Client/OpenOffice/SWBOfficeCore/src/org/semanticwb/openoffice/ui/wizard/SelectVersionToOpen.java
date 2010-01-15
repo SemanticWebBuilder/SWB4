@@ -52,6 +52,13 @@ public class SelectVersionToOpen extends WizardPage
 {
 
     public static final String VERSION = "version";
+    private static final String CONTENTID = "?contentId=";
+    private static final String GTW = "gtw";
+    private static final String NAME = "&name=";
+    private static final String PATH_SEPARATOR = "/";
+    private static final String REPOSITORYNAME = "&repositoryName=";
+    private static final String TYPE = "&type=";
+    private static final String VERSIONNAME = "&versionName=";
     private String type;
     /** Creates new form SelectVersionToOpen */
     public SelectVersionToOpen(String type)
@@ -106,7 +113,7 @@ public class SelectVersionToOpen extends WizardPage
 
     public static String getDescription()
     {
-        return "Versión de Contenido";
+        return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectVersionToOpen").getString("VERSIÓN_DE_CONTENIDO");
     }
 
     @Override
@@ -115,7 +122,7 @@ public class SelectVersionToOpen extends WizardPage
         WizardPanelNavResult result = WizardPanelNavResult.PROCEED;
         if (this.jTableVersion.getSelectedRow() == -1)
         {
-            JOptionPane.showMessageDialog(this, "!Debe indicar una versión!", SelectVersionToOpen.getDescription(), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectVersionToOpen").getString("!DEBE_INDICAR_UNA_VERSIÓN!"), SelectVersionToOpen.getDescription(), JOptionPane.ERROR_MESSAGE);
             this.jTableVersion.requestFocus();
             result = WizardPanelNavResult.REMAIN_ON_PAGE;
         }
@@ -177,7 +184,8 @@ public class SelectVersionToOpen extends WizardPage
         jToolBar1.setPreferredSize(new java.awt.Dimension(100, 25));
 
         jButtonView.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/see.png"))); // NOI18N
-        jButtonView.setToolTipText("Ver Contenido");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectVersionToOpen"); // NOI18N
+        jButtonView.setToolTipText(bundle.getString("VER_CONTENIDO")); // NOI18N
         jButtonView.setEnabled(false);
         jButtonView.setFocusable(false);
         jButtonView.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -207,18 +215,18 @@ private void jButtonViewActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIR
         {            
             name = OfficeApplication.getOfficeDocumentProxy().createPreview(workspace, version.contentId, version.nameOfVersion,type);
             String urlproxy = OfficeApplication.getOfficeApplicationProxy().getWebAddress().toString();
-            if (!urlproxy.endsWith("/gtw"))
+            if (!urlproxy.endsWith(PATH_SEPARATOR+GTW))
             {
-                if (!urlproxy.endsWith("/"))
+                if (!urlproxy.endsWith(PATH_SEPARATOR))
                 {
-                    urlproxy += "/";
+                    urlproxy += PATH_SEPARATOR;
                 }
-                if (!urlproxy.endsWith("gtw"))
+                if (!urlproxy.endsWith(GTW))
                 {
-                    urlproxy += "gtw";
+                    urlproxy += GTW;
                 }
             }
-            URL url = new URL(urlproxy + "?contentId=" + version.contentId + "&versionName=" + version.nameOfVersion + "&repositoryName=" + workspace + "&name=" + name+"&type="+type);
+            URL url = new URL(urlproxy + CONTENTID + version.contentId + VERSIONNAME + version.nameOfVersion + REPOSITORYNAME + workspace + NAME + name+TYPE+type);
             String title = OfficeApplication.getOfficeDocumentProxy().getTitle(workspace, version.contentId) + " (" + version.nameOfVersion + ") ";
             DialogPreview dialogPreview = new DialogPreview(url, false, title);
             dialogPreview.setVisible(true);

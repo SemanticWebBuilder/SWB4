@@ -7,7 +7,9 @@
   </NonVisualComponents>
   <Properties>
     <Property name="resizable" type="boolean" value="false"/>
-    <Property name="title" type="java.lang.String" value="Calendarizaci&#xf3;n"/>
+    <Property name="title" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+      <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogCalendar.properties" key="CALENDARIZACI&#xd3;N" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+    </Property>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -62,7 +64,9 @@
           <SubComponents>
             <Component class="javax.swing.JButton" name="jButtonRegularPeriods">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Configurar por periodos regulares"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogCalendar.properties" key="CONFIGURAR_POR_PERIODOS_REGULARES" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonRegularPeriodsActionPerformed"/>
@@ -70,7 +74,9 @@
             </Component>
             <Component class="javax.swing.JButton" name="jButtonOk">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Aceptar"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogCalendar.properties" key="ACEPTAR" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonOkActionPerformed"/>
@@ -78,7 +84,9 @@
             </Component>
             <Component class="javax.swing.JButton" name="jButtonClose">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Cerrar"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogCalendar.properties" key="CERRAR" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonCloseActionPerformed"/>
@@ -125,7 +133,9 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="jLabel1">
               <Properties>
-                <Property name="text" type="java.lang.String" value="T&#xed;tulo:"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogCalendar.properties" key="T&#xcd;TULO:" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextFieldTitle">
@@ -223,7 +233,9 @@
               <SubComponents>
                 <Component class="javax.swing.JCheckBox" name="jCheckBoxByTime">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Por Hora"/>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogCalendar.properties" key="POR_HORA" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    </Property>
                   </Properties>
                   <Events>
                     <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jCheckBoxByTimeStateChanged"/>
@@ -239,12 +251,16 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel2">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Hora de inicio:"/>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogCalendar.properties" key="HORA_DE_INICIO:" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    </Property>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel3">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Hora final:"/>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogCalendar.properties" key="HORA_FINAL:" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    </Property>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JSpinner" name="jSpinnerEndTime">
@@ -314,7 +330,9 @@
               <SubComponents>
                 <Component class="javax.swing.JLabel" name="jLabel4">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Feha de inicio:"/>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogCalendar.properties" key="FEHA_DE_INICIO:" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    </Property>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JRadioButton" name="jRadioButtonNotEndDate">
@@ -322,7 +340,9 @@
                     <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
                       <ComponentRef name="buttonGroupendDate"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Sin fecha de finalizaci&#xf3;n"/>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogCalendar.properties" key="SIN_FECHA_DE_FINALIZACI&#xd3;N" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    </Property>
                   </Properties>
                   <Events>
                     <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jRadioButtonNotEndDateStateChanged"/>
@@ -334,7 +354,9 @@
                       <ComponentRef name="buttonGroupendDate"/>
                     </Property>
                     <Property name="selected" type="boolean" value="true"/>
-                    <Property name="text" type="java.lang.String" value="Finaliza el:"/>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogCalendar.properties" key="FINALIZA_EL:" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    </Property>
                   </Properties>
                   <Events>
                     <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jRadioButtonEndSelectStateChanged"/>

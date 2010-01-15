@@ -91,11 +91,11 @@ public class Search extends WizardPage
             ContentInfo[] contens = OfficeApplication.getOfficeApplicationProxy().search(repositoryName, title, description, category, type, officeType.toString());
             if (contens.length == 0)
             {
-                JOptionPane.showMessageDialog(this, "¡No se encontrarón coincidencias para la busqueda!", Search.getDescription(), JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/Search").getString("¡NO_SE_ENCONTRARÓN_COINCIDENCIAS_PARA_LA_BUSQUEDA!"), Search.getDescription(), JOptionPane.INFORMATION_MESSAGE);
             }
             else
             {
-                JOptionPane.showMessageDialog(this, "¡Se encontrarón " + contens.length + " coincidencias para la busqueda!", Search.getDescription(), JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/Search").getString("¡SE_ENCONTRARÓN_") + contens.length + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/Search").getString("_COINCIDENCIAS_PARA_LA_BUSQUEDA!"), Search.getDescription(), JOptionPane.INFORMATION_MESSAGE);
             }
             for (ContentInfo info : contens)
             {
@@ -115,7 +115,7 @@ public class Search extends WizardPage
 
     public static String getDescription()
     {
-        return "Búsqueda de contenido";
+        return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/Search").getString("BÚSQUEDA_DE_CONTENIDO");
     }
 
     /** This method is called from within the constructor to
@@ -142,26 +142,26 @@ public class Search extends WizardPage
         jLabel5 = new javax.swing.JLabel();
         jComboBoxType = new javax.swing.JComboBox();
 
-        jLabel1.setText("Título:");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/Search"); // NOI18N
+        jLabel1.setText(bundle.getString("TÍTULO:")); // NOI18N
 
-        jTextFieldTitle.setToolTipText("Debe indicar una palabra o título completo a buscar");
+        jTextFieldTitle.setToolTipText(bundle.getString("DEBE_INDICAR_UNA_PALABRA_O_TÍTULO_COMPLETO_A_BUSCAR")); // NOI18N
 
-        jLabel2.setText("Descripción:");
+        jLabel2.setText(bundle.getString("DESCRIPCIÓN:")); // NOI18N
 
-        jTextFieldDescription.setToolTipText("Debe indicar una palabra o descripción completa a buscar");
+        jTextFieldDescription.setToolTipText(bundle.getString("DEBE_INDICAR_UNA_PALABRA_O_DESCRIPCIÓN_COMPLETA_A_BUSCAR")); // NOI18N
 
-        jButtonSearch.setText("Buscar");
-        jButtonSearch.setToolTipText("Seleccione esta opción para buscar contenidos que coincidan con los criterios de búsqueda");
+        jButtonSearch.setText(bundle.getString("BUSCAR")); // NOI18N
+        jButtonSearch.setToolTipText(bundle.getString("SELECCIONE_ESTA_OPCIÓN_PARA_BUSCAR_CONTENIDOS_QUE_COINCIDAN_CON_LOS_CRITERIOS_DE_BÚSQUEDA")); // NOI18N
         jButtonSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonSearchActionPerformed(evt);
             }
         });
 
-        jLabel3.setText("Categoria:");
+        jLabel3.setText(bundle.getString("CATEGORIA:")); // NOI18N
 
-        jComboBoxCategory.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBoxCategory.setToolTipText("Seleccione una categoria para buscar el contenido");
+        jComboBoxCategory.setToolTipText(bundle.getString("SELECCIONE_UNA_CATEGORIA_PARA_BUSCAR_EL_CONTENIDO")); // NOI18N
 
         jTableContents.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -199,22 +199,19 @@ public class Search extends WizardPage
         });
         jScrollPane1.setViewportView(jTableContents);
 
-        jButtonView.setText("Ver Contenido");
+        jButtonView.setText(bundle.getString("VER_CONTENIDO")); // NOI18N
         jButtonView.setEnabled(false);
 
-        jLabel4.setText("Repositorio:");
+        jLabel4.setText(bundle.getString("REPOSITORIO:")); // NOI18N
 
-        jComboBoxRepositorio.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBoxRepositorio.setToolTipText("Seleccione un repositorio de contenidos");
+        jComboBoxRepositorio.setToolTipText(bundle.getString("SELECCIONE_UN_REPOSITORIO_DE_CONTENIDOS")); // NOI18N
         jComboBoxRepositorio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBoxRepositorioActionPerformed(evt);
             }
         });
 
-        jLabel5.setText("Tipo de contenido:");
-
-        jComboBoxType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jLabel5.setText(bundle.getString("TIPO_DE_CONTENIDO:")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -283,19 +280,19 @@ public class Search extends WizardPage
 private void jButtonSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchActionPerformed
     if (this.jComboBoxRepositorio.getSelectedItem() == null)
     {
-        JOptionPane.showMessageDialog(this, "¡Debe indicar un repositorio!", Search.getDescription(), JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/Search").getString("¡DEBE_INDICAR_UN_REPOSITORIO!"), Search.getDescription(), JOptionPane.ERROR_MESSAGE);
         this.jComboBoxRepositorio.requestFocus();
         return;
     }
     if (this.jComboBoxCategory.getSelectedItem() == null)
     {
-        JOptionPane.showMessageDialog(this, "¡Debe indicar una categoria!", Search.getDescription(), JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/Search").getString("¡DEBE_INDICAR_UNA_CATEGORIA!"), Search.getDescription(), JOptionPane.ERROR_MESSAGE);
         this.jComboBoxCategory.requestFocus();
         return;
     }
     if (this.jComboBoxType.getSelectedItem() == null)
     {
-        JOptionPane.showMessageDialog(this, "¡Debe indicar un tipo de contenido!", Search.getDescription(), JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/Search").getString("¡DEBE_INDICAR_UN_TIPO_DE_CONTENIDO!"), Search.getDescription(), JOptionPane.ERROR_MESSAGE);
         this.jComboBoxType.requestFocus();
         return;
     }
@@ -334,8 +331,8 @@ private void jComboBoxRepositorioActionPerformed(java.awt.event.ActionEvent evt)
             }
             CategoryInfo all = new CategoryInfo();
             all.UDDI = "*";
-            all.title = "Todas las categorias";
-            all.description = "Todas las categorias del repositorio";
+            all.title = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/Search").getString("TODAS_LAS_CATEGORIAS");
+            all.description = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/Search").getString("TODAS_LAS_CATEGORIAS_DEL_REPOSITORIO");
             this.jComboBoxCategory.addItem(all);
             this.jComboBoxCategory.setSelectedItem(all);
 
@@ -385,7 +382,7 @@ private void jTableContentsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:
         WizardPanelNavResult result = WizardPanelNavResult.PROCEED;
         if (this.jTableContents.getSelectedRow() == -1)
         {
-            JOptionPane.showMessageDialog(this, "!Debe indicar un contenido!", Search.getDescription(), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/Search").getString("!DEBE_INDICAR_UN_CONTENIDO!"), Search.getDescription(), JOptionPane.ERROR_MESSAGE);
             this.jTableContents.requestFocus();
             result = WizardPanelNavResult.REMAIN_ON_PAGE;
         }

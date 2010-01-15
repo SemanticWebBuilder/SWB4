@@ -61,7 +61,7 @@ import org.semanticwb.openoffice.ui.wizard.SelectPage;
  */
 public class DialogEditResource extends javax.swing.JDialog
 {
-
+    private static final String NL = "\r\n";
     private static final String DATE_FORMAT = "dd/MM/yyyy";
     //private static final SimpleDateFormat DATE_SIMPLEFORMAT = new SimpleDateFormat(DATE_FORMAT);
     private PanelPropertyEditor panelPropertyEditor1 = new PanelPropertyEditor();
@@ -189,7 +189,7 @@ public class DialogEditResource extends javax.swing.JDialog
         {
             if (OfficeApplication.getOfficeDocumentProxy().needsSendToPublish(pageInformation))
             {
-                this.jCheckBoxActive.setToolTipText("El contenido debe ser autorizado antes de activarse");
+                this.jCheckBoxActive.setToolTipText(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("EL_CONTENIDO_DEBE_SER_AUTORIZADO_ANTES_DE_ACTIVARSE"));
             }
         }
         catch (Exception e)
@@ -200,7 +200,7 @@ public class DialogEditResource extends javax.swing.JDialog
         {
             if (OfficeApplication.getOfficeDocumentProxy().isInFlow(pageInformation))
             {
-                this.jCheckBoxActive.setToolTipText("El contenido esta en proceso de autorización, debe ser autorizado antes de activarse");
+                this.jCheckBoxActive.setToolTipText(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("EL_CONTENIDO_ESTA_EN_PROCESO_DE_AUTORIZACIÓN,_DEBE_SER_AUTORIZADO_ANTES_DE_ACTIVARSE"));
             }
         }
         catch (Exception e)
@@ -392,12 +392,13 @@ public class DialogEditResource extends javax.swing.JDialog
         jLanguageEditor = new org.semanticwb.openoffice.ui.wizard.LanguageEditor();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Editar Propiedades");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource"); // NOI18N
+        setTitle(bundle.getString("EDITAR_PROPIEDADES")); // NOI18N
         setResizable(false);
 
         jPanelOptions.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
-        jButtonSendToAuthorize.setText("Enviar a autorización");
+        jButtonSendToAuthorize.setText(bundle.getString("ENVIAR_A_AUTORIZACIÓN")); // NOI18N
         jButtonSendToAuthorize.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonSendToAuthorizeActionPerformed(evt);
@@ -405,7 +406,7 @@ public class DialogEditResource extends javax.swing.JDialog
         });
         jPanelOptions.add(jButtonSendToAuthorize);
 
-        jButtonOK.setText("Aceptar");
+        jButtonOK.setText(bundle.getString("ACEPTAR")); // NOI18N
         jButtonOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonOKActionPerformed(evt);
@@ -413,7 +414,7 @@ public class DialogEditResource extends javax.swing.JDialog
         });
         jPanelOptions.add(jButtonOK);
 
-        jButtonCancel.setText("Cerrar");
+        jButtonCancel.setText(bundle.getString("CERRAR")); // NOI18N
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);
@@ -425,32 +426,32 @@ public class DialogEditResource extends javax.swing.JDialog
 
         jTabbedPane1.setPreferredSize(new java.awt.Dimension(530, 400));
 
-        jLabel1.setText("Título por defecto:");
+        jLabel1.setText(bundle.getString("TÍTULO_POR_DEFECTO:")); // NOI18N
 
-        jLabel2.setText("Descripción:");
+        jLabel2.setText(bundle.getString("DESCRIPCIÓN:")); // NOI18N
 
         jTextAreaDescription.setColumns(20);
         jTextAreaDescription.setRows(5);
         jScrollPane3.setViewportView(jTextAreaDescription);
 
-        jLabel3.setText("Activo:");
+        jLabel3.setText(bundle.getString("ACTIVO:")); // NOI18N
 
-        jLabel4.setText("Sitio:");
+        jLabel4.setText(bundle.getString("SITIO:")); // NOI18N
 
-        jLabelSite.setText("Sitio de prueba");
+        jLabelSite.setText(bundle.getString("SITIO_DE_PRUEBA")); // NOI18N
 
-        jLabel6.setText("Página:");
+        jLabel6.setText(bundle.getString("PÁGINA:")); // NOI18N
 
-        jLabelPage.setText("Página");
+        jLabelPage.setText(bundle.getString("PÁGINA")); // NOI18N
 
-        jLabel8.setText("Versión a publicar:");
+        jLabel8.setText(bundle.getString("VERSIÓN_A_PUBLICAR:")); // NOI18N
 
-        jLabel5.setText("Vigencia:");
+        jLabel5.setText(bundle.getString("VIGENCIA:")); // NOI18N
 
         jSpinnerEndDate.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.DAY_OF_WEEK));
         jSpinnerEndDate.setEnabled(false);
 
-        jCheckBoxEndDateActive.setText("Activar Vigencia");
+        jCheckBoxEndDateActive.setText(bundle.getString("ACTIVAR_VIGENCIA")); // NOI18N
         jCheckBoxEndDateActive.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jCheckBoxEndDateActiveItemStateChanged(evt);
@@ -462,14 +463,14 @@ public class DialogEditResource extends javax.swing.JDialog
             }
         });
 
-        jButtonMove.setText("Mover");
+        jButtonMove.setText(bundle.getString("MOVER")); // NOI18N
         jButtonMove.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonMoveActionPerformed(evt);
             }
         });
 
-        jLabel7.setText("Página activa:");
+        jLabel7.setText(bundle.getString("PÁGINA_ACTIVA:")); // NOI18N
 
         javax.swing.GroupLayout jPanelInformationLayout = new javax.swing.GroupLayout(jPanelInformation);
         jPanelInformation.setLayout(jPanelInformationLayout);
@@ -565,10 +566,10 @@ public class DialogEditResource extends javax.swing.JDialog
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Información", jPanelInformation);
+        jTabbedPane1.addTab(bundle.getString("INFORMACIÓN"), jPanelInformation); // NOI18N
 
         jPanelProperties.setLayout(new java.awt.BorderLayout());
-        jTabbedPane1.addTab("Propiedades de publicación", jPanelProperties);
+        jTabbedPane1.addTab(bundle.getString("PROPIEDADES_DE_PUBLICACIÓN"), jPanelProperties); // NOI18N
 
         jPanelSchedule.setLayout(new java.awt.BorderLayout());
 
@@ -612,7 +613,7 @@ public class DialogEditResource extends javax.swing.JDialog
         jToolBar1.setRollover(true);
 
         jButtonAddCalendar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/add.png"))); // NOI18N
-        jButtonAddCalendar.setToolTipText("Agregar una calendarizacin para la publicación actual");
+        jButtonAddCalendar.setToolTipText(bundle.getString("AGREGAR_UNA_CALENDARIZACIN_PARA_LA_PUBLICACIÓN_ACTUAL")); // NOI18N
         jButtonAddCalendar.setFocusable(false);
         jButtonAddCalendar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonAddCalendar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -625,7 +626,7 @@ public class DialogEditResource extends javax.swing.JDialog
         jToolBar1.add(jSeparator1);
 
         jButtonDeleteScheduler.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/delete.png"))); // NOI18N
-        jButtonDeleteScheduler.setToolTipText("Eliminar la calendarización seleccionada");
+        jButtonDeleteScheduler.setToolTipText(bundle.getString("ELIMINAR_LA_CALENDARIZACIÓN_SELECCIONADA")); // NOI18N
         jButtonDeleteScheduler.setEnabled(false);
         jButtonDeleteScheduler.setFocusable(false);
         jButtonDeleteScheduler.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -639,7 +640,7 @@ public class DialogEditResource extends javax.swing.JDialog
 
         jPanelSchedule.add(jToolBar1, java.awt.BorderLayout.PAGE_START);
 
-        jTabbedPane1.addTab("Calendarización", jPanelSchedule);
+        jTabbedPane1.addTab(bundle.getString("CALENDARIZACIÓN"), jPanelSchedule); // NOI18N
 
         jPanelRules.setLayout(new java.awt.BorderLayout());
 
@@ -649,7 +650,7 @@ public class DialogEditResource extends javax.swing.JDialog
         jToolBarRules.setRollover(true);
 
         jButtonAddRule.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/add.png"))); // NOI18N
-        jButtonAddRule.setToolTipText("Agregar una regla, rol ó grupo para la publicación actual");
+        jButtonAddRule.setToolTipText(bundle.getString("AGREGAR_UNA_REGLA,_ROL_Ó_GRUPO_PARA_LA_PUBLICACIÓN_ACTUAL")); // NOI18N
         jButtonAddRule.setFocusable(false);
         jButtonAddRule.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonAddRule.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -662,7 +663,7 @@ public class DialogEditResource extends javax.swing.JDialog
         jToolBarRules.add(jSeparator2);
 
         jButtonDeleteRule.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/delete.png"))); // NOI18N
-        jButtonDeleteRule.setToolTipText("Eliminar la regla, rol o grupo seleccionada");
+        jButtonDeleteRule.setToolTipText(bundle.getString("ELIMINAR_LA_REGLA,_ROL_O_GRUPO_SELECCIONADA")); // NOI18N
         jButtonDeleteRule.setEnabled(false);
         jButtonDeleteRule.setFocusable(false);
         jButtonDeleteRule.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -725,12 +726,12 @@ public class DialogEditResource extends javax.swing.JDialog
 
         jPanelRules.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        jTabbedPane1.addTab("Reglas / Roles o Grupos de Usuarios", jPanelRules);
+        jTabbedPane1.addTab(bundle.getString("REGLAS_/_ROLES_O_GRUPOS_DE_USUARIOS"), jPanelRules); // NOI18N
 
         jPanelTitles.setLayout(new java.awt.BorderLayout());
         jPanelTitles.add(jLanguageEditor, java.awt.BorderLayout.CENTER);
 
-        jTabbedPane1.addTab("Títulos de página", jPanelTitles);
+        jTabbedPane1.addTab(bundle.getString("TÍTULOS_DE_PÁGINA"), jPanelTitles); // NOI18N
 
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
@@ -752,17 +753,17 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     isCancel = false;
     if (this.jTextFieldTitle.getText().isEmpty())
     {
-        JOptionPane.showMessageDialog(this, "¡Debe indicar el título de la públicación!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("¡DEBE_INDICAR_EL_TÍTULO_DE_LA_PÚBLICACIÓN!"), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
         jTextFieldTitle.requestFocus();
         return;
     }
     if (this.jTextAreaDescription.getText().isEmpty())
     {
-        JOptionPane.showMessageDialog(this, "¡Debe indicar una descripción de la públicación!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("¡DEBE_INDICAR_UNA_DESCRIPCIÓN_DE_LA_PÚBLICACIÓN!"), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
         jTextAreaDescription.requestFocus();
         return;
     }
-    int res = JOptionPane.showConfirmDialog(this, "Se va a realizar los cambios de la información de publicación.\r\n¿Desea continuar?", this.getTitle(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+    int res = JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("SE_VA_A_REALIZAR_LOS_CAMBIOS_DE_LA_INFORMACIÓN_DE_PUBLICACIÓN.")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("¿DESEA_CONTINUAR?"), this.getTitle(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
     if (res == JOptionPane.YES_OPTION)
     {
         pageInformation.title = this.jTextFieldTitle.getText();
@@ -802,7 +803,7 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                         if (OfficeApplication.getOfficeDocumentProxy().needsSendToPublish(pageInformation))
                         {
                             this.jCheckBoxActive.setSelected(pageInformation.active);
-                            res = JOptionPane.showConfirmDialog(this, "El documento requiere una autorización para activarse\r\n¿Desea envíar a publicar el contenido?", this.getTitle(), JOptionPane.YES_NO_OPTION);
+                            res = JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("EL_DOCUMENTO_REQUIERE_UNA_AUTORIZACIÓN_PARA_ACTIVARSE")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("¿DESEA_ENVÍAR_A_PUBLICAR_EL_CONTENIDO?"), this.getTitle(), JOptionPane.YES_NO_OPTION);
                             if (res == JOptionPane.YES_OPTION)
                             {
                                 DialogSelectFlow formSendToAutorize = new DialogSelectFlow(pageInformation);
@@ -813,18 +814,18 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                                 }
                                 else
                                 {
-                                    JOptionPane.showMessageDialog(this, "El contenido no se activo, ya que se requiere una autorización", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                                    JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("EL_CONTENIDO_NO_SE_ACTIVO,_YA_QUE_SE_REQUIERE_UNA_AUTORIZACIÓN"), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
                                 }
                             }
                             else
                             {
-                                JOptionPane.showMessageDialog(this, "El contenido no se activo, ya que se requiere una autorización", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("EL_CONTENIDO_NO_SE_ACTIVO,_YA_QUE_SE_REQUIERE_UNA_AUTORIZACIÓN"), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
                             }
                         }
                         else if (OfficeApplication.getOfficeDocumentProxy().isInFlow(pageInformation))
                         {
                             this.jCheckBoxActive.setSelected(pageInformation.active);
-                            JOptionPane.showMessageDialog(this, "El contenido se encuentra en proceso de ser autorizado.\r\nPara activarlo necesita terminar el proceso de autorización", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("EL_CONTENIDO_SE_ENCUENTRA_EN_PROCESO_DE_SER_AUTORIZADO.")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("PARA_ACTIVARLO_NECESITA_TERMINAR_EL_PROCESO_DE_AUTORIZACIÓN"), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
                         }
                         else if (OfficeApplication.getOfficeDocumentProxy().isAuthorized(pageInformation))
                         {
@@ -833,7 +834,7 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                         else
                         {
                             this.jCheckBoxActive.setSelected(pageInformation.active);
-                            res = JOptionPane.showConfirmDialog(this, "El contenido fue rechazado.\r\nPara activarlo necesita enviarlo a autorización de nuevo\r\n¿Desea enviarlo a autorización?", this.getTitle(), JOptionPane.YES_NO_OPTION);
+                            res = JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("EL_CONTENIDO_FUE_RECHAZADO.")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("PARA_ACTIVARLO_NECESITA_ENVIARLO_A_AUTORIZACIÓN_DE_NUEVO")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("¿DESEA_ENVIARLO_A_AUTORIZACIÓN?"), this.getTitle(), JOptionPane.YES_NO_OPTION);
                             if (res == JOptionPane.YES_OPTION)
                             {
                                 DialogSelectFlow formSendToAutorize = new DialogSelectFlow(pageInformation);
@@ -844,12 +845,12 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                                 }
                                 else
                                 {
-                                    JOptionPane.showMessageDialog(this, "El contenido no se activo, ya que se requiere una autorización", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                                    JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("EL_CONTENIDO_NO_SE_ACTIVO,_YA_QUE_SE_REQUIERE_UNA_AUTORIZACIÓN"), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
                                 }
                             }
                             else
                             {
-                                JOptionPane.showMessageDialog(this, "El contenido no se activo, ya que se requiere una autorización", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("EL_CONTENIDO_NO_SE_ACTIVO,_YA_QUE_SE_REQUIERE_UNA_AUTORIZACIÓN"), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
                             }
                         }
                     }
@@ -903,11 +904,11 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                 }
                 OfficeApplication.getOfficeDocumentProxy().setResourceProperties(pageInformation, prop, value);
             }
-            JOptionPane.showMessageDialog(this, "¡Se ha guardado la información correctamente!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("¡SE_HA_GUARDADO_LA_INFORMACIÓN_CORRECTAMENTE!"), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
         }
         catch (Exception e)
         {
-            JOptionPane.showMessageDialog(this, "¡Existe un error la guardar la información!\r\nDetalle: " + e.getLocalizedMessage(), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("¡EXISTE_UN_ERROR_LA_GUARDAR_LA_INFORMACIÓN!")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("DETALLE:_") + e.getLocalizedMessage(), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
         finally
@@ -963,7 +964,7 @@ private void jButtonDeleteSchedulerActionPerformed(java.awt.event.ActionEvent ev
 {//GEN-HEADEREND:event_jButtonDeleteSchedulerActionPerformed
     if (jTableScheduler.getSelectedRow() != -1)
     {
-        int res = JOptionPane.showConfirmDialog(this, "¿Desea eliminar la calendarización?", this.getTitle(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        int res = JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("¿DESEA_ELIMINAR_LA_CALENDARIZACIÓN?"), this.getTitle(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (res == JOptionPane.YES_OPTION)
         {
             CalendarInfo cal = (CalendarInfo) jTableScheduler.getModel().getValueAt(jTableScheduler.getSelectedRow(), 0);
@@ -1006,7 +1007,7 @@ private void jButtonSendToAuthorizeActionPerformed(java.awt.event.ActionEvent ev
             {
                 if (OfficeApplication.getOfficeDocumentProxy().needsSendToPublish(pageInformation))
                 {
-                    this.jCheckBoxActive.setToolTipText("El contenido debe ser autorizado antes de activarse");
+                    this.jCheckBoxActive.setToolTipText(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("EL_CONTENIDO_DEBE_SER_AUTORIZADO_ANTES_DE_ACTIVARSE"));
                 }
             }
             catch (Exception e)
@@ -1017,7 +1018,7 @@ private void jButtonSendToAuthorizeActionPerformed(java.awt.event.ActionEvent ev
             {
                 if (OfficeApplication.getOfficeDocumentProxy().isInFlow(pageInformation))
                 {
-                    this.jCheckBoxActive.setToolTipText("El contenido esta en proceso de autorización, debe ser autorizado antes de activarse");
+                    this.jCheckBoxActive.setToolTipText(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("EL_CONTENIDO_ESTA_EN_PROCESO_DE_AUTORIZACIÓN,_DEBE_SER_AUTORIZADO_ANTES_DE_ACTIVARSE"));
                 }
             }
             catch (Exception e)
@@ -1087,7 +1088,7 @@ private void jButtonDeleteRuleActionPerformed(java.awt.event.ActionEvent evt)//G
     {
         DefaultTableModel model = (DefaultTableModel) jTableRules.getModel();
         ElementInfo info = (ElementInfo) model.getValueAt(this.jTableRules.getSelectedRow(), 0);
-        int res = JOptionPane.showConfirmDialog(this, "¿Desea eliminar la regla / rol ó grupo de usuario " + info.title, this.getTitle(), JOptionPane.YES_NO_OPTION);
+        int res = JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("¿DESEA_ELIMINAR_LA_REGLA_/_ROL_Ó_GRUPO_DE_USUARIO_") + info.title, this.getTitle(), JOptionPane.YES_NO_OPTION);
         if (res == JOptionPane.YES_OPTION)
         {
             try
@@ -1130,7 +1131,7 @@ private void jButtonMoveActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIR
         {
             new SelectPage(this.pageInformation.page.site.id)
         };
-        Wizard wiz = WizardPage.createWizard("Mover Contenido de Página", clazz, resultProducer);
+        Wizard wiz = WizardPage.createWizard(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("MOVER_CONTENIDO_DE_PÁGINA"), clazz, resultProducer);
         wiz.show();
     }
     catch (Exception ue)

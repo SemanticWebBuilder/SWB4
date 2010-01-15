@@ -46,6 +46,22 @@ import org.w3c.dom.NodeList;
  */
 public class DialogRegularPeriods extends java.awt.Dialog
 {
+    private static final String DAY = "day";
+    private static final String EMPTY_STRING = "";
+    private static final String INTERVAL = "interval";
+    private static final String ITERATIONS = "iterations";
+    private static final String MONTH = "month";
+    private static final String MONTHLY = "monthly";
+    private static final String MONTHS = "months";
+    private static final String ONE = "1";
+    private static final String THREE = "3";
+    private static final String TWO = "2";
+    private static final String WDAYS = "wdays";
+    private static final String WEEK = "week";
+    private static final String WEEKLY = "weekly";
+    private static final String YEARLY = "yearly";
+    private static final String YEARS = "years";
+    private static final String ZERO = "0";
 
     /** Creates new form DialogRegularPeriods */
     public DialogRegularPeriods()
@@ -62,14 +78,14 @@ public class DialogRegularPeriods extends java.awt.Dialog
         org.jdom.Element interval = null;
         if (this.jCheckBoxUseRegularPeriods.isSelected())
         {
-            interval = new org.jdom.Element("interval");
+            interval = new org.jdom.Element(INTERVAL);
             org.jdom.Element elem = null;
-            org.jdom.Element iterations = new org.jdom.Element("iterations");
+            org.jdom.Element iterations = new org.jdom.Element(ITERATIONS);
             interval.addContent(iterations);
             if (this.periodweek.isSelected())
             {
                 int x = 0;
-                org.jdom.Element weekly = new org.jdom.Element("weekly");
+                org.jdom.Element weekly = new org.jdom.Element(WEEKLY);
                 iterations.addContent(weekly);
                 if (this.wday1.isSelected())
                 {
@@ -99,25 +115,25 @@ public class DialogRegularPeriods extends java.awt.Dialog
                 {
                     x += 64;
                 }
-                elem = new org.jdom.Element("wdays");
+                elem = new org.jdom.Element(WDAYS);
                 elem.setText(String.valueOf(x));
                 weekly.addContent(elem);
             }
             if (this.periodmonth.isSelected())
             {
-                org.jdom.Element monthly = new org.jdom.Element("monthly");
+                org.jdom.Element monthly = new org.jdom.Element(MONTHLY);
                 iterations.addContent(monthly);
                 if (this.periodmont1.isSelected())
                 {
                     if (this.mday.getValue() != null)
                     {
-                        elem = new org.jdom.Element("day");
+                        elem = new org.jdom.Element(DAY);
                         elem.setText(mday.getValue().toString());
                         monthly.addContent(elem);
                     }
                     if (this.mmonth.getValue() != null)
                     {
-                        elem = new org.jdom.Element("months");
+                        elem = new org.jdom.Element(MONTHS);
                         elem.setText(mmonth.getValue().toString());
                         monthly.addContent(elem);
                     }
@@ -127,8 +143,8 @@ public class DialogRegularPeriods extends java.awt.Dialog
                     int x = 0;
                     if (this.mweek.getSelectedItem() != null)
                     {
-                        elem = new org.jdom.Element("week");
-                        elem.setText("" + (mweek.getSelectedIndex() + 1));
+                        elem = new org.jdom.Element(WEEK);
+                        elem.setText(String.valueOf(mweek.getSelectedIndex() + 1));
                         monthly.addContent(elem);
                     }
                     if (this.mday1.isSelected())
@@ -159,12 +175,12 @@ public class DialogRegularPeriods extends java.awt.Dialog
                     {
                         x += 64;
                     }
-                    elem = new org.jdom.Element("wdays");
+                    elem = new org.jdom.Element(WDAYS);
                     elem.setText(String.valueOf(x));
                     monthly.addContent(elem);
                     if (this.mmonth2.getValue() != null)
                     {
-                        elem = new org.jdom.Element("months");
+                        elem = new org.jdom.Element(MONTHS);
                         elem.setText(mmonth2.getValue().toString());
                         monthly.addContent(elem);
                     }
@@ -172,23 +188,23 @@ public class DialogRegularPeriods extends java.awt.Dialog
             }
             if (this.periodyear.isSelected())
             {
-                org.jdom.Element yearly = new org.jdom.Element("yearly");
+                org.jdom.Element yearly = new org.jdom.Element(YEARLY);
                 iterations.addContent(yearly);
                 if (this.periodyear1.isSelected())
                 {
                     if (this.yday.getValue() != null)
                     {
-                        elem = new org.jdom.Element("day");
+                        elem = new org.jdom.Element(DAY);
                         elem.setText(yday.getValue().toString());
                         yearly.addContent(elem);
                     }
-                    elem = new org.jdom.Element("month");
-                    elem.setText("" + (ymonth.getSelectedIndex() + 1));
+                    elem = new org.jdom.Element(MONTH);
+                    elem.setText(String.valueOf(ymonth.getSelectedIndex() + 1));
                     yearly.addContent(elem);
 
                     if (this.yyear.getValue() != null)
                     {
-                        elem = new org.jdom.Element("years");
+                        elem = new org.jdom.Element(YEARS);
                         elem.setText(yyear.getValue().toString());
                         yearly.addContent(elem);
                     }
@@ -198,8 +214,8 @@ public class DialogRegularPeriods extends java.awt.Dialog
                     int x = 0;
                     if (this.yweek.getSelectedItem() != null)
                     {
-                        elem = new org.jdom.Element("week");
-                        elem.setText("" + (yweek.getSelectedIndex() + 1));
+                        elem = new org.jdom.Element(WEEK);
+                        elem.setText(String.valueOf(yweek.getSelectedIndex() + 1));
                         yearly.addContent(elem);
                     }
                     if (this.yday1.isSelected())
@@ -230,18 +246,18 @@ public class DialogRegularPeriods extends java.awt.Dialog
                     {
                         x += 64;
                     }
-                    elem = new org.jdom.Element("wdays");
+                    elem = new org.jdom.Element(WDAYS);
                     elem.setText(String.valueOf(x));
                     yearly.addContent(elem);
                     if (this.ymonth2.getSelectedItem() != null)
                     {
-                        elem = new org.jdom.Element("month");
-                        elem.setText("" + (ymonth2.getSelectedIndex() + 1));
+                        elem = new org.jdom.Element(MONTH);
+                        elem.setText(String.valueOf(ymonth2.getSelectedIndex() + 1));
                         yearly.addContent(elem);
                     }
                     if (this.yyear2.getValue() != null)
                     {
-                        elem = new org.jdom.Element("years");
+                        elem = new org.jdom.Element(YEARS);
                         elem.setText(yyear2.getValue().toString());
                         yearly.addContent(elem);
                     }
@@ -264,113 +280,113 @@ public class DialogRegularPeriods extends java.awt.Dialog
             org.w3c.dom.Document xml = out.output(document);
             if (document != null)
             {
-                if (xml.getElementsByTagName("iterations").getLength() > 0)
+                if (xml.getElementsByTagName(ITERATIONS).getLength() > 0)
                 {
                     this.jCheckBoxUseRegularPeriods.setSelected(true);
                 }
-                if (xml.getElementsByTagName("iterations").getLength() > 0)
+                if (xml.getElementsByTagName(ITERATIONS).getLength() > 0)
                 {
                     String[] siteminterval = new String[9];
-                    String tipo = "0";
-                    NodeList nodosweekly = xml.getElementsByTagName("weekly");
+                    String tipo = ZERO;
+                    NodeList nodosweekly = xml.getElementsByTagName(WEEKLY);
                     if (nodosweekly.getLength() > 0)
                     {
-                        tipo = "1";
+                        tipo = ONE;
                     }
-                    NodeList nodosmonthly = xml.getElementsByTagName("monthly");
+                    NodeList nodosmonthly = xml.getElementsByTagName(MONTHLY);
                     if (nodosmonthly.getLength() > 0)
                     {
-                        tipo = "2";
+                        tipo = TWO;
                     }
-                    NodeList nodosyearly = xml.getElementsByTagName("yearly");
+                    NodeList nodosyearly = xml.getElementsByTagName(YEARLY);
                     if (nodosyearly.getLength() > 0)
                     {
-                        tipo = "3";
+                        tipo = THREE;
                     }
 
-                    if (xml.getElementsByTagName("weekly").getLength() > 0)
+                    if (xml.getElementsByTagName(WEEKLY).getLength() > 0)
                     {
                         periodweek.setSelected(true);
 
                     }
-                    if (xml.getElementsByTagName("monthly").getLength() > 0)
+                    if (xml.getElementsByTagName(MONTHLY).getLength() > 0)
                     {
                         periodweek.setSelected(true);
                     }
-                    if (xml.getElementsByTagName("yearly").getLength() > 0)
+                    if (xml.getElementsByTagName(YEARLY).getLength() > 0)
                     {
                         periodyear.setSelected(true);
                     }
 
-                    NodeList nodositera = xml.getElementsByTagName("iterations");
+                    NodeList nodositera = xml.getElementsByTagName(ITERATIONS);
                     for (int i = 0; i < nodositera.getLength(); i++)
                     {
                         Element xmlitera = (Element) nodositera.item(i);
                         for (int l = 0; l < xmlitera.getChildNodes().getLength(); l++)
                         {
-                            NodeList nodosit = xmlitera.getElementsByTagName("weekly");
+                            NodeList nodosit = xmlitera.getElementsByTagName(WEEKLY);
                             for (int j = 0; j < nodosit.getLength(); j++)
                             {
                                 Element xmlit = (Element) nodosit.item(j);
                                 for (int k = 0; k < xmlit.getChildNodes().getLength(); k++)
                                 {
-                                    if (xmlit.getChildNodes().item(l).getNodeName().equals("wdays")) //días
+                                    if (xmlit.getChildNodes().item(l).getNodeName().equals(WDAYS)) //días
                                     {
                                         siteminterval[2] = xmlit.getChildNodes().item(k).getNodeValue();
                                     }
                                 }
                             }
-                            NodeList nodosit1 = xmlitera.getElementsByTagName("monthly");
+                            NodeList nodosit1 = xmlitera.getElementsByTagName(MONTHLY);
                             for (int j = 0; j < nodosit1.getLength(); j++)
                             {
                                 Element xmlit = (Element) nodosit1.item(j);
                                 for (int k = 0; k < xmlit.getChildNodes().getLength(); k++)
                                 {
-                                    if (xmlit.getChildNodes().item(k).getNodeName().equals("wdays")) //días
+                                    if (xmlit.getChildNodes().item(k).getNodeName().equals(WDAYS)) //días
                                     {
                                         siteminterval[2] = xmlit.getChildNodes().item(k).getNodeValue();
                                     }
-                                    if (xmlit.getChildNodes().item(k).getNodeName().equals("week")) //semanas
+                                    if (xmlit.getChildNodes().item(k).getNodeName().equals(WEEK)) //semanas
                                     {
                                         siteminterval[3] = xmlit.getChildNodes().item(k).getNodeValue();
                                     }
-                                    if (xmlit.getChildNodes().item(k).getNodeName().equals("months")) //meses
+                                    if (xmlit.getChildNodes().item(k).getNodeName().equals(MONTHS)) //meses
                                     {
                                         siteminterval[4] = xmlit.getChildNodes().item(k).getNodeValue();
                                     }
-                                    if (xmlit.getChildNodes().item(k).getNodeName().equals("day")) //día específico
+                                    if (xmlit.getChildNodes().item(k).getNodeName().equals(DAY)) //día específico
                                     {
                                         siteminterval[6] = xmlit.getChildNodes().item(k).getNodeValue();
                                     }
                                 }
                             }
-                            NodeList nodosit2 = xmlitera.getElementsByTagName("yearly");
+                            NodeList nodosit2 = xmlitera.getElementsByTagName(YEARLY);
                             for (int j = 0; j < nodosit2.getLength(); j++)
                             {
                                 Element xmlit = (Element) nodosit2.item(j);
                                 for (int k = 0; k < xmlit.getChildNodes().getLength(); k++)
                                 {
-                                    if (xmlit.getChildNodes().item(k).getNodeName().equals("wdays")) //días
+                                    if (xmlit.getChildNodes().item(k).getNodeName().equals(WDAYS)) //días
                                     {
                                         siteminterval[2] = xmlit.getChildNodes().item(k).getNodeValue();
                                     }
-                                    if (xmlit.getChildNodes().item(k).getNodeName().equals("week")) //semanas
+                                    if (xmlit.getChildNodes().item(k).getNodeName().equals(WEEK)) //semanas
                                     {
                                         siteminterval[3] = xmlit.getChildNodes().item(k).getNodeValue();
                                     }
-                                    if (xmlit.getChildNodes().item(k).getNodeName().equals("months")) //meses
+                                    if (xmlit.getChildNodes().item(k).getNodeName().equals(MONTHS)) //meses
                                     {
                                         siteminterval[4] = xmlit.getChildNodes().item(k).getNodeValue();
                                     }
-                                    if (xmlit.getChildNodes().item(k).getNodeName().equals("years")) //años
+                                    if (xmlit.getChildNodes().item(k).getNodeName().equals(YEARS)) //años
                                     {
                                         siteminterval[5] = xmlit.getChildNodes().item(k).getNodeValue();
                                     }
-                                    if (xmlit.getChildNodes().item(k).getNodeName().equals("day")) //día específico
+                                    if (xmlit.getChildNodes().item(k).getNodeName().equals(DAY)) //día específico
                                     {
                                         siteminterval[6] = xmlit.getChildNodes().item(k).getNodeValue();
                                     }
-                                    if (xmlit.getChildNodes().item(k).getNodeName().equals("month")) //mes específico
+                                    if (xmlit.getChildNodes().item(k).getNodeName().equals(MONTH)) //mes específico
                                     {
                                         siteminterval[7] = xmlit.getChildNodes().item(k).getNodeValue();
                                     }
@@ -378,13 +394,12 @@ public class DialogRegularPeriods extends java.awt.Dialog
                             }
                         }
                     }
-                    if (tipo.equals("1"))
+                    if (tipo.equals(ONE))
                     {
                         this.periodweek.setSelected(true);
                         String[] days =
                         {
-                            "", "", "", "", "", "", ""
-                        };
+                            EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING};
                         int dias = Integer.parseInt(siteminterval[2]);
                         int res = 0;
                         int cdias = 0;
@@ -399,38 +414,38 @@ public class DialogRegularPeriods extends java.awt.Dialog
                         {
                             if (days[i] != null)
                             {
-                                if (i == 0 && days[i].equals("1"))
+                                if (i == 0 && days[i].equals(ONE))
                                 {
                                     this.wday1.setSelected(true);
                                 }
-                                if (i == 1 && days[i].equals("1"))
+                                if (i == 1 && days[i].equals(ONE))
                                 {
                                     this.wday2.setSelected(true);
                                 }
-                                if (i == 2 && days[i].equals("1"))
+                                if (i == 2 && days[i].equals(ONE))
                                 {
                                     this.wday3.setSelected(true);
                                 }
-                                if (i == 3 && days[i].equals("1"))
+                                if (i == 3 && days[i].equals(ONE))
                                 {
                                     this.wday4.setSelected(true);
                                 }
-                                if (i == 4 && days[i].equals("1"))
+                                if (i == 4 && days[i].equals(ONE))
                                 {
                                     this.wday5.setSelected(true);
                                 }
-                                if (i == 5 && days[i].equals("1"))
+                                if (i == 5 && days[i].equals(ONE))
                                 {
                                     this.wday6.setSelected(true);
                                 }
-                                if (i == 6 && days[i].equals("1"))
+                                if (i == 6 && days[i].equals(ONE))
                                 {
                                     this.wday7.setSelected(true);
                                 }
                             }
                         }
                     }
-                    if (tipo.equals("2"))
+                    if (tipo.equals(TWO))
                     {
                         this.periodmonth.setSelected(true);
                         if (siteminterval[6] != null)
@@ -444,8 +459,7 @@ public class DialogRegularPeriods extends java.awt.Dialog
                             this.periodmont2.setSelected(true);
                             String[] days =
                             {
-                                "", "", "", "", "", "", ""
-                            };
+                                EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING};
                             int dias = Integer.parseInt(siteminterval[2]);
                             int res = 0;
                             int cdias = 0;
@@ -458,31 +472,31 @@ public class DialogRegularPeriods extends java.awt.Dialog
                             }
                             for (int i = 0; i < days.length; i++)
                             {
-                                if (i == 0 && days[i].equals("1"))
+                                if (i == 0 && days[i].equals(ONE))
                                 {
                                     this.mday1.setSelected(true);
                                 }
-                                if (i == 1 && days[i].equals("1"))
+                                if (i == 1 && days[i].equals(ONE))
                                 {
                                     this.mday2.setSelected(true);
                                 }
-                                if (i == 2 && days[i].equals("1"))
+                                if (i == 2 && days[i].equals(ONE))
                                 {
                                     this.mday3.setSelected(true);
                                 }
-                                if (i == 3 && days[i].equals("1"))
+                                if (i == 3 && days[i].equals(ONE))
                                 {
                                     this.mday4.setSelected(true);
                                 }
-                                if (i == 4 && days[i].equals("1"))
+                                if (i == 4 && days[i].equals(ONE))
                                 {
                                     this.mday5.setSelected(true);
                                 }
-                                if (i == 5 && days[i].equals("1"))
+                                if (i == 5 && days[i].equals(ONE))
                                 {
                                     this.mday6.setSelected(true);
                                 }
-                                if (i == 6 && days[i].equals("1"))
+                                if (i == 6 && days[i].equals(ONE))
                                 {
                                     this.mday7.setSelected(true);
                                 }
@@ -493,7 +507,7 @@ public class DialogRegularPeriods extends java.awt.Dialog
                             }
                         }
                     }
-                    if (tipo.equals("3"))
+                    if (tipo.equals(THREE))
                     {
                         this.periodyear.setSelected(true);
                         if (siteminterval[6] != null)
@@ -512,8 +526,7 @@ public class DialogRegularPeriods extends java.awt.Dialog
 
                             String[] days =
                             {
-                                "", "", "", "", "", "", ""
-                            };
+                                EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING};
                             int dias = Integer.parseInt(siteminterval[2]);
                             int res = 0;
                             int cdias = 0;
@@ -526,31 +539,31 @@ public class DialogRegularPeriods extends java.awt.Dialog
                             }
                             for (int i = 0; i < days.length; i++)
                             {
-                                if (i == 0 && days[i].equals("1"))
+                                if (i == 0 && days[i].equals(ONE))
                                 {
                                     this.yday1.setSelected(true);
                                 }
-                                if (i == 1 && days[i].equals("1"))
+                                if (i == 1 && days[i].equals(ONE))
                                 {
                                     this.yday2.setSelected(true);
                                 }
-                                if (i == 2 && days[i].equals("1"))
+                                if (i == 2 && days[i].equals(ONE))
                                 {
                                     this.yday3.setSelected(true);
                                 }
-                                if (i == 3 && days[i].equals("1"))
+                                if (i == 3 && days[i].equals(ONE))
                                 {
                                     this.yday4.setSelected(true);
                                 }
-                                if (i == 4 && days[i].equals("1"))
+                                if (i == 4 && days[i].equals(ONE))
                                 {
                                     this.yday5.setSelected(true);
                                 }
-                                if (i == 5 && days[i].equals("1"))
+                                if (i == 5 && days[i].equals(ONE))
                                 {
                                     this.yday6.setSelected(true);
                                 }
-                                if (i == 6 && days[i].equals("1"))
+                                if (i == 6 && days[i].equals(ONE))
                                 {
                                     this.yday7.setSelected(true);
                                 }
@@ -653,7 +666,8 @@ public class DialogRegularPeriods extends java.awt.Dialog
         setLocationRelativeTo(null);
         setModal(true);
         setResizable(false);
-        setTitle("Calendarización con Periodos Regulares");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods"); // NOI18N
+        setTitle(bundle.getString("CALENDARIZACIÓN_CON_PERIODOS_REGULARES")); // NOI18N
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 closeDialog(evt);
@@ -666,7 +680,7 @@ public class DialogRegularPeriods extends java.awt.Dialog
         jPanelCommands.setPreferredSize(new java.awt.Dimension(100, 40));
         jPanelCommands.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
-        jButtonok.setText("Aceptar");
+        jButtonok.setText(bundle.getString("ACEPTAR")); // NOI18N
         jButtonok.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonokActionPerformed(evt);
@@ -674,7 +688,7 @@ public class DialogRegularPeriods extends java.awt.Dialog
         });
         jPanelCommands.add(jButtonok);
 
-        jButtonCancel.setText("Cancelar");
+        jButtonCancel.setText(bundle.getString("CANCELAR")); // NOI18N
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);
@@ -691,21 +705,21 @@ public class DialogRegularPeriods extends java.awt.Dialog
 
         buttonGroupPeriodicidad.add(periodweek);
         periodweek.setSelected(true);
-        periodweek.setText("Semanal");
+        periodweek.setText(bundle.getString("SEMANAL")); // NOI18N
 
-        wday2.setText("Lunes");
+        wday2.setText(bundle.getString("LUNES")); // NOI18N
 
-        wday3.setText("Martes");
+        wday3.setText(bundle.getString("MARTES")); // NOI18N
 
-        wday4.setText("Miércoles");
+        wday4.setText(bundle.getString("MIÉRCOLES")); // NOI18N
 
-        wday5.setText("Jueves");
+        wday5.setText(bundle.getString("JUEVES")); // NOI18N
 
-        wday6.setText("Viernes");
+        wday6.setText(bundle.getString("VIERNES")); // NOI18N
 
-        wday7.setText("Sabado");
+        wday7.setText(bundle.getString("SABADO")); // NOI18N
 
-        wday1.setText("Domingo");
+        wday1.setText(bundle.getString("DOMINGO")); // NOI18N
 
         javax.swing.GroupLayout jPanelWeekLayout = new javax.swing.GroupLayout(jPanelWeek);
         jPanelWeek.setLayout(jPanelWeekLayout);
@@ -759,47 +773,47 @@ public class DialogRegularPeriods extends java.awt.Dialog
         jPanelMonth.setPreferredSize(new java.awt.Dimension(100, 130));
 
         buttonGroupPeriodicidad.add(periodmonth);
-        periodmonth.setText("Mensual");
+        periodmonth.setText(bundle.getString("MENSUAL")); // NOI18N
 
-        jLabel1.setText("El:");
+        jLabel1.setText(bundle.getString("EL:")); // NOI18N
 
         mweek.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Primer", "Segundo", "Tercer", "Cuarto", "Último" }));
-        mweek.setToolTipText("Selecione la semana");
+        mweek.setToolTipText(bundle.getString("SELECIONE_LA_SEMANA")); // NOI18N
 
-        mday2.setText("Lu");
+        mday2.setText(bundle.getString("LU")); // NOI18N
 
-        mday3.setText("Ma");
+        mday3.setText(bundle.getString("MA")); // NOI18N
 
-        mday4.setText("Mi");
+        mday4.setText(bundle.getString("MI")); // NOI18N
 
-        mday5.setText("Ju");
+        mday5.setText(bundle.getString("JU")); // NOI18N
 
-        mday6.setText("Vi");
+        mday6.setText(bundle.getString("VI")); // NOI18N
 
-        mday7.setText("Sa");
+        mday7.setText(bundle.getString("SA")); // NOI18N
 
-        mday1.setText("Do");
+        mday1.setText(bundle.getString("DO")); // NOI18N
 
         buttonGroupMensual.add(periodmont2);
         periodmont2.setSelected(true);
 
         buttonGroupMensual.add(periodmont1);
 
-        jLabel2.setText("El:");
+        jLabel2.setText(bundle.getString("EL:")); // NOI18N
 
         mday.setModel(new javax.swing.SpinnerNumberModel(1, 1, 31, 1));
 
-        jLabel3.setText("de cada:");
+        jLabel3.setText(bundle.getString("DE_CADA:")); // NOI18N
 
         mmonth.setModel(new javax.swing.SpinnerNumberModel(1, 1, 12, 1));
 
-        jLabel4.setText("Meses");
+        jLabel4.setText(bundle.getString("MESES")); // NOI18N
 
-        jLabel5.setText("de cada:");
+        jLabel5.setText(bundle.getString("DE_CADA:")); // NOI18N
 
         mmonth2.setModel(new javax.swing.SpinnerNumberModel(1, 1, 12, 1));
 
-        jLabel6.setText("Meses");
+        jLabel6.setText(bundle.getString("MESES")); // NOI18N
 
         javax.swing.GroupLayout jPanelMonthLayout = new javax.swing.GroupLayout(jPanelMonth);
         jPanelMonth.setLayout(jPanelMonthLayout);
@@ -896,55 +910,55 @@ public class DialogRegularPeriods extends java.awt.Dialog
         jPanelYear.setPreferredSize(new java.awt.Dimension(500, 160));
 
         buttonGroupPeriodicidad.add(periodyear);
-        periodyear.setText("Anual");
+        periodyear.setText(bundle.getString("ANUAL")); // NOI18N
 
         buttonGroupAnual.add(periodyear2);
         periodyear2.setSelected(true);
 
-        jLabel7.setText("El:");
+        jLabel7.setText(bundle.getString("EL:")); // NOI18N
 
         yweek.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Primer", "Segundo", "Tercer", "Cuarto", "Último" }));
-        yweek.setToolTipText("Seleccione la semana");
+        yweek.setToolTipText(bundle.getString("SELECCIONE_LA_SEMANA")); // NOI18N
 
-        yday2.setText("Lu");
+        yday2.setText(bundle.getString("LU")); // NOI18N
 
-        yday3.setText("Ma");
+        yday3.setText(bundle.getString("MA")); // NOI18N
 
-        yday6.setText("Vi");
+        yday6.setText(bundle.getString("VI")); // NOI18N
 
-        yday7.setText("Sa");
+        yday7.setText(bundle.getString("SA")); // NOI18N
 
-        yday1.setText("Do");
+        yday1.setText(bundle.getString("DO")); // NOI18N
 
-        yday4.setText("Mi");
+        yday4.setText(bundle.getString("MI")); // NOI18N
 
-        yday5.setText("Ju");
+        yday5.setText(bundle.getString("JU")); // NOI18N
 
-        jLabel8.setText("de:");
+        jLabel8.setText(bundle.getString("DE:")); // NOI18N
 
         ymonth2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" }));
 
         buttonGroupAnual.add(periodyear1);
 
-        jLabel9.setText("El:");
+        jLabel9.setText(bundle.getString("EL:")); // NOI18N
 
         yday.setModel(new javax.swing.SpinnerNumberModel(1, 1, 31, 1));
 
-        jLabel10.setText("de:");
+        jLabel10.setText(bundle.getString("DE:")); // NOI18N
 
         ymonth.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" }));
 
-        jLabel11.setText("de cada:");
+        jLabel11.setText(bundle.getString("DE_CADA:")); // NOI18N
 
         yyear.setModel(new javax.swing.SpinnerNumberModel(1, 1, 100, 1));
 
-        jLabel12.setText("años");
+        jLabel12.setText(bundle.getString("AÑOS")); // NOI18N
 
-        jLabel13.setText("de cada:");
+        jLabel13.setText(bundle.getString("DE_CADA:")); // NOI18N
 
         yyear2.setModel(new javax.swing.SpinnerNumberModel(1, 1, 100, 1));
 
-        jLabel14.setText("años");
+        jLabel14.setText(bundle.getString("AÑOS")); // NOI18N
 
         javax.swing.GroupLayout jPanelYearLayout = new javax.swing.GroupLayout(jPanelYear);
         jPanelYear.setLayout(jPanelYearLayout);
@@ -1075,7 +1089,7 @@ public class DialogRegularPeriods extends java.awt.Dialog
         jPanelUseRegularPeriods.setPreferredSize(new java.awt.Dimension(100, 30));
         jPanelUseRegularPeriods.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        jCheckBoxUseRegularPeriods.setText("Usar Periodos Regulares");
+        jCheckBoxUseRegularPeriods.setText(bundle.getString("USAR_PERIODOS_REGULARES")); // NOI18N
         jPanelUseRegularPeriods.add(jCheckBoxUseRegularPeriods);
 
         add(jPanelUseRegularPeriods, java.awt.BorderLayout.NORTH);
@@ -1100,7 +1114,7 @@ public class DialogRegularPeriods extends java.awt.Dialog
         {            
             if(!(wday1.isSelected() || wday2.isSelected() || wday3.isSelected() || wday4.isSelected() || wday5.isSelected() || wday6.isSelected() || wday7.isSelected()))
             {
-                JOptionPane.showMessageDialog(this, "Debe indicar por lo menos un día de la semana para un periodo semanal",this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods").getString("DEBE_INDICAR_POR_LO_MENOS_UN_DÍA_DE_LA_SEMANA_PARA_UN_PERIODO_SEMANAL"),this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
                 this.periodweek.requestFocus();
                 return;
             }
@@ -1109,7 +1123,7 @@ public class DialogRegularPeriods extends java.awt.Dialog
         {
             if(!(mday1.isSelected() || mday2.isSelected() || mday3.isSelected() || mday4.isSelected() || mday5.isSelected() || mday6.isSelected() || mday7.isSelected()))
             {
-                JOptionPane.showMessageDialog(this, "Debe indicar por lo menos un día de la semana para un periodo mensual",this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods").getString("DEBE_INDICAR_POR_LO_MENOS_UN_DÍA_DE_LA_SEMANA_PARA_UN_PERIODO_MENSUAL"),this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
                 this.periodmont2.requestFocus();
                 return;
             }
@@ -1119,7 +1133,7 @@ public class DialogRegularPeriods extends java.awt.Dialog
         {
             if(!(mday1.isSelected() || mday2.isSelected() || mday3.isSelected() || mday4.isSelected() || mday5.isSelected() || mday6.isSelected() || mday7.isSelected()))
             {
-                JOptionPane.showMessageDialog(this, "Debe indicar por lo menos un día de la semana para un periodo anual",this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogRegularPeriods").getString("DEBE_INDICAR_POR_LO_MENOS_UN_DÍA_DE_LA_SEMANA_PARA_UN_PERIODO_ANUAL"),this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
                 this.periodyear2.requestFocus();
                 return;
             }

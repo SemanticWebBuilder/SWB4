@@ -46,7 +46,7 @@ public class TitlePage extends WizardPage {
     }
     public static String getDescription()
     {
-        return "Información de la página";
+        return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/TitlePage").getString("INFORMACIÓN_DE_LA_PÁGINA");
     }
     @Override
     public WizardPanelNavResult allowNext(String arg, Map map, Wizard wizard)
@@ -98,7 +98,8 @@ public class TitlePage extends WizardPage {
         jTableTitles.getColumnModel().getColumn(2).setMinWidth(100);
         jTableTitles.getColumnModel().getColumn(2).setPreferredWidth(100);
 
-        jLabel1.setText("Identificador:");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/TitlePage"); // NOI18N
+        jLabel1.setText(bundle.getString("IDENTIFICADOR:")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);

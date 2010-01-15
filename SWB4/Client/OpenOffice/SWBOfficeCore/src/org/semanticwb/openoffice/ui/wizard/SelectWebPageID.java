@@ -58,7 +58,7 @@ public class SelectWebPageID extends WizardPage
 
     public static String getDescription()
     {
-        return "Identificador de página";
+        return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectWebPageID").getString("IDENTIFICADOR_DE_PÁGINA");
     }
 
     /** This method is called from within the constructor to
@@ -73,7 +73,8 @@ public class SelectWebPageID extends WizardPage
         jLabel1 = new javax.swing.JLabel();
         jTextFieldWebPageID = new javax.swing.JTextField();
 
-        jLabel1.setText("Identificador de página:");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectWebPageID"); // NOI18N
+        jLabel1.setText(bundle.getString("IDENTIFICADOR_DE_PÁGINA:")); // NOI18N
 
         jTextFieldWebPageID.setToolTipText("");
         jTextFieldWebPageID.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -244,7 +245,7 @@ public class SelectWebPageID extends WizardPage
         if (jTextFieldWebPageID.getText().isEmpty())
         {
             jTextFieldWebPageID.requestFocus();
-            JOptionPane.showMessageDialog(this, "¡Debe indicar un identificador!", getDescription(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectWebPageID").getString("¡DEBE_INDICAR_UN_IDENTIFICADOR!"), getDescription(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
         }
         else
         {
@@ -267,7 +268,7 @@ public class SelectWebPageID extends WizardPage
         }
         if (exists)
         {
-            JOptionPane.showMessageDialog(this, "¡Ya existe una página con ese identificador!", getDescription(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectWebPageID").getString("¡YA_EXISTE_UNA_PÁGINA_CON_ESE_IDENTIFICADOR!"), getDescription(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             result = WizardPanelNavResult.REMAIN_ON_PAGE;
         }
         return result;

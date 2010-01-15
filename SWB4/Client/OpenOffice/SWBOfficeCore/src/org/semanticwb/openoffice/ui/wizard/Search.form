@@ -94,28 +94,40 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="T&#xed;tulo:"/>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="org/semanticwb/openoffice/ui/wizard/Search.properties" key="T&#xcd;TULO:" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+        </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jTextFieldTitle">
       <Properties>
-        <Property name="toolTipText" type="java.lang.String" value="Debe indicar una palabra o t&#xed;tulo completo a buscar"/>
+        <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="org/semanticwb/openoffice/ui/wizard/Search.properties" key="DEBE_INDICAR_UNA_PALABRA_O_T&#xcd;TULO_COMPLETO_A_BUSCAR" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+        </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Descripci&#xf3;n:"/>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="org/semanticwb/openoffice/ui/wizard/Search.properties" key="DESCRIPCI&#xd3;N:" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+        </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jTextFieldDescription">
       <Properties>
-        <Property name="toolTipText" type="java.lang.String" value="Debe indicar una palabra o descripci&#xf3;n completa a buscar"/>
+        <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="org/semanticwb/openoffice/ui/wizard/Search.properties" key="DEBE_INDICAR_UNA_PALABRA_O_DESCRIPCI&#xd3;N_COMPLETA_A_BUSCAR" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+        </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="jButtonSearch">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Buscar"/>
-        <Property name="toolTipText" type="java.lang.String" value="Seleccione esta opci&#xf3;n para buscar contenidos que coincidan con los criterios de b&#xfa;squeda"/>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="org/semanticwb/openoffice/ui/wizard/Search.properties" key="BUSCAR" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+        </Property>
+        <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="org/semanticwb/openoffice/ui/wizard/Search.properties" key="SELECCIONE_ESTA_OPCI&#xd3;N_PARA_BUSCAR_CONTENIDOS_QUE_COINCIDAN_CON_LOS_CRITERIOS_DE_B&#xda;SQUEDA" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+        </Property>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonSearchActionPerformed"/>
@@ -123,20 +135,19 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Categoria:"/>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="org/semanticwb/openoffice/ui/wizard/Search.properties" key="CATEGORIA:" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+        </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JComboBox" name="jComboBoxCategory">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
-            <StringItem index="0" value="Item 1"/>
-            <StringItem index="1" value="Item 2"/>
-            <StringItem index="2" value="Item 3"/>
-            <StringItem index="3" value="Item 4"/>
-          </StringArray>
+          <StringArray count="0"/>
         </Property>
-        <Property name="toolTipText" type="java.lang.String" value="Seleccione una categoria para buscar el contenido"/>
+        <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="org/semanticwb/openoffice/ui/wizard/Search.properties" key="SELECCIONE_UNA_CATEGORIA_PARA_BUSCAR_EL_CONTENIDO" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+        </Property>
       </Properties>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
@@ -196,26 +207,27 @@
     </Container>
     <Component class="javax.swing.JButton" name="jButtonView">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Ver Contenido"/>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="org/semanticwb/openoffice/ui/wizard/Search.properties" key="VER_CONTENIDO" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+        </Property>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Repositorio:"/>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="org/semanticwb/openoffice/ui/wizard/Search.properties" key="REPOSITORIO:" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+        </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JComboBox" name="jComboBoxRepositorio">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
-            <StringItem index="0" value="Item 1"/>
-            <StringItem index="1" value="Item 2"/>
-            <StringItem index="2" value="Item 3"/>
-            <StringItem index="3" value="Item 4"/>
-          </StringArray>
+          <StringArray count="0"/>
         </Property>
-        <Property name="toolTipText" type="java.lang.String" value="Seleccione un repositorio de contenidos"/>
+        <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="org/semanticwb/openoffice/ui/wizard/Search.properties" key="SELECCIONE_UN_REPOSITORIO_DE_CONTENIDOS" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+        </Property>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jComboBoxRepositorioActionPerformed"/>
@@ -223,18 +235,15 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel5">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Tipo de contenido:"/>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="org/semanticwb/openoffice/ui/wizard/Search.properties" key="TIPO_DE_CONTENIDO:" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+        </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JComboBox" name="jComboBoxType">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
-            <StringItem index="0" value="Item 1"/>
-            <StringItem index="1" value="Item 2"/>
-            <StringItem index="2" value="Item 3"/>
-            <StringItem index="3" value="Item 4"/>
-          </StringArray>
+          <StringArray count="0"/>
         </Property>
       </Properties>
     </Component>

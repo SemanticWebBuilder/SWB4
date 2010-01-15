@@ -3,7 +3,9 @@
 <Form version="1.6" maxVersion="1.6" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
-    <Property name="title" type="java.lang.String" value="Editar Propiedades"/>
+    <Property name="title" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+      <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogEditResource.properties" key="EDITAR_PROPIEDADES" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+    </Property>
     <Property name="resizable" type="boolean" value="false"/>
   </Properties>
   <SyntheticProperties>
@@ -37,7 +39,9 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="jButtonSendToAuthorize">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Enviar a autorizaci&#xf3;n"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogEditResource.properties" key="ENVIAR_A_AUTORIZACI&#xd3;N" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonSendToAuthorizeActionPerformed"/>
@@ -45,7 +49,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="jButtonOK">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Aceptar"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogEditResource.properties" key="ACEPTAR" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonOKActionPerformed"/>
@@ -53,7 +59,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="jButtonCancel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Cerrar"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogEditResource.properties" key="CERRAR" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonCancelActionPerformed"/>
@@ -79,7 +87,9 @@
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
               <JTabbedPaneConstraints tabName="Informaci&#xf3;n">
-                <Property name="tabTitle" type="java.lang.String" value="Informaci&#xf3;n"/>
+                <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogEditResource.properties" key="INFORMACI&#xd3;N" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -209,14 +219,18 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="jLabel1">
               <Properties>
-                <Property name="text" type="java.lang.String" value="T&#xed;tulo por defecto:"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogEditResource.properties" key="T&#xcd;TULO_POR_DEFECTO:" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextFieldTitle">
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel2">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Descripci&#xf3;n:"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogEditResource.properties" key="DESCRIPCI&#xd3;N:" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
               </Properties>
             </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane3">
@@ -236,34 +250,46 @@
             </Container>
             <Component class="javax.swing.JLabel" name="jLabel3">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Activo:"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogEditResource.properties" key="ACTIVO:" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
               </Properties>
             </Component>
             <Component class="javax.swing.JCheckBox" name="jCheckBoxActive">
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel4">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Sitio:"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogEditResource.properties" key="SITIO:" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabelSite">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Sitio de prueba"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogEditResource.properties" key="SITIO_DE_PRUEBA" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel6">
               <Properties>
-                <Property name="text" type="java.lang.String" value="P&#xe1;gina:"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogEditResource.properties" key="P&#xc1;GINA:" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabelPage">
               <Properties>
-                <Property name="text" type="java.lang.String" value="P&#xe1;gina"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogEditResource.properties" key="P&#xc1;GINA" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel8">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Versi&#xf3;n a publicar:"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogEditResource.properties" key="VERSI&#xd3;N_A_PUBLICAR:" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
               </Properties>
             </Component>
             <Component class="javax.swing.JComboBox" name="jComboBoxVersion">
@@ -275,7 +301,9 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel5">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Vigencia:"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogEditResource.properties" key="VIGENCIA:" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
               </Properties>
             </Component>
             <Component class="javax.swing.JSpinner" name="jSpinnerEndDate">
@@ -288,7 +316,9 @@
             </Component>
             <Component class="javax.swing.JCheckBox" name="jCheckBoxEndDateActive">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Activar Vigencia"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogEditResource.properties" key="ACTIVAR_VIGENCIA" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
               </Properties>
               <Events>
                 <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="jCheckBoxEndDateActiveItemStateChanged"/>
@@ -297,7 +327,9 @@
             </Component>
             <Component class="javax.swing.JButton" name="jButtonMove">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Mover"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogEditResource.properties" key="MOVER" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonMoveActionPerformed"/>
@@ -307,7 +339,9 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel7">
               <Properties>
-                <Property name="text" type="java.lang.String" value="P&#xe1;gina activa:"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogEditResource.properties" key="P&#xc1;GINA_ACTIVA:" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
               </Properties>
             </Component>
           </SubComponents>
@@ -316,7 +350,9 @@
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
               <JTabbedPaneConstraints tabName="Propiedades de publicaci&#xf3;n">
-                <Property name="tabTitle" type="java.lang.String" value="Propiedades de publicaci&#xf3;n"/>
+                <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogEditResource.properties" key="PROPIEDADES_DE_PUBLICACI&#xd3;N" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -327,7 +363,9 @@
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
               <JTabbedPaneConstraints tabName="Calendarizaci&#xf3;n">
-                <Property name="tabTitle" type="java.lang.String" value="Calendarizaci&#xf3;n"/>
+                <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogEditResource.properties" key="CALENDARIZACI&#xd3;N" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -400,7 +438,9 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/org/semanticwb/openoffice/ui/icons/add.png"/>
                     </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="Agregar una calendarizacin para la publicaci&#xf3;n actual"/>
+                    <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogEditResource.properties" key="AGREGAR_UNA_CALENDARIZACIN_PARA_LA_PUBLICACI&#xd3;N_ACTUAL" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    </Property>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
                     <Property name="verticalTextPosition" type="int" value="3"/>
@@ -416,7 +456,9 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/org/semanticwb/openoffice/ui/icons/delete.png"/>
                     </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="Eliminar la calendarizaci&#xf3;n seleccionada"/>
+                    <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogEditResource.properties" key="ELIMINAR_LA_CALENDARIZACI&#xd3;N_SELECCIONADA" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    </Property>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -434,7 +476,9 @@
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
               <JTabbedPaneConstraints tabName="Reglas / Roles o Grupos de Usuarios">
-                <Property name="tabTitle" type="java.lang.String" value="Reglas / Roles o Grupos de Usuarios"/>
+                <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogEditResource.properties" key="REGLAS_/_ROLES_O_GRUPOS_DE_USUARIOS" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -485,7 +529,9 @@
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                           <Image iconType="3" name="/org/semanticwb/openoffice/ui/icons/add.png"/>
                         </Property>
-                        <Property name="toolTipText" type="java.lang.String" value="Agregar una regla, rol &#xf3; grupo para la publicaci&#xf3;n actual"/>
+                        <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogEditResource.properties" key="AGREGAR_UNA_REGLA,_ROL_&#xd3;_GRUPO_PARA_LA_PUBLICACI&#xd3;N_ACTUAL" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                         <Property name="focusable" type="boolean" value="false"/>
                         <Property name="horizontalTextPosition" type="int" value="0"/>
                         <Property name="verticalTextPosition" type="int" value="3"/>
@@ -501,7 +547,9 @@
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                           <Image iconType="3" name="/org/semanticwb/openoffice/ui/icons/delete.png"/>
                         </Property>
-                        <Property name="toolTipText" type="java.lang.String" value="Eliminar la regla, rol o grupo seleccionada"/>
+                        <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogEditResource.properties" key="ELIMINAR_LA_REGLA,_ROL_O_GRUPO_SELECCIONADA" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                        </Property>
                         <Property name="enabled" type="boolean" value="false"/>
                         <Property name="focusable" type="boolean" value="false"/>
                         <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -572,7 +620,9 @@
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
               <JTabbedPaneConstraints tabName="T&#xed;tulos de p&#xe1;gina">
-                <Property name="tabTitle" type="java.lang.String" value="T&#xed;tulos de p&#xe1;gina"/>
+                <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogEditResource.properties" key="T&#xcd;TULOS_DE_P&#xc1;GINA" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>

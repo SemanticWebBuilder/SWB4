@@ -39,7 +39,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.zip.ZipEntry;
@@ -79,11 +78,21 @@ import static org.semanticwb.openoffice.util.FileUtil.copyFile;
  */
 public abstract class OfficeDocument
 {
-
-    private static final String TITLE_SAVE_CONTENT_SITE = "Asistente para guardar contenido";
+    public static final String DOT = ".";
+    private static final String CONTENT_KEY = "content";
+    private static final String DFILEENCODING = "Dfile.encoding";
+    private static final String EMPTY_STRING = "";
+    private static final String FILE = "file";
+    private static final String FILE_SCHEMA = FILE+"://";
+    private static final String TITLE_SAVE_CONTENT_SITE = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("ASISTENTE_PARA_GUARDAR_CONTENIDO");
     public static final String CONTENT_ID_NAME = "contentID";
     public static final String WORKSPACE_ID_NAME = "workspaceID";
-    private static final String TITLE_VERIFY = "Verificación de contenido";
+    private static final String TITLE_VERIFY = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("VERIFICACIÓN_DE_CONTENIDO");
+    private static final String NL = "\r\n";
+    private static final String TOPICID_KEY = "topicid";
+    private static final String TOPICMAP_KEY = "topicmap";
+    private static final String UTF8 = "utf-8";
+    private static final String ZIP_EXTENSION = ".zip";
     // By default the content is not published
     private String contentID = null;
     private String workspaceID = null;
@@ -91,8 +100,7 @@ public abstract class OfficeDocument
     static
     {
         System.setProperty("wizard.sidebar.image", "org/semanticwb/openoffice/ui/icons/sidebar.png");
-        System.setProperty("WizardDisplayer.default", "org.semanticwb.openoffice.util.WBWizardDisplayerImpl");
-        Locale.setDefault(new Locale("es"));
+        System.setProperty("WizardDisplayer.default", "org.semanticwb.openoffice.util.WBWizardDisplayerImpl");        
         try
         {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -128,12 +136,12 @@ public abstract class OfficeDocument
             if (e.getCause() != null && e.getCause() instanceof ConnectException)
             {
                 JOptionPane.showMessageDialog(null,
-                        "No se puede verificar la existencia del contenido en el sitio, al paracer el sitio al que intenta conectarse no esta disponible.", TITLE_VERIFY, JOptionPane.WARNING_MESSAGE);
+                        java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("NO_SE_PUEDE_VERIFICAR_LA_EXISTENCIA_DEL_CONTENIDO_EN_EL_SITIO,_AL_PARACER_EL_SITIO_AL_QUE_INTENTA_CONECTARSE_NO_ESTA_DISPONIBLE."), TITLE_VERIFY, JOptionPane.WARNING_MESSAGE);
             }
             else
             {
                 JOptionPane.showMessageDialog(null,
-                        "No se puede verificar la existencia del contenido en el sitio, la causa es:\r\n" + e.getLocalizedMessage(), TITLE_VERIFY, JOptionPane.WARNING_MESSAGE);
+                        java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("NO_SE_PUEDE_VERIFICAR_LA_EXISTENCIA_DEL_CONTENIDO_EN_EL_SITIO,_LA_CAUSA_ES:")+ NL + e.getLocalizedMessage(), TITLE_VERIFY, JOptionPane.WARNING_MESSAGE);
             }
             OfficeApplication.logOff();
             ErrorLog.log(e);
@@ -143,13 +151,13 @@ public abstract class OfficeDocument
             if (e.getCode() == 404)
             {
                 JOptionPane.showMessageDialog(null,
-                        "No se puede verificar la existencia del contenido en el sitio, al paracer el sitio al que intenta conectarse no tiene habilitada la función de publicación de contenidos.", TITLE_VERIFY, JOptionPane.ERROR_MESSAGE);
+                        java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("NO_SE_PUEDE_VERIFICAR_LA_EXISTENCIA_DEL_CONTENIDO_EN_EL_SITIO,_AL_PARACER_EL_SITIO_AL_QUE_INTENTA_CONECTARSE_NO_TIENE_HABILITADA_LA_FUNCIÓN_DE_PUBLICACIÓN_DE_CONTENIDOS."), TITLE_VERIFY, JOptionPane.ERROR_MESSAGE);
 
             }
             else
             {
                 JOptionPane.showMessageDialog(null,
-                        "No se puede verificar la existencia del contenido en el sitio, la causa es:\r\n" + e.getLocalizedMessage(), TITLE_VERIFY, JOptionPane.ERROR_MESSAGE);
+                        java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("NO_SE_PUEDE_VERIFICAR_LA_EXISTENCIA_DEL_CONTENIDO_EN_EL_SITIO,_LA_CAUSA_ES:")+ NL + e.getLocalizedMessage(), TITLE_VERIFY, JOptionPane.ERROR_MESSAGE);
 
             }
             OfficeApplication.logOff();
@@ -284,7 +292,7 @@ public abstract class OfficeDocument
         try
         {
             URI uri = new URI(path);
-            if (uri.getScheme() == null || uri.getScheme().equalsIgnoreCase("file"))
+            if (uri.getScheme() == null || uri.getScheme().equalsIgnoreCase(FILE))
             {
                 if (uri.isAbsolute())
                 {
@@ -292,7 +300,7 @@ public abstract class OfficeDocument
                 }
                 else
                 {
-                    URI base = new URI("file:///" + this.getLocalPath().getPath().replace('\\', '/'));
+                    URI base = new URI(FILE_SCHEMA + this.getLocalPath().getPath().replace('\\', '/'));
                     URI resolved = base.resolve(uri);
                     attachments.add(getFile(resolved));
                 }
@@ -312,7 +320,7 @@ public abstract class OfficeDocument
         {
             if (isPublicated())
             {
-                int res = JOptionPane.showConfirmDialog(null, "¿Desea borrar el contenido?", "Borrado de contenido", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                int res = JOptionPane.showConfirmDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("¿DESEA_BORRAR_EL_CONTENIDO?"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("BORRADO_DE_CONTENIDO"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (res == JOptionPane.YES_OPTION)
                 {
                     contentID = this.getCustomProperties().get(CONTENT_ID_NAME);
@@ -322,7 +330,7 @@ public abstract class OfficeDocument
                         IOpenOfficeDocument doc = OfficeApplication.getOfficeDocumentProxy();
                         doc.delete(repositoryName, contentID);
                         deleteAssociation(false);
-                        JOptionPane.showMessageDialog(null, "¡Se ha borrado el contenido!", "Borrado de contenido", JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("¡SE_HA_BORRADO_EL_CONTENIDO!"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("BORRADO_DE_CONTENIDO"), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
                     }
                     catch (Exception e)
                     {
@@ -343,14 +351,14 @@ public abstract class OfficeDocument
         try
         {
             HashMap<String, String> properties = new HashMap<String, String>();
-            properties.put("Information 4", "");
-            properties.put("Information 3", "");
-            properties.put("Information 2", "");
-            properties.put("Information 1", "");
+            properties.put(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("INFORMATION_4"),EMPTY_STRING);
+            properties.put(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("INFORMATION_3"),EMPTY_STRING);
+            properties.put(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("INFORMATION_2"),EMPTY_STRING);
+            properties.put(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("INFORMATION_1"),EMPTY_STRING);
             saveCustomProperties(properties);
             if (showMessage)
             {
-                JOptionPane.showMessageDialog(null, "¡Se ha borrado la asociación de publicación de contenidos!", "Borrado de asociación de contenido", JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("¡SE_HA_BORRADO_LA_ASOCIACIÓN_DE_PUBLICACIÓN_DE_CONTENIDOS!"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("BORRADO_DE_ASOCIACIÓN_DE_CONTENIDO"), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
             }
         }
         catch (WBAlertException wba)
@@ -399,23 +407,23 @@ public abstract class OfficeDocument
         {
             if (isOldVersion())
             {
-                int res = JOptionPane.showConfirmDialog(null, "El documento esta publicado en una versión anterior, ¿Desea que se verifique si existe en el sitio actual?", "Publicación de contenido", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+                int res = JOptionPane.showConfirmDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("EL_DOCUMENTO_ESTA_PUBLICADO_EN_UNA_VERSIÓN_ANTERIOR,_¿DESEA_QUE_SE_VERIFIQUE_SI_EXISTE_EN_EL_SITIO_ACTUAL?"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("PUBLICACIÓN_DE_CONTENIDO"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (res == JOptionPane.YES_OPTION)
                 {
-                    String contentid = this.getCustomProperties().get("content");
-                    String topicid = this.getCustomProperties().get("topicid");
-                    String topicmap = this.getCustomProperties().get("topicmap");
+                    String contentid = this.getCustomProperties().get(CONTENT_KEY);
+                    String topicid = this.getCustomProperties().get(TOPICID_KEY);
+                    String topicmap = this.getCustomProperties().get(TOPICMAP_KEY);
                     try
                     {
                         ContentInfo info = OfficeApplication.getOfficeDocumentProxy().existContentOldVersion(contentid, topicmap, topicid);
                         if (info != null)
                         {
-                            res = JOptionPane.showConfirmDialog(null, "El documento se encuentra en el sitio, ¿Desea convertir el documento a versión 4?", "Publicación de contenido", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+                            res = JOptionPane.showConfirmDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("EL_DOCUMENTO_SE_ENCUENTRA_EN_EL_SITIO,_¿DESEA_CONVERTIR_EL_DOCUMENTO_A_VERSIÓN_4?"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("PUBLICACIÓN_DE_CONTENIDO"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
                             if (res == JOptionPane.YES_OPTION)
                             {
                                 cleanContentProperties();
                                 saveContentId(info.id, info.respositoryName);
-                                JOptionPane.showMessageDialog(null, "¡El documento se ha convertido a versión 4, puede continuar!", "Publicación de contenido", JOptionPane.OK_OPTION | JOptionPane.QUESTION_MESSAGE);
+                                JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("¡EL_DOCUMENTO_SE_HA_CONVERTIDO_A_VERSIÓN_4,_PUEDE_CONTINUAR!"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("PUBLICACIÓN_DE_CONTENIDO"), JOptionPane.OK_OPTION | JOptionPane.QUESTION_MESSAGE);
                             }
                             if (res == JOptionPane.CANCEL_OPTION)
                             {
@@ -424,7 +432,7 @@ public abstract class OfficeDocument
                         }
                         else
                         {
-                            res = JOptionPane.showConfirmDialog(null, "El documento no existe en el sitio actual, por lo cuál no se puede convertir, ¿Desea continuar?", "Publicación de contenido", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                            res = JOptionPane.showConfirmDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("EL_DOCUMENTO_NO_EXISTE_EN_EL_SITIO_ACTUAL,_POR_LO_CUÁL_NO_SE_PUEDE_CONVERTIR,_¿DESEA_CONTINUAR?"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("PUBLICACIÓN_DE_CONTENIDO"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                             if (res == JOptionPane.NO_OPTION)
                             {
                                 return;
@@ -451,7 +459,7 @@ public abstract class OfficeDocument
             {
 
                 deleteAssociation(false);
-                int resp = JOptionPane.showConfirmDialog(null, "El contenido no ha sido publicado.\r\n¿Desea publicar el contenido?", "Mostrar información del contenido", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                int resp = JOptionPane.showConfirmDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("EL_CONTENIDO_NO_HA_SIDO_PUBLICADO.")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("¿DESEA_PUBLICAR_EL_CONTENIDO?"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("PUBLICACIÓN_DE_CONTENIDO"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (resp == JOptionPane.YES_OPTION)
                 {
                     saveToSite();
@@ -468,7 +476,7 @@ public abstract class OfficeDocument
             }
             else
             {
-                JOptionPane.showMessageDialog(null, "El contenido no ha sido publicado.", "Mostrar información del contenido", JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("EL_CONTENIDO_NO_HA_SIDO_PUBLICADO."), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("PUBLICACIÓN_DE_CONTENIDO"), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -496,8 +504,7 @@ public abstract class OfficeDocument
 
     public final File saveOnGuidDirectoryAsHtml(String guid) throws WBException
     {
-        String path = this.getLocalPath().getParentFile().getPath() + File.separator + guid;
-        path = path.replace("%20", " ");
+        String path = this.getLocalPath().getParentFile().getPath() + File.separator + guid;        
         File file = new File(path);
         file = this.saveAsHtml(file);
         return file;
@@ -545,8 +552,13 @@ public abstract class OfficeDocument
             String guid = createGuid();
             File fileHtml = saveHtmlPrepareAndGetFiles(guid);
             tempotalDir = fileHtml.getParentFile();
-            String path = tempotalDir.getParentFile().getPath() + File.separatorChar + guid + ".zip";
-            path = path.replace("%20", " ");
+            String path = tempotalDir.getParentFile().getPath() + File.separatorChar + guid + ZIP_EXTENSION;
+            String encode=System.getenv(DFILEENCODING);
+            if(encode==null || encode.equals(EMPTY_STRING))
+            {
+                encode=UTF8;
+            }
+            path=java.net.URLDecoder.decode(path,encode);
             tempotalZipFile = new File(path);
 
             FileOutputStream fout = new FileOutputStream(tempotalZipFile);
@@ -574,16 +586,16 @@ public abstract class OfficeDocument
             deleteTemporalDirectory(tempotalDir);
             return tempotalZipFile;
         }
+
         catch (FileNotFoundException fnfe)
         {
             deleteTemporalDirectory(tempotalDir);
-            throw new WBException("No se puede crear el archivo zip\r\n" + fnfe.getLocalizedMessage(), fnfe);
+            throw new WBException(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("NO_SE_PUEDE_CREAR_EL_ARCHIVO_ZIP")+ NL +EMPTY_STRING + fnfe.getLocalizedMessage(), fnfe);
 
-        }
-        catch (IOException ioe)
+        }        catch (IOException ioe)
         {
             deleteTemporalDirectory(tempotalDir);
-            throw new WBException("No se puede crear el archivo zip\r\n" + ioe.getLocalizedMessage(), ioe);
+            throw new WBException(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("NO_SE_PUEDE_CREAR_EL_ARCHIVO_ZIP")+ NL +EMPTY_STRING + ioe.getLocalizedMessage(), ioe);
 
         }
     }
@@ -672,7 +684,7 @@ public abstract class OfficeDocument
                 {
                     new SelectPage(siteid), new PublishVersion(contentID, repositoryName), new ViewProperties(repositoryName, contentID)
                 };
-                Wizard wiz = WizardPage.createWizard("Asistente de publicación de contenido en página web", clazz, resultProducer);
+                Wizard wiz = WizardPage.createWizard(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("ASISTENTE_DE_PUBLICACIÓN_DE_CONTENIDO_EN_PÁGINA_WEB"), clazz, resultProducer);
                 wiz.show();
             }
         }
@@ -705,7 +717,7 @@ public abstract class OfficeDocument
             {
                 new TitleAndDescription(false), new SelectPage(siteid), new PublishVersion(contentID, repositoryName), new ViewProperties(repositoryName, contentID)
             };
-            Wizard wiz = WizardPage.createWizard("Asistente de publicación de contenido en página web", clazz, resultProducer);
+            Wizard wiz = WizardPage.createWizard(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("ASISTENTE_DE_PUBLICACIÓN_DE_CONTENIDO_EN_PÁGINA_WEB"), clazz, resultProducer);
             wiz.show();
         }
     }
@@ -719,7 +731,7 @@ public abstract class OfficeDocument
     {
         if (isReadOnly())
         {
-            JOptionPane.showMessageDialog(null, "El documento es de sólo lectura, por lo cuál no puede ser publicado", TITLE_SAVE_CONTENT_SITE, JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("EL_DOCUMENTO_ES_DE_SÓLO_LECTURA,_POR_LO_CUÁL_NO_PUEDE_SER_PUBLICADO"), TITLE_SAVE_CONTENT_SITE, JOptionPane.ERROR_MESSAGE);
         }
         else
         {
@@ -727,23 +739,23 @@ public abstract class OfficeDocument
             {
                 if (isOldVersion())
                 {
-                    int res = JOptionPane.showConfirmDialog(null, "El documento esta publicado en una versión anterior, ¿Desea que se verifique si existe en el sitio actual?", "Publicación de contenido", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    int res = JOptionPane.showConfirmDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("EL_DOCUMENTO_ESTA_PUBLICADO_EN_UNA_VERSIÓN_ANTERIOR,_¿DESEA_QUE_SE_VERIFIQUE_SI_EXISTE_EN_EL_SITIO_ACTUAL?"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("PUBLICACIÓN_DE_CONTENIDO"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
                     if (res == JOptionPane.YES_OPTION)
                     {
-                        String contentid = this.getCustomProperties().get("content");
-                        String topicid = this.getCustomProperties().get("topicid");
-                        String topicmap = this.getCustomProperties().get("topicmap");
+                        String contentid = this.getCustomProperties().get(CONTENT_KEY);
+                        String topicid = this.getCustomProperties().get(TOPICID_KEY);
+                        String topicmap = this.getCustomProperties().get(TOPICMAP_KEY);
                         try
                         {
                             ContentInfo info = OfficeApplication.getOfficeDocumentProxy().existContentOldVersion(contentid, topicmap, topicid);
                             if (info != null)
                             {
-                                res = JOptionPane.showConfirmDialog(null, "El documento se encuentra en el sitio, ¿Desea convertir el documento a versión 4?", "Publicación de contenido", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+                                res = JOptionPane.showConfirmDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("EL_DOCUMENTO_SE_ENCUENTRA_EN_EL_SITIO,_¿DESEA_CONVERTIR_EL_DOCUMENTO_A_VERSIÓN_4?"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("PUBLICACIÓN_DE_CONTENIDO"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
                                 if (res == JOptionPane.YES_OPTION)
                                 {
                                     cleanContentProperties();
                                     saveContentId(info.id, info.respositoryName);
-                                    JOptionPane.showMessageDialog(null, "¡El documento se ha convertido a versión 4, puede continuar!", "Publicación de contenido", JOptionPane.OK_OPTION | JOptionPane.QUESTION_MESSAGE);
+                                    JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("¡EL_DOCUMENTO_SE_HA_CONVERTIDO_A_VERSIÓN_4,_PUEDE_CONTINUAR!"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("PUBLICACIÓN_DE_CONTENIDO"), JOptionPane.OK_OPTION | JOptionPane.QUESTION_MESSAGE);
                                 }
                                 if (res == JOptionPane.CANCEL_OPTION)
                                 {
@@ -752,7 +764,7 @@ public abstract class OfficeDocument
                             }
                             else
                             {
-                                res = JOptionPane.showConfirmDialog(null, "El documento no existe en el sitio actual, por lo cuál no se puede convertir, ¿Desea continuar?", "Publicación de contenido", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                                res = JOptionPane.showConfirmDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("EL_DOCUMENTO_NO_EXISTE_EN_EL_SITIO_ACTUAL,_POR_LO_CUÁL_NO_SE_PUEDE_CONVERTIR,_¿DESEA_CONTINUAR?"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("PUBLICACIÓN_DE_CONTENIDO"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                                 if (res == JOptionPane.NO_OPTION)
                                 {
                                     return;
@@ -809,7 +821,7 @@ public abstract class OfficeDocument
                                 }
                                 catch (Exception e)
                                 {
-                                    JOptionPane.showMessageDialog(null, "No se puede actualizar el contenido la causa es: " + e.getMessage(), TITLE_SAVE_CONTENT_SITE, JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("NO_SE_PUEDE_ACTUALIZAR_EL_CONTENIDO_LA_CAUSA_ES:_") + e.getMessage(), TITLE_SAVE_CONTENT_SITE, JOptionPane.ERROR_MESSAGE);
                                     ErrorLog.log(e);
                                 }
                             }
@@ -842,19 +854,19 @@ public abstract class OfficeDocument
     public static boolean validaNombre(File file)
     {
         String name=file.getName();
-        int pos=name.indexOf(".");        
+        int pos=name.indexOf(DOT);
         if(pos!=-1)
         {
             name=file.getName().substring(0,pos);
         }
         try
         {
-            name=java.net.URLDecoder.decode(name, "utf-8");
+            name=java.net.URLDecoder.decode(name, UTF8);
         }
         catch(Exception e){}
         if(name.length()>40)
         {
-            JOptionPane.showMessageDialog(null,"El nombre del archivo es mayor a 40 caracteres","Validación de nombre de archivo",JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("EL_NOMBRE_DEL_ARCHIVO_ES_MAYOR_A_40_CARACTERES"),java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("VALIDACIÓN_DE_NOMBRE_DE_ARCHIVO"),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             return false;
         }
         char[] letras=name.toCharArray();
@@ -863,17 +875,17 @@ public abstract class OfficeDocument
             char letra=letras[i];
             if(Character.isWhitespace(letra))
             {
-                JOptionPane.showMessageDialog(null,"El nombre del archivo tiene espacios","Validación de nombre de archivo",JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null,java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("EL_NOMBRE_DEL_ARCHIVO_TIENE_ESPACIOS"),java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("VALIDACIÓN_DE_NOMBRE_DE_ARCHIVO"),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
                 return false;
             }
             else if(!(Character.isDigit(letra) || Character.isLetter(letra)))
             {
-                JOptionPane.showMessageDialog(null,"El nombre del archivo tiene caracteres no válidos:"+letra,"Validación de nombre de archivo",JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null,java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("EL_NOMBRE_DEL_ARCHIVO_TIENE_CARACTERES_NO_VÁLIDOS:")+letra,java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("VALIDACIÓN_DE_NOMBRE_DE_ARCHIVO"),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
                 return false;
             }
             else if(letra>123)
             {
-                JOptionPane.showMessageDialog(null,"El nombre del archivo tiene caracteres no válidos:"+letra,"Validación de nombre de archivo",JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null,java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("EL_NOMBRE_DEL_ARCHIVO_TIENE_CARACTERES_NO_VÁLIDOS:")+letra,java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("VALIDACIÓN_DE_NOMBRE_DE_ARCHIVO"),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
                 return false;
             }
         }
@@ -901,7 +913,7 @@ public abstract class OfficeDocument
         }
         if (file.exists())
         {
-            int resultOption = JOptionPane.showConfirmDialog(null, "El archivo ya existe, ¿Desea sobre escribir?", TITLE_SAVE_CONTENT_SITE, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            int resultOption = JOptionPane.showConfirmDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("EL_ARCHIVO_YA_EXISTE,_¿DESEA_SOBRE_ESCRIBIR?"), TITLE_SAVE_CONTENT_SITE, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (resultOption != JOptionPane.NO_OPTION)
             {
                 try
@@ -948,7 +960,7 @@ public abstract class OfficeDocument
     {
         if (this.isReadOnly())
         {
-            JOptionPane.showMessageDialog(null, "¡El documento es de sólo lectura!", "Insertar liga a página", JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("¡EL_DOCUMENTO_ES_DE_SÓLO_LECTURA!"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("INSERTAR_LIGA_A_PÁGINA"), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             return;
         }
         if (OfficeApplication.tryLogin())
@@ -958,7 +970,7 @@ public abstract class OfficeDocument
             {
                 new SelectPage(null), new SelectTitle()
             };
-            Wizard wiz = WizardPage.createWizard("Asistente de inserción de liga de página", clazz, resultProducer);
+            Wizard wiz = WizardPage.createWizard(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("ASISTENTE_DE_INSERCIÓN_DE_LIGA_DE_PÁGINA"), clazz, resultProducer);
             wiz.show();
         }
     }
@@ -966,16 +978,16 @@ public abstract class OfficeDocument
     private boolean isOldVersion()
     {
         Map<String, String> properties = this.getCustomProperties();
-        if (properties.containsKey("content") && properties.containsKey("topicid") && properties.containsKey("topicmap"))
+        if (properties.containsKey(CONTENT_KEY) && properties.containsKey(TOPICID_KEY) && properties.containsKey(TOPICMAP_KEY))
         {
-            String contentid = this.getCustomProperties().get("content");
-            String topicid = this.getCustomProperties().get("topicid");
-            String topicmap = this.getCustomProperties().get("topicmap");
+            String contentid = this.getCustomProperties().get(CONTENT_KEY);
+            String topicid = this.getCustomProperties().get(TOPICID_KEY);
+            String topicmap = this.getCustomProperties().get(TOPICMAP_KEY);
             if (contentid == null || topicmap == null || topicid == null)
             {
                 return false;
             }
-            if (contentid.equals("") || topicmap.equals("") || topicid.equals(""))
+            if (contentid.equals(EMPTY_STRING) || topicmap.equals(EMPTY_STRING) || topicid.equals(EMPTY_STRING))
             {
                 return false;
             }

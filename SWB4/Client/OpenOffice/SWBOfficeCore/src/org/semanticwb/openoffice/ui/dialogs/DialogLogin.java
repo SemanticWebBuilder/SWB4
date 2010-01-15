@@ -90,7 +90,8 @@ public class DialogLogin extends javax.swing.JDialog implements ImageObserver
     private void initComponents() {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Acceso a servicio de publicación");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogLogin"); // NOI18N
+        setTitle(bundle.getString("ACCESO_A_SERVICIO_DE_PUBLICACIÓN")); // NOI18N
         setLocationByPlatform(true);
         setModal(true);
         setResizable(false);
