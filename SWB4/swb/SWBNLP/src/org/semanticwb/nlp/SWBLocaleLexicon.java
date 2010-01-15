@@ -5,7 +5,6 @@
 
 package org.semanticwb.nlp;
 
-import com.sun.xml.internal.fastinfoset.vocab.Vocabulary;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
