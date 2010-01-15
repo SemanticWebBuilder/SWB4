@@ -28,7 +28,6 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.nlp.translation.SWBSparqlTranslator;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -46,9 +45,8 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import org.semanticwb.model.User;
 import org.semanticwb.nlp.SWBDictionary;
-import org.semanticwb.nlp.SWBLexicon;
 import org.semanticwb.nlp.SWBLocaleLexicon;
-import org.semanticwb.nlp.translation.Translator;
+import org.semanticwb.nlp.translation.SWBSparqlTranslator;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
@@ -67,7 +65,7 @@ public class SWBADBNatural extends GenericResource {
 
     private String lang = "x-x";
     private SWBDictionary lex = null;
-    private Translator tr;
+    private SWBSparqlTranslator tr;
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -107,6 +105,7 @@ public class SWBADBNatural extends GenericResource {
         } else {
             if (!lang.equals("es")) {
                 lang = "es";
+                lex.setLocale("es");
             }
         }        
 
@@ -534,8 +533,8 @@ public class SWBADBNatural extends GenericResource {
 
         if (!query.equals("")) {
             //Create SparQl translator
-            tr = new Translator(lex);
-            queryString = lex.getLexicon().getPrefixString() + "\n" + tr.translateSentence(query, false);
+            tr = new SWBSparqlTranslator(lex);
+            queryString = lex.getLexicon(lang).getPrefixString() + "\n" + tr.translateSentence(query, false);
             System.out.println("--->Query String:");
             System.out.println(queryString);
             //dym = tr.didYouMean(query);
@@ -652,7 +651,7 @@ public class SWBADBNatural extends GenericResource {
                 sbf.append("</ul>");
             }
         } else {
-            String tag = lex.getLexicon().getWord(word, true).getTag().getId();
+            String tag = lex.getLexicon(lang).getWord(word, true).getTag().getId();
             //String tag = lex.getObjWordTag(word).getObjId();
 
             sbf.append("<ul id=\"resultlist\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
@@ -676,10 +675,12 @@ public class SWBADBNatural extends GenericResource {
                     idCounter++;
                 }
             } else {
-                tag = lex.getLexicon().getWord(word, false).getTag().getId();
+                tag = lex.getLexicon(lang).getWord(word, false).getTag().getId();
+                SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(tag);
+                tag = sc.getPrefix() + ":" + sc.getName();
                 //tag = lex.getPropWordTag(word).getRangeClassId();
                 if (!tag.equals("")) {
-                    SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(tag);
+                    sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(tag);
                     idCounter = 0;
                     Iterator<SemanticProperty> sit = sc.listProperties();
                     while (sit.hasNext()) {
