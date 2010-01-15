@@ -78,20 +78,20 @@ import static org.semanticwb.openoffice.util.FileUtil.getPathURL;
 public class WB4Writer extends OfficeDocument
 {
 
-    private static final String ERROR_DOCUMENT_NOT_FOUND = "There is not a document active in the desktop";
+    private static final String ERROR_DOCUMENT_NOT_FOUND = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/writer/WB4Writer").getString("THERE_IS_NOT_A_DOCUMENT_ACTIVE_IN_THE_DESKTOP");
     private static final String HTML_EXPORT_FORMAT = "HTML (StarWriter)";
     private static final String OFFICE97_FORMAT = "MS Word 97";
-    private static final String DESKTOP_NOT_FOUND = "Error al obtener el escritorio de Open Office";
+    private static final String DESKTOP_NOT_FOUND = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/writer/WB4Writer").getString("ERROR_AL_OBTENER_EL_ESCRITORIO_DE_OPEN_OFFICE");
     private static final String DESKTOP_PATH = "com.sun.star.frame.Desktop";
-    private static final String INDEXOFBOUNDERROR = "There was an error saving custom properties";
-    private static final String ERROR_DOCUMENT_NOT_MODIFIED = "The document has not been modified";
-    private static final String ERROR_DOCUMENT_NOT_SAVED_BEFORE = "The document has not been saved before";
-    private static final String ERROR_DOCUMENT_READ_ONLY = "The document is read only";
+    private static final String INDEXOFBOUNDERROR = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/writer/WB4Writer").getString("THERE_WAS_AN_ERROR_SAVING_CUSTOM_PROPERTIES");
+    private static final String ERROR_DOCUMENT_NOT_MODIFIED = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/writer/WB4Writer").getString("THE_DOCUMENT_HAS_NOT_BEEN_MODIFIED");
+    private static final String ERROR_DOCUMENT_NOT_SAVED_BEFORE = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/writer/WB4Writer").getString("THE_DOCUMENT_HAS_NOT_BEEN_SAVED_BEFORE");
+    private static final String ERROR_DOCUMENT_READ_ONLY = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/writer/WB4Writer").getString("THE_DOCUMENT_IS_READ_ONLY");
     /**
      * The default Open Office Extension OPENOFFICE_EXTENSION=".odt"
      */
     private static final String OPENOFFICE_EXTENSION = ".odt";
-    private static final String ERROR_NO_SAVE = "The document can not be saved";
+    private static final String ERROR_NO_SAVE = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/writer/WB4Writer").getString("THE_DOCUMENT_CAN_NOT_BE_SAVED");
     /**
      * The xtension to a Word Document in format XP/2000/2003 WORD_EXTENSION=".doc"
      */

@@ -87,18 +87,18 @@ import static org.semanticwb.openoffice.util.FileUtil.getPathURL;
 public class WB4Impress extends OfficeDocument
 {
 
-    private static final String ERROR_DOCUMENT_NOT_MODIFIED = "The document has not been modified";
-    private static final String ERROR_DOCUMENT_NOT_SAVED_BEFORE = "The document has not been saved before";
-    private static final String ERROR_DOCUMENT_NOT_FOUND = "There is not a document active in the desktop";
+    private static final String ERROR_DOCUMENT_NOT_MODIFIED = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/impress/WB4Impress").getString("THE_DOCUMENT_HAS_NOT_BEEN_MODIFIED");
+    private static final String ERROR_DOCUMENT_NOT_SAVED_BEFORE = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/impress/WB4Impress").getString("THE_DOCUMENT_HAS_NOT_BEEN_SAVED_BEFORE");
+    private static final String ERROR_DOCUMENT_NOT_FOUND = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/impress/WB4Impress").getString("THERE_IS_NOT_A_DOCUMENT_ACTIVE_IN_THE_DESKTOP");
     private static final String OVERRIDE_OPTION = "Overwrite";
     private static final String APPLICATION_VERSION = "2.4";
     private static final String DESKTOP_PATH = "com.sun.star.frame.Desktop";
-    private static final String ERROR_DESKTOP_NOT_FOUND = "The desktop was not found";
+    private static final String ERROR_DESKTOP_NOT_FOUND = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/impress/WB4Impress").getString("THE_DESKTOP_WAS_NOT_FOUND");
     private static final String HTML_EXPORT_FORMAT = "impress_html_Export";
     private static final String IMPRESS_FORMAT = "Impress8";
-    private static final String INDEXOFBOUNDERROR = "There was an error saving custom properties";
-    private static final String ERROR_DOCUMENT_READ_ONLY = "The document is read only";
-    private static final String ERROR_NO_SAVE = "The document can not be saved";
+    private static final String INDEXOFBOUNDERROR = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/impress/WB4Impress").getString("THERE_WAS_AN_ERROR_SAVING_CUSTOM_PROPERTIES");
+    private static final String ERROR_DOCUMENT_READ_ONLY = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/impress/WB4Impress").getString("THE_DOCUMENT_IS_READ_ONLY");
+    private static final String ERROR_NO_SAVE = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/impress/WB4Impress").getString("THE_DOCUMENT_CAN_NOT_BE_SAVED");
     private static final String OPENOFFICE_EXTENSION = ".odp";
     private static final String POWERPOINT_97_FORMAT = "MS PowerPoint 97";
     private static final String PPT_EXTENSION = ".ppt";

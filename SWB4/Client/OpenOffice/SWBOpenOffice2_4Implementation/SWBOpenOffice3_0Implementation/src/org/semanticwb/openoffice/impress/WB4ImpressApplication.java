@@ -53,9 +53,9 @@ import static org.semanticwb.openoffice.util.FileUtil.getPathURL;
  */
 public class WB4ImpressApplication extends OfficeApplication
 {
-    private static final String DESKTOP_NOT_FOUND = "The desktop was not found";
+    private static final String DESKTOP_NOT_FOUND = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/impress/WB4ImpressApplication").getString("THE_DESKTOP_WAS_NOT_FOUND");
     private static final String DESKTOP_PATH = "com.sun.star.frame.Desktop";
-    private static final String DOCUMENT_CAN_NOT_BE_OPEN = "The document can not be open";
+    private static final String DOCUMENT_CAN_NOT_BE_OPEN = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/impress/WB4ImpressApplication").getString("THE_DOCUMENT_CAN_NOT_BE_OPEN");
     private static final String PRESENTATIONDOCUMENT_PATH = "com.sun.star.presentation.PresentationDocument";
     private static final String TARGET_BLANK = "_blank";
     
