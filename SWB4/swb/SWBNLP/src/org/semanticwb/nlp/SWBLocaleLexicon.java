@@ -115,7 +115,6 @@ public class SWBLocaleLexicon {
                         Word w = new Word(sp.getDisplayName(langCode));
                         w.setLemma(wLemma);
 
-                        SemanticClass rg = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sp.getRangeClass().getURI());
                         Tag t = new Tag();
                         if (sp.isObjectProperty()) {
                             t.setTag(OBT_TAG);
@@ -125,7 +124,15 @@ public class SWBLocaleLexicon {
 
                         t.setURI(sp.getURI());
                         t.setId(sp.getPrefix() + ":" + sp.getName());
-                        t.setRangeURI(rg.getPrefix() + ":" + rg.getName());
+                        /*SemanticClass rg = sp.getRangeClass();
+                        
+                        if (sp != null) {
+                            rg = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sp.getRangeClass().getURI());
+                        }
+
+                        if (rg != null) {
+                            t.setRangeURI(rg.getPrefix() + ":" + rg.getName());
+                        }*/
 
                         w.setTag(t);
                         propHash.put(wLemma, w);
