@@ -331,14 +331,7 @@ public class WBAAccessLogHitsReport extends GenericResource {
                 WebSite site = webSites.next();
                 // Evaluates if TopicMap is not Global
                 if(!site.getId().equals(SWBContext.getGlobalWebSite().getId())) {
-                    // Get access level of this user on this topicmap and if level is greater than "0" then user have access
-                    // TODO
-//                    i_access = AdmFilterMgr.getInstance().haveAccess2TopicMap(paramsRequest.getUser(),site.getDbdata().getId());
-//                    if(I_ACCESS < i_access) {
-//                        if(site.getDbdata().getDeleted()==0) {
-                            hm_sites.put(site.getId(), site.getDisplayTitle(paramsRequest.getUser().getLanguage()));
-//                        }
-//                    }
+                    hm_sites.put(site.getId(), site.getDisplayTitle(paramsRequest.getUser().getLanguage()));
                 }
             }
             // If there are sites continue
