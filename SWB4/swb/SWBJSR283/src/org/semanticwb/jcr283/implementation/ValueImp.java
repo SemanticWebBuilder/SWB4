@@ -11,7 +11,6 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import javax.jcr.Binary;
@@ -20,6 +19,7 @@ import javax.jcr.PropertyType;
 import javax.jcr.RepositoryException;
 import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
 /**
@@ -29,14 +29,16 @@ import org.semanticwb.SWBUtils;
 public class ValueImp implements Value
 {
 
+    static Logger log = SWBUtils.getLogger(ValueImp.class);
+    private static SimpleDateFormat iso8601dateFormat =  new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     private final int type;
-    private final Object value;
     ByteArrayOutputStream out = new ByteArrayOutputStream();
-    private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    Object value;
 
-    public ValueImp(Object value, int type)
+    ValueImp(Object value, int type)
     {
         this.type = type;
+
         if (value instanceof InputStream)
         {
             byte[] buffer = new byte[2048];
@@ -59,14 +61,7 @@ public class ValueImp implements Value
         }
         else
         {
-            if (value.getClass().isArray())
-            {
-                this.value = value; //TODO:
-            }
-            else
-            {
-                this.value = value;
-            }
+            this.value = value;
         }
     }
 
@@ -79,16 +74,17 @@ public class ValueImp implements Value
         String valueString = value.toString();
         if (value instanceof Node && type == PropertyType.REFERENCE)
         {
-            valueString = ((Node) value).getName();
+            valueString = ((Node) value).getUUID();
         }
         if (value instanceof Calendar)
         {
+            //valueString = iso8601dateFormat.format(((Calendar) value).getTime());
             valueString = SWBUtils.TEXT.iso8601DateFormat(((Calendar) value).getTime());
         }
         return valueString;
     }
 
-    public InputStream getStream() throws RepositoryException
+    public InputStream getStream() throws IllegalStateException, RepositoryException
     {
         if (value == null)
         {
@@ -96,25 +92,13 @@ public class ValueImp implements Value
         }
         if (value instanceof ByteArrayOutputStream && type == PropertyType.BINARY)
         {
-            ByteArrayOutputStream mout = (ByteArrayOutputStream) value;
+            ByteArrayOutputStream mout=(ByteArrayOutputStream)value;
             return new ByteArrayInputStream(mout.toByteArray());
         }
         return null;
     }
 
-    public Binary getBinary() throws RepositoryException
-    {
-        if (value instanceof Binary)
-        {
-            return (Binary)value;
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-    public long getLong() throws ValueFormatException, RepositoryException
+    public long getLong() throws ValueFormatException, IllegalStateException, RepositoryException
     {
         if (value == null)
         {
@@ -130,7 +114,7 @@ public class ValueImp implements Value
         }
     }
 
-    public double getDouble() throws ValueFormatException, RepositoryException
+    public double getDouble() throws ValueFormatException, IllegalStateException, RepositoryException
     {
         if (value == null)
         {
@@ -146,12 +130,7 @@ public class ValueImp implements Value
         }
     }
 
-    public BigDecimal getDecimal() throws ValueFormatException, RepositoryException
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public Calendar getDate() throws ValueFormatException, RepositoryException
+    public Calendar getDate() throws ValueFormatException, IllegalStateException, RepositoryException
     {
         if (value == null)
         {
@@ -179,7 +158,7 @@ public class ValueImp implements Value
                     calendar = Calendar.getInstance();
                     calendar.setTime(date);
                 }
-                catch (ParseException pe2)
+                catch(ParseException pe2)
                 {
                     throw new ValueFormatException(pe);
                 }
@@ -188,7 +167,7 @@ public class ValueImp implements Value
         return calendar;
     }
 
-    public boolean getBoolean() throws ValueFormatException, RepositoryException
+    public boolean getBoolean() throws ValueFormatException, IllegalStateException, RepositoryException
     {
         if (value == null)
         {
@@ -207,5 +186,15 @@ public class ValueImp implements Value
     public int getType()
     {
         return type;
+    }
+
+    public Binary getBinary() throws RepositoryException
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public BigDecimal getDecimal() throws ValueFormatException, RepositoryException
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
