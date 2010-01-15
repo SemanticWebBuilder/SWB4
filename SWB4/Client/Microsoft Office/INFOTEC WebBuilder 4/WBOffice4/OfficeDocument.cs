@@ -595,7 +595,22 @@ namespace WBOffice4
             }            
             return true;
         }
-
+        private Boolean ValidaFiles()
+        {
+            foreach (FileInfo file in this.MissedAttachments)
+            {
+                DialogResultEx valueres = MessageBoxWB4.Show("Publicación de contenido","El archivo incrustado " + file.FullName + " no se encontró,¿Desea continuar?" );
+                if (valueres == DialogResultEx.CANCEL)
+                {
+                    return false;
+                }
+                if (valueres == DialogResultEx.YESALL)
+                {
+                    return true;
+                }
+            }
+            return true;
+        }
         public void SaveToSite()
         {
             
@@ -609,6 +624,10 @@ namespace WBOffice4
                 if (OfficeApplication.TryLogOn() && SetupDocument())
                 {
                     if (!ValidaNombre(this.FilePath))
+                    {
+                        return;
+                    }
+                    if (!ValidaFiles())
                     {
                         return;
                     }
