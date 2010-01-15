@@ -32,7 +32,6 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.nlp.SWBLexicon;
 import org.semanticwb.nlp.translation.SWBSparqlTranslator;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
