@@ -11,21 +11,21 @@
         <high-contrast xlink:href="images/semius.png"/>
     </icon>
     <display-name>
-        <name lang="es">Semantic Webbuilder 4.0 for Open Office</name>
         <name lang="en">Semantic Webbuilder 4.0 for Open Office</name>
+        <name lang="es">Semantic Webbuilder 4.0 for Open Office</name>
     </display-name>
     <publisher>
-        <name lang="es" xlink:href="http://www.infotec.com.mx">INFOTEC</name>
         <name lang="en" xlink:href="http://www.infotec.com.mx">INFOTEC</name>
+        <name lang="es" xlink:href="http://www.infotec.com.mx">INFOTEC</name>
     </publisher>
     <extension-description>
-        <src lang="es" xlink:href="description/description.txt"/>
         <src lang="en" xlink:href="description/description.txt"/>
+        <src lang="es" xlink:href="description/description.txt"/>
     </extension-description>
     <registration>
-        <simple-license accept-by="user" default-license-id="es">
-            <license-text lang="es" license-id="es" xlink:href="licenses/Licencia_SWB.txt"/>
-            <license-text lang="en" xlink:href="licenses/Licencia_SWB.txt"/>
+        <simple-license accept-by="user" default-license-id="en">
+            <license-text lang="en" license-id="en" xlink:href="licenses/Licencia_SWB.txt"/>
+            <license-text lang="es" xlink:href="licenses/Licencia_SWB.txt"/>
         </simple-license>
     </registration>
 </description>
