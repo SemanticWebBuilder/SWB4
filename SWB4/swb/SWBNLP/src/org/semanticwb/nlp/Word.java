@@ -51,20 +51,10 @@ import java.util.ArrayList;
  * @author Hasdai Pacheco {haxdai@gmail.com}
  */
 public class Word {
-    /** Lexical form of the word.
-     * Forma léxica de la palabra.
-     */
     private String lemma; //raíz de la palabra
     private String lexicalForm;//displayname
-    /**Tag for the word as a {@link WordTag} object.
-     * Etiqueta de la palabra como un objeto {@link WordTag}.
-     */
     private Tag wTag;   //POS-TAG
-    /**Word language.
-     * Idioma de la palabra.
-     */
-
-    private ArrayList<String> synSet;
+    private ArrayList<String> synSet; //Conjunto de sinónimos
 
     /**
      * Creates a new instance of a Word with the given label (the word itself)
@@ -82,7 +72,6 @@ public class Word {
     public Word(String lexForm) {
         lexicalForm = lexForm;
         lemma = "";
-        wTag = new Tag();
     }
 
     public void addSynonym (String syn) {
