@@ -47,7 +47,6 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.sparql.util.StringUtils;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,7 +63,8 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
-import org.semanticwb.nlp.SWBLexicon;
+import org.semanticwb.nlp.SWBDictionary;
+import org.semanticwb.nlp.SWBLocaleLexicon;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
@@ -79,7 +79,7 @@ public class AdvancedSearch extends GenericAdmResource {
 
     private static Logger log = SWBUtils.getLogger(AdvancedSearch.class);
     private String lang = "x-x";
-    private SWBLexicon lex;
+    private SWBDictionary lex;
     private SWBSparqlTranslator tr;
     private SemanticProperty so_lat = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/emexcatalog.owl#latitude");
     private SemanticProperty so_long = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/emexcatalog.owl#longitude");
@@ -136,9 +136,9 @@ public class AdvancedSearch extends GenericAdmResource {
         tr = new SWBSparqlTranslator(lex);
 
         //Translate query to SparQl
-        String sparqlQuery = lex.getPrefixString() + "\n" + tr.translateSentence(query, true);
-        dym = tr.didYouMean(query);
-        dym = (dym.equalsIgnoreCase(query) ? "" : dym);
+        String sparqlQuery = lex.getLexicon().getPrefixString() + "\n" + tr.translateSentence(query, true);
+        //dym = tr.didYouMean(query);
+        //dym = (dym.equalsIgnoreCase(query) ? "" : dym);
 
         //System.out.println(sparqlQuery);
 
@@ -217,7 +217,8 @@ public class AdvancedSearch extends GenericAdmResource {
                                     }
                                 } else {
                                     segment.append("<b><font size=\"2\" face=\"verdana\">" +
-                                            lex.getObjWordTag(vName).getDisplayName() + "</b></font>" + "<br>");
+                                            lex.getLexicon().getWord(vName, true).getLemma());
+                                            //lex.getObjWordTag(vName).getDisplayName() + "</b></font>" + "<br>");
                                 }
                                 first = false;
                             } else { //Not a semantic object
@@ -258,6 +259,8 @@ public class AdvancedSearch extends GenericAdmResource {
         if (user != null) {
             if (!lang.equals(user.getLanguage())) {
                 lang = user.getLanguage();
+                lex.addLexicon(new SWBLocaleLexicon(lang, SWBDictionary.getLanguageName(lang)));
+                lex.setLocale(lang);
             }
         } else {
             if (!lang.equals("es")) {
@@ -270,7 +273,6 @@ public class AdvancedSearch extends GenericAdmResource {
         if (pf == null) {
             pf = "";
         }
-        lex = new SWBLexicon(lang, "");
 
         if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
             //Set URL call method to call_DIRECT to make an AJAX call
@@ -669,7 +671,7 @@ public class AdvancedSearch extends GenericAdmResource {
             }
 
             //Add all properties
-            Iterator<String> sit = lex.listPropertyNames();
+            Iterator<String> sit = lex.getLexicon().listWords(false);
             while (sit.hasNext()) {
                 String tempp = sit.next();
                 if (tempp.toLowerCase().indexOf(word.toLowerCase()) != -1) {
@@ -722,7 +724,8 @@ public class AdvancedSearch extends GenericAdmResource {
             }
         } else {
             System.out.println("Suggesting for " + word);
-            String tag = lex.getObjWordTag(word).getObjId();
+            String tag = lex.getLexicon().getWord(word, true).getTag().getId();
+            //String tag = lex.getObjWordTag(word).getObjId();
 
             if (!tag.equals("")) {
                 sbf.append("<ul id=\"resultlist\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
@@ -745,7 +748,8 @@ public class AdvancedSearch extends GenericAdmResource {
                 }
                 sbf.append("</ul>");
             } else {
-                tag = lex.getPropWordTag(word).getRangeClassId();
+                tag = lex.getLexicon().getWord(word, false).getTag().getRangeURI();
+                //tag = lex.getPropWordTag(word).getRangeClassId();
                 if (!tag.equals("")) {
                     sbf.append("<ul id=\"resultlist\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
                     "position:absolute;margin:0;padding:0;overflow:auto;max-height:" +
