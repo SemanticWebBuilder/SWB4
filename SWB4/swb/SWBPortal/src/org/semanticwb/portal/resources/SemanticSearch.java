@@ -57,6 +57,8 @@ import java.util.regex.Pattern;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
+import org.semanticwb.nlp.SWBDictionary;
+import org.semanticwb.nlp.SWBLocaleLexicon;
 import org.semanticwb.nlp.spell.SWBSpellChecker;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticModel;
@@ -73,7 +75,7 @@ public class SemanticSearch extends GenericAdmResource {
 
     private Logger log = SWBUtils.getLogger(SWBAListRelatedObjects.class);
     private SWBSparqlTranslator tr = null;
-    private SWBLexicon lex = null;
+    private SWBDictionary lex = null;
     private String lang = "x-x";
 
     @Override
@@ -111,12 +113,13 @@ public class SemanticSearch extends GenericAdmResource {
         if (user != null) {
             if (!lang.equals(paramRequest.getUser().getLanguage())) {
                 lang = paramRequest.getUser().getLanguage();
-                lex = new SWBLexicon(lang, "");
+                lex.addLexicon(new SWBLocaleLexicon(lang, SWBDictionary.getLanguageName(lang)));
+                lex.setLocale(lang);
             }
         } else {
             if (!lang.equals("es")) {
                 lang = "es";
-                lex = new SWBLexicon(lang, "");
+                lex.setLocale("es");
             }
         }
 
@@ -563,7 +566,8 @@ public class SemanticSearch extends GenericAdmResource {
                 sbf.append("</ul>\n");
             }
         } else {
-            String tag = lex.getObjWordTag(word.toLowerCase()).getObjId();
+            String tag = lex.getLexicon(lang).getWord(word, true).getTag().getId();
+            //String tag = lex.getObjWordTag(word.toLowerCase()).getObjId();
 
             sbf.append("<ul id=\"" + createId("resultlist") + "\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
                     "position:absolute;margin:0;padding:0;overflow:auto;max-height:" +
@@ -586,9 +590,12 @@ public class SemanticSearch extends GenericAdmResource {
                     idCounter++;
                 }
             } else {
-                tag = lex.getPropWordTag(word).getRangeClassId();
+                tag = lex.getLexicon(lang).getWord(word, false).getTag().getRangeURI();
+                SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(tag);
+                tag = sc.getPrefix() + ":" + sc.getName();
+                //tag = lex.getPropWordTag(word).getRangeClassId();
                 if (!tag.equals("")) {
-                    SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(tag);
+                    sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(tag);
                     idCounter = 0;
                     Iterator<SemanticProperty> sit = sc.listProperties();
                     while (sit.hasNext()) {
@@ -627,12 +634,13 @@ public class SemanticSearch extends GenericAdmResource {
         if (user != null) {
             if (!lang.equals(paramRequest.getUser().getLanguage())) {
                 lang = paramRequest.getUser().getLanguage();
-                lex = new SWBLexicon(lang, "");
+                lex.addLexicon(new SWBLocaleLexicon(lang, SWBDictionary.getLanguageName(lang)));
+                lex.setLocale(lang);
             }
         } else {
             if (!lang.equals("es")) {
                 lang = "es";
-                lex = new SWBLexicon(lang, "");
+                lex.setLocale("es");
             }
         }
 
@@ -674,7 +682,7 @@ public class SemanticSearch extends GenericAdmResource {
 
         tr = new SWBSparqlTranslator(lex);
         long time = System.currentTimeMillis();
-        String sparqlQuery = lex.getPrefixString() + "\n" + tr.translateSentence(query, false);
+        String sparqlQuery = lex.getLexicon(lang).getPrefixString() + "\n" + tr.translateSentence(query, false);
         //System.out.println("\n+++Tiempo de traducción: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
         //System.out.println(sparqlQuery);
         String errCount = Integer.toString(tr.getErrCode());
