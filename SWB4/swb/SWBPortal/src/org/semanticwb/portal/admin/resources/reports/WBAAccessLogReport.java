@@ -209,7 +209,7 @@ public class WBAAccessLogReport extends GenericResource {
             JSONObject obj = new JSONObject();
             try {
                 //obj.put("detail", "<a onClick=\"doDetail('width=860, height=580, scrollbars, resizable, alwaysRaised, menubar','"+cols[0]+"')\"><img src=\""+SWBPlatform.getContextPath()+"/swbadmin/icons/SEARCH.png\" border=\"0\" alt=\"detail\"/></a>");
-                obj.put("detail", Long.toString(i++));
+                obj.put("folio", Long.toString(i++));
                 obj.put("date", cols[0]);
                 obj.put("agregate", cols[1]);
                 jarr.put(obj);
@@ -364,7 +364,7 @@ public class WBAAccessLogReport extends GenericResource {
                 
                 ret.append("dojo.addOnLoad(function() {\n");
                 ret.append("   layout= [\n");
-                ret.append("      { field:\"detail\", width:\"5%\", name:\"Num\" },\n");
+                ret.append("      { field:\"folio\", width:\"5%\", name:\"Num\" },\n");
                 ret.append("      { field:\"date\", width:\"33%\", name:\"Fecha\" },\n");
                 ret.append("      { field:\"agregate\", width:\"33%\", name:\"Total Agregado\" },\n");
                 ret.append("   ];\n");
@@ -374,9 +374,7 @@ public class WBAAccessLogReport extends GenericResource {
                 ret.append("      structure: layout,\n");
                 ret.append("      rowSelector: \"10px\",\n");
                 ret.append("      rowsPerPage: \"15\"\n");
-
-ret.append(",onRowDblClick: fillReportDetalled   \n");
-
+                ret.append(",onRowDblClick: fillReportDetalled   \n");
                 ret.append("   }, \"gridMaster\");\n");
                 ret.append("   gridMaster.startup();\n");
                 ret.append("});\n");
@@ -468,10 +466,6 @@ ret.append("}\n");
                 ret.append("</script>\n");
 
                 ret.append("<div class=\"swbform\">\n");
-                ret.append("<fieldset>");
-                ret.append(paramsRequest.getLocaleString("description_1"));
-                ret.append("</fieldset>\n");
-
                 ret.append("<form method=\"Post\" class=\"box\" action=\"" + address + "\" id=\"frmrep\" name=\"frmrep\">\n");
                 ret.append("<fieldset>\n");
                 ret.append("<table border=\"0\" width=\"95%\" align=\"center\">\n");
@@ -689,7 +683,7 @@ ret.append("}\n");
 
         out.println("<div class=\"swbform\" style=\"margin:3px;\">");
         out.println("<fieldset>");
-        out.println("Detalle de Accesos - "+request.getParameter("key"));
+        out.println("Reporte detallado de accesos - "+request.getParameter("key"));
         out.println("</fieldset>");
         out.println("<br />");
         out.println("<fieldset>");
