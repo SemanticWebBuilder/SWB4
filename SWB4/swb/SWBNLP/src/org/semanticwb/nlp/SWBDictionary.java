@@ -14,7 +14,7 @@ import java.util.HashMap;
  */
 public class SWBDictionary {
 
-    private static HashMap<String, LocaleLexicon> lexicons;
+    private static HashMap<String, SWBLocaleLexicon> lexicons;
     private static SWBDictionary SWBDictInstance = null;    
     private static HashMap<String, String> langMap;
     private String defLang = "es";
@@ -25,15 +25,16 @@ public class SWBDictionary {
         if (SWBDictInstance == null) {
             SWBDictInstance = new SWBDictionary();
 
-            lexicons = new HashMap<String, LocaleLexicon>();
+            lexicons = new HashMap<String, SWBLocaleLexicon>();
             langMap = new HashMap<String, String>();
+            //TODO: habrá que cargar los idiomas de otro lado. Un archivo?
             langMap.put("es", "Spanish");
             langMap.put("en", "English");
             langMap.put("de", "Dutch");
             langMap.put("pt", "Portuguese");
             langMap.put("ru", "Russian");
             
-            SWBDictInstance.addLexicon(new LocaleLexicon());
+            SWBDictInstance.addLexicon(new SWBLocaleLexicon());
         }
     }
 
@@ -42,15 +43,15 @@ public class SWBDictionary {
         return SWBDictInstance;
     }
 
-    public LocaleLexicon getLexicon(String languageCode) {
+    public SWBLocaleLexicon getLexicon(String languageCode) {
         return lexicons.get(languageCode);
     }
 
-    public LocaleLexicon getLexicon() {
+    public SWBLocaleLexicon getLexicon() {
         return getLexicon(defLang);
     }
 
-    public void addLexicon(LocaleLexicon lexic) {
+    public void addLexicon(SWBLocaleLexicon lexic) {
         lexicons.put(lexic.getLanguageCode(), lexic);
     }
 
@@ -73,7 +74,11 @@ public class SWBDictionary {
 
     public void addLocale(String langCode, String langName) {
         if (lexicons.get(langCode) != null) return;
-        lexicons.put(langCode, new LocaleLexicon(langCode, langName));
+        lexicons.put(langCode, new SWBLocaleLexicon(langCode, langName));
         langMap.put(langCode, langName);
+    }
+
+    public static String getLanguageName(String languageCode) {
+        return langMap.get(languageCode);
     }
 }
