@@ -5,6 +5,7 @@
 
 package org.semanticwb.nlp;
 
+import com.sun.xml.internal.fastinfoset.vocab.Vocabulary;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -115,6 +116,7 @@ public class SWBLocaleLexicon {
                         Word w = new Word(sp.getDisplayName(langCode));
                         w.setLemma(wLemma);
 
+                        SemanticClass rg = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sp.getRangeClass().getURI());
                         Tag t = new Tag();
                         if (sp.isObjectProperty()) {
                             t.setTag(OBT_TAG);
@@ -124,6 +126,7 @@ public class SWBLocaleLexicon {
 
                         t.setURI(sp.getURI());
                         t.setId(sp.getPrefix() + ":" + sp.getName());
+                        t.setRangeURI(rg.getPrefix() + ":" + rg.getName());
 
                         w.setTag(t);
                         propHash.put(wLemma, w);
@@ -177,7 +180,7 @@ public class SWBLocaleLexicon {
             }
             ts.close();
         } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(SWBLexicon.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SWBLocaleLexicon.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return res.trim();
@@ -214,5 +217,10 @@ public class SWBLocaleLexicon {
     public Word getWord(String lexForm, boolean asObject) {
         if (asObject) return objHash.get(getSnowballForm(lexForm));
         return propHash.get(getSnowballForm(lexForm));
+    }
+
+    public Iterator<String> listWords(boolean asObjects) {
+        if (asObjects) return objHash.keySet().iterator();
+        return propHash.keySet().iterator();
     }
 }
