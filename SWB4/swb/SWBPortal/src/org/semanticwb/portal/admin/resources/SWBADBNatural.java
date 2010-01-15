@@ -45,7 +45,10 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import org.semanticwb.model.User;
+import org.semanticwb.nlp.SWBDictionary;
 import org.semanticwb.nlp.SWBLexicon;
+import org.semanticwb.nlp.SWBLocaleLexicon;
+import org.semanticwb.nlp.translation.Translator;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
@@ -63,8 +66,8 @@ import org.semanticwb.platform.SemanticProperty;
 public class SWBADBNatural extends GenericResource {
 
     private String lang = "x-x";
-    private SWBLexicon lex = null;
-    private SWBSparqlTranslator tr;
+    private SWBDictionary lex = null;
+    private Translator tr;
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -91,19 +94,21 @@ public class SWBADBNatural extends GenericResource {
         response.setHeader("Cache-control", "no-cache");
         response.setHeader("Pragma", "no-cache");*/
 
+        //Create lexicon for NLP
+        lex = SWBDictionary.getInstance();
+
         //Get user language if any
         if (user != null) {
             if (!lang.equals(user.getLanguage())) {
                 lang = user.getLanguage();
+                lex.addLexicon(new SWBLocaleLexicon(lang, SWBDictionary.getLanguageName(lang)));
+                lex.setLocale(lang);
             }
         } else {
             if (!lang.equals("es")) {
                 lang = "es";
             }
-        }
-
-        //Create lexicon for NLP
-        lex = new SWBLexicon(lang, "");
+        }        
 
         //Assert query string
         query = (query == null?"":query.trim());
@@ -389,10 +394,10 @@ public class SWBADBNatural extends GenericResource {
                    "  <fieldset>\n" + paramRequest.getLocaleString("lblExamples") +
                    "      <PRE>\n" +
                    "1. Usuario con activo = true, [Primer Apellido]\n" +
-                   "2. Activo, idioma de usuario con [nombre(s)]=\"admin\"\n" +
-                   "3. Creación, [Correo Electrónico] de usuario con [nombre(s)] = \"admin\"\n" +
+                   "2. Activo, idioma de usuario con [nombre(s)]=\"Admin\"\n" +
+                   //"3. Creación, [Correo Electrónico] de usuario con [nombre(s)] = \"Admin\"\n" +
                    "4. todo de usuario con creación < \"2009-04-02T13:36:21.409\"\n" +
-                   "5. todo de [Página Web] con [Usuario Creador] con [nombre(s)] = \"admin\"\n" +
+                   "5. todo de [Página Web] con [Usuario Creador] con [nombre(s)] = \"Admin\"\n" +
                    paramRequest.getLocaleString("prompt") +
                    "      </PRE>\n" +
                    paramRequest.getLocaleString("lblPromptQuery") + "<BR>\n" +
@@ -529,14 +534,16 @@ public class SWBADBNatural extends GenericResource {
 
         if (!query.equals("")) {
             //Create SparQl translator
-            tr = new SWBSparqlTranslator(lex);
-            queryString = lex.getPrefixString() + "\n" + tr.translateSentence(query, false);
-            dym = tr.didYouMean(query);
+            tr = new Translator(lex);
+            queryString = lex.getLexicon().getPrefixString() + "\n" + tr.translateSentence(query, false);
+            System.out.println("--->Query String:");
+            System.out.println(queryString);
+            //dym = tr.didYouMean(query);
 
             //If no different suggestion
-            if (query.toLowerCase().equals(dym.toLowerCase())) {
-                dym = "";
-            }
+            //if (query.toLowerCase().equals(dym.toLowerCase())) {
+            //    dym = "";
+            //}
 
             response.setRenderParameter("errCode", Integer.toString(tr.getErrCode()));
             response.setRenderParameter("sparqlQuery", queryString);
@@ -645,7 +652,8 @@ public class SWBADBNatural extends GenericResource {
                 sbf.append("</ul>");
             }
         } else {
-            String tag = lex.getObjWordTag(word).getObjId();
+            String tag = lex.getLexicon().getWord(word, true).getTag().getId();
+            //String tag = lex.getObjWordTag(word).getObjId();
 
             sbf.append("<ul id=\"resultlist\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
                     "position:absolute;margin:0;padding:0;overflow:auto;max-height:" +
@@ -668,7 +676,8 @@ public class SWBADBNatural extends GenericResource {
                     idCounter++;
                 }
             } else {
-                tag = lex.getPropWordTag(word).getRangeClassId();
+                tag = lex.getLexicon().getWord(word, false).getTag().getId();
+                //tag = lex.getPropWordTag(word).getRangeClassId();
                 if (!tag.equals("")) {
                     SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(tag);
                     idCounter = 0;
