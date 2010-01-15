@@ -13,6 +13,7 @@ public class Tag {
     private String label;
     private String URI;
     private String clsId;
+    private String rangeURI;
 
     public Tag () {
         this("");
@@ -46,6 +47,14 @@ public class Tag {
         URI = uri;
     }
 
+    public String getRangeURI() {
+        return rangeURI;
+    }
+
+    public void setRangeURI(String rURI) {
+        rangeURI = rURI;
+    }
+
     public boolean equals(Tag tag) {
         boolean ret = false;
         if (tag.getTag().equalsIgnoreCase(label) &&
@@ -53,5 +62,5 @@ public class Tag {
             ret = true;
         }
         return ret;
-    }
+    }    
 }
