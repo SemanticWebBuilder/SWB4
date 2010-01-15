@@ -308,6 +308,9 @@
     <EmbeddedResource Include="Forms\FormSendToAutorize.resx">
       <DependentUpon>FormSendToAutorize.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormUpdateContent.en.resx">
+      <DependentUpon>FormUpdateContent.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormUpdateContent.resx">
       <DependentUpon>FormUpdateContent.cs</DependentUpon>
     </EmbeddedResource>
@@ -323,11 +326,11 @@
     <EmbeddedResource Include="Forms\FrmDetalleDoc.resx">
       <DependentUpon>FrmDetalleDoc.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MessageBoxWB3.en.resx">
-      <DependentUpon>MessageBoxWB3.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\MessageBoxWB4.en.resx">
+      <DependentUpon>MessageBoxWB4.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MessageBoxWB3.resx">
-      <DependentUpon>MessageBoxWB3.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\MessageBoxWB4.resx">
+      <DependentUpon>MessageBoxWB4.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Steps\ContentProperties.resx">
       <DependentUpon>ContentProperties.cs</DependentUpon>
@@ -479,7 +482,7 @@
     <Compile Include="Forms\FrmDetalleDoc.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\MessageBoxWB3.cs">
+    <Compile Include="Forms\MessageBoxWB4.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Interfaces\CalendarInfo.cs" />
