@@ -136,7 +136,7 @@ public class AdvancedSearch extends GenericAdmResource {
         tr = new SWBSparqlTranslator(lex);
 
         //Translate query to SparQl
-        String sparqlQuery = lex.getLexicon().getPrefixString() + "\n" + tr.translateSentence(query, true);
+        String sparqlQuery = lex.getLexicon(lang).getPrefixString() + "\n" + tr.translateSentence(query, true);
         //dym = tr.didYouMean(query);
         //dym = (dym.equalsIgnoreCase(query) ? "" : dym);
 
@@ -217,7 +217,7 @@ public class AdvancedSearch extends GenericAdmResource {
                                     }
                                 } else {
                                     segment.append("<b><font size=\"2\" face=\"verdana\">" +
-                                            lex.getLexicon().getWord(vName, true).getLemma());
+                                            lex.getLexicon(lang).getWord(vName, true).getLemma());
                                             //lex.getObjWordTag(vName).getDisplayName() + "</b></font>" + "<br>");
                                 }
                                 first = false;
@@ -671,7 +671,7 @@ public class AdvancedSearch extends GenericAdmResource {
             }
 
             //Add all properties
-            Iterator<String> sit = lex.getLexicon().listWords(false);
+            Iterator<String> sit = lex.getLexicon(lang).listWords(false);
             while (sit.hasNext()) {
                 String tempp = sit.next();
                 if (tempp.toLowerCase().indexOf(word.toLowerCase()) != -1) {
@@ -724,7 +724,7 @@ public class AdvancedSearch extends GenericAdmResource {
             }
         } else {
             System.out.println("Suggesting for " + word);
-            String tag = lex.getLexicon().getWord(word, true).getTag().getId();
+            String tag = lex.getLexicon(lang).getWord(word, true).getTag().getId();
             //String tag = lex.getObjWordTag(word).getObjId();
 
             if (!tag.equals("")) {
@@ -748,7 +748,7 @@ public class AdvancedSearch extends GenericAdmResource {
                 }
                 sbf.append("</ul>");
             } else {
-                tag = lex.getLexicon().getWord(word, false).getTag().getRangeURI();
+                tag = lex.getLexicon(lang).getWord(word, false).getTag().getRangeURI();
                 //tag = lex.getPropWordTag(word).getRangeClassId();
                 if (!tag.equals("")) {
                     sbf.append("<ul id=\"resultlist\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
