@@ -6,6 +6,8 @@
 package org.semanticwb.nlp;
 
 import java.util.HashMap;
+import java.util.zip.Deflater;
+import org.semanticwb.SWBPlatform;
 
 /**
  * Diccionario para procesamiento de lenguaje natural. Contiene uno po varios
@@ -17,29 +19,37 @@ public class SWBDictionary {
     private static HashMap<String, SWBLocaleLexicon> lexicons;
     private static SWBDictionary SWBDictInstance = null;    
     private static HashMap<String, String> langMap;
-    private String defLang = "es";
+    private static String defLang = "es";
+    private static String spellDictPath;
 
     private SWBDictionary () {}
 
     private synchronized static void createInstance() {
         if (SWBDictInstance == null) {
             SWBDictInstance = new SWBDictionary();
+            lexicons = new HashMap<String, SWBLocaleLexicon>();            
+            SWBDictInstance.addLexicon(new SWBLocaleLexicon());
+        }
+    }
 
-            lexicons = new HashMap<String, SWBLocaleLexicon>();
+    public static SWBDictionary getInstance() {
+        if (SWBDictInstance == null) createInstance();
+
+        if (langMap == null) {
             langMap = new HashMap<String, String>();
+
             //TODO: habrá que cargar los idiomas de otro lado. Un archivo?
             langMap.put("es", "Spanish");
             langMap.put("en", "English");
             langMap.put("de", "Dutch");
             langMap.put("pt", "Portuguese");
             langMap.put("ru", "Russian");
-            
-            SWBDictInstance.addLexicon(new SWBLocaleLexicon());
         }
-    }
-
-    public static SWBDictionary getInstance () {
-        if (SWBDictInstance == null) createInstance();
+        
+        if (spellDictPath == null) {
+            spellDictPath = SWBPlatform.createInstance().getPlatformWorkPath() + "/index/spell_" +
+                    defLang + ".txt";
+        }
         return SWBDictInstance;
     }
 
@@ -47,7 +57,7 @@ public class SWBDictionary {
         return lexicons.get(languageCode);
     }
 
-    public SWBLocaleLexicon getLexicon() {
+    public SWBLocaleLexicon getDefaultLexicon() {
         return getLexicon(defLang);
     }
 
@@ -61,11 +71,11 @@ public class SWBDictionary {
     }
 
     public Tag getWordTag(String lexForm, boolean asObject) {
-        return getLexicon().getWord(lexForm, asObject).getTag();
+        return getLexicon(defLang).getWord(lexForm, asObject).getTag();
     }
 
     public void setWordTag(String lexForm, Tag tag, boolean asObject) {
-        getLexicon().getWord(lexForm, asObject).setTag(tag);
+        getLexicon(defLang).getWord(lexForm, asObject).setTag(tag);
     }
 
     public void setLocale(String langCode) {
@@ -80,5 +90,9 @@ public class SWBDictionary {
 
     public static String getLanguageName(String languageCode) {
         return langMap.get(languageCode);
+    }
+
+    public String getSpellDictPath() {
+        return spellDictPath;
     }
 }
