@@ -105,14 +105,15 @@ public class WBAAccessSessionReport extends GenericResource {
             jobj.put("items", jarr);
         } catch (JSONException jse) {
         }
-
+        
+        long i = 1;
         Iterator<String[]> records = getReportResults(request, paramsRequest);
-
         while (records.hasNext()) {
             String[] cols = records.next();
             JSONObject obj = new JSONObject();
             try {
-                obj.put("detail", "<a onClick=\"doDetail('width=860, height=580, scrollbars, resizable, alwaysRaised, menubar','" + cols[0] + "')\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/SEARCH.png\" border=\"0\" alt=\"detail\"></a>&nbsp;");
+                //obj.put("detail", "<a onClick=\"doDetail('width=860, height=580, scrollbars, resizable, alwaysRaised, menubar','" + cols[0] + "')\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/SEARCH.png\" border=\"0\" alt=\"detail\"></a>&nbsp;");
+                obj.put("folio", Long.toString(i++));
                 obj.put("date", cols[0]);
                 obj.put("agregate", cols[1]);
                 jarr.put(obj);
@@ -213,7 +214,6 @@ public class WBAAccessSessionReport extends GenericResource {
                 ret.append("   }, \"wb_t12\");\n");
                 ret.append("});\n");
 
-
                 ret.append("function fillGrid(grid, uri, mode, params) {\n");
                 ret.append("   grid.store = new dojo.data.ItemFileReadStore({url: uri+'/_mod/'+mode+params});\n");
                 ret.append("   grid._refresh();\n");
@@ -226,7 +226,7 @@ public class WBAAccessSessionReport extends GenericResource {
 
                 ret.append("dojo.addOnLoad(function() {\n");
                 ret.append("   layout= [\n");
-                ret.append("      { field:\"detail\", width:\"5%\", name:\"Ver Detalle\" },\n");
+                ret.append("      { field:\"folio\", width:\"5%\", name:\"Num\" },\n");
                 ret.append("      { field:\"date\", width:\"33%\", name:\"Fecha\" },\n");
                 ret.append("      { field:\"agregate\", width:\"33%\", name:\"Total Agregado\" },\n");
                 ret.append("   ];\n");
@@ -236,9 +236,17 @@ public class WBAAccessSessionReport extends GenericResource {
                 ret.append("      structure: layout,\n");
                 ret.append("      rowSelector: \"10px\",\n");
                 ret.append("      rowsPerPage: \"15\"\n");
+
+ret.append(",onRowDblClick: fillReportDetalled   \n");
+
                 ret.append("   }, \"gridMaster\");\n");
                 ret.append("   gridMaster.startup();\n");
                 ret.append("});\n");
+
+
+ret.append("function fillReportDetalled(evt) {\n");
+ret.append("doDetail('width=860, height=580, scrollbars, resizable, alwaysRaised, menubar',evt.grid.store.getValue(evt.grid.getItem(evt.rowIndex),'date')); \n");
+ret.append("}\n");
 
 
                 ret.append("function getParams() {\n");
@@ -301,10 +309,6 @@ public class WBAAccessSessionReport extends GenericResource {
                 ret.append("</script>\n");
 
                 ret.append("<div class=\"swbform\">\n");
-                ret.append("<fieldset>");
-                ret.append(paramsRequest.getLocaleString("description_1"));
-                ret.append("</fieldset>\n");
-
                 ret.append("<form method=\"Post\" class=\"box\" action=\"" + address + "\" id=\"frmrep\" name=\"frmrep\">\n");
                 ret.append("<fieldset>\n");
                 ret.append("<table border=\"0\" width=\"95%\" align=\"center\">\n");
@@ -472,7 +476,7 @@ public class WBAAccessSessionReport extends GenericResource {
 
         out.println("<div class=\"swbform\" style=\"margin:3px;\">");
         out.println("<fieldset>");
-        out.println("Detalle de Accesos - " + request.getParameter("key"));
+        out.println("Reporte detallado de sesiones - " + request.getParameter("key"));
         out.println("</fieldset>");
         out.println("<br />");
         out.println("<fieldset>");
@@ -977,6 +981,7 @@ public class WBAAccessSessionReport extends GenericResource {
                             if(tokens == null) {
                                 continue;
                             }
+                            //1-receives date
                             datefile = (GregorianCalendar)tokens.get("date");
                             //Evaluates if dates are correct                            
                             if( (datefile.after(first) || datefile.equals(first)) && ((datefile.before(last) || datefile.equals(last))) ) {
@@ -984,30 +989,30 @@ public class WBAAccessSessionReport extends GenericResource {
                             }else {
                                 continue;
                             }
-                            //s_aux receives user ip
+                            //2-s_aux receives user ip
                             s_aux = (String)tokens.get("userip");
                             if(b_ipadduser) {
                                 if(!s_aux.equalsIgnoreCase(ipadduser)) {
                                     continue;
                                 }
                             }
-                            //s_aux receives server ip
+                            //3-s_aux receives server ip
                             s_aux = (String) tokens.get("serverip");
                             if(b_ipaddserver) {
                                 if(!s_aux.equalsIgnoreCase(ipaddserver)) {
                                     continue;
                                 }
                             }
-                            //s_aux receives repository id, this value no matter
+                            //4-s_aux receives repository id, this value no matter
                             s_aux = (String) tokens.get("repositoryId");
-                            //s_aux receives user id
+                            //5-s_aux receives user id
                             s_aux = (String) tokens.get("userId");
                             if(b_userid) {
                                 if(!s_aux.equalsIgnoreCase(userId)) {
                                     continue;
                                 }
                             }
-                            //s_aux receives session id
+                            //6-s_aux receives session id
                             s_aux = (String) tokens.get("sessionId");
                             if (b_sessionid) {
                                 if (!s_aux.equalsIgnoreCase(sessionId)) {
