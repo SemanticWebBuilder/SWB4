@@ -28,7 +28,7 @@ namespace WBOffice4.Forms
 	/// <summary>
 	/// Descripción breve de MessageBoxWB3.
 	/// </summary>
-	public class MessageBoxWB3 : System.Windows.Forms.Form
+	public class MessageBoxWB4 : System.Windows.Forms.Form
 	{
 		private System.Windows.Forms.Label label1;
 		DialogResultEx res=DialogResultEx.YES;
@@ -45,7 +45,7 @@ namespace WBOffice4.Forms
 		/// <returns>Ok, Aplicar a todos, Cancelar</returns>
 		public static DialogResultEx Show(String title,string message,Form form)
 		{
-			MessageBoxWB3 frm=new MessageBoxWB3(title,message);
+			MessageBoxWB4 frm=new MessageBoxWB4(title,message);
 			frm.ShowDialog(frm);						
 			return frm.res;
 		}
@@ -57,7 +57,7 @@ namespace WBOffice4.Forms
 		/// <returns>Ok, Aplicar a todos, Cancelar</returns>
 		public static DialogResultEx Show(String title,string message)
 		{
-			MessageBoxWB3 frm=new MessageBoxWB3(title,message);
+			MessageBoxWB4 frm=new MessageBoxWB4(title,message);
 			frm.ShowDialog();
 			return frm.res;
 		}
@@ -66,7 +66,7 @@ namespace WBOffice4.Forms
 		/// </summary>
 		/// <param name="title">Título de la ventana</param>
 		/// <param name="message">Mensaje a despluegar</param>
-		private MessageBoxWB3(string title,string message)
+		private MessageBoxWB4(string title,string message)
 		{
 			
 			//
@@ -100,7 +100,7 @@ namespace WBOffice4.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(MessageBoxWB3));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(MessageBoxWB4));
 			this.buttonYes = new System.Windows.Forms.Button();
 			this.buttonYesAll = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();
