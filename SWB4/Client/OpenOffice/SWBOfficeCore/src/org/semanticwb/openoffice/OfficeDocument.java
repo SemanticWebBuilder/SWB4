@@ -731,9 +731,9 @@ public abstract class OfficeDocument
     private boolean validateFiles()
     {
         String[] choices = new String[3];
-        choices[0] = "Sí";
-        choices[1] = "Sí a todo";
-        choices[2] = "No";
+        choices[0] = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("YES");
+        choices[1] = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("YES_TO_ALL");
+        choices[2] = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("NO");
         try
         {
             Set<File> files=this.getMisssingAttachtments();
