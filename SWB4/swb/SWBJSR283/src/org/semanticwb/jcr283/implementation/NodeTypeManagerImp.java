@@ -2,10 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.semanticwb.jcr283.implementation;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.UnsupportedRepositoryOperationException;
@@ -25,42 +25,45 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.jcr283.repository.model.Base;
 import org.semanticwb.platform.SemanticClass;
 
-
-
 /**
  *
  * @author victor.lorenzana
  */
-public class NodeTypeManagerImp implements NodeTypeManager{
+public class NodeTypeManagerImp implements NodeTypeManager
+{
 
     private static Logger log = SWBUtils.getLogger(NodeTypeManagerImp.class);
-    private static HashMap<String,NodeTypeImp> types=new HashMap<String,NodeTypeImp>();
+    private static HashMap<String, NodeTypeImp> types = new HashMap<String, NodeTypeImp>();
+
     static
     {
         loadNodeTypes();
     }
-    static NodeType loadNodeType(SemanticClass clazz)
+
+    static NodeTypeImp loadNodeType(SemanticClass clazz)
     {
-        log.event("loading nodetype ..."+clazz.getURI()+" ...");
-        if(clazz.isSubClass(Base.sclass) || clazz.equals(Base.sclass))
-            {
-                NodeTypeImp nodeType=new NodeTypeImp(clazz);
-                log.event("loading nodetype "+ clazz.getURI() +"...");
-                types.put(clazz.getPrefix()+":"+clazz.getName(),nodeType);
-                return nodeType;
-            }
+
+        if (clazz.isSubClass(Base.sclass) || clazz.equals(Base.sclass))
+        {
+            log.event("loading nodetype ..." + clazz.getURI() + " ...");
+            NodeTypeImp nodeType = new NodeTypeImp(clazz);            
+            types.put(clazz.getPrefix() + ":" + clazz.getName(), nodeType);
+            return nodeType;
+        }
         return null;
     }
+
     private static void loadNodeTypes()
     {
         log.event("loading nodetypes...");
-        Iterator<SemanticClass> classes=SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
-        while(classes.hasNext())
+        Iterator<SemanticClass> classes = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
+        while (classes.hasNext())
         {
-            SemanticClass clazz=classes.next();
+            SemanticClass clazz = classes.next();
             loadNodeType(clazz);
         }
     }
+
     public NodeType getNodeType(String nodeTypeName) throws NoSuchNodeTypeException, RepositoryException
     {
         return types.get(nodeTypeName);
@@ -68,12 +71,17 @@ public class NodeTypeManagerImp implements NodeTypeManager{
 
     public boolean hasNodeType(String name) throws RepositoryException
     {
-        return types.get(name)==null ? false : true;
+        return types.get(name) == null ? false : true;
     }
 
     public NodeTypeIterator getAllNodeTypes() throws RepositoryException
     {
-        return new NodeTypeIteratorImp(types.values());
+        HashSet<SemanticClass> nodes=new HashSet<SemanticClass>();
+        for(NodeTypeImp nodeType : types.values())
+        {
+            nodes.add(nodeType.getSemanticClass());
+        }
+        return new NodeTypeIteratorImp(nodes);
     }
 
     public NodeTypeIterator getPrimaryNodeTypes() throws RepositoryException
@@ -125,5 +133,4 @@ public class NodeTypeManagerImp implements NodeTypeManager{
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
 }

@@ -5,11 +5,12 @@
 
 package org.semanticwb.jcr283.implementation;
 
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Set;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.nodetype.NodeTypeIterator;
+import org.semanticwb.platform.SemanticClass;
 
 /**
  *
@@ -20,16 +21,18 @@ public class NodeTypeIteratorImp implements NodeTypeIterator {
     private Iterator<NodeTypeImp> it;
     private final long size;
     private long position=0;
-    public NodeTypeIteratorImp(HashSet<NodeTypeImp> nodetypes)
-    {
-        it=nodetypes.iterator();
-        size=nodetypes.size();
+    private ArrayList<NodeTypeImp> nodes=new ArrayList<NodeTypeImp>();
+    public NodeTypeIteratorImp(Set<SemanticClass> classes)
+    {        
+        for(SemanticClass clazz : classes)
+        {
+            NodeTypeImp nodeType=NodeTypeManagerImp.loadNodeType(clazz);
+            nodes.add(nodeType);
+        }
+        it=nodes.iterator();
+        size=nodes.size();
     }
-    public NodeTypeIteratorImp(Collection<NodeTypeImp> nodetypes)
-    {
-        it=nodetypes.iterator();
-        size=nodetypes.size();
-    }
+    
     public NodeType nextNodeType()
     {
         NodeType nodeType=it.next();
@@ -65,7 +68,7 @@ public class NodeTypeIteratorImp implements NodeTypeIterator {
 
     public void remove()
     {
-        
+       nodes.remove(position);
     }
 
 }
