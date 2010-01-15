@@ -78,12 +78,13 @@ import static org.semanticwb.openoffice.util.FileUtil.copyFile;
  */
 public abstract class OfficeDocument
 {
+
     public static final String DOT = ".";
     private static final String CONTENT_KEY = "content";
     private static final String DFILEENCODING = "Dfile.encoding";
     private static final String EMPTY_STRING = "";
     private static final String FILE = "file";
-    private static final String FILE_SCHEMA = FILE+"://";
+    private static final String FILE_SCHEMA = FILE + "://";
     private static final String TITLE_SAVE_CONTENT_SITE = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("ASISTENTE_PARA_GUARDAR_CONTENIDO");
     public static final String CONTENT_ID_NAME = "contentID";
     public static final String WORKSPACE_ID_NAME = "workspaceID";
@@ -100,7 +101,7 @@ public abstract class OfficeDocument
     static
     {
         System.setProperty("wizard.sidebar.image", "org/semanticwb/openoffice/ui/icons/sidebar.png");
-        System.setProperty("WizardDisplayer.default", "org.semanticwb.openoffice.util.WBWizardDisplayerImpl");        
+        System.setProperty("WizardDisplayer.default", "org.semanticwb.openoffice.util.WBWizardDisplayerImpl");
         try
         {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -141,7 +142,7 @@ public abstract class OfficeDocument
             else
             {
                 JOptionPane.showMessageDialog(null,
-                        java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("NO_SE_PUEDE_VERIFICAR_LA_EXISTENCIA_DEL_CONTENIDO_EN_EL_SITIO,_LA_CAUSA_ES:")+ NL + e.getLocalizedMessage(), TITLE_VERIFY, JOptionPane.WARNING_MESSAGE);
+                        java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("NO_SE_PUEDE_VERIFICAR_LA_EXISTENCIA_DEL_CONTENIDO_EN_EL_SITIO,_LA_CAUSA_ES:") + NL + e.getLocalizedMessage(), TITLE_VERIFY, JOptionPane.WARNING_MESSAGE);
             }
             OfficeApplication.logOff();
             ErrorLog.log(e);
@@ -157,7 +158,7 @@ public abstract class OfficeDocument
             else
             {
                 JOptionPane.showMessageDialog(null,
-                        java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("NO_SE_PUEDE_VERIFICAR_LA_EXISTENCIA_DEL_CONTENIDO_EN_EL_SITIO,_LA_CAUSA_ES:")+ NL + e.getLocalizedMessage(), TITLE_VERIFY, JOptionPane.ERROR_MESSAGE);
+                        java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("NO_SE_PUEDE_VERIFICAR_LA_EXISTENCIA_DEL_CONTENIDO_EN_EL_SITIO,_LA_CAUSA_ES:") + NL + e.getLocalizedMessage(), TITLE_VERIFY, JOptionPane.ERROR_MESSAGE);
 
             }
             OfficeApplication.logOff();
@@ -265,7 +266,7 @@ public abstract class OfficeDocument
         Set<File> attachments = new HashSet<File>();
         for (File file : this.getAllAttachments())
         {
-            if (file.exists())
+            if (!file.exists())
             {
                 attachments.add(file);
             }
@@ -351,10 +352,10 @@ public abstract class OfficeDocument
         try
         {
             HashMap<String, String> properties = new HashMap<String, String>();
-            properties.put(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("INFORMATION_4"),EMPTY_STRING);
-            properties.put(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("INFORMATION_3"),EMPTY_STRING);
-            properties.put(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("INFORMATION_2"),EMPTY_STRING);
-            properties.put(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("INFORMATION_1"),EMPTY_STRING);
+            properties.put(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("INFORMATION_4"), EMPTY_STRING);
+            properties.put(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("INFORMATION_3"), EMPTY_STRING);
+            properties.put(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("INFORMATION_2"), EMPTY_STRING);
+            properties.put(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("INFORMATION_1"), EMPTY_STRING);
             saveCustomProperties(properties);
             if (showMessage)
             {
@@ -459,7 +460,7 @@ public abstract class OfficeDocument
             {
 
                 deleteAssociation(false);
-                int resp = JOptionPane.showConfirmDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("EL_CONTENIDO_NO_HA_SIDO_PUBLICADO.")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("¿DESEA_PUBLICAR_EL_CONTENIDO?"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("PUBLICACIÓN_DE_CONTENIDO"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                int resp = JOptionPane.showConfirmDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("EL_CONTENIDO_NO_HA_SIDO_PUBLICADO.") + NL + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("¿DESEA_PUBLICAR_EL_CONTENIDO?"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("PUBLICACIÓN_DE_CONTENIDO"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (resp == JOptionPane.YES_OPTION)
                 {
                     saveToSite();
@@ -504,7 +505,7 @@ public abstract class OfficeDocument
 
     public final File saveOnGuidDirectoryAsHtml(String guid) throws WBException
     {
-        String path = this.getLocalPath().getParentFile().getPath() + File.separator + guid;        
+        String path = this.getLocalPath().getParentFile().getPath() + File.separator + guid;
         File file = new File(path);
         file = this.saveAsHtml(file);
         return file;
@@ -553,12 +554,12 @@ public abstract class OfficeDocument
             File fileHtml = saveHtmlPrepareAndGetFiles(guid);
             tempotalDir = fileHtml.getParentFile();
             String path = tempotalDir.getParentFile().getPath() + File.separatorChar + guid + ZIP_EXTENSION;
-            String encode=System.getenv(DFILEENCODING);
-            if(encode==null || encode.equals(EMPTY_STRING))
+            String encode = System.getenv(DFILEENCODING);
+            if (encode == null || encode.equals(EMPTY_STRING))
             {
-                encode=UTF8;
+                encode = UTF8;
             }
-            path=java.net.URLDecoder.decode(path,encode);
+            path = java.net.URLDecoder.decode(path, encode);
             tempotalZipFile = new File(path);
 
             FileOutputStream fout = new FileOutputStream(tempotalZipFile);
@@ -586,16 +587,16 @@ public abstract class OfficeDocument
             deleteTemporalDirectory(tempotalDir);
             return tempotalZipFile;
         }
-
         catch (FileNotFoundException fnfe)
         {
             deleteTemporalDirectory(tempotalDir);
-            throw new WBException(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("NO_SE_PUEDE_CREAR_EL_ARCHIVO_ZIP")+ NL +EMPTY_STRING + fnfe.getLocalizedMessage(), fnfe);
+            throw new WBException(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("NO_SE_PUEDE_CREAR_EL_ARCHIVO_ZIP") + NL + EMPTY_STRING + fnfe.getLocalizedMessage(), fnfe);
 
-        }        catch (IOException ioe)
+        }
+        catch (IOException ioe)
         {
             deleteTemporalDirectory(tempotalDir);
-            throw new WBException(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("NO_SE_PUEDE_CREAR_EL_ARCHIVO_ZIP")+ NL +EMPTY_STRING + ioe.getLocalizedMessage(), ioe);
+            throw new WBException(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("NO_SE_PUEDE_CREAR_EL_ARCHIVO_ZIP") + NL + EMPTY_STRING + ioe.getLocalizedMessage(), ioe);
 
         }
     }
@@ -727,6 +728,54 @@ public abstract class OfficeDocument
         this.deleteAssociation(false);
     }
 
+    private boolean validateFiles()
+    {
+        String[] choices = new String[3];
+        choices[0] = "Sí";
+        choices[1] = "Sí a todo";
+        choices[2] = "No";
+        try
+        {
+            Set<File> files=this.getMisssingAttachtments();
+            if (files.size() > 0)
+            {
+                for (File file : files)
+                {
+                    int selection = JOptionPane.showOptionDialog(
+                            null,
+                            "El archivo incrustado en el contenido con ruta " + file.getCanonicalPath() + " no se encontró,¿Desea continuar?", TITLE_SAVE_CONTENT_SITE,
+                            JOptionPane.DEFAULT_OPTION,
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,
+                            choices,
+                            choices[0]);
+                    switch (selection)
+                    {
+                        case 0: //Si
+                            break;
+                        case 1: //Si All
+                            return true;
+                        case 2: //No
+                            return false;
+                    }
+                }
+                return true;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        catch (Exception e)
+        {
+            JOptionPane.showMessageDialog(null,"Error al validar archivos incrustados"+NL+"Detalle: "+ e.getMessage(),TITLE_SAVE_CONTENT_SITE,JOptionPane.OK_OPTION | JOptionPane.ERROR);
+            ErrorLog.log(e);
+            return false;
+        }
+        
+
+    }
+
     public final void saveToSite()
     {
         if (isReadOnly())
@@ -794,8 +843,8 @@ public abstract class OfficeDocument
                 if (canbepublished)
                 {
                     try
-                    {                        
-                        if(!validaNombre(this.getLocalPath()))
+                    {
+                        if (!validaNombre(this.getLocalPath()))
                         {
                             return;
                         }
@@ -804,7 +853,10 @@ public abstract class OfficeDocument
                     {
                     }
 
-
+                    if (!validateFiles())
+                    {
+                        return;
+                    }
                     try
                     {
                         if (isPublicated() && OfficeApplication.getOfficeDocumentProxy().exists(this.workspaceID, this.contentID))
@@ -851,41 +903,44 @@ public abstract class OfficeDocument
             }
         }
     }
+
     public static boolean validaNombre(File file)
     {
-        String name=file.getName();
-        int pos=name.indexOf(DOT);
-        if(pos!=-1)
+        String name = file.getName();
+        int pos = name.indexOf(DOT);
+        if (pos != -1)
         {
-            name=file.getName().substring(0,pos);
+            name = file.getName().substring(0, pos);
         }
         try
         {
-            name=java.net.URLDecoder.decode(name, UTF8);
+            name = java.net.URLDecoder.decode(name, UTF8);
         }
-        catch(Exception e){}
-        if(name.length()>40)
+        catch (Exception e)
         {
-            JOptionPane.showMessageDialog(null,java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("EL_NOMBRE_DEL_ARCHIVO_ES_MAYOR_A_40_CARACTERES"),java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("VALIDACIÓN_DE_NOMBRE_DE_ARCHIVO"),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+        }
+        if (name.length() > 40)
+        {
+            JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("EL_NOMBRE_DEL_ARCHIVO_ES_MAYOR_A_40_CARACTERES"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("VALIDACIÓN_DE_NOMBRE_DE_ARCHIVO"), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             return false;
         }
-        char[] letras=name.toCharArray();
-        for(int i=0;i<letras.length;i++)
+        char[] letras = name.toCharArray();
+        for (int i = 0; i < letras.length; i++)
         {
-            char letra=letras[i];
-            if(Character.isWhitespace(letra))
+            char letra = letras[i];
+            if (Character.isWhitespace(letra))
             {
-                JOptionPane.showMessageDialog(null,java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("EL_NOMBRE_DEL_ARCHIVO_TIENE_ESPACIOS"),java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("VALIDACIÓN_DE_NOMBRE_DE_ARCHIVO"),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("EL_NOMBRE_DEL_ARCHIVO_TIENE_ESPACIOS"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("VALIDACIÓN_DE_NOMBRE_DE_ARCHIVO"), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
                 return false;
             }
-            else if(!(Character.isDigit(letra) || Character.isLetter(letra)))
+            else if (!(Character.isDigit(letra) || Character.isLetter(letra)))
             {
-                JOptionPane.showMessageDialog(null,java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("EL_NOMBRE_DEL_ARCHIVO_TIENE_CARACTERES_NO_VÁLIDOS:")+letra,java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("VALIDACIÓN_DE_NOMBRE_DE_ARCHIVO"),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("EL_NOMBRE_DEL_ARCHIVO_TIENE_CARACTERES_NO_VÁLIDOS:") + letra, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("VALIDACIÓN_DE_NOMBRE_DE_ARCHIVO"), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
                 return false;
             }
-            else if(letra>123)
+            else if (letra > 123)
             {
-                JOptionPane.showMessageDialog(null,java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("EL_NOMBRE_DEL_ARCHIVO_TIENE_CARACTERES_NO_VÁLIDOS:")+letra,java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("VALIDACIÓN_DE_NOMBRE_DE_ARCHIVO"),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("EL_NOMBRE_DEL_ARCHIVO_TIENE_CARACTERES_NO_VÁLIDOS:") + letra, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("VALIDACIÓN_DE_NOMBRE_DE_ARCHIVO"), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
                 return false;
             }
         }
