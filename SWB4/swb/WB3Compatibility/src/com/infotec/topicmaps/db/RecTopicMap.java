@@ -31,28 +31,15 @@
 package com.infotec.topicmaps.db;
 
 import java.sql.*;
-import java.io.*;
-
-import com.infotec.wb.lib.*;
-
 import java.util.*;
 
 import com.infotec.appfw.exception.*;
-import com.infotec.appfw.lib.DBPool.DBConnectionManager;
-import com.infotec.wb.core.db.DBDbSync;
 import com.infotec.appfw.lib.AFObserver;
 import com.infotec.wb.lib.WBDBRecord;
-import com.infotec.appfw.util.AFUtils;
-import com.infotec.wb.util.*;
-import com.infotec.wb.core.*;
-import com.infotec.wb.core.db.*;
-import com.infotec.topicmaps.bean.*;
 import com.infotec.appfw.util.db.ObjectDecoder;
 import com.infotec.appfw.util.db.ObjectEncoder;
 
-import java.io.*;
 import org.semanticwb.SWBPortal;
-import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Language;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.UserRepository;
@@ -484,25 +471,30 @@ public class RecTopicMap implements WBDBRecord
             lastupdate = new Timestamp(new java.util.Date().getTime());
             if(!virtual)
             {
-                
-                st.setString(1, idadm);
-                st.setString(2, title);
-                st.setString(3, home);
-                st.setString(4, lang);
-                st.setString(5, description);
-                st.setInt(6, active);
-                if (xml == null)
-                    st.setString(7, null);
-                else
-                    st.setAsciiStream(7, com.infotec.appfw.util.AFUtils.getInstance().getStreamFromString(xml), xml.length());
-                st.setTimestamp(8, created);
-                st.setTimestamp(9, lastupdate);
-                st.setInt(10, deleted);
-                st.setInt(11, system);
-                st.setString(12, repository);
-                st.setString(13, indexer);
-                st.setString(14, id);
-
+                UserRepository urep = UserRepository.ClassMgr.getUserRepository(repository);
+                ws.setModifiedBy(urep.getUser(idadm));
+                ws.setTitle(title);
+//                WebPage wp = ws.createWebPage(home);
+//                wp.setTitle("home");
+//                ws.setHomePage(wp);
+                Language language = ws.getLanguage(lang);
+                ws.setLanguage(language);
+                ws.setDescription(description);
+                ws.setActive(active==1?true:false);
+                ws.setUserRepository(urep);
+//                if (xml == null)
+//                    st.setString(7, null);
+//                else
+//                    st.setAsciiStream(7, com.infotec.appfw.util.AFUtils.getInstance().getStreamFromString(xml), xml.length());
+                ws.setUpdated(new java.util.Date(lastupdate.getTime()));
+                ws.setDeleted(deleted==1?true:false);
+                SWBIndexer ind = SWBPortal.getIndexMgr().getIndexer(indexer);
+                ind.indexModel(id);
+//                if (xml == null)
+//                    st.setString(7, null);
+//                else
+//                    st.setAsciiStream(7, com.infotec.appfw.util.AFUtils.getInstance().getStreamFromString(xml), xml.length());
+                //st.setInt(11, system);
                 //DBDbSync.getInstance().saveChange("wbtopicmap", "update", 0, id, lastupdate);
             }
             Iterator it = observers.iterator();
@@ -510,7 +502,6 @@ public class RecTopicMap implements WBDBRecord
             {
                 ((AFObserver) it.next()).sendDBNotify("update", this);
             }
-
         } catch (Exception e)
         {
             throw new AFException("No fue posible actualizar el elemento...\n" + e.getMessage(), "RecTopicMap:update()");
