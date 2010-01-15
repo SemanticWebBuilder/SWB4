@@ -34,7 +34,6 @@
 package org.semanticwb.openoffice.ui.wizard;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JLabel;
@@ -52,8 +51,12 @@ import org.semanticwb.openoffice.OfficeApplication;
  */
 public class ContentProperties extends WizardPage
 {
+    private static final String BOOLEAN = "boolean";
+    private static final String EMPTY_STRING = "";
+    private static final String INTEGER = "integer";
+    private static final String STRING = "string";
 
-    private final JLabel label = new JLabel("No se tienen propiedades para este tipo de contenido, puede continuar.");
+    private final JLabel label = new JLabel(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/ContentProperties").getString("NO_SE_TIENEN_PROPIEDADES_PARA_ESTE_TIPO_DE_CONTENIDO,_PUEDE_CONTINUAR."));
     private final JPanel panel = new JPanel();
     public static final String CONTENT_PROPERTIES = "PROPERTIES";
 
@@ -97,15 +100,15 @@ public class ContentProperties extends WizardPage
                 for (PropertyInfo info : props)
                 {
                     Object defaultValue = null;
-                    if (info.type.equalsIgnoreCase("string"))
+                    if (info.type.equalsIgnoreCase(STRING))
                     {
-                        defaultValue = "";
+                        defaultValue = EMPTY_STRING;
                     }
-                    if (info.type.equalsIgnoreCase("integer"))
+                    if (info.type.equalsIgnoreCase(INTEGER))
                     {
                         defaultValue = 0;
                     }
-                    if (info.type.equalsIgnoreCase("boolean"))
+                    if (info.type.equalsIgnoreCase(BOOLEAN))
                     {
                         defaultValue = false;
                     }
@@ -137,7 +140,7 @@ public class ContentProperties extends WizardPage
             String value = this.panelPropertyEditor1.getProperties().get(prop);
             if (value.isEmpty() && prop.isRequired)
             {
-                JOptionPane.showMessageDialog(this, "¡Debe indicar " + prop + "!", getDescription(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/ContentProperties").getString("¡DEBE_INDICAR_") + prop + "!", getDescription(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
                 panelPropertyEditor1.requestFocus();
                 return WizardPanelNavResult.REMAIN_ON_PAGE;
             }
@@ -189,6 +192,6 @@ public class ContentProperties extends WizardPage
 
     public static String getDescription()
     {
-        return "Propiedades de contenido";
+        return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/ContentProperties").getString("PROPIEDADES_DE_CONTENIDO");
     }
 }

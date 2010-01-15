@@ -91,14 +91,14 @@ public class NumericPlainDocument extends FixedLengthPlainDocument
             Number result = format.parse(content, parsePos);
             if (parsePos.getIndex() != getLength())
             {
-                throw new ParseException("Not a valid number: " + content, 0);
+                throw new ParseException(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/util/NumericPlainDocument").getString("NOT_A_VALID_NUMBER:_") + content, 0);
             }
 
             return result;
         }
         catch (BadLocationException e)
         {
-            throw new ParseException("Not a valid number", 0);
+            throw new ParseException(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/util/NumericPlainDocument").getString("NOT_A_VALID_NUMBER"), 0);
         }
     }
 
@@ -107,7 +107,7 @@ public class NumericPlainDocument extends FixedLengthPlainDocument
         Number result = getNumberValue();
         if ((result instanceof Long) == false)
         {
-            throw new ParseException("Not a valid long", 0);
+            throw new ParseException(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/util/NumericPlainDocument").getString("NOT_A_VALID_LONG"), 0);
         }
 
         return (Long) result;
@@ -118,7 +118,7 @@ public class NumericPlainDocument extends FixedLengthPlainDocument
         Number result = getNumberValue();
         if ((result instanceof Long) == false && (result instanceof Double) == false)
         {
-            throw new ParseException("Not a valid double", 0);
+            throw new ParseException(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/util/NumericPlainDocument").getString("NOT_A_VALID_DOUBLE"), 0);
         }
 
         if (result instanceof Long)
@@ -129,6 +129,7 @@ public class NumericPlainDocument extends FixedLengthPlainDocument
         return (Double) result;
     }
 
+    @Override
     public void insertString(int offset, String str, AttributeSet a)
             throws BadLocationException
     {
@@ -274,7 +275,7 @@ public class NumericPlainDocument extends FixedLengthPlainDocument
             return;
         }
         throw new IllegalArgumentException(
-                "InsertErrorListener already registered");
+                java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/util/NumericPlainDocument").getString("INSERTERRORLISTENER_ALREADY_REGISTERED"));
     }
 
     public void removeInsertErrorListener(InsertErrorListener l)

@@ -92,12 +92,13 @@ public class DialogSelectFlow extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Selección de flujo");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogSelectFlow"); // NOI18N
+        setTitle(bundle.getString("SELECCIÓN_DE_FLUJO")); // NOI18N
 
         jPanel1.setPreferredSize(new java.awt.Dimension(400, 30));
         jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 20, 5));
 
-        jButtonAccept.setText("Aceptar");
+        jButtonAccept.setText(bundle.getString("ACEPTAR")); // NOI18N
         jButtonAccept.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAcceptActionPerformed(evt);
@@ -105,7 +106,7 @@ public class DialogSelectFlow extends javax.swing.JDialog {
         });
         jPanel1.add(jButtonAccept);
 
-        jButtonCancel.setText("Cancelar");
+        jButtonCancel.setText(bundle.getString("CANCELAR")); // NOI18N
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);
@@ -115,13 +116,13 @@ public class DialogSelectFlow extends javax.swing.JDialog {
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.SOUTH);
 
-        jLabel1.setText("Flujo e publicación a seguir:");
+        jLabel1.setText(bundle.getString("FLUJO_E_PUBLICACIÓN_A_SEGUIR:")); // NOI18N
 
         jTextAreaMessage.setColumns(20);
         jTextAreaMessage.setRows(5);
         jScrollPane1.setViewportView(jTextAreaMessage);
 
-        jLabel2.setText("Mensaje:");
+        jLabel2.setText(bundle.getString("MENSAJE:")); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -164,7 +165,7 @@ public class DialogSelectFlow extends javax.swing.JDialog {
     {//GEN-HEADEREND:event_jButtonAcceptActionPerformed
         if(this.jTextAreaMessage.getText().trim().isEmpty())
         {
-            JOptionPane.showMessageDialog(this, "¡Debe indicar un mensaje!",this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogSelectFlow").getString("¡DEBE_INDICAR_UN_MENSAJE!"),this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             this.jTextAreaMessage.requestFocus();
             return;
         }

@@ -33,6 +33,7 @@ import org.semanticwb.office.interfaces.LanguageInfo;
  * @author victor.lorenzana
  */
 public class LanguageEditor extends WizardPage {
+    private static final String EMPTY_STRING = "";
 
     LanguageInfo[] languages;
     /** Creates new form LanguageEditor */
@@ -51,7 +52,7 @@ public class LanguageEditor extends WizardPage {
         }
         for(LanguageInfo language :  languages)
         {
-            Object[] data=new Object[]{language,""};
+            Object[] data=new Object[]{language,EMPTY_STRING};
             model.addRow(data);
         }
     }
@@ -70,7 +71,7 @@ public class LanguageEditor extends WizardPage {
             if(value!=null)
                 values.add(value.toString());
             else
-                values.add("");
+                values.add(EMPTY_STRING);
         }
         return values.toArray(new String[values.size()]);
     }

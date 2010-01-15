@@ -40,10 +40,10 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.net.URI;
 import java.net.URISyntaxException;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import org.semanticwb.openoffice.ConfigurationListURI;
 import org.semanticwb.openoffice.ui.icons.ImageLoader;
+import org.semanticwb.openoffice.ui.wizard.Login;
 
 /**
  *
@@ -51,7 +51,8 @@ import org.semanticwb.openoffice.ui.icons.ImageLoader;
  */
 public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFocusListener
 {
-
+    private static final String EMPTY_STRING = "";
+    private static final String NL = "\r\n";
     private int numTry = 0;        
     ConfigurationListURI configurationListURI = new ConfigurationListURI();
     private Image imgFondo;
@@ -75,7 +76,7 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
         }
         else
         {
-            if (this.jTextFieldClave.getText().equals(""))
+            if (this.jTextFieldClave.getText().equals(EMPTY_STRING))
             {
                 this.jTextFieldClave.requestFocus();
             }
@@ -118,17 +119,18 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
         jLabelPassword.setFont(new java.awt.Font("Verdana", 1, 14));
         jLabelPassword.setForeground(new java.awt.Color(51, 102, 153));
         jLabelPassword.setLabelFor(jPassword);
-        jLabelPassword.setText("Contraseña:");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/BackGroundImagePanel"); // NOI18N
+        jLabelPassword.setText(bundle.getString("CONTRASEÑA:")); // NOI18N
 
         jLabelWebAddress.setFont(new java.awt.Font("Verdana", 1, 14));
         jLabelWebAddress.setForeground(new java.awt.Color(51, 102, 153));
         jLabelWebAddress.setLabelFor(jComboBoxWebAddress);
-        jLabelWebAddress.setText("Sitio:");
+        jLabelWebAddress.setText(bundle.getString("SITIO:")); // NOI18N
 
         jLabelClave.setFont(new java.awt.Font("Verdana", 1, 14));
         jLabelClave.setForeground(new java.awt.Color(51, 102, 153));
         jLabelClave.setLabelFor(jTextFieldClave);
-        jLabelClave.setText("Clave:");
+        jLabelClave.setText(bundle.getString("CLAVE:")); // NOI18N
 
         jTextFieldClave.setFont(new java.awt.Font("Tahoma", 0, 14));
 
@@ -146,8 +148,8 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
 
         jButtonAvanced.setBackground(new java.awt.Color(51, 102, 153));
         jButtonAvanced.setFont(new java.awt.Font("Tahoma", 0, 14));
-        jButtonAvanced.setText("Avanzado");
-        jButtonAvanced.setToolTipText("Configuración de Proxy");
+        jButtonAvanced.setText(bundle.getString("AVANZADO")); // NOI18N
+        jButtonAvanced.setToolTipText(bundle.getString("CONFIGURACIÓN_DE_PROXY")); // NOI18N
         jButtonAvanced.setBorder(null);
         jButtonAvanced.setBorderPainted(false);
         jButtonAvanced.addActionListener(new java.awt.event.ActionListener() {
@@ -158,7 +160,7 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
 
         jButtonCancel.setBackground(new java.awt.Color(51, 102, 153));
         jButtonCancel.setFont(new java.awt.Font("Tahoma", 0, 14));
-        jButtonCancel.setText("Cancelar");
+        jButtonCancel.setText(bundle.getString("CANCELAR")); // NOI18N
         jButtonCancel.setBorder(null);
         jButtonCancel.setBorderPainted(false);
         jButtonCancel.setDoubleBuffered(true);
@@ -171,7 +173,7 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
 
         jButtonAccept.setBackground(new java.awt.Color(51, 102, 153));
         jButtonAccept.setFont(new java.awt.Font("Tahoma", 0, 14));
-        jButtonAccept.setText("Aceptar");
+        jButtonAccept.setText(bundle.getString("ACEPTAR")); // NOI18N
         jButtonAccept.setBorder(null);
         jButtonAccept.setBorderPainted(false);
         jButtonAccept.addActionListener(new java.awt.event.ActionListener() {
@@ -181,7 +183,7 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
         });
 
         jButtonDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/delete.png"))); // NOI18N
-        jButtonDelete.setToolTipText("Borrar conexión");
+        jButtonDelete.setToolTipText(bundle.getString("BORRAR_CONEXIÓN")); // NOI18N
         jButtonDelete.setContentAreaFilled(false);
         jButtonDelete.setEnabled(false);
         jButtonDelete.setFocusPainted(false);
@@ -259,7 +261,7 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
             }
             catch (URISyntaxException use)
             {
-                JOptionPane.showMessageDialog(this, "Error al escribir la dirección web \r\nDetalle: "+use.getMessage(), "Dirección Web", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/BackGroundImagePanel").getString("ERROR_AL_ESCRIBIR_LA_DIRECCIÓN_WEB_")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/BackGroundImagePanel").getString("DETALLE:_")+use.getMessage(), "Dirección Web", JOptionPane.ERROR_MESSAGE);
             }
         }
 }//GEN-LAST:event_jComboBoxWebAddressActionPerformed
@@ -291,13 +293,13 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
                     URI uri = new URI(sUri);
                     if (this.jTextFieldClave.getText().isEmpty())
                     {
-                        JOptionPane.showMessageDialog(this, "Debe indicar la clave de acceso", "", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/BackGroundImagePanel").getString("DEBE_INDICAR_LA_CLAVE_DE_ACCESO"), Login.getDescription(), JOptionPane.ERROR_MESSAGE);
                         this.jTextFieldClave.requestFocus();
                         return;
                     }
                     if (this.jPassword.getPassword().length == 0)
                     {
-                        JOptionPane.showMessageDialog(this, "Debe indicar la contraseña de acceso", "", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/BackGroundImagePanel").getString("DEBE_INDICAR_LA_CONTRASEÑA_DE_ACCESO"), Login.getDescription(), JOptionPane.ERROR_MESSAGE);
                         this.jPassword.requestFocus();
                         return;
                     }
@@ -310,13 +312,13 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
                 }
                 catch (URISyntaxException use)
                 {
-                    JOptionPane.showMessageDialog(null, "La dirección Web no es válida", "", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/BackGroundImagePanel").getString("LA_DIRECCIÓN_WEB_NO_ES_VÁLIDA"), Login.getDescription(), JOptionPane.ERROR_MESSAGE);
                     this.jComboBoxWebAddress.requestFocus();
                 }
             }
             else
             {
-                JOptionPane.showMessageDialog(null, "Debe indicar una dirección Web", "", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/BackGroundImagePanel").getString("DEBE_INDICAR_UNA_DIRECCIÓN_WEB"), Login.getDescription(), JOptionPane.ERROR_MESSAGE);
                 this.jComboBoxWebAddress.requestFocus();
             }
 
@@ -335,7 +337,7 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
         URI uri = (URI) this.jComboBoxWebAddress.getSelectedItem();
         if (uri != null)
         {
-            int res = JOptionPane.showConfirmDialog(this, "¿Desea borrar esta configuración de conexión?", "Borrado de configuración", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+            int res = JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/BackGroundImagePanel").getString("¿DESEA_BORRAR_ESTA_CONFIGURACIÓN_DE_CONEXIÓN?"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/BackGroundImagePanel").getString("BORRADO_DE_CONFIGURACIÓN"), JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
             if (res == JOptionPane.YES_OPTION)
             {
                 configurationListURI.removeAddress(uri);
@@ -353,7 +355,7 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
         }
         else
         {
-            if (this.jTextFieldClave.getText().equals(""))
+            if (this.jTextFieldClave.getText().equals(EMPTY_STRING))
             {
                 this.jTextFieldClave.requestFocus();
             }
@@ -399,7 +401,7 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
         }
         else
         {
-            if (this.jTextFieldClave.getText().equals(""))
+            if (this.jTextFieldClave.getText().equals(EMPTY_STRING))
             {
                 this.jTextFieldClave.requestFocus();
             }

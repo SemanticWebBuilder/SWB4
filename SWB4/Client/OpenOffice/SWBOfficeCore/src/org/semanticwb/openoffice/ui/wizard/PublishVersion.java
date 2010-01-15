@@ -45,7 +45,7 @@ import org.semanticwb.openoffice.OfficeApplication;
 public class PublishVersion extends WizardPage
 {
 
-    public static final String VERSION = "version";
+    public static final String VERSION = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/PublishVersion").getString("VERSION");
     private String contentId,  repositoryName;
 
     /** Creates new form PublishVersion */
@@ -86,7 +86,7 @@ public class PublishVersion extends WizardPage
 
     public static String getDescription()
     {
-        return "Versión de Contenido";
+        return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/PublishVersion").getString("VERSIÓN_DE_CONTENIDO");
     }
 
     @Override
@@ -103,7 +103,7 @@ public class PublishVersion extends WizardPage
         {
             if (this.jTableVersions.getSelectedRow() == -1)
             {
-                JOptionPane.showMessageDialog(this, "!Debe indicar una versión!", SelectVersionToOpen.getDescription(), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/PublishVersion").getString("!DEBE_INDICAR_UNA_VERSIÓN!"), SelectVersionToOpen.getDescription(), JOptionPane.ERROR_MESSAGE);
                 this.jTableVersions.requestFocus();
                 result = WizardPanelNavResult.REMAIN_ON_PAGE;
             }
@@ -172,8 +172,9 @@ public class PublishVersion extends WizardPage
 
         buttonGroup1.add(jRadioButtonLasVersion);
         jRadioButtonLasVersion.setSelected(true);
-        jRadioButtonLasVersion.setText("Publica la última versión");
-        jRadioButtonLasVersion.setToolTipText("Esta opción le permite que siempre que exista una nueva versión de contenido, esta sea mostrada.");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/PublishVersion"); // NOI18N
+        jRadioButtonLasVersion.setText(bundle.getString("PUBLICA_LA_ÚLTIMA_VERSIÓN")); // NOI18N
+        jRadioButtonLasVersion.setToolTipText(bundle.getString("ESTA_OPCIÓN_LE_PERMITE_QUE_SIEMPRE_QUE_EXISTA_UNA_NUEVA_VERSIÓN_DE_CONTENIDO,_ESTA_SEA_MOSTRADA.")); // NOI18N
         jRadioButtonLasVersion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButtonLasVersionActionPerformed(evt);
@@ -182,8 +183,8 @@ public class PublishVersion extends WizardPage
         jPanel1.add(jRadioButtonLasVersion);
 
         buttonGroup1.add(jRadioButtonOneVersion);
-        jRadioButtonOneVersion.setText("Publica una versión");
-        jRadioButtonOneVersion.setToolTipText("Esta opción permite que sólo una versión sea mostrada en el sitio");
+        jRadioButtonOneVersion.setText(bundle.getString("PUBLICA_UNA_VERSIÓN")); // NOI18N
+        jRadioButtonOneVersion.setToolTipText(bundle.getString("ESTA_OPCIÓN_PERMITE_QUE_SÓLO_UNA_VERSIÓN_SEA_MOSTRADA_EN_EL_SITIO")); // NOI18N
         jRadioButtonOneVersion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButtonOneVersionActionPerformed(evt);

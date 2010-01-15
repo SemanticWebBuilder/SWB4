@@ -37,17 +37,18 @@ import javax.swing.filechooser.FileFilter;
  */
 public class PPTFileFilter extends FileFilter
 {
+    private static final String ODP = ".odp";
     public boolean accept(File f)
     {
         boolean result=true;
         if(!f.isDirectory())
         {
-            result=f.getName().endsWith(".odp");
+            result=f.getName().endsWith(ODP);
         }
         return result;        
     }
     public String getDescription()
     {
-        return "Open Document Presentation|.odp";
+        return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/util/PPTFileFilter").getString("OPEN_DOCUMENT_PRESENTATION|.")+ODP;
     }
 }

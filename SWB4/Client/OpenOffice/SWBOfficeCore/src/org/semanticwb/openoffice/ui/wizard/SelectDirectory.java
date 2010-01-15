@@ -48,7 +48,7 @@ public class SelectDirectory extends WizardPage {
     }
     public static String getDescription()
     {
-        return "Directorio de almacenamiento";
+        return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectDirectory").getString("DIRECTORIO_DE_ALMACENAMIENTO");
     }
     
     @Override
@@ -64,7 +64,7 @@ public class SelectDirectory extends WizardPage {
             }
             else
             {
-                JOptionPane.showMessageDialog(this, "!Debe indicar un directorio!", SelectDirectory.getDescription(), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectDirectory").getString("!DEBE_INDICAR_UN_DIRECTORIO!"), SelectDirectory.getDescription(), JOptionPane.ERROR_MESSAGE);
                 this.jFileChooser1.requestFocus();
                 result = WizardPanelNavResult.REMAIN_ON_PAGE;
             }
@@ -95,7 +95,8 @@ public class SelectDirectory extends WizardPage {
         setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.LINE_AXIS));
 
         jFileChooser1.setControlButtonsAreShown(false);
-        jFileChooser1.setDialogTitle("Seleccionar Directorio");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectDirectory"); // NOI18N
+        jFileChooser1.setDialogTitle(bundle.getString("SELECCIONAR_DIRECTORIO")); // NOI18N
         jFileChooser1.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
         jFileChooser1.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
         jFileChooser1.setPreferredSize(new java.awt.Dimension(330, 338));

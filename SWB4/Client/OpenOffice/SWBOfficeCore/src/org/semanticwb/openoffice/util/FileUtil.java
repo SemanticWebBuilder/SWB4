@@ -43,6 +43,7 @@ public final class FileUtil
 {
 
     private static final String SCHEMA_FILE = "file://";
+    private static final String UTF8 = "UTF-8";
     private static byte[] buffer = new byte[2048];
 
     private FileUtil()
@@ -65,7 +66,7 @@ public final class FileUtil
             String encode=System.getenv("Dfile.encoding");
             if(encode==null || encode.equals(""))
             {
-                encode="utf-8";
+                encode=UTF8;
             }
             path=java.net.URLDecoder.decode(path,encode);
         }
@@ -104,7 +105,7 @@ public final class FileUtil
             int read = in.read(buffer);
             while (read != -1)
             {
-                builder.append(new String(buffer, 0, read, "UTF-8"));
+                builder.append(new String(buffer, 0, read,UTF8));
                 read = in.read(buffer);
             }
             in.close();
@@ -125,7 +126,7 @@ public final class FileUtil
             int read = in.read(buffer);
             while (read != -1)
             {
-                builder.append(new String(buffer, 0, read, "UTF-8"));
+                builder.append(new String(buffer, 0, read,UTF8));
                 read = in.read(buffer);
             }
             in.close();

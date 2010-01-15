@@ -54,7 +54,7 @@ public class ViewProperties extends WizardPage
 
     public static final String VIEW_PROPERTIES = "PROPERTIES";
     private String repositoryName,  contentID;
-    private final JLabel label = new JLabel("No se tienen propiedades para este tipo de contenido, puede continuar.");
+    private final JLabel label = new JLabel(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/ViewProperties").getString("NO_SE_TIENEN_PROPIEDADES_PARA_ESTE_TIPO_DE_CONTENIDO,_PUEDE_CONTINUAR."));
     private final JPanel panel = new JPanel();
 
     public ViewProperties(String repositoryName, String contentID)
@@ -84,7 +84,7 @@ public class ViewProperties extends WizardPage
             String value = this.panelPropertyEditor1.getProperties().get(prop);
             if (value.isEmpty() && prop.isRequired)
             {
-                JOptionPane.showMessageDialog(this, "¡Debe indicar " + prop + "!", getDescription(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/ViewProperties").getString("¡DEBE_INDICAR_") + prop + "!", getDescription(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
                 return WizardPanelNavResult.REMAIN_ON_PAGE;
             }
         }
@@ -155,7 +155,7 @@ public class ViewProperties extends WizardPage
 
     public static String getDescription()
     {
-        return "Propiedades de presentación";
+        return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/ViewProperties").getString("PROPIEDADES_DE_PRESENTACIÓN");
     }
 
     /** This method is called from within the constructor to

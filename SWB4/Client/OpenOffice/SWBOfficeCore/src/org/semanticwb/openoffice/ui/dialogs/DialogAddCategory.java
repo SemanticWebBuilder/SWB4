@@ -54,7 +54,7 @@ public class DialogAddCategory extends javax.swing.JDialog
         this.setIconImage(ImageLoader.images.get("semius").getImage());
         this.setModal(true);
         this.repository = repository;
-        this.setTitle("Agregar categoria a repositorio " + repository);
+        this.setTitle(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogAddCategory").getString("AGREGAR_CATEGORIA_A_REPOSITORIO_") + repository);
         this.setLocationRelativeTo(null);
         this.categoryId = categoryid;
     }
@@ -82,24 +82,25 @@ public class DialogAddCategory extends javax.swing.JDialog
         jButtonCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Agregar Categoria");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogAddCategory"); // NOI18N
+        setTitle(bundle.getString("AGREGAR_CATEGORIA")); // NOI18N
 
-        jLabel1.setText("Nombre:");
+        jLabel1.setText(bundle.getString("NOMBRE:")); // NOI18N
 
-        jLabel2.setText("Descripción");
+        jLabel2.setText(bundle.getString("DESCRIPCIÓN")); // NOI18N
 
         jTextAreaDescription.setColumns(20);
         jTextAreaDescription.setRows(10);
         jScrollPane1.setViewportView(jTextAreaDescription);
 
-        jButtonAccept.setText("Aceptar");
+        jButtonAccept.setText(bundle.getString("ACEPTAR")); // NOI18N
         jButtonAccept.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAcceptActionPerformed(evt);
             }
         });
 
-        jButtonCancel.setText("Cancelar");
+        jButtonCancel.setText(bundle.getString("CANCELAR")); // NOI18N
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);
@@ -155,13 +156,13 @@ private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN
 private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAcceptActionPerformed
     if (jTextFieldName.getText().isEmpty())
     {
-        JOptionPane.showMessageDialog(this, "¡Debe indicar el nombre de la categoria!", "Error al capturar el nombre de la categoria", JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogAddCategory").getString("¡DEBE_INDICAR_EL_NOMBRE_DE_LA_CATEGORIA!"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogAddCategory").getString("ERROR_AL_CAPTURAR_EL_NOMBRE_DE_LA_CATEGORIA"), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
         jTextFieldName.requestFocus();
         return;
     }
     if (jTextAreaDescription.getText().isEmpty())
     {
-        JOptionPane.showMessageDialog(this, "¡Debe indicar la descripción de la categoria!", "Error al capturar descripción de la categoria", JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogAddCategory").getString("¡DEBE_INDICAR_LA_DESCRIPCIÓN_DE_LA_CATEGORIA!"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogAddCategory").getString("ERROR_AL_CAPTURAR_DESCRIPCIÓN_DE_LA_CATEGORIA"), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
         jTextAreaDescription.requestFocus();
         return;
     }
@@ -185,7 +186,7 @@ private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     if (existe)
     {
         setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        JOptionPane.showMessageDialog(this, "¡Ya existe una categoria con ese nombre!", "Error al capturar nombre", JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogAddCategory").getString("¡YA_EXISTE_UNA_CATEGORIA_CON_ESE_NOMBRE!"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogAddCategory").getString("ERROR_AL_CAPTURAR_NOMBRE"), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
         jTextFieldName.requestFocus();
         return;
     }

@@ -37,17 +37,18 @@ import javax.swing.filechooser.FileFilter;
  */
 public class WordFileFilter extends FileFilter
 {
+    private static final String ODT = ".odt";
     public boolean accept(File f)
     {
         boolean result=true;
         if(!f.isDirectory())
         {
-            result=f.getName().endsWith(".dot");
+            result=f.getName().endsWith(ODT);
         }
         return result;        
     }
     public String getDescription()
     {
-        return "Open Document Text|.odt";
+        return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/util/WordFileFilter").getString("OPEN_DOCUMENT_TEXT|.")+ODT;
     }
 }

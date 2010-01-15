@@ -75,23 +75,24 @@ public final class DialogChangePassword extends javax.swing.JDialog {
         jPasswordFieldNewPassword = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Cambiar contraseña");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogChangePassword"); // NOI18N
+        setTitle(bundle.getString("CAMBIAR_CONTRASEÑA")); // NOI18N
         setLocationByPlatform(true);
         setModal(true);
         setResizable(false);
 
-        jLabelNewPassword.setText("Nueva Contraseña:");
+        jLabelNewPassword.setText(bundle.getString("NUEVA_CONTRASEÑA:")); // NOI18N
 
-        jLabelConfirm.setText("Confirmar nueva contraseña:");
+        jLabelConfirm.setText(bundle.getString("CONFIRMAR_NUEVA_CONTRASEÑA:")); // NOI18N
 
-        jButtonAccept.setText("Aceptar");
+        jButtonAccept.setText(bundle.getString("ACEPTAR")); // NOI18N
         jButtonAccept.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAcceptActionPerformed(evt);
             }
         });
 
-        jButtonCancel.setText("Cancelar");
+        jButtonCancel.setText(bundle.getString("CANCELAR")); // NOI18N
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);
@@ -149,14 +150,14 @@ public final class DialogChangePassword extends javax.swing.JDialog {
 
         if(this.jPasswordFieldNewPassword.getPassword()==null || this.jPasswordFieldNewPassword.getPassword().length==0)
         {
-            JOptionPane.showMessageDialog(this, "¡Debe indicar la nueva contraseña!",this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogChangePassword").getString("¡DEBE_INDICAR_LA_NUEVA_CONTRASEÑA!"),this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             jPasswordFieldNewPassword.requestFocus();
             return;
         }
 
         if(this.jPasswordFieldConfirm.getPassword()==null || this.jPasswordFieldConfirm.getPassword().length==0)
         {
-            JOptionPane.showMessageDialog(this, "¡Debe indicar la confirmación de la nueva contraseña!",this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogChangePassword").getString("¡DEBE_INDICAR_LA_CONFIRMACIÓN_DE_LA_NUEVA_CONTRASEÑA!"),this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             jPasswordFieldConfirm.requestFocus();
             return;
         }
@@ -164,7 +165,7 @@ public final class DialogChangePassword extends javax.swing.JDialog {
         String confirm=new String(this.jPasswordFieldConfirm.getPassword());
         if(!confirm.equals(newPassWord))
         {
-            JOptionPane.showMessageDialog(this, "¡La nueva contraseña no corresponde con la confirmación!",this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogChangePassword").getString("¡LA_NUEVA_CONTRASEÑA_NO_CORRESPONDE_CON_LA_CONFIRMACIÓN!"),this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             jPasswordFieldNewPassword.requestFocus();
             return;
         }
@@ -173,7 +174,7 @@ public final class DialogChangePassword extends javax.swing.JDialog {
             OfficeApplication.getOfficeApplicationProxy().changePassword(newPassWord);
             OfficeApplication.getOfficeApplicationProxy().setPassword(newPassWord);
             OfficeApplication.getOfficeDocumentProxy().setPassword(newPassWord);
-            JOptionPane.showMessageDialog(this, "¡Se ha cambiado la contraseña!",this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogChangePassword").getString("¡SE_HA_CAMBIADO_LA_CONTRASEÑA!"),this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
         }
         catch(Exception e)
         {

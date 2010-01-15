@@ -71,7 +71,7 @@ public class PublishContentToWebPageResultProducer implements WizardResultProduc
 
     class BackgroundResultCreator extends DeferredWizardResult
     {
-
+        private static final String NL = "\r\n";
         String title, description;
 
         public BackgroundResultCreator(String title, String description)
@@ -110,7 +110,7 @@ public class PublishContentToWebPageResultProducer implements WizardResultProduc
 
                 if (openOfficeDocument.needsSendToPublish(info))
                 {
-                    int res = JOptionPane.showConfirmDialog(null, "El contenido necesita ser autorizado para presentarse en el sitio.\r\n¿Desea enviarlo a autorización?", "Publicación de contenido", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    int res = JOptionPane.showConfirmDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/PublishContentToWebPageResultProducer").getString("EL_CONTENIDO_NECESITA_SER_AUTORIZADO_PARA_PRESENTARSE_EN_EL_SITIO.")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/PublishContentToWebPageResultProducer").getString("¿DESEA_ENVIARLO_A_AUTORIZACIÓN?"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/PublishContentToWebPageResultProducer").getString("PUBLICACIÓN_DE_CONTENIDO"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                     if (res == JOptionPane.YES_OPTION)
                     {
                         DialogSelectFlow dialogSelectFlow=new DialogSelectFlow(info);
@@ -121,17 +121,17 @@ public class PublishContentToWebPageResultProducer implements WizardResultProduc
                         }
                         else
                         {
-                            JOptionPane.showMessageDialog(null,"¡Para activar este contenido debe ser autorizado primero!","Publicación de contenido",JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(null,java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/PublishContentToWebPageResultProducer").getString("¡PARA_ACTIVAR_ESTE_CONTENIDO_DEBE_SER_AUTORIZADO_PRIMERO!"),java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/PublishContentToWebPageResultProducer").getString("PUBLICACIÓN_DE_CONTENIDO"),JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
                         }
                     }
                 }
                 else
                 {
-                    int res = JOptionPane.showConfirmDialog(null, "¿Desea activar el contenido?", "Publicación de contenido", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    int res = JOptionPane.showConfirmDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/PublishContentToWebPageResultProducer").getString("¿DESEA_ACTIVAR_EL_CONTENIDO?"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/PublishContentToWebPageResultProducer").getString("PUBLICACIÓN_DE_CONTENIDO"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                     if (res == JOptionPane.YES_OPTION)
                     {
                         openOfficeDocument.activateResource(info, true);
-                        JOptionPane.showMessageDialog(null, "¡Se ha publicado el documento!", "Publicación de contenido", JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/PublishContentToWebPageResultProducer").getString("¡SE_HA_PUBLICADO_EL_DOCUMENTO!"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/PublishContentToWebPageResultProducer").getString("PUBLICACIÓN_DE_CONTENIDO"), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
                 
@@ -139,7 +139,7 @@ public class PublishContentToWebPageResultProducer implements WizardResultProduc
             }
             catch (Exception e)
             {                
-                Summary err=Summary.create(new SummaryError("Error al publicar contenido:",e), null);
+                Summary err=Summary.create(new SummaryError(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/PublishContentToWebPageResultProducer").getString("ERROR_AL_PUBLICAR_CONTENIDO:"),e), null);
                 progress.finished(err);                
                 e.printStackTrace();
             }

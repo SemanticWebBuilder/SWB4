@@ -34,7 +34,8 @@ package org.semanticwb.openoffice.ui.dialogs;
  * @author  victor.lorenzana
  */
 public class DialogError extends javax.swing.JDialog {
-    
+
+    private static final String NL = "\r\n";
     boolean expanded=false;
     Exception e;
     /** Creates new form DialogError */
@@ -46,12 +47,12 @@ public class DialogError extends javax.swing.JDialog {
         StringBuilder detail=new StringBuilder();
         for(StackTraceElement element : e.getStackTrace())
         {
-            detail.append(element+"\r\n");
+            detail.append(element+NL);
         }
         this.jTextAreaDetail.setText(detail.toString());
         this.jPanel3.remove(this.jPanel5);        
         this.setSize(500, 200);
-        this.jButton2.setText("Ver Detalle >");
+        this.jButton2.setText(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogError").getString("VER_DETALLE_>"));
         
     }
     
@@ -83,13 +84,14 @@ public class DialogError extends javax.swing.JDialog {
         jPanel1.setPreferredSize(new java.awt.Dimension(150, 40));
         jPanel1.setLayout(new java.awt.CardLayout(200, 7));
 
-        jButtonAccept.setText("OK");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogError"); // NOI18N
+        jButtonAccept.setText(bundle.getString("OK")); // NOI18N
         jButtonAccept.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAcceptActionPerformed(evt);
             }
         });
-        jPanel1.add(jButtonAccept, "card2");
+        jPanel1.add(jButtonAccept, bundle.getString("CARD2")); // NOI18N
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.SOUTH);
 
@@ -119,7 +121,7 @@ public class DialogError extends javax.swing.JDialog {
         jPanel4.setPreferredSize(new java.awt.Dimension(100, 30));
         jPanel4.setLayout(new java.awt.BorderLayout());
 
-        jButton2.setText("Ver Detalle >");
+        jButton2.setText(bundle.getString("VER_DETALLE_>")); // NOI18N
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -156,11 +158,11 @@ public class DialogError extends javax.swing.JDialog {
         {
             this.jPanel3.remove(this.jPanel5);        
             this.setSize(500, 200);
-            this.jButton2.setText("Ver Detalle >");
+            this.jButton2.setText(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogError").getString("VER_DETALLE_>"));
         }
         else
         {
-            this.jButton2.setText("Ocultar Detalle <");
+            this.jButton2.setText(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogError").getString("OCULTAR_DETALLE_<"));
             jPanel3.add(jPanel5, java.awt.BorderLayout.CENTER);
             this.setSize(500, 500);
         }

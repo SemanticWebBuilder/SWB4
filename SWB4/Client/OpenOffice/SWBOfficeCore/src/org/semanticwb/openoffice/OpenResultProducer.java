@@ -57,7 +57,7 @@ import org.semanticwb.xmlrpc.XmlProxy;
  */
 public class OpenResultProducer implements WizardResultProducer
 {
-
+    
     private OfficeApplication application;
 
     public OpenResultProducer(OfficeApplication application)
@@ -67,6 +67,11 @@ public class OpenResultProducer implements WizardResultProducer
 
     class BackgroundResultCreator extends DeferredWizardResult
     {
+        private static final String NL = "\r\n";
+        private static final String DOTS = "...";
+        private static final String PATH_SEPARATOR = "/";
+        private static final String UTF8 = "utf-8";
+        private static final String ZIP_EXTENSION = ".zip";
 
         public File contentfile;
 
@@ -77,16 +82,16 @@ public class OpenResultProducer implements WizardResultProducer
             try
             {
                 IOfficeApplication openOfficeDocument = OfficeApplication.getOfficeApplicationProxy();
-                progress.setProgress("Descargando Documento...", 1, 4);
+                progress.setProgress(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OpenResultProducer").getString("DESCARGANDO_DOCUMENTO..."), 1, 4);
                 String repositoryName = wizardData.get(Search.WORKSPACE).toString();
                 VersionInfo versioninfo = (VersionInfo) wizardData.get(SelectVersionToOpen.VERSION);
                 String fileName = openOfficeDocument.openContent(repositoryName, versioninfo);
-                fileName=java.net.URLDecoder.decode(fileName, "utf-8");
+                fileName=java.net.URLDecoder.decode(fileName,UTF8);
                 XmlProxy proxy = (XmlProxy) openOfficeDocument;
                 File dir = (File) wizardData.get(SelectDirectory.DIRECTORY);
-                contentfile = new File(dir.getAbsolutePath() + "/" + fileName);
+                contentfile = new File(dir.getAbsolutePath() + PATH_SEPARATOR + fileName);
                 String guid = java.util.UUID.randomUUID().toString().replace('-', '_');
-                File zipFile = new File(dir.getAbsolutePath() + "/" + guid + ".zip");
+                File zipFile = new File(dir.getAbsolutePath() + PATH_SEPARATOR + guid + ZIP_EXTENSION);
                 for (Part part : proxy.getResponseParts())
                 {
                     FileOutputStream out = new FileOutputStream(zipFile);
@@ -96,7 +101,7 @@ public class OpenResultProducer implements WizardResultProducer
                 // unzip the content
                 try
                 {
-                    progress.setProgress("Descomprimiendo archivo...", 2, 4);
+                    progress.setProgress(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OpenResultProducer").getString("DESCOMPRIMIENDO_ARCHIVO..."), 2, 4);
                     ZipFile zip = new ZipFile(zipFile);
                     ZipEntry entry = zip.getEntry(fileName);
                     if (entry != null)
@@ -104,14 +109,14 @@ public class OpenResultProducer implements WizardResultProducer
                         contentfile.getParentFile().mkdirs();
                         if (contentfile.exists())
                         {
-                            int res = JOptionPane.showConfirmDialog(null, "¡Existe un documento con el nombre " + fileName + "\r\n¿Desea sobre escribir el documento?", "Apertura de contenido", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                            int res = JOptionPane.showConfirmDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OpenResultProducer").getString("¡EXISTE_UN_DOCUMENTO_CON_EL_NOMBRE_") + fileName +  NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OpenResultProducer").getString("¿DESEA_SOBRE_ESCRIBIR_EL_DOCUMENTO?"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OpenResultProducer").getString("APERTURA_DE_CONTENIDO"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                             if (res == JOptionPane.NO_OPTION)
                             {
                                 return;
                             }
                             if (!contentfile.delete())
                             {
-                                JOptionPane.showMessageDialog(null, "¡Existe un documento con el mismo nombre\r\nNo se puede borrar el documento para reemplazarlo por el contenido descargado!", "Apertura de contenido", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OpenResultProducer").getString("¡EXISTE_UN_DOCUMENTO_CON_EL_MISMO_NOMBRE")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OpenResultProducer").getString("NO_SE_PUEDE_BORRAR_EL_DOCUMENTO_PARA_REEMPLAZARLO_POR_EL_CONTENIDO_DESCARGADO!"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OpenResultProducer").getString("APERTURA_DE_CONTENIDO"), JOptionPane.ERROR_MESSAGE);
                                 return;
                             }
                         }
@@ -127,10 +132,10 @@ public class OpenResultProducer implements WizardResultProducer
                         in.close();
                         out.close();
                         zip.close();
-                        progress.setProgress("Abriendo archivo " + contentfile.getPath() + "...", 3, 4);
+                        progress.setProgress(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OpenResultProducer").getString("ABRIENDO_ARCHIVO_") + contentfile.getPath() + DOTS, 3, 4);
                         progress.finished(null);
                         OfficeDocument document = application.open(contentfile);
-                        progress.setProgress("Documento abierto " + contentfile.getPath() + "...", 4, 4);
+                        progress.setProgress(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OpenResultProducer").getString("DOCUMENTO_ABIERTO_") + contentfile.getPath() + DOTS, 4, 4);
                         HashMap<String, String> properties = new HashMap<String, String>();
                         properties.put(OfficeDocument.CONTENT_ID_NAME, versioninfo.contentId);
                         properties.put(OfficeDocument.WORKSPACE_ID_NAME, wizardData.get(Search.WORKSPACE).toString());
@@ -140,15 +145,15 @@ public class OpenResultProducer implements WizardResultProducer
                 }
                 catch (ZipException ioe)
                 {
-                    progress.failed(ioe.getMessage() + "\r\n" + StackTraceUtil.getStackTrace(ioe), false);
+                    progress.failed(ioe.getMessage() + NL + StackTraceUtil.getStackTrace(ioe), false);
                 }
                 catch (IOException ioe)
                 {
-                    progress.failed(ioe.getMessage() + "\r\n" + StackTraceUtil.getStackTrace(ioe), false);
+                    progress.failed(ioe.getMessage() + NL + StackTraceUtil.getStackTrace(ioe), false);
                 }
                 catch (Exception ioe)
                 {
-                    progress.failed(ioe.getMessage() + "\r\n" + StackTraceUtil.getStackTrace(ioe), false);
+                    progress.failed(ioe.getMessage() +  NL + StackTraceUtil.getStackTrace(ioe), false);
                 }
                 finally
                 {

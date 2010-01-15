@@ -73,7 +73,9 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/org/semanticwb/openoffice/ui/icons/icon_agregarpag.png"/>
                 </Property>
-                <Property name="toolTipText" type="java.lang.String" value="Agregar p&#xe1;gina al sitio web"/>
+                <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="org/semanticwb/openoffice/ui/wizard/SelectPage.properties" key="AGREGAR_P&#xc1;GINA_AL_SITIO_WEB" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
                 <Property name="enabled" type="boolean" value="false"/>
                 <Property name="focusable" type="boolean" value="false"/>
                 <Property name="horizontalTextPosition" type="int" value="0"/>

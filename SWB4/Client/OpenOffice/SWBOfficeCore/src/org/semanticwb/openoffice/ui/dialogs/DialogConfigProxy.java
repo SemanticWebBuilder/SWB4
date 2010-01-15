@@ -43,6 +43,7 @@ import static org.semanticwb.openoffice.Configuration.PROXY_SERVER;
  */
 public class DialogConfigProxy extends javax.swing.JDialog
 {
+    private static final String EMPTY_STRING = "";
     
     Configuration configuration=new Configuration();
 
@@ -59,16 +60,16 @@ public class DialogConfigProxy extends javax.swing.JDialog
         String proxyPort=configuration.get(PROXY_PORT);
         if(proxyServer==null)
         {
-            proxyServer="";
+            proxyServer=EMPTY_STRING;
         }
         if(proxyPort==null)
         {
-            proxyServer="";
+            proxyServer=EMPTY_STRING;
         }            
-        if(proxyServer.equals("") || proxyPort.equals(""))
+        if(proxyServer.equals(EMPTY_STRING) || proxyPort.equals(EMPTY_STRING))
         {
-            proxyServer="";
-            proxyServer="";
+            proxyServer=EMPTY_STRING;
+            proxyServer=EMPTY_STRING;
             this.jCheckBoxUsesServerProxy.setSelected(false);
             jTextFieldServer.setEnabled(false);
             jTextFieldPort.setEnabled(false);
@@ -130,9 +131,10 @@ public class DialogConfigProxy extends javax.swing.JDialog
         jButtonCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Configuración Proxy");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogConfigProxy"); // NOI18N
+        setTitle(bundle.getString("CONFIGURACIÓN_PROXY")); // NOI18N
 
-        jCheckBoxUsesServerProxy.setText("Usa Servidor Proxy ");
+        jCheckBoxUsesServerProxy.setText(bundle.getString("USA_SERVIDOR_PROXY_")); // NOI18N
         jCheckBoxUsesServerProxy.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxUsesServerProxyActionPerformed(evt);
@@ -141,9 +143,9 @@ public class DialogConfigProxy extends javax.swing.JDialog
 
         jPanelProxy.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Configuración", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.ABOVE_TOP));
 
-        jLabelServerProxy.setText("Servidor Proxy:");
+        jLabelServerProxy.setText(bundle.getString("SERVIDOR_PROXY:")); // NOI18N
 
-        jLabelPort.setText("Puerto");
+        jLabelPort.setText(bundle.getString("PUERTO")); // NOI18N
 
         jTextFieldServer.setEnabled(false);
 
@@ -181,14 +183,14 @@ public class DialogConfigProxy extends javax.swing.JDialog
                 .addContainerGap(21, Short.MAX_VALUE))
         );
 
-        jButtonAccept.setText("Aceptar");
+        jButtonAccept.setText(bundle.getString("ACEPTAR")); // NOI18N
         jButtonAccept.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAcceptActionPerformed(evt);
             }
         });
 
-        jButtonCancel.setText("Cancelar");
+        jButtonCancel.setText(bundle.getString("CANCELAR")); // NOI18N
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);
@@ -238,14 +240,14 @@ public class DialogConfigProxy extends javax.swing.JDialog
     private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAcceptActionPerformed
         if (this.jCheckBoxUsesServerProxy.isSelected())
         {
-            if (this.jTextFieldServer.getText().trim().equals(""))
+            if (this.jTextFieldServer.getText().trim().equals(EMPTY_STRING))
             {
-                JOptionPane.showMessageDialog(null, "¡Debe indicar el Servidor Proxy!", this.getTitle(), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogConfigProxy").getString("¡DEBE_INDICAR_EL_SERVIDOR_PROXY!"), this.getTitle(), JOptionPane.ERROR_MESSAGE);
                 this.jTextFieldPort.requestFocus();                
             }
-            else if (this.jTextFieldPort.getText().trim().equals(""))
+            else if (this.jTextFieldPort.getText().trim().equals(EMPTY_STRING))
             {
-                JOptionPane.showMessageDialog(null, "¡Debe indicar el puerto del Servidor Proxy!", this.getTitle(), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogConfigProxy").getString("¡DEBE_INDICAR_EL_PUERTO_DEL_SERVIDOR_PROXY!"), this.getTitle(), JOptionPane.ERROR_MESSAGE);
                 this.jTextFieldPort.requestFocus();                
             }
             else
@@ -257,8 +259,8 @@ public class DialogConfigProxy extends javax.swing.JDialog
         } 
         else
         {
-            configuration.add(PROXY_SERVER,"");
-            configuration.add(PROXY_PORT,"");
+            configuration.add(PROXY_SERVER,EMPTY_STRING);
+            configuration.add(PROXY_PORT,EMPTY_STRING);
             this.setVisible(false);
         }
     }//GEN-LAST:event_jButtonAcceptActionPerformed

@@ -56,7 +56,7 @@ public class SelectTitle extends WizardPage
 
     public static String getDescription()
     {
-        return "Seleccionar Título";
+        return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectTitle").getString("SELECCIONAR_TÍTULO");
     }
 
     /** This method is called from within the constructor to
@@ -71,7 +71,8 @@ public class SelectTitle extends WizardPage
         jLabel1 = new javax.swing.JLabel();
         jTextFieldTitle = new javax.swing.JTextField();
 
-        jLabel1.setText("Títutlo:");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectTitle"); // NOI18N
+        jLabel1.setText(bundle.getString("TÍTUTLO:")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -113,7 +114,7 @@ public class SelectTitle extends WizardPage
         if(jTextFieldTitle.getText().isEmpty())
         {
             result = WizardPanelNavResult.REMAIN_ON_PAGE;
-            JOptionPane.showMessageDialog(this, "¡Debe indicar el titulo!",getDescription(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectTitle").getString("¡DEBE_INDICAR_EL_TITULO!"),getDescription(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             jTextFieldTitle.requestFocus();
         }
         map.put(TITLE, this.jTextFieldTitle.getText());

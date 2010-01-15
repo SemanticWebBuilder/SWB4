@@ -49,7 +49,7 @@ import org.semanticwb.openoffice.ui.icons.ImageLoader;
  */
 public class DialogPreview extends java.awt.Dialog
 {
-
+    private static final String NL = "\r\n";
     static
     {
         try
@@ -81,7 +81,7 @@ public class DialogPreview extends java.awt.Dialog
         }
         if (!showAddress)
         {
-            JOptionPane.showMessageDialog(null, "Para ver contenido, se solicitará su clave y contraseña", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogPreview").getString("PARA_VER_CONTENIDO,_SE_SOLICITARÁ_SU_CLAVE_Y_CONTRASEÑA"), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
         }
         this.setIconImage(ImageLoader.images.get("semius").getImage());
         try
@@ -130,8 +130,9 @@ public class DialogPreview extends java.awt.Dialog
 
         jPanel1.setPreferredSize(new java.awt.Dimension(600, 50));
 
-        jButtonClose.setText("Cerrar");
-        jButtonClose.setToolTipText("No se puede navegar con esta vista");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogPreview"); // NOI18N
+        jButtonClose.setText(bundle.getString("CERRAR")); // NOI18N
+        jButtonClose.setToolTipText(bundle.getString("NO_SE_PUEDE_NAVEGAR_CON_ESTA_VISTA")); // NOI18N
         jButtonClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCloseActionPerformed(evt);
@@ -140,9 +141,9 @@ public class DialogPreview extends java.awt.Dialog
 
         jTextFieldURL.setEditable(false);
 
-        jLabelWebAddress.setText("Dirección Web:");
+        jLabelWebAddress.setText(bundle.getString("DIRECCIÓN_WEB:")); // NOI18N
 
-        jButtonOpenBrowser.setText("Abrir en un navegador");
+        jButtonOpenBrowser.setText(bundle.getString("ABRIR_EN_UN_NAVEGADOR")); // NOI18N
         jButtonOpenBrowser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonOpenBrowserActionPerformed(evt);
@@ -251,9 +252,8 @@ public class DialogPreview extends java.awt.Dialog
         catch (IOException e)
         {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(frame,
-                    "\n\n El sistema falló al tratar de invocar su navegador por defecto intentando acceder a: \n\n " + url + "\n\n",
-                    "Error de navegador",
+            JOptionPane.showMessageDialog(frame,java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogPreview").getString("EL_SISTEMA_FALLÓ_AL_TRATAR_DE_INVOCAR_SU_NAVEGADOR_POR_DEFECTO_INTENTANDO_ACCEDER_A:_")+ NL +" " + url + NL,
+                    java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogPreview").getString("ERROR_DE_NAVEGADOR"),
                     JOptionPane.WARNING_MESSAGE);
 
             return false;
@@ -274,7 +274,7 @@ public class DialogPreview extends java.awt.Dialog
                 try
                 {
                     URL url = new URL("http://www.infotec.com.mx");
-                    DialogPreview dialog = new DialogPreview(url, "Demo");
+                    DialogPreview dialog = new DialogPreview(url, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogPreview").getString("DEMO"));
                     dialog.addWindowListener(new java.awt.event.WindowAdapter()
                     {
 

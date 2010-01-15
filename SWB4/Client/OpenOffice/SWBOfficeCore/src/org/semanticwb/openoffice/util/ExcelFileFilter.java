@@ -36,18 +36,19 @@ import javax.swing.filechooser.FileFilter;
  * @author victor.lorenzana
  */
 public class ExcelFileFilter extends FileFilter
-{    
+{
+    private static final String ODS = ".ods";
     public boolean accept(File f)
     {
         boolean result=true;
         if(!f.isDirectory())
         {
-            result=f.getName().endsWith(".dos");
+            result=f.getName().endsWith(ODS);
         }        
         return result;        
     }
     public String getDescription()
     {
-        return "Open Document Spreadsheet|.ods";
+        return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/util/ExcelFileFilter").getString("OPEN_DOCUMENT_SPREADSHEET|.")+ODS;
     }
 }

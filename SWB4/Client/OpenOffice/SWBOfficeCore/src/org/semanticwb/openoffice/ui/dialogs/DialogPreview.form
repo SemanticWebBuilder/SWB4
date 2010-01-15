@@ -68,8 +68,12 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="jButtonClose">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Cerrar"/>
-            <Property name="toolTipText" type="java.lang.String" value="No se puede navegar con esta vista"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogPreview.properties" key="CERRAR" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogPreview.properties" key="NO_SE_PUEDE_NAVEGAR_CON_ESTA_VISTA" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonCloseActionPerformed"/>
@@ -82,12 +86,16 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabelWebAddress">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Direcci&#xf3;n Web:"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogPreview.properties" key="DIRECCI&#xd3;N_WEB:" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="jButtonOpenBrowser">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Abrir en un navegador"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="org/semanticwb/openoffice/ui/dialogs/DialogPreview.properties" key="ABRIR_EN_UN_NAVEGADOR" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonOpenBrowserActionPerformed"/>

@@ -58,52 +58,9 @@ public class PropertyEditor extends WizardPage
     }
     public static String getDescription()
     {
-        return "Propiedades del contenido";
+        return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/PropertyEditor").getString("PROPIEDADES_DEL_CONTENIDO");
     }
-
-    public static void main(String[] args)
-    {
-        JDialog dialog = new JDialog(new Frame(), true);
-        dialog.add(new PropertyEditor());
-        dialog.setVisible(true);
-        dialog.addWindowListener(new WindowListener() {
-
-            public void windowOpened(WindowEvent e)
-            {
-                
-            }
-
-            public void windowClosing(WindowEvent e)
-            {
-                System.exit(0);
-            }
-
-            public void windowClosed(WindowEvent e)
-            {
-                
-            }
-
-            public void windowIconified(WindowEvent e)
-            {
-                
-            }
-
-            public void windowDeiconified(WindowEvent e)
-            {
-                
-            }
-
-            public void windowActivated(WindowEvent e)
-            {
-                
-            }
-
-            public void windowDeactivated(WindowEvent e)
-            {
-                
-            }
-        });
-    }
+    
 
     /** This method is called from within the constructor to
      * initialize the form.

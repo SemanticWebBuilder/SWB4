@@ -88,14 +88,14 @@ public class Login extends WizardPage
         jButtonDelete = new javax.swing.JButton();
         jButtonAvanced = new javax.swing.JButton();
 
-        jLabelPassword.setText("Contraseña de acceso:");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/Login"); // NOI18N
+        jLabelPassword.setText(bundle.getString("CONTRASEÑA_DE_ACCESO:")); // NOI18N
 
-        jLabelWebAddress.setText("Dirección Web:");
+        jLabelWebAddress.setText(bundle.getString("DIRECCIÓN_WEB:")); // NOI18N
 
-        jLabelClave.setText("Clave de acceso:");
+        jLabelClave.setText(bundle.getString("CLAVE_DE_ACCESO:")); // NOI18N
 
         jComboBoxWebAddress.setEditable(true);
-        jComboBoxWebAddress.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jComboBoxWebAddress.setAutoscrolls(true);
         jComboBoxWebAddress.setName("WebAddress"); // NOI18N
         jComboBoxWebAddress.addActionListener(new java.awt.event.ActionListener() {
@@ -104,14 +104,14 @@ public class Login extends WizardPage
             }
         });
 
-        jButtonDelete.setText("X");
+        jButtonDelete.setText("X"); // NOI18N
         jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonDeleteActionPerformed(evt);
             }
         });
 
-        jButtonAvanced.setText("Avanzado");
+        jButtonAvanced.setText(bundle.getString("AVANZADO")); // NOI18N
         jButtonAvanced.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAvancedActionPerformed(evt);
@@ -175,17 +175,17 @@ private void jComboBoxWebAddressActionPerformed(java.awt.event.ActionEvent evt) 
         }
         catch (URISyntaxException use)
         {
-            JOptionPane.showMessageDialog(this, "Error al escribir la dirección web", getDescription(), JOptionPane.ERROR);
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/Login").getString("ERROR_AL_ESCRIBIR_LA_DIRECCIÓN_WEB"), getDescription(), JOptionPane.ERROR);
         }
     }
 }//GEN-LAST:event_jComboBoxWebAddressActionPerformed
 
 public static String getDescription()
     {
-        return "Acceso a sitio";
+        return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/Login").getString("ACCESO_A_SITIO");
     }
 private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
-    int res = JOptionPane.showConfirmDialog(this, "¿Desea borrar esta configuración de conexión?", "Borrado de configuración", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+    int res = JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/Login").getString("¿DESEA_BORRAR_ESTA_CONFIGURACIÓN_DE_CONEXIÓN?"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/Login").getString("BORRADO_DE_CONFIGURACIÓN"), JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
     if (res == JOptionPane.YES_OPTION)
     {
         URI uri = (URI) this.jComboBoxWebAddress.getSelectedItem();
