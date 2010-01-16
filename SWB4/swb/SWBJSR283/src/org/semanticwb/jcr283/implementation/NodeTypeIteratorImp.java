@@ -18,10 +18,10 @@ import org.semanticwb.platform.SemanticClass;
  */
 public class NodeTypeIteratorImp implements NodeTypeIterator {
 
-    private Iterator<NodeTypeImp> it;
+    private final Iterator<NodeTypeImp> it;
     private final long size;
     private long position=0;
-    private ArrayList<NodeTypeImp> nodes=new ArrayList<NodeTypeImp>();
+    private final ArrayList<NodeTypeImp> nodes=new ArrayList<NodeTypeImp>();
     public NodeTypeIteratorImp(Set<SemanticClass> classes)
     {        
         for(SemanticClass clazz : classes)
@@ -68,7 +68,7 @@ public class NodeTypeIteratorImp implements NodeTypeIterator {
 
     public void remove()
     {
-       nodes.remove(position);
+       it.remove();
     }
 
 }

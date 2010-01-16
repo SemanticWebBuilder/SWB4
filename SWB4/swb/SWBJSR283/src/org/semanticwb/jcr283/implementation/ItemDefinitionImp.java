@@ -8,7 +8,6 @@ import javax.jcr.Property;
 import javax.jcr.nodetype.ItemDefinition;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.version.OnParentVersionAction;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.platform.SemanticLiteral;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
@@ -50,7 +49,7 @@ public class ItemDefinitionImp implements ItemDefinition
         {
             isMandatory = false;
         }
-        prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#protected");
+        prop = NodeTypeImp.getSemanticProperty(Property.JCR_PROTECTED);
         value = obj.getLiteralProperty(prop);
         if (value != null)
         {
@@ -60,7 +59,7 @@ public class ItemDefinitionImp implements ItemDefinition
         {
             isProtected = false;
         }
-        prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#onParentVersion");
+        prop = NodeTypeImp.getSemanticProperty(Property.JCR_ON_PARENT_VERSION);
         value = obj.getLiteralProperty(prop);
         if (value != null)
         {
@@ -70,7 +69,7 @@ public class ItemDefinitionImp implements ItemDefinition
         {
             onParentVersion = OnParentVersionAction.IGNORE;
         }
-        prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#autoCreated");
+        prop = NodeTypeImp.getSemanticProperty(Property.JCR_AUTOCREATED);
         value = obj.getLiteralProperty(prop);
         if (value != null)
         {

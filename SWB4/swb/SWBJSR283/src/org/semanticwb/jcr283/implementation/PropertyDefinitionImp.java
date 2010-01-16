@@ -10,7 +10,6 @@ import java.util.Iterator;
 import javax.jcr.Property;
 import javax.jcr.PropertyType;
 import javax.jcr.Value;
-import javax.jcr.nodetype.NodeType;
 import javax.jcr.nodetype.PropertyDefinition;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.platform.SemanticLiteral;
@@ -28,11 +27,7 @@ public class PropertyDefinitionImp extends ItemDefinitionImp implements Property
     private final boolean isMultiple;
     private final boolean isFullTextSearchable;
     private final boolean isQueryOrderable;
-    
-    
-    
-    private int requiredType;
-    
+    private int requiredType;    
     private final HashSet<Value> values=new HashSet<Value>();
     private final HashSet<String> valueConstrains=new HashSet<String>();
     public PropertyDefinitionImp(SemanticObject obj,NodeTypeImp nodeType)
@@ -60,6 +55,7 @@ public class PropertyDefinitionImp extends ItemDefinitionImp implements Property
         {
             requiredType=PropertyType.UNDEFINED;
         }
+
         prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#isFullTextSearchable");
         value=obj.getLiteralProperty(prop);
         if(value!=null)
