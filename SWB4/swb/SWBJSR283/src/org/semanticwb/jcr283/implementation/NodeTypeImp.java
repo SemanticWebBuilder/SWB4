@@ -456,4 +456,31 @@ public class NodeTypeImp implements NodeType
         // TODO: revisar
         return this.getChildNodeDefinitions();
     }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final NodeTypeImp other = (NodeTypeImp) obj;
+        if ((this.clazz == null || !this.clazz.equals(other.clazz)))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int hash = 7;
+        hash = 89 * hash + (this.clazz != null ? this.clazz.hashCode() : 0);
+        return hash;
+    }
 }
