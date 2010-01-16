@@ -2,12 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.semanticwb.jcr283.implementation;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import javax.jcr.Property;
 import javax.jcr.nodetype.NodeDefinition;
 import javax.jcr.nodetype.NodeType;
+import org.semanticwb.SWBPlatform;
+import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticLiteral;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
@@ -16,38 +19,103 @@ import org.semanticwb.platform.SemanticProperty;
  *
  * @author victor.lorenzana
  */
-public class NodeDefinitionImp extends ItemDefinitionImp implements NodeDefinition  {
+public class NodeDefinitionImp extends ItemDefinitionImp implements NodeDefinition
+{
 
-    
-    
-    public NodeDefinitionImp(SemanticObject obj,NodeTypeImp nodeType)
+    private final NodeTypeImp defaultPrimaryType;
+    private final boolean allowsSameNameSiblings;
+    HashSet<NodeTypeImp> requiredPrimaryTypes=new HashSet<NodeTypeImp>();
+    public NodeDefinitionImp(SemanticObject obj, NodeTypeImp nodeType)
     {
         super(obj, nodeType);
+        SemanticProperty prop = NodeTypeImp.getSemanticProperty(Property.JCR_DEFAULT_PRIMARY_TYPE);
+        SemanticLiteral value = obj.getLiteralProperty(prop);
+        if (value != null)
+        {
+            NodeTypeImp temp = null;
+            String name = value.getString();
+            Iterator<SemanticClass> classes = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
+            while (classes.hasNext())
+            {
+                SemanticClass clazz = classes.next();
+                String onametest = clazz.getPrefix() + ":" + clazz.getName();
+                if (onametest.equals(name))
+                {
+                    temp = NodeTypeManagerImp.loadNodeType(clazz);
+                }
+            }
+            defaultPrimaryType = temp;
+        }
+        else
+        {
+            defaultPrimaryType = null;
+        }
 
+        prop=NodeTypeImp.getSemanticProperty(Property.JCR_SAME_NAME_SIBLINGS);
+        value=obj.getLiteralProperty(prop);
+        if(value!=null)
+        {
+            allowsSameNameSiblings=value.getBoolean();
+        }
+        else
+        {
+            allowsSameNameSiblings=false;
+        }
+
+
+        prop=NodeTypeImp.getSemanticProperty(Property.JCR_REQUIRED_PRIMARY_TYPES);
+        Iterator<SemanticLiteral> values=obj.listLiteralProperties(prop);
+        while(values.hasNext())
+        {
+            SemanticLiteral ovalue=values.next();
+            String name=ovalue.getString();
+            Iterator<SemanticClass> classes = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
+            while (classes.hasNext())
+            {
+                SemanticClass clazz = classes.next();
+                String onametest = clazz.getPrefix() + ":" + clazz.getName();
+                if (onametest.equals(name))
+                {
+                    requiredPrimaryTypes.add(NodeTypeManagerImp.loadNodeType(clazz));
+                }
+            }
+        }
     }
+
     public NodeType[] getRequiredPrimaryTypes()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return requiredPrimaryTypes.toArray(new NodeType[requiredPrimaryTypes.size()]);
     }
 
     public String[] getRequiredPrimaryTypeNames()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        HashSet<String> requiredPrimaryTypeNames=new HashSet<String>();
+        for(NodeType nodeType : getRequiredPrimaryTypes())
+        {
+            requiredPrimaryTypeNames.add(nodeType.getName());
+        }
+        return requiredPrimaryTypeNames.toArray(new String[requiredPrimaryTypeNames.size()]);
     }
 
     public NodeType getDefaultPrimaryType()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return defaultPrimaryType;
     }
 
     public String getDefaultPrimaryTypeName()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if(defaultPrimaryType==null)
+        {
+            return null;
+        }
+        else
+        {
+            return defaultPrimaryType.getName();
+        }
     }
 
     public boolean allowsSameNameSiblings()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }    
-
+        return allowsSameNameSiblings;
+    }
 }
