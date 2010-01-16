@@ -28,6 +28,7 @@ public class SWBRepository implements Repository {
     private static Hashtable<String, Value> descriptors = new Hashtable<String, Value>();    
     static
     {
+        log.event("Initializing SWBRepository ...");
         new NodeTypeManagerImp();
         descriptors.put(OPTION_VERSIONING_SUPPORTED, new ValueImp(false,PropertyType.BOOLEAN));
         descriptors.put(SPEC_VERSION_DESC, new ValueImp("2.0",PropertyType.STRING));
