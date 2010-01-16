@@ -39,8 +39,7 @@ public class NodeTypeManagerImp implements NodeTypeManager
     {
         loadNodeTypes();
     }
-
-    static NodeTypeImp loadNodeType(SemanticClass clazz)
+    public static NodeTypeImp loadNodeType(SemanticClass clazz)
     {
 
         if (clazz.isSubClass(Base.sclass) || clazz.equals(Base.sclass))
