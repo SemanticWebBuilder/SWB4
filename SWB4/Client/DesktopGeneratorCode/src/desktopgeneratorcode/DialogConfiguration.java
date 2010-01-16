@@ -363,6 +363,15 @@ public class DialogConfiguration extends javax.swing.JDialog
 
     private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonCancelActionPerformed
     {//GEN-HEADEREND:event_jButtonCancelActionPerformed
+        if (!this.jTextArea1.getText().isEmpty())
+        {
+            JOptionPane.showMessageDialog(this, "Existen errores en la salida, favor de corregirlos", "Error al guardar", JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        for (OWL owl : owlsBaseCommons)
+        {
+            config.add(owl.getLocation(), owl.getLocation());
+        }
         this.setVisible(false);
     }//GEN-LAST:event_jButtonCancelActionPerformed
 
