@@ -34,10 +34,10 @@ public class NodeTypeImp implements NodeType
     private static final String ALL = "*";
     private static Logger log = SWBUtils.getLogger(NodeTypeImp.class);
     private final SemanticClass clazz;
-    private HashMap<String, PropertyDefinitionImp> propertyDefinitions = new HashMap<String, PropertyDefinitionImp>();
-    private HashMap<String, NodeDefinitionImp> childnodeDefinitions = new HashMap<String, NodeDefinitionImp>();
-    private HashSet<NodeType> supertypes = new HashSet<NodeType>();
-    private HashSet<SemanticClass> subtypes = new HashSet<SemanticClass>();
+    private final HashMap<String, PropertyDefinitionImp> propertyDefinitions = new HashMap<String, PropertyDefinitionImp>();
+    private final HashMap<String, NodeDefinitionImp> childnodeDefinitions = new HashMap<String, NodeDefinitionImp>();
+    private final HashSet<NodeType> supertypes = new HashSet<NodeType>();
+    private final HashSet<SemanticClass> subtypes = new HashSet<SemanticClass>();
     private final boolean isMixin;
     private final boolean isQueryable;
     private final boolean isAbstract;

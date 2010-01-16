@@ -33,7 +33,7 @@ public class NodeTypeManagerImp implements NodeTypeManager
 {
 
     private static Logger log = SWBUtils.getLogger(NodeTypeManagerImp.class);
-    private static HashMap<String, NodeTypeImp> types = new HashMap<String, NodeTypeImp>();
+    private static final HashMap<String, NodeTypeImp> types = new HashMap<String, NodeTypeImp>();
 
     static
     {
