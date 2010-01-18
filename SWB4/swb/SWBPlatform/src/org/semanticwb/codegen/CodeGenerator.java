@@ -79,7 +79,7 @@ public class CodeGenerator
     private File createPackage(String spackage, File pDirectory) throws CodeGeneratorException
     {
         File createPackage = pDirectory;
-        if (!spackage.equals(""))
+        if (spackage!=null && !spackage.equals(""))
         {
             File dir = new File(pDirectory.getPath() + File.separatorChar + spackage.replace('.', File.separatorChar));
             if (!dir.exists() && !dir.mkdirs())
