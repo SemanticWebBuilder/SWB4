@@ -29,7 +29,7 @@ public class PropertyDefinitionImp extends ItemDefinitionImp implements Property
     private int requiredType;
     private final HashSet<Value> values = new HashSet<Value>();
     private final HashSet<String> valueConstrains = new HashSet<String>();
-
+    private SemanticProperty semanticProperty;
     public PropertyDefinitionImp(SemanticObject obj, NodeTypeImp nodeType)
     {
         super(obj, nodeType);
@@ -96,6 +96,7 @@ public class PropertyDefinitionImp extends ItemDefinitionImp implements Property
     public PropertyDefinitionImp(SemanticProperty property)
     {
         this(property.getSemanticObject(), NodeTypeManagerImp.loadNodeType(property.getDomainClass()));
+        this.semanticProperty=property;
         if (property.isBinary())
         {
             requiredType = PropertyType.BINARY;
@@ -141,7 +142,10 @@ public class PropertyDefinitionImp extends ItemDefinitionImp implements Property
             requiredType = PropertyType.UNDEFINED;
         }
     }
-
+    public SemanticProperty getSemanticProperty()
+    {
+        return semanticProperty;
+    }
     public int getRequiredType()
     {
         return requiredType;
