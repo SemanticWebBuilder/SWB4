@@ -27,27 +27,42 @@ import javax.jcr.query.QueryManager;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionException;
 import javax.jcr.version.VersionManager;
+import org.semanticwb.jcr283.repository.model.Unstructured;
 import org.xml.sax.ContentHandler;
 
 /**
  *
  * @author victor.lorenzana
  */
-public class WorkspaceImp implements Workspace {
+public class WorkspaceImp  implements Workspace {
 
     private final SessionImp session;
-    public WorkspaceImp(SessionImp session)
+    private final NodeImp root;
+    private final String name;
+    private final NodeTypeManagerImp nodeTypeManagerImp=new NodeTypeManagerImp();
+    public WorkspaceImp(SessionImp session,org.semanticwb.jcr283.repository.model.Workspace ws)
     {
+        if(ws.getRoot()==null)
+        {
+            Unstructured newroot=Unstructured.ClassMgr.createUnstructured("jcr:root", ws);
+            ws.setRoot(newroot);
+        }
+        root=new NodeImp(ws.getRoot(),null,0,"/",0,session);
+        name=ws.getTitle();
         this.session=session;
+        session.setWorkspace(this);
     }
     public Session getSession()
     {
         return session;
     }
-
+    public NodeImp getRoot()
+    {
+        return root;
+    }
     public String getName()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return name;
     }
 
     public void copy(String srcAbsPath, String destAbsPath) throws ConstraintViolationException, VersionException, AccessDeniedException, PathNotFoundException, ItemExistsException, LockException, RepositoryException
@@ -87,12 +102,12 @@ public class WorkspaceImp implements Workspace {
 
     public NamespaceRegistry getNamespaceRegistry() throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new NamespaceRegistryImp();
     }
 
     public NodeTypeManager getNodeTypeManager() throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return nodeTypeManagerImp;
     }
 
     public ObservationManager getObservationManager() throws UnsupportedRepositoryOperationException, RepositoryException
@@ -122,7 +137,7 @@ public class WorkspaceImp implements Workspace {
 
     public void createWorkspace(String name) throws AccessDeniedException, UnsupportedRepositoryOperationException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        org.semanticwb.jcr283.repository.model.base.WorkspaceBase.ClassMgr.createWorkspace(name,"");
     }
 
     public void createWorkspace(String name, String srcWorkspace) throws AccessDeniedException, UnsupportedRepositoryOperationException, NoSuchWorkspaceException, RepositoryException
@@ -132,7 +147,7 @@ public class WorkspaceImp implements Workspace {
 
     public void deleteWorkspace(String name) throws AccessDeniedException, UnsupportedRepositoryOperationException, NoSuchWorkspaceException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        org.semanticwb.jcr283.repository.model.base.WorkspaceBase.ClassMgr.createWorkspace(name,"");
     }
 
 }
