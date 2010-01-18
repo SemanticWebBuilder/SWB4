@@ -34,9 +34,9 @@ public class PropertyImp extends ItemImp implements Property
     private final PropertyDefinitionImp propertyDefinitionImp;
     ArrayList<Value> values = new ArrayList<Value>();
 
-    public PropertyImp(SemanticProperty prop, NodeImp parent) throws RepositoryException
+    public PropertyImp(SemanticProperty prop, NodeImp parent,String path) throws RepositoryException
     {
-        super(prop, parent);
+        super(prop, parent,path);
         NodeTypeImp nodeType = NodeTypeManagerImp.loadNodeType(prop.getDomainClass());
         propertyDefinitionImp = new PropertyDefinitionImp(prop.getSemanticObject(), nodeType);
     }

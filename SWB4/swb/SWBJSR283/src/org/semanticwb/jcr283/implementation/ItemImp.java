@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.semanticwb.jcr283.implementation;
 
 import javax.jcr.AccessDeniedException;
@@ -26,16 +25,31 @@ import org.semanticwb.platform.SemanticProperty;
  *
  * @author victor.lorenzana
  */
-public abstract class ItemImp implements Item{
+public abstract class ItemImp implements Item
+{
 
     private final NodeImp parent;
     private final String name;
     protected boolean isNew;
-    public ItemImp(SemanticProperty prop,NodeImp parent)
+    private String path;
+
+    public ItemImp(SemanticProperty prop, NodeImp parent, String path)
     {
-        this.name=prop.getPrefix()+":"+prop.getName();
-        this.parent=parent;
-        isNew=false;
+        this(prop.getPrefix() + ":" + prop.getName(), parent, path);
+        isNew = false;
+    }
+
+    public ItemImp(SemanticObject obj, String name, NodeImp parent, String path)
+    {
+        this(name, parent, path);
+        isNew = false;
+    }
+
+    public ItemImp(String name, NodeImp parent, String path)
+    {
+        this.name = name;
+        this.parent = parent;
+        this.path = path;
     }
 
     @Override
@@ -43,22 +57,10 @@ public abstract class ItemImp implements Item{
     {
         return name;
     }
-    public ItemImp(SemanticObject obj,String name,NodeImp parent)
-    {
-        this.name=name;
-        this.parent=parent;
-        isNew=false;
-    }
 
-    public ItemImp(String name,NodeImp parent)
-    {
-        this.name=name;
-        this.parent=parent;
-    }
-    
     public String getPath() throws RepositoryException
     {
-        return parent.getPath()+"/"+this.getName();
+        return path;
     }
 
     public String getName() throws RepositoryException
@@ -86,8 +88,7 @@ public abstract class ItemImp implements Item{
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public abstract  boolean isNode();
-    
+    public abstract boolean isNode();
 
     public boolean isNew()
     {
@@ -104,7 +105,6 @@ public abstract class ItemImp implements Item{
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    
     public void accept(ItemVisitor visitor) throws RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -124,5 +124,4 @@ public abstract class ItemImp implements Item{
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
 }
