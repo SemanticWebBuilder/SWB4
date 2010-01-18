@@ -35,9 +35,14 @@ import org.xml.sax.ContentHandler;
  */
 public class WorkspaceImp implements Workspace {
 
+    private final SessionImp session;
+    public WorkspaceImp(SessionImp session)
+    {
+        this.session=session;
+    }
     public Session getSession()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return session;
     }
 
     public String getName()

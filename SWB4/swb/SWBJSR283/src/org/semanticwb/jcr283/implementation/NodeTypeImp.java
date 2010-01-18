@@ -7,6 +7,7 @@ package org.semanticwb.jcr283.implementation;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import javax.jcr.NamespaceRegistry;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Value;
@@ -32,7 +33,7 @@ public class NodeTypeImp implements NodeType
 {
 
     private static final String ALL = "*";
-    private static final String ISQUERYABLE = "http://www.jcp.org/jcr/1.0#isQueryable";
+    private static final String ISQUERYABLE = NamespaceRegistry.NAMESPACE_JCR+"#isQueryable";
     private static Logger log = SWBUtils.getLogger(NodeTypeImp.class);
     private final SemanticClass clazz;
     private final HashMap<String, PropertyDefinitionImp> propertyDefinitions = new HashMap<String, PropertyDefinitionImp>();
@@ -151,7 +152,7 @@ public class NodeTypeImp implements NodeType
 
     private void loadPropertyDefinitions()
     {
-        SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#propertyDefinition");
+        SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(NamespaceRegistry.NAMESPACE_JCR+"#propertyDefinition");
         Iterator<SemanticObject> values = clazz.listObjectRequiredProperties(prop);
         while (values.hasNext())
         {
@@ -169,7 +170,7 @@ public class NodeTypeImp implements NodeType
 
     private void loadChildNodeDefinitions()
     {
-        SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#childNodeDefinition");
+        SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(NamespaceRegistry.NAMESPACE_JCR+"#childNodeDefinition");
         Iterator<SemanticObject> values = clazz.listObjectRequiredProperties(prop);
         while (values.hasNext())
         {

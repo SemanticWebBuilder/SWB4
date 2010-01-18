@@ -83,7 +83,7 @@ public class NodeImp extends ItemImp implements Node
             while (props.hasNext())
             {
                 SemanticProperty semanticProperty = props.next();
-                SemanticClass repositoryPropertyDefinition = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#RepositoryPropertyDefinition");
+                SemanticClass repositoryPropertyDefinition = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(NamespaceRegistryImp.NAMESPACE_NT+"#RepositoryPropertyDefinition");
                 if (semanticProperty.getSemanticObject().getSemanticClass().isSubClass(repositoryPropertyDefinition))
                 {
                     try
