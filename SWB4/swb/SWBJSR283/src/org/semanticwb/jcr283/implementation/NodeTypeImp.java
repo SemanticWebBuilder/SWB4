@@ -239,6 +239,11 @@ public class NodeTypeImp implements NodeType
         return propertyDefinitions.values().toArray(new PropertyDefinition[propertyDefinitions.size()]);
     }
 
+    public PropertyDefinitionImp[] getPropertyDefinitionsImp()
+    {
+        return propertyDefinitions.values().toArray(new PropertyDefinitionImp[propertyDefinitions.size()]);
+    }
+
     public NodeDefinition[] getChildNodeDefinitions()
     {
         return childnodeDefinitions.values().toArray(new NodeDefinition[childnodeDefinitions.size()]);

@@ -85,6 +85,10 @@ public class ItemDefinitionImp implements ItemDefinition
     {
         return nodeType;
     }
+    public NodeTypeImp getDeclaringNodeTypeImp()
+    {
+        return nodeType;
+    }
 
     public String getName()
     {

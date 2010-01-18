@@ -53,8 +53,9 @@ import org.semanticwb.platform.SemanticProperty;
 public class NodeImp extends ItemImp implements Node
 {
 
-    private static Logger log = SWBUtils.getLogger(NodeImp.class);
+    private final static Logger log = SWBUtils.getLogger(NodeImp.class);
     private final static NodeTypeManagerImp nodeTypeManager = new NodeTypeManagerImp();
+    private final static NamespaceRegistryImp namespaceRegistryImp = new NamespaceRegistryImp();
     private final static ValueFactoryImp valueFactoryImp = new ValueFactoryImp();
     private final NodeDefinitionImp nodeDefinitionImp;
     private final Hashtable<String, PropertyImp> properties = new Hashtable<String, PropertyImp>();
@@ -92,6 +93,7 @@ public class NodeImp extends ItemImp implements Node
     {
         if (obj != null)
         {
+            // stored properties
             Iterator<SemanticProperty> props = obj.listProperties();
             while (props.hasNext())
             {
@@ -100,14 +102,41 @@ public class NodeImp extends ItemImp implements Node
                 if (semanticProperty.getSemanticObject().getSemanticClass().isSubClass(repositoryPropertyDefinition))
                 {
                     try
-                    {
-                        log.debug("loading property " + semanticProperty.getURI() + " for node " + obj.getURI());
+                    {                        
                         PropertyImp prop = new PropertyImp(semanticProperty, this, this.getPath() + "/" + semanticProperty.getPrefix() + ":" + semanticProperty.getName(), this.getDepth() + 1, this.session);
-                        this.properties.put(prop.getName(), prop);
+                        if (!this.properties.containsKey(prop.getName()))
+                        {
+                            log.debug("loading property " + semanticProperty.getURI() + " for node " + obj.getURI());
+                            this.properties.put(prop.getName(), prop);
+                        }
                     }
                     catch (Exception e)
                     {
                         log.error(e);
+                    }
+                }
+            }
+            for (PropertyDefinitionImp propDef : this.nodeDefinitionImp.getDeclaringNodeTypeImp().getPropertyDefinitionsImp())
+            {
+                if (propDef.getSemanticProperty() != null)
+                {
+                    SemanticClass repositoryPropertyDefinition = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(NamespaceRegistryImp.NAMESPACE_NT + "#RepositoryPropertyDefinition");
+                    SemanticProperty semanticProperty = propDef.getSemanticProperty();
+                    if (semanticProperty.getSemanticObject().getSemanticClass().isSubClass(repositoryPropertyDefinition))
+                    {
+                        try
+                        {
+                            PropertyImp prop = new PropertyImp(semanticProperty, this, this.getPath() + "/" + semanticProperty.getPrefix() + ":" + semanticProperty.getName(), this.getDepth() + 1, this.session);
+                            if (!this.properties.containsKey(prop.getName()))
+                            {
+                                log.debug("loading property " + semanticProperty.getURI() + " for node " + obj.getURI());
+                                this.properties.put(prop.getName(), prop);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            log.error(e);
+                        }
                     }
                 }
             }
@@ -150,7 +179,7 @@ public class NodeImp extends ItemImp implements Node
         if (primaryNodeTypeName == null)
         {
             nodeType = this.nodeDefinitionImp.getDefaultPrimaryTypeImp();
-            primaryNodeTypeName=nodeType.getName();
+            primaryNodeTypeName = nodeType.getName();
         }
         else
         {
@@ -161,8 +190,8 @@ public class NodeImp extends ItemImp implements Node
         {
             //TODO:ERROR
         }
-        NodeDefinitionImp childDefinition=null;
-        for(NodeDefinitionImp childNodeDefinition : nodeType.getChildNodeDefinitionsImp())
+        NodeDefinitionImp childDefinition = null;
+        for (NodeDefinitionImp childNodeDefinition : nodeType.getChildNodeDefinitionsImp())
         {
             if (childNodeDefinition.getName().equals("*"))
             {
@@ -177,7 +206,7 @@ public class NodeImp extends ItemImp implements Node
                     {
                         if (name.equals(primaryNodeTypeName))
                         {
-                            childDefinition=childNodeDefinition;
+                            childDefinition = childNodeDefinition;
                         }
                     }
                 }
@@ -192,15 +221,15 @@ public class NodeImp extends ItemImp implements Node
                     {
                         if (name.equals(primaryNodeTypeName))
                         {
-                            childDefinition=childNodeDefinition;
+                            childDefinition = childNodeDefinition;
                         }
                     }
                 }
             }
-            
+
         }
         if (childDefinition == null)
-        {            
+        {
             NodeImp newChild = new NodeImp(childDefinition, nameToAdd, this, 0, this.getPath() + "/" + nameToAdd, this.getDepth() + 1, session);
         }
         throw new UnsupportedOperationException("Not supported yet.");
