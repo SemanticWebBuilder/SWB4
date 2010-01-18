@@ -97,6 +97,7 @@ public class Resource
     public Resource(String topicmap)
     {
         //TODO:
+
     }
 
     /** Crea un nuevo objeto Resource con la informacion del registro de base de datos RecResource.
