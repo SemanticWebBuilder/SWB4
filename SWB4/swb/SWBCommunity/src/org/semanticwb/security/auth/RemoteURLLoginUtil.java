@@ -30,6 +30,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -42,6 +43,7 @@ import org.w3c.dom.NodeList;
 public class RemoteURLLoginUtil
 {
 
+    static Logger log = SWBUtils.getLogger(RemoteURLLoginUtil.class);
     public static HashMap<String, String> getUserAttributes(String login, String stamp, String host, String URL, String soapAcction)
     {
         HashMap<String, String> ret = null;
@@ -65,16 +67,19 @@ public class RemoteURLLoginUtil
                     "  </soap:Body>\n" +
                     "</soap:Envelope>";
 //System.out.println("WS-->"+wsdata);
+            log.trace("ws-->"+wsdata);
             WSInvoker wsInvoker = new WSInvoker();
             wsInvoker.setHost(host);
             wsInvoker.setUrl(URL);
             wsInvoker.setSoapaction(soapAcction);
             String result = wsInvoker.invoke(wsdata);
+            log.debug("wsResponse:"+result);
 //            System.out.println(result);
             Document doc = SWBUtils.XML.xmlToDom(result);
             result = ((Element) doc.getFirstChild()).getElementsByTagName("ValidateResult").item(0).getTextContent();
            // result = SWBUtils.TEXT.decode(result, "UTF-16");
             result = result.replaceFirst("utf-16", "iso-8859-1");
+            log.trace("->"+result);
 //            System.out.println("->"+result);
 
 //            // Send data
@@ -100,15 +105,18 @@ public class RemoteURLLoginUtil
             doc = SWBUtils.XML.xmlToDom(result);
             Element root = (Element) doc.getFirstChild();
 //            System.out.println("Buscando user");
+            log.trace("Buscando en el resultado");
             if (root.getNodeName().equals("user"))
             {
 //                System.out.println("Hay user");
+                log.trace("Tengo Tag");
                 NodeList nl = root.getChildNodes();
                 ret = new HashMap<String, String>();
 //                System.out.println("tengo hijos " + nl.getLength());
                 for (int i = 0; i < nl.getLength(); i++)
                 {
                     ret.put(nl.item(i).getNodeName(), nl.item(i).getTextContent());
+                    log.trace("Agregando "+ nl.item(i).getNodeName() + ":" + nl.item(i).getTextContent());
 //                    System.out.println("->" + nl.item(i).getNodeName() + ":" + nl.item(i).getTextContent());
                 }
             }

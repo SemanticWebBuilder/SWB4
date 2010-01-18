@@ -98,7 +98,7 @@ public class RemoteURLLoginModule implements LoginModule
             log.error("UnsupportedCallbackException Error Login a user", ex);
             throw new LoginException("UnsupportedCallbackException Error: " + ex.getMessage());
         }
-
+        log.trace("Autenticando a "+login);
         WebSite ws = SWBContext.getWebSite(website);
         UserRepository ur = ws.getUserRepository();
         principal = ur.getUserByLogin(login);
@@ -110,9 +110,11 @@ public class RemoteURLLoginModule implements LoginModule
                 ((RemoteURLLoginBridge) ur.getBridge()).getSoapAction());
         if (null != mapa)
         {
+            log.trace("Encontrado en Repositorio esterno: "+login);
             ret = true;
             if (null == principal)
             {
+                log.trace("Creando a "+login);
                 User us = ur.createUser();
                 us.setLogin(login);
                 us.setActive(true);
