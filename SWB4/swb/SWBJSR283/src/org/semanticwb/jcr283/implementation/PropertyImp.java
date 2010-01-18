@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
+import java.util.Iterator;
 import javax.jcr.Binary;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
@@ -21,6 +22,8 @@ import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.PropertyDefinition;
 import javax.jcr.version.VersionException;
+import org.semanticwb.platform.SemanticLiteral;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
 /**
@@ -28,19 +31,42 @@ import org.semanticwb.platform.SemanticProperty;
  * @author victor.lorenzana
  */
 public class PropertyImp extends ItemImp implements Property
-{
-
+{    
     private static final ValueFactoryImp valueFactoryImp = new ValueFactoryImp();
     private final PropertyDefinitionImp propertyDefinitionImp;
-    ArrayList<Value> values = new ArrayList<Value>();
-
-    public PropertyImp(SemanticProperty prop, NodeImp parent,String path) throws RepositoryException
+    private ArrayList<Value> values = new ArrayList<Value>();
+    private final NodeImp parent;
+    private SemanticProperty prop;
+    public PropertyImp(SemanticProperty prop, NodeImp parent,String path,int depth,SessionImp session) throws RepositoryException
     {
-        super(prop, parent,path);
+        super(prop, parent,path,depth,session);
+        this.prop=prop;
+        this.parent=parent;
         NodeTypeImp nodeType = NodeTypeManagerImp.loadNodeType(prop.getDomainClass());
         propertyDefinitionImp = new PropertyDefinitionImp(prop.getSemanticObject(), nodeType);
     }
+    private void loadValues()
+    {
+        SemanticObject obj=parent.getSemanticObject();
+        if(obj!=null && prop!=null && !isModified())
+        {
+            Iterator<SemanticLiteral> lvalues=obj.listLiteralProperties(prop);
+            while(lvalues.hasNext())
+            {
+                SemanticLiteral literal=lvalues.next();
+                String value=literal.getString();
+                try
+                {
+                    values.add(transformValue(valueFactoryImp.createValue(value),propertyDefinitionImp.getRequiredType()));
+                }
+                catch(Exception e)
+                {
+                    
+                }
+            }
+        }
 
+    }
     public void setValue(Value value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
         setValue(new Value[]
@@ -83,6 +109,7 @@ public class PropertyImp extends ItemImp implements Property
             newValues.add(transformValue(value, reqType));
         }
         this.values.addAll(newValues);
+        this.isModified=true;
     }
 
     public void setValue(String value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
@@ -151,6 +178,10 @@ public class PropertyImp extends ItemImp implements Property
 
     public Value[] getValues() throws ValueFormatException, RepositoryException
     {
+        if(values.size()==0)
+        {
+            loadValues();
+        }
         HashSet<Value> ovalues = new HashSet<Value>();
         for (Value value : values)
         {
