@@ -158,13 +158,19 @@ public class NodeTypeImp implements NodeType
         {
             SemanticObject propertyDefinition = values.next();
             PropertyDefinitionImp pd = new PropertyDefinitionImp(propertyDefinition,this);
-            propertyDefinitions.put(pd.getName(), pd);
+            if(!propertyDefinitions.containsKey(pd.getName()))
+            {
+                propertyDefinitions.put(pd.getName(), pd);
+            }
         }
         Iterator<SemanticProperty> props = clazz.listProperties();
         while (props.hasNext())
         {
             PropertyDefinitionImp pd = new PropertyDefinitionImp(props.next());
-            propertyDefinitions.put(pd.getName(), pd);
+            if(!propertyDefinitions.containsKey(pd.getName()))
+            {
+                propertyDefinitions.put(pd.getName(), pd);
+            }
         }
     }
 
