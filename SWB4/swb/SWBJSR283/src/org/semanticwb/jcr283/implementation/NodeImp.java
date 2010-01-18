@@ -59,18 +59,17 @@ public class NodeImp extends ItemImp implements Node
     private final NodeDefinitionImp nodeDefinitionImp;
     private final Hashtable<String, PropertyImp> properties = new Hashtable<String, PropertyImp>();
     private SemanticObject obj = null;
-    private final int index;
-
-    public NodeImp(Base base, NodeImp parent, int index)
+    private final int index;    
+    public NodeImp(Base base, NodeImp parent, int index,String path)
     {
-        this(base.getSemanticObject(), "", parent, index);
+        this(base.getSemanticObject(), "", parent, index,path);
     }
 
-    public NodeImp(SemanticObject obj, String name, NodeImp parent, int index)
+    public NodeImp(SemanticObject obj, String name, NodeImp parent, int index,String path)
     {
-        super(obj, name, parent);
+        super(obj, name, parent,path);
         this.obj = obj;
-        this.index = index;
+        this.index = index;        
         nodeDefinitionImp = new NodeDefinitionImp(obj, NodeTypeManagerImp.loadNodeType(obj.getSemanticClass()));
         loadProperties();
     }
@@ -89,7 +88,7 @@ public class NodeImp extends ItemImp implements Node
                     try
                     {
                         log.debug("loading property " + semanticProperty.getURI() + " for node " + obj.getURI());
-                        PropertyImp prop = new PropertyImp(semanticProperty, this);
+                        PropertyImp prop = new PropertyImp(semanticProperty, this,this.getPath()+"/"+semanticProperty.getPrefix()+":"+semanticProperty.getName());
                         this.properties.put(prop.getName(), prop);
                     }
                     catch (Exception e)
