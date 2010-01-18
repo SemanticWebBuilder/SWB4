@@ -60,24 +60,34 @@ public class NodeImp extends ItemImp implements Node
     private final Hashtable<String, PropertyImp> properties = new Hashtable<String, PropertyImp>();
     private SemanticObject obj = null;
     private final int index;
-    
-    public NodeImp(Base base, NodeImp parent, int index,String path,int depth,SessionImp session)
+
+    public NodeImp(Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
-        this(base.getSemanticObject(), "", parent, index,path,depth,session);
+        this(base.getSemanticObject(), "", parent, index, path, depth, session);
     }
 
-    public NodeImp(SemanticObject obj, String name, NodeImp parent, int index,String path,int depth,SessionImp session)
+    public NodeImp(NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
-        super(obj, name, parent,path,depth,session);
+        super(null, name, parent, path, depth, session);
+        this.index = index;
+        this.nodeDefinitionImp = nodeDefinition;
+        loadProperties();
+    }
+
+    public NodeImp(SemanticObject obj, String name, NodeImp parent, int index, String path, int depth, SessionImp session)
+    {
+        super(obj, name, parent, path, depth, session);
         this.obj = obj;
-        this.index = index;        
+        this.index = index;
         nodeDefinitionImp = new NodeDefinitionImp(obj, NodeTypeManagerImp.loadNodeType(obj.getSemanticClass()));
         loadProperties();
     }
+
     public SemanticObject getSemanticObject()
     {
         return obj;
     }
+
     private void loadProperties()
     {
         if (obj != null)
@@ -86,13 +96,13 @@ public class NodeImp extends ItemImp implements Node
             while (props.hasNext())
             {
                 SemanticProperty semanticProperty = props.next();
-                SemanticClass repositoryPropertyDefinition = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(NamespaceRegistryImp.NAMESPACE_NT+"#RepositoryPropertyDefinition");
+                SemanticClass repositoryPropertyDefinition = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(NamespaceRegistryImp.NAMESPACE_NT + "#RepositoryPropertyDefinition");
                 if (semanticProperty.getSemanticObject().getSemanticClass().isSubClass(repositoryPropertyDefinition))
                 {
                     try
                     {
                         log.debug("loading property " + semanticProperty.getURI() + " for node " + obj.getURI());
-                        PropertyImp prop = new PropertyImp(semanticProperty, this,this.getPath()+"/"+semanticProperty.getPrefix()+":"+semanticProperty.getName(),this.getDepth()+1,this.session);
+                        PropertyImp prop = new PropertyImp(semanticProperty, this, this.getPath() + "/" + semanticProperty.getPrefix() + ":" + semanticProperty.getName(), this.getDepth() + 1, this.session);
                         this.properties.put(prop.getName(), prop);
                     }
                     catch (Exception e)
@@ -136,19 +146,62 @@ public class NodeImp extends ItemImp implements Node
         {
             //TODO:ERROR
         }
-        NodeType nodeType = null;
+        NodeTypeImp nodeType = null;
         if (primaryNodeTypeName == null)
         {
-            nodeType = this.nodeDefinitionImp.getDefaultPrimaryType();
+            nodeType = this.nodeDefinitionImp.getDefaultPrimaryTypeImp();
+            primaryNodeTypeName=nodeType.getName();
         }
         else
         {
-            nodeType = nodeTypeManager.getNodeType(primaryNodeTypeName);
+            nodeType = nodeTypeManager.getNodeTypeImp(primaryNodeTypeName);
         }
         String nameToAdd = extractName(relPath);
         if (!nodeType.canAddChildNode(nameToAdd))
         {
             //TODO:ERROR
+        }
+        NodeDefinitionImp childDefinition=null;
+        for(NodeDefinitionImp childNodeDefinition : nodeType.getChildNodeDefinitionsImp())
+        {
+            if (childNodeDefinition.getName().equals("*"))
+            {
+                if (primaryNodeTypeName == null)
+                {
+                    primaryNodeTypeName = childNodeDefinition.getDefaultPrimaryTypeName();
+                }
+                if (primaryNodeTypeName != null)
+                {
+                    String names[] = childNodeDefinition.getRequiredPrimaryTypeNames();
+                    for (String name : names)
+                    {
+                        if (name.equals(primaryNodeTypeName))
+                        {
+                            childDefinition=childNodeDefinition;
+                        }
+                    }
+                }
+
+            }
+            else
+            {
+                if (childNodeDefinition.getName().equals(primaryNodeTypeName))
+                {
+                    String names[] = childNodeDefinition.getRequiredPrimaryTypeNames();
+                    for (String name : names)
+                    {
+                        if (name.equals(primaryNodeTypeName))
+                        {
+                            childDefinition=childNodeDefinition;
+                        }
+                    }
+                }
+            }
+            
+        }
+        if (childDefinition == null)
+        {            
+            NodeImp newChild = new NodeImp(childDefinition, nameToAdd, this, 0, this.getPath() + "/" + nameToAdd, this.getDepth() + 1, session);
         }
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -187,7 +240,7 @@ public class NodeImp extends ItemImp implements Node
         Property prop = this.getProperty(name);
         if (prop != null)
         {
-            prop.setValue(values);            
+            prop.setValue(values);
         }
         return prop;
     }

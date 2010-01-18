@@ -244,6 +244,11 @@ public class NodeTypeImp implements NodeType
         return childnodeDefinitions.values().toArray(new NodeDefinition[childnodeDefinitions.size()]);
     }
 
+    public NodeDefinitionImp[] getChildNodeDefinitionsImp()
+    {
+        return childnodeDefinitions.values().toArray(new NodeDefinitionImp[childnodeDefinitions.size()]);
+    }
+
     public boolean canSetProperty(String propertyName, Value value)
     {
         return canSetProperty(propertyName, new Value[]
