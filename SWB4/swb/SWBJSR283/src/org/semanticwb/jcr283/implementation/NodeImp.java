@@ -6,8 +6,10 @@ package org.semanticwb.jcr283.implementation;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Hashtable;
+import java.util.Iterator;
 import javax.jcr.AccessDeniedException;
 import javax.jcr.Binary;
 import javax.jcr.InvalidItemStateException;
@@ -32,13 +34,15 @@ import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.NoSuchNodeTypeException;
 import javax.jcr.nodetype.NodeDefinition;
 import javax.jcr.nodetype.NodeType;
-import javax.jcr.nodetype.PropertyDefinition;
 import javax.jcr.version.ActivityViolationException;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionException;
 import javax.jcr.version.VersionHistory;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.jcr283.repository.model.Base;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticProperty;
 
 /**
  *
@@ -47,29 +51,41 @@ import org.semanticwb.platform.SemanticObject;
 public class NodeImp extends ItemImp implements Node
 {
 
+    private static Logger log = SWBUtils.getLogger(NodeImp.class);
     private final static NodeTypeManagerImp nodeTypeManager = new NodeTypeManagerImp();
+    private final static ValueFactoryImp valueFactoryImp = new ValueFactoryImp();
     private final NodeDefinitionImp nodeDefinitionImp;
     private final Hashtable<String, PropertyImp> properties = new Hashtable<String, PropertyImp>();
-    private SemanticObject base = null;
+    private SemanticObject obj = null;
 
-    public NodeImp(Base base,NodeImp parent)
+    public NodeImp(Base base, NodeImp parent)
     {
-        this(base.getSemanticObject(),"",parent);
+        this(base.getSemanticObject(), "", parent);
     }
 
-    public NodeImp(SemanticObject obj,String name,NodeImp parent)
+    public NodeImp(SemanticObject obj, String name, NodeImp parent)
     {
-        super(obj,name,parent);
+        super(obj, name, parent);
+        this.obj = obj;
         nodeDefinitionImp = new NodeDefinitionImp(obj, NodeTypeManagerImp.loadNodeType(obj.getSemanticClass()));
         loadProperties();
-    }    
-    
+    }
 
     private void loadProperties()
     {
-        for(PropertyDefinition propDef : this.nodeDefinitionImp.getDeclaringNodeType().getPropertyDefinitions())
+        Iterator<SemanticProperty> props = obj.listProperties();
+        while (props.hasNext())
         {
-            
+            SemanticProperty semanticProperty = props.next();
+            try
+            {
+                PropertyImp prop = new PropertyImp(semanticProperty, this);
+                this.properties.put(prop.getName(), prop);
+            }
+            catch (Exception e)
+            {
+                log.error(e);
+            }
         }
     }
 
@@ -129,82 +145,102 @@ public class NodeImp extends ItemImp implements Node
 
     public Property setProperty(String name, Value value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return setProperty(name, value, value.getType());
     }
 
     public Property setProperty(String name, Value value, int type) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return setProperty(name, new Value[]
+                {
+                    value
+                }, type);
     }
 
     public Property setProperty(String name, Value[] values) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        int type = 0;
+        return setProperty(name, values, type);
     }
 
     public Property setProperty(String name, Value[] values, int type) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (!this.getDefinition().getDeclaringNodeType().canSetProperty(name, values))
+        {
+            // TODO: ERROR
+            throw new ConstraintViolationException("The node can not set this property");
+        }
+        Property prop = this.getProperty(name);
+        return prop;
     }
 
     public Property setProperty(String name, String[] values) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        ArrayList<Value> ovalues = new ArrayList<Value>();
+        for (String value : values)
+        {
+            ovalues.add(valueFactoryImp.createValue(value));
+        }
+        return setProperty(name, ovalues.toArray(new Value[ovalues.size()]));
     }
 
     public Property setProperty(String name, String[] values, int type) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        ArrayList<Value> ovalues = new ArrayList<Value>();
+        for (String value : values)
+        {
+            ovalues.add(valueFactoryImp.createValue(value));
+        }
+        return setProperty(name, ovalues.toArray(new Value[ovalues.size()]), type);
     }
 
     public Property setProperty(String name, String value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return setProperty(name, valueFactoryImp.createValue(value));
     }
 
     public Property setProperty(String name, String value, int type) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return setProperty(name, valueFactoryImp.createValue(value), type);
     }
 
     public Property setProperty(String name, InputStream value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return setProperty(name, valueFactoryImp.createValue(value));
     }
 
     public Property setProperty(String name, Binary value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return setProperty(name, valueFactoryImp.createValue(value));
     }
 
     public Property setProperty(String name, boolean value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return setProperty(name, valueFactoryImp.createValue(value));
     }
 
     public Property setProperty(String name, double value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return setProperty(name, valueFactoryImp.createValue(value));
     }
 
     public Property setProperty(String name, BigDecimal value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return setProperty(name, valueFactoryImp.createValue(value));
     }
 
     public Property setProperty(String name, long value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return setProperty(name, valueFactoryImp.createValue(value));
     }
 
     public Property setProperty(String name, Calendar value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return setProperty(name, valueFactoryImp.createValue(value));
     }
 
     public Property setProperty(String name, Node value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return setProperty(name, valueFactoryImp.createValue(value));
     }
 
     public Node getNode(String relPath) throws PathNotFoundException, RepositoryException
@@ -229,7 +265,13 @@ public class NodeImp extends ItemImp implements Node
 
     public Property getProperty(String relPath) throws PathNotFoundException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        String name = extractName(relPath);
+        PropertyImp prop = this.properties.get(name);
+        if (prop == null)
+        {
+            // TODO: ERROR
+        }
+        return prop;
     }
 
     public PropertyIterator getProperties() throws RepositoryException
@@ -471,17 +513,5 @@ public class NodeImp extends ItemImp implements Node
     public boolean isNode()
     {
         return true;
-    }
-
-    public boolean isNew()
-    {
-        if (base == null)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
     }
 }
