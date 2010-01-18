@@ -95,9 +95,9 @@ public class PropertyDefinitionImp extends ItemDefinitionImp implements Property
         }
     }
     
-    public PropertyDefinitionImp(SemanticProperty property,NodeTypeImp nodeType)
+    public PropertyDefinitionImp(SemanticProperty property)
     {
-        this(property.getSemanticObject(),nodeType);
+        this(property.getSemanticObject(),NodeTypeManagerImp.loadNodeType(property.getDomainClass()));
         if(property.isBinary())
         {
             requiredType=PropertyType.BINARY;

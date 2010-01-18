@@ -162,7 +162,7 @@ public class NodeTypeImp implements NodeType
         Iterator<SemanticProperty> props = clazz.listProperties();
         while (props.hasNext())
         {
-            PropertyDefinitionImp pd = new PropertyDefinitionImp(props.next(),this);
+            PropertyDefinitionImp pd = new PropertyDefinitionImp(props.next());
             propertyDefinitions.put(pd.getName(), pd);
         }
     }
