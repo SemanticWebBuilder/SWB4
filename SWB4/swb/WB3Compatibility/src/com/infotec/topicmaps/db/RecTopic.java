@@ -709,5 +709,5 @@ public class RecTopic implements WBDBRecord
         if(config==null)return null;
         return config.getElementsByTagName("interval");
     }    
-    
+  
 }
