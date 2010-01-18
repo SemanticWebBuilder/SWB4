@@ -30,26 +30,30 @@ public abstract class ItemImp implements Item
 
     private final NodeImp parent;
     private final String name;
-    protected boolean isNew;
+    private boolean isNew;
     private String path;
-
-    public ItemImp(SemanticProperty prop, NodeImp parent, String path)
+    protected boolean isModified=false;
+    private final int depth;
+    protected final SessionImp session;
+    public ItemImp(SemanticProperty prop, NodeImp parent, String path,int depth,SessionImp session)
     {
-        this(prop.getPrefix() + ":" + prop.getName(), parent, path);
+        this(prop.getPrefix() + ":" + prop.getName(), parent, path,depth,session);
         isNew = false;
     }
 
-    public ItemImp(SemanticObject obj, String name, NodeImp parent, String path)
+    public ItemImp(SemanticObject obj, String name, NodeImp parent, String path,int depth,SessionImp session)
     {
-        this(name, parent, path);
+        this(name, parent, path,depth,session);
         isNew = false;
     }
 
-    public ItemImp(String name, NodeImp parent, String path)
+    public ItemImp(String name, NodeImp parent, String path,int depth,SessionImp session)
     {
         this.name = name;
         this.parent = parent;
         this.path = path;
+        this.depth=depth;
+        this.session=session;
     }
 
     @Override
@@ -80,12 +84,12 @@ public abstract class ItemImp implements Item
 
     public int getDepth() throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return depth;
     }
 
     public Session getSession() throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return session;
     }
 
     public abstract boolean isNode();
@@ -97,7 +101,7 @@ public abstract class ItemImp implements Item
 
     public boolean isModified()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return isModified;
     }
 
     public boolean isSame(Item otherItem) throws RepositoryException
@@ -112,7 +116,7 @@ public abstract class ItemImp implements Item
 
     public void save() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.isNew=false;        
     }
 
     public void refresh(boolean keepChanges) throws InvalidItemStateException, RepositoryException
