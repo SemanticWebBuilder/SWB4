@@ -28,13 +28,14 @@ public class SWBLocaleLexicon {
     public static final String OBJ_TAG = "OBJ"; //SemanticClass
     public static final String DTT_TAG = "LPR"; //Datatype Property
     public static final String OBT_TAG = "OPR"; //Objecttype Property
-    
+
     private HashMap<String, Word> objHash;
     private HashMap<String, Word> propHash;
     private ArrayList<String> prefixFilters;
     private String langCode = "es";
     private String langName = "Spanish";
     private String prefixString;
+    private int maxWordLength;
     private String[] stopWords = {"a", "ante", "bajo", "cabe", "con",
         "contra", "de", "desde", "durante",
         "en", "entre", "hacia", "hasta",
@@ -67,6 +68,7 @@ public class SWBLocaleLexicon {
     public SWBLocaleLexicon(String languageCode, String languageName, String prexFilter) {
         langCode = languageCode;
         langName = languageName;
+        maxWordLength = 0;
 
         //System.out.println("----Creando lexicon");
         if (!prexFilter.trim().equals(""))
@@ -86,6 +88,10 @@ public class SWBLocaleLexicon {
         Iterator<SemanticClass> scit = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
         while(scit.hasNext()) {
             SemanticClass sc = scit.next();
+
+            if (sc.getDisplayName(langCode).length() > maxWordLength) {
+                maxWordLength = sc.getDisplayName(langCode).length();
+            }
 
             if (prefixFilters == null || (prefixFilters != null && prefixFilters.contains(sc.getPrefix()))) {
                 String wLemma = getSnowballForm(sc.getDisplayName(langCode));
@@ -125,7 +131,7 @@ public class SWBLocaleLexicon {
                         t.setURI(sp.getURI());
                         t.setId(sp.getPrefix() + ":" + sp.getName());
                         /*SemanticClass rg = sp.getRangeClass();
-                        
+
                         if (sp != null) {
                             rg = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sp.getRangeClass().getURI());
                         }
@@ -136,7 +142,7 @@ public class SWBLocaleLexicon {
 
                         w.setTag(t);
                         propHash.put(wLemma, w);
-                    }                    
+                    }
                 }
             }
         }
@@ -166,7 +172,7 @@ public class SWBLocaleLexicon {
             tList[stopWords.length] = w.toLowerCase();
             stopWords = tList;
         }
-            
+
     }
 
     public String getSnowballForm(String input) {
@@ -228,5 +234,9 @@ public class SWBLocaleLexicon {
     public Iterator<String> listWords(boolean asObjects) {
         if (asObjects) return objHash.keySet().iterator();
         return propHash.keySet().iterator();
+    }
+
+    public int getMaxWordLength() {
+        return maxWordLength;
     }
 }
