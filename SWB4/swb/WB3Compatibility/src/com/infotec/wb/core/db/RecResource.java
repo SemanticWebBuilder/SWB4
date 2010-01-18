@@ -211,6 +211,7 @@ public class RecResource //implements WBDBRecord
         this.views = views;
         this.hits = hits;
         this.hitlog = hitlog;
+      
     }
 
 //    public RecResource(ObjectDecoder dec)
