@@ -2,12 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.semanticwb.jcr283.implementation;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Calendar;
+import java.util.Hashtable;
 import javax.jcr.AccessDeniedException;
 import javax.jcr.Binary;
 import javax.jcr.InvalidItemStateException;
@@ -15,7 +15,6 @@ import javax.jcr.InvalidLifecycleTransitionException;
 import javax.jcr.Item;
 import javax.jcr.ItemExistsException;
 import javax.jcr.ItemNotFoundException;
-import javax.jcr.ItemVisitor;
 import javax.jcr.MergeException;
 import javax.jcr.NoSuchWorkspaceException;
 import javax.jcr.Node;
@@ -23,9 +22,7 @@ import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
-import javax.jcr.ReferentialIntegrityException;
 import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 import javax.jcr.UnsupportedRepositoryOperationException;
 import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
@@ -35,24 +32,93 @@ import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.NoSuchNodeTypeException;
 import javax.jcr.nodetype.NodeDefinition;
 import javax.jcr.nodetype.NodeType;
+import javax.jcr.nodetype.PropertyDefinition;
 import javax.jcr.version.ActivityViolationException;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionException;
 import javax.jcr.version.VersionHistory;
+import org.semanticwb.jcr283.repository.model.Base;
+import org.semanticwb.platform.SemanticObject;
 
 /**
  *
  * @author victor.lorenzana
  */
-public class NodeImp implements Node {
+public class NodeImp extends ItemImp implements Node
+{
+
+    private final static NodeTypeManagerImp nodeTypeManager = new NodeTypeManagerImp();
+    private final NodeDefinitionImp nodeDefinitionImp;
+    private final Hashtable<String, PropertyImp> properties = new Hashtable<String, PropertyImp>();
+    private SemanticObject base = null;
+
+    public NodeImp(Base base,NodeImp parent)
+    {
+        this(base.getSemanticObject(),"",parent);
+    }
+
+    public NodeImp(SemanticObject obj,String name,NodeImp parent)
+    {
+        super(obj,name,parent);
+        nodeDefinitionImp = new NodeDefinitionImp(obj, NodeTypeManagerImp.loadNodeType(obj.getSemanticClass()));
+        loadProperties();
+    }    
+    
+
+    private void loadProperties()
+    {
+        for(PropertyDefinition propDef : this.nodeDefinitionImp.getDeclaringNodeType().getPropertyDefinitions())
+        {
+            
+        }
+    }
 
     public Node addNode(String relPath) throws ItemExistsException, PathNotFoundException, VersionException, ConstraintViolationException, LockException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return addNode(relPath, null);
+    }
+
+    private static boolean isValidPath(String relPath)
+    {
+        return true;
+    }
+
+    private static String extractName(String relpath)
+    {
+        String name = relpath;
+        int pos = name.lastIndexOf("/");
+        if (pos != -1)
+        {
+            name = name.substring(pos + 1);
+        }
+        pos = name.lastIndexOf("[");
+        if (pos != -1)
+        {
+            name = name.substring(0, pos);
+        }
+        return name;
     }
 
     public Node addNode(String relPath, String primaryNodeTypeName) throws ItemExistsException, PathNotFoundException, NoSuchNodeTypeException, LockException, VersionException, ConstraintViolationException, RepositoryException
     {
+        if (!isValidPath(relPath))
+        {
+            //TODO:ERROR
+        }
+        NodeType nodeType = null;
+        if (primaryNodeTypeName == null)
+        {
+            nodeType = this.nodeDefinitionImp.getDefaultPrimaryType();
+        }
+        else
+        {
+            nodeType = nodeTypeManager.getNodeType(primaryNodeTypeName);
+        }
+        String nameToAdd = extractName(relPath);
+        if (!nodeType.canAddChildNode(nameToAdd))
+        {
+            //TODO:ERROR
+        }
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -278,7 +344,7 @@ public class NodeImp implements Node {
 
     public NodeDefinition getDefinition() throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return nodeDefinitionImp;
     }
 
     public Version checkin() throws VersionException, UnsupportedRepositoryOperationException, InvalidItemStateException, LockException, RepositoryException
@@ -401,74 +467,21 @@ public class NodeImp implements Node {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public String getPath() throws RepositoryException
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public String getName() throws RepositoryException
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public Item getAncestor(int depth) throws ItemNotFoundException, AccessDeniedException, RepositoryException
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public Node getParent() throws ItemNotFoundException, AccessDeniedException, RepositoryException
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public int getDepth() throws RepositoryException
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public Session getSession() throws RepositoryException
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
+    @Override
     public boolean isNode()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return true;
     }
 
     public boolean isNew()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (base == null)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
-
-    public boolean isModified()
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public boolean isSame(Item otherItem) throws RepositoryException
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void accept(ItemVisitor visitor) throws RepositoryException
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void save() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void refresh(boolean keepChanges) throws InvalidItemStateException, RepositoryException
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void remove() throws VersionException, LockException, ConstraintViolationException, AccessDeniedException, RepositoryException
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
 }

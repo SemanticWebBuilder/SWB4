@@ -22,7 +22,7 @@ import javax.jcr.nodetype.PropertyDefinitionTemplate;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.jcr283.repository.model.Base;
+import org.semanticwb.jcr283.repository.model.NodeTypes;
 import org.semanticwb.platform.SemanticClass;
 
 /**
@@ -42,7 +42,7 @@ public class NodeTypeManagerImp implements NodeTypeManager
     public static NodeTypeImp loadNodeType(SemanticClass clazz)
     {
 
-        if (clazz.isSubClass(Base.sclass) || clazz.equals(Base.sclass))
+        if (clazz.isSubClass(NodeTypes.sclass) || clazz.equals(NodeTypes.sclass))
         {
             log.event("loading nodetype ... " + clazz.getURI() + " ...");
             NodeTypeImp nodeType = new NodeTypeImp(clazz);            
@@ -85,12 +85,28 @@ public class NodeTypeManagerImp implements NodeTypeManager
 
     public NodeTypeIterator getPrimaryNodeTypes() throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        HashSet<SemanticClass> nodes=new HashSet<SemanticClass>();
+        for(NodeTypeImp nodeType : types.values())
+        {
+            if(!nodeType.isMixin())
+            {
+                nodes.add(nodeType.getSemanticClass());
+            }
+        }
+        return new NodeTypeIteratorImp(nodes);
     }
 
     public NodeTypeIterator getMixinNodeTypes() throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        HashSet<SemanticClass> nodes=new HashSet<SemanticClass>();
+        for(NodeTypeImp nodeType : types.values())
+        {
+            if(nodeType.isMixin())
+            {
+                nodes.add(nodeType.getSemanticClass());
+            }
+        }
+        return new NodeTypeIteratorImp(nodes);
     }
 
     public NodeTypeTemplate createNodeTypeTemplate() throws UnsupportedRepositoryOperationException, RepositoryException

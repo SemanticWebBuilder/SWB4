@@ -32,11 +32,13 @@ public class NodeTypeImp implements NodeType
 {
 
     private static final String ALL = "*";
+    private static final String ISQUERYABLE = "http://www.jcp.org/jcr/1.0#isQueryable";
     private static Logger log = SWBUtils.getLogger(NodeTypeImp.class);
     private final SemanticClass clazz;
     private final HashMap<String, PropertyDefinitionImp> propertyDefinitions = new HashMap<String, PropertyDefinitionImp>();
     private final HashMap<String, NodeDefinitionImp> childnodeDefinitions = new HashMap<String, NodeDefinitionImp>();
-    private final HashSet<NodeType> supertypes = new HashSet<NodeType>();
+    private final HashSet<NodeTypeImp> supertypes = new HashSet<NodeTypeImp>();
+    private final HashSet<NodeTypeImp> aditionalSuperTypes = new HashSet<NodeTypeImp>();
     private final HashSet<SemanticClass> subtypes = new HashSet<SemanticClass>();
     private final boolean isMixin;
     private final boolean isQueryable;
@@ -44,8 +46,17 @@ public class NodeTypeImp implements NodeType
     private final boolean hasOrderableChildNodes;
     private final String primaryItemName;
 
+    
     public NodeTypeImp(SemanticClass clazz)
     {
+        this(clazz,null);
+    }
+    public NodeTypeImp(SemanticClass clazz,HashSet<NodeTypeImp> aditionalSuperTypes)
+    {
+        if(aditionalSuperTypes!=null)
+        {
+            aditionalSuperTypes.addAll(aditionalSuperTypes);
+        }
         this.clazz = clazz;
         loadPropertyDefinitions();
         loadChildNodeDefinitions();
@@ -61,7 +72,7 @@ public class NodeTypeImp implements NodeType
         {
             isMixin = value.getBoolean();
         }
-        prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#isQueryable");
+        prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(ISQUERYABLE);
         value = clazz.getRequiredProperty(prop);
         if (value == null)
         {
@@ -121,7 +132,7 @@ public class NodeTypeImp implements NodeType
             {
                 try
                 {
-                    NodeType superNodeType = manager.getNodeType(superClazz.getPrefix() + ":" + superClazz.getName());
+                    NodeTypeImp superNodeType = (NodeTypeImp)manager.getNodeType(superClazz.getPrefix() + ":" + superClazz.getName());
                     supertypes.add(superNodeType);
                 }
                 catch (NoSuchNodeTypeException nsnte)
@@ -171,7 +182,10 @@ public class NodeTypeImp implements NodeType
 
     public NodeType[] getSupertypes()
     {
-        return supertypes.toArray(new NodeType[supertypes.size()]);
+        HashSet<NodeTypeImp> getSupertypes=new HashSet<NodeTypeImp>();
+        getSupertypes.addAll(this.supertypes);
+        getSupertypes.addAll(this.aditionalSuperTypes);
+        return getSupertypes.toArray(new NodeType[getSupertypes.size()]);
     }
 
     private void loadSubTypes()
@@ -195,38 +209,16 @@ public class NodeTypeImp implements NodeType
 
     public NodeType[] getDeclaredSupertypes()
     {
-        HashSet<NodeTypeImp> declaredSupertypes = new HashSet<NodeTypeImp>();
-        Iterator<SemanticClass> classes = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
-        while (classes.hasNext())
-        {
-            SemanticClass oclazz = classes.next();
-            if (clazz.isSubClass(oclazz))
-            {
-                declaredSupertypes.add(NodeTypeManagerImp.loadNodeType(oclazz));
-            }
-        }
-        return declaredSupertypes.toArray(new NodeType[declaredSupertypes.size()]);
-
+        return this.supertypes.toArray(new NodeType[this.supertypes.size()]);
     }
-
     public NodeTypeIterator getSubtypes()
     {
         return new NodeTypeIteratorImp(subtypes);
     }
 
     public NodeTypeIterator getDeclaredSubtypes()
-    {
-        HashSet<SemanticClass> declaredSubtypes = new HashSet<SemanticClass>();
-        Iterator<SemanticClass> classes = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
-        while (classes.hasNext())
-        {
-            SemanticClass oclazz = classes.next();
-            if (oclazz.isSubClass(clazz))
-            {
-                declaredSubtypes.add(oclazz);
-            }
-        }
-        return new NodeTypeIteratorImp(declaredSubtypes);
+    {        
+        return new NodeTypeIteratorImp(subtypes);
     }
 
     public boolean isNodeType(String nodeTypeName)
