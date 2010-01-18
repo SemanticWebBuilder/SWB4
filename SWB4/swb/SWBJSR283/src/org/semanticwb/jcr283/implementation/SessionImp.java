@@ -45,13 +45,17 @@ public class SessionImp implements Session{
 
     private WorkspaceImp workspace;
     private final String userid;
+    
     public SessionImp(String userid)
     {
         this.userid=userid;
+        
+        
     }
     public void setWorkspace(WorkspaceImp workspace)
     {
         this.workspace=workspace;
+
     }
     public Repository getRepository()
     {
@@ -80,7 +84,7 @@ public class SessionImp implements Session{
 
     public Node getRootNode() throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return workspace.getRoot();
     }
 
     public Session impersonate(Credentials credentials) throws LoginException, RepositoryException

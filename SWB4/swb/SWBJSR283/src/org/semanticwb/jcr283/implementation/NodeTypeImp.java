@@ -33,7 +33,7 @@ public class NodeTypeImp implements NodeType
 {
 
     private static final String ALL = "*";
-    private static final String ISQUERYABLE = NamespaceRegistry.NAMESPACE_JCR+"#isQueryable";
+    private static final String ISQUERYABLE = NamespaceRegistry.NAMESPACE_JCR + "#isQueryable";
     private static Logger log = SWBUtils.getLogger(NodeTypeImp.class);
     private final SemanticClass clazz;
     private final HashMap<String, PropertyDefinitionImp> propertyDefinitions = new HashMap<String, PropertyDefinitionImp>();
@@ -47,14 +47,14 @@ public class NodeTypeImp implements NodeType
     private final boolean hasOrderableChildNodes;
     private final String primaryItemName;
 
-    
     public NodeTypeImp(SemanticClass clazz)
     {
-        this(clazz,null);
+        this(clazz, null);
     }
-    public NodeTypeImp(SemanticClass clazz,HashSet<NodeTypeImp> aditionalSuperTypes)
+
+    public NodeTypeImp(SemanticClass clazz, HashSet<NodeTypeImp> aditionalSuperTypes)
     {
-        if(aditionalSuperTypes!=null)
+        if (aditionalSuperTypes != null)
         {
             aditionalSuperTypes.addAll(aditionalSuperTypes);
         }
@@ -116,12 +116,14 @@ public class NodeTypeImp implements NodeType
         }
 
     }
+
     public static SemanticProperty getSemanticProperty(String name)
     {
-        name=name.replace("{","");
-        name=name.replace("}","#");
+        name = name.replace("{", "");
+        name = name.replace("}", "#");
         return SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(name);
     }
+
     private void loadSuperTypes()
     {
         NodeTypeManagerImp manager = new NodeTypeManagerImp();
@@ -133,7 +135,7 @@ public class NodeTypeImp implements NodeType
             {
                 try
                 {
-                    NodeTypeImp superNodeType = (NodeTypeImp)manager.getNodeType(superClazz.getPrefix() + ":" + superClazz.getName());
+                    NodeTypeImp superNodeType = (NodeTypeImp) manager.getNodeType(superClazz.getPrefix() + ":" + superClazz.getName());
                     supertypes.add(superNodeType);
                 }
                 catch (NoSuchNodeTypeException nsnte)
@@ -152,13 +154,13 @@ public class NodeTypeImp implements NodeType
 
     private void loadPropertyDefinitions()
     {
-        SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(NamespaceRegistry.NAMESPACE_JCR+"#propertyDefinition");
+        SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(NamespaceRegistry.NAMESPACE_JCR + "#propertyDefinition");
         Iterator<SemanticObject> values = clazz.listObjectRequiredProperties(prop);
         while (values.hasNext())
         {
             SemanticObject propertyDefinition = values.next();
-            PropertyDefinitionImp pd = new PropertyDefinitionImp(propertyDefinition,this);
-            if(!propertyDefinitions.containsKey(pd.getName()))
+            PropertyDefinitionImp pd = new PropertyDefinitionImp(propertyDefinition, this);
+            if (!propertyDefinitions.containsKey(pd.getName()))
             {
                 propertyDefinitions.put(pd.getName(), pd);
             }
@@ -167,7 +169,7 @@ public class NodeTypeImp implements NodeType
         while (props.hasNext())
         {
             PropertyDefinitionImp pd = new PropertyDefinitionImp(props.next());
-            if(!propertyDefinitions.containsKey(pd.getName()))
+            if (!propertyDefinitions.containsKey(pd.getName()))
             {
                 propertyDefinitions.put(pd.getName(), pd);
             }
@@ -176,12 +178,12 @@ public class NodeTypeImp implements NodeType
 
     private void loadChildNodeDefinitions()
     {
-        SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(NamespaceRegistry.NAMESPACE_JCR+"#childNodeDefinition");
+        SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(NamespaceRegistry.NAMESPACE_JCR + "#childNodeDefinition");
         Iterator<SemanticObject> values = clazz.listObjectRequiredProperties(prop);
         while (values.hasNext())
         {
             SemanticObject childDefinition = values.next();
-            NodeDefinitionImp nodeDefinitionImp = new NodeDefinitionImp(childDefinition,this);
+            NodeDefinitionImp nodeDefinitionImp = new NodeDefinitionImp(childDefinition, this);
             childnodeDefinitions.put(nodeDefinitionImp.getName(), nodeDefinitionImp);
         }
 
@@ -189,7 +191,7 @@ public class NodeTypeImp implements NodeType
 
     public NodeType[] getSupertypes()
     {
-        HashSet<NodeTypeImp> getSupertypes=new HashSet<NodeTypeImp>();
+        HashSet<NodeTypeImp> getSupertypes = new HashSet<NodeTypeImp>();
         getSupertypes.addAll(this.supertypes);
         getSupertypes.addAll(this.aditionalSuperTypes);
         return getSupertypes.toArray(new NodeType[getSupertypes.size()]);
@@ -218,13 +220,14 @@ public class NodeTypeImp implements NodeType
     {
         return this.supertypes.toArray(new NodeType[this.supertypes.size()]);
     }
+
     public NodeTypeIterator getSubtypes()
     {
         return new NodeTypeIteratorImp(subtypes);
     }
 
     public NodeTypeIterator getDeclaredSubtypes()
-    {        
+    {
         return new NodeTypeIteratorImp(subtypes);
     }
 
@@ -331,13 +334,29 @@ public class NodeTypeImp implements NodeType
                 }
                 if (nodeTypeName != null)
                 {
-                    String names[] = childNodeDefinition.getRequiredPrimaryTypeNames();
-                    for (String name : names)
+                    NodeTypeManagerImp mg = new NodeTypeManagerImp();
+                    if (mg == null)
                     {
-                        if (name.equals(nodeTypeName))
+                        return false;
+                    }
+                    try
+                    {
+                        if (mg.getNodeType(nodeTypeName).isAbstract())
                         {
-                            return true;
+                            return false;
                         }
+                        String names[] = childNodeDefinition.getRequiredPrimaryTypeNames();
+                        for (String name : names)
+                        {
+                            if (name.equals(nodeTypeName))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        return false;
                     }
                 }
 
@@ -367,6 +386,12 @@ public class NodeTypeImp implements NodeType
             }
         }
         return false;
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.getName();
     }
 
     public boolean canRemoveItem(String itemName)

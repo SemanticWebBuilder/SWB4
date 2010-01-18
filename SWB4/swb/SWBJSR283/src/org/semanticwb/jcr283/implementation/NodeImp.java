@@ -54,11 +54,13 @@ public class NodeImp extends ItemImp implements Node
 {
 
     private final static Logger log = SWBUtils.getLogger(NodeImp.class);
-    private final static NodeTypeManagerImp nodeTypeManager = new NodeTypeManagerImp();
-    private final static NamespaceRegistryImp namespaceRegistryImp = new NamespaceRegistryImp();
+    private final static NodeTypeManagerImp nodeTypeManager = new NodeTypeManagerImp();    
     private final static ValueFactoryImp valueFactoryImp = new ValueFactoryImp();
     private final NodeDefinitionImp nodeDefinitionImp;
     private final Hashtable<String, PropertyImp> properties = new Hashtable<String, PropertyImp>();
+
+    
+
     private SemanticObject obj = null;
     private final int index;
 
@@ -83,7 +85,10 @@ public class NodeImp extends ItemImp implements Node
         nodeDefinitionImp = new NodeDefinitionImp(obj, NodeTypeManagerImp.loadNodeType(obj.getSemanticClass()));
         loadProperties();
     }
-
+    private void loadChilds()
+    {        
+        
+    }
     public SemanticObject getSemanticObject()
     {
         return obj;
@@ -189,7 +194,7 @@ public class NodeImp extends ItemImp implements Node
         if (!nodeType.canAddChildNode(nameToAdd))
         {
             //TODO:ERROR
-        }
+        }        
         NodeDefinitionImp childDefinition = null;
         for (NodeDefinitionImp childNodeDefinition : nodeType.getChildNodeDefinitionsImp())
         {
@@ -494,17 +499,42 @@ public class NodeImp extends ItemImp implements Node
 
     public void addMixin(String mixinName) throws NoSuchNodeTypeException, VersionException, ConstraintViolationException, LockException, RepositoryException
     {
+        NodeTypeManagerImp mg=new NodeTypeManagerImp();
+        NodeTypeImp mixNodeType=mg.getNodeTypeImp(mixinName);
+        if(this.canAddMixin(mixinName))
+        {
+            throw new ConstraintViolationException("The mixin can be added");
+        }
+        nodeDefinitionImp.removeNodeType(mixNodeType);
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public void removeMixin(String mixinName) throws NoSuchNodeTypeException, VersionException, ConstraintViolationException, LockException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        NodeTypeManagerImp mg=new NodeTypeManagerImp();
+        NodeType mixNodeType=mg.getNodeType(mixinName);
+        for(NodeType supertypes : nodeDefinitionImp.getDefaultPrimaryType().getDeclaredSupertypes())
+        {
+            if(supertypes.equals(mixNodeType))
+            {
+                throw new ConstraintViolationException("The mix in can not be deleted, the mixin is declared super nodetype");
+            }
+        }
+        // TODO: remove mixin
     }
 
     public boolean canAddMixin(String mixinName) throws NoSuchNodeTypeException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        NodeTypeManagerImp mg=new NodeTypeManagerImp();
+        NodeType mixNodeType=mg.getNodeType(mixinName);
+        for(NodeType supertypes : nodeDefinitionImp.getDefaultPrimaryType().getSupertypes())
+        {
+            if(supertypes.equals(mixNodeType))
+            {
+                return false;
+            }
+        }
+        return false;
     }
 
     public NodeDefinition getDefinition() throws RepositoryException

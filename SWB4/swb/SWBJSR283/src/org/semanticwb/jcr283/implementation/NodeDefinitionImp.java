@@ -86,7 +86,10 @@ public class NodeDefinitionImp extends ItemDefinitionImp implements NodeDefiniti
     {
         return requiredPrimaryTypes.toArray(new NodeType[requiredPrimaryTypes.size()]);
     }
-
+    public void removeNodeType(NodeTypeImp nodeType)
+    {
+        
+    }
     public String[] getRequiredPrimaryTypeNames()
     {
         HashSet<String> requiredPrimaryTypeNames=new HashSet<String>();
