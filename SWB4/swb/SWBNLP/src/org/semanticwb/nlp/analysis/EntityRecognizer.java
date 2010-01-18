@@ -15,7 +15,6 @@ import java.io.StringReader;
 public class EntityRecognizer {
 
     public EntityRecognizer() throws IOException {
-        NGramAnalyzer an = new NGramAnalyzer(2, 5);
         String test = "nombre(s),  correo electrónico  de usuario";
         StringReader reader = new StringReader(test);
 
