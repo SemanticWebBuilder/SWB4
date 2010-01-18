@@ -66,7 +66,11 @@ public class RemoteURLLoginBridge extends ExtUserRepInt
     @Override
     public boolean validateCredential(String login, Object credential)
     {
-        return (RemoteURLLoginUtil.getUserAttributes(login, new String((char[]) credential), host, URL, soapAction) != null);
+        if (RemoteURLLoginUtil.getUserAttributes(login, new String((char[]) credential), host, URL, soapAction) == null){
+            throw new RuntimeException("Commit failed");
+
+        }
+        return true;
     }
 
     @Override
