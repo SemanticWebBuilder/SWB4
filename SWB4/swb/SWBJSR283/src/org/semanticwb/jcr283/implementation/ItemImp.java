@@ -37,6 +37,12 @@ public abstract class ItemImp implements Item{
         this.parent=parent;
         isNew=false;
     }
+
+    @Override
+    public String toString()
+    {
+        return name;
+    }
     public ItemImp(SemanticObject obj,String name,NodeImp parent)
     {
         this.name=name;
@@ -98,6 +104,7 @@ public abstract class ItemImp implements Item{
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    
     public void accept(ItemVisitor visitor) throws RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");

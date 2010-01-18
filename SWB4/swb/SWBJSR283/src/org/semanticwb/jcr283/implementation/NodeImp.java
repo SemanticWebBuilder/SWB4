@@ -57,34 +57,39 @@ public class NodeImp extends ItemImp implements Node
     private final NodeDefinitionImp nodeDefinitionImp;
     private final Hashtable<String, PropertyImp> properties = new Hashtable<String, PropertyImp>();
     private SemanticObject obj = null;
-
-    public NodeImp(Base base, NodeImp parent)
+    private final int index;
+    public NodeImp(Base base, NodeImp parent,int index)
     {
-        this(base.getSemanticObject(), "", parent);
+        this(base.getSemanticObject(), "", parent,index);
     }
 
-    public NodeImp(SemanticObject obj, String name, NodeImp parent)
+    public NodeImp(SemanticObject obj, String name, NodeImp parent,int index)
     {
         super(obj, name, parent);
         this.obj = obj;
+        this.index=index;
         nodeDefinitionImp = new NodeDefinitionImp(obj, NodeTypeManagerImp.loadNodeType(obj.getSemanticClass()));
         loadProperties();
     }
 
     private void loadProperties()
     {
-        Iterator<SemanticProperty> props = obj.listProperties();
-        while (props.hasNext())
+        if (obj != null)
         {
-            SemanticProperty semanticProperty = props.next();
-            try
+            Iterator<SemanticProperty> props = obj.listProperties();
+            while (props.hasNext())
             {
-                PropertyImp prop = new PropertyImp(semanticProperty, this);
-                this.properties.put(prop.getName(), prop);
-            }
-            catch (Exception e)
-            {
-                log.error(e);
+                SemanticProperty semanticProperty = props.next();
+                try
+                {
+                    log.debug("loading property " + semanticProperty.getURI() + " for node " + obj.getURI());
+                    PropertyImp prop = new PropertyImp(semanticProperty, this);
+                    this.properties.put(prop.getName(), prop);
+                }
+                catch (Exception e)
+                {
+                    log.error(e);
+                }
             }
         }
     }
@@ -170,6 +175,10 @@ public class NodeImp extends ItemImp implements Node
             throw new ConstraintViolationException("The node can not set this property");
         }
         Property prop = this.getProperty(name);
+        if(prop!=null)
+        {
+            prop.setValue(values);
+        }
         return prop;
     }
 
@@ -245,6 +254,10 @@ public class NodeImp extends ItemImp implements Node
 
     public Node getNode(String relPath) throws PathNotFoundException, RepositoryException
     {
+        if(NodeImp.isValidPath(relPath))
+        {
+            //TODO: ERROR
+        }
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -269,6 +282,7 @@ public class NodeImp extends ItemImp implements Node
         PropertyImp prop = this.properties.get(name);
         if (prop == null)
         {
+            throw new PathNotFoundException("The property "+relPath+" was not found");
             // TODO: ERROR
         }
         return prop;
@@ -291,6 +305,7 @@ public class NodeImp extends ItemImp implements Node
 
     public Item getPrimaryItem() throws ItemNotFoundException, RepositoryException
     {
+        NodeType nodeTypePrimaryItem=this.getDefinition().getDefaultPrimaryType();
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -306,7 +321,7 @@ public class NodeImp extends ItemImp implements Node
 
     public int getIndex() throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return index;
     }
 
     public PropertyIterator getReferences() throws RepositoryException
@@ -331,12 +346,21 @@ public class NodeImp extends ItemImp implements Node
 
     public boolean hasNode(String relPath) throws RepositoryException
     {
+        if(!NodeImp.isValidPath(relPath))
+        {
+            //TODO:ERROR
+        }
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public boolean hasProperty(String relPath) throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        String name=extractName(relPath);
+        if(properties.get(name)==null)
+        {
+            return false;
+        }
+        return true;
     }
 
     public boolean hasNodes() throws RepositoryException
@@ -346,7 +370,14 @@ public class NodeImp extends ItemImp implements Node
 
     public boolean hasProperties() throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if(properties.size()>0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public NodeType getPrimaryNodeType() throws RepositoryException
@@ -361,7 +392,7 @@ public class NodeImp extends ItemImp implements Node
 
     public boolean isNodeType(String nodeTypeName) throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return nodeTypeManager.hasNodeType(nodeTypeName);
     }
 
     public void setPrimaryType(String nodeTypeName) throws NoSuchNodeTypeException, VersionException, ConstraintViolationException, LockException, RepositoryException
