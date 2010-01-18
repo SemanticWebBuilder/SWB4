@@ -102,6 +102,11 @@ public class NodeDefinitionImp extends ItemDefinitionImp implements NodeDefiniti
         return defaultPrimaryType;
     }
 
+    public NodeTypeImp getDefaultPrimaryTypeImp()
+    {
+        return defaultPrimaryType;
+    }
+
     public String getDefaultPrimaryTypeName()
     {
         if(defaultPrimaryType==null)

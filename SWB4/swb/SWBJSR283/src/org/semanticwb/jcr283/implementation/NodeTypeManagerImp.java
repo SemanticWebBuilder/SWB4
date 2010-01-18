@@ -68,6 +68,11 @@ public class NodeTypeManagerImp implements NodeTypeManager
         return types.get(nodeTypeName);
     }
 
+    public NodeTypeImp getNodeTypeImp(String nodeTypeName) throws NoSuchNodeTypeException, RepositoryException
+    {
+        return types.get(nodeTypeName);
+    }
+
     public boolean hasNodeType(String name) throws RepositoryException
     {
         return types.get(name) == null ? false : true;
