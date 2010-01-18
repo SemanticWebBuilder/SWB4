@@ -39,8 +39,10 @@ import javax.jcr.version.Version;
 import javax.jcr.version.VersionException;
 import javax.jcr.version.VersionHistory;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.jcr283.repository.model.Base;
+import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
@@ -58,16 +60,17 @@ public class NodeImp extends ItemImp implements Node
     private final Hashtable<String, PropertyImp> properties = new Hashtable<String, PropertyImp>();
     private SemanticObject obj = null;
     private final int index;
-    public NodeImp(Base base, NodeImp parent,int index)
+
+    public NodeImp(Base base, NodeImp parent, int index)
     {
-        this(base.getSemanticObject(), "", parent,index);
+        this(base.getSemanticObject(), "", parent, index);
     }
 
-    public NodeImp(SemanticObject obj, String name, NodeImp parent,int index)
+    public NodeImp(SemanticObject obj, String name, NodeImp parent, int index)
     {
         super(obj, name, parent);
         this.obj = obj;
-        this.index=index;
+        this.index = index;
         nodeDefinitionImp = new NodeDefinitionImp(obj, NodeTypeManagerImp.loadNodeType(obj.getSemanticClass()));
         loadProperties();
     }
@@ -80,15 +83,19 @@ public class NodeImp extends ItemImp implements Node
             while (props.hasNext())
             {
                 SemanticProperty semanticProperty = props.next();
-                try
+                SemanticClass repositoryPropertyDefinition = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#RepositoryPropertyDefinition");
+                if (semanticProperty.getSemanticObject().getSemanticClass().isSubClass(repositoryPropertyDefinition))
                 {
-                    log.debug("loading property " + semanticProperty.getURI() + " for node " + obj.getURI());
-                    PropertyImp prop = new PropertyImp(semanticProperty, this);
-                    this.properties.put(prop.getName(), prop);
-                }
-                catch (Exception e)
-                {
-                    log.error(e);
+                    try
+                    {
+                        log.debug("loading property " + semanticProperty.getURI() + " for node " + obj.getURI());
+                        PropertyImp prop = new PropertyImp(semanticProperty, this);
+                        this.properties.put(prop.getName(), prop);
+                    }
+                    catch (Exception e)
+                    {
+                        log.error(e);
+                    }
                 }
             }
         }
@@ -175,7 +182,7 @@ public class NodeImp extends ItemImp implements Node
             throw new ConstraintViolationException("The node can not set this property");
         }
         Property prop = this.getProperty(name);
-        if(prop!=null)
+        if (prop != null)
         {
             prop.setValue(values);
         }
@@ -254,7 +261,7 @@ public class NodeImp extends ItemImp implements Node
 
     public Node getNode(String relPath) throws PathNotFoundException, RepositoryException
     {
-        if(NodeImp.isValidPath(relPath))
+        if (NodeImp.isValidPath(relPath))
         {
             //TODO: ERROR
         }
@@ -282,7 +289,7 @@ public class NodeImp extends ItemImp implements Node
         PropertyImp prop = this.properties.get(name);
         if (prop == null)
         {
-            throw new PathNotFoundException("The property "+relPath+" was not found");
+            throw new PathNotFoundException("The property " + relPath + " was not found");
             // TODO: ERROR
         }
         return prop;
@@ -305,7 +312,7 @@ public class NodeImp extends ItemImp implements Node
 
     public Item getPrimaryItem() throws ItemNotFoundException, RepositoryException
     {
-        NodeType nodeTypePrimaryItem=this.getDefinition().getDefaultPrimaryType();
+        NodeType nodeTypePrimaryItem = this.getDefinition().getDefaultPrimaryType();
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -346,7 +353,7 @@ public class NodeImp extends ItemImp implements Node
 
     public boolean hasNode(String relPath) throws RepositoryException
     {
-        if(!NodeImp.isValidPath(relPath))
+        if (!NodeImp.isValidPath(relPath))
         {
             //TODO:ERROR
         }
@@ -355,8 +362,8 @@ public class NodeImp extends ItemImp implements Node
 
     public boolean hasProperty(String relPath) throws RepositoryException
     {
-        String name=extractName(relPath);
-        if(properties.get(name)==null)
+        String name = extractName(relPath);
+        if (properties.get(name) == null)
         {
             return false;
         }
@@ -370,7 +377,7 @@ public class NodeImp extends ItemImp implements Node
 
     public boolean hasProperties() throws RepositoryException
     {
-        if(properties.size()>0)
+        if (properties.size() > 0)
         {
             return true;
         }
