@@ -6,6 +6,7 @@ package org.semanticwb.jcr283.implementation;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import javax.jcr.NamespaceRegistry;
 import javax.jcr.Property;
 import javax.jcr.PropertyType;
 import javax.jcr.Value;
@@ -53,7 +54,7 @@ public class PropertyDefinitionImp extends ItemDefinitionImp implements Property
             requiredType = PropertyType.UNDEFINED;
         }
 
-        prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#isFullTextSearchable");
+        prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(NamespaceRegistry.NAMESPACE_JCR+"#isFullTextSearchable");
         value = obj.getLiteralProperty(prop);
         if (value != null)
         {
@@ -63,7 +64,7 @@ public class PropertyDefinitionImp extends ItemDefinitionImp implements Property
         {
             isFullTextSearchable = false;
         }
-        prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#isQueryOrderable");
+        prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(NamespaceRegistry.NAMESPACE_JCR+"#isQueryOrderable");
         value = obj.getLiteralProperty(prop);
         if (value != null)
         {
