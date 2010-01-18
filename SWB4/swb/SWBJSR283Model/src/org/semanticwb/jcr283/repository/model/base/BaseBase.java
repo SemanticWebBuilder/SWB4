@@ -1,7 +1,7 @@
 package org.semanticwb.jcr283.repository.model.base;
 
 
-public abstract class BaseBase extends org.semanticwb.model.base.GenericObjectBase 
+public abstract class BaseBase extends org.semanticwb.jcr283.repository.model.NodeTypes 
 {
        public static final org.semanticwb.platform.SemanticClass nt_Base=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#base");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#base");
@@ -44,16 +44,6 @@ public abstract class BaseBase extends org.semanticwb.model.base.GenericObjectBa
     public BaseBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-    public void remove()
-    {
-        getSemanticObject().remove();
-    }
-
-    public java.util.Iterator<org.semanticwb.model.GenericObject> listRelatedObjects()
-    {
-        return new org.semanticwb.model.GenericIterator(getSemanticObject().listRelatedObjects(),true);
     }
 
     public org.semanticwb.jcr283.repository.model.Workspace getWorkspace()
