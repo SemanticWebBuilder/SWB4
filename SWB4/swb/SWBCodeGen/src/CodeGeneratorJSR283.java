@@ -38,6 +38,7 @@ public class CodeGeneratorJSR283 {
             codeGeneration.generateCode("nt", false,dir);
             codeGeneration.generateCode("mix", false,dir);
             codeGeneration.generateCode("swbrep", false,dir);
+            codeGeneration.generateCode("jcr", false,dir);
             System.out.println("Generación de clases completa");
         }
         catch (CodeGeneratorException cge)
