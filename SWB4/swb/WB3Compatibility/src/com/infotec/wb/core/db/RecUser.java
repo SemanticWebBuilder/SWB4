@@ -57,9 +57,6 @@ import org.semanticwb.model.SWBContext;
  */
 public abstract class RecUser implements WBDBRecord, java.io.Serializable {
 
-    
-
-
     private ArrayList observers = new ArrayList();
     private ArrayList notifys = new ArrayList();
     public static String DEFLOGIN="nologin";

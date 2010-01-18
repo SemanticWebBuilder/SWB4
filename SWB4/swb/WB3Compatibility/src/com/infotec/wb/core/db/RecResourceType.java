@@ -60,6 +60,7 @@ import org.semanticwb.model.WebSite;
  */
 public class RecResourceType implements WBDBRecord
 {
+
     private static Logger log = SWBUtils.getLogger(RecResourceType.class);
     org.semanticwb.model.ResourceType res = null;
 
