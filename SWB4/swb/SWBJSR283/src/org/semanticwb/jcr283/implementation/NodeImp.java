@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import javax.jcr.AccessDeniedException;
@@ -52,15 +53,13 @@ import org.semanticwb.platform.SemanticProperty;
  */
 public class NodeImp extends ItemImp implements Node
 {
+    public static final String JCR_MIXINTYPES = "jcr:mixinTypes";
 
     private final static Logger log = SWBUtils.getLogger(NodeImp.class);
-    private final static NodeTypeManagerImp nodeTypeManager = new NodeTypeManagerImp();    
+    private final static NodeTypeManagerImp nodeTypeManager = new NodeTypeManagerImp();
     private final static ValueFactoryImp valueFactoryImp = new ValueFactoryImp();
     private final NodeDefinitionImp nodeDefinitionImp;
     private final Hashtable<String, PropertyImp> properties = new Hashtable<String, PropertyImp>();
-
-    
-
     private SemanticObject obj = null;
     private final int index;
 
@@ -85,10 +84,11 @@ public class NodeImp extends ItemImp implements Node
         nodeDefinitionImp = new NodeDefinitionImp(obj, NodeTypeManagerImp.loadNodeType(obj.getSemanticClass()));
         loadProperties();
     }
+
     private void loadChilds()
-    {        
-        
+    {
     }
+
     public SemanticObject getSemanticObject()
     {
         return obj;
@@ -107,7 +107,7 @@ public class NodeImp extends ItemImp implements Node
                 if (semanticProperty.getSemanticObject().getSemanticClass().isSubClass(repositoryPropertyDefinition))
                 {
                     try
-                    {                        
+                    {
                         PropertyImp prop = new PropertyImp(semanticProperty, this, this.getPath() + "/" + semanticProperty.getPrefix() + ":" + semanticProperty.getName(), this.getDepth() + 1, this.session);
                         if (!this.properties.containsKey(prop.getName()))
                         {
@@ -194,7 +194,7 @@ public class NodeImp extends ItemImp implements Node
         if (!nodeType.canAddChildNode(nameToAdd))
         {
             //TODO:ERROR
-        }        
+        }
         NodeDefinitionImp childDefinition = null;
         for (NodeDefinitionImp childNodeDefinition : nodeType.getChildNodeDefinitionsImp())
         {
@@ -499,40 +499,88 @@ public class NodeImp extends ItemImp implements Node
 
     public void addMixin(String mixinName) throws NoSuchNodeTypeException, VersionException, ConstraintViolationException, LockException, RepositoryException
     {
-        NodeTypeManagerImp mg=new NodeTypeManagerImp();
-        NodeTypeImp mixNodeType=mg.getNodeTypeImp(mixinName);
-        if(this.canAddMixin(mixinName))
+        NodeTypeManagerImp mg = new NodeTypeManagerImp();
+        NodeTypeImp mixNodeType = mg.getNodeTypeImp(mixinName);
+        if (!this.canAddMixin(mixinName))
         {
             throw new ConstraintViolationException("The mixin can be added");
         }
-        nodeDefinitionImp.removeNodeType(mixNodeType);
-        throw new UnsupportedOperationException("Not supported yet.");
+        PropertyImp prop = properties.get(JCR_MIXINTYPES);
+        Value[] values=prop.getValues();
+        Value newValue=valueFactoryImp.createValue(mixinName);
+        Value[] newValues=new Value[values.length+1];
+        int i=0;
+        for(Value value : values)
+        {
+            newValues[i]=value;
+            i++;
+        }
+        newValues[i]=newValue;
+        prop.setValue(newValues);
+        for (PropertyDefinitionImp propDef : mixNodeType.getPropertyDefinitionsImp())
+        {
+            if (propDef.getSemanticProperty() != null)
+            {
+                SemanticProperty semanticProperty = propDef.getSemanticProperty();
+                String name = semanticProperty.getPrefix() + ":" + semanticProperty.getName();
+                PropertyImp propMix = new PropertyImp(semanticProperty, this, this.getPath() + "/" + name, this.getDepth() + 1, session);
+                properties.put(name, propMix);
+            }
+        }
     }
 
     public void removeMixin(String mixinName) throws NoSuchNodeTypeException, VersionException, ConstraintViolationException, LockException, RepositoryException
     {
-        NodeTypeManagerImp mg=new NodeTypeManagerImp();
-        NodeType mixNodeType=mg.getNodeType(mixinName);
-        for(NodeType supertypes : nodeDefinitionImp.getDefaultPrimaryType().getDeclaredSupertypes())
+        NodeTypeManagerImp mg = new NodeTypeManagerImp();
+        NodeTypeImp mixNodeType = mg.getNodeTypeImp(mixinName);
+        for (NodeType supertypes : nodeDefinitionImp.getDefaultPrimaryType().getDeclaredSupertypes())
         {
-            if(supertypes.equals(mixNodeType))
+            if (supertypes.equals(mixNodeType))
             {
                 throw new ConstraintViolationException("The mix in can not be deleted, the mixin is declared super nodetype");
             }
         }
-        // TODO: remove mixin
+        PropertyImp prop = properties.get(JCR_MIXINTYPES);
+        Value[] values=prop.getValues();
+        HashSet<Value> newValues=new HashSet<Value>();
+        for(Value value : values)
+        {
+            if(!value.getString().equals(mixinName))
+            {
+                newValues.add(value);
+            }
+        }
+        prop.setValue(newValues.toArray(new Value[newValues.size()]));
+
+        for (PropertyDefinitionImp propDef : mixNodeType.getPropertyDefinitionsImp())
+        {
+            if (propDef.getSemanticProperty() != null)
+            {
+                SemanticProperty semanticProperty = propDef.getSemanticProperty();
+                String name = semanticProperty.getPrefix() + ":" + semanticProperty.getName();                
+                properties.remove(name);
+            }
+        }
     }
 
     public boolean canAddMixin(String mixinName) throws NoSuchNodeTypeException, RepositoryException
     {
-        NodeTypeManagerImp mg=new NodeTypeManagerImp();
-        NodeType mixNodeType=mg.getNodeType(mixinName);
-        for(NodeType supertypes : nodeDefinitionImp.getDefaultPrimaryType().getSupertypes())
+        NodeTypeManagerImp mg = new NodeTypeManagerImp();
+        NodeType mixNodeType = mg.getNodeType(mixinName);
+        if (!mixNodeType.isMixin())
         {
-            if(supertypes.equals(mixNodeType))
+            throw new NoSuchNodeTypeException("Tne nodeType is not mixin");
+        }
+        for (NodeType supertypes : nodeDefinitionImp.getDefaultPrimaryType().getSupertypes())
+        {
+            if (supertypes.equals(mixNodeType))
             {
                 return false;
             }
+        }
+        if (properties.containsKey(JCR_MIXINTYPES))
+        {
+            return false;
         }
         return false;
     }
