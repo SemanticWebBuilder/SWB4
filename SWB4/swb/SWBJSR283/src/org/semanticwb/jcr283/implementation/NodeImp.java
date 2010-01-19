@@ -87,6 +87,7 @@ public class NodeImp extends ItemImp implements Node
 
     private void loadChilds()
     {
+        Base base=new Base(obj);
     }
 
     public SemanticObject getSemanticObject()
