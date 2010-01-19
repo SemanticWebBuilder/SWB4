@@ -55,8 +55,11 @@ bodyset
 ruleSet
 :	selector (COMMA selector)*
 	LBRACE
-		(declaration SEMI)? (declaration SEMI)*
-	RBRACE -> ^(SELECTOR ^(ELEMENTS selector) ^(STYLE declaration?))
+		declaration SEMI (declaration SEMI)*
+	RBRACE -> ^(SELECTOR ^(ELEMENTS selector) ^(STYLE declaration+))
+	|selector (COMMA selector)*
+	LBRACE
+	RBRACE -> ^(SELECTOR ^(ELEMENTS selector) ^(STYLE))
 	;
 
 //Un selector es una lista de simpleSelectores separados por un signo de mas, un signo mayor que o un espacio.
