@@ -4,13 +4,16 @@ package org.semanticwb.nlp.analysis;
  *
  * @author hasdai
  */
-// $ANTLR 3.1.2 /home/hasdai/Documentos/SimpleCSSParser.g 2010-01-19 13:00:18
+// $ANTLR 3.1.2 /home/hasdai/Documentos/SimpleCSSParser.g 2010-01-19 13:10:48
 
 import org.antlr.runtime.*;
 import org.antlr.runtime.Token;
+import org.antlr.runtime.debug.*;
+import java.io.IOException;
+
 import org.antlr.runtime.tree.*;
 
-public class SimpleCSSParser extends Parser {
+public class SimpleCSSParser extends DebugParser {
     public static final String[] tokenNames = new String[] {
         "<invalid>", "<EOR>", "<DOWN>", "<UP>", "HEXCHAR", "NONASCII", "UNICODE", "ESCAPE", "NMSTART", "NMCHAR", "NAME", "URL", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "COMMENT", "CDO", "CDC", "INCLUDES", "DASHMATCH", "GREATER", "LBRACE", "RBRACE", "LBRACKET", "RBRACKET", "OPEQ", "SEMI", "COLON", "SOLIDUS", "MINUS", "PLUS", "STAR", "LPAREN", "RPAREN", "COMMA", "DOT", "INVALID", "STRING", "IDENT", "HASH", "IMPORT_SYM", "PAGE_SYM", "MEDIA_SYM", "CHARSET_SYM", "WS", "IMPORTANT_SYM", "EMS", "EXS", "LENGTH", "ANGLE", "TIME", "FREQ", "DIMENSION", "PERCENTAGE", "NUMBER", "URI", "NL", "STYLESHEET", "CLASS", "SELECTOR", "STYLE", "HTMLELEMENT", "ELEMENTS", "VAL", "EXPR"
     };
@@ -103,23 +106,66 @@ public class SimpleCSSParser extends Parser {
     // delegates
     // delegators
 
+    public static final String[] ruleNames = new String[] {
+        "invalidRule", "combinator", "synpred9_SimpleCSSParser", "synpred6_SimpleCSSParser",
+        "property", "synpred5_SimpleCSSParser", "synpred19_SimpleCSSParser",
+        "selector", "bodyset", "declaration", "synpred15_SimpleCSSParser",
+        "synpred13_SimpleCSSParser", "synpred16_SimpleCSSParser", "synpred11_SimpleCSSParser",
+        "synpred2_SimpleCSSParser", "synpred14_SimpleCSSParser", "expr",
+        "synpred20_SimpleCSSParser", "synpred21_SimpleCSSParser", "synpred17_SimpleCSSParser",
+        "elementName", "styleSheet", "operator", "synpred18_SimpleCSSParser",
+        "synpred12_SimpleCSSParser", "synpred10_SimpleCSSParser", "synpred3_SimpleCSSParser",
+        "synpred4_SimpleCSSParser", "synpred22_SimpleCSSParser", "cssClass",
+        "ruleSet", "bodyList", "hexColor", "unaryOperator", "synpred8_SimpleCSSParser",
+        "synpred23_SimpleCSSParser", "term", "simpleSelector", "synpred7_SimpleCSSParser",
+        "synpred1_SimpleCSSParser"
+    };
 
+        public int ruleLevel = 0;
+        public int getRuleLevel() { return ruleLevel; }
+        public void incRuleLevel() { ruleLevel++; }
+        public void decRuleLevel() { ruleLevel--; }
         public SimpleCSSParser(TokenStream input) {
-            this(input, new RecognizerSharedState());
+            this(input, DebugEventSocketProxy.DEFAULT_DEBUGGER_PORT, new RecognizerSharedState());
         }
-        public SimpleCSSParser(TokenStream input, RecognizerSharedState state) {
+        public SimpleCSSParser(TokenStream input, int port, RecognizerSharedState state) {
             super(input, state);
-
+            DebugEventSocketProxy proxy =
+                new DebugEventSocketProxy(this,port,adaptor);
+            setDebugListener(proxy);
+            setTokenStream(new DebugTokenStream(input,proxy));
+            try {
+                proxy.handshake();
+            }
+            catch (IOException ioe) {
+                reportError(ioe);
+            }
+            TreeAdaptor adap = new CommonTreeAdaptor();
+            setTreeAdaptor(adap);
+            proxy.setTreeAdaptor(adap);
         }
+    public SimpleCSSParser(TokenStream input, DebugEventListener dbg) {
+        super(input, dbg);
 
-    protected TreeAdaptor adaptor = new CommonTreeAdaptor();
 
+        TreeAdaptor adap = new CommonTreeAdaptor();
+        setTreeAdaptor(adap);
+
+    }
+    protected boolean evalPredicate(boolean result, String predicate) {
+        dbg.semanticPredicate(result, predicate);
+        return result;
+    }
+
+    protected DebugTreeAdaptor adaptor;
     public void setTreeAdaptor(TreeAdaptor adaptor) {
-        this.adaptor = adaptor;
+        this.adaptor = new DebugTreeAdaptor(dbg,adaptor);
+
     }
     public TreeAdaptor getTreeAdaptor() {
         return adaptor;
     }
+
 
     public String[] getTokenNames() { return SimpleCSSParser.tokenNames; }
     public String getGrammarFileName() { return "/home/hasdai/Documentos/SimpleCSSParser.g"; }
@@ -163,16 +209,25 @@ public class SimpleCSSParser extends Parser {
         Object EOF2_tree=null;
         RewriteRuleTokenStream stream_EOF=new RewriteRuleTokenStream(adaptor,"token EOF");
         RewriteRuleSubtreeStream stream_bodyList=new RewriteRuleSubtreeStream(adaptor,"rule bodyList");
+        try { dbg.enterRule(getGrammarFileName(), "styleSheet");
+        if ( getRuleLevel()==0 ) {dbg.commence();}
+        incRuleLevel();
+        dbg.location(38, 1);
+
         try {
             // /home/hasdai/Documentos/SimpleCSSParser.g:39:1: ( bodyList EOF -> ^( STYLESHEET bodyList ) )
+            dbg.enterAlt(1);
+
             // /home/hasdai/Documentos/SimpleCSSParser.g:39:3: bodyList EOF
             {
+            dbg.location(39,3);
             pushFollow(FOLLOW_bodyList_in_styleSheet88);
             bodyList1=bodyList();
 
             state._fsp--;
             if (state.failed) return retval;
             if ( state.backtracking==0 ) stream_bodyList.add(bodyList1.getTree());
+            dbg.location(39,12);
             EOF2=(Token)match(input,EOF,FOLLOW_EOF_in_styleSheet90); if (state.failed) return retval;
             if ( state.backtracking==0 ) stream_EOF.add(EOF2);
 
@@ -192,11 +247,14 @@ public class SimpleCSSParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 39:16: -> ^( STYLESHEET bodyList )
             {
+                dbg.location(39,19);
                 // /home/hasdai/Documentos/SimpleCSSParser.g:39:19: ^( STYLESHEET bodyList )
                 {
                 Object root_1 = (Object)adaptor.nil();
+                dbg.location(39,21);
                 root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(STYLESHEET, "STYLESHEET"), root_1);
 
+                dbg.location(39,32);
                 adaptor.addChild(root_1, stream_bodyList.nextTree());
 
                 adaptor.addChild(root_0, root_1);
@@ -223,6 +281,15 @@ public class SimpleCSSParser extends Parser {
         }
         finally {
         }
+        dbg.location(40, 1);
+
+        }
+        finally {
+            dbg.exitRule(getGrammarFileName(), "styleSheet");
+            decRuleLevel();
+            if ( getRuleLevel()==0 ) {dbg.terminate();}
+        }
+
         return retval;
     }
     // $ANTLR end "styleSheet"
@@ -244,16 +311,28 @@ public class SimpleCSSParser extends Parser {
 
 
 
+        try { dbg.enterRule(getGrammarFileName(), "bodyList");
+        if ( getRuleLevel()==0 ) {dbg.commence();}
+        incRuleLevel();
+        dbg.location(43, 1);
+
         try {
             // /home/hasdai/Documentos/SimpleCSSParser.g:44:1: ( ( bodyset )* )
+            dbg.enterAlt(1);
+
             // /home/hasdai/Documentos/SimpleCSSParser.g:44:3: ( bodyset )*
             {
             root_0 = (Object)adaptor.nil();
 
+            dbg.location(44,3);
             // /home/hasdai/Documentos/SimpleCSSParser.g:44:3: ( bodyset )*
+            try { dbg.enterSubRule(1);
+
             loop1:
             do {
                 int alt1=2;
+                try { dbg.enterDecision(1);
+
                 int LA1_0 = input.LA(1);
 
                 if ( (LA1_0==DOT) ) {
@@ -261,10 +340,15 @@ public class SimpleCSSParser extends Parser {
                 }
 
 
+                } finally {dbg.exitDecision(1);}
+
                 switch (alt1) {
             	case 1 :
+            	    dbg.enterAlt(1);
+
             	    // /home/hasdai/Documentos/SimpleCSSParser.g:0:0: bodyset
             	    {
+            	    dbg.location(44,3);
             	    pushFollow(FOLLOW_bodyset_in_bodyList108);
             	    bodyset3=bodyset();
 
@@ -279,6 +363,7 @@ public class SimpleCSSParser extends Parser {
             	    break loop1;
                 }
             } while (true);
+            } finally {dbg.exitSubRule(1);}
 
 
             }
@@ -299,6 +384,15 @@ public class SimpleCSSParser extends Parser {
         }
         finally {
         }
+        dbg.location(45, 1);
+
+        }
+        finally {
+            dbg.exitRule(getGrammarFileName(), "bodyList");
+            decRuleLevel();
+            if ( getRuleLevel()==0 ) {dbg.terminate();}
+        }
+
         return retval;
     }
     // $ANTLR end "bodyList"
@@ -320,12 +414,20 @@ public class SimpleCSSParser extends Parser {
 
 
 
+        try { dbg.enterRule(getGrammarFileName(), "bodyset");
+        if ( getRuleLevel()==0 ) {dbg.commence();}
+        incRuleLevel();
+        dbg.location(48, 1);
+
         try {
             // /home/hasdai/Documentos/SimpleCSSParser.g:49:1: ( ruleSet )
+            dbg.enterAlt(1);
+
             // /home/hasdai/Documentos/SimpleCSSParser.g:49:4: ruleSet
             {
             root_0 = (Object)adaptor.nil();
 
+            dbg.location(49,4);
             pushFollow(FOLLOW_ruleSet_in_bodyset120);
             ruleSet4=ruleSet();
 
@@ -351,6 +453,15 @@ public class SimpleCSSParser extends Parser {
         }
         finally {
         }
+        dbg.location(50, 2);
+
+        }
+        finally {
+            dbg.exitRule(getGrammarFileName(), "bodyset");
+            decRuleLevel();
+            if ( getRuleLevel()==0 ) {dbg.terminate();}
+        }
+
         return retval;
     }
     // $ANTLR end "bodyset"
@@ -361,7 +472,7 @@ public class SimpleCSSParser extends Parser {
     };
 
     // $ANTLR start "ruleSet"
-    // /home/hasdai/Documentos/SimpleCSSParser.g:55:1: ruleSet : selector ( COMMA selector )* LBRACE ( declaration SEMI )? ( declaration SEMI )* RBRACE -> ^( SELECTOR ^( ELEMENTS selector ) ^( STYLE ( declaration )? ) ) ;
+    // /home/hasdai/Documentos/SimpleCSSParser.g:55:1: ruleSet : selector ( COMMA selector )* LBRACE declaration SEMI ( declaration SEMI )* RBRACE -> ^( SELECTOR ^( ELEMENTS selector ) ^( STYLE ( declaration )+ ) ) ;
     public final SimpleCSSParser.ruleSet_return ruleSet() throws RecognitionException {
         SimpleCSSParser.ruleSet_return retval = new SimpleCSSParser.ruleSet_return();
         retval.start = input.LT(1);
@@ -393,20 +504,33 @@ public class SimpleCSSParser extends Parser {
         RewriteRuleTokenStream stream_LBRACE=new RewriteRuleTokenStream(adaptor,"token LBRACE");
         RewriteRuleSubtreeStream stream_selector=new RewriteRuleSubtreeStream(adaptor,"rule selector");
         RewriteRuleSubtreeStream stream_declaration=new RewriteRuleSubtreeStream(adaptor,"rule declaration");
+        try { dbg.enterRule(getGrammarFileName(), "ruleSet");
+        if ( getRuleLevel()==0 ) {dbg.commence();}
+        incRuleLevel();
+        dbg.location(55, 1);
+
         try {
-            // /home/hasdai/Documentos/SimpleCSSParser.g:56:1: ( selector ( COMMA selector )* LBRACE ( declaration SEMI )? ( declaration SEMI )* RBRACE -> ^( SELECTOR ^( ELEMENTS selector ) ^( STYLE ( declaration )? ) ) )
-            // /home/hasdai/Documentos/SimpleCSSParser.g:56:3: selector ( COMMA selector )* LBRACE ( declaration SEMI )? ( declaration SEMI )* RBRACE
+            // /home/hasdai/Documentos/SimpleCSSParser.g:56:1: ( selector ( COMMA selector )* LBRACE declaration SEMI ( declaration SEMI )* RBRACE -> ^( SELECTOR ^( ELEMENTS selector ) ^( STYLE ( declaration )+ ) ) )
+            dbg.enterAlt(1);
+
+            // /home/hasdai/Documentos/SimpleCSSParser.g:56:3: selector ( COMMA selector )* LBRACE declaration SEMI ( declaration SEMI )* RBRACE
             {
+            dbg.location(56,3);
             pushFollow(FOLLOW_selector_in_ruleSet133);
             selector5=selector();
 
             state._fsp--;
             if (state.failed) return retval;
             if ( state.backtracking==0 ) stream_selector.add(selector5.getTree());
+            dbg.location(56,12);
             // /home/hasdai/Documentos/SimpleCSSParser.g:56:12: ( COMMA selector )*
+            try { dbg.enterSubRule(2);
+
             loop2:
             do {
                 int alt2=2;
+                try { dbg.enterDecision(2);
+
                 int LA2_0 = input.LA(1);
 
                 if ( (LA2_0==COMMA) ) {
@@ -414,13 +538,19 @@ public class SimpleCSSParser extends Parser {
                 }
 
 
+                } finally {dbg.exitDecision(2);}
+
                 switch (alt2) {
             	case 1 :
+            	    dbg.enterAlt(1);
+
             	    // /home/hasdai/Documentos/SimpleCSSParser.g:56:13: COMMA selector
             	    {
+            	    dbg.location(56,13);
             	    COMMA6=(Token)match(input,COMMA,FOLLOW_COMMA_in_ruleSet136); if (state.failed) return retval;
             	    if ( state.backtracking==0 ) stream_COMMA.add(COMMA6);
 
+            	    dbg.location(56,19);
             	    pushFollow(FOLLOW_selector_in_ruleSet138);
             	    selector7=selector();
 
@@ -435,62 +565,56 @@ public class SimpleCSSParser extends Parser {
             	    break loop2;
                 }
             } while (true);
+            } finally {dbg.exitSubRule(2);}
 
+            dbg.location(57,2);
             LBRACE8=(Token)match(input,LBRACE,FOLLOW_LBRACE_in_ruleSet143); if (state.failed) return retval;
             if ( state.backtracking==0 ) stream_LBRACE.add(LBRACE8);
 
-            // /home/hasdai/Documentos/SimpleCSSParser.g:58:3: ( declaration SEMI )?
-            int alt3=2;
-            int LA3_0 = input.LA(1);
+            dbg.location(58,3);
+            pushFollow(FOLLOW_declaration_in_ruleSet147);
+            declaration9=declaration();
 
-            if ( (LA3_0==IDENT) ) {
-                int LA3_1 = input.LA(2);
+            state._fsp--;
+            if (state.failed) return retval;
+            if ( state.backtracking==0 ) stream_declaration.add(declaration9.getTree());
+            dbg.location(58,15);
+            SEMI10=(Token)match(input,SEMI,FOLLOW_SEMI_in_ruleSet149); if (state.failed) return retval;
+            if ( state.backtracking==0 ) stream_SEMI.add(SEMI10);
 
-                if ( (synpred3_SimpleCSSParser()) ) {
+            dbg.location(58,20);
+            // /home/hasdai/Documentos/SimpleCSSParser.g:58:20: ( declaration SEMI )*
+            try { dbg.enterSubRule(3);
+
+            loop3:
+            do {
+                int alt3=2;
+                try { dbg.enterDecision(3);
+
+                int LA3_0 = input.LA(1);
+
+                if ( (LA3_0==IDENT) ) {
                     alt3=1;
                 }
-            }
-            switch (alt3) {
-                case 1 :
-                    // /home/hasdai/Documentos/SimpleCSSParser.g:58:4: declaration SEMI
-                    {
-                    pushFollow(FOLLOW_declaration_in_ruleSet148);
-                    declaration9=declaration();
-
-                    state._fsp--;
-                    if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_declaration.add(declaration9.getTree());
-                    SEMI10=(Token)match(input,SEMI,FOLLOW_SEMI_in_ruleSet150); if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_SEMI.add(SEMI10);
 
 
-                    }
-                    break;
+                } finally {dbg.exitDecision(3);}
 
-            }
-
-            // /home/hasdai/Documentos/SimpleCSSParser.g:58:23: ( declaration SEMI )*
-            loop4:
-            do {
-                int alt4=2;
-                int LA4_0 = input.LA(1);
-
-                if ( (LA4_0==IDENT) ) {
-                    alt4=1;
-                }
-
-
-                switch (alt4) {
+                switch (alt3) {
             	case 1 :
-            	    // /home/hasdai/Documentos/SimpleCSSParser.g:58:24: declaration SEMI
+            	    dbg.enterAlt(1);
+
+            	    // /home/hasdai/Documentos/SimpleCSSParser.g:58:21: declaration SEMI
             	    {
-            	    pushFollow(FOLLOW_declaration_in_ruleSet155);
+            	    dbg.location(58,21);
+            	    pushFollow(FOLLOW_declaration_in_ruleSet152);
             	    declaration11=declaration();
 
             	    state._fsp--;
             	    if (state.failed) return retval;
             	    if ( state.backtracking==0 ) stream_declaration.add(declaration11.getTree());
-            	    SEMI12=(Token)match(input,SEMI,FOLLOW_SEMI_in_ruleSet157); if (state.failed) return retval;
+            	    dbg.location(58,33);
+            	    SEMI12=(Token)match(input,SEMI,FOLLOW_SEMI_in_ruleSet154); if (state.failed) return retval;
             	    if ( state.backtracking==0 ) stream_SEMI.add(SEMI12);
 
 
@@ -498,11 +622,13 @@ public class SimpleCSSParser extends Parser {
             	    break;
 
             	default :
-            	    break loop4;
+            	    break loop3;
                 }
             } while (true);
+            } finally {dbg.exitSubRule(3);}
 
-            RBRACE13=(Token)match(input,RBRACE,FOLLOW_RBRACE_in_ruleSet162); if (state.failed) return retval;
+            dbg.location(59,2);
+            RBRACE13=(Token)match(input,RBRACE,FOLLOW_RBRACE_in_ruleSet159); if (state.failed) return retval;
             if ( state.backtracking==0 ) stream_RBRACE.add(RBRACE13);
 
 
@@ -519,29 +645,40 @@ public class SimpleCSSParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 59:9: -> ^( SELECTOR ^( ELEMENTS selector ) ^( STYLE ( declaration )? ) )
+            // 59:9: -> ^( SELECTOR ^( ELEMENTS selector ) ^( STYLE ( declaration )+ ) )
             {
-                // /home/hasdai/Documentos/SimpleCSSParser.g:59:12: ^( SELECTOR ^( ELEMENTS selector ) ^( STYLE ( declaration )? ) )
+                dbg.location(59,12);
+                // /home/hasdai/Documentos/SimpleCSSParser.g:59:12: ^( SELECTOR ^( ELEMENTS selector ) ^( STYLE ( declaration )+ ) )
                 {
                 Object root_1 = (Object)adaptor.nil();
+                dbg.location(59,14);
                 root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(SELECTOR, "SELECTOR"), root_1);
 
+                dbg.location(59,23);
                 // /home/hasdai/Documentos/SimpleCSSParser.g:59:23: ^( ELEMENTS selector )
                 {
                 Object root_2 = (Object)adaptor.nil();
+                dbg.location(59,25);
                 root_2 = (Object)adaptor.becomeRoot((Object)adaptor.create(ELEMENTS, "ELEMENTS"), root_2);
 
+                dbg.location(59,34);
                 adaptor.addChild(root_2, stream_selector.nextTree());
 
                 adaptor.addChild(root_1, root_2);
                 }
-                // /home/hasdai/Documentos/SimpleCSSParser.g:59:44: ^( STYLE ( declaration )? )
+                dbg.location(59,44);
+                // /home/hasdai/Documentos/SimpleCSSParser.g:59:44: ^( STYLE ( declaration )+ )
                 {
                 Object root_2 = (Object)adaptor.nil();
+                dbg.location(59,46);
                 root_2 = (Object)adaptor.becomeRoot((Object)adaptor.create(STYLE, "STYLE"), root_2);
 
-                // /home/hasdai/Documentos/SimpleCSSParser.g:59:52: ( declaration )?
-                if ( stream_declaration.hasNext() ) {
+                dbg.location(59,52);
+                if ( !(stream_declaration.hasNext()) ) {
+                    throw new RewriteEarlyExitException();
+                }
+                while ( stream_declaration.hasNext() ) {
+                    dbg.location(59,52);
                     adaptor.addChild(root_2, stream_declaration.nextTree());
 
                 }
@@ -574,6 +711,15 @@ public class SimpleCSSParser extends Parser {
         }
         finally {
         }
+        dbg.location(60, 2);
+
+        }
+        finally {
+            dbg.exitRule(getGrammarFileName(), "ruleSet");
+            decRuleLevel();
+            if ( getRuleLevel()==0 ) {dbg.terminate();}
+        }
+
         return retval;
     }
     // $ANTLR end "ruleSet"
@@ -599,40 +745,59 @@ public class SimpleCSSParser extends Parser {
 
 
 
+        try { dbg.enterRule(getGrammarFileName(), "selector");
+        if ( getRuleLevel()==0 ) {dbg.commence();}
+        incRuleLevel();
+        dbg.location(63, 1);
+
         try {
             // /home/hasdai/Documentos/SimpleCSSParser.g:64:1: ( simpleSelector ( combinator simpleSelector )* )
+            dbg.enterAlt(1);
+
             // /home/hasdai/Documentos/SimpleCSSParser.g:64:3: simpleSelector ( combinator simpleSelector )*
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_simpleSelector_in_selector192);
+            dbg.location(64,3);
+            pushFollow(FOLLOW_simpleSelector_in_selector189);
             simpleSelector14=simpleSelector();
 
             state._fsp--;
             if (state.failed) return retval;
             if ( state.backtracking==0 ) adaptor.addChild(root_0, simpleSelector14.getTree());
+            dbg.location(64,18);
             // /home/hasdai/Documentos/SimpleCSSParser.g:64:18: ( combinator simpleSelector )*
-            loop5:
-            do {
-                int alt5=2;
-                int LA5_0 = input.LA(1);
+            try { dbg.enterSubRule(4);
 
-                if ( (LA5_0==GREATER||LA5_0==PLUS||LA5_0==DOT) ) {
-                    alt5=1;
+            loop4:
+            do {
+                int alt4=2;
+                try { dbg.enterDecision(4);
+
+                int LA4_0 = input.LA(1);
+
+                if ( (LA4_0==GREATER||LA4_0==PLUS||LA4_0==DOT) ) {
+                    alt4=1;
                 }
 
 
-                switch (alt5) {
+                } finally {dbg.exitDecision(4);}
+
+                switch (alt4) {
             	case 1 :
+            	    dbg.enterAlt(1);
+
             	    // /home/hasdai/Documentos/SimpleCSSParser.g:64:19: combinator simpleSelector
             	    {
-            	    pushFollow(FOLLOW_combinator_in_selector195);
+            	    dbg.location(64,19);
+            	    pushFollow(FOLLOW_combinator_in_selector192);
             	    combinator15=combinator();
 
             	    state._fsp--;
             	    if (state.failed) return retval;
             	    if ( state.backtracking==0 ) adaptor.addChild(root_0, combinator15.getTree());
-            	    pushFollow(FOLLOW_simpleSelector_in_selector197);
+            	    dbg.location(64,30);
+            	    pushFollow(FOLLOW_simpleSelector_in_selector194);
             	    simpleSelector16=simpleSelector();
 
             	    state._fsp--;
@@ -643,9 +808,10 @@ public class SimpleCSSParser extends Parser {
             	    break;
 
             	default :
-            	    break loop5;
+            	    break loop4;
                 }
             } while (true);
+            } finally {dbg.exitSubRule(4);}
 
 
             }
@@ -666,6 +832,15 @@ public class SimpleCSSParser extends Parser {
         }
         finally {
         }
+        dbg.location(65, 2);
+
+        }
+        finally {
+            dbg.exitRule(getGrammarFileName(), "selector");
+            decRuleLevel();
+            if ( getRuleLevel()==0 ) {dbg.terminate();}
+        }
+
         return retval;
     }
     // $ANTLR end "selector"
@@ -689,40 +864,53 @@ public class SimpleCSSParser extends Parser {
         Object PLUS17_tree=null;
         Object GREATER18_tree=null;
 
+        try { dbg.enterRule(getGrammarFileName(), "combinator");
+        if ( getRuleLevel()==0 ) {dbg.commence();}
+        incRuleLevel();
+        dbg.location(67, 1);
+
         try {
             // /home/hasdai/Documentos/SimpleCSSParser.g:68:1: ( PLUS | GREATER | )
-            int alt6=3;
+            int alt5=3;
+            try { dbg.enterDecision(5);
+
             switch ( input.LA(1) ) {
             case PLUS:
                 {
-                alt6=1;
+                alt5=1;
                 }
                 break;
             case GREATER:
                 {
-                alt6=2;
+                alt5=2;
                 }
                 break;
             case DOT:
                 {
-                alt6=3;
+                alt5=3;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return retval;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 6, 0, input);
+                    new NoViableAltException("", 5, 0, input);
 
+                dbg.recognitionException(nvae);
                 throw nvae;
             }
 
-            switch (alt6) {
+            } finally {dbg.exitDecision(5);}
+
+            switch (alt5) {
                 case 1 :
+                    dbg.enterAlt(1);
+
                     // /home/hasdai/Documentos/SimpleCSSParser.g:68:3: PLUS
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    PLUS17=(Token)match(input,PLUS,FOLLOW_PLUS_in_combinator209); if (state.failed) return retval;
+                    dbg.location(68,3);
+                    PLUS17=(Token)match(input,PLUS,FOLLOW_PLUS_in_combinator206); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                     PLUS17_tree = (Object)adaptor.create(PLUS17);
                     adaptor.addChild(root_0, PLUS17_tree);
@@ -731,11 +919,14 @@ public class SimpleCSSParser extends Parser {
                     }
                     break;
                 case 2 :
+                    dbg.enterAlt(2);
+
                     // /home/hasdai/Documentos/SimpleCSSParser.g:69:3: GREATER
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    GREATER18=(Token)match(input,GREATER,FOLLOW_GREATER_in_combinator213); if (state.failed) return retval;
+                    dbg.location(69,3);
+                    GREATER18=(Token)match(input,GREATER,FOLLOW_GREATER_in_combinator210); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                     GREATER18_tree = (Object)adaptor.create(GREATER18);
                     adaptor.addChild(root_0, GREATER18_tree);
@@ -744,6 +935,8 @@ public class SimpleCSSParser extends Parser {
                     }
                     break;
                 case 3 :
+                    dbg.enterAlt(3);
+
                     // /home/hasdai/Documentos/SimpleCSSParser.g:71:2:
                     {
                     root_0 = (Object)adaptor.nil();
@@ -768,6 +961,15 @@ public class SimpleCSSParser extends Parser {
         }
         finally {
         }
+        dbg.location(71, 2);
+
+        }
+        finally {
+            dbg.exitRule(getGrammarFileName(), "combinator");
+            decRuleLevel();
+            if ( getRuleLevel()==0 ) {dbg.terminate();}
+        }
+
         return retval;
     }
     // $ANTLR end "combinator"
@@ -789,11 +991,19 @@ public class SimpleCSSParser extends Parser {
 
 
         RewriteRuleSubtreeStream stream_cssClass=new RewriteRuleSubtreeStream(adaptor,"rule cssClass");
+        try { dbg.enterRule(getGrammarFileName(), "simpleSelector");
+        if ( getRuleLevel()==0 ) {dbg.commence();}
+        incRuleLevel();
+        dbg.location(76, 1);
+
         try {
             // /home/hasdai/Documentos/SimpleCSSParser.g:77:1: ( cssClass -> ^( CLASS cssClass ) )
+            dbg.enterAlt(1);
+
             // /home/hasdai/Documentos/SimpleCSSParser.g:78:2: cssClass
             {
-            pushFollow(FOLLOW_cssClass_in_simpleSelector231);
+            dbg.location(78,2);
+            pushFollow(FOLLOW_cssClass_in_simpleSelector228);
             cssClass19=cssClass();
 
             state._fsp--;
@@ -815,11 +1025,14 @@ public class SimpleCSSParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 78:11: -> ^( CLASS cssClass )
             {
+                dbg.location(78,14);
                 // /home/hasdai/Documentos/SimpleCSSParser.g:78:14: ^( CLASS cssClass )
                 {
                 Object root_1 = (Object)adaptor.nil();
+                dbg.location(78,16);
                 root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(CLASS, "CLASS"), root_1);
 
+                dbg.location(78,22);
                 adaptor.addChild(root_1, stream_cssClass.nextTree());
 
                 adaptor.addChild(root_0, root_1);
@@ -846,6 +1059,15 @@ public class SimpleCSSParser extends Parser {
         }
         finally {
         }
+        dbg.location(79, 1);
+
+        }
+        finally {
+            dbg.exitRule(getGrammarFileName(), "simpleSelector");
+            decRuleLevel();
+            if ( getRuleLevel()==0 ) {dbg.terminate();}
+        }
+
         return retval;
     }
     // $ANTLR end "simpleSelector"
@@ -867,13 +1089,21 @@ public class SimpleCSSParser extends Parser {
 
         Object IDENT20_tree=null;
 
+        try { dbg.enterRule(getGrammarFileName(), "elementName");
+        if ( getRuleLevel()==0 ) {dbg.commence();}
+        incRuleLevel();
+        dbg.location(82, 1);
+
         try {
             // /home/hasdai/Documentos/SimpleCSSParser.g:83:1: ( IDENT )
+            dbg.enterAlt(1);
+
             // /home/hasdai/Documentos/SimpleCSSParser.g:83:3: IDENT
             {
             root_0 = (Object)adaptor.nil();
 
-            IDENT20=(Token)match(input,IDENT,FOLLOW_IDENT_in_elementName249); if (state.failed) return retval;
+            dbg.location(83,3);
+            IDENT20=(Token)match(input,IDENT,FOLLOW_IDENT_in_elementName246); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
             IDENT20_tree = (Object)adaptor.create(IDENT20);
             adaptor.addChild(root_0, IDENT20_tree);
@@ -897,6 +1127,15 @@ public class SimpleCSSParser extends Parser {
         }
         finally {
         }
+        dbg.location(84, 2);
+
+        }
+        finally {
+            dbg.exitRule(getGrammarFileName(), "elementName");
+            decRuleLevel();
+            if ( getRuleLevel()==0 ) {dbg.terminate();}
+        }
+
         return retval;
     }
     // $ANTLR end "elementName"
@@ -920,14 +1159,23 @@ public class SimpleCSSParser extends Parser {
         Object DOT21_tree=null;
         Object IDENT22_tree=null;
 
+        try { dbg.enterRule(getGrammarFileName(), "cssClass");
+        if ( getRuleLevel()==0 ) {dbg.commence();}
+        incRuleLevel();
+        dbg.location(88, 1);
+
         try {
             // /home/hasdai/Documentos/SimpleCSSParser.g:89:1: ( DOT IDENT )
+            dbg.enterAlt(1);
+
             // /home/hasdai/Documentos/SimpleCSSParser.g:89:3: DOT IDENT
             {
             root_0 = (Object)adaptor.nil();
 
-            DOT21=(Token)match(input,DOT,FOLLOW_DOT_in_cssClass261); if (state.failed) return retval;
-            IDENT22=(Token)match(input,IDENT,FOLLOW_IDENT_in_cssClass264); if (state.failed) return retval;
+            dbg.location(89,6);
+            DOT21=(Token)match(input,DOT,FOLLOW_DOT_in_cssClass258); if (state.failed) return retval;
+            dbg.location(89,8);
+            IDENT22=(Token)match(input,IDENT,FOLLOW_IDENT_in_cssClass261); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
             IDENT22_tree = (Object)adaptor.create(IDENT22);
             adaptor.addChild(root_0, IDENT22_tree);
@@ -951,6 +1199,15 @@ public class SimpleCSSParser extends Parser {
         }
         finally {
         }
+        dbg.location(90, 2);
+
+        }
+        finally {
+            dbg.exitRule(getGrammarFileName(), "cssClass");
+            decRuleLevel();
+            if ( getRuleLevel()==0 ) {dbg.terminate();}
+        }
+
         return retval;
     }
     // $ANTLR end "cssClass"
@@ -978,20 +1235,30 @@ public class SimpleCSSParser extends Parser {
         RewriteRuleTokenStream stream_COLON=new RewriteRuleTokenStream(adaptor,"token COLON");
         RewriteRuleSubtreeStream stream_property=new RewriteRuleSubtreeStream(adaptor,"rule property");
         RewriteRuleSubtreeStream stream_expr=new RewriteRuleSubtreeStream(adaptor,"rule expr");
+        try { dbg.enterRule(getGrammarFileName(), "declaration");
+        if ( getRuleLevel()==0 ) {dbg.commence();}
+        incRuleLevel();
+        dbg.location(93, 1);
+
         try {
             // /home/hasdai/Documentos/SimpleCSSParser.g:94:1: ( property COLON expr -> ^( EXPR ^( NAME property ) ^( VAL expr ) ) )
+            dbg.enterAlt(1);
+
             // /home/hasdai/Documentos/SimpleCSSParser.g:94:3: property COLON expr
             {
-            pushFollow(FOLLOW_property_in_declaration275);
+            dbg.location(94,3);
+            pushFollow(FOLLOW_property_in_declaration272);
             property23=property();
 
             state._fsp--;
             if (state.failed) return retval;
             if ( state.backtracking==0 ) stream_property.add(property23.getTree());
-            COLON24=(Token)match(input,COLON,FOLLOW_COLON_in_declaration277); if (state.failed) return retval;
+            dbg.location(94,12);
+            COLON24=(Token)match(input,COLON,FOLLOW_COLON_in_declaration274); if (state.failed) return retval;
             if ( state.backtracking==0 ) stream_COLON.add(COLON24);
 
-            pushFollow(FOLLOW_expr_in_declaration279);
+            dbg.location(94,18);
+            pushFollow(FOLLOW_expr_in_declaration276);
             expr25=expr();
 
             state._fsp--;
@@ -1013,25 +1280,33 @@ public class SimpleCSSParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 94:23: -> ^( EXPR ^( NAME property ) ^( VAL expr ) )
             {
+                dbg.location(94,26);
                 // /home/hasdai/Documentos/SimpleCSSParser.g:94:26: ^( EXPR ^( NAME property ) ^( VAL expr ) )
                 {
                 Object root_1 = (Object)adaptor.nil();
+                dbg.location(94,28);
                 root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(EXPR, "EXPR"), root_1);
 
+                dbg.location(94,33);
                 // /home/hasdai/Documentos/SimpleCSSParser.g:94:33: ^( NAME property )
                 {
                 Object root_2 = (Object)adaptor.nil();
+                dbg.location(94,35);
                 root_2 = (Object)adaptor.becomeRoot((Object)adaptor.create(NAME, "NAME"), root_2);
 
+                dbg.location(94,40);
                 adaptor.addChild(root_2, stream_property.nextTree());
 
                 adaptor.addChild(root_1, root_2);
                 }
+                dbg.location(94,50);
                 // /home/hasdai/Documentos/SimpleCSSParser.g:94:50: ^( VAL expr )
                 {
                 Object root_2 = (Object)adaptor.nil();
+                dbg.location(94,52);
                 root_2 = (Object)adaptor.becomeRoot((Object)adaptor.create(VAL, "VAL"), root_2);
 
+                dbg.location(94,56);
                 adaptor.addChild(root_2, stream_expr.nextTree());
 
                 adaptor.addChild(root_1, root_2);
@@ -1061,6 +1336,15 @@ public class SimpleCSSParser extends Parser {
         }
         finally {
         }
+        dbg.location(95, 1);
+
+        }
+        finally {
+            dbg.exitRule(getGrammarFileName(), "declaration");
+            decRuleLevel();
+            if ( getRuleLevel()==0 ) {dbg.terminate();}
+        }
+
         return retval;
     }
     // $ANTLR end "declaration"
@@ -1082,13 +1366,21 @@ public class SimpleCSSParser extends Parser {
 
         Object IDENT26_tree=null;
 
+        try { dbg.enterRule(getGrammarFileName(), "property");
+        if ( getRuleLevel()==0 ) {dbg.commence();}
+        incRuleLevel();
+        dbg.location(98, 1);
+
         try {
             // /home/hasdai/Documentos/SimpleCSSParser.g:99:1: ( IDENT )
+            dbg.enterAlt(1);
+
             // /home/hasdai/Documentos/SimpleCSSParser.g:99:3: IDENT
             {
             root_0 = (Object)adaptor.nil();
 
-            IDENT26=(Token)match(input,IDENT,FOLLOW_IDENT_in_property307); if (state.failed) return retval;
+            dbg.location(99,3);
+            IDENT26=(Token)match(input,IDENT,FOLLOW_IDENT_in_property304); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
             IDENT26_tree = (Object)adaptor.create(IDENT26);
             adaptor.addChild(root_0, IDENT26_tree);
@@ -1112,6 +1404,15 @@ public class SimpleCSSParser extends Parser {
         }
         finally {
         }
+        dbg.location(100, 2);
+
+        }
+        finally {
+            dbg.exitRule(getGrammarFileName(), "property");
+            decRuleLevel();
+            if ( getRuleLevel()==0 ) {dbg.terminate();}
+        }
+
         return retval;
     }
     // $ANTLR end "property"
@@ -1137,40 +1438,59 @@ public class SimpleCSSParser extends Parser {
 
 
 
+        try { dbg.enterRule(getGrammarFileName(), "expr");
+        if ( getRuleLevel()==0 ) {dbg.commence();}
+        incRuleLevel();
+        dbg.location(103, 1);
+
         try {
             // /home/hasdai/Documentos/SimpleCSSParser.g:104:1: ( term ( operator term )* )
+            dbg.enterAlt(1);
+
             // /home/hasdai/Documentos/SimpleCSSParser.g:104:3: term ( operator term )*
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_term_in_expr318);
+            dbg.location(104,3);
+            pushFollow(FOLLOW_term_in_expr315);
             term27=term();
 
             state._fsp--;
             if (state.failed) return retval;
             if ( state.backtracking==0 ) adaptor.addChild(root_0, term27.getTree());
+            dbg.location(104,8);
             // /home/hasdai/Documentos/SimpleCSSParser.g:104:8: ( operator term )*
-            loop7:
-            do {
-                int alt7=2;
-                int LA7_0 = input.LA(1);
+            try { dbg.enterSubRule(6);
 
-                if ( ((LA7_0>=SOLIDUS && LA7_0<=PLUS)||LA7_0==COMMA||(LA7_0>=STRING && LA7_0<=HASH)||(LA7_0>=EMS && LA7_0<=FREQ)||(LA7_0>=PERCENTAGE && LA7_0<=URI)) ) {
-                    alt7=1;
+            loop6:
+            do {
+                int alt6=2;
+                try { dbg.enterDecision(6);
+
+                int LA6_0 = input.LA(1);
+
+                if ( ((LA6_0>=SOLIDUS && LA6_0<=PLUS)||LA6_0==COMMA||(LA6_0>=STRING && LA6_0<=HASH)||(LA6_0>=EMS && LA6_0<=FREQ)||(LA6_0>=PERCENTAGE && LA6_0<=URI)) ) {
+                    alt6=1;
                 }
 
 
-                switch (alt7) {
+                } finally {dbg.exitDecision(6);}
+
+                switch (alt6) {
             	case 1 :
+            	    dbg.enterAlt(1);
+
             	    // /home/hasdai/Documentos/SimpleCSSParser.g:104:9: operator term
             	    {
-            	    pushFollow(FOLLOW_operator_in_expr321);
+            	    dbg.location(104,9);
+            	    pushFollow(FOLLOW_operator_in_expr318);
             	    operator28=operator();
 
             	    state._fsp--;
             	    if (state.failed) return retval;
             	    if ( state.backtracking==0 ) adaptor.addChild(root_0, operator28.getTree());
-            	    pushFollow(FOLLOW_term_in_expr323);
+            	    dbg.location(104,18);
+            	    pushFollow(FOLLOW_term_in_expr320);
             	    term29=term();
 
             	    state._fsp--;
@@ -1181,9 +1501,10 @@ public class SimpleCSSParser extends Parser {
             	    break;
 
             	default :
-            	    break loop7;
+            	    break loop6;
                 }
             } while (true);
+            } finally {dbg.exitSubRule(6);}
 
 
             }
@@ -1204,6 +1525,15 @@ public class SimpleCSSParser extends Parser {
         }
         finally {
         }
+        dbg.location(105, 1);
+
+        }
+        finally {
+            dbg.exitRule(getGrammarFileName(), "expr");
+            decRuleLevel();
+            if ( getRuleLevel()==0 ) {dbg.terminate();}
+        }
+
         return retval;
     }
     // $ANTLR end "expr"
@@ -1241,9 +1571,16 @@ public class SimpleCSSParser extends Parser {
         Object RPAREN36_tree=null;
         Object URI37_tree=null;
 
+        try { dbg.enterRule(getGrammarFileName(), "term");
+        if ( getRuleLevel()==0 ) {dbg.commence();}
+        incRuleLevel();
+        dbg.location(109, 1);
+
         try {
             // /home/hasdai/Documentos/SimpleCSSParser.g:110:1: ( ( unaryOperator )? ( NUMBER | PERCENTAGE | LENGTH | EMS | EXS | ANGLE | TIME | FREQ ) | STRING | IDENT ( LPAREN expr RPAREN )? | URI | hexColor )
-            int alt10=5;
+            int alt9=5;
+            try { dbg.enterDecision(9);
+
             switch ( input.LA(1) ) {
             case MINUS:
             case PLUS:
@@ -1256,55 +1593,69 @@ public class SimpleCSSParser extends Parser {
             case PERCENTAGE:
             case NUMBER:
                 {
-                alt10=1;
+                alt9=1;
                 }
                 break;
             case STRING:
                 {
-                alt10=2;
+                alt9=2;
                 }
                 break;
             case IDENT:
                 {
-                alt10=3;
+                alt9=3;
                 }
                 break;
             case URI:
                 {
-                alt10=4;
+                alt9=4;
                 }
                 break;
             case HASH:
                 {
-                alt10=5;
+                alt9=5;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return retval;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 10, 0, input);
+                    new NoViableAltException("", 9, 0, input);
 
+                dbg.recognitionException(nvae);
                 throw nvae;
             }
 
-            switch (alt10) {
+            } finally {dbg.exitDecision(9);}
+
+            switch (alt9) {
                 case 1 :
+                    dbg.enterAlt(1);
+
                     // /home/hasdai/Documentos/SimpleCSSParser.g:110:3: ( unaryOperator )? ( NUMBER | PERCENTAGE | LENGTH | EMS | EXS | ANGLE | TIME | FREQ )
                     {
                     root_0 = (Object)adaptor.nil();
 
+                    dbg.location(110,3);
                     // /home/hasdai/Documentos/SimpleCSSParser.g:110:3: ( unaryOperator )?
-                    int alt8=2;
-                    int LA8_0 = input.LA(1);
+                    int alt7=2;
+                    try { dbg.enterSubRule(7);
+                    try { dbg.enterDecision(7);
 
-                    if ( ((LA8_0>=MINUS && LA8_0<=PLUS)) ) {
-                        alt8=1;
+                    int LA7_0 = input.LA(1);
+
+                    if ( ((LA7_0>=MINUS && LA7_0<=PLUS)) ) {
+                        alt7=1;
                     }
-                    switch (alt8) {
+                    } finally {dbg.exitDecision(7);}
+
+                    switch (alt7) {
                         case 1 :
+                            dbg.enterAlt(1);
+
                             // /home/hasdai/Documentos/SimpleCSSParser.g:0:0: unaryOperator
                             {
-                            pushFollow(FOLLOW_unaryOperator_in_term336);
+                            dbg.location(110,3);
+                            pushFollow(FOLLOW_unaryOperator_in_term333);
                             unaryOperator30=unaryOperator();
 
                             state._fsp--;
@@ -1315,7 +1666,9 @@ public class SimpleCSSParser extends Parser {
                             break;
 
                     }
+                    } finally {dbg.exitSubRule(7);}
 
+                    dbg.location(110,18);
                     set31=(Token)input.LT(1);
                     if ( (input.LA(1)>=EMS && input.LA(1)<=FREQ)||(input.LA(1)>=PERCENTAGE && input.LA(1)<=NUMBER) ) {
                         input.consume();
@@ -1325,6 +1678,7 @@ public class SimpleCSSParser extends Parser {
                     else {
                         if (state.backtracking>0) {state.failed=true; return retval;}
                         MismatchedSetException mse = new MismatchedSetException(null,input);
+                        dbg.recognitionException(mse);
                         throw mse;
                     }
 
@@ -1332,11 +1686,14 @@ public class SimpleCSSParser extends Parser {
                     }
                     break;
                 case 2 :
+                    dbg.enterAlt(2);
+
                     // /home/hasdai/Documentos/SimpleCSSParser.g:111:3: STRING
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    STRING32=(Token)match(input,STRING,FOLLOW_STRING_in_term359); if (state.failed) return retval;
+                    dbg.location(111,3);
+                    STRING32=(Token)match(input,STRING,FOLLOW_STRING_in_term356); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                     STRING32_tree = (Object)adaptor.create(STRING32);
                     adaptor.addChild(root_0, STRING32_tree);
@@ -1345,38 +1702,52 @@ public class SimpleCSSParser extends Parser {
                     }
                     break;
                 case 3 :
+                    dbg.enterAlt(3);
+
                     // /home/hasdai/Documentos/SimpleCSSParser.g:112:3: IDENT ( LPAREN expr RPAREN )?
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    IDENT33=(Token)match(input,IDENT,FOLLOW_IDENT_in_term363); if (state.failed) return retval;
+                    dbg.location(112,3);
+                    IDENT33=(Token)match(input,IDENT,FOLLOW_IDENT_in_term360); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                     IDENT33_tree = (Object)adaptor.create(IDENT33);
                     adaptor.addChild(root_0, IDENT33_tree);
                     }
+                    dbg.location(112,9);
                     // /home/hasdai/Documentos/SimpleCSSParser.g:112:9: ( LPAREN expr RPAREN )?
-                    int alt9=2;
-                    int LA9_0 = input.LA(1);
+                    int alt8=2;
+                    try { dbg.enterSubRule(8);
+                    try { dbg.enterDecision(8);
 
-                    if ( (LA9_0==LPAREN) ) {
-                        alt9=1;
+                    int LA8_0 = input.LA(1);
+
+                    if ( (LA8_0==LPAREN) ) {
+                        alt8=1;
                     }
-                    switch (alt9) {
+                    } finally {dbg.exitDecision(8);}
+
+                    switch (alt8) {
                         case 1 :
+                            dbg.enterAlt(1);
+
                             // /home/hasdai/Documentos/SimpleCSSParser.g:112:10: LPAREN expr RPAREN
                             {
-                            LPAREN34=(Token)match(input,LPAREN,FOLLOW_LPAREN_in_term366); if (state.failed) return retval;
+                            dbg.location(112,10);
+                            LPAREN34=(Token)match(input,LPAREN,FOLLOW_LPAREN_in_term363); if (state.failed) return retval;
                             if ( state.backtracking==0 ) {
                             LPAREN34_tree = (Object)adaptor.create(LPAREN34);
                             adaptor.addChild(root_0, LPAREN34_tree);
                             }
-                            pushFollow(FOLLOW_expr_in_term368);
+                            dbg.location(112,17);
+                            pushFollow(FOLLOW_expr_in_term365);
                             expr35=expr();
 
                             state._fsp--;
                             if (state.failed) return retval;
                             if ( state.backtracking==0 ) adaptor.addChild(root_0, expr35.getTree());
-                            RPAREN36=(Token)match(input,RPAREN,FOLLOW_RPAREN_in_term370); if (state.failed) return retval;
+                            dbg.location(112,22);
+                            RPAREN36=(Token)match(input,RPAREN,FOLLOW_RPAREN_in_term367); if (state.failed) return retval;
                             if ( state.backtracking==0 ) {
                             RPAREN36_tree = (Object)adaptor.create(RPAREN36);
                             adaptor.addChild(root_0, RPAREN36_tree);
@@ -1386,16 +1757,20 @@ public class SimpleCSSParser extends Parser {
                             break;
 
                     }
+                    } finally {dbg.exitSubRule(8);}
 
 
                     }
                     break;
                 case 4 :
+                    dbg.enterAlt(4);
+
                     // /home/hasdai/Documentos/SimpleCSSParser.g:113:3: URI
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    URI37=(Token)match(input,URI,FOLLOW_URI_in_term377); if (state.failed) return retval;
+                    dbg.location(113,3);
+                    URI37=(Token)match(input,URI,FOLLOW_URI_in_term374); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                     URI37_tree = (Object)adaptor.create(URI37);
                     adaptor.addChild(root_0, URI37_tree);
@@ -1404,11 +1779,14 @@ public class SimpleCSSParser extends Parser {
                     }
                     break;
                 case 5 :
+                    dbg.enterAlt(5);
+
                     // /home/hasdai/Documentos/SimpleCSSParser.g:114:3: hexColor
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_hexColor_in_term381);
+                    dbg.location(114,3);
+                    pushFollow(FOLLOW_hexColor_in_term378);
                     hexColor38=hexColor();
 
                     state._fsp--;
@@ -1435,6 +1813,15 @@ public class SimpleCSSParser extends Parser {
         }
         finally {
         }
+        dbg.location(115, 2);
+
+        }
+        finally {
+            dbg.exitRule(getGrammarFileName(), "term");
+            decRuleLevel();
+            if ( getRuleLevel()==0 ) {dbg.terminate();}
+        }
+
         return retval;
     }
     // $ANTLR end "term"
@@ -1456,12 +1843,20 @@ public class SimpleCSSParser extends Parser {
 
         Object set39_tree=null;
 
+        try { dbg.enterRule(getGrammarFileName(), "unaryOperator");
+        if ( getRuleLevel()==0 ) {dbg.commence();}
+        incRuleLevel();
+        dbg.location(117, 1);
+
         try {
             // /home/hasdai/Documentos/SimpleCSSParser.g:118:1: ( MINUS | PLUS )
+            dbg.enterAlt(1);
+
             // /home/hasdai/Documentos/SimpleCSSParser.g:
             {
             root_0 = (Object)adaptor.nil();
 
+            dbg.location(118,1);
             set39=(Token)input.LT(1);
             if ( (input.LA(1)>=MINUS && input.LA(1)<=PLUS) ) {
                 input.consume();
@@ -1471,6 +1866,7 @@ public class SimpleCSSParser extends Parser {
             else {
                 if (state.backtracking>0) {state.failed=true; return retval;}
                 MismatchedSetException mse = new MismatchedSetException(null,input);
+                dbg.recognitionException(mse);
                 throw mse;
             }
 
@@ -1493,6 +1889,15 @@ public class SimpleCSSParser extends Parser {
         }
         finally {
         }
+        dbg.location(120, 1);
+
+        }
+        finally {
+            dbg.exitRule(getGrammarFileName(), "unaryOperator");
+            decRuleLevel();
+            if ( getRuleLevel()==0 ) {dbg.terminate();}
+        }
+
         return retval;
     }
     // $ANTLR end "unaryOperator"
@@ -1514,13 +1919,21 @@ public class SimpleCSSParser extends Parser {
 
         Object HASH40_tree=null;
 
+        try { dbg.enterRule(getGrammarFileName(), "hexColor");
+        if ( getRuleLevel()==0 ) {dbg.commence();}
+        incRuleLevel();
+        dbg.location(122, 1);
+
         try {
             // /home/hasdai/Documentos/SimpleCSSParser.g:123:1: ( HASH )
+            dbg.enterAlt(1);
+
             // /home/hasdai/Documentos/SimpleCSSParser.g:123:3: HASH
             {
             root_0 = (Object)adaptor.nil();
 
-            HASH40=(Token)match(input,HASH,FOLLOW_HASH_in_hexColor404); if (state.failed) return retval;
+            dbg.location(123,3);
+            HASH40=(Token)match(input,HASH,FOLLOW_HASH_in_hexColor401); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
             HASH40_tree = (Object)adaptor.create(HASH40);
             adaptor.addChild(root_0, HASH40_tree);
@@ -1544,6 +1957,15 @@ public class SimpleCSSParser extends Parser {
         }
         finally {
         }
+        dbg.location(124, 2);
+
+        }
+        finally {
+            dbg.exitRule(getGrammarFileName(), "hexColor");
+            decRuleLevel();
+            if ( getRuleLevel()==0 ) {dbg.terminate();}
+        }
+
         return retval;
     }
     // $ANTLR end "hexColor"
@@ -1554,7 +1976,7 @@ public class SimpleCSSParser extends Parser {
     };
 
     // $ANTLR start "operator"
-    // /home/hasdai/Documentos/SimpleCSSParser.g:126:1: operator : ( SOLIDUS | COMMA | );
+    // /home/hasdai/Documentos/SimpleCSSParser.g:127:1: operator : ( SOLIDUS | COMMA | );
     public final SimpleCSSParser.operator_return operator() throws RecognitionException {
         SimpleCSSParser.operator_return retval = new SimpleCSSParser.operator_return();
         retval.start = input.LT(1);
@@ -1567,18 +1989,25 @@ public class SimpleCSSParser extends Parser {
         Object SOLIDUS41_tree=null;
         Object COMMA42_tree=null;
 
+        try { dbg.enterRule(getGrammarFileName(), "operator");
+        if ( getRuleLevel()==0 ) {dbg.commence();}
+        incRuleLevel();
+        dbg.location(127, 1);
+
         try {
-            // /home/hasdai/Documentos/SimpleCSSParser.g:127:1: ( SOLIDUS | COMMA | )
-            int alt11=3;
+            // /home/hasdai/Documentos/SimpleCSSParser.g:128:1: ( SOLIDUS | COMMA | )
+            int alt10=3;
+            try { dbg.enterDecision(10);
+
             switch ( input.LA(1) ) {
             case SOLIDUS:
                 {
-                alt11=1;
+                alt10=1;
                 }
                 break;
             case COMMA:
                 {
-                alt11=2;
+                alt10=2;
                 }
                 break;
             case MINUS:
@@ -1596,24 +2025,30 @@ public class SimpleCSSParser extends Parser {
             case NUMBER:
             case URI:
                 {
-                alt11=3;
+                alt10=3;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return retval;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 11, 0, input);
+                    new NoViableAltException("", 10, 0, input);
 
+                dbg.recognitionException(nvae);
                 throw nvae;
             }
 
-            switch (alt11) {
+            } finally {dbg.exitDecision(10);}
+
+            switch (alt10) {
                 case 1 :
-                    // /home/hasdai/Documentos/SimpleCSSParser.g:128:2: SOLIDUS
+                    dbg.enterAlt(1);
+
+                    // /home/hasdai/Documentos/SimpleCSSParser.g:128:3: SOLIDUS
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    SOLIDUS41=(Token)match(input,SOLIDUS,FOLLOW_SOLIDUS_in_operator416); if (state.failed) return retval;
+                    dbg.location(128,3);
+                    SOLIDUS41=(Token)match(input,SOLIDUS,FOLLOW_SOLIDUS_in_operator412); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                     SOLIDUS41_tree = (Object)adaptor.create(SOLIDUS41);
                     adaptor.addChild(root_0, SOLIDUS41_tree);
@@ -1622,11 +2057,14 @@ public class SimpleCSSParser extends Parser {
                     }
                     break;
                 case 2 :
+                    dbg.enterAlt(2);
+
                     // /home/hasdai/Documentos/SimpleCSSParser.g:129:3: COMMA
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    COMMA42=(Token)match(input,COMMA,FOLLOW_COMMA_in_operator420); if (state.failed) return retval;
+                    dbg.location(129,3);
+                    COMMA42=(Token)match(input,COMMA,FOLLOW_COMMA_in_operator416); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                     COMMA42_tree = (Object)adaptor.create(COMMA42);
                     adaptor.addChild(root_0, COMMA42_tree);
@@ -1635,7 +2073,9 @@ public class SimpleCSSParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/hasdai/Documentos/SimpleCSSParser.g:131:1:
+                    dbg.enterAlt(3);
+
+                    // /home/hasdai/Documentos/SimpleCSSParser.g:131:2:
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1659,42 +2099,20 @@ public class SimpleCSSParser extends Parser {
         }
         finally {
         }
+        dbg.location(131, 2);
+
+        }
+        finally {
+            dbg.exitRule(getGrammarFileName(), "operator");
+            decRuleLevel();
+            if ( getRuleLevel()==0 ) {dbg.terminate();}
+        }
+
         return retval;
     }
     // $ANTLR end "operator"
 
-    // $ANTLR start synpred3_SimpleCSSParser
-    public final void synpred3_SimpleCSSParser_fragment() throws RecognitionException {
-        // /home/hasdai/Documentos/SimpleCSSParser.g:58:4: ( declaration SEMI )
-        // /home/hasdai/Documentos/SimpleCSSParser.g:58:4: declaration SEMI
-        {
-        pushFollow(FOLLOW_declaration_in_synpred3_SimpleCSSParser148);
-        declaration();
-
-        state._fsp--;
-        if (state.failed) return ;
-        match(input,SEMI,FOLLOW_SEMI_in_synpred3_SimpleCSSParser150); if (state.failed) return ;
-
-        }
-    }
-    // $ANTLR end synpred3_SimpleCSSParser
-
     // Delegated rules
-
-    public final boolean synpred3_SimpleCSSParser() {
-        state.backtracking++;
-        int start = input.mark();
-        try {
-            synpred3_SimpleCSSParser_fragment(); // can never throw exception
-        } catch (RecognitionException re) {
-            System.err.println("impossible: "+re);
-        }
-        boolean success = !state.failed;
-        input.rewind(start);
-        state.backtracking--;
-        state.failed=false;
-        return success;
-    }
 
 
 
@@ -1706,42 +2124,40 @@ public class SimpleCSSParser extends Parser {
     public static final BitSet FOLLOW_selector_in_ruleSet133 = new BitSet(new long[]{0x0200100000000000L});
     public static final BitSet FOLLOW_COMMA_in_ruleSet136 = new BitSet(new long[]{0x0600100000000000L});
     public static final BitSet FOLLOW_selector_in_ruleSet138 = new BitSet(new long[]{0x0200100000000000L});
-    public static final BitSet FOLLOW_LBRACE_in_ruleSet143 = new BitSet(new long[]{0x2000200000000000L});
-    public static final BitSet FOLLOW_declaration_in_ruleSet148 = new BitSet(new long[]{0x0002000000000000L});
-    public static final BitSet FOLLOW_SEMI_in_ruleSet150 = new BitSet(new long[]{0x2000200000000000L});
-    public static final BitSet FOLLOW_declaration_in_ruleSet155 = new BitSet(new long[]{0x0002000000000000L});
-    public static final BitSet FOLLOW_SEMI_in_ruleSet157 = new BitSet(new long[]{0x2000200000000000L});
-    public static final BitSet FOLLOW_RBRACE_in_ruleSet162 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_simpleSelector_in_selector192 = new BitSet(new long[]{0x0420080000000000L});
-    public static final BitSet FOLLOW_combinator_in_selector195 = new BitSet(new long[]{0x0420080000000000L});
-    public static final BitSet FOLLOW_simpleSelector_in_selector197 = new BitSet(new long[]{0x0420080000000002L});
-    public static final BitSet FOLLOW_PLUS_in_combinator209 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_GREATER_in_combinator213 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_cssClass_in_simpleSelector231 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_IDENT_in_elementName249 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_DOT_in_cssClass261 = new BitSet(new long[]{0x2000000000000000L});
-    public static final BitSet FOLLOW_IDENT_in_cssClass264 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_property_in_declaration275 = new BitSet(new long[]{0x0004000000000000L});
-    public static final BitSet FOLLOW_COLON_in_declaration277 = new BitSet(new long[]{0x7030000000000000L,0x00000000000077E0L});
-    public static final BitSet FOLLOW_expr_in_declaration279 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_IDENT_in_property307 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_term_in_expr318 = new BitSet(new long[]{0x7238000000000002L,0x00000000000077E0L});
-    public static final BitSet FOLLOW_operator_in_expr321 = new BitSet(new long[]{0x7030000000000000L,0x00000000000077E0L});
-    public static final BitSet FOLLOW_term_in_expr323 = new BitSet(new long[]{0x7238000000000002L,0x00000000000077E0L});
-    public static final BitSet FOLLOW_unaryOperator_in_term336 = new BitSet(new long[]{0x0000000000000000L,0x00000000000037E0L});
-    public static final BitSet FOLLOW_set_in_term339 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_STRING_in_term359 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_IDENT_in_term363 = new BitSet(new long[]{0x0080000000000002L});
-    public static final BitSet FOLLOW_LPAREN_in_term366 = new BitSet(new long[]{0x7030000000000000L,0x00000000000077E0L});
-    public static final BitSet FOLLOW_expr_in_term368 = new BitSet(new long[]{0x0100000000000000L});
-    public static final BitSet FOLLOW_RPAREN_in_term370 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_URI_in_term377 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_hexColor_in_term381 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_LBRACE_in_ruleSet143 = new BitSet(new long[]{0x2000000000000000L});
+    public static final BitSet FOLLOW_declaration_in_ruleSet147 = new BitSet(new long[]{0x0002000000000000L});
+    public static final BitSet FOLLOW_SEMI_in_ruleSet149 = new BitSet(new long[]{0x2000200000000000L});
+    public static final BitSet FOLLOW_declaration_in_ruleSet152 = new BitSet(new long[]{0x0002000000000000L});
+    public static final BitSet FOLLOW_SEMI_in_ruleSet154 = new BitSet(new long[]{0x2000200000000000L});
+    public static final BitSet FOLLOW_RBRACE_in_ruleSet159 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_simpleSelector_in_selector189 = new BitSet(new long[]{0x0420080000000000L});
+    public static final BitSet FOLLOW_combinator_in_selector192 = new BitSet(new long[]{0x0420080000000000L});
+    public static final BitSet FOLLOW_simpleSelector_in_selector194 = new BitSet(new long[]{0x0420080000000002L});
+    public static final BitSet FOLLOW_PLUS_in_combinator206 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_GREATER_in_combinator210 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_cssClass_in_simpleSelector228 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_IDENT_in_elementName246 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_DOT_in_cssClass258 = new BitSet(new long[]{0x2000000000000000L});
+    public static final BitSet FOLLOW_IDENT_in_cssClass261 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_property_in_declaration272 = new BitSet(new long[]{0x0004000000000000L});
+    public static final BitSet FOLLOW_COLON_in_declaration274 = new BitSet(new long[]{0x7030000000000000L,0x00000000000077E0L});
+    public static final BitSet FOLLOW_expr_in_declaration276 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_IDENT_in_property304 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_term_in_expr315 = new BitSet(new long[]{0x7238000000000002L,0x00000000000077E0L});
+    public static final BitSet FOLLOW_operator_in_expr318 = new BitSet(new long[]{0x7030000000000000L,0x00000000000077E0L});
+    public static final BitSet FOLLOW_term_in_expr320 = new BitSet(new long[]{0x7238000000000002L,0x00000000000077E0L});
+    public static final BitSet FOLLOW_unaryOperator_in_term333 = new BitSet(new long[]{0x0000000000000000L,0x00000000000037E0L});
+    public static final BitSet FOLLOW_set_in_term336 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_STRING_in_term356 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_IDENT_in_term360 = new BitSet(new long[]{0x0080000000000002L});
+    public static final BitSet FOLLOW_LPAREN_in_term363 = new BitSet(new long[]{0x7030000000000000L,0x00000000000077E0L});
+    public static final BitSet FOLLOW_expr_in_term365 = new BitSet(new long[]{0x0100000000000000L});
+    public static final BitSet FOLLOW_RPAREN_in_term367 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_URI_in_term374 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_hexColor_in_term378 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_set_in_unaryOperator0 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_HASH_in_hexColor404 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_SOLIDUS_in_operator416 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_COMMA_in_operator420 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_declaration_in_synpred3_SimpleCSSParser148 = new BitSet(new long[]{0x0002000000000000L});
-    public static final BitSet FOLLOW_SEMI_in_synpred3_SimpleCSSParser150 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_HASH_in_hexColor401 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_SOLIDUS_in_operator412 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_COMMA_in_operator416 = new BitSet(new long[]{0x0000000000000002L});
 
 }
