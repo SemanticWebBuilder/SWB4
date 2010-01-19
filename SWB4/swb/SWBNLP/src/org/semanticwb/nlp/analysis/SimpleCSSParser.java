@@ -4,12 +4,10 @@ package org.semanticwb.nlp.analysis;
  *
  * @author hasdai
  */
-// $ANTLR 3.2 Sep 23, 2009 12:02:23 /home/hasdai/Documentos/INFOTEC/SimpleCSSParser.g 2009-12-09 11:49:56
-
 // $ANTLR 3.1.2 /home/hasdai/Documentos/SimpleCSSParser.g 2010-01-19 13:00:18
 
 import org.antlr.runtime.*;
-
+import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.*;
 
 public class SimpleCSSParser extends Parser {
