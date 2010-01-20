@@ -1,0 +1,3664 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<topicMap xmlns="http://www.topicmaps.org/xtm/1.0/" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <topic id="TOP_Administracion">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Negocios"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-ab">
+            <baseNameString>Administración</baseNameString>
+        </baseName>
+        <baseName id="x1ghqh43tn-ac">
+            <baseNameString>Administration</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_AprendizajeOrganizacional">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_RecursosHumanos"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-63">
+            <baseNameString>Aprendizaje Organizacional</baseNameString>
+        </baseName>
+        <baseName id="x1ghqh43tn-64">
+            <baseNameString>Learning Organization</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="PRY_Visitmexico">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_ProyectosINFOTEC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-52">
+            <baseNameString>Portal visitmexico.com</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_NET">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Arquitecturas"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-1">
+            <baseNameString>.NET</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ASO_Relacion">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TiposAsociacion"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-7c">
+            <baseNameString>Relaciones</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="PRY_WebBuilderSEP">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_ProyectosINFOTEC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-aa">
+            <baseNameString>Implantación WB en SEP</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_UIDT">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_AreasINFOTEC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-d1">
+            <baseNameString>UIDT</baseNameString>
+            <variant>
+                <variantName>
+                    <resourceData>Unidad de Innovación y Desarrollo Tecnológico</resourceData>
+                </variantName>
+            </variant>
+        </baseName>
+    </topic>
+    <topic id="REC_Tutorial">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TipoRecurso"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-b5">
+            <baseNameString>Tutoriales</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="x1ghqh43tn-ef">
+        <subjectIdentity>
+            <subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/index.html#psi-role-instance"/>
+        </subjectIdentity>
+    </topic>
+    <topic id="TOP_DisenioWeb">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Internet"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-87">
+            <baseNameString>Diseño Web</baseNameString>
+        </baseName>
+        <baseName id="x1ghqh43tn-88">
+            <baseNameString>Web Design</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_NegociosPorIndustrias">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Negocios"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-b6">
+            <baseNameString>Por Industrias</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ASO_ProductoProveedor">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TiposAsociacion"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-e1">
+            <baseNameString>Producto / Proveedor</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ROL_EsUtilizado">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Rol"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-3f">
+            <baseNameString>Es Utilizado</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Tecnologia">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Temas"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-ba">
+            <baseNameString>Tecnología</baseNameString>
+        </baseName>
+        <baseName id="x1ghqh43tn-bb">
+            <baseNameString>Technology</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="EMP_XimenaGonzalez">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Personal"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-8f">
+            <baseNameString>Ximena González</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Dibujo">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_ArtesHumanidades"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-ae">
+            <baseNameString>Dibujo</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="EMP_JoseReyes">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Personal"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-af">
+            <baseNameString>José Reyes</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Salud">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Ciencia"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-a7">
+            <baseNameString>Salud</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ORG_CPTM">
+        <instanceOf>
+            <topicRef xlink:href="#CLI_SECTUR"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-40">
+            <baseNameString>CPTM</baseNameString>
+            <variant>
+                <variantName>
+                    <resourceData>Consejo de Promoción Turística de México</resourceData>
+                </variantName>
+            </variant>
+        </baseName>
+        <baseName id="x1ghqh43tn-41">
+            <baseNameString>PROMOTUR</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_TiposTemas">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TiposTopicos"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-21">
+            <baseNameString>Tipos de tema</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="REC_Bulletin">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TipoRecurso"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-1b">
+            <baseNameString>Boletines</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_CRM">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Mercadotecnia"/>
+            <topicRef xlink:href="#TOP_TecnologiaNegocios"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-7f">
+            <baseNameString>CRM</baseNameString>
+            <variant>
+                <variantName>
+                    <resourceData>Customer Relationship Management</resourceData>
+                </variantName>
+            </variant>
+        </baseName>
+    </topic>
+    <topic id="EMP_RebecaBlanco">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Personal"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-84">
+            <baseNameString>Rebeca Blanco</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="PRY_PortalColaboracionAprend">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_ProyectosINFOTEC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-cc">
+            <baseNameString>Portal de Colaboración y Aprendizaje</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Internet">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TIC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-6f">
+            <baseNameString>Internet</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_UML">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_MetodologiasDesarrollo"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-c1">
+            <baseNameString>UML</baseNameString>
+            <variant>
+                <variantName>
+                    <resourceData>Unified Modeling Language</resourceData>
+                </variantName>
+            </variant>
+        </baseName>
+    </topic>
+    <topic id="TOP_Topicos">
+        <baseName id="x1ghqh43tn-27">
+            <baseNameString>Tópicos</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_WebServices">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_ProgramacionInternet"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-85">
+            <baseNameString>Web Services</baseNameString>
+        </baseName>
+        <occurrence id="x1ghqh43tn-2a1">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Article"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-55">
+                <baseNameString>Introduction to UDDI</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_WebServices/Article/618"/>
+        </occurrence>
+    </topic>
+    <topic id="TOP_Temas">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Topicos"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-5e">
+            <baseNameString>Temas</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="PRD_WebBuilder">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_ProductosINFOTEC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-a9">
+            <baseNameString>Web Builder</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_PrototiposINFOTEC">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_INFOTEC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-e5">
+            <baseNameString>Prototipos de INFOTEC</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="PRY_TopicMaps">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_ProyectosINFOTEC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-78">
+            <baseNameString>Topic Maps</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="EMP_JorgeJimenez">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Personal"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-e7">
+            <baseNameString>Jorge Jiménez</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="PRY_Becasmx">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_PrototiposINFOTEC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-c6">
+            <baseNameString>Becas.mx</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="EMP_SergioMartinez">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Personal"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-13">
+            <baseNameString>Sergio Martínez</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ASO_Implementaciones">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TiposAsociacion"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-cb">
+            <baseNameString>Implementaciones</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ORG_Microsoft">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Empresas"/>
+            <topicRef xlink:href="#TOP_ProveedoresINFOTEC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-d5">
+            <baseNameString>Microsoft</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_J2EE">
+        <baseName id="x1ghqh43tn-2d">
+            <baseNameString>J2EE</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ROL_ParticipadoEn">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Rol"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-47">
+            <baseNameString>Participado en</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="EMP_EduardoSoberanis">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Personal"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-ea">
+            <baseNameString>Eduardo Soberanis</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Seguridad">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TIC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-5f">
+            <baseNameString>Seguridad</baseNameString>
+        </baseName>
+        <baseName id="x1ghqh43tn-60">
+            <baseNameString>Security</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ORG_Ecquaria">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Empresas"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-76">
+            <baseNameString>Ecquaria</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_RecursosHumanos">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Negocios"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-24">
+            <baseNameString>Recursos Humanos</baseNameString>
+        </baseName>
+        <baseName id="x1ghqh43tn-25">
+            <baseNameString>Human Resources</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Sociologia">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_CienciasSociales"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-1f">
+            <baseNameString>Sociología</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="REC_Book">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TipoRecurso"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-28">
+            <baseNameString>Libros</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ROL_Pertenece">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Rol"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-8">
+            <baseNameString>Pertenece</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_CienciasPoliticas">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_CienciasSociales"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-e2">
+            <baseNameString>Ciencias políticas</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_NegocioElectronico">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TecnologiaNegocios"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-2b">
+            <baseNameString>Negocio electrónico</baseNameString>
+        </baseName>
+        <baseName id="x1ghqh43tn-2c">
+            <baseNameString>e-business</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="REC_Comment">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TipoRecurso"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-ec">
+            <baseNameString>Comentarios</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_XML">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_LenguajesMarcas"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-49">
+            <baseNameString>XML</baseNameString>
+            <variant>
+                <variantName>
+                    <resourceData>Extensible Markup Language</resourceData>
+                </variantName>
+            </variant>
+        </baseName>
+    </topic>
+    <topic id="EMP_JavierSolis">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Personal"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-a0">
+            <baseNameString>Javier Solis</baseNameString>
+        </baseName>
+        <baseName id="x1ghqh43tn-a1">
+            <baseNameString>Jei</baseNameString>
+        </baseName>
+        <occurrence id="x1ghqh43tn-2a2">
+            <instanceOf>
+                <topicRef xlink:href="#REC_File"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-8f">
+                <baseNameString>Image Map</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/EMP_JavierSolis/File/504"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2a3">
+            <instanceOf>
+                <topicRef xlink:href="#REC_File"/>
+            </instanceOf>
+            <baseName id="x1gho9q1mi-1">
+                <baseNameString>imagen</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/EMP_JavierSolis/File/751"/>
+        </occurrence>
+    </topic>
+    <topic id="ROL_LiderProyecto">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Rol"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-22">
+            <baseNameString>Líder de proyecto</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="EMP_TomasOrozco">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Personal"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-c2">
+            <baseNameString>Tomás Orozco</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_ProveedoresINFOTEC">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_INFOTEC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-43">
+            <baseNameString>Proveedores de INFOTEC</baseNameString>
+        </baseName>
+        <occurrence id="x1ghqh43tn-2a4">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Comment"/>
+            </instanceOf>
+            <baseName id="x1ghok2jsd-f">
+                <baseNameString>Grupo Pissa</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_ProveedoresINFOTEC/Comment/752"/>
+        </occurrence>
+    </topic>
+    <topic id="TOP_ArquitecturaInfraestructura">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_ArquitecturaEmpresarial"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-9c">
+            <baseNameString>Arquitectura de infraestructura tecnológica</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ROL_Analista">
+        <baseName id="x1ghqh43tn-4e">
+            <baseNameString>Analista</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Metodologias">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TiposTemas"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-8e">
+            <baseNameString>Metodología</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="home">
+        <baseName id="x1ghqh43tn-dd">
+            <baseNameString>Home</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Economia">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Negocios"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-38">
+            <baseNameString>Economía</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="x1ghqh43tn-f0">
+        <subjectIdentity>
+            <subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/index.html#psi-at-class-instance"/>
+        </subjectIdentity>
+    </topic>
+    <topic id="TOP_Gobierno">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Temas"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-70">
+            <baseNameString>Gobierno</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Antropologia">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_CienciasSociales"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-96">
+            <baseNameString>Antropología</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_RTN">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TI_INFOTEC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-b1">
+            <baseNameString>RTN</baseNameString>
+            <variant>
+                <variantName>
+                    <resourceData>Red Tecnológica Nacional</resourceData>
+                </variantName>
+            </variant>
+        </baseName>
+    </topic>
+    <topic id="ROL_ImplementadoPor">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Rol"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-56">
+            <baseNameString>Implementado por</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_TC">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_AreasINFOTEC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-53">
+            <baseNameString>TC</baseNameString>
+            <variant>
+                <variantName>
+                    <resourceData>Area de Tecnología del Conocimiento</resourceData>
+                </variantName>
+            </variant>
+        </baseName>
+    </topic>
+    <topic id="TOP_ISO9000">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_EstandaresCalidad"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-57">
+            <baseNameString>ISO 9000</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="REC_WhitePaper">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TipoRecurso"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-9e">
+            <baseNameString>White Papers</baseNameString>
+        </baseName>
+        <baseName id="x1ghqh43tn-9f">
+            <baseNameString>White Papers</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Educacion">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_CienciasSociales"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-4f">
+            <baseNameString>Educación</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_ComercioElectronico">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_NegocioElectronico"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-61">
+            <baseNameString>Comercio electrónico</baseNameString>
+        </baseName>
+        <baseName id="x1ghqh43tn-62">
+            <baseNameString>e-commerce</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ROL_Proveedor">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Rol"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-1a">
+            <baseNameString>Rol Proveedor</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="REC_Project">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TipoRecurso"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-15">
+            <baseNameString>Proyectos</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Personal">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_INFOTEC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-6">
+            <baseNameString>Personal de INFOTEC</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ROL_TemaRelacionado">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Rol"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-c8">
+            <baseNameString>Tema Relacionado</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_AreasINFOTEC">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_INFOTEC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-2">
+            <baseNameString>Areas de INFOTEC</baseNameString>
+        </baseName>
+        <occurrence id="x1ghqh43tn-2a5">
+            <instanceOf>
+                <topicRef xlink:href="#REC_File"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-c0">
+                <baseNameString>test</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_AreasINFOTEC/File/573"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2a6">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Article"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-c2">
+                <baseNameString>test</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_AreasINFOTEC/Article/574"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2a7">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Bulletin"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-c4">
+                <baseNameString>test</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_AreasINFOTEC/Bulletin/575"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2a8">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Cases"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-c7">
+                <baseNameString>test</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_AreasINFOTEC/Cases/576"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2a9">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Comment"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-c9">
+                <baseNameString>test</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_AreasINFOTEC/Comment/606"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2aa">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Content"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-cc">
+                <baseNameString>test</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_AreasINFOTEC/Content/607"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2ab">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Event"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-cf">
+                <baseNameString>test</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_AreasINFOTEC/Event/608"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2ac">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Expedience"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-d2">
+                <baseNameString>test</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_AreasINFOTEC/Expedience/609"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2ad">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Book"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-d4">
+                <baseNameString>test</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_AreasINFOTEC/Book/610"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2ae">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Link"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-d7">
+                <baseNameString>test</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_AreasINFOTEC/Link/611"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2af">
+            <instanceOf>
+                <topicRef xlink:href="#REC_News"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-da">
+                <baseNameString>test</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_AreasINFOTEC/News/612"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2b0">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Presentation"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-dd">
+                <baseNameString>test</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_AreasINFOTEC/Presentation/613"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2b1">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Project"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-df">
+                <baseNameString>jei</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_AreasINFOTEC/Project/614"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2b2">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Tip"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-e2">
+                <baseNameString>test</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_AreasINFOTEC/Tip/615"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2b3">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Tutorial"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-e4">
+                <baseNameString>test</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_AreasINFOTEC/Tutorial/616"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2b4">
+            <instanceOf>
+                <topicRef xlink:href="#REC_WhitePaper"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-e6">
+                <baseNameString>test</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_AreasINFOTEC/WhitePaper/617"/>
+        </occurrence>
+    </topic>
+    <topic id="TOP_XSL">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_LenguajesMarcas"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-b9">
+            <baseNameString>XSL</baseNameString>
+            <variant>
+                <variantName>
+                    <resourceData>Extensible Stylesheet Language</resourceData>
+                </variantName>
+            </variant>
+        </baseName>
+    </topic>
+    <topic id="id_rama">
+        <baseName id="x1ghqh43tn-d0">
+            <baseNameString>Rama</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="REC_Prototipos">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TiposTemas"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-58">
+            <baseNameString>Prototipos</baseNameString>
+        </baseName>
+        <baseName id="x1ghqh43tn-59">
+            <baseNameString>Prototipos</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Rol">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TiposTopicos"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-74">
+            <baseNameString>Roles de asociaciones</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_SunMicrosystems">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Empresas"/>
+            <topicRef xlink:href="#TOP_ProveedoresINFOTEC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-7e">
+            <baseNameString>Sun Microsystems</baseNameString>
+        </baseName>
+        <occurrence id="x1ghqh43tn-2b5">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Comment"/>
+            </instanceOf>
+            <baseName id="x1ghok2jsd-11">
+                <baseNameString>Grupo Pissa</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_SunMicrosystems/Comment/752"/>
+        </occurrence>
+    </topic>
+    <topic id="TOP_Calidad">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Negocios"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-a4">
+            <baseNameString>Calidad</baseNameString>
+        </baseName>
+        <baseName id="x1ghqh43tn-a5">
+            <baseNameString>Quality</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ROL_Sucesor">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Rol"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-d8">
+            <baseNameString>Sucesor</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="EMP_MauricioRosas">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Personal"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-77">
+            <baseNameString>Mauricio Rosas</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_UDDI">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_WebServices"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-6b">
+            <baseNameString>UDDI</baseNameString>
+            <variant>
+                <variantName>
+                    <resourceData>Universal Description, Discovery and Integration</resourceData>
+                </variantName>
+            </variant>
+        </baseName>
+        <occurrence id="x1ghqh43tn-2b6">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Link"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-fd">
+                <baseNameString>Sitio web de la organización UDDI</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_UDDI/Link/622"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2b7">
+            <instanceOf>
+                <topicRef xlink:href="#REC_WhitePaper"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-ff">
+                <baseNameString>UDDI Executive White paper</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_UDDI/WhitePaper/623"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2b8">
+            <instanceOf>
+                <topicRef xlink:href="#REC_News"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-101">
+                <baseNameString>SAP adopta UDDI</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_UDDI/News/624"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2b9">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Link"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-103">
+                <baseNameString>FAQ elaborado por uddi.org</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_UDDI/Link/627"/>
+        </occurrence>
+    </topic>
+    <topic id="TOP_Vinculacion">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_AreasINFOTEC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-73">
+            <baseNameString>Area de Vinculación</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Estandares">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TiposTemas"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-dc">
+            <baseNameString>Estándares</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_ArquitecturaEmpresarial">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TecnologiaNegocios"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-bc">
+            <baseNameString>Arquitectura empresarial</baseNameString>
+        </baseName>
+        <baseName id="x1ghqh43tn-bd">
+            <baseNameString>Enterprise architecture</baseNameString>
+        </baseName>
+        <occurrence id="x1ghqh43tn-2ba">
+            <instanceOf>
+                <topicRef xlink:href="#REC_File"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-10b">
+                <baseNameString>Presentaciones sobre arquitecturas empresariales</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_ArquitecturaEmpresarial/File/629"/>
+        </occurrence>
+    </topic>
+    <topic id="TOP_Software">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TIC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-46">
+            <baseNameString>Software</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ASO_Uso">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TiposAsociacion"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-4d">
+            <baseNameString>Uso</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_AdministradorContenidos">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TecnologiaNegocios"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-3">
+            <baseNameString>Administradores de contenidos</baseNameString>
+        </baseName>
+        <baseName id="x1ghqh43tn-4">
+            <baseNameString>Content Management</baseNameString>
+            <variant>
+                <variantName>
+                    <resourceData>CMS</resourceData>
+                </variantName>
+            </variant>
+        </baseName>
+    </topic>
+    <topic id="TOP_Java">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_LenguajesOO"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-36">
+            <baseNameString>Java</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_CienciasSociales">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Temas"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-a6">
+            <baseNameString>Ciencias Sociales</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_JuridicoINFOTEC">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_AreasINFOTEC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-b2">
+            <baseNameString>Area de Jurídico</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Interoperabilidad">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Conceptos"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-54">
+            <baseNameString>Interoperabilidad</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_ClientesINFOTEC">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_INFOTEC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-d7">
+            <baseNameString>Clientes de INFOTEC</baseNameString>
+        </baseName>
+        <occurrence id="x1ghqh43tn-2bb">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Article"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-120">
+                <baseNameString>jei</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_ClientesINFOTEC/Article/495"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2bc">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Article"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-122">
+                <baseNameString>prueba</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_ClientesINFOTEC/Article/496"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2bd">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Article"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-124">
+                <baseNameString>otra prueba</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_ClientesINFOTEC/Article/497"/>
+        </occurrence>
+    </topic>
+    <topic id="CLI_SEP">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_ClientesINFOTEC"/>
+            <topicRef xlink:href="#TOP_OrgGobierno"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-f">
+            <baseNameString>SEP</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_FJavierCardenas">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Contactos"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-e0">
+            <baseNameString>Francisco Javier Cárdenas</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Middleware">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Software"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-30">
+            <baseNameString>Middleware</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Arquitecturas">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TiposTemas"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-9d">
+            <baseNameString>Arquitecturas</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Arquitectura">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_ArtesHumanidades"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-eb">
+            <baseNameString>Arquitectura</baseNameString>
+        </baseName>
+        <occurrence id="x1ghqh43tn-2be">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Comment"/>
+            </instanceOf>
+            <baseName id="x1ghok2jsd-3">
+                <baseNameString>Grupo Pissa</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_Arquitectura/Comment/752"/>
+        </occurrence>
+    </topic>
+    <topic id="TOP_VB">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_LengProg"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-2e">
+            <baseNameString>Visual Basic</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Empresas">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Negocios"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-75">
+            <baseNameString>Empresas</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_ArtesHumanidades">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Temas"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-a8">
+            <baseNameString>Artes y Humanidades</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ROL_ResponsableDe">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Rol"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-0">
+            <baseNameString>Responsable de</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="id_fer">
+        <baseName id="x1ghqh43tn-7">
+            <baseNameString>Fer</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_MetodologiasDesarrollo">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Metodologias"/>
+            <topicRef xlink:href="#TOP_ProgramacionDesarrollo"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-6a">
+            <baseNameString>Metodologías de Desarrollo</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_LMS">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_AprendizajeOrganizacional"/>
+            <topicRef xlink:href="#TOP_TecnologiaNegocios"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-5d">
+            <baseNameString>LMS</baseNameString>
+            <variant>
+                <variantName>
+                    <resourceData>Learning Management s systems</resourceData>
+                </variantName>
+            </variant>
+        </baseName>
+    </topic>
+    <topic id="TOP_CTA">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TI_INFOTEC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-66">
+            <baseNameString>CTA</baseNameString>
+            <variant>
+                <variantName>
+                    <resourceData>Centro de Tecnologías Avanzadas</resourceData>
+                </variantName>
+            </variant>
+        </baseName>
+    </topic>
+    <topic id="TOP_OscarLuna">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Contactos"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-3e">
+            <baseNameString>Oscar Luna</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="EMP_VanessaArredondo">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Personal"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-93">
+            <baseNameString>Vanessa Arredondo</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ROL_ImplementadoEn">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Rol"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-c5">
+            <baseNameString>Implementado en</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ROL_Desarrollo">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Rol"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-26">
+            <baseNameString>Resultado del Desarrollo</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_pissa">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_ProveedoresINFOTEC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-d2">
+            <baseNameString>Grupo Pissa</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Matematicas">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Ciencia"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-12">
+            <baseNameString>Matemáticas</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_ProgramacionDesarrollo">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TIC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-d3">
+            <baseNameString>Programación y Desarrollo</baseNameString>
+        </baseName>
+        <baseName id="x1ghqh43tn-d4">
+            <baseNameString>Programming and Development</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_TiposAsociacion">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TiposTopicos"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-e9">
+            <baseNameString>Tipos de asociaciones</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_EstandaresCalidad">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Calidad"/>
+            <topicRef xlink:href="#TOP_Estandares"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-16">
+            <baseNameString>Estándares de calidad</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Hardware">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TIC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-da">
+            <baseNameString>Hardware</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_PagosElectronicos">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_ComercioElectronico"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-98">
+            <baseNameString>Pagos electrónicos</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_TipoRecurso">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TiposTopicos"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-e">
+            <baseNameString>Tipos de recursos</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Historia">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_CienciasSociales"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-b0">
+            <baseNameString>Historia</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_AdmonINFOTEC">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_AreasINFOTEC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-99">
+            <baseNameString>Area de Administración</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ROL_Predecesor">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Rol"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-2f">
+            <baseNameString>Predecesor</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="CLI_SECTUR">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_ClientesINFOTEC"/>
+            <topicRef xlink:href="#TOP_OrgGobierno"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-c4">
+            <baseNameString>SECTUR</baseNameString>
+            <variant>
+                <variantName>
+                    <resourceData>Secretaría de Turismo</resourceData>
+                </variantName>
+            </variant>
+        </baseName>
+    </topic>
+    <topic id="TOP_BPR">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Estrategia"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-3c">
+            <baseNameString>Reingeniería de Procesos</baseNameString>
+        </baseName>
+        <baseName id="x1ghqh43tn-3d">
+            <baseNameString>Business Process Reengeneering</baseNameString>
+            <variant>
+                <variantName>
+                    <resourceData>BPR</resourceData>
+                </variantName>
+            </variant>
+        </baseName>
+    </topic>
+    <topic id="EMP_RodolfoGaray">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Personal"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-7b">
+            <baseNameString>Rodolfo Garay</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="EMP_JesusRios">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Personal"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-b7">
+            <baseNameString>Jesús Ríos</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="PRY_PortaleGobierno">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_ProyectosINFOTEC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-8d">
+            <baseNameString>Portal e-Gobierno</baseNameString>
+        </baseName>
+        <occurrence id="x1ghqh43tn-2bf">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Comment"/>
+            </instanceOf>
+            <baseName id="x1ghok2jsd-d">
+                <baseNameString>Grupo Pissa</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/PRY_PortaleGobierno/Comment/752"/>
+        </occurrence>
+    </topic>
+    <topic id="TOP_KM">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_AprendizajeOrganizacional"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-c">
+            <baseNameString>Administracion del Conocimiento</baseNameString>
+        </baseName>
+        <baseName id="x1ghqh43tn-d">
+            <baseNameString>Knowledge Management</baseNameString>
+            <variant>
+                <variantName>
+                    <resourceData>KM</resourceData>
+                </variantName>
+            </variant>
+        </baseName>
+        <occurrence id="x1ghqh43tn-2c0">
+            <instanceOf>
+                <topicRef xlink:href="#REC_File"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-16c">
+                <baseNameString>Resumen introducción del libro &quot;El
+                    dilema del innovador&quot;</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_KM/File/628"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2c1">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Comment"/>
+            </instanceOf>
+            <baseName id="x1ghok2jsd-1">
+                <baseNameString>Grupo Pissa</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_KM/Comment/752"/>
+        </occurrence>
+    </topic>
+    <topic id="TOP_ArquitecturaAplicacion">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_ArquitecturaEmpresarial"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-23">
+            <baseNameString>Arquitectura de aplicaciones</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ORG_CONACYT">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_OrgGobierno"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-5b">
+            <baseNameString>CONACYT</baseNameString>
+            <variant>
+                <variantName>
+                    <resourceData>Consejo Nacional de Ciencia y Tecnología</resourceData>
+                </variantName>
+            </variant>
+        </baseName>
+        <occurrence id="x1ghqh43tn-2c2">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Link"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-173">
+                <baseNameString>Sitio web del CONACYT</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/ORG_CONACYT/Link/632"/>
+        </occurrence>
+    </topic>
+    <topic id="TOP_Conceptos">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TiposTemas"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-33">
+            <baseNameString>Conceptos</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Ciencia">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Temas"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-9b">
+            <baseNameString>Ciencias</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ASO_Desarrollos">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TiposAsociacion"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-cd">
+            <baseNameString>Desarrollos</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_ProyectosINFOTEC">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_INFOTEC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-ce">
+            <baseNameString>Proyectos de INFOTEC</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_EcquariaSOP">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Producto"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-39">
+            <baseNameString>Ecquaria SOP</baseNameString>
+        </baseName>
+        <occurrence id="x1ghqh43tn-2c3">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Comment"/>
+            </instanceOf>
+            <baseName id="x1ghok2jsd-7">
+                <baseNameString>Grupo Pissa</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_EcquariaSOP/Comment/752"/>
+        </occurrence>
+    </topic>
+    <topic id="ROL_Consultor">
+        <baseName id="x1ghqh43tn-14">
+            <baseNameString>Consultor</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Contabilidad">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Negocios"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-9">
+            <baseNameString>Contabilidad</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Finanzas">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Negocios"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-80">
+            <baseNameString>Finanzas</baseNameString>
+        </baseName>
+        <baseName id="x1ghqh43tn-81">
+            <baseNameString>Finance</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ROL_DesarrolladoPara">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Rol"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-20">
+            <baseNameString>Desarrollado para</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_TecnologiaNegocios">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Negocios"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-a2">
+            <baseNameString>TI en las organizaciones</baseNameString>
+        </baseName>
+        <baseName id="x1ghqh43tn-a3">
+            <baseNameString>Technology in Business</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="PRY_Enciclomedia">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_ProyectosINFOTEC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-5c">
+            <baseNameString>Enciclomedia</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="REC_Cases">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TipoRecurso"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-83">
+            <baseNameString>Casos de estudio</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Negocios">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Temas"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-67">
+            <baseNameString>Negocios</baseNameString>
+        </baseName>
+        <baseName id="x1ghqh43tn-68">
+            <baseNameString>Business</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ROL_Implementacion">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Rol"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-48">
+            <baseNameString>Implementación</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ASO_Pertenencia">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TiposAsociacion"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-b8">
+            <baseNameString>Pertenencia</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Mercadotecnia">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Negocios"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-e3">
+            <baseNameString>Mercadotecnia</baseNameString>
+        </baseName>
+        <baseName id="x1ghqh43tn-e4">
+            <baseNameString>Marketing</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Derecho">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_CienciasSociales"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-1c">
+            <baseNameString>Derecho</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="REC_File">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TipoRecurso"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-55">
+            <baseNameString>Archivos</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="REC_Content">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TipoRecurso"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-37">
+            <baseNameString>Texto / Contenido</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Usabilidad">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_DisenioWeb"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-71">
+            <baseNameString>Usabilidad</baseNameString>
+        </baseName>
+        <baseName id="x1ghqh43tn-72">
+            <baseNameString>Usability</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ROL_Diseniador">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Rol"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-97">
+            <baseNameString>Diseñador</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="REC_Expedience">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TipoRecurso"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-51">
+            <baseNameString>Experiencias</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="REC_Article">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TipoRecurso"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-19">
+            <baseNameString>Artículos</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_LenguajesMarcas">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_LengProg"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-a">
+            <baseNameString>Lenguajes de marcas</baseNameString>
+        </baseName>
+        <baseName id="x1ghqh43tn-b">
+            <baseNameString>Markup languages</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_BrechaDigital">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Conceptos"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-8b">
+            <baseNameString>Brecha Digital</baseNameString>
+        </baseName>
+        <occurrence id="x1ghqh43tn-2c4">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Comment"/>
+            </instanceOf>
+            <baseName id="x1ghok2jsd-5">
+                <baseNameString>Grupo Pissa</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_BrechaDigital/Comment/752"/>
+        </occurrence>
+    </topic>
+    <topic id="TOP_Estrategia">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Negocios"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-c9">
+            <baseNameString>Estrategia</baseNameString>
+        </baseName>
+        <baseName id="x1ghqh43tn-ca">
+            <baseNameString>Strategy</baseNameString>
+        </baseName>
+        <occurrence id="x1ghqh43tn-2c5">
+            <instanceOf>
+                <topicRef xlink:href="#REC_File"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-1a4">
+                <baseNameString>Resumen introducción del libro &quot;El
+                    dilema del innovador&quot;</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_Estrategia/File/628"/>
+        </occurrence>
+    </topic>
+    <topic id="PRY_DesarrolloWB">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_ProyectosINFOTEC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-50">
+            <baseNameString>Desarrollo de Web Builder version 1</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Innovacion">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Negocios"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-94">
+            <baseNameString>Innovación</baseNameString>
+        </baseName>
+        <baseName id="x1ghqh43tn-95">
+            <baseNameString>Innovation</baseNameString>
+        </baseName>
+        <occurrence id="x1ghqh43tn-2c6">
+            <instanceOf>
+                <topicRef xlink:href="#REC_File"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-1ab">
+                <baseNameString>Resumen introducción del libro &quot;El
+                    dilema del innovador&quot;</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_Innovacion/File/628"/>
+        </occurrence>
+    </topic>
+    <topic id="TOP_TiposTopicos">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Topicos"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-5a">
+            <baseNameString>Tipos de tópicos</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_ProductosINFOTEC">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_INFOTEC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-c0">
+            <baseNameString>Productos y servicios de INFOTEC</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_CienciasAplicadas">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Ciencia"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-c7">
+            <baseNameString>Ciencias aplicadas o ingenierías</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_INFOTEC">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Temas"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-4a">
+            <baseNameString>INFOTEC</baseNameString>
+            <variant>
+                <variantName>
+                    <resourceData>INFOTEC-CONACYT-Fideicomiso</resourceData>
+                </variantName>
+            </variant>
+            <variant>
+                <variantName>
+                    <resourceData>Fondo de Información y Documentación</resourceData>
+                </variantName>
+            </variant>
+        </baseName>
+        <occurrence id="x1ghqh43tn-2c7">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Article"/>
+            </instanceOf>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TMTT_INFOTEC/Article/16"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2c8">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Book"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-1b5">
+                <baseNameString>Esto es una prueba</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx/"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2c9">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Book"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-1b7">
+                <baseNameString>Esto es otra prueba</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/old/topic.jsp"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2ca">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Article"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-1b9">
+                <baseNameString>Prueba</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_INFOTEC/Article/507"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2cb">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Cases"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-1bb">
+                <baseNameString>prueba Cases</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_INFOTEC/Cases/509"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2cc">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Comment"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-1bd">
+                <baseNameString>Prueba Comentarion</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_INFOTEC/Comment/510"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2cd">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Event"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-1bf">
+                <baseNameString>visual studio</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_INFOTEC/Event/511"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2ce">
+            <instanceOf>
+                <topicRef xlink:href="#REC_File"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-1c1">
+                <baseNameString>file</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_INFOTEC/File/517"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2cf">
+            <instanceOf>
+                <topicRef xlink:href="#REC_News"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-1c3">
+                <baseNameString>mexico en el mundial</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_INFOTEC/News/520"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2d0">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Presentation"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-1c5">
+                <baseNameString>presentacion de punto gob</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_INFOTEC/Presentation/521"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2d1">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Tip"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-1c7">
+                <baseNameString>busca en jsolis.infotec.com.mx</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_INFOTEC/Tip/522"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2d2">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Bulletin"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-1c9">
+                <baseNameString>Prueba Boletin</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_INFOTEC/Bulletin/523"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2d3">
+            <instanceOf>
+                <topicRef xlink:href="#REC_File"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-1cb">
+                <baseNameString>Datos Circulando</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_INFOTEC/File/531"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2d4">
+            <instanceOf>
+                <topicRef xlink:href="#REC_File"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-1cd">
+                <baseNameString>Respaldo</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_INFOTEC/File/532"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2d5">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Article"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-1cf">
+                <baseNameString>jei</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_INFOTEC/Article/533"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2d6">
+            <instanceOf>
+                <topicRef xlink:href="#REC_File"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-1d1">
+                <baseNameString>imagen</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_INFOTEC/File/571"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2d7">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Content"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-1d3">
+                <baseNameString>Prueba contenido</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_INFOTEC/Content/641"/>
+        </occurrence>
+    </topic>
+    <topic id="ROL_Soporte">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Rol"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-ed">
+            <baseNameString>Soporte</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ASO_ProductoCliente">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TiposAsociacion"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-82">
+            <baseNameString>Producto / Cliente</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="EMP_IrakLopez">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Personal"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-9a">
+            <baseNameString>Irak López</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Disenio">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_ArtesHumanidades"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-32">
+            <baseNameString>Diseño</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_ArquitecturaNegocio">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_ArquitecturaEmpresarial"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-b3">
+            <baseNameString>Arquitectura de negocio</baseNameString>
+        </baseName>
+        <baseName id="x1ghqh43tn-b4">
+            <baseNameString>Business architecture</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ASO_Participacion">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TiposAsociacion"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-df">
+            <baseNameString>Participación</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_MercadotecniaInternet">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Internet"/>
+            <topicRef xlink:href="#TOP_Mercadotecnia"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-cf">
+            <baseNameString>Mercadotecnia en Internet</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_ProgramacionInternet">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Internet"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-1d">
+            <baseNameString>Programación para Internet</baseNameString>
+        </baseName>
+        <baseName id="x1ghqh43tn-1e">
+            <baseNameString>Internet Programming</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="REC_Event">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TipoRecurso"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-e8">
+            <baseNameString>Eventos</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_TIC">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Tecnologia"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-90">
+            <baseNameString>Tecnología de Información y Comunicaciones</baseNameString>
+            <variant>
+                <variantName>
+                    <resourceData>TI</resourceData>
+                </variantName>
+            </variant>
+        </baseName>
+        <baseName id="x1ghqh43tn-91">
+            <baseNameString>Information Technology</baseNameString>
+            <variant>
+                <variantName>
+                    <resourceData>IT</resourceData>
+                </variantName>
+            </variant>
+        </baseName>
+    </topic>
+    <topic id="REC_News">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TipoRecurso"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-31">
+            <baseNameString>Noticias</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Fisica">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Ciencia"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-92">
+            <baseNameString>Física</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="x1ghqh43tn-ee">
+        <subjectIdentity>
+            <subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/index.html#psi-role-class"/>
+        </subjectIdentity>
+    </topic>
+    <topic id="PRY_PuntoGob">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_ProyectosINFOTEC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-8a">
+            <baseNameString>Revista PuntoGob</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ROL_Utiliza">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Rol"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-8c">
+            <baseNameString>Utiliza</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="EMP_RobertoMurillo">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Personal"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-34">
+            <baseNameString>Roberto Murillo</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Contactos">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_INFOTEC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-d6">
+            <baseNameString>Contactos de INFOTEC</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_LengProg">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_ProgramacionDesarrollo"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-44">
+            <baseNameString>Lenguajes de programación</baseNameString>
+        </baseName>
+        <baseName id="x1ghqh43tn-45">
+            <baseNameString>Programming Language</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ROL_Desarrollador">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Rol"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-17">
+            <baseNameString>Desarrollado por</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Psicologia">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_ArtesHumanidades"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-5">
+            <baseNameString>Psicología</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ROL_RelacionadoCon">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Rol"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-de">
+            <baseNameString>Relacionado con</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ROL_Responsable">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Rol"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-6e">
+            <baseNameString>Responsable</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Producto">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TiposTemas"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-6d">
+            <baseNameString>Productos o servicios</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ROL_Cliente">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Rol"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-69">
+            <baseNameString>Rol Cliente</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Comunicaciones">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TIC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-3a">
+            <baseNameString>Telecomunicaciones</baseNameString>
+        </baseName>
+        <baseName id="x1ghqh43tn-3b">
+            <baseNameString>Telecommunications</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="EMP_ReneJara">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Personal"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-89">
+            <baseNameString>René Gerardo Jara</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_ArquitecturaInformacion">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_ArquitecturaEmpresarial"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-be">
+            <baseNameString>Arquitectura de Información</baseNameString>
+        </baseName>
+        <baseName id="x1ghqh43tn-bf">
+            <baseNameString>Information Architecture</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_OrgGobierno">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Gobierno"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-65">
+            <baseNameString>Organismos del Gobierno</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_InnovacionTecnologica">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Innovacion"/>
+            <topicRef xlink:href="#TOP_Tecnologia"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-35">
+            <baseNameString>Innovación Tecnológica</baseNameString>
+        </baseName>
+        <occurrence id="x1ghqh43tn-2d8">
+            <instanceOf>
+                <topicRef xlink:href="#REC_File"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-20e">
+                <baseNameString>Resumen - use IT for Strategic
+                    Innovation, not simply tactical automation</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_InnovacionTecnologica/File/630"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2d9">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Comment"/>
+            </instanceOf>
+            <baseName id="x1ghok2jsd-b">
+                <baseNameString>Grupo Pissa</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_InnovacionTecnologica/Comment/752"/>
+        </occurrence>
+    </topic>
+    <topic id="ROL_Contiene">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Rol"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-86">
+            <baseNameString>Contiene</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="EMP_DianaRivera">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Personal"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-ad">
+            <baseNameString>Diana Rivera</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="REC_Tip">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TipoRecurso"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-18">
+            <baseNameString>Tips</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_GobiernoElectronico">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TecnologiaNegocios"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-79">
+            <baseNameString>Gobierno Electrónico</baseNameString>
+        </baseName>
+        <baseName id="x1ghqh43tn-7a">
+            <baseNameString>e-Government</baseNameString>
+        </baseName>
+        <occurrence id="x1ghqh43tn-2da">
+            <instanceOf>
+                <topicRef xlink:href="#REC_File"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-218">
+                <baseNameString>Resumen - use IT for Strategic
+                    Innovation, not simply tactical automation</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_GobiernoElectronico/File/630"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2db">
+            <instanceOf>
+                <topicRef xlink:href="#REC_File"/>
+            </instanceOf>
+            <baseName id="x1gho8hoon-21a">
+                <baseNameString>Archivo original: Use IT for Strategic
+                    Innovation, Not simply tactical automation</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_GobiernoElectronico/File/631"/>
+        </occurrence>
+        <occurrence id="x1ghqh43tn-2dc">
+            <instanceOf>
+                <topicRef xlink:href="#REC_Comment"/>
+            </instanceOf>
+            <baseName id="x1ghok2jsd-9">
+                <baseNameString>Grupo Pissa</baseNameString>
+            </baseName>
+            <resourceRef xlink:href="http://jsolis.infotec.com.mx:82/servlet/serch/TOP_GobiernoElectronico/Comment/752"/>
+        </occurrence>
+    </topic>
+    <topic id="ASO_Secuencia">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TiposAsociacion"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-c3">
+            <baseNameString>Secuencia</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="REC_Presentation">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TipoRecurso"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-db">
+            <baseNameString>Presentaciones</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ASO_Responsabilidad">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TiposAsociacion"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-d9">
+            <baseNameString>Responsabilidad</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_Modelos">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TiposTemas"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-42">
+            <baseNameString>Modelos</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="PRD_TeamProject">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_ProductosINFOTEC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-e6">
+            <baseNameString>Team Project</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ROL_Programador">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Rol"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-7d">
+            <baseNameString>Programador</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="EMP_VictorLorenzana">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Personal"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-11">
+            <baseNameString>Víctor Lorenzana</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="ROL_Producto">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Rol"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-4b">
+            <baseNameString>Rol Producto o servicio</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_LenguajesOO">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_LengProg"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-29">
+            <baseNameString>Lenguajes Orientados a Objetos</baseNameString>
+        </baseName>
+        <baseName id="x1ghqh43tn-2a">
+            <baseNameString>Object-oriented languages</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="EMP_FernandoGarcia">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_Personal"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-10">
+            <baseNameString>Fernando García</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="REC_Link">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_TipoRecurso"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-6c">
+            <baseNameString>Ligas</baseNameString>
+        </baseName>
+    </topic>
+    <topic id="TOP_TI_INFOTEC">
+        <instanceOf>
+            <topicRef xlink:href="#TOP_AreasINFOTEC"/>
+        </instanceOf>
+        <baseName id="x1ghqh43tn-4c">
+            <baseNameString>TI</baseNameString>
+            <variant>
+                <variantName>
+                    <resourceData>Area de Tecnología de Información</resourceData>
+                </variantName>
+            </variant>
+        </baseName>
+    </topic>
+    <association id="x1ghqh43tn-fb">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Relacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-fc">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_Innovacion"/>
+        </member>
+        <member id="x1ghqh43tn-fd">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_KM"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-101">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Participacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-102">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_ParticipadoEn"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_WebBuilderSEP"/>
+        </member>
+        <member id="x1ghqh43tn-103">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_LiderProyecto"/>
+            </roleSpec>
+            <topicRef xlink:href="#EMP_FernandoGarcia"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-105">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Participacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-106">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_ParticipadoEn"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_DesarrolloWB"/>
+        </member>
+        <member id="x1ghqh43tn-107">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Programador"/>
+            </roleSpec>
+            <topicRef xlink:href="#EMP_VictorLorenzana"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-109">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Pertenencia"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-10a">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Contiene"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_UIDT"/>
+        </member>
+        <member id="x1ghqh43tn-10b">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Pertenece"/>
+            </roleSpec>
+            <topicRef xlink:href="#EMP_VictorLorenzana"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-10e">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Pertenencia"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-10f">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Contiene"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_UIDT"/>
+        </member>
+        <member id="x1ghqh43tn-110">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Pertenece"/>
+            </roleSpec>
+            <topicRef xlink:href="#EMP_SergioMartinez"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-11b">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Relacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-11c">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_Java"/>
+        </member>
+        <member id="x1ghqh43tn-11d">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_ProgramacionInternet"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-11e">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Relacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-11f">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_XML"/>
+        </member>
+        <member id="x1ghqh43tn-120">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_ProgramacionInternet"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-126">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Relacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-127">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_LengProg"/>
+        </member>
+        <member id="x1ghqh43tn-128">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_ArquitecturaAplicacion"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-137">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Relacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-138">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_UIDT"/>
+        </member>
+        <member id="x1ghqh43tn-139">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_TemaRelacionado"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_InnovacionTecnologica"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-13a">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Uso"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-13b">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Utiliza"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_DesarrolloWB"/>
+        </member>
+        <member id="x1ghqh43tn-13c">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_EsUtilizado"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_Java"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-13d">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Relacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-13e">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_J2EE"/>
+        </member>
+        <member id="x1ghqh43tn-13f">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_Java"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-143">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Uso"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-144">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_EsUtilizado"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_J2EE"/>
+        </member>
+        <member id="x1ghqh43tn-145">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Utiliza"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_EcquariaSOP"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-147">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Relacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-148">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_RTN"/>
+        </member>
+        <member id="x1ghqh43tn-149">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_TemaRelacionado"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_Comunicaciones"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-14e">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Pertenencia"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-14f">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Pertenece"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_OscarLuna"/>
+        </member>
+        <member id="x1ghqh43tn-150">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Contiene"/>
+            </roleSpec>
+            <topicRef xlink:href="#ORG_CPTM"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-151">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Implementaciones"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-152">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Implementacion"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_Visitmexico"/>
+        </member>
+        <member id="x1ghqh43tn-153">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_ImplementadoEn"/>
+            </roleSpec>
+            <topicRef xlink:href="#ORG_CPTM"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-15b">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Uso"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-15c">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Utiliza"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_EcquariaSOP"/>
+        </member>
+        <member id="x1ghqh43tn-15d">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_EsUtilizado"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_XML"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-15f">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Pertenencia"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-160">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Contiene"/>
+            </roleSpec>
+            <topicRef xlink:href="#ORG_CONACYT"/>
+        </member>
+        <member id="x1ghqh43tn-161">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Pertenece"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_INFOTEC"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-162">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Relacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-163">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_TemaRelacionado"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_GobiernoElectronico"/>
+        </member>
+        <member id="x1ghqh43tn-164">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_INFOTEC"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-16b">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Responsabilidad"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-16c">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Responsable"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_UIDT"/>
+        </member>
+        <member id="x1ghqh43tn-16d">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_ResponsableDe"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_DesarrolloWB"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-170">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Participacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-171">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_LiderProyecto"/>
+            </roleSpec>
+            <topicRef xlink:href="#EMP_RebecaBlanco"/>
+        </member>
+        <member id="x1ghqh43tn-172">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_ParticipadoEn"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_Visitmexico"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-173">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Responsabilidad"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-174">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Responsable"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_UIDT"/>
+        </member>
+        <member id="x1ghqh43tn-175">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_ResponsableDe"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_Visitmexico"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-178">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Relacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-179">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_XML"/>
+        </member>
+        <member id="x1ghqh43tn-17a">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_Interoperabilidad"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-181">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Responsabilidad"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-182">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Responsable"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_CTA"/>
+        </member>
+        <member id="x1ghqh43tn-183">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Responsable"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_Enciclomedia"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-185">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Desarrollos"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-186">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_DesarrolladoPara"/>
+            </roleSpec>
+            <topicRef xlink:href="#CLI_SEP"/>
+        </member>
+        <member id="x1ghqh43tn-187">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Desarrollo"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_Enciclomedia"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-18e">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Relacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-18f">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_TC"/>
+        </member>
+        <member id="x1ghqh43tn-190">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_AprendizajeOrganizacional"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-1a1">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_ProductoProveedor"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-1a2">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Producto"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_EcquariaSOP"/>
+        </member>
+        <member id="x1ghqh43tn-1a3">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Proveedor"/>
+            </roleSpec>
+            <topicRef xlink:href="#ORG_Ecquaria"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-1a7">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Responsabilidad"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-1a8">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Responsable"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_UIDT"/>
+        </member>
+        <member id="x1ghqh43tn-1a9">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_ResponsableDe"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_TopicMaps"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-1aa">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Relacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-1ab">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_TC"/>
+        </member>
+        <member id="x1ghqh43tn-1ac">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_TemaRelacionado"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_GobiernoElectronico"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-1af">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Pertenencia"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-1b0">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Contiene"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_UIDT"/>
+        </member>
+        <member id="x1ghqh43tn-1b1">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Pertenece"/>
+            </roleSpec>
+            <topicRef xlink:href="#EMP_RodolfoGaray"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-1b4">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Relacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-1b5">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#ORG_Ecquaria"/>
+        </member>
+        <member id="x1ghqh43tn-1b6">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_SunMicrosystems"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-1bf">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Pertenencia"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-1c0">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Contiene"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_UIDT"/>
+        </member>
+        <member id="x1ghqh43tn-1c1">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Pertenece"/>
+            </roleSpec>
+            <topicRef xlink:href="#EMP_RebecaBlanco"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-1c2">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Relacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-1c3">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_Interoperabilidad"/>
+        </member>
+        <member id="x1ghqh43tn-1c4">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_WebServices"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-1c6">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Relacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-1c7">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_XML"/>
+        </member>
+        <member id="x1ghqh43tn-1c8">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_WebServices"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-1cc">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Pertenencia"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-1cd">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Contiene"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_UIDT"/>
+        </member>
+        <member id="x1ghqh43tn-1ce">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Pertenece"/>
+            </roleSpec>
+            <topicRef xlink:href="#EMP_ReneJara"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-1cf">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Participacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-1d0">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Soporte"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_CTA"/>
+        </member>
+        <member id="x1ghqh43tn-1d1">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_ParticipadoEn"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_PuntoGob"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-1d3">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Responsabilidad"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-1d4">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Responsable"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_TC"/>
+        </member>
+        <member id="x1ghqh43tn-1d5">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_ResponsableDe"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_PuntoGob"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-1d6">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Participacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-1d7">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Soporte"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_UIDT"/>
+        </member>
+        <member id="x1ghqh43tn-1d8">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_ParticipadoEn"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_PuntoGob"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-1dc">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Responsabilidad"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-1dd">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Responsable"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_TC"/>
+        </member>
+        <member id="x1ghqh43tn-1de">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_ResponsableDe"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_PortaleGobierno"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-1df">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Responsabilidad"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-1e0">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Responsable"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_UIDT"/>
+        </member>
+        <member id="x1ghqh43tn-1e1">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_ResponsableDe"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_PortaleGobierno"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-1e3">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Participacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-1e4">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_ParticipadoEn"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_Becasmx"/>
+        </member>
+        <member id="x1ghqh43tn-1e5">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Consultor"/>
+            </roleSpec>
+            <topicRef xlink:href="#EMP_XimenaGonzalez"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-1e7">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Pertenencia"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-1e8">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Contiene"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_UIDT"/>
+        </member>
+        <member id="x1ghqh43tn-1e9">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Pertenece"/>
+            </roleSpec>
+            <topicRef xlink:href="#EMP_XimenaGonzalez"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-1ea">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Relacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-1eb">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_TI_INFOTEC"/>
+        </member>
+        <member id="x1ghqh43tn-1ec">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_TIC"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-1ee">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Relacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-1ef">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_UIDT"/>
+        </member>
+        <member id="x1ghqh43tn-1f0">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_TemaRelacionado"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_TIC"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-1f2">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Participacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-1f3">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_ParticipadoEn"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_DesarrolloWB"/>
+        </member>
+        <member id="x1ghqh43tn-1f4">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Programador"/>
+            </roleSpec>
+            <topicRef xlink:href="#EMP_VanessaArredondo"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-1f5">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Participacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-1f6">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_ParticipadoEn"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_WebBuilderSEP"/>
+        </member>
+        <member id="x1ghqh43tn-1f7">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_ParticipadoEn"/>
+            </roleSpec>
+            <topicRef xlink:href="#EMP_VanessaArredondo"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-1f9">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Pertenencia"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-1fa">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Contiene"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_UIDT"/>
+        </member>
+        <member id="x1ghqh43tn-1fb">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Pertenece"/>
+            </roleSpec>
+            <topicRef xlink:href="#EMP_VanessaArredondo"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-202">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Participacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-203">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_ParticipadoEn"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_PortaleGobierno"/>
+        </member>
+        <member id="x1ghqh43tn-204">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Soporte"/>
+            </roleSpec>
+            <topicRef xlink:href="#EMP_IrakLopez"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-205">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Participacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-206">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_ParticipadoEn"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_PuntoGob"/>
+        </member>
+        <member id="x1ghqh43tn-207">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Soporte"/>
+            </roleSpec>
+            <topicRef xlink:href="#EMP_IrakLopez"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-208">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Pertenencia"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-209">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Contiene"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_TC"/>
+        </member>
+        <member id="x1ghqh43tn-20a">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Pertenece"/>
+            </roleSpec>
+            <topicRef xlink:href="#EMP_IrakLopez"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-210">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Pertenencia"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-211">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Contiene"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_UIDT"/>
+        </member>
+        <member id="x1ghqh43tn-212">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Pertenece"/>
+            </roleSpec>
+            <topicRef xlink:href="#EMP_JavierSolis"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-218">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Relacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-219">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_TemaRelacionado"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_AdministradorContenidos"/>
+        </member>
+        <member id="x1ghqh43tn-21a">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRD_WebBuilder"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-21b">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Desarrollos"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-21c">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Desarrollador"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_DesarrolloWB"/>
+        </member>
+        <member id="x1ghqh43tn-21d">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Desarrollo"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRD_WebBuilder"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-21e">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Uso"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-21f">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Utiliza"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_WebBuilderSEP"/>
+        </member>
+        <member id="x1ghqh43tn-220">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_EsUtilizado"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRD_WebBuilder"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-222">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Uso"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-223">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Utiliza"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_PuntoGob"/>
+        </member>
+        <member id="x1ghqh43tn-224">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_EsUtilizado"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRD_WebBuilder"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-225">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Responsabilidad"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-226">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Responsable"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_CTA"/>
+        </member>
+        <member id="x1ghqh43tn-227">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_ResponsableDe"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_WebBuilderSEP"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-229">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Implementaciones"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-22a">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_ImplementadoEn"/>
+            </roleSpec>
+            <topicRef xlink:href="#CLI_SEP"/>
+        </member>
+        <member id="x1ghqh43tn-22b">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Implementacion"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_WebBuilderSEP"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-22c">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Responsabilidad"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-22d">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Responsable"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_UIDT"/>
+        </member>
+        <member id="x1ghqh43tn-22e">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_ResponsableDe"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_WebBuilderSEP"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-231">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Pertenencia"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-232">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Contiene"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_UIDT"/>
+        </member>
+        <member id="x1ghqh43tn-233">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Pertenece"/>
+            </roleSpec>
+            <topicRef xlink:href="#EMP_DianaRivera"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-23c">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Participacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-23d">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_ParticipadoEn"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_DesarrolloWB"/>
+        </member>
+        <member id="x1ghqh43tn-23e">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Diseniador"/>
+            </roleSpec>
+            <topicRef xlink:href="#EMP_JesusRios"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-245">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Relacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-246">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_Usabilidad"/>
+        </member>
+        <member id="x1ghqh43tn-247">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_ArquitecturaInformacion"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-250">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Participacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-251">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Consultor"/>
+            </roleSpec>
+            <topicRef xlink:href="#EMP_RebecaBlanco"/>
+        </member>
+        <member id="x1ghqh43tn-252">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_ParticipadoEn"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_Becasmx"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-257">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Relacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-258">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_KM"/>
+        </member>
+        <member id="x1ghqh43tn-259">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_PortalColaboracionAprend"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-25a">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Participacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-25b">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Soporte"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_CTA"/>
+        </member>
+        <member id="x1ghqh43tn-25c">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_ParticipadoEn"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_PortalColaboracionAprend"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-25e">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Responsabilidad"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-25f">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Responsable"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_TC"/>
+        </member>
+        <member id="x1ghqh43tn-260">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_ResponsableDe"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_PortalColaboracionAprend"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-261">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Participacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-262">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Soporte"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_UIDT"/>
+        </member>
+        <member id="x1ghqh43tn-263">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_ParticipadoEn"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_PortalColaboracionAprend"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-26a">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Uso"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-26b">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_EsUtilizado"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_GobiernoElectronico"/>
+        </member>
+        <member id="x1ghqh43tn-26c">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Utiliza"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_pissa"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-27a">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Relacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-27b">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_WebBuilderSEP"/>
+        </member>
+        <member id="x1ghqh43tn-27c">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_FJavierCardenas"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-27d">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Relacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-27e">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_PortaleGobierno"/>
+        </member>
+        <member id="x1ghqh43tn-27f">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_RelacionadoCon"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_FJavierCardenas"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-280">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Pertenencia"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-281">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Contiene"/>
+            </roleSpec>
+            <topicRef xlink:href="#CLI_SEP"/>
+        </member>
+        <member id="x1ghqh43tn-282">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Pertenece"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_FJavierCardenas"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-288">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Participacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-289">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_ParticipadoEn"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_DesarrolloWB"/>
+        </member>
+        <member id="x1ghqh43tn-28a">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Programador"/>
+            </roleSpec>
+            <topicRef xlink:href="#EMP_JorgeJimenez"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-28b">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Participacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-28c">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_ParticipadoEn"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_WebBuilderSEP"/>
+        </member>
+        <member id="x1ghqh43tn-28d">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Soporte"/>
+            </roleSpec>
+            <topicRef xlink:href="#EMP_JorgeJimenez"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-28f">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Pertenencia"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-290">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Contiene"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_UIDT"/>
+        </member>
+        <member id="x1ghqh43tn-291">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Pertenece"/>
+            </roleSpec>
+            <topicRef xlink:href="#EMP_JorgeJimenez"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-294">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Participacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-295">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_ParticipadoEn"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_Becasmx"/>
+        </member>
+        <member id="x1ghqh43tn-296">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Consultor"/>
+            </roleSpec>
+            <topicRef xlink:href="#EMP_EduardoSoberanis"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-297">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Participacion"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-298">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_ParticipadoEn"/>
+            </roleSpec>
+            <topicRef xlink:href="#PRY_DesarrolloWB"/>
+        </member>
+        <member id="x1ghqh43tn-299">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_LiderProyecto"/>
+            </roleSpec>
+            <topicRef xlink:href="#EMP_EduardoSoberanis"/>
+        </member>
+    </association>
+    <association id="x1ghqh43tn-29b">
+        <instanceOf>
+            <topicRef xlink:href="#ASO_Pertenencia"/>
+        </instanceOf>
+        <member id="x1ghqh43tn-29c">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Contiene"/>
+            </roleSpec>
+            <topicRef xlink:href="#TOP_UIDT"/>
+        </member>
+        <member id="x1ghqh43tn-29d">
+            <roleSpec>
+                <topicRef xlink:href="#ROL_Pertenece"/>
+            </roleSpec>
+            <topicRef xlink:href="#EMP_EduardoSoberanis"/>
+        </member>
+    </association>
+</topicMap>
