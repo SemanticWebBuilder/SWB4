@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.Token;
@@ -70,7 +71,6 @@ public class SWBLocaleLexicon {
         langName = languageName;
         maxWordLength = 0;
 
-        //System.out.println("----Creando lexicon");
         if (!prexFilter.trim().equals(""))
             prefixFilters = new ArrayList<String>(Arrays.asList(prexFilter.split(",")));
 
@@ -89,8 +89,8 @@ public class SWBLocaleLexicon {
         while(scit.hasNext()) {
             SemanticClass sc = scit.next();
 
-            if (sc.getDisplayName(langCode).length() > maxWordLength) {
-                maxWordLength = sc.getDisplayName(langCode).length();
+            if (sc.getDisplayName(langCode).split("[\\s]+").length > maxWordLength) {
+                maxWordLength = sc.getDisplayName(langCode).split("[\\s]+").length;
             }
 
             if (prefixFilters == null || (prefixFilters != null && prefixFilters.contains(sc.getPrefix()))) {
@@ -231,9 +231,39 @@ public class SWBLocaleLexicon {
         return propHash.get(getSnowballForm(lexForm));
     }
 
-    public Iterator<String> listWords(boolean asObjects) {
-        if (asObjects) return objHash.keySet().iterator();
-        return propHash.keySet().iterator();
+    public List<String> getWordLexForms(boolean asObjects) {
+        ArrayList<String> ret = new ArrayList<String>();
+        if (asObjects) {
+            Iterator<Word> vals = objHash.values().iterator();
+            while(vals.hasNext()) {
+                Word val = vals.next();
+                ret.add(val.getLexicalForm());
+            }
+        } else {
+            Iterator<Word> vals = propHash.values().iterator();
+            while(vals.hasNext()) {
+                Word val = vals.next();
+                ret.add(val.getLexicalForm());
+            }
+        }
+
+        return ret;
+    }
+
+    public List<String> getWordLexForms() {
+        ArrayList<String> ret = new ArrayList<String>();
+        Iterator<Word> vals = objHash.values().iterator();
+        while(vals.hasNext()) {
+            Word val = vals.next();
+            ret.add(val.getLexicalForm());
+        }
+
+        vals = propHash.values().iterator();
+        while(vals.hasNext()) {
+            Word val = vals.next();
+            ret.add(val.getLexicalForm());
+        }
+        return ret;
     }
 
     public int getMaxWordLength() {
