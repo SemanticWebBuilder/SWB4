@@ -329,7 +329,7 @@ public class ImageGallery extends GenericResource {
             ret.append("\n<form id=\"frmIG_"+base.getId()+"\" name=\"frmIG_"+base.getId()+"\" method=\"post\" enctype=\"multipart/form-data\" action=\""+ url.toString()+"\"> ");
 
 
-ret.append("\n<fieldset> ");
+/*ret.append("\n<fieldset> ");
 ret.append("\n<legend>"+paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_LaF")+"</legend>");
 String cssResPath = "/"+SWBUtils.TEXT.replaceAll(getClass().getName(), ".", "/")+".css";
 si = new StyleInner(getResourceBase());
@@ -344,7 +344,7 @@ try {
     log.error("Error en el recurso: "+base.getId() +"-"+ base.getTitle(), e);
 }
 ret.append(script);
-ret.append("\n</fieldset> ");
+ret.append("\n</fieldset> ");*/
 
 
             ret.append("\n<fieldset> ");
