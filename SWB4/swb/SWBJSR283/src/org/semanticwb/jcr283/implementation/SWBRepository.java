@@ -16,6 +16,7 @@ import javax.jcr.Session;
 import javax.jcr.Value;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.jcr283.repository.model.Workspace;
 
 
 /**
@@ -25,7 +26,8 @@ import org.semanticwb.SWBUtils;
 public class SWBRepository implements Repository {
 
     private static Logger log = SWBUtils.getLogger(SWBRepository.class);
-    private static Hashtable<String, Value> descriptors = new Hashtable<String, Value>();    
+    private static Hashtable<String, Value> descriptors = new Hashtable<String, Value>();
+    public static final String DEFAULT_WORKSPACE="default";
     static
     {
         log.event("Initializing SWBRepository ...");
@@ -81,22 +83,34 @@ public class SWBRepository implements Repository {
 
     public Session login(Credentials credentials, String workspaceName) throws LoginException, NoSuchWorkspaceException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if(workspaceName==null)
+        {
+            workspaceName=DEFAULT_WORKSPACE;
+        }
+        SessionImp session=new SessionImp("");
+        Workspace ws=Workspace.ClassMgr.getWorkspace(workspaceName);
+        if(ws==null)
+        {
+            throw new NoSuchWorkspaceException("The workspace "+workspaceName+" was not found");
+        }        
+        WorkspaceImp workspaceImp=new WorkspaceImp(session,ws);
+        session.setWorkspace(workspaceImp);
+        return session;
     }
 
     public Session login(Credentials credentials) throws LoginException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return login(credentials, null);
     }
 
     public Session login(String workspaceName) throws LoginException, NoSuchWorkspaceException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return login(null, workspaceName);
     }
 
     public Session login() throws LoginException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return login(null,null);
     }
     
 }

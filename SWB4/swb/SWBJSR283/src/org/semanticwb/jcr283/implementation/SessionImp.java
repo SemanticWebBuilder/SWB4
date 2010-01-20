@@ -52,6 +52,10 @@ public class SessionImp implements Session{
         
         
     }
+    public WorkspaceImp getWorkspaceImp()
+    {
+        return workspace;
+    }
     public void setWorkspace(WorkspaceImp workspace)
     {
         this.workspace=workspace;

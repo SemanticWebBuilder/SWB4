@@ -53,8 +53,8 @@ import org.semanticwb.platform.SemanticProperty;
  */
 public class NodeImp extends ItemImp implements Node
 {
-    public static final String JCR_MIXINTYPES = "jcr:mixinTypes";
 
+    public static final String JCR_MIXINTYPES = "jcr:mixinTypes";
     private final static Logger log = SWBUtils.getLogger(NodeImp.class);
     private final static NodeTypeManagerImp nodeTypeManager = new NodeTypeManagerImp();
     private final static ValueFactoryImp valueFactoryImp = new ValueFactoryImp();
@@ -63,12 +63,12 @@ public class NodeImp extends ItemImp implements Node
     private SemanticObject obj = null;
     private final int index;
 
-    public NodeImp(Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
+    NodeImp(Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
-        this(base.getSemanticObject(), "", parent, index, path, depth, session);
+        this(base.getSemanticObject(), base.getName(), parent, index, path, depth, session);
     }
 
-    public NodeImp(NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session)
+    NodeImp(NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
         super(null, name, parent, path, depth, session);
         this.index = index;
@@ -76,18 +76,13 @@ public class NodeImp extends ItemImp implements Node
         loadProperties();
     }
 
-    public NodeImp(SemanticObject obj, String name, NodeImp parent, int index, String path, int depth, SessionImp session)
+    NodeImp(SemanticObject obj, String name, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
         super(obj, name, parent, path, depth, session);
         this.obj = obj;
         this.index = index;
         nodeDefinitionImp = new NodeDefinitionImp(obj, NodeTypeManagerImp.loadNodeType(obj.getSemanticClass()));
         loadProperties();
-    }
-
-    private void loadChilds()
-    {
-        Base base=new Base(obj);
     }
 
     public SemanticObject getSemanticObject()
@@ -154,13 +149,27 @@ public class NodeImp extends ItemImp implements Node
         return addNode(relPath, null);
     }
 
-    private static boolean isValidPath(String relPath)
+    private static boolean isValidRelativePath(String relPath)
+    {
+        if (relPath.startsWith("/"))
+        {
+            return false;
+        }
+        return isPathSegment(relPath);
+    }
+
+    private static boolean isPathSegment(String pathsegment)
     {
         return true;
     }
 
     private static String extractName(String relpath)
     {
+        String extractName = relpath;
+        if (extractName.endsWith("/"))
+        {
+            extractName = extractName.substring(0, extractName.length() - 1);
+        }
         String name = relpath;
         int pos = name.lastIndexOf("/");
         if (pos != -1)
@@ -175,26 +184,102 @@ public class NodeImp extends ItemImp implements Node
         return name;
     }
 
+    private String normalizePath(String relpath) throws RepositoryException
+    {
+        if (isValidRelativePath(relpath))
+        {
+            throw new RepositoryException("The path is not relative");
+        }
+        if (relpath.startsWith("./"))
+        {
+            String absPath = this.getPath() + relpath;
+            return absPath;
+        }
+        if (relpath.startsWith("../"))
+        {
+            if (this.parent != null)
+            {
+                String newRelativePath = relpath.substring(1);
+                return this.parent.normalizePath(newRelativePath);
+            }
+        }
+        String newpath = relpath;
+        int pos = newpath.indexOf("./");
+        while (pos != -1)
+        {
+
+            pos = newpath.indexOf("./");
+        }
+
+        pos = newpath.indexOf("/../");
+        while (pos != -1)
+        {
+            String end = newpath.substring(pos + 3);
+            newpath = newpath.substring(0, pos);
+            pos = newpath.lastIndexOf("/");
+            newpath = newpath.substring(0, pos + 1);
+            newpath += end;
+            pos = newpath.indexOf("/../");
+        }
+        if (newpath.endsWith("/"))
+        {
+            newpath = newpath.substring(0, newpath.length() - 1);
+        }
+        return newpath;
+    }
+
+    private NodeImp insertNode(String nameToAdd, NodeDefinitionImp childDefinition) throws RepositoryException
+    {
+        String childpath = this.path + "/" + nameToAdd;
+        if (!childDefinition.allowsSameNameSiblings() && this.session.getWorkspaceImp().getNodeManager().hasNode(childpath, false))
+        {
+            throw new ItemExistsException("There is a node with the same name in the node " + this.path);
+        }
+        int childIndex = session.getWorkspaceImp().getNodeManager().countNodes(childpath, false);
+        if (childIndex > 0)
+        {
+            childIndex--;
+        }
+        if (childIndex > 0)
+        {
+            childpath += "[" + childIndex + "]";
+        }
+        NodeImp newChild = new NodeImp(childDefinition, nameToAdd, this, index, childpath, this.getDepth() + 1, session);
+        return session.getWorkspaceImp().getNodeManager().addNode(newChild, childpath);
+
+    }
+
     public Node addNode(String relPath, String primaryNodeTypeName) throws ItemExistsException, PathNotFoundException, NoSuchNodeTypeException, LockException, VersionException, ConstraintViolationException, RepositoryException
     {
-        if (!isValidPath(relPath))
+        if (!isValidRelativePath(relPath))
         {
             //TODO:ERROR
+        }
+        String absPath = normalizePath(relPath);
+        NodeImp nodeParent = this.session.getWorkspaceImp().getNodeManager().getNode(absPath);
+        if (nodeParent == null)
+        {
+            throw new PathNotFoundException("The node with path " + relPath + " was not found");
         }
         NodeTypeImp nodeType = null;
         if (primaryNodeTypeName == null)
         {
-            nodeType = this.nodeDefinitionImp.getDefaultPrimaryTypeImp();
+            nodeType = nodeParent.nodeDefinitionImp.getDefaultPrimaryTypeImp();
             primaryNodeTypeName = nodeType.getName();
         }
         else
         {
             nodeType = nodeTypeManager.getNodeTypeImp(primaryNodeTypeName);
         }
+        if (nodeType == null)
+        {
+            throw new NoSuchNodeTypeException("The node type was not found");
+        }
         String nameToAdd = extractName(relPath);
         if (!nodeType.canAddChildNode(nameToAdd))
         {
             //TODO:ERROR
+            throw new ConstraintViolationException("The node can no be added");
         }
         NodeDefinitionImp childDefinition = null;
         for (NodeDefinitionImp childNodeDefinition : nodeType.getChildNodeDefinitionsImp())
@@ -236,13 +321,22 @@ public class NodeImp extends ItemImp implements Node
         }
         if (childDefinition == null)
         {
-            NodeImp newChild = new NodeImp(childDefinition, nameToAdd, this, 0, this.getPath() + "/" + nameToAdd, this.getDepth() + 1, session);
+            return nodeParent.insertNode(nameToAdd, childDefinition);
         }
-        throw new UnsupportedOperationException("Not supported yet.");
+        else
+        {
+            throw new ConstraintViolationException("The node can not be added");
+        }
     }
 
     public void orderBefore(String srcChildRelPath, String destChildRelPath) throws UnsupportedRepositoryOperationException, VersionException, ConstraintViolationException, ItemNotFoundException, LockException, RepositoryException
     {
+        if (!isValidRelativePath(srcChildRelPath))
+        {
+        }
+        if (!isValidRelativePath(destChildRelPath))
+        {
+        }
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -352,16 +446,23 @@ public class NodeImp extends ItemImp implements Node
 
     public Node getNode(String relPath) throws PathNotFoundException, RepositoryException
     {
-        if (NodeImp.isValidPath(relPath))
+        if (NodeImp.isValidRelativePath(relPath))
         {
             //TODO: ERROR
         }
-        throw new UnsupportedOperationException("Not supported yet.");
+        NodeImp node = this.session.getWorkspaceImp().getNodeManager().getNode(relPath);
+        if (node == null)
+        {
+            throw new PathNotFoundException("The node with path " + relPath + " was not found");
+        }
+        return node;
     }
 
     public NodeIterator getNodes() throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.session.getWorkspaceImp().getNodeManager().loadChilds(this, this.path, depth, session, false);
+        NodeIteratorImp iterator = new NodeIteratorImp(this.session.getWorkspaceImp().getNodeManager().getChilds(this));
+        return iterator;
     }
 
     public NodeIterator getNodes(String namePattern) throws RepositoryException
@@ -444,11 +545,11 @@ public class NodeImp extends ItemImp implements Node
 
     public boolean hasNode(String relPath) throws RepositoryException
     {
-        if (!NodeImp.isValidPath(relPath))
+        if (!NodeImp.isValidRelativePath(relPath))
         {
             //TODO:ERROR
         }
-        throw new UnsupportedOperationException("Not supported yet.");
+        return this.session.getWorkspaceImp().getNodeManager().hasNode(relPath, true);
     }
 
     public boolean hasProperty(String relPath) throws RepositoryException
@@ -463,7 +564,7 @@ public class NodeImp extends ItemImp implements Node
 
     public boolean hasNodes() throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return this.session.getWorkspaceImp().getNodeManager().hasNode(path, true);
     }
 
     public boolean hasProperties() throws RepositoryException
@@ -507,16 +608,16 @@ public class NodeImp extends ItemImp implements Node
             throw new ConstraintViolationException("The mixin can be added");
         }
         PropertyImp prop = properties.get(JCR_MIXINTYPES);
-        Value[] values=prop.getValues();
-        Value newValue=valueFactoryImp.createValue(mixinName);
-        Value[] newValues=new Value[values.length+1];
-        int i=0;
-        for(Value value : values)
+        Value[] values = prop.getValues();
+        Value newValue = valueFactoryImp.createValue(mixinName);
+        Value[] newValues = new Value[values.length + 1];
+        int i = 0;
+        for (Value value : values)
         {
-            newValues[i]=value;
+            newValues[i] = value;
             i++;
         }
-        newValues[i]=newValue;
+        newValues[i] = newValue;
         prop.setValue(newValues);
         for (PropertyDefinitionImp propDef : mixNodeType.getPropertyDefinitionsImp())
         {
@@ -542,11 +643,11 @@ public class NodeImp extends ItemImp implements Node
             }
         }
         PropertyImp prop = properties.get(JCR_MIXINTYPES);
-        Value[] values=prop.getValues();
-        HashSet<Value> newValues=new HashSet<Value>();
-        for(Value value : values)
+        Value[] values = prop.getValues();
+        HashSet<Value> newValues = new HashSet<Value>();
+        for (Value value : values)
         {
-            if(!value.getString().equals(mixinName))
+            if (!value.getString().equals(mixinName))
             {
                 newValues.add(value);
             }
@@ -558,7 +659,7 @@ public class NodeImp extends ItemImp implements Node
             if (propDef.getSemanticProperty() != null)
             {
                 SemanticProperty semanticProperty = propDef.getSemanticProperty();
-                String name = semanticProperty.getPrefix() + ":" + semanticProperty.getName();                
+                String name = semanticProperty.getPrefix() + ":" + semanticProperty.getName();
                 properties.remove(name);
             }
         }
