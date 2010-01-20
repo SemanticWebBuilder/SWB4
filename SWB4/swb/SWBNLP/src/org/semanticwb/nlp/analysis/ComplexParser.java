@@ -23,6 +23,7 @@
 package org.semanticwb.nlp.analysis;
 
 import org.antlr.runtime.*;
+import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.*;
 
 /**
