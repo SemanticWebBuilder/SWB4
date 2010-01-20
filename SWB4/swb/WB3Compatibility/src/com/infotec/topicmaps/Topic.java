@@ -1365,22 +1365,7 @@ public class Topic
      */
     public int getLevel()
     {
-        int ret = 0;
-        if (getMap().getHome() != this)
-        {
-            Iterator aux = this.getTypes();
-            ArrayList arr = new ArrayList();
-            while (aux.hasNext())
-            {
-                Topic tp = (Topic) aux.next();
-                ret++;
-                if (arr.contains(tp)) break;
-                arr.add(tp);
-                aux = tp.getTypes();
-                if (getMap().getHome() == tp) break;
-            }
-        }
-        return ret;
+        return wp.getLevel();
     }
 
     /** indica si el topico es hijo de otro topico.
@@ -1633,6 +1618,7 @@ public class Topic
     
     public Association getAssociationWithTopic(Topic tp)
     {
+        //TODO
         Iterator it=tp.getAssociations().iterator();
         while(it.hasNext())
         {
