@@ -39,13 +39,13 @@ import com.infotec.wb.core.Resource;
 import com.infotec.appfw.exception.AFException;
 import com.infotec.appfw.util.AFUtils;
 import com.infotec.topicmaps.TopicMap;
-import com.infotec.topicmaps.bean.TopicMgr;
-import com.infotec.wb.core.WBResourceCachedMgr;
 import com.infotec.wb.core.db.RecResourceType;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Locale;
+import org.semanticwb.model.SWBContext;
+import org.semanticwb.portal.api.SWBResourceCachedMgr;
 
 /** Recurso gen�rico utilizado como plantilla para la generaci�n de nuevos recursos para
  * WebBuilder.
@@ -275,19 +275,15 @@ public class GenericResource implements WBResource, WBResourceCache, WBResourceW
         }else
         {
             Resource base=paramsRequest.getResourceBase();
-            return WBResourceCachedMgr.getKey(base.getRecResource());
+            return SWBResourceCachedMgr.getKey(base.getNative());
         }
     }
    
     public String[] getModes(HttpServletRequest request, WBParamRequest paramRequest) throws AFException, java.io.IOException
     {
-        TopicMap tm=TopicMgr.getInstance().getTopicMap(TopicMgr.TM_ADMIN);
-        if(tm!=null)
+        if(paramRequest.getUser().getNative().getUserRepository().getId().equals(SWBContext.USERREPOSITORY_ADMIN))
         {
-            if(paramRequest.getUser().havePermission(tm.getTopic("WBAd_per_Administrator")))
-            {
-                return new String[]{paramRequest.Mode_VIEW,paramRequest.Mode_ADMIN};
-            }
+            return new String[]{paramRequest.Mode_VIEW,paramRequest.Mode_ADMIN};
         }
         return new String[]{paramRequest.Mode_VIEW};
     }
@@ -305,17 +301,9 @@ public class GenericResource implements WBResource, WBResourceCache, WBResourceW
     public boolean windowSupport(HttpServletRequest request, WBParamRequest paramRequest) throws AFException, java.io.IOException
     {
         //System.out.println("----> "+paramRequest.getResourceBase().getId()+" windowSupport:"+paramRequest.getResourceBase().getConfAttribute("portletWindow","0"));
-        if(!paramRequest.getAdminTopic().getMap().getId().equals(TopicMgr.TM_ADMIN))
+        if(!paramRequest.getAdminTopic().getNative().getWebSiteId().equals(SWBContext.WEBSITE_ADMIN))
         {
-//            TopicMap tm=TopicMgr.getInstance().getTopicMap(TopicMgr.TM_ADMIN);
-//            if(tm!=null)
-//            {
-//                if(paramRequest.getUser().havePermission(tm.getTopic("WBAd_per_Administrator")))
-//                {
-//                    return true;
-//                }
-//            }
-            if(paramRequest.getResourceBase().getConfAttribute("portletWindow","0").equals("1"))
+            if(paramRequest.getResourceBase().getNative().isResourceWindow())
             {
                 return true;
             }

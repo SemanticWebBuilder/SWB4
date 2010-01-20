@@ -55,7 +55,7 @@ import org.semanticwb.model.SWBContext;
  * @author Sergio Martinez (2005)
  *
  */
-public abstract class RecUser implements WBDBRecord, java.io.Serializable {
+public class RecUser implements WBDBRecord, java.io.Serializable {
 
     private ArrayList observers = new ArrayList();
     private ArrayList notifys = new ArrayList();
@@ -109,12 +109,7 @@ public abstract class RecUser implements WBDBRecord, java.io.Serializable {
      */
     public RecUser(String repository) {
         this.repository = repository;
-//        if(WBLoader.getInstance().haveDBTables())
-        {
-            //registerObserver(DBUser.getInstance(repository));
-            if ("true".equalsIgnoreCase(DBUser.getInstance(repository).getProperty("active", "true")))
-                this.active = 1;
-        }
+        this.active = 1;
     }
 
     /**
@@ -682,7 +677,10 @@ public abstract class RecUser implements WBDBRecord, java.io.Serializable {
         }
     }
 
-    public abstract void removeImp() throws Exception;
+    public void removeImp() throws Exception
+    {
+        
+    }
 
     /**
      * actualiza el objeto en la base de datos y altualiza la informacion de los objetos que esten en memoria
@@ -717,7 +715,10 @@ public abstract class RecUser implements WBDBRecord, java.io.Serializable {
         }
     }
 
-    public abstract void updateImp() throws Exception;
+    public void updateImp() throws Exception
+    {
+        
+    }
 
     /**
      * crea un nuevo registro en la base de datos asi como un nuevo objeto en memoria
@@ -761,39 +762,42 @@ public abstract class RecUser implements WBDBRecord, java.io.Serializable {
         }
     }
 
-    public abstract void createImp() throws Exception;
+    public void createImp()
+    {
+
+    }
 
     /**
      * Set roles from DB to the user
      */
     public void loadRoles() throws AFException {
         //System.out.println("loadRoles:"+id);
-        try {
-            userroles = new ArrayList();
-            Connection con;
-            con = AFUtils.getDBConnection(AFUtils.getEnv("wb/db/nameconn"), "RecUser.loadRoles()");
-            PreparedStatement st = null;
-            if (id > 0) {
-                String query = "select rolId from wbuserrole where usrId=? and usrRepository=?";
-                st = con.prepareStatement(query);
-                st.setLong(1, id);
-                st.setString(2, repository);
-            } else {
-                throw new Exception();
-            }
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-                if (!userroles.contains(new Integer(rs.getInt("rolId")))) {
-                    //System.out.println("Add:"+rs.getInt("rolId"));
-                    userroles.add(new Integer(rs.getInt("rolId")));
-                }
-            }
-            rs.close();
-            st.close();
-            con.close();
-        } catch (Exception e) {
-            throw new AFException("Error while loading roles" + "...", "RecUser:loadRoles", e);
-        }
+//        try {
+//            userroles = new ArrayList();
+//            Connection con;
+//            con = AFUtils.getDBConnection(AFUtils.getEnv("wb/db/nameconn"), "RecUser.loadRoles()");
+//            PreparedStatement st = null;
+//            if (id > 0) {
+//                String query = "select rolId from wbuserrole where usrId=? and usrRepository=?";
+//                st = con.prepareStatement(query);
+//                st.setLong(1, id);
+//                st.setString(2, repository);
+//            } else {
+//                throw new Exception();
+//            }
+//            ResultSet rs = st.executeQuery();
+//            while (rs.next()) {
+//                if (!userroles.contains(new Integer(rs.getInt("rolId")))) {
+//                    //System.out.println("Add:"+rs.getInt("rolId"));
+//                    userroles.add(new Integer(rs.getInt("rolId")));
+//                }
+//            }
+//            rs.close();
+//            st.close();
+//            con.close();
+//        } catch (Exception e) {
+//            throw new AFException("Error while loading roles" + "...", "RecUser:loadRoles", e);
+//        }
         rolesLoaded = true;
     }
 
@@ -804,37 +808,39 @@ public abstract class RecUser implements WBDBRecord, java.io.Serializable {
      * @throws com.infotec.appfw.exception.AFException
      *
      */
-    public void addRole(int rolid) throws AFException {
-        if (!rolesLoaded) try {
-            loadRoles();
-        } catch (AFException e) {
-            AFUtils.log(e, "Problem loading roles for user " + login);
-        }
-        if (!userroles.contains(Integer.valueOf(String.valueOf(rolid)))) {
-            //if (!((String) com.infotec.appfw.util.AFUtils.getInstance().getEnv("wb/enableLDAP")).equals("true"))
-            {
-                Connection con;
-                try {
-                    con = AFUtils.getDBConnection(AFUtils.getEnv("wb/db/nameconn"), "RecUser.addRole()");
-                    lastupdate = new Timestamp(new java.util.Date().getTime());
-
-                    String query = "insert into wbuserrole (usrId, usrRepository, rolId, lastupdate) values (?,?,?,?)";
-                    PreparedStatement st = con.prepareStatement(query);
-                    st.setLong(1, id);
-                    st.setString(2, repository);
-                    st.setInt(3, rolid);
-                    st.setTimestamp(4, lastupdate);
-                    st.executeUpdate();
-                    st.close();
-                    con.close();
-                    //RecAdmLog rec = new RecAdmLog(userid, "add", "role", getId(), null, null, comment, lastupdate);
-                } catch (Exception e) {
-                    AFUtils.log(e);
-                    throw new AFException("Error while adding role to user, idrol" + ":" + rolid, "RecUser:addrole()", e);
-                }
-            }
-            userroles.add(Integer.valueOf(String.valueOf(rolid)));
-        }
+    public void addRole(int rolid) throws AFException 
+    {
+        //TODO
+//        if (!rolesLoaded) try {
+//            loadRoles();
+//        } catch (AFException e) {
+//            AFUtils.log(e, "Problem loading roles for user " + login);
+//        }
+//        if (!userroles.contains(Integer.valueOf(String.valueOf(rolid)))) {
+//            //if (!((String) com.infotec.appfw.util.AFUtils.getInstance().getEnv("wb/enableLDAP")).equals("true"))
+//            {
+//                Connection con;
+//                try {
+//                    con = AFUtils.getDBConnection(AFUtils.getEnv("wb/db/nameconn"), "RecUser.addRole()");
+//                    lastupdate = new Timestamp(new java.util.Date().getTime());
+//
+//                    String query = "insert into wbuserrole (usrId, usrRepository, rolId, lastupdate) values (?,?,?,?)";
+//                    PreparedStatement st = con.prepareStatement(query);
+//                    st.setLong(1, id);
+//                    st.setString(2, repository);
+//                    st.setInt(3, rolid);
+//                    st.setTimestamp(4, lastupdate);
+//                    st.executeUpdate();
+//                    st.close();
+//                    con.close();
+//                    //RecAdmLog rec = new RecAdmLog(userid, "add", "role", getId(), null, null, comment, lastupdate);
+//                } catch (Exception e) {
+//                    AFUtils.log(e);
+//                    throw new AFException("Error while adding role to user, idrol" + ":" + rolid, "RecUser:addrole()", e);
+//                }
+//            }
+//            userroles.add(Integer.valueOf(String.valueOf(rolid)));
+//        }
     }
 
     /**
@@ -843,77 +849,79 @@ public abstract class RecUser implements WBDBRecord, java.io.Serializable {
      * @throws com.infotec.appfw.exception.AFException
      *
      */
-    public void removeRole(int rolid) throws AFException {
-        if (!rolesLoaded) try {
-            loadRoles();
-        } catch (AFException e) {
-            AFUtils.log(e, "Problem loading roles for user " + login);
-        }
-        if (userroles.contains(Integer.valueOf(String.valueOf(rolid)))) {
-            //if (!((String) com.infotec.appfw.util.AFUtils.getInstance().getEnv("wb/enableLDAP")).equals("true"))
-            {
-                Connection con;
-                try {
-                    con = AFUtils.getDBConnection(AFUtils.getEnv("wb/db/nameconn"), "RecUser.addRole()");
-                    lastupdate = new Timestamp(new java.util.Date().getTime());
-
-                    String query = "delete from wbuserrole where usrId=? and usrRepository=? and rolId=?";
-                    PreparedStatement st = con.prepareStatement(query);
-                    st.setLong(1, id);
-                    st.setString(2, repository);
-                    st.setInt(3, rolid);
-                    st.executeUpdate();
-                    st.close();
-                    con.close();
-                    //RecAdmLog rec = new RecAdmLog(userid, "remove", "role", getId(), null, null, comment, lastupdate);
-                } catch (Exception e) {
-                    throw new AFException("Error while removing role from user, idrol" + ":" + rolid, "RecUser:removeRole()", e);
-                }
-            }
-            userroles.remove(Integer.valueOf(String.valueOf(rolid)));
-        }
+    public void removeRole(int rolid) throws AFException 
+    {
+        //TODO
+//        if (!rolesLoaded) try {
+//            loadRoles();
+//        } catch (AFException e) {
+//            AFUtils.log(e, "Problem loading roles for user " + login);
+//        }
+//        if (userroles.contains(Integer.valueOf(String.valueOf(rolid)))) {
+//            //if (!((String) com.infotec.appfw.util.AFUtils.getInstance().getEnv("wb/enableLDAP")).equals("true"))
+//            {
+//                Connection con;
+//                try {
+//                    con = AFUtils.getDBConnection(AFUtils.getEnv("wb/db/nameconn"), "RecUser.addRole()");
+//                    lastupdate = new Timestamp(new java.util.Date().getTime());
+//
+//                    String query = "delete from wbuserrole where usrId=? and usrRepository=? and rolId=?";
+//                    PreparedStatement st = con.prepareStatement(query);
+//                    st.setLong(1, id);
+//                    st.setString(2, repository);
+//                    st.setInt(3, rolid);
+//                    st.executeUpdate();
+//                    st.close();
+//                    con.close();
+//                    //RecAdmLog rec = new RecAdmLog(userid, "remove", "role", getId(), null, null, comment, lastupdate);
+//                } catch (Exception e) {
+//                    throw new AFException("Error while removing role from user, idrol" + ":" + rolid, "RecUser:removeRole()", e);
+//                }
+//            }
+//            userroles.remove(Integer.valueOf(String.valueOf(rolid)));
+//        }
     }
 
     /**
      * Set roles from DB to the user
      */
     public void loadAdmFilters() throws AFException {
-        try {
-            admfilters = new HashMap();
-            Connection con;
-            con = AFUtils.getDBConnection(AFUtils.getEnv("wb/db/nameconn"), "RecUser.loadAdmFolters()");
-            PreparedStatement st = null;
-            if (id > 0) {
-                String query = "select * from wbuserfilter where usrId=? and usrRepository=?";
-                st = con.prepareStatement(query);
-                st.setLong(1, id);
-                st.setString(2, repository);
-            } else {
-                throw new Exception();
-            }
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-                Integer fltId = new Integer(rs.getInt("fltId"));
-                String idtm = SWBContext.getAdminWebSite().getId(); //TopicMgr.TM_ADMIN;
-                try {
-                    idtm = rs.getString("idtm");
-                } catch (Exception e) {
-                    AFUtils.log(e);
-                }
-                ArrayList map = (ArrayList) admfilters.get(idtm);
-                if (map == null) {
-                    map = new ArrayList();
-                    admfilters.put(idtm, map);
-                }
-                map.add(fltId);
-            }
-            rs.close();
-            st.close();
-            con.close();
-        } catch (Exception e) {
-            throw new AFException("Error while loading roles" + "...", "RecUser:loadAdmFolters", e);
-        }
-        admFiltersLoaded = true;
+//        try {
+//            admfilters = new HashMap();
+//            Connection con;
+//            con = AFUtils.getDBConnection(AFUtils.getEnv("wb/db/nameconn"), "RecUser.loadAdmFolters()");
+//            PreparedStatement st = null;
+//            if (id > 0) {
+//                String query = "select * from wbuserfilter where usrId=? and usrRepository=?";
+//                st = con.prepareStatement(query);
+//                st.setLong(1, id);
+//                st.setString(2, repository);
+//            } else {
+//                throw new Exception();
+//            }
+//            ResultSet rs = st.executeQuery();
+//            while (rs.next()) {
+//                Integer fltId = new Integer(rs.getInt("fltId"));
+//                String idtm = SWBContext.getAdminWebSite().getId(); //TopicMgr.TM_ADMIN;
+//                try {
+//                    idtm = rs.getString("idtm");
+//                } catch (Exception e) {
+//                    AFUtils.log(e);
+//                }
+//                ArrayList map = (ArrayList) admfilters.get(idtm);
+//                if (map == null) {
+//                    map = new ArrayList();
+//                    admfilters.put(idtm, map);
+//                }
+//                map.add(fltId);
+//            }
+//            rs.close();
+//            st.close();
+//            con.close();
+//        } catch (Exception e) {
+//            throw new AFException("Error while loading roles" + "...", "RecUser:loadAdmFolters", e);
+//        }
+//        admFiltersLoaded = true;
     }
 
 
@@ -924,39 +932,39 @@ public abstract class RecUser implements WBDBRecord, java.io.Serializable {
      *
      */
     public void addAdmFilter(String topicmap, int fltid) throws AFException {
-        if (!admFiltersLoaded) try {
-            loadAdmFilters();
-        } catch (AFException e) {
-            AFUtils.log(e,"Problem loading filters for user "+ login);
-        }
-        if (!haveAdmFilter(topicmap, fltid)) {
-            try {
-                Connection con = AFUtils.getDBConnection(AFUtils.getEnv("wb/db/nameconn"), "RecUser.addAdmFilter()");
-                lastupdate = new Timestamp(new java.util.Date().getTime());
-
-                String query = "insert into wbuserfilter (usrId, usrRepository, fltId, idtm, lastupdate) values (?,?,?,?,?)";
-                PreparedStatement st = con.prepareStatement(query);
-                st.setLong(1, id);
-                st.setString(2, repository);
-                st.setInt(3, fltid);
-                st.setString(4, topicmap);
-                st.setTimestamp(5, lastupdate);
-                st.executeUpdate();
-                st.close();
-                con.close();
-
-                ArrayList map = (ArrayList) admfilters.get(topicmap);
-                if (map == null) {
-                    map = new ArrayList();
-                    admfilters.put(topicmap, map);
-                }
-                map.add(new Integer(fltid));
-
-            } catch (Exception e) {
-                throw new AFException("Error while adding filter to user, filterId" + ":" + fltid, "RecUser:addAdmFilter()", e);
-            }
-
-        }
+//        if (!admFiltersLoaded) try {
+//            loadAdmFilters();
+//        } catch (AFException e) {
+//            AFUtils.log(e,"Problem loading filters for user "+ login);
+//        }
+//        if (!haveAdmFilter(topicmap, fltid)) {
+//            try {
+//                Connection con = AFUtils.getDBConnection(AFUtils.getEnv("wb/db/nameconn"), "RecUser.addAdmFilter()");
+//                lastupdate = new Timestamp(new java.util.Date().getTime());
+//
+//                String query = "insert into wbuserfilter (usrId, usrRepository, fltId, idtm, lastupdate) values (?,?,?,?,?)";
+//                PreparedStatement st = con.prepareStatement(query);
+//                st.setLong(1, id);
+//                st.setString(2, repository);
+//                st.setInt(3, fltid);
+//                st.setString(4, topicmap);
+//                st.setTimestamp(5, lastupdate);
+//                st.executeUpdate();
+//                st.close();
+//                con.close();
+//
+//                ArrayList map = (ArrayList) admfilters.get(topicmap);
+//                if (map == null) {
+//                    map = new ArrayList();
+//                    admfilters.put(topicmap, map);
+//                }
+//                map.add(new Integer(fltid));
+//
+//            } catch (Exception e) {
+//                throw new AFException("Error while adding filter to user, filterId" + ":" + fltid, "RecUser:addAdmFilter()", e);
+//            }
+//
+//        }
     }
 
     /**
@@ -966,36 +974,36 @@ public abstract class RecUser implements WBDBRecord, java.io.Serializable {
      *
      */
     public void removeAdmFilter(String topicmap, int fltid) throws AFException {
-        if (!admFiltersLoaded) try {
-            loadAdmFilters();
-        } catch (AFException e) {
-            AFUtils.log(e,"Problem loading filters for user "+ login);
-        }
-        if (haveAdmFilter(topicmap, fltid)) {
-            Connection con;
-            try {
-                con = AFUtils.getDBConnection(AFUtils.getEnv("wb/db/nameconn"), "RecUser.removeRole()");
-                lastupdate = new Timestamp(new java.util.Date().getTime());
-
-                String query = "delete from wbuserfilter where usrId=? and usrRepository=? and fltId=? and idtm=?";
-                PreparedStatement st = con.prepareStatement(query);
-                st.setLong(1, id);
-                st.setString(2, repository);
-                st.setInt(3, fltid);
-                st.setString(4, topicmap);
-                st.executeUpdate();
-                st.close();
-                con.close();
-
-                ArrayList map = (ArrayList) admfilters.get(topicmap);
-                if (map != null) {
-                    map.remove(new Integer(fltid));
-                }
-
-            } catch (Exception e) {
-                throw new AFException("Error while removing filter from user, idfilter" + ":" + fltid, "RecUser:removeRole()", e);
-            }
-        }
+//        if (!admFiltersLoaded) try {
+//            loadAdmFilters();
+//        } catch (AFException e) {
+//            AFUtils.log(e,"Problem loading filters for user "+ login);
+//        }
+//        if (haveAdmFilter(topicmap, fltid)) {
+//            Connection con;
+//            try {
+//                con = AFUtils.getDBConnection(AFUtils.getEnv("wb/db/nameconn"), "RecUser.removeRole()");
+//                lastupdate = new Timestamp(new java.util.Date().getTime());
+//
+//                String query = "delete from wbuserfilter where usrId=? and usrRepository=? and fltId=? and idtm=?";
+//                PreparedStatement st = con.prepareStatement(query);
+//                st.setLong(1, id);
+//                st.setString(2, repository);
+//                st.setInt(3, fltid);
+//                st.setString(4, topicmap);
+//                st.executeUpdate();
+//                st.close();
+//                con.close();
+//
+//                ArrayList map = (ArrayList) admfilters.get(topicmap);
+//                if (map != null) {
+//                    map.remove(new Integer(fltid));
+//                }
+//
+//            } catch (Exception e) {
+//                throw new AFException("Error while removing filter from user, idfilter" + ":" + fltid, "RecUser:removeRole()", e);
+//            }
+//        }
     }
 
     /**
@@ -1031,7 +1039,10 @@ public abstract class RecUser implements WBDBRecord, java.io.Serializable {
         }
     }
 
-    public abstract void loadImp() throws Exception;
+    public void loadImp() throws Exception
+    {
+        
+    }
 
     public String getName() {
         String n = com.infotec.appfw.util.AFUtils.stringNullValidate(firstName);
@@ -1101,9 +1112,9 @@ public abstract class RecUser implements WBDBRecord, java.io.Serializable {
 //        registerObserver(DBUser.getInstance(repository));
     }
 
-    /**
-     * Writes this object out to a stream (i.e., serializes it).
-     */
+//    /**
+//     * Writes this object out to a stream (i.e., serializes it).
+//     */
 //    private synchronized void writeObject(java.io.ObjectOutputStream oos) throws java.io.IOException {
 //        //System.out.println("writeObject");
 //        oos.writeUTF(getEncoder().toString());
