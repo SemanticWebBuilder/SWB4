@@ -215,11 +215,6 @@ public class TestStyler extends GenericResource {
         Resource base = getResourceBase();
         String stel = request.getParameter("stel");
         String[] tkns = stel.split("@",3);
-
-        tkns[1].replaceAll("\\s", "");
-        tkns[2].replaceAll(" ", "");
-        //System.out.println("tkns[0]="+tkns[0]+", tkns[1]="+tkns[1]+", tkns[2]="+tkns[2]);
-
         HashMap tabs = (HashMap)si.getMm(base.getId());
         if( tabs!=null && tkns[1].length()>0 ) {
             try {
