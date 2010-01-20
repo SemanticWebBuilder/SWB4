@@ -40,8 +40,6 @@ import com.infotec.appfw.util.AFUtils;
 import com.infotec.topicmaps.Occurrence;
 import com.infotec.topicmaps.Topic;
 import com.infotec.topicmaps.TopicMap;
-import com.infotec.topicmaps.bean.TopicMgr;
-import com.infotec.wb.core.db.DBUser;
 import com.infotec.wb.core.db.RecUser;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -57,7 +55,6 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Vector;
-import org.semanticwb.SWBPortal;
 import org.semanticwb.model.AdminFilter;
 import org.semanticwb.model.Role;
 import org.semanticwb.model.SWBContext;
@@ -72,12 +69,14 @@ import org.semanticwb.model.UserRepository;
  * who enters in session.
  */
 public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.Serializable {
+    private RecUser recUser = null;
 
     org.semanticwb.model.User usr = null;
 
     public WBUser(org.semanticwb.model.User user)
     {
         usr = user;
+        recUser=new RecUser(user);
     }
 
     public org.semanticwb.model.User getNative()
@@ -86,7 +85,6 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
     }
 
 
-    private RecUser recUser = null;
     private String device;
     private String languageU;
     private String navegador;
@@ -918,19 +916,9 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
      *
      * @return boolean
      */
-    public boolean haveAccess(Topic topic, boolean ruleInherit) {
-        TopicMap adm = TopicMgr.getInstance().getAdminTopicMap();
-        if (topic.getMap() == adm) {
-            if (topic.isChildof(adm.getTopic("WBAd_Menus"))) {
-                if (!AdmFilterMgr.getInstance().haveAccess2Menu(this, topic)) return false;
-            } else if (topic.isChildof(adm.getTopic("WBAd_System"))) {
-                if (!AdmFilterMgr.getInstance().haveAccess2System(this, topic)) return false;
-            }
-        }
-        return checkRoles(topic, ruleInherit)
-                && checkRules(topic, ruleInherit)
-                && checkPermissions(topic, ruleInherit)
-                && checkInnerRules(topic, ruleInherit);
+    public boolean haveAccess(Topic topic, boolean ruleInherit) 
+    {
+        return getNative().haveAccess(topic.getNative());
     }
 
     /**
@@ -940,65 +928,7 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
      * @return boolean 
      */
     public boolean checkRules(Topic topic, boolean ruleInherit) {
-        boolean passrule = true;
-        boolean criterial_or = true;
-        com.infotec.wb.core.RuleMgr ruleMgr = com.infotec.wb.core.RuleMgr.getInstance();
-        if (ruleInherit) {
-            Iterator[] its = topic.getConfigOccurrencesAndRef(topic.getMap().getTopic(TopicMap.CNF_WBRule));
-            Iterator itref = its[1];
-            while (itref.hasNext()) {
-                String raux = ((Occurrence) itref.next()).getResourceRef();
-                if (raux.equals(topic.CONFIG_DATA_AND_CRITERIAL)) criterial_or = false;
-            }
-            Iterator reglas = its[0];
-            while (reglas.hasNext()) {
-                String raux = ((Occurrence) reglas.next()).getResourceData();
-                try {
-                    int regla = Integer.parseInt(raux);
-                    if (ruleMgr.eval(this, regla, topic.getMap().getId())) {
-                        passrule = true;
-                        if (criterial_or) break;
-                    } else {
-                        passrule = false;
-                        if (!criterial_or) break;
-                    }
-                } catch (Exception e) {
-                    AFUtils.log(e);
-                }
-            }
-        } else {
-            ArrayList resu = new ArrayList();
-            Iterator reglas = topic.getOccurrencesOfType(TopicMap.CNF_WBRule);
-            while (reglas.hasNext()) {
-                Occurrence occ = (Occurrence) reglas.next();
-                if (occ.isActive() && !occ.isResourceRef()) {
-                    try {
-                        if (occ.isResourceRef()) {
-                            if (occ.getResourceRef().equals(topic.CONFIG_DATA_AND_CRITERIAL)) criterial_or = false;
-                        } else {
-                            int regla = Integer.parseInt(occ.getResourceData());
-                            resu.add(new Boolean(ruleMgr.eval(this, regla, topic.getMap().getId())));
-                        }
-                    } catch (Exception e) {
-                        AFUtils.log(e);
-                    }
-                }
-            }
-
-            Iterator it = resu.iterator();
-            while (it.hasNext()) {
-                Boolean r = (Boolean) it.next();
-                if (r.booleanValue()) {
-                    passrule = true;
-                    if (criterial_or) break;
-                } else {
-                    passrule = false;
-                    if (!criterial_or) break;
-                }
-            }
-        }
-        //System.out.println("checkRules:"+topic+" "+passrule);
-        return passrule;
+        return getNative().haveAccess(topic.getNative());
     }
 
     /**
@@ -1008,63 +938,7 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
      * @return boolean
      */
     public boolean checkInnerRules(Topic topic, boolean ruleInherit) {
-        boolean passrule = true;
-        boolean criterial_or = true;
-        com.infotec.wb.core.RuleMgr ruleMgr = com.infotec.wb.core.RuleMgr.getInstance();
-        if (ruleInherit) {
-            Iterator[] its = topic.getConfigOccurrencesAndRef(topic.getMap().getTopic(TopicMap.CNF_WBInnerRule));
-            Iterator itref = its[1];
-            while (itref.hasNext()) {
-                String raux = ((Occurrence) itref.next()).getResourceRef();
-                if (raux.equals(topic.CONFIG_DATA_AND_CRITERIAL)) criterial_or = false;
-            }
-            Iterator reglas = its[0];
-            while (reglas.hasNext()) {
-                Occurrence occ = (Occurrence) reglas.next();
-                try {
-                    if (ruleMgr.eval(this, occ)) {
-                        passrule = true;
-                        if (criterial_or) break;
-                    } else {
-                        passrule = false;
-                        if (!criterial_or) break;
-                    }
-                } catch (Exception e) {
-                    AFUtils.log(e);
-                }
-            }
-        } else {
-            ArrayList resu = new ArrayList();
-            Iterator reglas = topic.getOccurrencesOfType(TopicMap.CNF_WBInnerRule);
-            while (reglas.hasNext()) {
-                Occurrence occ = (Occurrence) reglas.next();
-                if (occ.isActive() && !occ.isResourceRef()) {
-                    try {
-                        if (occ.isResourceRef()) {
-                            if (occ.getResourceRef().equals(topic.CONFIG_DATA_AND_CRITERIAL)) criterial_or = false;
-                        } else {
-                            resu.add(new Boolean(ruleMgr.eval(this, occ)));
-                        }
-                    } catch (Exception e) {
-                        AFUtils.log(e);
-                    }
-                }
-            }
-
-            Iterator it = resu.iterator();
-            while (it.hasNext()) {
-                Boolean r = (Boolean) it.next();
-                if (r.booleanValue()) {
-                    passrule = true;
-                    if (criterial_or) break;
-                } else {
-                    passrule = false;
-                    if (!criterial_or) break;
-                }
-            }
-        }
-        //System.out.println("checkRules:"+topic+" "+passrule);
-        return passrule;
+        return getNative().haveAccess(topic.getNative());
     }
 
 
@@ -1075,64 +949,7 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
      * @return boolean
      */
     public boolean checkRoles(Topic topic, boolean roleInherit) {
-        boolean passrole = true;
-        boolean criterial_or = true;
-        if (roleInherit) {
-            Iterator[] its = topic.getConfigOccurrencesAndRef(topic.getMap().getTopic(TopicMap.CNF_WBRole));
-            Iterator itref = its[1];
-            while (itref.hasNext()) {
-                String raux = ((Occurrence) itref.next()).getResourceRef();
-                if (raux.equals(topic.CONFIG_DATA_AND_CRITERIAL)) criterial_or = false;
-            }
-            Iterator roles = its[0];
-            while (roles.hasNext()) {
-                String raux = ((Occurrence) roles.next()).getResourceData();
-                try {
-                    int role = Integer.parseInt(raux);
-                    if (haveRole(role)) {
-                        passrole = true;
-                        if (criterial_or) break;
-                    } else {
-                        passrole = false;
-                        if (!criterial_or) break;
-                    }
-                } catch (Exception e) {
-                    AFUtils.log(e);
-                }
-            }
-        } else {
-            ArrayList resu = new ArrayList();
-            Iterator roles = topic.getOccurrencesOfType(TopicMap.CNF_WBRole);
-            while (roles.hasNext()) {
-                Occurrence occ = (Occurrence) roles.next();
-                if (occ.isActive() && !occ.isResourceRef()) {
-                    try {
-                        if (occ.isResourceRef()) {
-                            if (occ.getResourceRef().equals(topic.CONFIG_DATA_AND_CRITERIAL)) criterial_or = false;
-                        } else {
-                            int role = Integer.parseInt(occ.getResourceData());
-                            resu.add(new Boolean(haveRole(role)));
-                        }
-                    } catch (Exception e) {
-                        AFUtils.log(e);
-                    }
-                }
-            }
-
-            Iterator it = resu.iterator();
-            while (it.hasNext()) {
-                Boolean r = (Boolean) it.next();
-                if (r.booleanValue()) {
-                    passrole = true;
-                    if (criterial_or) break;
-                } else {
-                    passrole = false;
-                    if (!criterial_or) break;
-                }
-            }
-        }
-        //System.out.println("checkRoles:"+topic+" "+passrole);
-        return passrole;
+        return getNative().haveAccess(topic.getNative());
     }
 
     /**
@@ -1142,62 +959,7 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
      * @return boolean
      */
     public boolean checkPermissions(Topic topic, boolean permInherit) {
-        boolean pass = true;
-        boolean criterial_or = true;
-        if (permInherit) {
-            Iterator[] its = topic.getConfigOccurrencesAndRef(topic.getMap().getTopic(TopicMap.CNF_WBPermission));
-            Iterator itref = its[1];
-            while (itref.hasNext()) {
-                String raux = ((Occurrence) itref.next()).getResourceRef();
-                if (raux.equals(topic.CONFIG_DATA_AND_CRITERIAL)) criterial_or = false;
-            }
-            Iterator perms = its[0];
-            while (perms.hasNext()) {
-                String raux = ((Occurrence) perms.next()).getResourceData();
-                try {
-                    if (havePermission(TopicMgr.getInstance().getAdminTopicMap().getTopic(raux))) {
-                        pass = true;
-                        if (criterial_or) break;
-                    } else {
-                        pass = false;
-                        if (!criterial_or) break;
-                    }
-                } catch (Exception e) {
-                    AFUtils.log(e);
-                }
-            }
-        } else {
-            ArrayList resu = new ArrayList();
-            Iterator perms = topic.getOccurrencesOfType(TopicMap.CNF_WBPermission);
-            while (perms.hasNext()) {
-                Occurrence occ = (Occurrence) perms.next();
-                if (occ.isActive() && !occ.isResourceRef()) {
-                    try {
-                        if (occ.isResourceRef()) {
-                            if (occ.getResourceRef().equals(topic.CONFIG_DATA_AND_CRITERIAL)) criterial_or = false;
-                        } else {
-                            resu.add(new Boolean(havePermission(TopicMgr.getInstance().getAdminTopicMap().getTopic(occ.getResourceData()))));
-                        }
-                    } catch (Exception e) {
-                        AFUtils.log(e);
-                    }
-                }
-            }
-
-            Iterator it = resu.iterator();
-            while (it.hasNext()) {
-                Boolean r = (Boolean) it.next();
-                if (r.booleanValue()) {
-                    pass = true;
-                    if (criterial_or) break;
-                } else {
-                    pass = false;
-                    if (!criterial_or) break;
-                }
-            }
-        }
-        //System.out.println("checkPermissions:"+topic+" "+pass);
-        return pass;
+        return getNative().haveAccess(topic.getNative());
     }
 
     public int getActiveStatus() {

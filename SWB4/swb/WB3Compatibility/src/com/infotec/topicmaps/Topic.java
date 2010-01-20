@@ -30,23 +30,23 @@
 
 package com.infotec.topicmaps;
 
-import com.infotec.topicmaps.bean.*;
-import com.infotec.topicmaps.util.*;
-import com.infotec.wb.core.WBVirtualHostMgr;
 
 import java.util.*;
 
 import com.infotec.topicmaps.db.*;
 import org.xml.sax.*;
 import org.w3c.dom.*;
-import org.apache.xerces.parsers.*;
 
 import java.io.*;
 
-import com.infotec.wb.util.*;
 import com.infotec.appfw.util.AFUtils;
-import com.infotec.wb.core.db.DBResource;
+import com.infotec.topicmaps.bean.TopicMgr;
+import com.infotec.topicmaps.util.TMComparator;
+import com.infotec.topicmaps.util.XTMParser;
 import com.infotec.wb.core.db.RecResource;
+import org.apache.xerces.parsers.SAXParser;
+import org.semanticwb.SWBPortal;
+import org.semanticwb.model.WebPage;
 
 /**
  * Objeto <B>Topic</B> que es parte de la implementacion del estandar XTM de TopicMaps.
@@ -93,16 +93,11 @@ public class Topic
     protected ArrayList m_child;
 
     protected ArrayList m_associations; // Association
-    //protected ArrayList m_rolesPlayed; // Member*
-    //protected ArrayList m_mergedTopics; // Topic*
-    //protected Topic m_baseTopic;
-    //protected ArrayList m_contribThemes; // Topic*
-    //protected ArrayList m_scopedNames; // String+
 
     protected HashMap paths=new HashMap();
     {
-        paths.put("{webpath}",WBUtils.getInstance().getWebPath());
-        paths.put("{distpath}",WBUtils.getInstance().getDistPath());
+        paths.put("{webpath}",SWBPortal.getContextPath());
+        paths.put("{distpath}",SWBPortal.getDistributorPath());
     }
     
 
@@ -1013,7 +1008,6 @@ public class Topic
      */
     public Iterator[] getConfigOccurrencesAndRef(Topic type)
     {
-        if(type instanceof TopicFiltered)type=((TopicFiltered)type)._getTopic();
         Iterator[] its=new Iterator[2];
         //System.out.println(this+".getConfigData("+type+")");
         boolean inherit=true;
@@ -1100,8 +1094,6 @@ public class Topic
      */
     public Iterator getConfigObjects(Topic type, OccTransformer tranformer)
     {
-        if(type instanceof TopicFiltered)type=((TopicFiltered)type)._getTopic();
-        //System.out.println(this+".getConfigData("+type+")");
         boolean inherit=true;
         ArrayList ret = new ArrayList();
         Iterator enoc = getOccurrences().iterator();
@@ -1217,7 +1209,6 @@ public class Topic
      */
     public Iterator getOccurrencesOfType(Topic type, boolean deleted)
     {
-        if(type instanceof TopicFiltered)type=((TopicFiltered)type)._getTopic();
         ArrayList ret = new ArrayList();
         Iterator enoc = getOccurrences().iterator();
         while (enoc.hasNext())
@@ -1398,17 +1389,7 @@ public class Topic
      */
     public boolean isChildof(Topic topic)
     {
-        Iterator aux = this.getTypes();
-        ArrayList arr = new ArrayList();
-        while (aux.hasNext())
-        {
-            Topic tp = (Topic) aux.next();
-            if (tp == topic) return true;
-            if (arr.contains(tp)) return false;
-            arr.add(tp);
-            aux = tp.getTypes();
-        }
-        return false;
+        return wp.isChildof(topic.getNative());
     }
 
     /** indica si el topico es padre de otro topico.
@@ -1417,17 +1398,7 @@ public class Topic
      */
     public boolean isParentof(Topic topic)
     {
-        Iterator aux = topic.getTypes();
-        ArrayList arr = new ArrayList();
-        while (aux.hasNext())
-        {
-            Topic tp = (Topic) aux.next();
-            if (tp == this) return true;
-            if (arr.contains(tp)) return false;
-            arr.add(tp);
-            aux = tp.getTypes();
-        }
-        return false;
+        return wp.isParentof(topic.getNative());
     }
 
     /** Notifica que el topico fue cambiado para que los objetos que lo estan usando
@@ -1435,7 +1406,7 @@ public class Topic
      */
     public void notifyDBChanged()
     {
-        if (isDBSyncronized()) getMap().changes.add("ut:" + getId());
+        //if (isDBSyncronized()) getMap().changes.add("ut:" + getId());
     }
 
     /** activa el topico.
@@ -1444,12 +1415,8 @@ public class Topic
      */
     public void setActive(int active) throws com.infotec.appfw.exception.AFException
     {
-        getDbdata().setActive(active);
-        if (isDBSyncronized())
-        {
-            getDbdata().update();
-            getMap().notifyChanges("ut:" + getId() + "\n");
-        }
+        if(active==1)wp.setActive(true);
+        else wp.setActive(false);
     }
     
     /** cambia estatus de indexable al topico.
@@ -1458,12 +1425,8 @@ public class Topic
      */
     public void setIndexable(int indexable) throws com.infotec.appfw.exception.AFException
     {
-        getDbdata().setIndexable(indexable);
-        if (isDBSyncronized())
-        {
-            getDbdata().update();
-            getMap().notifyChanges("ut:" + getId() + "\n");
-        }
+        if(indexable==1)wp.setIndexable(true);
+        else wp.setIndexable(false);
     }
     
     /** oculta el topico.
@@ -1472,12 +1435,8 @@ public class Topic
      */
     public void setHidden(int hidden) throws com.infotec.appfw.exception.AFException
     {
-        getDbdata().setHidden(hidden);
-        if (isDBSyncronized())
-        {
-            getDbdata().update();
-            getMap().notifyChanges("ut:" + getId() + "\n");
-        }
+        if(hidden==1)wp.setHidden(true);
+        else wp.setHidden(false);
     }
     
 
@@ -1485,15 +1444,10 @@ public class Topic
      * @throws Exception Si el topico no pudo cambiar el estatus de borrado.
      * @param deleted int, 1=borrado, 0=No borrado.
      */
-    public void setDeleted(int seleted) throws com.infotec.appfw.exception.AFException
+    public void setDeleted(int deleted) throws com.infotec.appfw.exception.AFException
     {
-        if (seleted == 1) getDbdata().setActive(0);
-        getDbdata().setDeleted(seleted);
-        if (isDBSyncronized())
-        {
-            getDbdata().update();
-            getMap().notifyChanges("ut:" + getId() + "\n");
-        }
+        if(deleted==1)wp.setDeleted(true);
+        else wp.setDeleted(false);
     }
 
     /** Regresa string con la fecha de ultima actualizacion de los contenidos.
@@ -1511,37 +1465,7 @@ public class Topic
      */
     public String getContentsLastUpdate(String lang, String format)
     {
-        String ret = "";
-        java.sql.Timestamp auxt = null;
-        Iterator it = getContents();
-        while (it.hasNext())
-        {
-            RecResource recRes=null;
-            Occurrence occ = (Occurrence) it.next();
-            if(occ.getResourceData()!=null){
-               recRes=DBResource.getInstance().getResource(this.getMap().getId(), Long.parseLong(occ.getResourceData()));
-            }
-            if(recRes!=null){
-                java.sql.Timestamp ts = recRes.getLastupdate();
-                if (auxt == null || auxt.before(ts)) auxt = ts;
-            }
-        }
-        if (auxt != null)
-        {
-            if(lang==null)lang = "es";
-            if (getMap().getlang() != null)
-            {
-                lang = getMap().getlang().getId().substring(6);
-            }
-            if(format==null)
-            {
-                ret = com.infotec.appfw.util.AFUtils.getInstance().getStrDate(new Date(auxt.getTime()), lang);
-            }else 
-            {
-                ret = com.infotec.appfw.util.AFUtils.getInstance().getStrDate(new Date(auxt.getTime()), lang, format);
-            }
-        }
-        return ret;
+        return wp.getContentsLastUpdate(lang, format);
     }
     
     /** Regresa string con la fecha de ultima actualizacion de los contenidos.
@@ -1559,31 +1483,8 @@ public class Topic
      */
     public String getContentsAuthor()
     {
-        String ret = "";
-        Iterator it = getContents();
-        while (it.hasNext())
-        {
-            RecResource recRes=null;
-            Occurrence occ = (Occurrence) it.next();
-            if(occ.getResourceData()!=null){
-               recRes=DBResource.getInstance().getResource(this.getMap().getId(), Long.parseLong(occ.getResourceData()));
-            }
-            if(recRes!=null){
-                String userid=recRes.getIdAdm();
-                if(userid!=null)
-                {
-                    //System.out.println("Userid:"+userid);
-                    com.infotec.wb.core.db.RecUser user=com.infotec.wb.core.db.DBUser.getInstance().getUserById(userid);
-                    //System.out.println("User:"+user);
-                    if(user!=null)
-                    {
-                        ret = user.getName();
-                        //System.out.println("UserName:"+ret);
-                    }
-                }
-            }
-        }
-        return ret;
+        //TODO
+        return "";
     }
     
     /** Regresa numero de apariciones del topico o seccion.
@@ -1591,7 +1492,7 @@ public class Topic
      */
     public long getViews()
     {
-        return getDbdata().getViews();
+        return wp.getViews();
     }
 
     /** Regresa numero de apariciones del topico o seccion.
@@ -1605,7 +1506,7 @@ public class Topic
         String tpid = (String) args.get("topicid");
         if (tpid != null)
         {
-            return getMap().getTopic(tpid).getDbdata().getViews();
+            return getMap().getTopic(tpid).getViews();
         } else
             return 0;
     }
@@ -1616,7 +1517,7 @@ public class Topic
      */
     public String getDescription()
     {
-        return getDescription((Topic) null);
+        return wp.getDescription();
     }
 
     /** Regresa descripcion del topico, de acuerdo al scope dado.
@@ -1626,22 +1527,11 @@ public class Topic
     {
         if (scope == null)
         {
-            scope = getMap().getlang();
-        }
-        Iterator it = getOccurrencesOfType(scope.getId());
-        if (it.hasNext())
+            return wp.getDescription();
+        }else
         {
-            Occurrence occ = (Occurrence) it.next();
-            if (occ.getResourceData().trim().length() > 0)
-                //return AFUtils.getInstance().replaceXMLTags(occ.getResourceData());
-                return occ.getResourceData();
+            return wp.getDisplayDescription(scope.getId().substring(6)); //IDM_WB
         }
-        if (scope != getMap().getlang())
-        {
-            //return AFUtils.getInstance().replaceXMLTags(getDescription(getMap().getlang()));
-            return getDescription(getMap().getlang());
-        }
-        return "";
     }
 
     /** Regresa descripcion del topico, en el idioma que recibe por parapetro.
@@ -1668,7 +1558,7 @@ public class Topic
      */
     public String getRealUrl()
     {
-        return WBUtils.getInstance().getWebPath() + com.infotec.appfw.util.AFUtils.getInstance().getEnv("wb/distributor") + "/" + getMap().getId() + "/" + getId();
+        return wp.getRealUrl();
     }
 
 
@@ -1678,33 +1568,7 @@ public class Topic
      */
     public String getUrl()
     {
-        if(this.getSubjectIdentity()!=null)
-        {
-            String url=this.getSubjectIdentity().getResourceRef();
-            if(url!=null)
-            {
-                if(url.startsWith(WBVirtualHostMgr.PREF_FURL))
-                {
-                    url=url.substring(WBVirtualHostMgr.PREF_FURL.length());
-                    if(url.startsWith("/"))url=url.substring(1);
-                    url=WBUtils.getInstance().getWebPath()+url;
-                }else
-                {
-                    Iterator it=paths.keySet().iterator();
-                    while(it.hasNext())
-                    {
-                        String key=(String)it.next();
-                        int i=url.indexOf(key);
-                        if(i>=0)
-                        {
-                            url=url.substring(0,i)+paths.get(key)+url.substring(i+key.length());
-                        }
-                    }
-                }
-                return url;
-            }
-        }
-        return getRealUrl();
+        return wp.getUrl();
     }
 
     /**  Regresa el Url del topico
@@ -1713,13 +1577,13 @@ public class Topic
      */
     public String getUrl(Topic vtopic)
     {
-        if(vtopic==null)return getUrl();
-        String ret=getRealUrl();//WBUtils.getInstance().getWebPath();
-        //ret+=com.infotec.appfw.util.AFUtils.getInstance().getEnv("wb/distributor");
-        //ret+="/" + getMap().getId() + "/" + getId();
-        ret+="/"+com.infotec.wb.servlets.distributor.DistributorParams.URLP_VTOPIC;
-        ret+="/" + vtopic.getMap().getId() + "/" + vtopic.getId();
-        return ret;
+        if(vtopic!=null)
+        {
+            return wp.getUrl(vtopic.getNative());
+        }else
+        {
+            return wp.getUrl((WebPage)null);
+        }
     }    
     
     public String getTopicHomeId()
@@ -1757,17 +1621,15 @@ public class Topic
     
     public String getIcon()
     {
-        Iterator it=getOccurrencesOfType("CNF_WBIcon");
-        while(it.hasNext())
-        {
-            Occurrence occ=(Occurrence)it.next();
-            String i=occ.getResourceData();
-            return i;
-        }
+//        Iterator it=getOccurrencesOfType("CNF_WBIcon");
+//        while(it.hasNext())
+//        {
+//            Occurrence occ=(Occurrence)it.next();
+//            String i=occ.getResourceData();
+//            return i;
+//        }
         return null;
     }
-    
-    
     
     public Association getAssociationWithTopic(Topic tp)
     {
@@ -1780,93 +1642,14 @@ public class Topic
         return null;
     }
 
-    /** Verifica si el usuario tiene permisos de acceso al topico.
-     * @return boolean
-     *
-    public boolean haveAccess(com.infotec.wb.core.WBUser user)
-    {
-        return haveAccess(user, true);
-    }*/
-
-    /** Verifica si el usuario tiene permisos de acceso al topico, hereda reglas o no dependiendo
-     * del paremetro ruleInherit
-     * @return boolean
-     *
-    public boolean haveAccess(com.infotec.wb.core.WBUser user, boolean ruleInherit)
-    {
-        boolean passrule = true;
-        com.infotec.wb.core.RuleMgr ruleMgr = com.infotec.wb.core.RuleMgr.getInstance();
-        if (ruleInherit)
-        {
-            Iterator reglas = this.getConfigData("CNF_WBRule");
-            if (reglas.hasNext())
-            {
-                while (reglas.hasNext())
-                {
-                    try
-                    {
-                        int regla = Integer.parseInt(reglas.next().toString());
-                        if (ruleMgr.eval(user, regla, getMap().getId()))
-                        {
-                            passrule = true;
-                            break;
-                        } else
-                            passrule = false;
-                    } catch (Exception e)
-                    {
-                    }
-                }
-            }
-        } else
-        {
-            Iterator reglas = this.getOccurrencesOfType("CNF_WBRule");
-            while (reglas.hasNext())
-            {
-                Occurrence occ = (Occurrence) reglas.next();
-                if (occ.getDbdata().getActive() == 1 && !occ.isResourceRef())
-                {
-                    try
-                    {
-                        int regla = Integer.parseInt(occ.getResourceData());
-                        if (ruleMgr.eval(user, regla, getMap().getId()))
-                        {
-                            passrule = true;
-                            break;
-                        } else
-                            passrule = false;
-                    } catch (Exception e)
-                    {
-                    }
-                }
-            }
-
-        }
-        return passrule;
-    }*/
-    
-/*    
-    public String getAttribute(String key)
-    {
-        RecMDAttribute rec=getMap().getMDAttribute(key);
-        if(rec==null)return null;
-        return DBMetaData.getInstance().getMDTopicValue(getId(),getMap().getDbdata().getNId(),rec.getId());
-    }
-    
-    public String getAttribute(int key)
-    {
-        return DBMetaData.getInstance().getMDTopicValue(getId(),getMap().getDbdata().getNId(),key);
-    }
-    
-*/    
-    
     public boolean isActive()
     {
-        return getDbdata().getActive()==1 && getDbdata().getDeleted()==0 && checkSchedule(true);
+        return wp.isActive();
     }
     
     public boolean isVisible()
     {
-        return isActive() && getDbdata().getHidden()==0;
+        return wp.isVisible();
     }    
     
    /** Verifica si la calendarizacion del topico sen encuentra en tiempo, hereda calensarizaci�n o no dependiendo
@@ -1875,60 +1658,14 @@ public class Topic
      */
     public boolean checkSchedule(boolean ruleInherit)
     {
-        boolean passrule = true;
-        com.infotec.wb.core.ScheduleMgr scheduleMgr = com.infotec.wb.core.ScheduleMgr.getInstance();
-        if (ruleInherit)
-        {
-            Iterator it = getConfigOccurrences(getMap().getTopic(TopicMap.CNF_WBCalendar));
-            while (it.hasNext())
-            {
-                Occurrence occ=(Occurrence)it.next();
-                //System.out.println(occ);
-                try
-                {
-                    if (scheduleMgr.eval(occ))
-                    {
-                        passrule = true;
-                        break;
-                    } else
-                    {
-                        passrule = false;
-                    }
-                } catch (Exception e)
-                {
-                    AFUtils.log(e);
-                }
-            }
-        } else
-        {
-            Iterator it = getOccurrencesOfType(TopicMap.CNF_WBCalendar);
-            while (it.hasNext())
-            {
-                Occurrence occ=(Occurrence)it.next();
-                try
-                {
-                    if (scheduleMgr.eval(occ))
-                    {
-                        passrule = true;
-                        break;
-                    } else
-                    {
-                        passrule = false;
-                    }
-                } catch (Exception e)
-                {
-                    AFUtils.log(e);
-                }
-            }
-        }
-        //System.out.println("checkRules:"+topic+" "+passrule);
+        boolean passrule = wp.isOnSchedule();
         return passrule;
     }        
         
     
     public boolean isDeleted()
     {
-        return getDbdata().getDeleted()==1;
+        return wp.isDeleted();
     }
     
     
