@@ -65,6 +65,7 @@ import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.nlp.SWBDictionary;
 import org.semanticwb.nlp.SWBLocaleLexicon;
+import org.semanticwb.nlp.Word;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
@@ -671,10 +672,10 @@ public class AdvancedSearch extends GenericAdmResource {
             }
 
             //Add all properties
-            Iterator<String> sit = lex.getLexicon(lang).listWords(false);
+            Iterator<Word> sit = lex.getLexicon(lang).listPropertyWords();
             while (sit.hasNext()) {
-                String tempp = sit.next();
-                if (tempp.toLowerCase().indexOf(word.toLowerCase()) != -1) {
+                Word tempp = sit.next();
+                if (tempp.getLexicalForm().toLowerCase().indexOf(word.toLowerCase()) != -1) {
                     proOptions.add(tempp);
                 }
             }
