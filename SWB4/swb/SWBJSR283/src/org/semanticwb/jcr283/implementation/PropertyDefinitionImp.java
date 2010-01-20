@@ -47,7 +47,9 @@ public class PropertyDefinitionImp extends ItemDefinitionImp implements Property
         value = obj.getLiteralProperty(prop);
         if (value != null)
         {
-            requiredType = value.getInt();
+
+            String srequiredType = value.getString();
+            requiredType=PropertyType.valueFromName(srequiredType);
         }
         else
         {
