@@ -38,7 +38,7 @@ package org.semanticwb.nlp.analysis;
 // $ANTLR 3.1.2 /home/hasdai/Documentos/SimpleParser.g 2009-03-24 17:29:36
 
 import org.antlr.runtime.*;
-
+import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.*;
 
 public class SimpleParser extends Parser {
