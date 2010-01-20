@@ -28,12 +28,12 @@ import org.semanticwb.platform.SemanticProperty;
 public abstract class ItemImp implements Item
 {
 
-    private final NodeImp parent;
+    protected final NodeImp parent;
     private final String name;
     private boolean isNew;
-    private String path;
+    protected final String path;
     protected boolean isModified=false;
-    private final int depth;
+    protected final int depth;
     protected final SessionImp session;
     public ItemImp(SemanticProperty prop, NodeImp parent, String path,int depth,SessionImp session)
     {
