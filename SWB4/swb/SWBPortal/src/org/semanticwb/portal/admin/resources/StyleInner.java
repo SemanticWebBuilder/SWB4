@@ -21,7 +21,7 @@ import org.semanticwb.portal.admin.admresources.util.*;
 public class StyleInner {
     private static Logger log = SWBUtils.getLogger(Styler.class);
 
-    private HashMap mm;
+    private HashMap<String,HashMap> mm;
 
     public StyleInner(Resource base) {
         mm = new HashMap();
@@ -51,7 +51,6 @@ public class StyleInner {
             }
             css = c.toString();
         }
-
         SWBCssToXmlTranslator csst = new SWBCssToXmlTranslator();
         handler = new StylerDomParser(csst.translateCSS(css), base);
 
@@ -89,7 +88,7 @@ public class StyleInner {
     }
 
     public HashMap getMm(String key) {
-        return (HashMap)mm.get(key);
+        return mm.get(key);
     }
 
 
