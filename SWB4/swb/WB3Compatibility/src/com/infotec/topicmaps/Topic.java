@@ -44,7 +44,8 @@ import com.infotec.topicmaps.bean.TopicMgr;
 import com.infotec.topicmaps.util.TMComparator;
 import com.infotec.topicmaps.util.XTMParser;
 import com.infotec.wb.core.db.RecResource;
-import org.apache.xerces.parsers.SAXParser;
+import com.sun.org.apache.xerces.internal.parsers.SAXParser;
+
 import org.semanticwb.SWBPortal;
 import org.semanticwb.model.WebPage;
 
@@ -679,7 +680,7 @@ public class Topic
      */
     public String getDisplayName()
     {
-        return getDisplayName((Topic) null);
+        return wp.getDisplayName();
     }    
 
     /** Regresa el nombre por defecto, en base a un idioma.
@@ -688,7 +689,7 @@ public class Topic
      */
     public String getDisplayName(String lang)
     {
-        return getDisplayName(getMap().getTopicLang(lang));
+        return wp.getDisplayName(lang);
     }
 
     /** Regresa el nombre en base a un idioma.
@@ -698,22 +699,7 @@ public class Topic
      */
     public String getDisplayLangName(String lang)
     {
-        Topic scope=getMap().getTopicLang(lang);
-        String ret=null;
-        Iterator it = getBaseNames().iterator();
-        while (it.hasNext())
-        {
-            BaseName bn = (BaseName) it.next();
-            if((scope==null && bn.getScope()==null) || (bn.getScope() != null && scope!=null && bn.getScope().getTopicRefs().containsKey(scope.getId())))
-            {
-                if(bn.getBaseNameString()!=null && bn.getBaseNameString().length()>0)
-                {
-                    ret = bn.getBaseNameString();
-                    break;
-                }
-            }
-        }
-        return ret;
+        return wp.getDisplayName(lang);
     }    
     
     /** Regresa el nombre por defecto, en base a un idioma.
@@ -722,11 +708,12 @@ public class Topic
      */
     public String getDisplayName(Topic scope)
     {
-        String ret = null;
-        BaseName bn=getDisplayBaseName(scope);
-        if(bn!=null)ret=bn.getBaseNameString();
-        else ret = "Topic";
-        return ret;
+//        String ret = null;
+//        BaseName bn=getDisplayBaseName(scope);
+//        if(bn!=null)ret=bn.getBaseNameString();
+//        else ret = "Topic";
+//        return ret;
+        return getDisplayName();
     }
     
     /** Regresa el nombre por defecto.
@@ -811,10 +798,7 @@ public class Topic
      */
     public String getDisplayName(HashMap args)
     {
-        String language = (String) args.get("language");
-        Topic scope = null;
-        if (language != null) scope = getMap().getTopic("IDM_WB" + language);
-        return getDisplayName(scope);
+        return wp.getDisplayName(args);
     }
 
 
@@ -846,22 +830,7 @@ public class Topic
      */
     public String getSortName(Topic scope, boolean returnBaseName)
     {
-        String ret = null;
-        Topic sort = getMap().getTopic("CNF_WBSortName");
-        if (sort == null) return getDisplayName(scope);
-
-        Iterator it = getBaseNames().iterator();
-        while (it.hasNext())
-        {
-            BaseName bn = (BaseName) it.next();
-            if (bn.getScope() != null && bn.getScope().getTopicRefs().containsKey(sort.getId()))
-            {
-                ret = bn.getBaseNameString();
-            }
-        }
-
-        if (returnBaseName && ret == null) ret = getDisplayName(scope);
-        return ret;
+        return wp.getSortName();
     }
 
 
@@ -918,12 +887,12 @@ public class Topic
      */
     public void addOccurrence(Occurrence occ)
     {
-        getOccurrences().add(occ);
-        if (isDBSyncronized() || getMap().isDBSyncronized())
-        {
-            //System.out.println("addoccurrence:"+occ);
-            getMap().changes.add("ao:" + this.getId().length() + ":" + this.getId() + occ.getId());
-        }
+//        getOccurrences().add(occ);
+//        if (isDBSyncronized() || getMap().isDBSyncronized())
+//        {
+//            //System.out.println("addoccurrence:"+occ);
+//            getMap().changes.add("ao:" + this.getId().length() + ":" + this.getId() + occ.getId());
+//        }
     }
 
     /** Elimina una occurencia.
@@ -931,8 +900,8 @@ public class Topic
      */
     public void removeOccurrence(Occurrence occ)
     {
-        getOccurrences().remove(occ);
-        if (isDBSyncronized() || getMap().isDBSyncronized()) getMap().changes.add("ro:" + this.getId().length() + ":" + this.getId() + occ.getId());
+//        getOccurrences().remove(occ);
+//        if (isDBSyncronized() || getMap().isDBSyncronized()) getMap().changes.add("ro:" + this.getId().length() + ":" + this.getId() + occ.getId());
     }
 
     /** regresa un Occurencia.
@@ -941,15 +910,15 @@ public class Topic
      */
     public Occurrence getOccurrence(String id)
     {
-        Iterator it = getOccurrences().iterator();
-        while (it.hasNext())
-        {
-            Occurrence occ = (Occurrence) it.next();
-            if (id.equals(occ.getId()))
-            {
-                return occ;
-            }
-        }
+//        Iterator it = getOccurrences().iterator();
+//        while (it.hasNext())
+//        {
+//            Occurrence occ = (Occurrence) it.next();
+//            if (id.equals(occ.getId()))
+//            {
+//                return occ;
+//            }
+//        }
         return null;
     }
 
@@ -962,8 +931,8 @@ public class Topic
      */
     public Iterator getConfigData(String type)
     {
-        Topic tp = this.getMap().getTopic(type);
-        if (tp != null) return getConfigData(tp);
+//        Topic tp = this.getMap().getTopic(type);
+//        if (tp != null) return getConfigData(tp);
         return new ArrayList().iterator();
     }
     
@@ -978,23 +947,23 @@ public class Topic
     public Iterator[] getConfigDataAndRef(Topic type)
     {
         Iterator[] its=new Iterator[2];
-        ArrayList ret = new ArrayList();
-        ArrayList ref = new ArrayList();
-        Iterator[] auxs=getConfigOccurrencesAndRef(type);
-        Iterator it = auxs[0];
-        while(it.hasNext())
-        {
-            Occurrence occ=(Occurrence)it.next();
-            ret.add(occ.getResourceData());
-        }
-        it = auxs[1];
-        while(it.hasNext())
-        {
-            Occurrence occ=(Occurrence)it.next();
-            ret.add(occ.getResourceRef());
-        }        
-        its[0]=ret.iterator();
-        its[1]=ref.iterator();
+//        ArrayList ret = new ArrayList();
+//        ArrayList ref = new ArrayList();
+//        Iterator[] auxs=getConfigOccurrencesAndRef(type);
+//        Iterator it = auxs[0];
+//        while(it.hasNext())
+//        {
+//            Occurrence occ=(Occurrence)it.next();
+//            ret.add(occ.getResourceData());
+//        }
+//        it = auxs[1];
+//        while(it.hasNext())
+//        {
+//            Occurrence occ=(Occurrence)it.next();
+//            ret.add(occ.getResourceRef());
+//        }
+//        its[0]=ret.iterator();
+//        its[1]=ref.iterator();
         return its;
     }
     
@@ -1010,47 +979,47 @@ public class Topic
     {
         Iterator[] its=new Iterator[2];
         //System.out.println(this+".getConfigData("+type+")");
-        boolean inherit=true;
-        ArrayList ret = new ArrayList();
-        ArrayList ref = new ArrayList();
-        Iterator enoc = getOccurrences().iterator();
-        while (enoc.hasNext())
-        {
-            Occurrence occ = (Occurrence) enoc.next();
-            try
-            {
-                Topic ttype = occ.getInstanceOf().getTopicRef();
-                if (ttype == type)
-                {
-                    if (!occ.isResourceRef())
-                    {
-                        if(occ.isActive())ret.add(occ);
-                        //System.out.println(this+".getConfigData."+occ.getResourceData());
-                    }
-                    else
-                    {
-                        //******** revisar el no heredar **************
-                        if (occ.getResourceRef().equals("_noparent"))
-                        {
-                            inherit=false;
-                        }else
-                        {
-                            ref.add(occ);
-                        }
-                    }
-                }
-            } catch (Exception e)
-            {
-                TopicMgr.getInstance().log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_Topic_getConfigData_readConfError") + ":" + getDisplayName() + " " + com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_Topic_getConfigData_type") + type, true);
-            }
-        }
+//        boolean inherit=true;
+//        ArrayList ret = new ArrayList();
+//        ArrayList ref = new ArrayList();
+//        Iterator enoc = getOccurrences().iterator();
+//        while (enoc.hasNext())
+//        {
+//            Occurrence occ = (Occurrence) enoc.next();
+//            try
+//            {
+//                Topic ttype = occ.getInstanceOf().getTopicRef();
+//                if (ttype == type)
+//                {
+//                    if (!occ.isResourceRef())
+//                    {
+//                        if(occ.isActive())ret.add(occ);
+//                        //System.out.println(this+".getConfigData."+occ.getResourceData());
+//                    }
+//                    else
+//                    {
+//                        //******** revisar el no heredar **************
+//                        if (occ.getResourceRef().equals("_noparent"))
+//                        {
+//                            inherit=false;
+//                        }else
+//                        {
+//                            ref.add(occ);
+//                        }
+//                    }
+//                }
+//            } catch (Exception e)
+//            {
+//                TopicMgr.getInstance().log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_Topic_getConfigData_readConfError") + ":" + getDisplayName() + " " + com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_Topic_getConfigData_type") + type, true);
+//            }
+//        }
         //System.out.println(this+".getConfigData.ret:"+ret.size());            
-        if(ret.size()==0 && inherit && getType()!=null)
-        {
-            return getType().getConfigOccurrencesAndRef(type);
-        }        
-        its[0]=ret.iterator();
-        its[1]=ref.iterator();
+//        if(ret.size()==0 && inherit && getType()!=null)
+//        {
+//            return getType().getConfigOccurrencesAndRef(type);
+//        }
+//        its[0]=ret.iterator();
+//        its[1]=ref.iterator();
         return its;
     }    
     
@@ -1063,13 +1032,14 @@ public class Topic
      */
     public Iterator getConfigData(Topic type)
     {
+
         ArrayList ret = new ArrayList();
-        Iterator it=getConfigOccurrences(type);
-        while(it.hasNext())
-        {
-            Occurrence occ=(Occurrence)it.next();
-            ret.add(occ.getResourceData());
-        }
+//        Iterator it=getConfigOccurrences(type);
+//        while(it.hasNext())
+//        {
+//            Occurrence occ=(Occurrence)it.next();
+//            ret.add(occ.getResourceData());
+//        }
         return ret.iterator();
     }    
     
@@ -1082,7 +1052,8 @@ public class Topic
      */
     public Iterator getConfigOccurrences(Topic type)
     {
-        return getConfigObjects(type,null);
+        //return getConfigObjects(type,null);
+        return new ArrayList().iterator();
     }
 
     /** Regresa <B>Iterator</B> de objetos <B>Occurrence</B> que sean de un tipo y que
@@ -1094,53 +1065,54 @@ public class Topic
      */
     public Iterator getConfigObjects(Topic type, OccTransformer tranformer)
     {
-        boolean inherit=true;
-        ArrayList ret = new ArrayList();
-        Iterator enoc = getOccurrences().iterator();
-        while (enoc.hasNext())
-        {
-            Occurrence occ = (Occurrence) enoc.next();
-            try
-            {
-                Topic ttype = occ.getInstanceOf().getTopicRef();
-                if (ttype == type)
-                {
-                    if (!occ.isResourceRef())
-                    {
-                        if(occ.isActive())
-                        {
-                            if(tranformer!=null)
-                            {
-                                Object obj=tranformer.transform(occ);
-                                if(obj!=null)ret.add(obj);
-                            }else
-                            {
-                                ret.add(occ);
-                            }
-                        }
-                        //System.out.println(this+".getConfigOccurrences."+occ.getResourceData());
-                    }
-                    else
-                    {
-                        //System.out.println(occ.getResourceRef());
-                        //******** revisar el no heredar **************
-                        if (occ.getResourceRef().equals("_noparent"))
-                        {
-                            inherit=false;
-                        }
-                    }
-                }
-            } catch (Exception e)
-            {
-                TopicMgr.getInstance().log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_Topic_getConfigData_readConfError") + ":" + getDisplayName() + " " + com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_Topic_getConfigData_type") + type, true);
-            }
-        }
-        //System.out.println(this+".getConfigData.ret:"+ret.size());            
-        if(ret.size()==0 && inherit && getType()!=null)
-        {
-            return getType().getConfigObjects(type,tranformer);
-        }        
-        return ret.iterator();
+//        boolean inherit=true;
+//        ArrayList ret = new ArrayList();
+//        Iterator enoc = getOccurrences().iterator();
+//        while (enoc.hasNext())
+//        {
+//            Occurrence occ = (Occurrence) enoc.next();
+//            try
+//            {
+//                Topic ttype = occ.getInstanceOf().getTopicRef();
+//                if (ttype == type)
+//                {
+//                    if (!occ.isResourceRef())
+//                    {
+//                        if(occ.isActive())
+//                        {
+//                            if(tranformer!=null)
+//                            {
+//                                Object obj=tranformer.transform(occ);
+//                                if(obj!=null)ret.add(obj);
+//                            }else
+//                            {
+//                                ret.add(occ);
+//                            }
+//                        }
+//                        //System.out.println(this+".getConfigOccurrences."+occ.getResourceData());
+//                    }
+//                    else
+//                    {
+//                        //System.out.println(occ.getResourceRef());
+//                        //******** revisar el no heredar **************
+//                        if (occ.getResourceRef().equals("_noparent"))
+//                        {
+//                            inherit=false;
+//                        }
+//                    }
+//                }
+//            } catch (Exception e)
+//            {
+//                TopicMgr.getInstance().log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_Topic_getConfigData_readConfError") + ":" + getDisplayName() + " " + com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_Topic_getConfigData_type") + type, true);
+//            }
+//        }
+//        //System.out.println(this+".getConfigData.ret:"+ret.size());
+//        if(ret.size()==0 && inherit && getType()!=null)
+//        {
+//            return getType().getConfigObjects(type,tranformer);
+//        }
+//        return ret.iterator();
+        return new ArrayList().iterator();
     }
 
     /** Obtiene las ocurrencias de tipo contenido activas y que no esten borrados
@@ -1148,27 +1120,29 @@ public class Topic
      */
     public Iterator getContents()
     {
-        ArrayList ret = new ArrayList();
-        Iterator enoc = getOccurrences().iterator();
-        while (enoc.hasNext())
-        {
-            Occurrence occ = (Occurrence) enoc.next();
-            try
-            {
-                if (occ.isActive())
-                {
-                    Topic ttype = occ.getInstanceOf().getTopicRef();
-                    if (ttype != null && ttype.getId().equals("REC_WBContent"))
-                    {
-                        ret.add(occ);
-                    }
-                }
-            } catch (Exception e)
-            {
-                TopicMgr.getInstance().log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_Topic_getContents_readTopicContentsError") + ":" + getDisplayName(), true);
-            }
-        }
-        return ret.iterator();
+
+        //TODO
+//        ArrayList ret = new ArrayList();
+//        Iterator enoc = getOccurrences().iterator();
+//        while (enoc.hasNext())
+//        {
+//            Occurrence occ = (Occurrence) enoc.next();
+//            try
+//            {
+//                if (occ.isActive())
+//                {
+//                    Topic ttype = occ.getInstanceOf().getTopicRef();
+//                    if (ttype != null && ttype.getId().equals("REC_WBContent"))
+//                    {
+//                        ret.add(occ);
+//                    }
+//                }
+//            } catch (Exception e)
+//            {
+//                TopicMgr.getInstance().log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_Topic_getContents_readTopicContentsError") + ":" + getDisplayName(), true);
+//            }
+//        }
+        return new ArrayList().iterator();
     }
 
     /** Regresa <B>Iterator</B> de objetos <B>Occurrence</B> que sean de un tipo y que no se encuentren borradas.
@@ -1177,8 +1151,8 @@ public class Topic
      */
     public Iterator getOccurrencesOfType(String type)
     {
-        Topic tp = this.getMap().getTopic(type);
-        if (tp != null) return getOccurrencesOfType(tp,false);
+//        Topic tp = this.getMap().getTopic(type);
+//        if (tp != null) return getOccurrencesOfType(tp,false);
         return new ArrayList().iterator();
     }
     
@@ -1188,7 +1162,8 @@ public class Topic
      */
     public Iterator getOccurrencesOfType(Topic type)
     {
-        return getOccurrencesOfType(type,false);
+        //return getOccurrencesOfType(type,false);
+        return new ArrayList().iterator();
     }
     
      /** Regresa <B>Iterator</B> de objetos <B>Occurrence</B> que sean de un tipo y si deleted=false regresa solo las que no se encuentren borradas.
@@ -1197,8 +1172,8 @@ public class Topic
      */
     public Iterator getOccurrencesOfType(String type, boolean deleted)
     {
-        Topic tp = this.getMap().getTopic(type);
-        if (tp != null) return getOccurrencesOfType(tp,deleted);
+//        Topic tp = this.getMap().getTopic(type);
+//        if (tp != null) return getOccurrencesOfType(tp,deleted);
         return new ArrayList().iterator();
     }
     
@@ -1210,35 +1185,35 @@ public class Topic
     public Iterator getOccurrencesOfType(Topic type, boolean deleted)
     {
         ArrayList ret = new ArrayList();
-        Iterator enoc = getOccurrences().iterator();
-        while (enoc.hasNext())
-        {
-            Occurrence occ = (Occurrence) enoc.next();
-            try
-            {
-                if (occ.getDbdata() != null)
-                {
-                    if(deleted)
-                    {
-                        Topic ttype = occ.getInstanceOf().getTopicRef();
-                        if (ttype == type)
-                        {
-                            ret.add(occ);
-                        }
-                    }else if(occ.getDbdata().getDeleted() == 0)
-                    {
-                        Topic ttype = occ.getInstanceOf().getTopicRef();
-                        if (ttype == type)
-                        {
-                            ret.add(occ);
-                        }
-                    } 
-                }
-            } catch (Exception e)
-            {
-                TopicMgr.getInstance().log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_Topic_getOcurrencesofType_readOcuurencesType") + ":" + getDisplayName(), true);
-            }
-        }
+//        Iterator enoc = getOccurrences().iterator();
+//        while (enoc.hasNext())
+//        {
+//            Occurrence occ = (Occurrence) enoc.next();
+//            try
+//            {
+//                if (occ.getDbdata() != null)
+//                {
+//                    if(deleted)
+//                    {
+//                        Topic ttype = occ.getInstanceOf().getTopicRef();
+//                        if (ttype == type)
+//                        {
+//                            ret.add(occ);
+//                        }
+//                    }else if(occ.getDbdata().getDeleted() == 0)
+//                    {
+//                        Topic ttype = occ.getInstanceOf().getTopicRef();
+//                        if (ttype == type)
+//                        {
+//                            ret.add(occ);
+//                        }
+//                    }
+//                }
+//            } catch (Exception e)
+//            {
+//                TopicMgr.getInstance().log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_Topic_getOcurrencesofType_readOcuurencesType") + ":" + getDisplayName(), true);
+//            }
+//        }
         return ret.iterator();
     }
 
@@ -1255,7 +1230,7 @@ public class Topic
      */
     public String getPath()
     {
-        return getPath(new HashMap());
+        return wp.getPath();
     }
 
     /** Obtiene la ruta de navegacion de la seccion
@@ -1275,89 +1250,7 @@ public class Topic
      */
     public String getPath(HashMap args)
     {
-        //AFUtils.log("entra a nuevo topic getPath george...",true);
-         StringBuffer ret = new StringBuffer();
-        String separator = (String) args.get("separator");
-        String cssclass = (String) args.get("cssclass");
-        String tpacssclass = (String) args.get("tpacssclass");
-        String selectcolor = (String) args.get("selectcolor");
-        String links = (String) args.get("links");
-        String language = (String) args.get("language");
-        String home = (String) args.get("home");
-        String active = (String) args.get("active");
-        String target = (String) args.get("target");
-        String hiddentopics=(String)args.get("hiddentopics");
-
-        if (separator == null) separator = "";
-        if (cssclass == null) cssclass = ""; else cssclass = "class=\"" + cssclass + "\"";
-        if (selectcolor == null) selectcolor = ""; else selectcolor = "color=\"" + selectcolor + "\"";
-        if (links == null) links = "true";
-        if(target==null)target="";
-        else target="target=\""+target+"\"";
-
-        //Hidden Topics
-        ArrayList hd=null;
-        if(hiddentopics!=null)
-        {
-            hd=new ArrayList();
-            StringTokenizer st=new StringTokenizer(hiddentopics," ,|;&:");
-            while(st.hasMoreTokens())
-            {
-                Topic tp=getMap().getTopic(st.nextToken());
-                if(tp!=null)
-                {
-                    hd.add(tp);
-                }
-            }
-        }
-
-        Topic scope = null;
-        if (language != null) scope = getMap().getTopic("IDM_WB" + language);
-
-        Topic tphome = null;
-        if (home != null)
-        {
-            tphome = getMap().getTopic(home);
-            if (tphome == null) tphome = getMap().getHome();
-        } else
-            tphome = getMap().getHome();
-
-        if (tpacssclass!=null && tpacssclass.length() > 0) ret.append("<span " + tpacssclass + ">");
-        else if (cssclass != null && cssclass.length() > 0) ret.append("<span " + cssclass + ">");
-        if (selectcolor != null && selectcolor.length() > 0) ret.append("<font " + selectcolor + ">");
-        ret.append(this.getDisplayName(scope));
-        if (selectcolor != null && selectcolor.length() > 0) ret.append("</font>");
-        if ((tpacssclass!=null && tpacssclass.length() > 0) || (cssclass != null && cssclass.length() > 0)) ret.append("</span>");
-            
-        if (tphome != this)
-        {
-            Iterator aux = this.getTypes();
-            ArrayList arr = new ArrayList();
-            while (aux.hasNext())
-            {
-                Topic tp = (Topic) aux.next();
-
-                if(hd==null || (hd!=null && !hd.contains(tp)))
-                {
-
-                    if (links.equals("true") && tp.getDbdata().getActive() == 1){
-                        ret.insert(0, separator);
-                        ret.insert(0, "<a href=\"" + tp.getUrl() + "\" " + cssclass + " "+target+">" + tp.getDisplayName(scope) + "</a>");
-                    }
-                    else if(active==null || (tp.getDbdata().getActive() == 1 && active!=null && !active.toLowerCase().trim().equals("true"))){
-                        ret.insert(0, separator);
-                        ret.insert(0, tp.getDisplayName(scope));
-                    }
-		  
-                }
-                
-                if (arr.contains(tp)) break;
-                arr.add(tp);
-                aux = tp.getTypes();
-                if (tphome == tp) break;
-            }
-        }
-        return ret.toString();
+        return wp.getPath(args);
     }
 
     /** Regresa el nivel de profundidad del topico con respecto a la seccion home.
