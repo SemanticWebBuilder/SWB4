@@ -134,6 +134,10 @@ public class NodeManager
         }
         else
         {
+            if(!path.endsWith("/"))
+            {
+                path+="/";
+            }
             for (String pathNode : nodes.keySet())
             {
                 if (pathNode.startsWith(path))
@@ -165,6 +169,10 @@ public class NodeManager
         }
         else
         {
+            if(!path.endsWith("/"))
+            {
+                path+="/";
+            }
             for (String pathNode : properties.keySet())
             {
                 if (pathNode.startsWith(path))
