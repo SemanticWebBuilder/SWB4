@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.UUID;
 import javax.jcr.AccessDeniedException;
 import javax.jcr.Binary;
@@ -554,8 +555,16 @@ public class NodeImp extends ItemImp implements Node
     }
 
     public PropertyIterator getProperties() throws RepositoryException
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
+    {        
+        HashSet<PropertyImp> props=new HashSet<PropertyImp>();
+        for(PropertyImp prop : nodeManager.getChildProperties(this))
+        {
+            if(!prop.getDefinition().isProtected())
+            {
+                props.add(prop);
+            }
+        }
+        return new PropertyIteratorImp(props);
     }
 
     public PropertyIterator getProperties(String namePattern) throws RepositoryException
@@ -872,12 +881,19 @@ public class NodeImp extends ItemImp implements Node
 
     public Version checkin() throws VersionException, UnsupportedRepositoryOperationException, InvalidItemStateException, LockException, RepositoryException
     {
-
+        if(!isSimpleVersionable())
+        {
+            throw new UnsupportedRepositoryOperationException("The node is not versionable");
+        }
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public void checkout() throws UnsupportedRepositoryOperationException, LockException, ActivityViolationException, RepositoryException
     {
+        if(!isSimpleVersionable())
+        {
+            throw new UnsupportedRepositoryOperationException("The node is not versionable");
+        }
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
