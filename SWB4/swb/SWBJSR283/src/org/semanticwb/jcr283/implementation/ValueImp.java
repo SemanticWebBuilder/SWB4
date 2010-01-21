@@ -878,4 +878,8 @@ public class ValueImp implements Value
             throw new ValueFormatException(e);
         }
     }
+    private String toString(UUID value)
+    {
+        return value.toString();
+    }
 }
