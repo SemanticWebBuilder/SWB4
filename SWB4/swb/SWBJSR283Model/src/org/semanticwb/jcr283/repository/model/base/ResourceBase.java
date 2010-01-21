@@ -39,10 +39,52 @@ public abstract class ResourceBase extends org.semanticwb.jcr283.repository.mode
        {
            return (getResource(id, model)!=null);
        }
+   public static java.util.Iterator<org.semanticwb.jcr283.repository.model.Resource> listResourceByParentNode(org.semanticwb.jcr283.repository.model.Base parentnode,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.jcr283.repository.model.Resource> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbrep_parentNode, parentnode.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.jcr283.repository.model.Resource> listResourceByParentNode(org.semanticwb.jcr283.repository.model.Base parentnode)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.jcr283.repository.model.Resource> it=new org.semanticwb.model.GenericIterator(parentnode.getSemanticObject().getModel().listSubjects(swbrep_parentNode,parentnode.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.jcr283.repository.model.Resource> listResourceByNode(org.semanticwb.jcr283.repository.model.Base hasnode,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.jcr283.repository.model.Resource> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbrep_hasNode, hasnode.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.jcr283.repository.model.Resource> listResourceByNode(org.semanticwb.jcr283.repository.model.Base hasnode)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.jcr283.repository.model.Resource> it=new org.semanticwb.model.GenericIterator(hasnode.getSemanticObject().getModel().listSubjects(swbrep_hasNode,hasnode.getSemanticObject()));
+       return it;
+   }
     }
 
     public ResourceBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public String getMimeType()
+    {
+        return getSemanticObject().getProperty(jcr_mimeType);
+    }
+
+    public void setMimeType(String value)
+    {
+        getSemanticObject().setProperty(jcr_mimeType, value);
+    }
+
+    public String getEncoding()
+    {
+        return getSemanticObject().getProperty(jcr_encoding);
+    }
+
+    public void setEncoding(String value)
+    {
+        getSemanticObject().setProperty(jcr_encoding, value);
     }
 }
