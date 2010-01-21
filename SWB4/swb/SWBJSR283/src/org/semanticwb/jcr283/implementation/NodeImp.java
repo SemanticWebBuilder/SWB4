@@ -488,8 +488,34 @@ public class NodeImp extends ItemImp implements Node
 
     public Item getPrimaryItem() throws ItemNotFoundException, RepositoryException
     {
-        NodeType nodeTypePrimaryItem = this.getDefinition().getDefaultPrimaryType();
-        throw new UnsupportedOperationException("Not supported yet.");
+        NodeType nodeType = this.getDefinition().getDefaultPrimaryType();
+        String primaryItemName=nodeType.getPrimaryItemName();
+        if(primaryItemName!=null)
+        {
+            nodeManager.loadChilds(this, path, depth, session, false);
+            String primaryItemNamePath=getPropertyPath(primaryItemName);
+            NodeImp node=nodeManager.getNode(primaryItemNamePath);
+            if(node==null)
+            {
+                PropertyImp prop=nodeManager.getProperty(primaryItemNamePath);
+                if(prop==null)
+                {
+                    throw new ItemNotFoundException();
+                }
+                else
+                {
+                    return prop;
+                }
+            }
+            else
+            {
+                return node;
+            }
+        }
+        else
+        {
+            throw new ItemNotFoundException();
+        }
     }
 
     public String getUUID() throws UnsupportedRepositoryOperationException, RepositoryException
@@ -564,7 +590,7 @@ public class NodeImp extends ItemImp implements Node
 
     public NodeType getPrimaryNodeType() throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return nodeDefinitionImp.getDeclaringNodeType();
     }
 
     public NodeType[] getMixinNodeTypes() throws RepositoryException
