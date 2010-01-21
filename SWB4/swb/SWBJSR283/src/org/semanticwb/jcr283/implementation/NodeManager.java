@@ -324,6 +324,42 @@ public class NodeManager
         return getChilds;
     }
 
+    public void loadChild(NodeImp node, String name, String path, int depth, SessionImp session, boolean replace)
+    {
+        if (node.getSemanticObject() != null)
+        {
+            GenericIterator<Base> childs = new Base(node.getSemanticObject()).listNodes();
+            while (childs.hasNext())
+            {
+                Base child = childs.next();
+                if (child.getName().equals(name))
+                {
+                    int childindex = 0;
+                    childindex = getIndex(child);
+                    String childpath = null;
+                    if (path.endsWith("/"))
+                    {
+                        childpath = child.getName();
+                    }
+                    else
+                    {
+                        childpath = path + "/" + child.getName();
+                    }
+
+                    if (childindex > 0)
+                    {
+                        childpath += "[" + childindex + "]";
+                    }
+                    if (replace || !nodes.containsKey(childpath))
+                    {
+                        NodeImp childNode = new NodeImp(child, node, childindex, childpath, depth + 1, session);
+                        nodes.put(path, childNode);
+                    }
+                }
+            }
+        }
+    }
+
     public void loadChilds(NodeImp node, String path, int depth, SessionImp session, boolean replace)
     {
         if (node.getSemanticObject() != null)
