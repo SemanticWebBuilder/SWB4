@@ -55,6 +55,7 @@ public class NodeImp extends ItemImp implements Node
 
     public static final String JCR_MIXINTYPES = "jcr:mixinTypes";
     private static final String PATH_SEPARATOR = "/";
+    private static final String THE_PATH_IS_NOT_RELATIVE = "The path is not relative :";
     private final static Logger log = SWBUtils.getLogger(NodeImp.class);
     private final static NodeTypeManagerImp nodeTypeManager = new NodeTypeManagerImp();
     private final static ValueFactoryImp valueFactoryImp = new ValueFactoryImp();
@@ -198,26 +199,26 @@ public class NodeImp extends ItemImp implements Node
         return name;
     }
 
-    private String normalizePath(String relpath) throws RepositoryException
+    private String normalizePath(String relPath) throws RepositoryException
     {
-        if (isValidRelativePath(relpath))
+        if (isValidRelativePath(relPath))
         {
-            throw new RepositoryException("The path is not relative");
+            throw new RepositoryException(THE_PATH_IS_NOT_RELATIVE + relPath);
         }
-        if (relpath.startsWith("./"))
+        if (relPath.startsWith("./"))
         {
-            String absPath = this.getPath() + relpath;
+            String absPath = this.getPath() + relPath;
             return absPath;
         }
-        if (relpath.startsWith("../"))
+        if (relPath.startsWith("../"))
         {
             if (this.parent != null)
             {
-                String newRelativePath = relpath.substring(1);
+                String newRelativePath = relPath.substring(1);
                 return this.parent.normalizePath(newRelativePath);
             }
         }
-        String newpath = relpath;
+        String newpath = relPath;
         int pos = newpath.indexOf("./");
         while (pos != -1)
         {
@@ -272,6 +273,7 @@ public class NodeImp extends ItemImp implements Node
         if (!isValidRelativePath(relPath))
         {
             //TODO:ERROR
+            throw new RepositoryException(THE_PATH_IS_NOT_RELATIVE + relPath);
         }
         String absPath = normalizePath(relPath);
         NodeImp nodeParent = this.session.getWorkspaceImp().getNodeManager().getNode(absPath);
@@ -351,9 +353,11 @@ public class NodeImp extends ItemImp implements Node
     {
         if (!isValidRelativePath(srcChildRelPath))
         {
+            throw new RepositoryException(THE_PATH_IS_NOT_RELATIVE + srcChildRelPath);
         }
         if (!isValidRelativePath(destChildRelPath))
         {
+            throw new RepositoryException(THE_PATH_IS_NOT_RELATIVE + destChildRelPath);
         }
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -466,7 +470,7 @@ public class NodeImp extends ItemImp implements Node
     {
         if (NodeImp.isValidRelativePath(relPath))
         {
-            //TODO: ERROR
+            throw new RepositoryException(THE_PATH_IS_NOT_RELATIVE + relPath);
         }
         NodeImp node = this.session.getWorkspaceImp().getNodeManager().getNode(relPath);
         if (node == null)
@@ -497,7 +501,7 @@ public class NodeImp extends ItemImp implements Node
     {
         if (!isValidRelativePath(relPath))
         {
-            throw new RepositoryException("The path is not a relative path");
+            throw new RepositoryException(THE_PATH_IS_NOT_RELATIVE + relPath);
         }
         String pathAbsProperty = normalizePath(relPath);
         PropertyImp prop = manager.getProperty(pathAbsProperty);
@@ -568,7 +572,7 @@ public class NodeImp extends ItemImp implements Node
     {
         if (!NodeImp.isValidRelativePath(relPath))
         {
-            //TODO:ERROR
+            throw new RepositoryException(THE_PATH_IS_NOT_RELATIVE + relPath);
         }
         return this.session.getWorkspaceImp().getNodeManager().hasNode(relPath, true);
     }
@@ -577,7 +581,7 @@ public class NodeImp extends ItemImp implements Node
     {
         if (!isValidRelativePath(relPath))
         {
-            throw new RepositoryException("The path is not a relative path");
+            throw new RepositoryException(THE_PATH_IS_NOT_RELATIVE + relPath);
         }
         String pathAbsProperty = normalizePath(relPath);
         return manager.hasProperty(pathAbsProperty);
