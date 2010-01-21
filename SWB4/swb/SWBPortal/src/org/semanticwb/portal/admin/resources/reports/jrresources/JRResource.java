@@ -97,12 +97,12 @@ public abstract class JRResource {
     }
     
     protected void loadJasperResource() throws JRException {
-        System.out.println("\ninicio... loadJasperResource 1");
-        System.out.println("jasperResource="+jasperResource+"-----");
+//        System.out.println("\ninicio... loadJasperResource 1");
+//        System.out.println("jasperResource="+jasperResource+"-----");
         InputStream is = getClass().getResourceAsStream(jasperResource);
-        System.out.println("loadJasperResource 2");
+//        System.out.println("loadJasperResource 2");
         jasperReport = (JasperReport)JRLoader.loadObject(is);
-        System.out.println("loadJasperResource 3... fin");
+//        System.out.println("loadJasperResource 3... fin");
     }
     
     protected void fillReport()  throws JRException {
