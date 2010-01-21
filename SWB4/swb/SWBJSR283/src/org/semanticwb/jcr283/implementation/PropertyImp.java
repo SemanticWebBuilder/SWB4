@@ -248,7 +248,8 @@ public class PropertyImp extends ItemImp implements Property
 
     public Node getNode() throws ItemNotFoundException, ValueFormatException, RepositoryException
     {
-        if (propertyDefinitionImp.getRequiredType() == PropertyType.REFERENCE)
+        int requiredType=propertyDefinitionImp.getRequiredType();
+        if (requiredType == PropertyType.REFERENCE || requiredType == PropertyType.WEAKREFERENCE)
         {
             if (propertyDefinitionImp.isMultiple())
             {

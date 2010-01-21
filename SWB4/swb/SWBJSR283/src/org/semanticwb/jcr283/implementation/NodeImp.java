@@ -64,19 +64,32 @@ public class NodeImp extends ItemImp implements Node
     private final NodeDefinitionImp nodeDefinitionImp;
     private SemanticObject obj = null;
     private final int index;
-
+    private final NodeTypeImp nodeType;
     NodeImp(Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
-        this(base.getSemanticObject(), base.getName(), parent, index, path, depth, session);
+        this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()),base.getSemanticObject(), base.getName(), parent, index, path, depth, session);
     }
 
-    NodeImp(NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session)
+    NodeImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
         super(null, name, parent, path, depth, session);
         this.index = index;
         this.nodeDefinitionImp = nodeDefinition;
         this.isNew = true;
         loadProperties();
+        this.nodeType=nodeType;
+        try
+        {
+            String propertyPath = getPathFromName(Property.JCR_PRIMARY_TYPE);
+            PropertyImp prop = nodeManager.getProperty(propertyPath);
+            prop.set(valueFactoryImp.createValue(nodeType.getName()));
+            this.isModified = true;
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+        }
+
         try
         {
             if (isReferenceable())
@@ -85,7 +98,6 @@ public class NodeImp extends ItemImp implements Node
                 String propertyPath = getPathFromName(JCR_UUID);
                 PropertyImp prop = nodeManager.getProperty(propertyPath);
                 prop.set(valueFactoryImp.createValue(id));
-                this.isModified = true;
 
             }
         }
@@ -96,14 +108,14 @@ public class NodeImp extends ItemImp implements Node
 
     }
 
-    NodeImp(SemanticObject obj, String name, NodeImp parent, int index, String path, int depth, SessionImp session)
+    NodeImp(NodeTypeImp nodeType,SemanticObject obj, String name, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
         super(obj, name, parent, path, depth, session);
         this.obj = obj;
         this.index = index;
         nodeDefinitionImp = new NodeDefinitionImp(obj, NodeTypeManagerImp.loadNodeType(obj.getSemanticClass()));
         loadProperties();
-
+        this.nodeType=nodeType;
     }
 
     public void saveData() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
@@ -204,7 +216,7 @@ public class NodeImp extends ItemImp implements Node
         return addNode(relPath, null);
     }
 
-    private NodeImp insertNode(String nameToAdd, NodeDefinitionImp childDefinition,NodeType nodeType) throws RepositoryException
+    private NodeImp insertNode(String nameToAdd, NodeDefinitionImp childDefinition, NodeTypeImp nodeType) throws RepositoryException
     {
         String childpath = path + PATH_SEPARATOR + nameToAdd;
         if (childpath.endsWith(PATH_SEPARATOR))
@@ -224,7 +236,7 @@ public class NodeImp extends ItemImp implements Node
         {
             childpath += "[" + childIndex + "]";
         }
-        NodeImp newChild = new NodeImp(childDefinition, nameToAdd, this, index, childpath, this.getDepth() + 1, session);
+        NodeImp newChild = new NodeImp(nodeType, childDefinition, nameToAdd, this, index, childpath, this.getDepth() + 1, session);
         this.isModified = true;
         return nodeManager.addNode(newChild, childpath);
 
@@ -246,55 +258,55 @@ public class NodeImp extends ItemImp implements Node
         NodeDefinitionImp childDefinition = null;
         for (NodeDefinitionImp childNodeDefinition : parent.nodeDefinitionImp.getDeclaringNodeTypeImp().getChildNodeDefinitionsImp())
         {
-            if(childNodeDefinition.getName().equals(nameToAdd))
+            if (childNodeDefinition.getName().equals(nameToAdd))
             {
-                childDefinition=childNodeDefinition;
+                childDefinition = childNodeDefinition;
             }
         }
-        if(childDefinition==null)
+        if (childDefinition == null)
         {
             for (NodeDefinitionImp childNodeDefinition : parent.nodeDefinitionImp.getDeclaringNodeTypeImp().getChildNodeDefinitionsImp())
             {
-                if(childNodeDefinition.getName().equals(ALL))
+                if (childNodeDefinition.getName().equals(ALL))
                 {
-                    childDefinition=childNodeDefinition;
+                    childDefinition = childNodeDefinition;
                 }
             }
         }
-        if(childDefinition==null)
+        if (childDefinition == null)
         {
             throw new ConstraintViolationException("The node can not be added");
         }
         NodeTypeImp nodeType = null;
         if (primaryNodeTypeName == null)
         {
-            nodeType=childDefinition.getDefaultPrimaryTypeImp();
-            primaryNodeTypeName=nodeType.getName();
+            nodeType = childDefinition.getDefaultPrimaryTypeImp();
+            primaryNodeTypeName = nodeType.getName();
         }
         else
         {
-            nodeType=nodeTypeManager.getNodeTypeImp(primaryNodeTypeName);
-            if(nodeType==null)
+            nodeType = nodeTypeManager.getNodeTypeImp(primaryNodeTypeName);
+            if (nodeType == null)
             {
-                throw new NoSuchNodeTypeException("The NodeType "+primaryNodeTypeName+" was not found");
+                throw new NoSuchNodeTypeException("The NodeType " + primaryNodeTypeName + " was not found");
             }
         }
-        boolean isConformToRequired=false;
-        for(NodeType required : childDefinition.getRequiredPrimaryTypes())
+        boolean isConformToRequired = false;
+        for (NodeType required : childDefinition.getRequiredPrimaryTypes())
         {
-            if(required.equals(nodeType))
+            if (required.equals(nodeType))
             {
-                isConformToRequired=true;
+                isConformToRequired = true;
                 break;
             }
         }
-        if(!isConformToRequired)
+        if (!isConformToRequired)
         {
-            throw new ConstraintViolationException("The NodeType "+primaryNodeTypeName+" is not part of required node types ");
+            throw new ConstraintViolationException("The NodeType " + primaryNodeTypeName + " is not part of required node types ");
         }
-        return nodeParent.insertNode(nameToAdd, childDefinition,nodeType);
-        
-        
+        return nodeParent.insertNode(nameToAdd, childDefinition, nodeType);
+
+
     }
 
     public void orderBefore(String srcChildRelPath, String destChildRelPath) throws UnsupportedRepositoryOperationException, VersionException, ConstraintViolationException, ItemNotFoundException, LockException, RepositoryException
@@ -579,7 +591,7 @@ public class NodeImp extends ItemImp implements Node
 
     public NodeType getPrimaryNodeType() throws RepositoryException
     {
-        return nodeDefinitionImp.getDeclaringNodeType();
+        return nodeType;
     }
 
     public NodeType[] getMixinNodeTypes() throws RepositoryException
