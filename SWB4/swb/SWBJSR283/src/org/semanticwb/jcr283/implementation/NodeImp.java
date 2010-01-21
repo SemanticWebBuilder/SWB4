@@ -65,9 +65,10 @@ public class NodeImp extends ItemImp implements Node
     private SemanticObject obj = null;
     private final int index;
     private final NodeTypeImp nodeType;
+
     NodeImp(Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
-        this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()),base.getSemanticObject(), base.getName(), parent, index, path, depth, session);
+        this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), base.getSemanticObject(), base.getName(), parent, index, path, depth, session);
     }
 
     NodeImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session)
@@ -77,7 +78,7 @@ public class NodeImp extends ItemImp implements Node
         this.nodeDefinitionImp = nodeDefinition;
         this.isNew = true;
         loadProperties();
-        this.nodeType=nodeType;
+        this.nodeType = nodeType;
         try
         {
             String propertyPath = getPathFromName(Property.JCR_PRIMARY_TYPE);
@@ -108,14 +109,14 @@ public class NodeImp extends ItemImp implements Node
 
     }
 
-    NodeImp(NodeTypeImp nodeType,SemanticObject obj, String name, NodeImp parent, int index, String path, int depth, SessionImp session)
+    NodeImp(NodeTypeImp nodeType, SemanticObject obj, String name, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
         super(obj, name, parent, path, depth, session);
         this.obj = obj;
         this.index = index;
         nodeDefinitionImp = new NodeDefinitionImp(obj, NodeTypeManagerImp.loadNodeType(obj.getSemanticClass()));
         loadProperties();
-        this.nodeType=nodeType;
+        this.nodeType = nodeType;
     }
 
     public void saveData() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
@@ -277,16 +278,16 @@ public class NodeImp extends ItemImp implements Node
         {
             throw new ConstraintViolationException("The node can not be added");
         }
-        NodeTypeImp nodeType = null;
+        NodeTypeImp primaryNodeType = null;
         if (primaryNodeTypeName == null)
         {
-            nodeType = childDefinition.getDefaultPrimaryTypeImp();
-            primaryNodeTypeName = nodeType.getName();
+            primaryNodeType = childDefinition.getDefaultPrimaryTypeImp();
+            primaryNodeTypeName = primaryNodeType.getName();
         }
         else
         {
-            nodeType = nodeTypeManager.getNodeTypeImp(primaryNodeTypeName);
-            if (nodeType == null)
+            primaryNodeType = nodeTypeManager.getNodeTypeImp(primaryNodeTypeName);
+            if (primaryNodeType == null)
             {
                 throw new NoSuchNodeTypeException("The NodeType " + primaryNodeTypeName + " was not found");
             }
@@ -294,7 +295,7 @@ public class NodeImp extends ItemImp implements Node
         boolean isConformToRequired = false;
         for (NodeType required : childDefinition.getRequiredPrimaryTypes())
         {
-            if (required.equals(nodeType))
+            if (required.equals(primaryNodeType))
             {
                 isConformToRequired = true;
                 break;
@@ -304,7 +305,7 @@ public class NodeImp extends ItemImp implements Node
         {
             throw new ConstraintViolationException("The NodeType " + primaryNodeTypeName + " is not part of required node types ");
         }
-        return nodeParent.insertNode(nameToAdd, childDefinition, nodeType);
+        return nodeParent.insertNode(nameToAdd, childDefinition, primaryNodeType);
 
 
     }
@@ -489,8 +490,8 @@ public class NodeImp extends ItemImp implements Node
 
     public Item getPrimaryItem() throws ItemNotFoundException, RepositoryException
     {
-        NodeType nodeType = this.getDefinition().getDefaultPrimaryType();
-        String primaryItemName = nodeType.getPrimaryItemName();
+        NodeType defaultPrimaryNodeType = this.getDefinition().getDefaultPrimaryType();
+        String primaryItemName = defaultPrimaryNodeType.getPrimaryItemName();
         if (primaryItemName != null)
         {
             nodeManager.loadChilds(this, path, depth, session, false);
@@ -731,9 +732,9 @@ public class NodeImp extends ItemImp implements Node
 
     private boolean isReferenceable() throws RepositoryException
     {
-        for (NodeType nodeType : this.getMixinNodeTypes())
+        for (NodeType mixinNodeType : this.getMixinNodeTypes())
         {
-            if (nodeType.getName().equals("mix:referenceable"))
+            if (mixinNodeType.getName().equals("mix:referenceable"))
             {
                 return true;
             }
