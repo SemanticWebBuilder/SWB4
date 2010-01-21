@@ -27,6 +27,8 @@ import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.NoSuchNodeTypeException;
 import javax.jcr.nodetype.PropertyDefinition;
 import javax.jcr.version.VersionException;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.platform.SemanticLiteral;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
@@ -37,7 +39,7 @@ import org.semanticwb.platform.SemanticProperty;
  */
 public class PropertyImp extends ItemImp implements Property
 {
-
+    private final static Logger log = SWBUtils.getLogger(PropertyImp.class);
     private static final ValueFactoryImp valueFactoryImp = new ValueFactoryImp();
     private final PropertyDefinitionImp propertyDefinitionImp;
     private ArrayList<Value> values = new ArrayList<Value>();

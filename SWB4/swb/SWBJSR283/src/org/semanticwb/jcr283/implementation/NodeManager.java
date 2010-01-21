@@ -143,19 +143,19 @@ public class NodeManager
         nodes.get("/").save();
     }
 
-    public void save(String path,int depth) throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
+    public void save(String path, int depth) throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
     {
         if (nodes.containsKey(path))
         {
             NodeImp node = nodes.get(path);
             node.saveData();
-            for(PropertyImp prop : getChildProperties(node))
+            for (PropertyImp prop : getChildProperties(node))
             {
                 prop.saveData();
             }
         }
         if (properties.containsKey(path))
-        {            
+        {
             PropertyImp node = properties.get(path);
             node.saveData();
         }
@@ -263,7 +263,7 @@ public class NodeManager
         return null;
     }
 
-    private Set<PropertyImp> getChildProperties(String path,int depth)
+    private Set<PropertyImp> getChildProperties(String path, int depth)
     {
         HashSet<PropertyImp> getChilds = new HashSet<PropertyImp>();
         try
@@ -293,7 +293,7 @@ public class NodeManager
 
     public Set<PropertyImp> getChildProperties(NodeImp node) throws RepositoryException
     {
-        return getChildProperties(node.getPath(),node.getDepth());
+        return getChildProperties(node.getPath(), node.getDepth());
     }
 
     public Set<NodeImp> getChildNodes(NodeImp node)
