@@ -85,7 +85,7 @@ public class PropertyImp extends ItemImp implements Property
                 });
     }
 
-    private Value transformValue(Value value, int reqValue) throws ValueFormatException, RepositoryException
+    public static Value transformValue(Value value, int reqValue) throws ValueFormatException, RepositoryException
     {
         ValueImp newValue=new ValueImp(value,reqValue);
         return newValue;
