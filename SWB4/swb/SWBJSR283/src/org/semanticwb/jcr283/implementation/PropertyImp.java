@@ -49,6 +49,7 @@ public class PropertyImp extends ItemImp implements Property
         this.prop = prop;
         NodeTypeImp nodeType = NodeTypeManagerImp.loadNodeType(prop.getDomainClass());
         propertyDefinitionImp = new PropertyDefinitionImp(prop.getSemanticObject(), nodeType);
+        this.isNew=false;
     }
 
     private void loadValues()
@@ -83,25 +84,10 @@ public class PropertyImp extends ItemImp implements Property
 
     private Value transformValue(Value value, int reqValue) throws ValueFormatException, RepositoryException
     {
-        if (value.getType() != reqValue)
-        {
-            if (value.getType() == PropertyType.STRING || value.getType() == PropertyType.LONG || value.getType() == PropertyType.BOOLEAN || value.getType() == PropertyType.DECIMAL || value.getType() == PropertyType.DATE || value.getType() == PropertyType.DOUBLE || value.getType() == PropertyType.NAME || value.getType() == PropertyType.PATH || value.getType() == PropertyType.URI)
-            {
-                return valueFactoryImp.createValue(value.getString(), reqValue);
-            }
-            else
-            {
-                // TODO:
-                throw new ValueFormatException("The value can not be transformed to a valid value");
-            }
-        }
-        else
-        {
-            return value;
-        }
+        ValueImp newValue=new ValueImp(value,reqValue);
+        return newValue;
     }
-
-    public void setValue(Value[] values) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
+    void set(Value[] values) throws ValueFormatException, VersionException, LockException, RepositoryException
     {
         if (values.length > 1 && !propertyDefinitionImp.isMultiple())
         {
@@ -117,6 +103,18 @@ public class PropertyImp extends ItemImp implements Property
         this.values.addAll(newValues);
         this.isModified = true;
         parent.isModified = true;
+    }
+    public void setValue(Value[] values) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
+    {
+        if(this.getDefinition().isProtected())
+        {
+            throw new ConstraintViolationException("The property is protected");
+        }
+        set(values);
+    }
+    public void set(Value value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
+    {
+        set(new Value[]{value});
     }
 
     public void setValue(String value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException

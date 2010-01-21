@@ -120,7 +120,53 @@ public class ValueImp implements Value
     private Object getValue(Object value, int type) throws ValueFormatException, RepositoryException
     {
         Object getValue = null;
-        if (value instanceof InputStream)
+        if (value instanceof Value)
+        {
+            Value ovalue=(Value)value;
+            switch (type)
+            {
+                case PropertyType.STRING:
+                    getValue = ovalue.getString();
+                    break;
+                case PropertyType.BINARY:
+                    getValue = ovalue.getBinary();
+                    break;
+                case PropertyType.BOOLEAN:
+                    getValue = ovalue.getBoolean();
+                    break;
+                case PropertyType.DATE:
+                    getValue = ovalue.getDate();
+                    break;
+                case PropertyType.DECIMAL:
+                    getValue = ovalue.getDecimal();
+                    break;
+                case PropertyType.DOUBLE:
+                    getValue = ovalue.getDouble();
+                    break;
+                case PropertyType.LONG:
+                    getValue = ovalue.getLong();
+                    break;
+                case PropertyType.NAME:
+                    getValue = toName(ovalue.getString());
+                    break;
+                case PropertyType.PATH:
+                    getValue = toPath(ovalue.getString());
+                    break;
+                case PropertyType.REFERENCE:
+                    getValue = toReference(ovalue.getString());
+                    break;
+                case PropertyType.URI:
+                    getValue = toUri(ovalue.getString());
+                    break;
+                case PropertyType.WEAKREFERENCE:
+                    getValue = toWeakReference(ovalue.getString());
+                    break;
+                default:
+                    throw new ValueFormatException("The value can not be converted");
+
+            }
+        }
+        else if (value instanceof InputStream)
         {
             byte[] buffer = new byte[2048];
             InputStream in = (InputStream) value;
@@ -183,7 +229,6 @@ public class ValueImp implements Value
                 case PropertyType.WEAKREFERENCE:
                     getValue = toWeakReference(ovalue);
                     break;
-
                 default:
                     throw new ValueFormatException("The value can not be converted");
 
@@ -465,6 +510,8 @@ public class ValueImp implements Value
         }
         return getValue;
     }
+
+    
 
     public String getString() throws ValueFormatException, IllegalStateException, RepositoryException
     {

@@ -73,7 +73,24 @@ public class NodeImp extends ItemImp implements Node
         super(null, name, parent, path, depth, session);
         this.index = index;
         this.nodeDefinitionImp = nodeDefinition;
+        this.isNew = true;
         loadProperties();
+        try
+        {
+            if (isReferenceable())
+            {
+                String id = UUID.randomUUID().toString();
+                String propertyPath = getPropertyPath("jcr:uuid");
+                PropertyImp prop = nodeManager.getProperty(propertyPath);
+                prop.set(valueFactoryImp.createValue(id));
+                this.isModified = true;
+
+            }
+        }
+        catch (Exception e)
+        {
+            log.debug(e);
+        }
 
     }
 
@@ -111,12 +128,11 @@ public class NodeImp extends ItemImp implements Node
                 }
             }
         }
-        if(isModified)
+        if (isModified)
         {
-            
         }
-        this.isNew=false;
-        this.isModified=false;
+        this.isNew = false;
+        this.isModified = false;
 
     }
 
@@ -207,6 +223,7 @@ public class NodeImp extends ItemImp implements Node
             childpath += "[" + childIndex + "]";
         }
         NodeImp newChild = new NodeImp(childDefinition, nameToAdd, this, index, childpath, this.getDepth() + 1, session);
+        this.isModified = true;
         return nodeManager.addNode(newChild, childpath);
 
     }
@@ -477,7 +494,13 @@ public class NodeImp extends ItemImp implements Node
 
     public String getUUID() throws UnsupportedRepositoryOperationException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (!isReferenceable())
+        {
+            throw new UnsupportedRepositoryOperationException("The node is not referenceable");
+        }
+        String propPath = getPropertyPath("jcr:uuid");
+        PropertyImp prop = nodeManager.getProperty(propPath);
+        return prop.getString();
     }
 
     public String getIdentifier() throws RepositoryException
@@ -679,8 +702,35 @@ public class NodeImp extends ItemImp implements Node
         return nodeDefinitionImp;
     }
 
+    private boolean isReferenceable() throws RepositoryException
+    {
+        for (NodeType nodeType : this.getMixinNodeTypes())
+        {
+            if (nodeType.getName().equals("mix:referenceable"))
+            {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    private boolean isVersionable() throws RepositoryException
+    {
+        for (NodeType nodeType : this.getMixinNodeTypes())
+        {
+            if (nodeType.getName().equals("mix:versionable"))
+            {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
     public Version checkin() throws VersionException, UnsupportedRepositoryOperationException, InvalidItemStateException, LockException, RepositoryException
     {
+
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
