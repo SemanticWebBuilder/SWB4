@@ -190,7 +190,7 @@ public class SessionImp implements Session
         ItemImp destAbsPathItem =getItemImp(destAbsPath);
         String oldpath=srcAbsPathItem.getPath();
         String name=ItemImp.extractName(srcAbsPathItem.getPath());
-        String path=destAbsPathItem.getPropertyPath(name);
+        String path=destAbsPathItem.getPathFromName(name);
         if(this.itemExists(path))
         {
             throw new ItemExistsException();

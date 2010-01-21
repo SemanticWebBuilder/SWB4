@@ -80,7 +80,7 @@ public class NodeImp extends ItemImp implements Node
             if (isReferenceable())
             {
                 String id = UUID.randomUUID().toString();
-                String propertyPath = getPropertyPath("jcr:uuid");
+                String propertyPath = getPathFromName("jcr:uuid");
                 PropertyImp prop = nodeManager.getProperty(propertyPath);
                 prop.set(valueFactoryImp.createValue(id));
                 this.isModified = true;
@@ -156,7 +156,7 @@ public class NodeImp extends ItemImp implements Node
                     try
                     {
                         String nameProperty = semanticProperty.getPrefix() + ":" + semanticProperty.getName();
-                        String pathProperty = getPropertyPath(nameProperty);
+                        String pathProperty = getPathFromName(nameProperty);
                         PropertyImp prop = new PropertyImp(semanticProperty, this, pathProperty, this.session);
                         if (!nodeManager.hasProperty(prop.path))
                         {
@@ -493,7 +493,7 @@ public class NodeImp extends ItemImp implements Node
         if(primaryItemName!=null)
         {
             nodeManager.loadChilds(this, path, depth, session, false);
-            String primaryItemNamePath=getPropertyPath(primaryItemName);
+            String primaryItemNamePath=getPathFromName(primaryItemName);
             NodeImp node=nodeManager.getNode(primaryItemNamePath);
             if(node==null)
             {
@@ -524,7 +524,7 @@ public class NodeImp extends ItemImp implements Node
         {
             throw new UnsupportedRepositoryOperationException("The node is not referenceable");
         }
-        String propPath = getPropertyPath("jcr:uuid");
+        String propPath = getPathFromName("jcr:uuid");
         PropertyImp prop = nodeManager.getProperty(propPath);
         return prop.getString();
     }
@@ -603,7 +603,7 @@ public class NodeImp extends ItemImp implements Node
                 getMixinNodeTypes.add(superNodeType);
             }
         }
-        PropertyImp prop = nodeManager.getProperty(getPropertyPath(JCR_MIXINTYPES));
+        PropertyImp prop = nodeManager.getProperty(getPathFromName(JCR_MIXINTYPES));
         for (Value value : prop.getValues())
         {
             String type = value.getString();
@@ -642,7 +642,7 @@ public class NodeImp extends ItemImp implements Node
         {
             throw new ConstraintViolationException("The mixin can be added");
         }
-        PropertyImp prop = nodeManager.getProperty(getPropertyPath(JCR_MIXINTYPES));
+        PropertyImp prop = nodeManager.getProperty(getPathFromName(JCR_MIXINTYPES));
         Value[] values = prop.getValues();
         Value newValue = valueFactoryImp.createValue(mixinName);
         Value[] newValues = new Value[values.length + 1];
@@ -660,7 +660,7 @@ public class NodeImp extends ItemImp implements Node
             {
                 SemanticProperty semanticProperty = propDef.getSemanticProperty();
                 String nameProperty = semanticProperty.getPrefix() + ":" + semanticProperty.getName();
-                String pathProperty = getPropertyPath(nameProperty);
+                String pathProperty = getPathFromName(nameProperty);
                 PropertyImp propMix = new PropertyImp(semanticProperty, this, pathProperty, session);
                 nodeManager.addProperty(prop, prop.path);
             }
@@ -678,7 +678,7 @@ public class NodeImp extends ItemImp implements Node
                 throw new ConstraintViolationException("The mix in can not be deleted, the mixin is declared super nodetype");
             }
         }
-        PropertyImp prop = nodeManager.getProperty(getPropertyPath(JCR_MIXINTYPES));
+        PropertyImp prop = nodeManager.getProperty(getPathFromName(JCR_MIXINTYPES));
         Value[] values = prop.getValues();
         HashSet<Value> newValues = new HashSet<Value>();
         for (Value value : values)
@@ -696,7 +696,7 @@ public class NodeImp extends ItemImp implements Node
             {
                 SemanticProperty semanticProperty = propDef.getSemanticProperty();
                 String nameProperty = semanticProperty.getPrefix() + ":" + semanticProperty.getName();
-                nodeManager.removeProperty(getPropertyPath(nameProperty));
+                nodeManager.removeProperty(getPathFromName(nameProperty));
             }
         }
     }
@@ -716,7 +716,7 @@ public class NodeImp extends ItemImp implements Node
                 return false;
             }
         }
-        if (nodeManager.hasProperty(getPropertyPath(JCR_MIXINTYPES)))
+        if (nodeManager.hasProperty(getPathFromName(JCR_MIXINTYPES)))
         {
             return false;
         }
