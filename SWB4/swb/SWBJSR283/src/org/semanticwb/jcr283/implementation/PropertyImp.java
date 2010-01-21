@@ -293,9 +293,22 @@ public class PropertyImp extends ItemImp implements Property
         return false;
     }
 
-    private Value getCopy(Value value)
+    private Value getCopy(Value value) throws RepositoryException
     {
         // TODO:
-        return value;
+        Value copyValue=null;
+        int type=value.getType();
+        switch(type)
+        {
+            case PropertyType.BINARY:
+                Binary ovalue=value.getBinary();
+                copyValue=valueFactoryImp.createValue(ovalue);
+                break;
+            default:
+                String svalue=value.getString();
+                copyValue=valueFactoryImp.createValue(svalue, type);
+
+        }        
+        return copyValue;
     }
 }
