@@ -324,68 +324,59 @@ public class NodeTypeImp implements NodeType
 
     public boolean canAddChildNode(String childNodeName, String nodeTypeName)
     {
+        NodeDefinitionImp childDefinition = null;
         for (NodeDefinitionImp childNodeDefinition : this.childnodeDefinitions.values())
         {
-            if (childNodeDefinition.getName().equals(ALL))
+            if (childNodeDefinition.getName().equals(childNodeName))
             {
                 if (nodeTypeName == null)
                 {
-                    nodeTypeName = childNodeDefinition.getDefaultPrimaryTypeName();
+                    nodeTypeName = childNodeDefinition.getDeclaringNodeType().getName();
+                    childDefinition = childNodeDefinition;
                 }
-                if (nodeTypeName != null)
-                {
-                    NodeTypeManagerImp mg = new NodeTypeManagerImp();
-                    if (mg == null)
-                    {
-                        return false;
-                    }
-                    try
-                    {
-                        if (mg.getNodeType(nodeTypeName).isAbstract())
-                        {
-                            return false;
-                        }
-                        String names[] = childNodeDefinition.getRequiredPrimaryTypeNames();
-                        for (String name : names)
-                        {
-                            if (name.equals(nodeTypeName))
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        return false;
-                    }
-                }
-
+                break;
             }
         }
-        NodeDefinitionImp childNodeDefinition = this.childnodeDefinitions.get(childNodeName);
-        if (childNodeDefinition == null)
+        if (childDefinition == null)
+        {
+            for (NodeDefinitionImp childNodeDefinition : this.childnodeDefinitions.values())
+            {
+                if (childNodeDefinition.getName().equals(ALL))
+                {
+                    if (nodeTypeName == null)
+                    {
+                        nodeTypeName = childNodeDefinition.getDeclaringNodeType().getName();
+                        childDefinition = childNodeDefinition;
+                    }
+                    break;
+
+                }
+            }
+        }
+        if (childDefinition == null)
         {
             return false;
         }
-        else
+        try
         {
-            if (nodeTypeName == null)
+            NodeType nodeType = new NodeTypeManagerImp().getNodeType(nodeTypeName);
+            boolean isConformToRequired = false;
+            for (NodeType required : childDefinition.getRequiredPrimaryTypes())
             {
-                nodeTypeName = childNodeDefinition.getDefaultPrimaryTypeName();
-            }
-            if (nodeTypeName != null)
-            {
-                String names[] = childNodeDefinition.getRequiredPrimaryTypeNames();
-                for (String name : names)
+                if (required.equals(nodeType))
                 {
-                    if (name.equals(nodeTypeName))
-                    {
-                        return true;
-                    }
+                    isConformToRequired = true;
+                    break;
                 }
             }
+            return isConformToRequired;
         }
-        return false;
+        catch (Exception e)
+        {
+            log.debug(e);
+            return false;
+        }
+
     }
 
     @Override
