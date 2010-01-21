@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.UUID;
 import javax.jcr.AccessDeniedException;
 import javax.jcr.Binary;
 import javax.jcr.InvalidItemStateException;
@@ -88,6 +89,28 @@ public class NodeImp extends ItemImp implements Node
         
     }
 
+    public void saveData()
+    {
+        if(obj==null)
+        {
+            // create new Node
+            SemanticClass sclass=this.nodeDefinitionImp.getDeclaringNodeTypeImp().getSemanticClass();
+            String id=UUID.randomUUID().toString();
+            String workspacename=session.getWorkspaceImp().getName();
+            org.semanticwb.jcr283.repository.model.Workspace model=org.semanticwb.jcr283.repository.model.Workspace.ClassMgr.getWorkspace(workspacename);
+            obj=model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass).getSemanticObject();
+            Base base=new Base(obj);
+            base.setName(this.name);
+            if(parent!=null && parent.getSemanticObject()!=null)
+            {
+                base.setParentNode(new Base(parent.getSemanticObject()));
+            }
+            
+        }
+        // save properties
+
+    }
+
     public SemanticObject getSemanticObject()
     {
         return obj;
@@ -109,8 +132,8 @@ public class NodeImp extends ItemImp implements Node
                 {
                     try
                     {
-                        String name = semanticProperty.getPrefix() + ":" + semanticProperty.getName();
-                        String pathProperty = getPropertyPath(name);
+                        String nameProperty = semanticProperty.getPrefix() + ":" + semanticProperty.getName();
+                        String pathProperty = getPropertyPath(nameProperty);
                         PropertyImp prop = new PropertyImp(semanticProperty, this, pathProperty, this.session);
                         if (!nodeManager.hasProperty(prop.path))
                         {
@@ -226,10 +249,10 @@ public class NodeImp extends ItemImp implements Node
                 }
                 if (primaryNodeTypeName != null)
                 {
-                    String names[] = childNodeDefinition.getRequiredPrimaryTypeNames();
-                    for (String name : names)
+                    String requiredPrimaryTypeNames[] = childNodeDefinition.getRequiredPrimaryTypeNames();
+                    for (String requiredPrimaryTypeName : requiredPrimaryTypeNames)
                     {
-                        if (name.equals(primaryNodeTypeName))
+                        if (requiredPrimaryTypeName.equals(primaryNodeTypeName))
                         {
                             childDefinition = childNodeDefinition;
                         }
@@ -241,10 +264,10 @@ public class NodeImp extends ItemImp implements Node
             {
                 if (childNodeDefinition.getName().equals(primaryNodeTypeName))
                 {
-                    String names[] = childNodeDefinition.getRequiredPrimaryTypeNames();
-                    for (String name : names)
+                    String requiredPrimaryTypeNames[] = childNodeDefinition.getRequiredPrimaryTypeNames();
+                    for (String requiredPrimaryTypeName : requiredPrimaryTypeNames)
                     {
-                        if (name.equals(primaryNodeTypeName))
+                        if (requiredPrimaryTypeName.equals(primaryNodeTypeName))
                         {
                             childDefinition = childNodeDefinition;
                         }
@@ -582,8 +605,9 @@ public class NodeImp extends ItemImp implements Node
             if (propDef.getSemanticProperty() != null)
             {
                 SemanticProperty semanticProperty = propDef.getSemanticProperty();
-                String name = semanticProperty.getPrefix() + ":" + semanticProperty.getName();
-                PropertyImp propMix = new PropertyImp(semanticProperty, this, this.getPath() + PATH_SEPARATOR + name, session);
+                String nameProperty = semanticProperty.getPrefix() + ":" + semanticProperty.getName();
+                String pathProperty=getPropertyPath(nameProperty);
+                PropertyImp propMix = new PropertyImp(semanticProperty, this, pathProperty, session);
                 nodeManager.addProperty(prop, prop.path);
             }
         }
@@ -617,8 +641,8 @@ public class NodeImp extends ItemImp implements Node
             if (propDef.getSemanticProperty() != null)
             {
                 SemanticProperty semanticProperty = propDef.getSemanticProperty();
-                String name = semanticProperty.getPrefix() + ":" + semanticProperty.getName();
-                nodeManager.removeProperty(getPropertyPath(name));
+                String nameProperty = semanticProperty.getPrefix() + ":" + semanticProperty.getName();
+                nodeManager.removeProperty(getPropertyPath(nameProperty));
             }
         }
     }
