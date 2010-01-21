@@ -43,52 +43,81 @@ public class ValueImp implements Value
         {
             throw new NullPointerException("The value can not be null");
         }
-        this.value = getValue(value,type);
+        this.value = getValue(value, type);
     }
 
     ValueImp(String value)
     {
         this.type = PropertyType.STRING;
-        this.value=value;
+        this.value = value;
     }
-    ValueImp(Boolean value) 
+
+    ValueImp(InputStream value)
+    {
+        this.type = PropertyType.STRING;
+        byte[] buffer = new byte[2048];
+        InputStream in = (InputStream) value;
+        try
+        {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            int read = in.read(buffer);
+            while (read != -1)
+            {
+
+                out.write(buffer, 0, read);
+                read = in.read(buffer);
+            }
+            this.value = out;
+        }
+        catch (IOException ioe)
+        {
+            throw new IllegalArgumentException(ioe);
+        }
+    }
+
+    ValueImp(Boolean value)
     {
         this.type = PropertyType.BOOLEAN;
-        this.value=value;
+        this.value = value;
     }
+
     ValueImp(Calendar value)
     {
         this.type = PropertyType.DATE;
-        this.value=value;
+        this.value = value;
     }
+
     ValueImp(BigDecimal value)
     {
         this.type = PropertyType.DECIMAL;
-        this.value=value;
+        this.value = value;
     }
+
     ValueImp(URI value)
     {
         this.type = PropertyType.URI;
-        this.value=value;
+        this.value = value;
     }
 
     ValueImp(Double value)
     {
         this.type = PropertyType.DOUBLE;
-        this.value=value;
+        this.value = value;
     }
+
     ValueImp(Long value)
     {
         this.type = PropertyType.LONG;
-        this.value=value;
+        this.value = value;
     }
+
     ValueImp(QName value)
     {
         this.type = PropertyType.NAME;
-        this.value=value;
+        this.value = value;
     }
 
-    private Object getValue(Object value,int type) throws ValueFormatException,RepositoryException
+    private Object getValue(Object value, int type) throws ValueFormatException, RepositoryException
     {
         Object getValue = null;
         if (value instanceof InputStream)
@@ -439,43 +468,43 @@ public class ValueImp implements Value
 
     public String getString() throws ValueFormatException, IllegalStateException, RepositoryException
     {
-        return (String)getValue(value,PropertyType.STRING);
+        return (String) getValue(value, PropertyType.STRING);
     }
 
     public InputStream getStream() throws IllegalStateException, RepositoryException
     {
-        if(this.value instanceof ByteArrayOutputStream)
+        if (this.value instanceof ByteArrayOutputStream)
         {
-            ByteArrayOutputStream out=(ByteArrayOutputStream)this.value;
-            byte[] bcont=out.toByteArray();
-            ByteArrayInputStream in=new ByteArrayInputStream(bcont);
+            ByteArrayOutputStream out = (ByteArrayOutputStream) this.value;
+            byte[] bcont = out.toByteArray();
+            ByteArrayInputStream in = new ByteArrayInputStream(bcont);
             return in;
         }
         else
         {
-            return ((Binary)getValue(value,PropertyType.BINARY)).getStream();
+            return ((Binary) getValue(value, PropertyType.BINARY)).getStream();
         }
-        
+
     }
 
     public long getLong() throws ValueFormatException, IllegalStateException, RepositoryException
     {
-        return (Long)getValue(value,PropertyType.LONG);
+        return (Long) getValue(value, PropertyType.LONG);
     }
 
     public double getDouble() throws ValueFormatException, IllegalStateException, RepositoryException
     {
-        return (Double)getValue(value,PropertyType.DOUBLE);
+        return (Double) getValue(value, PropertyType.DOUBLE);
     }
 
     public Calendar getDate() throws ValueFormatException, IllegalStateException, RepositoryException
     {
-        return (Calendar)getValue(value,PropertyType.DATE);
+        return (Calendar) getValue(value, PropertyType.DATE);
     }
 
     public boolean getBoolean() throws ValueFormatException, IllegalStateException, RepositoryException
     {
-        return (Boolean)getValue(value,PropertyType.BOOLEAN);
+        return (Boolean) getValue(value, PropertyType.BOOLEAN);
     }
 
     public int getType()
@@ -485,12 +514,12 @@ public class ValueImp implements Value
 
     public Binary getBinary() throws RepositoryException
     {
-        return (Binary)getValue(value,PropertyType.BINARY);
+        return (Binary) getValue(value, PropertyType.BINARY);
     }
 
     public BigDecimal getDecimal() throws ValueFormatException, RepositoryException
     {
-        return (BigDecimal)getValue(value,PropertyType.DECIMAL);
+        return (BigDecimal) getValue(value, PropertyType.DECIMAL);
     }
 
     private Binary toBinary(String value) throws RepositoryException
