@@ -56,6 +56,8 @@ public class NodeImp extends ItemImp implements Node
 {
 
     public static final String JCR_MIXINTYPES = "jcr:mixinTypes";
+    public static final String JCR_UUID = "jcr:uuid";
+    private static final String ALL = "*";
     private final static Logger log = SWBUtils.getLogger(NodeImp.class);
     private final static NodeTypeManagerImp nodeTypeManager = new NodeTypeManagerImp();
     private final static ValueFactoryImp valueFactoryImp = new ValueFactoryImp();
@@ -80,7 +82,7 @@ public class NodeImp extends ItemImp implements Node
             if (isReferenceable())
             {
                 String id = UUID.randomUUID().toString();
-                String propertyPath = getPathFromName("jcr:uuid");
+                String propertyPath = getPathFromName(JCR_UUID);
                 PropertyImp prop = nodeManager.getProperty(propertyPath);
                 prop.set(valueFactoryImp.createValue(id));
                 this.isModified = true;
@@ -253,7 +255,7 @@ public class NodeImp extends ItemImp implements Node
         {
             for (NodeDefinitionImp childNodeDefinition : parent.nodeDefinitionImp.getDeclaringNodeTypeImp().getChildNodeDefinitionsImp())
             {
-                if(childNodeDefinition.getName().equals("*"))
+                if(childNodeDefinition.getName().equals(ALL))
                 {
                     childDefinition=childNodeDefinition;
                 }
@@ -511,7 +513,7 @@ public class NodeImp extends ItemImp implements Node
         {
             throw new UnsupportedRepositoryOperationException("The node is not referenceable");
         }
-        String propPath = getPathFromName("jcr:uuid");
+        String propPath = getPathFromName(JCR_UUID);
         PropertyImp prop = nodeManager.getProperty(propPath);
         return prop.getString();
     }

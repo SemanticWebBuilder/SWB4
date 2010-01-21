@@ -40,6 +40,7 @@ import org.semanticwb.platform.SemanticProperty;
  */
 public class PropertyImp extends ItemImp implements Property
 {
+
     private final static Logger log = SWBUtils.getLogger(PropertyImp.class);
     private static final ValueFactoryImp valueFactoryImp = new ValueFactoryImp();
     private final PropertyDefinitionImp propertyDefinitionImp;
@@ -52,7 +53,7 @@ public class PropertyImp extends ItemImp implements Property
         this.prop = prop;
         NodeTypeImp nodeType = NodeTypeManagerImp.loadNodeType(prop.getDomainClass());
         propertyDefinitionImp = new PropertyDefinitionImp(prop.getSemanticObject(), nodeType);
-        this.isNew=false;
+        this.isNew = false;
     }
 
     private void loadValues()
@@ -71,6 +72,7 @@ public class PropertyImp extends ItemImp implements Property
                 }
                 catch (Exception e)
                 {
+                    log.error(e);
                 }
             }
         }
@@ -87,9 +89,10 @@ public class PropertyImp extends ItemImp implements Property
 
     public static Value transformValue(Value value, int reqValue) throws ValueFormatException, RepositoryException
     {
-        ValueImp newValue=new ValueImp(value,reqValue);
+        ValueImp newValue = new ValueImp(value, reqValue);
         return newValue;
     }
+
     void set(Value[] values) throws ValueFormatException, VersionException, LockException, RepositoryException
     {
         if (values.length > 1 && !propertyDefinitionImp.isMultiple())
@@ -107,17 +110,22 @@ public class PropertyImp extends ItemImp implements Property
         this.isModified = true;
         parent.isModified = true;
     }
+
     public void setValue(Value[] values) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        if(this.getDefinition().isProtected())
+        if (this.getDefinition().isProtected())
         {
             throw new ConstraintViolationException("The property is protected");
         }
         set(values);
     }
+
     public void set(Value value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        set(new Value[]{value});
+        set(new Value[]
+                {
+                    value
+                });
     }
 
     public void setValue(String value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
@@ -240,7 +248,25 @@ public class PropertyImp extends ItemImp implements Property
 
     public Node getNode() throws ItemNotFoundException, ValueFormatException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (propertyDefinitionImp.getRequiredType() == PropertyType.REFERENCE)
+        {
+            if (propertyDefinitionImp.isMultiple())
+            {
+                throw new ValueFormatException("The property is multiple");
+            }
+            if (values.size() <= 0)
+            {
+                throw new ItemNotFoundException();
+            }
+            String pathNode = path + values.get(0);
+            NodeImp node = nodeManager.getNode(pathNode);
+            if (node == null)
+            {
+                throw new ItemExistsException();
+            }
+            return node;
+        }
+        throw new ValueFormatException("The property is not a reference");
     }
 
     public Property getProperty() throws ItemNotFoundException, ValueFormatException, RepositoryException
@@ -333,8 +359,8 @@ public class PropertyImp extends ItemImp implements Property
             if (prop == null)
             {
                 //TODO: create Semantic Property                
-                String urinewProperty=name;
-                prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(urinewProperty);
+                String urinewProperty = name;
+                prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(urinewProperty);
             }
             SemanticObject obj = parent.getSemanticObject();
             for (Value value : this.values)
@@ -372,7 +398,7 @@ public class PropertyImp extends ItemImp implements Property
                 }
             }
         }
-        this.isModified=false;
-        this.isNew=false;
+        this.isModified = false;
+        this.isNew = false;
     }
 }
