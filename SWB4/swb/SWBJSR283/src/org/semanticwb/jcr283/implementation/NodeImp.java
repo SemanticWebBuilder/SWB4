@@ -58,7 +58,9 @@ public class NodeImp extends ItemImp implements Node
     public static final String JCR_MIXINTYPES = "jcr:mixinTypes";
     public static final String JCR_UUID = "jcr:uuid";
     private static final String ALL = "*";
+    private static final String JCRISCHECKEDOUT = "jcr:isCheckedOut";
     private static final String MIX_REFERENCEABLE = "mix:referenceable";
+    private static final String MIX_SIMPLEVERSIONABLE = "mix:simpleVersionable";
     private static final String MIX_VERSIONABLE = "mix:versionable";
     private final static Logger log = SWBUtils.getLogger(NodeImp.class);
     private final static NodeTypeManagerImp nodeTypeManager = new NodeTypeManagerImp();
@@ -101,6 +103,22 @@ public class NodeImp extends ItemImp implements Node
                 String propertyPath = getPathFromName(JCR_UUID);
                 PropertyImp prop = nodeManager.getProperty(propertyPath);
                 prop.set(valueFactoryImp.createValue(id));
+
+            }
+        }
+        catch (Exception e)
+        {
+            log.debug(e);
+        }
+
+        try
+        {
+            if (isSimpleVersionable())
+            {
+                String id = UUID.randomUUID().toString();
+                String propertyPath = getPathFromName(JCRISCHECKEDOUT);
+                PropertyImp prop = nodeManager.getProperty(propertyPath);
+                prop.set(valueFactoryImp.createValue(true));
 
             }
         }
@@ -745,11 +763,11 @@ public class NodeImp extends ItemImp implements Node
 
     }
 
-    private boolean isVersionable() throws RepositoryException
+    private boolean isSimpleVersionable() throws RepositoryException
     {
         for (NodeType mixinNodeType : this.getMixinNodeTypes())
         {
-            if (mixinNodeType.getName().equals(MIX_VERSIONABLE))
+            if (mixinNodeType.getName().equals(MIX_SIMPLEVERSIONABLE))
             {
                 return true;
             }
