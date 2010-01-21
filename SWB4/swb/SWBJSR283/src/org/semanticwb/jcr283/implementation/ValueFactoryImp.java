@@ -47,37 +47,44 @@ public class ValueFactoryImp implements ValueFactory
 
      public Value createValue(String value)
     {
-        return new ValueImp(value, PropertyType.STRING);
+        return new ValueImp(value);
     }
 
     public Value createValue(String value, int type) throws ValueFormatException
     {
-        return new ValueImp(value,type);
+        try
+        {
+            return new ValueImp(value,type);
+        }
+        catch(Exception e)
+        {
+            throw new ValueFormatException(e);
+        }
     }
 
     public Value createValue(long value)
     {
-        return new ValueImp(value, PropertyType.LONG);
+        return new ValueImp(value);
     }
 
     public Value createValue(double value)
     {
-        return new ValueImp(value, PropertyType.DOUBLE);
+        return new ValueImp(value);
     }
 
     public Value createValue(boolean value)
     {
-        return new ValueImp(value, PropertyType.BOOLEAN);
+        return new ValueImp(value);
     }
 
     public Value createValue(Calendar value)
     {
-        return new ValueImp(value, PropertyType.DATE);
+        return new ValueImp(value);
     }
 
     public Value createValue(InputStream value)
     {
-        return new ValueImp(value, PropertyType.BINARY);
+        return new ValueImp(value);
     }
 
     public Value createValue(Node value) throws RepositoryException
