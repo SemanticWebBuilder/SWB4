@@ -111,7 +111,7 @@ public class NodeImp extends ItemImp implements Node
                 String propertyPath = getPathFromName(JCR_UUID);
                 PropertyImp prop = nodeManager.getProperty(propertyPath);
                 prop.set(valueFactoryImp.createValue(id));
-
+                this.isModified = true;
             }
         }
         catch (Exception e)
@@ -126,7 +126,7 @@ public class NodeImp extends ItemImp implements Node
                 String propertyPath = getPathFromName(JCR_ISCHECKEDOUT);
                 PropertyImp prop = nodeManager.getProperty(propertyPath);
                 prop.set(valueFactoryImp.createValue(true));
-
+                this.isModified = true;
             }
         }
         catch (Exception e)
@@ -141,7 +141,7 @@ public class NodeImp extends ItemImp implements Node
                 String propertyPath = getPathFromName(JCR_CREATED);
                 PropertyImp prop = nodeManager.getProperty(propertyPath);
                 prop.set(valueFactoryImp.createValue(cal));
-
+                this.isModified = true;
             }
         }
         catch (Exception e)
@@ -161,7 +161,7 @@ public class NodeImp extends ItemImp implements Node
                 propertyPath = getPathFromName(JCR_CREATEDBY);
                 prop = nodeManager.getProperty(propertyPath);
                 prop.set(valueFactoryImp.createValue(session.getUserID()));
-
+                this.isModified = true;
             }
         }
         catch (Exception e)
@@ -179,6 +179,7 @@ public class NodeImp extends ItemImp implements Node
                 propertyPath = getPathFromName(JCR_LASTMODIFIEDBY);
                 prop = nodeManager.getProperty(propertyPath);
                 prop.set(valueFactoryImp.createValue(session.getUserID()));
+                this.isModified = true;
             }
         }
         catch (Exception e)
