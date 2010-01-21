@@ -28,6 +28,7 @@ import javax.jcr.nodetype.NoSuchNodeTypeException;
 import javax.jcr.nodetype.PropertyDefinition;
 import javax.jcr.version.VersionException;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.platform.SemanticLiteral;
 import org.semanticwb.platform.SemanticObject;
@@ -331,7 +332,9 @@ public class PropertyImp extends ItemImp implements Property
         {
             if (prop == null)
             {
-                //TODO: create Semantic Property
+                //TODO: create Semantic Property                
+                String urinewProperty=name;
+                prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(urinewProperty);
             }
             SemanticObject obj = parent.getSemanticObject();
             for (Value value : this.values)
