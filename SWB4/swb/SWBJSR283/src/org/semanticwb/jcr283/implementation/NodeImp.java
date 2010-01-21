@@ -202,7 +202,7 @@ public class NodeImp extends ItemImp implements Node
         return addNode(relPath, null);
     }
 
-    private NodeImp insertNode(String nameToAdd, NodeDefinitionImp childDefinition) throws RepositoryException
+    private NodeImp insertNode(String nameToAdd, NodeDefinitionImp childDefinition,NodeType nodeType) throws RepositoryException
     {
         String childpath = path + PATH_SEPARATOR + nameToAdd;
         if (childpath.endsWith(PATH_SEPARATOR))
@@ -240,72 +240,59 @@ public class NodeImp extends ItemImp implements Node
         {
             throw new PathNotFoundException("The node with path " + relPath + " was not found");
         }
-        NodeTypeImp nodeType = null;
-        if (primaryNodeTypeName == null)
-        {
-            nodeType = nodeParent.nodeDefinitionImp.getDefaultPrimaryTypeImp();
-            primaryNodeTypeName = nodeType.getName();
-        }
-        else
-        {
-            nodeType = nodeTypeManager.getNodeTypeImp(primaryNodeTypeName);
-        }
-        if (nodeType == null)
-        {
-            throw new NoSuchNodeTypeException("The node type was not found");
-        }
         String nameToAdd = extractName(relPath);
-        if (!nodeType.canAddChildNode(nameToAdd))
-        {
-            //TODO:ERROR
-            throw new ConstraintViolationException("The node can no be added");
-        }
         NodeDefinitionImp childDefinition = null;
-        for (NodeDefinitionImp childNodeDefinition : nodeType.getChildNodeDefinitionsImp())
+        for (NodeDefinitionImp childNodeDefinition : parent.nodeDefinitionImp.getDeclaringNodeTypeImp().getChildNodeDefinitionsImp())
         {
-            if (childNodeDefinition.getName().equals("*"))
+            if(childNodeDefinition.getName().equals(nameToAdd))
             {
-                if (primaryNodeTypeName == null)
-                {
-                    primaryNodeTypeName = childNodeDefinition.getDefaultPrimaryTypeName();
-                }
-                if (primaryNodeTypeName != null)
-                {
-                    String requiredPrimaryTypeNames[] = childNodeDefinition.getRequiredPrimaryTypeNames();
-                    for (String requiredPrimaryTypeName : requiredPrimaryTypeNames)
-                    {
-                        if (requiredPrimaryTypeName.equals(primaryNodeTypeName))
-                        {
-                            childDefinition = childNodeDefinition;
-                        }
-                    }
-                }
-
+                childDefinition=childNodeDefinition;
             }
-            else
+        }
+        if(childDefinition==null)
+        {
+            for (NodeDefinitionImp childNodeDefinition : parent.nodeDefinitionImp.getDeclaringNodeTypeImp().getChildNodeDefinitionsImp())
             {
-                if (childNodeDefinition.getName().equals(primaryNodeTypeName))
+                if(childNodeDefinition.getName().equals("*"))
                 {
-                    String requiredPrimaryTypeNames[] = childNodeDefinition.getRequiredPrimaryTypeNames();
-                    for (String requiredPrimaryTypeName : requiredPrimaryTypeNames)
-                    {
-                        if (requiredPrimaryTypeName.equals(primaryNodeTypeName))
-                        {
-                            childDefinition = childNodeDefinition;
-                        }
-                    }
+                    childDefinition=childNodeDefinition;
                 }
             }
-
         }
-        if (childDefinition == null)
-        {
-            return nodeParent.insertNode(nameToAdd, childDefinition);
-        }
-        else
+        if(childDefinition==null)
         {
             throw new ConstraintViolationException("The node can not be added");
         }
+        NodeTypeImp nodeType = null;
+        if (primaryNodeTypeName == null)
+        {
+            nodeType=childDefinition.getDefaultPrimaryTypeImp();
+            primaryNodeTypeName=nodeType.getName();
+        }
+        else
+        {
+            nodeType=nodeTypeManager.getNodeTypeImp(primaryNodeTypeName);
+            if(nodeType==null)
+            {
+                throw new NoSuchNodeTypeException("The NodeType "+primaryNodeTypeName+" was not found");
+            }
+        }
+        boolean isConformToRequired=false;
+        for(NodeType required : childDefinition.getRequiredPrimaryTypes())
+        {
+            if(required.equals(nodeType))
+            {
+                isConformToRequired=true;
+                break;
+            }
+        }
+        if(!isConformToRequired)
+        {
+            throw new ConstraintViolationException("The NodeType "+primaryNodeTypeName+" is not part of required node types ");
+        }
+        return nodeParent.insertNode(nameToAdd, childDefinition,nodeType);
+        
+        
     }
 
     public void orderBefore(String srcChildRelPath, String destChildRelPath) throws UnsupportedRepositoryOperationException, VersionException, ConstraintViolationException, ItemNotFoundException, LockException, RepositoryException
@@ -489,16 +476,16 @@ public class NodeImp extends ItemImp implements Node
     public Item getPrimaryItem() throws ItemNotFoundException, RepositoryException
     {
         NodeType nodeType = this.getDefinition().getDefaultPrimaryType();
-        String primaryItemName=nodeType.getPrimaryItemName();
-        if(primaryItemName!=null)
+        String primaryItemName = nodeType.getPrimaryItemName();
+        if (primaryItemName != null)
         {
             nodeManager.loadChilds(this, path, depth, session, false);
-            String primaryItemNamePath=getPathFromName(primaryItemName);
-            NodeImp node=nodeManager.getNode(primaryItemNamePath);
-            if(node==null)
+            String primaryItemNamePath = getPathFromName(primaryItemName);
+            NodeImp node = nodeManager.getNode(primaryItemNamePath);
+            if (node == null)
             {
-                PropertyImp prop=nodeManager.getProperty(primaryItemNamePath);
-                if(prop==null)
+                PropertyImp prop = nodeManager.getProperty(primaryItemNamePath);
+                if (prop == null)
                 {
                     throw new ItemNotFoundException();
                 }
