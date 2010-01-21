@@ -273,47 +273,60 @@ public class NodeTypeImp implements NodeType
 
     public boolean canSetProperty(String propertyName, Value[] values)
     {
+        PropertyDefinitionImp definition = null;
         for (PropertyDefinitionImp propertyDefinition : propertyDefinitions.values())
         {
-            if (propertyDefinition.getName().equals(ALL))
+            if (propertyDefinition.getName().equals(propertyName))
             {
-                if (values.length > 1 && !propertyDefinition.isMultiple())
+                definition = propertyDefinition;
+            }
+        }
+        if (definition == null)
+        {
+            for (PropertyDefinitionImp propertyDefinition : propertyDefinitions.values())
+            {
+                if (propertyDefinition.getName().equals(ALL))
                 {
-                    return false;
-                }
-                else
-                {
-                    return true;
+                    definition = propertyDefinition;
                 }
             }
         }
-        PropertyDefinitionImp propertyDefinition = propertyDefinitions.get(propertyName);
-        if (propertyDefinition == null)
+        if (definition == null)
         {
             return false;
         }
-        if (values.length > 1 && !propertyDefinition.isMultiple())
+        if (values.length > 1 && !definition.isMultiple())
         {
             return false;
         }
         for (Value value : values)
         {
-            if (!isCompatibleValue(propertyDefinition.getRequiredType(), value.getType()))
+            if (!isCompatibleValue(definition.getRequiredType(), value))
             {
                 return false;
             }
+
         }
         return true;
     }
 
-    private boolean isCompatibleValue(int requeredType, int type)
+    private boolean isCompatibleValue(int requiredType, Value value)
     {
         boolean isCompatibleValue = false;
-        if (requeredType == type)
+        if (requiredType == value.getType())
         {
             return true;
         }
         //TODO: revisar con que otros datos es compatible
+        try
+        {
+            PropertyImp.transformValue(value, requiredType);
+            isCompatibleValue=true;
+        }
+        catch(Exception e)
+        {
+            isCompatibleValue=false;
+        }
         return isCompatibleValue;
     }
 
