@@ -93,7 +93,7 @@ public abstract class ItemImp implements Item
         return true;
     }
 
-    public static String extractName(String relpath)
+    public static String extractName(String relpath) throws RepositoryException
     {
         String extractName = relpath;
         if (extractName.endsWith(PATH_SEPARATOR))
@@ -111,7 +111,15 @@ public abstract class ItemImp implements Item
         {
             name = name.substring(0, pos);
         }
+        if(!isValidName(name))
+        {
+            throw new RepositoryException("The name is not valid");
+        }
         return name;
+    }
+    public static boolean isValidName(String name)
+    {
+        return true;
     }
 
     public String normalizePath(String relPath) throws RepositoryException
