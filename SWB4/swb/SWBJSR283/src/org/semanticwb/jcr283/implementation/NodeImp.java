@@ -54,14 +54,20 @@ import org.semanticwb.platform.SemanticProperty;
  */
 public class NodeImp extends ItemImp implements Node
 {
+    private static final String JCR_CREATED = "jcr:created";
+    private static final String JCR_LASTMODIFIED = "jcr:lastModified";
+    private static final String JCR_LASTMODIFIEDBY = "jcr:lastModifiedBy";
 
-    public static final String JCR_MIXINTYPES = "jcr:mixinTypes";
-    public static final String JCR_UUID = "jcr:uuid";
+    private static final String JCR_MIXINTYPES = "jcr:mixinTypes";
+    private static final String JCR_UUID = "jcr:uuid";
     private static final String ALL = "*";
-    private static final String JCRISCHECKEDOUT = "jcr:isCheckedOut";
+    private static final String JCR_ISCHECKEDOUT = "jcr:isCheckedOut";
+    private static final String JCR_CREATEDBY = "jcr:createdBy";
+    private static final String MIX_CREATED = "mix:created";
     private static final String MIX_REFERENCEABLE = "mix:referenceable";
     private static final String MIX_SIMPLEVERSIONABLE = "mix:simpleVersionable";
-    private static final String MIX_VERSIONABLE = "mix:versionable";
+    private static final String NT_VERSION = "nt:version";
+    
     private final static Logger log = SWBUtils.getLogger(NodeImp.class);
     private final static NodeTypeManagerImp nodeTypeManager = new NodeTypeManagerImp();
     private final static ValueFactoryImp valueFactoryImp = new ValueFactoryImp();
@@ -78,6 +84,8 @@ public class NodeImp extends ItemImp implements Node
     NodeImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
         super(null, name, parent, path, depth, session);
+        Calendar cal=Calendar.getInstance();
+        cal.setTimeInMillis(System.currentTimeMillis());
         this.index = index;
         this.nodeDefinitionImp = nodeDefinition;
         this.isNew = true;
@@ -114,12 +122,63 @@ public class NodeImp extends ItemImp implements Node
         try
         {
             if (isSimpleVersionable())
-            {
-                String id = UUID.randomUUID().toString();
-                String propertyPath = getPathFromName(JCRISCHECKEDOUT);
+            {                
+                String propertyPath = getPathFromName(JCR_ISCHECKEDOUT);
                 PropertyImp prop = nodeManager.getProperty(propertyPath);
                 prop.set(valueFactoryImp.createValue(true));
 
+            }
+        }
+        catch (Exception e)
+        {
+            log.debug(e);
+        }
+
+        try
+        {
+            if (isVersionNode())
+            {
+                String propertyPath = getPathFromName(JCR_CREATED);
+                PropertyImp prop = nodeManager.getProperty(propertyPath);
+                prop.set(valueFactoryImp.createValue(cal));
+
+            }
+        }
+        catch (Exception e)
+        {
+            log.debug(e);
+        }
+
+        
+
+        try
+        {
+            if (isMixCreated())
+            {
+                String propertyPath = getPathFromName(JCR_CREATED);
+                PropertyImp prop = nodeManager.getProperty(propertyPath);                
+                prop.set(valueFactoryImp.createValue(cal));
+                propertyPath = getPathFromName(JCR_CREATEDBY);
+                prop = nodeManager.getProperty(propertyPath);
+                prop.set(valueFactoryImp.createValue(session.getUserID()));
+
+            }
+        }
+        catch (Exception e)
+        {
+            log.debug(e);
+        }
+
+        try
+        {
+            if (isMixLastModified())
+            {
+                String propertyPath = getPathFromName(JCR_LASTMODIFIED);
+                PropertyImp prop = nodeManager.getProperty(propertyPath);
+                prop.set(valueFactoryImp.createValue(cal));
+                propertyPath = getPathFromName(JCR_LASTMODIFIEDBY);
+                prop = nodeManager.getProperty(propertyPath);
+                prop.set(valueFactoryImp.createValue(session.getUserID()));
             }
         }
         catch (Exception e)
@@ -752,7 +811,7 @@ public class NodeImp extends ItemImp implements Node
 
     private boolean isReferenceable() throws RepositoryException
     {
-        for (NodeType mixinNodeType : this.getMixinNodeTypes())
+        for (NodeType mixinNodeType : getMixinNodeTypes())
         {
             if (mixinNodeType.getName().equals(MIX_REFERENCEABLE))
             {
@@ -760,7 +819,41 @@ public class NodeImp extends ItemImp implements Node
             }
         }
         return false;
+    }
 
+    private boolean isVersionNode() throws RepositoryException
+    {
+        for (NodeType mixinNodeType : nodeType.getSupertypes())
+        {
+            if (mixinNodeType.getName().equals(NT_VERSION))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    private boolean isMixCreated() throws RepositoryException
+    {
+        for (NodeType mixinNodeType : getMixinNodeTypes())
+        {
+            if (mixinNodeType.getName().equals(MIX_CREATED))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isMixLastModified() throws RepositoryException
+    {
+        for (NodeType mixinNodeType : getMixinNodeTypes())
+        {
+            if (mixinNodeType.getName().equals("mix:lastModified"))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean isSimpleVersionable() throws RepositoryException
