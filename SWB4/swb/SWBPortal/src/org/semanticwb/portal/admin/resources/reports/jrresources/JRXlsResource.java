@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.export.JRXlsExporter;
+import net.sf.jasperreports.engine.export.JExcelApiExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 
 public class JRXlsResource extends JRResource {
@@ -43,7 +43,8 @@ public class JRXlsResource extends JRResource {
     }
     
     protected void formatReport(){
-        exporter = new JRXlsExporter();
+        //exporter = new JRXlsExporter();
+        exporter = new JExcelApiExporter();
     }
     
     protected void parametrizeReport(){
