@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Iterator;
 import javax.jcr.AccessDeniedException;
 import javax.jcr.Binary;
@@ -59,7 +58,7 @@ public class NodeImp extends ItemImp implements Node
     private final static NodeTypeManagerImp nodeTypeManager = new NodeTypeManagerImp();
     private final static ValueFactoryImp valueFactoryImp = new ValueFactoryImp();
     private final NodeDefinitionImp nodeDefinitionImp;
-    private final Hashtable<String, PropertyImp> properties = new Hashtable<String, PropertyImp>();
+    private final NodeManager manager;
     private SemanticObject obj = null;
     private final int index;
 
@@ -74,6 +73,7 @@ public class NodeImp extends ItemImp implements Node
         this.index = index;
         this.nodeDefinitionImp = nodeDefinition;
         loadProperties();
+        manager = session.getWorkspaceImp().getNodeManager();
     }
 
     NodeImp(SemanticObject obj, String name, NodeImp parent, int index, String path, int depth, SessionImp session)
@@ -83,11 +83,22 @@ public class NodeImp extends ItemImp implements Node
         this.index = index;
         nodeDefinitionImp = new NodeDefinitionImp(obj, NodeTypeManagerImp.loadNodeType(obj.getSemanticClass()));
         loadProperties();
+        manager = session.getWorkspaceImp().getNodeManager();
     }
 
     public SemanticObject getSemanticObject()
     {
         return obj;
+    }
+
+    private String getPropertyPath(String name)
+    {
+        String pathProperty = path + "/" + name;
+        if (pathProperty.endsWith("/"))
+        {
+            pathProperty = path + name;
+        }
+        return pathProperty;
     }
 
     private void loadProperties()
@@ -104,11 +115,13 @@ public class NodeImp extends ItemImp implements Node
                 {
                     try
                     {
-                        PropertyImp prop = new PropertyImp(semanticProperty, this, this.getPath() + "/" + semanticProperty.getPrefix() + ":" + semanticProperty.getName(), this.getDepth() + 1, this.session);
-                        if (!this.properties.containsKey(prop.getName()))
+                        String name = semanticProperty.getPrefix() + ":" + semanticProperty.getName();
+                        String pathProperty = getPropertyPath(name);
+                        PropertyImp prop = new PropertyImp(semanticProperty, this, pathProperty, this.session);
+                        if (!manager.hasProperty(prop.path))
                         {
                             log.debug("loading property " + semanticProperty.getURI() + " for node " + obj.getURI());
-                            this.properties.put(prop.getName(), prop);
+                            session.getWorkspaceImp().getNodeManager().addProperty(prop, prop.path);
                         }
                     }
                     catch (Exception e)
@@ -127,11 +140,11 @@ public class NodeImp extends ItemImp implements Node
                     {
                         try
                         {
-                            PropertyImp prop = new PropertyImp(semanticProperty, this, this.getPath() + "/" + semanticProperty.getPrefix() + ":" + semanticProperty.getName(), this.getDepth() + 1, this.session);
-                            if (!this.properties.containsKey(prop.getName()))
+                            PropertyImp prop = new PropertyImp(semanticProperty, this, this.getPath() + "/" + semanticProperty.getPrefix() + ":" + semanticProperty.getName(), this.session);
+                            if (!manager.hasProperty(prop.path))
                             {
                                 log.debug("loading property " + semanticProperty.getURI() + " for node " + obj.getURI());
-                                this.properties.put(prop.getName(), prop);
+                                session.getWorkspaceImp().getNodeManager().addProperty(prop, prop.path);
                             }
                         }
                         catch (Exception e)
@@ -461,7 +474,7 @@ public class NodeImp extends ItemImp implements Node
     public NodeIterator getNodes() throws RepositoryException
     {
         this.session.getWorkspaceImp().getNodeManager().loadChilds(this, this.path, depth, session, false);
-        NodeIteratorImp iterator = new NodeIteratorImp(this.session.getWorkspaceImp().getNodeManager().getChilds(this));
+        NodeIteratorImp iterator = new NodeIteratorImp(this.session.getWorkspaceImp().getNodeManager().getChildNodes(this));
         return iterator;
     }
 
@@ -477,12 +490,15 @@ public class NodeImp extends ItemImp implements Node
 
     public Property getProperty(String relPath) throws PathNotFoundException, RepositoryException
     {
-        String name = extractName(relPath);
-        PropertyImp prop = this.properties.get(name);
+        if (!isValidRelativePath(relPath))
+        {
+            throw new RepositoryException("The path is not a relative path");
+        }
+        String pathAbsProperty = normalizePath(relPath);
+        PropertyImp prop = manager.getProperty(pathAbsProperty);
         if (prop == null)
         {
-            throw new PathNotFoundException("The property " + relPath + " was not found");
-            // TODO: ERROR
+            throw new PathNotFoundException();
         }
         return prop;
     }
@@ -554,12 +570,12 @@ public class NodeImp extends ItemImp implements Node
 
     public boolean hasProperty(String relPath) throws RepositoryException
     {
-        String name = extractName(relPath);
-        if (properties.get(name) == null)
+        if (!isValidRelativePath(relPath))
         {
-            return false;
+            throw new RepositoryException("The path is not a relative path");
         }
-        return true;
+        String pathAbsProperty = normalizePath(relPath);
+        return manager.hasProperty(pathAbsProperty);
     }
 
     public boolean hasNodes() throws RepositoryException
@@ -569,14 +585,7 @@ public class NodeImp extends ItemImp implements Node
 
     public boolean hasProperties() throws RepositoryException
     {
-        if (properties.size() > 0)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return manager.hasProperty(path, false);
     }
 
     public NodeType getPrimaryNodeType() throws RepositoryException
@@ -607,7 +616,7 @@ public class NodeImp extends ItemImp implements Node
         {
             throw new ConstraintViolationException("The mixin can be added");
         }
-        PropertyImp prop = properties.get(JCR_MIXINTYPES);
+        PropertyImp prop = manager.getProperty(getPropertyPath(JCR_MIXINTYPES));
         Value[] values = prop.getValues();
         Value newValue = valueFactoryImp.createValue(mixinName);
         Value[] newValues = new Value[values.length + 1];
@@ -625,8 +634,8 @@ public class NodeImp extends ItemImp implements Node
             {
                 SemanticProperty semanticProperty = propDef.getSemanticProperty();
                 String name = semanticProperty.getPrefix() + ":" + semanticProperty.getName();
-                PropertyImp propMix = new PropertyImp(semanticProperty, this, this.getPath() + "/" + name, this.getDepth() + 1, session);
-                properties.put(name, propMix);
+                PropertyImp propMix = new PropertyImp(semanticProperty, this, this.getPath() + "/" + name, session);
+                manager.addProperty(prop, prop.path);
             }
         }
     }
@@ -641,8 +650,8 @@ public class NodeImp extends ItemImp implements Node
             {
                 throw new ConstraintViolationException("The mix in can not be deleted, the mixin is declared super nodetype");
             }
-        }
-        PropertyImp prop = properties.get(JCR_MIXINTYPES);
+        }        
+        PropertyImp prop = manager.getProperty(getPropertyPath(JCR_MIXINTYPES));
         Value[] values = prop.getValues();
         HashSet<Value> newValues = new HashSet<Value>();
         for (Value value : values)
@@ -659,8 +668,8 @@ public class NodeImp extends ItemImp implements Node
             if (propDef.getSemanticProperty() != null)
             {
                 SemanticProperty semanticProperty = propDef.getSemanticProperty();
-                String name = semanticProperty.getPrefix() + ":" + semanticProperty.getName();
-                properties.remove(name);
+                String name = semanticProperty.getPrefix() + ":" + semanticProperty.getName();                
+                manager.removeProperty(getPropertyPath(name));
             }
         }
     }
@@ -679,8 +688,8 @@ public class NodeImp extends ItemImp implements Node
             {
                 return false;
             }
-        }
-        if (properties.containsKey(JCR_MIXINTYPES))
+        }        
+        if (manager.hasProperty(getPropertyPath(JCR_MIXINTYPES)))
         {
             return false;
         }

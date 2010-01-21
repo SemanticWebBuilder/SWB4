@@ -21,6 +21,9 @@ public class NodeManager
 {
 
     private Hashtable<String, NodeImp> nodes = new Hashtable<String, NodeImp>();
+    private Hashtable<String, PropertyImp> properties = new Hashtable<String, PropertyImp>();
+    private Hashtable<String, NodeImp> nodesRemoved = new Hashtable<String, NodeImp>();
+    private Hashtable<String, PropertyImp> propertiesRemoved = new Hashtable<String, PropertyImp>();
     private final static Logger log = SWBUtils.getLogger(NodeManager.class);
 
     private static int getIndex(Base node)
@@ -68,6 +71,15 @@ public class NodeManager
             this.nodes.put(path, node);
         }
         return this.nodes.get(path);
+    }
+
+    public PropertyImp addProperty(PropertyImp node, String path)
+    {
+        if (!this.properties.containsKey(path))
+        {
+            this.properties.put(path, node);
+        }
+        return this.properties.get(path);
     }
 
     /**
@@ -140,6 +152,38 @@ public class NodeManager
         }
     }
 
+    public boolean hasProperty(String path)
+    {
+        return this.properties.get(path) == null ? false : true;
+    }
+
+    public boolean hasProperty(String path, boolean exact)
+    {
+        if (exact)
+        {
+            return hasProperty(path);
+        }
+        else
+        {
+            for (String pathNode : properties.keySet())
+            {
+                if (pathNode.startsWith(path))
+                {
+                    String dif = pathNode.substring(path.length());
+                    if (!dif.equals(""))
+                    {
+                        if (dif.indexOf("/") == -1)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+    }
+
     public NodeImp getNode(String path)
     {
         NodeImp node = this.nodes.get(path);
@@ -150,7 +194,45 @@ public class NodeManager
         return null;
     }
 
-    public Set<NodeImp> getChilds(NodeImp node)
+    public PropertyImp getProperty(String path)
+    {
+        PropertyImp node = this.properties.get(path);
+        if (node == null)
+        {
+            //TODO: Try to load the node from database
+        }
+        return null;
+    }
+
+    public Set<PropertyImp> getChildPropertyes(NodeImp node)
+    {
+        HashSet<PropertyImp> getChilds = new HashSet<PropertyImp>();
+        try
+        {
+            for (String pathNode : properties.keySet())
+            {
+                if (pathNode.startsWith(node.getPath()))
+                {
+                    String dif = pathNode.substring(node.getPath().length());
+                    if (!dif.equals(""))
+                    {
+                        PropertyImp prospect = properties.get(pathNode);
+                        if (prospect.getDepth() == (node.getDepth() + 1))
+                        {
+                            getChilds.add(prospect);
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            log.debug(e);
+        }
+        return getChilds;
+    }
+
+    public Set<NodeImp> getChildNodes(NodeImp node)
     {
         HashSet<NodeImp> getChilds = new HashSet<NodeImp>();
         try
@@ -210,5 +292,23 @@ public class NodeManager
                 }
             }
         }
+    }
+
+    public void removeProperty(String path)
+    {
+        if (properties.containsKey(path))
+        {
+            propertiesRemoved.put(path, properties.remove(path));
+        }
+
+    }
+
+    public void removeNode(String path)
+    {
+        if (nodes.containsKey(path))
+        {
+            nodesRemoved.put(path, nodes.remove(path));
+        }
+
     }
 }
