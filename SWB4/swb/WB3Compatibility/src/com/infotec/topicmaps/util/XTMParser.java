@@ -38,9 +38,8 @@ import java.util.*;
 import java.io.*;
 
 import com.infotec.topicmaps.*;
-import org.apache.xerces.parsers.*;
-import org.apache.xml.serialize.*;
-import com.infotec.appfw.util.AFUtils;
+import com.sun.org.apache.xerces.internal.parsers.SAXParser;
+
 
 
 /** objeto: parser de XTM
