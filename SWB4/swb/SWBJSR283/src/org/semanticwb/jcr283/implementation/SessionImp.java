@@ -114,7 +114,7 @@ public class SessionImp implements Session
         return true;
     }
 
-    public Item getItem(String absPath) throws PathNotFoundException, RepositoryException
+    private ItemImp getItemImp(String absPath) throws PathNotFoundException, RepositoryException
     {
         if (!isValidAbsPath(absPath))
         {
@@ -122,15 +122,23 @@ public class SessionImp implements Session
         }
         try
         {
-            return getNode(absPath);
+            return getNodeImp(absPath);
         }
         catch (PathNotFoundException pnfe)
         {
-            return getProperty(absPath);
+            return getPropertyImp(absPath);
         }
+    }
+    public Item getItem(String absPath) throws PathNotFoundException, RepositoryException
+    {
+        return getItemImp(absPath);
     }
 
     public Node getNode(String absPath) throws PathNotFoundException, RepositoryException
+    {
+        return getNodeImp(absPath);
+    }
+    private NodeImp getNodeImp(String absPath) throws PathNotFoundException, RepositoryException
     {
         NodeImp node = workspace.getNodeManager().getNode(absPath);
         if (node == null)
@@ -142,6 +150,10 @@ public class SessionImp implements Session
 
     public Property getProperty(String absPath) throws PathNotFoundException, RepositoryException
     {
+        return getPropertyImp(absPath);
+    }
+    public PropertyImp getPropertyImp(String absPath) throws PathNotFoundException, RepositoryException
+    {
         PropertyImp property = workspace.getNodeManager().getProperty(absPath);
         if (property == null)
         {
@@ -152,32 +164,52 @@ public class SessionImp implements Session
 
     public boolean itemExists(String absPath) throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if(!nodeExists(absPath))
+        {
+            return propertyExists(absPath);
+        }
+        else
+        {
+            return true;
+        }
     }
 
     public boolean nodeExists(String absPath) throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return workspace.getNodeManager().hasNode(absPath);
     }
 
     public boolean propertyExists(String absPath) throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return workspace.getNodeManager().hasProperty(absPath);
     }
 
     public void move(String srcAbsPath, String destAbsPath) throws ItemExistsException, PathNotFoundException, VersionException, ConstraintViolationException, LockException, RepositoryException
     {
+        ItemImp srcAbsPathItem =getItemImp(srcAbsPath);
+        ItemImp destAbsPathItem =getItemImp(destAbsPath);
+        String oldpath=srcAbsPathItem.getPath();
+        String name=ItemImp.extractName(srcAbsPathItem.getPath());
+        String path=destAbsPathItem.getPropertyPath(name);
+        if(this.itemExists(path))
+        {
+            throw new ItemExistsException();
+        }
+        if(destAbsPathItem instanceof NodeImp)
+        {
+            workspace.getNodeManager().move(oldpath, path, (NodeImp)destAbsPathItem);
+        }        
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public void removeItem(String absPath) throws VersionException, LockException, ConstraintViolationException, AccessDeniedException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        
     }
 
     public void save() throws AccessDeniedException, ItemExistsException, ReferentialIntegrityException, ConstraintViolationException, InvalidItemStateException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        workspace.getNodeManager().save();
     }
 
     public void refresh(boolean keepChanges) throws RepositoryException

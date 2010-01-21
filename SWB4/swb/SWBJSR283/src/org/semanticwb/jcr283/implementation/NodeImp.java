@@ -54,13 +54,13 @@ public class NodeImp extends ItemImp implements Node
 {
 
     public static final String JCR_MIXINTYPES = "jcr:mixinTypes";
-    private static final String PATH_SEPARATOR = "/";
-    private static final String THE_PATH_IS_NOT_RELATIVE = "The path is not relative :";
+    
+    
     private final static Logger log = SWBUtils.getLogger(NodeImp.class);
     private final static NodeTypeManagerImp nodeTypeManager = new NodeTypeManagerImp();
     private final static ValueFactoryImp valueFactoryImp = new ValueFactoryImp();
     private final NodeDefinitionImp nodeDefinitionImp;
-    private final NodeManager nodeManager;
+    
     private SemanticObject obj = null;
     private final int index;
 
@@ -75,7 +75,7 @@ public class NodeImp extends ItemImp implements Node
         this.index = index;
         this.nodeDefinitionImp = nodeDefinition;
         loadProperties();
-        nodeManager = session.getWorkspaceImp().getNodeManager();
+        
     }
 
     NodeImp(SemanticObject obj, String name, NodeImp parent, int index, String path, int depth, SessionImp session)
@@ -85,7 +85,7 @@ public class NodeImp extends ItemImp implements Node
         this.index = index;
         nodeDefinitionImp = new NodeDefinitionImp(obj, NodeTypeManagerImp.loadNodeType(obj.getSemanticClass()));
         loadProperties();
-        nodeManager = session.getWorkspaceImp().getNodeManager();
+        
     }
 
     public SemanticObject getSemanticObject()
@@ -93,15 +93,7 @@ public class NodeImp extends ItemImp implements Node
         return obj;
     }
 
-    private String getPropertyPath(String name)
-    {
-        String pathProperty = path + PATH_SEPARATOR + name;
-        if (pathProperty.endsWith(PATH_SEPARATOR))
-        {
-            pathProperty = path + name;
-        }
-        return pathProperty;
-    }
+    
 
     private void loadProperties()
     {
@@ -164,84 +156,7 @@ public class NodeImp extends ItemImp implements Node
         return addNode(relPath, null);
     }
 
-    private static boolean isValidRelativePath(String relPath)
-    {
-        if (relPath.startsWith(PATH_SEPARATOR))
-        {
-            return false;
-        }
-        return isPathSegment(relPath);
-    }
-
-    private static boolean isPathSegment(String pathsegment)
-    {
-        return true;
-    }
-
-    private static String extractName(String relpath)
-    {
-        String extractName = relpath;
-        if (extractName.endsWith(PATH_SEPARATOR))
-        {
-            extractName = extractName.substring(0, extractName.length() - 1);
-        }
-        String name = relpath;
-        int pos = name.lastIndexOf(PATH_SEPARATOR);
-        if (pos != -1)
-        {
-            name = name.substring(pos + 1);
-        }
-        pos = name.lastIndexOf("[");
-        if (pos != -1)
-        {
-            name = name.substring(0, pos);
-        }
-        return name;
-    }
-
-    private String normalizePath(String relPath) throws RepositoryException
-    {
-        if (isValidRelativePath(relPath))
-        {
-            throw new RepositoryException(THE_PATH_IS_NOT_RELATIVE + relPath);
-        }
-        if (relPath.startsWith("./"))
-        {
-            String absPath = this.getPath() + relPath;
-            return absPath;
-        }
-        if (relPath.startsWith("../"))
-        {
-            if (this.parent != null)
-            {
-                String newRelativePath = relPath.substring(1);
-                return this.parent.normalizePath(newRelativePath);
-            }
-        }
-        String newpath = relPath;
-        int pos = newpath.indexOf("./");
-        while (pos != -1)
-        {
-
-            pos = newpath.indexOf("./");
-        }
-
-        pos = newpath.indexOf("/../");
-        while (pos != -1)
-        {
-            String end = newpath.substring(pos + 3);
-            newpath = newpath.substring(0, pos);
-            pos = newpath.lastIndexOf(PATH_SEPARATOR);
-            newpath = newpath.substring(0, pos + 1);
-            newpath += end;
-            pos = newpath.indexOf("/../");
-        }
-        if (newpath.endsWith(PATH_SEPARATOR))
-        {
-            newpath = newpath.substring(0, newpath.length() - 1);
-        }
-        return newpath;
-    }
+    
 
     private NodeImp insertNode(String nameToAdd, NodeDefinitionImp childDefinition) throws RepositoryException
     {
