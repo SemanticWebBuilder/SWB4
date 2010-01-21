@@ -257,7 +257,7 @@ public class NodeImp extends ItemImp implements Node
                         if (!nodeManager.hasProperty(prop.path))
                         {
                             log.debug("loading property " + semanticProperty.getURI() + " for node " + obj.getURI());
-                            nodeManager.addProperty(prop, prop.path);
+                            nodeManager.addProperty(prop, prop.path,this.path);
                         }
                     }
                     catch (Exception e)
@@ -280,7 +280,7 @@ public class NodeImp extends ItemImp implements Node
                             if (!nodeManager.hasProperty(prop.path))
                             {
                                 log.debug("loading property " + semanticProperty.getURI() + " for node " + obj.getURI());
-                                nodeManager.addProperty(prop, prop.path);
+                                nodeManager.addProperty(prop, prop.path,this.path);
                             }
                         }
                         catch (Exception e)
@@ -299,16 +299,12 @@ public class NodeImp extends ItemImp implements Node
     }
 
     private NodeImp insertNode(String nameToAdd, NodeDefinitionImp childDefinition, NodeTypeImp nodeType) throws RepositoryException
-    {
-        String childpath = path + PATH_SEPARATOR + nameToAdd;
-        if (childpath.endsWith(PATH_SEPARATOR))
-        {
-            childpath = path + nameToAdd;
-        }
-        if (!childDefinition.allowsSameNameSiblings() && nodeManager.hasNode(childpath, false))
+    {        
+        if (!childDefinition.allowsSameNameSiblings() && nodeManager.hasNode(path,nameToAdd))
         {
             throw new ItemExistsException("There is a node with the same name in the node " + this.path);
         }
+        String childpath = getPathFromName(name);       
         int childIndex = nodeManager.countNodes(childpath, false);
         if (childIndex > 0)
         {
@@ -320,7 +316,7 @@ public class NodeImp extends ItemImp implements Node
         }
         NodeImp newChild = new NodeImp(nodeType, childDefinition, nameToAdd, this, index, childpath, this.getDepth() + 1, session);
         this.isModified = true;
-        return nodeManager.addNode(newChild, childpath);
+        return nodeManager.addNode(newChild, childpath,path);
 
     }
 
@@ -656,7 +652,8 @@ public class NodeImp extends ItemImp implements Node
         {
             throw new RepositoryException(THE_PATH_IS_NOT_RELATIVE + relPath);
         }
-        return nodeManager.hasNode(relPath, true);
+        String nodeAbsPath=normalizePath(relPath);
+        return nodeManager.hasNode(nodeAbsPath);
     }
 
     public boolean hasProperty(String relPath) throws RepositoryException
@@ -671,12 +668,12 @@ public class NodeImp extends ItemImp implements Node
 
     public boolean hasNodes() throws RepositoryException
     {
-        return nodeManager.hasNode(path, true);
+        return nodeManager.hasChildNodes(path);
     }
 
     public boolean hasProperties() throws RepositoryException
     {
-        return nodeManager.hasProperty(path, false);
+        return nodeManager.hasChildNodes(path);
     }
 
     public NodeType getPrimaryNodeType() throws RepositoryException
@@ -753,7 +750,7 @@ public class NodeImp extends ItemImp implements Node
                 String nameProperty = semanticProperty.getPrefix() + ":" + semanticProperty.getName();
                 String pathProperty = getPathFromName(nameProperty);
                 PropertyImp propMix = new PropertyImp(semanticProperty, this, pathProperty, session);
-                nodeManager.addProperty(prop, prop.path);
+                nodeManager.addProperty(propMix, propMix.path,path);
             }
         }
     }
@@ -787,7 +784,7 @@ public class NodeImp extends ItemImp implements Node
             {
                 SemanticProperty semanticProperty = propDef.getSemanticProperty();
                 String nameProperty = semanticProperty.getPrefix() + ":" + semanticProperty.getName();
-                nodeManager.removeProperty(getPathFromName(nameProperty));
+                nodeManager.removeProperty(getPathFromName(nameProperty),path);
             }
         }
     }
