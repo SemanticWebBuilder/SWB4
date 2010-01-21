@@ -120,6 +120,34 @@ public class NodeManager
         return countNodes;
     }
 
+    public boolean hasNode(String path)
+    {
+        return this.nodes.get(path) == null ? false : true;
+    }
+
+    public void move(String oldPath,String newPath,NodeImp newParent)
+    {
+        
+    }
+
+    public void save()
+    {
+
+    }
+
+    public void save(String path)
+    {
+        if(nodes.containsKey(path))
+        {
+            
+        }
+        if(properties.containsKey(path))
+        {
+
+        }
+    }
+
+
     /**
      *
      * @param path path to found
