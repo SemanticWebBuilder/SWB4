@@ -33,20 +33,9 @@ package com.infotec.topicmaps;
 import com.infotec.topicmaps.bean.*;
 import com.infotec.topicmaps.db.*;
 import com.infotec.topicmaps.util.*;
-
 import java.io.*;
 import java.util.*;
-
-import org.apache.xerces.parsers.*;
-import org.apache.xml.serialize.*;
-import org.xml.sax.*;
-import com.infotec.wb.lib.*;
-import com.infotec.wb.util.*;
 import com.infotec.wb.core.*;
-import com.infotec.wb.core.db.*;
-import com.infotec.wb.core.db.RecResource;
-import com.infotec.wb.core.db.DBResource;
-import com.infotec.wb.core.db.DBCatalogs;
 import com.infotec.appfw.lib.AFObserver;
 import com.infotec.appfw.util.AFUtils;
 import org.semanticwb.model.WebPage;
@@ -259,9 +248,7 @@ public class TopicMap
      * @return  */
     public Topic getTopic(String id, boolean deleted)
     {
-        Topic ret = (Topic) m_topics.get(id);
-        if (!deleted && ret != null && ret.getDbdata().getDeleted() == 1) return null;
-        return ret;
+        return new Topic(ws.getWebPage(id));
     }
 
     /**
@@ -275,10 +262,10 @@ public class TopicMap
     /**
      * @param id
      * @return  */
-    public MergeMap getMergeMap(String id)
-    {
-        return (MergeMap) m_mergemap.get(id);
-    }
+//    public MergeMap getMergeMap(String id)
+//    {
+//        return (MergeMap) m_mergemap.get(id);
+//    }
 
     /** Getter for property m_home.
      * @return Value of property m_home.
@@ -357,12 +344,12 @@ public class TopicMap
         if (syncronized && log) changes.add("aa:" + association.getId());
     }
 
-    /**
-     * @param mergemap  */
-    public void addMergeMap(MergeMap mergemap)
-    {
-        m_mergemap.put(mergemap.getId(), mergemap);
-    }
+//    /**
+//     * @param mergemap  */
+//    public void addMergeMap(MergeMap mergemap)
+//    {
+//        m_mergemap.put(mergemap.getId(), mergemap);
+//    }
 
     public void removeTopicandChild(String id)
     {
@@ -371,17 +358,7 @@ public class TopicMap
 
     public void removeTopicandChild(WBUser user, String id)
     {
-        Topic tp = getTopic(id, true);
-        if (tp == null) return;
-
-        ArrayList ch = new ArrayList(tp.getChild());
-        Iterator it = ch.iterator();
-        while (it.hasNext())
-        {
-            Topic ct = (Topic) it.next();
-            if (ct.getInstanceOf().size() == 1) removeTopicandChild(user, ct.getId());
-        }
-        removeTopic(user, tp.getId());
+        removeTopic(user, id);
     }
 
 
@@ -563,177 +540,178 @@ public class TopicMap
 
     public synchronized void update2DB()
     {
-        StringBuffer sendChanges = new StringBuffer();
-
-        //synchronized (changes)
-        {
-            Iterator it = changes.iterator();
-            try
-            {
-                while (it.hasNext())
-                {
-                    String str = (String) it.next();
-                    it.remove();
-                    sendChanges.append(str);
-                    sendChanges.append("\n");
-                    //System.out.println(str);
-
-                    String id = str.substring(3);
-                    if (str.startsWith("rt:"))
-                    {
-                        try
-                        {
-                            DBTopicMap.getInstance().getTopic(this.getId(), id).remove();
-                        } catch (Exception e)
-                        {
-                            TopicMgr.getInstance().log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_TopicMap_update2DB_removeTopic2DBError") + ":" + id, true);
-                        }
-                    } else if (str.startsWith("at:"))
-                    {
-                        try
-                        {
-                            Topic tp = this.getTopic(id, true);
-                            ByteArrayOutputStream xml = new ByteArrayOutputStream();
-                            XTMEncoder encoder = new XTMEncoder();
-                            encoder.encodeTopic(tp, null, false);
-                            encoder.writeXml(xml);
-                            //tp.getDbdata().setActive(0);
-                            tp.getDbdata().setXml(xml.toString());
-                            tp.getDbdata().setIdtm(this.getId());
-                            tp.getDbdata().create();
-                            tp.setDBSyncronized(true);
-                        } catch (Exception e)
-                        {
-                            TopicMgr.getInstance().log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_TopicMap_update2DB_updateTopic2DBError") + ":" + id, true);
-                            this.getTopics().remove(id);
-                        }
-                    } else if (str.startsWith("ut:"))
-                    {
-                        try
-                        {
-                            Topic tp = this.getTopic(id, true);
-                            ByteArrayOutputStream xml = new ByteArrayOutputStream();
-                            XTMEncoder encoder = new XTMEncoder();
-                            encoder.encodeTopic(tp, null, false);
-                            encoder.writeXml(xml);
-                            RecTopic rec = tp.getDbdata();
-                            rec.setXml(xml.toString());
-                            com.infotec.appfw.util.AFUtils.getInstance().debug("UpdateTopic:\n" + xml);
-                            rec.update();
-                        } catch (Exception e)
-                        {
-                            TopicMgr.getInstance().log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_TopicMap_update2DB_updateTopic2DBError1") + ":" + id, true);
-                        }
-                    } else if (str.startsWith("ra:"))
-                    {
-                        try
-                        {
-                            DBTopicMap.getInstance().getAssociation(this.getId(), id).remove();
-                        } catch (Exception e)
-                        {
-                            TopicMgr.getInstance().log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_TopicMap_update2DB_removeAssociation2DBError") + ":" + id, true);
-                        }
-                    } else if (str.startsWith("aa:"))
-                    {
-                        try
-                        {
-                            Association ass = this.getAssociation(id);
-                            ByteArrayOutputStream xml = new ByteArrayOutputStream();
-                            XTMEncoder encoder = new XTMEncoder();
-                            encoder.encodeAssociation(ass, null);
-                            encoder.writeXml(xml);
-                            ass.getDbdata().setXml(xml.toString());
-                            ass.getDbdata().setIdtm(this.getId());
-                            ass.getDbdata().create();
-                            ass.setDBSyncronized(true);
-                        } catch (Exception e)
-                        {
-                            TopicMgr.getInstance().log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_TopicMap_update2DB_addAssociation2DBError") + ":" + id, true);
-                            this.getAssociations().remove(id);
-                        }
-                    } else if (str.startsWith("ao:"))
-                    {
-                        int x1 = id.indexOf(":");
-                        String strn = id.substring(0, x1);
-                        x1++;
-                        int n = Integer.parseInt(strn);
-                        String tp = id.substring(x1, n + x1);
-                        String occid = id.substring(x1 + n);
-                        Occurrence occ = getTopic(tp, true).getOccurrence(occid);
-                        if (occ != null)
-                        {
-                            if (!occ.isDBSyncronized())
-                            {
-                                try
-                                {
-                                    ByteArrayOutputStream xml = new ByteArrayOutputStream();
-                                    XTMEncoder encoder = new XTMEncoder();
-                                    encoder.encodeOccurrence(occ, null);
-                                    encoder.writeXml(xml);
-                                    occ.getDbdata().setIdtm(this.getId());
-                                    occ.getDbdata().setIdtp(tp);
-                                    occ.getDbdata().setXml(xml.toString());
-                                    occ.getDbdata().create();
-                                    occ.setDBSyncronized(true);
-                                } catch (Exception e)
-                                {
-                                    TopicMgr.getInstance().log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_TopicMap_update2DB_addOcurrence2DBError") + ":" + id, true);
-                                }
-                            }
-                        } else
-                        {
-                            TopicMgr.getInstance().log(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "log_TopicMap_update2DB_addOccurrence2DBError") + "...", true);
-                            getTopic(tp, true).getOccurrences().remove(occ);
-                        }
-                    } else if (str.startsWith("uo:"))
-                    {
-                        try
-                        {
-                            RecOccurrence recocc = DBTopicMap.getInstance().getOccurrence(getId(),id);
-                            Occurrence occ=getTopic(recocc.getIdtp()).getOccurrence(id);
-                            ByteArrayOutputStream xml = new ByteArrayOutputStream();
-                            XTMEncoder encoder = new XTMEncoder();
-                            encoder.encodeOccurrence(occ, null);
-                            encoder.writeXml(xml);
-                            recocc.setXml(xml.toString());
-                            recocc.update();
-                        } catch (Exception e)
-                        {
-                            TopicMgr.getInstance().log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "log_TopicMap_update2DB_addOccurrence2DBError") + ":" + id, true);
-                        }
-                    } else if (str.startsWith("ro:"))
-                    {
-                        int x1 = id.indexOf(":");
-                        String strn = id.substring(0, x1);
-                        x1++;
-                        int n = Integer.parseInt(strn);
-                        String tp = id.substring(x1, n + x1);
-                        String occid = id.substring(x1 + n);
-                        try
-                        {
-                            DBTopicMap.getInstance().getOccurrence(this.getId(), occid).remove();
-                        } catch (Exception e)
-                        {
-                            TopicMgr.getInstance().log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_TopicMap_update2DB_removeOccurrence2DBError") + "...", true);
-                        }
-                    } else if (str.startsWith("um:"))
-                    {
-                        try
-                        {
-                            this.getDbdata().update();
-                        } catch (Exception e)
-                        {
-                            TopicMgr.getInstance().log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_TopicMap_update2DB_updateMapError") + ": " + this.getId(), true);
-                        }
-                    }
-                }
-            } catch (Exception e)
-            {
-                TopicMgr.getInstance().log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_TopicMap_update2DB_updateChangesMapError") + "...\n" + sendChanges.toString(), true);
-            }
-        }
-
-        notifyChanges(sendChanges.toString());
+        //
+//        StringBuffer sendChanges = new StringBuffer();
+//
+//        //synchronized (changes)
+//        {
+//            Iterator it = changes.iterator();
+//            try
+//            {
+//                while (it.hasNext())
+//                {
+//                    String str = (String) it.next();
+//                    it.remove();
+//                    sendChanges.append(str);
+//                    sendChanges.append("\n");
+//                    //System.out.println(str);
+//
+//                    String id = str.substring(3);
+//                    if (str.startsWith("rt:"))
+//                    {
+//                        try
+//                        {
+//                            DBTopicMap.getInstance().getTopic(this.getId(), id).remove();
+//                        } catch (Exception e)
+//                        {
+//                            TopicMgr.getInstance().log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_TopicMap_update2DB_removeTopic2DBError") + ":" + id, true);
+//                        }
+//                    } else if (str.startsWith("at:"))
+//                    {
+//                        try
+//                        {
+//                            Topic tp = this.getTopic(id, true);
+//                            ByteArrayOutputStream xml = new ByteArrayOutputStream();
+//                            XTMEncoder encoder = new XTMEncoder();
+//                            encoder.encodeTopic(tp, null, false);
+//                            encoder.writeXml(xml);
+//                            //tp.getDbdata().setActive(0);
+//                            tp.getDbdata().setXml(xml.toString());
+//                            tp.getDbdata().setIdtm(this.getId());
+//                            tp.getDbdata().create();
+//                            tp.setDBSyncronized(true);
+//                        } catch (Exception e)
+//                        {
+//                            TopicMgr.getInstance().log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_TopicMap_update2DB_updateTopic2DBError") + ":" + id, true);
+//                            this.getTopics().remove(id);
+//                        }
+//                    } else if (str.startsWith("ut:"))
+//                    {
+//                        try
+//                        {
+//                            Topic tp = this.getTopic(id, true);
+//                            ByteArrayOutputStream xml = new ByteArrayOutputStream();
+//                            XTMEncoder encoder = new XTMEncoder();
+//                            encoder.encodeTopic(tp, null, false);
+//                            encoder.writeXml(xml);
+//                            RecTopic rec = tp.getDbdata();
+//                            rec.setXml(xml.toString());
+//                            com.infotec.appfw.util.AFUtils.getInstance().debug("UpdateTopic:\n" + xml);
+//                            rec.update();
+//                        } catch (Exception e)
+//                        {
+//                            TopicMgr.getInstance().log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_TopicMap_update2DB_updateTopic2DBError1") + ":" + id, true);
+//                        }
+//                    } else if (str.startsWith("ra:"))
+//                    {
+//                        try
+//                        {
+//                            DBTopicMap.getInstance().getAssociation(this.getId(), id).remove();
+//                        } catch (Exception e)
+//                        {
+//                            TopicMgr.getInstance().log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_TopicMap_update2DB_removeAssociation2DBError") + ":" + id, true);
+//                        }
+//                    } else if (str.startsWith("aa:"))
+//                    {
+//                        try
+//                        {
+//                            Association ass = this.getAssociation(id);
+//                            ByteArrayOutputStream xml = new ByteArrayOutputStream();
+//                            XTMEncoder encoder = new XTMEncoder();
+//                            encoder.encodeAssociation(ass, null);
+//                            encoder.writeXml(xml);
+//                            ass.getDbdata().setXml(xml.toString());
+//                            ass.getDbdata().setIdtm(this.getId());
+//                            ass.getDbdata().create();
+//                            ass.setDBSyncronized(true);
+//                        } catch (Exception e)
+//                        {
+//                            TopicMgr.getInstance().log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_TopicMap_update2DB_addAssociation2DBError") + ":" + id, true);
+//                            this.getAssociations().remove(id);
+//                        }
+//                    } else if (str.startsWith("ao:"))
+//                    {
+//                        int x1 = id.indexOf(":");
+//                        String strn = id.substring(0, x1);
+//                        x1++;
+//                        int n = Integer.parseInt(strn);
+//                        String tp = id.substring(x1, n + x1);
+//                        String occid = id.substring(x1 + n);
+//                        Occurrence occ = getTopic(tp, true).getOccurrence(occid);
+//                        if (occ != null)
+//                        {
+//                            if (!occ.isDBSyncronized())
+//                            {
+//                                try
+//                                {
+//                                    ByteArrayOutputStream xml = new ByteArrayOutputStream();
+//                                    XTMEncoder encoder = new XTMEncoder();
+//                                    encoder.encodeOccurrence(occ, null);
+//                                    encoder.writeXml(xml);
+//                                    occ.getDbdata().setIdtm(this.getId());
+//                                    occ.getDbdata().setIdtp(tp);
+//                                    occ.getDbdata().setXml(xml.toString());
+//                                    occ.getDbdata().create();
+//                                    occ.setDBSyncronized(true);
+//                                } catch (Exception e)
+//                                {
+//                                    TopicMgr.getInstance().log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_TopicMap_update2DB_addOcurrence2DBError") + ":" + id, true);
+//                                }
+//                            }
+//                        } else
+//                        {
+//                            TopicMgr.getInstance().log(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "log_TopicMap_update2DB_addOccurrence2DBError") + "...", true);
+//                            getTopic(tp, true).getOccurrences().remove(occ);
+//                        }
+//                    } else if (str.startsWith("uo:"))
+//                    {
+//                        try
+//                        {
+//                            RecOccurrence recocc = DBTopicMap.getInstance().getOccurrence(getId(),id);
+//                            Occurrence occ=getTopic(recocc.getIdtp()).getOccurrence(id);
+//                            ByteArrayOutputStream xml = new ByteArrayOutputStream();
+//                            XTMEncoder encoder = new XTMEncoder();
+//                            encoder.encodeOccurrence(occ, null);
+//                            encoder.writeXml(xml);
+//                            recocc.setXml(xml.toString());
+//                            recocc.update();
+//                        } catch (Exception e)
+//                        {
+//                            TopicMgr.getInstance().log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "log_TopicMap_update2DB_addOccurrence2DBError") + ":" + id, true);
+//                        }
+//                    } else if (str.startsWith("ro:"))
+//                    {
+//                        int x1 = id.indexOf(":");
+//                        String strn = id.substring(0, x1);
+//                        x1++;
+//                        int n = Integer.parseInt(strn);
+//                        String tp = id.substring(x1, n + x1);
+//                        String occid = id.substring(x1 + n);
+//                        try
+//                        {
+//                            DBTopicMap.getInstance().getOccurrence(this.getId(), occid).remove();
+//                        } catch (Exception e)
+//                        {
+//                            TopicMgr.getInstance().log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_TopicMap_update2DB_removeOccurrence2DBError") + "...", true);
+//                        }
+//                    } else if (str.startsWith("um:"))
+//                    {
+//                        try
+//                        {
+//                            this.getDbdata().update();
+//                        } catch (Exception e)
+//                        {
+//                            TopicMgr.getInstance().log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_TopicMap_update2DB_updateMapError") + ": " + this.getId(), true);
+//                        }
+//                    }
+//                }
+//            } catch (Exception e)
+//            {
+//                TopicMgr.getInstance().log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_TopicMap_update2DB_updateChangesMapError") + "...\n" + sendChanges.toString(), true);
+//            }
+//        }
+//
+//        notifyChanges(sendChanges.toString());
     }
 
     public void notifyChanges(String changes)
@@ -821,11 +799,8 @@ public class TopicMap
      * @return  */
     public boolean existTopic(String topicid)
     {
-        Iterator it = this.m_topics.keySet().iterator();
-        while (it.hasNext())
-        {
-            if (((String) it.next()).equalsIgnoreCase(topicid)) return true;
-        }
+        WebPage wp = ws.getWebPage(topicid);
+        if(null!=wp) return true;
         return false;
         //return m_topics.containsKey(topicid);
     }
@@ -837,7 +812,8 @@ public class TopicMap
     
     public boolean isActive()
     {
-        return getDbdata().getActive()==1 && getDbdata().getDeleted()==0;
+        //return getDbdata().getActive()==1 && getDbdata().getDeleted()==0;
+        return ws.isActive();
     }    
     
 /*    
