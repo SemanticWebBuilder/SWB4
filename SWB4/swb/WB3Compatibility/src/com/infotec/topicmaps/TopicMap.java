@@ -49,6 +49,7 @@ import com.infotec.wb.core.db.DBResource;
 import com.infotec.wb.core.db.DBCatalogs;
 import com.infotec.appfw.lib.AFObserver;
 import com.infotec.appfw.util.AFUtils;
+import org.semanticwb.model.WebPage;
 
 /**
  * Objeto <B>TopicMap</B> que es parte de la implementacion del estandar XTM de TopicMaps.
@@ -410,87 +411,8 @@ public class TopicMap
      * @param log  */
     public void removeTopic(WBUser user, String id, boolean log)
     {
-        //if(syncronized)System.out.println("Remove topic:"+id);
-        Topic tp = getTopic(id, true);
-
-        //remover apuntadores de los padres a el topico a borrar
-        Iterator it = tp.getTypes();
-        while (it.hasNext())
-        {
-            Topic aux = (Topic) it.next();
-            aux.getChild().remove(tp);
-        }
-
-        //remover apuntadores de los hijos a el topico a borrar
-        it = tp.getChild().iterator();
-        while (it.hasNext())
-        {
-            Topic aux = (Topic) it.next();
-            //aux.removeType(tp,log);
-            Iterator it2 = aux.getInstanceOf().iterator();
-            while (it2.hasNext())
-            {
-                InstanceOf insof = (InstanceOf) it2.next();
-                if (insof.getTopicRef() == tp)
-                {
-                    it2.remove();
-                }
-            }
-        }
-
-        //remover asociaciones
-        removeAssociationsWithTopic(tp, false);
-
-        //eliminar occurrencias
-        it = tp.getOccurrences().iterator();
-        while (it.hasNext())
-        {
-            Occurrence occ = (Occurrence) it.next();
-            if (occ.getInstanceOf()!=null 
-             && occ.getInstanceOf().getTopicRef()!=null 
-             && occ.getInstanceOf().getTopicRef().getId().equals("REC_WBContent"))
-            {
-                try
-                {
-                    RecResource rec = DBResource.getInstance().getResource(getId(),Integer.parseInt(occ.getResourceData()));
-                    if(rec!=null)
-                    {
-                        String objPath = WBUtils.getInstance().getWorkPath() + Resource.getResourceWorkPath(rec);
-                        boolean bRemoveObj = com.infotec.appfw.util.AFUtils.getInstance().removeDirectory(objPath);
-                        if (bRemoveObj)
-                        {
-                            if (user != null)
-                                rec.remove(user.getId(), "Se elimino recurso con id:" + rec.getId() + ", ya que se elimino el topico que lo contenia");
-                            else
-                                rec.remove();
-                        }
-                    }
-                } catch (Exception e)
-                {
-                    AFUtils.log(e, "Error al Eliminar Occurrencias de topico con id:" + id);
-                }
-            }
-            it.remove();
-            if (syncronized && log) changes.add("ro:" + tp.getId().length() + ":" + tp.getId() + occ.getId());
-        }
-
-        //elimina el topico del mapa
-        try
-        {
-            Topic top = (Topic) m_topics.remove(id);
-            if (syncronized && log)
-            {
-                changes.add("rt:" + top.getId());
-                if(user!=null)
-                {
-                    com.infotec.wb.core.db.RecAdmLog rec=new com.infotec.wb.core.db.RecAdmLog(user.getId(),"remove","Topic",0,tp.getMap().getId(),tp.getId(),"Se elimino seccion "+tp.getDisplayName(),null);
-                    rec.create();
-                }
-            }
-        } catch (Exception e)
-        {
-            TopicMgr.getInstance().log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_TopicMap_removeTopic_removeTopicError") + ":" + id);
-        }
+        WebPage wp = ws.getWebPage(id);
+        if(null!=wp)wp.remove();
     }
 
 

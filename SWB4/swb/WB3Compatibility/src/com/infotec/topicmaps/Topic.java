@@ -739,44 +739,44 @@ public class Topic
     public BaseName getDisplayBaseName(Topic scope)
     {
         BaseName ret=null;
-        if (scope != null)
-        {
-            Iterator it = getBaseNames().iterator();
-            while (it.hasNext())
-            {
-                BaseName bn = (BaseName) it.next();
-                if (bn.getScope() != null && bn.getScope().getTopicRefs().containsKey(scope.getId()))
-                {
-                    if(bn.getBaseNameString()!=null && bn.getBaseNameString().length()>0)
-                    {
-                        ret = bn;
-                    }
-                }
-            }
-        }
-
-        if (ret == null && !getBaseNames().isEmpty())
-        {
-            Topic defect = this.getMap().getlang();
-            if (defect != null)
-            {
-                Iterator it = getBaseNames().iterator();
-                while (it.hasNext())
-                {
-                    BaseName bn = (BaseName) it.next();
-                    if (bn.getScope() != null && bn.getScope().getTopicRefs().containsKey(defect.getId()))
-                    {
-                        ret = bn;
-                        break;
-                    }
-                }
-            }
-
-            if (ret == null)
-            {
-                ret = ((BaseName) getBaseNames().get(0));
-            }
-        }
+//        if (scope != null)
+//        {
+//            Iterator it = getBaseNames().iterator();
+//            while (it.hasNext())
+//            {
+//                BaseName bn = (BaseName) it.next();
+//                if (bn.getScope() != null && bn.getScope().getTopicRefs().containsKey(scope.getId()))
+//                {
+//                    if(bn.getBaseNameString()!=null && bn.getBaseNameString().length()>0)
+//                    {
+//                        ret = bn;
+//                    }
+//                }
+//            }
+//        }
+//
+//        if (ret == null && !getBaseNames().isEmpty())
+//        {
+//            Topic defect = this.getMap().getlang();
+//            if (defect != null)
+//            {
+//                Iterator it = getBaseNames().iterator();
+//                while (it.hasNext())
+//                {
+//                    BaseName bn = (BaseName) it.next();
+//                    if (bn.getScope() != null && bn.getScope().getTopicRefs().containsKey(defect.getId()))
+//                    {
+//                        ret = bn;
+//                        break;
+//                    }
+//                }
+//            }
+//
+//            if (ret == null)
+//            {
+//                ret = ((BaseName) getBaseNames().get(0));
+//            }
+//        }
         return ret;        
     }
 
