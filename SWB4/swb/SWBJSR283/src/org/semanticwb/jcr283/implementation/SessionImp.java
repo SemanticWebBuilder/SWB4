@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.semanticwb.jcr283.implementation;
 
 import java.io.IOException;
@@ -41,26 +40,30 @@ import org.xml.sax.SAXException;
  *
  * @author victor.lorenzana
  */
-public class SessionImp implements Session{
+public class SessionImp implements Session
+{
 
     private WorkspaceImp workspace;
     private final String userid;
-    
+
     public SessionImp(String userid)
     {
-        this.userid=userid;
-        
-        
+        this.userid = userid;
+
+
     }
+
     public WorkspaceImp getWorkspaceImp()
     {
         return workspace;
     }
+
     public void setWorkspace(WorkspaceImp workspace)
     {
-        this.workspace=workspace;
+        this.workspace = workspace;
 
     }
+
     public Repository getRepository()
     {
         return new SWBRepository();
@@ -106,19 +109,45 @@ public class SessionImp implements Session{
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    private static boolean isValidAbsPath(String absPath)
+    {
+        return true;
+    }
+
     public Item getItem(String absPath) throws PathNotFoundException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (!isValidAbsPath(absPath))
+        {
+            throw new RepositoryException("The path is not a valid absolute path");
+        }
+        try
+        {
+            return getNode(absPath);
+        }
+        catch (PathNotFoundException pnfe)
+        {
+            return getProperty(absPath);
+        }
     }
 
     public Node getNode(String absPath) throws PathNotFoundException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        NodeImp node = workspace.getNodeManager().getNode(absPath);
+        if (node == null)
+        {
+            throw new PathNotFoundException();
+        }
+        return node;
     }
 
     public Property getProperty(String absPath) throws PathNotFoundException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        PropertyImp property = workspace.getNodeManager().getProperty(absPath);
+        if (property == null)
+        {
+            throw new PathNotFoundException();
+        }
+        return property;
     }
 
     public boolean itemExists(String absPath) throws RepositoryException
@@ -265,5 +294,4 @@ public class SessionImp implements Session{
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
 }
