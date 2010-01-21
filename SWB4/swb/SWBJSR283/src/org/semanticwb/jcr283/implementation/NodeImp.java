@@ -110,8 +110,11 @@ public class NodeImp extends ItemImp implements Node
                     base.setParentNode(new Base(parent.getSemanticObject()));
                 }
             }
-
-        }        
+        }
+        if(isModified)
+        {
+            
+        }
 
     }
 
