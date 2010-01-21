@@ -9,16 +9,19 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.net.URI;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 import javax.jcr.Binary;
 import javax.jcr.Node;
 import javax.jcr.PropertyType;
 import javax.jcr.RepositoryException;
 import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
+import javax.xml.namespace.QName;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
@@ -30,12 +33,12 @@ public class ValueImp implements Value
 {
 
     static Logger log = SWBUtils.getLogger(ValueImp.class);
-    private static SimpleDateFormat iso8601dateFormat =  new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     private final int type;
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     Object value;
 
-    ValueImp(Object value, int type)
+    ValueImp(Object value, int type) throws RepositoryException
     {
         this.type = type;
 
@@ -59,8 +62,211 @@ public class ValueImp implements Value
             }
 
         }
+        else if (value instanceof String)
+        {
+            String ovalue = (String) value;
+            switch (type)
+            {
+                case PropertyType.STRING:
+                    this.value = value;
+                    break;
+                case PropertyType.BINARY:
+                    this.value = toBinary(ovalue);
+                    break;
+                case PropertyType.BOOLEAN:
+                    this.value = toBoolean(ovalue);
+                    break;
+                case PropertyType.DATE:
+                    this.value = toDate(ovalue);
+                    break;
+                case PropertyType.DECIMAL:
+                    this.value = toDecimal(ovalue);
+                    break;
+                case PropertyType.DOUBLE:
+                    this.value = toDouble(ovalue);
+                    break;
+                case PropertyType.LONG:
+                    this.value = toLong(ovalue);
+                    break;
+                case PropertyType.NAME:
+                    this.value = toName(ovalue);
+                    break;
+                case PropertyType.PATH:
+                    this.value = toPath(ovalue);
+                    break;
+                case PropertyType.REFERENCE:
+                    this.value = toReference(ovalue);
+                    break;
+                case PropertyType.URI:
+                    this.value = toUri(ovalue);
+                    break;
+                case PropertyType.WEAKREFERENCE:
+                    this.value = toWeakReference(ovalue);
+                    break;
+
+                default:
+                    throw new ValueFormatException("The value can not be converted");
+
+            }
+        }
+        else if (value instanceof Binary)
+        {
+            Binary ovalue = (Binary) value;
+            String newvalue = toString(ovalue);
+            switch (type)
+            {
+                case PropertyType.STRING:
+                    this.value = newvalue;
+                case PropertyType.BINARY:
+                    this.value = value;
+                    break;
+                case PropertyType.BOOLEAN:
+                    this.value = toBoolean(newvalue);
+                    break;
+                case PropertyType.DATE:
+                    this.value = toDate(newvalue);
+                    break;
+                case PropertyType.DECIMAL:
+                    this.value = toDecimal(newvalue);
+                    break;
+                case PropertyType.DOUBLE:
+                    this.value = toDouble(newvalue);
+                    break;
+                case PropertyType.LONG:
+                    this.value = toLong(newvalue);
+                    break;
+                case PropertyType.NAME:
+                    this.value = toName(newvalue);
+                    break;
+                case PropertyType.PATH:
+                    this.value = toPath(newvalue);
+                    break;
+                case PropertyType.REFERENCE:
+                    this.value = toReference(newvalue);
+                    break;
+                case PropertyType.URI:
+                    this.value = toUri(newvalue);
+                    break;
+                case PropertyType.WEAKREFERENCE:
+                    this.value = toWeakReference(newvalue);
+                    break;
+                default:
+                    throw new ValueFormatException("The value can not be converted");
+            }
+
+        }
+        else if (value instanceof Calendar)
+        {
+            Calendar ovalue = (Calendar) value;
+            switch (type)
+            {
+                case PropertyType.STRING:
+                    this.value = toString(ovalue);
+                    break;
+                case PropertyType.DATE:
+                    this.value = ovalue;
+                    break;
+                case PropertyType.DECIMAL:
+                    this.value = toDecimal(ovalue);
+                    break;
+                case PropertyType.DOUBLE:
+                    this.value = toDouble(ovalue);
+                    break;
+                case PropertyType.LONG:
+                    this.value = toLong(ovalue);
+                    break;
+                default:
+                    throw new ValueFormatException("The value can not be converted");
+
+            }
+        }
+        else if (value instanceof Double)
+        {
+            Double ovalue = (Double) value;
+            switch (type)
+            {
+                case PropertyType.STRING:
+                    this.value = toString(ovalue);
+                    break;
+                case PropertyType.BINARY:
+                    this.value = toBinary(ovalue);
+                    break;               
+                case PropertyType.DATE:
+                    this.value = toDate(ovalue);
+                    break;
+                case PropertyType.DECIMAL:
+                    this.value = toDecimal(ovalue);
+                    break;
+                case PropertyType.DOUBLE:
+                    this.value = value;
+                    break;
+                case PropertyType.LONG:
+                    this.value = toLong(ovalue);
+                    break;               
+                default:
+                    throw new ValueFormatException("The value can not be converted");
+
+            }
+        }
+        else if (value instanceof BigDecimal)
+        {
+            BigDecimal ovalue = (BigDecimal) value;
+            switch (type)
+            {
+                case PropertyType.STRING:
+                    this.value = toString(ovalue);
+                    break;
+                case PropertyType.BINARY:
+                    this.value = toBinary(ovalue);
+                    break;               
+                case PropertyType.DATE:
+                    this.value = toDate(ovalue);
+                    break;
+                case PropertyType.DECIMAL:
+                    this.value = ovalue;
+                    break;
+                case PropertyType.DOUBLE:
+                    this.value = toDouble(ovalue);
+                    break;
+                case PropertyType.LONG:
+                    this.value = toLong(ovalue);
+                    break;
+                default:
+                    throw new ValueFormatException("The value can not be converted");
+
+            }
+        }
+        else if (value instanceof Long)
+        {
+            Long ovalue = (Long) value;
+            switch (type)
+            {
+                case PropertyType.STRING:
+                    this.value = toString(ovalue);
+                    break;
+                case PropertyType.BINARY:
+                    this.value = toBinary(ovalue);
+                    break;                
+                case PropertyType.DATE:
+                    this.value = toDate(ovalue);
+                    break;
+                case PropertyType.DECIMAL:
+                    this.value = toDecimal(ovalue);
+                    break;
+                case PropertyType.DOUBLE:
+                    this.value = toDouble(ovalue);
+                    break;
+                case PropertyType.LONG:
+                    this.value = ovalue;
+                    break;
+                default:
+                    throw new ValueFormatException("The value can not be converted");
+
+            }
+        }
         else
         {
+
             this.value = value;
         }
     }
@@ -92,7 +298,7 @@ public class ValueImp implements Value
         }
         if (value instanceof ByteArrayOutputStream && type == PropertyType.BINARY)
         {
-            ByteArrayOutputStream mout=(ByteArrayOutputStream)value;
+            ByteArrayOutputStream mout = (ByteArrayOutputStream) value;
             return new ByteArrayInputStream(mout.toByteArray());
         }
         return null;
@@ -158,7 +364,7 @@ public class ValueImp implements Value
                     calendar = Calendar.getInstance();
                     calendar.setTime(date);
                 }
-                catch(ParseException pe2)
+                catch (ParseException pe2)
                 {
                     throw new ValueFormatException(pe);
                 }
@@ -196,5 +402,261 @@ public class ValueImp implements Value
     public BigDecimal getDecimal() throws ValueFormatException, RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    private Binary toBinary(String value) throws RepositoryException
+    {
+        try
+        {
+            byte[] convert = value.getBytes("utf-8");
+            return new BinaryImp(convert);
+        }
+        catch (Exception e)
+        {
+            throw new RepositoryException(e);
+        }
+    }
+
+    private Calendar toDate(String value) throws ValueFormatException
+    {
+        try
+        {
+            Date date = iso8601dateFormat.parse(value);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            return cal;
+        }
+        catch (Exception e)
+        {
+            throw new ValueFormatException(e);
+        }
+    }
+
+    private Double toDouble(String value) throws ValueFormatException
+    {
+        try
+        {
+            return Double.valueOf(value);
+        }
+        catch (Exception e)
+        {
+            throw new ValueFormatException(e);
+        }
+    }
+
+    private BigDecimal toDecimal(String value) throws ValueFormatException
+    {
+        try
+        {
+            return new BigDecimal(value);
+        }
+        catch (Exception e)
+        {
+            throw new ValueFormatException(e);
+        }
+    }
+
+    private Long toLong(String value) throws ValueFormatException
+    {
+        try
+        {
+            return Long.valueOf(value);
+        }
+        catch (Exception e)
+        {
+            throw new ValueFormatException(e);
+        }
+    }
+
+    private Boolean toBoolean(String value) throws ValueFormatException
+    {
+        try
+        {
+            return Boolean.valueOf(value);
+        }
+        catch (Exception e)
+        {
+            throw new ValueFormatException(e);
+        }
+    }
+
+    private QName toName(String value) throws ValueFormatException
+    {
+        int pos = value.indexOf(":");
+        if (pos != -1)
+        {
+            String prefix = value.substring(0, pos);
+            String name = value.substring(pos + 1);
+            NamespaceRegistryImp reg = new NamespaceRegistryImp();
+            try
+            {
+                String uri = reg.getURI(prefix);
+                if (uri == null)
+                {
+                    throw new ValueFormatException("The uri for the prefix " + prefix + " was not found");
+                }
+                return new QName(uri, name);
+            }
+            catch (Exception e)
+            {
+                throw new ValueFormatException(e);
+            }
+        }
+        else
+        {
+            throw new ValueFormatException("The prefix was not found");
+        }
+
+    }
+
+    private String toPath(String value) throws ValueFormatException
+    {
+        return value;
+    }
+
+    private URI toUri(String value) throws ValueFormatException
+    {
+        try
+        {
+            return new URI(value);
+        }
+        catch (Exception e)
+        {
+            throw new ValueFormatException(e);
+        }
+    }
+
+    private UUID toReference(String value) throws ValueFormatException
+    {
+        try
+        {
+            return UUID.fromString(value);
+        }
+        catch (Exception e)
+        {
+            throw new ValueFormatException(e);
+        }
+    }
+
+    private UUID toWeakReference(String value) throws ValueFormatException
+    {
+        try
+        {
+            return UUID.fromString(value);
+        }
+        catch (Exception e)
+        {
+            throw new ValueFormatException(e);
+        }
+    }
+
+    private String toString(Binary value) throws ValueFormatException
+    {
+        String valueToReturn = value.toString();
+        if (valueToReturn == null)
+        {
+            throw new ValueFormatException("The value can not be converted to String");
+        }
+        return valueToReturn;
+    }
+
+    private String toString(Calendar value)
+    {
+        Date date = value.getTime();
+        return iso8601dateFormat.format(date);
+    }
+
+    private Double toDouble(Calendar value)
+    {
+        return new Double(value.getTime().getTime());
+
+    }
+
+    private BigDecimal toDecimal(Calendar value)
+    {
+        return new BigDecimal(value.getTime().getTime());
+
+    }
+
+    private Long toLong(Calendar value)
+    {
+        return value.getTime().getTime();
+
+    }
+    private String toString(Double value)
+    {
+        return value.toString();
+    }
+    private Binary toBinary(Double value) throws RepositoryException
+    {
+        return toBinary(value.toString());
+    }
+
+    private BigDecimal toDecimal(Double value)
+    {
+        return new BigDecimal(value);
+    }
+    private Calendar toDate(Double value)
+    {
+        Calendar cal=Calendar.getInstance();
+        cal.setTimeInMillis(value.longValue());
+        return cal;
+    }
+
+    private Long toLong(Double value)
+    {
+        return value.longValue();
+    }
+
+
+    private String toString(BigDecimal value)
+    {
+        return value.toString();
+    }
+
+    private Binary toBinary(BigDecimal value) throws RepositoryException
+    {
+        return toBinary(value.toString());
+    }
+
+    private Double toDouble(BigDecimal value)
+    {
+        return value.doubleValue();
+    }
+
+    private Calendar toDate(BigDecimal value)
+    {        
+        return toDate(new Double(value.longValue()));
+    }
+
+    private Long toLong(BigDecimal value)
+    {
+        return value.longValue();
+    }
+
+    private String toString(Long value)
+    {
+        return value.toString();
+    }
+    
+    private Binary toBinary(Long value) throws RepositoryException
+    {
+        return toBinary(value.toString());
+    }
+
+    private BigDecimal toDecimal(Long value)
+    {
+        return BigDecimal.valueOf(value);
+    }
+
+    private Calendar toDate(Long value)
+    {
+        Calendar cal=Calendar.getInstance();
+        cal.setTimeInMillis(value);
+        return cal;
+    }
+    private Double toDouble(Long value)
+    {
+        return new Double(value);
     }
 }
