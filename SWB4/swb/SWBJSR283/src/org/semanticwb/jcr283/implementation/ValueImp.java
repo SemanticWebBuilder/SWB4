@@ -42,7 +42,10 @@ public class ValueImp implements Value
     ValueImp(Object value, int type) throws RepositoryException
     {
         this.type = type;
-
+        if(value==null)
+        {
+            throw new NullPointerException("The value can not be null");
+        }        
         if (value instanceof InputStream)
         {
             byte[] buffer = new byte[2048];
