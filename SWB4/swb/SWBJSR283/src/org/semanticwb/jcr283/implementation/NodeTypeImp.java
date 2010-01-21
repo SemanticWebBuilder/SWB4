@@ -321,11 +321,11 @@ public class NodeTypeImp implements NodeType
         try
         {
             PropertyImp.transformValue(value, requiredType);
-            isCompatibleValue=true;
+            isCompatibleValue = true;
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-            isCompatibleValue=false;
+            isCompatibleValue = false;
         }
         return isCompatibleValue;
     }
@@ -345,8 +345,8 @@ public class NodeTypeImp implements NodeType
                 if (nodeTypeName == null)
                 {
                     nodeTypeName = childNodeDefinition.getDeclaringNodeType().getName();
-                    childDefinition = childNodeDefinition;
                 }
+                childDefinition = childNodeDefinition;
                 break;
             }
         }
@@ -359,8 +359,8 @@ public class NodeTypeImp implements NodeType
                     if (nodeTypeName == null)
                     {
                         nodeTypeName = childNodeDefinition.getDeclaringNodeType().getName();
-                        childDefinition = childNodeDefinition;
                     }
+                    childDefinition = childNodeDefinition;
                     break;
 
                 }
@@ -400,16 +400,80 @@ public class NodeTypeImp implements NodeType
 
     public boolean canRemoveItem(String itemName)
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        ItemDefinitionImp itemDefinition = null;
+        for (NodeDefinitionImp childNodeDefinition : this.childnodeDefinitions.values())
+        {
+            if (childNodeDefinition.getName().equals(itemName))
+            {
+                itemDefinition = childNodeDefinition;
+                break;
+            }
+        }
+        for (PropertyDefinitionImp propertyDefinition : propertyDefinitions.values())
+        {
+            if (propertyDefinition.getName().equals(itemName))
+            {
+                itemDefinition = propertyDefinition;
+                break;
+            }
+        }
+        if (itemDefinition == null)
+        {
+            return true;
+        }
+        if (itemDefinition.isProtected())
+        {
+            return false;
+        }
+        return true;
     }
 
     public boolean canRemoveNode(String nodeName)
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        ItemDefinitionImp itemDefinition = null;
+        for (NodeDefinitionImp childNodeDefinition : this.childnodeDefinitions.values())
+        {
+            if (childNodeDefinition.getName().equals(nodeName))
+            {
+                itemDefinition = childNodeDefinition;
+                break;
+            }
+        }
+        for (NodeDefinitionImp childNodeDefinition : this.childnodeDefinitions.values())
+        {
+            if (childNodeDefinition.getName().equals(ALL))
+            {
+                itemDefinition = childNodeDefinition;
+                break;
+            }
+        }
+        if (itemDefinition == null)
+        {
+            return true;
+        }
+        if (itemDefinition.isProtected())
+        {
+            return false;
+        }
+        return true;
     }
 
     public boolean canRemoveProperty(String propertyName)
     {
+        for (PropertyDefinitionImp propertyDefinition : propertyDefinitions.values())
+        {
+            if (propertyDefinition.getName().equals(propertyName))
+            {
+                if (propertyDefinition.isProtected())
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
         for (PropertyDefinitionImp propertyDefinition : propertyDefinitions.values())
         {
             if (propertyDefinition.getName().equals(ALL))
@@ -424,22 +488,7 @@ public class NodeTypeImp implements NodeType
                 }
             }
         }
-        PropertyDefinitionImp propertyDefinition = propertyDefinitions.get(propertyName);
-        if (propertyDefinition == null)
-        {
-            return false;
-        }
-        else
-        {
-            if (propertyDefinition.isProtected())
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
+        return true;
     }
 
     public String getName()
