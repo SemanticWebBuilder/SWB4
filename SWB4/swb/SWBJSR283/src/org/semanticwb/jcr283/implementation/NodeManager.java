@@ -7,6 +7,15 @@ package org.semanticwb.jcr283.implementation;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
+import javax.jcr.AccessDeniedException;
+import javax.jcr.InvalidItemStateException;
+import javax.jcr.ItemExistsException;
+import javax.jcr.ReferentialIntegrityException;
+import javax.jcr.RepositoryException;
+import javax.jcr.lock.LockException;
+import javax.jcr.nodetype.ConstraintViolationException;
+import javax.jcr.nodetype.NoSuchNodeTypeException;
+import javax.jcr.version.VersionException;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.jcr283.repository.model.Base;
@@ -125,28 +134,42 @@ public class NodeManager
         return this.nodes.get(path) == null ? false : true;
     }
 
-    public void move(String oldPath,String newPath,NodeImp newParent)
+    public void move(String oldPath, String newPath, NodeImp newParent)
     {
-        
     }
 
-    public void save()
+    public void save() throws RepositoryException
     {
-
+        nodes.get("/").save();
     }
 
-    public void save(String path)
+    public void save(String path,int depth) throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
     {
-        if(nodes.containsKey(path))
+        if (nodes.containsKey(path))
         {
-            
+            NodeImp node = nodes.get(path);
+            node.saveData();
+            for(PropertyImp prop : getChildProperties(node))
+            {
+                prop.saveData();
+            }
         }
-        if(properties.containsKey(path))
-        {
+        if (properties.containsKey(path))
+        {            
+            PropertyImp node = properties.get(path);
+            node.saveData();
+        }
 
-        }
     }
 
+    public void saveProperties(String nodePath) throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
+    {
+        if (nodes.containsKey(nodePath))
+        {
+            NodeImp node = nodes.get(nodePath);
+            node.saveData();
+        }
+    }
 
     /**
      *
@@ -162,9 +185,9 @@ public class NodeManager
         }
         else
         {
-            if(!path.endsWith("/"))
+            if (!path.endsWith("/"))
             {
-                path+="/";
+                path += "/";
             }
             for (String pathNode : nodes.keySet())
             {
@@ -197,9 +220,9 @@ public class NodeManager
         }
         else
         {
-            if(!path.endsWith("/"))
+            if (!path.endsWith("/"))
             {
-                path+="/";
+                path += "/";
             }
             for (String pathNode : properties.keySet())
             {
@@ -240,20 +263,20 @@ public class NodeManager
         return null;
     }
 
-    public Set<PropertyImp> getChildPropertyes(NodeImp node)
+    private Set<PropertyImp> getChildProperties(String path,int depth)
     {
         HashSet<PropertyImp> getChilds = new HashSet<PropertyImp>();
         try
         {
             for (String pathNode : properties.keySet())
             {
-                if (pathNode.startsWith(node.getPath()))
+                if (pathNode.startsWith(path))
                 {
-                    String dif = pathNode.substring(node.getPath().length());
+                    String dif = pathNode.substring(path.length());
                     if (!dif.equals(""))
                     {
                         PropertyImp prospect = properties.get(pathNode);
-                        if (prospect.getDepth() == (node.getDepth() + 1))
+                        if (prospect.getDepth() == (depth + 1))
                         {
                             getChilds.add(prospect);
                         }
@@ -266,6 +289,11 @@ public class NodeManager
             log.debug(e);
         }
         return getChilds;
+    }
+
+    public Set<PropertyImp> getChildProperties(NodeImp node) throws RepositoryException
+    {
+        return getChildProperties(node.getPath(),node.getDepth());
     }
 
     public Set<NodeImp> getChildNodes(NodeImp node)

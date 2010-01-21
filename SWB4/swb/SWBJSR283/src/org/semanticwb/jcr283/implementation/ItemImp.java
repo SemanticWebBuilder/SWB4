@@ -30,8 +30,8 @@ public abstract class ItemImp implements Item
     protected static final String PATH_SEPARATOR = "/";
     protected static final String THE_PATH_IS_NOT_RELATIVE = "The path is not relative :";
     protected NodeImp parent;
-    private final String name;
-    private boolean isNew;
+    protected final String name;
+    protected boolean isNew;
     protected final String path;
     protected boolean isModified=false;
     protected final int depth;
@@ -211,7 +211,7 @@ public abstract class ItemImp implements Item
 
     public void save() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
     {
-        nodeManager.save(path);
+        nodeManager.save(path,depth);
         this.isNew=false;        
     }
 

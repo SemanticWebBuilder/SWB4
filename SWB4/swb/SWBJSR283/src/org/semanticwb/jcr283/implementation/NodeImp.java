@@ -25,6 +25,7 @@ import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
+import javax.jcr.ReferentialIntegrityException;
 import javax.jcr.RepositoryException;
 import javax.jcr.UnsupportedRepositoryOperationException;
 import javax.jcr.Value;
@@ -55,13 +56,10 @@ public class NodeImp extends ItemImp implements Node
 {
 
     public static final String JCR_MIXINTYPES = "jcr:mixinTypes";
-    
-    
     private final static Logger log = SWBUtils.getLogger(NodeImp.class);
     private final static NodeTypeManagerImp nodeTypeManager = new NodeTypeManagerImp();
     private final static ValueFactoryImp valueFactoryImp = new ValueFactoryImp();
     private final NodeDefinitionImp nodeDefinitionImp;
-    
     private SemanticObject obj = null;
     private final int index;
 
@@ -76,7 +74,7 @@ public class NodeImp extends ItemImp implements Node
         this.index = index;
         this.nodeDefinitionImp = nodeDefinition;
         loadProperties();
-        
+
     }
 
     NodeImp(SemanticObject obj, String name, NodeImp parent, int index, String path, int depth, SessionImp session)
@@ -86,28 +84,34 @@ public class NodeImp extends ItemImp implements Node
         this.index = index;
         nodeDefinitionImp = new NodeDefinitionImp(obj, NodeTypeManagerImp.loadNodeType(obj.getSemanticClass()));
         loadProperties();
-        
+
     }
 
-    public void saveData()
+    public void saveData() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
     {
-        if(obj==null)
+        if (obj == null)
         {
             // create new Node
-            SemanticClass sclass=this.nodeDefinitionImp.getDeclaringNodeTypeImp().getSemanticClass();
-            String id=UUID.randomUUID().toString();
-            String workspacename=session.getWorkspaceImp().getName();
-            org.semanticwb.jcr283.repository.model.Workspace model=org.semanticwb.jcr283.repository.model.Workspace.ClassMgr.getWorkspace(workspacename);
-            obj=model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass).getSemanticObject();
-            Base base=new Base(obj);
+            SemanticClass sclass = this.nodeDefinitionImp.getDeclaringNodeTypeImp().getSemanticClass();
+            String id = UUID.randomUUID().toString();
+            String workspacename = session.getWorkspaceImp().getName();
+            org.semanticwb.jcr283.repository.model.Workspace model = org.semanticwb.jcr283.repository.model.Workspace.ClassMgr.getWorkspace(workspacename);
+            obj = model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass).getSemanticObject();
+            Base base = new Base(obj);
             base.setName(this.name);
-            if(parent!=null && parent.getSemanticObject()!=null)
+            if (parent != null)
             {
-                base.setParentNode(new Base(parent.getSemanticObject()));
+                if (parent.getSemanticObject() == null)
+                {
+                    // TODO:ERROR
+                }
+                else
+                {
+                    base.setParentNode(new Base(parent.getSemanticObject()));
+                }
             }
-            
-        }
-        // save properties
+
+        }        
 
     }
 
@@ -115,8 +119,6 @@ public class NodeImp extends ItemImp implements Node
     {
         return obj;
     }
-
-    
 
     private void loadProperties()
     {
@@ -179,8 +181,6 @@ public class NodeImp extends ItemImp implements Node
         return addNode(relPath, null);
     }
 
-    
-
     private NodeImp insertNode(String nameToAdd, NodeDefinitionImp childDefinition) throws RepositoryException
     {
         String childpath = path + PATH_SEPARATOR + nameToAdd;
@@ -209,7 +209,7 @@ public class NodeImp extends ItemImp implements Node
     public Node addNode(String relPath, String primaryNodeTypeName) throws ItemExistsException, PathNotFoundException, NoSuchNodeTypeException, LockException, VersionException, ConstraintViolationException, RepositoryException
     {
         if (!isValidRelativePath(relPath))
-        {            
+        {
             throw new RepositoryException(THE_PATH_IS_NOT_RELATIVE + relPath);
         }
         String absPath = normalizePath(relPath);
@@ -606,7 +606,7 @@ public class NodeImp extends ItemImp implements Node
             {
                 SemanticProperty semanticProperty = propDef.getSemanticProperty();
                 String nameProperty = semanticProperty.getPrefix() + ":" + semanticProperty.getName();
-                String pathProperty=getPropertyPath(nameProperty);
+                String pathProperty = getPropertyPath(nameProperty);
                 PropertyImp propMix = new PropertyImp(semanticProperty, this, pathProperty, session);
                 nodeManager.addProperty(prop, prop.path);
             }
