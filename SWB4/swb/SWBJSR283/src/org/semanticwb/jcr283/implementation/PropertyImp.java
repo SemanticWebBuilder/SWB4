@@ -10,16 +10,21 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Iterator;
+import javax.jcr.AccessDeniedException;
 import javax.jcr.Binary;
+import javax.jcr.InvalidItemStateException;
+import javax.jcr.ItemExistsException;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.PropertyType;
+import javax.jcr.ReferentialIntegrityException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
 import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
+import javax.jcr.nodetype.NoSuchNodeTypeException;
 import javax.jcr.nodetype.PropertyDefinition;
 import javax.jcr.version.VersionException;
 import org.semanticwb.platform.SemanticLiteral;
@@ -110,6 +115,7 @@ public class PropertyImp extends ItemImp implements Property
         }
         this.values.addAll(newValues);
         this.isModified=true;
+        parent.isModified=true;
     }
 
     public void setValue(String value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
@@ -310,5 +316,9 @@ public class PropertyImp extends ItemImp implements Property
 
         }        
         return copyValue;
+    }
+    public void saveData() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
+    {
+        
     }
 }
