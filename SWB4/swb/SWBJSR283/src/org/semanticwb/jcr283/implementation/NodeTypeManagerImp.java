@@ -39,6 +39,7 @@ public class NodeTypeManagerImp implements NodeTypeManager
     {
         loadNodeTypes();
     }
+    
     public static NodeTypeImp loadNodeType(SemanticClass clazz)
     {
 

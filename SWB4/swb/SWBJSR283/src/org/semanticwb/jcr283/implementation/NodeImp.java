@@ -245,9 +245,9 @@ public class NodeImp extends ItemImp implements Node
     private NodeImp insertNode(String nameToAdd, NodeDefinitionImp childDefinition) throws RepositoryException
     {
         String childpath = path + PATH_SEPARATOR + nameToAdd;
-        if(childpath.endsWith(PATH_SEPARATOR))
+        if (childpath.endsWith(PATH_SEPARATOR))
         {
-            childpath = path +nameToAdd;
+            childpath = path + nameToAdd;
         }
         if (!childDefinition.allowsSameNameSiblings() && this.session.getWorkspaceImp().getNodeManager().hasNode(childpath, false))
         {
@@ -600,7 +600,33 @@ public class NodeImp extends ItemImp implements Node
 
     public NodeType[] getMixinNodeTypes() throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        HashSet<NodeType> getMixinNodeTypes = new HashSet<NodeType>();
+        for (NodeType superNodeType : nodeDefinitionImp.getDeclaringNodeType().getSupertypes())
+        {
+            if (superNodeType.isMixin())
+            {
+                getMixinNodeTypes.add(superNodeType);
+            }
+        }
+        PropertyImp prop = manager.getProperty(getPropertyPath(JCR_MIXINTYPES));
+        for (Value value : prop.getValues())
+        {
+            String type = value.getString();
+            NodeTypeManagerImp nodeTypeManagerImp = new NodeTypeManagerImp();
+            try
+            {
+                NodeTypeImp superNodeType = nodeTypeManagerImp.getNodeTypeImp(type);
+                if (superNodeType.isMixin())
+                {
+                    getMixinNodeTypes.add(superNodeType);
+                }
+            }
+            catch (Exception e)
+            {
+                log.debug(e);
+            }
+        }
+        return getMixinNodeTypes.toArray(new NodeType[getMixinNodeTypes.size()]);
     }
 
     public boolean isNodeType(String nodeTypeName) throws RepositoryException
@@ -655,7 +681,7 @@ public class NodeImp extends ItemImp implements Node
             {
                 throw new ConstraintViolationException("The mix in can not be deleted, the mixin is declared super nodetype");
             }
-        }        
+        }
         PropertyImp prop = manager.getProperty(getPropertyPath(JCR_MIXINTYPES));
         Value[] values = prop.getValues();
         HashSet<Value> newValues = new HashSet<Value>();
@@ -673,7 +699,7 @@ public class NodeImp extends ItemImp implements Node
             if (propDef.getSemanticProperty() != null)
             {
                 SemanticProperty semanticProperty = propDef.getSemanticProperty();
-                String name = semanticProperty.getPrefix() + ":" + semanticProperty.getName();                
+                String name = semanticProperty.getPrefix() + ":" + semanticProperty.getName();
                 manager.removeProperty(getPropertyPath(name));
             }
         }
@@ -693,7 +719,7 @@ public class NodeImp extends ItemImp implements Node
             {
                 return false;
             }
-        }        
+        }
         if (manager.hasProperty(getPropertyPath(JCR_MIXINTYPES)))
         {
             return false;
