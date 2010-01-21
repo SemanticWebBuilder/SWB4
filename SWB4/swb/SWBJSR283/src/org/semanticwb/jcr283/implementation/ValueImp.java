@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.net.URI;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -190,7 +191,7 @@ public class ValueImp implements Value
                     break;
                 case PropertyType.BINARY:
                     this.value = toBinary(ovalue);
-                    break;               
+                    break;
                 case PropertyType.DATE:
                     this.value = toDate(ovalue);
                     break;
@@ -202,7 +203,7 @@ public class ValueImp implements Value
                     break;
                 case PropertyType.LONG:
                     this.value = toLong(ovalue);
-                    break;               
+                    break;
                 default:
                     throw new ValueFormatException("The value can not be converted");
 
@@ -218,7 +219,7 @@ public class ValueImp implements Value
                     break;
                 case PropertyType.BINARY:
                     this.value = toBinary(ovalue);
-                    break;               
+                    break;
                 case PropertyType.DATE:
                     this.value = toDate(ovalue);
                     break;
@@ -246,7 +247,7 @@ public class ValueImp implements Value
                     break;
                 case PropertyType.BINARY:
                     this.value = toBinary(ovalue);
-                    break;                
+                    break;
                 case PropertyType.DATE:
                     this.value = toDate(ovalue);
                     break;
@@ -257,6 +258,98 @@ public class ValueImp implements Value
                     this.value = toDouble(ovalue);
                     break;
                 case PropertyType.LONG:
+                    this.value = ovalue;
+                    break;
+                default:
+                    throw new ValueFormatException("The value can not be converted");
+
+            }
+        }
+        else if (value instanceof Boolean)
+        {
+            Boolean ovalue = (Boolean) value;
+            switch (type)
+            {
+                case PropertyType.STRING:
+                    this.value = toString(ovalue);
+                    break;
+                case PropertyType.BINARY:
+                    this.value = toBinary(ovalue);
+                    break;
+                default:
+                    throw new ValueFormatException("The value can not be converted");
+
+            }
+        }
+        else if (value instanceof QName)
+        {
+            QName ovalue = (QName) value;
+            switch (type)
+            {
+                case PropertyType.STRING:
+                    this.value = toString(ovalue);
+                    break;
+                case PropertyType.BINARY:
+                    this.value = toBinary(ovalue);
+                    break;
+
+                case PropertyType.PATH:
+                    this.value = toPath(ovalue);
+                    break;
+
+                case PropertyType.URI:
+                    this.value = toUri(ovalue);
+                    break;
+
+
+                default:
+                    throw new ValueFormatException("The value can not be converted");
+
+            }
+        }
+        else if (value instanceof URL)
+        {
+            URL ovalue = (URL) value;
+            switch (type)
+            {
+                case PropertyType.STRING:
+                    this.value = toString(ovalue);
+                    break;
+                case PropertyType.BINARY:
+                    this.value = toBinary(ovalue);
+                    break;
+                case PropertyType.NAME:
+                    this.value = toName(ovalue);
+                    break;
+                case PropertyType.PATH:
+                    this.value = ovalue;
+                    break;
+                case PropertyType.URI:
+                    this.value = toUri(ovalue);
+                    break;
+                default:
+                    throw new ValueFormatException("The value can not be converted");
+
+            }
+        }
+        else if (value instanceof URI)
+        {
+            URI ovalue = (URI) value;
+            switch (type)
+            {
+                case PropertyType.STRING:
+                    this.value = toString(ovalue);
+                    break;
+                case PropertyType.BINARY:
+                    this.value = toBinary(ovalue);
+                    break;
+                case PropertyType.NAME:
+                    this.value = toName(ovalue);
+                    break;
+                case PropertyType.PATH:
+                    this.value = toPath(ovalue);
+                    break;                
+                case PropertyType.URI:
                     this.value = ovalue;
                     break;
                 default:
@@ -509,9 +602,16 @@ public class ValueImp implements Value
 
     }
 
-    private String toPath(String value) throws ValueFormatException
+    private URL toPath(String value) throws ValueFormatException
     {
-        return value;
+        try
+        {
+            return new URL(value);
+        }
+        catch (Exception e)
+        {
+            throw new ValueFormatException(e);
+        }
     }
 
     private URI toUri(String value) throws ValueFormatException
@@ -583,10 +683,12 @@ public class ValueImp implements Value
         return value.getTime().getTime();
 
     }
+
     private String toString(Double value)
     {
         return value.toString();
     }
+
     private Binary toBinary(Double value) throws RepositoryException
     {
         return toBinary(value.toString());
@@ -596,9 +698,10 @@ public class ValueImp implements Value
     {
         return new BigDecimal(value);
     }
+
     private Calendar toDate(Double value)
     {
-        Calendar cal=Calendar.getInstance();
+        Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(value.longValue());
         return cal;
     }
@@ -607,7 +710,6 @@ public class ValueImp implements Value
     {
         return value.longValue();
     }
-
 
     private String toString(BigDecimal value)
     {
@@ -625,7 +727,7 @@ public class ValueImp implements Value
     }
 
     private Calendar toDate(BigDecimal value)
-    {        
+    {
         return toDate(new Double(value.longValue()));
     }
 
@@ -638,7 +740,7 @@ public class ValueImp implements Value
     {
         return value.toString();
     }
-    
+
     private Binary toBinary(Long value) throws RepositoryException
     {
         return toBinary(value.toString());
@@ -651,12 +753,129 @@ public class ValueImp implements Value
 
     private Calendar toDate(Long value)
     {
-        Calendar cal=Calendar.getInstance();
+        Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(value);
         return cal;
     }
+
     private Double toDouble(Long value)
     {
         return new Double(value);
+    }
+
+    private String toString(Boolean value)
+    {
+        return value.toString();
+    }
+
+    private Binary toBinary(Boolean value) throws RepositoryException
+    {
+        return toBinary(value.toString());
+    }
+
+    private String toString(QName value)
+    {
+        return value.toString();
+    }
+
+    private Binary toBinary(QName value) throws RepositoryException
+    {
+        return toBinary(value.toString());
+    }
+
+    private URL toPath(QName value) throws ValueFormatException
+    {
+        try
+        {
+            return new URL("./" + value.toString());
+        }
+        catch (Exception e)
+        {
+            throw new ValueFormatException(e);
+        }
+    }
+
+    private URI toUri(QName value) throws ValueFormatException
+    {
+        try
+        {
+            return new URI("./" + value.toString());
+        }
+        catch (Exception e)
+        {
+            throw new ValueFormatException(e);
+        }
+    }
+
+    private String toString(URL value)
+    {
+        return value.toString();
+    }
+
+    private Binary toBinary(URL value) throws RepositoryException
+    {
+        return toBinary(value.toString());
+    }
+
+    private QName toName(URL value) throws ValueFormatException
+    {
+        String path = value.toString();
+        if (path.startsWith("./"))
+        {
+            path = path.substring(2);
+            return toName(path);
+        }
+        throw new ValueFormatException("The value can not be converted to NAME");
+    }
+
+    private URI toUri(URL value) throws ValueFormatException
+    {
+        try
+        {
+            return value.toURI();
+        }
+        catch (Exception e)
+        {
+            throw new ValueFormatException(e);
+        }
+    }
+
+    private String toString(URI value)
+    {
+        return value.toString();
+    }
+
+    private Binary toBinary(URI value) throws RepositoryException
+    {
+        return toBinary(value.toString());
+    }
+
+    private QName toName(URI value) throws ValueFormatException
+    {
+        try
+        {
+            return toName(value.toURL());
+        }
+        catch(Exception e)
+        {
+            throw new ValueFormatException(e);
+        }
+    }
+
+    private URL toPath(URI value) throws ValueFormatException
+    {
+        String path=value.toString();
+        if(path.startsWith("/"))
+        {
+            path="."+path;
+        }
+        try
+        {
+            return new URL(path);
+        }
+        catch(Exception e)
+        {
+            throw new ValueFormatException(e);
+        }
     }
 }
