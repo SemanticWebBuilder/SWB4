@@ -7,4 +7,5 @@ public class Workspace extends org.semanticwb.jcr283.repository.model.base.Works
     {
         super(base);
     }
+    
 }

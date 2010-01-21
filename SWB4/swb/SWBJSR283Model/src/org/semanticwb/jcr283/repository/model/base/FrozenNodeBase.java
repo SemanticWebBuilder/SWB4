@@ -39,6 +39,28 @@ public abstract class FrozenNodeBase extends org.semanticwb.jcr283.repository.mo
        {
            return (getFrozenNode(id, model)!=null);
        }
+   public static java.util.Iterator<org.semanticwb.jcr283.repository.model.FrozenNode> listFrozenNodeByParentNode(org.semanticwb.jcr283.repository.model.Base parentnode,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.jcr283.repository.model.FrozenNode> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbrep_parentNode, parentnode.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.jcr283.repository.model.FrozenNode> listFrozenNodeByParentNode(org.semanticwb.jcr283.repository.model.Base parentnode)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.jcr283.repository.model.FrozenNode> it=new org.semanticwb.model.GenericIterator(parentnode.getSemanticObject().getModel().listSubjects(swbrep_parentNode,parentnode.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.jcr283.repository.model.FrozenNode> listFrozenNodeByNode(org.semanticwb.jcr283.repository.model.Base hasnode,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.jcr283.repository.model.FrozenNode> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbrep_hasNode, hasnode.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.jcr283.repository.model.FrozenNode> listFrozenNodeByNode(org.semanticwb.jcr283.repository.model.Base hasnode)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.jcr283.repository.model.FrozenNode> it=new org.semanticwb.model.GenericIterator(hasnode.getSemanticObject().getModel().listSubjects(swbrep_hasNode,hasnode.getSemanticObject()));
+       return it;
+   }
     }
 
     public FrozenNodeBase(org.semanticwb.platform.SemanticObject base)

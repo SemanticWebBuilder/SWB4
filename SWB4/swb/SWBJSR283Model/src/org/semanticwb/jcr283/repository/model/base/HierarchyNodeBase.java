@@ -39,6 +39,28 @@ public abstract class HierarchyNodeBase extends org.semanticwb.jcr283.repository
        {
            return (getHierarchyNode(id, model)!=null);
        }
+   public static java.util.Iterator<org.semanticwb.jcr283.repository.model.HierarchyNode> listHierarchyNodeByParentNode(org.semanticwb.jcr283.repository.model.Base parentnode,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.jcr283.repository.model.HierarchyNode> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbrep_parentNode, parentnode.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.jcr283.repository.model.HierarchyNode> listHierarchyNodeByParentNode(org.semanticwb.jcr283.repository.model.Base parentnode)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.jcr283.repository.model.HierarchyNode> it=new org.semanticwb.model.GenericIterator(parentnode.getSemanticObject().getModel().listSubjects(swbrep_parentNode,parentnode.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.jcr283.repository.model.HierarchyNode> listHierarchyNodeByNode(org.semanticwb.jcr283.repository.model.Base hasnode,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.jcr283.repository.model.HierarchyNode> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbrep_hasNode, hasnode.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.jcr283.repository.model.HierarchyNode> listHierarchyNodeByNode(org.semanticwb.jcr283.repository.model.Base hasnode)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.jcr283.repository.model.HierarchyNode> it=new org.semanticwb.model.GenericIterator(hasnode.getSemanticObject().getModel().listSubjects(swbrep_hasNode,hasnode.getSemanticObject()));
+       return it;
+   }
     }
 
     public HierarchyNodeBase(org.semanticwb.platform.SemanticObject base)

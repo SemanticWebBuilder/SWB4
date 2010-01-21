@@ -3,6 +3,8 @@ package org.semanticwb.jcr283.repository.model.base;
 
 public abstract class WorkspaceBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Descriptiveable
 {
+       public static final org.semanticwb.platform.SemanticClass xsd_String=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.w3.org/2001/XMLSchema#string");
+       public static final org.semanticwb.platform.SemanticProperty swbrep_name=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/jcr283#name");
        public static final org.semanticwb.platform.SemanticClass nt_Base=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#base");
        public static final org.semanticwb.platform.SemanticProperty jcr_root=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#root");
        public static final org.semanticwb.platform.SemanticClass nt_Unstructured=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#unstructured");
@@ -22,7 +24,7 @@ public abstract class WorkspaceBase extends org.semanticwb.model.SWBModel implem
            java.util.Iterator it=sclass.listInstances();
            return new org.semanticwb.model.GenericIterator<org.semanticwb.jcr283.repository.model.Workspace>(it, true);
        }
-
+       
        public static org.semanticwb.jcr283.repository.model.Workspace getWorkspace(String id)
        {
            org.semanticwb.platform.SemanticMgr mgr=org.semanticwb.SWBPlatform.getSemanticMgr();
@@ -113,6 +115,16 @@ public abstract class WorkspaceBase extends org.semanticwb.model.SWBModel implem
         getSemanticObject().setProperty(swb_title, title, lang);
     }
 
+    public String getName()
+    {
+        return getSemanticObject().getProperty(swbrep_name);
+    }
+
+    public void setName(String value)
+    {
+        getSemanticObject().setProperty(swbrep_name, value);
+    }
+
     public String getDescription()
     {
         return getSemanticObject().getProperty(swb_description);
@@ -160,30 +172,6 @@ public abstract class WorkspaceBase extends org.semanticwb.model.SWBModel implem
          return ret;
     }
 
-    public org.semanticwb.jcr283.repository.model.Unstructured getUnstructured(String id)
-    {
-        return org.semanticwb.jcr283.repository.model.Unstructured.ClassMgr.getUnstructured(id, this);
-    }
-
-    public java.util.Iterator<org.semanticwb.jcr283.repository.model.Unstructured> listUnstructureds()
-    {
-        return org.semanticwb.jcr283.repository.model.Unstructured.ClassMgr.listUnstructureds(this);
-    }
-
-    public org.semanticwb.jcr283.repository.model.Unstructured createUnstructured(String id)
-    {
-        return org.semanticwb.jcr283.repository.model.Unstructured.ClassMgr.createUnstructured(id,this);
-    }
-
-    public void removeUnstructured(String id)
-    {
-        org.semanticwb.jcr283.repository.model.Unstructured.ClassMgr.removeUnstructured(id, this);
-    }
-    public boolean hasUnstructured(String id)
-    {
-        return org.semanticwb.jcr283.repository.model.Unstructured.ClassMgr.hasUnstructured(id, this);
-    }
-
     public org.semanticwb.jcr283.repository.model.Base getBase(String id)
     {
         return org.semanticwb.jcr283.repository.model.Base.ClassMgr.getBase(id, this);
@@ -206,5 +194,29 @@ public abstract class WorkspaceBase extends org.semanticwb.model.SWBModel implem
     public boolean hasBase(String id)
     {
         return org.semanticwb.jcr283.repository.model.Base.ClassMgr.hasBase(id, this);
+    }
+
+    public org.semanticwb.jcr283.repository.model.Unstructured getUnstructured(String id)
+    {
+        return org.semanticwb.jcr283.repository.model.Unstructured.ClassMgr.getUnstructured(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.jcr283.repository.model.Unstructured> listUnstructureds()
+    {
+        return org.semanticwb.jcr283.repository.model.Unstructured.ClassMgr.listUnstructureds(this);
+    }
+
+    public org.semanticwb.jcr283.repository.model.Unstructured createUnstructured(String id)
+    {
+        return org.semanticwb.jcr283.repository.model.Unstructured.ClassMgr.createUnstructured(id,this);
+    }
+
+    public void removeUnstructured(String id)
+    {
+        org.semanticwb.jcr283.repository.model.Unstructured.ClassMgr.removeUnstructured(id, this);
+    }
+    public boolean hasUnstructured(String id)
+    {
+        return org.semanticwb.jcr283.repository.model.Unstructured.ClassMgr.hasUnstructured(id, this);
     }
 }
