@@ -54,6 +54,7 @@ public class NodeImp extends ItemImp implements Node
 {
 
     public static final String JCR_MIXINTYPES = "jcr:mixinTypes";
+    private static final String PATH_SEPARATOR = "/";
     private final static Logger log = SWBUtils.getLogger(NodeImp.class);
     private final static NodeTypeManagerImp nodeTypeManager = new NodeTypeManagerImp();
     private final static ValueFactoryImp valueFactoryImp = new ValueFactoryImp();
@@ -93,8 +94,8 @@ public class NodeImp extends ItemImp implements Node
 
     private String getPropertyPath(String name)
     {
-        String pathProperty = path + "/" + name;
-        if (pathProperty.endsWith("/"))
+        String pathProperty = path + PATH_SEPARATOR + name;
+        if (pathProperty.endsWith(PATH_SEPARATOR))
         {
             pathProperty = path + name;
         }
@@ -140,7 +141,7 @@ public class NodeImp extends ItemImp implements Node
                     {
                         try
                         {
-                            PropertyImp prop = new PropertyImp(semanticProperty, this, this.getPath() + "/" + semanticProperty.getPrefix() + ":" + semanticProperty.getName(), this.session);
+                            PropertyImp prop = new PropertyImp(semanticProperty, this, this.getPath() + PATH_SEPARATOR + semanticProperty.getPrefix() + ":" + semanticProperty.getName(), this.session);
                             if (!manager.hasProperty(prop.path))
                             {
                                 log.debug("loading property " + semanticProperty.getURI() + " for node " + obj.getURI());
@@ -164,7 +165,7 @@ public class NodeImp extends ItemImp implements Node
 
     private static boolean isValidRelativePath(String relPath)
     {
-        if (relPath.startsWith("/"))
+        if (relPath.startsWith(PATH_SEPARATOR))
         {
             return false;
         }
@@ -179,12 +180,12 @@ public class NodeImp extends ItemImp implements Node
     private static String extractName(String relpath)
     {
         String extractName = relpath;
-        if (extractName.endsWith("/"))
+        if (extractName.endsWith(PATH_SEPARATOR))
         {
             extractName = extractName.substring(0, extractName.length() - 1);
         }
         String name = relpath;
-        int pos = name.lastIndexOf("/");
+        int pos = name.lastIndexOf(PATH_SEPARATOR);
         if (pos != -1)
         {
             name = name.substring(pos + 1);
@@ -229,12 +230,12 @@ public class NodeImp extends ItemImp implements Node
         {
             String end = newpath.substring(pos + 3);
             newpath = newpath.substring(0, pos);
-            pos = newpath.lastIndexOf("/");
+            pos = newpath.lastIndexOf(PATH_SEPARATOR);
             newpath = newpath.substring(0, pos + 1);
             newpath += end;
             pos = newpath.indexOf("/../");
         }
-        if (newpath.endsWith("/"))
+        if (newpath.endsWith(PATH_SEPARATOR))
         {
             newpath = newpath.substring(0, newpath.length() - 1);
         }
@@ -243,7 +244,11 @@ public class NodeImp extends ItemImp implements Node
 
     private NodeImp insertNode(String nameToAdd, NodeDefinitionImp childDefinition) throws RepositoryException
     {
-        String childpath = this.path + "/" + nameToAdd;
+        String childpath = path + PATH_SEPARATOR + nameToAdd;
+        if(childpath.endsWith(PATH_SEPARATOR))
+        {
+            childpath = path +nameToAdd;
+        }
         if (!childDefinition.allowsSameNameSiblings() && this.session.getWorkspaceImp().getNodeManager().hasNode(childpath, false))
         {
             throw new ItemExistsException("There is a node with the same name in the node " + this.path);
@@ -634,7 +639,7 @@ public class NodeImp extends ItemImp implements Node
             {
                 SemanticProperty semanticProperty = propDef.getSemanticProperty();
                 String name = semanticProperty.getPrefix() + ":" + semanticProperty.getName();
-                PropertyImp propMix = new PropertyImp(semanticProperty, this, this.getPath() + "/" + name, session);
+                PropertyImp propMix = new PropertyImp(semanticProperty, this, this.getPath() + PATH_SEPARATOR + name, session);
                 manager.addProperty(prop, prop.path);
             }
         }
