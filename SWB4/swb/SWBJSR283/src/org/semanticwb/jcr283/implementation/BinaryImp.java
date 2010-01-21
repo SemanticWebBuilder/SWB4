@@ -45,6 +45,19 @@ public class BinaryImp implements Binary {
         return cont.length;
     }
 
+    @Override
+    public String toString()
+    {
+        try
+        {
+            return new String(this.cont,"utf-8");
+        }
+        catch(Exception e)
+        {
+            return null;
+        }
+    }
+
     public void dispose()
     {
         
