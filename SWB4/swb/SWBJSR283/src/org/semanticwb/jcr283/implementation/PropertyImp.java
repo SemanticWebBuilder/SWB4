@@ -369,5 +369,7 @@ public class PropertyImp extends ItemImp implements Property
                 }
             }
         }
+        this.isModified=false;
+        this.isNew=false;
     }
 }
