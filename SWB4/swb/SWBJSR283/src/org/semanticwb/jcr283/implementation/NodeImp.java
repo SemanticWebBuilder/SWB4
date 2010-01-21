@@ -115,6 +115,8 @@ public class NodeImp extends ItemImp implements Node
         {
             
         }
+        this.isNew=false;
+        this.isModified=false;
 
     }
 
