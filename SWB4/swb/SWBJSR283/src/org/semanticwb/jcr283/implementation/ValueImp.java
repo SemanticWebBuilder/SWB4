@@ -357,6 +357,29 @@ public class ValueImp implements Value
 
             }
         }
+        else if (value instanceof UUID)
+        {
+            UUID ovalue = (UUID) value;
+            switch (type)
+            {
+                case PropertyType.STRING:
+                    this.value = toString(ovalue);
+                    break;
+                case PropertyType.BINARY:
+                    this.value = toBinary(ovalue);
+                    break;                
+                case PropertyType.REFERENCE:
+                    this.value = ovalue;
+                    break;                
+                case PropertyType.WEAKREFERENCE:
+                    this.value = ovalue;
+                    break;
+
+                default:
+                    throw new ValueFormatException("The value can not be converted");
+
+            }
+        }
         else
         {
 
@@ -881,5 +904,9 @@ public class ValueImp implements Value
     private String toString(UUID value)
     {
         return value.toString();
+    }
+    private Binary toBinary(UUID value) throws RepositoryException
+    {
+        return toBinary(value.toString());
     }
 }
