@@ -11,13 +11,11 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URL;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 import javax.jcr.Binary;
-import javax.jcr.Node;
 import javax.jcr.PropertyType;
 import javax.jcr.RepositoryException;
 import javax.jcr.Value;
@@ -36,29 +34,78 @@ public class ValueImp implements Value
     static Logger log = SWBUtils.getLogger(ValueImp.class);
     private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     private final int type;
-    ByteArrayOutputStream out = new ByteArrayOutputStream();
-    Object value;
+    private final Object value;
 
     ValueImp(Object value, int type) throws RepositoryException
     {
         this.type = type;
-        if(value==null)
+        if (value == null)
         {
             throw new NullPointerException("The value can not be null");
-        }        
+        }
+        this.value = getValue(value,type);
+    }
+
+    ValueImp(String value)
+    {
+        this.type = PropertyType.STRING;
+        this.value=value;
+    }
+    ValueImp(Boolean value) 
+    {
+        this.type = PropertyType.BOOLEAN;
+        this.value=value;
+    }
+    ValueImp(Calendar value)
+    {
+        this.type = PropertyType.DATE;
+        this.value=value;
+    }
+    ValueImp(BigDecimal value)
+    {
+        this.type = PropertyType.DECIMAL;
+        this.value=value;
+    }
+    ValueImp(URI value)
+    {
+        this.type = PropertyType.URI;
+        this.value=value;
+    }
+
+    ValueImp(Double value)
+    {
+        this.type = PropertyType.DOUBLE;
+        this.value=value;
+    }
+    ValueImp(Long value)
+    {
+        this.type = PropertyType.LONG;
+        this.value=value;
+    }
+    ValueImp(QName value)
+    {
+        this.type = PropertyType.NAME;
+        this.value=value;
+    }
+
+    private Object getValue(Object value,int type) throws ValueFormatException,RepositoryException
+    {
+        Object getValue = null;
         if (value instanceof InputStream)
         {
             byte[] buffer = new byte[2048];
             InputStream in = (InputStream) value;
             try
             {
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
                 int read = in.read(buffer);
                 while (read != -1)
                 {
+
                     out.write(buffer, 0, read);
                     read = in.read(buffer);
                 }
-                this.value = out;
+                getValue = out;
             }
             catch (IOException ioe)
             {
@@ -72,40 +119,40 @@ public class ValueImp implements Value
             switch (type)
             {
                 case PropertyType.STRING:
-                    this.value = value;
+                    getValue = value;
                     break;
                 case PropertyType.BINARY:
-                    this.value = toBinary(ovalue);
+                    getValue = toBinary(ovalue);
                     break;
                 case PropertyType.BOOLEAN:
-                    this.value = toBoolean(ovalue);
+                    getValue = toBoolean(ovalue);
                     break;
                 case PropertyType.DATE:
-                    this.value = toDate(ovalue);
+                    getValue = toDate(ovalue);
                     break;
                 case PropertyType.DECIMAL:
-                    this.value = toDecimal(ovalue);
+                    getValue = toDecimal(ovalue);
                     break;
                 case PropertyType.DOUBLE:
-                    this.value = toDouble(ovalue);
+                    getValue = toDouble(ovalue);
                     break;
                 case PropertyType.LONG:
-                    this.value = toLong(ovalue);
+                    getValue = toLong(ovalue);
                     break;
                 case PropertyType.NAME:
-                    this.value = toName(ovalue);
+                    getValue = toName(ovalue);
                     break;
                 case PropertyType.PATH:
-                    this.value = toPath(ovalue);
+                    getValue = toPath(ovalue);
                     break;
                 case PropertyType.REFERENCE:
-                    this.value = toReference(ovalue);
+                    getValue = toReference(ovalue);
                     break;
                 case PropertyType.URI:
-                    this.value = toUri(ovalue);
+                    getValue = toUri(ovalue);
                     break;
                 case PropertyType.WEAKREFERENCE:
-                    this.value = toWeakReference(ovalue);
+                    getValue = toWeakReference(ovalue);
                     break;
 
                 default:
@@ -120,39 +167,39 @@ public class ValueImp implements Value
             switch (type)
             {
                 case PropertyType.STRING:
-                    this.value = newvalue;
+                    getValue = newvalue;
                 case PropertyType.BINARY:
-                    this.value = value;
+                    getValue = value;
                     break;
                 case PropertyType.BOOLEAN:
-                    this.value = toBoolean(newvalue);
+                    getValue = toBoolean(newvalue);
                     break;
                 case PropertyType.DATE:
-                    this.value = toDate(newvalue);
+                    getValue = toDate(newvalue);
                     break;
                 case PropertyType.DECIMAL:
-                    this.value = toDecimal(newvalue);
+                    getValue = toDecimal(newvalue);
                     break;
                 case PropertyType.DOUBLE:
-                    this.value = toDouble(newvalue);
+                    getValue = toDouble(newvalue);
                     break;
                 case PropertyType.LONG:
-                    this.value = toLong(newvalue);
+                    getValue = toLong(newvalue);
                     break;
                 case PropertyType.NAME:
-                    this.value = toName(newvalue);
+                    getValue = toName(newvalue);
                     break;
                 case PropertyType.PATH:
-                    this.value = toPath(newvalue);
+                    getValue = toPath(newvalue);
                     break;
                 case PropertyType.REFERENCE:
-                    this.value = toReference(newvalue);
+                    getValue = toReference(newvalue);
                     break;
                 case PropertyType.URI:
-                    this.value = toUri(newvalue);
+                    getValue = toUri(newvalue);
                     break;
                 case PropertyType.WEAKREFERENCE:
-                    this.value = toWeakReference(newvalue);
+                    getValue = toWeakReference(newvalue);
                     break;
                 default:
                     throw new ValueFormatException("The value can not be converted");
@@ -165,19 +212,19 @@ public class ValueImp implements Value
             switch (type)
             {
                 case PropertyType.STRING:
-                    this.value = toString(ovalue);
+                    getValue = toString(ovalue);
                     break;
                 case PropertyType.DATE:
-                    this.value = ovalue;
+                    getValue = ovalue;
                     break;
                 case PropertyType.DECIMAL:
-                    this.value = toDecimal(ovalue);
+                    getValue = toDecimal(ovalue);
                     break;
                 case PropertyType.DOUBLE:
-                    this.value = toDouble(ovalue);
+                    getValue = toDouble(ovalue);
                     break;
                 case PropertyType.LONG:
-                    this.value = toLong(ovalue);
+                    getValue = toLong(ovalue);
                     break;
                 default:
                     throw new ValueFormatException("The value can not be converted");
@@ -190,22 +237,22 @@ public class ValueImp implements Value
             switch (type)
             {
                 case PropertyType.STRING:
-                    this.value = toString(ovalue);
+                    getValue = toString(ovalue);
                     break;
                 case PropertyType.BINARY:
-                    this.value = toBinary(ovalue);
+                    getValue = toBinary(ovalue);
                     break;
                 case PropertyType.DATE:
-                    this.value = toDate(ovalue);
+                    getValue = toDate(ovalue);
                     break;
                 case PropertyType.DECIMAL:
-                    this.value = toDecimal(ovalue);
+                    getValue = toDecimal(ovalue);
                     break;
                 case PropertyType.DOUBLE:
-                    this.value = value;
+                    getValue = value;
                     break;
                 case PropertyType.LONG:
-                    this.value = toLong(ovalue);
+                    getValue = toLong(ovalue);
                     break;
                 default:
                     throw new ValueFormatException("The value can not be converted");
@@ -218,22 +265,22 @@ public class ValueImp implements Value
             switch (type)
             {
                 case PropertyType.STRING:
-                    this.value = toString(ovalue);
+                    getValue = toString(ovalue);
                     break;
                 case PropertyType.BINARY:
-                    this.value = toBinary(ovalue);
+                    getValue = toBinary(ovalue);
                     break;
                 case PropertyType.DATE:
-                    this.value = toDate(ovalue);
+                    getValue = toDate(ovalue);
                     break;
                 case PropertyType.DECIMAL:
-                    this.value = ovalue;
+                    getValue = ovalue;
                     break;
                 case PropertyType.DOUBLE:
-                    this.value = toDouble(ovalue);
+                    getValue = toDouble(ovalue);
                     break;
                 case PropertyType.LONG:
-                    this.value = toLong(ovalue);
+                    getValue = toLong(ovalue);
                     break;
                 default:
                     throw new ValueFormatException("The value can not be converted");
@@ -246,22 +293,22 @@ public class ValueImp implements Value
             switch (type)
             {
                 case PropertyType.STRING:
-                    this.value = toString(ovalue);
+                    getValue = toString(ovalue);
                     break;
                 case PropertyType.BINARY:
-                    this.value = toBinary(ovalue);
+                    getValue = toBinary(ovalue);
                     break;
                 case PropertyType.DATE:
-                    this.value = toDate(ovalue);
+                    getValue = toDate(ovalue);
                     break;
                 case PropertyType.DECIMAL:
-                    this.value = toDecimal(ovalue);
+                    getValue = toDecimal(ovalue);
                     break;
                 case PropertyType.DOUBLE:
-                    this.value = toDouble(ovalue);
+                    getValue = toDouble(ovalue);
                     break;
                 case PropertyType.LONG:
-                    this.value = ovalue;
+                    getValue = ovalue;
                     break;
                 default:
                     throw new ValueFormatException("The value can not be converted");
@@ -274,10 +321,10 @@ public class ValueImp implements Value
             switch (type)
             {
                 case PropertyType.STRING:
-                    this.value = toString(ovalue);
+                    getValue = toString(ovalue);
                     break;
                 case PropertyType.BINARY:
-                    this.value = toBinary(ovalue);
+                    getValue = toBinary(ovalue);
                     break;
                 default:
                     throw new ValueFormatException("The value can not be converted");
@@ -290,18 +337,18 @@ public class ValueImp implements Value
             switch (type)
             {
                 case PropertyType.STRING:
-                    this.value = toString(ovalue);
+                    getValue = toString(ovalue);
                     break;
                 case PropertyType.BINARY:
-                    this.value = toBinary(ovalue);
+                    getValue = toBinary(ovalue);
                     break;
 
                 case PropertyType.PATH:
-                    this.value = toPath(ovalue);
+                    getValue = toPath(ovalue);
                     break;
 
                 case PropertyType.URI:
-                    this.value = toUri(ovalue);
+                    getValue = toUri(ovalue);
                     break;
 
 
@@ -316,19 +363,19 @@ public class ValueImp implements Value
             switch (type)
             {
                 case PropertyType.STRING:
-                    this.value = toString(ovalue);
+                    getValue = toString(ovalue);
                     break;
                 case PropertyType.BINARY:
-                    this.value = toBinary(ovalue);
+                    getValue = toBinary(ovalue);
                     break;
                 case PropertyType.NAME:
-                    this.value = toName(ovalue);
+                    getValue = toName(ovalue);
                     break;
                 case PropertyType.PATH:
-                    this.value = ovalue;
+                    getValue = ovalue;
                     break;
                 case PropertyType.URI:
-                    this.value = toUri(ovalue);
+                    getValue = toUri(ovalue);
                     break;
                 default:
                     throw new ValueFormatException("The value can not be converted");
@@ -341,19 +388,19 @@ public class ValueImp implements Value
             switch (type)
             {
                 case PropertyType.STRING:
-                    this.value = toString(ovalue);
+                    getValue = toString(ovalue);
                     break;
                 case PropertyType.BINARY:
-                    this.value = toBinary(ovalue);
+                    getValue = toBinary(ovalue);
                     break;
                 case PropertyType.NAME:
-                    this.value = toName(ovalue);
+                    getValue = toName(ovalue);
                     break;
                 case PropertyType.PATH:
-                    this.value = toPath(ovalue);
-                    break;                
+                    getValue = toPath(ovalue);
+                    break;
                 case PropertyType.URI:
-                    this.value = ovalue;
+                    getValue = ovalue;
                     break;
                 default:
                     throw new ValueFormatException("The value can not be converted");
@@ -366,16 +413,16 @@ public class ValueImp implements Value
             switch (type)
             {
                 case PropertyType.STRING:
-                    this.value = toString(ovalue);
+                    getValue = toString(ovalue);
                     break;
                 case PropertyType.BINARY:
-                    this.value = toBinary(ovalue);
-                    break;                
+                    getValue = toBinary(ovalue);
+                    break;
                 case PropertyType.REFERENCE:
-                    this.value = ovalue;
-                    break;                
+                    getValue = ovalue;
+                    break;
                 case PropertyType.WEAKREFERENCE:
-                    this.value = ovalue;
+                    getValue = ovalue;
                     break;
 
                 default:
@@ -385,127 +432,50 @@ public class ValueImp implements Value
         }
         else
         {
-
-            this.value = value;
+            throw new ValueFormatException("The value can not be converted");
         }
+        return getValue;
     }
 
     public String getString() throws ValueFormatException, IllegalStateException, RepositoryException
     {
-        if (value == null)
-        {
-            return null;
-        }
-        String valueString = value.toString();
-        if (value instanceof Node && type == PropertyType.REFERENCE)
-        {
-            valueString = ((Node) value).getUUID();
-        }
-        if (value instanceof Calendar)
-        {
-            //valueString = iso8601dateFormat.format(((Calendar) value).getTime());
-            valueString = SWBUtils.TEXT.iso8601DateFormat(((Calendar) value).getTime());
-        }
-        return valueString;
+        return (String)getValue(value,PropertyType.STRING);
     }
 
     public InputStream getStream() throws IllegalStateException, RepositoryException
     {
-        if (value == null)
+        if(this.value instanceof ByteArrayOutputStream)
         {
-            return null;
+            ByteArrayOutputStream out=(ByteArrayOutputStream)this.value;
+            byte[] bcont=out.toByteArray();
+            ByteArrayInputStream in=new ByteArrayInputStream(bcont);
+            return in;
         }
-        if (value instanceof ByteArrayOutputStream && type == PropertyType.BINARY)
+        else
         {
-            ByteArrayOutputStream mout = (ByteArrayOutputStream) value;
-            return new ByteArrayInputStream(mout.toByteArray());
+            return ((Binary)getValue(value,PropertyType.BINARY)).getStream();
         }
-        return null;
+        
     }
 
     public long getLong() throws ValueFormatException, IllegalStateException, RepositoryException
     {
-        if (value == null)
-        {
-            throw new ValueFormatException();
-        }
-        try
-        {
-            return Long.parseLong(value.toString());
-        }
-        catch (NumberFormatException nfe)
-        {
-            throw new ValueFormatException(nfe);
-        }
+        return (Long)getValue(value,PropertyType.LONG);
     }
 
     public double getDouble() throws ValueFormatException, IllegalStateException, RepositoryException
     {
-        if (value == null)
-        {
-            throw new ValueFormatException();
-        }
-        try
-        {
-            return Double.parseDouble(value.toString());
-        }
-        catch (NumberFormatException nfe)
-        {
-            throw new ValueFormatException(nfe);
-        }
+        return (Double)getValue(value,PropertyType.DOUBLE);
     }
 
     public Calendar getDate() throws ValueFormatException, IllegalStateException, RepositoryException
     {
-        if (value == null)
-        {
-            return null;
-        }
-        Calendar calendar = null;
-        if (type == PropertyType.DATE && value instanceof Calendar)
-        {
-            calendar = (Calendar) value;
-        }
-        else
-        {
-            String stringDate = getString();
-            try
-            {
-                Date date = SWBUtils.TEXT.iso8601DateParse(stringDate);
-                calendar = Calendar.getInstance();
-                calendar.setTime(date);
-            }
-            catch (ParseException pe)
-            {
-                try
-                {
-                    Date date = iso8601dateFormat.parse(stringDate);
-                    calendar = Calendar.getInstance();
-                    calendar.setTime(date);
-                }
-                catch (ParseException pe2)
-                {
-                    throw new ValueFormatException(pe);
-                }
-            }
-        }
-        return calendar;
+        return (Calendar)getValue(value,PropertyType.DATE);
     }
 
     public boolean getBoolean() throws ValueFormatException, IllegalStateException, RepositoryException
     {
-        if (value == null)
-        {
-            throw new ValueFormatException();
-        }
-        try
-        {
-            return Boolean.parseBoolean(value.toString());
-        }
-        catch (NumberFormatException nfe)
-        {
-            throw new ValueFormatException(nfe);
-        }
+        return (Boolean)getValue(value,PropertyType.BOOLEAN);
     }
 
     public int getType()
@@ -515,12 +485,12 @@ public class ValueImp implements Value
 
     public Binary getBinary() throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return (Binary)getValue(value,PropertyType.BINARY);
     }
 
     public BigDecimal getDecimal() throws ValueFormatException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return (BigDecimal)getValue(value,PropertyType.DECIMAL);
     }
 
     private Binary toBinary(String value) throws RepositoryException
@@ -882,7 +852,7 @@ public class ValueImp implements Value
         {
             return toName(value.toURL());
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new ValueFormatException(e);
         }
@@ -890,24 +860,26 @@ public class ValueImp implements Value
 
     private URL toPath(URI value) throws ValueFormatException
     {
-        String path=value.toString();
-        if(path.startsWith("/"))
+        String path = value.toString();
+        if (path.startsWith("/"))
         {
-            path="."+path;
+            path = "." + path;
         }
         try
         {
             return new URL(path);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new ValueFormatException(e);
         }
     }
+
     private String toString(UUID value)
     {
         return value.toString();
     }
+
     private Binary toBinary(UUID value) throws RepositoryException
     {
         return toBinary(value.toString());
