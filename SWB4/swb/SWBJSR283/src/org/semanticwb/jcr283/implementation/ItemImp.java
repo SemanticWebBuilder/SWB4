@@ -66,7 +66,7 @@ public abstract class ItemImp implements Item
     public String getPathFromName(String name)
     {
         String pathProperty = path + PATH_SEPARATOR + name;
-        if (pathProperty.endsWith(PATH_SEPARATOR))
+        if (path.endsWith(PATH_SEPARATOR))
         {
             pathProperty = path + name;
         }
