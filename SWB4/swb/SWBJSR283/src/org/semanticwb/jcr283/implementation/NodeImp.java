@@ -245,7 +245,12 @@ public class NodeImp extends ItemImp implements Node
             Iterator<SemanticProperty> props = obj.listProperties();
             while (props.hasNext())
             {
-                SemanticProperty semanticProperty = props.next();
+                SemanticProperty semanticProperty = props.next();               
+                SemanticClass propertyClazz=semanticProperty.getSemanticObject().getSemanticClass();
+                if(propertyClazz.equals(NodeTypeImp.objectClazz) || propertyClazz.equals(NodeTypeImp.dataClazz))
+                {
+                    
+                }
                 SemanticClass repositoryPropertyDefinition = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(NamespaceRegistryImp.NAMESPACE_NT + "#RepositoryPropertyDefinition");
                 if (semanticProperty.getSemanticObject().getSemanticClass().isSubClass(repositoryPropertyDefinition))
                 {

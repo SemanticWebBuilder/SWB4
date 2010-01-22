@@ -49,7 +49,14 @@ public class PropertyDefinitionImp extends ItemDefinitionImp implements Property
         {
 
             String srequiredType = value.getString();
-            requiredType=PropertyType.valueFromName(srequiredType.toUpperCase());
+            try
+            {
+                requiredType=PropertyType.valueFromName(srequiredType.toUpperCase());
+            }
+            catch(IllegalArgumentException iae)
+            {
+                requiredType=PropertyType.UNDEFINED;
+            }
         }
         else
         {
