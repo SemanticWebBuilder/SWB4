@@ -59,7 +59,8 @@ public class SWBRepository implements Repository {
         org.semanticwb.jcr283.repository.model.Workspace ws=org.semanticwb.jcr283.repository.model.Workspace.ClassMgr.getWorkspace(DEFAULT_WORKSPACE);
         if(ws==null)
         {
-            ws=org.semanticwb.jcr283.repository.model.Workspace.ClassMgr.createWorkspace(DEFAULT_WORKSPACE, "http://www.semanticwb.org.mx/jcr283/default");
+            ws=org.semanticwb.jcr283.repository.model.Workspace.ClassMgr.createWorkspace(DEFAULT_WORKSPACE, "http://www.semanticwb.org.mx/jcr283/default#");
+            ws.setName(DEFAULT_WORKSPACE);
         }
         if(ws.getRoot()==null)
         {
