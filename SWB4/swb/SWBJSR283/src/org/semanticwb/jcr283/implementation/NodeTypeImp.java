@@ -4,6 +4,8 @@
  */
 package org.semanticwb.jcr283.implementation;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -24,6 +26,7 @@ import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticLiteral;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
+import sun.reflect.FieldInfo;
 
 /**
  *
@@ -155,7 +158,6 @@ public class NodeTypeImp implements NodeType
     public void loadPropertyDefinitions()
     {
 
-
         SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(NamespaceRegistry.NAMESPACE_JCR + "#propertyDefinition");
         Iterator<SemanticObject> values = clazz.listObjectRequiredProperties(prop);
         while (values.hasNext())
@@ -166,6 +168,42 @@ public class NodeTypeImp implements NodeType
             {
                 propertyDefinitions.put(pd.getName(), pd);
             }
+        }
+        try
+        {
+            String className = clazz.getClassName();
+            Class clazzJava = Class.forName(className);
+            for (Field field : clazzJava.getFields())
+            {
+                if (field.getType().equals(SemanticProperty.class) && Modifier.isPublic(clazzJava.getModifiers()) && Modifier.isFinal(clazzJava.getModifiers()))
+                {
+                    try
+                    {
+                        Object obj = field.get(null);
+                        if (obj != null)
+                        {
+                            SemanticProperty semanticProperty = (SemanticProperty) obj;
+                            SemanticClass clazzProperty = semanticProperty.getSemanticObject().getSemanticClass();
+                            if (clazzProperty.equals(dataClazz) || clazzProperty.equals(objectClazz))
+                            {
+                                PropertyDefinitionImp pd = new PropertyDefinitionImp(semanticProperty);
+                                if (!propertyDefinitions.containsKey(pd.getName()))
+                                {
+                                    propertyDefinitions.put(pd.getName(), pd);
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        log.error(e);
+                    }
+                }
+            }
+        }
+        catch (ClassNotFoundException cnfe)
+        {
+            log.error(cnfe);
         }
         Iterator<SemanticProperty> props = clazz.listProperties();
         while (props.hasNext())
