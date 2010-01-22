@@ -4,6 +4,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.codegen.CodeGenerator;
 import org.semanticwb.codegen.CodeGeneratorException;
+import org.semanticwb.platform.SemanticMgr;
 
 /*
  * To change this template, choose Tools | Templates
@@ -24,6 +25,7 @@ public class CodeGeneratorJSR283 {
     public void codeGen(String []args)
     {
         String base=SWBUtils.getApplicationPath();
+        SemanticMgr.setSchemaModel(SemanticMgr.ModelSchema.OWL_LITE_MEM_RDFS_INF);
         SWBPlatform.createInstance();        
         SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/swb.owl");
         SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/jcr283.owl");        
