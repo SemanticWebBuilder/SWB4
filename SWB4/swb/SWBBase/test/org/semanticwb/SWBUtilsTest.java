@@ -132,7 +132,7 @@ public class SWBUtilsTest {
         System.out.println("xml2dom");
         String xml = "<data><name>Jorge Jimenez</name><old>33</old></data>";
         Document dom = SWBUtils.XML.xmlToDom(xml);
-        SWBUtils.XML.domtoFile(dom, "C:/Archivos de programa/Apache Software Foundation/Tomcat 5.5/webapps/wb3/prueba/pruebaJ.xml", "UTF-8");
+        SWBUtils.XML.domToFile(dom, "C:/Archivos de programa/Apache Software Foundation/Tomcat 5.5/webapps/wb3/prueba/pruebaJ.xml", "UTF-8");
     }
 
     @Test
