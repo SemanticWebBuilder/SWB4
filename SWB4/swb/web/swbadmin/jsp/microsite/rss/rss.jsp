@@ -193,11 +193,11 @@
                 }
                 else if (request.getParameter("photo") != null)
                 {
-                    String eventURI = request.getParameter("photo");
-                    SemanticObject eventObj = SemanticObject.createSemanticObject(eventURI);
-                    if (eventObj != null)
+                    String photoURI = request.getParameter("photo");
+                    SemanticObject photoObj = SemanticObject.createSemanticObject(photoURI);
+                    if (photoObj != null)
                     {
-                        WebPage photowebpage = new WebPage(eventObj);
+                        WebPage photowebpage = new WebPage(photoObj);
 
 
                         response.setContentType("application/rss+xml");
@@ -257,11 +257,11 @@
                 }
                 else if (request.getParameter("news") != null)
                 {
-                    String eventURI = request.getParameter("news");
-                    SemanticObject eventObj = SemanticObject.createSemanticObject(eventURI);
-                    if (eventObj != null)
+                    String newsUri = request.getParameter("news");
+                    SemanticObject newsObj = SemanticObject.createSemanticObject(newsUri);
+                    if (newsObj != null)
                     {
-                        WebPage newswebpage = new WebPage(eventObj);
+                        WebPage newswebpage = new WebPage(newsObj);
 
 
                         response.setContentType("application/rss+xml");
@@ -321,11 +321,11 @@
                 }
                 else if (request.getParameter("video") != null)
                 {
-                    String eventURI = request.getParameter("video");
-                    SemanticObject eventObj = SemanticObject.createSemanticObject(eventURI);
-                    if (eventObj != null)
+                    String videoUri = request.getParameter("video");
+                    SemanticObject videoObj = SemanticObject.createSemanticObject(videoUri);
+                    if (videoObj != null)
                     {
-                        WebPage videowebpage = new WebPage(eventObj);
+                        WebPage videowebpage = new WebPage(videoObj);
 
 
                         response.setContentType("application/rss+xml");
@@ -385,11 +385,11 @@
                 }
                 else if (request.getParameter("comm") != null)
                 {
-                    String eventURI = request.getParameter("comm");
-                    SemanticObject eventObj = SemanticObject.createSemanticObject(eventURI);
-                    if (eventObj != null)
+                    String commURI = request.getParameter("comm");
+                    SemanticObject commObj = SemanticObject.createSemanticObject(commURI);
+                    if (commObj != null)
                     {
-                        WebPage commWebpage = (WebPage) eventObj.createGenericInstance();
+                        org.semanticwb.portal.community.MicroSite commWebpage = (org.semanticwb.portal.community.MicroSite) commObj.createGenericInstance();
 
 
                         response.setContentType("application/rss+xml;charset=utf-8");
@@ -402,15 +402,14 @@
                         rss.appendChild(channel);
                         String title = getTitle(commWebpage);
 
-                        addAtribute(channel, "title", title);
+                        addAtribute(channel, "title", "Comunidad "+title);
                         String url5 = commWebpage.getUrl();
                         url5 = SWBUtils.TEXT.replaceAllIgnoreCase(url5, "&amp;", "&");
                         addAtribute(channel, "link", url5);
                         addAtribute(channel, "description", title);
 
 
-
-                        Iterator elements = MicroSiteElement.ClassMgr.listMicroSiteElements(commWebpage.getWebSite());
+                        Iterator<MicroSiteElement> elements = MicroSiteElement.ClassMgr.listMicroSiteElements(commWebpage.getWebSite());
                         elements = SWBComparator.sortByCreated(elements, false);
                         int i = 0;
                         while (elements.hasNext())
@@ -418,7 +417,9 @@
                             Object obj = elements.next();
                             if (obj instanceof MicroSiteElement)
                             {
+
                                 MicroSiteElement element = (MicroSiteElement) obj;
+                                
                                 if (element.getVisibility() == MicroSiteElement.VIS_ALL)
                                 {
                                     Element item = doc.createElement("item");
@@ -428,7 +429,7 @@
                                     String url6 = element.getURL();
                                     url6 = SWBUtils.TEXT.replaceAllIgnoreCase(url6, "&amp;", "&");
                                     addAtribute(item, "link", url6);
-                                    addAtribute(item, "description", element.getDescription());
+                                    addAtribute(item, "description", element.getDescription()+","+commWebpage.getURI());
                                     addAtribute(item, "pubDate", element.getCreated().toGMTString());
                                     addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
                                     i++;
@@ -456,9 +457,6 @@
                     if (objBlog != null)
                     {
                         Blog blog = new Blog(objBlog);
-
-
-
                         response.setContentType("application/rss+xml");
                         Document doc = org.semanticwb.SWBUtils.XML.getNewDocument();
                         Element rss = doc.createElement("rss");
