@@ -1,7 +1,7 @@
 package org.semanticwb.jcr283.repository.model.base;
 
 
-public abstract class ConfigurationBase extends org.semanticwb.jcr283.repository.model.Base implements org.semanticwb.jcr283.repository.model.Versionable,org.semanticwb.jcr283.repository.model.SimpleVersionable,org.semanticwb.jcr283.repository.model.Referenceable
+public abstract class ConfigurationBase extends org.semanticwb.jcr283.repository.model.Base implements org.semanticwb.jcr283.repository.model.Versionable,org.semanticwb.jcr283.repository.model.Referenceable,org.semanticwb.jcr283.repository.model.SimpleVersionable
 {
        public static final org.semanticwb.platform.SemanticClass nt_Configuration=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#configuration");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#configuration");
@@ -50,6 +50,17 @@ public abstract class ConfigurationBase extends org.semanticwb.jcr283.repository
        org.semanticwb.model.GenericIterator<org.semanticwb.jcr283.repository.model.Configuration> it=new org.semanticwb.model.GenericIterator(parentnode.getSemanticObject().getModel().listSubjects(swbrep_parentNode,parentnode.getSemanticObject()));
        return it;
    }
+   public static java.util.Iterator<org.semanticwb.jcr283.repository.model.Configuration> listConfigurationByPredecessors(org.semanticwb.jcr283.repository.model.Version predecessors,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.jcr283.repository.model.Configuration> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(jcr_predecessors, predecessors.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.jcr283.repository.model.Configuration> listConfigurationByPredecessors(org.semanticwb.jcr283.repository.model.Version predecessors)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.jcr283.repository.model.Configuration> it=new org.semanticwb.model.GenericIterator(predecessors.getSemanticObject().getModel().listSubjects(jcr_predecessors,predecessors.getSemanticObject()));
+       return it;
+   }
    public static java.util.Iterator<org.semanticwb.jcr283.repository.model.Configuration> listConfigurationByActivity(org.semanticwb.jcr283.repository.model.Activity activity,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.jcr283.repository.model.Configuration> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(jcr_activity, activity.getSemanticObject()));
@@ -72,6 +83,17 @@ public abstract class ConfigurationBase extends org.semanticwb.jcr283.repository
        org.semanticwb.model.GenericIterator<org.semanticwb.jcr283.repository.model.Configuration> it=new org.semanticwb.model.GenericIterator(versionhistory.getSemanticObject().getModel().listSubjects(jcr_versionHistory,versionhistory.getSemanticObject()));
        return it;
    }
+   public static java.util.Iterator<org.semanticwb.jcr283.repository.model.Configuration> listConfigurationByConfiguration(org.semanticwb.jcr283.repository.model.Configuration configuration,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.jcr283.repository.model.Configuration> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(jcr_configuration, configuration.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.jcr283.repository.model.Configuration> listConfigurationByConfiguration(org.semanticwb.jcr283.repository.model.Configuration configuration)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.jcr283.repository.model.Configuration> it=new org.semanticwb.model.GenericIterator(configuration.getSemanticObject().getModel().listSubjects(jcr_configuration,configuration.getSemanticObject()));
+       return it;
+   }
    public static java.util.Iterator<org.semanticwb.jcr283.repository.model.Configuration> listConfigurationByBaseVersion(org.semanticwb.jcr283.repository.model.Version baseversion,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.jcr283.repository.model.Configuration> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(jcr_baseVersion, baseversion.getSemanticObject()));
@@ -81,6 +103,17 @@ public abstract class ConfigurationBase extends org.semanticwb.jcr283.repository
    public static java.util.Iterator<org.semanticwb.jcr283.repository.model.Configuration> listConfigurationByBaseVersion(org.semanticwb.jcr283.repository.model.Version baseversion)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.jcr283.repository.model.Configuration> it=new org.semanticwb.model.GenericIterator(baseversion.getSemanticObject().getModel().listSubjects(jcr_baseVersion,baseversion.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.jcr283.repository.model.Configuration> listConfigurationByMergeFailed(org.semanticwb.jcr283.repository.model.Version mergefailed,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.jcr283.repository.model.Configuration> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(jcr_mergeFailed, mergefailed.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.jcr283.repository.model.Configuration> listConfigurationByMergeFailed(org.semanticwb.jcr283.repository.model.Version mergefailed)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.jcr283.repository.model.Configuration> it=new org.semanticwb.model.GenericIterator(mergefailed.getSemanticObject().getModel().listSubjects(jcr_mergeFailed,mergefailed.getSemanticObject()));
        return it;
    }
    public static java.util.Iterator<org.semanticwb.jcr283.repository.model.Configuration> listConfigurationByNode(org.semanticwb.jcr283.repository.model.Base hasnode,org.semanticwb.model.SWBModel model)
@@ -109,6 +142,28 @@ public abstract class ConfigurationBase extends org.semanticwb.jcr283.repository
     public void setUuid(String value)
     {
         getSemanticObject().setProperty(jcr_uuid, value);
+    }
+
+    public void setPredecessors(org.semanticwb.jcr283.repository.model.Version value)
+    {
+        getSemanticObject().setObjectProperty(jcr_predecessors, value.getSemanticObject());
+    }
+
+    public void removePredecessors()
+    {
+        getSemanticObject().removeProperty(jcr_predecessors);
+    }
+
+
+    public org.semanticwb.jcr283.repository.model.Version getPredecessors()
+    {
+         org.semanticwb.jcr283.repository.model.Version ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(jcr_predecessors);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.jcr283.repository.model.Version)obj.createGenericInstance();
+         }
+         return ret;
     }
 
     public void setActivity(org.semanticwb.jcr283.repository.model.Activity value)
@@ -165,6 +220,28 @@ public abstract class ConfigurationBase extends org.semanticwb.jcr283.repository
          return ret;
     }
 
+    public void setConfiguration(org.semanticwb.jcr283.repository.model.Configuration value)
+    {
+        getSemanticObject().setObjectProperty(jcr_configuration, value.getSemanticObject());
+    }
+
+    public void removeConfiguration()
+    {
+        getSemanticObject().removeProperty(jcr_configuration);
+    }
+
+
+    public org.semanticwb.jcr283.repository.model.Configuration getConfiguration()
+    {
+         org.semanticwb.jcr283.repository.model.Configuration ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(jcr_configuration);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.jcr283.repository.model.Configuration)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
     public void setBaseVersion(org.semanticwb.jcr283.repository.model.Version value)
     {
         getSemanticObject().setObjectProperty(jcr_baseVersion, value.getSemanticObject());
@@ -180,6 +257,28 @@ public abstract class ConfigurationBase extends org.semanticwb.jcr283.repository
     {
          org.semanticwb.jcr283.repository.model.Version ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(jcr_baseVersion);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.jcr283.repository.model.Version)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+    public void setMergeFailed(org.semanticwb.jcr283.repository.model.Version value)
+    {
+        getSemanticObject().setObjectProperty(jcr_mergeFailed, value.getSemanticObject());
+    }
+
+    public void removeMergeFailed()
+    {
+        getSemanticObject().removeProperty(jcr_mergeFailed);
+    }
+
+
+    public org.semanticwb.jcr283.repository.model.Version getMergeFailed()
+    {
+         org.semanticwb.jcr283.repository.model.Version ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(jcr_mergeFailed);
          if(obj!=null)
          {
              ret=(org.semanticwb.jcr283.repository.model.Version)obj.createGenericInstance();

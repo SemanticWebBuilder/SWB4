@@ -3,6 +3,8 @@ package org.semanticwb.jcr283.repository.model.base;
 
 public abstract class VersionedChildBase extends org.semanticwb.jcr283.repository.model.Base 
 {
+       public static final org.semanticwb.platform.SemanticClass xsd_String=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.w3.org/2001/XMLSchema#string");
+       public static final org.semanticwb.platform.SemanticProperty jcr_childVersionHistory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#childVersionHistory");
        public static final org.semanticwb.platform.SemanticClass nt_VersionedChild=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#versionedChild");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#versionedChild");
     public static class ClassMgr
@@ -66,5 +68,15 @@ public abstract class VersionedChildBase extends org.semanticwb.jcr283.repositor
     public VersionedChildBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public String getChildVersionHistory()
+    {
+        return getSemanticObject().getProperty(jcr_childVersionHistory);
+    }
+
+    public void setChildVersionHistory(String value)
+    {
+        getSemanticObject().setProperty(jcr_childVersionHistory, value);
     }
 }

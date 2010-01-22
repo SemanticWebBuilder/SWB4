@@ -1,7 +1,7 @@
 package org.semanticwb.jcr283.repository.model.base;
 
 
-public abstract class FolderBase extends org.semanticwb.jcr283.repository.model.HierarchyNode 
+public abstract class FolderBase extends org.semanticwb.jcr283.repository.model.HierarchyNode implements org.semanticwb.jcr283.repository.model.Created
 {
        public static final org.semanticwb.platform.SemanticClass nt_Folder=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#folder");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#folder");

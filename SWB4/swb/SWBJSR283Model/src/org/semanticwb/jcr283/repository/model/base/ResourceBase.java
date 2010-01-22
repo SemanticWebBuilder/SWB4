@@ -1,8 +1,10 @@
 package org.semanticwb.jcr283.repository.model.base;
 
 
-public abstract class ResourceBase extends org.semanticwb.jcr283.repository.model.Base implements org.semanticwb.jcr283.repository.model.MimeType
+public abstract class ResourceBase extends org.semanticwb.jcr283.repository.model.Base implements org.semanticwb.jcr283.repository.model.LastModified,org.semanticwb.jcr283.repository.model.MimeType
 {
+       public static final org.semanticwb.platform.SemanticClass xsd_Base64Binary=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.w3.org/2001/XMLSchema#base64Binary");
+       public static final org.semanticwb.platform.SemanticProperty jcr_data=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#data");
        public static final org.semanticwb.platform.SemanticClass nt_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#resource");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#resource");
     public static class ClassMgr
@@ -86,5 +88,35 @@ public abstract class ResourceBase extends org.semanticwb.jcr283.repository.mode
     public void setEncoding(String value)
     {
         getSemanticObject().setProperty(jcr_encoding, value);
+    }
+
+    public java.util.Date getLastModified()
+    {
+        return getSemanticObject().getDateProperty(jcr_lastModified);
+    }
+
+    public void setLastModified(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(jcr_lastModified, value);
+    }
+
+    public String getLastModifiedBy()
+    {
+        return getSemanticObject().getProperty(jcr_lastModifiedBy);
+    }
+
+    public void setLastModifiedBy(String value)
+    {
+        getSemanticObject().setProperty(jcr_lastModifiedBy, value);
+    }
+
+    public java.io.InputStream getData() throws Exception
+    {
+        return getSemanticObject().getInputStreamProperty(jcr_data);
+    }
+
+    public void setData(java.io.InputStream value,String name) throws Exception
+    {
+        getSemanticObject().setInputStreamProperty(jcr_data, value,name);
     }
 }

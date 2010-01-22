@@ -24,7 +24,7 @@ public abstract class WorkspaceBase extends org.semanticwb.model.SWBModel implem
            java.util.Iterator it=sclass.listInstances();
            return new org.semanticwb.model.GenericIterator<org.semanticwb.jcr283.repository.model.Workspace>(it, true);
        }
-       
+
        public static org.semanticwb.jcr283.repository.model.Workspace getWorkspace(String id)
        {
            org.semanticwb.platform.SemanticMgr mgr=org.semanticwb.SWBPlatform.getSemanticMgr();
@@ -172,30 +172,6 @@ public abstract class WorkspaceBase extends org.semanticwb.model.SWBModel implem
          return ret;
     }
 
-    public org.semanticwb.jcr283.repository.model.Base getBase(String id)
-    {
-        return org.semanticwb.jcr283.repository.model.Base.ClassMgr.getBase(id, this);
-    }
-
-    public java.util.Iterator<org.semanticwb.jcr283.repository.model.Base> listBases()
-    {
-        return org.semanticwb.jcr283.repository.model.Base.ClassMgr.listBases(this);
-    }
-
-    public org.semanticwb.jcr283.repository.model.Base createBase(String id)
-    {
-        return org.semanticwb.jcr283.repository.model.Base.ClassMgr.createBase(id,this);
-    }
-
-    public void removeBase(String id)
-    {
-        org.semanticwb.jcr283.repository.model.Base.ClassMgr.removeBase(id, this);
-    }
-    public boolean hasBase(String id)
-    {
-        return org.semanticwb.jcr283.repository.model.Base.ClassMgr.hasBase(id, this);
-    }
-
     public org.semanticwb.jcr283.repository.model.Unstructured getUnstructured(String id)
     {
         return org.semanticwb.jcr283.repository.model.Unstructured.ClassMgr.getUnstructured(id, this);
@@ -218,5 +194,29 @@ public abstract class WorkspaceBase extends org.semanticwb.model.SWBModel implem
     public boolean hasUnstructured(String id)
     {
         return org.semanticwb.jcr283.repository.model.Unstructured.ClassMgr.hasUnstructured(id, this);
+    }
+
+    public org.semanticwb.jcr283.repository.model.Base getBase(String id)
+    {
+        return org.semanticwb.jcr283.repository.model.Base.ClassMgr.getBase(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.jcr283.repository.model.Base> listBases()
+    {
+        return org.semanticwb.jcr283.repository.model.Base.ClassMgr.listBases(this);
+    }
+
+    public org.semanticwb.jcr283.repository.model.Base createBase(String id)
+    {
+        return org.semanticwb.jcr283.repository.model.Base.ClassMgr.createBase(id,this);
+    }
+
+    public void removeBase(String id)
+    {
+        org.semanticwb.jcr283.repository.model.Base.ClassMgr.removeBase(id, this);
+    }
+    public boolean hasBase(String id)
+    {
+        return org.semanticwb.jcr283.repository.model.Base.ClassMgr.hasBase(id, this);
     }
 }
