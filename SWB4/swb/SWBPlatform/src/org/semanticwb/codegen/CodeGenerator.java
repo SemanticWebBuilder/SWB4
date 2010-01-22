@@ -486,7 +486,7 @@ public class CodeGenerator
             javaClassContent.append("import org.semanticwb.portal.api.*;" + ENTER);
 
             javaClassContent.append(ENTER);
-            javaClassContent.append("public abstract class " + toUpperCase(tpc.getClassCodeName()) + " extends " + tpc.getCodePackage() + ".base." + toUpperCase(tpc.getClassCodeName()) + "Base " + ENTER);
+            javaClassContent.append("public class " + toUpperCase(tpc.getClassCodeName()) + " extends " + tpc.getCodePackage() + ".base." + toUpperCase(tpc.getClassCodeName()) + "Base " + ENTER);
             javaClassContent.append("{" + ENTER);
 
             javaClassContent.append(ENTER);
@@ -547,7 +547,7 @@ public class CodeGenerator
             javaClassContent.append("" + ENTER);
         }
         javaClassContent.append(ENTER);
-        javaClassContent.append("public class " + toUpperCase(tpc.getClassCodeName()) + "Base extends " + exts + " " + getInterfacesAsString(tpc, false) + "" + ENTER);
+        javaClassContent.append("public abstract class " + toUpperCase(tpc.getClassCodeName()) + "Base extends " + exts + " " + getInterfacesAsString(tpc, false) + "" + ENTER);
         javaClassContent.append("{" + ENTER);
         HashSet<SemanticClass> staticClasses = new HashSet<SemanticClass>();
         HashSet<SemanticProperty> staticProperties = new HashSet<SemanticProperty>();
