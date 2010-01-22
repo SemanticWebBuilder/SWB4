@@ -41,7 +41,6 @@ import javax.jcr.version.Version;
 import javax.jcr.version.VersionException;
 import javax.jcr.version.VersionHistory;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.jcr283.repository.model.Base;
 import org.semanticwb.platform.SemanticClass;
@@ -275,24 +274,21 @@ public class NodeImp extends ItemImp implements Node
             {
                 if (propDef.getSemanticProperty() != null)
                 {
-                    SemanticClass repositoryPropertyDefinition = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(NamespaceRegistryImp.NAMESPACE_NT + "#RepositoryPropertyDefinition");
                     SemanticProperty semanticProperty = propDef.getSemanticProperty();
-                    if (semanticProperty.getSemanticObject().getSemanticClass().isSubClass(repositoryPropertyDefinition))
+                    try
                     {
-                        try
+                        PropertyImp prop = new PropertyImp(semanticProperty, this, this.getPath() + PATH_SEPARATOR + semanticProperty.getPrefix() + ":" + semanticProperty.getName(), this.session);
+                        if (!nodeManager.hasProperty(prop.path))
                         {
-                            PropertyImp prop = new PropertyImp(semanticProperty, this, this.getPath() + PATH_SEPARATOR + semanticProperty.getPrefix() + ":" + semanticProperty.getName(), this.session);
-                            if (!nodeManager.hasProperty(prop.path))
-                            {
-                                log.debug("loading property " + semanticProperty.getURI() + " for node " + obj.getURI());
-                                nodeManager.addProperty(prop, prop.path, this.path);
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            log.error(e);
+                            log.debug("loading property " + semanticProperty.getURI() + " for node " + obj.getURI());
+                            nodeManager.addProperty(prop, prop.path, this.path);
                         }
                     }
+                    catch (Exception e)
+                    {
+                        log.error(e);
+                    }
+
                 }
             }
         }
@@ -333,21 +329,21 @@ public class NodeImp extends ItemImp implements Node
         }
         String absPath = normalizePath(relPath);
         String nameToAdd = extractName(absPath);
-        if(!isValidName(nameToAdd))
+        if (!isValidName(nameToAdd))
         {
             throw new RepositoryException("The name for the new node is invalid");
         }
-        String tempPath=absPath;
-        if(!tempPath.endsWith("/"))
+        String tempPath = absPath;
+        if (!tempPath.endsWith("/"))
         {
-            tempPath+="/";
+            tempPath += "/";
         }
-        String parentPath=normalizePath("."+tempPath+"../");
+        String parentPath = normalizePath("." + tempPath + "../");
         NodeImp nodeParent = nodeManager.getNode(parentPath);
         if (nodeParent == null)
         {
             throw new PathNotFoundException("The node with path " + relPath + " was not found");
-        }        
+        }
         NodeDefinitionImp childDefinition = null;
         for (NodeDefinitionImp childNodeDefinition : nodeParent.nodeDefinitionImp.getDeclaringNodeTypeImp().getChildNodeDefinitionsImp())
         {
@@ -707,7 +703,8 @@ public class NodeImp extends ItemImp implements Node
                 getMixinNodeTypes.add(superNodeType);
             }
         }
-        PropertyImp prop = nodeManager.getProperty(getPathFromName(JCR_MIXINTYPES));
+        String jcr_mixinTypesPath=getPathFromName(JCR_MIXINTYPES);
+        PropertyImp prop = nodeManager.getProperty(jcr_mixinTypesPath);
         for (Value value : prop.getValues())
         {
             String type = value.getString();
@@ -819,11 +816,11 @@ public class NodeImp extends ItemImp implements Node
         }
         if (nodeManager.hasProperty(getPathFromName(JCR_MIXINTYPES)))
         {
-            PropertyImp jcr_mixinTypes=nodeManager.getProperty(getPathFromName(JCR_MIXINTYPES));
-            for(Value value : jcr_mixinTypes.getValues())
+            PropertyImp jcr_mixinTypes = nodeManager.getProperty(getPathFromName(JCR_MIXINTYPES));
+            for (Value value : jcr_mixinTypes.getValues())
             {
-                String mix=value.getString();
-                if(mix.equals(mixinName))
+                String mix = value.getString();
+                if (mix.equals(mixinName))
                 {
                     return false;
                 }

@@ -22,11 +22,10 @@ import org.semanticwb.platform.SemanticProperty;
 public class NodeDefinitionImp extends ItemDefinitionImp implements NodeDefinition
 {
 
-
-
     private final NodeTypeImp defaultPrimaryType;
     private final boolean allowsSameNameSiblings;
-    private final HashSet<NodeTypeImp> requiredPrimaryTypes=new HashSet<NodeTypeImp>();
+    private final HashSet<NodeTypeImp> requiredPrimaryTypes = new HashSet<NodeTypeImp>();
+
     public NodeDefinitionImp(SemanticObject obj, NodeTypeImp nodeType)
     {
         super(obj, nodeType);
@@ -54,24 +53,24 @@ public class NodeDefinitionImp extends ItemDefinitionImp implements NodeDefiniti
             defaultPrimaryType = null;
         }
 
-        prop=NodeTypeImp.getSemanticProperty(Property.JCR_SAME_NAME_SIBLINGS);
-        value=obj.getLiteralProperty(prop);
-        if(value!=null)
+        prop = NodeTypeImp.getSemanticProperty(Property.JCR_SAME_NAME_SIBLINGS);
+        value = obj.getLiteralProperty(prop);
+        if (value != null)
         {
-            allowsSameNameSiblings=value.getBoolean();
+            allowsSameNameSiblings = value.getBoolean();
         }
         else
         {
-            allowsSameNameSiblings=false;
+            allowsSameNameSiblings = false;
         }
 
 
-        prop=NodeTypeImp.getSemanticProperty(Property.JCR_REQUIRED_PRIMARY_TYPES);
-        Iterator<SemanticLiteral> values=obj.listLiteralProperties(prop);
-        while(values.hasNext())
+        prop = NodeTypeImp.getSemanticProperty(Property.JCR_REQUIRED_PRIMARY_TYPES);
+        Iterator<SemanticLiteral> values = obj.listLiteralProperties(prop);
+        while (values.hasNext())
         {
-            SemanticLiteral ovalue=values.next();
-            String name=ovalue.getString();
+            SemanticLiteral ovalue = values.next();
+            String name = ovalue.getString();
             Iterator<SemanticClass> classes = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
             while (classes.hasNext())
             {
@@ -94,21 +93,20 @@ public class NodeDefinitionImp extends ItemDefinitionImp implements NodeDefiniti
     {
         return requiredPrimaryTypes.toArray(new NodeTypeImp[requiredPrimaryTypes.size()]);
     }
+
     public void removeNodeType(NodeTypeImp nodeType)
     {
-        
     }
+
     public String[] getRequiredPrimaryTypeNames()
     {
-        HashSet<String> requiredPrimaryTypeNames=new HashSet<String>();
-        for(NodeType nodeType : getRequiredPrimaryTypes())
+        HashSet<String> requiredPrimaryTypeNames = new HashSet<String>();
+        for (NodeType nodeType : getRequiredPrimaryTypes())
         {
             requiredPrimaryTypeNames.add(nodeType.getName());
         }
         return requiredPrimaryTypeNames.toArray(new String[requiredPrimaryTypeNames.size()]);
     }
-
-
 
     public NodeType getDefaultPrimaryType()
     {
@@ -122,7 +120,7 @@ public class NodeDefinitionImp extends ItemDefinitionImp implements NodeDefiniti
 
     public String getDefaultPrimaryTypeName()
     {
-        if(defaultPrimaryType==null)
+        if (defaultPrimaryType == null)
         {
             return null;
         }
