@@ -245,12 +245,8 @@ public class NodeManager
 
     public PropertyImp getProperty(String path)
     {
-        PropertyImp node = this.properties.get(path);
-        if (node == null)
-        {
-            //TODO: Try to load the node from database
-        }
-        return null;
+        PropertyImp propertyImp = this.properties.get(path);       
+        return propertyImp;
     }
 
     private Set<PropertyImp> getChildProperties(String pathParent)
