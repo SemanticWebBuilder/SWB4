@@ -95,6 +95,11 @@ public class ItemDefinitionImp implements ItemDefinition
         return name;
     }
 
+    @Override
+    public String toString()
+    {
+        return name;
+    }
     public boolean isAutoCreated()
     {
         return isAutoCreated;
