@@ -32,6 +32,10 @@ import org.semanticwb.platform.SemanticProperty;
 public class NodeTypeImp implements NodeType
 {
 
+    private static final String uriDataTypePropertyDefiniton = "http://www.jcp.org/jcr/nt/1.0#DataTypePropertyDefinition";
+    private static final String uriObjectTypePropertyDefiniton = "http://www.jcp.org/jcr/nt/1.0#ObjectPropertyDefinition";
+    public static final SemanticClass dataClazz = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(uriDataTypePropertyDefiniton);
+    public static final SemanticClass objectClazz = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(uriObjectTypePropertyDefiniton);
     private static final String ALL = "*";
     private static final String ISQUERYABLE = NamespaceRegistry.NAMESPACE_JCR + "#isQueryable";
     private static Logger log = SWBUtils.getLogger(NodeTypeImp.class);
@@ -154,6 +158,9 @@ public class NodeTypeImp implements NodeType
 
     private void loadPropertyDefinitions()
     {
+        
+        
+
         SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(NamespaceRegistry.NAMESPACE_JCR + "#propertyDefinition");
         Iterator<SemanticObject> values = clazz.listObjectRequiredProperties(prop);
         while (values.hasNext())
@@ -168,10 +175,15 @@ public class NodeTypeImp implements NodeType
         Iterator<SemanticProperty> props = clazz.listProperties();
         while (props.hasNext())
         {
-            PropertyDefinitionImp pd = new PropertyDefinitionImp(props.next());
-            if (!propertyDefinitions.containsKey(pd.getName()))
+            SemanticProperty semanticProperty = props.next();
+            SemanticClass clazzProperty = semanticProperty.getSemanticObject().getSemanticClass();
+            if (clazzProperty.equals(dataClazz) || clazzProperty.equals(objectClazz))
             {
-                propertyDefinitions.put(pd.getName(), pd);
+                PropertyDefinitionImp pd = new PropertyDefinitionImp(semanticProperty);
+                if (!propertyDefinitions.containsKey(pd.getName()))
+                {
+                    propertyDefinitions.put(pd.getName(), pd);
+                }
             }
         }
     }
