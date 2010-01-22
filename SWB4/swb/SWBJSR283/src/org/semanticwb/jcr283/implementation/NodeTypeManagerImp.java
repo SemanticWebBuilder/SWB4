@@ -45,9 +45,19 @@ public class NodeTypeManagerImp implements NodeTypeManager
 
         if (clazz.isSubClass(NodeTypes.sclass) || clazz.equals(NodeTypes.sclass))
         {
-            log.event("loading nodetype ... " + clazz.getURI() + " ...");
-            NodeTypeImp nodeType = new NodeTypeImp(clazz);            
-            types.put(clazz.getPrefix() + ":" + clazz.getName(), nodeType);
+            String name=clazz.getPrefix() + ":" + clazz.getName();
+            NodeTypeImp nodeType=null;
+            if(!types.containsKey(name))
+            {
+                log.event("loading nodetype ... " + clazz.getURI() + " ...");
+                nodeType = new NodeTypeImp(clazz);                
+                types.put(name, nodeType);
+                nodeType.loadPropertyDefinitions();
+                nodeType.loadChildNodeDefinitions();
+                nodeType.loadSuperTypes();
+                nodeType.loadSubTypes();
+            }
+            nodeType=types.get(name);
             return nodeType;
         }
         return null;

@@ -63,10 +63,6 @@ public class NodeTypeImp implements NodeType
             aditionalSuperTypes.addAll(aditionalSuperTypes);
         }
         this.clazz = clazz;
-        loadPropertyDefinitions();
-        loadChildNodeDefinitions();
-        loadSuperTypes();
-        loadSubTypes();
         SemanticProperty prop = getSemanticProperty(Property.JCR_IS_MIXIN);
         SemanticLiteral value = clazz.getRequiredProperty(prop);
         if (value == null)
@@ -128,7 +124,7 @@ public class NodeTypeImp implements NodeType
         return SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(name);
     }
 
-    private void loadSuperTypes()
+    public void loadSuperTypes()
     {
         NodeTypeManagerImp manager = new NodeTypeManagerImp();
         Iterator<SemanticClass> classes = clazz.listSuperClasses();
@@ -156,10 +152,9 @@ public class NodeTypeImp implements NodeType
 
     }
 
-    private void loadPropertyDefinitions()
+    public void loadPropertyDefinitions()
     {
-        
-        
+
 
         SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(NamespaceRegistry.NAMESPACE_JCR + "#propertyDefinition");
         Iterator<SemanticObject> values = clazz.listObjectRequiredProperties(prop);
@@ -188,15 +183,29 @@ public class NodeTypeImp implements NodeType
         }
     }
 
-    private void loadChildNodeDefinitions()
+    public void loadChildNodeDefinitions()
     {
         SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(NamespaceRegistry.NAMESPACE_JCR + "#childNodeDefinition");
         Iterator<SemanticObject> values = clazz.listObjectRequiredProperties(prop);
         while (values.hasNext())
         {
             SemanticObject childDefinition = values.next();
-            NodeDefinitionImp nodeDefinitionImp = new NodeDefinitionImp(childDefinition, this);
-            childnodeDefinitions.put(nodeDefinitionImp.getName(), nodeDefinitionImp);
+            SemanticProperty jcr_name = NodeTypeImp.getSemanticProperty(Property.JCR_NAME);
+            String name = null;
+            SemanticLiteral value = childDefinition.getLiteralProperty(jcr_name);
+            if (value != null)
+            {
+                name = value.getString();
+            }
+            else
+            {
+                name = childDefinition.getPrefix() + ":" + childDefinition.getRDFName();
+            }
+            if (!childnodeDefinitions.containsKey(name))
+            {
+                NodeDefinitionImp nodeDefinitionImp = new NodeDefinitionImp(childDefinition, this);
+                childnodeDefinitions.put(nodeDefinitionImp.getName(), nodeDefinitionImp);
+            }
         }
 
     }
@@ -209,7 +218,7 @@ public class NodeTypeImp implements NodeType
         return getSupertypes.toArray(new NodeType[getSupertypes.size()]);
     }
 
-    private void loadSubTypes()
+    public void loadSubTypes()
     {
 
         Iterator<SemanticClass> classes = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
