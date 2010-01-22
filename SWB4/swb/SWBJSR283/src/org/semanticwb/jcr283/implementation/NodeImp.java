@@ -58,6 +58,7 @@ public class NodeImp extends ItemImp implements Node
     private static final String JCR_LASTMODIFIED = "jcr:lastModified";
     private static final String JCR_LASTMODIFIEDBY = "jcr:lastModifiedBy";
     private static final String JCR_MIXINTYPES = "jcr:mixinTypes";
+    private static final String JCR_PRIMARYTYPE = "jcr:primaryType";
     private static final String JCR_UUID = "jcr:uuid";
     private static final String ALL = "*";
     private static final String JCR_ISCHECKEDOUT = "jcr:isCheckedOut";
@@ -92,7 +93,7 @@ public class NodeImp extends ItemImp implements Node
         this.nodeTypeManager = session.getWorkspaceImp().getNodeTypeManagerImp();
         try
         {
-            String propertyPath = getPathFromName(Property.JCR_PRIMARY_TYPE);
+            String propertyPath = getPathFromName(JCR_PRIMARYTYPE);
             PropertyImp prop = nodeManager.getProperty(propertyPath);
             prop.set(valueFactoryImp.createValue(nodeType.getName()));
             this.isModified = true;

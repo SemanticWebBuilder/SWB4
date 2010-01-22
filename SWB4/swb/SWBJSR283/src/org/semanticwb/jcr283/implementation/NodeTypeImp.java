@@ -169,7 +169,7 @@ public class NodeTypeImp implements NodeType
             }
         }
         try
-        {            
+        {
             String className = clazz.getClassName();
             Class clazzJava = Class.forName(className);
             for (Field field : clazzJava.getFields())
@@ -183,12 +183,27 @@ public class NodeTypeImp implements NodeType
                         {
                             SemanticProperty semanticProperty = (SemanticProperty) obj;
                             SemanticClass clazzProperty = semanticProperty.getSemanticObject().getSemanticClass();
-                            if (clazzProperty.equals(dataClazz) || clazzProperty.equals(objectClazz))
+                            if (semanticProperty.getDomainClass() == null)
                             {
-                                PropertyDefinitionImp pd = new PropertyDefinitionImp(semanticProperty);
-                                if (!propertyDefinitions.containsKey(pd.getName()))
+                                if (clazzProperty.equals(dataClazz) || clazzProperty.equals(objectClazz))
                                 {
-                                    propertyDefinitions.put(pd.getName(), pd);
+                                    NodeTypeImp nodeType=NodeTypeManagerImp.loadNodeType(clazz);
+                                    PropertyDefinitionImp pd = new PropertyDefinitionImp(semanticProperty,nodeType);
+                                    if (!propertyDefinitions.containsKey(pd.getName()))
+                                    {
+                                        propertyDefinitions.put(pd.getName(), pd);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (clazzProperty.equals(dataClazz) || clazzProperty.equals(objectClazz))
+                                {
+                                    PropertyDefinitionImp pd = new PropertyDefinitionImp(semanticProperty);
+                                    if (!propertyDefinitions.containsKey(pd.getName()))
+                                    {
+                                        propertyDefinitions.put(pd.getName(), pd);
+                                    }
                                 }
                             }
                         }
