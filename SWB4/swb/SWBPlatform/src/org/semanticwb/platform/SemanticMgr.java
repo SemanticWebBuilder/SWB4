@@ -51,7 +51,8 @@ import com.hp.hpl.jena.rdf.model.NsIterator;
 import com.hp.hpl.jena.sdb.sql.SDBConnection;
 import com.hp.hpl.jena.sdb.store.DatabaseType;
 import com.hp.hpl.jena.sdb.store.LayoutType;
-//import com.hp.hpl.jena.tdb.TDBFactory;
+import com.hp.hpl.jena.tdb.TDBFactory;
+import com.hp.hpl.jena.tdb.mgt.TDBSystemInfo;
 import com.hp.hpl.jena.util.FileManager;
 import java.io.File;
 import java.io.FileInputStream;
@@ -64,6 +65,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
@@ -100,6 +103,8 @@ public class SemanticMgr implements SWBInstanceObject
 
     private CodePackage codepkg=null;
 
+    private Timer timer;                        //Commiter
+
     public void init() 
     {
         log.event("Initializing SemanticMgr...");
@@ -128,7 +133,6 @@ public class SemanticMgr implements SWBInstanceObject
 //        m_models.put("swb_schema", ontSchemaModel);
         //para busqueda inversa
         m_imodels.put(ontSchemaModel.getRDFModel(), ontSchemaModel);
-
     }
 
     public void initializeDB()
@@ -156,7 +160,15 @@ public class SemanticMgr implements SWBInstanceObject
             }
         }else if(SWBPlatform.createInstance().getPersistenceType().equalsIgnoreCase(SWBPlatform.PRESIST_TYPE_TDB))
         {
-            //Nothing to do
+            System.out.println("TDB Detected...,"+SWBPlatform.createInstance().getPlatformWorkPath()+"/data");
+            timer=new Timer();
+            timer.schedule(new TimerTask()
+            {
+                @Override
+                public void run() {
+                    commit();
+                }
+            },60000,10000);
         }else
         {
             // create a database connection
@@ -180,7 +192,7 @@ public class SemanticMgr implements SWBInstanceObject
 
             maker = ModelFactory.createModelRDBMaker(conn);
         }
-
+        //System.out.println("End initializeDB");
     }
 
     public SemanticModel addBaseOntology(String owlPath)
@@ -338,7 +350,8 @@ public class SemanticMgr implements SWBInstanceObject
             ret=SDBFactory.connectNamedModel(store, name);
         }else if(SWBPlatform.createInstance().getPersistenceType().equals(SWBPlatform.PRESIST_TYPE_TDB))
         {
-            //ret=TDBFactory.createModel(SWBPlatform.getWorkPath()+"/models/"+name+"/data");
+            ret=TDBFactory.createNamedModel(name,SWBPlatform.createInstance().getPlatformWorkPath()+"/data");
+            System.out.println("loadRDFDBModel:"+name);
         }else
         {
             ret=maker.openModel(name);
@@ -444,6 +457,19 @@ public class SemanticMgr implements SWBInstanceObject
                 log.trace("LoadingModel:"+name);
                 SemanticModel model=loadDBModel(name);
             }
+            set.close();
+        }else if(SWBPlatform.createInstance().getPersistenceType().equalsIgnoreCase(SWBPlatform.PRESIST_TYPE_TDB))
+        {
+            Dataset set=TDBFactory.createDataset(SWBPlatform.createInstance().getPlatformWorkPath()+"/data");
+            Iterator<String>it=set.listNames();
+            while(it.hasNext())
+            {
+                String name=it.next();
+                log.trace("LoadingModel:"+name);
+                System.out.println("LoadingModel:"+name);
+                SemanticModel model=loadDBModel(name);
+            }
+            set.close();
         }else
         {
             Iterator tpit=maker.listModels();
@@ -466,6 +492,7 @@ public class SemanticMgr implements SWBInstanceObject
         Model model=loadRDFDBModel(name);
         if(name.equals(SWBAdmin) && !SWBPlatform.createInstance().isAdminDev())
         {
+            //System.out.println(model);
             log.info("Loading SWBAdmin...");
             OntModel omodel=ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM,model);
             try
@@ -631,13 +658,13 @@ public class SemanticMgr implements SWBInstanceObject
         }else if(SWBPlatform.createInstance().getPersistenceType().equals(SWBPlatform.PRESIST_TYPE_TDB))
         {
             //TDBFactory.createModel(SWBPlatform.getWorkPath()+"/models/"+name+"/data");
+            model.getRDFModel().removeAll();
         }else
         {
             maker.removeModel(name);
         }
     }
-        
-    
+            
     public SemanticOntology getOntology() 
     {
         return m_ontology;
@@ -698,8 +725,49 @@ public class SemanticMgr implements SWBInstanceObject
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public CodePackage getCodePackage()
     {
         return codepkg;
+    }
+
+    /**
+     * Commit all models
+     */
+    public void commit()
+    {
+        System.out.println("ServerMgr.Commit()");
+        Iterator<SemanticModel> it=m_models.values().iterator();
+        while (it.hasNext())
+        {
+            SemanticModel model = it.next();
+            model.getRDFModel().commit();
+        }
+    }
+
+    /**
+     * Close all models
+     */
+    public void close()
+    {
+        System.out.println("ServerMgr.Close()");
+        Iterator<SemanticModel> it=m_models.values().iterator();
+        while (it.hasNext())
+        {
+            SemanticModel model = it.next();
+            model.getRDFModel().close();
+        }
+    }
+
+    /**
+     * Destroy method for this filter
+     *
+     */
+    public void destroy()
+    {
+        close();
     }
 }

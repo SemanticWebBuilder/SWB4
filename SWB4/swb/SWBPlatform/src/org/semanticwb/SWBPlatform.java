@@ -491,17 +491,17 @@ public class SWBPlatform
                 res=base.getResource(uri);
             }else
             {
-                Iterator<Model> it=ont.listSubModels();
+                Iterator<OntModel> it=ont.listSubModels();
                 while(it.hasNext())
                 {
-                    Model model=it.next();
-                    if(model instanceof OntModel)model=((OntModel)model).getBaseModel();
+                    OntModel model=it.next();
+                    Model base2=model.getBaseModel();
                     //System.out.println("sub:"+model.getGraph().size());
-                    if(model!=base)
+                    if(base2!=base)
                     {
-                        if(model.contains(res, type))
+                        if(base2.contains(res, type))
                         {
-                            res=model.getResource(uri);
+                            res=base2.getResource(uri);
                             break;
                         }
                     }
@@ -509,7 +509,6 @@ public class SWBPlatform
             }
             return res;
         }
-
     }
 
 }
