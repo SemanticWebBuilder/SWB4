@@ -397,7 +397,7 @@ public class NodeTypeImp implements NodeType
             boolean isConformToRequired = false;
             for (NodeType required : childDefinition.getRequiredPrimaryTypes())
             {
-                if (required.equals(nodeType))
+                if (required.equals(nodeType) || nodeType.isNodeType(required.getName()))
                 {
                     isConformToRequired = true;
                     break;

@@ -89,6 +89,11 @@ public class NodeDefinitionImp extends ItemDefinitionImp implements NodeDefiniti
     {
         return requiredPrimaryTypes.toArray(new NodeType[requiredPrimaryTypes.size()]);
     }
+
+    public NodeTypeImp[] getRequiredPrimaryTypesImp()
+    {
+        return requiredPrimaryTypes.toArray(new NodeTypeImp[requiredPrimaryTypes.size()]);
+    }
     public void removeNodeType(NodeTypeImp nodeType)
     {
         
@@ -102,6 +107,8 @@ public class NodeDefinitionImp extends ItemDefinitionImp implements NodeDefiniti
         }
         return requiredPrimaryTypeNames.toArray(new String[requiredPrimaryTypeNames.size()]);
     }
+
+
 
     public NodeType getDefaultPrimaryType()
     {
