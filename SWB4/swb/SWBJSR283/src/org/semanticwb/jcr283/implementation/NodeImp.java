@@ -385,9 +385,10 @@ public class NodeImp extends ItemImp implements Node
             }
         }
         boolean isConformToRequired = false;
-        for (NodeType required : childDefinition.getRequiredPrimaryTypes())
+
+        for (NodeTypeImp required : childDefinition.getRequiredPrimaryTypesImp())
         {
-            if (required.equals(primaryNodeType))
+            if (required.equals(primaryNodeType) || primaryNodeType.isNodeType(required.getName()))
             {
                 isConformToRequired = true;
                 break;
