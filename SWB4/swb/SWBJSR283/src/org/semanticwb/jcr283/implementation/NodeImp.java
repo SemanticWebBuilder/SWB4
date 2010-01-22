@@ -258,7 +258,7 @@ public class NodeImp extends ItemImp implements Node
                             PropertyImp prop = new PropertyImp(semanticProperty, this, pathProperty, this.session);
                             if (!nodeManager.hasProperty(prop.path))
                             {
-                                log.debug("loading property " + semanticProperty.getURI() + " for node " + obj.getURI());
+                                log.debug("loading property " + semanticProperty.getURI() + " for node " + path);
                                 nodeManager.addProperty(prop, prop.path, this.path);
                             }
                         }
@@ -271,28 +271,31 @@ public class NodeImp extends ItemImp implements Node
                 }
 
             }
-            for (PropertyDefinitionImp propDef : this.nodeDefinitionImp.getDeclaringNodeTypeImp().getPropertyDefinitionsImp())
+        }
+        for (PropertyDefinitionImp propDef : this.nodeDefinitionImp.getDeclaringNodeTypeImp().getPropertyDefinitionsImp())
+        {
+            if (propDef.getSemanticProperty() != null)
             {
-                if (propDef.getSemanticProperty() != null)
+                SemanticProperty semanticProperty = propDef.getSemanticProperty();
+                try
                 {
-                    SemanticProperty semanticProperty = propDef.getSemanticProperty();
-                    try
+                    String nameProperty = semanticProperty.getPrefix() + ":" + semanticProperty.getName();
+                    String pathProperty = getPathFromName(nameProperty);
+                    PropertyImp prop = new PropertyImp(semanticProperty, this, pathProperty, this.session);
+                    if (!nodeManager.hasProperty(prop.path))
                     {
-                        PropertyImp prop = new PropertyImp(semanticProperty, this, this.getPath() + PATH_SEPARATOR + semanticProperty.getPrefix() + ":" + semanticProperty.getName(), this.session);
-                        if (!nodeManager.hasProperty(prop.path))
-                        {
-                            log.debug("loading property " + semanticProperty.getURI() + " for node " + obj.getURI());
-                            nodeManager.addProperty(prop, prop.path, this.path);
-                        }
+                        log.debug("loading property " + pathProperty + " for node " + path);
+                        nodeManager.addProperty(prop, prop.path, this.path);
                     }
-                    catch (Exception e)
-                    {
-                        log.error(e);
-                    }
-
                 }
+                catch (Exception e)
+                {
+                    log.error(e);
+                }
+
             }
         }
+
     }
 
     public Node addNode(String relPath) throws ItemExistsException, PathNotFoundException, VersionException, ConstraintViolationException, LockException, RepositoryException
@@ -704,7 +707,7 @@ public class NodeImp extends ItemImp implements Node
                 getMixinNodeTypes.add(superNodeType);
             }
         }
-        String jcr_mixinTypesPath=getPathFromName(JCR_MIXINTYPES);
+        String jcr_mixinTypesPath = getPathFromName(JCR_MIXINTYPES);
         PropertyImp prop = nodeManager.getProperty(jcr_mixinTypesPath);
         for (Value value : prop.getValues())
         {
