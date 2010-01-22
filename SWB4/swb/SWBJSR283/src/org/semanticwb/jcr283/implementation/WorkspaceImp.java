@@ -36,15 +36,17 @@ import org.xml.sax.ContentHandler;
 public class WorkspaceImp  implements Workspace {
 
     private final SessionImp session;    
-    private final String name;
-    private final NodeTypeManagerImp nodeTypeManagerImp=new NodeTypeManagerImp();
+    private final String name;    
     private final NodeManager nodeManager=new NodeManager();
+    private NodeTypeManagerImp nodeTypeManager;
     public WorkspaceImp(SessionImp session,org.semanticwb.jcr283.repository.model.Workspace ws)
     {
+        session.getRepository();
         nodeManager.loadRoot(ws, session);
         name=ws.getName();
         this.session=session;
         session.setWorkspace(this);
+        nodeTypeManager=SWBRepository.getNodeTypeManagerImp();
     }
     public NodeManager getNodeManager()
     {
@@ -105,7 +107,11 @@ public class WorkspaceImp  implements Workspace {
 
     public NodeTypeManager getNodeTypeManager() throws RepositoryException
     {
-        return nodeTypeManagerImp;
+        return nodeTypeManager;
+    }
+    public NodeTypeManagerImp getNodeTypeManagerImp()
+    {
+        return nodeTypeManager;
     }
 
     public ObservationManager getObservationManager() throws UnsupportedRepositoryOperationException, RepositoryException

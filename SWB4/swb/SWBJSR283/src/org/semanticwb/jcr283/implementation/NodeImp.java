@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.UUID;
 import javax.jcr.AccessDeniedException;
 import javax.jcr.Binary;
@@ -69,14 +68,13 @@ public class NodeImp extends ItemImp implements Node
     private static final String MIX_SIMPLEVERSIONABLE = "mix:simpleVersionable";
     private static final String NT_VERSION = "nt:version";
     
-    private final static Logger log = SWBUtils.getLogger(NodeImp.class);
-    private final static NodeTypeManagerImp nodeTypeManager = new NodeTypeManagerImp();
+    private final static Logger log = SWBUtils.getLogger(NodeImp.class);    
     private final static ValueFactoryImp valueFactoryImp = new ValueFactoryImp();
     private final NodeDefinitionImp nodeDefinitionImp;
     private SemanticObject obj = null;
     private final int index;
     private final NodeTypeImp nodeType;
-
+    private final NodeTypeManagerImp nodeTypeManager;
     NodeImp(Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
         this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), base.getSemanticObject(), base.getName(), parent, index, path, depth, session);
@@ -92,6 +90,7 @@ public class NodeImp extends ItemImp implements Node
         this.isNew = true;
         loadProperties();
         this.nodeType = nodeType;
+        this.nodeTypeManager=session.getWorkspaceImp().getNodeTypeManagerImp();
         try
         {
             String propertyPath = getPathFromName(Property.JCR_PRIMARY_TYPE);
@@ -198,6 +197,7 @@ public class NodeImp extends ItemImp implements Node
         nodeDefinitionImp = new NodeDefinitionImp(obj, NodeTypeManagerImp.loadNodeType(obj.getSemanticClass()));
         loadProperties();
         this.nodeType = nodeType;
+        nodeTypeManager=session.getWorkspaceImp().getNodeTypeManagerImp();
     }
 
     public void saveData() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
@@ -700,7 +700,7 @@ public class NodeImp extends ItemImp implements Node
         for (Value value : prop.getValues())
         {
             String type = value.getString();
-            NodeTypeManagerImp nodeTypeManagerImp = new NodeTypeManagerImp();
+            NodeTypeManagerImp nodeTypeManagerImp = nodeTypeManager;
             try
             {
                 NodeTypeImp superNodeType = nodeTypeManagerImp.getNodeTypeImp(type);
@@ -728,9 +728,8 @@ public class NodeImp extends ItemImp implements Node
     }
 
     public void addMixin(String mixinName) throws NoSuchNodeTypeException, VersionException, ConstraintViolationException, LockException, RepositoryException
-    {
-        NodeTypeManagerImp mg = new NodeTypeManagerImp();
-        NodeTypeImp mixNodeType = mg.getNodeTypeImp(mixinName);
+    {        
+        NodeTypeImp mixNodeType = nodeTypeManager.getNodeTypeImp(mixinName);
         if (!this.canAddMixin(mixinName))
         {
             throw new ConstraintViolationException("The mixin can be added");
@@ -761,9 +760,8 @@ public class NodeImp extends ItemImp implements Node
     }
 
     public void removeMixin(String mixinName) throws NoSuchNodeTypeException, VersionException, ConstraintViolationException, LockException, RepositoryException
-    {
-        NodeTypeManagerImp mg = new NodeTypeManagerImp();
-        NodeTypeImp mixNodeType = mg.getNodeTypeImp(mixinName);
+    {        
+        NodeTypeImp mixNodeType = nodeTypeManager.getNodeTypeImp(mixinName);
         for (NodeType supertypes : nodeDefinitionImp.getDefaultPrimaryType().getDeclaredSupertypes())
         {
             if (supertypes.equals(mixNodeType))
@@ -795,9 +793,8 @@ public class NodeImp extends ItemImp implements Node
     }
 
     public boolean canAddMixin(String mixinName) throws NoSuchNodeTypeException, RepositoryException
-    {
-        NodeTypeManagerImp mg = new NodeTypeManagerImp();
-        NodeType mixNodeType = mg.getNodeType(mixinName);
+    {        
+        NodeType mixNodeType = nodeTypeManager.getNodeType(mixinName);
         if (!mixNodeType.isMixin())
         {
             throw new NoSuchNodeTypeException("Tne nodeType is not mixin");

@@ -126,7 +126,7 @@ public class NodeTypeImp implements NodeType
 
     public void loadSuperTypes()
     {
-        NodeTypeManagerImp manager = new NodeTypeManagerImp();
+        NodeTypeManagerImp manager = SWBRepository.getNodeTypeManagerImp();
         Iterator<SemanticClass> classes = clazz.listSuperClasses();
         while (classes.hasNext())
         {
@@ -393,7 +393,7 @@ public class NodeTypeImp implements NodeType
         }
         try
         {
-            NodeType nodeType = new NodeTypeManagerImp().getNodeType(nodeTypeName);
+            NodeType nodeType = SWBRepository.getNodeTypeManagerImp().getNodeType(nodeTypeName);
             boolean isConformToRequired = false;
             for (NodeType required : childDefinition.getRequiredPrimaryTypes())
             {
