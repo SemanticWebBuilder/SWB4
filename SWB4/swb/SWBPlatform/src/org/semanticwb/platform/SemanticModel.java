@@ -173,7 +173,8 @@ public class SemanticModel
         SemanticObject ret=SemanticObject.getSemanticObject(uri);
         if(ret==null)
         {
-            Resource res=m_model.getResource(uri);
+            Resource res=m_model.createResource(uri);
+            //System.out.println("getSemanticObject:"+res+" "+type);
             if(m_model.contains(res,type))
             {
                 ret=SemanticObject.createSemanticObject(res);
