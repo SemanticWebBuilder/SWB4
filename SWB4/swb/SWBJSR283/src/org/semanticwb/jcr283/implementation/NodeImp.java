@@ -819,7 +819,16 @@ public class NodeImp extends ItemImp implements Node
         }
         if (nodeManager.hasProperty(getPathFromName(JCR_MIXINTYPES)))
         {
-            return false;
+            PropertyImp jcr_mixinTypes=nodeManager.getProperty(getPathFromName(JCR_MIXINTYPES));
+            for(Value value : jcr_mixinTypes.getValues())
+            {
+                String mix=value.getString();
+                if(mix.equals(mixinName))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
         return false;
     }
