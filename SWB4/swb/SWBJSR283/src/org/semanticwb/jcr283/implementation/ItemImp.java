@@ -76,7 +76,7 @@ public abstract class ItemImp implements Item
     @Override
     public String toString()
     {
-        return name;
+        return path;
     }
 
     public static boolean isValidRelativePath(String relPath)
