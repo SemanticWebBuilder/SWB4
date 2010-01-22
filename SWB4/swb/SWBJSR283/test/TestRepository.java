@@ -2,7 +2,6 @@
 import java.util.HashMap;
 import java.util.Map;
 import javax.jcr.Node;
-import javax.jcr.PropertyType;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryFactory;
 import javax.jcr.Session;
@@ -33,8 +32,7 @@ public class TestRepository {
         SWBPlatform.getSemanticMgr().initializeDB();
         Map parameters = new HashMap();
         try
-        {
-            int name=PropertyType.valueFromName("String");
+        {            
             RepositoryFactory factory = (RepositoryFactory) Class.forName("org.semanticwb.jcr283.implementation.RepositoryFactoryImp").newInstance();
             Repository repo = factory.getRepository(parameters);
             Session session=repo.login();
