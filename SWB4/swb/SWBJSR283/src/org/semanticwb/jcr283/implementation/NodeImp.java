@@ -246,11 +246,10 @@ public class NodeImp extends ItemImp implements Node
             while (props.hasNext())
             {
                 SemanticProperty semanticProperty = props.next();
-                SemanticClass propertyClazz = semanticProperty.getSemanticObject().getSemanticClass();
-                if (propertyClazz.equals(NodeTypeImp.objectClazz) || propertyClazz.equals(NodeTypeImp.dataClazz))
+                if (semanticProperty.getSemanticObject() != null && semanticProperty.getSemanticObject().getSemanticClass() != null)
                 {
-                    SemanticClass repositoryPropertyDefinition = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(NamespaceRegistryImp.NAMESPACE_NT + "#RepositoryPropertyDefinition");
-                    if (semanticProperty.getSemanticObject().getSemanticClass().isSubClass(repositoryPropertyDefinition))
+                    SemanticClass propertyClazz = semanticProperty.getSemanticObject().getSemanticClass();
+                    if (propertyClazz.equals(NodeTypeImp.objectClazz) || propertyClazz.equals(NodeTypeImp.dataClazz))
                     {
                         try
                         {
@@ -267,6 +266,7 @@ public class NodeImp extends ItemImp implements Node
                         {
                             log.error(e);
                         }
+
                     }
                 }
 
@@ -332,14 +332,24 @@ public class NodeImp extends ItemImp implements Node
             throw new RepositoryException(THE_PATH_IS_NOT_RELATIVE + relPath);
         }
         String absPath = normalizePath(relPath);
-        NodeImp nodeParent = nodeManager.getNode(absPath);
+        String nameToAdd = extractName(absPath);
+        if(!isValidName(nameToAdd))
+        {
+            throw new RepositoryException("The name for the new node is invalid");
+        }
+        String tempPath=absPath;
+        if(!tempPath.endsWith("/"))
+        {
+            tempPath+="/";
+        }
+        String parentPath=normalizePath("."+tempPath+"../");
+        NodeImp nodeParent = nodeManager.getNode(parentPath);
         if (nodeParent == null)
         {
             throw new PathNotFoundException("The node with path " + relPath + " was not found");
-        }
-        String nameToAdd = extractName(relPath);
+        }        
         NodeDefinitionImp childDefinition = null;
-        for (NodeDefinitionImp childNodeDefinition : parent.nodeDefinitionImp.getDeclaringNodeTypeImp().getChildNodeDefinitionsImp())
+        for (NodeDefinitionImp childNodeDefinition : nodeParent.nodeDefinitionImp.getDeclaringNodeTypeImp().getChildNodeDefinitionsImp())
         {
             if (childNodeDefinition.getName().equals(nameToAdd))
             {
@@ -348,7 +358,7 @@ public class NodeImp extends ItemImp implements Node
         }
         if (childDefinition == null)
         {
-            for (NodeDefinitionImp childNodeDefinition : parent.nodeDefinitionImp.getDeclaringNodeTypeImp().getChildNodeDefinitionsImp())
+            for (NodeDefinitionImp childNodeDefinition : nodeParent.nodeDefinitionImp.getDeclaringNodeTypeImp().getChildNodeDefinitionsImp())
             {
                 if (childNodeDefinition.getName().equals(ALL))
                 {

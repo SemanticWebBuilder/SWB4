@@ -240,7 +240,7 @@ public class NodeManager
         {
             //TODO: Try to load the node from database
         }
-        return null;
+        return node;
     }
 
     public PropertyImp getProperty(String path)

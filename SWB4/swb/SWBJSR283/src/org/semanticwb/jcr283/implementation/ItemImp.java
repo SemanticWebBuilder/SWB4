@@ -119,19 +119,23 @@ public abstract class ItemImp implements Item
     }
     public static boolean isValidName(String name)
     {
+        if(name==null || name.trim().equals(""))
+        {
+            return false;
+        }
         return true;
     }
 
     public String normalizePath(String relPath) throws RepositoryException
     {
-        if (isValidRelativePath(relPath))
+        if (!isValidRelativePath(relPath))
         {
             throw new RepositoryException(THE_PATH_IS_NOT_RELATIVE + relPath);
         }
         if (relPath.startsWith("./"))
         {
-            String absPath = this.getPath() + relPath;
-            return absPath;
+            relPath = this.getPath() + relPath;
+            
         }
         if (relPath.startsWith("../"))
         {
@@ -142,26 +146,50 @@ public abstract class ItemImp implements Item
             }
         }
         String newpath = relPath;
-        int pos = newpath.indexOf("./");
-        while (pos != -1)
-        {
-
-            pos = newpath.indexOf("./");
-        }
-
-        pos = newpath.indexOf("/../");
+        int pos = newpath.indexOf("../");
         while (pos != -1)
         {
             String end = newpath.substring(pos + 3);
             newpath = newpath.substring(0, pos);
+            if(newpath.endsWith(PATH_SEPARATOR))
+            {
+                newpath=newpath.substring(0,newpath.length()-1);
+            }
             pos = newpath.lastIndexOf(PATH_SEPARATOR);
             newpath = newpath.substring(0, pos + 1);
-            newpath += end;
-            pos = newpath.indexOf("/../");
+            if(newpath.endsWith(PATH_SEPARATOR))
+            {
+                newpath += end;
+            }
+            else
+            {
+                newpath += PATH_SEPARATOR+end;
+            }
+            pos = newpath.indexOf("../");
         }
+        pos = newpath.indexOf("./");
+        while (pos != -1)
+        {
+            newpath = newpath.substring(0, pos)+newpath.substring(pos+2);
+            pos = newpath.indexOf("./");
+        }
+
+        
         if (newpath.endsWith(PATH_SEPARATOR))
         {
             newpath = newpath.substring(0, newpath.length() - 1);
+        }
+        if(path.endsWith("/"))
+        {
+            newpath=path+newpath;
+        }
+        else
+        {
+            newpath=path+"/"+newpath;
+        }
+        if(newpath.endsWith("/") && newpath.length()>1)
+        {
+            newpath=newpath.substring(0,newpath.length()-1);
         }
         return newpath;
     }
