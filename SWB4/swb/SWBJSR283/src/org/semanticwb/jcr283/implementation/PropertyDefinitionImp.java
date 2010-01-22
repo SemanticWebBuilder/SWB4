@@ -102,9 +102,9 @@ public class PropertyDefinitionImp extends ItemDefinitionImp implements Property
         }
     }
 
-    public PropertyDefinitionImp(SemanticProperty property)
+    public PropertyDefinitionImp(SemanticProperty property,NodeTypeImp nodeType)
     {
-        this(property.getSemanticObject(), NodeTypeManagerImp.loadNodeType(property.getDomainClass()));
+        this(property.getSemanticObject(), nodeType);
         this.semanticProperty=property;
         if (property.isBinary())
         {
@@ -150,6 +150,10 @@ public class PropertyDefinitionImp extends ItemDefinitionImp implements Property
         {
             requiredType = PropertyType.UNDEFINED;
         }
+    }
+    public PropertyDefinitionImp(SemanticProperty property)
+    {
+        this(property,NodeTypeManagerImp.loadNodeType(property.getDomainClass()));
     }
     public SemanticProperty getSemanticProperty()
     {
