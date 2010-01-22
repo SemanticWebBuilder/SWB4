@@ -42,6 +42,7 @@ public class NodeDefinitionImp extends ItemDefinitionImp implements NodeDefiniti
                 if (onametest.equals(name))
                 {
                     temp = NodeTypeManagerImp.loadNodeType(clazz);
+                    break;
                 }
             }
             defaultPrimaryType = temp;
