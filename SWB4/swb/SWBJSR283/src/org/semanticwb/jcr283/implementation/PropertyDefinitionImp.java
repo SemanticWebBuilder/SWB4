@@ -6,7 +6,6 @@ package org.semanticwb.jcr283.implementation;
 
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Locale;
 import javax.jcr.NamespaceRegistry;
 import javax.jcr.Property;
 import javax.jcr.PropertyType;
