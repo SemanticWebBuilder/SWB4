@@ -26,7 +26,6 @@ import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticLiteral;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
-import sun.reflect.FieldInfo;
 
 /**
  *
