@@ -169,12 +169,12 @@ public class NodeTypeImp implements NodeType
             }
         }
         try
-        {
+        {            
             String className = clazz.getClassName();
             Class clazzJava = Class.forName(className);
             for (Field field : clazzJava.getFields())
             {
-                if (field.getType().equals(SemanticProperty.class) && Modifier.isPublic(clazzJava.getModifiers()) && Modifier.isFinal(clazzJava.getModifiers()))
+                if (field.getType().equals(SemanticProperty.class) && Modifier.isPublic(field.getModifiers()) && Modifier.isFinal(field.getModifiers()))
                 {
                     try
                     {
