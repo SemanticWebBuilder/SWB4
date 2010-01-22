@@ -6,6 +6,7 @@ package org.semanticwb.jcr283.implementation;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Locale;
 import javax.jcr.NamespaceRegistry;
 import javax.jcr.Property;
 import javax.jcr.PropertyType;
@@ -45,13 +46,18 @@ public class PropertyDefinitionImp extends ItemDefinitionImp implements Property
         }
         prop = NodeTypeImp.getSemanticProperty(Property.JCR_REQUIRED_TYPE);
         value = obj.getLiteralProperty(prop);
-        if (value != null)
+        requiredType=PropertyType.UNDEFINED;
+        if (value != null && value.getString()!=null)
         {
 
-            String srequiredType = value.getString();
+            String srequiredType = value.getString().toLowerCase();
+            if(srequiredType.length()>0)
+            {
+                srequiredType=srequiredType.substring(0,1).toUpperCase()+srequiredType.substring(1);
+            }
             try
             {
-                requiredType=PropertyType.valueFromName(srequiredType.toUpperCase());
+                requiredType=PropertyType.valueFromName(srequiredType);
             }
             catch(IllegalArgumentException iae)
             {
