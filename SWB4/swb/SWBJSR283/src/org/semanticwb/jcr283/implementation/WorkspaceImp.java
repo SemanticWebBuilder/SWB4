@@ -41,12 +41,12 @@ public class WorkspaceImp  implements Workspace {
     private NodeTypeManagerImp nodeTypeManager;
     public WorkspaceImp(SessionImp session,org.semanticwb.jcr283.repository.model.Workspace ws)
     {
-        session.getRepository();
-        nodeManager.loadRoot(ws, session);
-        name=ws.getName();
+
         this.session=session;
+        name=ws.getName();
         session.setWorkspace(this);
         nodeTypeManager=SWBRepository.getNodeTypeManagerImp();
+        nodeManager.loadRoot(ws, session);                
     }
     public NodeManager getNodeManager()
     {

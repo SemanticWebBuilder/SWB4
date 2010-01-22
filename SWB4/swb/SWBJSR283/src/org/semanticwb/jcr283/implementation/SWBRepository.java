@@ -24,6 +24,7 @@ import org.semanticwb.jcr283.repository.model.Workspace;
  * @author victor.lorenzana
  */
 public class SWBRepository implements Repository {
+    private static final String JCR_ROOT = "jcr:root";
 
     private static Logger log = SWBUtils.getLogger(SWBRepository.class);
     private static Hashtable<String, Value> descriptors = new Hashtable<String, Value>();
@@ -64,8 +65,16 @@ public class SWBRepository implements Repository {
         }
         if(ws.getRoot()==null)
         {
-            Unstructured root=Unstructured.ClassMgr.createUnstructured("jcr:root", ws);
+            Unstructured root=Unstructured.ClassMgr.createUnstructured( JCR_ROOT, ws);
+            root.setName(JCR_ROOT);
             ws.setRoot(root);
+        }
+        else
+        {
+            if(ws.getRoot().getName()==null)
+            {
+                ws.getRoot().setName(JCR_ROOT);
+            }
         }
     }
     public String[] getDescriptorKeys()

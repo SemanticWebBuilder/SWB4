@@ -54,10 +54,10 @@ import org.semanticwb.platform.SemanticProperty;
  */
 public class NodeImp extends ItemImp implements Node
 {
+
     private static final String JCR_CREATED = "jcr:created";
     private static final String JCR_LASTMODIFIED = "jcr:lastModified";
     private static final String JCR_LASTMODIFIEDBY = "jcr:lastModifiedBy";
-
     private static final String JCR_MIXINTYPES = "jcr:mixinTypes";
     private static final String JCR_UUID = "jcr:uuid";
     private static final String ALL = "*";
@@ -67,14 +67,14 @@ public class NodeImp extends ItemImp implements Node
     private static final String MIX_REFERENCEABLE = "mix:referenceable";
     private static final String MIX_SIMPLEVERSIONABLE = "mix:simpleVersionable";
     private static final String NT_VERSION = "nt:version";
-    
-    private final static Logger log = SWBUtils.getLogger(NodeImp.class);    
+    private final static Logger log = SWBUtils.getLogger(NodeImp.class);
     private final static ValueFactoryImp valueFactoryImp = new ValueFactoryImp();
     private final NodeDefinitionImp nodeDefinitionImp;
     private SemanticObject obj = null;
     private final int index;
     private final NodeTypeImp nodeType;
     private final NodeTypeManagerImp nodeTypeManager;
+
     NodeImp(Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
         this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), base.getSemanticObject(), base.getName(), parent, index, path, depth, session);
@@ -83,14 +83,14 @@ public class NodeImp extends ItemImp implements Node
     NodeImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
         super(null, name, parent, path, depth, session);
-        Calendar cal=Calendar.getInstance();
+        Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(System.currentTimeMillis());
         this.index = index;
         this.nodeDefinitionImp = nodeDefinition;
         this.isNew = true;
         loadProperties();
         this.nodeType = nodeType;
-        this.nodeTypeManager=session.getWorkspaceImp().getNodeTypeManagerImp();
+        this.nodeTypeManager = session.getWorkspaceImp().getNodeTypeManagerImp();
         try
         {
             String propertyPath = getPathFromName(Property.JCR_PRIMARY_TYPE);
@@ -122,7 +122,7 @@ public class NodeImp extends ItemImp implements Node
         try
         {
             if (isSimpleVersionable())
-            {                
+            {
                 String propertyPath = getPathFromName(JCR_ISCHECKEDOUT);
                 PropertyImp prop = nodeManager.getProperty(propertyPath);
                 prop.set(valueFactoryImp.createValue(true));
@@ -149,14 +149,14 @@ public class NodeImp extends ItemImp implements Node
             log.debug(e);
         }
 
-        
+
 
         try
         {
             if (isMixCreated())
             {
                 String propertyPath = getPathFromName(JCR_CREATED);
-                PropertyImp prop = nodeManager.getProperty(propertyPath);                
+                PropertyImp prop = nodeManager.getProperty(propertyPath);
                 prop.set(valueFactoryImp.createValue(cal));
                 propertyPath = getPathFromName(JCR_CREATEDBY);
                 prop = nodeManager.getProperty(propertyPath);
@@ -197,7 +197,7 @@ public class NodeImp extends ItemImp implements Node
         nodeDefinitionImp = new NodeDefinitionImp(obj, NodeTypeManagerImp.loadNodeType(obj.getSemanticClass()));
         loadProperties();
         this.nodeType = nodeType;
-        nodeTypeManager=session.getWorkspaceImp().getNodeTypeManagerImp();
+        nodeTypeManager = session.getWorkspaceImp().getNodeTypeManagerImp();
     }
 
     public void saveData() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
@@ -245,31 +245,31 @@ public class NodeImp extends ItemImp implements Node
             Iterator<SemanticProperty> props = obj.listProperties();
             while (props.hasNext())
             {
-                SemanticProperty semanticProperty = props.next();               
-                SemanticClass propertyClazz=semanticProperty.getSemanticObject().getSemanticClass();
-                if(propertyClazz.equals(NodeTypeImp.objectClazz) || propertyClazz.equals(NodeTypeImp.dataClazz))
+                SemanticProperty semanticProperty = props.next();
+                SemanticClass propertyClazz = semanticProperty.getSemanticObject().getSemanticClass();
+                if (propertyClazz.equals(NodeTypeImp.objectClazz) || propertyClazz.equals(NodeTypeImp.dataClazz))
                 {
-                    
-                }
-                SemanticClass repositoryPropertyDefinition = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(NamespaceRegistryImp.NAMESPACE_NT + "#RepositoryPropertyDefinition");
-                if (semanticProperty.getSemanticObject().getSemanticClass().isSubClass(repositoryPropertyDefinition))
-                {
-                    try
+                    SemanticClass repositoryPropertyDefinition = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(NamespaceRegistryImp.NAMESPACE_NT + "#RepositoryPropertyDefinition");
+                    if (semanticProperty.getSemanticObject().getSemanticClass().isSubClass(repositoryPropertyDefinition))
                     {
-                        String nameProperty = semanticProperty.getPrefix() + ":" + semanticProperty.getName();
-                        String pathProperty = getPathFromName(nameProperty);
-                        PropertyImp prop = new PropertyImp(semanticProperty, this, pathProperty, this.session);
-                        if (!nodeManager.hasProperty(prop.path))
+                        try
                         {
-                            log.debug("loading property " + semanticProperty.getURI() + " for node " + obj.getURI());
-                            nodeManager.addProperty(prop, prop.path,this.path);
+                            String nameProperty = semanticProperty.getPrefix() + ":" + semanticProperty.getName();
+                            String pathProperty = getPathFromName(nameProperty);
+                            PropertyImp prop = new PropertyImp(semanticProperty, this, pathProperty, this.session);
+                            if (!nodeManager.hasProperty(prop.path))
+                            {
+                                log.debug("loading property " + semanticProperty.getURI() + " for node " + obj.getURI());
+                                nodeManager.addProperty(prop, prop.path, this.path);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            log.error(e);
                         }
                     }
-                    catch (Exception e)
-                    {
-                        log.error(e);
-                    }
                 }
+
             }
             for (PropertyDefinitionImp propDef : this.nodeDefinitionImp.getDeclaringNodeTypeImp().getPropertyDefinitionsImp())
             {
@@ -285,7 +285,7 @@ public class NodeImp extends ItemImp implements Node
                             if (!nodeManager.hasProperty(prop.path))
                             {
                                 log.debug("loading property " + semanticProperty.getURI() + " for node " + obj.getURI());
-                                nodeManager.addProperty(prop, prop.path,this.path);
+                                nodeManager.addProperty(prop, prop.path, this.path);
                             }
                         }
                         catch (Exception e)
@@ -304,12 +304,12 @@ public class NodeImp extends ItemImp implements Node
     }
 
     private NodeImp insertNode(String nameToAdd, NodeDefinitionImp childDefinition, NodeTypeImp nodeType) throws RepositoryException
-    {        
-        if (!childDefinition.allowsSameNameSiblings() && nodeManager.hasNode(path,nameToAdd))
+    {
+        if (!childDefinition.allowsSameNameSiblings() && nodeManager.hasNode(path, nameToAdd))
         {
             throw new ItemExistsException("There is a node with the same name in the node " + this.path);
         }
-        String childpath = getPathFromName(name);       
+        String childpath = getPathFromName(name);
         int childIndex = nodeManager.countNodes(childpath, false);
         if (childIndex > 0)
         {
@@ -321,7 +321,7 @@ public class NodeImp extends ItemImp implements Node
         }
         NodeImp newChild = new NodeImp(nodeType, childDefinition, nameToAdd, this, index, childpath, this.getDepth() + 1, session);
         this.isModified = true;
-        return nodeManager.addNode(newChild, childpath,path);
+        return nodeManager.addNode(newChild, childpath, path);
 
     }
 
@@ -556,11 +556,11 @@ public class NodeImp extends ItemImp implements Node
     }
 
     public PropertyIterator getProperties() throws RepositoryException
-    {        
-        HashSet<PropertyImp> props=new HashSet<PropertyImp>();
-        for(PropertyImp prop : nodeManager.getChildProperties(this))
+    {
+        HashSet<PropertyImp> props = new HashSet<PropertyImp>();
+        for (PropertyImp prop : nodeManager.getChildProperties(this))
         {
-            if(!prop.getDefinition().isProtected())
+            if (!prop.getDefinition().isProtected())
             {
                 props.add(prop);
             }
@@ -657,7 +657,7 @@ public class NodeImp extends ItemImp implements Node
         {
             throw new RepositoryException(THE_PATH_IS_NOT_RELATIVE + relPath);
         }
-        String nodeAbsPath=normalizePath(relPath);
+        String nodeAbsPath = normalizePath(relPath);
         return nodeManager.hasNode(nodeAbsPath);
     }
 
@@ -728,7 +728,7 @@ public class NodeImp extends ItemImp implements Node
     }
 
     public void addMixin(String mixinName) throws NoSuchNodeTypeException, VersionException, ConstraintViolationException, LockException, RepositoryException
-    {        
+    {
         NodeTypeImp mixNodeType = nodeTypeManager.getNodeTypeImp(mixinName);
         if (!this.canAddMixin(mixinName))
         {
@@ -754,13 +754,13 @@ public class NodeImp extends ItemImp implements Node
                 String nameProperty = semanticProperty.getPrefix() + ":" + semanticProperty.getName();
                 String pathProperty = getPathFromName(nameProperty);
                 PropertyImp propMix = new PropertyImp(semanticProperty, this, pathProperty, session);
-                nodeManager.addProperty(propMix, propMix.path,path);
+                nodeManager.addProperty(propMix, propMix.path, path);
             }
         }
     }
 
     public void removeMixin(String mixinName) throws NoSuchNodeTypeException, VersionException, ConstraintViolationException, LockException, RepositoryException
-    {        
+    {
         NodeTypeImp mixNodeType = nodeTypeManager.getNodeTypeImp(mixinName);
         for (NodeType supertypes : nodeDefinitionImp.getDefaultPrimaryType().getDeclaredSupertypes())
         {
@@ -787,13 +787,13 @@ public class NodeImp extends ItemImp implements Node
             {
                 SemanticProperty semanticProperty = propDef.getSemanticProperty();
                 String nameProperty = semanticProperty.getPrefix() + ":" + semanticProperty.getName();
-                nodeManager.removeProperty(getPathFromName(nameProperty),path);
+                nodeManager.removeProperty(getPathFromName(nameProperty), path);
             }
         }
     }
 
     public boolean canAddMixin(String mixinName) throws NoSuchNodeTypeException, RepositoryException
-    {        
+    {
         NodeType mixNodeType = nodeTypeManager.getNodeType(mixinName);
         if (!mixNodeType.isMixin())
         {
@@ -841,6 +841,7 @@ public class NodeImp extends ItemImp implements Node
         }
         return false;
     }
+
     private boolean isMixCreated() throws RepositoryException
     {
         for (NodeType mixinNodeType : getMixinNodeTypes())
@@ -880,7 +881,7 @@ public class NodeImp extends ItemImp implements Node
 
     public Version checkin() throws VersionException, UnsupportedRepositoryOperationException, InvalidItemStateException, LockException, RepositoryException
     {
-        if(!isSimpleVersionable())
+        if (!isSimpleVersionable())
         {
             throw new UnsupportedRepositoryOperationException("The node is not versionable");
         }
@@ -889,7 +890,7 @@ public class NodeImp extends ItemImp implements Node
 
     public void checkout() throws UnsupportedRepositoryOperationException, LockException, ActivityViolationException, RepositoryException
     {
-        if(!isSimpleVersionable())
+        if (!isSimpleVersionable())
         {
             throw new UnsupportedRepositoryOperationException("The node is not versionable");
         }
