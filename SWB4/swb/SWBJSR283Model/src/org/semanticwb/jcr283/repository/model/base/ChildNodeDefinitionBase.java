@@ -5,7 +5,14 @@ public abstract class ChildNodeDefinitionBase extends org.semanticwb.jcr283.repo
 {
        public static final org.semanticwb.platform.SemanticClass xsd_String=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.w3.org/2001/XMLSchema#string");
        public static final org.semanticwb.platform.SemanticProperty jcr_defaultPrimaryType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#defaultPrimaryType");
+       public static final org.semanticwb.platform.SemanticClass xsd_Boolean=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.w3.org/2001/XMLSchema#boolean");
+       public static final org.semanticwb.platform.SemanticProperty jcr_autoCreated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#autoCreated");
+       public static final org.semanticwb.platform.SemanticProperty jcr_sameNameSiblings=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#sameNameSiblings");
+       public static final org.semanticwb.platform.SemanticProperty jcr_mandatory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#mandatory");
+       public static final org.semanticwb.platform.SemanticProperty jcr_onParentVersion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#onParentVersion");
+       public static final org.semanticwb.platform.SemanticProperty jcr_multiple=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#multiple");
        public static final org.semanticwb.platform.SemanticProperty jcr_requiredPrimaryTypes=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#requiredPrimaryTypes");
+       public static final org.semanticwb.platform.SemanticProperty jcr_protected=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#protected");
        public static final org.semanticwb.platform.SemanticClass nt_ChildNodeDefinition=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#childNodeDefinition");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#childNodeDefinition");
     public static class ClassMgr
@@ -59,6 +66,56 @@ public abstract class ChildNodeDefinitionBase extends org.semanticwb.jcr283.repo
         getSemanticObject().setProperty(jcr_defaultPrimaryType, value);
     }
 
+    public boolean isAutoCreated()
+    {
+        return getSemanticObject().getBooleanProperty(jcr_autoCreated);
+    }
+
+    public void setAutoCreated(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(jcr_autoCreated, value);
+    }
+
+    public boolean isSameNameSiblings()
+    {
+        return getSemanticObject().getBooleanProperty(jcr_sameNameSiblings);
+    }
+
+    public void setSameNameSiblings(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(jcr_sameNameSiblings, value);
+    }
+
+    public boolean isMandatory()
+    {
+        return getSemanticObject().getBooleanProperty(jcr_mandatory);
+    }
+
+    public void setMandatory(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(jcr_mandatory, value);
+    }
+
+    public String getOnParentVersion()
+    {
+        return getSemanticObject().getProperty(jcr_onParentVersion);
+    }
+
+    public void setOnParentVersion(String value)
+    {
+        getSemanticObject().setProperty(jcr_onParentVersion, value);
+    }
+
+    public boolean isMultiple()
+    {
+        return getSemanticObject().getBooleanProperty(jcr_multiple);
+    }
+
+    public void setMultiple(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(jcr_multiple, value);
+    }
+
     public String getRequiredPrimaryTypes()
     {
         return getSemanticObject().getProperty(jcr_requiredPrimaryTypes);
@@ -67,5 +124,15 @@ public abstract class ChildNodeDefinitionBase extends org.semanticwb.jcr283.repo
     public void setRequiredPrimaryTypes(String value)
     {
         getSemanticObject().setProperty(jcr_requiredPrimaryTypes, value);
+    }
+
+    public boolean isProtected()
+    {
+        return getSemanticObject().getBooleanProperty(jcr_protected);
+    }
+
+    public void setProtected(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(jcr_protected, value);
     }
 }

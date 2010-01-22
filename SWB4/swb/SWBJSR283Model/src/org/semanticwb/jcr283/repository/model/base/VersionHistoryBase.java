@@ -1,8 +1,11 @@
 package org.semanticwb.jcr283.repository.model.base;
 
 
-public abstract class VersionHistoryBase extends org.semanticwb.jcr283.repository.model.Base 
+public abstract class VersionHistoryBase extends org.semanticwb.jcr283.repository.model.Base implements org.semanticwb.jcr283.repository.model.Referenceable
 {
+       public static final org.semanticwb.platform.SemanticClass xsd_String=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.w3.org/2001/XMLSchema#string");
+       public static final org.semanticwb.platform.SemanticProperty jcr_copiedFrom=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#copiedFrom");
+       public static final org.semanticwb.platform.SemanticProperty jcr_versionableUuid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#versionableUuid");
        public static final org.semanticwb.platform.SemanticClass nt_VersionHistory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#versionHistory");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#versionHistory");
     public static class ClassMgr
@@ -66,5 +69,35 @@ public abstract class VersionHistoryBase extends org.semanticwb.jcr283.repositor
     public VersionHistoryBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public String getCopiedFrom()
+    {
+        return getSemanticObject().getProperty(jcr_copiedFrom);
+    }
+
+    public void setCopiedFrom(String value)
+    {
+        getSemanticObject().setProperty(jcr_copiedFrom, value);
+    }
+
+    public String getVersionableUuid()
+    {
+        return getSemanticObject().getProperty(jcr_versionableUuid);
+    }
+
+    public void setVersionableUuid(String value)
+    {
+        getSemanticObject().setProperty(jcr_versionableUuid, value);
+    }
+
+    public String getUuid()
+    {
+        return getSemanticObject().getProperty(jcr_uuid);
+    }
+
+    public void setUuid(String value)
+    {
+        getSemanticObject().setProperty(jcr_uuid, value);
     }
 }

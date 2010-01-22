@@ -1,7 +1,7 @@
 package org.semanticwb.jcr283.repository.model.base;
 
 
-public abstract class HierarchyNodeBase extends org.semanticwb.jcr283.repository.model.Base 
+public abstract class HierarchyNodeBase extends org.semanticwb.jcr283.repository.model.Base implements org.semanticwb.jcr283.repository.model.Created
 {
        public static final org.semanticwb.platform.SemanticClass nt_HierarchyNode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#hierarchyNode");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#hierarchyNode");
@@ -66,5 +66,15 @@ public abstract class HierarchyNodeBase extends org.semanticwb.jcr283.repository
     public HierarchyNodeBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public String getCreatedBy()
+    {
+        return getSemanticObject().getProperty(jcr_createdBy);
+    }
+
+    public void setCreatedBy(String value)
+    {
+        getSemanticObject().setProperty(jcr_createdBy, value);
     }
 }

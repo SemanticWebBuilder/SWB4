@@ -2,13 +2,23 @@ package org.semanticwb.jcr283.repository.model.base;
 
 public interface VersionableBase extends org.semanticwb.jcr283.repository.model.SimpleVersionable,org.semanticwb.jcr283.repository.model.Referenceable
 {
+    public static final org.semanticwb.platform.SemanticClass nt_Version=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#version");
+    public static final org.semanticwb.platform.SemanticProperty jcr_predecessors=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#predecessors");
     public static final org.semanticwb.platform.SemanticClass nt_Activity=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#activity");
     public static final org.semanticwb.platform.SemanticProperty jcr_activity=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#activity");
     public static final org.semanticwb.platform.SemanticClass nt_VersionHistory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#versionHistory");
     public static final org.semanticwb.platform.SemanticProperty jcr_versionHistory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#versionHistory");
-    public static final org.semanticwb.platform.SemanticClass nt_Version=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#version");
+    public static final org.semanticwb.platform.SemanticClass nt_Configuration=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#configuration");
+    public static final org.semanticwb.platform.SemanticProperty jcr_configuration=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#configuration");
     public static final org.semanticwb.platform.SemanticProperty jcr_baseVersion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#baseVersion");
+    public static final org.semanticwb.platform.SemanticProperty jcr_mergeFailed=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#mergeFailed");
     public static final org.semanticwb.platform.SemanticClass mix_Versionable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/mix/1.0#versionable");
+
+    public void setPredecessors(org.semanticwb.jcr283.repository.model.Version version);
+
+    public void removePredecessors();
+
+    public org.semanticwb.jcr283.repository.model.Version getPredecessors();
 
     public void setActivity(org.semanticwb.jcr283.repository.model.Activity activity);
 
@@ -22,9 +32,21 @@ public interface VersionableBase extends org.semanticwb.jcr283.repository.model.
 
     public org.semanticwb.jcr283.repository.model.VersionHistory getVersionHistory();
 
+    public void setConfiguration(org.semanticwb.jcr283.repository.model.Configuration configuration);
+
+    public void removeConfiguration();
+
+    public org.semanticwb.jcr283.repository.model.Configuration getConfiguration();
+
     public void setBaseVersion(org.semanticwb.jcr283.repository.model.Version version);
 
     public void removeBaseVersion();
 
     public org.semanticwb.jcr283.repository.model.Version getBaseVersion();
+
+    public void setMergeFailed(org.semanticwb.jcr283.repository.model.Version version);
+
+    public void removeMergeFailed();
+
+    public org.semanticwb.jcr283.repository.model.Version getMergeFailed();
 }
