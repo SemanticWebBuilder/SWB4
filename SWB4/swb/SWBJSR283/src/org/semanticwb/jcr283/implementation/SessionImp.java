@@ -45,10 +45,11 @@ public class SessionImp implements Session
 
     private WorkspaceImp workspace;
     private final String userid;
-
-    public SessionImp(String userid)
+    private final SWBRepository repository;
+    public SessionImp(String userid,SWBRepository repository)
     {
         this.userid = userid;
+        this.repository=repository;
 
 
     }
@@ -66,7 +67,12 @@ public class SessionImp implements Session
 
     public Repository getRepository()
     {
-        return new SWBRepository();
+        return repository;
+    }
+
+    public SWBRepository getRepositoryImp()
+    {
+        return repository;
     }
 
     public String getUserID()

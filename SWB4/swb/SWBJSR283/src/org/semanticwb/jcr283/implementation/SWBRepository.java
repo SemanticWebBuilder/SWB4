@@ -15,6 +15,7 @@ import javax.jcr.Session;
 import javax.jcr.Value;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.jcr283.repository.model.Unstructured;
 import org.semanticwb.jcr283.repository.model.Workspace;
 
 
@@ -27,8 +28,10 @@ public class SWBRepository implements Repository {
     private static Logger log = SWBUtils.getLogger(SWBRepository.class);
     private static Hashtable<String, Value> descriptors = new Hashtable<String, Value>();
     public static final String DEFAULT_WORKSPACE="default";
+    private static NodeTypeManagerImp NodeTypeManagerImp;
     static
     {
+
         log.event("Initializing SWBRepository ...");
         new NodeTypeManagerImp();
         descriptors.put(OPTION_VERSIONING_SUPPORTED, new ValueImp(false));
@@ -41,9 +44,29 @@ public class SWBRepository implements Repository {
         descriptors.put(OPTION_TRANSACTIONS_SUPPORTED, new ValueImp(false));
         descriptors.put(OPTION_OBSERVATION_SUPPORTED, new ValueImp(false));
         descriptors.put(OPTION_LOCKING_SUPPORTED, new ValueImp(true));        
-
+        checkDefaultWorkspace();
     }
-    
+    public static NodeTypeManagerImp getNodeTypeManagerImp()
+    {
+        if(NodeTypeManagerImp==null)
+        {
+            NodeTypeManagerImp=new NodeTypeManagerImp();
+        }
+        return NodeTypeManagerImp;
+    }
+    private static void checkDefaultWorkspace()
+    {
+        org.semanticwb.jcr283.repository.model.Workspace ws=org.semanticwb.jcr283.repository.model.Workspace.ClassMgr.getWorkspace(DEFAULT_WORKSPACE);
+        if(ws==null)
+        {
+            ws=org.semanticwb.jcr283.repository.model.Workspace.ClassMgr.createWorkspace(DEFAULT_WORKSPACE, "http://www.semanticwb.org.mx/jcr283/default");
+        }
+        if(ws.getRoot()==null)
+        {
+            Unstructured root=Unstructured.ClassMgr.createUnstructured("jcr:root", ws);
+            ws.setRoot(root);
+        }
+    }
     public String[] getDescriptorKeys()
     {
         return descriptors.keySet().toArray(new String[descriptors.keySet().size()]);
@@ -86,7 +109,7 @@ public class SWBRepository implements Repository {
         {
             workspaceName=DEFAULT_WORKSPACE;
         }
-        SessionImp session=new SessionImp("");
+        SessionImp session=new SessionImp("",this);
         Workspace ws=Workspace.ClassMgr.getWorkspace(workspaceName);
         if(ws==null)
         {
