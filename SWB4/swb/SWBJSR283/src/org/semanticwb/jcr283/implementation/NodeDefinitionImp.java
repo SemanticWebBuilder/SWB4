@@ -22,6 +22,8 @@ import org.semanticwb.platform.SemanticProperty;
 public class NodeDefinitionImp extends ItemDefinitionImp implements NodeDefinition
 {
 
+
+
     private final NodeTypeImp defaultPrimaryType;
     private final boolean allowsSameNameSiblings;
     private final HashSet<NodeTypeImp> requiredPrimaryTypes=new HashSet<NodeTypeImp>();
