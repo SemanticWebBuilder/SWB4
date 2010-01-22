@@ -402,47 +402,185 @@
                         rss.appendChild(channel);
                         String title = getTitle(commWebpage);
 
-                        addAtribute(channel, "title", "Comunidad "+title);
+                        addAtribute(channel, "title", "Comunidad " + title);
                         String url5 = commWebpage.getUrl();
                         url5 = SWBUtils.TEXT.replaceAllIgnoreCase(url5, "&amp;", "&");
                         addAtribute(channel, "link", url5);
                         addAtribute(channel, "description", title);
 
+                        Iterator<WebPage> childs = commWebpage.listVisibleChilds("es");
+                        while (childs.hasNext())
+                        {
+                            WebPage child = childs.next();
+                            {
+                                
+                                Iterator<Blog> blogs = Blog.ClassMgr.listBlogByWebPage(child);
+                                while (blogs.hasNext())
+                                {
+                                    Blog blog = blogs.next();
+                                    Iterator<PostElement> elements = PostElement.ClassMgr.listPostElementByBlog(blog);
+                                    elements = SWBComparator.sortByCreated(elements, false);
+                                    int i = 0;
+                                    while (elements.hasNext())
+                                    {
+                                        PostElement element = elements.next();
+                                        if (element.getVisibility() == MicroSiteElement.VIS_ALL)
+                                        {
+                                            Element item = doc.createElement("item");
+                                            channel.appendChild(item);
 
-                        Iterator<MicroSiteElement> elements = MicroSiteElement.ClassMgr.listMicroSiteElements(commWebpage.getWebSite());
+                                            addAtribute(item, "title", element.getTitle());
+                                            String url6 = element.getURL();
+                                            url6 = SWBUtils.TEXT.replaceAllIgnoreCase(url6, "&amp;", "&");
+                                            addAtribute(item, "link", url6);
+                                            addAtribute(item, "description", element.getDescription());
+                                            addAtribute(item, "pubDate", element.getCreated().toGMTString());
+                                            addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
+                                            i++;
+                                            if (i == MAX_ITEMS)
+                                            {
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            {
+                                Iterator<EventElement> elements = EventElement.ClassMgr.listEventElementByEventWebPage(child);
+                                elements = SWBComparator.sortByCreated(elements, false);
+                                int i = 0;
+                                while (elements.hasNext())
+                                {
+                                    EventElement element = elements.next();
+                                    if (element.getVisibility() == MicroSiteElement.VIS_ALL)
+                                    {
+                                        Element item = doc.createElement("item");
+                                        channel.appendChild(item);
+
+                                        addAtribute(item, "title", element.getTitle());
+                                        String url6 = element.getURL();
+                                        url6 = SWBUtils.TEXT.replaceAllIgnoreCase(url6, "&amp;", "&");
+                                        addAtribute(item, "link", url6);
+                                        addAtribute(item, "description", element.getDescription());
+                                        addAtribute(item, "pubDate", element.getCreated().toGMTString());
+                                        addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
+                                        i++;
+                                        if (i == MAX_ITEMS)
+                                        {
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            {
+                                Iterator<PhotoElement> elements = PhotoElement.ClassMgr.listPhotoElementByPhotoWebPage(child);
+                                elements = SWBComparator.sortByCreated(elements, false);
+                                int i = 0;
+                                while (elements.hasNext())
+                                {
+                                    PhotoElement element = elements.next();
+                                    if (element.getVisibility() == MicroSiteElement.VIS_ALL)
+                                    {
+                                        Element item = doc.createElement("item");
+                                        channel.appendChild(item);
+
+                                        addAtribute(item, "title", element.getTitle());
+                                        String url6 = element.getURL();
+                                        url6 = SWBUtils.TEXT.replaceAllIgnoreCase(url6, "&amp;", "&");
+                                        addAtribute(item, "link", url6);
+                                        addAtribute(item, "description", element.getDescription());
+                                        addAtribute(item, "pubDate", element.getCreated().toGMTString());
+                                        addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
+                                        i++;
+                                        if (i == MAX_ITEMS)
+                                        {
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            {
+                                Iterator<NewsElement> elements = NewsElement.ClassMgr.listNewsElementByNewsWebPage(child);
+                                elements = SWBComparator.sortByCreated(elements, false);
+                                int i = 0;
+                                while (elements.hasNext())
+                                {
+                                    NewsElement element = elements.next();
+                                    if (element.getVisibility() == MicroSiteElement.VIS_ALL)
+                                    {
+                                        Element item = doc.createElement("item");
+                                        channel.appendChild(item);
+
+                                        addAtribute(item, "title", element.getTitle());
+                                        String url6 = element.getURL();
+                                        url6 = SWBUtils.TEXT.replaceAllIgnoreCase(url6, "&amp;", "&");
+                                        addAtribute(item, "link", url6);
+                                        addAtribute(item, "description", element.getDescription());
+                                        addAtribute(item, "pubDate", element.getCreated().toGMTString());
+                                        addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
+                                        i++;
+                                        if (i == MAX_ITEMS)
+                                        {
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            {
+                                Iterator<VideoElement> elements = VideoElement.ClassMgr.listVideoElementByWebPage(child);
+                                elements = SWBComparator.sortByCreated(elements, false);
+                                int i = 0;
+                                while (elements.hasNext())
+                                {
+                                    VideoElement element = elements.next();
+                                    if (element.getVisibility() == MicroSiteElement.VIS_ALL)
+                                    {
+                                        Element item = doc.createElement("item");
+                                        channel.appendChild(item);
+
+                                        addAtribute(item, "title", element.getTitle());
+                                        String url6 = element.getURL();
+                                        url6 = SWBUtils.TEXT.replaceAllIgnoreCase(url6, "&amp;", "&");
+                                        addAtribute(item, "link", url6);
+                                        addAtribute(item, "description", element.getDescription());
+                                        addAtribute(item, "pubDate", element.getCreated().toGMTString());
+                                        addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
+                                        i++;
+                                        if (i == MAX_ITEMS)
+                                        {
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        /*Iterator<MicroSiteElement> elements = MicroSiteElement.ClassMgr.lis(commWebpage.getWebSite());
                         elements = SWBComparator.sortByCreated(elements, false);
                         int i = 0;
                         while (elements.hasNext())
                         {
-                            Object obj = elements.next();
-                            if (obj instanceof MicroSiteElement)
-                            {
+                        MicroSiteElement element = elements.next();
+                        if (element.getVisibility() == MicroSiteElement.VIS_ALL)
+                        {
+                        Element item = doc.createElement("item");
+                        channel.appendChild(item);
 
-                                MicroSiteElement element = (MicroSiteElement) obj;
-                                
-                                if (element.getVisibility() == MicroSiteElement.VIS_ALL)
-                                {
-                                    Element item = doc.createElement("item");
-                                    channel.appendChild(item);
-
-                                    addAtribute(item, "title", element.getTitle());
-                                    String url6 = element.getURL();
-                                    url6 = SWBUtils.TEXT.replaceAllIgnoreCase(url6, "&amp;", "&");
-                                    addAtribute(item, "link", url6);
-                                    addAtribute(item, "description", element.getDescription()+","+commWebpage.getURI());
-                                    addAtribute(item, "pubDate", element.getCreated().toGMTString());
-                                    addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
-                                    i++;
-                                    if (i == MAX_ITEMS)
-                                    {
-                                        break;
-                                    }
-                                }
-
-                            }
+                        addAtribute(item, "title", element.getTitle());
+                        String url6 = element.getURL();
+                        url6 = SWBUtils.TEXT.replaceAllIgnoreCase(url6, "&amp;", "&");
+                        addAtribute(item, "link", url6);
+                        addAtribute(item, "description", element.getDescription());
+                        addAtribute(item, "pubDate", element.getCreated().toGMTString());
+                        addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
+                        i++;
+                        if (i == MAX_ITEMS)
+                        {
+                        break;
                         }
+                        }
+                        }*/
 
-                        out.write(new String(org.semanticwb.SWBUtils.XML.domToXml(doc).getBytes("iso-8859-1"),"utf-8"));
+                        out.write(new String(org.semanticwb.SWBUtils.XML.domToXml(doc).getBytes("iso-8859-1"), "utf-8"));
 
                     }
                     else
