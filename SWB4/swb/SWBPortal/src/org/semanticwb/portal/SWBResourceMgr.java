@@ -31,6 +31,7 @@ package org.semanticwb.portal;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Model;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -486,36 +487,40 @@ public class SWBResourceMgr
 //        return convertOldWBResource(obj, null);
 //    }
 
-//    /** Valida carga de Recursos de versiones anteriore
-//     *  Si el recursos es de una version anterior
-//     *  asigna setWb2Resource(true) del recursos
-//     */
-//    public Object convertOldWBResource(Object obj, Resource base)
-//    {
-//        Object aux = null;
-//        if (obj instanceof WBResource)
-//        {
-//            aux = obj;
-//        } else
-//        {
-//            try
-//            {
-//                Class wbresource = Class.forName("infotec.wb2.lib.WBResource");
-//                //System.out.println("convert:"+wbresource+" -> "+wbresource.isInstance(obj));
-//                if (wbresource.isInstance(obj))
-//                {
-//                    if(base!=null)base.setWb2Resource(true);
-//                    Class wbreswrapper = Class.forName("infotec.wb2.lib.WBResourceWrapperNew");
-//                    Constructor cons = wbreswrapper.getConstructor(new Class[]{wbresource});
-//                    aux = cons.newInstance(new Object[]{obj});
-//                }
-//            } catch (Exception e)
-//            {
-//                AFUtils.log(e, "");
-//            }
-//        }
-//        return aux;
-//    }
+    /** Valida carga de Recursos de versiones anteriore
+     *  Si el recursos es de una version anterior
+     *  asigna setWb2Resource(true) del recursos
+     */
+    public Object convertOldWBResource(Object obj, Resource base)
+    {
+        Object aux = null;
+        if (obj instanceof SWBResource)
+        {
+            aux = obj;
+        } else
+        {
+            try
+            {
+                //Class wbresource = Class.forName("infotec.wb2.lib.WBResource");
+                Class wbresource = Class.forName("com.infotec.wb.lib.WBResource");
+                //System.out.println("convert:"+wbresource+" -> "+wbresource.isInstance(obj));
+                if (wbresource.isInstance(obj))
+                {
+                    //if(base!=null)base.setWb2Resource(true);
+                    Class wbreswrapper = Class.forName("org.semanticwb.api.WBResourceToSWBResourceWrapper");
+                    Constructor cons = wbreswrapper.getConstructor(new Class[]{wbresource});
+                    aux = cons.newInstance(new Object[]{obj});
+                }else
+                {
+                    //version 2
+                }
+            } catch (Exception e)
+            {
+                log.error(e);
+            }
+        }
+        return aux;
+    }
 
     public Class createSWBResourceClass(String clsname) throws ClassNotFoundException
     {
@@ -563,8 +568,8 @@ public class SWBResourceMgr
             {
                 String clsname = type.getResourceClassName();
                 Class cls = createSWBResourceClass(clsname);
-    //            obj = (WBResource) convertOldWBResource(cls.newInstance(),base);
-                obj=(SWBResource)cls.newInstance();
+                obj = (SWBResource) convertOldWBResource(cls.newInstance(),resource);
+                //obj=(SWBResource)cls.newInstance();
                 if (obj != null)
                 {
                     obj.setResourceBase(resource);
