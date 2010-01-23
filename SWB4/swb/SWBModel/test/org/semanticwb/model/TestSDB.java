@@ -36,7 +36,6 @@ import com.hp.hpl.jena.sdb.Store;
 import java.util.Iterator;
 import org.junit.*;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 
 /**
