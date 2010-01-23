@@ -7,4 +7,9 @@ public class GateWay extends org.semanticwb.process.base.GateWayBase
     {
         super(base);
     }
+
+    public boolean isValid()
+    {
+        return true;
+    }
 }
