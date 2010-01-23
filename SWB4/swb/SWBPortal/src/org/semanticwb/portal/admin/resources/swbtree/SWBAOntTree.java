@@ -743,10 +743,10 @@ public class SWBAOntTree extends GenericResource
         events.put(TreeUtils.getEvent("onDblClick", TreeUtils.getAction("newTab", SWBPlatform.getContextPath()+"/swbadmin/jsp/resourceTab.jsp", null)));
         //events.put(getEvent("onClick", getAction("getHtml", SWBPlatform.getContextPath()+"/swbadmin/jsp/viewProps.jsp?id="+obj.getEncodedURI(), "vprop")));
 
-        Iterator<OntProperty> it=prop.listSubProperties(true);
+        Iterator it=prop.listSubProperties(true);
         while(it.hasNext())
         {
-            OntProperty cprop=it.next();
+            OntProperty cprop=(OntProperty)it.next();
             addProperty(childs, cprop,ont);
         }
     }

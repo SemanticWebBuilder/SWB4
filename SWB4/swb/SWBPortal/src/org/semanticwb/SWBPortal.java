@@ -469,11 +469,18 @@ public class SWBPortal {
 
         loadSemanticModels();
 
+        //System.out.println("Checking Predef Sites...");
+
+        try
+        {
+
         WebSite site = SWBContext.getAdminWebSite();
         if (site == null) {
             log.event("Creating Admin WebSite...");
             SWBPlatform.getSemanticMgr().createModel(SWBContext.WEBSITE_ADMIN, "http://www.semanticwb.org/SWBAdmin#");
         }
+
+        //System.out.println("Checking OntEditor...");
 
         site = SWBContext.getOntEditor();
         if (site == null) {
@@ -584,7 +591,9 @@ public class SWBPortal {
             site.setUserRepository(urep);
         }
 
+        }catch(Exception e){e.printStackTrace();}
 
+        //System.out.println("Checking Database...");
         //Crear tablas LOGS
         try {
             Connection con = SWBUtils.DB.getDefaultConnection();
@@ -733,6 +742,7 @@ public class SWBPortal {
 
         SWBPlatform.getSemanticMgr().loadBaseVocabulary();
 
+        //System.out.println("End Vocabulary");
 
 //        ontoModel.loadImports();
 //        ontoModel.getDocumentManager().addAltEntry(source,"file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/swb.owl" );
@@ -766,6 +776,7 @@ public class SWBPortal {
         //TODO agregar RDFa
 
         SWBPlatform.getSemanticMgr().getOntology().rebind();
+        //System.out.println("End loadSemanticModels");
     }
 
     /**
