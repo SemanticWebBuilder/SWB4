@@ -289,12 +289,16 @@ public class PropertyImp extends ItemImp implements Property
         {
             throw new ValueFormatException("The property is multivalued");
         }
+        if(values.size()==0)
+        {
+            return -1;
+        }
         return getLength(values.get(0));
     }
 
-    private long getLength(Value value)
+    private long getLength(Value value) throws ValueFormatException,RepositoryException
     {
-        return -1;
+        return value.getString().length();
     }
 
     public long[] getLengths() throws ValueFormatException, RepositoryException
