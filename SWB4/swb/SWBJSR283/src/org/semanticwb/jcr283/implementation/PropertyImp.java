@@ -335,7 +335,7 @@ public class PropertyImp extends ItemImp implements Property
 
     public boolean isMultiple() throws RepositoryException
     {
-        return values.size() == 0 ? false : true;
+        return values.size() >= 1 ? true : false;
     }
 
     public boolean isNode()
