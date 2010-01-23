@@ -33,6 +33,7 @@ import org.junit.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.base.SWBContext;
 
 /**
  *
