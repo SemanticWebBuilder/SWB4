@@ -298,6 +298,11 @@ public class PropertyImp extends ItemImp implements Property
 
     private long getLength(Value value) throws ValueFormatException,RepositoryException
     {
+        int type=value.getType();
+        if(type==PropertyType.BINARY)
+        {
+            return value.getBinary().getSize();
+        }
         return value.getString().length();
     }
 
