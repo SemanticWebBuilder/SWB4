@@ -256,7 +256,10 @@ public class TableGeneric implements SWBObserver {
         try {
 	        con = SWBUtils.DB.getConnection(dbcon);
 	        DatabaseMetaData dbmd = con.getMetaData();
-	        resultSet = dbmd.getColumns(null, "", tablename, null);
+	        if ("Oracle".equalsIgnoreCase(dbmd.getDatabaseProductName()))
+	        	resultSet = dbmd.getColumns(null, "%", tablename, "%");
+            else
+            	resultSet = dbmd.getColumns(null, "", tablename, null);
 	        while (resultSet.next()) {
 	            HashMap columnMetaData = new HashMap();
 	            columnMetaData.put("DATA_TYPE", resultSet.getString("DATA_TYPE"));

@@ -1,35 +1,18 @@
-/**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
-
-
 package com.infotec.wb.resources.database;
 
+import java.sql.Types;
+import java.sql.Blob;
 import java.io.InputStream;
-import java.sql.*;
-import java.util.*;
-
-
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Vector;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.SWBObserver;
@@ -40,26 +23,27 @@ import org.semanticwb.base.SWBObserver;
  * @author Infotec
  * @version 1.1
  */
-public class QueryGeneric implements SWBObserver
-{
+public class QueryGeneric implements SWBObserver {
+
+    Logger log = SWBUtils.getLogger(QueryGeneric.class);
+
     private int length;           // Numero de columnas que contiene la tabla que representa la consulta.
     private int types[];          // Tipos de dato en las columnas de la tabla que contiene los resultados de la consulta.
     private String dbcon;         // Nombre de la base de datos.
     private HashMap recs;         // Registro obtenido al realizar la consulta.
     private String message;       // Mensaje de error si ocurre una excepcion al realizar la consulta.
     private Vector results;       // Registros obtenidos al realizar la consulta.
-    private ArrayList names;      // Lista de nombres de las columnas de la tabla que contiene los resultados de la consulta. 
+    private ArrayList names;      // Lista de nombres de las columnas de la tabla que contiene los resultados de la consulta.
     private ArrayList primaryKeys;// Lista de claves primarias.
     private int cachelevel;       // Nivel de cache.
     private ArrayList set;        // Conjunto de registros de una consulta
     public static final int NO_CACHE = 0; // Indica que el recurso no esta en memoria.
     public static final int FLY_CACHE= 1; // Indica que el recurso tiene al menos un registro en memoria.
     public static final int FULL_CACHE=2; // Indica que todos los registros de la tabla estan en memoria.
-    Logger log = SWBUtils.getLogger(QueryGeneric.class);
 
     /**
      * Constructor.
-     * 
+     *
      * @param db Nombre de la base de datos.
      */
     public QueryGeneric(String db) {
@@ -68,7 +52,7 @@ public class QueryGeneric implements SWBObserver
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param dbcon Nombre de la base de datos.
 	 * @param cachelevel Nivel de cache para manejo en memoria.
 	 */
@@ -82,17 +66,17 @@ public class QueryGeneric implements SWBObserver
         this.cachelevel = cachelevel;
         this.primaryKeys = new ArrayList();
     }
-    
+
 	/**
 	 * Realiza la consulta dada a la base de datos.
-	 * 
+	 *
 	 * @param query Sentencia SQL que representa la consulta.
 	 */
     public void setQuery(String query) {
     	Connection con = null;
     	Statement st = null;
     	try {
-			con = SWBUtils.DB.getConnection(dbcon);
+			con = SWBUtils.DB.getConnection(this.dbcon);
 			st = con.createStatement();
 			ResultSet rs = st.executeQuery(query);
 			setMetadata(rs.getMetaData());
@@ -100,9 +84,9 @@ public class QueryGeneric implements SWBObserver
 			rs.close();
 			st.close();
 			con.close();
-    	}catch (SQLException e){    		
+    	}catch (SQLException e){
     		message = e.getMessage();
-			log.error( SWBUtils.TEXT.getLocaleString("com.infotec.wb.resources.database.QueryGeneric", "error_QueryGeneric_setQuery") + "...", e);
+			log.error(SWBUtils.TEXT.getLocaleString("com.infotec.wb.resources.database.QueryGeneric", "error_QueryGeneric_setQuery") + "...", e);
     	}finally {
     		try {
     			if (st != null)
@@ -111,14 +95,14 @@ public class QueryGeneric implements SWBObserver
     				con.close();
     		}catch (SQLException e){
     			message = e.getMessage();
-				log.error( SWBUtils.TEXT.getLocaleString("com.infotec.wb.resources.database.QueryGeneric", "error_QueryGeneric_setQuery") + "...", e);
+				log.error(SWBUtils.TEXT.getLocaleString("com.infotec.wb.resources.database.QueryGeneric", "error_QueryGeneric_setQuery") + "...", e);
     		}
     	}
     }
 
     /**
      * Indica si el catalogo existe en la base de datos.
-     * 
+     *
      * @return <b>boolean</b> true Si existe la tabla; false En caso contrario.
      */
     public boolean categoryExist(String query, String db) {
@@ -148,10 +132,10 @@ public class QueryGeneric implements SWBObserver
             }
         }
     }
-    
+
     /**
      * Establece los valores del catalogo.
-     * 
+     *
      * @param rs Registros de una consulta.
      * @param table Nombre de la tabla que contiene los valores del catalogo.
      */
@@ -172,34 +156,34 @@ public class QueryGeneric implements SWBObserver
             }
             return exist;
         }catch (SQLException e) {
-            log.error( SWBUtils.TEXT.getLocaleString("com.infotec.wb.resources.database.QueryGeneric", "error_QueryGeneric_setCategory") + "...", e);
+            log.error(SWBUtils.TEXT.getLocaleString("com.infotec.wb.resources.database.QueryGeneric", "error_QueryGeneric_setCategory") + "...", e);
             return false;
         }
     }
-    
+
     /**
      * Regresa los valores del catalogo.
-     * 
+     *
      * @return <b>Vector</b> Registros de una consulta.
      */
     public Iterator getCategory() {
         return set.iterator();
     }
-    
+
     /**
 	 * Obtiene mensaje de excepcion.
-	 * 
+	 *
 	 * @return <b>String</b> Mensaje de error.
 	 */
 	public String getMessageException() {
 		return message;
 	}
-	
+
 	/**
 	 * Regresa los resultados de la consulta.
-	 * 
+	 *
 	 * @return <b>Enumeration</b> Resultados de la consulta.
-	 * 
+	 *
 	 * @param key Sentencia SQL que representa la consulta.
 	 */
 	public Enumeration getResults(String key) {
@@ -207,48 +191,48 @@ public class QueryGeneric implements SWBObserver
 			setQuery(key);
 		return results.elements();
 	}
-        
+
 	public Vector getVectorResults(String key) {
 		if(getCacheSize() == 0)
 			setQuery(key);
 		return results;
-	}        
-    
+	}
+
 	/**
 	 * Consulta el nivel de cache en memoria.
-	 * 
+	 *
 	 * @return <b>int</b> Nivel actual de cache.
 	 */
     public int getCacheSize() {
         return results.size();
     }
-    
+
     /**
      * Establece los resultados de la consulta.
-     * 
+     *
      * @param rs ResultSet de la instancia que lo esta llamando.
      */
     public void setData(ResultSet rs)
     {
-        try 
+        try
         {
-            while (rs.next()) 
+            while (rs.next())
             {
                 HashMap recs = new HashMap();
-                for (int i=0; i < getLength(); i++) 
+                for (int i=0; i < getLength(); i++)
                 {
                     String columnName = getColumnName(i+1);
-                    if (getColumnType(i+1) == Types.LONGVARBINARY) 
+                    if (getColumnType(i+1) == Types.LONGVARBINARY)
                     {
                         InputStream stream = rs.getBinaryStream(i+1);
                         recs.put(columnName, stream);
                     }
-                    else if (getColumnType(i+1) == Types.BLOB) 
+                    else if (getColumnType(i+1) == Types.BLOB)
                     {
                         Blob blob = (Blob)rs.getBlob(i+1);
                         recs.put(columnName, blob);
-                    }                      
-                    else 
+                    }
+                    else
                     {
                         String columnValue = rs.getString(i+1);
                         recs.put(columnName, columnValue);
@@ -256,9 +240,7 @@ public class QueryGeneric implements SWBObserver
                 }
                 results.add(recs);
             }
-    	}
-        catch (SQLException e) 
-        {
+    	}catch (SQLException e) {
             message = e.getMessage();
             log.error(SWBUtils.TEXT.getLocaleString("com.infotec.wb.resources.database.QueryGeneric", "error_QueryGeneric_setData") + "...", e);
     	}
@@ -266,7 +248,7 @@ public class QueryGeneric implements SWBObserver
 
 	/**
 	 * Regresa el numero de registros que contiene la tabla.
-	 * 
+	 *
 	 * @return <b>int</b> Nivel de cache.
 	 */
     public int loadCache() {
@@ -276,7 +258,7 @@ public class QueryGeneric implements SWBObserver
 
 	/**
 	 * Establece los metadatos de la tabla.
-	 * 
+	 *
 	 * @param md ResultSetMetaData de la instancia que lo esta llamando.
 	 */
     public void setMetadata(ResultSetMetaData md) {
@@ -285,7 +267,10 @@ public class QueryGeneric implements SWBObserver
             types = new int[length];
             names = new ArrayList(length);
             for(int x = 0; x < length; x++) {
-                names.add(md.getColumnName(x + 1));
+            	if (null != md.getColumnLabel(x + 1) && !"".equals(md.getColumnLabel(x + 1)))
+            		names.add(md.getColumnLabel(x + 1));
+            	else
+            		names.add(md.getColumnName(x + 1));
                 types[x] = md.getColumnType(x + 1);
             }
         }
@@ -297,7 +282,7 @@ public class QueryGeneric implements SWBObserver
 
 	/**
 	 * Obtiene las claves primarias de la tabla que representa la consulta.
-	 * 
+	 *
 	 * @return <b>Iterator</b> Claves primarias.
 	 */
     public Iterator getPrimaryKeys() {
@@ -306,7 +291,7 @@ public class QueryGeneric implements SWBObserver
 
 	/**
 	 * Agrega una clave primaria.
-	 * 
+	 *
 	 * @param pk Indice de la columna que contiene la clave primaria.
 	 */
     public void addPrimaryKey(int pk) {
@@ -315,7 +300,7 @@ public class QueryGeneric implements SWBObserver
 
 	/**
 	 * Agrega una clave primaria.
-	 * 
+	 *
 	 * @param name Nombre de la columna que contiene la clave primaria.
 	 */
     public void addPrimaryKey(String name) {
@@ -324,9 +309,9 @@ public class QueryGeneric implements SWBObserver
 
 	/**
 	 * Obtiene el nombre de columna de la tabla que lo llama.
-	 * 
+	 *
 	 * @return <b>String</b> Nombre de la columna.
-	 * 
+	 *
 	 * @param x Indice de la columna.
 	 */
     public String getColumnName(int x) {
@@ -335,7 +320,7 @@ public class QueryGeneric implements SWBObserver
 
 	/**
 	 * Obtiene los nombres de las columnas de la tabla que lo llama.
-	 * 
+	 *
 	 * @return <b>Iterator</b> Nombres de las columnas.
 	 */
     public Iterator getColumnNames() {
@@ -344,9 +329,9 @@ public class QueryGeneric implements SWBObserver
 
 	/**
 	 * Indica si la columna existe en la tabla que lo llama.
-	 * 
+	 *
 	 * @return <b>boolean</b> true si la tabla contiene la columna, false en caso contrario.
-	 * 
+	 *
 	 * @param name Nombre de la columna.
 	 */
     public boolean existColumnName(String name) {
@@ -355,9 +340,9 @@ public class QueryGeneric implements SWBObserver
 
 	/**
 	 * Obtiene el tipo de la columna.
-	 * 
+	 *
 	 * @return <b>int</b> Tipo de la columna.
-	 * 
+	 *
 	 * @param x Indice de la columna.
 	 */
     public int getColumnType(int x) {
@@ -366,9 +351,9 @@ public class QueryGeneric implements SWBObserver
 
 	/**
 	 * Obtiene el tipo de la columna.
-	 * 
+	 *
 	 * @return <b>int</b> Tipo de la columna.
-	 * 
+	 *
 	 * @param name Nombre de la columna.
 	 */
     public int getColumnType(String name) {
@@ -381,7 +366,7 @@ public class QueryGeneric implements SWBObserver
 
 	/**
 	 * Actualiza los datos disponibles.
-	 * 
+	 *
 	 * @param query Consulta que se realiza.
 	 * @param results Vector de resultados.
 	 */
@@ -393,7 +378,7 @@ public class QueryGeneric implements SWBObserver
 
 	/**
 	 * Obtiene el numero de columnas.
-	 * 
+	 *
 	 * @return <b>int</b> Numero de columnas.
 	 */
     public int getLength() {
@@ -402,7 +387,7 @@ public class QueryGeneric implements SWBObserver
 
 	/**
 	 * Obtiene el nivel de cache actual.
-	 * 
+	 *
 	 * @return <b>int</b> Nivel de cache.
 	 */
     public int getCacheLevel() {
@@ -411,7 +396,7 @@ public class QueryGeneric implements SWBObserver
 
 	/**
 	 * Establece el nivel de cache.
-	 *  
+	 *
 	 * @param cachelevel Nivel de cache.
 	 */
     public void setCacheLevel(int cachelevel) {

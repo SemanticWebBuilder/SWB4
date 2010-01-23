@@ -19,9 +19,7 @@
 * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
 * dirección electrónica: 
 *  http://www.semanticwebbuilder.org
-**/ 
- 
-
+**/
 
 package com.infotec.wb.resources.database;
 
@@ -44,9 +42,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.util.FileUpload;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.ResourceType;
-import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.IDGenerator;
-import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -55,10 +51,10 @@ import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.portal.util.WBFileUpload;
 import org.semanticwb.util.Encryptor;
 import org.w3c.dom.*;
-
+import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
 
 /**
- * Recurso que permite realizar modificaci�n y consulta a una base de datos.
+ * Recurso que permite realizar modificación y consulta a una base de datos.
  *
  * @author Infotec
  * @version 1.1
@@ -84,8 +80,8 @@ public class DataBaseResource extends GenericResource
     public void setResourceBase(Resource base)
     {
         try 
-        { 
-            super.setResourceBase(base); 
+        {
+            super.setResourceBase(base);
             webWorkPath = (String) SWBPortal.getWebWorkPath() +  base.getWorkPath();
         }
         catch(Exception e) { log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(),e);  }
@@ -185,7 +181,6 @@ public class DataBaseResource extends GenericResource
                     requestparams.getFiles(request);
                     String value=acquireValue(requestparams, "table");
                     if(!"".equals(value)) base.setAttribute("table", value);
-                    
                     if (!"consulta".equals(queryType) && !"delete".equals(queryType))
                         setDomMetaData(requestparams, paramRequest);
                 }
@@ -195,7 +190,6 @@ public class DataBaseResource extends GenericResource
             {
                 if(null != request.getParameter("dbcon") && !"".equals(request.getParameter("dbcon").trim()))
                     base.setAttribute("dbcon", request.getParameter("dbcon").trim());
-
                 queryType = null != request.getParameter("queryType") && !"".equals(request.getParameter("queryType").trim()) ? request.getParameter("queryType").trim() : "";
                 if (!"".equals(queryType)) 
                 {
@@ -208,7 +202,7 @@ public class DataBaseResource extends GenericResource
                         base.removeAttribute("format");
                         base.removeAttribute("table");
                         base.removeAttribute("namekey");
-                        base.removeAttribute("sync");
+                        //base.removeAttribute("sync");
                     }
                     base.setAttribute("queryType", queryType);
                 }
@@ -220,7 +214,6 @@ public class DataBaseResource extends GenericResource
             ret.append("<form name=\"frmResource\" enctype=\"multipart/form-data\" onsubmit=\"if(!validate()) return false;\" method=\"POST\" action=\"" + url.toString() + "\">\n");
             ret.append("<div class=\"swbform\"> \n");
             ret.append("<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\"> \n");
-
             if ("consulta".equals(queryType))
                 ret.append(getConsultaForm(request, paramRequest));
             else if ("insert".equals(queryType))
@@ -231,7 +224,6 @@ public class DataBaseResource extends GenericResource
                 ret.append(getDeleteForm(request, paramRequest));
             else if ("search".equals(queryType))
                 ret.append(getSearchForm(request, paramRequest));
-            
             ret.append("<tr> \n");
             ret.append("<td colspan=2 align=right> \n");
             ret.append("<br><hr size=1 noshade> \n");
@@ -302,9 +294,10 @@ public class DataBaseResource extends GenericResource
                                     if ("consulta".equals(queryType)) 
                                     {
                                         applet = resUtil.uploadFileParsed(base, requestparams, "filex", request.getSession().getId());
-                                        if (applet != null && !applet.trim().equals(""))
-                                            base.setAttribute("filex", file);
-                                        else base.setAttribute("msgadmin", paramRequest.getLocaleString("usrmsg_DataBaseResource_doAdmin_msgWrongChangeFile") +" <i>" + value + "</i>.");
+                                        /*
+                                        if (applet != null && !applet.trim().equals(""))*/
+                                        base.setAttribute("filex", file);
+                                        //else base.setAttribute("msgadmin", paramRequest.getLocaleString("usrmsg_DataBaseResource_doAdmin_msgWrongChangeFile") +" <i>" + value + "</i>.");
                                     }
                                     else
                                     {
@@ -374,45 +367,34 @@ public class DataBaseResource extends GenericResource
                         }        
                     }
                 }
-                if ("consulta".equals(queryType)) 
-                {
-                    /*setAttribute(base, fUpload, "query");
-                    setAttribute(base, fUpload, "segment");
-                    setAttribute(base, fUpload, "format");*/
+                if ("consulta".equals(queryType)) {
                     setAttribute(base, requestparams, "query");
                     setAttribute(base, requestparams, "segment");
                     if("1".equals(acquireValue(requestparams, "nofilex"))) base.getAttribute("format", "1");
                     else setAttribute(base, requestparams, "format");
                 }
-                else 
-                {
-                    //setAttribute(base, fUpload, "table");
+                else {
                     setAttribute(base, requestparams, "table");
-                    if (!"search".equals(queryType)) 
-                    {
-                        setAttribute(base, requestparams, "sync", "on");
+                    setAttribute(base, requestparams, "nextTopic");
+                    if (!"search".equals(queryType)) {
+                        //setAttribute(base, requestparams, "sync", "on");
                         TableGeneric tbl = new TableGeneric(base.getAttribute("dbcon",""));
                         String nameKey = tbl.getKey(base.getAttribute("table",""));
                         base.setAttribute("namekey", nameKey);
                     }
                 }
                 base.updateAttributesToDB(); //paramRequest.getUser().getId(), "Resource with identifier "+base.getId()+" was updated successfully ");
-                //base.getRecResource().update(paramRequest.getUser().getId(), "Resource with identifier "+base.getId()+" was updated successfully ");
-                if(redirect) 
-                {
+                if(redirect) {
                     SWBResourceURL url=paramRequest.getRenderUrl();
                     url.setMode(paramRequest.Mode_ADMIN);
                     url.setAction("type");
                     response.sendRedirect(url.toString());
                 }
-                else
-                {
+                else {
                     if(applet!=null && !"".equals(applet.trim())) ret.append(applet);
                     else ret.append(getAdminResume(request, paramRequest));
                 }
-            }
-            catch(Exception e) 
-            { 
+            }catch(Exception e) {
                 log.error(paramRequest.getLocaleString("error_DataBaseResource_doAdmin_msgErrorActiveResource"), e);
                 base.setAttribute("msgadmin", base.getAttribute("msgadmin","")+"<br>"+paramRequest.getLocaleString("error_DataBaseResource_doAdmin_msgErrorActiveResource") +" " + base.getId() + ".");
             }
@@ -544,7 +526,7 @@ public class DataBaseResource extends GenericResource
                     }
                 }
             }
-            if ("on".equals(base.getAttribute("sync",""))) {
+            /*if ("on".equals(base.getAttribute("sync",""))) {
                 if ("on".equals(getIntegrityMsg(paramRequest))) {
                     ret.append("<tr> \n");
                     ret.append("<td width=\"200\" align=\"right\" valign=\"top\" class=\"datos\"> \n");
@@ -569,6 +551,14 @@ public class DataBaseResource extends GenericResource
                         ret.append("</td></tr> \n");
                     }
                 }
+            }*/
+            if (!"".equals(base.getAttribute("nextTopic",""))) {
+            	ret.append("<tr> \n");
+                ret.append("<td width=\"200\" align=\"right\" valign=\"top\" class=\"datos\"> \n");
+                ret.append(paramRequest.getLocaleString("usrmsg_DataBaseResource_doAdmin_msgUrl"));
+                ret.append("</td><td class=\"valores\"> \n");
+                ret.append(base.getAttribute("nextTopic",""));
+                ret.append("</td></tr> \n");
             }
             value=base.getAttribute("msgadmin", "").trim();
             if(!"".equals(value))
@@ -897,22 +887,25 @@ public class DataBaseResource extends GenericResource
      * @param request
      * @param paramRequest
      */       
-    private String getInsertForm(HttpServletRequest request, SWBParamRequest paramRequest)
-    {
-        StringBuffer ret=new StringBuffer("");
+    private String getInsertForm(HttpServletRequest request, SWBParamRequest paramRequest) {
         Resource base=getResourceBase();
-        try
-        {
+        StringBuffer ret=new StringBuffer("");
+        try {
             ret.append(getSearchForm(request, paramRequest));
-            if(!"".equals(base.getAttribute("table","")))
-            {
-                ret.append("<tr> \n");
+            if(!"".equals(base.getAttribute("table",""))) {
+                /*ret.append("<tr> \n");
                 ret.append("<td class=\"datos\">"+paramRequest.getLocaleString("usrmsg_DataBaseResource_doAdmin_msgSync") +"</td> \n");
                 ret.append("<td class=\"valores\"> \n");
                 ret.append("<input type=\"checkbox\" name=\"sync\" value=\"on\"");
                 if ("on".equals(base.getAttribute("sync","").trim())) ret.append(" checked");
                 ret.append("></td>");
-                ret.append("</tr>");
+                ret.append("</tr>");*/
+                ret.append("<tr> \n");
+                ret.append("<td class=\"datos\">" + paramRequest.getLocaleString("usrmsg_DataBaseResource_doAdmin_msgUrl") +"</td> \n");
+                ret.append("<td class=\"valores\"> \n");
+                ret.append("<input type=\"text\" name=\"nextTopic\" value=\"" + base.getAttribute("nextTopic","").trim() + "\" size=\"40\" ");
+                ret.append("></td>");
+                ret.append("</tr> \n");
             }
         }
         catch(Exception e) {  log.error("Error while generating administration form:getInsertForm() in resource "+base.getId()+".", e); }
@@ -964,21 +957,25 @@ public class DataBaseResource extends GenericResource
                     ret.append("<td class=\"valores\"><input type=checkbox name=notemplate value=1 onClick=\"if(this.checked==true) this.form.submit();\"> ");
                     ret.append(paramRequest.getLocaleString("msgCutFile") + " <i>" + base.getAttribute("template").trim() + "</i>");
                     ret.append("</td></tr> \n");
-                }
-                else
-                {
+                }else {
                     ret.append("<tr><td></td> \n");
                     ret.append("<td class=\"valores\">"+ paramRequest.getLocaleString("msgDefaultTemplate") +" ");
                     ret.append("<a href=\""+ SWBPlatform.getContextPath() + "Swbadmin/xsl/DataBaseResource/DataBaseResource_"+base.getAttribute("queryType","")+".xslt\">DataBaseResource_"+base.getAttribute("queryType","")+".xslt</a>");
                     ret.append("</td></tr> \n");
                 }
-                ret.append("<tr> \n");
+                /*ret.append("<tr> \n");
                 ret.append("<td class=\"datos\">"+paramRequest.getLocaleString("usrmsg_DataBaseResource_doAdmin_msgSync") +"</td> \n");
                 ret.append("<td class=\"valores\"> \n");
                 ret.append("<input type=\"checkbox\" name=\"sync\" value=\"on\"");
                 if ("on".equals(base.getAttribute("sync","").trim())) ret.append(" checked");
                 ret.append("></td>");
-                ret.append("</tr>");
+                ret.append("</tr>");*/
+                ret.append("<tr> \n");
+                ret.append("<td class=\"datos\">" + paramRequest.getLocaleString("usrmsg_DataBaseResource_doAdmin_msgUrl") +"</td> \n");
+                ret.append("<td class=\"valores\"> \n");
+                ret.append("<input type=\"text\" name=\"nextTopic\" value=\"" + base.getAttribute("nextTopic","").trim() + "\" size=\"40\" ");
+                ret.append("></td>");
+                ret.append("</tr> \n");
             }
             ret.append("<script> \n");
             ret.append("\nfunction validate()");
@@ -1762,7 +1759,7 @@ public class DataBaseResource extends GenericResource
                         if(!name.equals(show)) 
                             url.setParameter("show_elements", name);
                         out.append("<td>\n" +
-                                "               <a href=\"#\" onClick=\"javascript:document.frmResource.action='"+url.toString()+"'; document.frmResource.submit();\"><img src=\""+SWBPlatform.getContextPath()+"swbadmin/images/preview.gif\" border=0></a>\n" +
+                                "               <a href=\"#\" onClick=\"javascript:document.frmResource.action='"+url.toString()+"'; document.frmResource.submit();\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=0></a>\n" +
                         "           </td>\n");
                     }
                     if(name.equals(show)) out.append(getElementsTable(pktmp, paramRequest));
@@ -1814,7 +1811,7 @@ public class DataBaseResource extends GenericResource
                     "       document.frmResource.submit();\n"+
                     "   }\n"+
                     resUtil.loadTrim()+"\n"+
-                    //resUtil.loadIsNotNull()+"\n"+
+                    loadIsNotNull()+"\n"+
                     resUtil.loadIsNumber()+"\n"+
             "</script>\n");  
         }catch(Exception e) {
@@ -1822,7 +1819,39 @@ public class DataBaseResource extends GenericResource
         }
         return out.toString();
     }
-    
+
+    public String loadIsNotNull() {
+        StringBuffer sbfRet = new StringBuffer();
+        sbfRet.append("\nfunction isNotNull(pIn, msg)");
+        sbfRet.append("\n{");
+        sbfRet.append("\n   if(pIn.type==\"text\")");
+        sbfRet.append("\n   {");
+        sbfRet.append("\n       trim(pIn);");
+        sbfRet.append("\n       if (pIn.value=='')");
+        sbfRet.append("\n       {");
+        sbfRet.append("\n           alert(msg);");
+        sbfRet.append("\n           pIn.focus();");
+        sbfRet.append("\n           return false;");
+        sbfRet.append("\n       }");
+        sbfRet.append("\n   }");
+        sbfRet.append("\n   if(pIn.type==\"select-one\" || pIn.type==\"select-multiple\")");
+        sbfRet.append("\n   {");
+        sbfRet.append("\n       for(var i=0; i<pIn.length; i++)");
+        sbfRet.append("\n       {");
+        sbfRet.append("\n           if (pIn.options[i].selected && pIn.options[i].value=='')");
+        sbfRet.append("\n           {");
+        sbfRet.append("\n               alert(msg);");
+        sbfRet.append("\n               pIn.focus();");
+        sbfRet.append("\n               return false;");
+        sbfRet.append("\n           }");
+        sbfRet.append("\n       }");
+        sbfRet.append("\n   }");
+        sbfRet.append("\n   return true;");
+        sbfRet.append("\n}");
+        sbfRet.append(resUtil.loadTrim());
+        return sbfRet.toString();
+    }
+
     private String getElementsTable(ParamKeys pktmp, SWBParamRequest paramRequest)
     {
         StringBuffer out = new StringBuffer("");
@@ -1853,9 +1882,9 @@ public class DataBaseResource extends GenericResource
                         out.append("<tr class=valores>\n"+
                             "           <td>\n"+
                             "             <a href=\"#\" onClick=\"javascript:if(confirm('"+paramRequest.getLocaleString("msgConfirmRemove")+"')) { document.frmResource."+name+"_element_action.value='remove'; document.frmResource."+name+"_element_id.value="+i+"; document.frmResource.action='"+url.toString()+"'; document.frmResource.submit(); } else return false;\">\n"+
-                            "                   <img src=\"" + SWBPlatform.getContextPath() + "swbadmin/images/eliminar.gif\" border=0 alt=\""+paramRequest.getLocaleString("msgRemoveElement")+"\"></a>&nbsp;\n"+
+                            "                   <img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/iconelim.png\" border=0 alt=\""+paramRequest.getLocaleString("msgRemoveElement")+"\"></a>&nbsp;\n"+
                             "             <a href=\"#\" onClick=\"javascript:document.frmResource."+name+"_element_action.value='edit'; jsLoadElement(document.frmResource.btnAdd, document.frmResource."+name+"_element_id, document.frmResource."+name+"_element_caption, document.frmResource."+name+"_element_value, "+i+", '"+data[0]+"', '"+data[1]+"');\">\n"+
-                            "                   <img src=\"" +  SWBPlatform.getContextPath() + "wbadmin/images/i_contenido.gif\" border=0 alt=\""+paramRequest.getLocaleString("msgEditElement")+"\"></a>\n"+
+                            "                   <img src=\"" +  SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=0 alt=\""+paramRequest.getLocaleString("msgEditElement")+"\"></a>\n"+
                             "           </td> \n"+
                             "           <td>"+data[0]+"</td> \n"+
                             "           <td>"+data[1]+"</td> \n"+
@@ -2168,13 +2197,11 @@ public class DataBaseResource extends GenericResource
      * @param response Response asociado a la respuesta del cliente.
      * @param paramRequest Parametros asociados con la peticion del cliente.
      */
-    public void doViewQuery(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
+    public void doViewQuery(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         request.getSession().setAttribute("uri", request.getRequestURI());
         Resource base=getResourceBase();
         StringWriter ret=new StringWriter();
-        try 
-        {
+        try {
             Document doc = getDom(request, response, paramRequest);
             StreamResult sr = new StreamResult(ret);
             Transformer trans = tpl.newTransformer();
@@ -3298,116 +3325,102 @@ public class DataBaseResource extends GenericResource
      * @param response
      * @throws AFException
      * @throws IOException
-     */       
-    public void processAction(javax.servlet.http.HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
-    {
-        Resource base = getResourceBase();
-        String queryType = base.getAttribute("queryType");
+     */
+    public void processAction(javax.servlet.http.HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+
         String _msg = new String();
         String query = new String();
         String alert = new String();
         String _alert = new String();
-        HttpSession session = request.getSession();
-        WBFileUpload fUpload = new WBFileUpload();				
         HashMap data = new HashMap();
-        String password = new String();
+        Resource base = getResourceBase();
+        WBFileUpload fUpload = new WBFileUpload();
+        HttpSession session = request.getSession();
         String pass = "05fe858d86df4b909a8c87cb8d9ad596";
         byte word[] = new BigInteger(pass, 16).toByteArray();
-        Encryptor crypto = new Encryptor(word);
+        Encryptor crypto = null;
+        try {
+            crypto = new Encryptor(word);
+        }catch(Exception e) {
+            log.error("Encriptor error", e);
+        }
         try { fUpload.getFiles(request); }
-        catch(IOException e) 
-        { 
+        catch(IOException e) { 
             query += "\n <script>alert('" + response.getLocaleString("error_DataBaseResource_doViewInsert_uploadFiles") + "\n" + e.toString() + ".')</script>";
             log.error(response.getLocaleString("error_DataBaseResource_doViewInsert_uploadFiles"), e);
-        }        
-
-        if ("insert".equals(queryType))
-        {
-            String action = response.getAction();
-            if("2".equals(action)) 
-            {
+        }
+        if ("insert".equals(base.getAttribute("queryType"))) {
+            if("2".equals(response.getAction())) {
                 boolean page = false;
                 data = (HashMap)session.getAttribute("data");
-                String dbcon = base.getAttribute("dbcon");
-                String tableData = base.getAttribute("table");
-                try 
-                {
-                    QueryGeneric option = new QueryGeneric(dbcon);
-                    TableGeneric table = new TableGeneric(tableData, dbcon);
+                try {
+                    String value="";
+                    TableGeneric table = new TableGeneric(base.getAttribute("table"), base.getAttribute("dbcon"));
                     RecordGeneric record = new RecordGeneric(table);
-                    int numcol = table.getLength(); 
-                    String value=""; 
-                    for (int i=1; i<numcol+1; i++) 
-                    {
-                        if (table.getColumnType(i)==Types.LONGVARBINARY || table.getColumnType(i)==Types.BLOB) 
-                        {
-                            String columnName = table.getColumnName(i);
-                            value=acquireValue(fUpload, columnName);   
-                            if (!"".equals(value)) 
-                            {
-                                byte[] file=fUpload.getFileData(columnName);
-                                if (fUpload.getSize()>0)
-                                    data.put(columnName, file);
-                            }
-                        }
-                        else 
-                        {
-                            String columnName = table.getColumnName(i);
-                            String parameter = acquireValue(fUpload, columnName);
-                            System.out.println(columnName + " |" + parameter + "|");
-                            if (!"".equals(parameter)) {
-                                if("_sequence".equalsIgnoreCase(parameter))
-                                    parameter=getNextId(columnName);
-                                else if("_hash".equalsIgnoreCase(parameter))
-                                    parameter=getHash();
-                                else if("_random".equalsIgnoreCase(parameter))
-                                    parameter=getRandom(columnName);
-                                else if (session.getAttribute(columnName) != null)  {
-                                    parameter = (String)session.getAttribute(columnName);
-                                    parameter = crypto.decode(parameter).trim();
+                    for (int i=1; i<table.getLength()+1; i++) {
+                        if ("image".equalsIgnoreCase(table.getColumnName(i))) {
+        				   String sfile= fUpload.getFileName(table.getColumnName(i));
+         				   if (null != sfile && sfile.length()>0) {
+         					   sfile = findFileName(sfile);
+                               String pathFile = SWBPortal.getWorkPath() + getResourceBase().getWorkPath() + "/images";
+                               File filex = new File(pathFile);
+                               if (!filex.exists())
+                                   filex.mkdirs();
+                               RandomAccessFile img = new RandomAccessFile(pathFile + "/" + sfile, "rw");
+        					   img.write(fUpload.getFileData(table.getColumnName(i)));
+        					   img.close();
+        					   data.put("image","/work" + getResourceBase().getWorkPath() + "/images/" + sfile);
+        				   }else data.put("image","");
+        			   }else {
+                            if (table.getColumnType(i)==Types.LONGVARBINARY || table.getColumnType(i)==Types.BLOB) {
+                                String columnName = table.getColumnName(i);
+                                value=acquireValue(fUpload, columnName);
+                                if (!"".equals(value)) {
+                                    byte[] file=fUpload.getFileData(columnName);
+                                    if (fUpload.getSize()>0)
+                                        data.put(columnName, file);
                                 }
-                            }
-                            if (table.getColumnType(i)==Types.TIMESTAMP) 
-                            {
-                                Timestamp time = new Timestamp(System.currentTimeMillis());
-                                parameter = time.toString();
-                            }
-                            if (columnName.equals("password")) 
-                            {
-                                if (parameter != null) 
-                                {
-                                    password = parameter;
-                                    parameter = SWBUtils.CryptoWrapper.passwordDigest(parameter);
+                            }else {
+                                String columnName = table.getColumnName(i);
+                                String parameter = acquireValue(fUpload, columnName);
+                                if (!"".equals(parameter)) {
+                                    if("_sequence".equalsIgnoreCase(parameter))
+                                        parameter=getNextId(columnName);
+                                    else if("_hash".equalsIgnoreCase(parameter))
+                                        parameter=getHash();
+                                    else if("_random".equalsIgnoreCase(parameter))
+                                        parameter=getRandom(columnName);
                                 }
-                            }
-                            if (table.getColumnType(i)==Types.DATE) 
-                            {
-                                if (parameter != null) 
-                                {
-                                    if (parameter.indexOf('/') != -1)
-                                    parameter = getDate(parameter);
+                                if (table.getColumnType(i)==Types.TIMESTAMP) {
+                                    Timestamp time = new Timestamp(System.currentTimeMillis());
+                                    parameter = time.toString();
                                 }
+                                if (columnName.equals("password")) {
+                                    if (parameter != null)
+                                        parameter = SWBUtils.CryptoWrapper.passwordDigest(parameter);
+                                }
+                                if (table.getColumnType(i)==Types.DATE) {
+                                    if (parameter != null) {
+                                        if (parameter.indexOf('/') != -1)
+                                            parameter = getDate(parameter);
+                                    }
+                                }
+                                data.put(columnName, parameter);
                             }
-                            data.put(columnName, parameter);
-                        }
+                       }
                     }
                     session.setAttribute("data", data);
                     if (page == false) {
                         record.setData(data);
                         record.insert();
                         data.clear();
-                        password = "";
                         value=acquireValue(fUpload, "redirect");   
                         if (!"".equals(value))
                         {
-                            session.setAttribute("clear", tableData);
+                            session.setAttribute("clear", base.getAttribute("table"));
                             query = getUri(value, session);
                         }
                         else alert = "<script>alert('" + response.getLocaleString("usrmsg_DataBaseResource_doView_msgAlertSucessInsert") + ".')</script>";
-
-                        //TODO:
-                        //if (base.getAttribute("sync") != null)
-                        //    DBTopicMgr.getInstance().refresh();
                         logWrite(response, session);
                     }
                     else session.setAttribute("Insert", "2");
@@ -3424,7 +3437,7 @@ public class DataBaseResource extends GenericResource
                     session.setAttribute("Insert", "2");
                 }
             }
-            else if("3".equals(action)) 
+            else if("3".equals(response.getAction()))
             {
                 String values[] = request.getParameterValues("_assign");
                 _msg = request.getParameter("redirect");
@@ -3476,23 +3489,14 @@ public class DataBaseResource extends GenericResource
                                 }
                             }
                         }
-                        //TODO:
-                        //if (base.getAttribute("sync") != null)
-                        //    DBTopicMgr.getInstance().refresh();
-                    }
-                    catch(SQLException sql) 
-                    {
+                    }catch(SQLException sql) {
                         log.error(response.getLocaleString("error_DataBaseResource_doViewInsert_getTableGeneric" + getResourceBase().getAttribute("table")), sql);
                     }
-                }
-                else
+                }else
                     _alert = response.getLocaleString("usrmsg_DataBaseResource_doView_msgAlertEmptyInsert");
             }            
-        }
-        else if ("update".equals(queryType))
-        {
-            try 
-            {
+        }else if ("update".equals(base.getAttribute("queryType"))) {
+            try {
                 boolean page = false;
                 RecordGeneric prev = (RecordGeneric)session.getAttribute("record");
                 prev.load();
@@ -3504,115 +3508,102 @@ public class DataBaseResource extends GenericResource
                 RecordGeneric record = new RecordGeneric(table);
                 int numcol = table.getLength(); 
                 String value=""; 
-                for (int i=1; i<numcol+1; i++) 
-                {
-                    if (table.getColumnType(i)==Types.LONGVARBINARY || table.getColumnType(i)==Types.BLOB) 
-                    {
-                        String columnName = table.getColumnName(i);
-                        value=acquireParameter(fUpload, columnName);   
-                        if (value!=null) 
-                        {
-                            byte[] file=fUpload.getFileData(columnName);
-                            if (file.length>0) 
-                                attrusr.put(columnName, file);
-                            else
-                            {
-                                if (table.getColumnType(i)==Types.LONGVARBINARY) 
-                                {
-                                    InputStream in = (InputStream)args.get(columnName);
-                                    if (in != null) 
-                                    {
-                                        int size = in.available();
-                                        byte bytes[]=new byte[size];
-                                        size = in.read(bytes);
-                                        attrusr.put(columnName, bytes);
-                                    }
-                                }
-                                else 
-                                {
-                                    if (table.getColumnType(i)==Types.BLOB) 
-                                    {
-                                        Blob blob = (Blob)args.get(columnName);
-                                        if (blob != null) 
-                                        {
-                                            long size = blob.length();
-                                            byte bytes[]=blob.getBytes(1,(int)size);
+                for (int i=1; i<numcol+1; i++) {
+                    if ("image".equalsIgnoreCase(table.getColumnName(i))) {
+                        String sfile= fUpload.getFileName(table.getColumnName(i));
+         				if (null != sfile && sfile.length()>0) {
+                            sfile = findFileName(sfile);
+                            String pathFile = SWBPortal.getWorkPath() + getResourceBase().getWorkPath() + "/images";
+                            File filex = new File(pathFile);
+                            if (!filex.exists())
+                                filex.mkdirs();
+                            RandomAccessFile img = new RandomAccessFile(pathFile + "/" + sfile, "rw");
+                            img.write(fUpload.getFileData(table.getColumnName(i)));
+                            img.close();
+                            attrusr.put("image","/work" + getResourceBase().getWorkPath() + "/images/" + sfile);
+                        }//else attrusr.put("image","");
+                    }else {
+                        if (table.getColumnType(i)==Types.LONGVARBINARY || table.getColumnType(i)==Types.BLOB) {
+                            String columnName = table.getColumnName(i);
+                            value=acquireParameter(fUpload, columnName);
+                            if (value!=null) {
+                                byte[] file=fUpload.getFileData(columnName);
+                                if (file.length>0)
+                                    attrusr.put(columnName, file);
+                                else {
+                                    if (table.getColumnType(i)==Types.LONGVARBINARY) {
+                                        InputStream in = (InputStream)args.get(columnName);
+                                        if (in != null) {
+                                            int size = in.available();
+                                            byte bytes[]=new byte[size];
+                                            size = in.read(bytes);
                                             attrusr.put(columnName, bytes);
+                                        }
+                                    }else {
+                                        if (table.getColumnType(i)==Types.BLOB) {
+                                            Blob blob = (Blob)args.get(columnName);
+                                            if (blob != null) {
+                                                long size = blob.length();
+                                                byte bytes[]=blob.getBytes(1,(int)size);
+                                                attrusr.put(columnName, bytes);
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
-                    }
-                    else
-                    {
-                        String columnName = table.getColumnName(i);
-                        String parameter = acquireParameter(fUpload, columnName);   
-                        if (table.getColumnName(i).equals("password")) 
-                        {
+                        }else {
+                            String columnName = table.getColumnName(i);
+                            String parameter = acquireParameter(fUpload, columnName);
+                            if (table.getColumnName(i).equals("password")) {
+                                if (parameter != null)
+                                    parameter = SWBUtils.CryptoWrapper.passwordDigest(parameter);
+                                else parameter = (String)args.get(columnName);
+                            }
+                            if (table.getColumnType(i)==Types.DATE) {
+                                if (parameter != null && !"".equals(parameter)) {
+                                    backusr.put(columnName, acquireParameter(fUpload, columnName));
+                                    if (parameter.indexOf('/') != -1)
+                                        parameter = getDate(parameter);
+                                }else {
+                                    if (prev.getData().get(columnName) != null)
+                                        backusr.put(columnName, getDate(prev.getData().get(columnName).toString()));
+                                }
+                            }
                             if (parameter != null)
-                                parameter = SWBUtils.CryptoWrapper.passwordDigest(parameter);
-                            else parameter = (String)args.get(columnName);
-                        }
-                        if (table.getColumnType(i)==Types.DATE) 
-                        {
-                            if (parameter != null && !"".equals(parameter)) 
-                            {
-                                backusr.put(columnName, acquireParameter(fUpload, columnName));
-                                if (parameter.indexOf('/') != -1)
-                                    parameter = getDate(parameter);
+                                attrusr.put(columnName, parameter);
+                            if (table.getColumnType(i)==Types.TIMESTAMP) {
+                                if (parameter == null)
+                                    attrusr.put(columnName, args.get(columnName));
+                                else attrusr.put(columnName, new Timestamp(System.currentTimeMillis()));
                             }
-                            else 
-                            {
-                                if (prev.getData().get(columnName) != null)
-                                    backusr.put(columnName, getDate(prev.getData().get(columnName).toString()));
-                            }
-                        }
-                        if (parameter != null)
-                            attrusr.put(columnName, parameter);
-                        if (table.getColumnType(i)==Types.TIMESTAMP) 
-                        {
-                            if (parameter == null)
+                            if (session.getAttribute(columnName) != null)
                                 attrusr.put(columnName, args.get(columnName));
-                            else attrusr.put(columnName, new Timestamp(System.currentTimeMillis()));
-                        }
-                        if (session.getAttribute(columnName) != null)
-                            attrusr.put(columnName, args.get(columnName));
-                        if (parameter!=null && args.get(columnName)!=null) 
-                        {
-                            if (!parameter.equals(args.get(columnName).toString())) 
-                            {
-                                session.setAttribute("data", attrusr);
-                                if (categoryExist(session, columnName, option) && propertyNesting(session, columnName)) 
-                                {
-                                    args.put(columnName, parameter);
-                                    Document docResult=null;
-                                    if(!"".equals(base.getAttribute("filex", "").trim()))
-                                        docResult = processInit(session, response);
-                                    else docResult = getDocument(session, response);
-                                    if(docResult!=null) session.setAttribute("docResult", docResult);
-                                    page = true;
+                            if (parameter!=null && args.get(columnName)!=null) {
+                                if (!parameter.equals(args.get(columnName).toString())) {
+                                    session.setAttribute("data", attrusr);
+                                    if (categoryExist(session, columnName, option) && propertyNesting(session, columnName)) {
+                                        args.put(columnName, parameter);
+                                        Document docResult=null;
+                                        if(!"".equals(base.getAttribute("filex", "").trim()))
+                                            docResult = processInit(session, response);
+                                        else docResult = getDocument(session, response);
+                                        if(docResult!=null) session.setAttribute("docResult", docResult);
+                                        page = true;
+                                    }
                                 }
                             }
                         }
                     }
                 }
-                if (page == false) 
-                {
-                    if (session.getAttribute("page") == null) 
-                    {
+                if (page == false) {
+                    if (session.getAttribute("page") == null) {
                         record.setData(attrusr);
                         record.update();
                         session.setAttribute("Update", "2");
                         logWrite(response, session);
                         query = "<script>alert('" + response.getLocaleString("usrmsg_DataBaseResource_doView_msgAlertSucessUpdate") + ".')</script>";
-                        
-                        //TODO:
-                        //if (base.getAttribute("sync") != null)
-                        //{
-                        //    response.getWebPage().getWebSite().removeMergeMap("references");
-                        //    DBTopicMgr.getInstance().refresh();
-                        //}
+                        if (!"".equals(base.getAttribute("nextTopic","")))
+                            response.setAction("redirect");
                     }
                     else 
                     {
@@ -3642,7 +3633,7 @@ public class DataBaseResource extends GenericResource
                 session.setAttribute("Update", "1");
             }            
         }
-        else if ("delete".equals(queryType))
+        else if ("delete".equals(base.getAttribute("queryType")))
         {
             int result = 0;
             String key = new String();
@@ -3679,14 +3670,12 @@ public class DataBaseResource extends GenericResource
                 RecordGeneric record = new RecordGeneric(table);
                 record.setData(data);
                 result = record.remove();
-                if (result != 0) 
-                {
+                if (result != 0) {
                     logWrite(response, session);
                     session.setAttribute("page", "false");
                     alert = "alert('" + response.getLocaleString("usrmsg_DataBaseResource_doViewDelete_msgAlertSucessDelete") + ".')";
-                    //TODO:
-                    //if (base.getAttribute("sync") != null)
-                    //    DBTopicMgr.getInstance().refresh();
+                    /*if (base.getAttribute("sync") != null)
+                        DBTopicMgr.getInstance().refresh();*/
                 }
                 else  alert = "alert('" + response.getLocaleString("usrmsg_DataBaseResource_doViewDelete_msgAlertErrorDelete") + ".')";
             }
@@ -3696,8 +3685,8 @@ public class DataBaseResource extends GenericResource
                 alert = "alert('" + response.getLocaleString("error_DataBaseResource_doViewDelete_deleteRecord") + ".')";
             }            
         }
-        session.setAttribute("alert", alert);
-        session.setAttribute("query", query);
+        if (!"".equals(base.getAttribute("nextTopic","")) && null != response.getAction())
+        	response.sendRedirect(base.getAttribute("nextTopic"));
         response.setRenderParameter("alert", alert);
         response.setRenderParameter("query", query);
         if (!"".equals(_msg)) {
@@ -3705,7 +3694,36 @@ public class DataBaseResource extends GenericResource
             response.setRenderParameter("_alert", _alert);
         }
     }
-    
+
+    private String findFileName(String value) {
+        String out="";
+        if(value.startsWith("../")) {
+            out = takeOffString(value,"../");
+            if(!out.equals(""))value=out;
+        }
+        int x=value.lastIndexOf(".");
+        if(x>-1) {
+            int y=value.lastIndexOf("\\",x);
+            if(y>-1)
+                value=value.substring(y+1);
+            y=value.lastIndexOf("/",x);
+            if(y>-1)
+                value=value.substring(y+1);
+        }
+        return value;
+    }
+
+    public String takeOffString(String value,String takeOff) {
+        int pos=-1;
+        do {
+            pos=value.indexOf(takeOff);
+            if(pos!=-1) {
+                value=value.substring(pos+takeOff.length());
+            }
+        }while(pos!=-1);
+        return value;
+    }
+
     /**
 	 * Obtiene el mensaje de excepcion para el usuario.
 	 *
@@ -3879,7 +3897,7 @@ public class DataBaseResource extends GenericResource
 	 * 
 	 * @param key Campo de la tabla que contiene el identificador
 	 */
-	public String getNextId(String key) {
+	/*public String getNextId(String key) {
 	    String id = "";
 	    Resource base = getResourceBase();
 	    String max = "select MAX(" + key +") as id from " + base.getAttribute("table");
@@ -3889,10 +3907,43 @@ public class DataBaseResource extends GenericResource
 	        HashMap results = (HashMap)e.nextElement();
 	        id = (String)results.get("id");
 	    }
-	    if(id==null || (id!=null && id.trim().equals(""))) id="1";
+	    if(id==null || (id!=null && id.trim().equals(""))) id="0";
 	    Long increment = new Long(new Long(id).longValue() + 1);
 	    return increment.toString();
-	}       
+	}*/
+
+    public String getNextId(String key) {
+	    String id = "";
+    	Statement st = null;
+    	Connection con = null;
+	    Resource base = getResourceBase();
+	    String max = "select MAX(" + key +") as id from " + base.getAttribute("table");
+	    try {
+	    	con = SWBUtils.DB.getConnection(getResourceBase().getAttribute("dbcon"));
+			st = con.createStatement();
+			ResultSet rs = st.executeQuery(max);
+			while (rs.next()) {
+				id = rs.getString(1);
+			}
+			rs.close();
+			st.close();
+			con.close();
+	    }catch (SQLException e){
+	    	log.error(SWBUtils.TEXT.getLocaleString("com.infotec.wb.resources.database.QueryGeneric", "error_QueryGeneric_setQuery") + "...", e);
+	    }finally {
+    		try {
+    			if (st != null)
+    				st.close();
+    			if (con != null)
+    				con.close();
+    		}catch (SQLException e){
+    			log.error(SWBUtils.TEXT.getLocaleString("com.infotec.wb.resources.database.QueryGeneric", "error_QueryGeneric_setQuery") + "...", e);
+    		}
+    	}
+	    if(id==null || (id!=null && id.trim().equals(""))) id="0";
+	    Long increment = new Long(new Long(id).longValue() + 1);
+	    return increment.toString();
+	}
     
 	public String getRandom(String key)  
 	{
