@@ -845,9 +845,17 @@ public class ValueImp implements Value
         return toBinary(value.toString());
     }
 
-    private String toString(QName value)
+    private String toString(QName value) throws ValueFormatException
     {
-        return value.toString();
+        NamespaceRegistryImp reg=new NamespaceRegistryImp();
+        try
+        {
+            String prefix=reg.getPrefix(value.getNamespaceURI());
+            return  prefix+":"+value.getLocalPart();
+        }
+        catch(Exception e){
+            throw new ValueFormatException(e);
+        }
     }
 
     private Binary toBinary(QName value) throws RepositoryException

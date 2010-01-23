@@ -189,6 +189,10 @@ public class PropertyImp extends ItemImp implements Property
         {
             throw new ValueFormatException("The property is multivalued");
         }
+        if(values.size()==0)
+        {
+            return null;
+        }
         return getCopy(values.get(0));
     }
 
@@ -208,42 +212,42 @@ public class PropertyImp extends ItemImp implements Property
 
     public String getString() throws ValueFormatException, RepositoryException
     {
-        return this.getValue().getString();
+        return this.getValue()==null?null:this.getValue().getString();
     }
 
     public InputStream getStream() throws ValueFormatException, RepositoryException
     {
-        return this.getValue().getStream();
+        return this.getValue()==null?null:this.getValue().getStream();
     }
 
     public Binary getBinary() throws ValueFormatException, RepositoryException
     {
-        return this.getValue().getBinary();
+        return this.getValue()==null?null:this.getValue().getBinary();
     }
 
     public long getLong() throws ValueFormatException, RepositoryException
     {
-        return this.getValue().getLong();
+        return this.getValue()==null?null:this.getValue().getLong();
     }
 
     public double getDouble() throws ValueFormatException, RepositoryException
     {
-        return this.getValue().getDouble();
+        return this.getValue()==null?null:this.getValue().getDouble();
     }
 
     public BigDecimal getDecimal() throws ValueFormatException, RepositoryException
     {
-        return this.getValue().getDecimal();
+        return this.getValue()==null?null:this.getValue().getDecimal();
     }
 
     public Calendar getDate() throws ValueFormatException, RepositoryException
     {
-        return this.getValue().getDate();
+        return this.getValue()==null?null:this.getValue().getDate();
     }
 
     public boolean getBoolean() throws ValueFormatException, RepositoryException
     {
-        return this.getValue().getBoolean();
+        return this.getValue()==null?null:this.getValue().getBoolean();
     }
 
     public Node getNode() throws ItemNotFoundException, ValueFormatException, RepositoryException
