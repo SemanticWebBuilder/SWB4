@@ -521,6 +521,8 @@
             uriext="|"+(nullnode++);
             icon="swbIconWebPageV";
         }
+        //System.out.println(obj+" icon:"+icon);
+        //if(cls.hasProperty(SWBClass.swb_valid.getName()))System.out.println(obj.getBooleanProperty(SWBClass.swb_valid));
         JSONObject jobj=getNode(obj.getURI()+uriext, obj.getDisplayName(lang), type, icon);
         arr.put(jobj);
 
@@ -790,10 +792,10 @@
         events.put(getEvent("onDblClick", getAction("newTab", SWBPlatform.getContextPath()+"/swbadmin/jsp/resourceTab.jsp", null)));
         //events.put(getEvent("onClick", getAction("getHtml", SWBPlatform.getContextPath()+"/swbadmin/jsp/viewProps.jsp?id="+obj.getEncodedURI(), "vprop")));
 
-        Iterator<OntProperty> it=prop.listSubProperties(true);
+        Iterator it=prop.listSubProperties(true);
         while(it.hasNext())
         {
-            OntProperty cprop=it.next();
+            OntProperty cprop=(OntProperty)it.next();
             addProperty(childs, cprop,ont);
         }
     }

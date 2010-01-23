@@ -28,10 +28,10 @@
     Property label=ont.getRDFOntModel().getProperty(SemanticVocabulary.RDFS_LABEL);
     Property comment=ont.getRDFOntModel().getProperty(SemanticVocabulary.RDFS_COMMENT);
     Property type=ont.getRDFOntModel().getProperty(SemanticVocabulary.RDF_TYPE);
-    Iterator<Resource> itp=cls.listInstances();
+    Iterator itp=cls.listInstances();
     while(itp.hasNext())
     {
-        Resource obj=itp.next();
+        Resource obj=(Resource)itp.next();
         out.print("<tr>");
         out.print("<td>"+SWBPlatform.JENA_UTIL.getLink(obj,pathView)+"</td>");
         out.print("<td>"+SWBPlatform.JENA_UTIL.getObjectLink(obj,type,ont.getRDFOntModel(),pathView)+"</td>");
