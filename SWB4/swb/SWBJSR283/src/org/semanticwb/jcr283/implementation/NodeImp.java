@@ -183,7 +183,7 @@ public class NodeImp extends ItemImp implements Node
                 String id = UUID.randomUUID().toString();
                 String propertyPath = getPathFromName(JCR_UUID);
                 PropertyImp prop = nodeManager.getProperty(propertyPath);
-                if(prop.getLength()==0)
+                if(prop.getLength()==-1)
                 {
                     prop.set(valueFactoryImp.createValue(id));
                     this.isModified = true;
