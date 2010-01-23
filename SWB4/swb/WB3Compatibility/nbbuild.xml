@@ -7,8 +7,8 @@
 <!-- the Compile on Save feature is turned off for the project. -->
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
-<project name="WB3Compatibility" default="default" basedir=".">
-    <description>Builds, tests, and runs the project WB3Compatibility.</description>
+<project name="SWBTOWB3Compatibility" default="default" basedir=".">
+    <description>Builds, tests, and runs the project SWBTOWB3Compatibility.</description>
     <import file="nbproject/build-impl.xml"/>
     <!--
 
@@ -59,7 +59,7 @@
 
     An example of overriding the target for project execution could look like this:
 
-        <target name="run" depends="WB3Compatibility-impl.jar">
+        <target name="run" depends="SWBTOWB3Compatibility-impl.jar">
             <exec dir="bin" executable="launcher.exe">
                 <arg file="${dist.jar}"/>
             </exec>
