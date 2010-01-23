@@ -103,21 +103,7 @@ public class NodeImp extends ItemImp implements Node
             log.error(e);
         }
 
-        try
-        {
-            if (isReferenceable())
-            {
-                String id = UUID.randomUUID().toString();
-                String propertyPath = getPathFromName(JCR_UUID);
-                PropertyImp prop = nodeManager.getProperty(propertyPath);
-                prop.set(valueFactoryImp.createValue(id));
-                this.isModified = true;
-            }
-        }
-        catch (Exception e)
-        {
-            log.debug(e);
-        }
+        checkReferenceable();
 
         try
         {
@@ -188,7 +174,27 @@ public class NodeImp extends ItemImp implements Node
         }
 
     }
-
+    private void checkReferenceable()
+    {
+        try
+        {
+            if (isReferenceable())
+            {
+                String id = UUID.randomUUID().toString();
+                String propertyPath = getPathFromName(JCR_UUID);
+                PropertyImp prop = nodeManager.getProperty(propertyPath);
+                if(prop.getLength()==0)
+                {
+                    prop.set(valueFactoryImp.createValue(id));
+                    this.isModified = true;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            log.debug(e);
+        }
+    }
     NodeImp(NodeTypeImp nodeType, SemanticObject obj, String name, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
         super(obj, name, parent, path, depth, session);
@@ -769,6 +775,7 @@ public class NodeImp extends ItemImp implements Node
                 nodeManager.addProperty(propMix, propMix.path, path);
             }
         }
+        checkReferenceable();
     }
 
     public void removeMixin(String mixinName) throws NoSuchNodeTypeException, VersionException, ConstraintViolationException, LockException, RepositoryException
