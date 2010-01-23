@@ -32,24 +32,14 @@ package com.infotec.topicmaps.db;
 
 import java.sql.*;
 
-import com.infotec.wb.lib.*;
-
 import java.util.*;
 
 import com.infotec.appfw.exception.*;
 import com.infotec.appfw.lib.DBPool.DBConnectionManager;
-import com.infotec.wb.core.db.DBDbSync;
 import com.infotec.appfw.lib.AFObserver;
 import com.infotec.wb.lib.WBDBRecord;
-import com.infotec.appfw.util.AFUtils;
-import com.infotec.wb.util.*;
-import com.infotec.wb.core.*;
-import com.infotec.wb.core.db.*;
-import com.infotec.topicmaps.bean.*;
 import com.infotec.appfw.util.db.ObjectDecoder;
 import com.infotec.appfw.util.db.ObjectEncoder;
-
-import java.io.*;
 
 /** objeto: referencia al registro de la base de datos de la table wboccurrence
  * @author Javier Solis Gonzalez
