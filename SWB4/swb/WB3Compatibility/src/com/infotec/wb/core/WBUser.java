@@ -34,12 +34,9 @@ package com.infotec.wb.core;
  * @author Sergio Mart�nez Redise�o Nov 2004
  */
 
-import com.infotec.appfw.exception.AFException;
 import com.infotec.appfw.lib.AFObserver;
 import com.infotec.appfw.util.AFUtils;
-import com.infotec.topicmaps.Occurrence;
 import com.infotec.topicmaps.Topic;
-import com.infotec.topicmaps.TopicMap;
 import com.infotec.wb.core.db.RecUser;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -51,7 +48,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Vector;
@@ -84,13 +80,6 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
         return usr;
     }
 
-
-    private String device;
-    private String languageU;
-    private String navegador;
-    private String ip;
-    private boolean isloged;
-    private boolean isregistered;
     //private WBUserMgr usm;
     private String sesid = null;
     private Document dom;
@@ -99,9 +88,6 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
     private Subject authSubject = null;
 
     public WBUser(String repository) {
-        device = null;
-        navegador = null;
-        isloged = false;
         //this.usm = null;
         this.sesid = null;
         this.repository = repository;
@@ -110,9 +96,6 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
     }
 
     public WBUser(RecUser recuser) {
-        device = null;
-        navegador = null;
-        isloged = false;
         //this.usm = null;
         this.sesid = null;
         this.setRecUser(recuser);
@@ -128,9 +111,6 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
      * @param request <PRE>N�mero de sesion</PRE>
      */
     public WBUser(String sessid, String repository) {
-        device = null;
-        navegador = null;
-        isloged = false;
         //this.usm = usm;
         this.sesid = sessid;
         this.repository = repository;
@@ -146,9 +126,6 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
      * @param request <PRE>N�mero de sesion</PRE>
      */
     public WBUser(HttpServletRequest request, String repository) {
-        device = null;
-        navegador = null;
-        isloged = false;
         //this.usm = usm;
         this.sesid = request.getSession().getId();
         this.repository = repository;
@@ -226,8 +203,7 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
      */
     public void setLanguage(String language) {
         setAttribute("LANGUAGE", language);
-        languageU = language;
-        recUser.setLanguage(language);
+        usr.setLanguage(language);
     }
 
     /**
@@ -236,7 +212,7 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
      * @return <PRE>Regresa el lenguaje del Usuario de Sesion</PRE>
      */
     public String getLanguage() {
-        return languageU;
+        return usr.getLanguage();
     }
 
 
@@ -245,37 +221,9 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
      *
      * @param device :device de un usuario final
      */
-    public void setDevice(String device) {
-        if (device != null) {
-            this.device = device;
-            NodeList tmp = dom.getElementsByTagName("device");
-            if (null != tmp) {
-                int lgt = tmp.getLength();
-                for (int i = 0; i < lgt; i++)
-                    try {
-                        dom.getChildNodes().item(0).removeChild(tmp.item(i));
-                    } catch (Exception ignore) {
-                    }
-            }
-            Element el = dom.createElement("device");
-            el.appendChild(dom.createTextNode(device));
-            if (getNavegador() != null) {
-                String navwith = getNavegador();
-                el.setAttribute("NavWith", navwith);
-            }
-            dom.getChildNodes().item(0).appendChild(el);
-        }
-
-        String val = "false";
-        if (isregistered) val = "true";
-        setAttribute("isregistered", val);
-
-        if (isloged) {
-            val = "true";
-        } else {
-            val = "false";
-        }
-        setAttribute("isloged", val);
+    public void setDevice(String device) 
+    {
+        //usr.setDevice(Device.);
     }
 
     /**
@@ -285,7 +233,7 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
      *         sesion para ver el sitio en ese momento</PRE>
      */
     public String getDevice() {
-        return device;
+        return usr.getDevice().getId();
     }
 
     /**
@@ -298,7 +246,7 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
      * @deprecated el uso del device deber�a ser m�s que suficiente
      */
     public void setNavegador(String navegador) {
-        this.navegador = navegador;
+        //
     }
 
     /**
@@ -311,7 +259,7 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
      * @deprecated el uso del device deber�a ser m�s que suficiente
      */
     public String getNavegador() {
-        return navegador;
+        return null;
     }
 
     /**
@@ -321,31 +269,22 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
      * @return <PRE>Regresa true si el usuario esta logeado, de lo contrario regresa false</PRE>
      */
     public boolean isLoged() {
-        if (authSubject != null && authSubject.getPrincipals().contains(this.getLogin())) {
-            return true;
-        }
-        return isloged;
+        return usr.isSigned();
     }
 
     /**
      * Metodo que desconecta o deslogea a un usuario final
      */
     public void logout() {
-        isloged = false;
         setAttribute("isloged", "false");
+        //TODO
     }
 
     /**
      * Metodo que desconecta o deslogea a un usuario final
      */
     public void closeSession(HttpServletRequest request) {
-        isloged = false;
-        isregistered = false;
         setAttribute("isloged", "false");
-        //TODO:
-        //request.getSession().removeAttribute(WBUserMgr.UserAtt + "-" + getRepository());
-        //WBUserMgr.getInstance().removeUser(request.getSession().getId(), getRepository());
-        //setRecUser(DBUser.getInstance(getRepository()).getNewRecUser());
     }
 
     /**
@@ -364,55 +303,11 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
 
     public void sendLoginLog(HttpServletRequest request) {
         //User session log
-        {
-            StringBuffer logbuf = new StringBuffer();
-            logbuf.append("lgn|");
-            logbuf.append(request.getRemoteAddr());
-            logbuf.append("|");
-            //TODO:
-            //logbuf.append(WBMessageCenter.getInstance().getAddress());
-            logbuf.append("|");
-            logbuf.append(this.getRepository());
-            logbuf.append("|");
-            logbuf.append(this.getLogin());
-            logbuf.append("|");
-            logbuf.append(""+sesid.hashCode());
-            //TODO:
-            //WBMessageCenter.getInstance().sendMessage(logbuf.toString());
-        }
     }
 
 
     public boolean loginUser(String login, Object credential, HttpServletRequest request, HttpServletResponse response, String repository) {
-        User recordUser = null;
-        try {
-            recordUser = UserRepository.ClassMgr.getUserRepository(repository).getUserByLogin(login); //, credential);
-        }
-        catch (Exception e) {
-            //The user wasn't authenticated so we just pass along the exception
-        }
-/*      if(usm.getUser(this,request, response,login,credential,repository)!=null){
-            isloged = true;
-            isregistered = true;
-            setAttribute("isloged","true");
-            setAttribute("isregistered","true");
-            return true;
-        }
- */
-        if (null != recordUser) {
-
-            if (recordUser.isActive()) {
-                //this.setRecUser(recordUser);
-                isloged = true;
-                isregistered = true;
-                setAttribute("isloged", "true");
-                setAttribute("isregistered", "true");
-                sendLoginLog(request);
-                //System.out.println("reset:WBCookieMgr");
-                request.getSession().removeAttribute("WBCookieMgr");
-                return true;
-            } else return false;
-        }
+        //TODO:
         return false;
     }
 
@@ -470,12 +365,10 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
     public void setAttribute(String name, String value) {
         if ("_wb_token".equals(name)) {
             if ("true".equals(value) && 1 == this.getRecUser().getActive()) {
-                isloged = true;
-                isregistered = true;
                 setAttribute("isloged", "true");
                 setAttribute("isregistered", "true");
             } else {
-                isloged = false;
+                //isloged = false;
             }
         }
         try {
@@ -557,7 +450,7 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
      * @param ip :ip de usuario final
      */
     public void setIP(String ip) {
-        this.ip = ip;
+        usr.setIp(ip);
     }
 
     /**
@@ -568,7 +461,7 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
      *         en sesion.
      */
     public String getIp() {
-        return ip;
+        return usr.getIp();
     }
 
     /**
@@ -732,11 +625,6 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
      */
     public synchronized void setRecUser(RecUser recordUser) {
         this.recUser = recordUser;
-        if (null == recordUser.getLogin() || "nologin".equals(recordUser.getLogin())) {
-            isregistered = false;
-        } else {
-            isregistered = true;
-        }
         try {
             dom = null;
             if (recordUser.getXml() != null && recordUser.getXml().trim().length() > 0) {
@@ -782,7 +670,6 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
                 }
                 if (recordUser.getLanguage() != null) {
                     setAttribute("LANGUAGE", recordUser.getLanguage());
-                    languageU = recordUser.getLanguage();
                 }
                 if (recordUser.getEmail() != null) {
                     setAttribute("EMAIL", recordUser.getEmail());
@@ -805,8 +692,6 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
                         }
                     }
                 }
-                setDevice(device);
-
             }
             catch (Exception e) {
                 AFUtils.log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "Error while loading properties to user,WBUser:setRecUser") + recUser.getEmail(), true);
@@ -846,7 +731,7 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
      * @return Value of property isregistered.
      */
     public boolean isRegistered() {
-        return isregistered;
+        return usr.isRegistered();
     }
 
     //checar p/wb3(quitar)
@@ -968,12 +853,6 @@ public class WBUser implements HttpSessionBindingListener, AFObserver, java.io.S
 
     public static String getUserId(long id, String repository) {
         return "" + id + "_" + repository;
-    }
-
-    //TODO: remove the next declaration, kept for compatibility to Telemars infrastructure
-    public void setLogin(boolean login) {
-        isloged = login;
-        setAttribute("isloged", String.valueOf(login));
     }
 
     /**
