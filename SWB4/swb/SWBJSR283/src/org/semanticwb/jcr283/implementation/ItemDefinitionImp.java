@@ -28,11 +28,7 @@ public class ItemDefinitionImp implements ItemDefinition
 
     public ItemDefinitionImp(SemanticObject obj, NodeTypeImp nodeType)
     {
-        this.nodeType = nodeType;
-        if(nodeType==null)
-        {
-            System.out.print("a");
-        }
+        this.nodeType = nodeType;        
         SemanticProperty prop = NodeTypeImp.getSemanticProperty(Property.JCR_NAME);
         SemanticLiteral value = obj.getLiteralProperty(prop);
         if (value != null)
