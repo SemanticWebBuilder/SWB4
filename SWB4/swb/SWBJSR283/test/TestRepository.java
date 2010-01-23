@@ -38,7 +38,8 @@ public class TestRepository {
             Session session=repo.login();
             Node node=session.getRootNode();
             Node demo=node.addNode("demo:demo");
-            demo.addMixin("mix:referenceable");            
+            demo.addMixin("mix:referenceable");
+            System.out.println(demo.getUUID());
         }
         catch(Exception cnfe)
         {
