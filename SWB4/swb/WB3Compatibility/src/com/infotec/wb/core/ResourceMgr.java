@@ -45,7 +45,7 @@ import com.infotec.wb.resources.GenericAdmResource;
 
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.SWBPortal;
-import org.semanticwb.api.SWBResourceToWBResourceWrapper;
+import org.semanticwb.api.WBResourceToSWBResourceWrapper;
 import org.semanticwb.portal.api.SWBResource;
 
 
@@ -188,9 +188,9 @@ public class ResourceMgr implements AFAppObject, AFObserver
     public WBResource asWBResource(SWBResource res)
     {
         WBResource ret=null;
-        if(res instanceof SWBResourceToWBResourceWrapper)
+        if(res instanceof WBResourceToSWBResourceWrapper)
         {
-            ret=((SWBResourceToWBResourceWrapper)res).getOldResource();
+            ret=((WBResourceToSWBResourceWrapper)res).getOldResource();
         }
         return ret;
     }
