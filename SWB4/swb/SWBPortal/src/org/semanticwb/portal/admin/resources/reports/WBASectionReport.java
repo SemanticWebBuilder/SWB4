@@ -155,13 +155,7 @@ public class WBASectionReport extends GenericResource {
                 // Evaluates if TopicMap is not Global
                 if(!site.getId().equals(SWBContext.getGlobalWebSite().getId())) {
                     // Get access level of this user on this topicmap and if level is greater than "0" then user have access
-                    // TODO
-//                    i_access = AdmFilterMgr.getInstance().haveAccess2TopicMap(paramsRequest.getUser(),site.getDbdata().getId());
-//                    if(I_ACCESS < i_access) {
-//                        if(site.getDbdata().getDeleted()==0) {                            
-                            hm_sites.put(site.getId(), site.getDisplayTitle(paramsRequest.getUser().getLanguage()));
-//                        }
-//                    }
+                    hm_sites.put(site.getId(), site.getDisplayTitle(paramsRequest.getUser().getLanguage()));
                 }
             }
             
@@ -446,7 +440,7 @@ public class WBASectionReport extends GenericResource {
                         WBAFilterReportBean filter = buildFilter(request, paramsRequest);
                         JRDataSourceable dataDetail = new JRSectionAccessDataDetail(filter);
                         JasperTemplate jasperTemplate = JasperTemplate.SECTION_DAILY_HTML;
-                        HashMap params = new HashMap();
+                        HashMap<String,String> params = new HashMap();
                         params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
                         params.put("site", filter.getSite());
                         try {
@@ -567,7 +561,7 @@ public class WBASectionReport extends GenericResource {
                 WBAFilterReportBean filter = buildFilter(request, paramsRequest);
                 JRDataSourceable dataDetail = new JRSectionAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.SECTION_DAILY_GRAPH;
-                HashMap params = new HashMap();
+                HashMap<String,String> params = new HashMap();
                 params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
                 params.put("site", filter.getSite());
                 try {
@@ -607,7 +601,7 @@ public class WBASectionReport extends GenericResource {
                 WBAFilterReportBean filter = buildFilter(request, paramsRequest);
                 JRDataSourceable dataDetail = new JRSectionAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.SECTION_DAILY;
-                HashMap params = new HashMap();
+                HashMap<String,String> params = new HashMap();
                 params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
                 params.put("site", filter.getSite());
                 JRResource jrResource = new JRXlsResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
@@ -714,7 +708,7 @@ public class WBASectionReport extends GenericResource {
                 WBAFilterReportBean filter = buildFilter(request, paramsRequest);
                 JRDataSourceable dataDetail = new JRSectionAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.SECTION_DAILY;
-                HashMap params = new HashMap();
+                HashMap<String,String> params = new HashMap();
                 params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
                 params.put("site", filter.getSite());
                 try {
@@ -754,7 +748,7 @@ public class WBASectionReport extends GenericResource {
                 WBAFilterReportBean filter = buildFilter(request, paramsRequest);
                 JRDataSourceable dataDetail = new JRSectionAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.SECTION_DAILY;
-                HashMap params = new HashMap();
+                HashMap<String,String> params = new HashMap();
                 params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
                 params.put("site", filter.getSite());
                 JRResource jrResource = new JRRtfResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
