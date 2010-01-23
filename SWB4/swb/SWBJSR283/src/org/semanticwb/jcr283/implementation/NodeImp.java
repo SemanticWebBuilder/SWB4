@@ -757,7 +757,7 @@ public class NodeImp extends ItemImp implements Node
             i++;
         }
         newValues[i] = newValue;
-        prop.setValue(newValues);
+        prop.set(newValues);
         for (PropertyDefinitionImp propDef : mixNodeType.getPropertyDefinitionsImp())
         {
             if (propDef.getSemanticProperty() != null)
