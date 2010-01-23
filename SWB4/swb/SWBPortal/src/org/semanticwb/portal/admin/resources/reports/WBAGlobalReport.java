@@ -520,10 +520,11 @@ public class WBAGlobalReport extends GenericResource {
     public void doGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("application/pdf");
         Resource base = getResourceBase();
+        HashMap<String,String> params = new HashMap();
+        params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
+
         try {
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));
-            HashMap params = new HashMap();
-            params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
             if(rtype == 0) { // REPORTE DIARIO
                 WBAFilterReportBean filter = buildFilter(request, paramsRequest);
                 params.put("site", filter.getSite());
@@ -572,10 +573,11 @@ public class WBAGlobalReport extends GenericResource {
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-Disposition", "inline; filename=\"gar.xls\"");
         Resource base = getResourceBase();
+        HashMap<String,String> params = new HashMap();
+        params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
+
         try {
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));
-            HashMap params = new HashMap();
-            params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
             if(rtype == 0) { // REPORTE DIARIO
                 WBAFilterReportBean filter = buildFilter(request, paramsRequest);
                 params.put("site", filter.getSite());
@@ -715,10 +717,11 @@ public class WBAGlobalReport extends GenericResource {
     public void doRepPdf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("application/pdf");
         Resource base = getResourceBase();
+        HashMap<String,String> params = new HashMap();
+        params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
+
         try {
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));
-            HashMap params = new HashMap();
-            params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
             if(rtype == 0) { // REPORTE DIARIO
                 WBAFilterReportBean filter = buildFilter(request, paramsRequest);
                 params.put("site", filter.getSite());
@@ -760,10 +763,11 @@ public class WBAGlobalReport extends GenericResource {
         response.setContentType("application/rtf");
         response.setHeader("Content-Disposition", "inline; filename=\"gar.rtf\"");
         Resource base = getResourceBase();
+        HashMap<String,String> params = new HashMap();
+        params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
+
         try {
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));
-            HashMap params = new HashMap();
-            params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
             if(rtype == 0) { // REPORTE DIARIO
                 WBAFilterReportBean filter = buildFilter(request, paramsRequest);
                 params.put("site", filter.getSite());

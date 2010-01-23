@@ -484,7 +484,7 @@ public class WBADeviceReport extends GenericResource {
                         WBAFilterReportBean filter = buildFilter(request, paramsRequest);
                         JRDataSourceable dataDetail = new JRDeviceAccessDataDetail(filter);
                         JasperTemplate jasperTemplate = JasperTemplate.DEVICE_DAILY_HTML;
-                        HashMap params = new HashMap();
+                        HashMap<String,String> params = new HashMap();
                         params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
                         params.put("site", filter.getSite());
                         try {
@@ -555,7 +555,7 @@ public class WBADeviceReport extends GenericResource {
                         filter.setYearI(year13);
                         JRDataSourceable dataDetail = new JRDeviceAccessDataDetail(filter);
                         JasperTemplate jasperTemplate = JasperTemplate.DEVICE_MONTHLY_HTML;
-                        HashMap params = new HashMap();
+                        HashMap<String,String> params = new HashMap();
                         params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
                         params.put("site", filter.getSite());
                         try {
@@ -610,6 +610,9 @@ public class WBADeviceReport extends GenericResource {
     public void doGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("application/pdf");
         Resource base = getResourceBase();
+        HashMap<String,String> params = new HashMap();
+        params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
+        params.put("site", request.getParameter("wb_site"));
 
         try {
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));
@@ -617,7 +620,8 @@ public class WBADeviceReport extends GenericResource {
                 WBAFilterReportBean filter = buildFilter(request, paramsRequest);
                 JRDataSourceable dataDetail = new JRDeviceAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.DEVICE_DAILY_GRAPH;
-                JRResource jrResource = new JRPdfResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
+
+                JRResource jrResource = new JRPdfResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                 jrResource.prepareReport();
                 jrResource.exportReport(response);
             }else { // REPORTE MENSUAL                
@@ -639,7 +643,7 @@ public class WBADeviceReport extends GenericResource {
 
                 JRDataSourceable dataDetail = new JRDeviceAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.DEVICE_MONTHLY_GRAPH;
-                JRResource jrResource = new JRPdfResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
+                JRResource jrResource = new JRPdfResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                 jrResource.prepareReport();
                 jrResource.exportReport(response);
             }
@@ -660,14 +664,17 @@ public class WBADeviceReport extends GenericResource {
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-Disposition", "inline; filename=\"lar.xls\"");
         Resource base = getResourceBase();
-        /*ArrayList idaux = new ArrayList();*/
+        HashMap<String,String> params = new HashMap();
+        params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
+        params.put("site", request.getParameter("wb_site"));
+
         try {
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));            
             if(rtype == 0) { // by day
                 WBAFilterReportBean filter = buildFilter(request, paramsRequest);
                 JRDataSourceable dataDetail = new JRDeviceAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.DEVICE_DAILY;
-                JRResource jrResource = new JRXlsResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
+                JRResource jrResource = new JRXlsResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                 jrResource.prepareReport();
                 jrResource.exportReport(response);
             }else { // by month                
@@ -689,7 +696,7 @@ public class WBADeviceReport extends GenericResource {
                 
                 JRDataSourceable dataDetail = new JRDeviceAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.DEVICE_MONTHLY;                        
-                JRResource jrResource = new JRXlsResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
+                JRResource jrResource = new JRXlsResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                 jrResource.prepareReport();
                 jrResource.exportReport(response);
             }
@@ -707,12 +714,10 @@ public class WBADeviceReport extends GenericResource {
      * @throws IOException
      */
     public void doRepXml(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
-        response.setContentType("text/xml;charset=iso-8859-1");
-        PrintWriter out = response.getWriter();
-        
-        Document dom = SWBUtils.XML.getNewDocument();        
+        response.setContentType("text/xml;charset=iso-8859-1");        
         Resource base = getResourceBase();
-        /*ArrayList idaux = new ArrayList();*/
+        PrintWriter out = response.getWriter();
+        Document dom = SWBUtils.XML.getNewDocument();
         
         try {
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));
@@ -815,15 +820,18 @@ public class WBADeviceReport extends GenericResource {
     public void doRepPdf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-Disposition", "inline; filename=\"lar.xls\"");
-
         Resource base = getResourceBase();
+        HashMap<String,String> params = new HashMap();
+        params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
+        params.put("site", request.getParameter("wb_site"));
+
         try {
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));            
             if(rtype == 0) { // REPORTE DIARIO
                 WBAFilterReportBean filter = buildFilter(request, paramsRequest);
                 JRDataSourceable dataDetail = new JRDeviceAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.DEVICE_DAILY;
-                JRResource jrResource = new JRPdfResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
+                JRResource jrResource = new JRPdfResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                 jrResource.prepareReport();
                 jrResource.exportReport(response);
             }else { // REPORTE MENSUAL
@@ -845,7 +853,7 @@ public class WBADeviceReport extends GenericResource {
                 
                 JRDataSourceable dataDetail = new JRDeviceAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.DEVICE_MONTHLY;                        
-                JRResource jrResource = new JRPdfResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
+                JRResource jrResource = new JRPdfResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                 jrResource.prepareReport();
                 jrResource.exportReport(response);
             }
@@ -858,16 +866,18 @@ public class WBADeviceReport extends GenericResource {
     public void doRepRtf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-Disposition", "inline; filename=\"lar.xls\"");
-
         Resource base = getResourceBase();
-        /*ArrayList idaux = new ArrayList();*/
+        HashMap<String,String> params = new HashMap();
+        params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
+        params.put("site", request.getParameter("wb_site"));
+
         try {
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));            
             if(rtype == 0) { // REPORTE DIARIO
                 WBAFilterReportBean filter = buildFilter(request, paramsRequest);
                 JRDataSourceable dataDetail = new JRDeviceAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.DEVICE_DAILY;
-                JRResource jrResource = new JRRtfResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
+                JRResource jrResource = new JRRtfResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                 jrResource.prepareReport();
                 jrResource.exportReport(response);
             }else { // REPORTE MENSUAL
@@ -889,7 +899,7 @@ public class WBADeviceReport extends GenericResource {
                 
                 JRDataSourceable dataDetail = new JRDeviceAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.DEVICE_MONTHLY;                        
-                JRResource jrResource = new JRRtfResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
+                JRResource jrResource = new JRRtfResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                 jrResource.prepareReport();
                 jrResource.exportReport(response);
             }

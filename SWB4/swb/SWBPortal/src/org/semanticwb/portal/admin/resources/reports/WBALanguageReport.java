@@ -160,7 +160,6 @@ public class WBALanguageReport extends GenericResource {
         GregorianCalendar gc_now = new GregorianCalendar();
         HashMap hm_sites = new HashMap();
         String rtype = null;
-        int i_access = 0;
 
         try {
             // Evaluates if there are sites
@@ -418,7 +417,7 @@ public class WBALanguageReport extends GenericResource {
                         WBAFilterReportBean filter = buildFilter(request, paramsRequest);
                         JRDataSourceable dataDetail = new JRLanguageAccessDataDetail(filter);
                         JasperTemplate jasperTemplate = JasperTemplate.LANGUAGE_DAILY_HTML;
-                        HashMap params = new HashMap();
+                        HashMap<String,String> params = new HashMap();
                         params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
                         params.put("site", filter.getSite());
                         try {
@@ -481,7 +480,7 @@ public class WBALanguageReport extends GenericResource {
                         filter.setYearI(year13);
                         JRDataSourceable dataDetail = new JRLanguageAccessDataDetail(filter);
                         JasperTemplate jasperTemplate = JasperTemplate.LANGUAGE_MONTHLY_HTML;
-                        HashMap params = new HashMap();
+                        HashMap<String,String> params = new HashMap();
                         params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
                         params.put("site", filter.getSite());
                         try {
@@ -529,14 +528,17 @@ public class WBALanguageReport extends GenericResource {
     public void doGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("application/pdf");
         Resource base = getResourceBase();
-        /*ArrayList idaux = new ArrayList();*/
+        HashMap<String,String> params = new HashMap();
+        params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
+        params.put("site", request.getParameter("wb_site"));
+
         try {
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));
             if(rtype == 0) { // REPORTE DIARIO
                 WBAFilterReportBean filter = buildFilter(request, paramsRequest);
                 JRDataSourceable dataDetail = new JRLanguageAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.LANGUAGE_DAILY_GRAPH;
-                JRResource jrResource = new JRPdfResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
+                JRResource jrResource = new JRPdfResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                 jrResource.prepareReport();
                 jrResource.exportReport(response);
             }else { // REPORTE MENSUAL                
@@ -553,7 +555,7 @@ public class WBALanguageReport extends GenericResource {
 
                 JRDataSourceable dataDetail = new JRLanguageAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.LANGUAGE_MONTHLY_GRAPH;                        
-                JRResource jrResource = new JRPdfResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
+                JRResource jrResource = new JRPdfResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                 jrResource.prepareReport();
                 jrResource.exportReport(response);
             }
@@ -573,9 +575,11 @@ public class WBALanguageReport extends GenericResource {
     public void doRepExcel(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-Disposition", "inline; filename=\"lar.xls\"");
-
         Resource base = getResourceBase();
-        /*ArrayList idaux = new ArrayList();*/
+        HashMap<String,String> params = new HashMap();
+        params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
+        params.put("site", request.getParameter("wb_site"));
+
         try {
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));            
             if(rtype == 0) { // by day
@@ -583,7 +587,7 @@ public class WBALanguageReport extends GenericResource {
                 System.out.println("por dia. filtro="+filter.toString());
                 JRDataSourceable dataDetail = new JRLanguageAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.LANGUAGE_DAILY;
-                JRResource jrResource = new JRXlsResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
+                JRResource jrResource = new JRXlsResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                 jrResource.prepareReport();
                 jrResource.exportReport(response);
             }else { // by month                
@@ -601,7 +605,7 @@ public class WBALanguageReport extends GenericResource {
 
                 JRDataSourceable dataDetail = new JRLanguageAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.LANGUAGE_MONTHLY;                        
-                JRResource jrResource = new JRXlsResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
+                JRResource jrResource = new JRXlsResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                 jrResource.prepareReport();
                 jrResource.exportReport(response);
             }
@@ -721,7 +725,10 @@ public class WBALanguageReport extends GenericResource {
     public void doRepPdf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("application/pdf");
         Resource base = getResourceBase();
-        /*ArrayList idaux = new ArrayList();*/
+        HashMap<String,String> params = new HashMap();
+        params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
+        params.put("site", request.getParameter("wb_site"));
+
         try{            
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));            
             if(rtype == 0) { // by day
@@ -729,7 +736,7 @@ public class WBALanguageReport extends GenericResource {
                 System.out.println("por dia. filtro="+filter.toString());
                 JRDataSourceable dataDetail = new JRLanguageAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.LANGUAGE_DAILY;
-                JRResource jrResource = new JRPdfResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
+                JRResource jrResource = new JRPdfResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                 jrResource.prepareReport();
                 jrResource.exportReport(response);
             }else { // by month                
@@ -747,7 +754,7 @@ public class WBALanguageReport extends GenericResource {
 
                 JRDataSourceable dataDetail = new JRLanguageAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.LANGUAGE_MONTHLY;                        
-                JRResource jrResource = new JRPdfResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
+                JRResource jrResource = new JRPdfResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                 jrResource.prepareReport();
                 jrResource.exportReport(response);
             }
@@ -760,9 +767,11 @@ public class WBALanguageReport extends GenericResource {
     public void doRepRtf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("application/rtf");
         response.setHeader("Content-Disposition", "inline; filename=\"lar.rtf\"");
-
         Resource base = getResourceBase();
-        /*ArrayList idaux = new ArrayList();*/
+        HashMap<String,String> params = new HashMap();
+        params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
+        params.put("site", request.getParameter("wb_site"));
+        
         try{            
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));            
             if(rtype == 0) { // by day
@@ -770,7 +779,7 @@ public class WBALanguageReport extends GenericResource {
                 System.out.println("por dia. filtro="+filter.toString());
                 JRDataSourceable dataDetail = new JRLanguageAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.LANGUAGE_DAILY;
-                JRResource jrResource = new JRRtfResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
+                JRResource jrResource = new JRRtfResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                 jrResource.prepareReport();
                 jrResource.exportReport(response);
             }else { // by month                
@@ -788,7 +797,7 @@ public class WBALanguageReport extends GenericResource {
 
                 JRDataSourceable dataDetail = new JRLanguageAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.LANGUAGE_MONTHLY;                        
-                JRResource jrResource = new JRRtfResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
+                JRResource jrResource = new JRRtfResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                 jrResource.prepareReport();
                 jrResource.exportReport(response);
             }
