@@ -376,6 +376,10 @@
                     <file>${file.reference.poi-scratchpad-3.5-FINAL-20090928.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
+                <library dirs="200">
+                    <file>${reference.SWBTOWB3Compatibility.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
             </web-module-libraries>
             <web-module-additional-libraries/>
             <source-roots>
@@ -502,6 +506,14 @@
                 <foreign-project>SWBSemanticFileRepository</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+            <reference>
+                <foreign-project>SWBTOWB3Compatibility</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>nbbuild.xml</script>
                 <target>jar</target>
                 <clean-target>clean</clean-target>
                 <id>jar</id>
