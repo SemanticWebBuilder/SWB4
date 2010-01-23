@@ -7,4 +7,9 @@ public class Event extends org.semanticwb.process.base.EventBase
     {
         super(base);
     }
+
+    public boolean isValid()
+    {
+        return true;
+    }
 }

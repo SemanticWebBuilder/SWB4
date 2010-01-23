@@ -33,4 +33,9 @@ public class Process extends org.semanticwb.process.base.ProcessBase
         return pinst;
     }
 
+    public boolean isValid()
+    {
+        return true;
+    }
+
 }
