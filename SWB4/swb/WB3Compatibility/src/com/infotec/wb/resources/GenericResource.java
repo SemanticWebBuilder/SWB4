@@ -44,6 +44,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Locale;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.portal.api.SWBResourceCachedMgr;
 
@@ -199,11 +200,11 @@ public class GenericResource implements WBResource, WBResourceCache, WBResourceW
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, WBParamRequest paramsRequest) throws AFException, IOException
     {
         java.io.PrintWriter out = response.getWriter();
-        out.println("<div class=\"box\">");
+        out.println("<div class=\"swbform\">");
         out.println("<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"5\">");
         out.println("<tr>");
         out.println("<td class=datos>");
-        out.println(AFUtils.getLocaleString("com.infotec.wb.resources.GenericResource", "msgNotAdmin",new Locale(paramsRequest.getUser().getLanguage())));
+        out.println(SWBUtils.TEXT.getLocaleString("org.semanticwb.portal.api.GenericResource", "msgNotAdmin",new Locale(paramsRequest.getUser().getLanguage())));
         out.println("</td>");
         out.println("</tr>");
         out.println("</table>");
