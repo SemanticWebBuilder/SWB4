@@ -245,6 +245,10 @@ public class NodeImp extends ItemImp implements Node
 
     public void saveData() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
     {
+        if(this.definition.isProtected())
+        {
+            throw new ConstraintViolationException("The node "+path+" is protected");
+        }
         if (obj == null)
         {
             // create new Node
@@ -453,6 +457,10 @@ public class NodeImp extends ItemImp implements Node
 
     public void orderBefore(String srcChildRelPath, String destChildRelPath) throws UnsupportedRepositoryOperationException, VersionException, ConstraintViolationException, ItemNotFoundException, LockException, RepositoryException
     {
+        if(this.definition.isProtected())
+        {
+            throw new ConstraintViolationException("The node "+path+" is protected");
+        }
         if (!isValidRelativePath(srcChildRelPath))
         {
             throw new RepositoryException(THE_PATH_IS_NOT_RELATIVE + srcChildRelPath);
