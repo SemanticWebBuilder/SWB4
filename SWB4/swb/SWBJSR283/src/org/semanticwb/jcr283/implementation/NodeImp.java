@@ -78,12 +78,13 @@ public class NodeImp extends ItemImp implements Node
 
     NodeImp(Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
-        this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), base.getSemanticObject(), base.getName(), parent, index, path, depth, session, base.getId());
-    }
+        this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), new NodeDefinitionImp(base.getSemanticObject(), NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass())), base.getName(), parent, index, path, depth, session, base.getId());
+        this.obj=base.getSemanticObject();
+    }    
 
     NodeImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session, String id)
     {
-        super(name, parent, path, depth, session,nodeDefinition.isProtected());
+        super(name, parent, path, depth, session, nodeDefinition.isProtected());
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(System.currentTimeMillis());
         this.index = index;
@@ -199,17 +200,7 @@ public class NodeImp extends ItemImp implements Node
         }
     }
 
-    NodeImp(NodeTypeImp nodeType, SemanticObject obj, String name, NodeImp parent, int index, String path, int depth, SessionImp session, String id)
-    {
-        super(name, parent, path, depth, session,false);
-        this.obj = obj;
-        this.index = index;
-        this.id = id;
-        nodeDefinitionImp = new NodeDefinitionImp(obj, NodeTypeManagerImp.loadNodeType(obj.getSemanticClass()));
-        loadProperties(false);
-        this.nodeType = nodeType;
-        nodeTypeManager = session.getWorkspaceImp().getNodeTypeManagerImp();
-    }
+    
 
     public void saveData() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
     {
@@ -269,7 +260,7 @@ public class NodeImp extends ItemImp implements Node
                             if (!nodeManager.hasProperty(pathProperty))
                             {
                                 log.trace("loading property " + pathProperty + " for node " + path);
-                                PropertyImp prop = new PropertyImp(new PropertyDefinitionImp(semanticProperty),semanticProperty, this, pathProperty, this.session);
+                                PropertyImp prop = new PropertyImp(new PropertyDefinitionImp(semanticProperty), semanticProperty, this, pathProperty, this.session);
                                 nodeManager.addProperty(prop, prop.path, this.path, replace);
                             }
                         }
@@ -295,7 +286,7 @@ public class NodeImp extends ItemImp implements Node
                     if (!nodeManager.hasProperty(pathProperty))
                     {
                         log.trace("loading property " + pathProperty + " for node " + path);
-                        PropertyImp prop = new PropertyImp(new PropertyDefinitionImp(semanticProperty),semanticProperty, this, pathProperty, this.session);
+                        PropertyImp prop = new PropertyImp(new PropertyDefinitionImp(semanticProperty), semanticProperty, this, pathProperty, this.session);
                         nodeManager.addProperty(prop, prop.path, this.path, false);
                     }
                 }
@@ -330,7 +321,7 @@ public class NodeImp extends ItemImp implements Node
         {
             childpath += "[" + childIndex + "]";
         }
-        String newId = UUID.randomUUID().toString();        
+        String newId = UUID.randomUUID().toString();
         NodeImp newChild = new NodeImp(nodeType, childDefinition, nameToAdd, this, index, childpath, this.getDepth() + 1, session, newId);
         this.isModified = true;
         return nodeManager.addNode(newChild, childpath, path);
@@ -780,7 +771,7 @@ public class NodeImp extends ItemImp implements Node
                 if (!nodeManager.hasProperty(pathProperty))
                 {
                     log.trace("loading property " + pathProperty + " for node " + path);
-                    PropertyImp propMix = new PropertyImp(new PropertyDefinitionImp(semanticProperty),semanticProperty, this, pathProperty, session);
+                    PropertyImp propMix = new PropertyImp(new PropertyDefinitionImp(semanticProperty), semanticProperty, this, pathProperty, session);
                     nodeManager.addProperty(propMix, propMix.path, path, false);
                 }
             }
