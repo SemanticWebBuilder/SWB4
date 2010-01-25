@@ -438,7 +438,6 @@ public class NodeManager
         {
             nodes.get(path).delete();
         }
-
     }
 }
 
