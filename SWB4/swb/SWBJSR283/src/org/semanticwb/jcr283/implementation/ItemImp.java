@@ -27,41 +27,39 @@ import org.semanticwb.platform.SemanticProperty;
  */
 public abstract class ItemImp implements Item
 {
+
     protected static final String PATH_SEPARATOR = "/";
     protected static final String THE_PATH_IS_NOT_RELATIVE = "The path is not relative :";
     protected NodeImp parent;
     protected final String name;
     protected boolean isNew;
     protected final String path;
-    protected boolean isModified=false;
+    protected boolean isModified = false;
     protected final int depth;
     protected final NodeManager nodeManager;
     protected final SessionImp session;
 
-
-
-    public ItemImp(SemanticProperty prop, NodeImp parent, String path,int depth,SessionImp session)
+    public ItemImp(SemanticProperty prop, NodeImp parent, String path, int depth, SessionImp session)
     {
-        this(prop.getPrefix() + ":" + prop.getName(), parent, path,depth,session);
-        isNew = false;        
-    }
-
-    public ItemImp(SemanticObject obj, String name, NodeImp parent, String path,int depth,SessionImp session)
-    {
-        this(name, parent, path,depth,session);
+        this(prop.getPrefix() + ":" + prop.getName(), parent, path, depth, session);
         isNew = false;
     }
 
-    public ItemImp(String name, NodeImp parent, String path,int depth,SessionImp session)
+    public ItemImp(SemanticObject obj, String name, NodeImp parent, String path, int depth, SessionImp session)
+    {
+        this(name, parent, path, depth, session);
+        isNew = false;
+    }
+
+    public ItemImp(String name, NodeImp parent, String path, int depth, SessionImp session)
     {
         this.name = name;
         this.parent = parent;
         this.path = path;
-        this.depth=depth;
-        this.session=session;
+        this.depth = depth;
+        this.session = session;
         nodeManager = session.getWorkspaceImp().getNodeManager();
     }
-
 
     public String getPathFromName(String name)
     {
@@ -72,7 +70,7 @@ public abstract class ItemImp implements Item
         }
         return pathProperty;
     }
-    
+
     @Override
     public String toString()
     {
@@ -111,15 +109,16 @@ public abstract class ItemImp implements Item
         {
             name = name.substring(0, pos);
         }
-        if(!isValidName(name))
+        if (!isValidName(name))
         {
             throw new RepositoryException("The name is not valid");
         }
         return name;
     }
+
     public static boolean isValidName(String name)
     {
-        if(name==null || name.trim().equals(""))
+        if (name == null || name.trim().equals(""))
         {
             return false;
         }
@@ -135,7 +134,7 @@ public abstract class ItemImp implements Item
         if (relPath.startsWith("./"))
         {
             relPath = this.getPath() + relPath;
-            
+
         }
         if (relPath.startsWith("../"))
         {
@@ -151,48 +150,49 @@ public abstract class ItemImp implements Item
         {
             String end = newpath.substring(pos + 3);
             newpath = newpath.substring(0, pos);
-            if(newpath.endsWith(PATH_SEPARATOR))
+            if (newpath.endsWith(PATH_SEPARATOR))
             {
-                newpath=newpath.substring(0,newpath.length()-1);
+                newpath = newpath.substring(0, newpath.length() - 1);
             }
             pos = newpath.lastIndexOf(PATH_SEPARATOR);
             newpath = newpath.substring(0, pos + 1);
-            if(newpath.endsWith(PATH_SEPARATOR))
+            if (newpath.endsWith(PATH_SEPARATOR))
             {
                 newpath += end;
             }
             else
             {
-                newpath += PATH_SEPARATOR+end;
+                newpath += PATH_SEPARATOR + end;
             }
             pos = newpath.indexOf("../");
         }
         pos = newpath.indexOf("./");
         while (pos != -1)
         {
-            newpath = newpath.substring(0, pos)+newpath.substring(pos+2);
+            newpath = newpath.substring(0, pos) + newpath.substring(pos + 2);
             pos = newpath.indexOf("./");
         }
 
-        
+
         if (newpath.endsWith(PATH_SEPARATOR))
         {
             newpath = newpath.substring(0, newpath.length() - 1);
         }
-        if(path.endsWith("/"))
+        if (path.endsWith("/"))
         {
-            newpath=path+newpath;
+            newpath = path + newpath;
         }
         else
         {
-            newpath=path+"/"+newpath;
+            newpath = path + "/" + newpath;
         }
-        if(newpath.endsWith("/") && newpath.length()>1)
+        if (newpath.endsWith("/") && newpath.length() > 1)
         {
-            newpath=newpath.substring(0,newpath.length()-1);
+            newpath = newpath.substring(0, newpath.length() - 1);
         }
         return newpath;
     }
+
     public String getPath() throws RepositoryException
     {
         return path;
@@ -247,8 +247,8 @@ public abstract class ItemImp implements Item
 
     public void save() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
     {
-        nodeManager.save(path,depth);
-        this.isNew=false;        
+        nodeManager.save(path, depth);
+        this.isNew = false;
     }
 
     public void refresh(boolean keepChanges) throws InvalidItemStateException, RepositoryException
@@ -258,6 +258,14 @@ public abstract class ItemImp implements Item
 
     public void remove() throws VersionException, LockException, ConstraintViolationException, AccessDeniedException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (parent != null)
+        {
+            String parentPath = parent.getPath();
+            nodeManager.removeNode(path, path);
+        }
+        else
+        {
+            throw new ConstraintViolationException("The root node can be removed");
+        }
     }
 }
