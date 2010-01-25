@@ -28,6 +28,7 @@ import org.semanticwb.model.GenericIterator;
  */
 public class NodeManager
 {
+    private static final String PATH_SEPARATOR = "/";
 
     private Hashtable<String, NodeStatus> nodes = new Hashtable<String, NodeStatus>();
     private Hashtable<String, HashSet<NodeStatus>> nodesbyParent = new Hashtable<String, HashSet<NodeStatus>>();
@@ -56,28 +57,32 @@ public class NodeManager
 
     public NodeImp loadRoot(org.semanticwb.jcr283.repository.model.Workspace ws, SessionImp session)
     {
-        if (ws.getRoot() == null)
+        if (!nodes.containsKey(PATH_SEPARATOR))
         {
-            Unstructured newroot = Unstructured.ClassMgr.createUnstructured("jcr:root", ws);
-            ws.setRoot(newroot);
+            log.trace("Loading root node for repository "+ws.getName());
+            if (ws.getRoot() == null)
+            {
+                Unstructured newroot = Unstructured.ClassMgr.createUnstructured("jcr:root", ws);
+                ws.setRoot(newroot);
+            }
+            String path = PATH_SEPARATOR;
+            NodeImp root = new NodeImp(ws.getRoot(), null, 0, path, 0, session);
+            nodes.put(path, new NodeStatus(root));
         }
-        String path = "/";
-        NodeImp root = new NodeImp(ws.getRoot(), null, 0, path, 0, session);
-        nodes.put(path, new NodeStatus(root));
-        return root;
+        return nodes.get(PATH_SEPARATOR).getNode();
 
     }
 
     public NodeImp getRoot()
     {
-        return this.nodes.get("/").getNode();
+        return this.nodes.get(PATH_SEPARATOR).getNode();
     }
 
     public NodeImp addNode(NodeImp node, String path, String pathParent)
     {
         if (!this.nodes.containsKey(path))
         {
-            log.trace("Loading node "+path);
+            log.trace("Loading node " + path);
             NodeStatus nodeStatus = new NodeStatus(node);
             this.nodes.put(path, nodeStatus);
             HashSet<NodeStatus> childnodes = new HashSet<NodeStatus>();
@@ -160,7 +165,7 @@ public class NodeManager
                     String dif = pathNode.substring(path.length());
                     if (!dif.equals(""))
                     {
-                        if (dif.startsWith("[") && dif.endsWith("]") && dif.indexOf("/") == -1)
+                        if (dif.startsWith("[") && dif.endsWith("]") && dif.indexOf(PATH_SEPARATOR) == -1)
                         {
                             countNodes++;
                         }
@@ -210,7 +215,7 @@ public class NodeManager
 
     public void save() throws RepositoryException
     {
-        nodes.get("/").getNode().save();
+        nodes.get(PATH_SEPARATOR).getNode().save();
     }
 
     public void save(String path, int depth) throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
@@ -269,15 +274,15 @@ public class NodeManager
         if (node == null)
         {
             //TODO: Try to load the node from database
-            String[] paths = path.split("/");
+            String[] paths = path.split(PATH_SEPARATOR);
             for (String fragment : paths)
             {
                 int depth = 0;
-                NodeImp nodetoextract = nodes.get("/").getNode();
+                NodeImp nodetoextract = nodes.get(PATH_SEPARATOR).getNode();
                 if (fragment.equals(""))
                 {
-                    nodetoextract = nodes.get("/").getNode();
-                    loadChilds(nodetoextract, "/", depth, session, false);
+                    nodetoextract = nodes.get(PATH_SEPARATOR).getNode();
+                    loadChilds(nodetoextract, PATH_SEPARATOR, depth, session, false);
                     depth = 0;
                 }
                 else
@@ -336,7 +341,7 @@ public class NodeManager
     {
         HashSet<NodeImp> getChilds = new HashSet<NodeImp>();
         HashSet<NodeStatus> childs = nodesbyParent.get(parenPath);
-        if (childs!=null && childs.size() > 0)
+        if (childs != null && childs.size() > 0)
         {
             for (NodeStatus node : childs)
             {
@@ -362,13 +367,13 @@ public class NodeManager
                     int childindex = 0;
                     childindex = getIndex(child);
                     String childpath = null;
-                    if (path.endsWith("/"))
+                    if (path.endsWith(PATH_SEPARATOR))
                     {
                         childpath = child.getName();
                     }
                     else
                     {
-                        childpath = path + "/" + child.getName();
+                        childpath = path + PATH_SEPARATOR + child.getName();
                     }
 
                     if (childindex > 0)
@@ -397,13 +402,13 @@ public class NodeManager
                 childindex = getIndex(child);
                 String childpath = null;
 
-                if (path.endsWith("/"))
+                if (path.endsWith(PATH_SEPARATOR))
                 {
                     childpath = child.getName();
                 }
                 else
                 {
-                    childpath = path + "/" + child.getName();
+                    childpath = path + PATH_SEPARATOR + child.getName();
                 }
 
                 if (childindex > 0)
