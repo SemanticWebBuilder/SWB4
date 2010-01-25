@@ -32,7 +32,7 @@ package arq.examples;
 import java.io.StringReader;
 
 import com.hp.hpl.jena.query.ARQ;
-import com.hp.hpl.jena.query.larq.IndexBuilderExt;
+import com.hp.hpl.jena.query.larq.IndexBuilderNode;
 import com.hp.hpl.jena.query.larq.IndexLARQ;
 import com.hp.hpl.jena.rdf.model.*;
 import com.hp.hpl.jena.sparql.util.StringUtils;
@@ -76,7 +76,7 @@ public class ExLucene5
     static IndexLARQ buildIndexExternalContent(Model model)
     {
         // ---- Create index builder
-        IndexBuilderExt larqBuilder = new IndexBuilderExt() ;
+        IndexBuilderNode larqBuilder = new IndexBuilderNode();
         
         Resource r1 = ResourceFactory.createResource("http://example/r1") ;
         Resource r2 = ResourceFactory.createResource("http://example/r2") ;
