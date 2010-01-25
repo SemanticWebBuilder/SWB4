@@ -229,10 +229,8 @@ public abstract class ItemImp implements Item
         return this.equals(otherItem);
     }
 
-    public void accept(ItemVisitor visitor) throws RepositoryException
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    public abstract void accept(ItemVisitor visitor) throws RepositoryException;
+    
 
     public void save() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
     {

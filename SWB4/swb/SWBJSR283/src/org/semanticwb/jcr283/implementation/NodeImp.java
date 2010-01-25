@@ -18,6 +18,7 @@ import javax.jcr.InvalidLifecycleTransitionException;
 import javax.jcr.Item;
 import javax.jcr.ItemExistsException;
 import javax.jcr.ItemNotFoundException;
+import javax.jcr.ItemVisitor;
 import javax.jcr.MergeException;
 import javax.jcr.NoSuchWorkspaceException;
 import javax.jcr.Node;
@@ -1105,5 +1106,11 @@ public class NodeImp extends ItemImp implements Node
     public boolean isNode()
     {
         return true;
+    }
+
+    @Override
+    public void accept(ItemVisitor visitor) throws RepositoryException
+    {
+        visitor.visit(this);
     }
 }
