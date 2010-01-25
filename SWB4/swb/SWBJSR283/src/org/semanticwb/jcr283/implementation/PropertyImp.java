@@ -15,6 +15,7 @@ import javax.jcr.Binary;
 import javax.jcr.InvalidItemStateException;
 import javax.jcr.ItemExistsException;
 import javax.jcr.ItemNotFoundException;
+import javax.jcr.ItemVisitor;
 import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.PropertyType;
@@ -439,5 +440,11 @@ public class PropertyImp extends ItemImp implements Property
         }
         this.isModified = false;
         this.isNew = false;
+    }
+
+    @Override
+    public void accept(ItemVisitor visitor) throws RepositoryException
+    {
+        visitor.visit(this);
     }
 }
