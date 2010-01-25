@@ -39,25 +39,25 @@ public class NodeTypeManagerImp implements NodeTypeManager
     {
         loadNodeTypes();
     }
-    
+
     public static NodeTypeImp loadNodeType(SemanticClass clazz)
     {
 
         if (clazz.isSubClass(NodeTypes.sclass) || clazz.equals(NodeTypes.sclass))
         {
-            String name=clazz.getPrefix() + ":" + clazz.getName();
-            NodeTypeImp nodeType=null;
-            if(!types.containsKey(name))
+            String name = clazz.getPrefix() + ":" + clazz.getName();
+            NodeTypeImp nodeType = null;
+            if (!types.containsKey(name))
             {
                 log.event("loading nodetype ... " + clazz.getURI() + " ...");
-                nodeType = new NodeTypeImp(clazz);                
+                nodeType = new NodeTypeImp(clazz);
                 types.put(name, nodeType);
                 nodeType.loadPropertyDefinitions();
                 nodeType.loadChildNodeDefinitions();
                 nodeType.loadSuperTypes();
                 nodeType.loadSubTypes();
             }
-            nodeType=types.get(name);
+            nodeType = types.get(name);
             return nodeType;
         }
         return null;
@@ -91,22 +91,22 @@ public class NodeTypeManagerImp implements NodeTypeManager
 
     public NodeTypeIterator getAllNodeTypes() throws RepositoryException
     {
-        HashSet<SemanticClass> nodes=new HashSet<SemanticClass>();
-        for(NodeTypeImp nodeType : types.values())
+        HashSet<NodeTypeImp> nodes = new HashSet<NodeTypeImp>();
+        for (NodeTypeImp nodeType : types.values())
         {
-            nodes.add(nodeType.getSemanticClass());
+            nodes.add(nodeType);
         }
         return new NodeTypeIteratorImp(nodes);
     }
 
     public NodeTypeIterator getPrimaryNodeTypes() throws RepositoryException
     {
-        HashSet<SemanticClass> nodes=new HashSet<SemanticClass>();
-        for(NodeTypeImp nodeType : types.values())
+        HashSet<NodeTypeImp> nodes = new HashSet<NodeTypeImp>();
+        for (NodeTypeImp nodeType : types.values())
         {
-            if(!nodeType.isMixin())
+            if (!nodeType.isMixin())
             {
-                nodes.add(nodeType.getSemanticClass());
+                nodes.add(nodeType);
             }
         }
         return new NodeTypeIteratorImp(nodes);
@@ -114,12 +114,12 @@ public class NodeTypeManagerImp implements NodeTypeManager
 
     public NodeTypeIterator getMixinNodeTypes() throws RepositoryException
     {
-        HashSet<SemanticClass> nodes=new HashSet<SemanticClass>();
-        for(NodeTypeImp nodeType : types.values())
+        HashSet<NodeTypeImp> nodes = new HashSet<NodeTypeImp>();
+        for (NodeTypeImp nodeType : types.values())
         {
-            if(nodeType.isMixin())
+            if (nodeType.isMixin())
             {
-                nodes.add(nodeType.getSemanticClass());
+                nodes.add(nodeType);
             }
         }
         return new NodeTypeIteratorImp(nodes);
