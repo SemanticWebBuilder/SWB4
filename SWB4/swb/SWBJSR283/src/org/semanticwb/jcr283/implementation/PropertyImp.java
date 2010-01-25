@@ -134,6 +134,10 @@ public class PropertyImp extends ItemImp implements Property
         {
             throw new ConstraintViolationException("The property is protected");
         }
+        if(this.parent.definition.isProtected())
+        {
+            throw new ConstraintViolationException("The node "+this.parent.path+" is protected");
+        }
         set(values);
     }
 

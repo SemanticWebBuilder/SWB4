@@ -35,16 +35,17 @@ public abstract class ItemImp implements Item
     protected boolean isModified = false;
     protected final int depth;
     protected final NodeManager nodeManager;
-    protected final SessionImp session;    
+    protected final SessionImp session;
     protected final ItemDefinitionImp definition;
-    public ItemImp(ItemDefinitionImp definition,String name, NodeImp parent, String path, int depth, SessionImp session)
+
+    public ItemImp(ItemDefinitionImp definition, String name, NodeImp parent, String path, int depth, SessionImp session)
     {
         this.name = name;
         this.parent = parent;
-        this.path = path;        
+        this.path = path;
         this.depth = depth;
         this.session = session;
-        this.definition=definition;
+        this.definition = definition;
         nodeManager = session.getWorkspaceImp().getNodeManager();
 
     }
@@ -246,14 +247,22 @@ public abstract class ItemImp implements Item
 
     public void remove() throws VersionException, LockException, ConstraintViolationException, AccessDeniedException, RepositoryException
     {
-        if (parent != null && !this.definition.isProtected())
+        if (parent != null)
         {
+            if (!this.definition.isProtected())
+            {
+                throw new ConstraintViolationException("The item " + path + "  is protecetd");
+            }
+            if (!parent.definition.isProtected())
+            {
+                throw new ConstraintViolationException("The item " + parent.path + " is protected");
+            }
             String parentPath = parent.getPath();
             nodeManager.removeNode(path, parentPath);
         }
         else
         {
-            throw new ConstraintViolationException("The item can be removed "+path);
+            throw new ConstraintViolationException("The item can be removed " + path);
         }
     }
 }
