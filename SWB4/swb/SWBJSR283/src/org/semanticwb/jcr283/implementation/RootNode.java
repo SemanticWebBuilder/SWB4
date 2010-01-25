@@ -11,10 +11,10 @@ import org.semanticwb.jcr283.repository.model.Base;
  *
  * @author victor.lorenzana
  */
-public class RootNode extends NodeImp {
+public class RootNode extends NodeImp{
 
     RootNode(Base base,SessionImp session)
     {
-        super(base, null, 0, "/", 0, session);
+        super(base, null, 0, "/", 0, session,false);
     }
 }

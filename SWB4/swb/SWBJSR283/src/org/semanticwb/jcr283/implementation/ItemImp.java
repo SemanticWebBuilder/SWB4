@@ -18,8 +18,6 @@ import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.NoSuchNodeTypeException;
 import javax.jcr.version.VersionException;
-import org.semanticwb.platform.SemanticObject;
-import org.semanticwb.platform.SemanticProperty;
 
 /**
  *
@@ -38,24 +36,14 @@ public abstract class ItemImp implements Item
     protected final int depth;
     protected final NodeManager nodeManager;
     protected final SessionImp session;
+    protected final boolean isReadOnly;   
 
-    public ItemImp(SemanticProperty prop, NodeImp parent, String path, int depth, SessionImp session)
-    {
-        this(prop.getPrefix() + ":" + prop.getName(), parent, path, depth, session);
-        isNew = false;
-    }
-
-    public ItemImp(SemanticObject obj, String name, NodeImp parent, String path, int depth, SessionImp session)
-    {
-        this(name, parent, path, depth, session);
-        isNew = false;
-    }
-
-    public ItemImp(String name, NodeImp parent, String path, int depth, SessionImp session)
+    public ItemImp(String name, NodeImp parent, String path, int depth, SessionImp session,boolean isReadOnly)
     {
         this.name = name;
         this.parent = parent;
         this.path = path;
+        this.isReadOnly=isReadOnly;
         this.depth = depth;
         this.session = session;
         nodeManager = session.getWorkspaceImp().getNodeManager();
@@ -258,14 +246,15 @@ public abstract class ItemImp implements Item
 
     public void remove() throws VersionException, LockException, ConstraintViolationException, AccessDeniedException, RepositoryException
     {
-        if (parent != null)
+        if (parent != null && !this.isReadOnly)
         {
+
             String parentPath = parent.getPath();
             nodeManager.removeNode(path, path);
         }
         else
         {
-            throw new ConstraintViolationException("The root node can be removed");
+            throw new ConstraintViolationException("The node can be removed "+path);
         }
     }
 }
