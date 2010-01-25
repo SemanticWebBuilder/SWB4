@@ -262,7 +262,7 @@ public abstract class ItemImp implements Item
         }
         else
         {
-            throw new ConstraintViolationException("The item can be removed " + path);
+            throw new RepositoryException("The item can be removed " + path+" due the node has not a parent node");
         }
     }
 }

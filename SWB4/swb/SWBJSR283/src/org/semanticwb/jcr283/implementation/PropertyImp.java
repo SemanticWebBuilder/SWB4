@@ -278,7 +278,7 @@ public class PropertyImp extends ItemImp implements Property
         {
             if (((PropertyDefinitionImp)definition).isMultiple())
             {
-                throw new ValueFormatException("The property is multiple");
+                throw new ValueFormatException("The property "+path+" is multiple");
             }
             if (values.size() <= 0)
             {
@@ -288,7 +288,7 @@ public class PropertyImp extends ItemImp implements Property
             NodeImp node = nodeManager.getNode(pathNode,session);
             if (node == null)
             {
-                throw new ItemExistsException();
+                throw new ItemNotFoundException();
             }
             return node;
         }
