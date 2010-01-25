@@ -77,6 +77,7 @@ public class NodeManager
     {
         if (!this.nodes.containsKey(path))
         {
+            log.trace("Loading node "+path);
             NodeStatus nodeStatus = new NodeStatus(node);
             this.nodes.put(path, nodeStatus);
             HashSet<NodeStatus> childnodes = new HashSet<NodeStatus>();

@@ -54,6 +54,7 @@ public class PropertyImp extends ItemImp implements Property
         NodeTypeImp nodeType = NodeTypeManagerImp.loadNodeType(prop.getDomainClass());
         propertyDefinitionImp = new PropertyDefinitionImp(prop.getSemanticObject(), nodeType);
         this.isNew = false;
+        loadValues();
     }
 
     private void loadValues()
@@ -68,6 +69,7 @@ public class PropertyImp extends ItemImp implements Property
                 String value = literal.getString();
                 try
                 {
+                    log.trace("loading value from database for the property "+path);
                     values.add(transformValue(valueFactoryImp.createValue(value), propertyDefinitionImp.getRequiredType()));
                 }
                 catch (Exception e)
@@ -89,6 +91,11 @@ public class PropertyImp extends ItemImp implements Property
 
     public static Value transformValue(Value value, int reqValue) throws ValueFormatException, RepositoryException
     {
+        if(value.getType()==reqValue)
+        {
+            return value;
+        }
+        log.trace("Tranforming value from "+ PropertyType.nameFromValue(value.getType()) +" to "+ PropertyType.nameFromValue(reqValue));
         ValueImp newValue = new ValueImp(value, reqValue);
         return newValue;
     }
@@ -106,6 +113,7 @@ public class PropertyImp extends ItemImp implements Property
         {
             newValues.add(transformValue(value, reqType));
         }
+        log.trace("Setting values to the property "+path);
         this.values.addAll(newValues);
         this.isModified = true;
         parent.isModified = true;
@@ -198,10 +206,10 @@ public class PropertyImp extends ItemImp implements Property
 
     public Value[] getValues() throws ValueFormatException, RepositoryException
     {
-        if (values.size() == 0)
+        /*if (values.size() == 0)
         {
             loadValues();
-        }
+        }*/
         HashSet<Value> ovalues = new HashSet<Value>();
         for (Value value : values)
         {
