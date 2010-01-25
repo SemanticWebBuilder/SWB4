@@ -90,7 +90,7 @@ public class NodeImp extends ItemImp implements Node
         this.nodeDefinitionImp = nodeDefinition;
         this.isNew = true;
         this.id=id;
-        loadProperties();
+        loadProperties(false);
         this.nodeType = nodeType;
         this.nodeTypeManager = session.getWorkspaceImp().getNodeTypeManagerImp();
         try
@@ -204,7 +204,7 @@ public class NodeImp extends ItemImp implements Node
         this.index = index;
         this.id=id;
         nodeDefinitionImp = new NodeDefinitionImp(obj, NodeTypeManagerImp.loadNodeType(obj.getSemanticClass()));
-        loadProperties();
+        loadProperties(false);
         this.nodeType = nodeType;
         nodeTypeManager = session.getWorkspaceImp().getNodeTypeManagerImp();
     }
@@ -246,7 +246,7 @@ public class NodeImp extends ItemImp implements Node
         return obj;
     }
 
-    private void loadProperties()
+    private void loadProperties(boolean replace)
     {
         if (obj != null)
         {
@@ -268,7 +268,7 @@ public class NodeImp extends ItemImp implements Node
                             if (!nodeManager.hasProperty(prop.path))
                             {
                                 log.debug("loading property " + semanticProperty.getURI() + " for node " + path);
-                                nodeManager.addProperty(prop, prop.path, this.path,false);
+                                nodeManager.addProperty(prop, prop.path, this.path,replace);
                             }
                         }
                         catch (Exception e)
