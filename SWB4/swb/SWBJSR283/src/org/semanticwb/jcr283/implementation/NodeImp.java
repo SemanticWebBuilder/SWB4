@@ -260,7 +260,7 @@ public class NodeImp extends ItemImp implements Node
                             if (!nodeManager.hasProperty(pathProperty))
                             {
                                 log.trace("loading property " + pathProperty + " for node " + path);
-                                PropertyImp prop = new PropertyImp(new PropertyDefinitionImp(semanticProperty), semanticProperty, this, pathProperty, this.session);
+                                PropertyImp prop = new PropertyImp(semanticProperty, this, pathProperty, this.session);
                                 nodeManager.addProperty(prop, prop.path, this.path, replace);
                             }
                         }
@@ -286,7 +286,7 @@ public class NodeImp extends ItemImp implements Node
                     if (!nodeManager.hasProperty(pathProperty))
                     {
                         log.trace("loading property " + pathProperty + " for node " + path);
-                        PropertyImp prop = new PropertyImp(new PropertyDefinitionImp(semanticProperty), semanticProperty, this, pathProperty, this.session);
+                        PropertyImp prop = new PropertyImp(semanticProperty, this, pathProperty, this.session);
                         nodeManager.addProperty(prop, prop.path, this.path, false);
                     }
                 }
@@ -771,7 +771,7 @@ public class NodeImp extends ItemImp implements Node
                 if (!nodeManager.hasProperty(pathProperty))
                 {
                     log.trace("loading property " + pathProperty + " for node " + path);
-                    PropertyImp propMix = new PropertyImp(new PropertyDefinitionImp(semanticProperty), semanticProperty, this, pathProperty, session);
+                    PropertyImp propMix = new PropertyImp(semanticProperty, this, pathProperty, session);
                     nodeManager.addProperty(propMix, propMix.path, path, false);
                 }
             }
