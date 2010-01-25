@@ -64,10 +64,9 @@ public class NodeManager
             {
                 Unstructured newroot = Unstructured.ClassMgr.createUnstructured("jcr:root", ws);
                 ws.setRoot(newroot);
-            }
-            String path = PATH_SEPARATOR;
-            NodeImp root = new NodeImp(ws.getRoot(), null, 0, path, 0, session);
-            nodes.put(path, new NodeStatus(root));
+            }            
+            RootNode root = new RootNode(ws.getRoot(),session);
+            nodes.put(PATH_SEPARATOR, new NodeStatus(root));
         }
         return nodes.get(PATH_SEPARATOR).getNode();
 

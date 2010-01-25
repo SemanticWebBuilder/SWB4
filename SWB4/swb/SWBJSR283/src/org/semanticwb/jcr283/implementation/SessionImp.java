@@ -50,8 +50,6 @@ public class SessionImp implements Session
     {
         this.userid = userid;
         this.repository=repository;
-
-
     }
 
     public WorkspaceImp getWorkspaceImp()
