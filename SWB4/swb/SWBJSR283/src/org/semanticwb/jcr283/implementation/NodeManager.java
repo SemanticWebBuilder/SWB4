@@ -91,18 +91,35 @@ public class NodeManager
         return this.nodes.get(path);
     }
 
+    private void restoreProperty(String path)
+    {
+        if (propertiesRemoved.containsKey(path))
+        {
+            PropertyImp prop = propertiesRemoved.get(path);
+            propertiesRemoved.remove(path);
+            this.properties.put(path, prop);
+        }
+    }
+
     public PropertyImp addProperty(PropertyImp node, String path, String pathParent)
     {
         if (!this.properties.containsKey(path))
         {
-            this.properties.put(path, node);
-            HashSet<PropertyImp> childnodes = new HashSet<PropertyImp>();
-            if (propertiesbyParent.containsKey(pathParent))
+            if (propertiesRemoved.containsKey(path))
             {
-                childnodes = propertiesbyParent.get(pathParent);
+                restoreProperty(path);
             }
-            childnodes.add(node);
-            propertiesbyParent.put(pathParent, childnodes);
+            else
+            {
+                this.properties.put(path, node);
+                HashSet<PropertyImp> childnodes = new HashSet<PropertyImp>();
+                if (propertiesbyParent.containsKey(pathParent))
+                {
+                    childnodes = propertiesbyParent.get(pathParent);
+                }
+                childnodes.add(node);
+                propertiesbyParent.put(pathParent, childnodes);
+            }
         }
         return this.properties.get(path);
     }
@@ -245,7 +262,7 @@ public class NodeManager
 
     public PropertyImp getProperty(String path)
     {
-        PropertyImp propertyImp = this.properties.get(path);       
+        PropertyImp propertyImp = this.properties.get(path);
         return propertyImp;
     }
 
