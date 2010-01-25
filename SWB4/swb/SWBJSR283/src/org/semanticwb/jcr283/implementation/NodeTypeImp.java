@@ -133,23 +133,11 @@ public class NodeTypeImp implements NodeType
         while (classes.hasNext())
         {
             SemanticClass superClazz = classes.next();
-            if (superClazz.isSubClass(Base.sclass) || superClazz.equals(Base.sclass))
+            if (superClazz.isSubClass(Base.sclass))
             {
-                try
-                {
-                    NodeTypeImp superNodeType = (NodeTypeImp) manager.getNodeType(superClazz.getPrefix() + ":" + superClazz.getName());
-                    log.debug("loading superType " + superNodeType.getName() + " for nodeType " + this.getName());
-                    supertypes.add(superNodeType);
-                }
-                catch (NoSuchNodeTypeException nsnte)
-                {
-                    log.error(nsnte);
-                    NodeTypeManagerImp.loadNodeType(clazz);
-                }
-                catch (RepositoryException re)
-                {
-                    log.error(re);
-                }
+                NodeTypeImp superNodeType = NodeTypeManagerImp.loadNodeType(superClazz);
+                log.trace("loading superType " + superNodeType.getName() + " for nodeType " + this.getName());
+                supertypes.add(superNodeType);
             }
         }
 
@@ -166,7 +154,7 @@ public class NodeTypeImp implements NodeType
             PropertyDefinitionImp pd = new PropertyDefinitionImp(propertyDefinition, this);
             if (!propertyDefinitions.containsKey(pd.getName()))
             {
-                log.debug("loading propertyDefinition " + pd.getName() + " for node " + this.getName());
+                log.trace("loading propertyDefinition " + pd.getName() + " for node " + this.getName());
                 propertyDefinitions.put(pd.getName(), pd);
             }
         }
@@ -193,7 +181,7 @@ public class NodeTypeImp implements NodeType
                                     PropertyDefinitionImp pd = new PropertyDefinitionImp(semanticProperty, nodeType);
                                     if (!propertyDefinitions.containsKey(pd.getName()))
                                     {
-                                        log.debug("loading propertyDefinition " + pd.getName() + " for node " + this.getName());
+                                        log.trace("loading propertyDefinition " + pd.getName() + " for node " + this.getName());
                                         propertyDefinitions.put(pd.getName(), pd);
                                     }
                                 }
@@ -205,7 +193,7 @@ public class NodeTypeImp implements NodeType
                                     PropertyDefinitionImp pd = new PropertyDefinitionImp(semanticProperty);
                                     if (!propertyDefinitions.containsKey(pd.getName()))
                                     {
-                                        log.debug("loading propertyDefinition " + pd.getName() + " for node " + this.getName());
+                                        log.trace("loading propertyDefinition " + pd.getName() + " for node " + this.getName());
                                         propertyDefinitions.put(pd.getName(), pd);
                                     }
                                 }
@@ -260,7 +248,7 @@ public class NodeTypeImp implements NodeType
             if (!childnodeDefinitions.containsKey(name))
             {
                 NodeDefinitionImp nodeDefinitionImp = new NodeDefinitionImp(childDefinition, this);
-                log.debug("loading nodeDefinition " + name + " for node " + this.getName());
+                log.trace("loading nodeDefinition " + name + " for node " + this.getName());
                 childnodeDefinitions.put(nodeDefinitionImp.getName(), nodeDefinitionImp);
             }
         }
@@ -285,7 +273,7 @@ public class NodeTypeImp implements NodeType
             if (oclazz.isSubClass(clazz))
             {
                 NodeTypeImp nodeType = NodeTypeManagerImp.loadNodeType(clazz);
-                log.debug("loading subtype " + nodeType.getName() + " for nodeType " + this.getName());
+                log.trace("loading subtype " + nodeType.getName() + " for nodeType " + this.getName());
                 subtypes.add(nodeType);
             }
         }
