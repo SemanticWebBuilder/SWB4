@@ -68,8 +68,7 @@ public class NodeImp extends ItemImp implements Node
     private static final String MIX_SIMPLEVERSIONABLE = "mix:simpleVersionable";
     private static final String NT_VERSION = "nt:version";
     private final static Logger log = SWBUtils.getLogger(NodeImp.class);
-    private final static ValueFactoryImp valueFactoryImp = new ValueFactoryImp();
-    private final NodeDefinitionImp nodeDefinitionImp;
+    private final static ValueFactoryImp valueFactoryImp = new ValueFactoryImp();    
     private SemanticObject obj = null;
     private final int index;
     private final NodeTypeImp nodeType;
@@ -84,9 +83,8 @@ public class NodeImp extends ItemImp implements Node
 
     NodeImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session, String id)
     {
-        super(name, parent, path, depth, session, nodeDefinition.isProtected());
-        this.index = index;
-        this.nodeDefinitionImp = nodeDefinition;
+        super(nodeDefinition,name, parent, path, depth, session);
+        this.index = index;        
         this.isNew = true;
         this.id = id;
         loadProperties(false);
@@ -250,7 +248,7 @@ public class NodeImp extends ItemImp implements Node
         if (obj == null)
         {
             // create new Node
-            SemanticClass sclass = this.nodeDefinitionImp.getDeclaringNodeTypeImp().getSemanticClass();
+            SemanticClass sclass = ((PropertyDefinitionImp)this.definition).getDeclaringNodeTypeImp().getSemanticClass();
             String newid = UUID.randomUUID().toString();
             String workspacename = session.getWorkspaceImp().getName();
             org.semanticwb.jcr283.repository.model.Workspace model = org.semanticwb.jcr283.repository.model.Workspace.ClassMgr.getWorkspace(workspacename);
@@ -317,7 +315,7 @@ public class NodeImp extends ItemImp implements Node
 
             }
         }
-        for (PropertyDefinitionImp propDef : this.nodeDefinitionImp.getDeclaringNodeTypeImp().getPropertyDefinitionsImp())
+        for (PropertyDefinitionImp propDef : ((NodeDefinitionImp)this.definition).getDeclaringNodeTypeImp().getPropertyDefinitionsImp())
         {
             if (propDef.getSemanticProperty() != null)
             {
@@ -395,7 +393,7 @@ public class NodeImp extends ItemImp implements Node
             throw new PathNotFoundException("The node with path " + relPath + " was not found");
         }
         NodeDefinitionImp childDefinition = null;
-        for (NodeDefinitionImp childNodeDefinition : nodeParent.nodeDefinitionImp.getDeclaringNodeTypeImp().getChildNodeDefinitionsImp())
+        for (NodeDefinitionImp childNodeDefinition : ((PropertyDefinitionImp)nodeParent.definition).getDeclaringNodeTypeImp().getChildNodeDefinitionsImp())
         {
             if (childNodeDefinition.getName().equals(nameToAdd))
             {
@@ -404,7 +402,7 @@ public class NodeImp extends ItemImp implements Node
         }
         if (childDefinition == null)
         {
-            for (NodeDefinitionImp childNodeDefinition : nodeParent.nodeDefinitionImp.getDeclaringNodeTypeImp().getChildNodeDefinitionsImp())
+            for (NodeDefinitionImp childNodeDefinition : ((PropertyDefinitionImp)nodeParent.definition).getDeclaringNodeTypeImp().getChildNodeDefinitionsImp())
             {
                 if (childNodeDefinition.getName().equals(ALL))
                 {
@@ -746,7 +744,7 @@ public class NodeImp extends ItemImp implements Node
     public NodeType[] getMixinNodeTypes() throws RepositoryException
     {
         HashSet<NodeType> getMixinNodeTypes = new HashSet<NodeType>();
-        for (NodeType superNodeType : nodeDefinitionImp.getDeclaringNodeType().getSupertypes())
+        for (NodeType superNodeType : ((NodeDefinitionImp)this.definition).getDeclaringNodeType().getSupertypes())
         {
             if (superNodeType.isMixin())
             {
@@ -825,7 +823,7 @@ public class NodeImp extends ItemImp implements Node
     public void removeMixin(String mixinName) throws NoSuchNodeTypeException, VersionException, ConstraintViolationException, LockException, RepositoryException
     {
         NodeTypeImp mixNodeType = nodeTypeManager.getNodeTypeImp(mixinName);
-        for (NodeType supertypes : nodeDefinitionImp.getDefaultPrimaryType().getDeclaredSupertypes())
+        for (NodeType supertypes : ((NodeDefinitionImp)this.definition).getDefaultPrimaryType().getDeclaredSupertypes())
         {
             if (supertypes.equals(mixNodeType))
             {
@@ -862,7 +860,7 @@ public class NodeImp extends ItemImp implements Node
         {
             throw new NoSuchNodeTypeException("Tne nodeType is not mixin");
         }
-        for (NodeType supertypes : nodeDefinitionImp.getDefaultPrimaryType().getSupertypes())
+        for (NodeType supertypes : ((NodeDefinitionImp)this.definition).getDefaultPrimaryType().getSupertypes())
         {
             if (supertypes.equals(mixNodeType))
             {
@@ -887,7 +885,7 @@ public class NodeImp extends ItemImp implements Node
 
     public NodeDefinition getDefinition() throws RepositoryException
     {
-        return nodeDefinitionImp;
+        return ((NodeDefinitionImp)this.definition);
     }
 
     private boolean isReferenceable() throws RepositoryException

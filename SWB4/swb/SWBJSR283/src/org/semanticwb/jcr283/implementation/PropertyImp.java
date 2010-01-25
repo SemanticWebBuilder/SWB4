@@ -43,8 +43,7 @@ public class PropertyImp extends ItemImp implements Property
 
     private static final ValueFactoryImp valueFactoryImp = new ValueFactoryImp();
     private static final Logger log = SWBUtils.getLogger(PropertyImp.class);
-    
-    private final PropertyDefinitionImp propertyDefinitionImp;
+       
     private final ArrayList<Value> values = new ArrayList<Value>();
     private SemanticProperty prop;
 
@@ -58,10 +57,9 @@ public class PropertyImp extends ItemImp implements Property
 
     public PropertyImp(PropertyDefinitionImp definition,String name,NodeImp parent, String path, SessionImp session) throws RepositoryException
     {
-        super(name, parent, path, parent.getDepth()+1, session, definition.isProtected());
+        super(definition,name, parent, path, parent.getDepth()+1, session);
         prop=null;
-        this.isNew=true;        
-        propertyDefinitionImp = definition;                
+        this.isNew=true;                
     }
 
     private void loadValues()
@@ -77,7 +75,7 @@ public class PropertyImp extends ItemImp implements Property
                 try
                 {
                     log.trace("loading value from database for the property "+path);
-                    values.add(transformValue(valueFactoryImp.createValue(value), propertyDefinitionImp.getRequiredType()));
+                    values.add(transformValue(valueFactoryImp.createValue(value), ((PropertyDefinitionImp)definition).getRequiredType()));
                 }
                 catch (Exception e)
                 {
@@ -113,11 +111,11 @@ public class PropertyImp extends ItemImp implements Property
         {
             throw new ValueFormatException("The length can not be zero");
         }
-        if (values.length > 1 && !propertyDefinitionImp.isMultiple())
+        if (values.length > 1 && !((PropertyDefinitionImp)definition).isMultiple())
         {
             throw new ConstraintViolationException("The property is not multiple");
         }
-        int reqType = propertyDefinitionImp.getRequiredType();
+        int reqType = ((PropertyDefinitionImp)definition).getRequiredType();
         //Validate Values
         HashSet<Value> newValues = new HashSet<Value>();
         for (Value value : values)
@@ -271,10 +269,10 @@ public class PropertyImp extends ItemImp implements Property
 
     public Node getNode() throws ItemNotFoundException, ValueFormatException, RepositoryException
     {
-        int requiredType=propertyDefinitionImp.getRequiredType();
+        int requiredType=((PropertyDefinitionImp)definition).getRequiredType();
         if (requiredType == PropertyType.REFERENCE || requiredType == PropertyType.WEAKREFERENCE)
         {
-            if (propertyDefinitionImp.isMultiple())
+            if (((PropertyDefinitionImp)definition).isMultiple())
             {
                 throw new ValueFormatException("The property is multiple");
             }
@@ -339,7 +337,7 @@ public class PropertyImp extends ItemImp implements Property
 
     public PropertyDefinition getDefinition() throws RepositoryException
     {
-        return propertyDefinitionImp;
+        return ((PropertyDefinitionImp)definition);
     }
 
     public int getType() throws RepositoryException
