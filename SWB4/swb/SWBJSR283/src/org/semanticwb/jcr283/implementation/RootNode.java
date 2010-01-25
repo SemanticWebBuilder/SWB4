@@ -15,6 +15,6 @@ public class RootNode extends NodeImp{
 
     RootNode(Base base,SessionImp session)
     {
-        super(base, null, 0, "/", 0, session,false);
+        super(base, null, 0, "/", 0, session);
     }
 }

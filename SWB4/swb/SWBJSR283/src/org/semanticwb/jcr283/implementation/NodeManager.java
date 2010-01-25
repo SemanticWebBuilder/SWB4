@@ -381,7 +381,7 @@ public class NodeManager
                     }
                     if (replace || !nodes.containsKey(childpath))
                     {
-                        NodeImp childNode = new NodeImp(child, node, childindex, childpath, depth + 1, session,false);
+                        NodeImp childNode = new NodeImp(child, node, childindex, childpath, depth + 1, session);
                         this.addNode(childNode, childpath, path);
                     }
                 }
@@ -416,7 +416,7 @@ public class NodeManager
                 }
                 if (replace || !nodes.containsKey(childpath))
                 {
-                    NodeImp childNode = new NodeImp(child, node, childindex, childpath, depth + 1, session,false);
+                    NodeImp childNode = new NodeImp(child, node, childindex, childpath, depth + 1, session);
                     this.addNode(childNode, childpath, path);
                 }
             }
