@@ -146,7 +146,7 @@ public class SessionImp implements Session
     }
     private NodeImp getNodeImp(String absPath) throws PathNotFoundException, RepositoryException
     {
-        NodeImp node = workspace.getNodeManager().getNode(absPath);
+        NodeImp node = workspace.getNodeManager().getNode(absPath,this);
         if (node == null)
         {
             throw new PathNotFoundException();

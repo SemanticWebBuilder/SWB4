@@ -29,12 +29,11 @@ import org.semanticwb.model.GenericIterator;
 public class NodeManager
 {
 
-    private Hashtable<String, NodeImp> nodes = new Hashtable<String, NodeImp>();
+    private Hashtable<String, NodeStatus> nodes = new Hashtable<String, NodeStatus>();
     private Hashtable<String, HashSet<NodeImp>> nodesbyParent = new Hashtable<String, HashSet<NodeImp>>();
-    private Hashtable<String, PropertyImp> properties = new Hashtable<String, PropertyImp>();
+
+    private Hashtable<String, PropertyStatus> properties = new Hashtable<String, PropertyStatus>();
     private Hashtable<String, HashSet<PropertyImp>> propertiesbyParent = new Hashtable<String, HashSet<PropertyImp>>();
-    private Hashtable<String, NodeImp> nodesRemoved = new Hashtable<String, NodeImp>();
-    private Hashtable<String, PropertyImp> propertiesRemoved = new Hashtable<String, PropertyImp>();
     private final static Logger log = SWBUtils.getLogger(NodeManager.class);
 
     private static int getIndex(Base node)
@@ -65,21 +64,21 @@ public class NodeManager
         }
         String path = "/";
         NodeImp root = new NodeImp(ws.getRoot(), null, 0, path, 0, session);
-        nodes.put(path, root);
+        nodes.put(path, new NodeStatus(root));
         return root;
 
     }
 
     public NodeImp getRoot()
     {
-        return this.nodes.get("/");
+        return this.nodes.get("/").getNode();
     }
 
     public NodeImp addNode(NodeImp node, String path, String pathParent)
     {
         if (!this.nodes.containsKey(path))
         {
-            this.nodes.put(path, node);
+            this.nodes.put(path, new NodeStatus(node));
             HashSet<NodeImp> childnodes = new HashSet<NodeImp>();
             if (nodesbyParent.containsKey(pathParent))
             {
@@ -88,40 +87,37 @@ public class NodeManager
             childnodes.add(node);
             nodesbyParent.put(pathParent, childnodes);
         }
-        return this.nodes.get(path);
+        return this.nodes.get(path).getNode();
     }
 
     private void restoreProperty(String path)
     {
-        if (propertiesRemoved.containsKey(path))
+        if (properties.containsKey(path))
         {
-            PropertyImp prop = propertiesRemoved.get(path);
-            propertiesRemoved.remove(path);
-            this.properties.put(path, prop);
+            PropertyStatus prop = properties.get(path);
+            prop.restore();
         }
     }
 
-    public PropertyImp addProperty(PropertyImp node, String path, String pathParent)
-    {
+    public PropertyImp addProperty(PropertyImp property, String path, String pathParent)
+    {        
         if (!this.properties.containsKey(path))
         {
-            if (propertiesRemoved.containsKey(path))
+            this.properties.put(path, new PropertyStatus(property));
+            HashSet<PropertyImp> childnodes = new HashSet<PropertyImp>();
+            if (propertiesbyParent.containsKey(pathParent))
             {
-                restoreProperty(path);
+                childnodes = propertiesbyParent.get(pathParent);
             }
-            else
-            {
-                this.properties.put(path, node);
-                HashSet<PropertyImp> childnodes = new HashSet<PropertyImp>();
-                if (propertiesbyParent.containsKey(pathParent))
-                {
-                    childnodes = propertiesbyParent.get(pathParent);
-                }
-                childnodes.add(node);
-                propertiesbyParent.put(pathParent, childnodes);
-            }
+            childnodes.add(property);
+           propertiesbyParent.put(pathParent, childnodes);
+            
         }
-        return this.properties.get(path);
+        else
+        {
+            restoreProperty(path);
+        }
+        return this.properties.get(path).getProperty();
     }
 
     /**
@@ -197,14 +193,14 @@ public class NodeManager
 
     public void save() throws RepositoryException
     {
-        nodes.get("/").save();
+        nodes.get("/").getNode().save();
     }
 
     public void save(String path, int depth) throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
     {
         if (nodes.containsKey(path))
         {
-            NodeImp node = nodes.get(path);
+            NodeImp node = nodes.get(path).getNode();
             node.saveData();
             for (PropertyImp prop : getChildProperties(node))
             {
@@ -213,7 +209,7 @@ public class NodeManager
         }
         if (properties.containsKey(path))
         {
-            PropertyImp node = properties.get(path);
+            PropertyImp node = properties.get(path).getProperty();
             node.saveData();
         }
 
@@ -223,7 +219,7 @@ public class NodeManager
     {
         if (nodes.containsKey(nodePath))
         {
-            NodeImp node = nodes.get(nodePath);
+            NodeImp node = nodes.get(nodePath).getNode();
             node.saveData();
         }
     }
@@ -250,19 +246,47 @@ public class NodeManager
 
     }
 
-    public NodeImp getNode(String path)
+
+    public NodeImp getNode(String path,SessionImp session) throws RepositoryException
     {
-        NodeImp node = this.nodes.get(path);
+        NodeImp node = this.nodes.get(path).getNode();
         if (node == null)
         {
             //TODO: Try to load the node from database
+            String[] paths=path.split("/");
+            for(String fragment : paths)
+            {
+                int depth=0;
+                NodeImp nodetoextract=nodes.get("/").getNode();
+                if(fragment.equals(""))
+                {
+                    nodetoextract=nodes.get("/").getNode();
+                    loadChilds(nodetoextract, "/", depth, session, false);
+                    depth=0;
+                }
+                else
+                {
+                    try
+                    {
+                        String pathParent=nodetoextract.getPath();
+                        loadChilds(nodetoextract, pathParent, depth, session, false);
+                        depth++;
+                    }
+                    catch(Exception e)
+                    {
+                        throw new RepositoryException(e);
+                    }
+                }
+                
+            }
+            node = this.nodes.get(path).getNode();
         }
         return node;
     }
 
     public PropertyImp getProperty(String path)
     {
-        PropertyImp propertyImp = this.properties.get(path);
+        PropertyImp propertyImp = this.properties.get(path).getProperty();
         return propertyImp;
     }
 
@@ -296,8 +320,8 @@ public class NodeManager
                     String dif = pathNode.substring(node.getPath().length());
                     if (!dif.equals(""))
                     {
-                        NodeImp prospect = nodes.get(pathNode);
-                        if (prospect.getDepth() == (node.getDepth() + 1))
+                        NodeImp prospect = nodes.get(pathNode).getNode();
+                        if (!nodes.get(pathNode).isDeleted() && prospect.getDepth() == (node.getDepth() + 1))
                         {
                             getChilds.add(prospect);
                         }
@@ -386,71 +410,122 @@ public class NodeManager
     {
         if (properties.containsKey(path))
         {
-            propertiesRemoved.put(path, properties.remove(path));
-            if (propertiesbyParent.containsKey(parentPath) && propertiesbyParent.get(parentPath).size() > 0)
-            {
-                HashSet<PropertyImp> props = propertiesbyParent.get(parentPath);
-                for (PropertyImp prop : props)
-                {
-                    try
-                    {
-                        if (prop.getPath().equals(path))
-                        {
-                            props.remove(prop);
-                            break;
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        log.debug(e);
-                    }
-                }
-                if (props.size() == 0)
-                {
-                    propertiesbyParent.remove(parentPath);
-                }
-                else
-                {
-                    propertiesbyParent.put(parentPath, props);
-                }
-            }
+            properties.get(path).delete();            
         }
-
     }
 
     public void removeNode(String path, String parentPath)
     {
         if (nodes.containsKey(path))
         {
-            nodesRemoved.put(path, nodes.remove(path));
-            if (nodesbyParent.containsKey(parentPath) && nodesbyParent.get(parentPath).size() > 0)
-            {
-                HashSet<NodeImp> props = nodesbyParent.get(parentPath);
-                for (NodeImp prop : props)
-                {
-                    try
-                    {
-                        if (prop.getPath().equals(path))
-                        {
-                            props.remove(prop);
-                            break;
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        log.debug(e);
-                    }
-                }
-                if (props.size() == 0)
-                {
-                    nodesbyParent.remove(parentPath);
-                }
-                else
-                {
-                    nodesbyParent.put(parentPath, props);
-                }
-            }
+            nodes.get(path).delete();
         }
 
     }
+}
+
+class NodeStatus
+{
+
+    private boolean deleted;
+    private final NodeImp node;
+
+    public NodeStatus(NodeImp node, boolean deleted)
+    {
+        this.deleted = deleted;
+        this.node = node;
+    }
+    public NodeStatus(NodeImp node)
+    {
+        this.deleted = false;
+        this.node = node;
+    }
+
+    public NodeImp getNode()
+    {
+        return node;
+    }
+
+    public void delete()
+    {
+        this.deleted = true;
+    }
+
+    public void restore()
+    {
+        this.deleted = false;
+    }
+
+    public boolean isDeleted()
+    {
+        return deleted;
+    }
+    
+}
+
+
+class PropertyStatus
+{
+
+    private boolean deleted;
+    private final PropertyImp property;
+
+    public PropertyStatus(PropertyImp property, boolean deleted)
+    {
+        this.deleted = deleted;
+        this.property = property;
+    }
+    public PropertyStatus(PropertyImp property)
+    {
+        this.deleted = false;
+        this.property = property;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final PropertyStatus other = (PropertyStatus) obj;
+        if (this.property != other.property && (this.property == null || !this.property.equals(other.property)))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int hash = 3;
+        hash = 37 * hash + (this.property != null ? this.property.hashCode() : 0);
+        return hash;
+    }
+
+    public PropertyImp getProperty()
+    {
+        return property;
+    }
+
+    public void delete()
+    {
+        this.deleted = true;
+    }
+
+    public void restore()
+    {
+        this.deleted = false;
+    }
+
+    public boolean isDeleted()
+    {
+        return deleted;
+    }
+
 }
