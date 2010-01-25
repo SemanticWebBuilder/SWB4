@@ -335,7 +335,7 @@ public class NodeManager
     {
         HashSet<NodeImp> getChilds = new HashSet<NodeImp>();
         HashSet<NodeStatus> childs = nodesbyParent.get(parenPath);
-        if (childs.size() > 0)
+        if (childs!=null && childs.size() > 0)
         {
             for (NodeStatus node : childs)
             {
