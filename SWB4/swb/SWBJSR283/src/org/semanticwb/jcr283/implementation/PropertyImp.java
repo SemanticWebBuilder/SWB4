@@ -41,20 +41,28 @@ import org.semanticwb.platform.SemanticProperty;
 public class PropertyImp extends ItemImp implements Property
 {
 
-    private final static Logger log = SWBUtils.getLogger(PropertyImp.class);
     private static final ValueFactoryImp valueFactoryImp = new ValueFactoryImp();
+    private static final Logger log = SWBUtils.getLogger(PropertyImp.class);
+    
     private final PropertyDefinitionImp propertyDefinitionImp;
-    private ArrayList<Value> values = new ArrayList<Value>();
+    private final ArrayList<Value> values = new ArrayList<Value>();
     private SemanticProperty prop;
 
-    public PropertyImp(SemanticProperty prop, NodeImp parent, String path, SessionImp session) throws RepositoryException
+    public PropertyImp(PropertyDefinitionImp definition,SemanticProperty prop, NodeImp parent, String path, SessionImp session) throws RepositoryException
     {
-        super(prop, parent, path, parent.getDepth() + 1, session);
-        this.prop = prop;
-        NodeTypeImp nodeType = NodeTypeManagerImp.loadNodeType(prop.getDomainClass());
-        propertyDefinitionImp = new PropertyDefinitionImp(prop.getSemanticObject(), nodeType);
-        this.isNew = false;
+        super(prop.getPrefix()+":"+prop.getName(), parent, path, parent.getDepth()+1, session, definition.isProtected());
+        this.propertyDefinitionImp=definition;
+        this.prop = prop;        
+        this.isNew=false;
         loadValues();
+    }
+
+    public PropertyImp(PropertyDefinitionImp definition,String name,NodeImp parent, String path, SessionImp session) throws RepositoryException
+    {
+        super(name, parent, path, parent.getDepth()+1, session, definition.isProtected());
+        prop=null;
+        this.isNew=true;        
+        propertyDefinitionImp = definition;                
     }
 
     private void loadValues()

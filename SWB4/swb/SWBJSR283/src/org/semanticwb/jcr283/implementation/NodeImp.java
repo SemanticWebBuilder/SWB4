@@ -76,14 +76,14 @@ public class NodeImp extends ItemImp implements Node
     private final NodeTypeManagerImp nodeTypeManager;
     private final String id;
 
-    NodeImp(Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
+    NodeImp(Base base, NodeImp parent, int index, String path, int depth, SessionImp session,boolean isReadOnly)
     {
         this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), base.getSemanticObject(), base.getName(), parent, index, path, depth, session, base.getId());
     }
 
-    NodeImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session, String id)
+    NodeImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session, String id,boolean isReadOnly)
     {
-        super(null, name, parent, path, depth, session);
+        super(name, parent, path, depth, session,isReadOnly);
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(System.currentTimeMillis());
         this.index = index;
@@ -201,7 +201,7 @@ public class NodeImp extends ItemImp implements Node
 
     NodeImp(NodeTypeImp nodeType, SemanticObject obj, String name, NodeImp parent, int index, String path, int depth, SessionImp session, String id)
     {
-        super(obj, name, parent, path, depth, session);
+        super(name, parent, path, depth, session,false);
         this.obj = obj;
         this.index = index;
         this.id = id;
@@ -269,7 +269,7 @@ public class NodeImp extends ItemImp implements Node
                             if (!nodeManager.hasProperty(pathProperty))
                             {
                                 log.trace("loading property " + pathProperty + " for node " + path);
-                                PropertyImp prop = new PropertyImp(semanticProperty, this, pathProperty, this.session);
+                                PropertyImp prop = new PropertyImp(new PropertyDefinitionImp(semanticProperty),semanticProperty, this, pathProperty, this.session);
                                 nodeManager.addProperty(prop, prop.path, this.path, replace);
                             }
                         }
@@ -295,7 +295,7 @@ public class NodeImp extends ItemImp implements Node
                     if (!nodeManager.hasProperty(pathProperty))
                     {
                         log.trace("loading property " + pathProperty + " for node " + path);
-                        PropertyImp prop = new PropertyImp(semanticProperty, this, pathProperty, this.session);
+                        PropertyImp prop = new PropertyImp(new PropertyDefinitionImp(semanticProperty),semanticProperty, this, pathProperty, this.session);
                         nodeManager.addProperty(prop, prop.path, this.path, false);
                     }
                 }
@@ -331,7 +331,8 @@ public class NodeImp extends ItemImp implements Node
             childpath += "[" + childIndex + "]";
         }
         String newId = UUID.randomUUID().toString();
-        NodeImp newChild = new NodeImp(nodeType, childDefinition, nameToAdd, this, index, childpath, this.getDepth() + 1, session, newId);
+        boolean isReadOnlyChild=childDefinition.isProtected();
+        NodeImp newChild = new NodeImp(nodeType, childDefinition, nameToAdd, this, index, childpath, this.getDepth() + 1, session, newId,isReadOnlyChild);
         this.isModified = true;
         return nodeManager.addNode(newChild, childpath, path);
 
@@ -780,7 +781,7 @@ public class NodeImp extends ItemImp implements Node
                 if (!nodeManager.hasProperty(pathProperty))
                 {
                     log.trace("loading property " + pathProperty + " for node " + path);
-                    PropertyImp propMix = new PropertyImp(semanticProperty, this, pathProperty, session);
+                    PropertyImp propMix = new PropertyImp(new PropertyDefinitionImp(semanticProperty),semanticProperty, this, pathProperty, session);
                     nodeManager.addProperty(propMix, propMix.path, path, false);
                 }
             }
