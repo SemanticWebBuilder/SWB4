@@ -285,7 +285,7 @@ public class NodeTypeImp implements NodeType
             if (oclazz.isSubClass(clazz))
             {
                 NodeTypeImp nodeType = NodeTypeManagerImp.loadNodeType(clazz);
-                log.debug("loading superType " + nodeType.getName() + " for nodeType " + this.getName());
+                log.debug("loading subtype " + nodeType.getName() + " for nodeType " + this.getName());
                 subtypes.add(nodeType);
             }
         }
