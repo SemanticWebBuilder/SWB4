@@ -48,10 +48,9 @@ public class PropertyImp extends ItemImp implements Property
     private final ArrayList<Value> values = new ArrayList<Value>();
     private SemanticProperty prop;
 
-    public PropertyImp(PropertyDefinitionImp definition,SemanticProperty prop, NodeImp parent, String path, SessionImp session) throws RepositoryException
+    public PropertyImp(SemanticProperty prop, NodeImp parent, String path, SessionImp session) throws RepositoryException
     {
-        super(prop.getPrefix()+":"+prop.getName(), parent, path, parent.getDepth()+1, session, definition.isProtected());
-        this.propertyDefinitionImp=definition;
+        this(new PropertyDefinitionImp(prop), prop.getPrefix()+":"+prop.getName(), parent, path, session);
         this.prop = prop;        
         this.isNew=false;
         loadValues();
