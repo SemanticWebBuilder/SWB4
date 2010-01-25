@@ -41,7 +41,6 @@ public class WorkspaceImp  implements Workspace {
     private NodeTypeManagerImp nodeTypeManager;
     public WorkspaceImp(SessionImp session,org.semanticwb.jcr283.repository.model.Workspace ws)
     {
-
         this.session=session;
         name=ws.getName();
         session.setWorkspace(this);
