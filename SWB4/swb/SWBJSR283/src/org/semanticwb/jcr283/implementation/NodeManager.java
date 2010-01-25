@@ -30,10 +30,9 @@ public class NodeManager
 {
 
     private Hashtable<String, NodeStatus> nodes = new Hashtable<String, NodeStatus>();
-    private Hashtable<String, HashSet<NodeImp>> nodesbyParent = new Hashtable<String, HashSet<NodeImp>>();
-
+    private Hashtable<String, HashSet<NodeStatus>> nodesbyParent = new Hashtable<String, HashSet<NodeStatus>>();
     private Hashtable<String, PropertyStatus> properties = new Hashtable<String, PropertyStatus>();
-    private Hashtable<String, HashSet<PropertyImp>> propertiesbyParent = new Hashtable<String, HashSet<PropertyImp>>();
+    private Hashtable<String, HashSet<PropertyStatus>> propertiesbyParent = new Hashtable<String, HashSet<PropertyStatus>>();
     private final static Logger log = SWBUtils.getLogger(NodeManager.class);
 
     private static int getIndex(Base node)
@@ -78,13 +77,14 @@ public class NodeManager
     {
         if (!this.nodes.containsKey(path))
         {
-            this.nodes.put(path, new NodeStatus(node));
-            HashSet<NodeImp> childnodes = new HashSet<NodeImp>();
+            NodeStatus nodeStatus = new NodeStatus(node);
+            this.nodes.put(path, nodeStatus);
+            HashSet<NodeStatus> childnodes = new HashSet<NodeStatus>();
             if (nodesbyParent.containsKey(pathParent))
             {
                 childnodes = nodesbyParent.get(pathParent);
             }
-            childnodes.add(node);
+            childnodes.add(nodeStatus);
             nodesbyParent.put(pathParent, childnodes);
         }
         return this.nodes.get(path).getNode();
@@ -99,23 +99,39 @@ public class NodeManager
         }
     }
 
-    public PropertyImp addProperty(PropertyImp property, String path, String pathParent)
-    {        
+    public PropertyImp addProperty(PropertyImp property, String path, String pathParent, boolean replace)
+    {
         if (!this.properties.containsKey(path))
         {
-            this.properties.put(path, new PropertyStatus(property));
-            HashSet<PropertyImp> childnodes = new HashSet<PropertyImp>();
+            PropertyStatus propertyStatus = new PropertyStatus(property);
+            this.properties.put(path, propertyStatus);
+            HashSet<PropertyStatus> childnodes = new HashSet<PropertyStatus>();
             if (propertiesbyParent.containsKey(pathParent))
             {
                 childnodes = propertiesbyParent.get(pathParent);
             }
-            childnodes.add(property);
-           propertiesbyParent.put(pathParent, childnodes);
-            
+            childnodes.add(propertyStatus);
+            propertiesbyParent.put(pathParent, childnodes);
+
         }
         else
         {
-            restoreProperty(path);
+            if (replace)
+            {
+                PropertyStatus propertyStatus = new PropertyStatus(property);
+                this.properties.put(path, propertyStatus);
+                HashSet<PropertyStatus> childnodes = new HashSet<PropertyStatus>();
+                if (propertiesbyParent.containsKey(pathParent))
+                {
+                    childnodes = propertiesbyParent.get(pathParent);
+                }
+                childnodes.add(propertyStatus);
+                propertiesbyParent.put(pathParent, childnodes);
+            }
+            else
+            {
+                restoreProperty(path);
+            }
         }
         return this.properties.get(path).getProperty();
     }
@@ -167,12 +183,12 @@ public class NodeManager
     {
         if (this.nodesbyParent.containsKey(parentNode) && this.nodesbyParent.get(parentNode).size() > 0)
         {
-            Set<NodeImp> childs = this.nodesbyParent.get(parentNode);
-            for (NodeImp node : childs)
+            Set<NodeStatus> childs = this.nodesbyParent.get(parentNode);
+            for (NodeStatus node : childs)
             {
                 try
                 {
-                    if (node.getName().equals(name))
+                    if (!node.isDeleted() && node.getNode().getName().equals(name))
                     {
                         return true;
                     }
@@ -246,38 +262,37 @@ public class NodeManager
 
     }
 
-
-    public NodeImp getNode(String path,SessionImp session) throws RepositoryException
+    public NodeImp getNode(String path, SessionImp session) throws RepositoryException
     {
         NodeImp node = this.nodes.get(path).getNode();
         if (node == null)
         {
             //TODO: Try to load the node from database
-            String[] paths=path.split("/");
-            for(String fragment : paths)
+            String[] paths = path.split("/");
+            for (String fragment : paths)
             {
-                int depth=0;
-                NodeImp nodetoextract=nodes.get("/").getNode();
-                if(fragment.equals(""))
+                int depth = 0;
+                NodeImp nodetoextract = nodes.get("/").getNode();
+                if (fragment.equals(""))
                 {
-                    nodetoextract=nodes.get("/").getNode();
+                    nodetoextract = nodes.get("/").getNode();
                     loadChilds(nodetoextract, "/", depth, session, false);
-                    depth=0;
+                    depth = 0;
                 }
                 else
                 {
                     try
                     {
-                        String pathParent=nodetoextract.getPath();
+                        String pathParent = nodetoextract.getPath();
                         loadChilds(nodetoextract, pathParent, depth, session, false);
                         depth++;
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         throw new RepositoryException(e);
                     }
                 }
-                
+
             }
             node = this.nodes.get(path).getNode();
         }
@@ -295,9 +310,12 @@ public class NodeManager
         HashSet<PropertyImp> getChilds = new HashSet<PropertyImp>();
         if (propertiesbyParent.containsKey(pathParent) && propertiesbyParent.get(pathParent).size() > 0)
         {
-            for (PropertyImp prop : this.propertiesbyParent.get(pathParent))
+            for (PropertyStatus prop : this.propertiesbyParent.get(pathParent))
             {
-                getChilds.add(prop);
+                if (!prop.isDeleted())
+                {
+                    getChilds.add(prop.getProperty());
+                }
             }
         }
         return getChilds;
@@ -308,30 +326,24 @@ public class NodeManager
         return getChildProperties(node.getPath());
     }
 
-    public Set<NodeImp> getChildNodes(NodeImp node)
+    public Set<NodeImp> getChildNodes(NodeImp node) throws RepositoryException
+    {
+        return this.getChildNodes(node.getPath());
+    }
+
+    public Set<NodeImp> getChildNodes(String parenPath) throws RepositoryException
     {
         HashSet<NodeImp> getChilds = new HashSet<NodeImp>();
-        try
+        HashSet<NodeStatus> childs = nodesbyParent.get(parenPath);
+        if (childs.size() > 0)
         {
-            for (String pathNode : nodes.keySet())
+            for (NodeStatus node : childs)
             {
-                if (pathNode.startsWith(node.getPath()))
+                if (!node.isDeleted())
                 {
-                    String dif = pathNode.substring(node.getPath().length());
-                    if (!dif.equals(""))
-                    {
-                        NodeImp prospect = nodes.get(pathNode).getNode();
-                        if (!nodes.get(pathNode).isDeleted() && prospect.getDepth() == (node.getDepth() + 1))
-                        {
-                            getChilds.add(prospect);
-                        }
-                    }
+                    getChilds.add(node.getNode());
                 }
             }
-        }
-        catch (Exception e)
-        {
-            log.debug(e);
         }
         return getChilds;
     }
@@ -410,7 +422,7 @@ public class NodeManager
     {
         if (properties.containsKey(path))
         {
-            properties.get(path).delete();            
+            properties.get(path).delete();
         }
     }
 
@@ -435,6 +447,7 @@ class NodeStatus
         this.deleted = deleted;
         this.node = node;
     }
+
     public NodeStatus(NodeImp node)
     {
         this.deleted = false;
@@ -460,9 +473,7 @@ class NodeStatus
     {
         return deleted;
     }
-    
 }
-
 
 class PropertyStatus
 {
@@ -475,6 +486,7 @@ class PropertyStatus
         this.deleted = deleted;
         this.property = property;
     }
+
     public PropertyStatus(PropertyImp property)
     {
         this.deleted = false;
@@ -527,5 +539,4 @@ class PropertyStatus
     {
         return deleted;
     }
-
 }
