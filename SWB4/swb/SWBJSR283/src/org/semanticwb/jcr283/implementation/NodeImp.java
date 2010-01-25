@@ -268,7 +268,7 @@ public class NodeImp extends ItemImp implements Node
                             if (!nodeManager.hasProperty(prop.path))
                             {
                                 log.debug("loading property " + semanticProperty.getURI() + " for node " + path);
-                                nodeManager.addProperty(prop, prop.path, this.path);
+                                nodeManager.addProperty(prop, prop.path, this.path,false);
                             }
                         }
                         catch (Exception e)
@@ -294,7 +294,7 @@ public class NodeImp extends ItemImp implements Node
                     if (!nodeManager.hasProperty(prop.path))
                     {
                         log.debug("loading property " + pathProperty + " for node " + path);
-                        nodeManager.addProperty(prop, prop.path, this.path);
+                        nodeManager.addProperty(prop, prop.path, this.path,false);
                     }
                 }
                 catch (Exception e)
@@ -776,7 +776,7 @@ public class NodeImp extends ItemImp implements Node
                 String nameProperty = semanticProperty.getPrefix() + ":" + semanticProperty.getName();
                 String pathProperty = getPathFromName(nameProperty);
                 PropertyImp propMix = new PropertyImp(semanticProperty, this, pathProperty, session);
-                nodeManager.addProperty(propMix, propMix.path, path);
+                nodeManager.addProperty(propMix, propMix.path, path,false);
             }
         }
         checkReferenceable();
