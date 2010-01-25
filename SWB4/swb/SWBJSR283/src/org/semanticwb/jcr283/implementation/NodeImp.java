@@ -76,14 +76,14 @@ public class NodeImp extends ItemImp implements Node
     private final NodeTypeManagerImp nodeTypeManager;
     private final String id;
 
-    NodeImp(Base base, NodeImp parent, int index, String path, int depth, SessionImp session,boolean isReadOnly)
+    NodeImp(Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
         this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), base.getSemanticObject(), base.getName(), parent, index, path, depth, session, base.getId());
     }
 
-    NodeImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session, String id,boolean isReadOnly)
+    NodeImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session, String id)
     {
-        super(name, parent, path, depth, session,isReadOnly);
+        super(name, parent, path, depth, session,nodeDefinition.isProtected());
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(System.currentTimeMillis());
         this.index = index;
@@ -330,9 +330,8 @@ public class NodeImp extends ItemImp implements Node
         {
             childpath += "[" + childIndex + "]";
         }
-        String newId = UUID.randomUUID().toString();
-        boolean isReadOnlyChild=childDefinition.isProtected();
-        NodeImp newChild = new NodeImp(nodeType, childDefinition, nameToAdd, this, index, childpath, this.getDepth() + 1, session, newId,isReadOnlyChild);
+        String newId = UUID.randomUUID().toString();        
+        NodeImp newChild = new NodeImp(nodeType, childDefinition, nameToAdd, this, index, childpath, this.getDepth() + 1, session, newId);
         this.isModified = true;
         return nodeManager.addNode(newChild, childpath, path);
 
