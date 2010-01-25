@@ -79,14 +79,12 @@ public class NodeImp extends ItemImp implements Node
     NodeImp(Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
         this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), new NodeDefinitionImp(base.getSemanticObject(), NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass())), base.getName(), parent, index, path, depth, session, base.getId());
-        this.obj=base.getSemanticObject();
-    }    
+        this.obj = base.getSemanticObject();
+    }
 
     NodeImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session, String id)
     {
         super(name, parent, path, depth, session, nodeDefinition.isProtected());
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(System.currentTimeMillis());
         this.index = index;
         this.nodeDefinitionImp = nodeDefinition;
         this.isNew = true;
@@ -94,91 +92,138 @@ public class NodeImp extends ItemImp implements Node
         loadProperties(false);
         this.nodeType = nodeType;
         this.nodeTypeManager = session.getWorkspaceImp().getNodeTypeManagerImp();
+        init();
+
+    }
+
+    private void init()
+    {
+        initPrimaryType();
+        initReferenceable();
+        initMixLastModified();
+        initMixCreated();
+        initSimpleVersionable();
+        initversionNode();
+    }
+
+    private void initPrimaryType()
+    {
         try
         {
             String propertyPath = getPathFromName(JCR_PRIMARYTYPE);
             PropertyImp prop = nodeManager.getProperty(propertyPath);
-            prop.set(valueFactoryImp.createValue(nodeType.getName()));
-            this.isModified = true;
-        }
-        catch (Exception e)
-        {
-            log.error(e);
-        }
-
-        checkReferenceable();
-
-        try
-        {
-            if (isSimpleVersionable())
+            if (prop.getLength() == -1)
             {
-                String propertyPath = getPathFromName(JCR_ISCHECKEDOUT);
-                PropertyImp prop = nodeManager.getProperty(propertyPath);
-                prop.set(valueFactoryImp.createValue(true));
+                prop.set(valueFactoryImp.createValue(nodeType.getName()));
                 this.isModified = true;
             }
         }
         catch (Exception e)
         {
-            log.debug(e);
+            log.error(e);
         }
+    }
 
+    private void initversionNode()
+    {
         try
         {
             if (isVersionNode())
             {
                 String propertyPath = getPathFromName(JCR_CREATED);
                 PropertyImp prop = nodeManager.getProperty(propertyPath);
-                prop.set(valueFactoryImp.createValue(cal));
-                this.isModified = true;
+                if(prop.getLength()==-1)
+                {
+                    prop.set(valueFactoryImp.createValue(Calendar.getInstance()));
+                    this.isModified = true;
+                }
             }
         }
         catch (Exception e)
         {
             log.debug(e);
         }
+    }
 
+    private void initSimpleVersionable()
+    {
+        try
+        {
+            if (isSimpleVersionable())
+            {
+                String propertyPath = getPathFromName(JCR_ISCHECKEDOUT);
+                PropertyImp prop = nodeManager.getProperty(propertyPath);
+                if (prop.getLength() == -1)
+                {
+                    prop.set(valueFactoryImp.createValue(true));
+                    this.isModified = true;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            log.debug(e);
+        }
+    }
 
-
+    private void initMixCreated()
+    {
         try
         {
             if (isMixCreated())
             {
                 String propertyPath = getPathFromName(JCR_CREATED);
                 PropertyImp prop = nodeManager.getProperty(propertyPath);
-                prop.set(valueFactoryImp.createValue(cal));
+                if (prop.getLength() == -1)
+                {
+                    prop.set(valueFactoryImp.createValue(Calendar.getInstance()));
+                    this.isModified = true;
+                }
                 propertyPath = getPathFromName(JCR_CREATEDBY);
                 prop = nodeManager.getProperty(propertyPath);
-                prop.set(valueFactoryImp.createValue(session.getUserID()));
-                this.isModified = true;
+                if (prop.getLength() == -1)
+                {
+                    prop.set(valueFactoryImp.createValue(session.getUserID()));
+                    this.isModified = true;
+                }
+
             }
         }
         catch (Exception e)
         {
             log.debug(e);
         }
+    }
 
+    private void initMixLastModified()
+    {
         try
         {
             if (isMixLastModified())
             {
                 String propertyPath = getPathFromName(JCR_LASTMODIFIED);
                 PropertyImp prop = nodeManager.getProperty(propertyPath);
-                prop.set(valueFactoryImp.createValue(cal));
+                if (prop.getLength() == -1)
+                {
+                    prop.set(valueFactoryImp.createValue(Calendar.getInstance()));
+                    this.isModified = true;
+                }
                 propertyPath = getPathFromName(JCR_LASTMODIFIEDBY);
                 prop = nodeManager.getProperty(propertyPath);
-                prop.set(valueFactoryImp.createValue(session.getUserID()));
-                this.isModified = true;
+                if (prop.getLength() == -1)
+                {
+                    prop.set(valueFactoryImp.createValue(session.getUserID()));
+                    this.isModified = true;
+                }
             }
         }
         catch (Exception e)
         {
             log.debug(e);
         }
-
     }
 
-    private void checkReferenceable()
+    private void initReferenceable()
     {
         try
         {
@@ -199,8 +244,6 @@ public class NodeImp extends ItemImp implements Node
             log.debug(e);
         }
     }
-
-    
 
     public void saveData() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
     {
@@ -776,7 +819,7 @@ public class NodeImp extends ItemImp implements Node
                 }
             }
         }
-        checkReferenceable();
+        init();
     }
 
     public void removeMixin(String mixinName) throws NoSuchNodeTypeException, VersionException, ConstraintViolationException, LockException, RepositoryException
