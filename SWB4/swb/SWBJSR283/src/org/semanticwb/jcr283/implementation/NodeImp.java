@@ -834,6 +834,10 @@ public class NodeImp extends ItemImp implements Node
 
     public void removeMixin(String mixinName) throws NoSuchNodeTypeException, VersionException, ConstraintViolationException, LockException, RepositoryException
     {
+        if(this.definition.isProtected())
+        {
+            throw new ConstraintViolationException("The node "+path+" is protected");
+        }
         NodeTypeImp mixNodeType = nodeTypeManager.getNodeTypeImp(mixinName);
         for (NodeType supertypes : ((NodeDefinitionImp) this.definition).getDefaultPrimaryType().getDeclaredSupertypes())
         {
