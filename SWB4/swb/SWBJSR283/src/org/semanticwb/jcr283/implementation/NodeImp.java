@@ -267,7 +267,7 @@ public class NodeImp extends ItemImp implements Node
                             PropertyImp prop = new PropertyImp(semanticProperty, this, pathProperty, this.session);
                             if (!nodeManager.hasProperty(prop.path))
                             {
-                                log.debug("loading property " + semanticProperty.getURI() + " for node " + path);
+                                log.debug("loading property " + pathProperty + " for node " + path);
                                 nodeManager.addProperty(prop, prop.path, this.path,replace);
                             }
                         }
