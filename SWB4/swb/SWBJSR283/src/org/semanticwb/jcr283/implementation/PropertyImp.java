@@ -109,6 +109,10 @@ public class PropertyImp extends ItemImp implements Property
 
     void set(Value[] values) throws ValueFormatException, VersionException, LockException, RepositoryException
     {
+        if(values.length==0)
+        {
+            throw new ValueFormatException("The length can not be zero");
+        }
         if (values.length > 1 && !propertyDefinitionImp.isMultiple())
         {
             throw new ConstraintViolationException("The property is not multiple");
@@ -120,7 +124,7 @@ public class PropertyImp extends ItemImp implements Property
         {
             newValues.add(transformValue(value, reqType));
         }
-        log.trace("Setting values to the property "+path);
+        log.trace("Setting values to the property "+path+"  values.length: "+values.length);
         this.values.addAll(newValues);
         this.isModified = true;
         parent.isModified = true;
