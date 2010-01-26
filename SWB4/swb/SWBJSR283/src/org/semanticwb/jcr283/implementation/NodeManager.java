@@ -437,17 +437,47 @@ public class NodeManager
     public PropertyImp getProperty(String path)
     {
         PropertyImp propertyImp = this.properties.get(path).getProperty();
+        if(propertyImp.definition.isProtected())
+        {
+            propertyImp=null;
+        }
         return propertyImp;
     }
 
-    private Set<PropertyImp> getChildProperties(String pathParent)
+    public PropertyImp getProtectedProperty(String path) throws RepositoryException
+    {
+        PropertyImp propertyImp = this.properties.get(path).getProperty();
+        if(!propertyImp.getDefinition().isProtected())
+        {
+            propertyImp=null;
+        }
+        return propertyImp;
+    }
+
+    private Set<PropertyImp> getChildProperties(String pathParent) throws RepositoryException
     {
         HashSet<PropertyImp> getChilds = new HashSet<PropertyImp>();
         if (propertiesbyParent.containsKey(pathParent) && propertiesbyParent.get(pathParent).size() > 0)
         {
             for (PropertyStatus prop : this.propertiesbyParent.get(pathParent))
             {
-                if (!prop.isDeleted())
+                if (!prop.isDeleted() && !prop.getProperty().getDefinition().isProtected())
+                {
+                    getChilds.add(prop.getProperty());
+                }
+            }
+        }
+        return getChilds;
+    }
+
+    public Set<PropertyImp> getProtectedChildProperties(String pathParent) throws RepositoryException
+    {
+        HashSet<PropertyImp> getChilds = new HashSet<PropertyImp>();
+        if (propertiesbyParent.containsKey(pathParent) && propertiesbyParent.get(pathParent).size() > 0)
+        {
+            for (PropertyStatus prop : this.propertiesbyParent.get(pathParent))
+            {
+                if (!prop.isDeleted() && prop.getProperty().getDefinition().isProtected())
                 {
                     getChilds.add(prop.getProperty());
                 }
