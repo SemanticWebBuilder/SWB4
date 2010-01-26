@@ -74,6 +74,7 @@ public abstract class ItemImp implements Item
         }
         return isPathSegment(relPath);
     }
+
     public static boolean isValidAbsPath(String relPath)
     {
         return true;
@@ -234,10 +235,17 @@ public abstract class ItemImp implements Item
     }
 
     public abstract void accept(ItemVisitor visitor) throws RepositoryException;
-    
 
     public void save() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
     {
+        if (!this.definition.isProtected())
+        {
+            throw new ConstraintViolationException("The item " + path + "  is protecetd");
+        }
+        if(parent!=null && parent.getSemanticObject()==null)
+        {
+            throw new ConstraintViolationException("The parent of the item " + path + "  is new");
+        }
         nodeManager.save(path, depth);
         this.isNew = false;
     }
@@ -249,22 +257,19 @@ public abstract class ItemImp implements Item
 
     public void remove() throws VersionException, LockException, ConstraintViolationException, AccessDeniedException, RepositoryException
     {
+        if (!this.definition.isProtected())
+        {
+            throw new ConstraintViolationException("The item " + path + "  is protecetd");
+        }
+
         if (parent != null)
         {
-            if (!this.definition.isProtected())
-            {
-                throw new ConstraintViolationException("The item " + path + "  is protecetd");
-            }
             if (!parent.definition.isProtected())
             {
                 throw new ConstraintViolationException("The item " + parent.path + " is protected");
             }
             String parentPath = parent.getPath();
             nodeManager.removeNode(path, parentPath);
-        }
-        else
-        {
-            throw new RepositoryException("The item can be removed " + path+" due the node has not a parent node");
-        }
+        }        
     }
 }
