@@ -53,7 +53,7 @@ public class DialogDocumentDetail extends javax.swing.JDialog {
             location=document.getLocalPath().getParentFile().getCanonicalPath();            
             observacion=validaNombre(document.getLocalPath().getAbsoluteFile());
             java.text.NumberFormat nf=NumberFormat.getInstance(Locale.getDefault());
-            tam=nf.format(document.getLocalPath().length())+java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("_BYTES");
+            tam=nf.format(document.getLocalPath().length())+" "+java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("_BYTES");
             
         }
         catch(Exception e){}
@@ -84,10 +84,10 @@ public class DialogDocumentDetail extends javax.swing.JDialog {
             {
                 URI uribase=new URI(archivo);
                 uribase=uribase.normalize();
-                if(uribase.getScheme().equals(FILE_SCHEMA))
+                if(uribase.getScheme().equals(FILE_SCHEMA) || uribase.getScheme().equals("file"))
                 {
                     File file=new File(uribase.toURL().getFile());
-                    tam=file.length()+java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("_BYTES");
+                    tam=file.length()+" "+java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("_BYTES");
                     name=file.getName();
                     location=file.getParentFile().getAbsolutePath();
                     String exists=java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("NO");
