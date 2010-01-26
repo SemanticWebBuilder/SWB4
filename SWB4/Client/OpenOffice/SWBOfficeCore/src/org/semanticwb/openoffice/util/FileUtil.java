@@ -82,6 +82,10 @@ public final class FileUtil
             path=path.replace(File.separatorChar, '/');
         }
         String url = SCHEMA_FILE +"/"+path;
+        if(path.startsWith("/"))
+        {
+            url = SCHEMA_FILE+path;
+        }
         return url;
     }
 

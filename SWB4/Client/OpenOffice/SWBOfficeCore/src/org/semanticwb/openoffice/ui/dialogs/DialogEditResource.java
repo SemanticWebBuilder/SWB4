@@ -905,6 +905,7 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                 OfficeApplication.getOfficeDocumentProxy().setResourceProperties(pageInformation, prop, value);
             }
             JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("¡SE_HA_GUARDADO_LA_INFORMACIÓN_CORRECTAMENTE!"), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+            this.setVisible(false);
         }
         catch (Exception e)
         {

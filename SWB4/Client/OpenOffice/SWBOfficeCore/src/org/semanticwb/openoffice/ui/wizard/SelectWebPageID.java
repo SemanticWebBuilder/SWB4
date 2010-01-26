@@ -38,6 +38,7 @@ import javax.swing.JOptionPane;
 import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPage;
 import org.netbeans.spi.wizard.WizardPanelNavResult;
+import org.semanticwb.office.interfaces.WebPageInfo;
 import org.semanticwb.office.interfaces.WebSiteInfo;
 import org.semanticwb.openoffice.OfficeApplication;
 
@@ -49,11 +50,17 @@ public class SelectWebPageID extends WizardPage
 {
 
     public static final String WEBPAGEID = "WEBPAGEID";
-
+    private WebPageInfo parent;
     /** Creates new form SelectWebPageID */
     public SelectWebPageID()
     {
         initComponents();
+    }
+
+     public SelectWebPageID(WebPageInfo parent)
+    {
+        initComponents();
+        this.parent=parent;
     }
 
     public static String getDescription()
@@ -254,7 +261,16 @@ public class SelectWebPageID extends WizardPage
         }
         SelectPage.WebPage pageSelected = (SelectPage.WebPage) this.getWizardDataMap().get(SelectPage.WEBPAGE);
         WebSiteInfo site = new WebSiteInfo();
-        site.id = pageSelected.getSite();
+        if(pageSelected==null && this.parent!=null)
+        {
+            site.id = this.parent.siteID;
+        }
+        else
+        {
+            site.id = pageSelected.getSite();
+        }
+        
+        
         boolean exists = false;
         try
         {
