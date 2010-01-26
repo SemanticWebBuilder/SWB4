@@ -105,6 +105,7 @@ public class Poll extends GenericResource {
         }
     }
 
+  
      @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=iso-8859-1");
@@ -121,7 +122,7 @@ public class Poll extends GenericResource {
             e.printStackTrace();
         }
     }
-   
+  
     /**
      * Muestra el html al usuario final
      * @param request
@@ -309,7 +310,7 @@ public class Poll extends GenericResource {
         }
         out.flush();
     }
-     * */
+    **/
     
     /**
      * Muestra los resultados de la encuesta en especifico
