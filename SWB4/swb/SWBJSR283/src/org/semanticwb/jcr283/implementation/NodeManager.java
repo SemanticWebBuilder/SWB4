@@ -342,7 +342,7 @@ public class NodeManager
 
     }
 
-    public NodeImp getProtectedNode(String path, SessionImp session) throws RepositoryException
+    NodeImp getProtectedNode(String path, SessionImp session) throws RepositoryException
     {
         boolean deleted = false;
         NodeImp node = this.nodes.get(path).getNode();
@@ -444,7 +444,7 @@ public class NodeManager
         return propertyImp;
     }
 
-    public PropertyImp getProtectedProperty(String path) throws RepositoryException
+    PropertyImp getProtectedProperty(String path) throws RepositoryException
     {
         PropertyImp propertyImp = this.properties.get(path).getProperty();
         if(!propertyImp.getDefinition().isProtected())
@@ -470,7 +470,7 @@ public class NodeManager
         return getChilds;
     }
 
-    public Set<PropertyImp> getProtectedChildProperties(String pathParent) throws RepositoryException
+    Set<PropertyImp> getProtectedChildProperties(String pathParent) throws RepositoryException
     {
         HashSet<PropertyImp> getChilds = new HashSet<PropertyImp>();
         if (propertiesbyParent.containsKey(pathParent) && propertiesbyParent.get(pathParent).size() > 0)
@@ -496,7 +496,7 @@ public class NodeManager
         return this.getChildNodes(node.getPath());
     }
 
-    public Set<NodeImp> getProtectedChildNodes(String parenPath) throws RepositoryException
+    Set<NodeImp> getProtectedChildNodes(String parenPath) throws RepositoryException
     {
         HashSet<NodeImp> getChilds = new HashSet<NodeImp>();
         HashSet<NodeStatus> childs = nodesbyParent.get(parenPath);
