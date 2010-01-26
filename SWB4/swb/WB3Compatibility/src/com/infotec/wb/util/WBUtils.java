@@ -30,6 +30,8 @@
 
 package com.infotec.wb.util;
 
+import com.arthurdo.parser.HtmlStreamTokenizer;
+import com.arthurdo.parser.HtmlTag;
 import java.io.*;
 import java.util.*;
 
@@ -46,8 +48,11 @@ import java.util.zip.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.jar.JarFile;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.SWBContext;
 
 /** objeto: Utilerias de uso comun para desarrolladores de WB.
  * @author Javier Solis Gonzalez
@@ -70,7 +75,7 @@ public class WBUtils implements AFAppObject
     
     /** Creates new utils */
     private WBUtils() {
-        AFUtils.log(AFUtils.getLocaleString("locale_wb2_util", "log_WBUtils_iniciando"));
+        AFUtils.log(SWBUtils.TEXT.getLocaleString("locale_wb2_util", "log_WBUtils_iniciando"));
         init();
     }
     
@@ -184,21 +189,21 @@ public class WBUtils implements AFAppObject
     
     public void setWebPath(String webpath)
     {
-        if(webpath==null)return;
-        try {
-            webPath = webpath;
-            if (webPath.endsWith("/")) {
-                webWorkPath = webPath + AFUtils.getInstance().getEnv("wb/webWorkPath").substring(1);
-            } else {
-                webWorkPath = webPath + AFUtils.getInstance().getEnv("wb/webWorkPath");
-            }
-            
-            distPath = webPath + AFUtils.getInstance().getEnv("wb/distributor", "wb");
-            
-        } catch (Exception e) {
-            AFUtils.log(e, "Can't read the context path...\n", true);
-            workPath = "";
-        }        
+//        if(webpath==null)return;
+//        try {
+//            webPath = webpath;
+//            if (webPath.endsWith("/")) {
+//                webWorkPath = webPath + AFUtils.getInstance().getEnv("wb/webWorkPath").substring(1);
+//            } else {
+//                webWorkPath = webPath + AFUtils.getInstance().getEnv("wb/webWorkPath");
+//            }
+//
+//            distPath = webPath + AFUtils.getInstance().getEnv("wb/distributor", "wb");
+//
+//        } catch (Exception e) {
+//            AFUtils.log(e, "Can't read the context path...\n", true);
+//            workPath = "";
+//        }
     }
     
     /**
@@ -223,7 +228,7 @@ public class WBUtils implements AFAppObject
      * @return Value of property webWorkPath.
      */
     public String getWebWorkPath() {
-        return webWorkPath;
+        return SWBPortal.getWebWorkPath();
     }
     
     /**
@@ -232,12 +237,12 @@ public class WBUtils implements AFAppObject
      * @return Value of property distPath.
      */
     public java.lang.String getDistPath() {
-        return distPath;
+        return SWBPortal.getDistributorPath();
     }
     
     
     public String parseHTML(String datos, String ruta) {
-        return parseHTML(datos,ruta,0);
+        return SWBPortal.UTIL.parseHTML(datos, ruta);
     }
     
     
@@ -246,142 +251,12 @@ public class WBUtils implements AFAppObject
      * @param ruta
      * @return  */
     public String parseHTML(String datos, String ruta,int pages) {
-        hAnchors=new HashMap();
-        //detecci�n de si el contenido es de word
-        boolean iswordcontent=false;
-        int posword=-1;
-        posword=datos.toLowerCase().indexOf("name=generator content=\"microsoft word");
-        if(posword>-1) {
-            iswordcontent=true;
-        }
-        //termina detecci�n de si es contenido de word
-        
-        HtmlTag tag = new HtmlTag();
-        int pos = -1;
-        int pos1 = -1;
-        StringBuffer ret = new StringBuffer();
-        try {
-            HtmlStreamTokenizer tok = new HtmlStreamTokenizer(new ByteArrayInputStream(datos.getBytes()));
-            while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF) {
-                int ttype = tok.getTokenType();
-                //System.out.println("type:"+tok.getTokenType()+" : "+tok.getRawString());
-                //if (ttype==HtmlStreamTokenizer.TT_COMMENT) continue;
-                if (ttype == HtmlStreamTokenizer.TT_TAG || ttype == HtmlStreamTokenizer.TT_COMMENT) {
-                    if(ttype==HtmlStreamTokenizer.TT_COMMENT && tok.getRawString().equals("<!-- -->")) {
-                        //System.out.println("comm1"+tok.getTokenType());
-                        continue;
-                    }
-                    tok.parseTag(tok.getStringValue(), tag);
-                    
-                    if (tok.getRawString().toLowerCase().startsWith("<!--[if")) {
-                        continue;
-                    }
-                    //System.out.println("tag:"+tag.getTagString().toLowerCase());
-                    if ((tag.getTagString().toLowerCase().equals("img")
-                    || tag.getTagString().toLowerCase().equals("applet")
-                    || tag.getTagString().toLowerCase().equals("script")
-                    || tag.getTagString().toLowerCase().equals("tr")
-                    || tag.getTagString().toLowerCase().equals("td")
-                    || tag.getTagString().toLowerCase().equals("table")
-                    || tag.getTagString().toLowerCase().equals("body")
-                    || tag.getTagString().toLowerCase().equals("input")
-                    || tag.getTagString().toLowerCase().equals("a")
-                    || tag.getTagString().toLowerCase().equals("form")
-                    || tag.getTagString().toLowerCase().equals("area")
-                    || tag.getTagString().toLowerCase().equals("meta")
-                    || tag.getTagString().toLowerCase().equals("bca")
-                    || tag.getTagString().toLowerCase().equals("link")
-                    || tag.getTagString().toLowerCase().equals("param")
-                    || tag.getTagString().toLowerCase().equals("embed")
-                    || tag.getTagString().toLowerCase().equals("iframe")
-                    || tag.getTagString().toLowerCase().equals("frame"))
-                    && !tok.getRawString().startsWith("<!--")
-                    ) {
-                        if (!tag.isEndTag()) {
-                            ret.append("<");
-                            ret.append(tag.getTagString());
-                            ret.append(" ");
-                            Enumeration en = tag.getParamNames();
-                            String name = "";
-                            String value = "";
-                            String actionval = "";
-                            while (en.hasMoreElements()) {
-                                boolean bwritestyle=true;
-                                name = (String) en.nextElement();
-                                value = tag.getParam(name);
-                                String sruta=null;
-                                if((name.toLowerCase().equals("src")||name.toLowerCase().equals("href")||name.toLowerCase().equals("background")||name.toLowerCase().equals("codebase")||name.toLowerCase().equals("value"))&&!value.startsWith("http://")&&!value.startsWith("https://")&&!value.startsWith("mailto:")&&!value.startsWith("javascript:")&&!value.startsWith("ftp:")&&!value.startsWith("rtsp:")&&!value.startsWith("telnet:")&&!value.startsWith("#")&&!value.startsWith("/")&&!value.startsWith("../")&&!value.startsWith("{")) {
-                                    if(!tag.getTagString().toLowerCase().equals("input") && !value.toLowerCase().equals("true") && !value.toLowerCase().equals("false") && value.indexOf(".")>-1) {
-                                        sruta=ruta;
-                                    }
-                                    //poner solo archivo
-                                    if(((pos=value.indexOf("/"))>-1) || (pos=value.indexOf("\\"))>-1)
-                                        value=findFileName(value);
-                                }else if(name.toLowerCase().equals("href") && value.startsWith("../")){
-                                    value="/"+takeOffString(value,"../");
-                                }
-                                else if(name.toLowerCase().equals("href") && value.startsWith("#_") && pages>1) { //Es un ancla
-                                    int page=findAnchorInContent(datos,value,pages);
-                                    if(page>0) value="?page="+page+"&"+value;
-                                }
-                                else if(name.toLowerCase().equals("onmouseover") || name.toLowerCase().equals("onload")|| name.toLowerCase().equals("onmouseout")||name.toLowerCase().equals("onclick")) {
-                                    String out=findImagesInScript(value,".gif'",ruta);
-                                    out=findImagesInScript(out,".jpg'",ruta);
-                                    //ret.append(ruta);
-                                    if(!out.equals("")) value=out;
-                                }else if(tag.getTagString().toLowerCase().equals("body") && iswordcontent && (name.equals("link") || name.equals("vlink"))) { //elimina los liks
-                                    bwritestyle=false;
-                                }
-                                if(bwritestyle) {
-                                    ret.append(name);
-                                    ret.append("=\"");
-                                    if(sruta!=null)
-                                    { ret.append(sruta);}
-                                    ret.append(value);
-                                    ret.append("\" ");
-                                }
-                            }
-                            if(tag.isEmpty()) {
-                                ret.append("/");
-                            }
-                            ret.append(">");
-                            if (tag.getTagString().toLowerCase().equals("form")) ret.append(actionval);
-                        } else {
-                            //System.out.println("else:"+tok.getRawString());
-                            ret.append(tok.getRawString());
-                        }
-                    } else {
-                        //System.out.println("otro:"+tok.getRawString());
-                        ret.append(tok.getRawString());
-                    }
-                } else //if (ttype == HtmlStreamTokenizer.TT_TEXT)
-                {
-                    //System.out.println("text:"+tok.getRawString());
-                    ret.append(tok.getRawString());
-                }
-            }
-        } catch (NumberFormatException f) {
-            AFUtils.log(f, AFUtils.getLocaleString("locale_wb2_util", "error_WBUtils_decodifica"), true);
-        } catch (Exception e) {
-            AFUtils.log(e, AFUtils.getLocaleString("locale_wb2_util", "error_WBUtils_IOHTML"), true);
-        }
-        //System.out.println("ret:"+ret.toString());
-        return ret.toString();
+        return SWBPortal.UTIL.parseHTML(datos, ruta,pages);
     }
     
     
     private int findAnchorInContent(String content,String ancla,int pages) {
-        ancla=ancla.substring(1);
-        Integer page=(Integer)hAnchors.get(ancla);
-        if(page!=null) { //existe en hash de anclas
-            return page.intValue();
-        }
-        else {
-            for(int i=0;i<=pages;i++) {
-                if(findAnchorInContentPage(content,ancla,i,pages)) return i;
-            }
-        }
-        return 0;
+        return SWBPortal.UTIL.findAnchorInContentPage(content, ancla, pages, 0)?1:0;
     }
     
     
@@ -390,79 +265,7 @@ public class WBUtils implements AFAppObject
      * @param ruta
      */
     public boolean findAnchorInContentPage(String datos,String ancla,int page,int itpages) {
-        HtmlTag tag = new HtmlTag();
-        boolean flag=false;
-        boolean flag1=false;
-        boolean flag2=false;
-        try {
-            HtmlStreamTokenizer tok = new HtmlStreamTokenizer(new java.io.ByteArrayInputStream(datos.getBytes()));
-            while(tok.nextToken()!=HtmlStreamTokenizer.TT_EOF) {
-                int ttype = tok.getTokenType();
-                if (ttype == HtmlStreamTokenizer.TT_TAG || ttype==HtmlStreamTokenizer.TT_COMMENT) {
-                    tok.parseTag(tok.getStringValue(), tag);
-                    if (tok.getRawString().toLowerCase().startsWith("<!--[if"))
-                    {continue;}
-                    if(tag.getTagString().toLowerCase().equals("div")) {
-                        flag1=true;
-                        if(!tag.isEndTag()) {
-                            Enumeration en=tag.getParamNames();
-                            String name="";
-                            String value="";
-                            String actionval="";
-                            while(en.hasMoreElements()) {
-                                name=(String)en.nextElement();
-                                value=tag.getParam(name);
-                                if(name.toLowerCase().equals("class")) {
-                                    if(value.toLowerCase().equals("section"+page)) {
-                                        flag=true;
-                                    }
-                                }else  if(flag) {
-                                    flag2=true;
-                                }
-                            }
-                        }
-                        else {
-                            if(flag && !flag2) {
-                                //entra a este if y se rompe el ciclo solo si la p�gina actual es menos al total de p�ginas encontradas en el documento,
-                                //si es igual, entonces no lo rompe y se termina hasta que se acaba el html, para que funcionen los pie de p�gina si existen
-                                //al final del dicumento
-                                if(page<itpages){
-                                    break;
-                                }
-                                
-                            }else if(flag && flag2) {
-                                flag2=false;
-                            }
-                        }
-                    }
-                    else if(flag1 && flag) {
-                        if(tag.getTagString().toLowerCase().equals("a")) {
-                            if (!tag.isEndTag()) {
-                                Enumeration en = tag.getParamNames();
-                                String name = "";
-                                String value = "";
-                                String actionval = "";
-                                while (en.hasMoreElements()) {
-                                    name = (String) en.nextElement();
-                                    value = tag.getParam(name);
-                                    if(name.toLowerCase().equals("name") && value.equals(ancla)) { //emcontrado
-                                        hAnchors.put(value, new Integer(page));
-                                        return true;
-                                    }
-                                    else if(name.toLowerCase().equals("name") && value.startsWith("_")) { //es una ancla, guardarla en hash de anclas
-                                        if(hAnchors.get(value)==null) hAnchors.put(value, new Integer(page));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        catch(Exception e) {
-            AFUtils.log(e);
-        }
-        return false;
+        return SWBPortal.UTIL.findAnchorInContentPage(datos, ancla, page, itpages);
     }
     
     
@@ -472,98 +275,7 @@ public class WBUtils implements AFAppObject
      * @param ruta
      * @return  */
     public String parseXsl(String datos, String ruta) {
-        HtmlTag tag = new HtmlTag();
-        int pos = -1;
-        int pos1 = -1;
-        StringBuffer ret = new StringBuffer();
-        try {
-            HtmlStreamTokenizer tok = new HtmlStreamTokenizer(new ByteArrayInputStream(datos.getBytes()));
-            while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF) {
-                int ttype = tok.getTokenType();
-                //if (ttype==HtmlStreamTokenizer.TT_COMMENT) continue;
-                if (ttype == HtmlStreamTokenizer.TT_TAG || ttype == HtmlStreamTokenizer.TT_COMMENT) {
-                    if(ttype==HtmlStreamTokenizer.TT_COMMENT && tok.getRawString().equals("<!-- -->")) {
-                        continue;
-                    }
-                    tok.parseTag(tok.getStringValue(), tag);
-                    
-                    if (tok.getRawString().toLowerCase().startsWith("<!--[if")) {
-                        continue;
-                    }
-                    //if (tag.getTagString().toLowerCase().startsWith("o:")){System.out.println("o:Salto");   continue;}
-                    if (tag.getTagString().toLowerCase().equals("img")
-                    || tag.getTagString().toLowerCase().equals("applet")
-                    || tag.getTagString().toLowerCase().equals("script")
-                    || tag.getTagString().toLowerCase().equals("td")
-                    || tag.getTagString().toLowerCase().equals("table")
-                    || tag.getTagString().toLowerCase().equals("body")
-                    || tag.getTagString().toLowerCase().equals("input")
-                    || tag.getTagString().toLowerCase().equals("a")
-                    || tag.getTagString().toLowerCase().equals("form")
-                    || tag.getTagString().toLowerCase().equals("area")
-                    || tag.getTagString().toLowerCase().equals("meta")
-                    || tag.getTagString().toLowerCase().equals("bca")
-                    || tag.getTagString().toLowerCase().equals("link")
-                    || tag.getTagString().toLowerCase().equals("param")
-                    || tag.getTagString().toLowerCase().equals("embed")
-                    || tag.getTagString().toLowerCase().equals("iframe")
-                    || tag.getTagString().toLowerCase().equals("frame")
-                    ) {
-                        
-                        if (!tag.isEndTag()) {
-                            ret.append("<");
-                            ret.append(tag.getTagString());
-                            ret.append(" ");
-                            Enumeration en = tag.getParamNames();
-                            String name = "";
-                            String value = "";
-                            String actionval = "";
-                            while (en.hasMoreElements()) {
-                                name = (String) en.nextElement();
-                                value = tag.getParam(name);
-                                ret.append(name);
-                                ret.append("=\"");
-                                if((name.toLowerCase().equals("src")||name.toLowerCase().equals("href")||name.toLowerCase().equals("background")||name.toLowerCase().equals("codebase")||name.toLowerCase().equals("value"))&&!value.startsWith("http://")&&!value.startsWith("mailto:")&&!value.startsWith("javascript:")&&!value.startsWith("ftp:")&&!value.startsWith("rtsp:")&&!value.startsWith("telnet:")&&!value.startsWith("#")&&!value.startsWith("/")&&!value.startsWith("{")) {
-                                    if(!tag.getTagString().toLowerCase().equals("input") && !value.toLowerCase().equals("true") && !value.toLowerCase().equals("false") && value.indexOf(".")>-1)
-                                        ret.append(ruta);
-                                    //poner solo archivo
-                                    if(((pos=value.indexOf("/"))>-1) || (pos=value.indexOf("\\"))>-1)
-                                        value=findFileName(value);
-                                }
-                                if(name.toLowerCase().equals("onmouseover") || name.toLowerCase().equals("onload")|| name.toLowerCase().equals("onmouseout")||name.toLowerCase().equals("onclick")) {
-                                    String out=findImagesInScript(value,".gif'",ruta);
-                                    out=findImagesInScript(out,".jpg'",ruta);
-                                    //ret.append(ruta);
-                                    if(!out.equals("")) value=out;
-                                    //System.out.println("out:"+out);
-                                }
-                                ret.append(value);
-                                ret.append("\" ");
-                            }
-                            //if(tag.getTagString().toLowerCase().equals("img") && tok.getStringValue().toString().endsWith("/")) {
-                            if(tag.isEmpty()) {
-                                ret.append("/");
-                            }
-                            
-                            ret.append(">");
-                            
-                            if (tag.getTagString().toLowerCase().equals("form")) ret.append(actionval);
-                        } else {
-                            ret.append(tok.getRawString());
-                        }
-                    } else {
-                        ret.append(tok.getRawString());
-                    }
-                } else if (ttype == HtmlStreamTokenizer.TT_TEXT) {
-                    ret.append(tok.getRawString());
-                }
-            }
-        } catch (NumberFormatException f) {
-            AFUtils.log(f, AFUtils.getLocaleString("locale_wb2_util", "error_WBUtils_decodifica"), true);
-        } catch (Exception e) {
-            AFUtils.log(e, AFUtils.getLocaleString("locale_wb2_util", "error_WBUtils_IOHTML"), true);
-        }
-        return ret.toString();
+        return SWBPortal.UTIL.parseXsl(datos, ruta);
     }
     
     
@@ -609,114 +321,7 @@ public class WBUtils implements AFAppObject
      * @param ruta
      */
     public String FindAttaches(String datos) {
-        HtmlTag tag = new HtmlTag();
-        StringBuffer ret = new StringBuffer();
-        Vector vvector = new Vector();
-        try {
-            HtmlStreamTokenizer tok = new HtmlStreamTokenizer(new ByteArrayInputStream(datos.getBytes()));
-            while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF) {
-                
-                int ttype = tok.getTokenType();
-                if (ttype == HtmlStreamTokenizer.TT_TAG || ttype == HtmlStreamTokenizer.TT_COMMENT) {
-                    tok.parseTag(tok.getStringValue(), tag);
-                    
-                    if (tok.getRawString().toLowerCase().startsWith("<!--[if")) {
-                        continue;
-                    }
-                    //if (tag.getTagString().toLowerCase().startsWith("o:")){System.out.println("o:Salto");   continue;}
-                    if (tag.getTagString().toLowerCase().equals("img")
-                    || tag.getTagString().toLowerCase().equals("applet")
-                    || tag.getTagString().toLowerCase().equals("script")
-                    || tag.getTagString().toLowerCase().equals("td")
-                    || tag.getTagString().toLowerCase().equals("table")
-                    || tag.getTagString().toLowerCase().equals("body")
-                    || tag.getTagString().toLowerCase().equals("input")
-                    || tag.getTagString().toLowerCase().equals("a")
-                    || tag.getTagString().toLowerCase().equals("area")
-                    || tag.getTagString().toLowerCase().equals("link")
-                    || tag.getTagString().toLowerCase().equals("param")
-                    || tag.getTagString().toLowerCase().equals("embed")
-                    ) {
-                        if (!tag.isEndTag()) {
-                            //ret.append("<");
-                            //ret.append(tag.getTagString());
-                            //ret.append(" ");
-                            Enumeration en = tag.getParamNames();
-                            String name = "";
-                            String value = "";
-                            String actionval = "";
-                            while (en.hasMoreElements()) {
-                                name = (String) en.nextElement();
-                                value = tag.getParam(name);
-                                String out = null;
-                                if ((name.toLowerCase().equals("src") || name.toLowerCase().equals("href") || name.toLowerCase().equals("background") || name.toLowerCase().equals("codebase") || name.toLowerCase().equals("value")) && !value.startsWith("http://") && !value.startsWith("mailto:") && !value.startsWith("javascript:") && !value.startsWith("ftp:") && !value.startsWith("telnet:") && !value.startsWith("#") && !value.startsWith("/") && !value.startsWith("{")) {
-                                    String stype="";
-                                    if(tag.getTagString().toLowerCase().equals("input")) {
-                                        stype=tag.getParam("type").toLowerCase();
-                                    }
-                                    if (!value.startsWith("http://") && !value.startsWith("https://") && (!tag.getTagString().toLowerCase().equals("input") || (tag.getTagString().toLowerCase().equals("input") && stype.equals("image")))) {
-                                        if(value.toLowerCase().endsWith(".gif") || value.toLowerCase().endsWith(".jpg") || value.toLowerCase().endsWith(".jpeg") || value.toLowerCase().endsWith(".bmp") ||
-                                        value.toLowerCase().endsWith(".doc") || value.toLowerCase().endsWith(".htm") || value.toLowerCase().endsWith(".html") || value.toLowerCase().endsWith(".zip") ||
-                                        value.toLowerCase().endsWith(".txt") || value.toLowerCase().endsWith(".pdf") || value.toLowerCase().endsWith(".xls") || value.toLowerCase().endsWith(".ppt") ||
-                                        value.toLowerCase().endsWith(".xsl") || value.toLowerCase().endsWith(".xslt") || value.toLowerCase().endsWith(".bin") || value.toLowerCase().endsWith(".tar")) {
-                                            out = value;
-                                        }
-                                    }
-                                }else if ((name.toLowerCase().equals("src") || name.toLowerCase().equals("href") || name.toLowerCase().equals("background") || name.toLowerCase().equals("codebase") || name.toLowerCase().equals("value")) && !value.startsWith("http://") && !value.startsWith("mailto:") && !value.startsWith("javascript:") && !value.startsWith("ftp:") && !value.startsWith("telnet:") && !value.startsWith("#") && !value.startsWith("/") && value.startsWith("{")) {
-                                    int pos = -1;
-                                    pos = value.indexOf("}");
-                                    if (pos != -1) {
-                                        out = value.substring(pos + 1);
-                                    }
-                                }
-                                else if (name.toLowerCase().equals("href") && value.startsWith("/")) {
-                                    out = value;
-                                }
-                                else if (name.toLowerCase().equals("onmouseover")) {
-                                    //if(!value.startsWith("http://") && !value.startsWith("https://"))
-                                    int pos = -1,pos1 = -1;
-                                    pos = value.indexOf("http://");
-                                    pos1 = value.indexOf("https://");
-                                    if (pos < 0 && pos1 < 0) {
-                                        out = findImageInScript1(value, ".gif'", "");
-                                        out = findImageInScript1(out, ".jpg'", "");
-                                    }
-                                }
-                                if (out != null) {
-                                    boolean flag = false;
-                                    for (int i = 0; i < vvector.size(); i++) {
-                                        if (out.equals((String) vvector.elementAt(i)))
-                                            flag = true;
-                                    }
-                                    if (!flag) {
-                                        vvector.addElement(out);
-                                    }
-                                }
-                                
-                                //ret.append("\" ");
-                            }
-                            //ret.append(">");
-                            //if(tag.getTagString().toLowerCase().equals("form")) ret.append(actionval);
-                        } else {
-                            //ret.append(tok.getRawString());
-                        }
-                    } else {
-                        //ret.append(tok.getRawString());
-                    }
-                } else if (ttype == HtmlStreamTokenizer.TT_TEXT) {
-                    //ret.append(tok.getRawString());
-                }
-            }
-            for (int i = 0; i < vvector.size(); i++) {
-                ret.append((String) vvector.elementAt(i) + ";");
-            }
-        } catch (NumberFormatException f) {
-            AFUtils.log(f, AFUtils.getLocaleString("locale_wb2_util", "error_WBUtils_decodifica"), true);
-        } catch (Exception e) {
-            AFUtils.log(e, AFUtils.getLocaleString("locale_wb2_util", "error_WBUtils_IOHTML"), true);
-        }
-        //System.out.println("entra a FindAttaches regresando:"+ret.toString());
-        return ret.toString();
+        return SWBPortal.UTIL.FindAttaches(datos);
     }
     
     
@@ -782,17 +387,12 @@ public class WBUtils implements AFAppObject
         return value;
     }
     
-    public JarFile getAdminFile(String path) {
-        JarFile f=(JarFile)admFiles.get(path);
-        if(f==null)f=new JarFile(path);
-        return f;
+    public org.semanticwb.util.JarFile getAdminFile(String path) {
+        return SWBPortal.getAdminFile(path);
     }
     
     public InputStream getAdminFileStream(String path) {
-        JarFile f=(JarFile)admFiles.get(path);
-        if(f==null)f=new JarFile(path);
-        if(!f.exists())return null;
-        return f.getInputStream();
+        return SWBPortal.getAdminFileStream(path);
     }
     
     /**
@@ -802,65 +402,26 @@ public class WBUtils implements AFAppObject
     public InputStream getFileFromWorkPath(String path) throws AFException {
         InputStream ret = null;
         try {
-            String confCS = (String) AFUtils.getInstance().getEnv("wb/clientServer");
-            
-            if(confCS.equalsIgnoreCase("ClientFR")) {
-                try {
-                    ret = new FileInputStream(getWorkPath() + path);
-                }catch(FileNotFoundException fnfe) {
-                    //ret=getFileFromAdminWorkPath(path);
-                    DownloadDirectory downdir=new DownloadDirectory(AFUtils.getEnv("wb/serverURL"),getWorkPath(),"workpath");
-                    downdir.download(path);
-                    ret = new FileInputStream(getWorkPath() + path);
-                }
-            }else if(confCS.equalsIgnoreCase("Client")) {
-                ret=getFileFromAdminWorkPath(path);
-            } else {
-                ret = new FileInputStream(getWorkPath() + path);
-            }
+            ret= SWBPortal.getFileFromWorkPath(path);
         } catch (Exception e) {
-            throw new AFException(e.getMessage(), "getFileFromWorkPath");
+        }
+        return ret;
+
+    }
+    
+    public InputStream getFileFromAdminWorkPath(String path) throws MalformedURLException, IOException {
+        //TODO
+        InputStream ret = null;
+        try {
+            ret = SWBPortal.getAdminFileStream(path);
+        } catch (Exception e) {
         }
         return ret;
     }
     
-    public InputStream getFileFromAdminWorkPath(String path) throws MalformedURLException, IOException {
-        InputStream ret = null;
-        //String str = getRemoteWorkPath() + path;
-        String servlet=DownloadDirectory.SERVDWN;
-        String str = AFUtils.getEnv("wb/serverURL")+servlet+ "?workpath=" + path;
-        
-        str = str.substring(0, str.lastIndexOf("/") + 1) + com.infotec.appfw.util.URLEncoder.encode(str.substring(str.lastIndexOf("/") + 1));
-        ret = new java.net.URL(str).openStream();
-        return ret;
-    }
-    
     public void writeFileToWorkPath(String path, InputStream in, String userid) throws AFException {
-        //System.out.println("writeFileToWorkPath:"+path);
         try {
-            String confCS = (String) AFUtils.getInstance().getEnv("wb/clientServer");
-            
-            //System.out.println("clientServer:"+confCS);
-            if(confCS.equalsIgnoreCase("ClientFR")||confCS.equalsIgnoreCase("Client")) {
-                String str = AFUtils.getEnv("wb/serverURL")+DownloadDirectory.SERVUP;
-                URL url=new URL(str);
-                //System.out.println("url:"+url);
-                URLConnection urlconn=url.openConnection();
-                //if(jsess!=null)urlconn.setRequestProperty("Cookie", "JSESSIONID="+jsess);
-                urlconn.setRequestProperty("type","workpath");
-                urlconn.setRequestProperty("path",path);
-                urlconn.setRequestProperty("user",userid);
-                urlconn.setDoOutput(true);
-                AFUtils.copyStream(in,urlconn.getOutputStream());
-                //System.out.println("copyStream");
-                String ret=AFUtils.getInstance().readInputStream(urlconn.getInputStream());
-                //System.out.println("ret:"+ret);
-            }else {
-                File file=new File(getWorkPath() + path);
-                file.getParentFile().mkdirs();
-                FileOutputStream out=new FileOutputStream(file);
-                AFUtils.copyStream(in,out);
-            }
+            SWBPortal.writeFileToWorkPath(path, in, userid);
         } catch (Exception e) {
             throw new AFException(e.getMessage(), "writeFileToWorkPath");
         }
@@ -871,7 +432,13 @@ public class WBUtils implements AFAppObject
      * @throws AFException
      * @return  */
     public String getFileFromWorkPath2(String path) throws AFException {
-        return AFUtils.getInstance().readInputStream(getFileFromWorkPath(path));
+        String ret=null;
+        try {
+            ret=SWBUtils.IO.readInputStream(getFileFromWorkPath(path));
+        } catch (Exception e) {
+             throw new AFException(e.getMessage(), "getFileFromWorkPath2");
+        }
+        return ret;
     }
     
     /**
@@ -895,12 +462,12 @@ public class WBUtils implements AFAppObject
      * @throws AFException
      * @return  */
     public String getFileFromWorkPath2(String path, String encode) throws AFException {
-        StringBuffer ret = new StringBuffer(AFUtils.getBufferSize());
+        StringBuffer ret = new StringBuffer(SWBUtils.IO.getBufferSize());
         try {
             InputStreamReader file = getFileFromWorkPath(path, encode);
-            char[] bfile = new char[AFUtils.getBufferSize()];
+            char[] bfile = new char[SWBUtils.IO.getBufferSize()];
             int x;
-            while ((x = file.read(bfile, 0, AFUtils.getBufferSize())) > -1) {
+            while ((x = file.read(bfile, 0, SWBUtils.IO.getBufferSize())) > -1) {
                 ret.append(bfile, 0, x);
             }
             file.close();
@@ -914,21 +481,23 @@ public class WBUtils implements AFAppObject
      * @return Value of property client.
      */
     public boolean isClient() {
-        return client;
+        return SWBPortal.isClient();
     }
     
     /** Getter for property remoteWorkPath.
      * @return Value of property remoteWorkPath.
      */
     public String getRemoteWorkPath() {
-        return remoteWorkPath;
+        //TODO
+        return ""; //remoteWorkPath;
     }
     
     /** Obtiene objeto de propiedades de la version de webbuilder.
      * @return Value of property pversion.
      */
     public Properties getVersionProperties() {
-        return pversion;
+        
+        return SWBPortal.getWebProperties();
     }
     
     /**
@@ -939,7 +508,7 @@ public class WBUtils implements AFAppObject
     public void XMLObjectEncoder(Object obj, String file) throws Exception {
         String logFile = null;
         
-        logFile = workPath + (String) AFUtils.getInstance().getEnv("wb/persistPath") + file;
+        logFile = SWBPortal.getWorkPath() + (String) SWBPortal.getEnv("wb/persistPath") + file;
         
         // Serialize object into XML
 /*
@@ -961,7 +530,7 @@ public class WBUtils implements AFAppObject
     public Object XMLObjectDecoder(String file) throws Exception {
         String logFile = null;
         
-        logFile = workPath + AFUtils.getInstance().getEnv("wb/persistPath") + file;
+        logFile = SWBPortal.getWorkPath() + (String) SWBPortal.getEnv("wb/persistPath") + file;
         
         Object obj = null;
         
@@ -982,34 +551,22 @@ public class WBUtils implements AFAppObject
      * @return Connection from DBPool.
      * @param name  */
     public static Connection getDBConnection() {
-        return AFUtils.getDBConnection(AFUtils.getEnv("wb/db/nameconn"));
-        //return dbPool.getNoPoolConnection((String)getEnv("wb/db/nameconn"));
+
+        return SWBUtils.DB.getDefaultConnection();
     }
     
     /** Getter for default wb2 Connection form DBPool.
      * @return Connection from DBPool.
      * @param name  */
     public static Connection getNoPoolDBConnection() {
-        return AFUtils.getNoPoolDBConnection(AFUtils.getEnv("wb/db/nameconn"));
+        return SWBUtils.DB.getNoPoolConnection(SWBPortal.getEnv("wb/db/nameconn"));
     }
     
     /** Nombre de base de datos que esta utilizando WB.
      *  @return String nombre de la base de datos.
      */
     public static String getDBName() {
-        String ret = null;
-        try {
-            Connection con = getDBConnection();
-            if(con!=null)
-            {
-                java.sql.DatabaseMetaData md = con.getMetaData();
-                ret = md.getDatabaseProductName();
-                con.close();
-            }
-        } catch (Exception e) {
-            AFUtils.log(e, AFUtils.getLocaleString("locale_wb2_util", "error_WBUtils_nodataname2"), true);
-        }
-        return ret;
+        return SWBUtils.DB.getDatabaseName();
     }
     
     public static String dateFormat(java.sql.Timestamp date) {
@@ -1096,9 +653,9 @@ public class WBUtils implements AFAppObject
             }
         }
         catch(NumberFormatException f)
-        {AFUtils.log(f,AFUtils.getLocaleString("locale_wb2_util","error_WBUtils_decodifica"),true);}
+        {AFUtils.log(f,SWBUtils.TEXT.getLocaleString("locale_wb2_util","error_WBUtils_decodifica"),true);}
         catch(Exception e)
-        {AFUtils.log(e,AFUtils.getLocaleString("locale_wb2_util","error_WBUtils_IOHTML"),true);}
+        {AFUtils.log(e,SWBUtils.TEXT.getLocaleString("locale_wb2_util","error_WBUtils_IOHTML"),true);}
         return ret.toString();
     }
     
@@ -1131,7 +688,7 @@ public class WBUtils implements AFAppObject
     
     public String getAccessLogDatePatern() {
         if(df==null) {
-            String period = AFUtils.getEnv("wb/accessLogPeriod","monthly");
+            String period = SWBPortal.getEnv("wb/accessLogPeriod","monthly");
             if (period.equalsIgnoreCase("yearly")) {
                 df = new SimpleDateFormat("yyyy");
             } else if (period != null && period.equalsIgnoreCase("daily")) {
@@ -1145,14 +702,14 @@ public class WBUtils implements AFAppObject
     
     public String getAccessLogPath() {
         String workp=null;;
-        if (AFUtils.getEnv("wb/accessLog","/logs/wb_log").startsWith("file:")) {
+        if (SWBPortal.getEnv("wb/accessLog","/logs/wb_log").startsWith("file:")) {
             try {
-                workp = new File(AFUtils.getEnv("wb/accessLog","/logs/wb_log").substring(5)).getCanonicalPath().replace('\\','/');
+                workp = new File(SWBPortal.getEnv("wb/accessLog","/logs/wb_log").substring(5)).getCanonicalPath().replace('\\','/');
             } catch (Exception e) {
-                workp = AFUtils.getEnv("wb/accessLog","/logs/wb_log").substring(5);
+                workp = SWBPortal.getEnv("wb/accessLog","/logs/wb_log").substring(5);
             }
         } else {
-            workp = getWorkPath() + AFUtils.getEnv("wb/accessLog");
+            workp = getWorkPath() + SWBPortal.getEnv("wb/accessLog");
         }
         return workp;
     }
@@ -1162,7 +719,7 @@ public class WBUtils implements AFAppObject
      * @return Value of property bufferSize.
      */
     public int getBufferSize() {
-        return AFUtils.getBufferSize();
+        return SWBUtils.IO.getBufferSize();
     }
     
     /**
@@ -1170,7 +727,8 @@ public class WBUtils implements AFAppObject
      * @param bufferSize New value of property bufferSize.
      */
     public void setBufferSize(int bufferSize) {
-        AFUtils.setBufferSize(bufferSize);
+        //TODO
+        //AFUtils.setBufferSize(bufferSize);
     }
     
     
