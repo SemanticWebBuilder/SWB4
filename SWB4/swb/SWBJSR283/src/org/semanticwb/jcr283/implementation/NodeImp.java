@@ -947,7 +947,7 @@ public class NodeImp extends ItemImp implements Node
                 throw new ConstraintViolationException("The mix in can not be deleted, the mixin is declared super nodetype");
             }
         }
-        PropertyImp prop = nodeManager.getProperty(getPathFromName(JCR_MIXINTYPES));
+        PropertyImp prop = nodeManager.getProtectedProperty(getPathFromName(JCR_MIXINTYPES));
         Value[] values = prop.getValues();
         HashSet<Value> newValues = new HashSet<Value>();
         for (Value value : values)
