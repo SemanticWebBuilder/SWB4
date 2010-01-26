@@ -67,32 +67,7 @@ public class NodeImp extends ItemImp implements Node
     private static final String MIX_CREATED = "mix:created";
     private static final String MIX_REFERENCEABLE = "mix:referenceable";
 
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (obj == null)
-        {
-            return false;
-        }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final NodeImp other = (NodeImp) obj;
-        if ((this.id == null) ? (other.id != null) : !this.id.equals(other.id))
-        {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int hash = 3;
-        hash = 53 * hash + (this.id != null ? this.id.hashCode() : 0);
-        return hash;
-    }
+    
     private static final String MIX_SIMPLEVERSIONABLE = "mix:simpleVersionable";
     private static final String NT_VERSION = "nt:version";
     private final static Logger log = SWBUtils.getLogger(NodeImp.class);
@@ -1220,5 +1195,31 @@ public class NodeImp extends ItemImp implements Node
     public void accept(ItemVisitor visitor) throws RepositoryException
     {
         visitor.visit(this);
+    }
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final NodeImp other = (NodeImp) obj;
+        if ((this.id == null) ? (other.id != null) : !this.id.equals(other.id))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int hash = 3;
+        hash = 53 * hash + (this.id != null ? this.id.hashCode() : 0);
+        return hash;
     }
 }
