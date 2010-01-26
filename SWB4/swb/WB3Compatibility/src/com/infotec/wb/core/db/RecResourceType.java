@@ -67,6 +67,7 @@ public class RecResourceType implements WBDBRecord
     public RecResourceType(org.semanticwb.model.ResourceType resourceType)
     {
         res = resourceType;
+        idtm=res.getWebSite().getId();
         try {
             load();
         } catch (Exception e) {
