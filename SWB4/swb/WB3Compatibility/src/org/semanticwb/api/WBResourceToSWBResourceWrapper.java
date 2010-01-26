@@ -8,7 +8,6 @@ package org.semanticwb.api;
 import com.infotec.appfw.exception.AFException;
 import com.infotec.wb.core.db.RecResourceType;
 import com.infotec.wb.lib.WBActionResponseImp;
-import com.infotec.wb.lib.WBParamRequest;
 import com.infotec.wb.lib.WBParamRequestImp;
 import com.infotec.wb.lib.WBResourceCache;
 import java.io.IOException;
@@ -21,8 +20,6 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBActionResponseImp;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBParamRequestImp;
-import org.semanticwb.portal.api.SWBResourceCache;
-import org.semanticwb.portal.api.SWBResourceCachedMgr;
 import org.semanticwb.portal.api.SWBResourceException;
 
 /**
@@ -117,6 +114,7 @@ public class WBResourceToSWBResourceWrapper extends GenericResource
      * @param base
      * @throws SWBResourceException
      */
+    @Override
     public void setResourceBase(Resource base) throws SWBResourceException
     {
         try
@@ -129,6 +127,7 @@ public class WBResourceToSWBResourceWrapper extends GenericResource
      * @param recobj
      * @throws SWBResourceException
      */
+    @Override
     public void uninstall(ResourceType recobj) throws SWBResourceException
     {
         try
