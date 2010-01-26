@@ -910,7 +910,7 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
         }
         catch (Exception e)
         {
-            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("¡EXISTE_UN_ERROR_LA_GUARDAR_LA_INFORMACIÓN!")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("DETALLE:_") + e.getLocalizedMessage(), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("¡EXISTE_UN_ERROR_LA_GUARDAR_LA_INFORMACIÓN!")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("DETALLE:_")+" " + e.getLocalizedMessage(), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
         finally
@@ -1090,7 +1090,7 @@ private void jButtonDeleteRuleActionPerformed(java.awt.event.ActionEvent evt)//G
     {
         DefaultTableModel model = (DefaultTableModel) jTableRules.getModel();
         ElementInfo info = (ElementInfo) model.getValueAt(this.jTableRules.getSelectedRow(), 0);
-        int res = JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("¿DESEA_ELIMINAR_LA_REGLA_/_ROL_Ó_GRUPO_DE_USUARIO_") + info.title, this.getTitle(), JOptionPane.YES_NO_OPTION);
+        int res = JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("¿DESEA_ELIMINAR_LA_REGLA_/_ROL_Ó_GRUPO_DE_USUARIO_")+" " + info.title, this.getTitle(), JOptionPane.YES_NO_OPTION);
         if (res == JOptionPane.YES_OPTION)
         {
             try

@@ -873,7 +873,7 @@ public abstract class OfficeDocument
                                 }
                                 catch (Exception e)
                                 {
-                                    JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("NO_SE_PUEDE_ACTUALIZAR_EL_CONTENIDO_LA_CAUSA_ES:_") + e.getMessage(), TITLE_SAVE_CONTENT_SITE, JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("NO_SE_PUEDE_ACTUALIZAR_EL_CONTENIDO_LA_CAUSA_ES:_")+" " + e.getMessage(), TITLE_SAVE_CONTENT_SITE, JOptionPane.ERROR_MESSAGE);
                                     ErrorLog.log(e);
                                 }
                             }

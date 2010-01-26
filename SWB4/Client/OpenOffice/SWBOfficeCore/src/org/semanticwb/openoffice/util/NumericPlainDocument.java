@@ -91,7 +91,7 @@ public class NumericPlainDocument extends FixedLengthPlainDocument
             Number result = format.parse(content, parsePos);
             if (parsePos.getIndex() != getLength())
             {
-                throw new ParseException(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/util/NumericPlainDocument").getString("NOT_A_VALID_NUMBER:_") + content, 0);
+                throw new ParseException(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/util/NumericPlainDocument").getString("NOT_A_VALID_NUMBER:_")+" " + content, 0);
             }
 
             return result;

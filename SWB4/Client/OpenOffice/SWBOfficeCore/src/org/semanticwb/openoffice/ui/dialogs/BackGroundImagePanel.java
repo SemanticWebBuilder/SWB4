@@ -261,7 +261,7 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
             }
             catch (URISyntaxException use)
             {
-                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/BackGroundImagePanel").getString("ERROR_AL_ESCRIBIR_LA_DIRECCIÓN_WEB_")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/BackGroundImagePanel").getString("DETALLE:_")+use.getMessage(), "Dirección Web", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/BackGroundImagePanel").getString("ERROR_AL_ESCRIBIR_LA_DIRECCIÓN_WEB_")+" "+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/BackGroundImagePanel").getString("DETALLE:_")+" "+use.getMessage(), "Dirección Web", JOptionPane.ERROR_MESSAGE);
             }
         }
 }//GEN-LAST:event_jComboBoxWebAddressActionPerformed

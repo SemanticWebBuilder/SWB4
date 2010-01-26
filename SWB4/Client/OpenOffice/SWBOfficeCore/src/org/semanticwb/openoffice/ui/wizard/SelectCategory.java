@@ -189,7 +189,7 @@ public class SelectCategory extends WizardPage
         RepositoryInfo rep = (RepositoryInfo) this.getWizardDataMap().get(REPOSITORY_ID);
         if (rep.exclusive)
         {
-            int res = JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("¡EL_REPOSITORIO_SELECIONADO_SÓLO_PUEDE_PUBLICAR_CONTENIDOS_EN_EL_SITIO_") + rep.siteInfo.title + "!"+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("¿DESEA_CONTINUAR?"), getDescription(), JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+            int res = JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("¡EL_REPOSITORIO_SELECIONADO_SÓLO_PUEDE_PUBLICAR_CONTENIDOS_EN_EL_SITIO_")+" " + rep.siteInfo.title + "!"+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("¿DESEA_CONTINUAR?"), getDescription(), JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
             if (res == JOptionPane.NO_OPTION)
             {
                 result = WizardPanelNavResult.REMAIN_ON_PAGE;
@@ -478,7 +478,7 @@ class RepositoryNode extends DefaultMutableTreeNode implements ToolTipTreeNode
     {
         if (repositoryInfo.exclusive)
         {
-            return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("REPOSITORIO_EXCLUSIVO_PARA_EL_SITIO_") + repositoryInfo.siteInfo.title;
+            return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("REPOSITORIO_EXCLUSIVO_PARA_EL_SITIO_")+" " + repositoryInfo.siteInfo.title;
         }
         else
         {
