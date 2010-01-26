@@ -238,7 +238,7 @@ public abstract class ItemImp implements Item
 
     public void save() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
     {
-        if (!this.definition.isProtected())
+        if (this.definition.isProtected())
         {
             throw new ConstraintViolationException("The item " + path + "  is protecetd");
         }
