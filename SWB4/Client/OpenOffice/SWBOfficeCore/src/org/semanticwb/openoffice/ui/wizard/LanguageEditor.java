@@ -60,6 +60,16 @@ public class LanguageEditor extends WizardPage {
     {
         return languages;
     }
+    public void endEdit()
+    {
+        if(this.jTableLenguages.getSelectedRow()!=-1 && jTableLenguages.getSelectedColumn()==1 && this.jTableLenguages.isEditing())
+        {
+
+            this.jTableLenguages.getCellEditor(this.jTableLenguages.getSelectedRow(), jTableLenguages.getSelectedColumn()).stopCellEditing();
+            //DefaultTableModel model=(DefaultTableModel)this.jTableLenguages.getModel();
+            //model.setValueAt(value, this.jTableLenguages.getSelectedRow(), jTableLenguages.getSelectedColumn());
+        }
+    }
     public String[] getTitles()
     {
         ArrayList<String> values=new ArrayList<String>();
@@ -124,6 +134,7 @@ public class LanguageEditor extends WizardPage {
                 return canEdit [columnIndex];
             }
         });
+        jTableLenguages.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTableLenguages);
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);

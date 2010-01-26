@@ -871,6 +871,7 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                     e.printStackTrace();
                 }
             }
+            this.jLanguageEditor.endEdit();
             String[] titles=this.jLanguageEditor.getTitles();
             LanguageInfo[] languages=this.jLanguageEditor.getLanguages();
             OfficeApplication.getOfficeDocumentProxy().setTitlesOfWebPage(this.pageInformation.page, languages, titles);
