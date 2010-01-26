@@ -29,7 +29,15 @@ import javax.jcr.version.VersionManager;
  */
 public class VersionManagerImp implements VersionManager {
 
-    private Hashtable<String,VersionHistoryImp> versions=new Hashtable<String, VersionHistoryImp>();
+    private Hashtable<String,VersionHistoryImp> versionhistories=new Hashtable<String, VersionHistoryImp>();
+
+    public void addVersionHistory(VersionHistoryImp version) throws RepositoryException
+    {
+        if(!versionhistories.containsKey(version.getVersionableIdentifier()))
+        {
+            versionhistories.put(version.getVersionableIdentifier(), version);
+        }
+    }
     public Version checkin(String absPath) throws VersionException, UnsupportedRepositoryOperationException, InvalidItemStateException, LockException, RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -56,7 +64,7 @@ public class VersionManagerImp implements VersionManager {
         {
             
         }
-        return versions.get(absPath);
+        return versionhistories.get(absPath);
     }
 
     public Version getBaseVersion(String absPath) throws UnsupportedRepositoryOperationException, RepositoryException

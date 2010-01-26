@@ -66,6 +66,33 @@ public class NodeImp extends ItemImp implements Node
     private static final String JCR_CREATEDBY = "jcr:createdBy";
     private static final String MIX_CREATED = "mix:created";
     private static final String MIX_REFERENCEABLE = "mix:referenceable";
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final NodeImp other = (NodeImp) obj;
+        if ((this.id == null) ? (other.id != null) : !this.id.equals(other.id))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int hash = 3;
+        hash = 53 * hash + (this.id != null ? this.id.hashCode() : 0);
+        return hash;
+    }
     private static final String MIX_SIMPLEVERSIONABLE = "mix:simpleVersionable";
     private static final String NT_VERSION = "nt:version";
     private final static Logger log = SWBUtils.getLogger(NodeImp.class);
@@ -74,7 +101,7 @@ public class NodeImp extends ItemImp implements Node
     private final int index;
     private final NodeTypeImp nodeType;
     protected final NodeTypeManagerImp nodeTypeManager;
-    private final String id;
+    protected final String id;
     private final VersionManagerImp versionManagerImp;
     NodeImp(Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
@@ -119,7 +146,7 @@ public class NodeImp extends ItemImp implements Node
         {
             if (this.isVersionable())
             {
-                createVersionHistory();                
+                initVersionHistory();
             }
         }
         catch (RepositoryException re)
@@ -127,16 +154,24 @@ public class NodeImp extends ItemImp implements Node
             log.error(re);
         }
     }
-    private void createVersionHistory() throws RepositoryException
-    {
-        
-        NodeDefinitionImp versionDefinition=new NodeDefinitionImp(obj, nodeTypeManager.getNodeTypeImp("nt:versionHistory"));
+    private void initVersionHistory() throws RepositoryException
+    {   
         PropertyImp prop=nodeManager.getProperty(getPathFromName("jcr:versionHistory"));
         if(prop.getLength()==-1)
         {
-            VersionHistoryImp history=new VersionHistoryImp(versionDefinition, this, session);
+            log.trace("Initilizing versionHistory for node "+path);
+            NodeDefinitionImp versionDefinition=new VersionHistoryDefinition();
+            NodeImp root=nodeManager.getNode("/", session);
+            String path_jcr_version_storage=root.getPathFromName("jcr:versionStorage");
+            NodeImp jcr_version_Storage=nodeManager.getNode(path_jcr_version_storage, session);
+            if(jcr_version_Storage==null)
+            {
+                throw new RepositoryException("The version storage was not found");
+            }
+            VersionHistoryImp history=new VersionHistoryImp(versionDefinition, jcr_version_Storage, session,this);
             prop.set(valueFactoryImp.createValue(history));
-            this.isModified=true;
+            this.isModified=true;            
+            nodeManager.addNode(history, history.path, path);
         }
     }
     
@@ -387,54 +422,14 @@ public class NodeImp extends ItemImp implements Node
         return addNode(relPath, null);
     }
 
-    private NodeImp insertNode(String nameToAdd, NodeDefinitionImp childDefinition, NodeTypeImp nodeType) throws RepositoryException
+    NodeImp insertNode(String nameToAdd) throws RepositoryException
     {
-        if (!childDefinition.allowsSameNameSiblings() && nodeManager.hasNode(path, nameToAdd))
-        {
-            throw new ItemExistsException("There is a node with the same name in the node " + this.path);
-        }
-        String childpath = getPathFromName(nameToAdd);
-        int childIndex = nodeManager.countNodes(childpath, false);
-        if (childIndex > 0)
-        {
-            childIndex--;
-        }
-        if (childIndex > 0)
-        {
-            childpath += "[" + childIndex + "]";
-        }
-        String newId = UUID.randomUUID().toString();
-        NodeImp newChild = new NodeImp(nodeType, childDefinition, nameToAdd, this, index, childpath, this.getDepth() + 1, session, newId);
-        this.isModified = true;
-        return nodeManager.addNode(newChild, childpath, path);
-
+        return this.insertNode(nameToAdd, null);
     }
-
-    public Node addNode(String relPath, String primaryNodeTypeName) throws ItemExistsException, PathNotFoundException, NoSuchNodeTypeException, LockException, VersionException, ConstraintViolationException, RepositoryException
+    NodeImp insertNode(String nameToAdd,String primaryNodeTypeName) throws RepositoryException
     {
-        if (!isValidRelativePath(relPath))
-        {
-            throw new RepositoryException(THE_PATH_IS_NOT_RELATIVE + relPath);
-        }
-        String absPath = normalizePath(relPath);
-        String nameToAdd = extractName(absPath);
-        if (!isValidName(nameToAdd))
-        {
-            throw new RepositoryException("The name for the new node is invalid");
-        }
-        String tempPath = absPath;
-        if (!tempPath.endsWith("/"))
-        {
-            tempPath += "/";
-        }
-        String parentPath = normalizePath("." + tempPath + "../");
-        NodeImp nodeParent = nodeManager.getNode(parentPath, session);
-        if (nodeParent == null)
-        {
-            throw new PathNotFoundException("The node with path " + relPath + " was not found");
-        }
         NodeDefinitionImp childDefinition = null;
-        for (NodeDefinitionImp childNodeDefinition : ((PropertyDefinitionImp) nodeParent.definition).getDeclaringNodeTypeImp().getChildNodeDefinitionsImp())
+        for (NodeDefinitionImp childNodeDefinition : ((PropertyDefinitionImp) this.definition).getDeclaringNodeTypeImp().getChildNodeDefinitionsImp())
         {
             if (childNodeDefinition.getName().equals(nameToAdd))
             {
@@ -443,7 +438,7 @@ public class NodeImp extends ItemImp implements Node
         }
         if (childDefinition == null)
         {
-            for (NodeDefinitionImp childNodeDefinition : ((PropertyDefinitionImp) nodeParent.definition).getDeclaringNodeTypeImp().getChildNodeDefinitionsImp())
+            for (NodeDefinitionImp childNodeDefinition : ((PropertyDefinitionImp) this.definition).getDeclaringNodeTypeImp().getChildNodeDefinitionsImp())
             {
                 if (childNodeDefinition.getName().equals(ALL))
                 {
@@ -455,10 +450,7 @@ public class NodeImp extends ItemImp implements Node
         {
             throw new ConstraintViolationException("The node can not be added");
         }
-        if (this.definition.isProtected())
-        {
-            throw new ConstraintViolationException("The node " + path + " is protected");
-        }
+
         NodeTypeImp primaryNodeType = null;
         if (primaryNodeTypeName == null)
         {
@@ -487,7 +479,56 @@ public class NodeImp extends ItemImp implements Node
         {
             throw new ConstraintViolationException("The NodeType " + primaryNodeTypeName + " is not part of required node types ");
         }
-        return nodeParent.insertNode(nameToAdd, childDefinition, primaryNodeType);
+        if (!childDefinition.allowsSameNameSiblings() && nodeManager.hasNode(path, nameToAdd))
+        {
+            throw new ItemExistsException("There is a node with the same name in the node " + this.path);
+        }
+        String childpath = getPathFromName(nameToAdd);
+        int childIndex = nodeManager.countNodes(childpath, false);
+        if (childIndex > 0)
+        {
+            childIndex--;
+        }
+        if (childIndex > 0)
+        {
+            childpath += "[" + childIndex + "]";
+        }
+        String newId = UUID.randomUUID().toString();
+        log.trace("Creating the node "+nameToAdd);
+        NodeImp newChild = new NodeImp(nodeType, childDefinition, nameToAdd, this, index, childpath, this.getDepth() + 1, session, newId);
+        this.isModified = true;
+        return nodeManager.addNode(newChild, childpath, path);
+
+    }
+
+    public Node addNode(String relPath, String primaryNodeTypeName) throws ItemExistsException, PathNotFoundException, NoSuchNodeTypeException, LockException, VersionException, ConstraintViolationException, RepositoryException
+    {
+        if (this.definition.isProtected())
+        {
+            throw new ConstraintViolationException("The node " + path + " is protected");
+        }
+        if (!isValidRelativePath(relPath))
+        {
+            throw new RepositoryException(THE_PATH_IS_NOT_RELATIVE + relPath);
+        }
+        String absPath = normalizePath(relPath);
+        String nameToAdd = extractName(absPath);
+        if (!isValidName(nameToAdd))
+        {
+            throw new RepositoryException("The name for the new node is invalid");
+        }
+        String tempPath = absPath;
+        if (!tempPath.endsWith("/"))
+        {
+            tempPath += "/";
+        }
+        String parentPath = normalizePath("." + tempPath + "../");
+        NodeImp nodeParent = nodeManager.getNode(parentPath, session);
+        if (nodeParent == null)
+        {
+            throw new PathNotFoundException("The node with path " + relPath + " was not found");
+        }        
+        return nodeParent.insertNode(nameToAdd, primaryNodeTypeName);
 
 
     }

@@ -40,7 +40,7 @@ public class WorkspaceImp  implements Workspace {
     private final NodeManager nodeManager=new NodeManager();
     private NodeTypeManagerImp nodeTypeManager;
     private final VersionManagerImp versionManagerImp=new VersionManagerImp();
-    public WorkspaceImp(SessionImp session,org.semanticwb.jcr283.repository.model.Workspace ws)
+    public WorkspaceImp(SessionImp session,org.semanticwb.jcr283.repository.model.Workspace ws) throws RepositoryException
     {
         this.session=session;
         name=ws.getName();
