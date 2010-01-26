@@ -23,7 +23,6 @@
 <%@page import="org.w3c.dom.*"%>
 <%@page import="org.semanticwb.Logger"%>
 <%!
- private static Logger log = SWBUtils.getLogger(org.semanticwb.portal.resources.PollJsp.class);
  private static String poll = "pollJsp_";
 %>
 <%
