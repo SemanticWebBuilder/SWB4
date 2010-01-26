@@ -92,7 +92,10 @@ public class NodeManager
     {
         if (nodesbyId.containsKey(id))
         {
-            return nodesbyId.get(id).getNode();
+            if(!nodesbyId.get(id).isDeleted())
+            {
+                return nodesbyId.get(id).getNode();
+            }
         }
         else
         {
