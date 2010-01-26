@@ -29,7 +29,7 @@ public class ResourceWB3Test extends GenericResource
         Topic topic=paramsRequest.getTopic();
         Resource resource=paramsRequest.getResourceBase();
         out.println("Hola Mundo");
-        out.println("User:"+user.getName());
+        out.println("User:"+user.getEmail());
         out.println("Topic:"+topic.getDisplayName());
         out.println("Resource:"+resource.getId()+" "+resource.getTitle());
     }
