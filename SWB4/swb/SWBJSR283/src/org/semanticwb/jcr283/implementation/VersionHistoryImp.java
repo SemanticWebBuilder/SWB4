@@ -35,14 +35,26 @@ public class VersionHistoryImp extends NodeImp implements VersionHistory {
             throw new RepositoryException("The versionableUuid property was not found");
         }
         String versionableId=prop.getString();
-        versionableNode=(NodeImp)session.getNodeByIdentifier(versionableId);        
+        versionableNode=(NodeImp)session.getNodeByIdentifier(versionableId);
     }
     public VersionHistoryImp(NodeDefinitionImp nodeDefinition, NodeImp parent, SessionImp session,NodeImp versionableNode) throws NoSuchNodeTypeException,RepositoryException
     {
         super(SWBRepository.getNodeTypeManagerImp().getNodeTypeImp("nt:versionHistory"), nodeDefinition, "jcr:versionHistory", parent, 0, parent.path+PATH_SEPARATOR+"jcr:versionHistory", parent.getDepth()+1, session, UUID.randomUUID().toString());
         this.versionableNode=versionableNode;
-    
-    }       
+        init();
+    }
+    private void init() throws RepositoryException
+    {
+        createRootVersion();
+    }
+    private void createRootVersion() throws RepositoryException
+    {
+        String jcr_rootVersion="jcr:rootVersion";
+        if(!nodeManager.hasNode(this.getPathFromName(jcr_rootVersion)))
+        {
+            NodeImp version=this.insertNode(jcr_rootVersion);
+        }
+    }
 
     public String getVersionableUUID() throws RepositoryException
     {
