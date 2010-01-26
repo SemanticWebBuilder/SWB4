@@ -79,6 +79,18 @@ import org.semanticwb.rdf.RemoteGraph;
  */
 public class SemanticMgr implements SWBInstanceObject
 {
+    public enum ModelSchema
+    {
+
+        OWL_MEM_TRANS_INF, OWL_LITE_MEM_RDFS_INF, OWL_MEM_MINI_RULE_INF, RDFS_MEM_RDFS_INF,
+        DAML_MEM_RDFS_INF, OWL_DL_MEM_RDFS_INF;
+    }
+    private static ModelSchema modelSchema = ModelSchema.OWL_MEM_TRANS_INF;
+
+    public static void setSchemaModel(ModelSchema modelSchema)
+    {
+        SemanticMgr.modelSchema = modelSchema;
+    }
     private static Logger log = SWBUtils.getLogger(SemanticMgr.class);
 
     public final static String SWBSystem="SWBSystem";
@@ -117,8 +129,33 @@ public class SemanticMgr implements SWBInstanceObject
         //m_schemas=new HashMap();
         m_observers=new ArrayList();
 
+        OntModelSpec model = OntModelSpec.OWL_MEM_TRANS_INF;
         //Create Schema
-        m_schema = new SemanticOntology("SWBSquema",ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM_TRANS_INF));
+        switch (modelSchema)
+        {
+            case OWL_DL_MEM_RDFS_INF:
+                model = OntModelSpec.OWL_DL_MEM_RDFS_INF;
+                break;
+            case OWL_MEM_TRANS_INF:
+                model = OntModelSpec.OWL_MEM_TRANS_INF;
+                break;
+            case OWL_MEM_MINI_RULE_INF:
+                model = OntModelSpec.OWL_MEM_MINI_RULE_INF;
+                break;
+            case RDFS_MEM_RDFS_INF:
+                model = OntModelSpec.RDFS_MEM_RDFS_INF;
+                break;
+            case DAML_MEM_RDFS_INF:
+                model = OntModelSpec.DAML_MEM_RDFS_INF;
+                break;
+            case OWL_LITE_MEM_RDFS_INF:
+                model = OntModelSpec.OWL_LITE_MEM_RDFS_INF;
+                break;
+            default:
+                model = OntModelSpec.OWL_MEM_TRANS_INF;
+        }
+        //Create Schema
+        m_schema = new SemanticOntology("SWBSquema",ModelFactory.createOntologyModel(model));
         //Create Ontology
         m_ontology = new SemanticOntology("SWBOntology",ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM));
         //m_ontology = new SemanticOntology("SWBOntology",ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM_RDFS_INF));
