@@ -479,19 +479,11 @@ public class SWBResourceMgr
     }
 
 
-//    /** Valida carga de Recursos de versiones anteriore
-//     *
-//     */
-//    public Object convertOldWBResource(Object obj)
-//    {
-//        return convertOldWBResource(obj, null);
-//    }
-
     /** Valida carga de Recursos de versiones anteriore
      *  Si el recursos es de una version anterior
      *  asigna setWb2Resource(true) del recursos
      */
-    public Object convertOldWBResource(Object obj, Resource base)
+    public Object convertOldWBResource(Object obj)  //Resource base
     {
         Object aux = null;
         if (obj instanceof SWBResource)
@@ -576,7 +568,7 @@ public class SWBResourceMgr
             {
                 String clsname = type.getResourceClassName();
                 Class cls = createSWBResourceClass(clsname);
-                obj = (SWBResource) convertOldWBResource(cls.newInstance(),resource);
+                obj = (SWBResource) convertOldWBResource(cls.newInstance());
                 //obj=(SWBResource)cls.newInstance();
                 if (obj != null)
                 {
