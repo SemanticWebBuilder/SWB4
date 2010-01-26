@@ -22,6 +22,7 @@
 <%@page import="org.semanticwb.portal.api.*"%>
 <%@page import="org.w3c.dom.*"%>
 <%@page import="org.semanticwb.Logger"%>
+Hola mundo
 <%!
  private static Logger log = SWBUtils.getLogger(org.semanticwb.portal.resources.PollJsp.class);
  private static String poll = "pollJsp_";
@@ -187,12 +188,17 @@
                                 }
                             }
                             if(optValue != null) {
+                                <%
                                 if (display) {
+                                %>
                                     window.open('<%=url.toString()%>&radiobutton='+optValue,'_newenc','<%=win%>');
+                                <%
                                 } else {
+                                %>
                                     getHtml('<%=url.toString()%>&radiobutton='+optValue,'<%=poll%><%=base.getId()%>'); expande();
+                                <%
                                 }
-
+                                %>
                             }else {
                                 alert('<%=paramRequest.getLocaleString("usrmsg_Encuesta_doView_msgAnswer")%>');
                             }
@@ -220,8 +226,7 @@
             }
         } catch (Exception e) {
             //log.error(paramRequest.getLocaleString("error_Encuesta_doView_resource") + " " + restype + " " + paramRequest.getLocaleString("error_Encuesta_doView_method"), e);
-        }
-        out.flush();
+        }        
 %>
 
 <%!
