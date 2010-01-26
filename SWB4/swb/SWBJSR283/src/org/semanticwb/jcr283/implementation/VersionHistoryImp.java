@@ -34,8 +34,8 @@ public class VersionHistoryImp extends NodeImp implements VersionHistory {
         {
             throw new RepositoryException("The versionableUuid property was not found");
         }
-        String id=prop.getString();
-        versionableNode=(NodeImp)session.getNodeByIdentifier(id);
+        String versionableId=prop.getString();
+        versionableNode=(NodeImp)session.getNodeByIdentifier(versionableId);        
     }
     public VersionHistoryImp(NodeDefinitionImp nodeDefinition, NodeImp parent, SessionImp session,NodeImp versionableNode) throws NoSuchNodeTypeException,RepositoryException
     {

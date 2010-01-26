@@ -158,7 +158,7 @@ public class NodeImp extends ItemImp implements Node
 
     private void initVersionHistory() throws RepositoryException
     {
-        PropertyImp prop = nodeManager.getProperty(getPathFromName("jcr:versionHistory"));
+        PropertyImp prop = nodeManager.getProtectedProperty(getPathFromName("jcr:versionHistory"));
         if (prop.getLength() == -1)
         {
             log.trace("Initilizing versionHistory for node " + path);
@@ -182,7 +182,7 @@ public class NodeImp extends ItemImp implements Node
         try
         {
             String propertyPath = getPathFromName(JCR_PRIMARYTYPE);
-            PropertyImp prop = nodeManager.getProperty(propertyPath);
+            PropertyImp prop = nodeManager.getProtectedProperty(propertyPath);
             if (prop.getLength() == -1)
             {
                 prop.set(valueFactoryImp.createValue(nodeType.getName()));
@@ -223,7 +223,7 @@ public class NodeImp extends ItemImp implements Node
             if (isSimpleVersionable())
             {
                 String propertyPath = getPathFromName(JCR_ISCHECKEDOUT);
-                PropertyImp prop = nodeManager.getProperty(propertyPath);
+                PropertyImp prop = nodeManager.getProtectedProperty(propertyPath);
                 if (prop.getLength() == -1)
                 {
                     prop.set(valueFactoryImp.createValue(true));
@@ -244,7 +244,7 @@ public class NodeImp extends ItemImp implements Node
             if (isMixCreated())
             {
                 String propertyPath = getPathFromName(JCR_CREATED);
-                PropertyImp prop = nodeManager.getProperty(propertyPath);
+                PropertyImp prop = nodeManager.getProtectedProperty(propertyPath);
                 if (prop.getLength() == -1)
                 {
                     prop.set(valueFactoryImp.createValue(Calendar.getInstance()));
@@ -273,7 +273,7 @@ public class NodeImp extends ItemImp implements Node
             if (isMixLastModified())
             {
                 String propertyPath = getPathFromName(JCR_LASTMODIFIED);
-                PropertyImp prop = nodeManager.getProperty(propertyPath);
+                PropertyImp prop = nodeManager.getProtectedProperty(propertyPath);
                 if (prop.getLength() == -1)
                 {
                     prop.set(valueFactoryImp.createValue(Calendar.getInstance()));
@@ -302,7 +302,7 @@ public class NodeImp extends ItemImp implements Node
             {
                 String uuid = UUID.randomUUID().toString();
                 String propertyPath = getPathFromName(JCR_UUID);
-                PropertyImp prop = nodeManager.getProperty(propertyPath);
+                PropertyImp prop = nodeManager.getProtectedProperty(propertyPath);
                 if (prop.getLength() == -1)
                 {
                     prop.set(valueFactoryImp.createValue(uuid));
@@ -766,7 +766,7 @@ public class NodeImp extends ItemImp implements Node
             throw new UnsupportedRepositoryOperationException("The node is not referenceable");
         }
         String propPath = getPathFromName(JCR_UUID);
-        PropertyImp prop = nodeManager.getProperty(propPath);
+        PropertyImp prop = nodeManager.getProtectedProperty(propPath);
         return prop.getString();
     }
 
@@ -846,7 +846,7 @@ public class NodeImp extends ItemImp implements Node
             }
         }
         String jcr_mixinTypesPath = getPathFromName(JCR_MIXINTYPES);
-        PropertyImp prop = nodeManager.getProperty(jcr_mixinTypesPath);
+        PropertyImp prop = nodeManager.getProtectedProperty(jcr_mixinTypesPath);
         for (Value value : prop.getValues())
         {
             String type = value.getString();
@@ -892,7 +892,7 @@ public class NodeImp extends ItemImp implements Node
         {
             throw new ConstraintViolationException("The mixin can be added");
         }
-        PropertyImp prop = nodeManager.getProperty(getPathFromName(JCR_MIXINTYPES));
+        PropertyImp prop = nodeManager.getProtectedProperty(getPathFromName(JCR_MIXINTYPES));
         Value[] values = prop.getValues();
         boolean exists = false;
         for (Value value : values)
@@ -986,7 +986,7 @@ public class NodeImp extends ItemImp implements Node
         }
         if (nodeManager.hasProperty(getPathFromName(JCR_MIXINTYPES)))
         {
-            PropertyImp jcr_mixinTypes = nodeManager.getProperty(getPathFromName(JCR_MIXINTYPES));
+            PropertyImp jcr_mixinTypes = nodeManager.getProtectedProperty(getPathFromName(JCR_MIXINTYPES));
             for (Value value : jcr_mixinTypes.getValues())
             {
                 String mix = value.getString();
