@@ -74,6 +74,10 @@ public abstract class ItemImp implements Item
         }
         return isPathSegment(relPath);
     }
+    public static boolean isValidAbsPath(String relPath)
+    {
+        return true;
+    }
 
     public static boolean isPathSegment(String pathsegment)
     {
