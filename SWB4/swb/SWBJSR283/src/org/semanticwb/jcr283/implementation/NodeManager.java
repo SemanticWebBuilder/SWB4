@@ -33,9 +33,7 @@ public class NodeManager
 
     private static final String PATH_SEPARATOR = "/";
     private Hashtable<String, NodeStatus> nodes = new Hashtable<String, NodeStatus>();
-
-    private Hashtable<String, NodeStatus> nodesbyId = new Hashtable<String,NodeStatus>();
-
+    private Hashtable<String, NodeStatus> nodesbyId = new Hashtable<String, NodeStatus>();
     private Hashtable<String, HashSet<NodeStatus>> nodesbyParent = new Hashtable<String, HashSet<NodeStatus>>();
     private Hashtable<String, PropertyStatus> properties = new Hashtable<String, PropertyStatus>();
     private Hashtable<String, HashSet<PropertyStatus>> propertiesbyParent = new Hashtable<String, HashSet<PropertyStatus>>();
@@ -90,54 +88,62 @@ public class NodeManager
         return this.nodes.get(PATH_SEPARATOR).getNode();
     }
 
-    public NodeImp getNodeByIdentifier(String id,SessionImp session) throws RepositoryException
+    public NodeImp getNodeByIdentifier(String id, SessionImp session) throws RepositoryException
     {
-        if(nodesbyId.containsKey(id))
+        if (nodesbyId.containsKey(id))
         {
             return nodesbyId.get(id).getNode();
         }
         else
         {
             // load node
-            ArrayList<Base> nodesToLoad=new ArrayList<Base>();
-            Workspace ws=Workspace.ClassMgr.getWorkspace(session.getWorkspace().getName());
-            Base nodeToLoad=Base.ClassMgr.getBase(id, ws);
+            ArrayList<Base> nodesToLoad = new ArrayList<Base>();
+            Workspace ws = Workspace.ClassMgr.getWorkspace(session.getWorkspace().getName());
+            Base nodeToLoad = Base.ClassMgr.getBase(id, ws);
 
-            if(nodeToLoad!=null)
+            if (nodeToLoad != null)
             {
                 nodesToLoad.add(nodeToLoad);
-                Base parent=nodeToLoad.getParentNode();
-                NodeImp parentloaded=null;
-                boolean loaded=false;
-                while(loaded!=true)
+                Base parent = nodeToLoad.getParentNode();
+                NodeImp parentloaded = null;
+                boolean loaded = false;
+                while (loaded != true)
                 {
-                    if(nodesbyId.containsKey(parent.getId()))
+                    if (nodesbyId.containsKey(parent.getId()))
                     {
-                        loaded=true;
-                        parentloaded=nodesbyId.get(parent.getId()).getNode();
+                        loaded = true;
+                        parentloaded = nodesbyId.get(parent.getId()).getNode();
                     }
                     else
                     {
-                        String tempid=parent.getId();
+                        String tempid = parent.getId();
                         nodesToLoad.add(parent);
-                        parent=parent.getParentNode();
-                        if(parent==null)
+                        parent = parent.getParentNode();
+                        if (parent == null)
                         {
-                            throw new RepositoryException("The parentNode for the node with id "+tempid+" was not found");
+                            throw new RepositoryException("The parentNode for the node with id " + tempid + " was not found");
                         }
                     }
                 }
-                if(parentloaded!=null)
-                {                    
-                    for(int i=nodesToLoad.size()-1;i>=0;i--)
+                if (parentloaded != null)
+                {
+                    for (int i = nodesToLoad.size() - 1; i >= 0; i--)
                     {
-                        Base base=nodesToLoad.get(i);
-                        String path=parentloaded.path;
-                        String pathChild=parentloaded.getPathFromName(base.getName());
-                        int index=countNodes(path, false);
-                        NodeImp temp=new NodeImp(base, parentloaded,index , pathChild, parentloaded.getDepth()+1, session);
-                        this.addNode(temp, path, pathChild);
-                        parentloaded=temp;
+                        Base base = nodesToLoad.get(i);
+                        String path = parentloaded.path;
+                        String childpath = parentloaded.getPathFromName(base.getName());
+                        int childIndex = countNodes(path, false);
+                        if (childIndex > 0)
+                        {
+                            childIndex--;
+                        }
+                        if (childIndex > 0)
+                        {
+                            childpath += "[" + childIndex + "]";
+                        }
+                        NodeImp temp = new NodeImp(base, parentloaded, childIndex, childpath, parentloaded.getDepth() + 1, session);
+                        this.addNode(temp, path, childpath);
+                        parentloaded = temp;
                     }
                 }
             }
