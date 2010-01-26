@@ -388,12 +388,20 @@ private void jButtonDeletCategoryActionPerformed(java.awt.event.ActionEvent evt)
             {
                 return;//-- remove node --
             }
-            parentNode.remove(node);
-            ((DefaultTreeModel) jTreeCategory.getModel()).reload(parentNode);
+            if(OfficeApplication.getOfficeApplicationProxy().deleteCategory(repository.name,categoryId))
+            {
+                parentNode.remove(node);
+                ((DefaultTreeModel) jTreeCategory.getModel()).reload(parentNode);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("NO_SE_PUEDE_BORRAR_LA_CATEGORIA_POR_QUE_TIENE_CONTENIDOS"), getDescription(), JOptionPane.ERROR | JOptionPane.OK_OPTION);
+            }
+            
         }
         else
         {
-            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("NO_SE_PUEDE_BORRAR_LA_CATEGORIA_POR_QUE_TIENE_CONTENIDOS"), getDescription(), JOptionPane.ERROR | JOptionPane.YES_NO_OPTION);
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("NO_SE_PUEDE_BORRAR_LA_CATEGORIA_POR_QUE_TIENE_CONTENIDOS"), getDescription(), JOptionPane.ERROR | JOptionPane.OK_OPTION);
         }
     }
     catch (Exception e)
