@@ -504,7 +504,7 @@ public class SWBResourceMgr
                 //Class wbresource = Class.forName("infotec.wb2.lib.WBResource");
                 Class wbresource = Class.forName("com.infotec.wb.lib.WBResource");
                 //System.out.println("convert:"+wbresource+" -> "+wbresource.isInstance(obj));
-                if (wbresource.isInstance(obj))
+                if (wbresource!=null && wbresource.isInstance(obj))
                 {
                     //if(base!=null)base.setWb2Resource(true);
                     Class wbreswrapper = Class.forName("org.semanticwb.api.WBResourceToSWBResourceWrapper");
@@ -513,6 +513,14 @@ public class SWBResourceMgr
                 }else
                 {
                     //version 2
+                    wbresource = Class.forName("infotec.wb2.lib.WBResource");
+                    if (wbresource!=null && wbresource.isInstance(obj))
+                    {
+                        //if(base!=null)base.setWb2Resource(true);
+                        Class wbreswrapper = Class.forName("infotec.wb2.lib.WBResourceWrapperNew");
+                        Constructor cons = wbreswrapper.getConstructor(new Class[]{wbresource});
+                        aux = cons.newInstance(new Object[]{obj});
+                    }
                 }
             } catch (Exception e)
             {
