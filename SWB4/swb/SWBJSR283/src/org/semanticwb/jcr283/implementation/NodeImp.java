@@ -103,13 +103,14 @@ public class NodeImp extends ItemImp implements Node
     protected final NodeTypeManagerImp nodeTypeManager;
     protected final String id;
     private final VersionManagerImp versionManagerImp;
+
     NodeImp(Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
         this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), new NodeDefinitionImp(base.getSemanticObject(), NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass())), base.getName(), parent, index, path, depth, session, base.getId());
         this.obj = base.getSemanticObject();
     }
 
-    NodeImp(NodeDefinitionImp definition,Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
+    NodeImp(NodeDefinitionImp definition, Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
         this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), definition, base.getName(), parent, index, path, depth, session, base.getId());
         this.obj = base.getSemanticObject();
@@ -124,7 +125,7 @@ public class NodeImp extends ItemImp implements Node
         loadProperties(false);
         this.nodeType = nodeType;
         this.nodeTypeManager = session.getWorkspaceImp().getNodeTypeManagerImp();
-        versionManagerImp=session.getWorkspaceImp().getVersionManagerImp();
+        versionManagerImp = session.getWorkspaceImp().getVersionManagerImp();
         init();
 
     }
@@ -154,27 +155,27 @@ public class NodeImp extends ItemImp implements Node
             log.error(re);
         }
     }
+
     private void initVersionHistory() throws RepositoryException
-    {   
-        PropertyImp prop=nodeManager.getProperty(getPathFromName("jcr:versionHistory"));
-        if(prop.getLength()==-1)
+    {
+        PropertyImp prop = nodeManager.getProperty(getPathFromName("jcr:versionHistory"));
+        if (prop.getLength() == -1)
         {
-            log.trace("Initilizing versionHistory for node "+path);
-            NodeDefinitionImp versionDefinition=new VersionHistoryDefinition();
-            NodeImp root=nodeManager.getNode("/", session);
-            String path_jcr_version_storage=root.getPathFromName("jcr:versionStorage");
-            NodeImp jcr_version_Storage=nodeManager.getNode(path_jcr_version_storage, session);
-            if(jcr_version_Storage==null)
+            log.trace("Initilizing versionHistory for node " + path);
+            NodeDefinitionImp versionDefinition = new VersionHistoryDefinition();
+            NodeImp root = nodeManager.getNode("/", session);
+            String path_jcr_version_storage = root.getPathFromName("jcr:versionStorage");
+            NodeImp jcr_version_Storage = nodeManager.getProtectedNode(path_jcr_version_storage, session);
+            if (jcr_version_Storage == null)
             {
                 throw new RepositoryException("The version storage was not found");
             }
-            VersionHistoryImp history=new VersionHistoryImp(versionDefinition, jcr_version_Storage, session,this);
+            VersionHistoryImp history = new VersionHistoryImp(versionDefinition, jcr_version_Storage, session, this);
             prop.set(valueFactoryImp.createValue(history));
-            this.isModified=true;            
+            this.isModified = true;
             nodeManager.addNode(history, history.path, path);
         }
     }
-    
 
     private void initPrimaryType()
     {
@@ -426,23 +427,26 @@ public class NodeImp extends ItemImp implements Node
     {
         return this.insertNode(nameToAdd, null);
     }
-    NodeImp insertNode(String nameToAdd,String primaryNodeTypeName) throws RepositoryException
+
+    NodeImp insertNode(String nameToAdd, String primaryNodeTypeName) throws RepositoryException
     {
         NodeDefinitionImp childDefinition = null;
-        for (NodeDefinitionImp childNodeDefinition : ((PropertyDefinitionImp) this.definition).getDeclaringNodeTypeImp().getChildNodeDefinitionsImp())
+        for (NodeDefinitionImp childNodeDefinition : ((NodeDefinitionImp) this.definition).getDeclaringNodeTypeImp().getChildNodeDefinitionsImp())
         {
             if (childNodeDefinition.getName().equals(nameToAdd))
             {
                 childDefinition = childNodeDefinition;
+                break;
             }
         }
         if (childDefinition == null)
         {
-            for (NodeDefinitionImp childNodeDefinition : ((PropertyDefinitionImp) this.definition).getDeclaringNodeTypeImp().getChildNodeDefinitionsImp())
+            for (NodeDefinitionImp childNodeDefinition : ((NodeDefinitionImp) this.definition).getDeclaringNodeTypeImp().getChildNodeDefinitionsImp())
             {
                 if (childNodeDefinition.getName().equals(ALL))
                 {
                     childDefinition = childNodeDefinition;
+                    break;
                 }
             }
         }
@@ -494,7 +498,7 @@ public class NodeImp extends ItemImp implements Node
             childpath += "[" + childIndex + "]";
         }
         String newId = UUID.randomUUID().toString();
-        log.trace("Creating the node "+nameToAdd);
+        log.trace("Creating the node " + nameToAdd);
         NodeImp newChild = new NodeImp(nodeType, childDefinition, nameToAdd, this, index, childpath, this.getDepth() + 1, session, newId);
         this.isModified = true;
         return nodeManager.addNode(newChild, childpath, path);
@@ -527,7 +531,7 @@ public class NodeImp extends ItemImp implements Node
         if (nodeParent == null)
         {
             throw new PathNotFoundException("The node with path " + relPath + " was not found");
-        }        
+        }
         return nodeParent.insertNode(nameToAdd, primaryNodeTypeName);
 
 
@@ -890,16 +894,27 @@ public class NodeImp extends ItemImp implements Node
         }
         PropertyImp prop = nodeManager.getProperty(getPathFromName(JCR_MIXINTYPES));
         Value[] values = prop.getValues();
-        Value newValue = valueFactoryImp.createValue(mixinName);
-        Value[] newValues = new Value[values.length + 1];
-        int i = 0;
+        boolean exists = false;
         for (Value value : values)
         {
-            newValues[i] = value;
-            i++;
+            if (value.getString().equals(mixinName))
+            {
+                exists = true;
+            }
         }
-        newValues[i] = newValue;
-        prop.set(newValues);
+        if (!exists)
+        {
+            Value newValue = valueFactoryImp.createValue(mixinName);
+            Value[] newValues = new Value[values.length + 1];
+            int i = 0;
+            for (Value value : values)
+            {
+                newValues[i] = value;
+                i++;
+            }
+            newValues[i] = newValue;
+            prop.set(newValues);
+        }
         for (PropertyDefinitionImp propDef : mixNodeType.getPropertyDefinitionsImp())
         {
             if (propDef.getSemanticProperty() != null)
@@ -1153,7 +1168,7 @@ public class NodeImp extends ItemImp implements Node
 
     public Version getBaseVersion() throws UnsupportedRepositoryOperationException, RepositoryException
     {
-        if(!isVersionable())
+        if (!isVersionable())
         {
             throw new UnsupportedRepositoryOperationException("The node is not versionable");
         }

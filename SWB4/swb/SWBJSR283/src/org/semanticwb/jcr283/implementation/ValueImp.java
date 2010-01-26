@@ -134,7 +134,7 @@ public class ValueImp implements Value
                     break;
             }
         }
-        if (value instanceof Value)
+        else if (value instanceof Value)
         {
             Value ovalue = (Value) value;
             switch (type)
