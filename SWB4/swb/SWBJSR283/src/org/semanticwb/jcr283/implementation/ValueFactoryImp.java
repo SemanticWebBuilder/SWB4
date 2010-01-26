@@ -104,7 +104,15 @@ public class ValueFactoryImp implements ValueFactory
 
     public Value createValue(Node value, boolean weak) throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if(weak)
+        {
+            return new ValueImp(value, PropertyType.WEAKREFERENCE);
+        }
+        else
+        {
+            return new ValueImp(value,PropertyType.REFERENCE);
+        }  
+
     }
 
     public Binary createBinary(InputStream stream) throws RepositoryException

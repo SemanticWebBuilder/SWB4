@@ -73,9 +73,9 @@ public class NodeImp extends ItemImp implements Node
     private SemanticObject obj = null;
     private final int index;
     private final NodeTypeImp nodeType;
-    private final NodeTypeManagerImp nodeTypeManager;
+    protected final NodeTypeManagerImp nodeTypeManager;
     private final String id;
-
+    private final VersionManagerImp versionManagerImp;
     NodeImp(Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
         this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), new NodeDefinitionImp(base.getSemanticObject(), NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass())), base.getName(), parent, index, path, depth, session, base.getId());
@@ -91,6 +91,7 @@ public class NodeImp extends ItemImp implements Node
         loadProperties(false);
         this.nodeType = nodeType;
         this.nodeTypeManager = session.getWorkspaceImp().getNodeTypeManagerImp();
+        versionManagerImp=session.getWorkspaceImp().getVersionManagerImp();
         init();
 
     }
@@ -103,7 +104,36 @@ public class NodeImp extends ItemImp implements Node
         initMixCreated();
         initSimpleVersionable();
         initversionNode();
+        initVersionable();
     }
+
+    private void initVersionable()
+    {
+        try
+        {
+            if (this.isVersionable())
+            {
+                createVersionHistory();                
+            }
+        }
+        catch (RepositoryException re)
+        {
+            log.error(re);
+        }
+    }
+    private void createVersionHistory() throws RepositoryException
+    {
+        NodeDefinitionImp versionDefinition=null;
+        NodeImp parentVersionHistory=null;
+        VersionHistoryImp history=new VersionHistoryImp(versionDefinition, parentVersionHistory, session);
+        PropertyImp prop=nodeManager.getProperty(getPathFromName("jcr:versionHistory"));
+        if(prop.getLength()==-1)
+        {
+            prop.set(valueFactoryImp.createValue(history));
+            this.isModified=true;
+        }
+    }
+    
 
     private void initPrimaryType()
     {
@@ -246,9 +276,9 @@ public class NodeImp extends ItemImp implements Node
 
     public void saveData() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
     {
-        if(this.definition.isProtected())
+        if (this.definition.isProtected())
         {
-            throw new ConstraintViolationException("The node "+path+" is protected");
+            throw new ConstraintViolationException("The node " + path + " is protected");
         }
         if (obj == null)
         {
@@ -458,9 +488,9 @@ public class NodeImp extends ItemImp implements Node
 
     public void orderBefore(String srcChildRelPath, String destChildRelPath) throws UnsupportedRepositoryOperationException, VersionException, ConstraintViolationException, ItemNotFoundException, LockException, RepositoryException
     {
-        if(this.definition.isProtected())
+        if (this.definition.isProtected())
         {
-            throw new ConstraintViolationException("The node "+path+" is protected");
+            throw new ConstraintViolationException("The node " + path + " is protected");
         }
         if (!isValidRelativePath(srcChildRelPath))
         {
@@ -802,9 +832,9 @@ public class NodeImp extends ItemImp implements Node
 
     public void addMixin(String mixinName) throws NoSuchNodeTypeException, VersionException, ConstraintViolationException, LockException, RepositoryException
     {
-        if(this.definition.isProtected())
+        if (this.definition.isProtected())
         {
-            throw new ConstraintViolationException("The node "+path+" is protected");
+            throw new ConstraintViolationException("The node " + path + " is protected");
         }
         NodeTypeImp mixNodeType = nodeTypeManager.getNodeTypeImp(mixinName);
         if (!this.canAddMixin(mixinName))
@@ -843,9 +873,9 @@ public class NodeImp extends ItemImp implements Node
 
     public void removeMixin(String mixinName) throws NoSuchNodeTypeException, VersionException, ConstraintViolationException, LockException, RepositoryException
     {
-        if(this.definition.isProtected())
+        if (this.definition.isProtected())
         {
-            throw new ConstraintViolationException("The node "+path+" is protected");
+            throw new ConstraintViolationException("The node " + path + " is protected");
         }
         NodeTypeImp mixNodeType = nodeTypeManager.getNodeTypeImp(mixinName);
         for (NodeType supertypes : ((NodeDefinitionImp) this.definition).getDefaultPrimaryType().getDeclaredSupertypes())
@@ -961,6 +991,18 @@ public class NodeImp extends ItemImp implements Node
         return false;
     }
 
+    private boolean isVersionable() throws RepositoryException
+    {
+        for (NodeType mixinNodeType : this.getMixinNodeTypes())
+        {
+            if (mixinNodeType.getName().equals("mix:versionable"))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private boolean isSimpleVersionable() throws RepositoryException
     {
         for (NodeType mixinNodeType : this.getMixinNodeTypes())
@@ -1064,7 +1106,11 @@ public class NodeImp extends ItemImp implements Node
 
     public Version getBaseVersion() throws UnsupportedRepositoryOperationException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if(!isVersionable())
+        {
+            throw new UnsupportedRepositoryOperationException("The node is not versionable");
+        }
+        return versionManagerImp.getBaseVersion(path);
     }
 
     public Lock lock(boolean isDeep, boolean isSessionScoped) throws UnsupportedRepositoryOperationException, LockException, AccessDeniedException, InvalidItemStateException, RepositoryException
