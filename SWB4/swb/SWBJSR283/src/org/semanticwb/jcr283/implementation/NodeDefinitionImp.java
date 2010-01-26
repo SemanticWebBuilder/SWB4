@@ -26,6 +26,13 @@ public class NodeDefinitionImp extends ItemDefinitionImp implements NodeDefiniti
     private final boolean allowsSameNameSiblings;
     private final HashSet<NodeTypeImp> requiredPrimaryTypes = new HashSet<NodeTypeImp>();
 
+    public NodeDefinitionImp(String name,boolean isMandatory,boolean isProtected,int onParentVersion,NodeTypeImp nodeType,boolean isAutoCreated,boolean allowsSameNameSiblings,NodeTypeImp defaultPrimaryType)
+    {
+        super(name, isMandatory, isProtected, onParentVersion, nodeType, isAutoCreated);
+        this.allowsSameNameSiblings=allowsSameNameSiblings;
+        this.defaultPrimaryType=defaultPrimaryType;
+        requiredPrimaryTypes.add(defaultPrimaryType);
+    }
     public NodeDefinitionImp(SemanticObject obj, NodeTypeImp nodeType)
     {
         super(obj, nodeType);

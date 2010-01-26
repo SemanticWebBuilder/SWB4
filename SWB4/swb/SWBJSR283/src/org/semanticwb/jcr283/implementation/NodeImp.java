@@ -82,6 +82,12 @@ public class NodeImp extends ItemImp implements Node
         this.obj = base.getSemanticObject();
     }
 
+    NodeImp(NodeDefinitionImp definition,Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
+    {
+        this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), definition, base.getName(), parent, index, path, depth, session, base.getId());
+        this.obj = base.getSemanticObject();
+    }
+
     NodeImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session, String id)
     {
         super(nodeDefinition, name, parent, path, depth, session);
@@ -123,12 +129,12 @@ public class NodeImp extends ItemImp implements Node
     }
     private void createVersionHistory() throws RepositoryException
     {
-        NodeDefinitionImp versionDefinition=null;
-        NodeImp parentVersionHistory=null;
-        VersionHistoryImp history=new VersionHistoryImp(versionDefinition, parentVersionHistory, session);
+        
+        NodeDefinitionImp versionDefinition=new NodeDefinitionImp(obj, nodeTypeManager.getNodeTypeImp("nt:versionHistory"));
         PropertyImp prop=nodeManager.getProperty(getPathFromName("jcr:versionHistory"));
         if(prop.getLength()==-1)
         {
+            VersionHistoryImp history=new VersionHistoryImp(versionDefinition, this, session);
             prop.set(valueFactoryImp.createValue(history));
             this.isModified=true;
         }

@@ -26,6 +26,15 @@ public class ItemDefinitionImp implements ItemDefinition
     private final NodeTypeImp nodeType;
     private final boolean isAutoCreated;
 
+    public ItemDefinitionImp(String name,boolean isMandatory,boolean isProtected,int onParentVersion,NodeTypeImp nodeType,boolean isAutoCreated)
+    {
+        this.name=name;
+        this.isMandatory=isMandatory;
+        this.isProtected=isProtected;
+        this.onParentVersion=onParentVersion;
+        this.nodeType=nodeType;
+        this.isAutoCreated=isAutoCreated;
+    }
     public ItemDefinitionImp(SemanticObject obj, NodeTypeImp nodeType)
     {
         this.nodeType = nodeType;        
