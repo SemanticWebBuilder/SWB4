@@ -32,6 +32,7 @@ import com.hp.hpl.jena.db.DBConnection;
 import com.hp.hpl.jena.db.IDBConnection;
 import com.hp.hpl.jena.db.ModelRDB;
 import com.hp.hpl.jena.db.impl.Driver_Derby_SWB;
+import com.hp.hpl.jena.db.impl.Driver_HSQLDB_SWB;
 import com.hp.hpl.jena.db.impl.Driver_HSQL_SWB;
 import com.hp.hpl.jena.db.impl.Driver_MsSQL_SWB;
 import com.hp.hpl.jena.db.impl.Driver_MySQL_SWB;
@@ -52,7 +53,6 @@ import com.hp.hpl.jena.sdb.sql.SDBConnection;
 import com.hp.hpl.jena.sdb.store.DatabaseType;
 import com.hp.hpl.jena.sdb.store.LayoutType;
 import com.hp.hpl.jena.tdb.TDBFactory;
-import com.hp.hpl.jena.tdb.mgt.TDBSystemInfo;
 import com.hp.hpl.jena.util.FileManager;
 import java.io.File;
 import java.io.FileInputStream;
@@ -180,7 +180,7 @@ public class SemanticMgr implements SWBInstanceObject
             IRDBDriver driver=null;
             if(M_DB.equals(SWBUtils.DB.DBTYPE_MySQL)){driver=new Driver_MySQL_SWB();}
             else if(M_DB.equals(SWBUtils.DB.DBTYPE_Derby)){driver=new Driver_Derby_SWB();}
-            else if(M_DB.equals(SWBUtils.DB.DBTYPE_HSQL)){driver=new Driver_HSQL_SWB();}
+            else if(M_DB.equals(SWBUtils.DB.DBTYPE_HSQL)){driver=new Driver_HSQLDB_SWB();}
             else if(M_DB.equals(SWBUtils.DB.DBTYPE_MsSQL)){driver=new Driver_MsSQL_SWB();}
             else if(M_DB.equals(SWBUtils.DB.DBTYPE_Oracle)){driver=new Driver_Oracle_SWB();}
             else if(M_DB.equals(SWBUtils.DB.DBTYPE_PostgreSQL)){driver=new Driver_PostgreSQL_SWB();}
