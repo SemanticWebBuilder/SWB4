@@ -95,7 +95,7 @@ public class Search extends WizardPage
             }
             else
             {
-                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/Search").getString("¡SE_ENCONTRARÓN_") + contens.length + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/Search").getString("_COINCIDENCIAS_PARA_LA_BUSQUEDA!"), Search.getDescription(), JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/Search").getString("¡SE_ENCONTRARÓN_") + " "+contens.length +" "+ java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/Search").getString("_COINCIDENCIAS_PARA_LA_BUSQUEDA!"), Search.getDescription(), JOptionPane.INFORMATION_MESSAGE);
             }
             for (ContentInfo info : contens)
             {
