@@ -52,6 +52,7 @@ var stylesheets = "{__DIR__}style.css";
 var color="#6060FF";
 //var color="#000000";
 var color_over="#FF6060";
+var color_focused="#FF8080";
 var color_fill="#f5f5ff";
 //var color_over="#f06060";
 var style_task="fill: {color_fill}; stroke: {color}; strokeWidth: 2; arcWidth: 15; arcHeight: 15;";
@@ -863,6 +864,19 @@ class FlowObject extends CustomNode
 
     var movetimer:Timeline;
 
+    var focusState = bind focused on replace
+    {
+        if (focused)
+        {
+            println("focused");
+        }
+        else
+        {
+            shape.stroke=Color.web(color);
+            println("lost focus");
+        }
+    }
+
     public function move(ax: Number, ay: Number)
     {
         visible=true;
@@ -934,14 +948,15 @@ class FlowObject extends CustomNode
 
     override var onMouseClicked = function ( e: MouseEvent ) : Void
     {
-        if(modeler.clickedNode==this)
+        println("onMouseClicked node:{e}");
+        if(modeler.focusedNode==this)
         {
             if(e.clickCount >= 2)
             {
+                println("starEditing");
                 text.startEditing();
             }
         }
-        println("onMouseClicked node:{e}");
     }
 
     override var onMouseDragged = function ( e: MouseEvent ) : Void
@@ -954,6 +969,8 @@ class FlowObject extends CustomNode
             if(ay>0)y=ay else y=0;
         }
     }
+
+
 
     override var onMousePressed = function( e: MouseEvent ):Void
     {
@@ -974,6 +991,7 @@ class FlowObject extends CustomNode
             dx=x-e.sceneX;
             dy=y-e.sceneY;
             //toFront();
+            requestFocus();
         }
         println("onMousePress node:{e}");
     }
@@ -1006,16 +1024,31 @@ class FlowObject extends CustomNode
                 modeler.overNode=null;
                 if(modeler.tempNode==null)modeler.disablePannable=false;
         }
-        shape.stroke=Color.web(color);
+        if(focused) shape.stroke=Color.web(color_focused)
+        else shape.stroke=Color.web(color);
         shape.strokeWidth=stkw;
         //normaltimer.playFromStart();
     }
 
     override var onKeyPressed = function( e: KeyEvent )
     {
+        if(e.code==e.code.VK_DELETE)
+        {
+            remove();
+        }
         println(e);
     }
 
+    public function remove()
+    {
+        modeler.remove(this);
+        for(connection in modeler.contents where connection instanceof ConnectionObject)
+        {
+            var c=connection as ConnectionObject;
+            if(c.end == this)c.remove();
+            if(c.ini == this)c.remove();
+        }
+    }
 
 
 }
@@ -1112,6 +1145,11 @@ class ConnectionObject extends CustomNode
             opacity: bind o;
             effect: dropShadow
         };
+    }
+
+    public function remove()
+    {
+        modeler.remove(this);
     }
 
     override var onMouseDragged = function ( e: MouseEvent ) : Void
