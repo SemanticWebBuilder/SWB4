@@ -39,6 +39,7 @@ public class WorkspaceImp  implements Workspace {
     private final String name;    
     private final NodeManager nodeManager=new NodeManager();
     private NodeTypeManagerImp nodeTypeManager;
+    private final VersionManagerImp versionManagerImp=new VersionManagerImp();
     public WorkspaceImp(SessionImp session,org.semanticwb.jcr283.repository.model.Workspace ws)
     {
         this.session=session;
@@ -120,7 +121,12 @@ public class WorkspaceImp  implements Workspace {
 
     public VersionManager getVersionManager() throws UnsupportedRepositoryOperationException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return versionManagerImp;
+    }
+
+    public VersionManagerImp getVersionManagerImp()
+    {
+        return versionManagerImp;
     }
 
     public String[] getAccessibleWorkspaceNames() throws RepositoryException

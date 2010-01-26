@@ -16,6 +16,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 import javax.jcr.Binary;
+import javax.jcr.Node;
 import javax.jcr.PropertyType;
 import javax.jcr.RepositoryException;
 import javax.jcr.Value;
@@ -120,9 +121,22 @@ public class ValueImp implements Value
     private Object getValue(Object value, int type) throws ValueFormatException, RepositoryException
     {
         Object getValue = null;
+        if (value instanceof Node)
+        {
+            Node node = (Node) value;
+            switch (type)
+            {
+                case PropertyType.WEAKREFERENCE:
+                    getValue = node.getIdentifier();
+                    break;
+                case PropertyType.REFERENCE:
+                    getValue = node.getIdentifier();
+                    break;
+            }
+        }
         if (value instanceof Value)
         {
-            Value ovalue=(Value)value;
+            Value ovalue = (Value) value;
             switch (type)
             {
                 case PropertyType.STRING:
@@ -511,8 +525,6 @@ public class ValueImp implements Value
         return getValue;
     }
 
-    
-
     public String getString() throws ValueFormatException, IllegalStateException, RepositoryException
     {
         return (String) getValue(value, PropertyType.STRING);
@@ -847,13 +859,14 @@ public class ValueImp implements Value
 
     private String toString(QName value) throws ValueFormatException
     {
-        NamespaceRegistryImp reg=new NamespaceRegistryImp();
+        NamespaceRegistryImp reg = new NamespaceRegistryImp();
         try
         {
-            String prefix=reg.getPrefix(value.getNamespaceURI());
-            return  prefix+":"+value.getLocalPart();
+            String prefix = reg.getPrefix(value.getNamespaceURI());
+            return prefix + ":" + value.getLocalPart();
         }
-        catch(Exception e){
+        catch (Exception e)
+        {
             throw new ValueFormatException(e);
         }
     }
