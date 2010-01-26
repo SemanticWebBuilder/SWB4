@@ -112,7 +112,7 @@ public class SessionImp implements Session
 
     public Node getNodeByIdentifier(String id) throws ItemNotFoundException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return workspace.getNodeManager().getNodeByIdentifier(id,this);
     }
 
     private static boolean isValidAbsPath(String absPath)

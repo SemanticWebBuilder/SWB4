@@ -4,6 +4,7 @@
  */
 package org.semanticwb.jcr283.implementation;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
@@ -20,6 +21,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.jcr283.repository.model.Base;
 import org.semanticwb.jcr283.repository.model.Unstructured;
+import org.semanticwb.jcr283.repository.model.Workspace;
 import org.semanticwb.model.GenericIterator;
 
 /**
@@ -28,9 +30,12 @@ import org.semanticwb.model.GenericIterator;
  */
 public class NodeManager
 {
-    private static final String PATH_SEPARATOR = "/";
 
+    private static final String PATH_SEPARATOR = "/";
     private Hashtable<String, NodeStatus> nodes = new Hashtable<String, NodeStatus>();
+
+    private Hashtable<String, NodeStatus> nodesbyId = new Hashtable<String,NodeStatus>();
+
     private Hashtable<String, HashSet<NodeStatus>> nodesbyParent = new Hashtable<String, HashSet<NodeStatus>>();
     private Hashtable<String, PropertyStatus> properties = new Hashtable<String, PropertyStatus>();
     private Hashtable<String, HashSet<PropertyStatus>> propertiesbyParent = new Hashtable<String, HashSet<PropertyStatus>>();
@@ -55,21 +60,29 @@ public class NodeManager
         return getIndex;
     }
 
-    public NodeImp loadRoot(org.semanticwb.jcr283.repository.model.Workspace ws, SessionImp session)
+    public NodeImp loadRoot(org.semanticwb.jcr283.repository.model.Workspace ws, SessionImp session) throws RepositoryException
     {
         if (!nodes.containsKey(PATH_SEPARATOR))
         {
-            log.trace("Loading root node for repository "+ws.getName());
+            log.trace("Loading root node for repository " + ws.getName());
             if (ws.getRoot() == null)
             {
                 Unstructured newroot = Unstructured.ClassMgr.createUnstructured("jcr:root", ws);
                 ws.setRoot(newroot);
-            }            
-            RootNodeImp root = new RootNodeImp(ws.getRoot(),session);
+            }
+            RootNodeImp root = new RootNodeImp(ws.getRoot(), session);
             nodes.put(PATH_SEPARATOR, new NodeStatus(root));
         }
-        return nodes.get(PATH_SEPARATOR).getNode();
+        NodeImp root = nodes.get(PATH_SEPARATOR).getNode();
+        initVersionStore(root);
+        return root;
 
+    }
+
+    private void initVersionStore(NodeImp root) throws RepositoryException
+    {
+        log.trace("Creating Version Storage");
+        root.insertNode("jcr:versionStorage");
     }
 
     public NodeImp getRoot()
@@ -77,11 +90,66 @@ public class NodeManager
         return this.nodes.get(PATH_SEPARATOR).getNode();
     }
 
+    public NodeImp getNodeByIdentifier(String id,SessionImp session) throws RepositoryException
+    {
+        if(nodesbyId.containsKey(id))
+        {
+            return nodesbyId.get(id).getNode();
+        }
+        else
+        {
+            // load node
+            ArrayList<Base> nodesToLoad=new ArrayList<Base>();
+            Workspace ws=Workspace.ClassMgr.getWorkspace(session.getWorkspace().getName());
+            Base nodeToLoad=Base.ClassMgr.getBase(id, ws);
+
+            if(nodeToLoad!=null)
+            {
+                nodesToLoad.add(nodeToLoad);
+                Base parent=nodeToLoad.getParentNode();
+                NodeImp parentloaded=null;
+                boolean loaded=false;
+                while(loaded!=true)
+                {
+                    if(nodesbyId.containsKey(parent.getId()))
+                    {
+                        loaded=true;
+                        parentloaded=nodesbyId.get(parent.getId()).getNode();
+                    }
+                    else
+                    {
+                        String tempid=parent.getId();
+                        nodesToLoad.add(parent);
+                        parent=parent.getParentNode();
+                        if(parent==null)
+                        {
+                            throw new RepositoryException("The parentNode for the node with id "+tempid+" was not found");
+                        }
+                    }
+                }
+                if(parentloaded!=null)
+                {                    
+                    for(int i=nodesToLoad.size()-1;i>=0;i--)
+                    {
+                        Base base=nodesToLoad.get(i);
+                        String path=parentloaded.path;
+                        String pathChild=parentloaded.getPathFromName(base.getName());
+                        int index=countNodes(path, false);
+                        NodeImp temp=new NodeImp(base, parentloaded,index , pathChild, parentloaded.getDepth()+1, session);
+                        this.addNode(temp, path, pathChild);
+                        parentloaded=temp;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     public NodeImp addNode(NodeImp node, String path, String pathParent)
     {
         if (!this.nodes.containsKey(path))
         {
-            log.trace("Loading node " + path);
+            log.trace("Inserting node " + path + " into the NodeManager");
             NodeStatus nodeStatus = new NodeStatus(node);
             this.nodes.put(path, nodeStatus);
             HashSet<NodeStatus> childnodes = new HashSet<NodeStatus>();
@@ -91,6 +159,7 @@ public class NodeManager
             }
             childnodes.add(nodeStatus);
             nodesbyParent.put(pathParent, childnodes);
+            nodesbyId.put(node.id, nodeStatus);
         }
         return this.nodes.get(path).getNode();
     }
@@ -267,8 +336,9 @@ public class NodeManager
 
     }
 
-    public NodeImp getNode(String path, SessionImp session) throws RepositoryException
+    public NodeImp getProtectedNode(String path, SessionImp session) throws RepositoryException
     {
+        boolean deleted = false;
         NodeImp node = this.nodes.get(path).getNode();
         if (node == null)
         {
@@ -300,6 +370,60 @@ public class NodeManager
 
             }
             node = this.nodes.get(path).getNode();
+        }
+        else
+        {
+            deleted = this.nodes.get(path).isDeleted();
+        }
+        if (deleted || !node.getDefinition().isProtected())
+        {
+            node = null;
+        }
+        return node;
+    }
+
+    public NodeImp getNode(String path, SessionImp session) throws RepositoryException
+    {
+        boolean deleted = false;
+        NodeImp node = this.nodes.get(path).getNode();
+        if (node == null)
+        {
+            //TODO: Try to load the node from database
+            String[] paths = path.split(PATH_SEPARATOR);
+            for (String fragment : paths)
+            {
+                int depth = 0;
+                NodeImp nodetoextract = nodes.get(PATH_SEPARATOR).getNode();
+                if (fragment.equals(""))
+                {
+                    nodetoextract = nodes.get(PATH_SEPARATOR).getNode();
+                    loadChilds(nodetoextract, PATH_SEPARATOR, depth, session, false);
+                    depth = 0;
+                }
+                else
+                {
+                    try
+                    {
+                        String pathParent = nodetoextract.getPath();
+                        loadChilds(nodetoextract, pathParent, depth, session, false);
+                        depth++;
+                    }
+                    catch (Exception e)
+                    {
+                        throw new RepositoryException(e);
+                    }
+                }
+
+            }
+            node = this.nodes.get(path).getNode();
+        }
+        else
+        {
+            deleted = this.nodes.get(path).isDeleted();
+        }
+        if (node.getDefinition().isProtected() || deleted)
+        {
+            node = null;
         }
         return node;
     }
@@ -336,6 +460,23 @@ public class NodeManager
         return this.getChildNodes(node.getPath());
     }
 
+    public Set<NodeImp> getProtectedChildNodes(String parenPath) throws RepositoryException
+    {
+        HashSet<NodeImp> getChilds = new HashSet<NodeImp>();
+        HashSet<NodeStatus> childs = nodesbyParent.get(parenPath);
+        if (childs != null && childs.size() > 0)
+        {
+            for (NodeStatus node : childs)
+            {
+                if (!node.isDeleted() && node.getNode().getDefinition().isProtected())
+                {
+                    getChilds.add(node.getNode());
+                }
+            }
+        }
+        return getChilds;
+    }
+
     public Set<NodeImp> getChildNodes(String parenPath) throws RepositoryException
     {
         HashSet<NodeImp> getChilds = new HashSet<NodeImp>();
@@ -344,7 +485,7 @@ public class NodeManager
         {
             for (NodeStatus node : childs)
             {
-                if (!node.isDeleted())
+                if (!node.isDeleted() && node.getNode().getDefinition().isProtected())
                 {
                     getChilds.add(node.getNode());
                 }
@@ -466,6 +607,33 @@ class NodeStatus
     public void delete()
     {
         this.deleted = true;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final NodeStatus other = (NodeStatus) obj;
+        if (this.node != other.node && (this.node == null || !this.node.equals(other.node)))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int hash = 7;
+        hash = 67 * hash + (this.node != null ? this.node.hashCode() : 0);
+        return hash;
     }
 
     public void restore()

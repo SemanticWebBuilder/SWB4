@@ -24,29 +24,34 @@ import javax.jcr.version.VersionIterator;
  */
 public class VersionHistoryImp extends NodeImp implements VersionHistory {
 
-    VersionManagerImp versionManager=new VersionManagerImp();
-    public VersionHistoryImp(org.semanticwb.jcr283.repository.model.VersionHistory vh, NodeImp parent, int index, String path, int depth, SessionImp session)
+    private final NodeImp versionableNode;
+    
+    public VersionHistoryImp(org.semanticwb.jcr283.repository.model.VersionHistory vh, NodeImp parent, int index, String path, int depth, SessionImp session) throws RepositoryException
     {
         super(vh, parent, index, path, depth, session);
+        PropertyImp prop=nodeManager.getProperty(this.getPathFromName("jcr:versionableUuid"));
+        if(prop.getLength()==-1)
+        {
+            throw new RepositoryException("The versionableUuid property was not found");
+        }
+        String id=prop.getString();
+        versionableNode=(NodeImp)session.getNodeByIdentifier(id);
     }
-    public VersionHistoryImp(NodeDefinitionImp nodeDefinition, NodeImp parent, SessionImp session) throws NoSuchNodeTypeException,RepositoryException
+    public VersionHistoryImp(NodeDefinitionImp nodeDefinition, NodeImp parent, SessionImp session,NodeImp versionableNode) throws NoSuchNodeTypeException,RepositoryException
     {
         super(SWBRepository.getNodeTypeManagerImp().getNodeTypeImp("nt:versionHistory"), nodeDefinition, "jcr:versionHistory", parent, 0, parent.path+PATH_SEPARATOR+"jcr:versionHistory", parent.getDepth()+1, session, UUID.randomUUID().toString());
-        createBaseVersion();
-    }
-    private void createBaseVersion()
-    {
-        
-    }
+        this.versionableNode=versionableNode;
+    
+    }       
 
     public String getVersionableUUID() throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return getVersionableIdentifier();
     }
 
     public String getVersionableIdentifier() throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return versionableNode.getIdentifier();
     }
 
     public Version getRootVersion() throws RepositoryException
