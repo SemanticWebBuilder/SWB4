@@ -315,7 +315,7 @@ public abstract class OfficeApplication
         CreatePageResultProducer resultProducer = new CreatePageResultProducer(parent);
         WizardPage[] clazz = new WizardPage[]
         {
-            new TitleAndDescription(false), new SelectWebPageID()
+            new TitleAndDescription(false), new SelectWebPageID(parent)
         };
         Wizard wiz = WizardPage.createWizard(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("ASISTENTE_DE_CREACIÓN_DE_PÁGINA"), clazz, resultProducer);
         wiz.show();
