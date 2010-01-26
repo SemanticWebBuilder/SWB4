@@ -32,10 +32,10 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.StringTokenizer;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
@@ -104,6 +104,23 @@ public class Poll extends GenericResource {
             super.processRequest(request, response, paramRequest);
         }
     }
+
+     @Override
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/html; charset=iso-8859-1");
+        response.setHeader("Cache-Control","no-cache"); //HTTP 1.1
+        response.setHeader("Pragma","no-cache"); //HTTP 1.0
+        response.setDateHeader ("Expires", 0); //prevents caching at the proxy server
+
+         try {
+            String jspFile=paramRequest.getResourceBase().getAttribute("jspfile","/swbadmin/jsp/poll/poll.jsp");
+            request.setAttribute("paramRequest", paramRequest);
+            RequestDispatcher rd = request.getRequestDispatcher(jspFile);
+            rd.include(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
    
     /**
      * Muestra el html al usuario final
@@ -112,7 +129,8 @@ public class Poll extends GenericResource {
      * @param reqParams
      * @throws AFException
      * @throws IOException
-     */    
+     */
+    /*
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=iso-8859-1");
@@ -291,6 +309,7 @@ public class Poll extends GenericResource {
         }
         out.flush();
     }
+     * */
     
     /**
      * Muestra los resultados de la encuesta en especifico
@@ -711,7 +730,11 @@ public class Poll extends GenericResource {
                                 msg=paramRequest.getLocaleString("msgErrUploadFile") +" <i>" + value + "</i>.";
                             }
                         } 
-                    } 
+                    }
+
+                    value = null != fup.getValue("jspfile") && !"".equals(fup.getValue("jspfile").trim()) ? fup.getValue("jspfile").trim() : "";
+                    base.setAttribute("jspfile",value);
+                    
 
                     value = null != fup.getValue("nobutton") && !"".equals(fup.getValue("nobutton").trim()) ? fup.getValue("nobutton").trim() : "0";
                     if ("1".equals(value) && !"".equals(base.getAttribute("button", "").trim()))
@@ -945,6 +968,17 @@ public class Poll extends GenericResource {
             ret.append("<legend>"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_section1")+"</legend>");
             ret.append("<table width=\"100%\"  border=\"0\" cellpadding=\"0\" cellspacing=\"5\"> ");
             ret.append("<tr><td width=\"30%\"></td><td width=\"70%\"></td>");
+
+            ret.append("<tr>");
+            ret.append("<td align=\"right\">* " + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_jsp") + "</td>");
+            ret.append("<td>");
+            ret.append("<input type=\"text\" size=\"50\" name=\"jspfile\" ");
+            if(!"".equals(base.getAttribute("jspfile", "").trim())) {
+                ret.append(" value=\"" + base.getAttribute("jspfile") + "\"");
+            }
+            ret.append("/>");
+            ret.append("</td> ");
+            ret.append("</tr>");
 
             ret.append("<tr>");
             ret.append("<td align=\"right\">* " + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_question") + "</td>");
