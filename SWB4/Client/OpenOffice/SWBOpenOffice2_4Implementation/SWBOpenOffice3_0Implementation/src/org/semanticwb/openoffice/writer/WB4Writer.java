@@ -35,11 +35,9 @@ import com.sun.star.frame.XController;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XStorable;
-import com.sun.star.graphic.XGraphicProvider;
 import com.sun.star.io.IOException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
@@ -555,17 +553,6 @@ public class WB4Writer extends OfficeDocument
                 storeProps[1].Name = OVERWRITE;
                 storeProps[1].Value = true;
                 XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
-
-
-
-
-
-
-
-
-
-
-
                 if (!dir.exists())
                 {
                     dir.mkdirs();
@@ -587,29 +574,17 @@ public class WB4Writer extends OfficeDocument
             storeProps[1].Name = OVERWRITE;
             storeProps[1].Value = true;
             XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
-
-
-
-
-
-
-
-
-
             if (!dir.exists())
             {
                 dir.mkdirs();
             }
             String url = getPathURL(HTMLfile);
             xStorable.storeToURL(url, storeProps);
-
-
-
-
             return HTMLfile;
         }
         catch (IOException ioe)
         {
+            ioe.printStackTrace();
             throw new WBOfficeException(ERROR_NO_SAVE, ioe);
         }
 
