@@ -15,6 +15,6 @@ public class RootNodeDefinition extends NodeDefinitionImp  {
 
     public RootNodeDefinition(NodeTypeImp nodeType,NodeTypeImp defaultPrimaryType)
     {
-        super("", true, true, OnParentVersionAction.VERSION, nodeType, true, false, defaultPrimaryType);
+        super("", true, false, OnParentVersionAction.VERSION, nodeType, true, false, defaultPrimaryType);
     }
 }
