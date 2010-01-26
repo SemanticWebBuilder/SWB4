@@ -115,12 +115,12 @@ public abstract class OfficeApplication
                 }
                 catch (URISyntaxException e)
                 {
-                    String message = DELETE_CONFIGURATION_ERROR + new Configuration().getPath();
+                    String message = DELETE_CONFIGURATION_ERROR +" "+ new Configuration().getPath();
                     throw new WBException(message, e);
                 }
                 catch (NumberFormatException e)
                 {
-                    String message = DELETE_CONFIGURATION_ERROR + new Configuration().getPath();
+                    String message = DELETE_CONFIGURATION_ERROR+" " + new Configuration().getPath();
                     throw new WBException(message, e);
                 }
             }
@@ -133,9 +133,9 @@ public abstract class OfficeApplication
             }
             catch (ConnectException e)
             {
-                JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("NO_SE_PUEDE_CONECTAR_AL_SERVIDORDETALLE:_")+e.getLocalizedMessage(), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("ERROR_DE_ACCESO"), JOptionPane.OK_OPTION |
+                JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("NO_SE_PUEDE_CONECTAR_AL_SERVIDORDETALLE:_")+" "+e.getLocalizedMessage(), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("ERROR_DE_ACCESO"), JOptionPane.OK_OPTION |
                             JOptionPane.ERROR_MESSAGE);
-                throw new WBException(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("NO_SE_PUEDE_CONECTAR_AL_SERVIDORDETALLE:_")+e.getLocalizedMessage(), e);
+                throw new WBException(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("NO_SE_PUEDE_CONECTAR_AL_SERVIDORDETALLE:_")+" "+e.getLocalizedMessage(), e);
             }
             catch (HttpException e)
             {
@@ -180,12 +180,12 @@ public abstract class OfficeApplication
             }
             catch (URISyntaxException e)
             {
-                String message = DELETE_CONFIGURATION_ERROR + new Configuration().getPath();
+                String message = DELETE_CONFIGURATION_ERROR +" "+ new Configuration().getPath();
                 throw new WBException(message, e);
             }
             catch (NumberFormatException e)
             {
-                String message = DELETE_CONFIGURATION_ERROR + new Configuration().getPath();
+                String message = DELETE_CONFIGURATION_ERROR+" " + new Configuration().getPath();
                 throw new WBException(message, e);
             }
         }
@@ -207,9 +207,9 @@ public abstract class OfficeApplication
             }
             catch (ConnectException e)
             {
-                JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("NO_SE_PUEDE_CONECTAR_AL_SERVIDORDETALLE:_")+e.getLocalizedMessage(), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("ERROR_DE_ACCESO"), JOptionPane.OK_OPTION |
+                JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("NO_SE_PUEDE_CONECTAR_AL_SERVIDORDETALLE:_")+" "+e.getLocalizedMessage(), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("ERROR_DE_ACCESO"), JOptionPane.OK_OPTION |
                             JOptionPane.ERROR_MESSAGE);
-                throw new WBException(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("NO_SE_PUEDE_CONECTAR_AL_SERVIDORDETALLE:_")+e.getLocalizedMessage(), e);
+                throw new WBException(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("NO_SE_PUEDE_CONECTAR_AL_SERVIDORDETALLE:_")+" "+e.getLocalizedMessage(), e);
             }
             catch (HttpException e)
             {

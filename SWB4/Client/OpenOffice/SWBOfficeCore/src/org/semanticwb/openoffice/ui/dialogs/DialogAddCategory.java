@@ -54,7 +54,7 @@ public class DialogAddCategory extends javax.swing.JDialog
         this.setIconImage(ImageLoader.images.get("semius").getImage());
         this.setModal(true);
         this.repository = repository;
-        this.setTitle(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogAddCategory").getString("AGREGAR_CATEGORIA_A_REPOSITORIO_") + repository);
+        this.setTitle(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogAddCategory").getString("AGREGAR_CATEGORIA_A_REPOSITORIO_")+" " + repository);
         this.setLocationRelativeTo(null);
         this.categoryId = categoryid;
     }

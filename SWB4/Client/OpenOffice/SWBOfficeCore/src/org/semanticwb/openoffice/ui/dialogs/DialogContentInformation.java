@@ -59,6 +59,7 @@ import org.semanticwb.openoffice.ui.icons.ImageLoader;
  */
 public class DialogContentInformation extends javax.swing.JDialog
 {
+
     public static final String CONTENTID = "?contentId=";
     private static final String BOOLEAN = "boolean";
     private static final String EMPTY_STRING = "";
@@ -735,7 +736,7 @@ public class DialogContentInformation extends javax.swing.JDialog
 
     private void jButtonPublishActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonPublishActionPerformed
     {//GEN-HEADEREND:event_jButtonPublishActionPerformed
-        this.setCursor(new Cursor(Cursor.WAIT_CURSOR));        
+        this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
         document.publish();
         this.repaint();
         this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
@@ -820,7 +821,7 @@ public class DialogContentInformation extends javax.swing.JDialog
                     {
                         if (OfficeApplication.getOfficeDocumentProxy().needsSendToPublish(resourceInfo))
                         {
-                            int res = JOptionPane.showConfirmDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("EL_CONTENIDO_NECESITA_SER_AUTORIZADO_PARA_PRESENTARSE_EN_EL_SITIO.")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("¿DESEA_ENVIARLO_A_AUTORIZACIÓN?"), this.getTitle(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                            int res = JOptionPane.showConfirmDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("EL_CONTENIDO_NECESITA_SER_AUTORIZADO_PARA_PRESENTARSE_EN_EL_SITIO.") + NL + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("¿DESEA_ENVIARLO_A_AUTORIZACIÓN?"), this.getTitle(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                             if (res == JOptionPane.YES_OPTION)
                             {
                                 DialogSelectFlow dialogSelectFlow = new DialogSelectFlow(resourceInfo);
@@ -845,7 +846,7 @@ public class DialogContentInformation extends javax.swing.JDialog
                         }
                         else
                         {
-                            int res = JOptionPane.showConfirmDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("EL_CONTENIDO_FUE_RECHAZADO.")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("PARA_ACTIVARLO_NECESITA_ENVIARLO_A_AUTORIZACIÓN_DE_NUEVO")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("¿DESEA_ENVIARLO_A_AUTORIZACIÓN?"), this.getTitle(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                            int res = JOptionPane.showConfirmDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("EL_CONTENIDO_FUE_RECHAZADO.") + NL + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("PARA_ACTIVARLO_NECESITA_ENVIARLO_A_AUTORIZACIÓN_DE_NUEVO") + NL + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("¿DESEA_ENVIARLO_A_AUTORIZACIÓN?"), this.getTitle(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                             if (res == JOptionPane.YES_OPTION)
                             {
                                 DialogSelectFlow dialogSelectFlow = new DialogSelectFlow(resourceInfo);
@@ -920,7 +921,7 @@ public class DialogContentInformation extends javax.swing.JDialog
             ResourceInfo porlet = (ResourceInfo) jTablePages.getModel().getValueAt(jTablePages.getSelectedRow(), 0);
             try
             {
-                int res = JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("¿DESEA_ELIMINAR_LA_PUBLICACIÓN_DEL_CONTENIDO_CON_TITULO_") + porlet.title + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("_DE_LA_PÁGINA_") + porlet.page.title + "?", this.getTitle(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                int res = JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("¿DESEA_ELIMINAR_LA_PUBLICACIÓN_DEL_CONTENIDO_CON_TITULO_") + " " + porlet.title + " " + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("_DE_LA_PÁGINA_")+" " + porlet.page.title + "?", this.getTitle(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (res == JOptionPane.YES_OPTION)
                 {
                     this.jButtonDeletePage.setEnabled(false);
@@ -982,7 +983,7 @@ public class DialogContentInformation extends javax.swing.JDialog
             try
             {
                 String urlproxy = OfficeApplication.getOfficeApplicationProxy().getWebAddress().toString();
-                if (!urlproxy.endsWith(PATH_SEPARATOR+GTW))
+                if (!urlproxy.endsWith(PATH_SEPARATOR + GTW))
                 {
                     if (!urlproxy.endsWith(PATH_SEPARATOR))
                     {
@@ -1076,12 +1077,12 @@ public class DialogContentInformation extends javax.swing.JDialog
             boolean published = (Boolean) model.getValueAt(this.jTableSummary1.getSelectedRow(), 3);
             if (published)
             {
-                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("¡NO_SE_PUEDE_BORRAR_UNA_VERSIÓN_QUE_HA_SIDO_PUBLICADA.!")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("DEBE_BORRAR_PRIMERO_LA_PUBLICACIÓN_DEL_CONTENIDO."), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("BORRADO_DE_VERSIÓN_DE_CONTENIDO"), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("¡NO_SE_PUEDE_BORRAR_UNA_VERSIÓN_QUE_HA_SIDO_PUBLICADA.!") + NL + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("DEBE_BORRAR_PRIMERO_LA_PUBLICACIÓN_DEL_CONTENIDO."), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("BORRADO_DE_VERSIÓN_DE_CONTENIDO"), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
                 return;
             }
             try
             {
-                int res = JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("¿DESEA_BORRAR_LA_VERSIÓN_") + versionInfo + "?", java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("BORRADO_DE_VERSIÓN_DE_CONTENIDO"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                int res = JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("¿DESEA_BORRAR_LA_VERSIÓN_")+" " + versionInfo + "?", java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogContentInformation").getString("BORRADO_DE_VERSIÓN_DE_CONTENIDO"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (res == JOptionPane.YES_OPTION)
                 {
                     try

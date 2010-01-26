@@ -273,7 +273,7 @@ public class SummaryPublish extends javax.swing.JPanel
             }
             try
             {
-                int res=JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SummaryPublish").getString("¿DESEA_BORRAR_LA_VERSIÓN_")+ versionInfo +"?",java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SummaryPublish").getString("BORRADO_DE_VERSIÓN_DE_CONTENIDO"),JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+                int res=JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SummaryPublish").getString("¿DESEA_BORRAR_LA_VERSIÓN_")+" "+ versionInfo +"?",java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SummaryPublish").getString("BORRADO_DE_VERSIÓN_DE_CONTENIDO"),JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
                 if(res==JOptionPane.YES_OPTION)
                 {
                     try

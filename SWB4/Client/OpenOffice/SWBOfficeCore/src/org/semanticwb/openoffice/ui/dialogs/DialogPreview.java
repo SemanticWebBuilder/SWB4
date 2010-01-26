@@ -252,7 +252,7 @@ public class DialogPreview extends java.awt.Dialog
         catch (IOException e)
         {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(frame,java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogPreview").getString("EL_SISTEMA_FALLÓ_AL_TRATAR_DE_INVOCAR_SU_NAVEGADOR_POR_DEFECTO_INTENTANDO_ACCEDER_A:_")+ NL +" " + url + NL,
+            JOptionPane.showMessageDialog(frame,java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogPreview").getString("EL_SISTEMA_FALLÓ_AL_TRATAR_DE_INVOCAR_SU_NAVEGADOR_POR_DEFECTO_INTENTANDO_ACCEDER_A:_")+" "+ NL +" " + url + NL,
                     java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogPreview").getString("ERROR_DE_NAVEGADOR"),
                     JOptionPane.WARNING_MESSAGE);
 

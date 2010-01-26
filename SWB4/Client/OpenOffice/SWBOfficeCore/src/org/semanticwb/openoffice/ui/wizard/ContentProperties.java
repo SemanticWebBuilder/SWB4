@@ -140,7 +140,7 @@ public class ContentProperties extends WizardPage
             String value = this.panelPropertyEditor1.getProperties().get(prop);
             if (value.isEmpty() && prop.isRequired)
             {
-                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/ContentProperties").getString("¡DEBE_INDICAR_") + prop + "!", getDescription(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/ContentProperties").getString("¡DEBE_INDICAR_")+" " + prop + "!", getDescription(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
                 panelPropertyEditor1.requestFocus();
                 return WizardPanelNavResult.REMAIN_ON_PAGE;
             }

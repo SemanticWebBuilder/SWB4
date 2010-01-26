@@ -1,26 +1,25 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -57,7 +56,7 @@ import org.semanticwb.xmlrpc.XmlProxy;
  */
 public class OpenResultProducer implements WizardResultProducer
 {
-    
+
     private OfficeApplication application;
 
     public OpenResultProducer(OfficeApplication application)
@@ -67,12 +66,12 @@ public class OpenResultProducer implements WizardResultProducer
 
     class BackgroundResultCreator extends DeferredWizardResult
     {
+
         private static final String NL = "\r\n";
         private static final String DOTS = "...";
         private static final String PATH_SEPARATOR = "/";
         private static final String UTF8 = "utf-8";
         private static final String ZIP_EXTENSION = ".zip";
-
         public File contentfile;
 
         @Override
@@ -86,7 +85,7 @@ public class OpenResultProducer implements WizardResultProducer
                 String repositoryName = wizardData.get(Search.WORKSPACE).toString();
                 VersionInfo versioninfo = (VersionInfo) wizardData.get(SelectVersionToOpen.VERSION);
                 String fileName = openOfficeDocument.openContent(repositoryName, versioninfo);
-                fileName=java.net.URLDecoder.decode(fileName,UTF8);
+                fileName = java.net.URLDecoder.decode(fileName, UTF8);
                 XmlProxy proxy = (XmlProxy) openOfficeDocument;
                 File dir = (File) wizardData.get(SelectDirectory.DIRECTORY);
                 contentfile = new File(dir.getAbsolutePath() + PATH_SEPARATOR + fileName);
@@ -109,14 +108,14 @@ public class OpenResultProducer implements WizardResultProducer
                         contentfile.getParentFile().mkdirs();
                         if (contentfile.exists())
                         {
-                            int res = JOptionPane.showConfirmDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OpenResultProducer").getString("¡EXISTE_UN_DOCUMENTO_CON_EL_NOMBRE_") + fileName +  NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OpenResultProducer").getString("¿DESEA_SOBRE_ESCRIBIR_EL_DOCUMENTO?"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OpenResultProducer").getString("APERTURA_DE_CONTENIDO"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                            int res = JOptionPane.showConfirmDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OpenResultProducer").getString("¡EXISTE_UN_DOCUMENTO_CON_EL_NOMBRE_") + " " + fileName + NL + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OpenResultProducer").getString("¿DESEA_SOBRE_ESCRIBIR_EL_DOCUMENTO?"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OpenResultProducer").getString("APERTURA_DE_CONTENIDO"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                             if (res == JOptionPane.NO_OPTION)
                             {
                                 return;
                             }
                             if (!contentfile.delete())
                             {
-                                JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OpenResultProducer").getString("¡EXISTE_UN_DOCUMENTO_CON_EL_MISMO_NOMBRE")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OpenResultProducer").getString("NO_SE_PUEDE_BORRAR_EL_DOCUMENTO_PARA_REEMPLAZARLO_POR_EL_CONTENIDO_DESCARGADO!"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OpenResultProducer").getString("APERTURA_DE_CONTENIDO"), JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OpenResultProducer").getString("¡EXISTE_UN_DOCUMENTO_CON_EL_MISMO_NOMBRE") + NL + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OpenResultProducer").getString("NO_SE_PUEDE_BORRAR_EL_DOCUMENTO_PARA_REEMPLAZARLO_POR_EL_CONTENIDO_DESCARGADO!"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OpenResultProducer").getString("APERTURA_DE_CONTENIDO"), JOptionPane.ERROR_MESSAGE);
                                 return;
                             }
                         }
@@ -132,10 +131,10 @@ public class OpenResultProducer implements WizardResultProducer
                         in.close();
                         out.close();
                         zip.close();
-                        progress.setProgress(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OpenResultProducer").getString("ABRIENDO_ARCHIVO_") + contentfile.getPath() + DOTS, 3, 4);
+                        progress.setProgress(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OpenResultProducer").getString("ABRIENDO_ARCHIVO_") + " " + contentfile.getPath() + DOTS, 3, 4);
                         progress.finished(null);
                         OfficeDocument document = application.open(contentfile);
-                        progress.setProgress(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OpenResultProducer").getString("DOCUMENTO_ABIERTO_") + contentfile.getPath() + DOTS, 4, 4);
+                        progress.setProgress(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OpenResultProducer").getString("DOCUMENTO_ABIERTO_") + " " + contentfile.getPath() + DOTS, 4, 4);
                         HashMap<String, String> properties = new HashMap<String, String>();
                         properties.put(OfficeDocument.CONTENT_ID_NAME, versioninfo.contentId);
                         properties.put(OfficeDocument.WORKSPACE_ID_NAME, wizardData.get(Search.WORKSPACE).toString());
@@ -153,7 +152,7 @@ public class OpenResultProducer implements WizardResultProducer
                 }
                 catch (Exception ioe)
                 {
-                    progress.failed(ioe.getMessage() +  NL + StackTraceUtil.getStackTrace(ioe), false);
+                    progress.failed(ioe.getMessage() + NL + StackTraceUtil.getStackTrace(ioe), false);
                 }
                 finally
                 {

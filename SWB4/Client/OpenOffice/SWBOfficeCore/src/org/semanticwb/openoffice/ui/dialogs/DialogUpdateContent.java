@@ -67,7 +67,7 @@ public class DialogUpdateContent extends javax.swing.JDialog
             try
             {
                 dialog.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-                jLabel1.setText(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("ENVIANDO_ARCHIVO_DE_PUBLICACIÓN_") + zipFile.getName());
+                jLabel1.setText(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("ENVIANDO_ARCHIVO_DE_PUBLICACIÓN_")+" " + zipFile.getName());
                 jLabel1.repaint();
                 String name = document.getLocalPath().getName().replace(document.getDefaultExtension(), document.getPublicationExtension());
                 document.getOfficeDocumentProxy().updateContent(workspaceid, contentid, name);
@@ -207,7 +207,7 @@ private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                 {
                     if (versions >= limit)
                     {
-                        int resp=JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("¡EL_LIMITE_MÁXIMO_DE_VERSIONES_ES_DE_") + limit + "!"+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("PUEDE_PUBLICAR_ESTE_CONTENIDO,_DEBIDO_A_QUE_TIENE_TODAS_LAS_VERSIONES_PUBLICADAS,_PERO_EXCEDERÁ_DEL_LÍMITE_DE_VERSIONES")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("¿DESEA_CONTINUAR?"), this.getTitle(), JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+                        int resp=JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("¡EL_LIMITE_MÁXIMO_DE_VERSIONES_ES_DE_")+" " + limit + "!"+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("PUEDE_PUBLICAR_ESTE_CONTENIDO,_DEBIDO_A_QUE_TIENE_TODAS_LAS_VERSIONES_PUBLICADAS,_PERO_EXCEDERÁ_DEL_LÍMITE_DE_VERSIONES")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("¿DESEA_CONTINUAR?"), this.getTitle(), JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
                         if(resp==JOptionPane.NO_OPTION)
                         {
                             return;
@@ -218,7 +218,7 @@ private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                 {                    
                     if (versions >= limit)
                     {
-                        JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("¡EL_LIMITE_MÁXIMO_DE_VERSIONES_ES_DE_") + limit + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("!")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("SI_DESEA_CREAR_UNA_NUEVA_VERSION,_DEBE_BORRAR_ALGUNA_DE_LAS_EXISTENTES,_QUE_NO_ESTE_PUBLICADA."), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("¡EL_LIMITE_MÁXIMO_DE_VERSIONES_ES_DE_")+" " + limit + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("!")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("SI_DESEA_CREAR_UNA_NUEVA_VERSION,_DEBE_BORRAR_ALGUNA_DE_LAS_EXISTENTES,_QUE_NO_ESTE_PUBLICADA."), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
                         return;
                     }
                 }
