@@ -99,7 +99,7 @@ public class NodeManager
             // load node
             ArrayList<Base> nodesToLoad = new ArrayList<Base>();
             Workspace ws = Workspace.ClassMgr.getWorkspace(session.getWorkspace().getName());
-            Base nodeToLoad = Base.ClassMgr.getBase(id, ws);
+            Base nodeToLoad = ws.getBase(id);
 
             if (nodeToLoad != null)
             {
