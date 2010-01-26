@@ -5,6 +5,7 @@
 
 package org.semanticwb.jcr283.implementation;
 
+import java.util.Hashtable;
 import javax.jcr.AccessDeniedException;
 import javax.jcr.InvalidItemStateException;
 import javax.jcr.ItemExistsException;
@@ -28,6 +29,7 @@ import javax.jcr.version.VersionManager;
  */
 public class VersionManagerImp implements VersionManager {
 
+    private Hashtable<String,VersionHistoryImp> versions=new Hashtable<String, VersionHistoryImp>();
     public Version checkin(String absPath) throws VersionException, UnsupportedRepositoryOperationException, InvalidItemStateException, LockException, RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -50,7 +52,11 @@ public class VersionManagerImp implements VersionManager {
 
     public VersionHistory getVersionHistory(String absPath) throws UnsupportedRepositoryOperationException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if(!ItemImp.isValidAbsPath(absPath))
+        {
+            
+        }
+        return versions.get(absPath);
     }
 
     public Version getBaseVersion(String absPath) throws UnsupportedRepositoryOperationException, RepositoryException
