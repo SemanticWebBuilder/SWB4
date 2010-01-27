@@ -4097,7 +4097,7 @@ public class SWBUtils {
             if (ret.toLowerCase().indexOf("hsqldb") >- 1) {
                 ret = SWBUtils.DB.DBTYPE_HSQLDB;
             } else if (ret.toLowerCase().indexOf("hsql") >- 1) {
-                ret = SWBUtils.DB.DBTYPE_HSQL;
+                ret = SWBUtils.DB.DBTYPE_HSQLDB; //MAPS74 Forcing to use HSQLDB as DB
             } else if (ret.toLowerCase().indexOf("mysql") >- 1) {
                 ret = SWBUtils.DB.DBTYPE_MySQL;
             } else if (ret.toLowerCase().indexOf("mssql") >- 1) {
