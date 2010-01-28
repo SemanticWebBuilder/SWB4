@@ -241,7 +241,7 @@ private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                 boolean showMessage = false;
                 for (ResourceInfo resourceInfo : resources)
                 {
-                    if (OfficeApplication.getOfficeDocumentProxy().isInFlow(resourceInfo))
+                    if (OfficeApplication.getOfficeDocumentProxy().isInFlow(resourceInfo) && resourceInfo.version.endsWith("*"))
                     {
                         int res = JOptionPane.showConfirmDialog(this, "La publicación de este contenido en la página " + resourceInfo.title + " esta en trámite." + NL + "Si continua se perderá este proceso de autorización, ¿Desea continuar?", this.getTitle(), JOptionPane.YES_NO_OPTION);
                         if (res == JOptionPane.NO_OPTION)
@@ -276,7 +276,7 @@ private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                     PFlow[] pflows = OfficeApplication.getOfficeDocumentProxy().getFlows(resourceInfo);
                     if (pflows != null && pflows.length >= 1)
                     {
-                        if (resourceInfo.version.endsWith("*"))
+                        if (resourceInfo.version.endsWith("*") && !flows.containsKey(resourceInfo))
                         {
                             showMessage = true;
                         }                        
@@ -296,7 +296,7 @@ private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                     if (aflows != null && aflows.length >= 1)
                     {
                         // solo avisa de las que va a actualizar
-                        if (resourceInfo.version.endsWith("*"))
+                        if (resourceInfo.version.endsWith("*") && !flows.containsKey(resourceInfo))
                         {
                             PFlow flowtoSend = null;
                             String msg = null;
