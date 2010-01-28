@@ -39,6 +39,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBUtils;
@@ -67,8 +69,8 @@ public class SemanticObject
     private boolean m_virtual = false;
     private HashMap m_virtprops;
 
-    private Map m_cacheprops;
-    private Map m_cachepropsrel;
+    private ConcurrentMap m_cacheprops;
+    private ConcurrentMap m_cachepropsrel;
 
     private static String NULL="__NULL__";
 
@@ -96,8 +98,8 @@ public class SemanticObject
     private SemanticObject(Resource res)
     {
         if(res==null)throw new NullPointerException("Resource is Null...");
-        m_cacheprops=Collections.synchronizedMap(new HashMap());
-        m_cachepropsrel=Collections.synchronizedMap(new HashMap());
+        m_cacheprops=new ConcurrentHashMap(); //MAPS74 //Collections.synchronizedMap(new HashMap());
+        m_cachepropsrel=new ConcurrentHashMap(); //MAPS74 //Collections.synchronizedMap(new HashMap());
         this.m_res = res;
         validateModel();
         //System.out.println("SemanticObject:"+res);
@@ -222,8 +224,8 @@ public class SemanticObject
         if(!m_virtual)
         {
             m_cls = null;
-            m_cacheprops=new HashMap();
-            m_cachepropsrel=new HashMap();
+            m_cacheprops=new ConcurrentHashMap(); //MAPS74
+            m_cachepropsrel=new ConcurrentHashMap(); //MAPS74
         }
     }
 
@@ -421,8 +423,8 @@ public class SemanticObject
         m_cls = cls;
         m_virtual = true;
         m_virtprops = new HashMap();
-        m_cacheprops=new HashMap();
-        m_cachepropsrel=new HashMap();
+        m_cacheprops=new ConcurrentHashMap(); //MAPS74 //new HashMap();
+        m_cachepropsrel=new ConcurrentHashMap(); //MAPS74 //new HashMap();
     }
 
     public String getURI()
