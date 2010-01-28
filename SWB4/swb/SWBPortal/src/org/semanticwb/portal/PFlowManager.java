@@ -1,26 +1,25 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -137,7 +136,7 @@ public class PFlowManager
                 {
                     PFlowInstance instance = instances.next();
                     Resource resource = instance.getPfinstResource();
-                    if (resource!=null && isInFlow(resource) && resource.getCreator() != null && resource.getCreator().equals(user))
+                    if (resource != null && isInFlow(resource) && resource.getCreator() != null && resource.getCreator().equals(user))
                     {
                         getContentsAtFlowOfUser.add(resource);
                     }
@@ -161,7 +160,7 @@ public class PFlowManager
                 {
                     PFlowInstance instance = instances.next();
                     Resource resource = instance.getPfinstResource();
-                    if (resource!=null && isInFlow(resource))
+                    if (resource != null && isInFlow(resource))
                     {
                         getContentsAtFlowAll.add(resource);
                     }
@@ -185,7 +184,7 @@ public class PFlowManager
                 {
                     PFlowInstance instance = instances.next();
                     Resource resource = instance.getPfinstResource();
-                    if (resource!=null && isInFlow(resource) && resource.getCreator().equals(user) && this.isReviewer(resource, user))
+                    if (resource != null && isInFlow(resource) && resource.getCreator().equals(user) && this.isReviewer(resource, user))
                     {
                         getContentsAtFlow.add(resource);
                     }
@@ -203,7 +202,7 @@ public class PFlowManager
         {
             PFlowInstance instance = instances.next();
             Resource resource = instance.getPfinstResource();
-            if (resource!=null && isInFlow(resource))
+            if (resource != null && isInFlow(resource))
             {
                 getContentsAtFlow.add(resource);
             }
@@ -240,7 +239,7 @@ public class PFlowManager
             Resource[] resources = getContentsAtFlowAll(site);
             for (Resource resource : resources)
             {
-                if (resource!=null && isInFlow(resource) && isReviewer(resource, user))
+                if (resource != null && isInFlow(resource) && isReviewer(resource, user))
                 {
                     getContentsAtFlow.add(resource);
                 }
@@ -259,7 +258,7 @@ public class PFlowManager
             Resource[] resources = getContentsAtFlowAll(site);
             for (Resource resource : resources)
             {
-                if (resource!=null && isInFlow(resource))
+                if (resource != null && isInFlow(resource))
                 {
                     getContentsAtFlow.add(resource);
                 }
@@ -319,8 +318,8 @@ public class PFlowManager
                                 for (int j = 0; j < roles.getLength(); j++)
                                 {
                                     Element erole = (Element) roles.item(j);
-                                    String idrole=erole.getAttribute("id");
-                                    Role role=user.getUserRepository().getRole(idrole);
+                                    String idrole = erole.getAttribute("id");
+                                    Role role = user.getUserRepository().getRole(idrole);
                                     return user.hasRole(role);
                                 }
                             }
@@ -333,6 +332,10 @@ public class PFlowManager
     }
 
     public void approveResource(Resource resource, User user, String msg)
+    {
+        this.approveResource(resource, user, msg, null);
+    }
+    public void approveResource(Resource resource, User user, String msg, FlowNotification notification)
     {
         PFlowInstance instance = resource.getPflowInstance();
         if (instance != null && instance.getStatus() > 0)
@@ -391,9 +394,9 @@ public class PFlowManager
                                                     long milliseconds = ((hours * 3600) + (days * 86400)) * 1000;
                                                     Date timestart = instance.getTime();
                                                     long timefirst = timestart.getTime() + milliseconds;
-                                                // TODO:Como controlar las altertas de tiempo
+                                                    // TODO:Como controlar las altertas de tiempo
                                                     /*ControlFlow alert = new ControlFlow(occ, new java.util.Date(timefirst), activityName);
-                                                PFlowSrv.addControlFlow(alert);*/
+                                                    PFlowSrv.addControlFlow(alert);*/
                                                 }
                                             }
                                         }
@@ -418,14 +421,26 @@ public class PFlowManager
                                     {
                                         resource.getPflowInstance().setStatus(2);
                                         resource.getPflowInstance().setStep(null);
+                                        if (notification != null)
+                                        {
+                                            notification.autorize(resource);
+                                        }
                                     }
                                     else if (serviceName.equals("noauthorize"))
                                     {
                                         noauthorizeContent(resource);
+                                        if (notification != null)
+                                        {
+                                            notification.noAutorize(resource);
+                                        }
                                     }
                                     else if (serviceName.equals("publish"))
                                     {
                                         resource.setActive(true);
+                                        if (notification != null)
+                                        {
+                                            notification.publish(resource);
+                                        }
                                     }
                                 }
 
@@ -498,11 +513,11 @@ public class PFlowManager
                                         if (days > 0 || hours > 0)
                                         {
                                             long milliseconds = ((hours * 3600) + (days * 86400)) * 1000;
-                                        // TODO: Constrol de tiempo
+                                            // TODO: Constrol de tiempo
                                             /*Timestamp timestart = occ.getDbdata().getFlowtime();
-                                        long timefirst = timestart.getTime() + milliseconds;
-                                        ControlFlow alert = new ControlFlow(occ, new java.util.Date(timefirst), activity);
-                                        PFlowSrv.addControlFlow(alert);*/
+                                            long timefirst = timestart.getTime() + milliseconds;
+                                            ControlFlow alert = new ControlFlow(occ, new java.util.Date(timefirst), activity);
+                                            PFlowSrv.addControlFlow(alert);*/
 
                                         }
                                     }
@@ -617,11 +632,11 @@ public class PFlowManager
                         if (days > 0 || hours > 0)
                         {
                             long milliseconds = ((hours * 3600) + (days * 86400)) * 1000;
-                        //TODO agregar control de tiempo
+                            //TODO agregar control de tiempo
                             /*Timestamp timestart = occ.getDbdata().getFlowtime();
-                        long timefirst = timestart.getTime() + milliseconds;
-                        ControlFlow controlFlow = new ControlFlow(occ, new java.util.Date(timefirst), activity);
-                        PFlowSrv.addControlFlow(controlFlow);*/
+                            long timefirst = timestart.getTime() + milliseconds;
+                            ControlFlow controlFlow = new ControlFlow(occ, new java.util.Date(timefirst), activity);
+                            PFlowSrv.addControlFlow(controlFlow);*/
                         }
                     }
                 }
@@ -756,7 +771,7 @@ public class PFlowManager
 
     public boolean isAuthorized(Resource resource)
     {
-        if(resource==null)
+        if (resource == null)
         {
             return false;
         }
