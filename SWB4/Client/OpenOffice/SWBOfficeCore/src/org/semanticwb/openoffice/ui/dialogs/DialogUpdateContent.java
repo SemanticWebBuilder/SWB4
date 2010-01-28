@@ -243,7 +243,7 @@ private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                 {
                     if (OfficeApplication.getOfficeDocumentProxy().isInFlow(resourceInfo) && resourceInfo.version.endsWith("*"))
                     {
-                        int res = JOptionPane.showConfirmDialog(this, "La publicación de este contenido en la página " + resourceInfo.title + " esta en trámite." + NL + "Si continua se perderá este proceso de autorización, ¿Desea continuar?", this.getTitle(), JOptionPane.YES_NO_OPTION);
+                        int res = JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("LA_PUBLICACIÓN_DE_ESTE_CONTENIDO_EN_LA_PÁGINA_")+" " + resourceInfo.title + " "+ java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("_ESTA_EN_TRÁMITE.") + NL + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("SI_CONTINUA_SE_PERDERÁ_ESTE_PROCESO_DE_AUTORIZACIÓN,_¿DESEA_CONTINUAR?"), this.getTitle(), JOptionPane.YES_NO_OPTION);
                         if (res == JOptionPane.NO_OPTION)
                         {
                             return;
@@ -253,7 +253,7 @@ private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                         String msg = null;
 
                         DialogSelectFlow dialogSelectFlow = new DialogSelectFlow(resourceInfo);
-                        dialogSelectFlow.setTitle(dialogSelectFlow.getTitle() + " para página " + resourceInfo.title);
+                        dialogSelectFlow.setTitle(dialogSelectFlow.getTitle() + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("_PARA_PÁGINA_")+" " + resourceInfo.title);
                         dialogSelectFlow.setVisible(true);
                         flowtoSend = dialogSelectFlow.selected;
                         msg = dialogSelectFlow.jTextAreaMessage.getText();
@@ -284,7 +284,7 @@ private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                 }
                 if (showMessage)
                 {
-                    int res = JOptionPane.showConfirmDialog(this, "Se encontró que algunas páginas requiren autorización para publicar este contenido, ¿Desea continuar?", this.getTitle(), JOptionPane.YES_NO_OPTION);
+                    int res = JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("SE_ENCONTRÓ_QUE_ALGUNAS_PÁGINAS_REQUIREN_AUTORIZACIÓN_PARA_PUBLICAR_ESTE_CONTENIDO,_¿DESEA_CONTINUAR?"), this.getTitle(), JOptionPane.YES_NO_OPTION);
                     if (res == JOptionPane.NO_OPTION)
                     {
                         return;
@@ -301,7 +301,7 @@ private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                             PFlow flowtoSend = null;
                             String msg = null;
                             DialogSelectFlow dialogSelectFlow = new DialogSelectFlow(resourceInfo);
-                            dialogSelectFlow.setTitle(dialogSelectFlow.getTitle() + " para página " + resourceInfo.title);
+                            dialogSelectFlow.setTitle(dialogSelectFlow.getTitle() + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("_PARA_PÁGINA_") + resourceInfo.title);
                             dialogSelectFlow.setVisible(true);
                             flowtoSend = dialogSelectFlow.selected;
                             msg = dialogSelectFlow.jTextAreaMessage.getText();
