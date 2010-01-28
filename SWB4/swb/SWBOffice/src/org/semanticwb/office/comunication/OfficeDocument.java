@@ -735,6 +735,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             lastModified.setTimeInMillis(System.currentTimeMillis());
             nodeContent.setProperty(LASTMODIFIED, lastModified);
             nodeContent.save();
+            String versionName=null;
             try
             {
                 if (requestParts.size() == 0)
@@ -764,7 +765,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     resNode.setProperty(JCR_LASTMODIFIED, lastModified);
                     session.save();
                     Version version = resNode.checkin();
-                    return version.getName();
+                    versionName= version.getName();
+                    return versionName;
                 }
 
 
@@ -787,8 +789,9 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         if (obj.getSemanticClass().isSubClass(OfficeResource.ClassMgr.sclass) || obj.getSemanticClass().equals(OfficeResource.ClassMgr.sclass))
                         {
                             OfficeResource officeResource = OfficeResource.getOfficeResource(obj.getId(), site);
-                            if (officeResource.getResourceBase() != null && officeResource.getResourceBase().getPflowInstance() != null)
+                            if (officeResource.getVersionToShow().equals("*") && officeResource.getResourceBase() != null && officeResource.getResourceBase().getPflowInstance() != null)
                             {
+                                // remueve flujos para los que se quieren sólo la última version
                                 officeResource.getResourceBase().removePflowInstance();
                             }
                         }
@@ -833,8 +836,12 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                             {
                                 if (officeResource.getRepositoryName() != null && officeResource.getRepositoryName().equals(repositoryName))
                                 {
-                                    InputStream in = getContent(repositoryName, contentId, officeResource.getVersionToShow());
-                                    officeResource.loadContent(in);
+                                    String versionToShow=officeResource.getVersionToShow();
+                                    if(versionToShow.equals(versionName))
+                                    {
+                                        InputStream in = getContent(repositoryName, contentId, versionToShow);
+                                        officeResource.loadContent(in);
+                                    }
                                 }
                             }
 
