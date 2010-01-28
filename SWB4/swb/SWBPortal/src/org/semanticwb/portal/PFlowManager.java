@@ -420,8 +420,7 @@ public class PFlowManager
                                     else if (serviceName.equals("authorize"))
                                     {
                                         resource.getPflowInstance().setStatus(2);
-                                        resource.getPflowInstance().setStep(null);
-                                        resource.removePflowInstance();
+                                        resource.getPflowInstance().setStep(null);                                        
                                         if (notification != null)
                                         {
                                             notification.autorize(resource);
@@ -437,7 +436,7 @@ public class PFlowManager
                                     }
                                     else if (serviceName.equals("publish"))
                                     {
-                                        resource.setActive(true);
+                                        resource.setActive(true);                                        
                                         if (notification != null)
                                         {
                                             notification.publish(resource);
