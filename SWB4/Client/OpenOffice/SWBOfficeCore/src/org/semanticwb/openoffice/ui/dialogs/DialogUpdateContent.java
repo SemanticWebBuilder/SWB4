@@ -1,26 +1,25 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 /*
  * DialogSummaryPublish.java
  *
@@ -31,8 +30,11 @@ package org.semanticwb.openoffice.ui.dialogs;
 import java.awt.Cursor;
 import java.awt.Frame;
 import java.io.File;
+import java.util.Hashtable;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import org.semanticwb.office.interfaces.PFlow;
+import org.semanticwb.office.interfaces.ResourceInfo;
 import org.semanticwb.openoffice.OfficeApplication;
 import org.semanticwb.openoffice.OfficeDocument;
 import org.semanticwb.openoffice.ui.icons.ImageLoader;
@@ -44,9 +46,10 @@ import org.semanticwb.xmlrpc.Attachment;
  */
 public class DialogUpdateContent extends javax.swing.JDialog
 {
+
     private static final String NL = "\r\n";
     private boolean updated = false;
-    private String workspaceid,  contentid;
+    private String workspaceid, contentid;
     private OfficeDocument document;
 
     class Update extends Thread
@@ -54,11 +57,17 @@ public class DialogUpdateContent extends javax.swing.JDialog
 
         File zipFile;
         JDialog dialog;
+        ResourceInfo[] resources;
+        PFlow[] flows;
+        String[] msg;
 
-        public Update(File zipFile, JDialog dialog)
+        public Update(File zipFile, JDialog dialog, ResourceInfo[] resources, PFlow[] flows, String[] msg)
         {
             this.zipFile = zipFile;
             this.dialog = dialog;
+            this.resources = resources;
+            this.flows = flows;
+            this.msg = msg;
         }
 
         @Override
@@ -67,10 +76,10 @@ public class DialogUpdateContent extends javax.swing.JDialog
             try
             {
                 dialog.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-                jLabel1.setText(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("ENVIANDO_ARCHIVO_DE_PUBLICACIÓN_")+" " + zipFile.getName());
+                jLabel1.setText(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("ENVIANDO_ARCHIVO_DE_PUBLICACIÓN_") + " " + zipFile.getName());
                 jLabel1.repaint();
                 String name = document.getLocalPath().getName().replace(document.getDefaultExtension(), document.getPublicationExtension());
-                document.getOfficeDocumentProxy().updateContent(workspaceid, contentid, name);
+                document.getOfficeDocumentProxy().updateContent(workspaceid, contentid, name, resources, flows, msg);
                 jProgressBar.setValue(2);
                 jLabel1.setText(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("ACTUALIZACIÓN_TERMINADA"));
                 summaryPublish1.loadVersions(contentid, workspaceid);
@@ -92,11 +101,11 @@ public class DialogUpdateContent extends javax.swing.JDialog
             }
         }
     }
-    
+
     /** Creates new form DialogSummaryPublish */
     public DialogUpdateContent(String wokspaceid, String contentid, OfficeDocument document)
     {
-        super((Frame)null, ModalityType.TOOLKIT_MODAL);
+        super((Frame) null, ModalityType.TOOLKIT_MODAL);
         initComponents();
         this.setIconImage(ImageLoader.images.get("semius").getImage());
         summaryPublish1.setType(document.getDocumentType().toString().toLowerCase());
@@ -207,22 +216,115 @@ private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                 {
                     if (versions >= limit)
                     {
-                        int resp=JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("¡EL_LIMITE_MÁXIMO_DE_VERSIONES_ES_DE_")+" " + limit + "!"+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("PUEDE_PUBLICAR_ESTE_CONTENIDO,_DEBIDO_A_QUE_TIENE_TODAS_LAS_VERSIONES_PUBLICADAS,_PERO_EXCEDERÁ_DEL_LÍMITE_DE_VERSIONES")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("¿DESEA_CONTINUAR?"), this.getTitle(), JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
-                        if(resp==JOptionPane.NO_OPTION)
+                        int resp = JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("¡EL_LIMITE_MÁXIMO_DE_VERSIONES_ES_DE_") + " " + limit + "!" + NL + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("PUEDE_PUBLICAR_ESTE_CONTENIDO,_DEBIDO_A_QUE_TIENE_TODAS_LAS_VERSIONES_PUBLICADAS,_PERO_EXCEDERÁ_DEL_LÍMITE_DE_VERSIONES") + NL + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("¿DESEA_CONTINUAR?"), this.getTitle(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                        if (resp == JOptionPane.NO_OPTION)
                         {
                             return;
                         }
                     }
                 }
                 else
-                {                    
+                {
                     if (versions >= limit)
                     {
-                        JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("¡EL_LIMITE_MÁXIMO_DE_VERSIONES_ES_DE_")+" " + limit + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("!")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("SI_DESEA_CREAR_UNA_NUEVA_VERSION,_DEBE_BORRAR_ALGUNA_DE_LAS_EXISTENTES,_QUE_NO_ESTE_PUBLICADA."), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("¡EL_LIMITE_MÁXIMO_DE_VERSIONES_ES_DE_") + " " + limit + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("!") + NL + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("SI_DESEA_CREAR_UNA_NUEVA_VERSION,_DEBE_BORRAR_ALGUNA_DE_LAS_EXISTENTES,_QUE_NO_ESTE_PUBLICADA."), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
                         return;
                     }
                 }
             }
+
+            //
+            Hashtable<ResourceInfo, Hashtable<PFlow, String>> flows = new Hashtable<ResourceInfo, Hashtable<PFlow, String>>();
+            ResourceInfo[] resources = OfficeApplication.getOfficeDocumentProxy().listResources(workspaceid, contentid);
+            if (resources != null && resources.length > 0)
+            {
+                boolean showMessage = false;
+                for (ResourceInfo resourceInfo : resources)
+                {
+                    if (OfficeApplication.getOfficeDocumentProxy().isInFlow(resourceInfo))
+                    {
+                        int res = JOptionPane.showConfirmDialog(this, "La publicación de este contenido en la página " + resourceInfo.title + " esta en trámite." + NL + "Si continua se perderá este proceso de autorización, ¿Desea continuar?", this.getTitle(), JOptionPane.YES_NO_OPTION);
+                        if (res == JOptionPane.NO_OPTION)
+                        {
+                            return;
+                        }
+                        PFlow[] aflows = OfficeApplication.getOfficeDocumentProxy().getFlows(resourceInfo);
+                        PFlow flowtoSend = null;
+                        String msg = null;
+
+                        DialogSelectFlow dialogSelectFlow = new DialogSelectFlow(resourceInfo);
+                        dialogSelectFlow.setTitle(dialogSelectFlow.getTitle()+" para página "+resourceInfo.title);
+                        dialogSelectFlow.setVisible(true);
+                        flowtoSend = dialogSelectFlow.selected;
+                        msg = dialogSelectFlow.jTextAreaMessage.getText();
+
+                        if (aflows.length == 1)
+                        {
+                            flowtoSend = aflows[0];
+                        }
+                        if (flowtoSend != null && msg != null)
+                        {
+                            flows.put(resourceInfo, new Hashtable<PFlow, String>());
+                            flows.get(resourceInfo).put(flowtoSend, msg);
+                        }
+                        break;
+                    }
+                }
+
+                for (ResourceInfo resourceInfo : resources)
+                {
+                    if (OfficeApplication.getOfficeDocumentProxy().needsSendToPublish(resourceInfo))
+                    {
+                        showMessage = true;
+                        break;
+                    }
+
+                }
+                if (showMessage)
+                {
+                    int res = JOptionPane.showConfirmDialog(this, "Se encontró que algunas páginas requiren autorización para publicar este contenido, ¿Desea continuar?", this.getTitle(), JOptionPane.YES_NO_OPTION);
+                    if (res == JOptionPane.NO_OPTION)
+                    {
+                        return;
+                    }
+                }
+                for (ResourceInfo resourceInfo : resources)
+                {
+                    if (OfficeApplication.getOfficeDocumentProxy().needsSendToPublish(resourceInfo))
+                    {
+                        PFlow[] aflows = OfficeApplication.getOfficeDocumentProxy().getFlows(resourceInfo);
+                        PFlow flowtoSend = null;
+                        String msg = null;
+                        DialogSelectFlow dialogSelectFlow = new DialogSelectFlow(resourceInfo);
+                        dialogSelectFlow.setTitle(dialogSelectFlow.getTitle()+" para página "+resourceInfo.title);
+                        dialogSelectFlow.setVisible(true);
+                        flowtoSend = dialogSelectFlow.selected;
+                        msg = dialogSelectFlow.jTextAreaMessage.getText();
+
+                        if (aflows.length == 1)
+                        {
+                            flowtoSend = aflows[0];
+                        }
+                        if (flowtoSend != null && msg != null)
+                        {
+                            flows.put(resourceInfo, new Hashtable<PFlow, String>());
+                            flows.get(resourceInfo).put(flowtoSend, msg);
+                        }
+                    }
+                }
+            }
+            ResourceInfo[] resourcestoSend = flows.keySet().toArray(new ResourceInfo[flows.size()]);
+            String[] msg = new String[flows.size()];
+            PFlow[] flowsToSend = new PFlow[flows.size()];
+            int i = 0;
+            for (ResourceInfo res : resourcestoSend)
+            {
+                flowsToSend[i] = flows.get(res).keySet().iterator().next();
+                msg[i] = flows.get(res).get(flowsToSend[i]);
+                i++;
+            }
+
+
             jProgressBar.setMaximum(2);
             this.jLabel1.setText(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("CREANDO_ARCHIVO_PARA_PUBLICACIÓN_..."));
             jLabel1.repaint();
@@ -233,7 +335,7 @@ private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN
             jLabel1.repaint();
             jProgressBar.setValue(1);
             document.getOfficeDocumentProxy().addAttachment(new Attachment(zipFile, zipFile.getName()));
-            Update up = new Update(zipFile, this);
+            Update up = new Update(zipFile, this, resourcestoSend, flowsToSend, msg);
             up.start();
         }
         catch (Exception e)
