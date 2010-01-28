@@ -145,13 +145,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 
     public OfficeDocument()
     {
+    }
 
-    }
-    public OfficeDocument(String user,String password)
+    public OfficeDocument(String user, String password)
     {
-        this.user=user;
-        this.password=password;
+        this.user = user;
+        this.password = password;
     }
+
     public static String[] getOfficeTypes()
     {
         String[] getOfficeTypes = new String[3];
@@ -714,7 +715,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @return The version name created
      * @throws java.lang.Exception
      */
-    public String updateContent(String repositoryName, String contentId, String file,ResourceInfo[] resources,PFlow[] flows,String[] msg) throws Exception
+    public String updateContent(String repositoryName, String contentId, String file, ResourceInfo[] resources, PFlow[] flows, String[] msg) throws Exception
     {
         String encode = System.getenv("Dfile.encoding");
         if (encode == null || encode.equals(""))
@@ -775,9 +776,6 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
             finally
             {
-
-
-                // actualiza version si no tiene fujo
                 Iterator<WebSite> sites = SWBContext.listWebSites();
                 while (sites.hasNext())
                 {
@@ -788,27 +786,46 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         SemanticObject obj = it.next();
                         if (obj.getSemanticClass().isSubClass(OfficeResource.ClassMgr.sclass) || obj.getSemanticClass().equals(OfficeResource.ClassMgr.sclass))
                         {
-                            OfficeResource officeResource = OfficeResource.getOfficeResource(obj.getId(), site);                            
-                            ResourceInfo resInfo=getResourceInfo(officeResource);
+                            OfficeResource officeResource = OfficeResource.getOfficeResource(obj.getId(), site);
+                            if (officeResource.getResourceBase() != null && officeResource.getResourceBase().getPflowInstance() != null)
+                            {
+                                officeResource.getResourceBase().removePflowInstance();
+                            }
+                        }
+                    }
+                }
+                // actualiza version si no tiene fujo
+                sites = SWBContext.listWebSites();
+                while (sites.hasNext())
+                {
+                    WebSite site = sites.next();
+                    Iterator<SemanticObject> it = site.getSemanticObject().getModel().listSubjects(prop_content, contentId);
+                    while (it.hasNext())
+                    {
+                        SemanticObject obj = it.next();
+                        if (obj.getSemanticClass().isSubClass(OfficeResource.ClassMgr.sclass) || obj.getSemanticClass().equals(OfficeResource.ClassMgr.sclass))
+                        {
+                            OfficeResource officeResource = OfficeResource.getOfficeResource(obj.getId(), site);
+                            ResourceInfo resInfo = getResourceInfo(officeResource);
                             if (this.isInFlow(resInfo))
                             {
                                 officeResource.getResourceBase().removePflowInstance();
                             }
                             if (this.needsSendToPublish(resInfo))
                             {
-                                if(resources!=null && flows!=null)
+                                if (resources != null && flows != null)
                                 {
-                                    int i=0;
-                                    for(ResourceInfo res : resources)
+                                    int i = 0;
+                                    for (ResourceInfo res : resources)
                                     {
-                                        if(res.id.equals(resInfo.id))
+                                        if (res.id.equals(resInfo.id))
                                         {
                                             break;
                                         }
                                         i++;
                                     }
-                                    PFlow flow=flows[i];
-                                    String message=msg[i];
+                                    PFlow flow = flows[i];
+                                    String message = msg[i];
                                     this.sendToAuthorize(resInfo, flow, message);
                                 }
                             }
