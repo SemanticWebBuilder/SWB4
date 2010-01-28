@@ -705,7 +705,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @return The version name created
      * @throws java.lang.Exception
      */
-    public String updateContent(String repositoryName, String contentId, String file) throws Exception
+    public String updateContent(String repositoryName, String contentId, String file,ResourceInfo[] resources,PFlow[] flows,String[] msg) throws Exception
     {
         String encode = System.getenv("Dfile.encoding");
         if (encode == null || encode.equals(""))
@@ -767,7 +767,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             finally
             {
 
-                // actualiza version
+
+                // actualiza version si no tiene fujo
                 Iterator<WebSite> sites = SWBContext.listWebSites();
                 while (sites.hasNext())
                 {
@@ -778,12 +779,39 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         SemanticObject obj = it.next();
                         if (obj.getSemanticClass().isSubClass(OfficeResource.ClassMgr.sclass) || obj.getSemanticClass().equals(OfficeResource.ClassMgr.sclass))
                         {
-                            OfficeResource officeResource = OfficeResource.getOfficeResource(obj.getId(), site);
-                            if (officeResource.getRepositoryName() != null && officeResource.getRepositoryName().equals(repositoryName))
+                            OfficeResource officeResource = OfficeResource.getOfficeResource(obj.getId(), site);                            
+                            ResourceInfo resInfo=getResourceInfo(officeResource);
+                            if (this.isInFlow(resInfo))
                             {
-                                InputStream in = getContent(repositoryName, contentId, officeResource.getVersionToShow());
-                                officeResource.loadContent(in);
+                                officeResource.getResourceBase().removePflowInstance();
                             }
+                            if (this.needsSendToPublish(resInfo))
+                            {
+                                if(resources!=null && flows!=null)
+                                {
+                                    int i=0;
+                                    for(ResourceInfo res : resources)
+                                    {
+                                        if(res.id.equals(resInfo.id))
+                                        {
+                                            break;
+                                        }
+                                        i++;
+                                    }
+                                    PFlow flow=flows[i];
+                                    String message=msg[i];
+                                    this.sendToAuthorize(resInfo, flow, message);
+                                }
+                            }
+                            else
+                            {
+                                if (officeResource.getRepositoryName() != null && officeResource.getRepositoryName().equals(repositoryName))
+                                {
+                                    InputStream in = getContent(repositoryName, contentId, officeResource.getVersionToShow());
+                                    officeResource.loadContent(in);
+                                }
+                            }
+
                         }
                     }
                 }
