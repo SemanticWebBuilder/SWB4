@@ -421,6 +421,7 @@ public class PFlowManager
                                     {
                                         resource.getPflowInstance().setStatus(2);
                                         resource.getPflowInstance().setStep(null);
+                                        resource.removePflowInstance();
                                         if (notification != null)
                                         {
                                             notification.autorize(resource);
