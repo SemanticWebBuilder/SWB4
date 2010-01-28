@@ -38,13 +38,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.office.comunication.OfficeDocument;
 import org.semanticwb.office.comunication.OfficeServlet;
+import org.semanticwb.office.interfaces.IOfficeApplication;
 import org.semanticwb.security.auth.SWB4CallbackHandlerGateWayOffice;
 import static org.semanticwb.office.comunication.Base64.*;
 
@@ -216,6 +216,7 @@ public class GateWayOffice implements InternalServlet
                 out.println("</head>");
                 out.println("<body>");
                 out.println("<h1>" + title + "</h1>");
+                out.println("<h2>Version API: " + IOfficeApplication.version + "</h2>");
                 out.println("</body>");
                 out.println("</html>");
                 out.close();
@@ -292,6 +293,7 @@ public class GateWayOffice implements InternalServlet
                         out.println("</head>");
                         out.println("<body>");
                         out.println("<h1>" + title + "</h1>");
+                        out.println("<h2>Version API: " + IOfficeApplication.version + "</h2>");
                         out.println("</body>");
                         out.println("</html>");
                         out.close();
