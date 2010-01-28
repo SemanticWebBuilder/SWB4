@@ -91,7 +91,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
     //private Session session;
     public boolean isValidVersion(double version)
     {
-        return IOfficeApplication.version >= version;
+        return IOfficeApplication.version == version;
     }
 
     public void createPage(WebPageInfo page, String pageid, String title, String description) throws Exception
