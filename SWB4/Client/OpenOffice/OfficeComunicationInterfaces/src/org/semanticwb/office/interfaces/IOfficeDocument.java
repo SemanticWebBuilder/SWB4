@@ -68,7 +68,7 @@ public interface IOfficeDocument
     public boolean exists(String repositoryName, String contentId) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.updateContent")
-    public String updateContent(String repositoryName, String contentId, String file) throws Exception;
+    public String updateContent(String repositoryName, String contentId, String file,ResourceInfo[] resources,PFlow[] flows,String[] msg) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.getVersions")
     public VersionInfo[] getVersions(String repositoryName, String contentId) throws Exception;
