@@ -114,11 +114,16 @@ public class TitleAndDescription extends WizardPage
         {
             JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/TitleAndDescription").getString("¡DEBE_INDICAR_EL_TÍTULO_DEL_CONTENIDO!"), getDescription(), JOptionPane.ERROR_MESSAGE);
             this.jTextFieldName.requestFocus();
+            result = WizardPanelNavResult.REMAIN_ON_PAGE;
+            return result;
+
         }
         else if (this.jTextAreaDescription.getText().trim().equals(""))
         {
             JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/TitleAndDescription").getString("¡DEBE_INDICAR_LA_DESCRIPCIÓN_DEL_CONTENIDO!"), getDescription(), JOptionPane.ERROR_MESSAGE);
             this.jTextAreaDescription.requestFocus();
+            result = WizardPanelNavResult.REMAIN_ON_PAGE;
+            return result;
         }
         if (showTypeOfcontent)
         {
