@@ -810,7 +810,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         {
                             OfficeResource officeResource = OfficeResource.getOfficeResource(obj.getId(), site);
                             ResourceInfo resInfo = getResourceInfo(officeResource);
-                            if (this.isInFlow(resInfo))
+                            if (this.isInFlow(resInfo) && officeResource.getVersionToShow().equals("*"))
                             {
                                 officeResource.getResourceBase().removePflowInstance();
                             }
