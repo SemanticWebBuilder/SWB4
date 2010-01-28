@@ -73,6 +73,7 @@ import org.semanticwb.office.interfaces.SiteInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.office.interfaces.WebPageInfo;
 import org.semanticwb.office.interfaces.WebSiteInfo;
+import org.semanticwb.portal.FlowNotification;
 import org.semanticwb.repository.RepositoryManagerLoader;
 import org.semanticwb.resource.office.sem.OfficeResource;
 import org.semanticwb.xmlrpc.Part;
@@ -82,7 +83,7 @@ import org.semanticwb.xmlrpc.XmlRpcObject;
  *
  * @author victor.lorenzana
  */
-public class OfficeApplication extends XmlRpcObject implements IOfficeApplication
+public class OfficeApplication extends XmlRpcObject implements IOfficeApplication, FlowNotification
 {
 
     static Logger log = SWBUtils.getLogger(OfficeApplication.class);
@@ -808,7 +809,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
     {
         Resource resource = SWBContext.getWebSite(resourceInfo.page.site.id).getResource(resourceInfo.id);
         org.semanticwb.model.User wbuser = SWBContext.getAdminRepository().getUserByLogin(user);
-        SWBPortal.getPFlowManager().approveResource(resource, wbuser, message);
+        SWBPortal.getPFlowManager().approveResource(resource, wbuser, message, this);
     }
 
     public void reject(ResourceInfo resourceInfo, String message) throws Exception
@@ -1065,5 +1066,32 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         WebPage page = site.getWebPage(webPageInfo.id);
         page.setActive(active);
 
+    }
+
+    public void autorize(Resource resource)
+    {
+        WebSite site = SWBContext.getWebSite(resource.getWebSiteId());
+        OfficeResource officeResource = OfficeResource.getOfficeResource(resource.getId(), site);
+        if (officeResource.getRepositoryName() != null && officeResource.getContent() != null)
+        {
+            OfficeDocument doc=new OfficeDocument(this.user,this.password);
+            try
+            {
+                InputStream in = doc.getContent(officeResource.getRepositoryName(), officeResource.getContent(), officeResource.getVersionToShow());
+                officeResource.loadContent(in);
+            }
+            catch(Exception e)
+            {
+                log.error(e);
+            }
+        }
+    }
+
+    public void publish(Resource resource)
+    {
+    }
+
+    public void noAutorize(Resource resource)
+    {
     }
 }
