@@ -253,7 +253,7 @@ private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                         String msg = null;
 
                         DialogSelectFlow dialogSelectFlow = new DialogSelectFlow(resourceInfo);
-                        dialogSelectFlow.setTitle(dialogSelectFlow.getTitle()+" para página "+resourceInfo.title);
+                        dialogSelectFlow.setTitle(dialogSelectFlow.getTitle() + " para página " + resourceInfo.title);
                         dialogSelectFlow.setVisible(true);
                         flowtoSend = dialogSelectFlow.selected;
                         msg = dialogSelectFlow.jTextAreaMessage.getText();
@@ -273,12 +273,14 @@ private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN
 
                 for (ResourceInfo resourceInfo : resources)
                 {
-                    if (OfficeApplication.getOfficeDocumentProxy().needsSendToPublish(resourceInfo))
+                    PFlow[] pflows = OfficeApplication.getOfficeDocumentProxy().getFlows(resourceInfo);
+                    if (pflows != null && pflows.length >= 1)
                     {
-                        showMessage = true;
-                        break;
+                        if (resourceInfo.version.endsWith("*"))
+                        {
+                            showMessage = true;
+                        }                        
                     }
-
                 }
                 if (showMessage)
                 {
@@ -290,25 +292,29 @@ private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                 }
                 for (ResourceInfo resourceInfo : resources)
                 {
-                    if (OfficeApplication.getOfficeDocumentProxy().needsSendToPublish(resourceInfo))
+                    PFlow[] aflows = OfficeApplication.getOfficeDocumentProxy().getFlows(resourceInfo);
+                    if (aflows != null && aflows.length >= 1)
                     {
-                        PFlow[] aflows = OfficeApplication.getOfficeDocumentProxy().getFlows(resourceInfo);
-                        PFlow flowtoSend = null;
-                        String msg = null;
-                        DialogSelectFlow dialogSelectFlow = new DialogSelectFlow(resourceInfo);
-                        dialogSelectFlow.setTitle(dialogSelectFlow.getTitle()+" para página "+resourceInfo.title);
-                        dialogSelectFlow.setVisible(true);
-                        flowtoSend = dialogSelectFlow.selected;
-                        msg = dialogSelectFlow.jTextAreaMessage.getText();
+                        // solo avisa de las que va a actualizar
+                        if (resourceInfo.version.endsWith("*"))
+                        {
+                            PFlow flowtoSend = null;
+                            String msg = null;
+                            DialogSelectFlow dialogSelectFlow = new DialogSelectFlow(resourceInfo);
+                            dialogSelectFlow.setTitle(dialogSelectFlow.getTitle() + " para página " + resourceInfo.title);
+                            dialogSelectFlow.setVisible(true);
+                            flowtoSend = dialogSelectFlow.selected;
+                            msg = dialogSelectFlow.jTextAreaMessage.getText();
 
-                        if (aflows.length == 1)
-                        {
-                            flowtoSend = aflows[0];
-                        }
-                        if (flowtoSend != null && msg != null)
-                        {
-                            flows.put(resourceInfo, new Hashtable<PFlow, String>());
-                            flows.get(resourceInfo).put(flowtoSend, msg);
+                            if (aflows.length == 1)
+                            {
+                                flowtoSend = aflows[0];
+                            }
+                            if (flowtoSend != null && msg != null)
+                            {
+                                flows.put(resourceInfo, new Hashtable<PFlow, String>());
+                                flows.get(resourceInfo).put(flowtoSend, msg);
+                            }
                         }
                     }
                 }
