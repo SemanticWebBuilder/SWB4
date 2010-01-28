@@ -436,7 +436,8 @@ public class PFlowManager
                                     }
                                     else if (serviceName.equals("publish"))
                                     {
-                                        resource.setActive(true);                                        
+                                        resource.setActive(true);
+                                        resource.removePflowInstance();
                                         if (notification != null)
                                         {
                                             notification.publish(resource);
