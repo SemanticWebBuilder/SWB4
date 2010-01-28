@@ -137,7 +137,7 @@ public class PFlowManager
                 {
                     PFlowInstance instance = instances.next();
                     Resource resource = instance.getPfinstResource();
-                    if (isInFlow(resource) && resource.getCreator() != null && resource.getCreator().equals(user))
+                    if (resource!=null && isInFlow(resource) && resource.getCreator() != null && resource.getCreator().equals(user))
                     {
                         getContentsAtFlowOfUser.add(resource);
                     }
@@ -161,7 +161,7 @@ public class PFlowManager
                 {
                     PFlowInstance instance = instances.next();
                     Resource resource = instance.getPfinstResource();
-                    if (isInFlow(resource))
+                    if (resource!=null && isInFlow(resource))
                     {
                         getContentsAtFlowAll.add(resource);
                     }
@@ -185,7 +185,7 @@ public class PFlowManager
                 {
                     PFlowInstance instance = instances.next();
                     Resource resource = instance.getPfinstResource();
-                    if (isInFlow(resource) && resource.getCreator().equals(user) && this.isReviewer(resource, user))
+                    if (resource!=null && isInFlow(resource) && resource.getCreator().equals(user) && this.isReviewer(resource, user))
                     {
                         getContentsAtFlow.add(resource);
                     }
@@ -203,7 +203,7 @@ public class PFlowManager
         {
             PFlowInstance instance = instances.next();
             Resource resource = instance.getPfinstResource();
-            if (isInFlow(resource))
+            if (resource!=null && isInFlow(resource))
             {
                 getContentsAtFlow.add(resource);
             }
@@ -240,7 +240,7 @@ public class PFlowManager
             Resource[] resources = getContentsAtFlowAll(site);
             for (Resource resource : resources)
             {
-                if (isInFlow(resource) && isReviewer(resource, user))
+                if (resource!=null && isInFlow(resource) && isReviewer(resource, user))
                 {
                     getContentsAtFlow.add(resource);
                 }
@@ -259,7 +259,7 @@ public class PFlowManager
             Resource[] resources = getContentsAtFlowAll(site);
             for (Resource resource : resources)
             {
-                if (isInFlow(resource))
+                if (resource!=null && isInFlow(resource))
                 {
                     getContentsAtFlow.add(resource);
                 }
@@ -756,6 +756,10 @@ public class PFlowManager
 
     public boolean isAuthorized(Resource resource)
     {
+        if(resource==null)
+        {
+            return false;
+        }
         if (needAnAuthorization(resource) || isInFlow(resource))
         {
             return false;
