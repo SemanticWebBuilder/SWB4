@@ -70,7 +70,10 @@ public final class FileUtil
             }
             path=java.net.URLDecoder.decode(path,encode);
         }
-        catch(Exception e){}
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
         return new File(path);
     }
 

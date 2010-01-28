@@ -241,24 +241,7 @@ public abstract class OfficeApplication
     {
     }
 
-    /*private void verifyVersion()
-    {
-    if ( OfficeApplication.tryLogin() )
-    {
-    IOpenOfficeApplication officeApplication = XmlRpcProxyFactory.newInstance(IOpenOfficeApplication.class, webAddress);
-    try
-    {
-    if ( officeApplication.isValidVersion(IOpenOfficeApplication.version) && menuListener != null )
-    {
-    menuListener.onLogin();
-    }
-    }
-    catch ( Exception e )
-    {
-    JOptionPane.showMessageDialog(null, e.getMessage(), "Verificación de versión de publicación", JOptionPane.ERROR_MESSAGE);
-    }
-    }
-    }*/
+    
     /**
      * Opens a document in a file path
      * @param file Path for the file

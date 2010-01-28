@@ -56,7 +56,10 @@ public class DialogDocumentDetail extends javax.swing.JDialog {
             tam=nf.format(document.getLocalPath().length())+" "+java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("_BYTES");
             
         }
-        catch(Exception e){}
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
         Object data[]={java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("NOMBRE_DEL_ARCHIVO"),name};
         model.addRow(data);
         
@@ -100,7 +103,10 @@ public class DialogDocumentDetail extends javax.swing.JDialog {
                     model.addRow(data);
                 }
             }
-            catch(Exception e){}
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
         }
         model=(DefaultTableModel)jTablePages.getModel();
         for(String archivo : links)
@@ -122,7 +128,10 @@ public class DialogDocumentDetail extends javax.swing.JDialog {
                     model.addRow(data);
                 }
             }
-            catch(Exception e){}
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 
