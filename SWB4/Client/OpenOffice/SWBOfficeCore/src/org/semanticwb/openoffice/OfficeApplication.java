@@ -126,8 +126,10 @@ public abstract class OfficeApplication
             }
             try
             {
-                if (!application.isValidVersion(IOpenOfficeApplication.version))
+                boolean equals=application.isValidVersion(IOpenOfficeApplication.version);
+                if (!equals)
                 {
+                    JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("LA_VERSIÓN_ENTRE_LA_APLICACIÓN_DE_PUBLICACIÓN_Y_EL_SITIO_NO_ES_COMPATIBLE")+ "version :"+IOpenOfficeApplication.version,java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("ERROR_DE_ACCESO"),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
                     throw new WBException(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("LA_VERSIÓN_ENTRE_LA_APLICACIÓN_DE_PUBLICACIÓN_Y_EL_SITIO_NO_ES_COMPATIBLE"));
                 }
             }
