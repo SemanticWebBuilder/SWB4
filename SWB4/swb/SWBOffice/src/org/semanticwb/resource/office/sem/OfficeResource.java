@@ -102,10 +102,18 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
 
     public void clean()
     {
-        if (SWBPortal.getWorkPath() != null && getResourceBase() != null && getResourceBase().getWorkPath() != null)
+        try
         {
-            File dir = new File(SWBPortal.getWorkPath() + getResourceBase().getWorkPath());
-            clean(dir);
+            if (SWBPortal.getWorkPath() != null && getResourceBase() != null && getResourceBase().getWorkPath() != null)
+            {
+                File dir = new File(SWBPortal.getWorkPath() + getResourceBase().getWorkPath());
+                clean(dir);
+            }
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+
         }
     }
 
