@@ -32,7 +32,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
@@ -103,8 +102,11 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
 
     public void clean()
     {
-        File dir = new File(SWBPortal.getWorkPath() + getResourceBase().getWorkPath());
-        clean(dir);
+        if (SWBPortal.getWorkPath() != null && getResourceBase() != null && getResourceBase().getWorkPath() != null)
+        {
+            File dir = new File(SWBPortal.getWorkPath() + getResourceBase().getWorkPath());
+            clean(dir);
+        }
     }
 
     public void loadContent(InputStream in)
@@ -138,7 +140,7 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
                         }
                         else
                         {
-                            log.error("No se puede sacar archivo de zip, para publicación de office entrada: "+entry.getName()+" tamaño: "+entry.getSize()+" archivo zip: "+zipFile.getAbsolutePath());
+                            log.error("No se puede sacar archivo de zip, para publicación de office entrada: " + entry.getName() + " tamaño: " + entry.getSize() + " archivo zip: " + zipFile.getAbsolutePath());
                         }
                     }
                 }
