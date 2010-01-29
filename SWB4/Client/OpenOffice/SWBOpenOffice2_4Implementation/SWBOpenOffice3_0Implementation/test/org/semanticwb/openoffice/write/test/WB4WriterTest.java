@@ -304,7 +304,7 @@ public class WB4WriterTest
     }
 
     @Test
-    //@Ignore
+    @Ignore
     public void showContentsInFlowTest()
     {
         try
@@ -336,7 +336,7 @@ public class WB4WriterTest
     }
 
     @Test
-    @Ignore
+    //@Ignore
     public void saveToSiteTest()
     {
         try

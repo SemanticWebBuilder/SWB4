@@ -50,6 +50,10 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.XModifiable;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -57,6 +61,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JOptionPane;
 import org.semanticwb.openoffice.DocumentType;
 import org.semanticwb.openoffice.ErrorLog;
 import org.semanticwb.openoffice.NoHasLocationException;
@@ -78,6 +83,7 @@ import static org.semanticwb.openoffice.util.FileUtil.getFileFromURL;
  */
 public class WB4Calc extends OfficeDocument
 {
+
     private static final String NL = "\r\n";
     private static final String ERROR_DOCUMENT_NOT_FOUND = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/calc/WB4Calc").getString("THERE_IS_NOT_A_DOCUMENT_ACTIVE_IN_THE_DESKTOP");
     private static final String CALC_FORMAT = "Calc8";
@@ -561,6 +567,27 @@ public class WB4Calc extends OfficeDocument
             }
             else
             {
+                try
+                {
+                    String name = docFile.getName();
+                    File DocFile = new File(dir.getPath() + File.separatorChar + name);
+                    DocFile.getParentFile().mkdirs();
+                    OutputStream out = new FileOutputStream(DocFile);
+                    InputStream in = new FileInputStream(docFile.getAbsoluteFile());
+                    byte[] bcont = new byte[2048];
+                    int read = in.read(bcont);
+                    while (read != -1)
+                    {
+                        out.write(bcont, 0, read);
+                        read = in.read(bcont);
+                    }
+                }
+                catch (Exception e)
+                {
+                    String msg = "Error: detail: " + NL + e.getLocalizedMessage();
+                    JOptionPane.showMessageDialog(null, msg, "Error", JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                    throw new WBException(msg, e);
+                }
                 HTMLfile = new File(dir.getPath() + File.separatorChar + docFile.getName().replace(EXCEL_EXTENSION, HTML_EXTENSION));
             }
 
@@ -641,16 +668,16 @@ public class WB4Calc extends OfficeDocument
 
     private void changeContentToViewTabStrip(File htmlFile)
     {
-        StringBuilder content = new StringBuilder("<html>"+ NL );
-        content.append("<frameset rows=\"*,39\" border=0 width=0 frameborder=no framespacing=0>"+ NL);
-        content.append("<frame src=\"sheet000.html\" name=\"frSheet\">"+ NL);
-        content.append("<frame src=\"tabstrip.html\" name=\"frTabs\" marginwidth=0 marginheight=0>"+ NL);
-        content.append("<noframes>"+ NL);
-        content.append("<body>"+ NL);
-        content.append(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/calc/WB4Calc").getString("<P>ESTA_PÁGINA_UTILIZA_MARCOS_QUE_SU_EXPLORADOR_NO_ADMITE.</P>")+ NL);
-        content.append("</body></noframes>"+ NL);
-        content.append("</frameset>"+ NL);
-        content.append("</html>"+ NL);
+        StringBuilder content = new StringBuilder("<html>" + NL);
+        content.append("<frameset rows=\"*,39\" border=0 width=0 frameborder=no framespacing=0>" + NL);
+        content.append("<frame src=\"sheet000.html\" name=\"frSheet\">" + NL);
+        content.append("<frame src=\"tabstrip.html\" name=\"frTabs\" marginwidth=0 marginheight=0>" + NL);
+        content.append("<noframes>" + NL);
+        content.append("<body>" + NL);
+        content.append(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/calc/WB4Calc").getString("<P>ESTA_PÁGINA_UTILIZA_MARCOS_QUE_SU_EXPLORADOR_NO_ADMITE.</P>") + NL);
+        content.append("</body></noframes>" + NL);
+        content.append("</frameset>" + NL);
+        content.append("</html>" + NL);
         saveContent(content, htmlFile);
     }
 
@@ -661,7 +688,7 @@ public class WB4Calc extends OfficeDocument
         for (String sheetTitle : sheets.keySet())
         {
             String sheetName = sheets.get(sheetTitle);
-            sheetstable.append("<td bgcolor=\"#FFFFFF\" nowrap><b><small><small>&nbsp;<a href=\"" + sheetName + ".html\" target=\"frSheet\"><font face=\"Arial\" color=\"#000000\">" + sheetTitle + "</font></a>&nbsp;</small></small></b></td>"+ NL);
+            sheetstable.append("<td bgcolor=\"#FFFFFF\" nowrap><b><small><small>&nbsp;<a href=\"" + sheetName + ".html\" target=\"frSheet\"><font face=\"Arial\" color=\"#000000\">" + sheetTitle + "</font></a>&nbsp;</small></small></b></td>" + NL);
         }
         String tabStripFinal = tabstrip.replace("[file]", filecontentName);
         tabStripFinal = tabStripFinal.replace("[sheetstable]", sheetstable.toString());
@@ -772,9 +799,9 @@ public class WB4Calc extends OfficeDocument
         {
             Object objtextfied = xDocFactory.createInstance("com.sun.star.text.TextField.URL");
             XPropertySet xTextFieldProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, objtextfied);
-            xTextFieldProps.setPropertyValue( REPRESENTATION, text);
-            xTextFieldProps.setPropertyValue(TARGETFRAME,_BLANK);
-            xTextFieldProps.setPropertyValue( URL, url);
+            xTextFieldProps.setPropertyValue(REPRESENTATION, text);
+            xTextFieldProps.setPropertyValue(TARGETFRAME, _BLANK);
+            xTextFieldProps.setPropertyValue(URL, url);
             XText xShapeText = (XText) UnoRuntime.queryInterface(XText.class, xCell);
             XTextContent xFieldTextContent = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, xTextFieldProps);
             xShapeText.insertTextContent(xTextCursor, xFieldTextContent, false);
@@ -835,7 +862,7 @@ public class WB4Calc extends OfficeDocument
                 XDrawPageSupplier oDPS = (XDrawPageSupplier) UnoRuntime.queryInterface(
                         XDrawPageSupplier.class, sheet);
                 XDrawPage xDrawPage = oDPS.getDrawPage();
-                images+=xDrawPage.getCount();
+                images += xDrawPage.getCount();
 
             }
             catch (com.sun.star.uno.Exception upe)
