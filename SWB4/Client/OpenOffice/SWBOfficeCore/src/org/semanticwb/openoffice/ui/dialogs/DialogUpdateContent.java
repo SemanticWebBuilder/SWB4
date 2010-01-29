@@ -253,7 +253,7 @@ private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                         String msg = null;
 
                         DialogSelectFlow dialogSelectFlow = new DialogSelectFlow(resourceInfo);
-                        dialogSelectFlow.setTitle(dialogSelectFlow.getTitle() + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("_PARA_PÁGINA_") + " " + resourceInfo.title);
+                        dialogSelectFlow.setTitle(dialogSelectFlow.getTitle() + " " + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("_PARA_PÁGINA_") + " " + resourceInfo.title);
                         dialogSelectFlow.setVisible(true);
                         if (dialogSelectFlow.selected == null)
                         {
@@ -305,7 +305,7 @@ private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                             PFlow flowtoSend = null;
                             String msg = null;
                             DialogSelectFlow dialogSelectFlow = new DialogSelectFlow(resourceInfo);
-                            dialogSelectFlow.setTitle(dialogSelectFlow.getTitle() + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("_PARA_PÁGINA_")+" " + resourceInfo.title);
+                            dialogSelectFlow.setTitle(dialogSelectFlow.getTitle() + " " + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("_PARA_PÁGINA_") + " " + resourceInfo.title);
                             dialogSelectFlow.setVisible(true);
                             if (dialogSelectFlow.selected == null)
                             {
