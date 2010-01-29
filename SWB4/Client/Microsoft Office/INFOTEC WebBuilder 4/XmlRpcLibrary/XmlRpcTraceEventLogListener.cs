@@ -42,21 +42,89 @@ namespace XmlRpcLibrary
         }
         public static void WriteError(Exception e)
         {
-            log.WriteEntry(e.Message + "\r\n\r\n" + e.StackTrace, EventLogEntryType.Error);
+            try
+            {
+                log.WriteEntry(e.Message + "\r\n\r\n" + e.StackTrace, EventLogEntryType.Error);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.StackTrace);
+                log.Clear();
+                try
+                {
+                    log.WriteEntry(e.Message + "\r\n\r\n" + e.StackTrace, EventLogEntryType.Error);
+                }
+                catch (Exception ue)
+                {
+                    Debug.WriteLine(ue.StackTrace);
+                }
+
+            }
         }
         public override void Write(string message)
         {
-            log.WriteEntry(message, EventLogEntryType.Information);            
+            try
+            {
+                log.WriteEntry(message, EventLogEntryType.Information);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.StackTrace);
+                log.Clear();
+                try
+                {
+                    log.WriteEntry(e.Message + "\r\n\r\n" + e.StackTrace, EventLogEntryType.Error);
+                }
+                catch (Exception ue)
+                {
+                    Debug.WriteLine(ue.StackTrace);
+                }
+
+            }
         }
 
         public override void WriteLine(string message)
         {
-            log.WriteEntry(message, EventLogEntryType.Information);
+            try
+            {
+                log.WriteEntry(message, EventLogEntryType.Information);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.StackTrace);
+                log.Clear();
+                try
+                {
+                    log.WriteEntry(e.Message + "\r\n\r\n" + e.StackTrace, EventLogEntryType.Error);
+                }
+                catch (Exception ue)
+                {
+                    Debug.WriteLine(ue.StackTrace);
+                }
+
+            }
         }
         
         public void WriteWarning(string message)
         {
-            log.WriteEntry(message, EventLogEntryType.Error);
+            try
+            {
+                log.WriteEntry(message, EventLogEntryType.Error);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.StackTrace);
+                log.Clear();
+                try
+                {
+                    log.WriteEntry(e.Message + "\r\n\r\n" + e.StackTrace, EventLogEntryType.Error);
+                }
+                catch (Exception ue)
+                {
+                    Debug.WriteLine(ue.StackTrace);
+                }
+
+            }
         }
     }
 }
