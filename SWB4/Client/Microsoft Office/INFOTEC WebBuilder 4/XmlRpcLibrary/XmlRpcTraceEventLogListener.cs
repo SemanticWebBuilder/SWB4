@@ -46,17 +46,17 @@ namespace XmlRpcLibrary
             {
                 log.WriteEntry(e.Message + "\r\n\r\n" + e.StackTrace, EventLogEntryType.Error);
             }
-            catch (Exception e)
+            catch (Exception ue)
             {
-                Debug.WriteLine(e.StackTrace);
+                Debug.WriteLine(ue.StackTrace);
                 log.Clear();
                 try
                 {
                     log.WriteEntry(e.Message + "\r\n\r\n" + e.StackTrace, EventLogEntryType.Error);
                 }
-                catch (Exception ue)
+                catch (Exception uue)
                 {
-                    Debug.WriteLine(ue.StackTrace);
+                    Debug.WriteLine(uue.StackTrace);
                 }
 
             }
