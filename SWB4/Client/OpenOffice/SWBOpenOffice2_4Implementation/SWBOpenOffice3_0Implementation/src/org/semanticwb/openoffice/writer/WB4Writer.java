@@ -52,11 +52,16 @@ import com.sun.star.util.XPropertyReplace;
 import com.sun.star.util.XSearchDescriptor;
 import com.sun.star.util.XSearchable;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JOptionPane;
 import org.semanticwb.openoffice.DocumentType;
 import org.semanticwb.openoffice.ErrorLog;
 import org.semanticwb.openoffice.NoHasLocationException;
@@ -76,6 +81,7 @@ import static org.semanticwb.openoffice.util.FileUtil.getPathURL;
 public class WB4Writer extends OfficeDocument
 {
 
+    private static final String NL = "\r\n";
     private static final String ERROR_DOCUMENT_NOT_FOUND = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/writer/WB4Writer").getString("THERE_IS_NOT_A_DOCUMENT_ACTIVE_IN_THE_DESKTOP");
     private static final String HTML_EXPORT_FORMAT = "HTML (StarWriter)";
     private static final String OFFICE97_FORMAT = "MS Word 97";
@@ -562,6 +568,27 @@ public class WB4Writer extends OfficeDocument
             }
             else
             {
+                try
+                {
+                    String name = docFile.getName();
+                    File DocFile = new File(dir.getPath() + File.separatorChar + name);
+                    DocFile.getParentFile().mkdirs();
+                    OutputStream out=new FileOutputStream(DocFile);
+                    InputStream in=new FileInputStream(docFile.getAbsoluteFile());
+                    byte[] bcont=new byte[2048];
+                    int read=in.read(bcont);
+                    while(read!=-1)
+                    {
+                        out.write(bcont,0, read);
+                        read=in.read(bcont);
+                    }
+                }
+                catch(Exception e)
+                {
+                    String msg="Error: detail: "+NL+e.getLocalizedMessage();
+                    JOptionPane.showMessageDialog(null,msg,"Error",JOptionPane.OK_OPTION  | JOptionPane.ERROR_MESSAGE );
+                    throw new WBException(msg, e);
+                }
                 HTMLfile = new File(dir.getPath() + File.separatorChar + docFile.getName().replace(WORD_EXTENSION, HTML_EXTENSION));
             }
 

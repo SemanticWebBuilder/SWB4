@@ -26,11 +26,8 @@
  */
 package org.semanticwb.openoffice.impress;
 
-import com.sun.star.awt.XBitmap;
-import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.UnknownPropertyException;
-import com.sun.star.beans.XProperty;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XEnumeration;
@@ -60,11 +57,16 @@ import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.XModifiable;
 import com.sun.star.view.XSelectionSupplier;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JOptionPane;
 import org.semanticwb.openoffice.DocumentType;
 import org.semanticwb.openoffice.ErrorLog;
 import org.semanticwb.openoffice.NoHasLocationException;
@@ -87,6 +89,7 @@ import static org.semanticwb.openoffice.util.FileUtil.getPathURL;
 public class WB4Impress extends OfficeDocument
 {
 
+    private static final String NL = "\r\n";
     private static final String ERROR_DOCUMENT_NOT_MODIFIED = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/impress/WB4Impress").getString("THE_DOCUMENT_HAS_NOT_BEEN_MODIFIED");
     private static final String ERROR_DOCUMENT_NOT_SAVED_BEFORE = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/impress/WB4Impress").getString("THE_DOCUMENT_HAS_NOT_BEEN_SAVED_BEFORE");
     private static final String ERROR_DOCUMENT_NOT_FOUND = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/impress/WB4Impress").getString("THERE_IS_NOT_A_DOCUMENT_ACTIVE_IN_THE_DESKTOP");
@@ -684,6 +687,27 @@ public class WB4Impress extends OfficeDocument
             }
             else
             {
+                try
+                {
+                    String name = docFile.getName();
+                    File DocFile = new File(dir.getPath() + File.separatorChar + name);
+                    DocFile.getParentFile().mkdirs();
+                    OutputStream out = new FileOutputStream(DocFile);
+                    InputStream in = new FileInputStream(docFile.getAbsoluteFile());
+                    byte[] bcont = new byte[2048];
+                    int read = in.read(bcont);
+                    while (read != -1)
+                    {
+                        out.write(bcont, 0, read);
+                        read = in.read(bcont);
+                    }
+                }
+                catch (Exception e)
+                {
+                    String msg = "Error: detail: " + NL + e.getLocalizedMessage();
+                    JOptionPane.showMessageDialog(null, msg, "Error", JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                    throw new WBException(msg, e);
+                }
                 HTMLfile = new File(dir.getPath() + File.separatorChar + docFile.getName().replace(PPT_EXTENSION, HTML_EXTENSION));
             }
 
@@ -1087,7 +1111,9 @@ public class WB4Impress extends OfficeDocument
                         xPropSet.getPropertyValue("GraphicURL");
                         images++;
                     }
-                    catch(Exception e){} 
+                    catch (Exception e)
+                    {
+                    }
                 }
             }
             catch (Exception iobe)
