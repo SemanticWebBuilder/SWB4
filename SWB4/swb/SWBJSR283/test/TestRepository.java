@@ -39,6 +39,7 @@ public class TestRepository {
             Node node=session.getRootNode();
             Node demo=node.addNode("demo:demo");
             demo.addMixin("mix:referenceable");
+            demo.addMixin("mix:versionable");
             System.out.println(demo.getUUID());
         }
         catch(Exception cnfe)
