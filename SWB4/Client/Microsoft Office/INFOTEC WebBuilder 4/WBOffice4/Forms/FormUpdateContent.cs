@@ -40,6 +40,7 @@ namespace WBOffice4.Forms
 {
     public partial class FormUpdateContent : Form
     {
+        private static readonly String NL = "\r\n";
         OfficeDocument document;
         public FormUpdateContent(OfficeDocument document)
         {
@@ -99,6 +100,113 @@ namespace WBOffice4.Forms
                     }
                 }
             }
+            
+            Dictionary<ResourceInfo, Dictionary<PFlow, String>> flows = new Dictionary<ResourceInfo, Dictionary<PFlow, String>>();
+            ResourceInfo[] resources = OfficeApplication.OfficeDocumentProxy.listResources(document.reporitoryID, document.contentID);
+            if (resources != null && resources.Length > 0)
+            {
+                bool showMessage = false;
+                foreach (ResourceInfo resourceInfo in resources)
+                {
+                    if (OfficeApplication.OfficeDocumentProxy.isInFlow(resourceInfo) && resourceInfo.version.EndsWith("*"))
+                    {
+                        DialogResult res = MessageBox.Show(this, "La publicación de este contenido en la página" + " " + resourceInfo.title + " " + "esta en trámite" + NL + "Si continua se perderá este proceso de autorización, ¿Desea continuar?", this.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                        if (res == DialogResult.No)
+                        {
+                            return;
+                        }
+                        PFlow[] aflows = OfficeApplication.OfficeDocumentProxy.getFlows(resourceInfo);
+                        PFlow flowtoSend = null;
+                        String msg = null;
+
+                        FormSendToAutorize dialogSelectFlow = new FormSendToAutorize(resourceInfo);
+                        dialogSelectFlow.Text = dialogSelectFlow.Text + " "+"para página" + " " + resourceInfo.title;
+                        dialogSelectFlow.ShowDialog(this);
+                        if (dialogSelectFlow.DialogResult == DialogResult.Cancel)
+                        {
+                            return;
+                        }
+
+
+                        flowtoSend = dialogSelectFlow.pflow;
+                        msg = dialogSelectFlow.textBoxMessage.Text;
+                        if (aflows.Length == 1)
+                        {
+                            flowtoSend = aflows[0];
+                        }
+                        if (flowtoSend != null && msg != null)
+                        {
+                            flows.Add(resourceInfo, new Dictionary<PFlow, String>());
+                            flows[resourceInfo].Add(flowtoSend, msg);
+                        }
+                        break;
+                    }
+                }
+
+                foreach (ResourceInfo resourceInfo in resources)
+                {
+                    PFlow[] pflows = OfficeApplication.OfficeDocumentProxy.getFlows(resourceInfo);
+                    if (pflows != null && pflows.Length >= 1)
+                    {
+                        if (resourceInfo.version.EndsWith("*") && !flows.ContainsKey(resourceInfo))
+                        {
+                            showMessage = true;
+                        }                        
+                    }
+                }
+                if (showMessage)
+                {
+                    DialogResult res = MessageBox.Show(this, "Se encontró que algunas páginas requieren autorización para publicar este contenido, ¿Desea continuar?", this.Text,MessageBoxButtons.YesNo,MessageBoxIcon.Question);
+                    if (res == DialogResult.No)
+                    {
+                        return;
+                    }
+                }
+                foreach (ResourceInfo resourceInfo in resources)
+                {
+                    PFlow[] aflows = OfficeApplication.OfficeDocumentProxy.getFlows(resourceInfo);
+                    if (aflows != null && aflows.Length >= 1)
+                    {
+                        // solo avisa de las que va a actualizar
+                        if (resourceInfo.version.EndsWith("*") && !flows.ContainsKey(resourceInfo))
+                        {
+                            PFlow flowtoSend = null;
+                            String msg = null;
+                            FormSendToAutorize dialogSelectFlow = new FormSendToAutorize(resourceInfo);
+                            dialogSelectFlow.Text = dialogSelectFlow.Text + " " + "para página" + " " + resourceInfo.title;
+                            dialogSelectFlow.ShowDialog(this);
+                            if (dialogSelectFlow.DialogResult == DialogResult.Cancel)
+                            {
+                                return;
+                            }
+
+
+                            flowtoSend = dialogSelectFlow.pflow;
+                            msg = dialogSelectFlow.textBoxMessage.Text;
+                            if (aflows.Length == 1)
+                            {
+                                flowtoSend = aflows[0];
+                            }
+                            if (flowtoSend != null && msg != null)
+                            {
+                                flows.Add(resourceInfo, new Dictionary<PFlow, String>());
+                                flows[resourceInfo].Add(flowtoSend, msg);
+                            }
+                        }
+                    }
+                }
+            }
+            ResourceInfo[] resourcestoSend = flows.Keys.ToArray<ResourceInfo>();
+            String[] messages = new String[flows.Count];
+            PFlow[] flowsToSend = new PFlow[flows.Count];
+            int i = 0;
+            foreach (ResourceInfo res in resourcestoSend)
+            {
+                flowsToSend[i] = flows[res].Keys.ElementAt(0);
+                messages[i] = flows[res][flowsToSend[i]];
+                i++;
+            }
+
             this.progressBarSave.Maximum = 1;
             FileInfo zipFile = document.CreateZipFile();
             this.progressBarSave.Value = 1;
@@ -108,7 +216,7 @@ namespace WBOffice4.Forms
             {
 
                 String name = document.FilePath.Name.Replace(document.DefaultExtension, document.PublicationExtension);
-                OfficeDocument.OfficeDocumentProxy.updateContent(document.reporitoryID, document.contentID, name);
+                OfficeDocument.OfficeDocumentProxy.updateContent(document.reporitoryID, document.contentID, name, resourcestoSend, flowsToSend, messages);
                 MessageBox.Show(this, "¡Version actualizada!", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 loadVersions();
                 this.buttonUpdate.Enabled = false;
