@@ -243,7 +243,7 @@ private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                 {
                     if (OfficeApplication.getOfficeDocumentProxy().isInFlow(resourceInfo) && resourceInfo.version.endsWith("*"))
                     {
-                        int res = JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("LA_PUBLICACIÓN_DE_ESTE_CONTENIDO_EN_LA_PÁGINA_")+" " + resourceInfo.title + " "+ java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("_ESTA_EN_TRÁMITE.") + NL + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("SI_CONTINUA_SE_PERDERÁ_ESTE_PROCESO_DE_AUTORIZACIÓN,_¿DESEA_CONTINUAR?"), this.getTitle(), JOptionPane.YES_NO_OPTION);
+                        int res = JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("LA_PUBLICACIÓN_DE_ESTE_CONTENIDO_EN_LA_PÁGINA_") + " " + resourceInfo.title + " " + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("_ESTA_EN_TRÁMITE.") + NL + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("SI_CONTINUA_SE_PERDERÁ_ESTE_PROCESO_DE_AUTORIZACIÓN,_¿DESEA_CONTINUAR?"), this.getTitle(), JOptionPane.YES_NO_OPTION);
                         if (res == JOptionPane.NO_OPTION)
                         {
                             return;
@@ -253,8 +253,12 @@ private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                         String msg = null;
 
                         DialogSelectFlow dialogSelectFlow = new DialogSelectFlow(resourceInfo);
-                        dialogSelectFlow.setTitle(dialogSelectFlow.getTitle() + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("_PARA_PÁGINA_")+" " + resourceInfo.title);
+                        dialogSelectFlow.setTitle(dialogSelectFlow.getTitle() + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("_PARA_PÁGINA_") + " " + resourceInfo.title);
                         dialogSelectFlow.setVisible(true);
+                        if (dialogSelectFlow.selected == null)
+                        {
+                            return;
+                        }
                         flowtoSend = dialogSelectFlow.selected;
                         msg = dialogSelectFlow.jTextAreaMessage.getText();
 
@@ -279,7 +283,7 @@ private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                         if (resourceInfo.version.endsWith("*") && !flows.containsKey(resourceInfo))
                         {
                             showMessage = true;
-                        }                        
+                        }
                     }
                 }
                 if (showMessage)
@@ -303,6 +307,10 @@ private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                             DialogSelectFlow dialogSelectFlow = new DialogSelectFlow(resourceInfo);
                             dialogSelectFlow.setTitle(dialogSelectFlow.getTitle() + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogUpdateContent").getString("_PARA_PÁGINA_") + resourceInfo.title);
                             dialogSelectFlow.setVisible(true);
+                            if (dialogSelectFlow.selected == null)
+                            {
+                                return;
+                            }
                             flowtoSend = dialogSelectFlow.selected;
                             msg = dialogSelectFlow.jTextAreaMessage.getText();
 
