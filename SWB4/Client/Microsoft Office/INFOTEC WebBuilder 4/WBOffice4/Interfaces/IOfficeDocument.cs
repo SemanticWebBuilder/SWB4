@@ -61,7 +61,7 @@ namespace WBOffice4.Interfaces
         bool exists(String repositoryName, String contentId);
 
         [XmlRpcMethod("OfficeDocument.updateContent")]
-        String updateContent(String repositoryName, String contentId, String file);
+        String updateContent(String repositoryName, String contentId, String file, ResourceInfo[] resourcestoSend, PFlow[] flowsToSend, String[] msg);
 
         [XmlRpcMethod("OfficeDocument.getVersions")]
         VersionInfo[] getVersions(String repositoryName, String contentId);

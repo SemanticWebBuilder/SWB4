@@ -57,95 +57,85 @@
             this.buttonClose = new System.Windows.Forms.Button();
             this.buttonUpdate = new System.Windows.Forms.Button();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripButtonView = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButtonDelete = new System.Windows.Forms.ToolStripButton();
             this.listViewVersions = new System.Windows.Forms.ListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader4 = new System.Windows.Forms.ColumnHeader();
-            this.toolStripButtonView = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonDelete = new System.Windows.Forms.ToolStripButton();
             this.panel1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
-            this.panel1.AccessibleDescription = null;
-            this.panel1.AccessibleName = null;
-            resources.ApplyResources(this.panel1, "panel1");
-            this.panel1.BackgroundImage = null;
             this.panel1.Controls.Add(this.progressBarSave);
             this.panel1.Controls.Add(this.buttonClose);
             this.panel1.Controls.Add(this.buttonUpdate);
-            this.panel1.Font = null;
+            resources.ApplyResources(this.panel1, "panel1");
             this.panel1.Name = "panel1";
             // 
             // progressBarSave
             // 
-            this.progressBarSave.AccessibleDescription = null;
-            this.progressBarSave.AccessibleName = null;
             resources.ApplyResources(this.progressBarSave, "progressBarSave");
-            this.progressBarSave.BackgroundImage = null;
-            this.progressBarSave.Font = null;
             this.progressBarSave.Name = "progressBarSave";
             // 
             // buttonClose
             // 
-            this.buttonClose.AccessibleDescription = null;
-            this.buttonClose.AccessibleName = null;
-            resources.ApplyResources(this.buttonClose, "buttonClose");
-            this.buttonClose.BackgroundImage = null;
             this.buttonClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonClose.Font = null;
+            resources.ApplyResources(this.buttonClose, "buttonClose");
             this.buttonClose.Name = "buttonClose";
             this.buttonClose.UseVisualStyleBackColor = true;
             this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
             // 
             // buttonUpdate
             // 
-            this.buttonUpdate.AccessibleDescription = null;
-            this.buttonUpdate.AccessibleName = null;
             resources.ApplyResources(this.buttonUpdate, "buttonUpdate");
-            this.buttonUpdate.BackgroundImage = null;
-            this.buttonUpdate.Font = null;
             this.buttonUpdate.Name = "buttonUpdate";
             this.buttonUpdate.UseVisualStyleBackColor = true;
             this.buttonUpdate.Click += new System.EventHandler(this.buttonUpdate_Click);
             // 
             // toolStrip1
             // 
-            this.toolStrip1.AccessibleDescription = null;
-            this.toolStrip1.AccessibleName = null;
-            resources.ApplyResources(this.toolStrip1, "toolStrip1");
-            this.toolStrip1.BackgroundImage = null;
-            this.toolStrip1.Font = null;
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonView,
             this.toolStripSeparator1,
             this.toolStripButtonDelete});
+            resources.ApplyResources(this.toolStrip1, "toolStrip1");
             this.toolStrip1.Name = "toolStrip1";
+            // 
+            // toolStripButtonView
+            // 
+            this.toolStripButtonView.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            resources.ApplyResources(this.toolStripButtonView, "toolStripButtonView");
+            this.toolStripButtonView.Image = global::WBOffice4.Properties.Resources.see;
+            this.toolStripButtonView.Name = "toolStripButtonView";
+            this.toolStripButtonView.Click += new System.EventHandler(this.toolStripButtonView_Click);
             // 
             // toolStripSeparator1
             // 
-            this.toolStripSeparator1.AccessibleDescription = null;
-            this.toolStripSeparator1.AccessibleName = null;
-            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
             this.toolStripSeparator1.Name = "toolStripSeparator1";
+            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
+            // 
+            // toolStripButtonDelete
+            // 
+            this.toolStripButtonDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            resources.ApplyResources(this.toolStripButtonDelete, "toolStripButtonDelete");
+            this.toolStripButtonDelete.Image = global::WBOffice4.Properties.Resources.delete;
+            this.toolStripButtonDelete.Name = "toolStripButtonDelete";
+            this.toolStripButtonDelete.Click += new System.EventHandler(this.toolStripButtonDelete_Click);
             // 
             // listViewVersions
             // 
-            this.listViewVersions.AccessibleDescription = null;
-            this.listViewVersions.AccessibleName = null;
-            resources.ApplyResources(this.listViewVersions, "listViewVersions");
-            this.listViewVersions.BackgroundImage = null;
             this.listViewVersions.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2,
             this.columnHeader3,
             this.columnHeader4});
-            this.listViewVersions.Font = null;
+            resources.ApplyResources(this.listViewVersions, "listViewVersions");
             this.listViewVersions.FullRowSelect = true;
             this.listViewVersions.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewVersions.MultiSelect = false;
@@ -170,41 +160,15 @@
             // 
             resources.ApplyResources(this.columnHeader4, "columnHeader4");
             // 
-            // toolStripButtonView
-            // 
-            this.toolStripButtonView.AccessibleDescription = null;
-            this.toolStripButtonView.AccessibleName = null;
-            resources.ApplyResources(this.toolStripButtonView, "toolStripButtonView");
-            this.toolStripButtonView.BackgroundImage = null;
-            this.toolStripButtonView.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonView.Image = global::WBOffice4.Properties.Resources.see;
-            this.toolStripButtonView.Name = "toolStripButtonView";
-            this.toolStripButtonView.Click += new System.EventHandler(this.toolStripButtonView_Click);
-            // 
-            // toolStripButtonDelete
-            // 
-            this.toolStripButtonDelete.AccessibleDescription = null;
-            this.toolStripButtonDelete.AccessibleName = null;
-            resources.ApplyResources(this.toolStripButtonDelete, "toolStripButtonDelete");
-            this.toolStripButtonDelete.BackgroundImage = null;
-            this.toolStripButtonDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonDelete.Image = global::WBOffice4.Properties.Resources.delete;
-            this.toolStripButtonDelete.Name = "toolStripButtonDelete";
-            this.toolStripButtonDelete.Click += new System.EventHandler(this.toolStripButtonDelete_Click);
-            // 
             // FormUpdateContent
             // 
             this.AcceptButton = this.buttonUpdate;
-            this.AccessibleDescription = null;
-            this.AccessibleName = null;
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = null;
             this.CancelButton = this.buttonClose;
             this.Controls.Add(this.listViewVersions);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.panel1);
-            this.Font = null;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
