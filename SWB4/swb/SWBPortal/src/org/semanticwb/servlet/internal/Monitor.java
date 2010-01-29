@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.portal.monitor.SWBGCDump;
 import org.semanticwb.portal.monitor.SWBJvmEventListener;
 import org.semanticwb.portal.monitor.SWBNotificationListener;
 import org.semanticwb.portal.monitor.SWBSummary;
@@ -122,6 +123,7 @@ public class Monitor implements InternalServlet
 //        } catch (Exception e){e.printStackTrace();}
                 out.print("<div id=\"DeathLock\"><pre>"+SWBThreadDumper.dumpDeathLock()+"<pre></div>");
                 out.print("<div id=\"ThreadDump\"><pre>"+SWBThreadDumper.dumpBLOCKEDThreadWithStackTrace()+"<pre></div>");
+                out.print("<div id=\"GC\"><pre>"+SWBGCDump.getVerboseGc()+"<pre></div>");
 //        doMonitor();
 //        ThreadMXBean thbean = java.lang.management.ManagementFactory.getThreadMXBean();
 //        if (thbean.isThreadContentionMonitoringSupported())
