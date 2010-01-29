@@ -251,12 +251,24 @@ public class SemanticVocabulary
         return prop;
     }
 
+    public HashMap<String,String> getNsPrefixMap()
+    {
+        HashMap<String,String> getNamespaces=new HashMap<String, String>();
+        for(String key : SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getNsPrefixMap().keySet())
+        {
+            String value=SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getNsPrefixMap().get(key);
+            getNamespaces.put(key, value);
+        }
+        return getNamespaces;
+    }
+
     public SemanticProperty getSemanticProperty(String uri)
     {
         SemanticProperty prop = properties.get(uri);
         if (prop == null)
         {
             OntModel ont = SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel();
+            
             try
             {
                 Property p = ont.getProperty(uri);
