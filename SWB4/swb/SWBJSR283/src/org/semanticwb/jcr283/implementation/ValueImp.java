@@ -664,10 +664,10 @@ public class ValueImp implements Value
         {
             String prefix = value.substring(0, pos);
             String name = value.substring(pos + 1);
-            NamespaceRegistryImp reg = new NamespaceRegistryImp();
+            
             try
             {
-                String uri = reg.getURI(prefix);
+                String uri = SWBRepository.getNamespaceRegistryImp().getURI(prefix);
                 if (uri == null)
                 {
                     throw new ValueFormatException("The uri for the prefix " + prefix + " was not found");
@@ -858,11 +858,10 @@ public class ValueImp implements Value
     }
 
     private String toString(QName value) throws ValueFormatException
-    {
-        NamespaceRegistryImp reg = new NamespaceRegistryImp();
+    {        
         try
         {
-            String prefix = reg.getPrefix(value.getNamespaceURI());
+            String prefix = SWBRepository.getNamespaceRegistryImp().getPrefix(value.getNamespaceURI());
             return prefix + ":" + value.getLocalPart();
         }
         catch (Exception e)

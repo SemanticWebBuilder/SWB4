@@ -27,6 +27,7 @@ import javax.jcr.query.QueryManager;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionException;
 import javax.jcr.version.VersionManager;
+import org.semanticwb.SWBPlatform;
 import org.xml.sax.ContentHandler;
 
 /**
@@ -40,6 +41,7 @@ public class WorkspaceImp  implements Workspace {
     private final NodeManager nodeManager=new NodeManager();
     private NodeTypeManagerImp nodeTypeManager;
     private final VersionManagerImp versionManagerImp=new VersionManagerImp();
+    
     public WorkspaceImp(SessionImp session,org.semanticwb.jcr283.repository.model.Workspace ws) throws RepositoryException
     {
         this.session=session;
@@ -102,7 +104,7 @@ public class WorkspaceImp  implements Workspace {
 
     public NamespaceRegistry getNamespaceRegistry() throws RepositoryException
     {
-        return new NamespaceRegistryImp();
+        return SWBRepository.getNamespaceRegistryImp();
     }
 
     public NodeTypeManager getNodeTypeManager() throws RepositoryException

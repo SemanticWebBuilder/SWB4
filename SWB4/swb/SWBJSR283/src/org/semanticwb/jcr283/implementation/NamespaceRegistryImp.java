@@ -11,7 +11,9 @@ import javax.jcr.NamespaceException;
 import javax.jcr.NamespaceRegistry;
 import javax.jcr.RepositoryException;
 import javax.jcr.UnsupportedRepositoryOperationException;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBUtils;
 
 /**
  *
@@ -19,7 +21,7 @@ import org.semanticwb.SWBPlatform;
  */
 public class NamespaceRegistryImp implements NamespaceRegistry {
 
-
+    private static Logger log = SWBUtils.getLogger(NamespaceRegistryImp.class);
     private final HashMap<String,String> values =new HashMap<String, String>();
     public NamespaceRegistryImp()
     {
@@ -28,6 +30,13 @@ public class NamespaceRegistryImp implements NamespaceRegistry {
         values.put(PREFIX_NT, NAMESPACE_NT);
         values.put(PREFIX_XML, NAMESPACE_XML);
         //TODO: add prefixes and namespaces from SWBPlatform
+        HashMap<String,String>  nsPrefixMap=SWBPlatform.getSemanticMgr().getVocabulary().getNsPrefixMap();
+        for(String key : nsPrefixMap.keySet())
+        {
+            String value=nsPrefixMap.get(key);
+            log.trace("loading prefix "+ key +" for uri "+value);
+            values.put(key, value);
+        }
     }
     public void registerNamespace(String prefix, String uri) throws NamespaceException, UnsupportedRepositoryOperationException, AccessDeniedException, RepositoryException
     {
