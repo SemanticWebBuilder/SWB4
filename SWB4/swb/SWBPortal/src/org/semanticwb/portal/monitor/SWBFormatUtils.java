@@ -49,4 +49,9 @@ public class SWBFormatUtils {
     static String formatLong(long value) {
 	return String.format("%,d", value);
     }
+
+    static String formatMillis(long ms)
+    {
+        return String.format("%.4fsec", ms / 1000d);
+    }
 }
