@@ -49,6 +49,7 @@ import org.semanticwb.servlet.internal.FrmProcess;
 import org.semanticwb.servlet.internal.GoogleSiteMap;
 import org.semanticwb.servlet.internal.InternalServlet;
 import org.semanticwb.servlet.internal.Login;
+import org.semanticwb.servlet.internal.Monitor;
 import org.semanticwb.servlet.internal.Upload;
 import org.semanticwb.servlet.internal.UploadFormElement;
 
@@ -316,6 +317,10 @@ public class SWBVirtualHostFilter implements Filter
         InternalServlet googleMap = new GoogleSiteMap();
         intServlets.put("sitemap.txt", googleMap);
         googleMap.init(filterConfig.getServletContext());
+
+        InternalServlet monitor = new Monitor();
+        intServlets.put("swbmonitor.ssl", monitor);
+        monitor.init(filterConfig.getServletContext());
 
     }
 
