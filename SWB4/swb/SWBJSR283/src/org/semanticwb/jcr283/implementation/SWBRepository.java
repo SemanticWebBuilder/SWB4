@@ -30,6 +30,7 @@ public class SWBRepository implements Repository {
     private static Hashtable<String, Value> descriptors = new Hashtable<String, Value>();
     public static final String DEFAULT_WORKSPACE="default";
     private static NodeTypeManagerImp NodeTypeManagerImp;
+    private static final NamespaceRegistryImp namespaceRegistryImp=new NamespaceRegistryImp();
     static
     {
 
@@ -46,6 +47,10 @@ public class SWBRepository implements Repository {
         descriptors.put(OPTION_OBSERVATION_SUPPORTED, new ValueImp(false));
         descriptors.put(OPTION_LOCKING_SUPPORTED, new ValueImp(true));        
         checkDefaultWorkspace();
+    }
+    public static NamespaceRegistryImp getNamespaceRegistryImp()
+    {
+        return namespaceRegistryImp;
     }
     public static NodeTypeManagerImp getNodeTypeManagerImp()
     {
