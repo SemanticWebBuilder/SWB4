@@ -1143,7 +1143,11 @@ public class NodeImp extends ItemImp implements Node
 
     public VersionHistory getVersionHistory() throws UnsupportedRepositoryOperationException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (!isVersionable())
+        {
+            throw new UnsupportedRepositoryOperationException("The node is not versionable");
+        }
+        return versionManagerImp.getVersionHistory(path);
     }
 
     public Version getBaseVersion() throws UnsupportedRepositoryOperationException, RepositoryException
