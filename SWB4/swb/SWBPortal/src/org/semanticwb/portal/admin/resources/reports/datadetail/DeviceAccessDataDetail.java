@@ -24,6 +24,8 @@
 
 package org.semanticwb.portal.admin.resources.reports.datadetail;
 
+import static org.semanticwb.portal.admin.resources.reports.WBADeviceReport.UNKNOW;
+
 import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
@@ -62,7 +64,7 @@ public class DeviceAccessDataDetail extends SWBDataDetail {
         HashMap labels=new HashMap();
 
         if(rfilter==null) {
-            labels.put("_", "Desconocido");
+            labels.put("_", UNKNOW);
         }
         WebSite ws=SWBContext.getWebSite(siteId);
         Iterator<Device> it=ws.listDevices();
@@ -86,7 +88,7 @@ public class DeviceAccessDataDetail extends SWBDataDetail {
         HashMap labels=new HashMap();
 
         if(rfilter==null) {
-            labels.put("_", "Desconocido");
+            labels.put("_", UNKNOW);
         }
         WebSite ws=SWBContext.getWebSite(siteId);
         Iterator<Device> it=ws.listDevices();
@@ -110,7 +112,7 @@ public class DeviceAccessDataDetail extends SWBDataDetail {
         HashMap labels=new HashMap();
 
         if(rfilter==null) {
-            labels.put("_", "Desconocido");
+            labels.put("_", UNKNOW);
         }
         WebSite ws=SWBContext.getWebSite(siteId);
         Iterator<Device> it=ws.listDevices();

@@ -28,8 +28,9 @@
 
 package org.semanticwb.portal.admin.resources.reports.beans;
 
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.Iterator;
 
 /**
  *
@@ -50,12 +51,21 @@ public class WBAFilterReportBean {
 
     private String userLanguage;
 
+    private boolean groupedDates;
+
     
     public WBAFilterReportBean(){
         dayI   = -1;
         monthI = -1;
         yearI  = -1;
         userLanguage = "es";
+    }
+
+    public WBAFilterReportBean(String language) {
+        dayI   = -1;
+        monthI = -1;
+        yearI  = -1;
+        userLanguage = language;
     }
 
     public int getDayI() {
@@ -167,5 +177,29 @@ public class WBAFilterReportBean {
      */
     public void setUserLanguage(String userLanguage) {
         this.userLanguage = userLanguage;
+    }
+
+    /**
+     * @return the groupedDates
+     */
+    public boolean isGroupedDates() {
+        return groupedDates;
+    }
+
+    /**
+     * @param groupedDates the groupedDates to set
+     */
+    public void setGroupedDates(boolean groupedDates) {
+        this.groupedDates = groupedDates;
+    }
+
+    public Date getDateI() {
+        GregorianCalendar d = new GregorianCalendar(yearI, monthI-1, dayI);
+        return d.getTime();
+    }
+
+    public Date getDateF() {
+        GregorianCalendar d = new GregorianCalendar(yearF, monthF-1, dayF);
+        return d.getTime();
     }
 }

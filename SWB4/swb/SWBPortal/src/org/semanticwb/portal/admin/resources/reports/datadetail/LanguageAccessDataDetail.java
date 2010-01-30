@@ -24,6 +24,8 @@
 
 package org.semanticwb.portal.admin.resources.reports.datadetail;
 
+import static org.semanticwb.portal.admin.resources.reports.WBADeviceReport.UNKNOW;
+
 import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
@@ -295,7 +297,7 @@ public class LanguageAccessDataDetail extends SWBDataDetail {
 //        HashMap labels=new HashMap();
 //
 //        if(rfilter==null) {
-//            labels.put("_", "Desconocido");
+//            labels.put("_", UNKNOW_DEV);
 //        }
 //        WebSite ws=SWBContext.getWebSite(siteId);
 //        Iterator<Language> it=ws.listLanguages();
@@ -316,7 +318,7 @@ public class LanguageAccessDataDetail extends SWBDataDetail {
         HashMap labels=new HashMap();
 
         if(rfilter==null) {
-            labels.put("_", "Desconocido");
+            labels.put("_", UNKNOW);
         }
         WebSite ws=SWBContext.getWebSite(siteId);
         Iterator<Language> it=ws.listLanguages();
@@ -325,7 +327,7 @@ public class LanguageAccessDataDetail extends SWBDataDetail {
             labels.put(lang.getId(), lang.getDisplayTitle(language));
         }
         resumeRecHits.addAll(SWBRecHits_.getInstance().getResHitsLog(siteId, rfilter, type, year, labels));
-        /*resumeRecHits.addAll(getUnknownHits(site, type, year, "Desconocido"));*/
+        /*resumeRecHits.addAll(getUnknownHits(site, type, year, UNKNOW));*/
         return resumeRecHits;
     }
     
@@ -338,7 +340,7 @@ public class LanguageAccessDataDetail extends SWBDataDetail {
         HashMap labels=new HashMap();
 
         if(rfilter==null) {
-            labels.put("_", "Desconocido");
+            labels.put("_", UNKNOW);
         }
         WebSite ws=SWBContext.getWebSite(siteId);
         Iterator<Language> it=ws.listLanguages();
@@ -347,7 +349,7 @@ public class LanguageAccessDataDetail extends SWBDataDetail {
             labels.put(lang.getId(), lang.getDisplayTitle(language));
         }
         resumeRecHits.addAll(SWBRecHits_.getInstance().getResHitsLog(siteId, rfilter, type, year, month, day, labels));
-        /*resumeRecHits.addAll(getUnknownHits(site, type, year, month, day, "Desconocido"));*/
+        /*resumeRecHits.addAll(getUnknownHits(site, type, year, month, day, UNKNOW));*/
         return resumeRecHits;
     }
     
@@ -360,7 +362,7 @@ public class LanguageAccessDataDetail extends SWBDataDetail {
         HashMap labels=new HashMap();
 
         if(rfilter==null) {
-            labels.put("_", "Desconocido");
+            labels.put("_", UNKNOW);
         }
         WebSite ws=SWBContext.getWebSite(siteId);
         Iterator<Language> it=ws.listLanguages();
@@ -369,7 +371,7 @@ public class LanguageAccessDataDetail extends SWBDataDetail {
             labels.put(lang.getId(), lang.getDisplayTitle(language));
         }
         resumeRecHits.addAll(SWBRecHits_.getInstance().getResHitsLog(siteId, rfilter, type, yearI, monthI, dayI, yearF, monthF, dayF, labels));
-        /*resumeRecHits.addAll(getUnknownHits(site, type, yearI, monthI, dayI, yearF, monthF, dayF, "Desconocido"));*/
+        /*resumeRecHits.addAll(getUnknownHits(site, type, yearI, monthI, dayI, yearF, monthF, dayF, UNKNOW));*/
         return resumeRecHits;
     }
 }
