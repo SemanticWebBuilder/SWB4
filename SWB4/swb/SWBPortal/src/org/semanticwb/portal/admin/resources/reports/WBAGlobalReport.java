@@ -26,6 +26,7 @@ package org.semanticwb.portal.admin.resources.reports;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -34,6 +35,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.model.SWBContext;
@@ -93,15 +95,17 @@ public class WBAGlobalReport extends GenericResource {
      */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
-        if(paramsRequest.getMode().equals("graph")) {
+        if(paramsRequest.getMode().equalsIgnoreCase("graph")) {
             doGraph(request,response,paramsRequest);
-        }else if(paramsRequest.getMode().equals("report_excel")) {
+        }else if(paramsRequest.getMode().equalsIgnoreCase("histogram")) {
+            doHistrogram(request,response,paramsRequest);
+        }else if(paramsRequest.getMode().equalsIgnoreCase("xls")) {
             doRepExcel(request,response,paramsRequest);
-        }else if(paramsRequest.getMode().equals("report_xml")) {
+        }else if(paramsRequest.getMode().equalsIgnoreCase("xml")) {
             doRepXml(request,response,paramsRequest);
-        }else if(paramsRequest.getMode().equals("report_pdf")) {
+        }else if(paramsRequest.getMode().equalsIgnoreCase("pdf")) {
             doRepPdf(request,response,paramsRequest);
-        }else if(paramsRequest.getMode().equals("report_rtf")) {
+        }else if(paramsRequest.getMode().equalsIgnoreCase("rtf")) {
             doRepRtf(request,response,paramsRequest);
         }else {
             super.processRequest(request, response, paramsRequest);
@@ -238,16 +242,21 @@ public class WBAGlobalReport extends GenericResource {
                 out.println("function doXml(accion, size) { ");
                 /*out.println("   if(validate(accion)) {");*/
                 out.println("      var params = getParams(accion);");
-                out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_xml")+"\"+params,\"graphWindow\",size);    ");
+                out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("xml")+"\"+params,\"graphWindow\",size);    ");
                 /*out.println("   }");*/
                 out.println("}");
 
                 out.println("function doExcel(accion, size) { ");
                 /*out.println("   if(validate(accion)) {");*/
                 out.println("      var params = getParams(accion);");
-                out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_excel")+"\"+params,\"graphWindow\",size);    ");
+                out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("xls")+"\"+params,\"graphWindow\",size);    ");
                 /*out.println("   }");*/
                 out.println("}");
+
+                out.println("function doHistogram(accion, size) { ");
+                out.println("      var params = getParams(accion);");
+                out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("histogram")+"\"+params,\"graphWindow\",size);    ");
+                out.println(" }");
 
                 out.println("function doGraph(accion, size) { ");
                 /*out.println("   if(validate(accion)) {");*/
@@ -259,14 +268,14 @@ public class WBAGlobalReport extends GenericResource {
                 out.println("function doPdf(accion, size) { ");
                 /*out.println("   if(validate(accion)) {");*/
                 out.println("      var params = getParams(accion);");
-                out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_pdf")+"\"+params,\"graphWindow\",size);    ");
+                out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("pdf")+"\"+params,\"graphWindow\",size);    ");
                 /*out.println("   }");*/
                 out.println("}");
 
                 out.println("function doRtf(accion, size) { ");
                 /*out.println("   if(validate(accion)) {");*/
                 out.println("      var params = getParams(accion);");
-                out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_rtf")+"\"+params,\"graphWindow\",size);    ");
+                out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("rtf")+"\"+params,\"graphWindow\",size);    ");
                 /*out.println("   }");*/
                 out.println("}");
 
@@ -380,10 +389,11 @@ public class WBAGlobalReport extends GenericResource {
                     out.println("<tr>");
                     out.println(" <td colspan=\"4\">&nbsp;&nbsp;&nbsp;");
                     out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doXml('"+rtype+"', 'width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">XML</button>&nbsp;");
-                    out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doExcel('"+rtype+"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">MS Excel</button>&nbsp;");
+                    out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doExcel('"+rtype+"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">"+paramsRequest.getLocaleString("spread_sheet")+"</button>&nbsp;");
                     out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doPdf('"+rtype+"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">PDF</button>&nbsp;");
                     out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doRtf('"+rtype+"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">RTF</button>&nbsp;");
                     out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doGraph('"+rtype+"','width=600, height=550, scrollbars, resizable')\">"+paramsRequest.getLocaleString("graph")+"</button>&nbsp;");
+                    out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doHistogram('"+rtype+"', 'width=600, height=600, scrollbars, resizable, alwaysRaised, menubar')\">"+paramsRequest.getLocaleString("histogram")+"</button>&nbsp;");
                     out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doApply()\">"+paramsRequest.getLocaleString("apply")+"</button>");
                     out.println(" </td>");
                     out.println("</tr>");
@@ -442,10 +452,11 @@ public class WBAGlobalReport extends GenericResource {
                     out.println("<tr>");
                     out.println(" <td colspan=\"4\">&nbsp;&nbsp;&nbsp;");
                     out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doXml('"+rtype+"', 'width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">XML</button>&nbsp;");
-                    out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doExcel('"+rtype+"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">MS Excel</button>&nbsp;");
+                    out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doExcel('"+rtype+"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">"+paramsRequest.getLocaleString("spread_sheet")+"</button>&nbsp;");
                     out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doPdf('"+rtype+"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">PDF</button>&nbsp;");
                     out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doRtf('"+rtype+"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">RTF</button>&nbsp;");
                     out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doGraph('"+rtype+"','width=600, height=550, scrollbars, resizable')\">"+paramsRequest.getLocaleString("graph")+"</button>&nbsp;");
+                    out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doHistogram('"+rtype+"', 'width=600, height=600, scrollbars, resizable, alwaysRaised, menubar')\">"+paramsRequest.getLocaleString("histogram")+"</button>&nbsp;");
                     out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doApply()\">"+paramsRequest.getLocaleString("apply")+"</button>");
                     out.println(" </td>");
                     out.println("</tr>");
@@ -805,6 +816,157 @@ public class WBAGlobalReport extends GenericResource {
         }
     }
 
+    public void doHistrogram(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
+        StringBuffer sb_ret = new StringBuffer();
+        StringBuffer sb_app = new StringBuffer();
+        Resource base = paramsRequest.getResourceBase();
+        String monthinyear = null;
+        boolean hasBarname = false;
+        int j = 0;
+
+        try {
+            String rtype = request.getParameter("wb_rtype")==null? "0":request.getParameter("wb_rtype");
+            monthinyear = request.getParameter("wbr_barname");
+            if(monthinyear != null){
+                hasBarname = true;
+            }
+
+            sb_ret.append("<html>");
+            sb_ret.append("<head>");
+            sb_ret.append("<title>"+paramsRequest.getLocaleString("global_report")+"</title>");
+            sb_ret.append("</head>");
+            //sb_ret.append("<LINK href=\"" + WBUtils.getInstance().getWebPath() +"work/WBAdmin/templates/3/1/images/wb3.css\" rel=\"stylesheet\" type=\"text/css\" >");
+            sb_ret.append("<body>");
+            sb_ret.append("<table border=\"0\" width=\"98%\">");
+            sb_ret.append("<tr>");
+            sb_ret.append("<td colpsan=\"3\" align=\"center\">");
+            sb_ret.append("<img src=\""+SWBPortal.getContextPath()+"/swbadmin/images/swb-logo-hor.jpg\" alt=\"\" width=\"229\" height=\"44\" />");
+            sb_ret.append("</td>");
+            sb_ret.append("</tr>");
+            sb_ret.append("<tr><td colpsan=\"3\">&nbsp;</td></tr>");
+            sb_ret.append("<tr>");
+            sb_ret.append("<td colpsan=\"3\" align=\"right\">");
+            if(hasBarname) {
+                sb_ret.append("<input type=\"button\" class=\"boton\" onClick=\"window.history.back()\" value=\""+paramsRequest.getLocaleString("back")+"\" name=\"btnBack\">&nbsp;");
+            }
+            sb_ret.append("<input type=\"button\" class=\"boton\" onClick=\"window.print()\" value=\""+paramsRequest.getLocaleString("print")+"\" name=\"btnPrint\">&nbsp;");
+            sb_ret.append("<input type=\"button\" class=\"boton\" onClick=\"window.close()\" value=\""+paramsRequest.getLocaleString("close")+"\" name=\"btnClose\">");
+            sb_ret.append("</td>");
+            sb_ret.append("</tr>");
+            sb_ret.append("<tr><td colpsan=\"3\">&nbsp;</td></tr>");
+            sb_ret.append("<tr>");
+            sb_ret.append("<td colpsan=\"3\">");
+
+            sb_app.append("\n<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+ SWBPortal.getContextPath() + "/swbadmin/lib/SWBAplGraph.jar\" width=\"98%\" height=\"450\">");
+            sb_app.append("<param name=\"GraphType\" value=\"Bar\">");
+            sb_app.append("<param name=\"ncdata\" value=\"1\">");
+            sb_app.append("<param name=\"percent\" value=\"false\">");
+
+            JRBeanCollectionDataSource  ds;
+            if(rtype.equals("0")) { // by day
+                WBAFilterReportBean filter;
+                if(hasBarname) {
+                    filter = new WBAFilterReportBean(paramsRequest.getUser().getLanguage());
+                    filter.setSite(request.getParameter("wb_site"));
+                    filter.setIdaux(S_REPORT_IDAUX);
+                    filter.setType(I_REPORT_TYPE);
+                    filter.setGroupedDates(true);
+
+                    SimpleDateFormat format = new SimpleDateFormat("dd/MMM/yyyy");
+                    Date di = format.parse("01/"+monthinyear);
+                    GregorianCalendar ci = new GregorianCalendar();
+                    ci.setTime(di);
+                    System.out.println("di="+format.format(di));
+                    GregorianCalendar cf = new GregorianCalendar();
+                    cf.setTime(di);
+                    cf.add(Calendar.DAY_OF_MONTH, cf.getActualMaximum(Calendar.DAY_OF_MONTH)-1);
+                    Date df = cf.getTime();
+                    System.out.println("df="+format.format(df));
+                    filter.setYearI(ci.get(Calendar.YEAR));
+                    filter.setMonthI(ci.get(Calendar.MONTH)+1);
+                    filter.setDayI(ci.get(Calendar.DAY_OF_MONTH));
+                    filter.setYearF(cf.get(Calendar.YEAR));
+                    filter.setMonthF(cf.get(Calendar.MONTH)+1);
+                    filter.setDayF(cf.get(Calendar.DAY_OF_MONTH));
+                }else {
+                    filter = buildFilter(request, paramsRequest);
+                }
+                JRDataSourceable dataDetail = new JRGlobalAccessDataDetail(filter);
+                ds = dataDetail.orderJRReport();
+                Iterator<SWBRecHit> it = ds.getData().iterator();
+                while(it.hasNext()) {
+                    SWBRecHit rh = it.next();
+                    sb_app.append("<param name=\"label" + j + "\" value=\""+rh.getDay()+"-"+rh.getMonth("MMM")+"\">");
+                    sb_app.append("<param name=\"data" + j + "\" value=\"" + rh.getHits() + "\">");
+                    j++;
+                }
+                Locale loc = new Locale(paramsRequest.getUser().getLanguage());
+                if(filter.isGroupedDates())
+                    sb_app.append("<param name=\"Title\" value=\""+paramsRequest.getLocaleString("daily_report")+". "+paramsRequest.getLocaleString("query_range")+": "+paramsRequest.getLocaleString("from")+" "+DateFormat.getDateInstance(DateFormat.MEDIUM, loc).format(filter.getDateI())+" "+paramsRequest.getLocaleString("to")+" "+DateFormat.getDateInstance(DateFormat.MEDIUM, loc).format(filter.getDateF())+"\">");
+                else
+                    sb_app.append("<param name=\"Title\" value=\""+paramsRequest.getLocaleString("daily_report")+". "+paramsRequest.getLocaleString("query_range")+": "+DateFormat.getDateInstance(DateFormat.MEDIUM, loc).format(filter.getDateI())+"\">");
+                sb_app.append("<param name=\"ndata\" value=\""+ ds.getRecordCount() +"\">");
+            }else { // by each month
+                String websiteId = request.getParameter("wb_site");
+                int year13 = Integer.parseInt(request.getParameter("wb_year13"));
+                WBAFilterReportBean filter = new WBAFilterReportBean();
+                filter.setSite(websiteId);
+                filter.setIdaux(S_REPORT_IDAUX);
+                filter. setType(I_REPORT_TYPE);
+                filter.setYearI(year13);
+                JRDataSourceable dataDetail = new JRGlobalAccessDataDetail(filter);
+                ds = dataDetail.orderJRReport();
+                Iterator<SWBRecHit> it = ds.getData().iterator();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                while(it.hasNext()) {
+                    SWBRecHit rh = it.next();
+                    sb_app.append("\n<param name=\"label" + j + "\" value=\""+rh.getMonth("MMM")+"/"+rh.getYear()+"\">");
+                    sb_app.append("\n<param name=\"data" + j + "\" value=\"" + rh.getHits() + "\">");
+                    j++;
+                    sdf.format(new Date(rh.getDate().getTime()));
+                }
+                sb_app.append("\n<param name=\"Title\" value=\""+paramsRequest.getLocaleString("monthly_report")+". "+paramsRequest.getLocaleString("query_range")+": "+year13+"\">");
+                sb_app.append("\n<param name=\"ndata\" value=\""+ ds.getRecordCount() +"\">");
+                String url = paramsRequest.getRenderUrl().toString()+"?wb_rtype=0&wb_rep_type=1&wb_site="+websiteId+"&wb_year13="+year13+"&wbr_barname=";
+                sb_app.append("\n<param name=\"link\" value=\""+ url+ "\">");
+            }
+            sb_app.append("<param name=\"barname0\" value=\"Hits\">");
+
+            sb_app.append("<param name=\"color0\" value=\"100,100,255\">");
+            sb_app.append("<param name=\"color1\" value=\"255,100,100\">");
+            sb_app.append("<param name=\"color2\" value=\"100,255,100\">");
+            sb_app.append("<param name=\"color3\" value=\"100,250,250\">");
+            sb_app.append("<param name=\"color4\" value=\"250,100,250\">");
+            sb_app.append("<param name=\"color5\" value=\"250,250,100\">");
+            sb_app.append("<param name=\"color6\" value=\"0,0,250\">");
+            sb_app.append("<param name=\"color7\" value=\"250,0,0\">");
+            sb_app.append("<param name=\"color8\" value=\"0,250,0\">");
+            sb_app.append("<param name=\"color9\" value=\"0,250,250\">");
+            sb_app.append("<param name=\"color10\" value=\"250,0,250\">");
+            sb_app.append("<param name=\"color11\" value=\"200,200,100\">");
+            sb_app.append("<param name=\"color12\" value=\"230,180,80\">");
+
+            sb_app.append("<param name=\"zoom\" value=\"true\">");
+            sb_app.append("\n</APPLET>");
+
+            // Evaluates if there are records
+            if(ds.getData().isEmpty())
+                sb_ret.append("\n<br/><br/><br/><br/><font color=\"black\">"+paramsRequest.getLocaleString("no_records")+"</font>");
+            else
+                sb_ret.append(sb_app.toString());
+
+            sb_ret.append("\n</td>");
+            sb_ret.append("</tr>");
+            sb_ret.append("</table>");
+            sb_ret.append("</body>");
+            sb_ret.append("</html>");
+        }
+        catch (Exception e){
+            log.error("Error on method doHistogram() resource " + strRscType + " with id " + base.getId(), e);
+        }
+        response.getWriter().print(sb_ret.toString());
+    }
+
     private WBAFilterReportBean buildFilter(HttpServletRequest request, SWBParamRequest paramsRequest) throws SWBResourceException, IncompleteFilterException {
         WBAFilterReportBean filterReportBean = null;
         String websiteId = request.getParameter("wb_site");
@@ -818,6 +980,7 @@ public class WBAGlobalReport extends GenericResource {
         GregorianCalendar cal = new GregorianCalendar();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String fecha1 = request.getParameter("wb_fecha1")==null ? sdf.format(cal.getTime()):request.getParameter("wb_fecha1");
+        System.out.println("fecha1="+fecha1);
         try {
             sdf.parse(fecha1);
         }catch(ParseException pe){
@@ -837,28 +1000,23 @@ public class WBAGlobalReport extends GenericResource {
         }
 
         try {
+            filterReportBean = new WBAFilterReportBean(paramsRequest.getUser().getLanguage());
+            filterReportBean.setSite(websiteId);
+            filterReportBean.setIdaux(S_REPORT_IDAUX);
+            filterReportBean.setType(I_REPORT_TYPE);
             if(groupDates==0) { // radio button was 0. Select only one date
-                /*String[] numFecha = fecha1.split("-");*/
-                filterReportBean = new WBAFilterReportBean();
-                filterReportBean.setSite(websiteId);
-                filterReportBean.setIdaux(S_REPORT_IDAUX);
-                filterReportBean.setType(I_REPORT_TYPE);
+                filterReportBean.setGroupedDates(false);                
                 filterReportBean.setYearI(Integer.parseInt(fecha1.substring(0,4)));
                 filterReportBean.setMonthI(Integer.parseInt(fecha1.substring(5,7)));
                 filterReportBean.setDayI(Integer.parseInt(fecha1.substring(8)));
 
             }else { // radio button was 1. Select between two dates
-                filterReportBean = new WBAFilterReportBean();
-                filterReportBean.setSite(websiteId);
-                filterReportBean.setIdaux(S_REPORT_IDAUX);
-                filterReportBean.setType(I_REPORT_TYPE);
-
-                /*String[] numFecha = fecha11.split("-");*/
+                filterReportBean.setGroupedDates(true);
+                
                 filterReportBean.setYearI(Integer.parseInt(fecha11.substring(0,4)));
                 filterReportBean.setMonthI(Integer.parseInt(fecha11.substring(5,7)));
                 filterReportBean.setDayI(Integer.parseInt(fecha11.substring(8)));
-
-                /*numFecha = fecha12.split("-");*/
+                
                 filterReportBean.setYearF(Integer.parseInt(fecha12.substring(0,4)));
                 filterReportBean.setMonthF(Integer.parseInt(fecha12.substring(5,7)));
                 filterReportBean.setDayF(Integer.parseInt(fecha12.substring(8)));
