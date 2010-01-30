@@ -21,8 +21,10 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.jcr283.repository.model.Base;
 import org.semanticwb.jcr283.repository.model.Unstructured;
+import org.semanticwb.jcr283.repository.model.Version;
 import org.semanticwb.jcr283.repository.model.Workspace;
 import org.semanticwb.model.GenericIterator;
+import org.semanticwb.platform.SemanticClass;
 
 /**
  *
@@ -569,7 +571,7 @@ public class NodeManager
         }
     }
 
-    public void loadChilds(NodeImp node, String path, int depth, SessionImp session, boolean replace)
+    public void loadChilds(NodeImp node, String path, int depth, SessionImp session, boolean replace) throws RepositoryException
     {
         if (node.getSemanticObject() != null)
         {
@@ -595,9 +597,9 @@ public class NodeManager
                     childpath += "[" + childindex + "]";
                 }
                 if (replace || !nodes.containsKey(childpath))
-                {
-                    NodeImp childNode = new NodeImp(child, node, childindex, childpath, depth + 1, session);
-                    this.addNode(childNode, childpath, path);
+                {                    
+                    NodeImp childNode=NodeImp.createNodeImp(child, node, childindex, childpath, depth + 1, session);
+                    this.addNode(childNode, childpath, path);                    
                 }
             }
         }
