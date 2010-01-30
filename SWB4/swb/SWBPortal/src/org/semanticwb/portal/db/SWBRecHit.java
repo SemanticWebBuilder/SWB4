@@ -32,7 +32,7 @@ import java.util.Locale;
 /*import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;*/
 
-public class SWBRecHit implements java.io.Serializable {
+public class SWBRecHit implements java.io.Serializable, Comparable<SWBRecHit>  {
     private Timestamp date;
     private int iditem;
     private String item;
@@ -140,27 +140,6 @@ public class SWBRecHit implements java.io.Serializable {
     public String getMonth() {
         SimpleDateFormat formatter  = new SimpleDateFormat("MMMM", locale);
         return formatter.format(date);
-
-
-
-        /*String mes;
-        int imes = Integer.parseInt(month);
-        switch(imes){
-            case 0: mes="Enero"; break;
-            case 1: mes="Febrero"; break;
-            case 2: mes="Marzo"; break;
-            case 3: mes="Abril"; break;
-            case 4: mes="Mayo"; break;
-            case 5: mes="Junio"; break;
-            case 6: mes="Julio"; break;
-            case 7: mes="Agosto"; break;
-            case 8: mes="Septiembre"; break;
-            case 9: mes="Octubre"; break;
-            case 10: mes="Noviembre"; break;
-            case 11: mes="Diciembre"; break;
-            default: mes="Desconocido";
-        }      
-        return mes;*/
     }
 
     public String getMonth(String pattern) {
@@ -203,5 +182,17 @@ public class SWBRecHit implements java.io.Serializable {
         sb.append(", month="+month);
         sb.append(", day="+day);
         return sb.toString();
+    }
+
+    public int compareTo(SWBRecHit o) {
+        int compara = 0;
+        compara = date.compareTo(o.getDate());
+        if(compara!=0)
+            return compara;
+        compara = topicmap.compareToIgnoreCase(o.getTopicmap());
+        if(compara!=0)
+            return compara;
+        compara = item.compareToIgnoreCase(o.getItem());
+        return compara;
     }
 }
