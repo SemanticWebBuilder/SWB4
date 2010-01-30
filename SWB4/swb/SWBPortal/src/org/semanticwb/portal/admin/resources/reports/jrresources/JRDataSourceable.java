@@ -28,11 +28,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.semanticwb.portal.admin.resources.reports.beans.IncompleteFilterException;
 
-import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 public interface JRDataSourceable {
-    public JRDataSource orderJRReport() throws IncompleteFilterException;
+    public JRBeanCollectionDataSource orderJRReport() throws IncompleteFilterException;
     
     public void prepareJRReport() throws JRException;
     

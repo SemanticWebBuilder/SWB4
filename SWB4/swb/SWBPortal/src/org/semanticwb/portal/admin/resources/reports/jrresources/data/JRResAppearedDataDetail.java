@@ -35,8 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.semanticwb.portal.admin.resources.reports.beans.IncompleteFilterException;
 import org.semanticwb.portal.admin.resources.reports.jrresources.JRDataSourceable;
-        
-import net.sf.jasperreports.engine.JRDataSource;
+
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
@@ -49,7 +48,7 @@ public class JRResAppearedDataDetail implements JRDataSourceable{
         this.locale = locale;
     }
     
-    public JRDataSource orderJRReport() throws IncompleteFilterException{
+    public JRBeanCollectionDataSource orderJRReport() throws IncompleteFilterException{
         List dataList = new ArrayList();        
 //        Enumeration enuRecs = DBResource.getInstance().getResources(topicmap);
 //        
@@ -102,9 +101,7 @@ public class JRResAppearedDataDetail implements JRDataSourceable{
 //            }
 //        }
         
-        JRBeanCollectionDataSource dataSource = null;        
-        if(!dataList.isEmpty())
-            dataSource = new JRBeanCollectionDataSource(dataList);
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(dataList);
         return dataSource;        
     }    
     

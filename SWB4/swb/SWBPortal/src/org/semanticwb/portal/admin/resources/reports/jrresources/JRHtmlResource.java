@@ -29,18 +29,18 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.semanticwb.SWBUtils;
 
-import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRHtmlExporter;
 import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
 
 public class JRHtmlResource extends JRResource {
-    public JRHtmlResource(String jasperResource, HashMap params, JRDataSource dataSource){
+    public JRHtmlResource(String jasperResource, HashMap params, JRBeanCollectionDataSource dataSource){
         super(jasperResource, params, dataSource);
     }
     
-    public JRHtmlResource(String jasperResource, JRDataSource dataSource){
+    public JRHtmlResource(String jasperResource, JRBeanCollectionDataSource dataSource){
         super(jasperResource, null, dataSource);
     }
         

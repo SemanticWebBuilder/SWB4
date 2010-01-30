@@ -32,13 +32,9 @@ import org.semanticwb.portal.admin.resources.reports.datadetail.LoggedUserDataDe
 import org.semanticwb.portal.admin.resources.reports.datadetail.SWBDataDetail;
 import org.semanticwb.portal.admin.resources.reports.jrresources.JRDataSourceable;
 
-import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-/**
- *
- * @author Administrador
- */
+
 public class JRLoggedUserDataDetail implements JRDataSourceable{
     private SWBDataDetail dataDetail;
     
@@ -46,12 +42,9 @@ public class JRLoggedUserDataDetail implements JRDataSourceable{
         dataDetail = new LoggedUserDataDetail(filterReportBean);
     }
     
-    public JRDataSource orderJRReport() throws IncompleteFilterException{
+    public JRBeanCollectionDataSource orderJRReport() throws IncompleteFilterException{
         List dataList = dataDetail.execute();
-        JRBeanCollectionDataSource dataSource = null;
-        
-        if(!dataList.isEmpty())
-            dataSource = new JRBeanCollectionDataSource(dataList);
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(dataList);
         return dataSource;
     }
     
