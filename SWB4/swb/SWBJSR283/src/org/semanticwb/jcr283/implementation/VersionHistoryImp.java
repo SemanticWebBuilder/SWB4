@@ -64,8 +64,8 @@ public class VersionHistoryImp extends NodeImp implements VersionHistory
             {
                 jcr_rootVersion = (VersionImp) nodeManager.getProtectedNode(path_jcr_rootVersion, session);
             }
-        }
-        session.getWorkspaceImp().getVersionManagerImp().setBaseVersion(jcr_rootVersion, parent.path);
+        }        
+       
     }
 
     public VersionHistoryImp(NodeDefinitionImp nodeDefinition, NodeImp parent, SessionImp session, NodeImp versionableNode) throws NoSuchNodeTypeException, RepositoryException
@@ -81,6 +81,13 @@ public class VersionHistoryImp extends NodeImp implements VersionHistory
         {
             jcr_rootVersion = (VersionImp) nodeManager.getProtectedNode(path_jcr_rootVersion, session);
         }
+        String pathBaseVersion=versionableNode.getPathFromName("jcr:baseVersion");
+        PropertyImp prop=nodeManager.getProtectedProperty(pathBaseVersion);
+        if(prop.getLength()==-1)
+        {
+            prop.set(new ValueFactoryImp().createValue(jcr_rootVersion));
+        }
+        session.getWorkspaceImp().getVersionManagerImp().setBaseVersion(jcr_rootVersion, versionableNode.path);
 
     }
     @Override
