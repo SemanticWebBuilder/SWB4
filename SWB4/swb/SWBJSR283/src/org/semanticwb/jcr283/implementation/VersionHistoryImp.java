@@ -30,7 +30,7 @@ public class VersionHistoryImp extends NodeImp implements VersionHistory
     private final NodeImp versionableNode;
     private VersionImp jcr_rootVersion;
 
-    public VersionHistoryImp(org.semanticwb.jcr283.repository.model.VersionHistory vh, NodeImp parent, int index, String path, int depth, SessionImp session) throws RepositoryException
+    protected VersionHistoryImp(org.semanticwb.jcr283.repository.model.VersionHistory vh, NodeImp parent, int index, String path, int depth, SessionImp session) throws RepositoryException
     {
         super(vh, parent, index, path, depth, session);
         PropertyImp prop = nodeManager.getProtectedProperty(this.getPathFromName("jcr:versionableUuid"));
@@ -90,11 +90,7 @@ public class VersionHistoryImp extends NodeImp implements VersionHistory
         session.getWorkspaceImp().getVersionManagerImp().setBaseVersion(jcr_rootVersion, versionableNode.path);
 
     }
-    @Override
-    protected NodeImp createNodeImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session, String id) throws RepositoryException
-    {
-        return new VersionImp(nodeDefinition, name, parent, index, path, depth, session, id);
-    }
+    
 
     public String getVersionableUUID() throws RepositoryException
     {

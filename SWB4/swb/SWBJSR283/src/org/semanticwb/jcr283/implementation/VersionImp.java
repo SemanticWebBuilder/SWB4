@@ -19,6 +19,8 @@ import javax.jcr.version.VersionHistory;
  */
 public class VersionImp extends NodeImp implements Version {
 
+    
+    
     public VersionImp(org.semanticwb.jcr283.repository.model.Version version, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
         super(version, parent, index, path, depth, session);

@@ -79,19 +79,19 @@ public class NodeImp extends ItemImp implements Node
     protected final String id;
     private final VersionManagerImp versionManagerImp;
 
-    NodeImp(Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
+    protected NodeImp(Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
         this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), new NodeDefinitionImp(base.getSemanticObject(), NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass())), base.getName(), parent, index, path, depth, session, base.getId());
         this.obj = base.getSemanticObject();
     }
 
-    NodeImp(NodeDefinitionImp definition, Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
+    protected NodeImp(NodeDefinitionImp definition, Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
         this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), definition, base.getName(), parent, index, path, depth, session, base.getId());
         this.obj = base.getSemanticObject();
     }
 
-    NodeImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session, String id)
+    protected NodeImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session, String id)
     {
         super(nodeDefinition, name, parent, path, depth, session);
         this.index = index;
@@ -122,14 +122,33 @@ public class NodeImp extends ItemImp implements Node
         {
             if (this.isVersionable())
             {
-                initVersionHistory();                
+                initVersionHistory();
+                initVersionBase();
             }
         }
         catch (RepositoryException re)
         {
             log.error(re);
         }
-    }    
+    }
+    private void initVersionBase() throws RepositoryException
+    {
+        String pathBaseVersion=this.getPathFromName("jcr:baseVersion");
+        PropertyImp prop=nodeManager.getProtectedProperty(pathBaseVersion);
+        if(prop.getLength()!=-1)
+        {
+            Node node=prop.getNode();
+            if(node instanceof VersionImp)
+            {
+                versionManagerImp.setBaseVersion((VersionImp)node, path);
+            }
+            else
+            {
+                throw new RepositoryException("The baseVersion is not a version node");
+            }
+        }
+        
+    }
     private void initVersionHistory() throws RepositoryException
     {
         PropertyImp prop = nodeManager.getProtectedProperty(getPathFromName("jcr:versionHistory"));
@@ -403,9 +422,35 @@ public class NodeImp extends ItemImp implements Node
         return this.insertNode(nameToAdd, null);
     }  
 
-    protected NodeImp createNodeImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session, String id) throws RepositoryException
+    public final static NodeImp createNodeImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session, String id) throws RepositoryException
     {
-        return new NodeImp(nodeType, nodeDefinition, name, parent, index, path, depth, session, id);
+        if(nodeType.getSemanticClass()==org.semanticwb.jcr283.repository.model.Version.sclass)
+        {
+            return new VersionImp(nodeDefinition, name, parent, index, path, depth, session, id);
+        }
+        else if(nodeType.getSemanticClass()==org.semanticwb.jcr283.repository.model.VersionHistory.sclass)
+        {
+            return new VersionHistoryImp(nodeDefinition, parent, session, parent);
+        }
+        else
+        {
+            return new NodeImp(nodeType, nodeDefinition, name, parent, index, path, depth, session, id);
+        }
+    }
+    public final static NodeImp createNodeImp(Base base, NodeImp parent, int index, String path, int depth, SessionImp session) throws RepositoryException
+    {
+        if(base.getSemanticObject().getSemanticClass()==org.semanticwb.jcr283.repository.model.Version.sclass && base instanceof org.semanticwb.jcr283.repository.model.Version)
+        {
+            return new VersionImp((org.semanticwb.jcr283.repository.model.Version)base, parent, index, path, depth, session);
+        }
+        else if(base.getSemanticObject().getSemanticClass()==org.semanticwb.jcr283.repository.model.VersionHistory.sclass && base instanceof org.semanticwb.jcr283.repository.model.VersionHistory)
+        {
+            return new VersionHistoryImp((org.semanticwb.jcr283.repository.model.VersionHistory)base, parent, index, path, depth, session);
+        }
+        else
+        {
+            return new NodeImp(base, parent, index, path, depth, session);
+        }
     }
     NodeImp insertNode(String nameToAdd, String primaryNodeTypeName) throws RepositoryException
     {
@@ -1156,7 +1201,12 @@ public class NodeImp extends ItemImp implements Node
         {
             throw new UnsupportedRepositoryOperationException("The node is not versionable");
         }
-        return versionManagerImp.getBaseVersion(path);
+        Version version=versionManagerImp.getBaseVersion(path);
+        if(version==null)
+        {
+            throw new RepositoryException("The base Version was not found");
+        }
+        return version;
     }
 
     public Lock lock(boolean isDeep, boolean isSessionScoped) throws UnsupportedRepositoryOperationException, LockException, AccessDeniedException, InvalidItemStateException, RepositoryException
