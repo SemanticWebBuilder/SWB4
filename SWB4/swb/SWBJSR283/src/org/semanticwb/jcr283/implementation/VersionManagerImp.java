@@ -74,7 +74,7 @@ public class VersionManagerImp implements VersionManager {
 
     public Version getBaseVersion(String absPath) throws UnsupportedRepositoryOperationException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return baseVersions.get(absPath);
     }
 
     public void restore(Version[] versions, boolean removeExisting) throws ItemExistsException, UnsupportedRepositoryOperationException, VersionException, LockException, InvalidItemStateException, RepositoryException
