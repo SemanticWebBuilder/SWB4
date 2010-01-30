@@ -26,13 +26,13 @@ package org.semanticwb.portal.admin.resources.reports.jrresources;
 
 import java.io.File;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.fill.JRFileVirtualizer;
 import net.sf.jasperreports.engine.util.JRLoader;
 
@@ -45,13 +45,13 @@ public abstract class JRResource {
     public boolean virtualized;
     private String jasperResource;
     private HashMap params;
-    private JRDataSource dataSource;
+    private JRBeanCollectionDataSource dataSource;
     private Locale locale;    
     
     protected JasperReport jasperReport;
     protected JasperPrint jasperPrint;    
        
-    public JRResource(String jasperResource, HashMap params, JRDataSource dataSource, Locale locale){        
+    public JRResource(String jasperResource, HashMap params, JRBeanCollectionDataSource dataSource, Locale locale){
         this.jasperResource = jasperResource;
         this.params = params!=null ? params : new HashMap();
         this.dataSource = dataSource;
@@ -64,14 +64,14 @@ public abstract class JRResource {
         setVirtualized(true);
     }
     
-    public JRResource(String jasperResource, HashMap params, JRDataSource dataSource){
+    public JRResource(String jasperResource, HashMap params, JRBeanCollectionDataSource dataSource){
         this.jasperResource = jasperResource;
         this.params = params!=null ? params : new HashMap();
         this.dataSource = dataSource;
         setVirtualized(true);
     }
     
-    public JRResource(String jasperResource, JRDataSource dataSource){
+    public JRResource(String jasperResource, JRBeanCollectionDataSource dataSource){
         this(jasperResource, null, dataSource, new Locale("es","MX"));
     }
     

@@ -27,17 +27,17 @@ package org.semanticwb.portal.admin.resources.reports.jrresources;
 import java.util.HashMap;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRXmlExporter;
 
 public class JRXmlResource extends JRResource {
-    public JRXmlResource(String jasperResource, HashMap params, JRDataSource dataSource){
+    public JRXmlResource(String jasperResource, HashMap params, JRBeanCollectionDataSource dataSource){
         super(jasperResource, params, dataSource);
     }
     
-    public JRXmlResource(String jasperResource, JRDataSource dataSource){
+    public JRXmlResource(String jasperResource, JRBeanCollectionDataSource dataSource){
         super(jasperResource, null, dataSource);
     }
     

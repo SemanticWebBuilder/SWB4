@@ -32,14 +32,9 @@ import org.semanticwb.portal.admin.resources.reports.datadetail.LanguageAccessDa
 import org.semanticwb.portal.admin.resources.reports.datadetail.SWBDataDetail;
 import org.semanticwb.portal.admin.resources.reports.jrresources.JRDataSourceable;
 
-import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
-/**
- *
- * @author Administrador
- */
 public class JRLanguageAccessDataDetail implements JRDataSourceable{
     private SWBDataDetail dataDetail;
     
@@ -47,12 +42,9 @@ public class JRLanguageAccessDataDetail implements JRDataSourceable{
         dataDetail = new LanguageAccessDataDetail(filterReportBean);
     }
     
-    public JRDataSource orderJRReport() throws IncompleteFilterException {
+    public JRBeanCollectionDataSource orderJRReport() throws IncompleteFilterException {
         List dataList = dataDetail.execute();
-        JRBeanCollectionDataSource dataSource = null;
-        if(!dataList.isEmpty()) {
-            dataSource = new JRBeanCollectionDataSource(dataList);
-        }
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(dataList);
         return dataSource;
     }
     
