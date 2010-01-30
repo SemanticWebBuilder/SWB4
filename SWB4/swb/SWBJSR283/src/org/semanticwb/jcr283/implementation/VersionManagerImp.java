@@ -30,7 +30,12 @@ import javax.jcr.version.VersionManager;
 public class VersionManagerImp implements VersionManager {
 
     private Hashtable<String,VersionHistoryImp> versionhistories=new Hashtable<String, VersionHistoryImp>();
+    private Hashtable<String,VersionImp> baseVersions=new Hashtable<String, VersionImp>();
 
+    public void setBaseVersion(VersionImp version,String path)
+    {
+        baseVersions.put(path, version);
+    }
     public void addVersionHistory(VersionHistoryImp version) throws RepositoryException
     {
         if(!versionhistories.containsKey(version.getVersionableIdentifier()))

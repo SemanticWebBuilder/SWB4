@@ -122,15 +122,14 @@ public class NodeImp extends ItemImp implements Node
         {
             if (this.isVersionable())
             {
-                initVersionHistory();
+                initVersionHistory();                
             }
         }
         catch (RepositoryException re)
         {
             log.error(re);
         }
-    }
-
+    }    
     private void initVersionHistory() throws RepositoryException
     {
         PropertyImp prop = nodeManager.getProtectedProperty(getPathFromName("jcr:versionHistory"));
@@ -149,6 +148,7 @@ public class NodeImp extends ItemImp implements Node
             prop.set(valueFactoryImp.createValue(history));
             this.isModified = true;
             nodeManager.addNode(history, history.path, path);
+
         }
     }
 
@@ -401,8 +401,12 @@ public class NodeImp extends ItemImp implements Node
     NodeImp insertNode(String nameToAdd) throws RepositoryException
     {
         return this.insertNode(nameToAdd, null);
-    }
+    }  
 
+    protected NodeImp createNodeImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session, String id) throws RepositoryException
+    {
+        return new NodeImp(nodeType, nodeDefinition, name, parent, index, path, depth, session, id);
+    }
     NodeImp insertNode(String nameToAdd, String primaryNodeTypeName) throws RepositoryException
     {
         NodeDefinitionImp childDefinition = null;
@@ -474,11 +478,12 @@ public class NodeImp extends ItemImp implements Node
         }
         String newId = UUID.randomUUID().toString();
         log.trace("Creating the node " + nameToAdd);
-        NodeImp newChild = new NodeImp(nodeType, childDefinition, nameToAdd, this, index, childpath, this.getDepth() + 1, session, newId);
+        NodeImp newChild = createNodeImp(primaryNodeType, childDefinition, nameToAdd, this, index, childpath, this.getDepth() + 1, session, newId);
         this.isModified = true;
         return nodeManager.addNode(newChild, childpath, path);
 
     }
+
 
     public Node addNode(String relPath, String primaryNodeTypeName) throws ItemExistsException, PathNotFoundException, NoSuchNodeTypeException, LockException, VersionException, ConstraintViolationException, RepositoryException
     {
