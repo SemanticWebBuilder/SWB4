@@ -285,8 +285,8 @@ public class PropertyImp extends ItemImp implements Property
             {
                 throw new ItemNotFoundException();
             }
-            String pathNode = path + values.get(0);
-            NodeImp node = nodeManager.getNode(pathNode,session);
+            String id=values.get(0).getString();            
+            NodeImp node = (NodeImp)session.getNodeByIdentifier(id);
             if (node == null)
             {
                 throw new ItemNotFoundException();
