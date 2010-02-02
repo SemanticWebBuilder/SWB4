@@ -63,6 +63,11 @@ public class PropertyImp extends ItemImp implements Property
         this.isNew=true;                
     }
 
+    void addValue(Value value)
+    {
+        this.values.add(value);
+    }
+
     private void loadValues()
     {
         SemanticObject obj = parent.getSemanticObject();

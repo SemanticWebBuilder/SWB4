@@ -69,8 +69,9 @@ public class NodeImp extends ItemImp implements Node
     private static final String MIX_REFERENCEABLE = "mix:referenceable";
     private static final String MIX_SIMPLEVERSIONABLE = "mix:simpleVersionable";
     private static final String NT_VERSION = "nt:version";
+    private static final String THE_NODE_IS_NOT_VERSIONABLE = "The node is not versionable";
     private final static Logger log = SWBUtils.getLogger(NodeImp.class);
-    private final static ValueFactoryImp valueFactoryImp = new ValueFactoryImp();
+    protected final static ValueFactoryImp valueFactoryImp = new ValueFactoryImp();
     private SemanticObject obj = null;
     private final int index;
     private final NodeTypeImp nodeType;
@@ -1101,7 +1102,7 @@ public class NodeImp extends ItemImp implements Node
         return false;
     }
 
-    private boolean isVersionable() throws RepositoryException
+    public boolean isVersionable() throws RepositoryException
     {
         for (NodeType mixinNodeType : this.getMixinNodeTypes())
         {
@@ -1124,24 +1125,29 @@ public class NodeImp extends ItemImp implements Node
         }
         return false;
 
-    }
-
+    }    
     public Version checkin() throws VersionException, UnsupportedRepositoryOperationException, InvalidItemStateException, LockException, RepositoryException
-    {
-        if (!isSimpleVersionable())
-        {
-            throw new UnsupportedRepositoryOperationException("The node is not versionable");
-        }
-        throw new UnsupportedOperationException("Not supported yet.");
+    {        
+        VersionHistoryImp history=(VersionHistoryImp)versionManagerImp.getVersionHistory(this.path);
+        VersionImp version=(VersionImp)history.insertVersionNode("1.0");
+        PropertyImp baseVersion=nodeManager.getProtectedProperty(getPathFromName("jcr:baseVersion"));
+        baseVersion.set(valueFactoryImp.createValue(version));
+        this.isModified=true;
+        return version;
     }
 
     public void checkout() throws UnsupportedRepositoryOperationException, LockException, ActivityViolationException, RepositoryException
     {
         if (!isSimpleVersionable())
         {
-            throw new UnsupportedRepositoryOperationException("The node is not versionable");
+            throw new UnsupportedRepositoryOperationException(THE_NODE_IS_NOT_VERSIONABLE);
         }
-        throw new UnsupportedOperationException("Not supported yet.");
+        PropertyImp prop=nodeManager.getProtectedProperty(this.getPathFromName(JCR_ISCHECKEDOUT));
+        if(prop.getLength()==-1)
+        {
+            prop.set(valueFactoryImp.createValue(true));
+            this.isModified=true;
+        }        
     }
 
     public void doneMerge(Version version) throws VersionException, InvalidItemStateException, UnsupportedRepositoryOperationException, RepositoryException
@@ -1213,23 +1219,27 @@ public class NodeImp extends ItemImp implements Node
     {
         if (!isVersionable())
         {
-            throw new UnsupportedRepositoryOperationException("The node is not versionable");
+            throw new UnsupportedRepositoryOperationException(THE_NODE_IS_NOT_VERSIONABLE);
         }
         return versionManagerImp.getVersionHistory(path);
     }
 
-    public Version getBaseVersion() throws UnsupportedRepositoryOperationException, RepositoryException
+    public VersionImp getBaseVersionImp() throws UnsupportedRepositoryOperationException, RepositoryException
     {
         if (!isVersionable())
         {
-            throw new UnsupportedRepositoryOperationException("The node is not versionable");
+            throw new UnsupportedRepositoryOperationException(THE_NODE_IS_NOT_VERSIONABLE);
         }
-        Version version = versionManagerImp.getBaseVersion(path);
+        VersionImp version = versionManagerImp.getBaseVersionImp(path);
         if (version == null)
         {
             throw new RepositoryException("The base Version was not found");
         }
         return version;
+    }
+    public Version getBaseVersion() throws UnsupportedRepositoryOperationException, RepositoryException
+    {
+       return getBaseVersionImp();
     }
 
     public Lock lock(boolean isDeep, boolean isSessionScoped) throws UnsupportedRepositoryOperationException, LockException, AccessDeniedException, InvalidItemStateException, RepositoryException
