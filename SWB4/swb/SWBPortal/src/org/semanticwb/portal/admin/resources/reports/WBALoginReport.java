@@ -489,7 +489,7 @@ public class WBALoginReport extends GenericResource {
             else {   // There are not sites and displays a message
                 out.println("<div class=\"swbform\">");
                 out.println("<fieldset>");
-                out.println("<legend>" + paramsRequest.getLocaleString("filter") + "</legend>");
+                out.println("<legend>" + paramsRequest.getLocaleString("login_report") + "</legend>");
                 out.println("<form method=\"Post\" action=\"" + paramsRequest.getWebPage().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
                 out.println("<table border=0 width=\"100%\">");
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
