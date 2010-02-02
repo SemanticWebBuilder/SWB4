@@ -599,7 +599,6 @@ public class WBAGlobalReport extends GenericResource {
                     jrResource.prepareReport();
                     jrResource.exportReport(response);
                 }catch (Exception e) {
-                    System.out.println("************************* error."+e);
                     throw new javax.servlet.ServletException(e);
                 }
             }else { // REPORTE MENSUAL
@@ -853,7 +852,7 @@ public class WBAGlobalReport extends GenericResource {
             sb_ret.append("<input type=\"button\" class=\"boton\" onClick=\"window.close()\" value=\""+paramsRequest.getLocaleString("close")+"\" name=\"btnClose\">");
             sb_ret.append("</td>");
             sb_ret.append("</tr>");
-            sb_ret.append("<tr><td colpsan=\"3\">&nbsp;</td></tr>");
+            sb_ret.append("<tr><td colpsan=\"3\" align=\"center\">"+request.getParameter("wb_site")+"</td></tr>");
             sb_ret.append("<tr>");
             sb_ret.append("<td colpsan=\"3\">");
 
@@ -876,12 +875,9 @@ public class WBAGlobalReport extends GenericResource {
                     Date di = format.parse("01/"+monthinyear);
                     GregorianCalendar ci = new GregorianCalendar();
                     ci.setTime(di);
-                    System.out.println("di="+format.format(di));
                     GregorianCalendar cf = new GregorianCalendar();
                     cf.setTime(di);
                     cf.add(Calendar.DAY_OF_MONTH, cf.getActualMaximum(Calendar.DAY_OF_MONTH)-1);
-                    Date df = cf.getTime();
-                    System.out.println("df="+format.format(df));
                     filter.setYearI(ci.get(Calendar.YEAR));
                     filter.setMonthI(ci.get(Calendar.MONTH)+1);
                     filter.setDayI(ci.get(Calendar.DAY_OF_MONTH));
@@ -980,7 +976,6 @@ public class WBAGlobalReport extends GenericResource {
         GregorianCalendar cal = new GregorianCalendar();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String fecha1 = request.getParameter("wb_fecha1")==null ? sdf.format(cal.getTime()):request.getParameter("wb_fecha1");
-        System.out.println("fecha1="+fecha1);
         try {
             sdf.parse(fecha1);
         }catch(ParseException pe){
