@@ -76,7 +76,7 @@ public class NodeManager
         return root;
 
     }
-    public void validate() throws ConstraintViolationException
+    public void validate() throws ConstraintViolationException,RepositoryException
     {
         nodes.get(PATH_SEPARATOR).getNode().validate();
     }
