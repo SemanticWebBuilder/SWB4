@@ -10,12 +10,9 @@ import static java.lang.management.ManagementFactory.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.management.*;
-import java.net.URISyntaxException;
 import java.util.*;
-import java.util.logging.Level;
 import javax.management.InstanceNotFoundException;
 import javax.management.MBeanServer;
-import javax.management.MBeanServerFactory;
 import javax.management.ObjectName;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -24,17 +21,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.monitor.SWBGCDump;
-import org.semanticwb.portal.monitor.SWBJvmEventListener;
-import org.semanticwb.portal.monitor.SWBNotificationListener;
 import org.semanticwb.portal.monitor.SWBSummary;
-import org.semanticwb.portal.monitor.SWBSummaryData;
 import org.semanticwb.portal.monitor.SWBThreadDumper;
-import sun.jvmstat.monitor.MonitorException;
-import sun.jvmstat.monitor.MonitoredHost;
-import sun.jvmstat.monitor.MonitoredVm;
-import sun.jvmstat.monitor.VmIdentifier;
-import sun.jvmstat.perfdata.monitor.protocol.local.LocalVmManager;
-import sun.management.HotSpotDiagnostic;
 
 /**
  *

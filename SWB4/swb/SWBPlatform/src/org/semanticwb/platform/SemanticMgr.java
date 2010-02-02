@@ -60,6 +60,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -189,7 +190,7 @@ public class SemanticMgr implements SWBInstanceObject
             store = SDBFactory.connectStore(con,sd);
             //Revisar si las tablas existen
             List list=store.getConnection().getTableNames();
-            System.out.println("list:"+list);
+            //System.out.println("list:"+list);
             if(!list.contains("nodes") && !list.contains("triples") && !list.contains("quads"))
             {
                 log.event("Formating Database Tables...");
@@ -197,7 +198,7 @@ public class SemanticMgr implements SWBInstanceObject
             }
         }else if(SWBPlatform.createInstance().getPersistenceType().equalsIgnoreCase(SWBPlatform.PRESIST_TYPE_TDB))
         {
-            System.out.println("TDB Detected...,"+SWBPlatform.createInstance().getPlatformWorkPath()+"/data");
+            log.info("TDB Detected...,"+SWBPlatform.createInstance().getPlatformWorkPath()+"/data");
             timer=new Timer();
             timer.schedule(new TimerTask()
             {
@@ -389,7 +390,7 @@ public class SemanticMgr implements SWBInstanceObject
         }else if(SWBPlatform.createInstance().getPersistenceType().equals(SWBPlatform.PRESIST_TYPE_TDB))
         {
             ret=TDBFactory.createNamedModel(name,SWBPlatform.createInstance().getPlatformWorkPath()+"/data");
-            System.out.println("loadRDFDBModel:"+name);
+            //System.out.println("loadRDFDBModel:"+name);
         }else
         {
             ret=maker.openModel(name);
@@ -495,7 +496,7 @@ public class SemanticMgr implements SWBInstanceObject
                 log.trace("LoadingModel:"+name);
                 SemanticModel model=loadDBModel(name);
             }
-            set.close();
+            //set.close();
         }else if(SWBPlatform.createInstance().getPersistenceType().equalsIgnoreCase(SWBPlatform.PRESIST_TYPE_TDB))
         {
             Dataset set=TDBFactory.createDataset(SWBPlatform.createInstance().getPlatformWorkPath()+"/data");
@@ -504,10 +505,10 @@ public class SemanticMgr implements SWBInstanceObject
             {
                 String name=it.next();
                 log.trace("LoadingModel:"+name);
-                System.out.println("LoadingModel:"+name);
+                //System.out.println("LoadingModel:"+name);
                 SemanticModel model=loadDBModel(name);
             }
-            set.close();
+            //set.close();
         }else
         {
             Iterator tpit=maker.listModels();
@@ -592,7 +593,7 @@ public class SemanticMgr implements SWBInstanceObject
             NsIterator it=model.listNameSpaces();
             if(!it.hasNext())
             {
-                log.info("Importing Admin...");
+                log.info("Importing SWBOntEdit...");
                 it.close();
                 try
                 {
@@ -695,7 +696,6 @@ public class SemanticMgr implements SWBInstanceObject
             model.getRDFModel().removeAll();
         }else if(SWBPlatform.createInstance().getPersistenceType().equals(SWBPlatform.PRESIST_TYPE_TDB))
         {
-            //TDBFactory.createModel(SWBPlatform.getWorkPath()+"/models/"+name+"/data");
             model.getRDFModel().removeAll();
         }else
         {
@@ -777,13 +777,17 @@ public class SemanticMgr implements SWBInstanceObject
      */
     public void commit()
     {
-        System.out.println("ServerMgr.Commit()");
-        Iterator<SemanticModel> it=m_models.values().iterator();
-        while (it.hasNext())
+        log.trace("ServerMgr.Commit()");
+        try
         {
-            SemanticModel model = it.next();
-            model.getRDFModel().commit();
-        }
+            Iterator<SemanticModel> it=m_models.values().iterator();
+            while (it.hasNext())
+            {
+                SemanticModel model = it.next();
+                model.getRDFModel().commit();
+            }
+        }catch(ConcurrentModificationException noe){
+        }catch(Exception e){log.error(e);}
     }
 
     /**
@@ -791,7 +795,7 @@ public class SemanticMgr implements SWBInstanceObject
      */
     public void close()
     {
-        System.out.println("ServerMgr.Close()");
+        //System.out.println("ServerMgr.Close()");
         Iterator<SemanticModel> it=m_models.values().iterator();
         while (it.hasNext())
         {
