@@ -1322,6 +1322,10 @@ public class NodeImp extends ItemImp implements Node
                         NodeImp childNode=nodeManager.getNode(pathChild);
                         childNode.validate();
                     }
+                    else
+                    {
+                        throw new ConstraintViolationException("The node "+childNodeDefinitionName+" was not found for the node "+path);
+                    }
                 }
             }
         }
@@ -1337,6 +1341,10 @@ public class NodeImp extends ItemImp implements Node
                     {
                         PropertyImp prop=nodeManager.getProperty(path);
                         prop.validate();
+                    }
+                    else
+                    {
+                        throw new ConstraintViolationException("The property "+propertyDefinitionName+" was not found for the node "+path);
                     }
                 }
             }
