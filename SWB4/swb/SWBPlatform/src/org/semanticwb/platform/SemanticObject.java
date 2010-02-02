@@ -59,7 +59,7 @@ public class SemanticObject
 {
     private static Logger log = SWBUtils.getLogger(SemanticObject.class);
 
-    private static Map<String, SemanticObject>m_objs=Collections.synchronizedMap(new HashMap());
+    private static Map<String, SemanticObject>m_objs=new ConcurrentHashMap();
     private GenericObject m_genobj=null;
 
     private Resource m_res = null;
@@ -69,8 +69,8 @@ public class SemanticObject
     private boolean m_virtual = false;
     private HashMap m_virtprops;
 
-    private ConcurrentMap m_cacheprops;
-    private ConcurrentMap m_cachepropsrel;
+    private Map m_cacheprops;
+    private Map m_cachepropsrel;
 
     private static String NULL="__NULL__";
 

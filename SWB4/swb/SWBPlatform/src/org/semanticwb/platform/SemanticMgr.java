@@ -219,7 +219,7 @@ public class SemanticMgr implements SWBInstanceObject
             if(M_DB.equals(SWBUtils.DB.DBTYPE_MySQL)){driver=new Driver_MySQL_SWB();}
             else if(M_DB.equals(SWBUtils.DB.DBTYPE_Derby)){driver=new Driver_Derby_SWB();}
             else if(M_DB.equals(SWBUtils.DB.DBTYPE_HSQLDB)){driver=new Driver_HSQLDB_SWB();}
-            else if(M_DB.equals(SWBUtils.DB.DBTYPE_HSQL)){driver=new Driver_HSQL_SWB();}
+            //else if(M_DB.equals(SWBUtils.DB.DBTYPE_HSQL)){driver=new Driver_HSQL_SWB();}
             else if(M_DB.equals(SWBUtils.DB.DBTYPE_MsSQL)){driver=new Driver_MsSQL_SWB();}
             else if(M_DB.equals(SWBUtils.DB.DBTYPE_Oracle)){driver=new Driver_Oracle_SWB();}
             else if(M_DB.equals(SWBUtils.DB.DBTYPE_PostgreSQL)){driver=new Driver_PostgreSQL_SWB();}
