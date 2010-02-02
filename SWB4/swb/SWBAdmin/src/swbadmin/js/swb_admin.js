@@ -1,6 +1,8 @@
+      // scan page for widgets and instantiate them
+
 
       dojo.require("dijit.Menu");
-      dojo.require("dijit._Calendar");
+      //dojo.require("dijit._Calendar");
       dojo.require("dijit.ColorPalette");
       dojo.require("dijit.ProgressBar");
       dojo.require("dijit.TitlePane");
@@ -14,7 +16,7 @@
       dojo.require("dojo.dnd.Source");
 
       // various Form elemetns
-      dojo.require("dijit.form.Form");
+      //dojo.require("dijit.form.Form");
       dojo.require("dijit.form.CheckBox");
       dojo.require("dijit.form.Textarea");
       dojo.require("dijit.form.FilteringSelect");
@@ -34,8 +36,6 @@
       dojo.require("dijit.layout.BorderContainer");
       dojo.require("dijit.Dialog");
 
-      // scan page for widgets and instantiate them
-      dojo.require("dojo.parser");
 
       // humm?
       dojo.require("dojo.date.locale");
@@ -58,3 +58,4 @@
       dojo.require("dojox.data.QueryReadStore");
 
 
+      dojo.require("dojo.parser");
