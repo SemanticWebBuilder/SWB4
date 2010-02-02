@@ -215,6 +215,7 @@ public class SessionImp implements Session
 
     public void save() throws AccessDeniedException, ItemExistsException, ReferentialIntegrityException, ConstraintViolationException, InvalidItemStateException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
     {
+        workspace.getNodeManager().validate();
         workspace.getNodeManager().save();
     }
 

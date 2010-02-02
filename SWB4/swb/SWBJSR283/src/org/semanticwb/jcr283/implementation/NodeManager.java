@@ -21,10 +21,8 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.jcr283.repository.model.Base;
 import org.semanticwb.jcr283.repository.model.Unstructured;
-import org.semanticwb.jcr283.repository.model.Version;
 import org.semanticwb.jcr283.repository.model.Workspace;
 import org.semanticwb.model.GenericIterator;
-import org.semanticwb.platform.SemanticClass;
 
 /**
  *
@@ -77,6 +75,10 @@ public class NodeManager
         initVersionStore(root);
         return root;
 
+    }
+    public void validate() throws ConstraintViolationException
+    {
+        nodes.get(PATH_SEPARATOR).getNode().validate();
     }
 
     private void initVersionStore(NodeImp root) throws RepositoryException
@@ -394,6 +396,15 @@ public class NodeManager
         return node;
     }
 
+    public NodeImp getNode(String path)
+    {        
+        NodeImp node = this.nodes.get(path).getNode();
+        if(node!=null && !this.nodes.get(path).isDeleted())
+        {
+            return node;
+        }
+        return null;
+    }
     public NodeImp getNode(String path, SessionImp session) throws RepositoryException
     {
         boolean deleted = false;

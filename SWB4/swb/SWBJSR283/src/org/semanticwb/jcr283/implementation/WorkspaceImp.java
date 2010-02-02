@@ -50,6 +50,7 @@ public class WorkspaceImp  implements Workspace {
         nodeTypeManager=SWBRepository.getNodeTypeManagerImp();
         nodeManager.loadRoot(ws, session);                
     }
+    
     public NodeManager getNodeManager()
     {
         return this.nodeManager;

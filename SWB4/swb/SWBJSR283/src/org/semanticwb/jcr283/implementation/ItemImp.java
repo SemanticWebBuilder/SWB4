@@ -249,6 +249,7 @@ public abstract class ItemImp implements Item
         nodeManager.save(path, depth);
         this.isNew = false;
     }
+    public abstract void validate() throws ConstraintViolationException,RepositoryException;
 
     public void refresh(boolean keepChanges) throws InvalidItemStateException, RepositoryException
     {

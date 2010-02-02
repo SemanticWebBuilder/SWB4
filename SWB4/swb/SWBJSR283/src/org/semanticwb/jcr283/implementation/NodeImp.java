@@ -37,6 +37,7 @@ import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.NoSuchNodeTypeException;
 import javax.jcr.nodetype.NodeDefinition;
 import javax.jcr.nodetype.NodeType;
+import javax.jcr.nodetype.PropertyDefinition;
 import javax.jcr.version.ActivityViolationException;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionException;
@@ -55,13 +56,13 @@ import org.semanticwb.platform.SemanticProperty;
 public class NodeImp extends ItemImp implements Node
 {
 
+    private static final String ALL = "*";
     private static final String JCR_CREATED = "jcr:created";
     private static final String JCR_LASTMODIFIED = "jcr:lastModified";
     private static final String JCR_LASTMODIFIEDBY = "jcr:lastModifiedBy";
     private static final String JCR_MIXINTYPES = "jcr:mixinTypes";
     private static final String JCR_PRIMARYTYPE = "jcr:primaryType";
     private static final String JCR_UUID = "jcr:uuid";
-    private static final String ALL = "*";
     private static final String JCR_ISCHECKEDOUT = "jcr:isCheckedOut";
     private static final String JCR_CREATEDBY = "jcr:createdBy";
     private static final String MIX_CREATED = "mix:created";
@@ -308,7 +309,8 @@ public class NodeImp extends ItemImp implements Node
         {
             log.debug(e);
         }
-    }    
+    }
+
     public void saveData() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
     {
         Base base = null;
@@ -319,7 +321,7 @@ public class NodeImp extends ItemImp implements Node
             String newid = UUID.randomUUID().toString();
             String workspacename = session.getWorkspaceImp().getName();
             org.semanticwb.jcr283.repository.model.Workspace model = org.semanticwb.jcr283.repository.model.Workspace.ClassMgr.getWorkspace(workspacename);
-            log.trace("creating a node with id :"+newid+" and class "+sclass.getURI());
+            log.trace("creating a node with id :" + newid + " and class " + sclass.getURI());
             obj = model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(newid, sclass), sclass).getSemanticObject();
         }
         base = new Base(obj);
@@ -336,7 +338,7 @@ public class NodeImp extends ItemImp implements Node
                 base.setParentNode(new Base(parent.getSemanticObject()));
             }
         }
-        
+
         if (isModified)
         {
             for (NodeImp child : nodeManager.getChildNodes(this))
@@ -1302,5 +1304,42 @@ public class NodeImp extends ItemImp implements Node
         int hash = 3;
         hash = 53 * hash + (this.id != null ? this.id.hashCode() : 0);
         return hash;
+    }
+
+    @Override
+    public void validate() throws ConstraintViolationException,RepositoryException
+    {
+        for (NodeDefinition childNodeDefinition : nodeType.getChildNodeDefinitions())
+        {
+            if (childNodeDefinition.isMandatory())
+            {
+                String childNodeDefinitionName = childNodeDefinition.getName();
+                if (!childNodeDefinitionName.equals(ALL))
+                {
+                    String pathChild = this.getPathFromName(childNodeDefinitionName);
+                    if (nodeManager.hasNode(pathChild))
+                    {
+                        NodeImp childNode=nodeManager.getNode(pathChild);
+                        childNode.validate();
+                    }
+                }
+            }
+        }
+        for (PropertyDefinition propDef : nodeType.getPropertyDefinitions())
+        {
+            if (propDef.isMandatory())
+            {
+                String propertyDefinitionName = propDef.getName();
+                if (!propertyDefinitionName.equals(ALL))
+                {
+                    String pathChild = this.getPathFromName(propertyDefinitionName);
+                    if (nodeManager.hasProperty(pathChild))
+                    {
+                        PropertyImp prop=nodeManager.getProperty(path);
+                        prop.validate();
+                    }
+                }
+            }
+        }
     }
 }

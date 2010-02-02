@@ -448,4 +448,14 @@ public class PropertyImp extends ItemImp implements Property
     {
         visitor.visit(this);
     }
+
+    @Override
+    public void validate() throws ConstraintViolationException,RepositoryException
+    {
+        PropertyDefinitionImp propertyDefinitionImp=(PropertyDefinitionImp) definition;
+        if(propertyDefinitionImp.isMandatory() && values.size()==0)
+        {
+            throw new ConstraintViolationException("The propetty "+name+" is mandatory");
+        }
+    }
 }
