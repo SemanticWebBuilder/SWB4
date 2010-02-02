@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.semanticwb.jcr283.implementation;
 
 import java.util.Hashtable;
@@ -27,22 +26,31 @@ import javax.jcr.version.VersionManager;
  *
  * @author victor.lorenzana
  */
-public class VersionManagerImp implements VersionManager {
+public class VersionManagerImp implements VersionManager
+{
 
-    private Hashtable<String,VersionHistoryImp> versionhistories=new Hashtable<String, VersionHistoryImp>();
-    private Hashtable<String,VersionImp> baseVersions=new Hashtable<String, VersionImp>();
+    private Hashtable<String, VersionHistoryImp> versionhistories = new Hashtable<String, VersionHistoryImp>();
+    private Hashtable<String, VersionImp> baseVersions = new Hashtable<String, VersionImp>();
+    private final SessionImp session;
 
-    public void setBaseVersion(VersionImp version,String path)
+    public VersionManagerImp(SessionImp session)
+    {
+        this.session = session;
+    }
+
+    public void setBaseVersion(VersionImp version, String path)
     {
         baseVersions.put(path, version);
     }
+
     public void addVersionHistory(VersionHistoryImp version) throws RepositoryException
     {
-        if(!versionhistories.containsKey(version.getVersionableIdentifier()))
+        if (!versionhistories.containsKey(version.getVersionableIdentifier()))
         {
             versionhistories.put(version.getVersionableIdentifier(), version);
         }
     }
+
     public Version checkin(String absPath) throws VersionException, UnsupportedRepositoryOperationException, InvalidItemStateException, LockException, RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -65,14 +73,27 @@ public class VersionManagerImp implements VersionManager {
 
     public VersionHistory getVersionHistory(String absPath) throws UnsupportedRepositoryOperationException, RepositoryException
     {
-        if(!ItemImp.isValidAbsPath(absPath))
+        if (!ItemImp.isValidAbsPath(absPath))
         {
-            
+            throw new RepositoryException("The path is not absolute: " + absPath);
+        }
+        if (session.getWorkspaceImp().getNodeManager().hasNode(absPath))
+        {
+            throw new RepositoryException("the node " + absPath + " was not found");
+        }
+        NodeImp node=session.getWorkspaceImp().getNodeManager().getNode(absPath);
+        if(!node.isVersionable())
+        {
+            throw new UnsupportedRepositoryOperationException("The node is not versionable");
         }
         return versionhistories.get(absPath);
     }
 
     public Version getBaseVersion(String absPath) throws UnsupportedRepositoryOperationException, RepositoryException
+    {
+        return baseVersions.get(absPath);
+    }
+    public VersionImp getBaseVersionImp(String absPath) throws UnsupportedRepositoryOperationException, RepositoryException
     {
         return baseVersions.get(absPath);
     }
@@ -151,5 +172,4 @@ public class VersionManagerImp implements VersionManager {
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
 }

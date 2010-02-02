@@ -25,8 +25,9 @@ import org.semanticwb.model.GenericIterator;
  */
 public class VersionHistoryImp extends NodeImp implements VersionHistory
 {
-    private static final String JCR_ROOT_VERSION_NAME = "jcr:rootVersion";
+    private static final String JCR_PREDECESSORS = "jcr:predecessors";
 
+    private static final String JCR_ROOT_VERSION_NAME = "jcr:rootVersion";
     private final NodeImp versionableNode;
     private VersionImp jcr_rootVersion;
 
@@ -64,8 +65,8 @@ public class VersionHistoryImp extends NodeImp implements VersionHistory
             {
                 jcr_rootVersion = (VersionImp) nodeManager.getProtectedNode(path_jcr_rootVersion, session);
             }
-        }        
-       
+        }
+
     }
 
     public VersionHistoryImp(NodeDefinitionImp nodeDefinition, NodeImp parent, SessionImp session, NodeImp versionableNode) throws NoSuchNodeTypeException, RepositoryException
@@ -81,17 +82,31 @@ public class VersionHistoryImp extends NodeImp implements VersionHistory
         {
             jcr_rootVersion = (VersionImp) nodeManager.getProtectedNode(path_jcr_rootVersion, session);
         }
-        String pathBaseVersion=versionableNode.getPathFromName("jcr:baseVersion");
-        PropertyImp prop=nodeManager.getProtectedProperty(pathBaseVersion);
-        if(prop.getLength()==-1)
+        String pathBaseVersion = versionableNode.getPathFromName("jcr:baseVersion");
+        PropertyImp prop = nodeManager.getProtectedProperty(pathBaseVersion);
+        if (prop.getLength() == -1)
         {
             prop.set(new ValueFactoryImp().createValue(jcr_rootVersion));
         }
         session.getWorkspaceImp().getVersionManagerImp().setBaseVersion(jcr_rootVersion, versionableNode.path);
 
     }
-    
 
+
+    NodeImp insertVersionNode(String nameToAdd) throws RepositoryException
+    {
+       VersionImp newversion=(VersionImp)this.insertNode(nameToAdd, null);
+       VersionImp baseverion=this.versionableNode.getBaseVersionImp();
+
+
+       PropertyImp jcr_predecessors=nodeManager.getProtectedProperty(newversion.getPathFromName(JCR_PREDECESSORS));
+       jcr_predecessors.addValue(valueFactoryImp.createValue(baseverion));
+       
+       PropertyImp jcr_successors=nodeManager.getProtectedProperty(baseverion.getPathFromName("jcr:successors"));
+       jcr_successors.addValue(valueFactoryImp.createValue(newversion));
+
+       return newversion;
+    }
     public String getVersionableUUID() throws RepositoryException
     {
         return getVersionableIdentifier();
