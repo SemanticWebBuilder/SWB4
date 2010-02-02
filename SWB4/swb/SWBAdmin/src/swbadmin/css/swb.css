@@ -193,8 +193,8 @@ html, body, #main{
 .swbIconUserTask   { background-position: -560px -145px; }
 .swbIconORGateWay   { background-position: -400px -145px; }
 .swbIconANDGateWay   { background-position: -420px -145px; }
-.swbIconInterEvent   { background-position: -480px -145px; }
-.swbIconInitEvent   { background-position: -500px -145px; }
+.swbIconInitEvent   { background-position: -480px -145px; }
+.swbIconInterEvent   { background-position: -500px -145px; }
 .swbIconEndEvent   { background-position: -520px -145px; }
 
 .admViewProperties table{ padding:0px; margin:-10px; width:100%; }
