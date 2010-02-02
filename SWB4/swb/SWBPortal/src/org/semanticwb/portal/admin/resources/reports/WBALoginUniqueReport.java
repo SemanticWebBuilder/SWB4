@@ -357,7 +357,7 @@ public class WBALoginUniqueReport extends GenericResource{
                         out.println(" checked=\"checked\"");
                     }
                     out.println(" />");
-                    out.println("&nbsp;" + paramsRequest.getLocaleString("by_interval_dates"));
+                    out.println("&nbsp;" + paramsRequest.getLocaleString("by_range"));
                     out.println("</label></td>");
                     out.println("<td>");
                     out.println("<input type=\"text\" name=\"wb_fecha11\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha11\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha11+"\">");
@@ -391,7 +391,6 @@ public class WBALoginUniqueReport extends GenericResource{
                         out.println("<tr>");
                         out.println("<td>");
                         WBAFilterReportBean filter = buildFilter(request, paramsRequest);
-                        System.out.println("filter="+filter.toString());
                         JRDataSourceable dataDetail = new JRLoggedUniqueDataDetail(filter);
                         JasperTemplate jasperTemplate = JasperTemplate.LOGGED_UNIQUE_DAILY_HTML;
                         HashMap params = new HashMap();
