@@ -82,7 +82,8 @@ public class NodeManager
     private void initVersionStore(NodeImp root) throws RepositoryException
     {
         log.trace("Creating Version Storage");
-        root.insertNode("jcr:versionStorage");
+        NodeImp jcr_versionStorage=root.insertNode("jcr:versionStorage");
+        jcr_versionStorage.saveData();
     }
 
     public NodeImp getRoot()
@@ -526,7 +527,7 @@ public class NodeManager
         {
             for (NodeStatus node : childs)
             {
-                if (!node.isDeleted() && node.getNode().getDefinition().isProtected())
+                if (!node.isDeleted() && !node.getNode().getDefinition().isProtected())
                 {
                     getChilds.add(node.getNode());
                 }

@@ -66,8 +66,6 @@ public class NodeImp extends ItemImp implements Node
     private static final String JCR_CREATEDBY = "jcr:createdBy";
     private static final String MIX_CREATED = "mix:created";
     private static final String MIX_REFERENCEABLE = "mix:referenceable";
-
-    
     private static final String MIX_SIMPLEVERSIONABLE = "mix:simpleVersionable";
     private static final String NT_VERSION = "nt:version";
     private final static Logger log = SWBUtils.getLogger(NodeImp.class);
@@ -131,24 +129,26 @@ public class NodeImp extends ItemImp implements Node
             log.error(re);
         }
     }
+
     private void initVersionBase() throws RepositoryException
     {
-        String pathBaseVersion=this.getPathFromName("jcr:baseVersion");
-        PropertyImp prop=nodeManager.getProtectedProperty(pathBaseVersion);
-        if(prop.getLength()!=-1)
+        String pathBaseVersion = this.getPathFromName("jcr:baseVersion");
+        PropertyImp prop = nodeManager.getProtectedProperty(pathBaseVersion);
+        if (prop.getLength() != -1)
         {
-            Node node=prop.getNode();
-            if(node instanceof VersionImp)
+            Node node = prop.getNode();
+            if (node instanceof VersionImp)
             {
-                versionManagerImp.setBaseVersion((VersionImp)node, path);
+                versionManagerImp.setBaseVersion((VersionImp) node, path);
             }
             else
             {
                 throw new RepositoryException("The baseVersion is not a version node");
             }
         }
-        
+
     }
+
     private void initVersionHistory() throws RepositoryException
     {
         PropertyImp prop = nodeManager.getProtectedProperty(getPathFromName("jcr:versionHistory"));
@@ -308,38 +308,58 @@ public class NodeImp extends ItemImp implements Node
         {
             log.debug(e);
         }
-    }
-
+    }    
     public void saveData() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
     {
-        if (this.definition.isProtected())
-        {
-            throw new ConstraintViolationException("The node " + path + " is protected");
-        }
+        Base base = null;
         if (obj == null)
         {
             // create new Node
-            SemanticClass sclass = ((PropertyDefinitionImp) this.definition).getDeclaringNodeTypeImp().getSemanticClass();
+            SemanticClass sclass = ((NodeDefinitionImp) this.definition).getDeclaringNodeTypeImp().getSemanticClass();
             String newid = UUID.randomUUID().toString();
             String workspacename = session.getWorkspaceImp().getName();
             org.semanticwb.jcr283.repository.model.Workspace model = org.semanticwb.jcr283.repository.model.Workspace.ClassMgr.getWorkspace(workspacename);
+            log.trace("creating a node with id :"+newid+" and class "+sclass.getURI());
             obj = model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(newid, sclass), sclass).getSemanticObject();
-            Base base = new Base(obj);
-            base.setName(this.name);
-            if (parent != null)
+        }
+        base = new Base(obj);
+        base.setName(this.name);
+        if (parent == null && !path.equals("/"))
+        {
+            if (parent.getSemanticObject() == null)
             {
-                if (parent.getSemanticObject() == null)
-                {
-                    // TODO:ERROR
-                }
-                else
-                {
-                    base.setParentNode(new Base(parent.getSemanticObject()));
-                }
+                // TODO:ERROR
+                throw new RepositoryException("The parent node is null");
+            }
+            else
+            {
+                base.setParentNode(new Base(parent.getSemanticObject()));
             }
         }
+        
         if (isModified)
         {
+            for (NodeImp child : nodeManager.getChildNodes(this))
+            {
+                child.save();
+            }
+            for (NodeImp child : nodeManager.getProtectedChildNodes(this.path))
+            {
+                child.saveData();
+            }
+            //saveproperties
+            for (PropertyImp prop : nodeManager.getChildProperties(this))
+            {
+                prop.save();
+            }
+            for (PropertyImp prop : nodeManager.getProtectedChildProperties(path))
+            {
+                prop.saveData();
+            }
+        }
+        if (base.getParentNode() == null && !path.equals("/"))
+        {
+            base.setParentNode(new Base(parent.obj));
         }
         this.isNew = false;
         this.isModified = false;
@@ -420,15 +440,15 @@ public class NodeImp extends ItemImp implements Node
     NodeImp insertNode(String nameToAdd) throws RepositoryException
     {
         return this.insertNode(nameToAdd, null);
-    }  
+    }
 
     public final static NodeImp createNodeImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session, String id) throws RepositoryException
     {
-        if(nodeType.getSemanticClass()==org.semanticwb.jcr283.repository.model.Version.sclass)
+        if (nodeType.getSemanticClass() == org.semanticwb.jcr283.repository.model.Version.sclass)
         {
             return new VersionImp(nodeDefinition, name, parent, index, path, depth, session, id);
         }
-        else if(nodeType.getSemanticClass()==org.semanticwb.jcr283.repository.model.VersionHistory.sclass)
+        else if (nodeType.getSemanticClass() == org.semanticwb.jcr283.repository.model.VersionHistory.sclass)
         {
             return new VersionHistoryImp(nodeDefinition, parent, session, parent);
         }
@@ -437,21 +457,23 @@ public class NodeImp extends ItemImp implements Node
             return new NodeImp(nodeType, nodeDefinition, name, parent, index, path, depth, session, id);
         }
     }
+
     public final static NodeImp createNodeImp(Base base, NodeImp parent, int index, String path, int depth, SessionImp session) throws RepositoryException
     {
-        if(base.getSemanticObject().getSemanticClass()==org.semanticwb.jcr283.repository.model.Version.sclass && base instanceof org.semanticwb.jcr283.repository.model.Version)
+        if (base.getSemanticObject().getSemanticClass() == org.semanticwb.jcr283.repository.model.Version.sclass && base instanceof org.semanticwb.jcr283.repository.model.Version)
         {
-            return new VersionImp((org.semanticwb.jcr283.repository.model.Version)base, parent, index, path, depth, session);
+            return new VersionImp((org.semanticwb.jcr283.repository.model.Version) base, parent, index, path, depth, session);
         }
-        else if(base.getSemanticObject().getSemanticClass()==org.semanticwb.jcr283.repository.model.VersionHistory.sclass && base instanceof org.semanticwb.jcr283.repository.model.VersionHistory)
+        else if (base.getSemanticObject().getSemanticClass() == org.semanticwb.jcr283.repository.model.VersionHistory.sclass && base instanceof org.semanticwb.jcr283.repository.model.VersionHistory)
         {
-            return new VersionHistoryImp((org.semanticwb.jcr283.repository.model.VersionHistory)base, parent, index, path, depth, session);
+            return new VersionHistoryImp((org.semanticwb.jcr283.repository.model.VersionHistory) base, parent, index, path, depth, session);
         }
         else
         {
             return new NodeImp(base, parent, index, path, depth, session);
         }
     }
+
     NodeImp insertNode(String nameToAdd, String primaryNodeTypeName) throws RepositoryException
     {
         NodeDefinitionImp childDefinition = null;
@@ -528,7 +550,6 @@ public class NodeImp extends ItemImp implements Node
         return nodeManager.addNode(newChild, childpath, path);
 
     }
-
 
     public Node addNode(String relPath, String primaryNodeTypeName) throws ItemExistsException, PathNotFoundException, NoSuchNodeTypeException, LockException, VersionException, ConstraintViolationException, RepositoryException
     {
@@ -1201,8 +1222,8 @@ public class NodeImp extends ItemImp implements Node
         {
             throw new UnsupportedRepositoryOperationException("The node is not versionable");
         }
-        Version version=versionManagerImp.getBaseVersion(path);
-        if(version==null)
+        Version version = versionManagerImp.getBaseVersion(path);
+        if (version == null)
         {
             throw new RepositoryException("The base Version was not found");
         }
@@ -1255,6 +1276,7 @@ public class NodeImp extends ItemImp implements Node
     {
         visitor.visit(this);
     }
+
     @Override
     public boolean equals(Object obj)
     {
