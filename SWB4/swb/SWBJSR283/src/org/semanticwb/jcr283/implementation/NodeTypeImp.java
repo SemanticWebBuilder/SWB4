@@ -32,6 +32,8 @@ import org.semanticwb.platform.SemanticProperty;
 public class NodeTypeImp implements NodeType
 {
 
+    private static final SemanticProperty childNodeDefinitionProperty = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(NamespaceRegistry.NAMESPACE_JCR + "#childNodeDefinition");
+    private static final SemanticProperty propertyDefinition = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(NamespaceRegistry.NAMESPACE_JCR + "#propertyDefinition");
     private static final String uriDataTypePropertyDefiniton = "http://www.jcp.org/jcr/nt/1.0#DataTypePropertyDefinition";
     private static final String uriObjectTypePropertyDefiniton = "http://www.jcp.org/jcr/nt/1.0#ObjectPropertyDefinition";
     public static final SemanticClass dataClazz = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(uriDataTypePropertyDefiniton);
@@ -126,7 +128,6 @@ public class NodeTypeImp implements NodeType
 
     public void loadSuperTypes()
     {
-        NodeTypeManagerImp manager = SWBRepository.getNodeTypeManagerImp();
         Iterator<SemanticClass> classes = clazz.listSuperClasses();
         while (classes.hasNext())
         {
@@ -141,15 +142,13 @@ public class NodeTypeImp implements NodeType
 
     }
 
-    public void loadPropertyDefinitions()
+    private void loadPropertyDefinitions(SemanticClass oclazz)
     {
-
-        SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(NamespaceRegistry.NAMESPACE_JCR + "#propertyDefinition");
-        Iterator<SemanticObject> values = clazz.listObjectRequiredProperties(prop);
+        Iterator<SemanticObject> values = oclazz.listObjectRequiredProperties(propertyDefinition);
         while (values.hasNext())
         {
-            SemanticObject propertyDefinition = values.next();
-            PropertyDefinitionImp pd = new PropertyDefinitionImp(propertyDefinition, this);
+            SemanticObject propertyDefinitionObj = values.next();
+            PropertyDefinitionImp pd = new PropertyDefinitionImp(propertyDefinitionObj, this);
             if (!propertyDefinitions.containsKey(pd.getName()))
             {
                 log.trace("loading propertyDefinition " + pd.getName() + " for node " + this.getName());
@@ -209,26 +208,37 @@ public class NodeTypeImp implements NodeType
         {
             log.error(cnfe);
         }
-        Iterator<SemanticProperty> props = clazz.listProperties();
+        Iterator<SemanticProperty> props = oclazz.listProperties();
         while (props.hasNext())
         {
             SemanticProperty semanticProperty = props.next();
             SemanticClass clazzProperty = semanticProperty.getSemanticObject().getSemanticClass();
             if (clazzProperty.equals(dataClazz) || clazzProperty.equals(objectClazz))
             {
-                PropertyDefinitionImp pd = new PropertyDefinitionImp(semanticProperty);
-                if (!propertyDefinitions.containsKey(pd.getName()))
+
+                if (!propertyDefinitions.containsKey(semanticProperty.getName() + ":" + semanticProperty.getName()))
                 {
+                    PropertyDefinitionImp pd = new PropertyDefinitionImp(semanticProperty);
                     propertyDefinitions.put(pd.getName(), pd);
                 }
             }
         }
     }
 
-    public void loadChildNodeDefinitions()
+    public void loadPropertyDefinitions()
     {
-        SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(NamespaceRegistry.NAMESPACE_JCR + "#childNodeDefinition");
-        Iterator<SemanticObject> values = clazz.listObjectRequiredProperties(prop);
+        loadPropertyDefinitions(clazz);
+        Iterator<SemanticClass> suprclasses = clazz.listSuperClasses();
+        while (suprclasses.hasNext())
+        {
+            SemanticClass superClazz = suprclasses.next();
+            loadPropertyDefinitions(superClazz);
+        }
+    }
+
+    public void loadChildNodeDefinitions(SemanticClass oclazz)
+    {
+        Iterator<SemanticObject> values = oclazz.listObjectRequiredProperties(childNodeDefinitionProperty);
         while (values.hasNext())
         {
             SemanticObject childDefinition = values.next();
@@ -249,6 +259,19 @@ public class NodeTypeImp implements NodeType
                 log.trace("loading nodeDefinition " + name + " for node " + this.getName());
                 childnodeDefinitions.put(nodeDefinitionImp.getName(), nodeDefinitionImp);
             }
+        }
+    }
+
+    public void loadChildNodeDefinitions()
+    {
+
+        loadChildNodeDefinitions(clazz);
+        Iterator<SemanticClass> superClasses = clazz.listSuperClasses();
+        while (superClasses.hasNext())
+        {
+            SemanticClass superClazz = superClasses.next();
+            loadChildNodeDefinitions(superClazz);
+
         }
 
     }
@@ -340,20 +363,20 @@ public class NodeTypeImp implements NodeType
     public boolean canSetProperty(String propertyName, Value[] values)
     {
         PropertyDefinitionImp definition = null;
-        for (PropertyDefinitionImp propertyDefinition : propertyDefinitions.values())
+        for (PropertyDefinitionImp propertyDefinitionImp : propertyDefinitions.values())
         {
-            if (propertyDefinition.getName().equals(propertyName))
+            if (propertyDefinitionImp.getName().equals(propertyName))
             {
-                definition = propertyDefinition;
+                definition = propertyDefinitionImp;
             }
         }
         if (definition == null)
         {
-            for (PropertyDefinitionImp propertyDefinition : propertyDefinitions.values())
+            for (PropertyDefinitionImp propertyDefinitionImp : propertyDefinitions.values())
             {
-                if (propertyDefinition.getName().equals(ALL))
+                if (propertyDefinitionImp.getName().equals(ALL))
                 {
-                    definition = propertyDefinition;
+                    definition = propertyDefinitionImp;
                 }
             }
         }
@@ -475,11 +498,11 @@ public class NodeTypeImp implements NodeType
                 break;
             }
         }
-        for (PropertyDefinitionImp propertyDefinition : propertyDefinitions.values())
+        for (PropertyDefinitionImp propertyDefinitionImp : propertyDefinitions.values())
         {
-            if (propertyDefinition.getName().equals(itemName))
+            if (propertyDefinitionImp.getName().equals(itemName))
             {
-                itemDefinition = propertyDefinition;
+                itemDefinition = propertyDefinitionImp;
                 break;
             }
         }
@@ -526,11 +549,11 @@ public class NodeTypeImp implements NodeType
 
     public boolean canRemoveProperty(String propertyName)
     {
-        for (PropertyDefinitionImp propertyDefinition : propertyDefinitions.values())
+        for (PropertyDefinitionImp propertyDefinitionImp : propertyDefinitions.values())
         {
-            if (propertyDefinition.getName().equals(propertyName))
+            if (propertyDefinitionImp.getName().equals(propertyName))
             {
-                if (propertyDefinition.isProtected())
+                if (propertyDefinitionImp.isProtected())
                 {
                     return false;
                 }
@@ -540,11 +563,11 @@ public class NodeTypeImp implements NodeType
                 }
             }
         }
-        for (PropertyDefinitionImp propertyDefinition : propertyDefinitions.values())
+        for (PropertyDefinitionImp propertyDefinitionImp : propertyDefinitions.values())
         {
-            if (propertyDefinition.getName().equals(ALL))
+            if (propertyDefinitionImp.getName().equals(ALL))
             {
-                if (propertyDefinition.isProtected())
+                if (propertyDefinitionImp.isProtected())
                 {
                     return false;
                 }
