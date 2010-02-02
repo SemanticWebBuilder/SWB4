@@ -3821,7 +3821,7 @@ public class SWBUtils {
          * Identifier for the Hypersonic database.
          * <p>Identificador para la base de datos Hypersonic.</p>
          */
-        public static final String DBTYPE_HSQL = "HSQL";
+//        public static final String DBTYPE_HSQL = "HSQL";
 
         /**
          * Identifier for the Hypersonic database.
@@ -4094,10 +4094,10 @@ public class SWBUtils {
         public static String getDatabaseType(String poolName) {
             
             String ret = getDatabaseName(poolName);
-            if (ret.toLowerCase().indexOf("hsqldb") >- 1) {
+            if (ret.toLowerCase().indexOf("hsql") >- 1) {
                 ret = SWBUtils.DB.DBTYPE_HSQLDB;
-            } else if (ret.toLowerCase().indexOf("hsql") >- 1) {
-                ret = SWBUtils.DB.DBTYPE_HSQLDB; //MAPS74 Forcing to use HSQLDB as DB
+//            } else if (ret.toLowerCase().indexOf("hsql") >- 1) {
+//                ret = SWBUtils.DB.DBTYPE_HSQLDB; //MAPS74 Forcing to use HSQLDB as DB
             } else if (ret.toLowerCase().indexOf("mysql") >- 1) {
                 ret = SWBUtils.DB.DBTYPE_MySQL;
             } else if (ret.toLowerCase().indexOf("mssql") >- 1) {
