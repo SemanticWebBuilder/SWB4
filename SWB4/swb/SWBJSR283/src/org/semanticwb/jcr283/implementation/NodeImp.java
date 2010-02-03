@@ -57,18 +57,22 @@ public class NodeImp extends ItemImp implements Node
 {
 
     private static final String ALL = "*";
+    private static final String JCR_BASE_VERSION = "jcr:baseVersion";
     private static final String JCR_CREATED = "jcr:created";
     private static final String JCR_LASTMODIFIED = "jcr:lastModified";
     private static final String JCR_LASTMODIFIEDBY = "jcr:lastModifiedBy";
     private static final String JCR_MIXINTYPES = "jcr:mixinTypes";
+    private static final String JCR_NAME = "jcr:name";
     private static final String JCR_PRIMARYTYPE = "jcr:primaryType";
     private static final String JCR_UUID = "jcr:uuid";
     private static final String JCR_ISCHECKEDOUT = "jcr:isCheckedOut";
     private static final String JCR_CREATEDBY = "jcr:createdBy";
+    private static final String JCR_VERSION_HISTORY = "jcr:versionHistory";
     private static final String MIX_CREATED = "mix:created";
     private static final String MIX_REFERENCEABLE = "mix:referenceable";
     private static final String MIX_SIMPLEVERSIONABLE = "mix:simpleVersionable";
     private static final String NT_VERSION = "nt:version";
+    private static final String SEPARATOR = "/";
     private static final String THE_NODE_IS_NOT_VERSIONABLE = "The node is not versionable";
     private final static Logger log = SWBUtils.getLogger(NodeImp.class);
     protected final static ValueFactoryImp valueFactoryImp = new ValueFactoryImp();
@@ -119,7 +123,7 @@ public class NodeImp extends ItemImp implements Node
     {
         try
         {
-            PropertyImp jcr_name = nodeManager.getProtectedProperty(getPathFromName("jcr:name"));
+            PropertyImp jcr_name = nodeManager.getProtectedProperty(getPathFromName(JCR_NAME));
             if (jcr_name.getLength() == -1)
             {
                 jcr_name.set(valueFactoryImp.createValue(name));
@@ -157,7 +161,7 @@ public class NodeImp extends ItemImp implements Node
 
     private void initVersionBase() throws RepositoryException
     {
-        String pathBaseVersion = this.getPathFromName("jcr:baseVersion");
+        String pathBaseVersion = this.getPathFromName(JCR_BASE_VERSION);
         PropertyImp prop = nodeManager.getProtectedProperty(pathBaseVersion);
         if (prop.getLength() != -1)
         {
@@ -176,12 +180,12 @@ public class NodeImp extends ItemImp implements Node
 
     private void initVersionHistory() throws RepositoryException
     {
-        PropertyImp prop = nodeManager.getProtectedProperty(getPathFromName("jcr:versionHistory"));
+        PropertyImp prop = nodeManager.getProtectedProperty(getPathFromName(JCR_VERSION_HISTORY));
         if (prop.getLength() == -1)
         {
             log.trace("Initilizing versionHistory for node " + path);
             NodeDefinitionImp versionDefinition = new VersionHistoryDefinition();
-            NodeImp root = nodeManager.getNode("/", session);
+            NodeImp root = nodeManager.getNode( SEPARATOR, session);
             NodeImp jcr_version_Storage = versionManagerImp.getVersionStorage();
             if (jcr_version_Storage == null)
             {
@@ -348,7 +352,7 @@ public class NodeImp extends ItemImp implements Node
         }
         base = new Base(obj);
         base.setName(this.name);
-        if (parent == null && !path.equals("/"))
+        if (parent == null && !path.equals(SEPARATOR))
         {
             if (parent.getSemanticObject() == null)
             {
@@ -382,7 +386,7 @@ public class NodeImp extends ItemImp implements Node
                 prop.saveData();
             }
         }
-        if (base.getParentNode() == null && !path.equals("/"))
+        if (base.getParentNode() == null && !path.equals(SEPARATOR))
         {
             base.setParentNode(new Base(parent.obj));
         }
@@ -578,9 +582,9 @@ public class NodeImp extends ItemImp implements Node
             throw new RepositoryException("The name for the new node is invalid");
         }
         String tempPath = absPath;
-        if (!tempPath.endsWith("/"))
+        if (!tempPath.endsWith(SEPARATOR))
         {
-            tempPath += "/";
+            tempPath += SEPARATOR;
         }
         String parentPath = normalizePath("." + tempPath + "../");
         NodeImp nodeParent = nodeManager.getNode(parentPath, session);
@@ -1161,7 +1165,7 @@ public class NodeImp extends ItemImp implements Node
             log.debug(nfe);
         }
         VersionImp version = (VersionImp) history.insertVersionNode(String.valueOf(versionnumber));
-        PropertyImp baseVersion = nodeManager.getProtectedProperty(getPathFromName("jcr:baseVersion"));
+        PropertyImp baseVersion = nodeManager.getProtectedProperty(getPathFromName(JCR_BASE_VERSION));
         baseVersion.set(valueFactoryImp.createValue(version));
         PropertyImp jcr_checkout=nodeManager.getProtectedProperty(JCR_ISCHECKEDOUT);
         jcr_checkout.set(valueFactoryImp.createValue(false));
