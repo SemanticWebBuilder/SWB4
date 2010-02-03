@@ -62,7 +62,7 @@ public class VersionManagerImp implements VersionManager
         NodeImp node=nodeManager.getNode(absPath);
         if(node==null)
         {
-            throw new VersionException("The node "+absPath+" was not found");
+            throw new RepositoryException("The node "+absPath+" was not found");
         }
         return node.checkin();
     }
@@ -80,7 +80,16 @@ public class VersionManagerImp implements VersionManager
 
     public boolean isCheckedOut(String absPath) throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        NodeImp node=nodeManager.getNode(absPath);
+        if(node==null)
+        {
+            throw new RepositoryException("The node "+absPath+" was not found");
+        }
+        if(!node.isVersionable())
+        {
+            throw new RepositoryException("The node is not versionable");
+        }
+        return node.isCheckedOut();
     }
 
     public VersionHistory getVersionHistory(String absPath) throws UnsupportedRepositoryOperationException, RepositoryException
