@@ -49,6 +49,8 @@ a:hover {text-decoration: underline;}
         SWBResourceURL urlRemovePost = paramRequest.getRenderUrl();
         SWBResourceURL actionURL = paramRequest.getActionUrl();
         User user = paramRequest.getUser();
+        boolean acceptguesscomments=false;
+        if(request.getAttribute("acceptguesscomments")!=null) acceptguesscomments=(Boolean)request.getAttribute("acceptguesscomments");
         boolean isforumAdmin=false;
         Role forumAdmin=website.getUserRepository().getRole("administrador_foros");
         if(forumAdmin!=null)  {
@@ -59,7 +61,7 @@ a:hover {text-decoration: underline;}
         String autor = "";
         if (action != null && action.equals("viewPost")) {
             SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
-            Thread thread = Thread.getThread(semObject.getId(), website);
+            Thread thread = Thread.ClassMgr.getThread(semObject.getId(), website);
             if(request.getParameter("addView")!=null) thread.setViewCount(thread.getViewCount() + 1);
             url.setParameter("threadUri", thread.getURI());
             urlRemovePost.setParameter("threadUri", thread.getURI());
@@ -106,6 +108,8 @@ a:hover {text-decoration: underline;}
             </div>
             <%
                 String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.png";
+                if((user!=null && user.isRegistered()) || acceptguesscomments)
+                {
                     SWBFormMgr mgr = new SWBFormMgr(Post.frm_Post, thread.getSemanticObject(), null);
                     actionURL.setParameter("threadUri", thread.getURI());
                     lang = user.getLanguage();
@@ -119,9 +123,10 @@ a:hover {text-decoration: underline;}
                     mgr.addButton(SWBFormButton.newSaveButton());
                     mgr.addButton(SWBFormButton.newCancelButton());
                     request.setAttribute("formName", mgr.getFormName());
-                %>
-                    <%=mgr.renderForm(request)%>
-                <%
+                    %>
+                        <%=mgr.renderForm(request)%>
+                    <%
+                }
                 boolean cambiaColor = true;
                 GenericIterator<Post> itPost = thread.listPosts();
                 while (itPost.hasNext()) {
@@ -155,9 +160,13 @@ a:hover {text-decoration: underline;}
                       <div class="vistasForo_comment">
                           <%urlthread.setMode("replyPost");urlthread.setParameter("postUri", post.getURI());%>
                           <p> 
+                          <%
+                            if((user!=null && user.isRegistered()) || acceptguesscomments){
+                          %>
                             <a href="<%=urlthread%>">
                               <%=paramRequest.getLocaleString("comment")%>
                             </a><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/commentsForo.png" alt="<%=paramRequest.getLocaleString("comment")%>" width="14" height="12" />
+                           <%}%>
                            <%if(isTheAuthor || isforumAdmin){%> |  <%urlthread.setMode("editPost");%>
                           <a href="<%=urlthread%>">
                               <%=paramRequest.getLocaleString("edit")%>
@@ -177,7 +186,7 @@ a:hover {text-decoration: underline;}
         <%} else if (action != null && action.equals("removePost")) {
                 if (request.getParameter("isthread") != null) {
                     SemanticObject soThread = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
-                    Thread thread = Thread.getThread(soThread.getId(), website);
+                    Thread thread = Thread.ClassMgr.getThread(soThread.getId(), website);
                     actionURL.setAction("removeThread");
             %>
               <table class="eliminarDatos">
@@ -259,7 +268,7 @@ a:hover {text-decoration: underline;}
             <%} else {
                     actionURL.setAction("removePost");
                     SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("postUri"));
-                    Post post = Post.getPost(semObject.getId(), paramRequest.getWebPage().getWebSite());
+                    Post post = Post.ClassMgr.getPost(semObject.getId(), paramRequest.getWebPage().getWebSite());
             %>
             <table border="0" cellspacing="1" cellpadding="2" width="100%">
                 <tr><td>
@@ -316,7 +325,7 @@ a:hover {text-decoration: underline;}
                             </tr>
                             <%
                     int attchmentsSize = 0;
-                    GenericIterator<Attachment> itattach = post.listAttachmentss();
+                    GenericIterator<Attachment> itattach = post.listAttachmentses();
                     while (itattach.hasNext()) {
                         itattach.next();
                         attchmentsSize++;
@@ -444,8 +453,19 @@ a:hover {text-decoration: underline;}
                             <p class="tituloNoticia"><a href="#"><%=autor%></a></p>
 
                             <div class="lastView_foro">
-                                <%String date=SWBUtils.TEXT.getStrDate(thread.getCreated(), user.getLanguage());%>
-                                <p>Última entrada: <%=date%></p>
+                                <%
+                                String date=null;
+                                if(thread.getLastPostDate()!=null){
+                                    date=SWBUtils.TEXT.getStrDate(thread.getLastPostDate(), user.getLanguage());
+                                }
+                                %>
+                                <p>Última entrada:
+                                <%
+                                if(date!=null){
+                                %>
+                                    <%=date%>
+                                <%}else{%>ESTE TEMA AUN NO TIENE ENTRADAS<%}%>
+                                </p>
                             </div>
                             <div class="vistasForo">
                                 <p> (<%=thread.getReplyCount()%>) <%=paramRequest.getLocaleString("responses")%> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/commentsForo.png" alt="<%=paramRequest.getLocaleString("responses")%>" width="14" height="12" /> |  (<%=thread.getViewCount()%>) <%=paramRequest.getLocaleString("visites")%> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/viewsForo.png" alt="<%=paramRequest.getLocaleString("visites")%>" width="10" height="9" /></p>
@@ -470,7 +490,7 @@ a:hover {text-decoration: underline;}
         String[] posattachX = posattach.split("/");
         int postCount = Integer.parseInt(posattachX[0]);
         int AttachCount = Integer.parseInt(posattachX[1]);
-        GenericIterator<Attachment> gitAttach = post.listAttachmentss();
+        GenericIterator<Attachment> gitAttach = post.listAttachmentses();
         while (gitAttach.hasNext()) {
             gitAttach.next();
             AttachCount++;
@@ -487,7 +507,7 @@ a:hover {text-decoration: underline;}
     }
 
     private int getTotAttachments(Post post, int attchCount) {
-        GenericIterator<Attachment> gitAttach = post.listAttachmentss();
+        GenericIterator<Attachment> gitAttach = post.listAttachmentses();
         while (gitAttach.hasNext()) {
             gitAttach.next();
             attchCount++;
