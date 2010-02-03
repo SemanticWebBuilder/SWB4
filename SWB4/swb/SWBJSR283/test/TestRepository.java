@@ -52,6 +52,7 @@ public class TestRepository {
             demo.addMixin("mix:referenceable");
             demo.addMixin("mix:versionable");
             System.out.println(demo.getUUID());
+            System.out.println(demo.getIdentifier());
             System.out.println(demo.getPath());
             session.save();
         }
