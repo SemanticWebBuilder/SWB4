@@ -326,7 +326,7 @@ public class NodeTypeImp implements NodeType
         try
         {
             NodeTypeImp nodeType = new NodeTypeManagerImp().getNodeTypeImp(nodeTypeName);
-            if (nodeType.getSemanticClass().equals(clazz) || nodeType.getSemanticClass().isSubClass(clazz))
+            if (nodeType.getSemanticClass().equals(clazz) || nodeType.getSemanticClass().isSuperClass(clazz))
             {
                 return true;
             }
