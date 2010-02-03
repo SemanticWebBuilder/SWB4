@@ -82,23 +82,23 @@ public class NodeImp extends ItemImp implements Node
     protected NodeImp(Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
         this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), NodeDefinitionImp.getNodeDefinition(base,parent), base.getName(), parent, index, path, depth, session, base.getId());
-        this.obj = base.getSemanticObject();
-        for (PropertyImp prop : nodeManager.getAllChildProperties(path))
+        this.obj = base.getSemanticObject();       
+        loadStoredProperties(false);
+        for(PropertyImp prop : nodeManager.getAllChildProperties(path))
         {
             prop.loadValues();
         }
-        loadStoredProperties(false);
     }
 
     protected NodeImp(NodeDefinitionImp definition, Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
         this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), definition, base.getName(), parent, index, path, depth, session, base.getId());
-        this.obj = base.getSemanticObject();
-        for (PropertyImp prop : nodeManager.getAllChildProperties(path))
+        this.obj = base.getSemanticObject();        
+        loadStoredProperties(false);
+        for(PropertyImp prop : nodeManager.getAllChildProperties(path))
         {
             prop.loadValues();
         }
-        loadStoredProperties(false);
     }
 
     protected NodeImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session, String id)
@@ -417,6 +417,7 @@ public class NodeImp extends ItemImp implements Node
                             {
                                 log.trace("loading property " + pathProperty + " for node " + path);
                                 PropertyImp prop = new PropertyImp(semanticProperty, this, pathProperty, this.session);
+                                prop.loadValues();
                                 nodeManager.addProperty(prop, prop.path, this.path, replace);
                             }
                         }

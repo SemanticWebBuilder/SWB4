@@ -47,7 +47,7 @@ public class PropertyImp extends ItemImp implements Property
        
     private final ArrayList<Value> values = new ArrayList<Value>();
     private SemanticProperty prop;
-
+    private boolean loaded=false;
     public PropertyImp(SemanticProperty prop, NodeImp parent, String path, SessionImp session) throws RepositoryException
     {
         this(new PropertyDefinitionImp(prop), prop.getPrefix()+":"+prop.getName(), parent, path, session);
@@ -70,8 +70,8 @@ public class PropertyImp extends ItemImp implements Property
     public void loadValues()
     {
         SemanticObject obj = parent.getSemanticObject();
-        if (obj != null && prop != null && !isModified())
-        {
+        if (!loaded && obj != null && prop != null && !isModified())
+        {            
             Iterator<SemanticLiteral> lvalues = obj.listLiteralProperties(prop);
             while (lvalues.hasNext())
             {
@@ -84,9 +84,12 @@ public class PropertyImp extends ItemImp implements Property
                 }
                 catch (Exception e)
                 {
+                    loaded=false;
                     log.error(e);
+                    break;
                 }
             }
+            loaded=true;
         }
 
     }
