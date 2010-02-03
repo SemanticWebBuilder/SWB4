@@ -199,7 +199,24 @@ public abstract class ItemImp implements Item
 
     public Item getAncestor(int depth) throws ItemNotFoundException, AccessDeniedException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if(this.getDepth()<depth)
+        {
+            throw new ItemNotFoundException();
+        }
+        String[] paths=path.split("/");
+        StringBuffer pathItem=new StringBuffer();
+        for(int i=0;i<depth;i++)
+        {
+            if(i>0)
+            {
+                pathItem.append("/"+paths[i]);
+            }            
+        }
+        if(pathItem.toString().equals(""))
+        {
+            throw new ItemNotFoundException();
+        }
+        return session.getItem(pathItem.toString());
     }
 
     public Node getParent() throws ItemNotFoundException, AccessDeniedException, RepositoryException
