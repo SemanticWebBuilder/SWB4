@@ -641,7 +641,7 @@ public class NodeManager
 
     public void loadChilds(NodeImp node, SessionImp session, boolean replace) throws RepositoryException
     {
-        if (node.getSemanticObject() != null)
+        if (node.getSemanticObject() != null &&  !nodes.get(node.path).getAddChildLoaded())
         {
             GenericIterator<Base> childs = new Base(node.getSemanticObject()).listNodes();
             while (childs.hasNext())
@@ -653,7 +653,7 @@ public class NodeManager
                 String path = node.path;
                 if (path.endsWith(PATH_SEPARATOR))
                 {
-                    childpath = child.getName();
+                    childpath = path+child.getName();
                 }
                 else
                 {
@@ -671,6 +671,7 @@ public class NodeManager
                     this.addNode(childNode, childpath, path);
                 }
             }
+            nodes.get(node.path).allChildLoaded();
         }
     }
 
@@ -696,11 +697,20 @@ class NodeStatus
 
     private boolean deleted;
     private final NodeImp node;
+    private boolean allchildLoaded=false;
 
     public NodeStatus(NodeImp node, boolean deleted)
     {
         this.deleted = deleted;
         this.node = node;
+    }
+    public boolean getAddChildLoaded()
+    {
+        return allchildLoaded;
+    }
+    public void allChildLoaded()
+    {
+        allchildLoaded=true;
     }
 
     public NodeStatus(NodeImp node)
