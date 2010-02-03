@@ -162,7 +162,7 @@ public class NodeManager
                         Base base = nodesToLoad.get(i);
                         String path = parentloaded.path;
                         String childpath = parentloaded.getPathFromName(base.getName());
-                        int childIndex = countNodes(path, false);
+                        int childIndex = countNodes(base.getName(), parentloaded, session);
                         if (childIndex > 0)
                         {
                             childIndex--;
@@ -252,36 +252,50 @@ public class NodeManager
      * @param exact
      * @return
      */
-    public int countNodes(String path, boolean exact)
+    public int countNodes(String name, NodeImp parent, SessionImp session) throws RepositoryException
     {
-
         int countNodes = 0;
-        if (exact)
+        if (nodesbyParent.containsKey(parent.path))
         {
-            return this.nodes.containsKey(path) ? 1 : 0;
-        }
-        else
-        {
-            for (String pathNode : nodes.keySet())
+            loadChilds(parent, session, true);
+            HashSet<NodeStatus> childnodes = nodesbyParent.get(parent.path);
+            for (NodeStatus nodeStatus : childnodes)
             {
-                if (pathNode.startsWith(path))
+                if (nodeStatus.getNode().name.equals(name))
                 {
-                    String dif = pathNode.substring(path.length());
-                    if (!dif.equals(""))
-                    {
-                        if (dif.startsWith("[") && dif.endsWith("]") && dif.indexOf(PATH_SEPARATOR) == -1)
-                        {
-                            countNodes++;
-                        }
-                    }
-                    else
-                    {
-                        countNodes++;
-                    }
+                    countNodes++;
                 }
             }
         }
         return countNodes;
+
+        /*int countNodes = 0;
+        if (exact)
+        {
+        return this.nodes.containsKey(path) ? 1 : 0;
+        }
+        else
+        {
+        for (String pathNode : nodes.keySet())
+        {
+        if (pathNode.startsWith(path))
+        {
+        String dif = pathNode.substring(path.length());
+        if (!dif.equals(""))
+        {
+        if (dif.startsWith("[") && dif.endsWith("]") && dif.indexOf(PATH_SEPARATOR) == -1)
+        {
+        countNodes++;
+        }
+        }
+        else
+        {
+        countNodes++;
+        }
+        }
+        }
+        }
+        return countNodes;*/
     }
 
     public boolean hasNode(String path)
@@ -641,7 +655,7 @@ public class NodeManager
 
     public void loadChilds(NodeImp node, SessionImp session, boolean replace) throws RepositoryException
     {
-        if (node.getSemanticObject() != null &&  !nodes.get(node.path).getAddChildLoaded())
+        if (node.getSemanticObject() != null && !nodes.get(node.path).getAddChildLoaded())
         {
             GenericIterator<Base> childs = new Base(node.getSemanticObject()).listNodes();
             while (childs.hasNext())
@@ -653,7 +667,7 @@ public class NodeManager
                 String path = node.path;
                 if (path.endsWith(PATH_SEPARATOR))
                 {
-                    childpath = path+child.getName();
+                    childpath = path + child.getName();
                 }
                 else
                 {
@@ -697,20 +711,22 @@ class NodeStatus
 
     private boolean deleted;
     private final NodeImp node;
-    private boolean allchildLoaded=false;
+    private boolean allchildLoaded = false;
 
     public NodeStatus(NodeImp node, boolean deleted)
     {
         this.deleted = deleted;
         this.node = node;
     }
+
     public boolean getAddChildLoaded()
     {
         return allchildLoaded;
     }
+
     public void allChildLoaded()
     {
-        allchildLoaded=true;
+        allchildLoaded = true;
     }
 
     public NodeStatus(NodeImp node)

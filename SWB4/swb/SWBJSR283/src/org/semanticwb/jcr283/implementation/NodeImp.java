@@ -546,7 +546,7 @@ public class NodeImp extends ItemImp implements Node
             throw new ItemExistsException("There is a node with the same name in the node " + this.path);
         }
         String childpath = getPathFromName(nameToAdd);
-        int childIndex = nodeManager.countNodes(childpath, false);        
+        int childIndex = nodeManager.countNodes(nameToAdd, this, session);
         if (childIndex > 0)
         {
             childpath += "[" + childIndex + "]";
