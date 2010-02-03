@@ -1351,7 +1351,7 @@ public class NodeImp extends ItemImp implements Node
                     String pathChild = this.getPathFromName(propertyDefinitionName);
                     if (nodeManager.hasProperty(pathChild))
                     {
-                        PropertyImp prop=nodeManager.getProperty(path);
+                        PropertyImp prop=nodeManager.getProperty(pathChild);
                         prop.validate();
                     }
                     else
