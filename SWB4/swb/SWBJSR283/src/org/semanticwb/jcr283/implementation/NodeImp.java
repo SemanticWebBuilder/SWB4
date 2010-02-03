@@ -385,6 +385,15 @@ public class NodeImp extends ItemImp implements Node
             {
                 prop.saveData();
             }
+            for (NodeImp child : nodeManager.getDeletedChildNodes(path))
+            {
+                if(child.obj!=null)
+                {                    
+                    Base.ClassMgr.removeBase(base.getId(),base.getWorkspace());
+                }
+            }
+            nodeManager.clearDeletedChildNodes(path);
+
         }
         if (base.getParentNode() == null && !path.equals(SEPARATOR))
         {
