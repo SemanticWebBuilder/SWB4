@@ -86,10 +86,10 @@ public class NodeManager
         }
         NodeImp system = nodes.get(systemPath).getNode();
         if (system == null)
-        {            
+        {
             throw new RepositoryException("The node system was not found");
         }
-        initVersionStore(system);
+        initVersionStore(system, session);
         return root;
 
     }
@@ -99,11 +99,15 @@ public class NodeManager
         nodes.get(PATH_SEPARATOR).getNode().validate();
     }
 
-    private void initVersionStore(NodeImp system) throws RepositoryException
+    private void initVersionStore(NodeImp system, SessionImp session) throws RepositoryException
     {
         log.trace("Creating Version Storage");
-        NodeImp jcr_versionStorage = system.insertNode(JCR_VERSION_STORAGE);
-        jcr_versionStorage.saveData();
+        loadChilds(system, session, false);
+        if (!nodes.containsKey(system.getPathFromName(JCR_VERSION_STORAGE)))
+        {
+            NodeImp jcr_versionStorage = system.insertNode(JCR_VERSION_STORAGE);
+            jcr_versionStorage.saveData();
+        }
     }
 
     public NodeImp getRoot()
@@ -360,6 +364,16 @@ public class NodeManager
     public boolean hasProperty(String path)
     {
         return this.properties.get(path) == null ? false : true;
+        /*PropertyStatus propStatus=this.properties.get(path);
+        if(propStatus==null)
+        {
+        return false;
+        }
+        if(propStatus.getProperty().definition.isProtected() || propStatus.isDeleted())
+        {
+        return false;
+        }
+        return true;*/
     }
 
     public boolean hasChildProperty(String pathParent)
@@ -480,6 +494,12 @@ public class NodeManager
         return propertyImp;
     }
 
+    public PropertyImp getAllProperty(String path)
+    {
+        PropertyImp propertyImp = this.properties.get(path).getProperty();
+        return propertyImp;
+    }
+
     PropertyImp getProtectedProperty(String path) throws RepositoryException
     {
         PropertyImp propertyImp = this.properties.get(path).getProperty();
@@ -582,7 +602,7 @@ public class NodeManager
                     String path = node.path;
                     if (path.endsWith(PATH_SEPARATOR))
                     {
-                        childpath = path+child.getName();
+                        childpath = path + child.getName();
                     }
                     else
                     {

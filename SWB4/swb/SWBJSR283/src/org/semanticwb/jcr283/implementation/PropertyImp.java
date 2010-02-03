@@ -460,7 +460,7 @@ public class PropertyImp extends ItemImp implements Property
         PropertyDefinitionImp propertyDefinitionImp=(PropertyDefinitionImp) definition;
         if(propertyDefinitionImp.isMandatory() && values.size()==0)
         {
-            throw new ConstraintViolationException("The propetty "+name+" is mandatory");
+            throw new ConstraintViolationException("The property "+name+" is mandatory");
         }
     }
 }
