@@ -4,7 +4,6 @@
  */
 package org.semanticwb.jcr283.implementation;
 
-import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.UUID;
 import javax.jcr.Node;
@@ -13,6 +12,7 @@ import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.nodetype.NoSuchNodeTypeException;
 import javax.jcr.nodetype.NodeType;
+import javax.jcr.version.OnParentVersionAction;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
 
@@ -42,36 +42,49 @@ public class VersionImp extends NodeImp implements Version
     private void createFrozenNode(NodeImp target) throws RepositoryException
     {
         NodeImp frozenNode = this.insertNode("jcr:frozenNode");
-        initFrozenNode(frozenNode,target);
-        copyNodes(frozenNode, target);
-        copyProperties(frozenNode, target);
+        initFrozenNode(frozenNode, target);
     }
 
     private void initFrozenNode(NodeImp frozenNode, NodeImp target) throws RepositoryException
     {
-        PropertyImp jcr_frozenPrimaryType = nodeManager.getProperty(getPathFromName("jcr:frozenPrimaryType"));
+        PropertyImp jcr_frozenPrimaryType = nodeManager.getProperty(frozenNode.getPathFromName("jcr:frozenPrimaryType"));
         if (jcr_frozenPrimaryType.getLength() == -1)
         {
             jcr_frozenPrimaryType.set(valueFactoryImp.createValue(target.getPrimaryNodeType().getName()));
         }
-        PropertyImp jcr_frozenMixinTypes = nodeManager.getProperty(getPathFromName("jcr:frozenMixinTypes"));
+        PropertyImp jcr_frozenMixinTypes = nodeManager.getProperty(frozenNode.getPathFromName("jcr:frozenMixinTypes"));
         if (jcr_frozenMixinTypes.getLength() == -1)
         {
-            for(NodeType nodeType : target.getMixinNodeTypes())
+            for (NodeType nodeType : target.getMixinNodeTypes())
             {
                 jcr_frozenMixinTypes.addValue(valueFactoryImp.createValue(nodeType.getName()));
             }
         }
-        PropertyImp jcr_frozenUuid= nodeManager.getProperty(getPathFromName("jcr:frozenUuid"));
-        if(jcr_frozenUuid.getLength()==-1)
+        PropertyImp jcr_frozenUuid = nodeManager.getProperty(frozenNode.getPathFromName("jcr:frozenUuid"));
+        if (jcr_frozenUuid.getLength() == -1)
         {
-            jcr_frozenUuid.set(valueFactoryImp.createValue(target.getUUID()));            
-        }        
+            jcr_frozenUuid.set(valueFactoryImp.createValue(target.getUUID()));
+        }
+        copyNodes(frozenNode, target);
+        copyProperties(frozenNode, target);
     }
 
     private void copyNodes(NodeImp frozenNode, NodeImp target) throws RepositoryException
     {
         nodeManager.loadChilds(target, path, session, false);
+        for (NodeImp child : nodeManager.getChildNodes(target))
+        {
+            int onParentVersion = child.definition.getOnParentVersion();
+            switch (onParentVersion)
+            {
+                case OnParentVersionAction.VERSION:
+                    NodeImp childFrozenNode = frozenNode.insertNode(child.getName());
+                    initFrozenNode(childFrozenNode, child);
+                    break;
+                case OnParentVersionAction.ABORT:
+                    throw new RepositoryException("The definition of child " + child.path + " is abort");                
+            }
+        }
     }
 
     private void copyProperties(NodeImp frozenNode, NodeImp target) throws RepositoryException
@@ -80,7 +93,15 @@ public class VersionImp extends NodeImp implements Version
         while (props.hasNext())
         {
             Property prop = props.nextProperty();
-            frozenNode.setProperty(prop.getName(), prop.getValues());
+            int onParentVersion = prop.getDefinition().getOnParentVersion();
+            switch (onParentVersion)
+            {
+                case OnParentVersionAction.VERSION:
+                    frozenNode.setProperty(prop.getName(), prop.getValues());
+                    break;
+                case OnParentVersionAction.ABORT:
+                    throw new RepositoryException("The definition of propert " + prop.getPath() + " is abort");                
+            }            
         }
     }
 
