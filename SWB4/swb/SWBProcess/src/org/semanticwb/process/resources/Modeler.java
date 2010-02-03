@@ -42,6 +42,23 @@ public class Modeler extends GenericResource {
 //        //out.println("</script>");
 //        out.println("\" />");
 
+/*
+    case"Mac":
+        standardArchives.push("javafx-rt-macosx-universal");
+        break;
+    case"Windows":
+        standardArchives.push("javafx-rt-windows-i586");
+        break;
+    case"Linux":
+        standardArchives.push("javafx-rt-linux-i586");
+        break;
+    case"SunOS":
+        standardArchives.push("javafx-rt-solaris-i586");
+        break;
+
+    var versionNumber="1.2.3_b36";
+ */
+
         out.println("<div id=\"SWBAppBPMNModeler\" class=\"applet\">");
         out.println("<applet height=\"500\" width=\"100%\" archive=\""+ SWBPlatform.getContextPath() + "/swbadmin/lib/SWBAppBPMNModeler.jar,http://dl.javafx.com/applet-launcher__V1.2.3_b36.jar,http://dl.javafx.com/javafx-rt-windows-i586__V1.2.3_b36.jar,http://dl.javafx.com/emptyJarFile-1265174763440__V1.2.3_b36.jar\" code=\"org.jdesktop.applet.util.JNLPAppletLauncher\" mayscript=\"\"/>");
         out.println("<param name=\"subapplet.classname\" value=\"com.sun.javafx.runtime.adapter.Applet\">");
