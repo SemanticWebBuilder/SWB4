@@ -140,9 +140,11 @@
                     function buscaCookie(forma) {
                         var numcom = getCookie(forma.NombreCookie.value);
                         if(numcom == "SI") {
+                            <%
                             if ("true".equals(base.getAttribute("oncevote", "true").trim()) && !"0".equals(base.getAttribute("vmode", "0").trim())) {
+                            %>
                                 alert('<%=paramRequest.getLocaleString("usrmsg_Encuesta_doView_msgVote")%>');
-                            }
+                            <%}%>
                         }
                         grabaEncuesta(forma);
                     }
