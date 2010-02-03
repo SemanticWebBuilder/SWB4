@@ -51,6 +51,7 @@ public class TestRepository {
             Node demo=root.addNode("demo:demo");
             demo.addMixin("mix:referenceable");
             demo.addMixin("mix:versionable");
+            session.getWorkspace().getVersionManager().checkin(demo.getPath());
             System.out.println(demo.getUUID());
             System.out.println(demo.getIdentifier());
             System.out.println(demo.getPath());
