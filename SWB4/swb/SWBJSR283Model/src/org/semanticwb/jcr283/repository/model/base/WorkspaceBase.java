@@ -5,9 +5,10 @@ public abstract class WorkspaceBase extends org.semanticwb.model.SWBModel implem
 {
        public static final org.semanticwb.platform.SemanticClass xsd_String=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.w3.org/2001/XMLSchema#string");
        public static final org.semanticwb.platform.SemanticProperty swbrep_name=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/jcr283#name");
-       public static final org.semanticwb.platform.SemanticClass nt_Base=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#base");
+       public static final org.semanticwb.platform.SemanticClass swbrep_Root=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/jcr283#root");
        public static final org.semanticwb.platform.SemanticProperty jcr_root=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#root");
        public static final org.semanticwb.platform.SemanticClass nt_Unstructured=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#unstructured");
+       public static final org.semanticwb.platform.SemanticClass nt_Base=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#base");
        public static final org.semanticwb.platform.SemanticClass swbrep_Workspace=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/jcr283#Workspace");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/jcr283#Workspace");
     public static class ClassMgr
@@ -72,13 +73,13 @@ public abstract class WorkspaceBase extends org.semanticwb.model.SWBModel implem
        org.semanticwb.model.GenericIterator<org.semanticwb.jcr283.repository.model.Workspace> it=new org.semanticwb.model.GenericIterator(parentwebsite.getSemanticObject().getModel().listSubjects(swb_parentWebSite,parentwebsite.getSemanticObject()));
        return it;
    }
-   public static java.util.Iterator<org.semanticwb.jcr283.repository.model.Workspace> listWorkspaceByRoot(org.semanticwb.jcr283.repository.model.Base root,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.jcr283.repository.model.Workspace> listWorkspaceByRoot(org.semanticwb.jcr283.repository.model.Root root,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.jcr283.repository.model.Workspace> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(jcr_root, root.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.jcr283.repository.model.Workspace> listWorkspaceByRoot(org.semanticwb.jcr283.repository.model.Base root)
+   public static java.util.Iterator<org.semanticwb.jcr283.repository.model.Workspace> listWorkspaceByRoot(org.semanticwb.jcr283.repository.model.Root root)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.jcr283.repository.model.Workspace> it=new org.semanticwb.model.GenericIterator(root.getSemanticObject().getModel().listSubjects(jcr_root,root.getSemanticObject()));
        return it;
@@ -150,7 +151,7 @@ public abstract class WorkspaceBase extends org.semanticwb.model.SWBModel implem
         getSemanticObject().setProperty(swb_description, description, lang);
     }
 
-    public void setRoot(org.semanticwb.jcr283.repository.model.Base value)
+    public void setRoot(org.semanticwb.jcr283.repository.model.Root value)
     {
         getSemanticObject().setObjectProperty(jcr_root, value.getSemanticObject());
     }
@@ -161,13 +162,13 @@ public abstract class WorkspaceBase extends org.semanticwb.model.SWBModel implem
     }
 
 
-    public org.semanticwb.jcr283.repository.model.Base getRoot()
+    public org.semanticwb.jcr283.repository.model.Root getRoot()
     {
-         org.semanticwb.jcr283.repository.model.Base ret=null;
+         org.semanticwb.jcr283.repository.model.Root ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(jcr_root);
          if(obj!=null)
          {
-             ret=(org.semanticwb.jcr283.repository.model.Base)obj.createGenericInstance();
+             ret=(org.semanticwb.jcr283.repository.model.Root)obj.createGenericInstance();
          }
          return ret;
     }
