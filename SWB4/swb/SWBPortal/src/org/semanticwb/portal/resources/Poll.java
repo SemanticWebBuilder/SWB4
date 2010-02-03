@@ -55,7 +55,7 @@ import org.semanticwb.portal.util.FileUpload;
  * Poll is in charge to unfold and to administer a survey of opinion under
  * certain criteria (resource configuration).
  * 
- * @author  Jorge Sandoval Jimenez
+ * @author  Jorge Jiménez Sandoval
  */
 
 public class Poll extends GenericResource {
