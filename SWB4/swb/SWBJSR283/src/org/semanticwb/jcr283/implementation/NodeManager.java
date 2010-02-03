@@ -41,24 +41,7 @@ public class NodeManager
     private Hashtable<String, HashSet<PropertyStatus>> propertiesbyParent = new Hashtable<String, HashSet<PropertyStatus>>();
     private final static Logger log = SWBUtils.getLogger(NodeManager.class);
 
-    private static int getIndex(Base node)
-    {
-        int getIndex = 0;
-        GenericIterator<Base> childs = node.listNodes();
-        while (childs.hasNext())
-        {
-            Base child = childs.next();
-            if (child.getName().equals(node.getName()))
-            {
-                getIndex++;
-                if (node.equals(child))
-                {
-                    return getIndex--;
-                }
-            }
-        }
-        return getIndex;
-    }
+    
 
     public NodeImp loadRoot(org.semanticwb.jcr283.repository.model.Workspace ws, SessionImp session) throws RepositoryException
     {
@@ -162,7 +145,7 @@ public class NodeManager
                         Base base = nodesToLoad.get(i);
                         String path = parentloaded.path;
                         String childpath = parentloaded.getPathFromName(base.getName());
-                        int childIndex = countNodes(base.getName(), parentloaded, session);
+                        int childIndex = countNodes(base.getName(), parentloaded, session,false);
                         if (childIndex > 0)
                         {
                             childIndex--;
@@ -252,12 +235,15 @@ public class NodeManager
      * @param exact
      * @return
      */
-    public int countNodes(String name, NodeImp parent, SessionImp session) throws RepositoryException
+    public int countNodes(String name, NodeImp parent, SessionImp session,boolean loadchilds) throws RepositoryException
     {
         int countNodes = 0;
         if (nodesbyParent.containsKey(parent.path))
         {
-            loadChilds(parent, session, true);
+            if(loadchilds)
+            {
+                loadChilds(parent, session, true);
+            }
             HashSet<NodeStatus> childnodes = nodesbyParent.get(parent.path);
             for (NodeStatus nodeStatus : childnodes)
             {
@@ -627,7 +613,7 @@ public class NodeManager
                 if (child.getName().equals(name))
                 {
                     int childindex = 0;
-                    childindex = getIndex(child);
+                    childindex = countNodes(child.getName(), node, session,false);
                     String childpath = null;
                     String path = node.path;
                     if (path.endsWith(PATH_SEPARATOR))
@@ -662,7 +648,7 @@ public class NodeManager
             {
                 Base child = childs.next();
                 int childindex = 0;
-                childindex = getIndex(child);
+                childindex = countNodes(child.getName(), node, session,false);
                 String childpath = null;
                 String path = node.path;
                 if (path.endsWith(PATH_SEPARATOR))
