@@ -60,4 +60,8 @@ public abstract class SWBDataDetail {
     protected abstract List doDataList(String siteId, String objId, int type, int year, int month, int day, String language) throws IncompleteFilterException;
     
     protected abstract List doDataList(String siteId, String objId, int type, int yearI, int monthI, int dayI, int yearF, int monthF, int dayF, String language) throws IncompleteFilterException;
+
+    public WBAFilterReportBean getFilterReportBean() {
+        return filterReportBean;
+    }
 }
