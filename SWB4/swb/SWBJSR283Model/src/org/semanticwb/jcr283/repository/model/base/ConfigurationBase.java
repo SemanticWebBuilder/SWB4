@@ -50,17 +50,6 @@ public abstract class ConfigurationBase extends org.semanticwb.jcr283.repository
        org.semanticwb.model.GenericIterator<org.semanticwb.jcr283.repository.model.Configuration> it=new org.semanticwb.model.GenericIterator(parentnode.getSemanticObject().getModel().listSubjects(swbrep_parentNode,parentnode.getSemanticObject()));
        return it;
    }
-   public static java.util.Iterator<org.semanticwb.jcr283.repository.model.Configuration> listConfigurationByPredecessors(org.semanticwb.jcr283.repository.model.Version predecessors,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.jcr283.repository.model.Configuration> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(jcr_predecessors, predecessors.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.jcr283.repository.model.Configuration> listConfigurationByPredecessors(org.semanticwb.jcr283.repository.model.Version predecessors)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.jcr283.repository.model.Configuration> it=new org.semanticwb.model.GenericIterator(predecessors.getSemanticObject().getModel().listSubjects(jcr_predecessors,predecessors.getSemanticObject()));
-       return it;
-   }
    public static java.util.Iterator<org.semanticwb.jcr283.repository.model.Configuration> listConfigurationByActivity(org.semanticwb.jcr283.repository.model.Activity activity,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.jcr283.repository.model.Configuration> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(jcr_activity, activity.getSemanticObject()));
@@ -142,28 +131,6 @@ public abstract class ConfigurationBase extends org.semanticwb.jcr283.repository
     public void setUuid(String value)
     {
         getSemanticObject().setProperty(jcr_uuid, value);
-    }
-
-    public void setPredecessors(org.semanticwb.jcr283.repository.model.Version value)
-    {
-        getSemanticObject().setObjectProperty(jcr_predecessors, value.getSemanticObject());
-    }
-
-    public void removePredecessors()
-    {
-        getSemanticObject().removeProperty(jcr_predecessors);
-    }
-
-
-    public org.semanticwb.jcr283.repository.model.Version getPredecessors()
-    {
-         org.semanticwb.jcr283.repository.model.Version ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(jcr_predecessors);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.jcr283.repository.model.Version)obj.createGenericInstance();
-         }
-         return ret;
     }
 
     public void setActivity(org.semanticwb.jcr283.repository.model.Activity value)

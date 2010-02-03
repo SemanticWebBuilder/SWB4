@@ -14,8 +14,12 @@ public interface LifecycleBase extends org.semanticwb.model.GenericObject
     public void removeLifecyclePolicy();
 
     public org.semanticwb.jcr283.repository.model.Base getLifecyclePolicy();
+
     public String getName();
-    public void setName(String name);
+
+    public void setName(String value);
+
     public String getCurrentLifecycleState();
-    public void setCurrentLifecycleState(String currentLifecycleState);
+
+    public void setCurrentLifecycleState(String value);
 }
