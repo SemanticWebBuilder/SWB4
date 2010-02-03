@@ -527,7 +527,7 @@ public class CodeGenerator
             parent = it.next();
             if (parent.isSWBSemanticResource())
             {
-                exts = tpc.getCodePackage() + "." + toUpperCase(parent.getClassCodeName());
+                exts = parent.getCodePackage() + "." + toUpperCase(parent.getClassCodeName());
                 break;
             }
             else
