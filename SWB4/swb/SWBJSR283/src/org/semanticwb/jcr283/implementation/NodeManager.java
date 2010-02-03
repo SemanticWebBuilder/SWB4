@@ -542,6 +542,22 @@ public class NodeManager
         return getChilds;
     }
 
+    Set<PropertyImp> getAllChildProperties(String pathParent)
+    {
+        HashSet<PropertyImp> getChilds = new HashSet<PropertyImp>();
+        if (propertiesbyParent.containsKey(pathParent) && propertiesbyParent.get(pathParent).size() > 0)
+        {
+            for (PropertyStatus prop : this.propertiesbyParent.get(pathParent))
+            {
+                if (!prop.isDeleted())
+                {
+                    getChilds.add(prop.getProperty());
+                }
+            }
+        }
+        return getChilds;
+    }
+
     public Set<PropertyImp> getChildProperties(NodeImp node) throws RepositoryException
     {
         return getChildProperties(node.getPath());
