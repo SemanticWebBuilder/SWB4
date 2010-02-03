@@ -36,11 +36,14 @@ public class TestRepository {
             RepositoryFactory factory = (RepositoryFactory) Class.forName("org.semanticwb.jcr283.implementation.RepositoryFactoryImp").newInstance();
             Repository repo = factory.getRepository(parameters);
             Session session=repo.login();
-            Node node=session.getRootNode();
-            Node demo=node.addNode("demo:demo");
+            Node root=session.getRootNode();
+            System.out.println(root.getNodes().getSize());
+            System.out.println(root.getNodes().getSize());
+            Node demo=root.addNode("demo:demo");
             demo.addMixin("mix:referenceable");
             demo.addMixin("mix:versionable");
             System.out.println(demo.getUUID());
+            session.save();
         }
         catch(Exception cnfe)
         {
