@@ -107,6 +107,19 @@ public class NodeImp extends ItemImp implements Node
 
     private void init()
     {
+        try
+        {
+            PropertyImp prop = nodeManager.getProtectedProperty(getPathFromName("jcr:name"));
+            if (prop.getLength() == -1)
+            {
+                prop.set(valueFactoryImp.createValue(name));
+            }
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+
+        }
         initPrimaryType();
         initReferenceable();
         initMixLastModified();
@@ -158,7 +171,7 @@ public class NodeImp extends ItemImp implements Node
         {
             log.trace("Initilizing versionHistory for node " + path);
             NodeDefinitionImp versionDefinition = new VersionHistoryDefinition();
-            NodeImp root = nodeManager.getNode("/", session);            
+            NodeImp root = nodeManager.getNode("/", session);
             NodeImp jcr_version_Storage = versionManagerImp.getVersionStorage();
             if (jcr_version_Storage == null)
             {
@@ -317,7 +330,7 @@ public class NodeImp extends ItemImp implements Node
         if (obj == null)
         {
             // create new Node
-            SemanticClass sclass = ((NodeDefinitionImp) this.definition).getDeclaringNodeTypeImp().getSemanticClass();
+            SemanticClass sclass = this.nodeType.getSemanticClass();
             String newid = UUID.randomUUID().toString();
             String workspacename = session.getWorkspaceImp().getName();
             org.semanticwb.jcr283.repository.model.Workspace model = org.semanticwb.jcr283.repository.model.Workspace.ClassMgr.getWorkspace(workspacename);
@@ -448,7 +461,7 @@ public class NodeImp extends ItemImp implements Node
     {
         if (nodeType.getSemanticClass() == org.semanticwb.jcr283.repository.model.Version.sclass)
         {
-            return new VersionImp(nodeDefinition, name, (VersionHistoryImp)parent, index, path, parent.getDepth()+1, session, id);
+            return new VersionImp(nodeDefinition, name, (VersionHistoryImp) parent, index, path, parent.getDepth() + 1, session, id);
         }
         else if (nodeType.getSemanticClass() == org.semanticwb.jcr283.repository.model.VersionHistory.sclass)
         {
@@ -456,7 +469,7 @@ public class NodeImp extends ItemImp implements Node
         }
         else
         {
-            return new NodeImp(nodeType, nodeDefinition, name, parent, index, path, parent.getDepth()+1, session, id);
+            return new NodeImp(nodeType, nodeDefinition, name, parent, index, path, parent.getDepth() + 1, session, id);
         }
     }
 
@@ -464,15 +477,15 @@ public class NodeImp extends ItemImp implements Node
     {
         if (base.getSemanticObject().getSemanticClass() == org.semanticwb.jcr283.repository.model.Version.sclass && base instanceof org.semanticwb.jcr283.repository.model.Version)
         {
-            return new VersionImp((org.semanticwb.jcr283.repository.model.Version) base, (VersionHistoryImp)parent, index, path, parent.getDepth()+1, session);
+            return new VersionImp((org.semanticwb.jcr283.repository.model.Version) base, (VersionHistoryImp) parent, index, path, parent.getDepth() + 1, session);
         }
         else if (base.getSemanticObject().getSemanticClass() == org.semanticwb.jcr283.repository.model.VersionHistory.sclass && base instanceof org.semanticwb.jcr283.repository.model.VersionHistory)
         {
-            return new VersionHistoryImp((org.semanticwb.jcr283.repository.model.VersionHistory) base, parent, index, path, parent.getDepth()+1, session);
+            return new VersionHistoryImp((org.semanticwb.jcr283.repository.model.VersionHistory) base, parent, index, path, parent.getDepth() + 1, session);
         }
         else
         {
-            return new NodeImp(base, parent, index, path, parent.getDepth()+1, session);
+            return new NodeImp(base, parent, index, path, parent.getDepth() + 1, session);
         }
     }
 
@@ -1124,14 +1137,15 @@ public class NodeImp extends ItemImp implements Node
         }
         return false;
 
-    }    
+    }
+
     public Version checkin() throws VersionException, UnsupportedRepositoryOperationException, InvalidItemStateException, LockException, RepositoryException
-    {        
-        VersionHistoryImp history=(VersionHistoryImp)versionManagerImp.getVersionHistory(this.path);
-        VersionImp version=(VersionImp)history.insertVersionNode("1.0");
-        PropertyImp baseVersion=nodeManager.getProtectedProperty(getPathFromName("jcr:baseVersion"));
+    {
+        VersionHistoryImp history = (VersionHistoryImp) versionManagerImp.getVersionHistory(this.path);
+        VersionImp version = (VersionImp) history.insertVersionNode("1.0");
+        PropertyImp baseVersion = nodeManager.getProtectedProperty(getPathFromName("jcr:baseVersion"));
         baseVersion.set(valueFactoryImp.createValue(version));
-        this.isModified=true;
+        this.isModified = true;
         return version;
     }
 
@@ -1141,12 +1155,12 @@ public class NodeImp extends ItemImp implements Node
         {
             throw new UnsupportedRepositoryOperationException(THE_NODE_IS_NOT_VERSIONABLE);
         }
-        PropertyImp prop=nodeManager.getProtectedProperty(this.getPathFromName(JCR_ISCHECKEDOUT));
-        if(prop.getLength()==-1)
+        PropertyImp prop = nodeManager.getProtectedProperty(this.getPathFromName(JCR_ISCHECKEDOUT));
+        if (prop.getLength() == -1)
         {
             prop.set(valueFactoryImp.createValue(true));
-            this.isModified=true;
-        }        
+            this.isModified = true;
+        }
     }
 
     public void doneMerge(Version version) throws VersionException, InvalidItemStateException, UnsupportedRepositoryOperationException, RepositoryException
@@ -1236,9 +1250,10 @@ public class NodeImp extends ItemImp implements Node
         }
         return version;
     }
+
     public Version getBaseVersion() throws UnsupportedRepositoryOperationException, RepositoryException
     {
-       return getBaseVersionImp();
+        return getBaseVersionImp();
     }
 
     public Lock lock(boolean isDeep, boolean isSessionScoped) throws UnsupportedRepositoryOperationException, LockException, AccessDeniedException, InvalidItemStateException, RepositoryException
@@ -1316,7 +1331,7 @@ public class NodeImp extends ItemImp implements Node
     }
 
     @Override
-    public void validate() throws ConstraintViolationException,RepositoryException
+    public void validate() throws ConstraintViolationException, RepositoryException
     {
         for (NodeDefinition childNodeDefinition : nodeType.getChildNodeDefinitions())
         {
@@ -1328,15 +1343,15 @@ public class NodeImp extends ItemImp implements Node
                     String pathChild = this.getPathFromName(childNodeDefinitionName);
                     if (nodeManager.hasNode(pathChild))
                     {
-                        NodeImp childNode=nodeManager.getNode(pathChild);
-                        if(childNode.isModified)
+                        NodeImp childNode = nodeManager.getNode(pathChild);
+                        if (childNode.isModified)
                         {
                             childNode.validate();
                         }
                     }
                     else
                     {
-                        throw new ConstraintViolationException("The node "+childNodeDefinitionName+" was not found for the node "+path);
+                        throw new ConstraintViolationException("The node " + childNodeDefinitionName + " was not found for the node " + path);
                     }
                 }
             }
@@ -1351,12 +1366,12 @@ public class NodeImp extends ItemImp implements Node
                     String pathChild = this.getPathFromName(propertyDefinitionName);
                     if (nodeManager.hasProperty(pathChild))
                     {
-                        PropertyImp prop=nodeManager.getProperty(pathChild);
+                        PropertyImp prop = nodeManager.getAllProperty(pathChild);
                         prop.validate();
                     }
                     else
                     {
-                        throw new ConstraintViolationException("The property "+propertyDefinitionName+" was not found for the node "+path);
+                        throw new ConstraintViolationException("The property " + propertyDefinitionName + " was not found for the node " + path);
                     }
                 }
             }
