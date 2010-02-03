@@ -71,7 +71,7 @@ public class PropertyImp extends ItemImp implements Property
     private void loadValues()
     {
         SemanticObject obj = parent.getSemanticObject();
-        if (obj != null && prop != null && !isModified())
+        if (obj != null && prop != null)
         {
             Iterator<SemanticLiteral> lvalues = obj.listLiteralProperties(prop);
             while (lvalues.hasNext())
