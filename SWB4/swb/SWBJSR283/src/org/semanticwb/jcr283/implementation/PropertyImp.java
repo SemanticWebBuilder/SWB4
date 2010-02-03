@@ -394,12 +394,7 @@ public class PropertyImp extends ItemImp implements Property
     }
 
     public void saveData() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
-    {
-        /*if(this.definition.isProtected())
-        {
-            throw new ConstraintViolationException("The node "+path+" is protected");
-        }*/
-
+    {        
         if (parent.getSemanticObject() == null)
         {
             //TODO:ERROR
