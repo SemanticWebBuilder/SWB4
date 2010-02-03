@@ -71,6 +71,7 @@ public class VersionImp extends NodeImp implements Version
 
     private void copyNodes(NodeImp frozenNode, NodeImp target) throws RepositoryException
     {
+        nodeManager.loadChilds(target, path, session, false);
     }
 
     private void copyProperties(NodeImp frozenNode, NodeImp target) throws RepositoryException
@@ -116,7 +117,7 @@ public class VersionImp extends NodeImp implements Version
 
     public Node getFrozenNode() throws RepositoryException
     {
-        nodeManager.loadChilds(this, path, depth + 1, session, false);
+        nodeManager.loadChilds(this, path, session, false);
         return nodeManager.getNode(getPathFromName("jcr:frozenNode"));
     }
 }

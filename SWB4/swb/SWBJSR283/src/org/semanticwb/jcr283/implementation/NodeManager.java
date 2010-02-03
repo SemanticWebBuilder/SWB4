@@ -365,7 +365,7 @@ public class NodeManager
                 if (fragment.equals(""))
                 {
                     nodetoextract = nodes.get(PATH_SEPARATOR).getNode();
-                    loadChilds(nodetoextract, PATH_SEPARATOR, depth, session, false);
+                    loadChilds(nodetoextract, PATH_SEPARATOR, session, false);
                     depth = 0;
                 }
                 else
@@ -373,7 +373,7 @@ public class NodeManager
                     try
                     {
                         String pathParent = nodetoextract.getPath();
-                        loadChilds(nodetoextract, pathParent, depth, session, false);
+                        loadChilds(nodetoextract, pathParent, session, false);
                         depth++;
                     }
                     catch (Exception e)
@@ -420,7 +420,7 @@ public class NodeManager
                 if (fragment.equals(""))
                 {
                     nodetoextract = nodes.get(PATH_SEPARATOR).getNode();
-                    loadChilds(nodetoextract, PATH_SEPARATOR, depth, session, false);
+                    loadChilds(nodetoextract, PATH_SEPARATOR, session, false);
                     depth = 0;
                 }
                 else
@@ -428,7 +428,7 @@ public class NodeManager
                     try
                     {
                         String pathParent = nodetoextract.getPath();
-                        loadChilds(nodetoextract, pathParent, depth, session, false);
+                        loadChilds(nodetoextract, pathParent, session, false);
                         depth++;
                     }
                     catch (Exception e)
@@ -583,7 +583,7 @@ public class NodeManager
         }
     }
 
-    public void loadChilds(NodeImp node, String path, int depth, SessionImp session, boolean replace) throws RepositoryException
+    public void loadChilds(NodeImp node, String path, SessionImp session, boolean replace) throws RepositoryException
     {
         if (node.getSemanticObject() != null)
         {
@@ -609,8 +609,9 @@ public class NodeManager
                     childpath += "[" + childindex + "]";
                 }
                 if (replace || !nodes.containsKey(childpath))
-                {                    
-                    NodeImp childNode=NodeImp.createNodeImp(child, node, childindex, childpath, depth + 1, session);
+                {
+                    NodeImp childNode=NodeImp.createNodeImp(child, node, childindex, childpath, session);
+                    //NodeImp childNode=NodeImp.createNodeImp(child, node, childindex, childpath, session);
                     this.addNode(childNode, childpath, path);                    
                 }
             }

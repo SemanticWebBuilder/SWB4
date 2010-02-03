@@ -445,11 +445,11 @@ public class NodeImp extends ItemImp implements Node
         return this.insertNode(nameToAdd, null);
     }
 
-    public final static NodeImp createNodeImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session, String id) throws RepositoryException
+    public final static NodeImp createNodeImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, SessionImp session, String id) throws RepositoryException
     {
         if (nodeType.getSemanticClass() == org.semanticwb.jcr283.repository.model.Version.sclass)
         {
-            return new VersionImp(nodeDefinition, name, (VersionHistoryImp)parent, index, path, depth, session, id);
+            return new VersionImp(nodeDefinition, name, (VersionHistoryImp)parent, index, path, parent.getDepth()+1, session, id);
         }
         else if (nodeType.getSemanticClass() == org.semanticwb.jcr283.repository.model.VersionHistory.sclass)
         {
@@ -457,23 +457,23 @@ public class NodeImp extends ItemImp implements Node
         }
         else
         {
-            return new NodeImp(nodeType, nodeDefinition, name, parent, index, path, depth, session, id);
+            return new NodeImp(nodeType, nodeDefinition, name, parent, index, path, parent.getDepth()+1, session, id);
         }
     }
 
-    public final static NodeImp createNodeImp(Base base, NodeImp parent, int index, String path, int depth, SessionImp session) throws RepositoryException
+    public final static NodeImp createNodeImp(Base base, NodeImp parent, int index, String path, SessionImp session) throws RepositoryException
     {
         if (base.getSemanticObject().getSemanticClass() == org.semanticwb.jcr283.repository.model.Version.sclass && base instanceof org.semanticwb.jcr283.repository.model.Version)
         {
-            return new VersionImp((org.semanticwb.jcr283.repository.model.Version) base, (VersionHistoryImp)parent, index, path, depth, session);
+            return new VersionImp((org.semanticwb.jcr283.repository.model.Version) base, (VersionHistoryImp)parent, index, path, parent.getDepth()+1, session);
         }
         else if (base.getSemanticObject().getSemanticClass() == org.semanticwb.jcr283.repository.model.VersionHistory.sclass && base instanceof org.semanticwb.jcr283.repository.model.VersionHistory)
         {
-            return new VersionHistoryImp((org.semanticwb.jcr283.repository.model.VersionHistory) base, parent, index, path, depth, session);
+            return new VersionHistoryImp((org.semanticwb.jcr283.repository.model.VersionHistory) base, parent, index, path, parent.getDepth()+1, session);
         }
         else
         {
-            return new NodeImp(base, parent, index, path, depth, session);
+            return new NodeImp(base, parent, index, path, parent.getDepth()+1, session);
         }
     }
 
@@ -548,7 +548,7 @@ public class NodeImp extends ItemImp implements Node
         }
         String newId = UUID.randomUUID().toString();
         log.trace("Creating the node " + nameToAdd);
-        NodeImp newChild = createNodeImp(primaryNodeType, childDefinition, nameToAdd, this, index, childpath, this.getDepth() + 1, session, newId);
+        NodeImp newChild = createNodeImp(primaryNodeType, childDefinition, nameToAdd, this, index, childpath, session, newId);
         this.isModified = true;
         return nodeManager.addNode(newChild, childpath, path);
 
@@ -723,7 +723,7 @@ public class NodeImp extends ItemImp implements Node
 
     public NodeIterator getNodes() throws RepositoryException
     {
-        nodeManager.loadChilds(this, this.path, depth, session, false);
+        nodeManager.loadChilds(this, this.path, session, false);
         NodeIteratorImp iterator = new NodeIteratorImp(nodeManager.getChildNodes(this));
         return iterator;
     }
@@ -782,7 +782,7 @@ public class NodeImp extends ItemImp implements Node
         String primaryItemName = defaultPrimaryNodeType.getPrimaryItemName();
         if (primaryItemName != null)
         {
-            nodeManager.loadChilds(this, path, depth, session, false);
+            nodeManager.loadChilds(this, path, session, false);
             String primaryItemNamePath = getPathFromName(primaryItemName);
             NodeImp node = nodeManager.getNode(primaryItemNamePath, session);
             if (node == null)
