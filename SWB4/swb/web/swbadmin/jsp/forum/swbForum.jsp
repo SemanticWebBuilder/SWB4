@@ -459,12 +459,12 @@ a:hover {text-decoration: underline;}
                                     date=SWBUtils.TEXT.getStrDate(thread.getLastPostDate(), user.getLanguage());
                                 }
                                 %>
-                                <p>Última entrada:
+                                <p>Último Comentario:
                                 <%
                                 if(date!=null){
                                 %>
                                     <%=date%>
-                                <%}else{%>ESTE TEMA AUN NO TIENE ENTRADAS<%}%>
+                                <%}else{%>ESTE TEMA AUN NO TIENE COMENTARIOS<%}%>
                                 </p>
                             </div>
                             <div class="vistasForo">
