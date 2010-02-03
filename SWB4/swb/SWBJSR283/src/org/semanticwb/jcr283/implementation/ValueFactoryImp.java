@@ -81,7 +81,7 @@ public class ValueFactoryImp implements ValueFactory
     {
         return new ValueImp(value);
     }
-
+    @Deprecated
     public Value createValue(InputStream value)
     {
         return new ValueImp(value);

@@ -56,7 +56,7 @@ public class VersionManagerImp implements VersionManager
             versionhistories.put(version.getVersionableIdentifier(), version);
         }
     }
-
+    @SuppressWarnings(value="deprecation")
     public Version checkin(String absPath) throws VersionException, UnsupportedRepositoryOperationException, InvalidItemStateException, LockException, RepositoryException
     {
         NodeImp node=nodeManager.getNode(absPath);
@@ -67,6 +67,7 @@ public class VersionManagerImp implements VersionManager
         return node.checkin();
     }
 
+    @SuppressWarnings(value="deprecation")
     public void checkout(String absPath) throws UnsupportedRepositoryOperationException, LockException, RepositoryException
     {
         NodeImp node=nodeManager.getNode(absPath);

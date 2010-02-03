@@ -104,7 +104,7 @@ public class SessionImp implements Session
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
+    @Deprecated
     public Node getNodeByUUID(String uuid) throws ItemNotFoundException, RepositoryException
     {
         return workspace.getNodeManager().getNodeByIdentifier(uuid,this);
@@ -308,17 +308,17 @@ public class SessionImp implements Session
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
+    @Deprecated
     public void addLockToken(String lt)
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
+    @Deprecated
     public String[] getLockTokens()
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
+    @Deprecated
     public void removeLockToken(String lt)
     {
         throw new UnsupportedOperationException("Not supported yet.");
