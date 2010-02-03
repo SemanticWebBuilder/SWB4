@@ -2,6 +2,7 @@
 import java.util.HashMap;
 import java.util.Map;
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryFactory;
 import javax.jcr.Session;
@@ -37,12 +38,21 @@ public class TestRepository {
             Repository repo = factory.getRepository(parameters);
             Session session=repo.login();
             Node root=session.getRootNode();
-            System.out.println(root.getNodes().getSize());
-            System.out.println(root.getNodes().getSize());
+            NodeIterator it=root.getNodes();
+            long i=it.getSize();
+            System.out.println(i);
+            while(it.hasNext())
+            {
+                Node node=it.nextNode();
+                System.out.println(node.getUUID());
+                System.out.println(node.getIdentifier());
+                System.out.println(node.getPath());
+            }
             Node demo=root.addNode("demo:demo");
             demo.addMixin("mix:referenceable");
             demo.addMixin("mix:versionable");
             System.out.println(demo.getUUID());
+            System.out.println(demo.getPath());
             session.save();
         }
         catch(Exception cnfe)
