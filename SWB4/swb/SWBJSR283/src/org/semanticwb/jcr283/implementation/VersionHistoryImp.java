@@ -96,6 +96,7 @@ public class VersionHistoryImp extends NodeImp implements VersionHistory
     NodeImp insertVersionNode(String nameToAdd) throws RepositoryException
     {
        VersionImp newversion=(VersionImp)this.insertNode(nameToAdd, null);
+       newversion.init(versionableNode);
        VersionImp baseverion=this.versionableNode.getBaseVersionImp();
 
 
