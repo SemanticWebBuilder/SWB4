@@ -205,12 +205,19 @@ public abstract class ItemImp implements Item
         }
         String[] paths=path.split("/");
         StringBuffer pathItem=new StringBuffer();
+        if(depth==0)
+        {
+            pathItem.append("/");
+        }
+        else
+        {
         for(int i=0;i<depth;i++)
         {
             if(i>0)
             {
                 pathItem.append("/"+paths[i]);
             }            
+        }
         }
         if(pathItem.toString().equals(""))
         {
