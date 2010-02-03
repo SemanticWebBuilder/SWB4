@@ -44,11 +44,18 @@ public class WorkspaceImp  implements Workspace {
     public WorkspaceImp(SessionImp session,org.semanticwb.jcr283.repository.model.Workspace ws) throws RepositoryException
     {
         this.session=session;
-        versionManagerImp=new VersionManagerImp(session);
+        
         name=ws.getName();
         session.setWorkspace(this);
         nodeTypeManager=SWBRepository.getNodeTypeManagerImp();
         nodeManager.loadRoot(ws, session);
+        String path="/jcr:system/jcr:versionStorage";
+        NodeImp versionSotrage=nodeManager.getNode(path);
+        if(versionSotrage==null)
+        {
+            throw new RepositoryException("The node "+path+" was not found");
+        }
+        versionManagerImp=new VersionManagerImp(session,versionSotrage);
         
     }
     
