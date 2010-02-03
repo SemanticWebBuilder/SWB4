@@ -272,6 +272,7 @@ public abstract class ItemImp implements Item
             }
             String parentPath = parent.getPath();
             nodeManager.removeNode(path, parentPath);
+            nodeManager.removeProperty(path, parentPath);
         }        
     }
 }
