@@ -1,82 +1,87 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package org.semanticwb.portal.monitor;
 
 import java.lang.management.MemoryUsage;
+
 /**
  *
  * @author serch
  */
-public class SWBMemoryPoolStat {
+public class SWBMemoryPoolStat
+{
 
-    private String      poolName; 
-    private long        usageThreshold; 
-    private MemoryUsage usage; 
-    private long        lastGcId;
-    private long        lastGcStartTime;
-    private long        lastGcEndTime;
-    private long        collectThreshold; 
-    private MemoryUsage beforeGcUsage; 
+    private String poolName;
+    private long usageThreshold;
+    private MemoryUsage usage;
+    private long lastGcId;
+    private long lastGcStartTime;
+    private long lastGcEndTime;
+    private long collectThreshold;
+    private MemoryUsage beforeGcUsage;
     private MemoryUsage afterGcUsage;
-    
-    SWBMemoryPoolStat(String name, 
-                   long usageThreshold, 
-                   MemoryUsage usage, 
-                   long lastGcId,
-                   long lastGcStartTime,
-                   long lastGcEndTime,
-                   long collectThreshold, 
-                   MemoryUsage beforeGcUsage, 
-                   MemoryUsage afterGcUsage) {
-        this.poolName = name; 
-        this.usageThreshold = usageThreshold; 
-        this.usage = usage; 
+
+    SWBMemoryPoolStat(String name,
+            long usageThreshold,
+            MemoryUsage usage,
+            long lastGcId,
+            long lastGcStartTime,
+            long lastGcEndTime,
+            long collectThreshold,
+            MemoryUsage beforeGcUsage,
+            MemoryUsage afterGcUsage)
+    {
+        this.poolName = name;
+        this.usageThreshold = usageThreshold;
+        this.usage = usage;
         this.lastGcId = lastGcId;
         this.lastGcStartTime = lastGcStartTime;
         this.lastGcEndTime = lastGcEndTime;
-        this.collectThreshold = collectThreshold; 
-        this.beforeGcUsage = beforeGcUsage; 
+        this.collectThreshold = collectThreshold;
+        this.beforeGcUsage = beforeGcUsage;
         this.afterGcUsage = afterGcUsage;
     }
 
-       public String getPoolName() {
+    public String getPoolName()
+    {
         return poolName;
     }
 
-       public MemoryUsage getUsage() {
+    public MemoryUsage getUsage()
+    {
         return usage;
     }
 
-    public long getUsageThreshold() {
+    public long getUsageThreshold()
+    {
         return usageThreshold;
     }
 
-    public long getCollectionUsageThreshold() {
+    public long getCollectionUsageThreshold()
+    {
         return collectThreshold;
     }
 
-    public long getLastGcId() {
+    public long getLastGcId()
+    {
         return lastGcId;
     }
 
-
-    public long getLastGcStartTime() {
+    public long getLastGcStartTime()
+    {
         return lastGcStartTime;
     }
 
-    public long getLastGcEndTime() {
+    public long getLastGcEndTime()
+    {
         return lastGcEndTime;
     }
 
-    public MemoryUsage getBeforeGcUsage() {
-        return beforeGcUsage; 
+    public MemoryUsage getBeforeGcUsage()
+    {
+        return beforeGcUsage;
     }
 
-    public MemoryUsage getAfterGcUsage() {
-        return beforeGcUsage; 
+    public MemoryUsage getAfterGcUsage()
+    {
+        return beforeGcUsage;
     }
-
 }
