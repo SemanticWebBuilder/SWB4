@@ -81,22 +81,24 @@ public class NodeImp extends ItemImp implements Node
 
     protected NodeImp(Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
-        this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), new NodeDefinitionImp(base.getSemanticObject(), NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass())), base.getName(), parent, index, path, depth, session, base.getId());
+        this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), NodeDefinitionImp.getNodeDefinition(base,parent), base.getName(), parent, index, path, depth, session, base.getId());
         this.obj = base.getSemanticObject();
-        for(PropertyImp prop : nodeManager.getAllChildProperties(path))
+        for (PropertyImp prop : nodeManager.getAllChildProperties(path))
         {
             prop.loadValues();
         }
+        loadStoredProperties(false);
     }
 
     protected NodeImp(NodeDefinitionImp definition, Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
         this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), definition, base.getName(), parent, index, path, depth, session, base.getId());
         this.obj = base.getSemanticObject();
-        for(PropertyImp prop : nodeManager.getAllChildProperties(path))
+        for (PropertyImp prop : nodeManager.getAllChildProperties(path))
         {
             prop.loadValues();
         }
+        loadStoredProperties(false);
     }
 
     protected NodeImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session, String id)
@@ -114,7 +116,20 @@ public class NodeImp extends ItemImp implements Node
     }
 
     private void init()
-    {        
+    {
+        try
+        {
+            PropertyImp jcr_name = nodeManager.getProtectedProperty(getPathFromName("jcr:name"));
+            if (jcr_name.getLength() == -1)
+            {
+                jcr_name.set(valueFactoryImp.createValue(name));
+            }
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+
+        }
         initPrimaryType();
         initReferenceable();
         initMixLastModified();
@@ -381,11 +396,11 @@ public class NodeImp extends ItemImp implements Node
         return obj;
     }
 
-    private void loadProperties(boolean replace)
+    private void loadStoredProperties(boolean replace)
     {
+        // stored properties
         if (obj != null)
         {
-            // stored properties
             Iterator<SemanticProperty> props = obj.listProperties();
             while (props.hasNext())
             {
@@ -416,6 +431,10 @@ public class NodeImp extends ItemImp implements Node
 
             }
         }
+    }
+    private void loadProperties(boolean replace)
+    {
+        // declared properties
         for (PropertyDefinitionImp propDef : ((NodeDefinitionImp) this.definition).getDeclaringNodeTypeImp().getPropertyDefinitionsImp())
         {
             if (propDef.getSemanticProperty() != null)
@@ -439,6 +458,8 @@ public class NodeImp extends ItemImp implements Node
 
             }
         }
+        
+
 
     }
 
@@ -486,26 +507,7 @@ public class NodeImp extends ItemImp implements Node
 
     NodeImp insertNode(String nameToAdd, String primaryNodeTypeName) throws RepositoryException
     {
-        NodeDefinitionImp childDefinition = null;
-        for (NodeDefinitionImp childNodeDefinition : ((NodeDefinitionImp) this.definition).getDeclaringNodeTypeImp().getChildNodeDefinitionsImp())
-        {
-            if (childNodeDefinition.getName().equals(nameToAdd))
-            {
-                childDefinition = childNodeDefinition;
-                break;
-            }
-        }
-        if (childDefinition == null)
-        {
-            for (NodeDefinitionImp childNodeDefinition : ((NodeDefinitionImp) this.definition).getDeclaringNodeTypeImp().getChildNodeDefinitionsImp())
-            {
-                if (childNodeDefinition.getName().equals(ALL))
-                {
-                    childDefinition = childNodeDefinition;
-                    break;
-                }
-            }
-        }
+        NodeDefinitionImp childDefinition = NodeDefinitionImp.getNodeDefinition(nameToAdd, this);
         if (childDefinition == null)
         {
             throw new ConstraintViolationException("The node can not be added");
@@ -544,11 +546,7 @@ public class NodeImp extends ItemImp implements Node
             throw new ItemExistsException("There is a node with the same name in the node " + this.path);
         }
         String childpath = getPathFromName(nameToAdd);
-        int childIndex = nodeManager.countNodes(childpath, false);
-        if (childIndex > 0)
-        {
-            childIndex--;
-        }
+        int childIndex = nodeManager.countNodes(childpath, false);        
         if (childIndex > 0)
         {
             childpath += "[" + childIndex + "]";
