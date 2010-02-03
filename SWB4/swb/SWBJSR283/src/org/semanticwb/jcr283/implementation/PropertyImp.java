@@ -52,8 +52,7 @@ public class PropertyImp extends ItemImp implements Property
     {
         this(new PropertyDefinitionImp(prop), prop.getPrefix()+":"+prop.getName(), parent, path, session);
         this.prop = prop;        
-        this.isNew=false;
-        loadValues();
+        this.isNew=false;        
     }
 
     public PropertyImp(PropertyDefinitionImp definition,String name,NodeImp parent, String path, SessionImp session) throws RepositoryException
@@ -460,7 +459,7 @@ public class PropertyImp extends ItemImp implements Property
         PropertyDefinitionImp propertyDefinitionImp=(PropertyDefinitionImp) definition;
         if(propertyDefinitionImp.isMandatory() && values.size()==0)
         {
-            throw new ConstraintViolationException("The property "+name+" is mandatory");
+            throw new ConstraintViolationException("The property "+name+" is mandatory for the node "+parent.path);
         }
     }
 }
