@@ -408,6 +408,7 @@ public class PropertyImp extends ItemImp implements Property
                 prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(urinewProperty);
             }
             SemanticObject obj = parent.getSemanticObject();
+            log.trace("Saving property "+path+" for node "+parent.path);
             for (Value value : this.values)
             {
                 int type = value.getType();
