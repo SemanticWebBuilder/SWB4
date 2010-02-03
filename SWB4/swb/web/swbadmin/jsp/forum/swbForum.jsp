@@ -464,7 +464,7 @@ a:hover {text-decoration: underline;}
                                 if(date!=null){
                                 %>
                                     <%=date%>
-                                <%}else{%>ESTE TEMA AUN NO TIENE COMENTARIOS<%}%>
+                                <%}else{%>ESTE TEMA AúN NO TIENE COMENTARIOS<%}%>
                                 </p>
                             </div>
                             <div class="vistasForo">
