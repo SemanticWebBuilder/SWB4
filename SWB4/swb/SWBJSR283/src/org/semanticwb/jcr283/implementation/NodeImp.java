@@ -1145,7 +1145,18 @@ public class NodeImp extends ItemImp implements Node
             throw new InvalidItemStateException("The node is not chekedout");
         }
         VersionHistoryImp history = (VersionHistoryImp) versionManagerImp.getVersionHistory(this.path);
-        VersionImp version = (VersionImp) history.insertVersionNode("1.0");
+        Version obaseVersion=this.session.getWorkspaceImp().getVersionManagerImp().getBaseVersion(path);
+        float versionnumber=1.0f;
+        try
+        {
+            versionnumber=Float.parseFloat(obaseVersion.getName());
+            versionnumber+=0.1f;
+        }
+        catch(NumberFormatException nfe)
+        {
+            log.debug(nfe);
+        }
+        VersionImp version = (VersionImp) history.insertVersionNode(String.valueOf(versionnumber));
         PropertyImp baseVersion = nodeManager.getProtectedProperty(getPathFromName("jcr:baseVersion"));
         baseVersion.set(valueFactoryImp.createValue(version));
         this.isModified = true;
