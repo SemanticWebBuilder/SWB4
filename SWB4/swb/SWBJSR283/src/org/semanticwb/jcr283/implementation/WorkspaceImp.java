@@ -55,7 +55,7 @@ public class WorkspaceImp  implements Workspace {
         {
             throw new RepositoryException("The node "+path+" was not found");
         }
-        versionManagerImp=new VersionManagerImp(session,versionSotrage);
+        versionManagerImp=new VersionManagerImp(session,versionSotrage,nodeManager);
         
     }
     

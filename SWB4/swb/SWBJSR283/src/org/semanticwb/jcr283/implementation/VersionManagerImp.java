@@ -32,11 +32,12 @@ public class VersionManagerImp implements VersionManager
     private Hashtable<String, VersionHistoryImp> versionhistories = new Hashtable<String, VersionHistoryImp>();
     private Hashtable<String, VersionImp> baseVersions = new Hashtable<String, VersionImp>();
     private final SessionImp session;
-
-    public VersionManagerImp(SessionImp session,NodeImp versionStorage)
+    private final NodeManager nodeManager;
+    public VersionManagerImp(SessionImp session,NodeImp versionStorage,NodeManager nodeManager)
     {
         this.session = session;
         this.versionStorage=versionStorage;
+        this.nodeManager=nodeManager;
     }
     public NodeImp getVersionStorage()
     {
@@ -58,12 +59,18 @@ public class VersionManagerImp implements VersionManager
 
     public Version checkin(String absPath) throws VersionException, UnsupportedRepositoryOperationException, InvalidItemStateException, LockException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        NodeImp node=nodeManager.getNode(absPath);
+        if(node==null)
+        {
+            throw new VersionException("The node "+absPath+" was not found");
+        }
+        return node.checkin();
     }
 
     public void checkout(String absPath) throws UnsupportedRepositoryOperationException, LockException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        NodeImp node=nodeManager.getNode(absPath);
+        node.checkout();
     }
 
     public Version checkpoint(String absPath) throws VersionException, UnsupportedRepositoryOperationException, InvalidItemStateException, LockException, RepositoryException
