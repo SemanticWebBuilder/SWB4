@@ -317,13 +317,12 @@ public class NodeImp extends ItemImp implements Node
         try
         {
             if (isReferenceable())
-            {
-                String uuid = UUID.randomUUID().toString();
+            {                
                 String propertyPath = getPathFromName(JCR_UUID);
                 PropertyImp prop = nodeManager.getProtectedProperty(propertyPath);
                 if (prop.getLength() == -1)
                 {
-                    prop.set(valueFactoryImp.createValue(uuid));
+                    prop.set(valueFactoryImp.createValue(this.id));
                     this.isModified = true;
                 }
             }
