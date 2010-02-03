@@ -20,7 +20,7 @@ import javax.jcr.version.VersionException;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.jcr283.repository.model.Base;
-import org.semanticwb.jcr283.repository.model.Unstructured;
+import org.semanticwb.jcr283.repository.model.Root;
 import org.semanticwb.jcr283.repository.model.Workspace;
 import org.semanticwb.model.GenericIterator;
 
@@ -65,13 +65,17 @@ public class NodeManager
             log.trace("Loading root node for repository " + ws.getName());
             if (ws.getRoot() == null)
             {
-                Unstructured newroot = Unstructured.ClassMgr.createUnstructured("jcr:root", ws);
+                Root newroot = Root.ClassMgr.createRoot("jcr:root", ws);
                 ws.setRoot(newroot);
             }
             RootNodeImp root = new RootNodeImp(ws.getRoot(), session);
+            
             nodes.put(PATH_SEPARATOR, new NodeStatus(root));
         }
         NodeImp root = nodes.get(PATH_SEPARATOR).getNode();
+        loadChilds(root, session, false);
+
+        NodeImp system = nodes.get(PATH_SEPARATOR).getNode();
         initVersionStore(root);
         return root;
 
@@ -81,10 +85,10 @@ public class NodeManager
         nodes.get(PATH_SEPARATOR).getNode().validate();
     }
 
-    private void initVersionStore(NodeImp root) throws RepositoryException
+    private void initVersionStore(NodeImp system) throws RepositoryException
     {
         log.trace("Creating Version Storage");
-        NodeImp jcr_versionStorage=root.insertNode("jcr:versionStorage");
+        NodeImp jcr_versionStorage=system.insertNode("jcr:versionStorage");
         jcr_versionStorage.saveData();
     }
 
@@ -365,7 +369,7 @@ public class NodeManager
                 if (fragment.equals(""))
                 {
                     nodetoextract = nodes.get(PATH_SEPARATOR).getNode();
-                    loadChilds(nodetoextract, PATH_SEPARATOR, session, false);
+                    loadChilds(nodetoextract, session, false);
                     depth = 0;
                 }
                 else
@@ -373,7 +377,7 @@ public class NodeManager
                     try
                     {
                         String pathParent = nodetoextract.getPath();
-                        loadChilds(nodetoextract, pathParent, session, false);
+                        loadChilds(nodetoextract, session, false);
                         depth++;
                     }
                     catch (Exception e)
@@ -420,7 +424,7 @@ public class NodeManager
                 if (fragment.equals(""))
                 {
                     nodetoextract = nodes.get(PATH_SEPARATOR).getNode();
-                    loadChilds(nodetoextract, PATH_SEPARATOR, session, false);
+                    loadChilds(nodetoextract, session, false);
                     depth = 0;
                 }
                 else
@@ -428,7 +432,7 @@ public class NodeManager
                     try
                     {
                         String pathParent = nodetoextract.getPath();
-                        loadChilds(nodetoextract, pathParent, session, false);
+                        loadChilds(nodetoextract, session, false);
                         depth++;
                     }
                     catch (Exception e)
@@ -583,7 +587,7 @@ public class NodeManager
         }
     }
 
-    public void loadChilds(NodeImp node, String path, SessionImp session, boolean replace) throws RepositoryException
+    public void loadChilds(NodeImp node, SessionImp session, boolean replace) throws RepositoryException
     {
         if (node.getSemanticObject() != null)
         {
@@ -594,7 +598,7 @@ public class NodeManager
                 int childindex = 0;
                 childindex = getIndex(child);
                 String childpath = null;
-
+                String path=node.path;
                 if (path.endsWith(PATH_SEPARATOR))
                 {
                     childpath = child.getName();

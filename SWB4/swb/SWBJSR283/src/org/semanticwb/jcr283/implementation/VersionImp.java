@@ -71,7 +71,7 @@ public class VersionImp extends NodeImp implements Version
 
     private void copyNodes(NodeImp frozenNode, NodeImp target) throws RepositoryException
     {
-        nodeManager.loadChilds(target, path, session, false);
+        nodeManager.loadChilds(target, session, false);
         for (NodeImp child : nodeManager.getChildNodes(target))
         {
             int onParentVersion = child.definition.getOnParentVersion();
@@ -138,7 +138,7 @@ public class VersionImp extends NodeImp implements Version
 
     public Node getFrozenNode() throws RepositoryException
     {
-        nodeManager.loadChilds(this, path, session, false);
+        nodeManager.loadChilds(this, session, false);
         return nodeManager.getNode(getPathFromName("jcr:frozenNode"));
     }
 }
