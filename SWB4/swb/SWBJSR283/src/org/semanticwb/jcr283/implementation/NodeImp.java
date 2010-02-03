@@ -83,6 +83,10 @@ public class NodeImp extends ItemImp implements Node
     {
         this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), new NodeDefinitionImp(base.getSemanticObject(), NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass())), base.getName(), parent, index, path, depth, session, base.getId());
         this.obj = base.getSemanticObject();
+        for(PropertyImp prop : nodeManager.getAllChildProperties(path))
+        {
+            prop.loadValues();
+        }
     }
 
     protected NodeImp(NodeDefinitionImp definition, Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
