@@ -62,7 +62,6 @@ public class LoggedUserDataDetail extends SWBDataDetail{
     protected List doDataList(String repository, String rfilter, int type, int year, int month, int day, String userLanguage) throws IncompleteFilterException{
         List resumeRecHits = new ArrayList();
         HashMap labels=new HashMap();
-
         UserRepository ur=SWBContext.getUserRepository(repository);
         labels.put(ur.getId(), ur.getDisplayTitle(userLanguage));
 
