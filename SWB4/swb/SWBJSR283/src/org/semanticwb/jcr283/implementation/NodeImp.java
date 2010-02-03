@@ -723,7 +723,7 @@ public class NodeImp extends ItemImp implements Node
 
     public NodeIterator getNodes() throws RepositoryException
     {
-        nodeManager.loadChilds(this, this.path, session, false);
+        nodeManager.loadChilds(this, session, false);
         NodeIteratorImp iterator = new NodeIteratorImp(nodeManager.getChildNodes(this));
         return iterator;
     }
@@ -782,7 +782,7 @@ public class NodeImp extends ItemImp implements Node
         String primaryItemName = defaultPrimaryNodeType.getPrimaryItemName();
         if (primaryItemName != null)
         {
-            nodeManager.loadChilds(this, path, session, false);
+            nodeManager.loadChilds(this, session, false);
             String primaryItemNamePath = getPathFromName(primaryItemName);
             NodeImp node = nodeManager.getNode(primaryItemNamePath, session);
             if (node == null)

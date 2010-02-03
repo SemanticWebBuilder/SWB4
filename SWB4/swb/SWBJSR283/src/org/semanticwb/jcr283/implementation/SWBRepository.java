@@ -15,7 +15,7 @@ import javax.jcr.Session;
 import javax.jcr.Value;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.jcr283.repository.model.Unstructured;
+import org.semanticwb.jcr283.repository.model.Root;
 import org.semanticwb.jcr283.repository.model.Workspace;
 
 
@@ -70,7 +70,7 @@ public class SWBRepository implements Repository {
         }
         if(ws.getRoot()==null)
         {
-            Unstructured root=Unstructured.ClassMgr.createUnstructured( JCR_ROOT, ws);
+            Root root=Root.ClassMgr.createRoot(JCR_ROOT, ws);
             root.setName(JCR_ROOT);
             ws.setRoot(root);
         }
