@@ -25,19 +25,29 @@ public class Modeler extends GenericResource {
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         //out.println("<h1>Process Modeler</h1>");
-        out.println("<script src=\"http://dl.javafx.com/1.2/dtfx.js\"></script>");
-        out.println("<script>");
-        out.println("    javafx(");
-        out.println("      {");
-        out.println("        archive: \""+ SWBPlatform.getContextPath() + "/swbadmin/lib/SWBAppBPMNModeler.jar\",");
-        out.println("        draggable: true,");
-        out.println("        width: 800,");
-        out.println("        height: 600,");
-        out.println("        code: \"org.semanticwb.process.modeler.Main\",");
-        out.println("        name: \"SWBAppBPMNModeler\"");
-        out.println("      }");
-        out.println("   );");
-        out.println("</script>");
+
+//        out.println("<div dojoType=\"dijit.layout.ContentPane\" postCreate=\"");
+//        //out.println("<script type=\"dojo/connect\">");
+//        out.println("    alert('hola');");
+//        out.println("    javafx(");
+//        out.println("      {");
+//        out.println("        archive: '"+ SWBPlatform.getContextPath() + "/swbadmin/lib/SWBAppBPMNModeler.jar',");
+//        out.println("        draggable: true,");
+//        out.println("        width: 800,");
+//        out.println("        height: 600,");
+//        out.println("        code: 'org.semanticwb.process.modeler.Main',");
+//        out.println("        name: 'SWBAppBPMNModeler'");
+//        out.println("      }");
+//        out.println("   );");
+//        //out.println("</script>");
+//        out.println("\" />");
+
+        out.println("<div id=\"deployJavaApplet2\" style=\"position: relative; left: 0px;\">");
+        out.println("<applet height=\"500\" width=\"100%\" archive=\""+ SWBPlatform.getContextPath() + "/swbadmin/lib/SWBAppBPMNModeler.jar,http://dl.javafx.com/applet-launcher__V1.2.3_b36.jar,http://dl.javafx.com/javafx-rt-windows-i586__V1.2.3_b36.jar,http://dl.javafx.com/emptyJarFile-1265174763440__V1.2.3_b36.jar\" code=\"org.jdesktop.applet.util.JNLPAppletLauncher\" mayscript=\"\"/>");
+        out.println("<param name=\"subapplet.classname\" value=\"com.sun.javafx.runtime.adapter.Applet\">");
+        out.println("<param name=\"MainJavaFXScript\" value=\"org.semanticwb.process.modeler.Main\">");
+        out.println("</div>");
+
     }
 
     @Override
