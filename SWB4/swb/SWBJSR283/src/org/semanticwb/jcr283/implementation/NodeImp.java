@@ -1134,6 +1134,14 @@ public class NodeImp extends ItemImp implements Node
 
     public Version checkin() throws VersionException, UnsupportedRepositoryOperationException, InvalidItemStateException, LockException, RepositoryException
     {
+        if(!this.isVersionable())
+        {
+            throw  new UnsupportedRepositoryOperationException("The node is not versionable");
+        }
+        if(!isCheckedOut())
+        {
+            throw new InvalidItemStateException("The node is not chekedout");
+        }
         VersionHistoryImp history = (VersionHistoryImp) versionManagerImp.getVersionHistory(this.path);
         VersionImp version = (VersionImp) history.insertVersionNode("1.0");
         PropertyImp baseVersion = nodeManager.getProtectedProperty(getPathFromName("jcr:baseVersion"));
