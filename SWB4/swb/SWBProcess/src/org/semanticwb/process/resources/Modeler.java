@@ -42,7 +42,7 @@ public class Modeler extends GenericResource {
 //        //out.println("</script>");
 //        out.println("\" />");
 
-        out.println("<div id=\"deployJavaApplet2\" style=\"position: relative; left: 0px;\">");
+        out.println("<div id=\"SWBAppBPMNModeler\" class=\"applet\">");
         out.println("<applet height=\"500\" width=\"100%\" archive=\""+ SWBPlatform.getContextPath() + "/swbadmin/lib/SWBAppBPMNModeler.jar,http://dl.javafx.com/applet-launcher__V1.2.3_b36.jar,http://dl.javafx.com/javafx-rt-windows-i586__V1.2.3_b36.jar,http://dl.javafx.com/emptyJarFile-1265174763440__V1.2.3_b36.jar\" code=\"org.jdesktop.applet.util.JNLPAppletLauncher\" mayscript=\"\"/>");
         out.println("<param name=\"subapplet.classname\" value=\"com.sun.javafx.runtime.adapter.Applet\">");
         out.println("<param name=\"MainJavaFXScript\" value=\"org.semanticwb.process.modeler.Main\">");
