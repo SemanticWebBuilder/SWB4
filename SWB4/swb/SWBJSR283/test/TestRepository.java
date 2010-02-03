@@ -20,6 +20,7 @@ import org.semanticwb.SWBUtils;
  */
 public class TestRepository {
 
+    @SuppressWarnings(value = "deprecation")
     public static void main(String[] args)
     {
         String base=SWBUtils.getApplicationPath();
@@ -44,18 +45,27 @@ public class TestRepository {
             while(it.hasNext())
             {
                 Node node=it.nextNode();
-                System.out.println(node.getUUID());
+                if(node.isNodeType("mix:referenceable"))
+                {
+                    System.out.println(node.getUUID());
+                }
                 System.out.println(node.getIdentifier());
                 System.out.println(node.getPath());
             }
             Node demo=root.addNode("demo:demo");
+
             demo.addMixin("mix:referenceable");
             demo.addMixin("mix:versionable");
-            session.getWorkspace().getVersionManager().checkin(demo.getPath());
+            
             System.out.println(demo.getUUID());
             System.out.println(demo.getIdentifier());
             System.out.println(demo.getPath());
-            session.save();
+            
+            System.out.println(demo.getAncestor(0).getPath());
+            System.out.println(demo.getAncestor(1).getPath());
+            System.out.println(demo.getAncestor(2).getPath());
+            session.getWorkspace().getVersionManager().checkin(demo.getPath());
+            session.getWorkspace().getVersionManager().checkin(demo.getPath());
         }
         catch(Exception cnfe)
         {

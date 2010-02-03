@@ -938,7 +938,14 @@ public class NodeImp extends ItemImp implements Node
 
     public boolean isNodeType(String nodeTypeName) throws RepositoryException
     {
-        return nodeTypeManager.hasNodeType(nodeTypeName);
+        for (NodeType mixinNodeType : getMixinNodeTypes())
+        {
+            if (mixinNodeType.getName().equals(nodeTypeName))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void setPrimaryType(String nodeTypeName) throws NoSuchNodeTypeException, VersionException, ConstraintViolationException, LockException, RepositoryException
@@ -1242,7 +1249,16 @@ public class NodeImp extends ItemImp implements Node
 
     public boolean isCheckedOut() throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if(!isSimpleVersionable())
+        {
+            return true;
+        }
+        PropertyImp jcr_ischeckout=nodeManager.getProtectedProperty(getPathFromName(JCR_ISCHECKEDOUT));
+        if(jcr_ischeckout.getLength()!=-1)
+        {
+            return jcr_ischeckout.getBoolean();
+        }
+        return true;
     }
     @Deprecated
     public void restore(String versionName, boolean removeExisting) throws VersionException, ItemExistsException, UnsupportedRepositoryOperationException, LockException, InvalidItemStateException, RepositoryException
