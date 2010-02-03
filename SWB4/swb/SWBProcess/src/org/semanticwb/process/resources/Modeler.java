@@ -44,7 +44,4 @@ public class Modeler extends GenericResource {
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         super.processAction(request, response);
     }
-
-
-
 }
