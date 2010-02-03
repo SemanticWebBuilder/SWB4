@@ -52,10 +52,11 @@ public class NodeTypeImp implements NodeType
     private final boolean isAbstract;
     private final boolean hasOrderableChildNodes;
     private final String primaryItemName;
+    
 
     public NodeTypeImp(SemanticClass clazz)
     {
-        this(clazz, null);
+        this(clazz, new HashSet<NodeTypeImp>());
     }
 
     public NodeTypeImp(SemanticClass clazz, HashSet<NodeTypeImp> aditionalSuperTypes)
@@ -63,7 +64,7 @@ public class NodeTypeImp implements NodeType
         if (aditionalSuperTypes != null)
         {
             aditionalSuperTypes.addAll(aditionalSuperTypes);
-        }
+        }        
         this.clazz = clazz;
         SemanticProperty prop = getSemanticProperty(Property.JCR_IS_MIXIN);
         SemanticLiteral value = clazz.getRequiredProperty(prop);
@@ -322,14 +323,23 @@ public class NodeTypeImp implements NodeType
 
     public boolean isNodeType(String nodeTypeName)
     {
-        if (clazz.equals(Base.sclass) || clazz.isSubClass(Base.sclass))
+        try
         {
-            return true;
+            NodeTypeImp nodeType = new NodeTypeManagerImp().getNodeTypeImp(nodeTypeName);
+            if (nodeType.getSemanticClass().equals(clazz) || nodeType.getSemanticClass().isSubClass(clazz))
+            {
+                return true;
+            }
+            if (nodeType == null)
+            {
+                return false;
+            }
         }
-        else
+        catch (Exception e)
         {
             return false;
         }
+        return false;
     }
 
     public PropertyDefinition[] getPropertyDefinitions()
@@ -486,6 +496,7 @@ public class NodeTypeImp implements NodeType
     {
         return this.getName();
     }
+
     @Deprecated
     public boolean canRemoveItem(String itemName)
     {
