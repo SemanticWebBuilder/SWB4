@@ -486,7 +486,7 @@ public class NodeTypeImp implements NodeType
     {
         return this.getName();
     }
-
+    @Deprecated
     public boolean canRemoveItem(String itemName)
     {
         ItemDefinitionImp itemDefinition = null;

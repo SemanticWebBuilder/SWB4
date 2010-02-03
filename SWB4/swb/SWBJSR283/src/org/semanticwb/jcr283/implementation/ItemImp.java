@@ -236,6 +236,7 @@ public abstract class ItemImp implements Item
 
     public abstract void accept(ItemVisitor visitor) throws RepositoryException;
 
+    @Deprecated
     public void save() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
     {
         if (this.definition.isProtected())
