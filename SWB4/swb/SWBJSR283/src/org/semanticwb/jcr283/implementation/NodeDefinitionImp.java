@@ -10,6 +10,7 @@ import javax.jcr.Property;
 import javax.jcr.nodetype.NodeDefinition;
 import javax.jcr.nodetype.NodeType;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.jcr283.repository.model.Base;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticLiteral;
 import org.semanticwb.platform.SemanticObject;
@@ -140,5 +141,33 @@ public class NodeDefinitionImp extends ItemDefinitionImp implements NodeDefiniti
     public boolean allowsSameNameSiblings()
     {
         return allowsSameNameSiblings;
+    }
+    public static NodeDefinitionImp getNodeDefinition(String name,NodeImp parent)
+    {
+        NodeDefinitionImp childDefinition = null;
+        for (NodeDefinitionImp childNodeDefinition : ((NodeDefinitionImp) parent.definition).getDeclaringNodeTypeImp().getChildNodeDefinitionsImp())
+        {
+            if (childNodeDefinition.getName().equals(name))
+            {
+                childDefinition = childNodeDefinition;
+                break;
+            }
+        }
+        if (childDefinition == null)
+        {
+            for (NodeDefinitionImp childNodeDefinition : ((NodeDefinitionImp) parent.definition).getDeclaringNodeTypeImp().getChildNodeDefinitionsImp())
+            {
+                if (childNodeDefinition.getName().equals("*"))
+                {
+                    childDefinition = childNodeDefinition;
+                    break;
+                }
+            }
+        }        
+        return childDefinition;
+    }
+    public static NodeDefinitionImp getNodeDefinition(Base base,NodeImp parent)
+    {
+        return getNodeDefinition(base.getName(), parent);
     }
 }
