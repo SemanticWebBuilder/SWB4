@@ -63,7 +63,7 @@ public class VersionImp extends NodeImp implements Version
         PropertyImp jcr_frozenUuid = nodeManager.getProperty(frozenNode.getPathFromName("jcr:frozenUuid"));
         if (jcr_frozenUuid.getLength() == -1)
         {
-            jcr_frozenUuid.set(valueFactoryImp.createValue(target.getUUID()));
+            jcr_frozenUuid.set(valueFactoryImp.createValue(target.id));
         }
         copyNodes(frozenNode, target);
         copyProperties(frozenNode, target);
