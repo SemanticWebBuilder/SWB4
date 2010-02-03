@@ -6,8 +6,12 @@ public interface EtagBase extends org.semanticwb.model.GenericObject
     public static final org.semanticwb.platform.SemanticProperty jcr_name=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#name");
     public static final org.semanticwb.platform.SemanticProperty jcr_etag=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#etag");
     public static final org.semanticwb.platform.SemanticClass mix_Etag=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/mix/1.0#etag");
+
     public String getName();
-    public void setName(String name);
+
+    public void setName(String value);
+
     public String getEtag();
-    public void setEtag(String etag);
+
+    public void setEtag(String value);
 }
