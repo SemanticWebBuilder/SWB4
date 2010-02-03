@@ -41,8 +41,6 @@ public class NodeManager
     private Hashtable<String, HashSet<PropertyStatus>> propertiesbyParent = new Hashtable<String, HashSet<PropertyStatus>>();
     private final static Logger log = SWBUtils.getLogger(NodeManager.class);
 
-    
-
     public NodeImp loadRoot(org.semanticwb.jcr283.repository.model.Workspace ws, SessionImp session) throws RepositoryException
     {
         if (!nodes.containsKey(PATH_SEPARATOR))
@@ -145,7 +143,7 @@ public class NodeManager
                         Base base = nodesToLoad.get(i);
                         String path = parentloaded.path;
                         String childpath = parentloaded.getPathFromName(base.getName());
-                        int childIndex = countNodes(base.getName(), parentloaded, session,false);
+                        int childIndex = countNodes(base.getName(), parentloaded, session, false);
                         if (childIndex > 0)
                         {
                             childIndex--;
@@ -235,12 +233,12 @@ public class NodeManager
      * @param exact
      * @return
      */
-    public int countNodes(String name, NodeImp parent, SessionImp session,boolean loadchilds) throws RepositoryException
+    public int countNodes(String name, NodeImp parent, SessionImp session, boolean loadchilds) throws RepositoryException
     {
         int countNodes = 0;
         if (nodesbyParent.containsKey(parent.path))
         {
-            if(loadchilds)
+            if (loadchilds)
             {
                 loadChilds(parent, session, true);
             }
@@ -316,7 +314,8 @@ public class NodeManager
     public void move(String oldPath, String newPath, NodeImp newParent)
     {
     }
-    @SuppressWarnings(value="deprecation")
+
+    @SuppressWarnings(value = "deprecation")
     public void save() throws RepositoryException
     {
         nodes.get(PATH_SEPARATOR).getNode().save();
@@ -585,6 +584,38 @@ public class NodeManager
         return getChilds;
     }
 
+    void  clearDeletedChildNodes(String parenPath) throws RepositoryException
+    {        
+        HashSet<NodeStatus> childs = nodesbyParent.get(parenPath);
+        if (childs != null && childs.size() > 0)
+        {
+            for (NodeStatus node : childs)
+            {
+                if (node.isDeleted() && node.getNode().getDefinition().isProtected())
+                {
+                    nodes.remove(node);
+                }
+            }
+        }
+    }
+
+    Set<NodeImp> getDeletedChildNodes(String parenPath) throws RepositoryException
+    {
+        HashSet<NodeImp> getChilds = new HashSet<NodeImp>();
+        HashSet<NodeStatus> childs = nodesbyParent.get(parenPath);
+        if (childs != null && childs.size() > 0)
+        {
+            for (NodeStatus node : childs)
+            {
+                if (node.isDeleted() && node.getNode().getDefinition().isProtected())
+                {
+                    getChilds.add(node.getNode());
+                }
+            }
+        }
+        return getChilds;
+    }
+
     public Set<NodeImp> getChildNodes(String parenPath) throws RepositoryException
     {
         HashSet<NodeImp> getChilds = new HashSet<NodeImp>();
@@ -613,7 +644,7 @@ public class NodeManager
                 if (child.getName().equals(name))
                 {
                     int childindex = 0;
-                    childindex = countNodes(child.getName(), node, session,false);
+                    childindex = countNodes(child.getName(), node, session, false);
                     String childpath = null;
                     String path = node.path;
                     if (path.endsWith(PATH_SEPARATOR))
@@ -648,7 +679,7 @@ public class NodeManager
             {
                 Base child = childs.next();
                 int childindex = 0;
-                childindex = countNodes(child.getName(), node, session,false);
+                childindex = countNodes(child.getName(), node, session, false);
                 String childpath = null;
                 String path = node.path;
                 if (path.endsWith(PATH_SEPARATOR))
