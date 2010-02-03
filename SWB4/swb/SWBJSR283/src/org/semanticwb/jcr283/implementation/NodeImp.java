@@ -81,10 +81,10 @@ public class NodeImp extends ItemImp implements Node
 
     protected NodeImp(Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
-        this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), NodeDefinitionImp.getNodeDefinition(base,parent), base.getName(), parent, index, path, depth, session, base.getId());
-        this.obj = base.getSemanticObject();       
+        this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), NodeDefinitionImp.getNodeDefinition(base, parent), base.getName(), parent, index, path, depth, session, base.getId());
+        this.obj = base.getSemanticObject();
         loadStoredProperties(false);
-        for(PropertyImp prop : nodeManager.getAllChildProperties(path))
+        for (PropertyImp prop : nodeManager.getAllChildProperties(path))
         {
             prop.loadValues();
         }
@@ -93,9 +93,9 @@ public class NodeImp extends ItemImp implements Node
     protected NodeImp(NodeDefinitionImp definition, Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
         this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), definition, base.getName(), parent, index, path, depth, session, base.getId());
-        this.obj = base.getSemanticObject();        
+        this.obj = base.getSemanticObject();
         loadStoredProperties(false);
-        for(PropertyImp prop : nodeManager.getAllChildProperties(path))
+        for (PropertyImp prop : nodeManager.getAllChildProperties(path))
         {
             prop.loadValues();
         }
@@ -317,7 +317,7 @@ public class NodeImp extends ItemImp implements Node
         try
         {
             if (isReferenceable())
-            {                
+            {
                 String propertyPath = getPathFromName(JCR_UUID);
                 PropertyImp prop = nodeManager.getProtectedProperty(propertyPath);
                 if (prop.getLength() == -1)
@@ -332,9 +332,9 @@ public class NodeImp extends ItemImp implements Node
             log.debug(e);
         }
     }
-
+    @SuppressWarnings(value = "deprecation")
     public void saveData() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
-    {
+    {        
         Base base = null;
         if (obj == null)
         {
@@ -365,6 +365,7 @@ public class NodeImp extends ItemImp implements Node
         {
             for (NodeImp child : nodeManager.getChildNodes(this))
             {
+
                 child.save();
             }
             for (NodeImp child : nodeManager.getProtectedChildNodes(this.path))
@@ -432,6 +433,7 @@ public class NodeImp extends ItemImp implements Node
             }
         }
     }
+
     private void loadProperties(boolean replace)
     {
         // declared properties
@@ -458,7 +460,7 @@ public class NodeImp extends ItemImp implements Node
 
             }
         }
-        
+
 
 
     }
@@ -546,7 +548,7 @@ public class NodeImp extends ItemImp implements Node
             throw new ItemExistsException("There is a node with the same name in the node " + this.path);
         }
         String childpath = getPathFromName(nameToAdd);
-        int childIndex = nodeManager.countNodes(nameToAdd, this, session,true);
+        int childIndex = nodeManager.countNodes(nameToAdd, this, session, true);
         if (childIndex > 0)
         {
             childpath += "[" + childIndex + "]";
@@ -671,7 +673,7 @@ public class NodeImp extends ItemImp implements Node
     {
         return setProperty(name, valueFactoryImp.createValue(value), type);
     }
-
+    @Deprecated
     public Property setProperty(String name, InputStream value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
         return setProperty(name, valueFactoryImp.createValue(value));
@@ -812,7 +814,7 @@ public class NodeImp extends ItemImp implements Node
             throw new ItemNotFoundException();
         }
     }
-
+    @Deprecated
     public String getUUID() throws UnsupportedRepositoryOperationException, RepositoryException
     {
         if (!isReferenceable())
@@ -1131,14 +1133,14 @@ public class NodeImp extends ItemImp implements Node
         return false;
 
     }
-
+    @Deprecated
     public Version checkin() throws VersionException, UnsupportedRepositoryOperationException, InvalidItemStateException, LockException, RepositoryException
     {
-        if(!this.isVersionable())
+        if (!this.isVersionable())
         {
-            throw  new UnsupportedRepositoryOperationException("The node is not versionable");
+            throw new UnsupportedRepositoryOperationException("The node is not versionable");
         }
-        if(!isCheckedOut())
+        if (!isCheckedOut())
         {
             throw new InvalidItemStateException("The node is not chekedout");
         }
@@ -1149,7 +1151,7 @@ public class NodeImp extends ItemImp implements Node
         this.isModified = true;
         return version;
     }
-
+    @Deprecated
     public void checkout() throws UnsupportedRepositoryOperationException, LockException, ActivityViolationException, RepositoryException
     {
         if (!isSimpleVersionable())
@@ -1163,12 +1165,12 @@ public class NodeImp extends ItemImp implements Node
             this.isModified = true;
         }
     }
-
+    @Deprecated
     public void doneMerge(Version version) throws VersionException, InvalidItemStateException, UnsupportedRepositoryOperationException, RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
+    @Deprecated
     public void cancelMerge(Version version) throws VersionException, InvalidItemStateException, UnsupportedRepositoryOperationException, RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -1178,7 +1180,7 @@ public class NodeImp extends ItemImp implements Node
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
+    @Deprecated
     public NodeIterator merge(String srcWorkspace, boolean bestEffort) throws NoSuchWorkspaceException, AccessDeniedException, MergeException, LockException, InvalidItemStateException, RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -1208,27 +1210,31 @@ public class NodeImp extends ItemImp implements Node
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
+    @Deprecated
     public void restore(String versionName, boolean removeExisting) throws VersionException, ItemExistsException, UnsupportedRepositoryOperationException, LockException, InvalidItemStateException, RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Deprecated
     public void restore(Version version, boolean removeExisting) throws VersionException, ItemExistsException, InvalidItemStateException, UnsupportedRepositoryOperationException, LockException, RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Deprecated
     public void restore(Version version, String relPath, boolean removeExisting) throws PathNotFoundException, ItemExistsException, VersionException, ConstraintViolationException, UnsupportedRepositoryOperationException, LockException, InvalidItemStateException, RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Deprecated
     public void restoreByLabel(String versionLabel, boolean removeExisting) throws VersionException, ItemExistsException, UnsupportedRepositoryOperationException, LockException, InvalidItemStateException, RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Deprecated
     public VersionHistory getVersionHistory() throws UnsupportedRepositoryOperationException, RepositoryException
     {
         if (!isVersionable())
@@ -1252,26 +1258,31 @@ public class NodeImp extends ItemImp implements Node
         return version;
     }
 
+    @Deprecated
     public Version getBaseVersion() throws UnsupportedRepositoryOperationException, RepositoryException
     {
         return getBaseVersionImp();
     }
 
+    @Deprecated
     public Lock lock(boolean isDeep, boolean isSessionScoped) throws UnsupportedRepositoryOperationException, LockException, AccessDeniedException, InvalidItemStateException, RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Deprecated
     public Lock getLock() throws UnsupportedRepositoryOperationException, LockException, AccessDeniedException, RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Deprecated
     public void unlock() throws UnsupportedRepositoryOperationException, LockException, AccessDeniedException, InvalidItemStateException, RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Deprecated
     public boolean holdsLock() throws RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");
