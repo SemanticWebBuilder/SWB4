@@ -785,14 +785,14 @@ public class WBASectionReport extends GenericResource {
 
     public void doHistrogram(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         StringBuffer sb_ret = new StringBuffer();
-        StringBuffer sb_app = new StringBuffer();
+        /*StringBuffer sb_app = new StringBuffer();*/
         Resource base = paramsRequest.getResourceBase();
-        String monthinyear = null;
+        /*String monthinyear = null;*/
         /*boolean hasBarname = false;*/
         int j = 0;
 
         try {
-            String rtype = request.getParameter("wb_rtype")==null? "0":request.getParameter("wb_rtype");
+            /*String rtype = request.getParameter("wb_rtype")==null? "0":request.getParameter("wb_rtype");*/
             /*monthinyear = request.getParameter("wbr_barname");
             if(monthinyear != null){
                 hasBarname = true;
@@ -823,8 +823,8 @@ public class WBASectionReport extends GenericResource {
             sb_ret.append("<tr><td colpsan=\"3\">&nbsp;</td></tr>");
             sb_ret.append("<tr>");
             sb_ret.append("<td colpsan=\"3\">");
-
-            sb_app.append("\n<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+ SWBPortal.getContextPath() + "/swbadmin/lib/SWBAplGraph.jar\" width=\"98%\" height=\"450\">");
+            sb_ret.append(getHistogram(request, response, paramsRequest));
+            /*sb_app.append("\n<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+ SWBPortal.getContextPath() + "/swbadmin/lib/SWBAplGraph.jar\" width=\"98%\" height=\"450\">");
             sb_app.append("<param name=\"GraphType\" value=\"Bar\">");
             sb_app.append("<param name=\"ncdata\" value=\"1\">");
             sb_app.append("<param name=\"percent\" value=\"false\">");
@@ -832,32 +832,7 @@ public class WBASectionReport extends GenericResource {
             JRBeanCollectionDataSource  ds = null;
             if(rtype.equals("0")) { // by day
                 WBAFilterReportBean filter;
-                /*if(hasBarname) {
-                    filter = new WBAFilterReportBean(paramsRequest.getUser().getLanguage());
-                    filter.setSite(request.getParameter("wb_site"));
-                    filter.setIdaux(request.getParameter("section"));
-                    filter.setType(I_REPORT_TYPE);
-                    filter.setGroupedDates(true);
-
-                    SimpleDateFormat format = new SimpleDateFormat("dd/MMM/yyyy");
-                    Date di = format.parse("01/"+monthinyear);
-                    GregorianCalendar ci = new GregorianCalendar();
-                    ci.setTime(di);
-                    System.out.println("di="+format.format(di));
-                    GregorianCalendar cf = new GregorianCalendar();
-                    cf.setTime(di);
-                    cf.add(Calendar.DAY_OF_MONTH, cf.getActualMaximum(Calendar.DAY_OF_MONTH)-1);
-                    Date df = cf.getTime();
-                    System.out.println("df="+format.format(df));
-                    filter.setYearI(ci.get(Calendar.YEAR));
-                    filter.setMonthI(ci.get(Calendar.MONTH)+1);
-                    filter.setDayI(ci.get(Calendar.DAY_OF_MONTH));
-                    filter.setYearF(cf.get(Calendar.YEAR));
-                    filter.setMonthF(cf.get(Calendar.MONTH)+1);
-                    filter.setDayF(cf.get(Calendar.DAY_OF_MONTH));
-                }else {*/
-                    filter = buildFilter(request, paramsRequest);
-                /*}*/
+                filter = buildFilter(request, paramsRequest);
                 JRDataSourceable dataDetail = new JRSectionAccessDataDetail(filter);
                 ds = dataDetail.orderJRReport();
                 Iterator<SWBRecHit> it = ds.getData().iterator();
@@ -873,30 +848,7 @@ public class WBASectionReport extends GenericResource {
                 else
                     sb_app.append("<param name=\"Title\" value=\""+paramsRequest.getLocaleString("daily_report")+". "+paramsRequest.getLocaleString("query_range")+": "+DateFormat.getDateInstance(DateFormat.MEDIUM, loc).format(filter.getDateI())+"\">");
                 sb_app.append("<param name=\"ndata\" value=\""+ ds.getRecordCount() +"\">");
-            }/*else { // by each month
-                String websiteId = request.getParameter("wb_site");
-                int year13 = Integer.parseInt(request.getParameter("wb_year13"));
-                WBAFilterReportBean filter = new WBAFilterReportBean();
-                filter.setSite(websiteId);
-                filter.setIdaux(request.getParameter("section"));
-                filter. setType(I_REPORT_TYPE);
-                filter.setYearI(year13);
-                JRDataSourceable dataDetail = new JRSectionAccessDataDetail(filter);
-                ds = dataDetail.orderJRReport();
-                Iterator<SWBRecHit> it = ds.getData().iterator();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                while(it.hasNext()) {
-                    SWBRecHit rh = it.next();
-                    sb_app.append("\n<param name=\"label" + j + "\" value=\""+rh.getMonth("MMM")+"/"+rh.getYear()+"\">");
-                    sb_app.append("\n<param name=\"data" + j + "\" value=\"" + rh.getHits() + "\">");
-                    j++;
-                    sdf.format(new Date(rh.getDate().getTime()));
-                }
-                sb_app.append("\n<param name=\"Title\" value=\""+paramsRequest.getLocaleString("monthly_report")+". "+paramsRequest.getLocaleString("query_range")+": "+year13+"\">");
-                sb_app.append("\n<param name=\"ndata\" value=\""+ ds.getRecordCount() +"\">");
-                String url = paramsRequest.getRenderUrl().toString()+"?wb_rtype=0&wb_rep_type=1&wb_site="+websiteId+"&wb_year13="+year13+"&wbr_barname=";
-                sb_app.append("\n<param name=\"link\" value=\""+ url+ "\">");
-            }*/
+            }
             sb_app.append("<param name=\"barname0\" value=\"Hits\">");
 
             sb_app.append("<param name=\"color0\" value=\"100,100,255\">");
@@ -920,8 +872,7 @@ public class WBASectionReport extends GenericResource {
             if(ds.getData().isEmpty())
                 sb_ret.append("\n<br/><br/><br/><br/><font color=\"black\">"+paramsRequest.getLocaleString("no_records")+"</font>");
             else
-                sb_ret.append(sb_app.toString());
-
+                sb_ret.append(sb_app.toString());*/
             sb_ret.append("\n</td>");
             sb_ret.append("</tr>");
             sb_ret.append("</table>");
@@ -932,6 +883,79 @@ public class WBASectionReport extends GenericResource {
             log.error("Error on method doHistogram() resource " + strRscType + " with id " + base.getId(), e);
         }
         response.getWriter().print(sb_ret.toString());
+    }
+
+    public String getHistogram(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException {
+        StringBuffer sb_ret = new StringBuffer();
+        StringBuffer sb_app = new StringBuffer();
+        /*boolean hasBarname = false;*/
+        int j = 0;
+
+        String rtype = request.getParameter("wb_rtype")==null? "0":request.getParameter("wb_rtype");
+        /*String monthinyear = request.getParameter("wbr_barname");
+        if(monthinyear != null){
+            hasBarname = true;
+        }*/
+
+        sb_app.append("\n<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+ SWBPortal.getContextPath() + "/swbadmin/lib/SWBAplGraph.jar\" width=\"98%\" height=\"450\">");
+        sb_app.append("<param name=\"GraphType\" value=\"Bar\">");
+        sb_app.append("<param name=\"ncdata\" value=\"1\">");
+        sb_app.append("<param name=\"percent\" value=\"false\">");
+
+        JRBeanCollectionDataSource  ds = null;
+        if(rtype.equals("0")) { // by day
+            WBAFilterReportBean filter;
+            try {
+                filter = buildFilter(request, paramsRequest);
+            }catch(IncompleteFilterException ife) {
+                throw new SWBResourceException(ife.getMessage());
+            }
+            JRDataSourceable dataDetail = new JRSectionAccessDataDetail(filter);
+            try {
+                ds = dataDetail.orderJRReport();
+            }catch(IncompleteFilterException ife) {
+                throw new SWBResourceException(ife.getMessage());
+            }
+            Iterator<SWBRecHit> it = ds.getData().iterator();
+            while(it.hasNext()) {
+                SWBRecHit rh = it.next();
+                sb_app.append("<param name=\"label" + j + "\" value=\""+rh.getDay()+"-"+rh.getMonth("MMM")+"\">");
+                sb_app.append("<param name=\"data" + j + "\" value=\"" + rh.getHits() + "\">");
+                j++;
+            }
+            Locale loc = new Locale(paramsRequest.getUser().getLanguage());
+            if(filter.isGroupedDates())
+                sb_app.append("<param name=\"Title\" value=\""+paramsRequest.getLocaleString("daily_report")+". "+paramsRequest.getLocaleString("query_range")+": "+paramsRequest.getLocaleString("from")+" "+DateFormat.getDateInstance(DateFormat.MEDIUM, loc).format(filter.getDateI())+" "+paramsRequest.getLocaleString("to")+" "+DateFormat.getDateInstance(DateFormat.MEDIUM, loc).format(filter.getDateF())+"\">");
+            else
+                sb_app.append("<param name=\"Title\" value=\""+paramsRequest.getLocaleString("daily_report")+". "+paramsRequest.getLocaleString("query_range")+": "+DateFormat.getDateInstance(DateFormat.MEDIUM, loc).format(filter.getDateI())+"\">");
+            sb_app.append("<param name=\"ndata\" value=\""+ ds.getRecordCount() +"\">");
+        }
+        sb_app.append("<param name=\"barname0\" value=\"Hits\">");
+
+        sb_app.append("<param name=\"color0\" value=\"100,100,255\">");
+        sb_app.append("<param name=\"color1\" value=\"255,100,100\">");
+        sb_app.append("<param name=\"color2\" value=\"100,255,100\">");
+        sb_app.append("<param name=\"color3\" value=\"100,250,250\">");
+        sb_app.append("<param name=\"color4\" value=\"250,100,250\">");
+        sb_app.append("<param name=\"color5\" value=\"250,250,100\">");
+        sb_app.append("<param name=\"color6\" value=\"0,0,250\">");
+        sb_app.append("<param name=\"color7\" value=\"250,0,0\">");
+        sb_app.append("<param name=\"color8\" value=\"0,250,0\">");
+        sb_app.append("<param name=\"color9\" value=\"0,250,250\">");
+        sb_app.append("<param name=\"color10\" value=\"250,0,250\">");
+        sb_app.append("<param name=\"color11\" value=\"200,200,100\">");
+        sb_app.append("<param name=\"color12\" value=\"230,180,80\">");
+
+        sb_app.append("<param name=\"zoom\" value=\"true\">");
+        sb_app.append("\n</APPLET>");
+
+        // Evaluates if there are records
+        if(ds.getData().isEmpty())
+            sb_ret.append("\n<br/><br/><br/><br/><font color=\"black\">"+paramsRequest.getLocaleString("no_records")+"</font>");
+        else
+            sb_ret.append(sb_app.toString());
+
+        return sb_ret.toString();
     }
 
     private WBAFilterReportBean buildFilter(HttpServletRequest request, SWBParamRequest paramsRequest) throws SWBResourceException, IncompleteFilterException {
