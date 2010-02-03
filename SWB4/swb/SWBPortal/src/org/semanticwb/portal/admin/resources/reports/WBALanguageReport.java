@@ -849,8 +849,8 @@ public class WBALanguageReport extends GenericResource {
             sb_ret.append("<tr><td colpsan=\"3\" align=\"center\">"+request.getParameter("wb_site")+"</td></tr>");
             sb_ret.append("<tr>");
             sb_ret.append("<td colpsan=\"3\">");
-
-            sb_app.append("\n<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+ SWBPortal.getContextPath() + "/swbadmin/lib/SWBAplGraph.jar\" width=\"98%\" height=\"450\">");
+            sb_ret.append(getHistogram(request, response, paramsRequest));
+            /*sb_app.append("\n<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+ SWBPortal.getContextPath() + "/swbadmin/lib/SWBAplGraph.jar\" width=\"98%\" height=\"450\">");
             sb_app.append("<param name=\"GraphType\" value=\"Bar\">");
             sb_app.append("<param name=\"percent\" value=\"false\">");
 
@@ -992,7 +992,7 @@ sb_app.append("<param name=\"ndata\" value=\""+ j +"\">");
                     sb_ret.append("\n<br/><br/><br/><br/><font color=\"black\">"+paramsRequest.getLocaleString("no_records")+"</font>");
                 else
                     sb_ret.append(sb_app.toString());
-            }
+            }*/
 
             sb_ret.append("\n</td>");
             sb_ret.append("</tr>");
@@ -1004,6 +1004,178 @@ sb_app.append("<param name=\"ndata\" value=\""+ j +"\">");
             log.error("Error on method doHistogram() resource " + strRscType + " with id " + base.getId(), e);
         }
         response.getWriter().print(sb_ret.toString());
+    }
+
+    public String getHistogram(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException {
+        StringBuffer sb_ret = new StringBuffer();
+        StringBuffer sb_app = new StringBuffer();
+        boolean hasBarname = false;
+        int j = 0;
+
+        String rtype = request.getParameter("wb_rtype")==null? "1":request.getParameter("wb_rtype");
+        String monthinyear = request.getParameter("wbr_barname");
+        if(monthinyear != null){
+            hasBarname = true;
+        }
+
+        sb_app.append("\n<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+ SWBPortal.getContextPath() + "/swbadmin/lib/SWBAplGraph.jar\" width=\"98%\" height=\"450\">");
+        sb_app.append("<param name=\"GraphType\" value=\"Bar\">");
+        sb_app.append("<param name=\"percent\" value=\"false\">");
+        JRBeanCollectionDataSource  ds;
+        String userLanguage = paramsRequest.getUser().getLanguage();
+        WebSite ws = SWBContext.getWebSite(request.getParameter("wb_site"));
+        if(ws != null) {
+            final ArrayList<String> paternLangs = listLanguages(request.getParameter("wb_site"), userLanguage);
+            paternLangs.add(UNKNOW);
+            WBAFilterReportBean filter;
+            if(rtype.equals("0")) { // by day
+                if(hasBarname) {
+                    filter = new WBAFilterReportBean(userLanguage);
+                    filter.setSite(request.getParameter("wb_site"));
+                    String languageId = Arrays.toString(request.getParameterValues("wb_lang"));
+                    languageId = languageId.replaceFirst("\\[", "");
+                    languageId = languageId.replaceFirst("\\]", "");
+                    languageId = languageId.replace(" ", "");
+                    if(!languageId.equalsIgnoreCase("null")) {
+                        filter.setIdaux(languageId);
+                    }
+                    filter.setType(I_REPORT_TYPE);
+                    filter.setGroupedDates(true);
+
+                    SimpleDateFormat format = new SimpleDateFormat("dd/MMM/yyyy");
+                    Date di = null;
+                    try {
+                        format.parse("01/"+monthinyear);
+                    }catch(ParseException pe) {
+                        throw new SWBResourceException(pe.getMessage());
+                    }
+                    GregorianCalendar ci = new GregorianCalendar();
+                    ci.setTime(di);
+                    GregorianCalendar cf = new GregorianCalendar();
+                    cf.setTime(di);
+                    cf.add(Calendar.DAY_OF_MONTH, cf.getActualMaximum(Calendar.DAY_OF_MONTH)-1);
+                    filter.setYearI(ci.get(Calendar.YEAR));
+                    filter.setMonthI(ci.get(Calendar.MONTH)+1);
+                    filter.setDayI(ci.get(Calendar.DAY_OF_MONTH));
+                    filter.setYearF(cf.get(Calendar.YEAR));
+                    filter.setMonthF(cf.get(Calendar.MONTH)+1);
+                    filter.setDayF(cf.get(Calendar.DAY_OF_MONTH));
+                }else {
+                    try {
+                        filter = buildFilter(request, paramsRequest);
+                    }catch(IncompleteFilterException ife) {
+                        throw new SWBResourceException(ife.getMessage());
+                    }
+                }
+                Locale loc = new Locale(userLanguage);
+                if(filter.isGroupedDates())
+                    sb_app.append("<param name=\"Title\" value=\""+paramsRequest.getLocaleString("daily_report")+". "+paramsRequest.getLocaleString("query_range")+": "+paramsRequest.getLocaleString("from")+" "+DateFormat.getDateInstance(DateFormat.MEDIUM, loc).format(filter.getDateI())+" "+paramsRequest.getLocaleString("to")+" "+DateFormat.getDateInstance(DateFormat.MEDIUM, loc).format(filter.getDateF())+"\">");
+                else
+                    sb_app.append("<param name=\"Title\" value=\""+paramsRequest.getLocaleString("daily_report")+". "+paramsRequest.getLocaleString("query_range")+": "+DateFormat.getDateInstance(DateFormat.MEDIUM, loc).format(filter.getDateI())+"\">");
+            }else { // by each month
+                String websiteId = request.getParameter("wb_site")!=null?request.getParameter("wb_site") : (String)request.getAttribute("wb_site");
+                int year13;
+                try {
+                    year13 = Integer.parseInt(request.getParameter("wb_year13"));
+                }catch(NumberFormatException nfe) {
+                    year13 = new GregorianCalendar().get(Calendar.YEAR);
+                }
+                String langId = request.getParameter("wb_lang")==null? "0":request.getParameter("wb_lang");
+                filter = new WBAFilterReportBean();
+                filter.setSite(websiteId);
+                if( !langId.equalsIgnoreCase("0") ) {
+                    filter.setIdaux(langId);
+                }
+                filter. setType(I_REPORT_TYPE);
+                filter.setYearI(year13);
+                sb_app.append("\n<param name=\"Title\" value=\""+paramsRequest.getLocaleString("monthly_report")+". "+paramsRequest.getLocaleString("query_range")+": "+year13+"\">");
+                String url = paramsRequest.getRenderUrl().toString()+"?wb_rtype=0&wb_rep_type=1&wb_site="+websiteId+"&wb_year13="+year13+"&wbr_barname=";
+                sb_app.append("\n<param name=\"link\" value=\""+ url+ "\">");
+            }
+            JRDataSourceable dataDetail = new JRLanguageAccessDataDetail(filter);
+            try {
+                ds = dataDetail.orderJRReport();
+            }catch(IncompleteFilterException ife) {
+                throw new SWBResourceException(ife.getMessage());
+            }
+            ArrayList<SWBRecHit> rep = (ArrayList<SWBRecHit>)ds.getData();
+            Date same = null;
+            SWBRecHit rh;
+            for(int k=0; k<rep.size(); ) {
+                ArrayList<String> languages = (ArrayList<String>)paternLangs.clone();
+                HashMap<String,SWBRecHit> m = new HashMap();
+                do {
+                    rh = rep.get(k);
+                    m.put(rh.getItem(), rh);
+                    languages.remove(rh.getItem());
+                    if(k+1<rep.size())
+                        same = rep.get(k+1).getDate();
+                    k++;
+                }while( k<rep.size()&&rh.getDate().equals(same) );
+                languages.trimToSize();
+                for(int i=0; i<languages.size(); i++) {
+                    m.put(languages.get(i), new SWBRecHit());
+                }
+
+                StringBuilder data = new StringBuilder();
+                if(rtype.equals("0")) {
+                    sb_app.append("<param name=\"label" + j + "\" value=\""+rh.getDay()+"/"+rh.getMonth("MMM")+"\">");
+                }else {
+                    sb_app.append("<param name=\"label" + j + "\" value=\""+rh.getMonth("MMM")+"/"+rh.getYear()+"\">");
+                }
+                for(int i=0; i<paternLangs.size(); i++) {
+                    rh = m.get(paternLangs.get(i));
+                    data.append(rh.getHits());
+                    if( i+1<paternLangs.size() )
+                        data.append("|");
+                }
+                sb_app.append("<param name=\"data" + j + "\" value=\""+data+"\">");
+                j++;
+
+                languages = null;
+                m = null;
+                data = null;
+            }
+            sb_app.append("<param name=\"ncdata\" value=\""+(SWBUtils.Collections.sizeOf(ws.listLanguages())+1)+"\">");
+            sb_app.append("<param name=\"ndata\" value=\""+ j +"\">");
+
+            Iterator<Language> langs = ws.listLanguages();
+            j = 0;
+            while(langs.hasNext()) {
+                Language language = langs.next();
+                sb_app.append("<param name=\"barname"+j+"\" value=\""+language.getDisplayTitle(userLanguage)+"\">");
+                j++;
+            }
+            sb_app.append("<param name=\"barname"+j+"\" value=\""+UNKNOW+"\">");
+
+            sb_app.append("<param name=\"color0\" value=\"100,100,255\">");
+            sb_app.append("<param name=\"color1\" value=\"255,100,100\">");
+            sb_app.append("<param name=\"color2\" value=\"100,255,100\">");
+            sb_app.append("<param name=\"color3\" value=\"100,250,250\">");
+            sb_app.append("<param name=\"color4\" value=\"250,100,250\">");
+            sb_app.append("<param name=\"color5\" value=\"250,250,100\">");
+            sb_app.append("<param name=\"color6\" value=\"0,0,250\">");
+            sb_app.append("<param name=\"color7\" value=\"250,0,0\">");
+            sb_app.append("<param name=\"color8\" value=\"221,196,49\">");
+            sb_app.append("<param name=\"color9\" value=\"0,250,250\">");
+            sb_app.append("<param name=\"color10\" value=\"250,0,250\">");
+            sb_app.append("<param name=\"color11\" value=\"200,200,100\">");
+            sb_app.append("<param name=\"color12\" value=\"230,180,80\">");
+            sb_app.append("<param name=\"color13\" value=\"149,0,149\">");
+            sb_app.append("<param name=\"color14\" value=\"75,0,130\">");
+            sb_app.append("<param name=\"color15\" value=\"221,88,0\">");
+            sb_app.append("<param name=\"color15\" value=\"255,245,238\">");
+
+            sb_app.append("<param name=\"zoom\" value=\"true\">");
+            sb_app.append("\n</APPLET>");
+
+            // Evaluates if there are records
+            if(ds.getData().isEmpty())
+                sb_ret.append("\n<br/><br/><br/><br/><font color=\"black\">"+paramsRequest.getLocaleString("no_records")+"</font>");
+            else
+                sb_ret.append(sb_app.toString());
+        }
+        return sb_ret.toString();
     }
 
     private WBAFilterReportBean buildFilter(HttpServletRequest request, SWBParamRequest paramsRequest) throws SWBResourceException, IncompleteFilterException {
