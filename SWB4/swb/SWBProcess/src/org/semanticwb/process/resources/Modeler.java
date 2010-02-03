@@ -22,7 +22,7 @@ import org.semanticwb.portal.api.SWBResourceException;
 public class Modeler extends GenericResource {
 
     @Override
-    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         out.println("<h1>Process Modeler</h1>");
         out.println("<script src=\"http://dl.javafx.com/1.2/dtfx.js\"></script>");
