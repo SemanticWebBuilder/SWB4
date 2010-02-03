@@ -28,8 +28,7 @@ public class NamespaceRegistryImp implements NamespaceRegistry {
         values.put(PREFIX_JCR, NAMESPACE_JCR);
         values.put(PREFIX_MIX, NAMESPACE_MIX);
         values.put(PREFIX_NT, NAMESPACE_NT);
-        values.put(PREFIX_XML, NAMESPACE_XML);
-        //TODO: add prefixes and namespaces from SWBPlatform
+        values.put(PREFIX_XML, NAMESPACE_XML);        
         HashMap<String,String>  nsPrefixMap=SWBPlatform.getSemanticMgr().getVocabulary().getNsPrefixMap();
         for(String key : nsPrefixMap.keySet())
         {
