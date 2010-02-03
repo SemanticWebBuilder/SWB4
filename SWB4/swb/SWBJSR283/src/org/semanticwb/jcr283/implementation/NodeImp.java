@@ -69,8 +69,10 @@ public class NodeImp extends ItemImp implements Node
     private static final String JCR_CREATEDBY = "jcr:createdBy";
     private static final String JCR_VERSION_HISTORY = "jcr:versionHistory";
     private static final String MIX_CREATED = "mix:created";
+    private static final String MIX_LAST_MODIFIED = "mix:lastModified";
     private static final String MIX_REFERENCEABLE = "mix:referenceable";
     private static final String MIX_SIMPLEVERSIONABLE = "mix:simpleVersionable";
+    private static final String MIX_VERSIONABLE = "mix:versionable";
     private static final String NT_VERSION = "nt:version";
     private static final String SEPARATOR = "/";
     private static final String THE_NODE_IS_NOT_VERSIONABLE = "The node is not versionable";
@@ -940,7 +942,7 @@ public class NodeImp extends ItemImp implements Node
     {
         for (NodeType mixinNodeType : getMixinNodeTypes())
         {
-            if (mixinNodeType.getName().equals(nodeTypeName))
+            if (mixinNodeType.isNodeType(nodeTypeName))
             {
                 return true;
             }
@@ -1087,75 +1089,32 @@ public class NodeImp extends ItemImp implements Node
 
     private boolean isReferenceable() throws RepositoryException
     {
-        for (NodeType mixinNodeType : getMixinNodeTypes())
-        {
-            if (mixinNodeType.getName().equals(MIX_REFERENCEABLE))
-            {
-                return true;
-            }
-        }
-        return false;
+        return this.isNodeType(MIX_REFERENCEABLE);
     }
 
     private boolean isVersionNode() throws RepositoryException
     {
-        for (NodeType mixinNodeType : nodeType.getSupertypes())
-        {
-            if (mixinNodeType.getName().equals(NT_VERSION))
-            {
-                return true;
-            }
-        }
-        return false;
+        return this.isNodeType(NT_VERSION);
     }
 
     private boolean isMixCreated() throws RepositoryException
     {
-        for (NodeType mixinNodeType : getMixinNodeTypes())
-        {
-            if (mixinNodeType.getName().equals(MIX_CREATED))
-            {
-                return true;
-            }
-        }
-        return false;
+        return this.isNodeType(MIX_CREATED);
     }
 
     private boolean isMixLastModified() throws RepositoryException
     {
-        for (NodeType mixinNodeType : getMixinNodeTypes())
-        {
-            if (mixinNodeType.getName().equals("mix:lastModified"))
-            {
-                return true;
-            }
-        }
-        return false;
+        return this.isNodeType(MIX_LAST_MODIFIED);
     }
 
     public boolean isVersionable() throws RepositoryException
     {
-        for (NodeType mixinNodeType : this.getMixinNodeTypes())
-        {
-            if (mixinNodeType.getName().equals("mix:versionable"))
-            {
-                return true;
-            }
-        }
-        return false;
+        return this.isNodeType(MIX_VERSIONABLE);
     }
 
     private boolean isSimpleVersionable() throws RepositoryException
     {
-        for (NodeType mixinNodeType : this.getMixinNodeTypes())
-        {
-            if (mixinNodeType.getName().equals(MIX_SIMPLEVERSIONABLE))
-            {
-                return true;
-            }
-        }
-        return false;
-
+        return this.isNodeType(MIX_SIMPLEVERSIONABLE);                       
     }
     @Deprecated
     public Version checkin() throws VersionException, UnsupportedRepositoryOperationException, InvalidItemStateException, LockException, RepositoryException
