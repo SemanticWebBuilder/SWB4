@@ -108,6 +108,7 @@ public class VersionHistoryImp extends NodeImp implements VersionHistory
 
        return newversion;
     }
+    @Deprecated
     public String getVersionableUUID() throws RepositoryException
     {
         return getVersionableIdentifier();

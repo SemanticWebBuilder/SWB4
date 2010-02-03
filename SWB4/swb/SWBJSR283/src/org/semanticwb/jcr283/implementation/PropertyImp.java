@@ -171,7 +171,8 @@ public class PropertyImp extends ItemImp implements Property
         }
         setValue(ovalues.toArray(new Value[ovalues.size()]));
     }
-
+    @Deprecated
+    @SuppressWarnings(value="deprecation")
     public void setValue(InputStream value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
         setValue(valueFactoryImp.createValue(value));
@@ -243,7 +244,8 @@ public class PropertyImp extends ItemImp implements Property
     {
         return this.getValue()==null?null:this.getValue().getString();
     }
-
+    @Deprecated
+    @SuppressWarnings(value="deprecation")
     public InputStream getStream() throws ValueFormatException, RepositoryException
     {
         return this.getValue()==null?null:this.getValue().getStream();

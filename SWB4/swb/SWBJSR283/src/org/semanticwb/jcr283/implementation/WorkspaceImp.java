@@ -95,7 +95,7 @@ public class WorkspaceImp  implements Workspace {
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
+    @Deprecated
     public void restore(Version[] versions, boolean removeExisting) throws ItemExistsException, UnsupportedRepositoryOperationException, VersionException, LockException, InvalidItemStateException, RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");
