@@ -158,9 +158,8 @@ public class NodeImp extends ItemImp implements Node
         {
             log.trace("Initilizing versionHistory for node " + path);
             NodeDefinitionImp versionDefinition = new VersionHistoryDefinition();
-            NodeImp root = nodeManager.getNode("/", session);
-            String path_jcr_version_storage = root.getPathFromName("jcr:versionStorage");
-            NodeImp jcr_version_Storage = nodeManager.getProtectedNode(path_jcr_version_storage, session);
+            NodeImp root = nodeManager.getNode("/", session);            
+            NodeImp jcr_version_Storage = versionManagerImp.getVersionStorage();
             if (jcr_version_Storage == null)
             {
                 throw new RepositoryException("The version storage was not found");
@@ -1330,7 +1329,10 @@ public class NodeImp extends ItemImp implements Node
                     if (nodeManager.hasNode(pathChild))
                     {
                         NodeImp childNode=nodeManager.getNode(pathChild);
-                        childNode.validate();
+                        if(childNode.isModified)
+                        {
+                            childNode.validate();
+                        }
                     }
                     else
                     {

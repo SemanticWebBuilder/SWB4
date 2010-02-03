@@ -28,14 +28,19 @@ import javax.jcr.version.VersionManager;
  */
 public class VersionManagerImp implements VersionManager
 {
-
+    private final NodeImp versionStorage;
     private Hashtable<String, VersionHistoryImp> versionhistories = new Hashtable<String, VersionHistoryImp>();
     private Hashtable<String, VersionImp> baseVersions = new Hashtable<String, VersionImp>();
     private final SessionImp session;
 
-    public VersionManagerImp(SessionImp session)
+    public VersionManagerImp(SessionImp session,NodeImp versionStorage)
     {
         this.session = session;
+        this.versionStorage=versionStorage;
+    }
+    public NodeImp getVersionStorage()
+    {
+        return versionStorage;
     }
 
     public void setBaseVersion(VersionImp version, String path)

@@ -31,6 +31,8 @@ import org.semanticwb.model.GenericIterator;
 public class NodeManager
 {
 
+    private static final String JCR_SYSTEM = "jcr:system";
+    private static final String JCR_VERSION_STORAGE = "jcr:versionStorage";
     private static final String PATH_SEPARATOR = "/";
     private Hashtable<String, NodeStatus> nodes = new Hashtable<String, NodeStatus>();
     private Hashtable<String, NodeStatus> nodesbyId = new Hashtable<String, NodeStatus>();
@@ -69,18 +71,30 @@ public class NodeManager
                 ws.setRoot(newroot);
             }
             RootNodeImp root = new RootNodeImp(ws.getRoot(), session);
-            
             nodes.put(PATH_SEPARATOR, new NodeStatus(root));
         }
-        NodeImp root = nodes.get(PATH_SEPARATOR).getNode();
-        loadChilds(root, session, false);
-
-        NodeImp system = nodes.get(PATH_SEPARATOR).getNode();
-        initVersionStore(root);
+        RootNodeImp root = (RootNodeImp) nodes.get(PATH_SEPARATOR).getNode();
+        String systemPath = root.getPathFromName(JCR_SYSTEM);
+        if (!nodes.containsKey(systemPath))
+        {
+            loadChild(root, JCR_SYSTEM, session, true);
+        }
+        if (nodes.get(systemPath) == null)
+        {
+            NodeImp system = root.insertNode(JCR_SYSTEM);
+            system.saveData();
+        }
+        NodeImp system = nodes.get(systemPath).getNode();
+        if (system == null)
+        {            
+            throw new RepositoryException("The node system was not found");
+        }
+        initVersionStore(system);
         return root;
 
     }
-    public void validate() throws ConstraintViolationException,RepositoryException
+
+    public void validate() throws ConstraintViolationException, RepositoryException
     {
         nodes.get(PATH_SEPARATOR).getNode().validate();
     }
@@ -88,7 +102,7 @@ public class NodeManager
     private void initVersionStore(NodeImp system) throws RepositoryException
     {
         log.trace("Creating Version Storage");
-        NodeImp jcr_versionStorage=system.insertNode("jcr:versionStorage");
+        NodeImp jcr_versionStorage = system.insertNode(JCR_VERSION_STORAGE);
         jcr_versionStorage.saveData();
     }
 
@@ -101,7 +115,7 @@ public class NodeManager
     {
         if (nodesbyId.containsKey(id))
         {
-            if(!nodesbyId.get(id).isDeleted())
+            if (!nodesbyId.get(id).isDeleted())
             {
                 return nodesbyId.get(id).getNode();
             }
@@ -401,14 +415,15 @@ public class NodeManager
     }
 
     public NodeImp getNode(String path)
-    {        
+    {
         NodeImp node = this.nodes.get(path).getNode();
-        if(node!=null && !this.nodes.get(path).isDeleted())
+        if (node != null && !this.nodes.get(path).isDeleted())
         {
             return node;
         }
         return null;
     }
+
     public NodeImp getNode(String path, SessionImp session) throws RepositoryException
     {
         boolean deleted = false;
@@ -458,9 +473,9 @@ public class NodeManager
     public PropertyImp getProperty(String path)
     {
         PropertyImp propertyImp = this.properties.get(path).getProperty();
-        if(propertyImp.definition.isProtected())
+        if (propertyImp.definition.isProtected())
         {
-            propertyImp=null;
+            propertyImp = null;
         }
         return propertyImp;
     }
@@ -468,9 +483,9 @@ public class NodeManager
     PropertyImp getProtectedProperty(String path) throws RepositoryException
     {
         PropertyImp propertyImp = this.properties.get(path).getProperty();
-        if(!propertyImp.getDefinition().isProtected())
+        if (!propertyImp.getDefinition().isProtected())
         {
-            propertyImp=null;
+            propertyImp = null;
         }
         return propertyImp;
     }
@@ -551,7 +566,7 @@ public class NodeManager
         return getChilds;
     }
 
-    public void loadChild(NodeImp node, String name, String path, int depth, SessionImp session, boolean replace)
+    public void loadChild(NodeImp node, String name, SessionImp session, boolean replace) throws RepositoryException
     {
         if (node.getSemanticObject() != null)
         {
@@ -564,9 +579,10 @@ public class NodeManager
                     int childindex = 0;
                     childindex = getIndex(child);
                     String childpath = null;
+                    String path = node.path;
                     if (path.endsWith(PATH_SEPARATOR))
                     {
-                        childpath = child.getName();
+                        childpath = path+child.getName();
                     }
                     else
                     {
@@ -579,7 +595,7 @@ public class NodeManager
                     }
                     if (replace || !nodes.containsKey(childpath))
                     {
-                        NodeImp childNode = new NodeImp(child, node, childindex, childpath, depth + 1, session);
+                        NodeImp childNode = new NodeImp(child, node, childindex, childpath, node.getDepth() + 1, session);
                         this.addNode(childNode, childpath, path);
                     }
                 }
@@ -598,7 +614,7 @@ public class NodeManager
                 int childindex = 0;
                 childindex = getIndex(child);
                 String childpath = null;
-                String path=node.path;
+                String path = node.path;
                 if (path.endsWith(PATH_SEPARATOR))
                 {
                     childpath = child.getName();
@@ -614,9 +630,9 @@ public class NodeManager
                 }
                 if (replace || !nodes.containsKey(childpath))
                 {
-                    NodeImp childNode=NodeImp.createNodeImp(child, node, childindex, childpath, session);
+                    NodeImp childNode = NodeImp.createNodeImp(child, node, childindex, childpath, session);
                     //NodeImp childNode=NodeImp.createNodeImp(child, node, childindex, childpath, session);
-                    this.addNode(childNode, childpath, path);                    
+                    this.addNode(childNode, childpath, path);
                 }
             }
         }
