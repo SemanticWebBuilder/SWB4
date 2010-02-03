@@ -529,7 +529,7 @@ public class ValueImp implements Value
     {
         return (String) getValue(value, PropertyType.STRING);
     }
-
+    @Deprecated
     public InputStream getStream() throws IllegalStateException, RepositoryException
     {
         if (this.value instanceof ByteArrayOutputStream)

@@ -316,7 +316,7 @@ public class NodeManager
     public void move(String oldPath, String newPath, NodeImp newParent)
     {
     }
-
+    @SuppressWarnings(value="deprecation")
     public void save() throws RepositoryException
     {
         nodes.get(PATH_SEPARATOR).getNode().save();
