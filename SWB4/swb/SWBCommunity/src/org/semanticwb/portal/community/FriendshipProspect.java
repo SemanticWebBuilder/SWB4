@@ -5,7 +5,6 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
-import org.semanticwb.model.WebSite;
 
 
 public class FriendshipProspect extends org.semanticwb.portal.community.base.FriendshipProspectBase 
@@ -34,7 +33,7 @@ public class FriendshipProspect extends org.semanticwb.portal.community.base.Fri
         while (itFriendshipProspect.hasNext()) {
             FriendshipProspect friendshipProspect = itFriendshipProspect.next();
             User userRequester = friendshipProspect.getFriendShipRequester();
-            if (userRequester.getURI().equals(requester.getURI())) {
+            if (requester!=null && requester.getURI()!=null && userRequester!=null && userRequester.getURI()!=null && userRequester.getURI().equals(requester.getURI())) {
                 friendshipProspect.remove();
                 return true;
             }
