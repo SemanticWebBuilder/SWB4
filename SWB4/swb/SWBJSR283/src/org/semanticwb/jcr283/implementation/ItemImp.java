@@ -199,7 +199,7 @@ public abstract class ItemImp implements Item
 
     public Item getAncestor(int depth) throws ItemNotFoundException, AccessDeniedException, RepositoryException
     {
-        if(this.getDepth()<depth)
+        if(this.getDepth()<depth || depth<0)
         {
             throw new ItemNotFoundException();
         }
@@ -211,7 +211,7 @@ public abstract class ItemImp implements Item
         }
         else
         {
-        for(int i=0;i<depth;i++)
+        for(int i=0;i<=depth;i++)
         {
             if(i>0)
             {
@@ -223,7 +223,12 @@ public abstract class ItemImp implements Item
         {
             throw new ItemNotFoundException();
         }
-        return session.getItem(pathItem.toString());
+        Item item=session.getItem(pathItem.toString());
+        if(item==null)
+        {
+            throw new ItemNotFoundException();
+        }
+        return item;
     }
 
     public Node getParent() throws ItemNotFoundException, AccessDeniedException, RepositoryException
