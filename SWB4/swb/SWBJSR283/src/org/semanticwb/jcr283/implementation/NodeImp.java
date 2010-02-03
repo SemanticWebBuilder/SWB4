@@ -449,7 +449,7 @@ public class NodeImp extends ItemImp implements Node
     {
         if (nodeType.getSemanticClass() == org.semanticwb.jcr283.repository.model.Version.sclass)
         {
-            return new VersionImp(nodeDefinition, name, parent, index, path, depth, session, id);
+            return new VersionImp(nodeDefinition, name, (VersionHistoryImp)parent, index, path, depth, session, id);
         }
         else if (nodeType.getSemanticClass() == org.semanticwb.jcr283.repository.model.VersionHistory.sclass)
         {
@@ -465,7 +465,7 @@ public class NodeImp extends ItemImp implements Node
     {
         if (base.getSemanticObject().getSemanticClass() == org.semanticwb.jcr283.repository.model.Version.sclass && base instanceof org.semanticwb.jcr283.repository.model.Version)
         {
-            return new VersionImp((org.semanticwb.jcr283.repository.model.Version) base, parent, index, path, depth, session);
+            return new VersionImp((org.semanticwb.jcr283.repository.model.Version) base, (VersionHistoryImp)parent, index, path, depth, session);
         }
         else if (base.getSemanticObject().getSemanticClass() == org.semanticwb.jcr283.repository.model.VersionHistory.sclass && base instanceof org.semanticwb.jcr283.repository.model.VersionHistory)
         {
