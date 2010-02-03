@@ -107,7 +107,7 @@ public class SessionImp implements Session
 
     public Node getNodeByUUID(String uuid) throws ItemNotFoundException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return workspace.getNodeManager().getNodeByIdentifier(uuid,this);
     }
 
     public Node getNodeByIdentifier(String id) throws ItemNotFoundException, RepositoryException
