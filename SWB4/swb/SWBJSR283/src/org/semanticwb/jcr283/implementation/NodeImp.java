@@ -938,6 +938,10 @@ public class NodeImp extends ItemImp implements Node
         {
             throw new ConstraintViolationException("The node " + path + " is protected");
         }
+        if(!isNodeType(nodeTypeName))
+        {
+            throw new NoSuchNodeTypeException(nodeTypeName+" is not a NodeType");
+        }
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
