@@ -62,8 +62,7 @@ public class Poll extends GenericResource {
     private static Logger log = SWBUtils.getLogger(Poll.class);
     private static String poll = "poll_";
     
-    HashMap hashSec;
-    HashMap hashPrim;    
+    HashMap hashPrim=new HashMap();
     String workPath = "";
     String webWorkPath= "/work";
     String restype = "";
@@ -80,8 +79,6 @@ public class Poll extends GenericResource {
         try 
         {
             super.setResourceBase(base);
-            hashSec = new HashMap();
-            hashPrim = new HashMap();
             workPath = (String) SWBPortal.getWorkPath() +  base;
             webWorkPath = (String) SWBPortal.getWebWorkPath() +  base.getWorkPath();
             restype= base.getResourceType().getResourceClassName();
@@ -424,61 +421,37 @@ public class Poll extends GenericResource {
      * Metodo que valida si la ip del usuario final ya voto
      * @param request
      */
-    private boolean validateIPAddress(javax.servlet.http.HttpServletRequest request) {
+    private boolean validateIPAddress(javax.servlet.http.HttpServletRequest request)
+    {
         boolean flag = false;
-        int minutes;
+        String actualIP=request.getRemoteAddr();
+        int minutes=20;
         try { 
             minutes=Integer.parseInt(getResourceBase().getAttribute("time", "20").trim()); 
-        }catch(Exception e){ 
+        }
+        catch(Exception e){ 
             minutes=20; 
         }
-        Date firstTime = new Date();
-        Timestamp fctual = new Timestamp(firstTime.getTime());
-        GregorianCalendar newTime = new GregorianCalendar();
-        newTime.setTime(firstTime);
-        newTime.add(GregorianCalendar.MINUTE, minutes);
-        Timestamp Tfctualmoretime = new Timestamp(newTime.getTimeInMillis());
-        if (hashPrim != null && hashSec != null && hashPrim.size() > 0 && hashSec.size() > 0)
-        { // Existe hash primario
-            Iterator IHmP = hashPrim.keySet().iterator();
-            while (IHmP.hasNext())
-            {
-                HashMap Hm = (HashMap) IHmP.next();
-                if (Hm != null && Hm == hashSec)
-                {
-                    Timestamp f1 = (Timestamp) hashPrim.get(Hm);
-                    if (f1 != null && fctual.before(f1))
-                    { // La fecha actual es menor que la que trae el hash primario, entonces se siguen
-                      // almacenando IPs en hash secundario. Aqu? entrar?a como segundo paso.
-                        if (!hashSec.containsKey(request.getRemoteAddr()))
-                        {
-                            hashSec.put(request.getRemoteAddr(), fctual);
-                            hashPrim.clear();
-                            if (hashPrim.isEmpty()) hashPrim.put(hashSec, f1);
-                        } 
-                        else flag = true;
-                    } 
-                    else if (f1 != null && (fctual.equals(f1) || fctual.after(f1)))
-                    { // La fecha actual es mayor a la que trae el hash primario, entonces 
-                      // se elimina hashes y se crean de nuevo. Aqu? entrar?a como tercer paso.
-                        hashSec = new HashMap();
-                        hashSec.put(request.getRemoteAddr(), fctual);
-                        hashPrim = new HashMap();
-                        hashPrim.put(hashSec, Tfctualmoretime);
-                    }                     
-                } 
-                else if (Hm == null || Hm != hashSec)
-                {
-                    hashPrim.remove(Hm);
+        Date date = new Date();
+        Timestamp fctual = new Timestamp(date.getTime());
+        date = new Date(date.getYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes() + minutes, date.getSeconds());
+        Timestamp Tfctualmoretime = new Timestamp(date.getTime());
+        if (hashPrim != null && hashPrim.size() > 0)
+        { 
+            if(hashPrim.containsKey(actualIP)){
+                Timestamp ipdate=(Timestamp)hashPrim.get(actualIP);
+                if(ipdate.after(fctual)) {
+                    return true; //No puede votar
+                }else{ //Despues de pasado el tiempo se elimina la ip, para que pueda votar y vuelva a pasar el tiempo definido para volver a podet votar
+                    hashPrim.remove(actualIP);
                 }
+            }else {
+                hashPrim.put(request.getRemoteAddr(), Tfctualmoretime);
             }
-        } 
-        else if (hashPrim != null && hashPrim.size() == 0)
-        { // No existe hash primario. Aqu? entraria como primer paso.
-            hashSec = new HashMap();
-            hashSec.put(request.getRemoteAddr(), fctual);
+        }else if (hashPrim.size() == 0)
+        { 
             hashPrim = new HashMap();
-            hashPrim.put(hashSec, Tfctualmoretime);
+            hashPrim.put(request.getRemoteAddr(), Tfctualmoretime);
         }
         return flag;
     }
