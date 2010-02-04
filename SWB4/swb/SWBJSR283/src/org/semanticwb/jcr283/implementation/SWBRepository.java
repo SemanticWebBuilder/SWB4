@@ -67,20 +67,7 @@ public class SWBRepository implements Repository {
         {
             ws=org.semanticwb.jcr283.repository.model.Workspace.ClassMgr.createWorkspace(DEFAULT_WORKSPACE, "http://www.semanticwb.org.mx/jcr283/default#");
             ws.setName(DEFAULT_WORKSPACE);
-        }
-        if(ws.getRoot()==null)
-        {
-            Root root=Root.ClassMgr.createRoot(JCR_ROOT, ws);
-            root.setName(JCR_ROOT);
-            ws.setRoot(root);
-        }
-        else
-        {
-            if(ws.getRoot().getName()==null)
-            {
-                ws.getRoot().setName(JCR_ROOT);
-            }
-        }
+        }        
     }
     public String[] getDescriptorKeys()
     {

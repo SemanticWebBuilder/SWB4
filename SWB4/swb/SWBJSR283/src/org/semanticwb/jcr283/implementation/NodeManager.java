@@ -50,9 +50,12 @@ public class NodeManager
             {
                 Root newroot = Root.ClassMgr.createRoot("jcr:root", ws);
                 ws.setRoot(newroot);
+                newroot.setPrimaryType(Root.sclass.getPrefix()+":"+Root.sclass.getName());
+                newroot.setName("jcr:root");
             }
             RootNodeImp root = new RootNodeImp(ws.getRoot(), session);
             nodes.put(PATH_SEPARATOR, new NodeStatus(root));
+
         }
         RootNodeImp root = (RootNodeImp) nodes.get(PATH_SEPARATOR).getNode();
         String systemPath = root.getPathFromName(JCR_SYSTEM);
