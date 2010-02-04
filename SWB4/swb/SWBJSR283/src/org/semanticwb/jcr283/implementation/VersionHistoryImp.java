@@ -71,7 +71,7 @@ public class VersionHistoryImp extends NodeImp implements VersionHistory
 
     public VersionHistoryImp(NodeDefinitionImp nodeDefinition, NodeImp parent, SessionImp session, NodeImp versionableNode) throws NoSuchNodeTypeException, RepositoryException
     {
-        super(SWBRepository.getNodeTypeManagerImp().getNodeTypeImp("nt:versionHistory"), nodeDefinition, "jcr:versionHistory", parent, 0, parent.path + PATH_SEPARATOR + "jcr:versionHistory", parent.getDepth() + 1, session, UUID.randomUUID().toString());
+        super(SWBRepository.getNodeTypeManagerImp().getNodeTypeImp("nt:versionHistory"), nodeDefinition, "jcr:versionHistory", parent, 0, parent.path + PATH_SEPARATOR + "jcr:versionHistory", parent.getDepth() + 1, session, UUID.randomUUID().toString(),true);
         this.versionableNode = versionableNode;
         String path_jcr_rootVersion = this.getPathFromName(JCR_ROOT_VERSION_NAME);
         if (!nodeManager.hasNode(path_jcr_rootVersion))
