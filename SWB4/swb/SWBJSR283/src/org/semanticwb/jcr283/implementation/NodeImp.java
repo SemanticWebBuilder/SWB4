@@ -1141,10 +1141,21 @@ public class NodeImp extends ItemImp implements Node
             }
         }
         VersionImp version = (VersionImp) history.insertVersionNode(String.valueOf(versionnumber));
+
+        history.saveData();
+        
         PropertyImp baseVersion = nodeManager.getProtectedProperty(getPathFromName(JCR_BASE_VERSION));
         baseVersion.set(valueFactoryImp.createValue(version));
+        baseVersion.saveData();
+
         PropertyImp jcr_checkout = nodeManager.getProtectedProperty(getPathFromName(JCR_ISCHECKEDOUT));
-        jcr_checkout.set(valueFactoryImp.createValue(false));        
+        jcr_checkout.set(valueFactoryImp.createValue(false));
+
+        jcr_checkout.saveData();
+
+        
+        
+        this.isModified=false;
         return version;
     }
 
