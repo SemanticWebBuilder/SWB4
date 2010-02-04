@@ -99,7 +99,7 @@ public class VersionManagerImp implements VersionManager
         {
             throw new RepositoryException("The path is not absolute: " + absPath);
         }
-        if (session.getWorkspaceImp().getNodeManager().hasNode(absPath))
+        if (!session.getWorkspaceImp().getNodeManager().hasNode(absPath))
         {
             throw new RepositoryException("the node " + absPath + " was not found");
         }
