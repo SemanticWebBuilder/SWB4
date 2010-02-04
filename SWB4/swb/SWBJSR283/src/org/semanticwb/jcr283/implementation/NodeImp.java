@@ -87,7 +87,7 @@ public class NodeImp extends ItemImp implements Node
 
     protected NodeImp(Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
-        this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), NodeDefinitionImp.getNodeDefinition(base, parent), base.getName(), parent, index, path, depth, session, base.getId());
+        this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), NodeDefinitionImp.getNodeDefinition(base, parent), base.getName(), parent, index, path, depth, session, base.getId(),false);
         this.obj = base.getSemanticObject();
         loadStoredProperties(false);
         for (PropertyImp prop : nodeManager.getAllChildProperties(path))
@@ -98,7 +98,7 @@ public class NodeImp extends ItemImp implements Node
 
     protected NodeImp(NodeDefinitionImp definition, Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
-        this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), definition, base.getName(), parent, index, path, depth, session, base.getId());
+        this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), definition, base.getName(), parent, index, path, depth, session, base.getId(),false);
         this.obj = base.getSemanticObject();
         loadStoredProperties(false);
         for (PropertyImp prop : nodeManager.getAllChildProperties(path))
@@ -107,35 +107,36 @@ public class NodeImp extends ItemImp implements Node
         }
     }
 
-    protected NodeImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session, String id)
+
+    protected NodeImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session, String id,boolean isnew)
     {
         super(nodeDefinition, name, parent, path, depth, session);
         this.index = index;
-        this.isNew = true;
+        this.isNew = isnew;
         this.id = id;
         this.nodeType = nodeType;
         this.nodeTypeManager = session.getWorkspaceImp().getNodeTypeManagerImp();
         versionManagerImp = session.getWorkspaceImp().getVersionManagerImp();
-        loadProperties(false);                
+        loadProperties(false);
+        if(isnew)
+        {
+            try
+            {
+                PropertyImp jcr_name=nodeManager.getProtectedProperty(getPathFromName(JCR_NAME));
+                jcr_name.set(valueFactoryImp.createValue(name));
+            }
+            catch(Exception e)
+            {
+                log.debug(e);
+            }
+
+        }
         init();
 
     }
 
     private void init()
-    {
-        try
-        {
-            PropertyImp jcr_name = nodeManager.getProtectedProperty(getPathFromName(JCR_NAME));
-            if (jcr_name.getLength() == -1)
-            {
-                jcr_name.set(valueFactoryImp.createValue(name));
-            }
-        }
-        catch (Exception e)
-        {
-            log.error(e);
-
-        }
+    {        
         initPrimaryType();
         initReferenceable();
         initMixLastModified();
@@ -353,9 +354,9 @@ public class NodeImp extends ItemImp implements Node
             org.semanticwb.jcr283.repository.model.Workspace model = org.semanticwb.jcr283.repository.model.Workspace.ClassMgr.getWorkspace(workspacename);
             log.trace("creating a node with id :" + newid + " and class " + sclass.getURI());
             obj = model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(newid, sclass), sclass).getSemanticObject();
+            base.setName(this.name);
         }
-        base = new Base(obj);
-        base.setName(this.name);
+        base = new Base(obj);        
         if (parent == null && !path.equals(SEPARATOR))
         {
             if (parent.getSemanticObject() == null)
@@ -504,7 +505,7 @@ public class NodeImp extends ItemImp implements Node
         }
         else
         {
-            return new NodeImp(nodeType, nodeDefinition, name, parent, index, path, parent.getDepth() + 1, session, id);
+            return new NodeImp(nodeType, nodeDefinition, name, parent, index, path, parent.getDepth() + 1, session, id,true);
         }
     }
 

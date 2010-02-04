@@ -62,8 +62,12 @@ public class PropertyImp extends ItemImp implements Property
         this.isNew = true;
     }
 
-    public void addValue(Value value)
+    public void addValue(Value value) throws RepositoryException
     {
+        if(!((PropertyDefinitionImp)definition).isMultiple() && values.size()>=1)
+        {
+            throw new RepositoryException("The property is not multiple");
+        }
         this.values.add(value);
         this.isModified = true;
     }
@@ -91,7 +95,9 @@ public class PropertyImp extends ItemImp implements Property
                 }
             }
             loaded = true;
+            this.isModified=false;
         }
+        
 
     }
 
