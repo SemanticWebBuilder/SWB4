@@ -45,7 +45,7 @@ public class NodeManager
     {
         if (!nodes.containsKey(PATH_SEPARATOR))
         {
-            log.trace("Loading root node for repository " + ws.getName());
+            //log.trace("Loading root node for repository " + ws.getName());
             if (ws.getRoot() == null)
             {
                 Root newroot = Root.ClassMgr.createRoot("jcr:root", ws);
@@ -82,7 +82,7 @@ public class NodeManager
 
     private void initVersionStore(NodeImp system, SessionImp session) throws RepositoryException
     {
-        log.trace("Creating Version Storage");
+        //log.trace("Creating Version Storage");
         loadChilds(system, session, false);
         if (!nodes.containsKey(system.getPathFromName(JCR_VERSION_STORAGE)))
         {
@@ -166,7 +166,7 @@ public class NodeManager
     {
         if (!this.nodes.containsKey(path))
         {
-            log.trace("Inserting node " + path + " into the NodeManager");
+            //log.trace("Inserting node " + path + " into the NodeManager");
             NodeStatus nodeStatus = new NodeStatus(node);
             this.nodes.put(path, nodeStatus);
             HashSet<NodeStatus> childnodes = new HashSet<NodeStatus>();
