@@ -1,7 +1,7 @@
 package org.semanticwb.process.base;
 
 
-public abstract class GateWayBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.model.Traceable,org.semanticwb.process.FlowObject,org.semanticwb.model.Descriptiveable
+public abstract class GateWayBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.process.FlowObject,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
        public static final org.semanticwb.platform.SemanticClass swbps_GateWay=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#GateWay");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#GateWay");
