@@ -187,7 +187,7 @@ public class NodeImp extends ItemImp implements Node
         {
             log.trace("Initilizing versionHistory for node " + path);
             NodeDefinitionImp versionDefinition = new VersionHistoryDefinition();
-            NodeImp root = nodeManager.getNode( SEPARATOR, session);
+            NodeImp root = nodeManager.getNode(SEPARATOR, session);
             NodeImp jcr_version_Storage = versionManagerImp.getVersionStorage();
             if (jcr_version_Storage == null)
             {
@@ -338,9 +338,10 @@ public class NodeImp extends ItemImp implements Node
             log.debug(e);
         }
     }
+
     @SuppressWarnings(value = "deprecation")
     public void saveData() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
-    {        
+    {
         Base base = null;
         if (obj == null)
         {
@@ -389,9 +390,9 @@ public class NodeImp extends ItemImp implements Node
             }
             for (NodeImp child : nodeManager.getDeletedChildNodes(path))
             {
-                if(child.obj!=null)
-                {                    
-                    Base.ClassMgr.removeBase(base.getId(),base.getWorkspace());
+                if (child.obj != null)
+                {
+                    Base.ClassMgr.removeBase(base.getId(), base.getWorkspace());
                 }
             }
             nodeManager.clearDeletedChildNodes(path);
@@ -688,6 +689,7 @@ public class NodeImp extends ItemImp implements Node
     {
         return setProperty(name, valueFactoryImp.createValue(value), type);
     }
+
     @Deprecated
     public Property setProperty(String name, InputStream value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
@@ -829,6 +831,7 @@ public class NodeImp extends ItemImp implements Node
             throw new ItemNotFoundException();
         }
     }
+
     @Deprecated
     public String getUUID() throws UnsupportedRepositoryOperationException, RepositoryException
     {
@@ -956,9 +959,9 @@ public class NodeImp extends ItemImp implements Node
         {
             throw new ConstraintViolationException("The node " + path + " is protected");
         }
-        if(!isNodeType(nodeTypeName))
+        if (!isNodeType(nodeTypeName))
         {
-            throw new NoSuchNodeTypeException(nodeTypeName+" is not a NodeType");
+            throw new NoSuchNodeTypeException(nodeTypeName + " is not a NodeType");
         }
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -986,7 +989,7 @@ public class NodeImp extends ItemImp implements Node
         }
         if (!exists)
         {
-            Value  newValue= valueFactoryImp.createValue(mixinName);
+            Value newValue = valueFactoryImp.createValue(mixinName);
             prop.addValue(newValue);
         }
         for (PropertyDefinitionImp propDef : mixNodeType.getPropertyDefinitionsImp())
@@ -1106,8 +1109,9 @@ public class NodeImp extends ItemImp implements Node
 
     private boolean isSimpleVersionable() throws RepositoryException
     {
-        return this.isNodeType(MIX_SIMPLEVERSIONABLE);                       
+        return this.isNodeType(MIX_SIMPLEVERSIONABLE);
     }
+
     @Deprecated
     public Version checkin() throws VersionException, UnsupportedRepositoryOperationException, InvalidItemStateException, LockException, RepositoryException
     {
@@ -1119,30 +1123,35 @@ public class NodeImp extends ItemImp implements Node
         {
             throw new InvalidItemStateException("The node is not chekedout");
         }
-        if(obj==null || isModified)
+        if (obj == null || isModified)
         {
             throw new UnsupportedRepositoryOperationException("The node must be saved before, because has changes or is new");
         }
         VersionHistoryImp history = (VersionHistoryImp) versionManagerImp.getVersionHistory(this.path);
-        Version obaseVersion=this.session.getWorkspaceImp().getVersionManagerImp().getBaseVersion(path);
-        float versionnumber=1.0f;
-        try
+        Version obaseVersion = this.session.getWorkspaceImp().getVersionManagerImp().getBaseVersion(path);
+
+        float versionnumber = 1.0f;
+        if (!obaseVersion.getName().equals(JCR_ROOT_VERSION))
         {
-            versionnumber=Float.parseFloat(obaseVersion.getName());
-            versionnumber+=0.1f;
-        }
-        catch(NumberFormatException nfe)
-        {
-            log.debug(nfe);
+            try
+            {
+                versionnumber = Float.parseFloat(obaseVersion.getName());
+                versionnumber += 0.1f;
+            }
+            catch (NumberFormatException nfe)
+            {
+                log.debug(nfe);
+            }
         }
         VersionImp version = (VersionImp) history.insertVersionNode(String.valueOf(versionnumber));
         PropertyImp baseVersion = nodeManager.getProtectedProperty(getPathFromName(JCR_BASE_VERSION));
         baseVersion.set(valueFactoryImp.createValue(version));
-        PropertyImp jcr_checkout=nodeManager.getProtectedProperty(JCR_ISCHECKEDOUT);
+        PropertyImp jcr_checkout = nodeManager.getProtectedProperty(JCR_ISCHECKEDOUT);
         jcr_checkout.set(valueFactoryImp.createValue(false));
         this.isModified = true;
         return version;
     }
+
     @Deprecated
     public void checkout() throws UnsupportedRepositoryOperationException, LockException, ActivityViolationException, RepositoryException
     {
@@ -1157,11 +1166,13 @@ public class NodeImp extends ItemImp implements Node
             this.isModified = true;
         }
     }
+
     @Deprecated
     public void doneMerge(Version version) throws VersionException, InvalidItemStateException, UnsupportedRepositoryOperationException, RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
     @Deprecated
     public void cancelMerge(Version version) throws VersionException, InvalidItemStateException, UnsupportedRepositoryOperationException, RepositoryException
     {
@@ -1172,6 +1183,7 @@ public class NodeImp extends ItemImp implements Node
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
     @Deprecated
     public NodeIterator merge(String srcWorkspace, boolean bestEffort) throws NoSuchWorkspaceException, AccessDeniedException, MergeException, LockException, InvalidItemStateException, RepositoryException
     {
@@ -1200,17 +1212,18 @@ public class NodeImp extends ItemImp implements Node
 
     public boolean isCheckedOut() throws RepositoryException
     {
-        if(!isSimpleVersionable())
+        if (!isSimpleVersionable())
         {
             return true;
         }
-        PropertyImp jcr_ischeckout=nodeManager.getProtectedProperty(getPathFromName(JCR_ISCHECKEDOUT));
-        if(jcr_ischeckout.getLength()!=-1)
+        PropertyImp jcr_ischeckout = nodeManager.getProtectedProperty(getPathFromName(JCR_ISCHECKEDOUT));
+        if (jcr_ischeckout.getLength() != -1)
         {
             return jcr_ischeckout.getBoolean();
         }
         return true;
     }
+
     @Deprecated
     public void restore(String versionName, boolean removeExisting) throws VersionException, ItemExistsException, UnsupportedRepositoryOperationException, LockException, InvalidItemStateException, RepositoryException
     {
