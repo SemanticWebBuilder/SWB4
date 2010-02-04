@@ -28,6 +28,7 @@ public class VersionHistoryImp extends NodeImp implements VersionHistory
     private static final String JCR_PREDECESSORS = "jcr:predecessors";
 
     private static final String JCR_ROOT_VERSION_NAME = "jcr:rootVersion";
+    private static final String JCR_SUCCESSORS = "jcr:successors";
     private final NodeImp versionableNode;
     private VersionImp jcr_rootVersion;
 
@@ -103,7 +104,7 @@ public class VersionHistoryImp extends NodeImp implements VersionHistory
        PropertyImp jcr_predecessors=nodeManager.getProtectedProperty(newversion.getPathFromName(JCR_PREDECESSORS));
        jcr_predecessors.addValue(valueFactoryImp.createValue(baseverion));
        
-       PropertyImp jcr_successors=nodeManager.getProtectedProperty(baseverion.getPathFromName("jcr:successors"));
+       PropertyImp jcr_successors=nodeManager.getProtectedProperty(baseverion.getPathFromName(JCR_SUCCESSORS));
        jcr_successors.addValue(valueFactoryImp.createValue(newversion));
 
        return newversion;
