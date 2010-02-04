@@ -473,5 +473,9 @@ public class PropertyImp extends ItemImp implements Property
         {
             throw new ConstraintViolationException("The property " + name + " is mandatory for the node " + parent.path);
         }
+        if (!propertyDefinitionImp.isMultiple() && values.size() > 1)
+        {
+            throw new ConstraintViolationException("The property " + name + " is not multiple for the node " + parent.path);
+        }
     }
 }
