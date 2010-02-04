@@ -143,7 +143,7 @@ public class NodeManager
                         Base base = nodesToLoad.get(i);
                         String path = parentloaded.path;
                         String childpath = parentloaded.getPathFromName(base.getName());
-                        int childIndex = countNodes(base.getName(), parentloaded, session, false);
+                        int childIndex = countNodes(base.getName(), parentloaded, session, false,base.getId());
                         if (childIndex > 0)
                         {
                             childIndex--;
@@ -233,7 +233,7 @@ public class NodeManager
      * @param exact
      * @return
      */
-    public int countNodes(String name, NodeImp parent, SessionImp session, boolean loadchilds) throws RepositoryException
+    public int countNodes(String name, NodeImp parent, SessionImp session, boolean loadchilds,String id) throws RepositoryException
     {
         int countNodes = 0;
         if (nodesbyParent.containsKey(parent.path))
@@ -247,7 +247,17 @@ public class NodeManager
             {
                 if (nodeStatus.getNode().name.equals(name))
                 {
-                    countNodes++;
+                    if(id==null)
+                    {
+                        countNodes++;
+                    }
+                    else
+                    {
+                        if(!id.equals(nodeStatus.getNode().id))
+                        {
+                            countNodes++;
+                        }
+                    }
                 }
             }
         }
@@ -644,7 +654,7 @@ public class NodeManager
                 if (child.getName().equals(name))
                 {
                     int childindex = 0;
-                    childindex = countNodes(child.getName(), node, session, false);
+                    childindex = countNodes(child.getName(), node, session, false,child.getId());
                     String childpath = null;
                     String path = node.path;
                     if (path.endsWith(PATH_SEPARATOR))
@@ -679,7 +689,7 @@ public class NodeManager
             {
                 Base child = childs.next();
                 int childindex = 0;
-                childindex = countNodes(child.getName(), node, session, false);
+                childindex = countNodes(child.getName(), node, session, false,child.getId());
                 String childpath = null;
                 String path = node.path;
                 if (path.endsWith(PATH_SEPARATOR))

@@ -569,13 +569,14 @@ public class NodeImp extends ItemImp implements Node
         {
             throw new ItemExistsException("There is a node with the same name in the node " + this.path);
         }
+        String newId = UUID.randomUUID().toString();
         String childpath = getPathFromName(nameToAdd);
-        int childIndex = nodeManager.countNodes(nameToAdd, this, session, true);
+        int childIndex = nodeManager.countNodes(nameToAdd, this, session, true,newId);
         if (childIndex > 0)
         {
             childpath += "[" + childIndex + "]";
         }
-        String newId = UUID.randomUUID().toString();
+        
         log.trace("Creating the node " + nameToAdd);
         NodeImp newChild = createNodeImp(primaryNodeType, childDefinition, nameToAdd, this, index, childpath, session, newId);
         this.isModified = true;
