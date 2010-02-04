@@ -195,8 +195,7 @@ public class NodeImp extends ItemImp implements Node
             }
             VersionHistoryImp history = new VersionHistoryImp(versionDefinition, jcr_version_Storage, session, this);
             versionManagerImp.addVersionHistory(history,this);
-            prop.set(valueFactoryImp.createValue(history));
-            this.isModified = true;
+            prop.set(valueFactoryImp.createValue(history));            
             nodeManager.addNode(history, history.path, path);
 
         }
@@ -210,8 +209,7 @@ public class NodeImp extends ItemImp implements Node
             PropertyImp prop = nodeManager.getProtectedProperty(propertyPath);
             if (prop.getLength() == -1)
             {
-                prop.set(valueFactoryImp.createValue(nodeType.getName()));
-                this.isModified = true;
+                prop.set(valueFactoryImp.createValue(nodeType.getName()));                
             }
         }
         catch (Exception e)
@@ -230,8 +228,7 @@ public class NodeImp extends ItemImp implements Node
                 PropertyImp prop = nodeManager.getProperty(propertyPath);
                 if (prop.getLength() == -1)
                 {
-                    prop.set(valueFactoryImp.createValue(Calendar.getInstance()));
-                    this.isModified = true;
+                    prop.set(valueFactoryImp.createValue(Calendar.getInstance()));                    
                 }
             }
         }
@@ -251,8 +248,7 @@ public class NodeImp extends ItemImp implements Node
                 PropertyImp prop = nodeManager.getProtectedProperty(propertyPath);
                 if (prop.getLength() == -1)
                 {
-                    prop.set(valueFactoryImp.createValue(true));
-                    this.isModified = true;
+                    prop.set(valueFactoryImp.createValue(true));                    
                 }
             }
         }
@@ -272,15 +268,13 @@ public class NodeImp extends ItemImp implements Node
                 PropertyImp prop = nodeManager.getProtectedProperty(propertyPath);
                 if (prop.getLength() == -1)
                 {
-                    prop.set(valueFactoryImp.createValue(Calendar.getInstance()));
-                    this.isModified = true;
+                    prop.set(valueFactoryImp.createValue(Calendar.getInstance()));                    
                 }
                 propertyPath = getPathFromName(JCR_CREATEDBY);
                 prop = nodeManager.getProperty(propertyPath);
                 if (prop.getLength() == -1)
                 {
-                    prop.set(valueFactoryImp.createValue(session.getUserID()));
-                    this.isModified = true;
+                    prop.set(valueFactoryImp.createValue(session.getUserID()));                    
                 }
 
             }
@@ -302,14 +296,13 @@ public class NodeImp extends ItemImp implements Node
                 if (prop.getLength() == -1)
                 {
                     prop.set(valueFactoryImp.createValue(Calendar.getInstance()));
-                    this.isModified = true;
+                    
                 }
                 propertyPath = getPathFromName(JCR_LASTMODIFIEDBY);
                 prop = nodeManager.getProperty(propertyPath);
                 if (prop.getLength() == -1)
                 {
-                    prop.set(valueFactoryImp.createValue(session.getUserID()));
-                    this.isModified = true;
+                    prop.set(valueFactoryImp.createValue(session.getUserID()));                    
                 }
             }
         }
@@ -329,8 +322,7 @@ public class NodeImp extends ItemImp implements Node
                 PropertyImp prop = nodeManager.getProtectedProperty(propertyPath);
                 if (prop.getLength() == -1)
                 {
-                    prop.set(valueFactoryImp.createValue(this.id));
-                    this.isModified = true;
+                    prop.set(valueFactoryImp.createValue(this.id));                    
                 }
             }
         }
@@ -375,9 +367,9 @@ public class NodeImp extends ItemImp implements Node
 
         if (isModified)
         {
+            log.trace("Saving node "+this.path);
             for (NodeImp child : nodeManager.getChildNodes(this))
             {
-
                 child.save();
             }
             for (NodeImp child : nodeManager.getProtectedChildNodes(this.path))
@@ -574,8 +566,7 @@ public class NodeImp extends ItemImp implements Node
         if (childIndex > 0)
         {
             childpath += "[" + childIndex + "]";
-        }
-        
+        }        
         //log.trace("Creating the node " + nameToAdd);
         NodeImp newChild = createNodeImp(primaryNodeType, childDefinition, nameToAdd, this, index, childpath, session, newId);
         this.isModified = true;
@@ -1153,8 +1144,7 @@ public class NodeImp extends ItemImp implements Node
         PropertyImp baseVersion = nodeManager.getProtectedProperty(getPathFromName(JCR_BASE_VERSION));
         baseVersion.set(valueFactoryImp.createValue(version));
         PropertyImp jcr_checkout = nodeManager.getProtectedProperty(getPathFromName(JCR_ISCHECKEDOUT));
-        jcr_checkout.set(valueFactoryImp.createValue(false));
-        this.isModified = true;
+        jcr_checkout.set(valueFactoryImp.createValue(false));        
         return version;
     }
 
@@ -1168,8 +1158,7 @@ public class NodeImp extends ItemImp implements Node
         PropertyImp prop = nodeManager.getProtectedProperty(this.getPathFromName(JCR_ISCHECKEDOUT));
         if (prop.getLength() == -1)
         {
-            prop.set(valueFactoryImp.createValue(true));
-            this.isModified = true;
+            prop.set(valueFactoryImp.createValue(true));            
         }
     }
 
