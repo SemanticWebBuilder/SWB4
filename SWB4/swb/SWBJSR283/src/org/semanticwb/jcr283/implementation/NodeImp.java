@@ -1147,7 +1147,7 @@ public class NodeImp extends ItemImp implements Node
         VersionImp version = (VersionImp) history.insertVersionNode(String.valueOf(versionnumber));
         PropertyImp baseVersion = nodeManager.getProtectedProperty(getPathFromName(JCR_BASE_VERSION));
         baseVersion.set(valueFactoryImp.createValue(version));
-        PropertyImp jcr_checkout = nodeManager.getProtectedProperty(JCR_ISCHECKEDOUT);
+        PropertyImp jcr_checkout = nodeManager.getProtectedProperty(getPathFromName(JCR_ISCHECKEDOUT));
         jcr_checkout.set(valueFactoryImp.createValue(false));
         this.isModified = true;
         return version;

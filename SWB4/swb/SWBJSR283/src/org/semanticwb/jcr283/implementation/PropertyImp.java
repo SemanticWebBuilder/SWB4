@@ -132,6 +132,7 @@ public class PropertyImp extends ItemImp implements Property
             newValues.add(transformValue(value, reqType));
         }
         log.trace("Setting values to the property " + path + "  values.length: " + values.length);
+        this.values.clear();
         this.values.addAll(newValues);
         this.isModified = true;
         parent.isModified = true;
