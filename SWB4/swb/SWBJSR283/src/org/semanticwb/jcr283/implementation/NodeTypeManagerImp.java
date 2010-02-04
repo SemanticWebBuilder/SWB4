@@ -49,7 +49,7 @@ public class NodeTypeManagerImp implements NodeTypeManager
             NodeTypeImp nodeType = null;
             if (!types.containsKey(name))
             {
-                log.trace("loading nodetype ... " + clazz.getURI() + " ...");
+                log.trace("Loading nodetype ... " + clazz.getURI() + " ...");
                 nodeType = new NodeTypeImp(clazz);
                 types.put(name, nodeType);
                 nodeType.loadPropertyDefinitions();
@@ -65,7 +65,7 @@ public class NodeTypeManagerImp implements NodeTypeManager
 
     private static void loadNodeTypes()
     {
-        log.trace("loading nodetypes...");
+        //log.trace("Loading nodetypes...");
         Iterator<SemanticClass> classes = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
         while (classes.hasNext())
         {

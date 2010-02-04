@@ -136,7 +136,7 @@ public class NodeTypeImp implements NodeType
             if (superClazz.isSubClass(Base.sclass))
             {
                 NodeTypeImp superNodeType = NodeTypeManagerImp.loadNodeType(superClazz);
-                log.trace("loading superType " + superNodeType.getName() + " for nodeType " + this.getName());
+                //log.trace("loading superType " + superNodeType.getName() + " for nodeType " + this.getName());
                 supertypes.add(superNodeType);
             }
         }
@@ -257,7 +257,7 @@ public class NodeTypeImp implements NodeType
             if (!childnodeDefinitions.containsKey(name))
             {
                 NodeDefinitionImp nodeDefinitionImp = new NodeDefinitionImp(childDefinition, this);
-                log.trace("loading nodeDefinition " + name + " for node " + this.getName());
+                //log.trace("Loading nodeDefinition " + name + " for node " + this.getName());
                 childnodeDefinitions.put(nodeDefinitionImp.getName(), nodeDefinitionImp);
             }
         }
@@ -295,7 +295,7 @@ public class NodeTypeImp implements NodeType
             if (oclazz.isSubClass(clazz))
             {
                 NodeTypeImp nodeType = NodeTypeManagerImp.loadNodeType(clazz);
-                log.trace("loading subtype " + nodeType.getName() + " for nodeType " + this.getName());
+                //log.trace("Loading subtype " + nodeType.getName() + " for nodeType " + this.getName());
                 subtypes.add(nodeType);
             }
         }

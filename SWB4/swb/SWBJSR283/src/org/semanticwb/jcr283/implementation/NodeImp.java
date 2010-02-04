@@ -120,6 +120,7 @@ public class NodeImp extends ItemImp implements Node
         loadProperties(false);
         if(isnew)
         {
+            init();
             try
             {
                 PropertyImp jcr_name=nodeManager.getProtectedProperty(getPathFromName(JCR_NAME));
@@ -131,7 +132,6 @@ public class NodeImp extends ItemImp implements Node
             }
 
         }
-        init();
 
     }
 
@@ -186,9 +186,8 @@ public class NodeImp extends ItemImp implements Node
         PropertyImp prop = nodeManager.getProtectedProperty(getPathFromName(JCR_VERSION_HISTORY));
         if (prop.getLength() == -1)
         {
-            log.trace("Initilizing versionHistory for node " + path);
-            NodeDefinitionImp versionDefinition = new VersionHistoryDefinition();
-            NodeImp root = nodeManager.getNode(SEPARATOR, session);
+            //log.trace("Initilizing versionHistory for node " + path);
+            NodeDefinitionImp versionDefinition = new VersionHistoryDefinition();            
             NodeImp jcr_version_Storage = versionManagerImp.getVersionStorage();
             if (jcr_version_Storage == null)
             {
@@ -352,7 +351,7 @@ public class NodeImp extends ItemImp implements Node
             String newid = UUID.randomUUID().toString();
             String workspacename = session.getWorkspaceImp().getName();
             org.semanticwb.jcr283.repository.model.Workspace model = org.semanticwb.jcr283.repository.model.Workspace.ClassMgr.getWorkspace(workspacename);
-            log.trace("creating a node with id :" + newid + " and class " + sclass.getURI());
+            //log.trace("Creating a node with id :" + newid + " and class " + sclass.getURI());
             obj = model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(newid, sclass), sclass).getSemanticObject();
             base = new Base(obj);
             base.setName(this.name);
@@ -577,7 +576,7 @@ public class NodeImp extends ItemImp implements Node
             childpath += "[" + childIndex + "]";
         }
         
-        log.trace("Creating the node " + nameToAdd);
+        //log.trace("Creating the node " + nameToAdd);
         NodeImp newChild = createNodeImp(primaryNodeType, childDefinition, nameToAdd, this, index, childpath, session, newId);
         this.isModified = true;
         return nodeManager.addNode(newChild, childpath, path);

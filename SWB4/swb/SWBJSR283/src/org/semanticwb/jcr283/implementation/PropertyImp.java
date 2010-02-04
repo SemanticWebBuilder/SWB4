@@ -84,7 +84,7 @@ public class PropertyImp extends ItemImp implements Property
                 String value = literal.getString();
                 try
                 {
-                    log.trace("loading value from database for the property " + path);
+                    //log.trace("loading value from database for the property " + path);
                     values.add(transformValue(valueFactoryImp.createValue(value), ((PropertyDefinitionImp) definition).getRequiredType()));
                 }
                 catch (Exception e)
@@ -115,7 +115,7 @@ public class PropertyImp extends ItemImp implements Property
         {
             return value;
         }
-        log.trace("Tranforming value from " + PropertyType.nameFromValue(value.getType()) + " to " + PropertyType.nameFromValue(reqValue));
+        //log.trace("Tranforming value from " + PropertyType.nameFromValue(value.getType()) + " to " + PropertyType.nameFromValue(reqValue));
         ValueImp newValue = new ValueImp(value, reqValue);
         return newValue;
     }
@@ -418,7 +418,7 @@ public class PropertyImp extends ItemImp implements Property
                 prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(urinewProperty);
             }
             SemanticObject obj = parent.getSemanticObject();
-            log.trace("Saving property " + path + " for node " + parent.path + " values :" + values.size());
+            //log.trace("Saving property " + path + " for node " + parent.path + " values :" + values.size());
 
             for (Value value : this.values)
             {
