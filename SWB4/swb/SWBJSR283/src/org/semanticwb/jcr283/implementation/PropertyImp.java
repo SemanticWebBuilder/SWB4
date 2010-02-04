@@ -70,6 +70,7 @@ public class PropertyImp extends ItemImp implements Property
         }
         this.values.add(value);
         this.isModified = true;
+        this.parent.isModified=true;
     }
 
     public void loadValues()
