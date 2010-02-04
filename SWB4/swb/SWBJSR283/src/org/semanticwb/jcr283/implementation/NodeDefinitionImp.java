@@ -145,7 +145,7 @@ public class NodeDefinitionImp extends ItemDefinitionImp implements NodeDefiniti
     public static NodeDefinitionImp getNodeDefinition(String name,NodeImp parent)
     {
         NodeDefinitionImp childDefinition = null;
-        for (NodeDefinitionImp childNodeDefinition : ((NodeDefinitionImp) parent.definition).getDeclaringNodeTypeImp().getChildNodeDefinitionsImp())
+        for (NodeDefinitionImp childNodeDefinition : parent.nodeType.getChildNodeDefinitionsImp())
         {
             if (childNodeDefinition.getName().equals(name))
             {

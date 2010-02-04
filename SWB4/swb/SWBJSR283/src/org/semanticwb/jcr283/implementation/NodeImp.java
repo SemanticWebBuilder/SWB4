@@ -80,7 +80,7 @@ public class NodeImp extends ItemImp implements Node
     protected final static ValueFactoryImp valueFactoryImp = new ValueFactoryImp();
     private SemanticObject obj = null;
     private final int index;
-    private final NodeTypeImp nodeType;
+    protected final NodeTypeImp nodeType;
     protected final NodeTypeManagerImp nodeTypeManager;
     protected final String id;
     private final VersionManagerImp versionManagerImp;
@@ -113,10 +113,10 @@ public class NodeImp extends ItemImp implements Node
         this.index = index;
         this.isNew = true;
         this.id = id;
-        loadProperties(false);
         this.nodeType = nodeType;
         this.nodeTypeManager = session.getWorkspaceImp().getNodeTypeManagerImp();
         versionManagerImp = session.getWorkspaceImp().getVersionManagerImp();
+        loadProperties(false);                
         init();
 
     }
@@ -454,7 +454,7 @@ public class NodeImp extends ItemImp implements Node
     private void loadProperties(boolean replace)
     {
         // declared properties
-        for (PropertyDefinitionImp propDef : ((NodeDefinitionImp) this.definition).getDeclaringNodeTypeImp().getPropertyDefinitionsImp())
+        for (PropertyDefinitionImp propDef : nodeType.getPropertyDefinitionsImp())
         {
             if (propDef.getSemanticProperty() != null)
             {
