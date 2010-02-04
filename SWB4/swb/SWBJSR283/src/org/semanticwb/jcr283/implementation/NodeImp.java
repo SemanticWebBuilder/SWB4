@@ -571,7 +571,7 @@ public class NodeImp extends ItemImp implements Node
         }
         String newId = UUID.randomUUID().toString();
         String childpath = getPathFromName(nameToAdd);
-        int childIndex = nodeManager.countNodes(nameToAdd, this, session, true,newId);
+        int childIndex = nodeManager.countNodes(nameToAdd, this, session, false,newId);
         if (childIndex > 0)
         {
             childpath += "[" + childIndex + "]";
