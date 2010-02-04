@@ -49,11 +49,11 @@ public class VersionManagerImp implements VersionManager
         baseVersions.put(path, version);
     }
 
-    public void addVersionHistory(VersionHistoryImp version) throws RepositoryException
+    public void addVersionHistory(VersionHistoryImp version,NodeImp versionableNode) throws RepositoryException
     {
-        if (!versionhistories.containsKey(version.getVersionableIdentifier()))
+        if (!versionhistories.containsKey(versionableNode.path))
         {
-            versionhistories.put(version.getVersionableIdentifier(), version);
+            versionhistories.put(versionableNode.path, version);
         }
     }
     @SuppressWarnings(value="deprecation")
