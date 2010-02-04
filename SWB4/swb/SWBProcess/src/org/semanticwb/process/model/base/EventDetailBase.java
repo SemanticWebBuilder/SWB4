@@ -3,7 +3,6 @@ package org.semanticwb.process.model.base;
 
 public abstract class EventDetailBase extends org.semanticwb.process.model.SupportingElement implements org.semanticwb.model.Descriptiveable
 {
-       public static final org.semanticwb.platform.SemanticProperty swp_eventDetailType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#eventDetailType");
        public static final org.semanticwb.platform.SemanticClass swp_EventDetail=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#EventDetail");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#EventDetail");
     public static class ClassMgr
@@ -62,15 +61,5 @@ public abstract class EventDetailBase extends org.semanticwb.process.model.Suppo
     public EventDetailBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-    public String getEventDetailType()
-    {
-        return getSemanticObject().getProperty(swp_eventDetailType);
-    }
-
-    public void setEventDetailType(String value)
-    {
-        getSemanticObject().setProperty(swp_eventDetailType, value);
     }
 }

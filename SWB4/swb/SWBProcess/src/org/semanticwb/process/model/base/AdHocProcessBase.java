@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class AdHocProcessBase extends org.semanticwb.process.model.EmbeddedSubProcess implements org.semanticwb.process.model.Observable,org.semanticwb.process.model.Performable,org.semanticwb.process.model.Diagramable,org.semanticwb.process.model.AdHocable,org.semanticwb.process.model.Modelable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.IOAble,org.semanticwb.process.model.Assignable
+public abstract class AdHocProcessBase extends org.semanticwb.process.model.Process implements org.semanticwb.process.model.AdHocable,org.semanticwb.process.model.Modelable,org.semanticwb.process.model.Assignable,org.semanticwb.model.Traceable,org.semanticwb.process.model.Diagramable,org.semanticwb.process.model.Performable,org.semanticwb.process.model.IOAble,org.semanticwb.process.model.ProcessTraceable,org.semanticwb.model.Descriptiveable
 {
        public static final org.semanticwb.platform.SemanticClass swp_AdHocProcess=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#AdHocProcess");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#AdHocProcess");
@@ -18,12 +18,6 @@ public abstract class AdHocProcessBase extends org.semanticwb.process.model.Embe
        {
            java.util.Iterator it=sclass.listInstances();
            return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess>(it, true);
-       }
-
-       public static org.semanticwb.process.model.AdHocProcess createAdHocProcess(org.semanticwb.model.SWBModel model)
-       {
-           long id=model.getSemanticObject().getModel().getCounter(sclass);
-           return org.semanticwb.process.model.AdHocProcess.ClassMgr.createAdHocProcess(String.valueOf(id), model);
        }
 
        public static org.semanticwb.process.model.AdHocProcess getAdHocProcess(String id, org.semanticwb.model.SWBModel model)
@@ -45,37 +39,15 @@ public abstract class AdHocProcessBase extends org.semanticwb.process.model.Embe
        {
            return (getAdHocProcess(id, model)!=null);
        }
-   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByLane(org.semanticwb.process.model.Lane lane,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByModifiedBy(org.semanticwb.model.User modifiedby,org.semanticwb.model.SWBModel model)
    {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_lane, lane.getSemanticObject()));
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_modifiedBy, modifiedby.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByLane(org.semanticwb.process.model.Lane lane)
+   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByModifiedBy(org.semanticwb.model.User modifiedby)
    {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(lane.getSemanticObject().getModel().listSubjects(swp_lane,lane.getSemanticObject()));
-       return it;
-   }
-   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByGraphicalElement(org.semanticwb.process.model.GraphicalElement hasgraphicalelement,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasGraphicalElement, hasgraphicalelement.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByGraphicalElement(org.semanticwb.process.model.GraphicalElement hasgraphicalelement)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(hasgraphicalelement.getSemanticObject().getModel().listSubjects(swp_hasGraphicalElement,hasgraphicalelement.getSemanticObject()));
-       return it;
-   }
-   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByIORule(org.semanticwb.process.model.Expression hasiorule,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasIORule, hasiorule.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByIORule(org.semanticwb.process.model.Expression hasiorule)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(hasiorule.getSemanticObject().getModel().listSubjects(swp_hasIORule,hasiorule.getSemanticObject()));
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(modifiedby.getSemanticObject().getModel().listSubjects(swb_modifiedBy,modifiedby.getSemanticObject()));
        return it;
    }
    public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByInputSet(org.semanticwb.process.model.InputSet hasinputset,org.semanticwb.model.SWBModel model)
@@ -89,37 +61,15 @@ public abstract class AdHocProcessBase extends org.semanticwb.process.model.Embe
        org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(hasinputset.getSemanticObject().getModel().listSubjects(swp_hasInputSet,hasinputset.getSemanticObject()));
        return it;
    }
-   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByLoopCondition(org.semanticwb.process.model.Expression loopcondition,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByOutputSet(org.semanticwb.process.model.OutputSet hasoutputset,org.semanticwb.model.SWBModel model)
    {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_loopCondition, loopcondition.getSemanticObject()));
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasOutputSet, hasoutputset.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByLoopCondition(org.semanticwb.process.model.Expression loopcondition)
+   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByOutputSet(org.semanticwb.process.model.OutputSet hasoutputset)
    {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(loopcondition.getSemanticObject().getModel().listSubjects(swp_loopCondition,loopcondition.getSemanticObject()));
-       return it;
-   }
-   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByCategory(org.semanticwb.process.model.Category hascategory,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasCategory, hascategory.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByCategory(org.semanticwb.process.model.Category hascategory)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(hascategory.getSemanticObject().getModel().listSubjects(swp_hasCategory,hascategory.getSemanticObject()));
-       return it;
-   }
-   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByComplexMIFlowCondition(org.semanticwb.process.model.Expression complexmiflowcondition,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_complexMIFlowCondition, complexmiflowcondition.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByComplexMIFlowCondition(org.semanticwb.process.model.Expression complexmiflowcondition)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(complexmiflowcondition.getSemanticObject().getModel().listSubjects(swp_complexMIFlowCondition,complexmiflowcondition.getSemanticObject()));
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(hasoutputset.getSemanticObject().getModel().listSubjects(swp_hasOutputSet,hasoutputset.getSemanticObject()));
        return it;
    }
    public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByAssignment(org.semanticwb.process.model.Assignment hasassignment,org.semanticwb.model.SWBModel model)
@@ -133,26 +83,15 @@ public abstract class AdHocProcessBase extends org.semanticwb.process.model.Embe
        org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(hasassignment.getSemanticObject().getModel().listSubjects(swp_hasAssignment,hasassignment.getSemanticObject()));
        return it;
    }
-   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByProperty(org.semanticwb.process.model.Property hasproperty,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByGraphicalElement(org.semanticwb.process.model.GraphicalElement hasgraphicalelement,org.semanticwb.model.SWBModel model)
    {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasProperty, hasproperty.getSemanticObject()));
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasGraphicalElement, hasgraphicalelement.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByProperty(org.semanticwb.process.model.Property hasproperty)
+   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByGraphicalElement(org.semanticwb.process.model.GraphicalElement hasgraphicalelement)
    {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(hasproperty.getSemanticObject().getModel().listSubjects(swp_hasProperty,hasproperty.getSemanticObject()));
-       return it;
-   }
-   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByOutputSet(org.semanticwb.process.model.OutputSet hasoutputset,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasOutputSet, hasoutputset.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByOutputSet(org.semanticwb.process.model.OutputSet hasoutputset)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(hasoutputset.getSemanticObject().getModel().listSubjects(swp_hasOutputSet,hasoutputset.getSemanticObject()));
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(hasgraphicalelement.getSemanticObject().getModel().listSubjects(swp_hasGraphicalElement,hasgraphicalelement.getSemanticObject()));
        return it;
    }
    public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByAdHocCompletionCondition(org.semanticwb.process.model.Expression adhoccompletioncondition,org.semanticwb.model.SWBModel model)
@@ -166,26 +105,48 @@ public abstract class AdHocProcessBase extends org.semanticwb.process.model.Embe
        org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(adhoccompletioncondition.getSemanticObject().getModel().listSubjects(swp_adHocCompletionCondition,adhoccompletioncondition.getSemanticObject()));
        return it;
    }
-   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByTransactionRef(org.semanticwb.process.model.Transaction transactionref,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByCreator(org.semanticwb.model.User creator,org.semanticwb.model.SWBModel model)
    {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_transactionRef, transactionref.getSemanticObject()));
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_creator, creator.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByTransactionRef(org.semanticwb.process.model.Transaction transactionref)
+   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByCreator(org.semanticwb.model.User creator)
    {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(transactionref.getSemanticObject().getModel().listSubjects(swp_transactionRef,transactionref.getSemanticObject()));
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(creator.getSemanticObject().getModel().listSubjects(swb_creator,creator.getSemanticObject()));
        return it;
    }
-   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByMICondition(org.semanticwb.process.model.Expression micondition,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByEndedBy(org.semanticwb.model.User endedby,org.semanticwb.model.SWBModel model)
    {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_mICondition, micondition.getSemanticObject()));
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_endedBy, endedby.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByMICondition(org.semanticwb.process.model.Expression micondition)
+   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByEndedBy(org.semanticwb.model.User endedby)
    {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(micondition.getSemanticObject().getModel().listSubjects(swp_mICondition,micondition.getSemanticObject()));
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(endedby.getSemanticObject().getModel().listSubjects(swp_endedBy,endedby.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByProperty(org.semanticwb.process.model.Property hasproperty,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasProperty, hasproperty.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByProperty(org.semanticwb.process.model.Property hasproperty)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(hasproperty.getSemanticObject().getModel().listSubjects(swp_hasProperty,hasproperty.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByCategory(org.semanticwb.process.model.Category hascategory,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasCategory, hascategory.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.process.model.AdHocProcess> listAdHocProcessByCategory(org.semanticwb.process.model.Category hascategory)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdHocProcess> it=new org.semanticwb.model.GenericIterator(hascategory.getSemanticObject().getModel().listSubjects(swp_hasCategory,hascategory.getSemanticObject()));
        return it;
    }
     }
@@ -193,5 +154,37 @@ public abstract class AdHocProcessBase extends org.semanticwb.process.model.Embe
     public AdHocProcessBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public String getAdHocOrdering()
+    {
+        return getSemanticObject().getProperty(swp_adHocOrdering);
+    }
+
+    public void setAdHocOrdering(String value)
+    {
+        getSemanticObject().setProperty(swp_adHocOrdering, value);
+    }
+
+    public void setAdHocCompletionCondition(org.semanticwb.process.model.Expression value)
+    {
+        getSemanticObject().setObjectProperty(swp_adHocCompletionCondition, value.getSemanticObject());
+    }
+
+    public void removeAdHocCompletionCondition()
+    {
+        getSemanticObject().removeProperty(swp_adHocCompletionCondition);
+    }
+
+
+    public org.semanticwb.process.model.Expression getAdHocCompletionCondition()
+    {
+         org.semanticwb.process.model.Expression ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_adHocCompletionCondition);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.process.model.Expression)obj.createGenericInstance();
+         }
+         return ret;
     }
 }

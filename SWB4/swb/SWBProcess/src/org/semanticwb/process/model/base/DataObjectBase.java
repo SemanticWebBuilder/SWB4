@@ -75,6 +75,16 @@ public abstract class DataObjectBase extends org.semanticwb.process.model.Artifa
         super(base);
     }
 
+    public String getState()
+    {
+        return getSemanticObject().getProperty(swp_state);
+    }
+
+    public void setState(String value)
+    {
+        getSemanticObject().setProperty(swp_state, value);
+    }
+
     public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Property> listProperties()
     {
         return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Property>(getSemanticObject().listObjectProperties(swp_hasProperty));
@@ -111,15 +121,5 @@ public abstract class DataObjectBase extends org.semanticwb.process.model.Artifa
              ret=(org.semanticwb.process.model.Property)obj.createGenericInstance();
          }
          return ret;
-    }
-
-    public String getState()
-    {
-        return getSemanticObject().getProperty(swp_state);
-    }
-
-    public void setState(String value)
-    {
-        getSemanticObject().setProperty(swp_state, value);
     }
 }

@@ -22,6 +22,12 @@ public abstract class SignalDetailBase extends org.semanticwb.process.model.Even
            return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.SignalDetail>(it, true);
        }
 
+       public static org.semanticwb.process.model.SignalDetail createSignalDetail(org.semanticwb.model.SWBModel model)
+       {
+           long id=model.getSemanticObject().getModel().getCounter(sclass);
+           return org.semanticwb.process.model.SignalDetail.ClassMgr.createSignalDetail(String.valueOf(id), model);
+       }
+
        public static org.semanticwb.process.model.SignalDetail getSignalDetail(String id, org.semanticwb.model.SWBModel model)
        {
            return (org.semanticwb.process.model.SignalDetail)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);

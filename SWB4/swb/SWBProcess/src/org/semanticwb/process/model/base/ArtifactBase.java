@@ -3,7 +3,6 @@ package org.semanticwb.process.model.base;
 
 public abstract class ArtifactBase extends org.semanticwb.process.model.GraphicalElement implements org.semanticwb.model.Descriptiveable
 {
-       public static final org.semanticwb.platform.SemanticProperty swp_artifactType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#artifactType");
        public static final org.semanticwb.platform.SemanticClass swp_Artifact=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#Artifact");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#Artifact");
     public static class ClassMgr
@@ -62,15 +61,5 @@ public abstract class ArtifactBase extends org.semanticwb.process.model.Graphica
     public ArtifactBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-    public String getArtifactType()
-    {
-        return getSemanticObject().getProperty(swp_artifactType);
-    }
-
-    public void setArtifactType(String value)
-    {
-        getSemanticObject().setProperty(swp_artifactType, value);
     }
 }

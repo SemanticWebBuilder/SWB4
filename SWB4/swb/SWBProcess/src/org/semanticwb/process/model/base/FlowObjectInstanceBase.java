@@ -1,12 +1,12 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class FlowObjectInstanceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.process.model.Observable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ProcessTraceable
+public abstract class FlowObjectInstanceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.process.model.ProcessTraceable,org.semanticwb.model.Descriptiveable
 {
+       public static final org.semanticwb.platform.SemanticProperty swp_iteration=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#iteration");
+       public static final org.semanticwb.platform.SemanticProperty swp_action=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#action");
        public static final org.semanticwb.platform.SemanticClass swp_FlowObject=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#FlowObject");
        public static final org.semanticwb.platform.SemanticProperty swp_flowObjectType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#flowObjectType");
-       public static final org.semanticwb.platform.SemanticProperty swp_action=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#action");
-       public static final org.semanticwb.platform.SemanticProperty swp_iteration=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#iteration");
        public static final org.semanticwb.platform.SemanticProperty swp_execution=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#execution");
        public static final org.semanticwb.platform.SemanticClass swp_FlowObjectInstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#FlowObjectInstance");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#FlowObjectInstance");
@@ -72,17 +72,6 @@ public abstract class FlowObjectInstanceBase extends org.semanticwb.model.SWBCla
        org.semanticwb.model.GenericIterator<org.semanticwb.process.model.FlowObjectInstance> it=new org.semanticwb.model.GenericIterator(flowobjecttype.getSemanticObject().getModel().listSubjects(swp_flowObjectType,flowobjecttype.getSemanticObject()));
        return it;
    }
-   public static java.util.Iterator<org.semanticwb.process.model.FlowObjectInstance> listFlowObjectInstanceByEndedBy(org.semanticwb.model.User endedby,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.FlowObjectInstance> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_endedBy, endedby.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.process.model.FlowObjectInstance> listFlowObjectInstanceByEndedBy(org.semanticwb.model.User endedby)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.FlowObjectInstance> it=new org.semanticwb.model.GenericIterator(endedby.getSemanticObject().getModel().listSubjects(swp_endedBy,endedby.getSemanticObject()));
-       return it;
-   }
    public static java.util.Iterator<org.semanticwb.process.model.FlowObjectInstance> listFlowObjectInstanceByCreator(org.semanticwb.model.User creator,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.process.model.FlowObjectInstance> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_creator, creator.getSemanticObject()));
@@ -94,21 +83,22 @@ public abstract class FlowObjectInstanceBase extends org.semanticwb.model.SWBCla
        org.semanticwb.model.GenericIterator<org.semanticwb.process.model.FlowObjectInstance> it=new org.semanticwb.model.GenericIterator(creator.getSemanticObject().getModel().listSubjects(swb_creator,creator.getSemanticObject()));
        return it;
    }
+   public static java.util.Iterator<org.semanticwb.process.model.FlowObjectInstance> listFlowObjectInstanceByEndedBy(org.semanticwb.model.User endedby,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.FlowObjectInstance> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_endedBy, endedby.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.process.model.FlowObjectInstance> listFlowObjectInstanceByEndedBy(org.semanticwb.model.User endedby)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.FlowObjectInstance> it=new org.semanticwb.model.GenericIterator(endedby.getSemanticObject().getModel().listSubjects(swp_endedBy,endedby.getSemanticObject()));
+       return it;
+   }
     }
 
     public FlowObjectInstanceBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-    public java.util.Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(swb_created);
-    }
-
-    public void setCreated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_created, value);
     }
 
     public void setModifiedBy(org.semanticwb.model.User value)
@@ -133,6 +123,36 @@ public abstract class FlowObjectInstanceBase extends org.semanticwb.model.SWBCla
          return ret;
     }
 
+    public java.util.Date getEnded()
+    {
+        return getSemanticObject().getDateProperty(swp_ended);
+    }
+
+    public void setEnded(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swp_ended, value);
+    }
+
+    public int getIteration()
+    {
+        return getSemanticObject().getIntProperty(swp_iteration);
+    }
+
+    public void setIteration(int value)
+    {
+        getSemanticObject().setIntProperty(swp_iteration, value);
+    }
+
+    public java.util.Date getCreated()
+    {
+        return getSemanticObject().getDateProperty(swb_created);
+    }
+
+    public void setCreated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_created, value);
+    }
+
     public java.util.Date getUpdated()
     {
         return getSemanticObject().getDateProperty(swb_updated);
@@ -141,6 +161,41 @@ public abstract class FlowObjectInstanceBase extends org.semanticwb.model.SWBCla
     public void setUpdated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_updated, value);
+    }
+
+    public String getDescription()
+    {
+        return getSemanticObject().getProperty(swb_description);
+    }
+
+    public void setDescription(String value)
+    {
+        getSemanticObject().setProperty(swb_description, value);
+    }
+
+    public String getDescription(String lang)
+    {
+        return getSemanticObject().getProperty(swb_description, null, lang);
+    }
+
+    public String getDisplayDescription(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_description, lang);
+    }
+
+    public void setDescription(String description, String lang)
+    {
+        getSemanticObject().setProperty(swb_description, description, lang);
+    }
+
+    public String getAction()
+    {
+        return getSemanticObject().getProperty(swp_action);
+    }
+
+    public void setAction(String value)
+    {
+        getSemanticObject().setProperty(swp_action, value);
     }
 
     public void setFlowObjectType(org.semanticwb.process.model.FlowObject value)
@@ -165,66 +220,14 @@ public abstract class FlowObjectInstanceBase extends org.semanticwb.model.SWBCla
          return ret;
     }
 
-    public java.util.Date getEnded()
+    public int getExecution()
     {
-        return getSemanticObject().getDateProperty(swp_ended);
+        return getSemanticObject().getIntProperty(swp_execution);
     }
 
-    public void setEnded(java.util.Date value)
+    public void setExecution(int value)
     {
-        getSemanticObject().setDateProperty(swp_ended, value);
-    }
-
-    public void setEndedBy(org.semanticwb.model.User value)
-    {
-        getSemanticObject().setObjectProperty(swp_endedBy, value.getSemanticObject());
-    }
-
-    public void removeEndedBy()
-    {
-        getSemanticObject().removeProperty(swp_endedBy);
-    }
-
-
-    public org.semanticwb.model.User getEndedBy()
-    {
-         org.semanticwb.model.User ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_endedBy);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.User)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
-    public String getAction()
-    {
-        return getSemanticObject().getProperty(swp_action);
-    }
-
-    public void setAction(String value)
-    {
-        getSemanticObject().setProperty(swp_action, value);
-    }
-
-    public String getStatus()
-    {
-        return getSemanticObject().getProperty(swp_status);
-    }
-
-    public void setStatus(String value)
-    {
-        getSemanticObject().setProperty(swp_status, value);
-    }
-
-    public int getIteration()
-    {
-        return getSemanticObject().getIntProperty(swp_iteration);
-    }
-
-    public void setIteration(int value)
-    {
-        getSemanticObject().setIntProperty(swp_iteration, value);
+        getSemanticObject().setIntProperty(swp_execution, value);
     }
 
     public void setCreator(org.semanticwb.model.User value)
@@ -249,13 +252,50 @@ public abstract class FlowObjectInstanceBase extends org.semanticwb.model.SWBCla
          return ret;
     }
 
-    public int getExecution()
+    public String getTitle()
     {
-        return getSemanticObject().getIntProperty(swp_execution);
+        return getSemanticObject().getProperty(swb_title);
     }
 
-    public void setExecution(int value)
+    public void setTitle(String value)
     {
-        getSemanticObject().setIntProperty(swp_execution, value);
+        getSemanticObject().setProperty(swb_title, value);
+    }
+
+    public String getTitle(String lang)
+    {
+        return getSemanticObject().getProperty(swb_title, null, lang);
+    }
+
+    public String getDisplayTitle(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_title, lang);
+    }
+
+    public void setTitle(String title, String lang)
+    {
+        getSemanticObject().setProperty(swb_title, title, lang);
+    }
+
+    public void setEndedBy(org.semanticwb.model.User value)
+    {
+        getSemanticObject().setObjectProperty(swp_endedBy, value.getSemanticObject());
+    }
+
+    public void removeEndedBy()
+    {
+        getSemanticObject().removeProperty(swp_endedBy);
+    }
+
+
+    public org.semanticwb.model.User getEndedBy()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_endedBy);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
     }
 }

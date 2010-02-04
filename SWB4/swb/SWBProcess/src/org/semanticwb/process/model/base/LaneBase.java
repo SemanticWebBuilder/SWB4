@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class LaneBase extends org.semanticwb.process.model.Swimlane implements org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Laneable,org.semanticwb.model.Ruleable,org.semanticwb.model.Roleable,org.semanticwb.model.UserGroupable
+public abstract class LaneBase extends org.semanticwb.process.model.Swimlane implements org.semanticwb.model.Roleable,org.semanticwb.process.model.Laneable,org.semanticwb.model.Ruleable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Descriptiveable
 {
        public static final org.semanticwb.platform.SemanticClass swp_Lane=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#Lane");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#Lane");
@@ -39,15 +39,15 @@ public abstract class LaneBase extends org.semanticwb.process.model.Swimlane imp
        {
            return (getLane(id, model)!=null);
        }
-   public static java.util.Iterator<org.semanticwb.process.model.Lane> listLaneByUserGroup(org.semanticwb.model.UserGroup hasusergroup,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.process.model.Lane> listLaneByLane(org.semanticwb.process.model.Lane haslane,org.semanticwb.model.SWBModel model)
    {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Lane> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_hasUserGroup, hasusergroup.getSemanticObject()));
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Lane> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasLane, haslane.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.process.model.Lane> listLaneByUserGroup(org.semanticwb.model.UserGroup hasusergroup)
+   public static java.util.Iterator<org.semanticwb.process.model.Lane> listLaneByLane(org.semanticwb.process.model.Lane haslane)
    {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Lane> it=new org.semanticwb.model.GenericIterator(hasusergroup.getSemanticObject().getModel().listSubjects(swb_hasUserGroup,hasusergroup.getSemanticObject()));
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Lane> it=new org.semanticwb.model.GenericIterator(haslane.getSemanticObject().getModel().listSubjects(swp_hasLane,haslane.getSemanticObject()));
        return it;
    }
    public static java.util.Iterator<org.semanticwb.process.model.Lane> listLaneByRule(org.semanticwb.model.Rule hasrule,org.semanticwb.model.SWBModel model)
@@ -61,26 +61,15 @@ public abstract class LaneBase extends org.semanticwb.process.model.Swimlane imp
        org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Lane> it=new org.semanticwb.model.GenericIterator(hasrule.getSemanticObject().getModel().listSubjects(swb_hasRule,hasrule.getSemanticObject()));
        return it;
    }
-   public static java.util.Iterator<org.semanticwb.process.model.Lane> listLaneByLane(org.semanticwb.process.model.Lane haslane,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.process.model.Lane> listLaneByUserGroup(org.semanticwb.model.UserGroup hasusergroup,org.semanticwb.model.SWBModel model)
    {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Lane> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasLane, haslane.getSemanticObject()));
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Lane> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_hasUserGroup, hasusergroup.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.process.model.Lane> listLaneByLane(org.semanticwb.process.model.Lane haslane)
+   public static java.util.Iterator<org.semanticwb.process.model.Lane> listLaneByUserGroup(org.semanticwb.model.UserGroup hasusergroup)
    {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Lane> it=new org.semanticwb.model.GenericIterator(haslane.getSemanticObject().getModel().listSubjects(swp_hasLane,haslane.getSemanticObject()));
-       return it;
-   }
-   public static java.util.Iterator<org.semanticwb.process.model.Lane> listLaneByCategory(org.semanticwb.process.model.Category hascategory,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Lane> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasCategory, hascategory.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.process.model.Lane> listLaneByCategory(org.semanticwb.process.model.Category hascategory)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Lane> it=new org.semanticwb.model.GenericIterator(hascategory.getSemanticObject().getModel().listSubjects(swp_hasCategory,hascategory.getSemanticObject()));
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Lane> it=new org.semanticwb.model.GenericIterator(hasusergroup.getSemanticObject().getModel().listSubjects(swb_hasUserGroup,hasusergroup.getSemanticObject()));
        return it;
    }
    public static java.util.Iterator<org.semanticwb.process.model.Lane> listLaneByRole(org.semanticwb.model.Role hasrole,org.semanticwb.model.SWBModel model)
@@ -94,6 +83,17 @@ public abstract class LaneBase extends org.semanticwb.process.model.Swimlane imp
        org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Lane> it=new org.semanticwb.model.GenericIterator(hasrole.getSemanticObject().getModel().listSubjects(swb_hasRole,hasrole.getSemanticObject()));
        return it;
    }
+   public static java.util.Iterator<org.semanticwb.process.model.Lane> listLaneByCategory(org.semanticwb.process.model.Category hascategory,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Lane> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasCategory, hascategory.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.process.model.Lane> listLaneByCategory(org.semanticwb.process.model.Category hascategory)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Lane> it=new org.semanticwb.model.GenericIterator(hascategory.getSemanticObject().getModel().listSubjects(swp_hasCategory,hascategory.getSemanticObject()));
+       return it;
+   }
     }
 
     public LaneBase(org.semanticwb.platform.SemanticObject base)
@@ -101,40 +101,40 @@ public abstract class LaneBase extends org.semanticwb.process.model.Swimlane imp
         super(base);
     }
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup> listUserGroups()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Lane> listLanes()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup>(getSemanticObject().listObjectProperties(swb_hasUserGroup));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Lane>(getSemanticObject().listObjectProperties(swp_hasLane));
     }
 
-    public boolean hasUserGroup(org.semanticwb.model.UserGroup usergroup)
+    public boolean hasLane(org.semanticwb.process.model.Lane lane)
     {
-        if(usergroup==null)return false;
-        return getSemanticObject().hasObjectProperty(swb_hasUserGroup,usergroup.getSemanticObject());
+        if(lane==null)return false;
+        return getSemanticObject().hasObjectProperty(swp_hasLane,lane.getSemanticObject());
     }
 
-    public void addUserGroup(org.semanticwb.model.UserGroup value)
+    public void addLane(org.semanticwb.process.model.Lane value)
     {
-        getSemanticObject().addObjectProperty(swb_hasUserGroup, value.getSemanticObject());
+        getSemanticObject().addObjectProperty(swp_hasLane, value.getSemanticObject());
     }
 
-    public void removeAllUserGroup()
+    public void removeAllLane()
     {
-        getSemanticObject().removeProperty(swb_hasUserGroup);
+        getSemanticObject().removeProperty(swp_hasLane);
     }
 
-    public void removeUserGroup(org.semanticwb.model.UserGroup usergroup)
+    public void removeLane(org.semanticwb.process.model.Lane lane)
     {
-        getSemanticObject().removeObjectProperty(swb_hasUserGroup,usergroup.getSemanticObject());
+        getSemanticObject().removeObjectProperty(swp_hasLane,lane.getSemanticObject());
     }
 
 
-    public org.semanticwb.model.UserGroup getUserGroup()
+    public org.semanticwb.process.model.Lane getLane()
     {
-         org.semanticwb.model.UserGroup ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasUserGroup);
+         org.semanticwb.process.model.Lane ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_hasLane);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.UserGroup)obj.createGenericInstance();
+             ret=(org.semanticwb.process.model.Lane)obj.createGenericInstance();
          }
          return ret;
     }
@@ -177,40 +177,40 @@ public abstract class LaneBase extends org.semanticwb.process.model.Swimlane imp
          return ret;
     }
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Lane> listLanes()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup> listUserGroups()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Lane>(getSemanticObject().listObjectProperties(swp_hasLane));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup>(getSemanticObject().listObjectProperties(swb_hasUserGroup));
     }
 
-    public boolean hasLane(org.semanticwb.process.model.Lane lane)
+    public boolean hasUserGroup(org.semanticwb.model.UserGroup usergroup)
     {
-        if(lane==null)return false;
-        return getSemanticObject().hasObjectProperty(swp_hasLane,lane.getSemanticObject());
+        if(usergroup==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasUserGroup,usergroup.getSemanticObject());
     }
 
-    public void addLane(org.semanticwb.process.model.Lane value)
+    public void addUserGroup(org.semanticwb.model.UserGroup value)
     {
-        getSemanticObject().addObjectProperty(swp_hasLane, value.getSemanticObject());
+        getSemanticObject().addObjectProperty(swb_hasUserGroup, value.getSemanticObject());
     }
 
-    public void removeAllLane()
+    public void removeAllUserGroup()
     {
-        getSemanticObject().removeProperty(swp_hasLane);
+        getSemanticObject().removeProperty(swb_hasUserGroup);
     }
 
-    public void removeLane(org.semanticwb.process.model.Lane lane)
+    public void removeUserGroup(org.semanticwb.model.UserGroup usergroup)
     {
-        getSemanticObject().removeObjectProperty(swp_hasLane,lane.getSemanticObject());
+        getSemanticObject().removeObjectProperty(swb_hasUserGroup,usergroup.getSemanticObject());
     }
 
 
-    public org.semanticwb.process.model.Lane getLane()
+    public org.semanticwb.model.UserGroup getUserGroup()
     {
-         org.semanticwb.process.model.Lane ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_hasLane);
+         org.semanticwb.model.UserGroup ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasUserGroup);
          if(obj!=null)
          {
-             ret=(org.semanticwb.process.model.Lane)obj.createGenericInstance();
+             ret=(org.semanticwb.model.UserGroup)obj.createGenericInstance();
          }
          return ret;
     }

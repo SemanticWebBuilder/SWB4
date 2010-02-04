@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class StartEventBase extends org.semanticwb.process.model.Event implements org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Assignable,org.semanticwb.process.model.Catchable
+public abstract class StartEventBase extends org.semanticwb.process.model.Event implements org.semanticwb.process.model.Catchable,org.semanticwb.process.model.Assignable,org.semanticwb.model.Descriptiveable
 {
        public static final org.semanticwb.platform.SemanticClass swp_StartEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#StartEvent");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#StartEvent");
@@ -18,6 +18,12 @@ public abstract class StartEventBase extends org.semanticwb.process.model.Event 
        {
            java.util.Iterator it=sclass.listInstances();
            return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.StartEvent>(it, true);
+       }
+
+       public static org.semanticwb.process.model.StartEvent createStartEvent(org.semanticwb.model.SWBModel model)
+       {
+           long id=model.getSemanticObject().getModel().getCounter(sclass);
+           return org.semanticwb.process.model.StartEvent.ClassMgr.createStartEvent(String.valueOf(id), model);
        }
 
        public static org.semanticwb.process.model.StartEvent getStartEvent(String id, org.semanticwb.model.SWBModel model)
@@ -39,17 +45,6 @@ public abstract class StartEventBase extends org.semanticwb.process.model.Event 
        {
            return (getStartEvent(id, model)!=null);
        }
-   public static java.util.Iterator<org.semanticwb.process.model.StartEvent> listStartEventByCategory(org.semanticwb.process.model.Category hascategory,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.StartEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasCategory, hascategory.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.process.model.StartEvent> listStartEventByCategory(org.semanticwb.process.model.Category hascategory)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.StartEvent> it=new org.semanticwb.model.GenericIterator(hascategory.getSemanticObject().getModel().listSubjects(swp_hasCategory,hascategory.getSemanticObject()));
-       return it;
-   }
    public static java.util.Iterator<org.semanticwb.process.model.StartEvent> listStartEventByTrigger(org.semanticwb.process.model.EventDetail hastrigger,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.process.model.StartEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasTrigger, hastrigger.getSemanticObject()));
@@ -70,6 +65,17 @@ public abstract class StartEventBase extends org.semanticwb.process.model.Event 
    public static java.util.Iterator<org.semanticwb.process.model.StartEvent> listStartEventByAssignment(org.semanticwb.process.model.Assignment hasassignment)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.process.model.StartEvent> it=new org.semanticwb.model.GenericIterator(hasassignment.getSemanticObject().getModel().listSubjects(swp_hasAssignment,hasassignment.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.process.model.StartEvent> listStartEventByCategory(org.semanticwb.process.model.Category hascategory,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.StartEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasCategory, hascategory.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.process.model.StartEvent> listStartEventByCategory(org.semanticwb.process.model.Category hascategory)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.StartEvent> it=new org.semanticwb.model.GenericIterator(hascategory.getSemanticObject().getModel().listSubjects(swp_hasCategory,hascategory.getSemanticObject()));
        return it;
    }
     }

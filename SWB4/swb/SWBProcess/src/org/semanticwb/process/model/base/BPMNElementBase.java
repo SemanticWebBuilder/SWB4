@@ -22,6 +22,12 @@ public abstract class BPMNElementBase extends org.semanticwb.model.SWBClass impl
            return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.BPMNElement>(it, true);
        }
 
+       public static org.semanticwb.process.model.BPMNElement createBPMNElement(org.semanticwb.model.SWBModel model)
+       {
+           long id=model.getSemanticObject().getModel().getCounter(sclass);
+           return org.semanticwb.process.model.BPMNElement.ClassMgr.createBPMNElement(String.valueOf(id), model);
+       }
+
        public static org.semanticwb.process.model.BPMNElement getBPMNElement(String id, org.semanticwb.model.SWBModel model)
        {
            return (org.semanticwb.process.model.BPMNElement)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
@@ -84,6 +90,31 @@ public abstract class BPMNElementBase extends org.semanticwb.model.SWBClass impl
         getSemanticObject().setProperty(swb_title, title, lang);
     }
 
+    public String getDescription()
+    {
+        return getSemanticObject().getProperty(swb_description);
+    }
+
+    public void setDescription(String value)
+    {
+        getSemanticObject().setProperty(swb_description, value);
+    }
+
+    public String getDescription(String lang)
+    {
+        return getSemanticObject().getProperty(swb_description, null, lang);
+    }
+
+    public String getDisplayDescription(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_description, lang);
+    }
+
+    public void setDescription(String description, String lang)
+    {
+        getSemanticObject().setProperty(swb_description, description, lang);
+    }
+
     public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Category> listCategories()
     {
         return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Category>(getSemanticObject().listObjectProperties(swp_hasCategory));
@@ -120,30 +151,5 @@ public abstract class BPMNElementBase extends org.semanticwb.model.SWBClass impl
              ret=(org.semanticwb.process.model.Category)obj.createGenericInstance();
          }
          return ret;
-    }
-
-    public String getDescription()
-    {
-        return getSemanticObject().getProperty(swb_description);
-    }
-
-    public void setDescription(String value)
-    {
-        getSemanticObject().setProperty(swb_description, value);
-    }
-
-    public String getDescription(String lang)
-    {
-        return getSemanticObject().getProperty(swb_description, null, lang);
-    }
-
-    public String getDisplayDescription(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(swb_description, lang);
-    }
-
-    public void setDescription(String description, String lang)
-    {
-        getSemanticObject().setProperty(swb_description, description, lang);
     }
 }

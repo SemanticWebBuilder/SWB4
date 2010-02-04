@@ -1,10 +1,10 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class PoolBase extends org.semanticwb.process.model.Swimlane implements org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Participable,org.semanticwb.process.model.Laneable,org.semanticwb.process.model.ProcessReferensable
+public abstract class PoolBase extends org.semanticwb.process.model.Swimlane implements org.semanticwb.process.model.ProcessReferensable,org.semanticwb.process.model.Laneable,org.semanticwb.process.model.Participable,org.semanticwb.model.Descriptiveable
 {
-       public static final org.semanticwb.platform.SemanticProperty swp_mainPool=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#mainPool");
        public static final org.semanticwb.platform.SemanticProperty swp_boundaryVisible=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#boundaryVisible");
+       public static final org.semanticwb.platform.SemanticProperty swp_mainPool=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#mainPool");
        public static final org.semanticwb.platform.SemanticClass swp_Pool=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#Pool");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#Pool");
     public static class ClassMgr
@@ -41,17 +41,6 @@ public abstract class PoolBase extends org.semanticwb.process.model.Swimlane imp
        {
            return (getPool(id, model)!=null);
        }
-   public static java.util.Iterator<org.semanticwb.process.model.Pool> listPoolByParticipantRef(org.semanticwb.process.model.Participant participantref,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Pool> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_participantRef, participantref.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.process.model.Pool> listPoolByParticipantRef(org.semanticwb.process.model.Participant participantref)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Pool> it=new org.semanticwb.model.GenericIterator(participantref.getSemanticObject().getModel().listSubjects(swp_participantRef,participantref.getSemanticObject()));
-       return it;
-   }
    public static java.util.Iterator<org.semanticwb.process.model.Pool> listPoolByLane(org.semanticwb.process.model.Lane haslane,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Pool> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasLane, haslane.getSemanticObject()));
@@ -85,43 +74,22 @@ public abstract class PoolBase extends org.semanticwb.process.model.Swimlane imp
        org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Pool> it=new org.semanticwb.model.GenericIterator(processref.getSemanticObject().getModel().listSubjects(swp_processRef,processref.getSemanticObject()));
        return it;
    }
+   public static java.util.Iterator<org.semanticwb.process.model.Pool> listPoolByParticipantRef(org.semanticwb.process.model.Participant participantref,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Pool> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_participantRef, participantref.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.process.model.Pool> listPoolByParticipantRef(org.semanticwb.process.model.Participant participantref)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Pool> it=new org.semanticwb.model.GenericIterator(participantref.getSemanticObject().getModel().listSubjects(swp_participantRef,participantref.getSemanticObject()));
+       return it;
+   }
     }
 
     public PoolBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-    public void setParticipantRef(org.semanticwb.process.model.Participant value)
-    {
-        getSemanticObject().setObjectProperty(swp_participantRef, value.getSemanticObject());
-    }
-
-    public void removeParticipantRef()
-    {
-        getSemanticObject().removeProperty(swp_participantRef);
-    }
-
-
-    public org.semanticwb.process.model.Participant getParticipantRef()
-    {
-         org.semanticwb.process.model.Participant ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_participantRef);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.process.model.Participant)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
-    public boolean isMainPool()
-    {
-        return getSemanticObject().getBooleanProperty(swp_mainPool);
-    }
-
-    public void setMainPool(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(swp_mainPool, value);
     }
 
     public boolean isBoundaryVisible()
@@ -172,6 +140,16 @@ public abstract class PoolBase extends org.semanticwb.process.model.Swimlane imp
          return ret;
     }
 
+    public boolean isMainPool()
+    {
+        return getSemanticObject().getBooleanProperty(swp_mainPool);
+    }
+
+    public void setMainPool(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swp_mainPool, value);
+    }
+
     public void setProcessRef(org.semanticwb.process.model.Process value)
     {
         getSemanticObject().setObjectProperty(swp_processRef, value.getSemanticObject());
@@ -190,6 +168,28 @@ public abstract class PoolBase extends org.semanticwb.process.model.Swimlane imp
          if(obj!=null)
          {
              ret=(org.semanticwb.process.model.Process)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+    public void setParticipantRef(org.semanticwb.process.model.Participant value)
+    {
+        getSemanticObject().setObjectProperty(swp_participantRef, value.getSemanticObject());
+    }
+
+    public void removeParticipantRef()
+    {
+        getSemanticObject().removeProperty(swp_participantRef);
+    }
+
+
+    public org.semanticwb.process.model.Participant getParticipantRef()
+    {
+         org.semanticwb.process.model.Participant ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_participantRef);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.process.model.Participant)obj.createGenericInstance();
          }
          return ret;
     }

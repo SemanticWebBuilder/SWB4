@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class FlowObjectBase extends org.semanticwb.process.model.GraphicalElement implements org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Assignable
+public abstract class FlowObjectBase extends org.semanticwb.process.model.GraphicalElement implements org.semanticwb.process.model.Assignable,org.semanticwb.model.Descriptiveable
 {
        public static final org.semanticwb.platform.SemanticClass swp_FlowObject=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#FlowObject");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#FlowObject");
@@ -18,12 +18,6 @@ public abstract class FlowObjectBase extends org.semanticwb.process.model.Graphi
        {
            java.util.Iterator it=sclass.listInstances();
            return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.FlowObject>(it, true);
-       }
-
-       public static org.semanticwb.process.model.FlowObject createFlowObject(org.semanticwb.model.SWBModel model)
-       {
-           long id=model.getSemanticObject().getModel().getCounter(sclass);
-           return org.semanticwb.process.model.FlowObject.ClassMgr.createFlowObject(String.valueOf(id), model);
        }
 
        public static org.semanticwb.process.model.FlowObject getFlowObject(String id, org.semanticwb.model.SWBModel model)
@@ -45,17 +39,6 @@ public abstract class FlowObjectBase extends org.semanticwb.process.model.Graphi
        {
            return (getFlowObject(id, model)!=null);
        }
-   public static java.util.Iterator<org.semanticwb.process.model.FlowObject> listFlowObjectByCategory(org.semanticwb.process.model.Category hascategory,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.FlowObject> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasCategory, hascategory.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.process.model.FlowObject> listFlowObjectByCategory(org.semanticwb.process.model.Category hascategory)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.FlowObject> it=new org.semanticwb.model.GenericIterator(hascategory.getSemanticObject().getModel().listSubjects(swp_hasCategory,hascategory.getSemanticObject()));
-       return it;
-   }
    public static java.util.Iterator<org.semanticwb.process.model.FlowObject> listFlowObjectByAssignment(org.semanticwb.process.model.Assignment hasassignment,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.process.model.FlowObject> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasAssignment, hasassignment.getSemanticObject()));
@@ -65,6 +48,17 @@ public abstract class FlowObjectBase extends org.semanticwb.process.model.Graphi
    public static java.util.Iterator<org.semanticwb.process.model.FlowObject> listFlowObjectByAssignment(org.semanticwb.process.model.Assignment hasassignment)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.process.model.FlowObject> it=new org.semanticwb.model.GenericIterator(hasassignment.getSemanticObject().getModel().listSubjects(swp_hasAssignment,hasassignment.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.process.model.FlowObject> listFlowObjectByCategory(org.semanticwb.process.model.Category hascategory,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.FlowObject> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasCategory, hascategory.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.process.model.FlowObject> listFlowObjectByCategory(org.semanticwb.process.model.Category hascategory)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.FlowObject> it=new org.semanticwb.model.GenericIterator(hascategory.getSemanticObject().getModel().listSubjects(swp_hasCategory,hascategory.getSemanticObject()));
        return it;
    }
     }

@@ -20,12 +20,6 @@ public abstract class TerminateDetailBase extends org.semanticwb.process.model.E
            return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TerminateDetail>(it, true);
        }
 
-       public static org.semanticwb.process.model.TerminateDetail createTerminateDetail(org.semanticwb.model.SWBModel model)
-       {
-           long id=model.getSemanticObject().getModel().getCounter(sclass);
-           return org.semanticwb.process.model.TerminateDetail.ClassMgr.createTerminateDetail(String.valueOf(id), model);
-       }
-
        public static org.semanticwb.process.model.TerminateDetail getTerminateDetail(String id, org.semanticwb.model.SWBModel model)
        {
            return (org.semanticwb.process.model.TerminateDetail)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
