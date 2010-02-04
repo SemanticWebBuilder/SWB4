@@ -986,16 +986,8 @@ public class NodeImp extends ItemImp implements Node
         }
         if (!exists)
         {
-            Value newValue = valueFactoryImp.createValue(mixinName);
-            Value[] newValues = new Value[values.length + 1];
-            int i = 0;
-            for (Value value : values)
-            {
-                newValues[i] = value;
-                i++;
-            }
-            newValues[i] = newValue;
-            prop.set(newValues);
+            Value  newValue= valueFactoryImp.createValue(mixinName);
+            prop.addValue(newValue);
         }
         for (PropertyDefinitionImp propDef : mixNodeType.getPropertyDefinitionsImp())
         {
