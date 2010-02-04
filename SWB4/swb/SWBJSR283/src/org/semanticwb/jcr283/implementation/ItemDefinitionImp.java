@@ -23,7 +23,7 @@ public class ItemDefinitionImp implements ItemDefinition
     private final boolean isMandatory;
     private final boolean isProtected;
     private final int onParentVersion;
-    private final NodeTypeImp nodeType;
+    private final NodeTypeImp declaringNodeType;
     private final boolean isAutoCreated;
 
     public ItemDefinitionImp(String name,boolean isMandatory,boolean isProtected,int onParentVersion,NodeTypeImp nodeType,boolean isAutoCreated)
@@ -32,12 +32,12 @@ public class ItemDefinitionImp implements ItemDefinition
         this.isMandatory=isMandatory;
         this.isProtected=isProtected;
         this.onParentVersion=onParentVersion;
-        this.nodeType=nodeType;
+        this.declaringNodeType=nodeType;
         this.isAutoCreated=isAutoCreated;
     }
-    public ItemDefinitionImp(SemanticObject obj, NodeTypeImp nodeType)
+    public ItemDefinitionImp(SemanticObject obj, NodeTypeImp declaringNodeType)
     {
-        this.nodeType = nodeType;        
+        this.declaringNodeType = declaringNodeType;
         SemanticProperty prop = NodeTypeImp.getSemanticProperty(Property.JCR_NAME);
         SemanticLiteral value = obj.getLiteralProperty(prop);
         if (value != null)
@@ -92,11 +92,11 @@ public class ItemDefinitionImp implements ItemDefinition
 
     public NodeType getDeclaringNodeType()
     {
-        return nodeType;
+        return declaringNodeType;
     }
     public NodeTypeImp getDeclaringNodeTypeImp()
     {
-        return nodeType;
+        return declaringNodeType;
     }
 
     public String getName()

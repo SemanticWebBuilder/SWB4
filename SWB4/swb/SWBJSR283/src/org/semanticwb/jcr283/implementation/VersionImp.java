@@ -47,20 +47,20 @@ public class VersionImp extends NodeImp implements Version
 
     private void initFrozenNode(NodeImp frozenNode, NodeImp target) throws RepositoryException
     {
-        PropertyImp jcr_frozenPrimaryType = nodeManager.getProperty(frozenNode.getPathFromName("jcr:frozenPrimaryType"));
+        PropertyImp jcr_frozenPrimaryType = nodeManager.getProtectedProperty(frozenNode.getPathFromName("jcr:frozenPrimaryType"));
         if (jcr_frozenPrimaryType.getLength() == -1)
         {
             jcr_frozenPrimaryType.set(valueFactoryImp.createValue(target.getPrimaryNodeType().getName()));
         }
-        PropertyImp jcr_frozenMixinTypes = nodeManager.getProperty(frozenNode.getPathFromName("jcr:frozenMixinTypes"));
+        PropertyImp jcr_frozenMixinTypes = nodeManager.getProtectedProperty(frozenNode.getPathFromName("jcr:frozenMixinTypes"));
         if (jcr_frozenMixinTypes.getLength() == -1)
         {
-            for (NodeType nodeType : target.getMixinNodeTypes())
+            for (NodeType mixinNodeType : target.getMixinNodeTypes())
             {
-                jcr_frozenMixinTypes.addValue(valueFactoryImp.createValue(nodeType.getName()));
+                jcr_frozenMixinTypes.addValue(valueFactoryImp.createValue(mixinNodeType.getName()));
             }
         }
-        PropertyImp jcr_frozenUuid = nodeManager.getProperty(frozenNode.getPathFromName("jcr:frozenUuid"));
+        PropertyImp jcr_frozenUuid = nodeManager.getProtectedProperty(frozenNode.getPathFromName("jcr:frozenUuid"));
         if (jcr_frozenUuid.getLength() == -1)
         {
             jcr_frozenUuid.set(valueFactoryImp.createValue(target.id));
