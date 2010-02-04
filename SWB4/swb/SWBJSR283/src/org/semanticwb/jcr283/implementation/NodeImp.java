@@ -194,6 +194,7 @@ public class NodeImp extends ItemImp implements Node
                 throw new RepositoryException("The version storage was not found");
             }
             VersionHistoryImp history = new VersionHistoryImp(versionDefinition, jcr_version_Storage, session, this);
+            versionManagerImp.addVersionHistory(history,this);
             prop.set(valueFactoryImp.createValue(history));
             this.isModified = true;
             nodeManager.addNode(history, history.path, path);
@@ -493,11 +494,11 @@ public class NodeImp extends ItemImp implements Node
 
     public final static NodeImp createNodeImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, SessionImp session, String id) throws RepositoryException
     {
-        if (nodeType.getSemanticClass() == org.semanticwb.jcr283.repository.model.Version.sclass)
+        if (nodeType.getSemanticClass().equals(org.semanticwb.jcr283.repository.model.Version.sclass))
         {
             return new VersionImp(nodeDefinition, name, (VersionHistoryImp) parent, index, path, parent.getDepth() + 1, session, id);
         }
-        else if (nodeType.getSemanticClass() == org.semanticwb.jcr283.repository.model.VersionHistory.sclass)
+        else if (nodeType.getSemanticClass().equals(org.semanticwb.jcr283.repository.model.VersionHistory.sclass))
         {
             return new VersionHistoryImp(nodeDefinition, parent, session, parent);
         }
@@ -1131,7 +1132,7 @@ public class NodeImp extends ItemImp implements Node
         Version obaseVersion = this.session.getWorkspaceImp().getVersionManagerImp().getBaseVersion(path);
 
         float versionnumber = 1.0f;
-        if (!obaseVersion.getName().equals(JCR_ROOT_VERSION))
+        if (!obaseVersion.getName().equals("jcr:rootVersion"))
         {
             try
             {
