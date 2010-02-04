@@ -152,7 +152,7 @@ public class NodeTypeImp implements NodeType
             PropertyDefinitionImp pd = new PropertyDefinitionImp(propertyDefinitionObj, this);
             if (!propertyDefinitions.containsKey(pd.getName()))
             {
-                log.trace("loading propertyDefinition " + pd.getName() + " for node " + this.getName());
+                //log.trace("loading propertyDefinition " + pd.getName() + " for node " + this.getName());
                 propertyDefinitions.put(pd.getName(), pd);
             }
         }
@@ -179,7 +179,7 @@ public class NodeTypeImp implements NodeType
                                     PropertyDefinitionImp pd = new PropertyDefinitionImp(semanticProperty, nodeType);
                                     if (!propertyDefinitions.containsKey(pd.getName()))
                                     {
-                                        log.trace("loading propertyDefinition " + pd.getName() + " for node " + this.getName());
+                                        //log.trace("loading propertyDefinition " + pd.getName() + " for node " + this.getName());
                                         propertyDefinitions.put(pd.getName(), pd);
                                     }
                                 }
@@ -191,7 +191,7 @@ public class NodeTypeImp implements NodeType
                                     PropertyDefinitionImp pd = new PropertyDefinitionImp(semanticProperty);
                                     if (!propertyDefinitions.containsKey(pd.getName()))
                                     {
-                                        log.trace("loading propertyDefinition " + pd.getName() + " for node " + this.getName());
+                                        //log.trace("loading propertyDefinition " + pd.getName() + " for node " + this.getName());
                                         propertyDefinitions.put(pd.getName(), pd);
                                     }
                                 }
