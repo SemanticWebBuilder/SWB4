@@ -62,9 +62,13 @@ public class PropertyImp extends ItemImp implements Property
         this.isNew = true;
     }
 
-    void addValue(Value value)
+    public void addValue(Value value)
     {
-        this.values.add(value);
+        if(this.definition.isProtected())
+        {
+            this.values.add(value);
+            this.isModified=true;
+        }
     }
 
     public void loadValues()
@@ -410,7 +414,7 @@ public class PropertyImp extends ItemImp implements Property
                 prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(urinewProperty);
             }
             SemanticObject obj = parent.getSemanticObject();
-            log.trace("Saving property " + path + " for node " + parent.path);
+            log.trace("Saving property " + path + " for node " + parent.path+" values :"+values.size());
 
             for (Value value : this.values)
             {
