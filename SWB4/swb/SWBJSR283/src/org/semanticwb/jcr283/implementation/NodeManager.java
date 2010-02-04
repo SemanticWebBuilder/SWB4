@@ -593,7 +593,7 @@ public class NodeManager
             {
                 if (node.isDeleted() && node.getNode().getDefinition().isProtected())
                 {
-                    nodes.remove(node);
+                    nodes.remove(node.getNode().path);
                 }
             }
         }
