@@ -64,11 +64,8 @@ public class PropertyImp extends ItemImp implements Property
 
     public void addValue(Value value)
     {
-        if(this.definition.isProtected())
-        {
-            this.values.add(value);
-            this.isModified=true;
-        }
+        this.values.add(value);
+        this.isModified = true;
     }
 
     public void loadValues()
@@ -414,7 +411,7 @@ public class PropertyImp extends ItemImp implements Property
                 prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(urinewProperty);
             }
             SemanticObject obj = parent.getSemanticObject();
-            log.trace("Saving property " + path + " for node " + parent.path+" values :"+values.size());
+            log.trace("Saving property " + path + " for node " + parent.path + " values :" + values.size());
 
             for (Value value : this.values)
             {
@@ -433,28 +430,28 @@ public class PropertyImp extends ItemImp implements Property
                         }
                         break;
                     case PropertyType.BOOLEAN:
-                        obj.addLiteralProperty(prop,new SemanticLiteral(value.getBoolean()));
+                        obj.addLiteralProperty(prop, new SemanticLiteral(value.getBoolean()));
                         //obj.setBooleanProperty(prop, value.getBoolean());
                         break;
                     case PropertyType.DATE:
-                        obj.addLiteralProperty(prop,new SemanticLiteral(value.getDate().getTime()));
+                        obj.addLiteralProperty(prop, new SemanticLiteral(value.getDate().getTime()));
                         //obj.setDateProperty(prop, value.getDate().getTime());
                         break;
                     case PropertyType.DECIMAL:
-                        obj.addLiteralProperty(prop,new SemanticLiteral(value.getDecimal().doubleValue()));
+                        obj.addLiteralProperty(prop, new SemanticLiteral(value.getDecimal().doubleValue()));
                         //obj.setDoubleProperty(prop, value.getDecimal().doubleValue());
                         break;
                     case PropertyType.DOUBLE:
-                        obj.addLiteralProperty(prop,new SemanticLiteral(value.getDouble()));
+                        obj.addLiteralProperty(prop, new SemanticLiteral(value.getDouble()));
                         //obj.setDoubleProperty(prop, value.getDouble());
                         break;
                     case PropertyType.LONG:
-                        obj.addLiteralProperty(prop,new SemanticLiteral(value.getLong()));
+                        obj.addLiteralProperty(prop, new SemanticLiteral(value.getLong()));
                         //obj.setLongProperty(prop, value.getLong());
                         break;
                     default:
-                        obj.addLiteralProperty(prop,new SemanticLiteral(value.getString()));
-                        //obj.setProperty(prop, value.getString());
+                        obj.addLiteralProperty(prop, new SemanticLiteral(value.getString()));
+                    //obj.setProperty(prop, value.getString());
                 }
             }
         }
