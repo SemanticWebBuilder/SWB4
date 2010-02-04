@@ -1,8 +1,10 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class DataBasedExclusiveGatewayBase extends org.semanticwb.process.model.ExclusiveGateway implements org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Gateable,org.semanticwb.process.model.Assignable
+public abstract class DataBasedExclusiveGatewayBase extends org.semanticwb.process.model.ExclusiveGateway implements org.semanticwb.process.model.Gateable,org.semanticwb.process.model.Assignable,org.semanticwb.model.Descriptiveable
 {
+       public static final org.semanticwb.platform.SemanticClass swp_Gate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#Gate");
+       public static final org.semanticwb.platform.SemanticProperty swp_defaultGate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#defaultGate");
        public static final org.semanticwb.platform.SemanticProperty swp_markerVisible=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#markerVisible");
        public static final org.semanticwb.platform.SemanticClass swp_DataBasedExclusiveGateway=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#DataBasedExclusiveGateway");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#DataBasedExclusiveGateway");
@@ -40,28 +42,6 @@ public abstract class DataBasedExclusiveGatewayBase extends org.semanticwb.proce
        {
            return (getDataBasedExclusiveGateway(id, model)!=null);
        }
-   public static java.util.Iterator<org.semanticwb.process.model.DataBasedExclusiveGateway> listDataBasedExclusiveGatewayByGate(org.semanticwb.process.model.Gate hasgate,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DataBasedExclusiveGateway> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasGate, hasgate.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.process.model.DataBasedExclusiveGateway> listDataBasedExclusiveGatewayByGate(org.semanticwb.process.model.Gate hasgate)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DataBasedExclusiveGateway> it=new org.semanticwb.model.GenericIterator(hasgate.getSemanticObject().getModel().listSubjects(swp_hasGate,hasgate.getSemanticObject()));
-       return it;
-   }
-   public static java.util.Iterator<org.semanticwb.process.model.DataBasedExclusiveGateway> listDataBasedExclusiveGatewayByCategory(org.semanticwb.process.model.Category hascategory,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DataBasedExclusiveGateway> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasCategory, hascategory.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.process.model.DataBasedExclusiveGateway> listDataBasedExclusiveGatewayByCategory(org.semanticwb.process.model.Category hascategory)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DataBasedExclusiveGateway> it=new org.semanticwb.model.GenericIterator(hascategory.getSemanticObject().getModel().listSubjects(swp_hasCategory,hascategory.getSemanticObject()));
-       return it;
-   }
    public static java.util.Iterator<org.semanticwb.process.model.DataBasedExclusiveGateway> listDataBasedExclusiveGatewayByAssignment(org.semanticwb.process.model.Assignment hasassignment,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DataBasedExclusiveGateway> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasAssignment, hasassignment.getSemanticObject()));
@@ -84,11 +64,55 @@ public abstract class DataBasedExclusiveGatewayBase extends org.semanticwb.proce
        org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DataBasedExclusiveGateway> it=new org.semanticwb.model.GenericIterator(defaultgate.getSemanticObject().getModel().listSubjects(swp_defaultGate,defaultgate.getSemanticObject()));
        return it;
    }
+   public static java.util.Iterator<org.semanticwb.process.model.DataBasedExclusiveGateway> listDataBasedExclusiveGatewayByGate(org.semanticwb.process.model.Gate hasgate,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DataBasedExclusiveGateway> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasGate, hasgate.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.process.model.DataBasedExclusiveGateway> listDataBasedExclusiveGatewayByGate(org.semanticwb.process.model.Gate hasgate)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DataBasedExclusiveGateway> it=new org.semanticwb.model.GenericIterator(hasgate.getSemanticObject().getModel().listSubjects(swp_hasGate,hasgate.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.process.model.DataBasedExclusiveGateway> listDataBasedExclusiveGatewayByCategory(org.semanticwb.process.model.Category hascategory,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DataBasedExclusiveGateway> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasCategory, hascategory.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.process.model.DataBasedExclusiveGateway> listDataBasedExclusiveGatewayByCategory(org.semanticwb.process.model.Category hascategory)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DataBasedExclusiveGateway> it=new org.semanticwb.model.GenericIterator(hascategory.getSemanticObject().getModel().listSubjects(swp_hasCategory,hascategory.getSemanticObject()));
+       return it;
+   }
     }
 
     public DataBasedExclusiveGatewayBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public void setDefaultGate(org.semanticwb.process.model.Gate value)
+    {
+        getSemanticObject().setObjectProperty(swp_defaultGate, value.getSemanticObject());
+    }
+
+    public void removeDefaultGate()
+    {
+        getSemanticObject().removeProperty(swp_defaultGate);
+    }
+
+
+    public org.semanticwb.process.model.Gate getDefaultGate()
+    {
+         org.semanticwb.process.model.Gate ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_defaultGate);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.process.model.Gate)obj.createGenericInstance();
+         }
+         return ret;
     }
 
     public boolean isMarkerVisible()

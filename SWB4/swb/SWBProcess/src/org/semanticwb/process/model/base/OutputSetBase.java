@@ -3,10 +3,10 @@ package org.semanticwb.process.model.base;
 
 public abstract class OutputSetBase extends org.semanticwb.process.model.SupportingElement implements org.semanticwb.model.Descriptiveable
 {
-       public static final org.semanticwb.platform.SemanticClass swp_ArtifactOutput=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#ArtifactOutput");
-       public static final org.semanticwb.platform.SemanticProperty swp_hasArtifactOutput=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#hasArtifactOutput");
        public static final org.semanticwb.platform.SemanticClass swp_Property=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#Property");
        public static final org.semanticwb.platform.SemanticProperty swp_hasPropertyOutput=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#hasPropertyOutput");
+       public static final org.semanticwb.platform.SemanticClass swp_ArtifactOutput=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#ArtifactOutput");
+       public static final org.semanticwb.platform.SemanticProperty swp_hasArtifactOutput=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#hasArtifactOutput");
        public static final org.semanticwb.platform.SemanticClass swp_OutputSet=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#OutputSet");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#OutputSet");
     public static class ClassMgr
@@ -49,15 +49,15 @@ public abstract class OutputSetBase extends org.semanticwb.process.model.Support
        {
            return (getOutputSet(id, model)!=null);
        }
-   public static java.util.Iterator<org.semanticwb.process.model.OutputSet> listOutputSetByArtifactOutput(org.semanticwb.process.model.ArtifactOutput hasartifactoutput,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.process.model.OutputSet> listOutputSetByPropertyOutput(org.semanticwb.process.model.Property haspropertyoutput,org.semanticwb.model.SWBModel model)
    {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.OutputSet> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasArtifactOutput, hasartifactoutput.getSemanticObject()));
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.OutputSet> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasPropertyOutput, haspropertyoutput.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.process.model.OutputSet> listOutputSetByArtifactOutput(org.semanticwb.process.model.ArtifactOutput hasartifactoutput)
+   public static java.util.Iterator<org.semanticwb.process.model.OutputSet> listOutputSetByPropertyOutput(org.semanticwb.process.model.Property haspropertyoutput)
    {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.OutputSet> it=new org.semanticwb.model.GenericIterator(hasartifactoutput.getSemanticObject().getModel().listSubjects(swp_hasArtifactOutput,hasartifactoutput.getSemanticObject()));
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.OutputSet> it=new org.semanticwb.model.GenericIterator(haspropertyoutput.getSemanticObject().getModel().listSubjects(swp_hasPropertyOutput,haspropertyoutput.getSemanticObject()));
        return it;
    }
    public static java.util.Iterator<org.semanticwb.process.model.OutputSet> listOutputSetByCategory(org.semanticwb.process.model.Category hascategory,org.semanticwb.model.SWBModel model)
@@ -71,15 +71,15 @@ public abstract class OutputSetBase extends org.semanticwb.process.model.Support
        org.semanticwb.model.GenericIterator<org.semanticwb.process.model.OutputSet> it=new org.semanticwb.model.GenericIterator(hascategory.getSemanticObject().getModel().listSubjects(swp_hasCategory,hascategory.getSemanticObject()));
        return it;
    }
-   public static java.util.Iterator<org.semanticwb.process.model.OutputSet> listOutputSetByPropertyOutput(org.semanticwb.process.model.Property haspropertyoutput,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.process.model.OutputSet> listOutputSetByArtifactOutput(org.semanticwb.process.model.ArtifactOutput hasartifactoutput,org.semanticwb.model.SWBModel model)
    {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.OutputSet> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasPropertyOutput, haspropertyoutput.getSemanticObject()));
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.OutputSet> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasArtifactOutput, hasartifactoutput.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.process.model.OutputSet> listOutputSetByPropertyOutput(org.semanticwb.process.model.Property haspropertyoutput)
+   public static java.util.Iterator<org.semanticwb.process.model.OutputSet> listOutputSetByArtifactOutput(org.semanticwb.process.model.ArtifactOutput hasartifactoutput)
    {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.OutputSet> it=new org.semanticwb.model.GenericIterator(haspropertyoutput.getSemanticObject().getModel().listSubjects(swp_hasPropertyOutput,haspropertyoutput.getSemanticObject()));
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.OutputSet> it=new org.semanticwb.model.GenericIterator(hasartifactoutput.getSemanticObject().getModel().listSubjects(swp_hasArtifactOutput,hasartifactoutput.getSemanticObject()));
        return it;
    }
     }
@@ -87,44 +87,6 @@ public abstract class OutputSetBase extends org.semanticwb.process.model.Support
     public OutputSetBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ArtifactOutput> listArtifactOutputs()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ArtifactOutput>(getSemanticObject().listObjectProperties(swp_hasArtifactOutput));
-    }
-
-    public boolean hasArtifactOutput(org.semanticwb.process.model.ArtifactOutput artifactoutput)
-    {
-        if(artifactoutput==null)return false;
-        return getSemanticObject().hasObjectProperty(swp_hasArtifactOutput,artifactoutput.getSemanticObject());
-    }
-
-    public void addArtifactOutput(org.semanticwb.process.model.ArtifactOutput value)
-    {
-        getSemanticObject().addObjectProperty(swp_hasArtifactOutput, value.getSemanticObject());
-    }
-
-    public void removeAllArtifactOutput()
-    {
-        getSemanticObject().removeProperty(swp_hasArtifactOutput);
-    }
-
-    public void removeArtifactOutput(org.semanticwb.process.model.ArtifactOutput artifactoutput)
-    {
-        getSemanticObject().removeObjectProperty(swp_hasArtifactOutput,artifactoutput.getSemanticObject());
-    }
-
-
-    public org.semanticwb.process.model.ArtifactOutput getArtifactOutput()
-    {
-         org.semanticwb.process.model.ArtifactOutput ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_hasArtifactOutput);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.process.model.ArtifactOutput)obj.createGenericInstance();
-         }
-         return ret;
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Property> listPropertyOutputs()
@@ -161,6 +123,44 @@ public abstract class OutputSetBase extends org.semanticwb.process.model.Support
          if(obj!=null)
          {
              ret=(org.semanticwb.process.model.Property)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ArtifactOutput> listArtifactOutputs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ArtifactOutput>(getSemanticObject().listObjectProperties(swp_hasArtifactOutput));
+    }
+
+    public boolean hasArtifactOutput(org.semanticwb.process.model.ArtifactOutput artifactoutput)
+    {
+        if(artifactoutput==null)return false;
+        return getSemanticObject().hasObjectProperty(swp_hasArtifactOutput,artifactoutput.getSemanticObject());
+    }
+
+    public void addArtifactOutput(org.semanticwb.process.model.ArtifactOutput value)
+    {
+        getSemanticObject().addObjectProperty(swp_hasArtifactOutput, value.getSemanticObject());
+    }
+
+    public void removeAllArtifactOutput()
+    {
+        getSemanticObject().removeProperty(swp_hasArtifactOutput);
+    }
+
+    public void removeArtifactOutput(org.semanticwb.process.model.ArtifactOutput artifactoutput)
+    {
+        getSemanticObject().removeObjectProperty(swp_hasArtifactOutput,artifactoutput.getSemanticObject());
+    }
+
+
+    public org.semanticwb.process.model.ArtifactOutput getArtifactOutput()
+    {
+         org.semanticwb.process.model.ArtifactOutput ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_hasArtifactOutput);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.process.model.ArtifactOutput)obj.createGenericInstance();
          }
          return ret;
     }

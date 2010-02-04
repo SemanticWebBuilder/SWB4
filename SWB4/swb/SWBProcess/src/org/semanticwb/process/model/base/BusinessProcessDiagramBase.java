@@ -71,17 +71,6 @@ public abstract class BusinessProcessDiagramBase extends org.semanticwb.model.SW
        org.semanticwb.model.GenericIterator<org.semanticwb.process.model.BusinessProcessDiagram> it=new org.semanticwb.model.GenericIterator(actualversion.getSemanticObject().getModel().listSubjects(swb_actualVersion,actualversion.getSemanticObject()));
        return it;
    }
-   public static java.util.Iterator<org.semanticwb.process.model.BusinessProcessDiagram> listBusinessProcessDiagramByLastVersion(org.semanticwb.model.VersionInfo lastversion,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.BusinessProcessDiagram> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_lastVersion, lastversion.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.process.model.BusinessProcessDiagram> listBusinessProcessDiagramByLastVersion(org.semanticwb.model.VersionInfo lastversion)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.BusinessProcessDiagram> it=new org.semanticwb.model.GenericIterator(lastversion.getSemanticObject().getModel().listSubjects(swb_lastVersion,lastversion.getSemanticObject()));
-       return it;
-   }
    public static java.util.Iterator<org.semanticwb.process.model.BusinessProcessDiagram> listBusinessProcessDiagramByPools(org.semanticwb.process.model.Pool pools,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.process.model.BusinessProcessDiagram> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_pools, pools.getSemanticObject()));
@@ -104,21 +93,22 @@ public abstract class BusinessProcessDiagramBase extends org.semanticwb.model.SW
        org.semanticwb.model.GenericIterator<org.semanticwb.process.model.BusinessProcessDiagram> it=new org.semanticwb.model.GenericIterator(creator.getSemanticObject().getModel().listSubjects(swb_creator,creator.getSemanticObject()));
        return it;
    }
+   public static java.util.Iterator<org.semanticwb.process.model.BusinessProcessDiagram> listBusinessProcessDiagramByLastVersion(org.semanticwb.model.VersionInfo lastversion,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.BusinessProcessDiagram> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_lastVersion, lastversion.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.process.model.BusinessProcessDiagram> listBusinessProcessDiagramByLastVersion(org.semanticwb.model.VersionInfo lastversion)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.BusinessProcessDiagram> it=new org.semanticwb.model.GenericIterator(lastversion.getSemanticObject().getModel().listSubjects(swb_lastVersion,lastversion.getSemanticObject()));
+       return it;
+   }
     }
 
     public BusinessProcessDiagramBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-    public java.util.Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(swb_created);
-    }
-
-    public void setCreated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_created, value);
     }
 
     public void setModifiedBy(org.semanticwb.model.User value)
@@ -143,29 +133,49 @@ public abstract class BusinessProcessDiagramBase extends org.semanticwb.model.SW
          return ret;
     }
 
-    public String getTitle()
+    public java.util.Date getCreated()
     {
-        return getSemanticObject().getProperty(swb_title);
+        return getSemanticObject().getDateProperty(swb_created);
     }
 
-    public void setTitle(String value)
+    public void setCreated(java.util.Date value)
     {
-        getSemanticObject().setProperty(swb_title, value);
+        getSemanticObject().setDateProperty(swb_created, value);
     }
 
-    public String getTitle(String lang)
+    public java.util.Date getUpdated()
     {
-        return getSemanticObject().getProperty(swb_title, null, lang);
+        return getSemanticObject().getDateProperty(swb_updated);
     }
 
-    public String getDisplayTitle(String lang)
+    public void setUpdated(java.util.Date value)
     {
-        return getSemanticObject().getLocaleProperty(swb_title, lang);
+        getSemanticObject().setDateProperty(swb_updated, value);
     }
 
-    public void setTitle(String title, String lang)
+    public String getDescription()
     {
-        getSemanticObject().setProperty(swb_title, title, lang);
+        return getSemanticObject().getProperty(swb_description);
+    }
+
+    public void setDescription(String value)
+    {
+        getSemanticObject().setProperty(swb_description, value);
+    }
+
+    public String getDescription(String lang)
+    {
+        return getSemanticObject().getProperty(swb_description, null, lang);
+    }
+
+    public String getDisplayDescription(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_description, lang);
+    }
+
+    public void setDescription(String description, String lang)
+    {
+        getSemanticObject().setProperty(swb_description, description, lang);
     }
 
     public void setActualVersion(org.semanticwb.model.VersionInfo value)
@@ -183,38 +193,6 @@ public abstract class BusinessProcessDiagramBase extends org.semanticwb.model.SW
     {
          org.semanticwb.model.VersionInfo ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_actualVersion);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.VersionInfo)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
-    public java.util.Date getUpdated()
-    {
-        return getSemanticObject().getDateProperty(swb_updated);
-    }
-
-    public void setUpdated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_updated, value);
-    }
-
-    public void setLastVersion(org.semanticwb.model.VersionInfo value)
-    {
-        getSemanticObject().setObjectProperty(swb_lastVersion, value.getSemanticObject());
-    }
-
-    public void removeLastVersion()
-    {
-        getSemanticObject().removeProperty(swb_lastVersion);
-    }
-
-
-    public org.semanticwb.model.VersionInfo getLastVersion()
-    {
-         org.semanticwb.model.VersionInfo ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_lastVersion);
          if(obj!=null)
          {
              ret=(org.semanticwb.model.VersionInfo)obj.createGenericInstance();
@@ -276,6 +254,53 @@ public abstract class BusinessProcessDiagramBase extends org.semanticwb.model.SW
          return ret;
     }
 
+    public String getTitle()
+    {
+        return getSemanticObject().getProperty(swb_title);
+    }
+
+    public void setTitle(String value)
+    {
+        getSemanticObject().setProperty(swb_title, value);
+    }
+
+    public String getTitle(String lang)
+    {
+        return getSemanticObject().getProperty(swb_title, null, lang);
+    }
+
+    public String getDisplayTitle(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_title, lang);
+    }
+
+    public void setTitle(String title, String lang)
+    {
+        getSemanticObject().setProperty(swb_title, title, lang);
+    }
+
+    public void setLastVersion(org.semanticwb.model.VersionInfo value)
+    {
+        getSemanticObject().setObjectProperty(swb_lastVersion, value.getSemanticObject());
+    }
+
+    public void removeLastVersion()
+    {
+        getSemanticObject().removeProperty(swb_lastVersion);
+    }
+
+
+    public org.semanticwb.model.VersionInfo getLastVersion()
+    {
+         org.semanticwb.model.VersionInfo ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_lastVersion);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.VersionInfo)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
     public String getQueryLanguage()
     {
         return getSemanticObject().getProperty(swp_queryLanguage);
@@ -284,30 +309,5 @@ public abstract class BusinessProcessDiagramBase extends org.semanticwb.model.SW
     public void setQueryLanguage(String value)
     {
         getSemanticObject().setProperty(swp_queryLanguage, value);
-    }
-
-    public String getDescription()
-    {
-        return getSemanticObject().getProperty(swb_description);
-    }
-
-    public void setDescription(String value)
-    {
-        getSemanticObject().setProperty(swb_description, value);
-    }
-
-    public String getDescription(String lang)
-    {
-        return getSemanticObject().getProperty(swb_description, null, lang);
-    }
-
-    public String getDisplayDescription(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(swb_description, lang);
-    }
-
-    public void setDescription(String description, String lang)
-    {
-        getSemanticObject().setProperty(swb_description, description, lang);
     }
 }

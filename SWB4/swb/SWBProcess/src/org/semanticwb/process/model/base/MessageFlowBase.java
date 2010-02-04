@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class MessageFlowBase extends org.semanticwb.process.model.ConnectingObject implements org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Messageable
+public abstract class MessageFlowBase extends org.semanticwb.process.model.ConnectingObject implements org.semanticwb.process.model.Messageable,org.semanticwb.model.Descriptiveable
 {
        public static final org.semanticwb.platform.SemanticClass swp_MessageFlow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#MessageFlow");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#MessageFlow");
@@ -18,6 +18,12 @@ public abstract class MessageFlowBase extends org.semanticwb.process.model.Conne
        {
            java.util.Iterator it=sclass.listInstances();
            return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.MessageFlow>(it, true);
+       }
+
+       public static org.semanticwb.process.model.MessageFlow createMessageFlow(org.semanticwb.model.SWBModel model)
+       {
+           long id=model.getSemanticObject().getModel().getCounter(sclass);
+           return org.semanticwb.process.model.MessageFlow.ClassMgr.createMessageFlow(String.valueOf(id), model);
        }
 
        public static org.semanticwb.process.model.MessageFlow getMessageFlow(String id, org.semanticwb.model.SWBModel model)
@@ -39,26 +45,15 @@ public abstract class MessageFlowBase extends org.semanticwb.process.model.Conne
        {
            return (getMessageFlow(id, model)!=null);
        }
-   public static java.util.Iterator<org.semanticwb.process.model.MessageFlow> listMessageFlowByInMessageRef(org.semanticwb.process.model.Message inmessageref,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.process.model.MessageFlow> listMessageFlowByMessageRef(org.semanticwb.process.model.Message messageref,org.semanticwb.model.SWBModel model)
    {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.MessageFlow> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_inMessageRef, inmessageref.getSemanticObject()));
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.MessageFlow> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_messageRef, messageref.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.process.model.MessageFlow> listMessageFlowByInMessageRef(org.semanticwb.process.model.Message inmessageref)
+   public static java.util.Iterator<org.semanticwb.process.model.MessageFlow> listMessageFlowByMessageRef(org.semanticwb.process.model.Message messageref)
    {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.MessageFlow> it=new org.semanticwb.model.GenericIterator(inmessageref.getSemanticObject().getModel().listSubjects(swp_inMessageRef,inmessageref.getSemanticObject()));
-       return it;
-   }
-   public static java.util.Iterator<org.semanticwb.process.model.MessageFlow> listMessageFlowByOutMessageRef(org.semanticwb.process.model.Message outmessageref,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.MessageFlow> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_outMessageRef, outmessageref.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.process.model.MessageFlow> listMessageFlowByOutMessageRef(org.semanticwb.process.model.Message outmessageref)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.MessageFlow> it=new org.semanticwb.model.GenericIterator(outmessageref.getSemanticObject().getModel().listSubjects(swp_outMessageRef,outmessageref.getSemanticObject()));
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.MessageFlow> it=new org.semanticwb.model.GenericIterator(messageref.getSemanticObject().getModel().listSubjects(swp_messageRef,messageref.getSemanticObject()));
        return it;
    }
    public static java.util.Iterator<org.semanticwb.process.model.MessageFlow> listMessageFlowBySourceRef(org.semanticwb.process.model.GraphicalElement sourceref,org.semanticwb.model.SWBModel model)
@@ -83,17 +78,6 @@ public abstract class MessageFlowBase extends org.semanticwb.process.model.Conne
        org.semanticwb.model.GenericIterator<org.semanticwb.process.model.MessageFlow> it=new org.semanticwb.model.GenericIterator(hascategory.getSemanticObject().getModel().listSubjects(swp_hasCategory,hascategory.getSemanticObject()));
        return it;
    }
-   public static java.util.Iterator<org.semanticwb.process.model.MessageFlow> listMessageFlowByMessageRef(org.semanticwb.process.model.Message messageref,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.MessageFlow> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_messageRef, messageref.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.process.model.MessageFlow> listMessageFlowByMessageRef(org.semanticwb.process.model.Message messageref)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.MessageFlow> it=new org.semanticwb.model.GenericIterator(messageref.getSemanticObject().getModel().listSubjects(swp_messageRef,messageref.getSemanticObject()));
-       return it;
-   }
    public static java.util.Iterator<org.semanticwb.process.model.MessageFlow> listMessageFlowByTargetRef(org.semanticwb.process.model.GraphicalElement targetref,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.process.model.MessageFlow> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_targetRef, targetref.getSemanticObject()));
@@ -110,50 +94,6 @@ public abstract class MessageFlowBase extends org.semanticwb.process.model.Conne
     public MessageFlowBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-    public void setInMessageRef(org.semanticwb.process.model.Message value)
-    {
-        getSemanticObject().setObjectProperty(swp_inMessageRef, value.getSemanticObject());
-    }
-
-    public void removeInMessageRef()
-    {
-        getSemanticObject().removeProperty(swp_inMessageRef);
-    }
-
-
-    public org.semanticwb.process.model.Message getInMessageRef()
-    {
-         org.semanticwb.process.model.Message ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_inMessageRef);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.process.model.Message)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
-    public void setOutMessageRef(org.semanticwb.process.model.Message value)
-    {
-        getSemanticObject().setObjectProperty(swp_outMessageRef, value.getSemanticObject());
-    }
-
-    public void removeOutMessageRef()
-    {
-        getSemanticObject().removeProperty(swp_outMessageRef);
-    }
-
-
-    public org.semanticwb.process.model.Message getOutMessageRef()
-    {
-         org.semanticwb.process.model.Message ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_outMessageRef);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.process.model.Message)obj.createGenericInstance();
-         }
-         return ret;
     }
 
     public void setMessageRef(org.semanticwb.process.model.Message value)

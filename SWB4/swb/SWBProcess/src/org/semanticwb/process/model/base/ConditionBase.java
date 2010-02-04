@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ConditionBase extends org.semanticwb.process.model.SupportingElement implements org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Conditionable
+public abstract class ConditionBase extends org.semanticwb.process.model.SupportingElement implements org.semanticwb.process.model.Conditionable,org.semanticwb.model.Descriptiveable
 {
        public static final org.semanticwb.platform.SemanticClass swp_Condition=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#Condition");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#Condition");
@@ -45,17 +45,6 @@ public abstract class ConditionBase extends org.semanticwb.process.model.Support
        {
            return (getCondition(id, model)!=null);
        }
-   public static java.util.Iterator<org.semanticwb.process.model.Condition> listConditionByConditionExpression(org.semanticwb.process.model.Expression conditionexpression,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Condition> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_conditionExpression, conditionexpression.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.process.model.Condition> listConditionByConditionExpression(org.semanticwb.process.model.Expression conditionexpression)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Condition> it=new org.semanticwb.model.GenericIterator(conditionexpression.getSemanticObject().getModel().listSubjects(swp_conditionExpression,conditionexpression.getSemanticObject()));
-       return it;
-   }
    public static java.util.Iterator<org.semanticwb.process.model.Condition> listConditionByCategory(org.semanticwb.process.model.Category hascategory,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Condition> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasCategory, hascategory.getSemanticObject()));
@@ -65,6 +54,17 @@ public abstract class ConditionBase extends org.semanticwb.process.model.Support
    public static java.util.Iterator<org.semanticwb.process.model.Condition> listConditionByCategory(org.semanticwb.process.model.Category hascategory)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Condition> it=new org.semanticwb.model.GenericIterator(hascategory.getSemanticObject().getModel().listSubjects(swp_hasCategory,hascategory.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.process.model.Condition> listConditionByConditionExpression(org.semanticwb.process.model.Expression conditionexpression,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Condition> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_conditionExpression, conditionexpression.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.process.model.Condition> listConditionByConditionExpression(org.semanticwb.process.model.Expression conditionexpression)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Condition> it=new org.semanticwb.model.GenericIterator(conditionexpression.getSemanticObject().getModel().listSubjects(swp_conditionExpression,conditionexpression.getSemanticObject()));
        return it;
    }
     }

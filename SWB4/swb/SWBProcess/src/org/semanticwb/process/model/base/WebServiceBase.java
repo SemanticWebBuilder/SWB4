@@ -1,10 +1,10 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class WebServiceBase extends org.semanticwb.process.model.SupportingElement implements org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Participable
+public abstract class WebServiceBase extends org.semanticwb.process.model.SupportingElement implements org.semanticwb.process.model.Participable,org.semanticwb.model.Descriptiveable
 {
-       public static final org.semanticwb.platform.SemanticProperty swp_interface=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#interface");
        public static final org.semanticwb.platform.SemanticProperty swp_hasOperation=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#hasOperation");
+       public static final org.semanticwb.platform.SemanticProperty swp_interface=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#interface");
        public static final org.semanticwb.platform.SemanticClass swp_WebService=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#WebService");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#WebService");
     public static class ClassMgr
@@ -20,12 +20,6 @@ public abstract class WebServiceBase extends org.semanticwb.process.model.Suppor
        {
            java.util.Iterator it=sclass.listInstances();
            return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.WebService>(it, true);
-       }
-
-       public static org.semanticwb.process.model.WebService createWebService(org.semanticwb.model.SWBModel model)
-       {
-           long id=model.getSemanticObject().getModel().getCounter(sclass);
-           return org.semanticwb.process.model.WebService.ClassMgr.createWebService(String.valueOf(id), model);
        }
 
        public static org.semanticwb.process.model.WebService getWebService(String id, org.semanticwb.model.SWBModel model)
@@ -47,17 +41,6 @@ public abstract class WebServiceBase extends org.semanticwb.process.model.Suppor
        {
            return (getWebService(id, model)!=null);
        }
-   public static java.util.Iterator<org.semanticwb.process.model.WebService> listWebServiceByParticipantRef(org.semanticwb.process.model.Participant participantref,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.WebService> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_participantRef, participantref.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.process.model.WebService> listWebServiceByParticipantRef(org.semanticwb.process.model.Participant participantref)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.WebService> it=new org.semanticwb.model.GenericIterator(participantref.getSemanticObject().getModel().listSubjects(swp_participantRef,participantref.getSemanticObject()));
-       return it;
-   }
    public static java.util.Iterator<org.semanticwb.process.model.WebService> listWebServiceByCategory(org.semanticwb.process.model.Category hascategory,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.process.model.WebService> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasCategory, hascategory.getSemanticObject()));
@@ -69,11 +52,49 @@ public abstract class WebServiceBase extends org.semanticwb.process.model.Suppor
        org.semanticwb.model.GenericIterator<org.semanticwb.process.model.WebService> it=new org.semanticwb.model.GenericIterator(hascategory.getSemanticObject().getModel().listSubjects(swp_hasCategory,hascategory.getSemanticObject()));
        return it;
    }
+   public static java.util.Iterator<org.semanticwb.process.model.WebService> listWebServiceByParticipantRef(org.semanticwb.process.model.Participant participantref,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.WebService> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_participantRef, participantref.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.process.model.WebService> listWebServiceByParticipantRef(org.semanticwb.process.model.Participant participantref)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.WebService> it=new org.semanticwb.model.GenericIterator(participantref.getSemanticObject().getModel().listSubjects(swp_participantRef,participantref.getSemanticObject()));
+       return it;
+   }
     }
 
     public WebServiceBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public java.util.Iterator<String> listOperations()
+    {
+        java.util.ArrayList<String> values=new java.util.ArrayList<String>();
+        java.util.Iterator<org.semanticwb.platform.SemanticLiteral> it=getSemanticObject().listLiteralProperties(swp_hasOperation);
+        while(it.hasNext())
+        {
+                org.semanticwb.platform.SemanticLiteral literal=it.next();
+                values.add(literal.getString());
+        }
+        return values.iterator();
+    }
+
+    public void addOperation(String operation)
+    {
+        getSemanticObject().setProperty(swp_hasOperation, operation);
+    }
+
+    public void removeAllOperation()
+    {
+        getSemanticObject().removeProperty(swp_hasOperation);
+    }
+
+    public void removeOperation(String operation)
+    {
+        getSemanticObject().removeProperty(swp_hasOperation,operation);
     }
 
     public String getInterface()
@@ -106,32 +127,5 @@ public abstract class WebServiceBase extends org.semanticwb.process.model.Suppor
              ret=(org.semanticwb.process.model.Participant)obj.createGenericInstance();
          }
          return ret;
-    }
-
-    public java.util.Iterator<String> listOperations()
-    {
-        java.util.ArrayList<String> values=new java.util.ArrayList<String>();
-        java.util.Iterator<org.semanticwb.platform.SemanticLiteral> it=getSemanticObject().listLiteralProperties(swp_hasOperation);
-        while(it.hasNext())
-        {
-                org.semanticwb.platform.SemanticLiteral literal=it.next();
-                values.add(literal.getString());
-        }
-        return values.iterator();
-    }
-
-    public void addOperation(String operation)
-    {
-        getSemanticObject().setProperty(swp_hasOperation, operation);
-    }
-
-    public void removeAllOperation()
-    {
-        getSemanticObject().removeProperty(swp_hasOperation);
-    }
-
-    public void removeOperation(String operation)
-    {
-        getSemanticObject().removeProperty(swp_hasOperation,operation);
     }
 }

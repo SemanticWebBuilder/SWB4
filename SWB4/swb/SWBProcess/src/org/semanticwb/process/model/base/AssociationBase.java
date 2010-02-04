@@ -21,6 +21,12 @@ public abstract class AssociationBase extends org.semanticwb.process.model.Conne
            return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Association>(it, true);
        }
 
+       public static org.semanticwb.process.model.Association createAssociation(org.semanticwb.model.SWBModel model)
+       {
+           long id=model.getSemanticObject().getModel().getCounter(sclass);
+           return org.semanticwb.process.model.Association.ClassMgr.createAssociation(String.valueOf(id), model);
+       }
+
        public static org.semanticwb.process.model.Association getAssociation(String id, org.semanticwb.model.SWBModel model)
        {
            return (org.semanticwb.process.model.Association)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);

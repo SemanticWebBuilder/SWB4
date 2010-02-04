@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class GroupBase extends org.semanticwb.process.model.Artifact implements org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Diagramable
+public abstract class GroupBase extends org.semanticwb.process.model.Artifact implements org.semanticwb.process.model.Diagramable,org.semanticwb.model.Descriptiveable
 {
        public static final org.semanticwb.platform.SemanticClass swp_Category=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#Category");
        public static final org.semanticwb.platform.SemanticProperty swp_categoryRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#categoryRef");
@@ -58,17 +58,6 @@ public abstract class GroupBase extends org.semanticwb.process.model.Artifact im
        org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Group> it=new org.semanticwb.model.GenericIterator(hasgraphicalelement.getSemanticObject().getModel().listSubjects(swp_hasGraphicalElement,hasgraphicalelement.getSemanticObject()));
        return it;
    }
-   public static java.util.Iterator<org.semanticwb.process.model.Group> listGroupByCategory(org.semanticwb.process.model.Category hascategory,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Group> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasCategory, hascategory.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.process.model.Group> listGroupByCategory(org.semanticwb.process.model.Category hascategory)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Group> it=new org.semanticwb.model.GenericIterator(hascategory.getSemanticObject().getModel().listSubjects(swp_hasCategory,hascategory.getSemanticObject()));
-       return it;
-   }
    public static java.util.Iterator<org.semanticwb.process.model.Group> listGroupByCategoryRef(org.semanticwb.process.model.Category categoryref,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Group> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_categoryRef, categoryref.getSemanticObject()));
@@ -78,6 +67,17 @@ public abstract class GroupBase extends org.semanticwb.process.model.Artifact im
    public static java.util.Iterator<org.semanticwb.process.model.Group> listGroupByCategoryRef(org.semanticwb.process.model.Category categoryref)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Group> it=new org.semanticwb.model.GenericIterator(categoryref.getSemanticObject().getModel().listSubjects(swp_categoryRef,categoryref.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.process.model.Group> listGroupByCategory(org.semanticwb.process.model.Category hascategory,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Group> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasCategory, hascategory.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.process.model.Group> listGroupByCategory(org.semanticwb.process.model.Category hascategory)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Group> it=new org.semanticwb.model.GenericIterator(hascategory.getSemanticObject().getModel().listSubjects(swp_hasCategory,hascategory.getSemanticObject()));
        return it;
    }
     }

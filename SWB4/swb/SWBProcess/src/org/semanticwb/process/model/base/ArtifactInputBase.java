@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ArtifactInputBase extends org.semanticwb.process.model.SupportingElement implements org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ArtifactReferensable
+public abstract class ArtifactInputBase extends org.semanticwb.process.model.SupportingElement implements org.semanticwb.process.model.ArtifactReferensable,org.semanticwb.model.Descriptiveable
 {
        public static final org.semanticwb.platform.SemanticProperty swp_requiredForStart=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#requiredForStart");
        public static final org.semanticwb.platform.SemanticClass swp_ArtifactInput=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#ArtifactInput");
@@ -19,12 +19,6 @@ public abstract class ArtifactInputBase extends org.semanticwb.process.model.Sup
        {
            java.util.Iterator it=sclass.listInstances();
            return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ArtifactInput>(it, true);
-       }
-
-       public static org.semanticwb.process.model.ArtifactInput createArtifactInput(org.semanticwb.model.SWBModel model)
-       {
-           long id=model.getSemanticObject().getModel().getCounter(sclass);
-           return org.semanticwb.process.model.ArtifactInput.ClassMgr.createArtifactInput(String.valueOf(id), model);
        }
 
        public static org.semanticwb.process.model.ArtifactInput getArtifactInput(String id, org.semanticwb.model.SWBModel model)
@@ -46,17 +40,6 @@ public abstract class ArtifactInputBase extends org.semanticwb.process.model.Sup
        {
            return (getArtifactInput(id, model)!=null);
        }
-   public static java.util.Iterator<org.semanticwb.process.model.ArtifactInput> listArtifactInputByCategory(org.semanticwb.process.model.Category hascategory,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ArtifactInput> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasCategory, hascategory.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.process.model.ArtifactInput> listArtifactInputByCategory(org.semanticwb.process.model.Category hascategory)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ArtifactInput> it=new org.semanticwb.model.GenericIterator(hascategory.getSemanticObject().getModel().listSubjects(swp_hasCategory,hascategory.getSemanticObject()));
-       return it;
-   }
    public static java.util.Iterator<org.semanticwb.process.model.ArtifactInput> listArtifactInputByArtifactRef(org.semanticwb.process.model.Artifact artifactref,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ArtifactInput> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_artifactRef, artifactref.getSemanticObject()));
@@ -66,6 +49,17 @@ public abstract class ArtifactInputBase extends org.semanticwb.process.model.Sup
    public static java.util.Iterator<org.semanticwb.process.model.ArtifactInput> listArtifactInputByArtifactRef(org.semanticwb.process.model.Artifact artifactref)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ArtifactInput> it=new org.semanticwb.model.GenericIterator(artifactref.getSemanticObject().getModel().listSubjects(swp_artifactRef,artifactref.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.process.model.ArtifactInput> listArtifactInputByCategory(org.semanticwb.process.model.Category hascategory,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ArtifactInput> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasCategory, hascategory.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.process.model.ArtifactInput> listArtifactInputByCategory(org.semanticwb.process.model.Category hascategory)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ArtifactInput> it=new org.semanticwb.model.GenericIterator(hascategory.getSemanticObject().getModel().listSubjects(swp_hasCategory,hascategory.getSemanticObject()));
        return it;
    }
     }

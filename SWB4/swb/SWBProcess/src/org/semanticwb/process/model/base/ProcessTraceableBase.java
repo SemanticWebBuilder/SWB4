@@ -1,6 +1,6 @@
 package org.semanticwb.process.model.base;
 
-public interface ProcessTraceableBase extends org.semanticwb.model.Traceable
+public interface ProcessTraceableBase extends org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticProperty swp_ended=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#ended");
     public static final org.semanticwb.platform.SemanticProperty swp_endedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#endedBy");
