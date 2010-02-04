@@ -4,6 +4,7 @@
  */
 package org.semanticwb.jcr283.implementation;
 
+import java.util.HashSet;
 import java.util.UUID;
 import javax.jcr.AccessDeniedException;
 import javax.jcr.NodeIterator;
@@ -132,7 +133,13 @@ public class VersionHistoryImp extends NodeImp implements VersionHistory
 
     public VersionIterator getAllVersions() throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        HashSet<VersionImp> getAllVersions=new HashSet<VersionImp>();
+        nodeManager.loadChilds(this, session, false);
+        for(NodeImp node : nodeManager.getProtectedChildNodes(path))
+        {
+            getAllVersions.add((VersionImp)node);
+        }
+        return new VersionIteratorImp(getAllVersions);
     }
 
     public NodeIterator getAllLinearFrozenNodes() throws RepositoryException
