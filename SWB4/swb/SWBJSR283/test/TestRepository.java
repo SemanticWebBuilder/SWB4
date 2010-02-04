@@ -36,8 +36,10 @@ public class TestRepository
         Map parameters = new HashMap();
         try
         {
+
             RepositoryFactory factory = (RepositoryFactory) Class.forName("org.semanticwb.jcr283.implementation.RepositoryFactoryImp").newInstance();
             Repository repo = factory.getRepository(parameters);
+
             Session session = repo.login();
             Node root = session.getRootNode();
             NodeIterator it = root.getNodes();
@@ -48,28 +50,40 @@ public class TestRepository
                 Node node = it.nextNode();
 
                 System.out.println(node.getUUID());
-
+                System.out.println(node.isNew());
+                System.out.println(node.isModified());
                 System.out.println(node.getIdentifier());
                 System.out.println(node.getPath());
             }
             Node demo = root.addNode("demo:demo");
-
+            System.out.println(demo.isModified());
             demo.addMixin("mix:referenceable");
             demo.addMixin("mix:versionable");
+            System.out.println(demo.isNew());
 
             System.out.println(demo.getUUID());
             System.out.println(demo.getIdentifier());
             System.out.println(demo.getPath());
-
-            System.out.println(demo.getAncestor(0).getPath());
-            System.out.println(demo.getAncestor(1).getPath());
-            //System.out.println(demo.getAncestor(2).getPath());
-            session.save();
-            Version version=session.getWorkspace().getVersionManager().checkin(demo.getPath());
+            //System.out.println(demo.getAncestor(0).getPath());
+            //System.out.println(demo.getAncestor(1).getPath());
+            {
+                long init = System.currentTimeMillis();
+                session.save();
+                long fin = System.currentTimeMillis() - init;
+                System.out.println("Tiempo save:" + fin + " ms");
+            }
+            {
+                long init = System.currentTimeMillis();
+                Version version = session.getWorkspace().getVersionManager().checkin(demo.getPath());
+                long fin = System.currentTimeMillis() - init;
+                System.out.println("Tiempo version :" + fin + " ms");                
+                System.out.println(version.getName());
+            }
             System.out.println(demo.isCheckedOut());
-            System.out.println(version.getName());
+            System.out.println(demo.isNew());
+            System.out.println(demo.isModified());
 
-            
+
         }
         catch (Exception cnfe)
         {
