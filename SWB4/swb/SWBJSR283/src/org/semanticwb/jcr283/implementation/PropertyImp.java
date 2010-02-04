@@ -44,22 +44,22 @@ public class PropertyImp extends ItemImp implements Property
 
     private static final ValueFactoryImp valueFactoryImp = new ValueFactoryImp();
     private static final Logger log = SWBUtils.getLogger(PropertyImp.class);
-       
     private final ArrayList<Value> values = new ArrayList<Value>();
     private SemanticProperty prop;
-    private boolean loaded=false;
+    private boolean loaded = false;
+
     public PropertyImp(SemanticProperty prop, NodeImp parent, String path, SessionImp session) throws RepositoryException
     {
-        this(new PropertyDefinitionImp(prop), prop.getPrefix()+":"+prop.getName(), parent, path, session);
-        this.prop = prop;        
-        this.isNew=false;        
+        this(new PropertyDefinitionImp(prop), prop.getPrefix() + ":" + prop.getName(), parent, path, session);
+        this.prop = prop;
+        this.isNew = false;
     }
 
-    public PropertyImp(PropertyDefinitionImp definition,String name,NodeImp parent, String path, SessionImp session) throws RepositoryException
+    public PropertyImp(PropertyDefinitionImp definition, String name, NodeImp parent, String path, SessionImp session) throws RepositoryException
     {
-        super(definition,name, parent, path, parent.getDepth()+1, session);
-        prop=null;
-        this.isNew=true;                
+        super(definition, name, parent, path, parent.getDepth() + 1, session);
+        prop = null;
+        this.isNew = true;
     }
 
     void addValue(Value value)
@@ -71,7 +71,7 @@ public class PropertyImp extends ItemImp implements Property
     {
         SemanticObject obj = parent.getSemanticObject();
         if (!loaded && obj != null && prop != null && !isModified())
-        {            
+        {
             Iterator<SemanticLiteral> lvalues = obj.listLiteralProperties(prop);
             while (lvalues.hasNext())
             {
@@ -79,17 +79,17 @@ public class PropertyImp extends ItemImp implements Property
                 String value = literal.getString();
                 try
                 {
-                    log.trace("loading value from database for the property "+path);
-                    values.add(transformValue(valueFactoryImp.createValue(value), ((PropertyDefinitionImp)definition).getRequiredType()));
+                    log.trace("loading value from database for the property " + path);
+                    values.add(transformValue(valueFactoryImp.createValue(value), ((PropertyDefinitionImp) definition).getRequiredType()));
                 }
                 catch (Exception e)
                 {
-                    loaded=false;
+                    loaded = false;
                     log.error(e);
                     break;
                 }
             }
-            loaded=true;
+            loaded = true;
         }
 
     }
@@ -104,33 +104,33 @@ public class PropertyImp extends ItemImp implements Property
 
     public static Value transformValue(Value value, int reqValue) throws ValueFormatException, RepositoryException
     {
-        if(value.getType()==reqValue)
+        if (value.getType() == reqValue)
         {
             return value;
         }
-        log.trace("Tranforming value from "+ PropertyType.nameFromValue(value.getType()) +" to "+ PropertyType.nameFromValue(reqValue));
+        log.trace("Tranforming value from " + PropertyType.nameFromValue(value.getType()) + " to " + PropertyType.nameFromValue(reqValue));
         ValueImp newValue = new ValueImp(value, reqValue);
         return newValue;
     }
 
     void set(Value[] values) throws ValueFormatException, VersionException, LockException, RepositoryException
     {
-        if(values.length==0)
+        if (values.length == 0)
         {
             throw new ValueFormatException("The length can not be zero");
         }
-        if (values.length > 1 && !((PropertyDefinitionImp)definition).isMultiple())
+        if (values.length > 1 && !((PropertyDefinitionImp) definition).isMultiple())
         {
             throw new ConstraintViolationException("The property is not multiple");
         }
-        int reqType = ((PropertyDefinitionImp)definition).getRequiredType();
+        int reqType = ((PropertyDefinitionImp) definition).getRequiredType();
         //Validate Values
         HashSet<Value> newValues = new HashSet<Value>();
         for (Value value : values)
         {
             newValues.add(transformValue(value, reqType));
         }
-        log.trace("Setting values to the property "+path+"  values.length: "+values.length);
+        log.trace("Setting values to the property " + path + "  values.length: " + values.length);
         this.values.addAll(newValues);
         this.isModified = true;
         parent.isModified = true;
@@ -142,9 +142,9 @@ public class PropertyImp extends ItemImp implements Property
         {
             throw new ConstraintViolationException("The property is protected");
         }
-        if(this.parent.definition.isProtected())
+        if (this.parent.definition.isProtected())
         {
-            throw new ConstraintViolationException("The node "+this.parent.path+" is protected");
+            throw new ConstraintViolationException("The node " + this.parent.path + " is protected");
         }
         set(values);
     }
@@ -171,8 +171,9 @@ public class PropertyImp extends ItemImp implements Property
         }
         setValue(ovalues.toArray(new Value[ovalues.size()]));
     }
+
     @Deprecated
-    @SuppressWarnings(value="deprecation")
+    @SuppressWarnings(value = "deprecation")
     public void setValue(InputStream value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
         setValue(valueFactoryImp.createValue(value));
@@ -219,7 +220,7 @@ public class PropertyImp extends ItemImp implements Property
         {
             throw new ValueFormatException("The property is multivalued");
         }
-        if(values.size()==0)
+        if (values.size() == 0)
         {
             return null;
         }
@@ -230,7 +231,7 @@ public class PropertyImp extends ItemImp implements Property
     {
         /*if (values.size() == 0)
         {
-            loadValues();
+        loadValues();
         }*/
         HashSet<Value> ovalues = new HashSet<Value>();
         for (Value value : values)
@@ -242,60 +243,61 @@ public class PropertyImp extends ItemImp implements Property
 
     public String getString() throws ValueFormatException, RepositoryException
     {
-        return this.getValue()==null?null:this.getValue().getString();
+        return this.getValue() == null ? null : this.getValue().getString();
     }
+
     @Deprecated
-    @SuppressWarnings(value="deprecation")
+    @SuppressWarnings(value = "deprecation")
     public InputStream getStream() throws ValueFormatException, RepositoryException
     {
-        return this.getValue()==null?null:this.getValue().getStream();
+        return this.getValue() == null ? null : this.getValue().getStream();
     }
 
     public Binary getBinary() throws ValueFormatException, RepositoryException
     {
-        return this.getValue()==null?null:this.getValue().getBinary();
+        return this.getValue() == null ? null : this.getValue().getBinary();
     }
 
     public long getLong() throws ValueFormatException, RepositoryException
     {
-        return this.getValue()==null?null:this.getValue().getLong();
+        return this.getValue() == null ? null : this.getValue().getLong();
     }
 
     public double getDouble() throws ValueFormatException, RepositoryException
     {
-        return this.getValue()==null?null:this.getValue().getDouble();
+        return this.getValue() == null ? null : this.getValue().getDouble();
     }
 
     public BigDecimal getDecimal() throws ValueFormatException, RepositoryException
     {
-        return this.getValue()==null?null:this.getValue().getDecimal();
+        return this.getValue() == null ? null : this.getValue().getDecimal();
     }
 
     public Calendar getDate() throws ValueFormatException, RepositoryException
     {
-        return this.getValue()==null?null:this.getValue().getDate();
+        return this.getValue() == null ? null : this.getValue().getDate();
     }
 
     public boolean getBoolean() throws ValueFormatException, RepositoryException
     {
-        return this.getValue()==null?null:this.getValue().getBoolean();
+        return this.getValue() == null ? null : this.getValue().getBoolean();
     }
 
     public Node getNode() throws ItemNotFoundException, ValueFormatException, RepositoryException
     {
-        int requiredType=((PropertyDefinitionImp)definition).getRequiredType();
+        int requiredType = ((PropertyDefinitionImp) definition).getRequiredType();
         if (requiredType == PropertyType.REFERENCE || requiredType == PropertyType.WEAKREFERENCE)
         {
-            if (((PropertyDefinitionImp)definition).isMultiple())
+            if (((PropertyDefinitionImp) definition).isMultiple())
             {
-                throw new ValueFormatException("The property "+path+" is multiple");
+                throw new ValueFormatException("The property " + path + " is multiple");
             }
             if (values.size() <= 0)
             {
                 throw new ItemNotFoundException();
             }
-            String id=values.get(0).getString();            
-            NodeImp node = (NodeImp)session.getNodeByIdentifier(id);
+            String id = values.get(0).getString();
+            NodeImp node = (NodeImp) session.getNodeByIdentifier(id);
             if (node == null)
             {
                 throw new ItemNotFoundException();
@@ -320,17 +322,17 @@ public class PropertyImp extends ItemImp implements Property
         {
             throw new ValueFormatException("The property is multivalued");
         }
-        if(values.size()==0)
+        if (values.size() == 0)
         {
             return -1;
         }
         return getLength(values.get(0));
     }
 
-    private long getLength(Value value) throws ValueFormatException,RepositoryException
+    private long getLength(Value value) throws ValueFormatException, RepositoryException
     {
-        int type=value.getType();
-        if(type==PropertyType.BINARY)
+        int type = value.getType();
+        if (type == PropertyType.BINARY)
         {
             return value.getBinary().getSize();
         }
@@ -351,7 +353,7 @@ public class PropertyImp extends ItemImp implements Property
 
     public PropertyDefinition getDefinition() throws RepositoryException
     {
-        return ((PropertyDefinitionImp)definition);
+        return ((PropertyDefinitionImp) definition);
     }
 
     public int getType() throws RepositoryException
@@ -394,7 +396,7 @@ public class PropertyImp extends ItemImp implements Property
     }
 
     public void saveData() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
-    {        
+    {
         if (parent.getSemanticObject() == null)
         {
             //TODO:ERROR
@@ -408,7 +410,8 @@ public class PropertyImp extends ItemImp implements Property
                 prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(urinewProperty);
             }
             SemanticObject obj = parent.getSemanticObject();
-            log.trace("Saving property "+path+" for node "+parent.path);
+            log.trace("Saving property " + path + " for node " + parent.path);
+
             for (Value value : this.values)
             {
                 int type = value.getType();
@@ -417,6 +420,7 @@ public class PropertyImp extends ItemImp implements Property
                     case PropertyType.BINARY:
                         try
                         {
+
                             obj.setInputStreamProperty(prop, value.getBinary().getStream(), prop.getName());
                         }
                         catch (Exception e)
@@ -425,22 +429,28 @@ public class PropertyImp extends ItemImp implements Property
                         }
                         break;
                     case PropertyType.BOOLEAN:
-                        obj.setBooleanProperty(prop, value.getBoolean());
+                        obj.addLiteralProperty(prop,new SemanticLiteral(value.getBoolean()));
+                        //obj.setBooleanProperty(prop, value.getBoolean());
                         break;
                     case PropertyType.DATE:
-                        obj.setDateProperty(prop, value.getDate().getTime());
+                        obj.addLiteralProperty(prop,new SemanticLiteral(value.getDate().getTime()));
+                        //obj.setDateProperty(prop, value.getDate().getTime());
                         break;
                     case PropertyType.DECIMAL:
-                        obj.setDoubleProperty(prop, value.getDecimal().doubleValue());
+                        obj.addLiteralProperty(prop,new SemanticLiteral(value.getDecimal().doubleValue()));
+                        //obj.setDoubleProperty(prop, value.getDecimal().doubleValue());
                         break;
                     case PropertyType.DOUBLE:
-                        obj.setDoubleProperty(prop, value.getDouble());
+                        obj.addLiteralProperty(prop,new SemanticLiteral(value.getDouble()));
+                        //obj.setDoubleProperty(prop, value.getDouble());
                         break;
                     case PropertyType.LONG:
-                        obj.setLongProperty(prop, value.getLong());
+                        obj.addLiteralProperty(prop,new SemanticLiteral(value.getLong()));
+                        //obj.setLongProperty(prop, value.getLong());
                         break;
                     default:
-                        obj.setProperty(prop, value.getString());
+                        obj.addLiteralProperty(prop,new SemanticLiteral(value.getString()));
+                        //obj.setProperty(prop, value.getString());
                 }
             }
         }
@@ -455,12 +465,12 @@ public class PropertyImp extends ItemImp implements Property
     }
 
     @Override
-    public void validate() throws ConstraintViolationException,RepositoryException
+    public void validate() throws ConstraintViolationException, RepositoryException
     {
-        PropertyDefinitionImp propertyDefinitionImp=(PropertyDefinitionImp) definition;
-        if(propertyDefinitionImp.isMandatory() && values.size()==0)
+        PropertyDefinitionImp propertyDefinitionImp = (PropertyDefinitionImp) definition;
+        if (propertyDefinitionImp.isMandatory() && values.size() == 0)
         {
-            throw new ConstraintViolationException("The property "+name+" is mandatory for the node "+parent.path);
+            throw new ConstraintViolationException("The property " + name + " is mandatory for the node " + parent.path);
         }
     }
 }
