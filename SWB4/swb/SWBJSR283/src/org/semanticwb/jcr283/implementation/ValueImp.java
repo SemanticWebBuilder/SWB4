@@ -414,6 +414,9 @@ public class ValueImp implements Value
                 case PropertyType.BINARY:
                     getValue = toBinary(ovalue);
                     break;
+                case PropertyType.BOOLEAN:
+                    getValue = ovalue;
+                    break;
                 default:
                     throw new ValueFormatException("The value can not be converted");
 
@@ -529,6 +532,7 @@ public class ValueImp implements Value
     {
         return (String) getValue(value, PropertyType.STRING);
     }
+
     @Deprecated
     public InputStream getStream() throws IllegalStateException, RepositoryException
     {
@@ -664,7 +668,7 @@ public class ValueImp implements Value
         {
             String prefix = value.substring(0, pos);
             String name = value.substring(pos + 1);
-            
+
             try
             {
                 String uri = SWBRepository.getNamespaceRegistryImp().getURI(prefix);
@@ -858,7 +862,7 @@ public class ValueImp implements Value
     }
 
     private String toString(QName value) throws ValueFormatException
-    {        
+    {
         try
         {
             String prefix = SWBRepository.getNamespaceRegistryImp().getPrefix(value.getNamespaceURI());
