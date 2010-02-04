@@ -240,7 +240,7 @@ public class NodeManager
         {
             if (loadchilds)
             {
-                loadChilds(parent, session, true);
+                loadChilds(parent, session, false);
             }
             HashSet<NodeStatus> childnodes = nodesbyParent.get(parent.path);
             for (NodeStatus nodeStatus : childnodes)
