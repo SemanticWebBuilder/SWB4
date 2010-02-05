@@ -7,14 +7,10 @@ package org.semanticwb.jcr283.implementation;
 import java.util.HashSet;
 import java.util.UUID;
 import javax.jcr.AccessDeniedException;
-import javax.jcr.InvalidItemStateException;
-import javax.jcr.ItemExistsException;
 import javax.jcr.NodeIterator;
 import javax.jcr.ReferentialIntegrityException;
 import javax.jcr.RepositoryException;
 import javax.jcr.UnsupportedRepositoryOperationException;
-import javax.jcr.lock.LockException;
-import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.NoSuchNodeTypeException;
 import javax.jcr.version.LabelExistsVersionException;
 import javax.jcr.version.Version;
@@ -120,7 +116,7 @@ public class VersionHistoryImp extends NodeImp implements VersionHistory
     {
         VersionImp newversion = (VersionImp) this.insertNode(nameToAdd, null);
         newversion.init(versionableNode);
-        VersionImp baseverion = this.versionableNode.getBaseVersionImp();
+        VersionImp baseverion =   session.getWorkspaceImp().getVersionManagerImp().getBaseVersionImp(this.versionableNode);
 
 
         PropertyImp jcr_predecessors = nodeManager.getProtectedProperty(newversion.getPathFromName(JCR_PREDECESSORS));
