@@ -1408,4 +1408,9 @@ public class NodeImp extends ItemImp implements Node
             }
         }
     }
+    @Override
+    public String toString()
+    {
+        return path+" ("+ nodeType.getName() +","+ this.getClass().getCanonicalName() +")";
+    }
 }

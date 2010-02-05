@@ -30,13 +30,14 @@ public class VersionHistoryImp extends NodeImp implements VersionHistory
 
     private static final String JCR_ROOT_VERSION_NAME = "jcr:rootVersion";
     private static final String JCR_SUCCESSORS = "jcr:successors";
+    private static final String JCR_VERSIONABLE_UUID = "jcr:versionableUuid";
     private final NodeImp versionableNode;
     private VersionImp jcr_rootVersion;
 
     protected VersionHistoryImp(org.semanticwb.jcr283.repository.model.VersionHistory vh, NodeImp parent, int index, String path, int depth, SessionImp session) throws RepositoryException
     {
         super(vh, parent, index, path, depth, session);
-        PropertyImp prop = nodeManager.getProtectedProperty(this.getPathFromName("jcr:versionableUuid"));
+        PropertyImp prop = nodeManager.getProtectedProperty(this.getPathFromName(JCR_VERSIONABLE_UUID));
         if (prop.getLength() == -1)
         {
             throw new RepositoryException("The versionableUuid property was not found");
