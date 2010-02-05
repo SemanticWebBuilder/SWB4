@@ -8,6 +8,7 @@ public class Gateway extends org.semanticwb.process.model.base.GatewayBase
         super(base);
     }
 
+    @Override
     public boolean isValid()
     {
         return true;
