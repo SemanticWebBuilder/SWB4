@@ -33,7 +33,7 @@ import static org.semanticwb.portal.monitor.SWBFormatUtils.*;
 public class SWBSummaryData implements Serializable {
     private static final long serialVersionUID = 4012L;
        public long upTime, startTime = -1L;
-    //   public double systemLoadAverage = Double.NEGATIVE_INFINITY;
+//       public double systemLoadAverage;
 	public long processCpuTime = -1L;
 	public long timeStamp;
 	public int nCPUs;
@@ -60,7 +60,8 @@ public class SWBSummaryData implements Serializable {
             ret.append("<li>Instancia: "+vmInstanceName+"</li>\n");
             //ret.append("<li>Nombre Interno: "+internalName+"</li>\n");
             ret.append("<li>Compilador: "+jitCompiler+"</li>\n");
-          //  ret.append("<li>Carga promedio: "+String.format("%1$3.4f", systemLoadAverage)+"</li>\n");
+//            if (systemLoadAverage>0d)
+//            ret.append("<li>Carga promedio: "+String.format("%1$3.4f", systemLoadAverage)+"</li>\n");
             ret.append("<li>CPU Instantaneo: "+String.format("%1$3.4f", instantCPU)+"</li>\n");
             ret.append("<li>Hora de Inicio: "+formatDate(startTime)+"</li>\n");
             ret.append("<li>Tiempo de Uso: "+formatTime(upTime)+"</li>\n");
@@ -83,9 +84,9 @@ public class SWBSummaryData implements Serializable {
             ret.append("<li>Total Clases: "+totalClass+"</li>\n");
             ret.append("<li>Classes Descargadas: "+unloadedClass+"</li>\n</ul>\n</div>\n");
             ret.append("<div id\"Memory\">");
-            ret.append("<ul>\n<li>Heap Actual: "+formatLong(currentHeap/1024)+" kbytes</li>\n");
+            ret.append("<ul>\n<li>Memoria Heap en uso: "+formatLong(currentHeap/1024)+" kbytes</li>\n");
             ret.append("<li>Heap M&aacute;ximo: "+formatLong(maxHeap/1024)+" kbytes</li>\n");
-            ret.append("<li>Memoria asignada: "+formatLong(currentCommited/1024)+" kbytes</li>\n");
+            ret.append("<li>Tama&ntilde;o asignado de Heap: "+formatLong(currentCommited/1024)+" kbytes</li>\n");
             ret.append("<li>Objetos por finalizar: "+objectsPending+"</li>\n");
             for (String curr: gcDetails){
                 ret.append("<li>GC: "+curr+"</li>\n");

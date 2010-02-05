@@ -114,7 +114,7 @@ public class SWBSummary
             ret.freePhysicalMem = sunOperatingSystemMXBean.getFreePhysicalMemorySize();
             ret.totalPhysicalMem = sunOperatingSystemMXBean.getTotalPhysicalMemorySize();
             ret.totalSwapMem = sunOperatingSystemMXBean.getTotalSwapSpaceSize();
-            //ret.systemLoadAverage = sunOperatingSystemMXBean.getSystemLoadAverage();
+//            ret.systemLoadAverage = sunOperatingSystemMXBean.getSystemLoadAverage();
         }
         ret.jitCompiler = compilationMBean.getName();
         ret.vmLibraryPath = runtimeMBean.getLibraryPath();
@@ -132,7 +132,7 @@ public class SWBSummary
         ret.nCPUs = operatingSystemMBean.getAvailableProcessors();
         ret.upTime = runtimeMBean.getUptime();
         ret.startTime = runtimeMBean.getStartTime();
-        //ret.systemLoadAverage = operatingSystemMBean.getSystemLoadAverage();
+//        ret.systemLoadAverage = operatingSystemMBean.getSystemLoadAverage();
         ret.liveTh = threadMBean.getThreadCount();
         ret.deamonTh = threadMBean.getDaemonThreadCount();
         ret.peakTh = threadMBean.getPeakThreadCount();
