@@ -7,4 +7,17 @@ public class ConditionalSequenceFlow extends org.semanticwb.process.model.base.C
     {
         super(base);
     }
+
+    public boolean evaluate(FlowObjectInstance instance)
+    {
+        boolean ret = true;
+        String cond = getConditionExpression().getExpressionBody();
+        String action = instance.getAction();
+        if(cond != null) {
+            if(!cond.equals(action)) {
+                ret = false;
+            }
+        }
+        return ret;
+    }
 }
