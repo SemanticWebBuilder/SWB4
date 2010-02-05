@@ -111,6 +111,11 @@ public class NodeManager
 
     public NodeImp getNodeByIdentifier(String id, SessionImp session) throws RepositoryException
     {
+        return this.getNodeByIdentifier(id, session, null);
+    }
+
+    public NodeImp getNodeByIdentifier(String id, SessionImp session, NodeTypeImp nodeTypeToSeach) throws RepositoryException
+    {
         if (nodesbyId.containsKey(id))
         {
             if (!nodesbyId.get(id).isDeleted())
@@ -124,16 +129,23 @@ public class NodeManager
             Base nodeToLoad = null;
             ArrayList<Base> nodesToLoad = new ArrayList<Base>();
             Workspace ws = Workspace.ClassMgr.getWorkspace(session.getWorkspace().getName());
-            NodeTypeImp baseNodeTye = NodeTypeManagerImp.loadNodeType(Base.sclass);
-            NodeTypeIteratorImp nodeTypes = baseNodeTye.getSubtypesImp();
-            while (nodeTypes.hasNext())
-            {
-                NodeTypeImp nodeType = (NodeTypeImp) nodeTypes.nextNodeType();
-                nodeToLoad = (org.semanticwb.jcr283.repository.model.Base) ws.getSemanticObject().getModel().getGenericObject(ws.getSemanticObject().getModel().getObjectUri(id, nodeType.getSemanticClass()), nodeType.getSemanticClass());
-                if (nodeToLoad != null)
+            if (nodeTypeToSeach == null)
+            {                
+                NodeTypeImp baseNodeTye = NodeTypeManagerImp.loadNodeType(Base.sclass);
+                NodeTypeIteratorImp nodeTypes = baseNodeTye.getSubtypesImp();
+                while (nodeTypes.hasNext())
                 {
-                    break;
+                    NodeTypeImp nodeType = (NodeTypeImp) nodeTypes.nextNodeType();
+                    nodeToLoad = (org.semanticwb.jcr283.repository.model.Base) ws.getSemanticObject().getModel().getGenericObject(ws.getSemanticObject().getModel().getObjectUri(id, nodeType.getSemanticClass()), nodeType.getSemanticClass());
+                    if (nodeToLoad != null)
+                    {
+                        break;
+                    }
                 }
+            }
+            else
+            {
+                nodeToLoad = (org.semanticwb.jcr283.repository.model.Base) ws.getSemanticObject().getModel().getGenericObject(ws.getSemanticObject().getModel().getObjectUri(id, nodeTypeToSeach.getSemanticClass()), nodeTypeToSeach.getSemanticClass());
             }
 
             if (nodeToLoad != null)
@@ -177,7 +189,7 @@ public class NodeManager
                             childpath += "[" + childIndex + "]";
                         }
                         NodeImp temp = NodeImp.createNodeImp(base, parentloaded, childIndex, childpath, session);
-                        this.addNode(temp, childpath,path);
+                        this.addNode(temp, childpath, path);
                         parentloaded = temp;
                     }
                 }
