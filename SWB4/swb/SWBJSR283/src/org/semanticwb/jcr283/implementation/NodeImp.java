@@ -170,8 +170,9 @@ public class NodeImp extends ItemImp implements Node
             if (jcr_version_Storage == null)
             {
                 throw new RepositoryException("The version storage was not found");
-            }            
-            VersionHistoryImp history=(VersionHistoryImp)jcr_version_Storage.insertNode("jcr:versionHistory");
+            }
+            NodeImp temp=jcr_version_Storage.insertNode("jcr:versionHistory");
+            VersionHistoryImp history=(VersionHistoryImp)temp;
             history.init(this);
             prop.set(valueFactoryImp.createValue(history));
             nodeManager.addNode(history, history.path, path);
@@ -468,11 +469,11 @@ public class NodeImp extends ItemImp implements Node
     {
         if (nodeType.getSemanticClass().equals(org.semanticwb.jcr283.repository.model.Version.sclass))
         {
-            return new VersionImp(nodeDefinition, name, (VersionHistoryImp) parent, index, path, parent.getDepth() + 1, session, id);
+            return new VersionImp(nodeType, nodeDefinition, name, parent, index, path, index, session, id, true);
         }
         else if (nodeType.getSemanticClass().equals(org.semanticwb.jcr283.repository.model.VersionHistory.sclass))
         {
-            return new VersionHistoryImp(nodeDefinition, parent, session);
+            return new VersionHistoryImp(nodeType, nodeDefinition, name, parent, index, path, index, session, id, true);
         }
         else
         {
@@ -545,7 +546,7 @@ public class NodeImp extends ItemImp implements Node
             childpath += "[" + childIndex + "]";
         }
         //log.trace("Creating the node " + nameToAdd);
-        NodeImp newChild = createNodeImp(primaryNodeType, childDefinition, nameToAdd, this, index, childpath, session, newId);
+        NodeImp newChild = createNodeImp(primaryNodeType, childDefinition, nameToAdd, this, childIndex, childpath, session, newId);
         this.isModified = true;
         return nodeManager.addNode(newChild, childpath, path);
 

@@ -29,7 +29,7 @@ public class VersionImp extends NodeImp implements Version
         super(version, parent, index, path, depth, session);
     }
 
-    public VersionImp(NodeDefinitionImp nodeDefinition, String name, VersionHistoryImp parent, int index, String path, int depth, SessionImp session, String id) throws NoSuchNodeTypeException, RepositoryException
+    protected VersionImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session, String id, boolean isnew) throws RepositoryException
     {
         super(SWBRepository.getNodeTypeManagerImp().getNodeTypeImp("nt:version"), nodeDefinition, name, parent, index, path, depth, session, id,true);
 
