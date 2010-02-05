@@ -40,11 +40,11 @@ public class NodeManager
     private Hashtable<String, PropertyStatus> properties = new Hashtable<String, PropertyStatus>();
     private Hashtable<String, HashSet<PropertyStatus>> propertiesbyParent = new Hashtable<String, HashSet<PropertyStatus>>();
     private final static Logger log = SWBUtils.getLogger(NodeManager.class);
-    
+
     public NodeManager()
     {
-    
     }
+
     public NodeImp loadRoot(org.semanticwb.jcr283.repository.model.Workspace ws, SessionImp session) throws RepositoryException
     {
         if (!nodes.containsKey(PATH_SEPARATOR))
@@ -58,7 +58,7 @@ public class NodeManager
                 newroot.setName("jcr:root");
             }
             RootNodeImp root = new RootNodeImp(ws.getRoot(), session);
-            nodes.put(PATH_SEPARATOR, new NodeStatus(root));
+            this.addNode(root, "/", null);
 
         }
         RootNodeImp root = (RootNodeImp) nodes.get(PATH_SEPARATOR).getNode();
@@ -70,6 +70,7 @@ public class NodeManager
         if (nodes.get(systemPath) == null)
         {
             NodeImp system = root.insertNode(JCR_SYSTEM);
+            this.addNode(system, systemPath, "/");
             system.saveData();
         }
         NodeImp system = nodes.get(systemPath).getNode();
@@ -89,12 +90,17 @@ public class NodeManager
 
     private void initVersionStore(NodeImp system, SessionImp session) throws RepositoryException
     {
-        //log.trace("Creating Version Storage");
         loadChilds(system, session, false);
         if (!nodes.containsKey(system.getPathFromName(JCR_VERSION_STORAGE)))
         {
             NodeImp jcr_versionStorage = system.insertNode(JCR_VERSION_STORAGE);
+            this.addNode(jcr_versionStorage, jcr_versionStorage.path, system.path);
             jcr_versionStorage.saveData();
+        }
+        else
+        {
+            NodeImp versionStorage = nodes.get(system.getPathFromName(JCR_VERSION_STORAGE)).getNode();
+            this.addNode(versionStorage, versionStorage.path, system.path);
         }
     }
 
@@ -115,16 +121,16 @@ public class NodeManager
         else
         {
             // load node
-            Base nodeToLoad=null;
+            Base nodeToLoad = null;
             ArrayList<Base> nodesToLoad = new ArrayList<Base>();
             Workspace ws = Workspace.ClassMgr.getWorkspace(session.getWorkspace().getName());
-            NodeTypeImp baseNodeTye=NodeTypeManagerImp.loadNodeType(Base.sclass);
-            NodeTypeIteratorImp nodeTypes=baseNodeTye.getSubtypesImp();
-            while(nodeTypes.hasNext())
+            NodeTypeImp baseNodeTye = NodeTypeManagerImp.loadNodeType(Base.sclass);
+            NodeTypeIteratorImp nodeTypes = baseNodeTye.getSubtypesImp();
+            while (nodeTypes.hasNext())
             {
-                NodeTypeImp nodeType=(NodeTypeImp)nodeTypes.nextNodeType();
-                nodeToLoad=(org.semanticwb.jcr283.repository.model.Base)ws.getSemanticObject().getModel().getGenericObject(ws.getSemanticObject().getModel().getObjectUri(id,nodeType.getSemanticClass()),nodeType.getSemanticClass());
-                if(nodeToLoad!=null)
+                NodeTypeImp nodeType = (NodeTypeImp) nodeTypes.nextNodeType();
+                nodeToLoad = (org.semanticwb.jcr283.repository.model.Base) ws.getSemanticObject().getModel().getGenericObject(ws.getSemanticObject().getModel().getObjectUri(id, nodeType.getSemanticClass()), nodeType.getSemanticClass());
+                if (nodeToLoad != null)
                 {
                     break;
                 }
@@ -170,14 +176,14 @@ public class NodeManager
                         {
                             childpath += "[" + childIndex + "]";
                         }
-                        NodeImp temp=NodeImp.createNodeImp(base, parentloaded, childIndex, childpath, session);
-                        this.addNode(temp, path, childpath);
+                        NodeImp temp = NodeImp.createNodeImp(base, parentloaded, childIndex, childpath, session);
+                        this.addNode(temp, childpath,path);
                         parentloaded = temp;
                     }
                 }
             }
         }
-        if(nodesbyId.get(id)!=null)
+        if (nodesbyId.get(id) != null)
         {
             return nodesbyId.get(id).getNode();
         }
@@ -186,21 +192,51 @@ public class NodeManager
 
     public NodeImp addNode(NodeImp node, String path, String pathParent)
     {
-        if (!this.nodes.containsKey(path))
+        //log.trace("Inserting node " + path + " into the NodeManager");
+        NodeStatus nodestatus = null;
+        if (this.nodes.containsKey(path))
         {
-            //log.trace("Inserting node " + path + " into the NodeManager");
-            NodeStatus nodeStatus = new NodeStatus(node);
-            this.nodes.put(path, nodeStatus);
-            HashSet<NodeStatus> childnodes = new HashSet<NodeStatus>();
+            nodestatus = this.nodes.get(path);
+        }
+        else
+        {
+            nodestatus = new NodeStatus(node);
+            this.nodes.put(path, nodestatus);
+        }
+        if (!nodesbyId.containsKey(node.id))
+        {
+            nodesbyId.put(node.id, nodestatus);
+        }
+        if (pathParent != null)
+        {
             if (nodesbyParent.containsKey(pathParent))
             {
-                childnodes = nodesbyParent.get(pathParent);
+                HashSet<NodeStatus> childs = nodesbyParent.get(pathParent);
+                if (childs == null)
+                {
+                    childs = new HashSet<NodeStatus>();
+                }
+                if (!childs.contains(nodestatus))
+                {
+                    childs.add(nodestatus);
+                }
+
             }
-            childnodes.add(nodeStatus);
-            nodesbyParent.put(pathParent, childnodes);
-            nodesbyId.put(node.id, nodeStatus);
+            else
+            {
+                HashSet<NodeStatus> childs = new HashSet<NodeStatus>();
+                if (childs == null)
+                {
+                    childs = new HashSet<NodeStatus>();
+                }
+                if (!childs.contains(nodestatus))
+                {
+                    childs.add(nodestatus);
+                }
+                nodesbyParent.put(pathParent, childs);
+            }
         }
-        return this.nodes.get(path).getNode();
+        return nodestatus.getNode();
     }
 
     private void restoreProperty(String path)
@@ -598,8 +634,6 @@ public class NodeManager
     {
         return this.getChildNodes(node.getPath());
     }
-
-
 
     public NodeImp getChildNodeById(NodeImp parent, String id, SessionImp session, boolean replace) throws RepositoryException
     {

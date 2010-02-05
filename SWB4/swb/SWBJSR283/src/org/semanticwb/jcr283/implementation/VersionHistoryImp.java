@@ -5,13 +5,11 @@
 package org.semanticwb.jcr283.implementation;
 
 import java.util.HashSet;
-import java.util.UUID;
 import javax.jcr.AccessDeniedException;
 import javax.jcr.NodeIterator;
 import javax.jcr.ReferentialIntegrityException;
 import javax.jcr.RepositoryException;
 import javax.jcr.UnsupportedRepositoryOperationException;
-import javax.jcr.nodetype.NoSuchNodeTypeException;
 import javax.jcr.version.LabelExistsVersionException;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionException;
@@ -82,9 +80,9 @@ public class VersionHistoryImp extends NodeImp implements VersionHistory
 
     }
     
-    public VersionHistoryImp(NodeDefinitionImp nodeDefinition, NodeImp parent, SessionImp session) throws NoSuchNodeTypeException, RepositoryException
+    protected VersionHistoryImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session, String id, boolean isnew) throws RepositoryException
     {
-        super(SWBRepository.getNodeTypeManagerImp().getNodeTypeImp("nt:versionHistory"), nodeDefinition, "jcr:versionHistory", parent, 0, parent.path + PATH_SEPARATOR + "jcr:versionHistory", parent.getDepth() + 1, session, UUID.randomUUID().toString(), true);
+        super(nodeType, nodeDefinition, name, parent, index, path, depth, session, id, isnew);
         
         String path_jcr_rootVersion = this.getPathFromName(JCR_ROOT_VERSION_NAME);
         if (!nodeManager.hasNode(path_jcr_rootVersion))
