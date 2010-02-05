@@ -5,21 +5,14 @@
 package org.semanticwb.jcr283.implementation;
 
 import java.util.Calendar;
-import javax.jcr.AccessDeniedException;
-import javax.jcr.InvalidItemStateException;
-import javax.jcr.ItemExistsException;
 import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
-import javax.jcr.ReferentialIntegrityException;
 import javax.jcr.RepositoryException;
-import javax.jcr.lock.LockException;
-import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.NoSuchNodeTypeException;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.version.OnParentVersionAction;
 import javax.jcr.version.Version;
-import javax.jcr.version.VersionException;
 import javax.jcr.version.VersionHistory;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
@@ -117,6 +110,11 @@ public class VersionImp extends NodeImp implements Version
     public VersionHistory getContainingHistory() throws RepositoryException
     {
         return (VersionHistory) parent;
+    }
+
+    public VersionHistoryImp getContainingHistoryImp() throws RepositoryException
+    {
+        return (VersionHistoryImp) parent;
     }
 
     public Calendar getCreated() throws RepositoryException

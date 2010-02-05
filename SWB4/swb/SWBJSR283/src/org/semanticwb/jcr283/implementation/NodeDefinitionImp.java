@@ -27,13 +27,14 @@ public class NodeDefinitionImp extends ItemDefinitionImp implements NodeDefiniti
     private final boolean allowsSameNameSiblings;
     private final HashSet<NodeTypeImp> requiredPrimaryTypes = new HashSet<NodeTypeImp>();
 
-    public NodeDefinitionImp(String name,boolean isMandatory,boolean isProtected,int onParentVersion,NodeTypeImp nodeType,boolean isAutoCreated,boolean allowsSameNameSiblings,NodeTypeImp defaultPrimaryType)
+    public NodeDefinitionImp(String name, boolean isMandatory, boolean isProtected, int onParentVersion, NodeTypeImp nodeType, boolean isAutoCreated, boolean allowsSameNameSiblings, NodeTypeImp defaultPrimaryType)
     {
         super(name, isMandatory, isProtected, onParentVersion, nodeType, isAutoCreated);
-        this.allowsSameNameSiblings=allowsSameNameSiblings;
-        this.defaultPrimaryType=defaultPrimaryType;
+        this.allowsSameNameSiblings = allowsSameNameSiblings;
+        this.defaultPrimaryType = defaultPrimaryType;
         requiredPrimaryTypes.add(defaultPrimaryType);
     }
+
     public NodeDefinitionImp(SemanticObject obj, NodeTypeImp nodeType)
     {
         super(obj, nodeType);
@@ -142,15 +143,31 @@ public class NodeDefinitionImp extends ItemDefinitionImp implements NodeDefiniti
     {
         return allowsSameNameSiblings;
     }
-    public static NodeDefinitionImp getNodeDefinition(String name,NodeImp parent)
+
+    public static NodeDefinitionImp getNodeDefinition(String name, NodeImp parent, NodeTypeImp nodeType)
     {
         NodeDefinitionImp childDefinition = null;
         for (NodeDefinitionImp childNodeDefinition : parent.nodeType.getChildNodeDefinitionsImp())
         {
             if (childNodeDefinition.getName().equals(name))
             {
-                childDefinition = childNodeDefinition;
-                break;
+                if (nodeType == null)
+                {
+                    childDefinition = childNodeDefinition;
+                    break;
+                }
+                else
+                {
+                    for (NodeTypeImp requiredNodeType : childDefinition.getRequiredPrimaryTypesImp())
+                    {
+                        if (nodeType.isNodeType(requiredNodeType.getName()))
+                        {
+                            childDefinition = childNodeDefinition;
+                            break;
+                        }
+                    }
+                }
+
             }
         }
         if (childDefinition == null)
@@ -159,15 +176,30 @@ public class NodeDefinitionImp extends ItemDefinitionImp implements NodeDefiniti
             {
                 if (childNodeDefinition.getName().equals("*"))
                 {
-                    childDefinition = childNodeDefinition;
-                    break;
+                    if (nodeType == null)
+                    {
+                        childDefinition = childNodeDefinition;
+                        break;
+                    }
+                    else
+                    {
+                        for (NodeTypeImp requiredNodeType : childDefinition.getRequiredPrimaryTypesImp())
+                        {
+                            if (nodeType.isNodeType(requiredNodeType.getName()))
+                            {
+                                childDefinition = childNodeDefinition;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
-        }        
+        }
         return childDefinition;
     }
-    public static NodeDefinitionImp getNodeDefinition(Base base,NodeImp parent)
+
+    public static NodeDefinitionImp getNodeDefinition(Base base, NodeImp parent,NodeTypeImp nodeType)
     {
-        return getNodeDefinition(base.getName(), parent);
+        return getNodeDefinition(base.getName(), parent,nodeType);
     }
 }

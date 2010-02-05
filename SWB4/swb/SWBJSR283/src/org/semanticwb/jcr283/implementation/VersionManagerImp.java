@@ -20,6 +20,8 @@ import javax.jcr.version.Version;
 import javax.jcr.version.VersionException;
 import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionManager;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 
 /**
  *
@@ -27,36 +29,80 @@ import javax.jcr.version.VersionManager;
  */
 public class VersionManagerImp implements VersionManager
 {
+
+    private static final String JCR_ISCHECKEDOUT = "jcr:isCheckedOut";
+    private static final String JCR_BASE_VERSION = "jcr:baseVersion";
+    private final static Logger log = SWBUtils.getLogger(VersionManagerImp.class);
     private final NodeImp versionStorage;
-    
     private final SessionImp session;
     private final NodeManager nodeManager;
-    public VersionManagerImp(SessionImp session,NodeImp versionStorage,NodeManager nodeManager)
+    private final ValueFactoryImp valueFactory = new ValueFactoryImp();
+
+    public VersionManagerImp(SessionImp session, NodeImp versionStorage, NodeManager nodeManager)
     {
         this.session = session;
-        this.versionStorage=versionStorage;
-        this.nodeManager=nodeManager;
+        this.versionStorage = versionStorage;
+        this.nodeManager = nodeManager;
     }
+
     public NodeImp getVersionStorage()
     {
         return versionStorage;
     }
-    
-    @SuppressWarnings(value="deprecation")
+
+    @SuppressWarnings(value = "deprecation")
     public Version checkin(String absPath) throws VersionException, UnsupportedRepositoryOperationException, InvalidItemStateException, LockException, RepositoryException
     {
-        NodeImp node=nodeManager.getNode(absPath);
-        if(node==null)
+        NodeImp node = nodeManager.getNode(absPath);
+        if (node == null)
         {
-            throw new RepositoryException("The node "+absPath+" was not found");
+            throw new RepositoryException("The node " + absPath + " was not found");
         }
-        return node.checkin();
+        if (!node.isVersionable())
+        {
+            throw new UnsupportedRepositoryOperationException("The node is not versionable");
+        }
+        if (!node.isCheckedOut())
+        {
+            throw new InvalidItemStateException("The node is not chekedout");
+        }
+        if (node.isNew() || node.isModified())
+        {
+            throw new UnsupportedRepositoryOperationException("The node must be saved before, because has changes or is new");
+        }
+        VersionHistoryImp history = getVersionHistoryImp(node.path);
+        VersionImp obaseVersion = getBaseVersionImp(node);
+
+        float versionnumber = 1.0f;
+        if (!obaseVersion.getName().equals("jcr:rootVersion"))
+        {
+            try
+            {
+                versionnumber = Float.parseFloat(obaseVersion.getName());
+                versionnumber += 0.1f;
+            }
+            catch (NumberFormatException nfe)
+            {
+                log.debug(nfe);
+            }
+        }
+        VersionImp version = (VersionImp) history.insertVersionNode(String.valueOf(versionnumber));
+        history.saveData();
+        PropertyImp baseVersion = nodeManager.getProtectedProperty(node.getPathFromName(JCR_BASE_VERSION));
+        baseVersion.set(valueFactory.createValue(version));
+        baseVersion.saveData();
+        PropertyImp jcr_checkout = nodeManager.getProtectedProperty(node.getPathFromName(JCR_ISCHECKEDOUT));
+        jcr_checkout.set(valueFactory.createValue(false));
+        jcr_checkout.saveData();
+        node.isModified = false;
+        return version;
+
     }
 
-    @SuppressWarnings(value="deprecation")
+    @SuppressWarnings(value = "deprecation")
     public void checkout(String absPath) throws UnsupportedRepositoryOperationException, LockException, RepositoryException
     {
-        NodeImp node=nodeManager.getNode(absPath);
+        NodeImp node = nodeManager.getNode(absPath);
         node.checkout();
     }
 
@@ -67,19 +113,19 @@ public class VersionManagerImp implements VersionManager
 
     public boolean isCheckedOut(String absPath) throws RepositoryException
     {
-        NodeImp node=nodeManager.getNode(absPath);
-        if(node==null)
+        NodeImp node = nodeManager.getNode(absPath);
+        if (node == null)
         {
-            throw new RepositoryException("The node "+absPath+" was not found");
+            throw new RepositoryException("The node " + absPath + " was not found");
         }
-        if(!node.isVersionable())
+        if (!node.isVersionable())
         {
             throw new RepositoryException("The node is not versionable");
         }
         return node.isCheckedOut();
     }
 
-    public VersionHistory getVersionHistory(String absPath) throws UnsupportedRepositoryOperationException, RepositoryException
+    public VersionHistoryImp getVersionHistoryImp(String absPath) throws UnsupportedRepositoryOperationException, RepositoryException
     {
         if (!ItemImp.isValidAbsPath(absPath))
         {
@@ -89,18 +135,35 @@ public class VersionManagerImp implements VersionManager
         {
             throw new RepositoryException("the node " + absPath + " was not found");
         }
-        NodeImp node=session.getWorkspaceImp().getNodeManager().getNode(absPath);
-        if(!node.isVersionable())
+        NodeImp node = session.getWorkspaceImp().getNodeManager().getNode(absPath);
+        if (!node.isVersionable())
         {
             throw new UnsupportedRepositoryOperationException("The node is not versionable");
         }
-        return node.getBaseVersion().getContainingHistory();        
+        return getBaseVersionImp(node).getContainingHistoryImp();
+    }
+
+    public VersionHistory getVersionHistory(String absPath) throws UnsupportedRepositoryOperationException, RepositoryException
+    {
+        return getVersionHistoryImp(absPath);
+    }
+
+    public VersionImp getBaseVersionImp(NodeImp node) throws UnsupportedRepositoryOperationException, RepositoryException
+    {
+        if (!node.isVersionable())
+        {
+            throw new UnsupportedRepositoryOperationException("The node is not versionable");
+        }
+        PropertyImp jcr_baseVersion = nodeManager.getProtectedProperty(node.getPathFromName("jcr:baseVersion"));
+        VersionImp version = (VersionImp) jcr_baseVersion.getNode();
+        return version;
     }
 
     public Version getBaseVersion(String absPath) throws UnsupportedRepositoryOperationException, RepositoryException
     {
         return getBaseVersionImp(absPath);
     }
+
     public VersionImp getBaseVersionImp(String absPath) throws UnsupportedRepositoryOperationException, RepositoryException
     {
         if (!ItemImp.isValidAbsPath(absPath))
@@ -111,12 +174,12 @@ public class VersionManagerImp implements VersionManager
         {
             throw new RepositoryException("the node " + absPath + " was not found");
         }
-        NodeImp node=session.getWorkspaceImp().getNodeManager().getNode(absPath);
-        if(!node.isVersionable())
+        NodeImp node = session.getWorkspaceImp().getNodeManager().getNode(absPath);
+        if (!node.isVersionable())
         {
             throw new UnsupportedRepositoryOperationException("The node is not versionable");
         }
-        return node.getBaseVersionImp();
+        return getBaseVersionImp(node);
     }
 
     public void restore(Version[] versions, boolean removeExisting) throws ItemExistsException, UnsupportedRepositoryOperationException, VersionException, LockException, InvalidItemStateException, RepositoryException

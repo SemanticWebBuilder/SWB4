@@ -57,7 +57,7 @@ public class NodeImp extends ItemImp implements Node
 {
 
     private static final String ALL = "*";
-    private static final String JCR_BASE_VERSION = "jcr:baseVersion";
+    
     private static final String JCR_CREATED = "jcr:created";
     private static final String JCR_LASTMODIFIED = "jcr:lastModified";
     private static final String JCR_LASTMODIFIEDBY = "jcr:lastModifiedBy";
@@ -87,7 +87,7 @@ public class NodeImp extends ItemImp implements Node
 
     protected NodeImp(Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
-        this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), NodeDefinitionImp.getNodeDefinition(base, parent), base.getName(), parent, index, path, depth, session, base.getId(),false);
+        this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), NodeDefinitionImp.getNodeDefinition(base, parent,NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass())), base.getName(), parent, index, path, depth, session, base.getId(), false);
         this.obj = base.getSemanticObject();
         loadStoredProperties(false);
         for (PropertyImp prop : nodeManager.getAllChildProperties(path))
@@ -98,7 +98,7 @@ public class NodeImp extends ItemImp implements Node
 
     protected NodeImp(NodeDefinitionImp definition, Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
-        this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), definition, base.getName(), parent, index, path, depth, session, base.getId(),false);
+        this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), definition, base.getName(), parent, index, path, depth, session, base.getId(), false);
         this.obj = base.getSemanticObject();
         loadStoredProperties(false);
         for (PropertyImp prop : nodeManager.getAllChildProperties(path))
@@ -107,8 +107,7 @@ public class NodeImp extends ItemImp implements Node
         }
     }
 
-
-    protected NodeImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session, String id,boolean isnew)
+    protected NodeImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session, String id, boolean isnew)
     {
         super(nodeDefinition, name, parent, path, depth, session);
         this.index = index;
@@ -118,15 +117,15 @@ public class NodeImp extends ItemImp implements Node
         this.nodeTypeManager = session.getWorkspaceImp().getNodeTypeManagerImp();
         versionManagerImp = session.getWorkspaceImp().getVersionManagerImp();
         loadProperties(false);
-        if(isnew)
+        if (isnew)
         {
             init();
             try
             {
-                PropertyImp jcr_name=nodeManager.getProtectedProperty(getPathFromName(JCR_NAME));
+                PropertyImp jcr_name = nodeManager.getProtectedProperty(getPathFromName(JCR_NAME));
                 jcr_name.set(valueFactoryImp.createValue(name));
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 log.debug(e);
             }
@@ -136,7 +135,7 @@ public class NodeImp extends ItemImp implements Node
     }
 
     private void init()
-    {        
+    {
         initPrimaryType();
         initReferenceable();
         initMixLastModified();
@@ -152,7 +151,7 @@ public class NodeImp extends ItemImp implements Node
         {
             if (this.isVersionable())
             {
-                initVersionHistory();                
+                initVersionHistory();
             }
         }
         catch (RepositoryException re)
@@ -160,7 +159,6 @@ public class NodeImp extends ItemImp implements Node
             log.error(re);
         }
     }
-    
 
     private void initVersionHistory() throws RepositoryException
     {
@@ -168,14 +166,14 @@ public class NodeImp extends ItemImp implements Node
         if (prop.getLength() == -1)
         {
             //log.trace("Initilizing versionHistory for node " + path);
-            NodeDefinitionImp versionDefinition = new VersionHistoryDefinition();            
+            NodeDefinitionImp versionDefinition = new VersionHistoryDefinition();
             NodeImp jcr_version_Storage = versionManagerImp.getVersionStorage();
             if (jcr_version_Storage == null)
             {
                 throw new RepositoryException("The version storage was not found");
             }
-            VersionHistoryImp history = new VersionHistoryImp(versionDefinition, jcr_version_Storage, session, this);            
-            prop.set(valueFactoryImp.createValue(history));            
+            VersionHistoryImp history = new VersionHistoryImp(versionDefinition, jcr_version_Storage, session, this);
+            prop.set(valueFactoryImp.createValue(history));
             nodeManager.addNode(history, history.path, path);
 
         }
@@ -189,7 +187,7 @@ public class NodeImp extends ItemImp implements Node
             PropertyImp prop = nodeManager.getProtectedProperty(propertyPath);
             if (prop.getLength() == -1)
             {
-                prop.set(valueFactoryImp.createValue(nodeType.getName()));                
+                prop.set(valueFactoryImp.createValue(nodeType.getName()));
             }
         }
         catch (Exception e)
@@ -208,7 +206,7 @@ public class NodeImp extends ItemImp implements Node
                 PropertyImp prop = nodeManager.getProperty(propertyPath);
                 if (prop.getLength() == -1)
                 {
-                    prop.set(valueFactoryImp.createValue(Calendar.getInstance()));                    
+                    prop.set(valueFactoryImp.createValue(Calendar.getInstance()));
                 }
             }
         }
@@ -228,7 +226,7 @@ public class NodeImp extends ItemImp implements Node
                 PropertyImp prop = nodeManager.getProtectedProperty(propertyPath);
                 if (prop.getLength() == -1)
                 {
-                    prop.set(valueFactoryImp.createValue(true));                    
+                    prop.set(valueFactoryImp.createValue(true));
                 }
             }
         }
@@ -248,13 +246,13 @@ public class NodeImp extends ItemImp implements Node
                 PropertyImp prop = nodeManager.getProtectedProperty(propertyPath);
                 if (prop.getLength() == -1)
                 {
-                    prop.set(valueFactoryImp.createValue(Calendar.getInstance()));                    
+                    prop.set(valueFactoryImp.createValue(Calendar.getInstance()));
                 }
                 propertyPath = getPathFromName(JCR_CREATEDBY);
                 prop = nodeManager.getProperty(propertyPath);
                 if (prop.getLength() == -1)
                 {
-                    prop.set(valueFactoryImp.createValue(session.getUserID()));                    
+                    prop.set(valueFactoryImp.createValue(session.getUserID()));
                 }
 
             }
@@ -276,13 +274,13 @@ public class NodeImp extends ItemImp implements Node
                 if (prop.getLength() == -1)
                 {
                     prop.set(valueFactoryImp.createValue(Calendar.getInstance()));
-                    
+
                 }
                 propertyPath = getPathFromName(JCR_LASTMODIFIEDBY);
                 prop = nodeManager.getProperty(propertyPath);
                 if (prop.getLength() == -1)
                 {
-                    prop.set(valueFactoryImp.createValue(session.getUserID()));                    
+                    prop.set(valueFactoryImp.createValue(session.getUserID()));
                 }
             }
         }
@@ -302,7 +300,7 @@ public class NodeImp extends ItemImp implements Node
                 PropertyImp prop = nodeManager.getProtectedProperty(propertyPath);
                 if (prop.getLength() == -1)
                 {
-                    prop.set(valueFactoryImp.createValue(this.id));                    
+                    prop.set(valueFactoryImp.createValue(this.id));
                 }
             }
         }
@@ -319,7 +317,7 @@ public class NodeImp extends ItemImp implements Node
         if (obj == null)
         {
             // create new Node
-            SemanticClass sclass = this.nodeType.getSemanticClass();            
+            SemanticClass sclass = this.nodeType.getSemanticClass();
             String workspacename = session.getWorkspaceImp().getName();
             org.semanticwb.jcr283.repository.model.Workspace model = org.semanticwb.jcr283.repository.model.Workspace.ClassMgr.getWorkspace(workspacename);
             //log.trace("Creating a node with id :" + newid + " and class " + sclass.getURI());
@@ -346,7 +344,7 @@ public class NodeImp extends ItemImp implements Node
 
         if (isModified)
         {
-            log.trace("Saving node "+this.path);
+            log.trace("Saving node " + this.path);
             for (NodeImp child : nodeManager.getChildNodes(this))
             {
                 child.save();
@@ -479,7 +477,7 @@ public class NodeImp extends ItemImp implements Node
         }
         else
         {
-            return new NodeImp(nodeType, nodeDefinition, name, parent, index, path, parent.getDepth() + 1, session, id,true);
+            return new NodeImp(nodeType, nodeDefinition, name, parent, index, path, parent.getDepth() + 1, session, id, true);
         }
     }
 
@@ -501,25 +499,26 @@ public class NodeImp extends ItemImp implements Node
 
     NodeImp insertNode(String nameToAdd, String primaryNodeTypeName) throws RepositoryException
     {
-        NodeDefinitionImp childDefinition = NodeDefinitionImp.getNodeDefinition(nameToAdd, this);
-        if (childDefinition == null)
-        {
-            throw new ConstraintViolationException("The node can not be added");
-        }
-
         NodeTypeImp primaryNodeType = null;
-        if (primaryNodeTypeName == null)
-        {
-            primaryNodeType = childDefinition.getDefaultPrimaryTypeImp();
-            primaryNodeTypeName = primaryNodeType.getName();
-        }
-        else
+        if (primaryNodeTypeName != null)
         {
             primaryNodeType = nodeTypeManager.getNodeTypeImp(primaryNodeTypeName);
             if (primaryNodeType == null)
             {
                 throw new NoSuchNodeTypeException("The NodeType " + primaryNodeTypeName + " was not found");
             }
+        }
+        NodeDefinitionImp childDefinition = NodeDefinitionImp.getNodeDefinition(nameToAdd, this,primaryNodeType);
+        if (childDefinition == null)
+        {
+            throw new ConstraintViolationException("The node can not be added");
+        }
+
+
+        if (primaryNodeTypeName == null)
+        {
+            primaryNodeType = childDefinition.getDefaultPrimaryTypeImp();
+            primaryNodeTypeName = primaryNodeType.getName();
         }
         boolean isConformToRequired = false;
 
@@ -541,11 +540,11 @@ public class NodeImp extends ItemImp implements Node
         }
         String newId = UUID.randomUUID().toString();
         String childpath = getPathFromName(nameToAdd);
-        int childIndex = nodeManager.countNodes(nameToAdd, this, session, false,newId);
+        int childIndex = nodeManager.countNodes(nameToAdd, this, session, false, newId);
         if (childIndex > 0)
         {
             childpath += "[" + childIndex + "]";
-        }        
+        }
         //log.trace("Creating the node " + nameToAdd);
         NodeImp newChild = createNodeImp(primaryNodeType, childDefinition, nameToAdd, this, index, childpath, session, newId);
         this.isModified = true;
@@ -1091,51 +1090,7 @@ public class NodeImp extends ItemImp implements Node
     @Deprecated
     public Version checkin() throws VersionException, UnsupportedRepositoryOperationException, InvalidItemStateException, LockException, RepositoryException
     {
-        if (!this.isVersionable())
-        {
-            throw new UnsupportedRepositoryOperationException("The node is not versionable");
-        }
-        if (!isCheckedOut())
-        {
-            throw new InvalidItemStateException("The node is not chekedout");
-        }
-        if (obj == null || isModified)
-        {
-            throw new UnsupportedRepositoryOperationException("The node must be saved before, because has changes or is new");
-        }
-        VersionHistoryImp history = (VersionHistoryImp) versionManagerImp.getVersionHistory(this.path);
-        VersionImp obaseVersion = this.getBaseVersionImp();
-
-        float versionnumber = 1.0f;
-        if (!obaseVersion.getName().equals("jcr:rootVersion"))
-        {
-            try
-            {
-                versionnumber = Float.parseFloat(obaseVersion.getName());
-                versionnumber += 0.1f;
-            }
-            catch (NumberFormatException nfe)
-            {
-                log.debug(nfe);
-            }
-        }
-        VersionImp version = (VersionImp) history.insertVersionNode(String.valueOf(versionnumber));
-
-        history.saveData();
-        
-        PropertyImp baseVersion = nodeManager.getProtectedProperty(getPathFromName(JCR_BASE_VERSION));
-        baseVersion.set(valueFactoryImp.createValue(version));
-        baseVersion.saveData();
-
-        PropertyImp jcr_checkout = nodeManager.getProtectedProperty(getPathFromName(JCR_ISCHECKEDOUT));
-        jcr_checkout.set(valueFactoryImp.createValue(false));
-
-        jcr_checkout.saveData();
-
-        
-        
-        this.isModified=false;
-        return version;
+        return versionManagerImp.checkin(path);
     }
 
     @Deprecated
@@ -1148,7 +1103,7 @@ public class NodeImp extends ItemImp implements Node
         PropertyImp prop = nodeManager.getProtectedProperty(this.getPathFromName(JCR_ISCHECKEDOUT));
         if (prop.getLength() == -1)
         {
-            prop.set(valueFactoryImp.createValue(true));            
+            prop.set(valueFactoryImp.createValue(true));
         }
     }
 
@@ -1243,23 +1198,12 @@ public class NodeImp extends ItemImp implements Node
         return versionManagerImp.getVersionHistory(path);
     }
 
-    public VersionImp getBaseVersionImp() throws UnsupportedRepositoryOperationException, RepositoryException
-    {
-        if (!isVersionable())
-        {
-            throw new UnsupportedRepositoryOperationException(THE_NODE_IS_NOT_VERSIONABLE);
-        }
-        PropertyImp jcr_baseVersion=nodeManager.getProtectedProperty(getPathFromName("jcr:baseVersion"));
-        VersionImp version=(VersionImp)jcr_baseVersion.getNode();
-        return version;
-    }
-
     
 
     @Deprecated
     public Version getBaseVersion() throws UnsupportedRepositoryOperationException, RepositoryException
     {
-        return getBaseVersionImp();
+        return versionManagerImp.getBaseVersionImp(this);
     }
 
     @Deprecated
@@ -1387,9 +1331,10 @@ public class NodeImp extends ItemImp implements Node
             }
         }
     }
+
     @Override
     public String toString()
     {
-        return path+" ("+ nodeType.getName() +","+ this.getClass().getCanonicalName() +")";
+        return path + " (" + nodeType.getName() + "," + this.getClass().getCanonicalName() + ")";
     }
 }
