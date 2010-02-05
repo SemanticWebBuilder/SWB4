@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ArtifactInputBase extends org.semanticwb.process.model.SupportingElement implements org.semanticwb.process.model.ArtifactReferensable,org.semanticwb.model.Descriptiveable
+public abstract class ArtifactInputBase extends org.semanticwb.process.model.SupportingElement implements org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ArtifactReferensable
 {
        public static final org.semanticwb.platform.SemanticProperty swp_requiredForStart=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#requiredForStart");
        public static final org.semanticwb.platform.SemanticClass swp_ArtifactInput=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#ArtifactInput");
