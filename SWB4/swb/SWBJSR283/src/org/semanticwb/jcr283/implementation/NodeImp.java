@@ -165,17 +165,16 @@ public class NodeImp extends ItemImp implements Node
         PropertyImp prop = nodeManager.getProtectedProperty(getPathFromName(JCR_VERSION_HISTORY));
         if (prop.getLength() == -1)
         {
-            //log.trace("Initilizing versionHistory for node " + path);
-            NodeDefinitionImp versionDefinition = new VersionHistoryDefinition();
+            //log.trace("Initilizing versionHistory for node " + path);            
             NodeImp jcr_version_Storage = versionManagerImp.getVersionStorage();
             if (jcr_version_Storage == null)
             {
                 throw new RepositoryException("The version storage was not found");
-            }
-            VersionHistoryImp history = new VersionHistoryImp(versionDefinition, jcr_version_Storage, session, this);
+            }            
+            VersionHistoryImp history=(VersionHistoryImp)jcr_version_Storage.insertNode("jcr:versionHistory");
+            history.init(this);
             prop.set(valueFactoryImp.createValue(history));
             nodeManager.addNode(history, history.path, path);
-
         }
     }
 
@@ -465,7 +464,7 @@ public class NodeImp extends ItemImp implements Node
         return this.insertNode(nameToAdd, null);
     }
 
-    public final static NodeImp createNodeImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, SessionImp session, String id) throws RepositoryException
+    public static final NodeImp createNodeImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, SessionImp session, String id) throws RepositoryException
     {
         if (nodeType.getSemanticClass().equals(org.semanticwb.jcr283.repository.model.Version.sclass))
         {
@@ -473,7 +472,7 @@ public class NodeImp extends ItemImp implements Node
         }
         else if (nodeType.getSemanticClass().equals(org.semanticwb.jcr283.repository.model.VersionHistory.sclass))
         {
-            return new VersionHistoryImp(nodeDefinition, parent, session, parent);
+            return new VersionHistoryImp(nodeDefinition, parent, session);
         }
         else
         {

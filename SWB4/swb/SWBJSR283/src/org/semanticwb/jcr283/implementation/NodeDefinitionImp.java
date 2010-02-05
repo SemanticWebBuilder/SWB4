@@ -158,7 +158,7 @@ public class NodeDefinitionImp extends ItemDefinitionImp implements NodeDefiniti
                 }
                 else
                 {
-                    for (NodeTypeImp requiredNodeType : childDefinition.getRequiredPrimaryTypesImp())
+                    for (NodeTypeImp requiredNodeType : childNodeDefinition.getRequiredPrimaryTypesImp())
                     {
                         if (nodeType.isNodeType(requiredNodeType.getName()))
                         {
@@ -183,7 +183,7 @@ public class NodeDefinitionImp extends ItemDefinitionImp implements NodeDefiniti
                     }
                     else
                     {
-                        for (NodeTypeImp requiredNodeType : childDefinition.getRequiredPrimaryTypesImp())
+                        for (NodeTypeImp requiredNodeType : childNodeDefinition.getRequiredPrimaryTypesImp())
                         {
                             if (nodeType.isNodeType(requiredNodeType.getName()))
                             {
