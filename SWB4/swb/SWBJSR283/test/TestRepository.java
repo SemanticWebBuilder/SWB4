@@ -1,6 +1,7 @@
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Repository;
@@ -9,8 +10,10 @@ import javax.jcr.Session;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
+import org.apache.log4j.PropertyConfigurator;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.SWBUtils.IO;
 
 /*
  * To change this template, choose Tools | Templates
@@ -26,6 +29,9 @@ public class TestRepository
     @SuppressWarnings(value = "deprecation")
     public static void main(String[] args)
     {
+
+        SWBUtils.createInstance(TestRepository.class.getResource("/").getFile());
+
         String base = SWBUtils.getApplicationPath();
         //SemanticMgr.setSchemaModel(SemanticMgr.ModelSchema.OWL_DL_MEM_RDFS_INF);
         SWBPlatform.createInstance();
@@ -56,14 +62,14 @@ public class TestRepository
                 System.out.println(node.isModified());
                 System.out.println(node.getIdentifier());
                 System.out.println(node.getPath());
-                if(node.isNodeType("mix:versionable"))
+                if (node.isNodeType("mix:versionable"))
                 {
-                    VersionHistory history=session.getWorkspace().getVersionManager().getVersionHistory(node.getPath());
-                    VersionIterator itVersions=history.getAllVersions();
-                    while(itVersions.hasNext())
+                    VersionHistory history = session.getWorkspace().getVersionManager().getVersionHistory(node.getPath());
+                    VersionIterator itVersions = history.getAllVersions();
+                    while (itVersions.hasNext())
                     {
-                        Version version=itVersions.nextVersion();
-                        System.out.println("Version : "+version.getName());
+                        Version version = itVersions.nextVersion();
+                        System.out.println("Version : " + version.getName());
 
                     }
                 }
@@ -89,7 +95,7 @@ public class TestRepository
                 long init = System.currentTimeMillis();
                 Version version = session.getWorkspace().getVersionManager().checkin(demo.getPath());
                 long fin = System.currentTimeMillis() - init;
-                System.out.println("Tiempo version :" + fin + " ms");                
+                System.out.println("Tiempo version :" + fin + " ms");
                 System.out.println(version.getName());
             }
             System.out.println(demo.isCheckedOut());
