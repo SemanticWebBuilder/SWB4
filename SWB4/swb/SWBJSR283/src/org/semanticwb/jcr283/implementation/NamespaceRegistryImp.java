@@ -38,13 +38,21 @@ public class NamespaceRegistryImp implements NamespaceRegistry {
         }
     }
     public void registerNamespace(String prefix, String uri) throws NamespaceException, UnsupportedRepositoryOperationException, AccessDeniedException, RepositoryException
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
+    {        
+        if(values.containsKey(prefix))
+        {
+            throw new NamespaceException("The prefix was already registered");
+        }
+        values.put(prefix, uri);
     }
 
     public void unregisterNamespace(String prefix) throws NamespaceException, UnsupportedRepositoryOperationException, AccessDeniedException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if(SWBPlatform.getSemanticMgr().getVocabulary().getNsPrefixMap().containsKey(prefix))
+        {
+            throw new AccessDeniedException("The prefix can not be removed");
+        }
+        values.remove(prefix);
     }
 
     public String[] getPrefixes() throws RepositoryException
