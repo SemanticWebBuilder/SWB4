@@ -34,9 +34,50 @@
     </rdfs:subClassOf>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
+  <owl:Class rdf:ID="MessageStartEvent">
+    <rdfs:subClassOf>
+      <swb:Class rdf:ID="StartEvent">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf>
+          <owl:Class rdf:ID="Event"/>
+        </rdfs:subClassOf>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Indica el comienzo de un proceso en particular. Contiene un trigger que define la causa del evento, dicho trigger sólo es usado para activar el evento, no para disparar la activación de otros eventos.</rdfs:comment>
+        <rdfs:label xml:lang="en">Start event</rdfs:label>
+        <rdfs:label xml:lang="es">Evento inicial</rdfs:label>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:subClassOf>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:label xml:lang="es">Evento inicial de mensaje</rdfs:label>
+    <rdfs:label xml:lang="en">Message start event</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Espera un mensaje proveniente de un participante para activarse e iniciar el proceso.</rdfs:comment>
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="Catchable">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
   <owl:Class rdf:ID="Diagramable">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="NormalIntermediateEvent">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="IntermediateEvent"/>
+    </rdfs:subClassOf>
+    <rdfs:label xml:lang="es">Evento intermedio normal</rdfs:label>
+    <rdfs:label xml:lang="en">Normal intermediate event</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Sólo puede usarse en el flujo principal de un proceso e indican un cambio de estado en el mismo.</rdfs:comment>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="InputSet">
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -45,6 +86,20 @@
     <rdfs:label xml:lang="es">Conjunto de entrada</rdfs:label>
     <rdfs:subClassOf>
       <owl:Class rdf:ID="SupportingElement"/>
+    </rdfs:subClassOf>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Participable">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Property">
+    <rdfs:label xml:lang="en">Property</rdfs:label>
+    <rdfs:label xml:lang="es">Propiedad</rdfs:label>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#SupportingElement"/>
     </rdfs:subClassOf>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
@@ -94,20 +149,6 @@
     <swb:classGroupId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Task</swb:classGroupId>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Property">
-    <rdfs:label xml:lang="en">Property</rdfs:label>
-    <rdfs:label xml:lang="es">Propiedad</rdfs:label>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#SupportingElement"/>
-    </rdfs:subClassOf>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Participable">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
   </owl:Class>
   <owl:Class rdf:ID="BusinessProcessDiagram">
     <rdfs:label xml:lang="es">Diagrama de procesos de negocio</rdfs:label>
@@ -180,7 +221,7 @@
     </rdfs:subClassOf>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
-  <owl:Class rdf:ID="Event">
+  <owl:Class rdf:about="#Event">
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
     <rdfs:subClassOf>
@@ -190,6 +231,16 @@
     <rdfs:label xml:lang="en">Event</rdfs:label>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Un evento es algo que sucede durante el curso de un proceso de negocio y que afecta su flujo. Los eventos usualmente tienen una causa (trigger) o un impacto (result).</rdfs:comment>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Assignment">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:label xml:lang="en">Assignment</rdfs:label>
+    <rdfs:label xml:lang="es">Asignación</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#SupportingElement"/>
+    </rdfs:subClassOf>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="Group">
@@ -229,16 +280,6 @@
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Indica el término de un proceso. Los eventos finales definen un resultado que es la consecuencia del fin de una secuencia de flujo.</rdfs:comment>
     <rdfs:subClassOf rdf:resource="#Event"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Assignment">
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:label xml:lang="en">Assignment</rdfs:label>
-    <rdfs:label xml:lang="es">Asignación</rdfs:label>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#SupportingElement"/>
-    </rdfs:subClassOf>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:about="#ExclusiveGateway">
@@ -310,6 +351,18 @@
     </rdfs:subClassOf>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
+  <owl:Class rdf:ID="GraphicalElement">
+    <rdfs:subClassOf rdf:resource="#BPMNElement"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ComplexGateway">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:label xml:lang="es">Compuerta compleja</rdfs:label>
+    <rdfs:label xml:lang="en">Complex gateway</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#Gateway"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
   <owl:Class rdf:ID="Pool">
     <rdfs:subClassOf rdf:resource="#Participable"/>
     <rdfs:subClassOf>
@@ -327,18 +380,6 @@
     </rdfs:subClassOf>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
-  <owl:Class rdf:ID="ComplexGateway">
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:label xml:lang="es">Compuerta compleja</rdfs:label>
-    <rdfs:label xml:lang="en">Complex gateway</rdfs:label>
-    <rdfs:subClassOf rdf:resource="#Gateway"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="GraphicalElement">
-    <rdfs:subClassOf rdf:resource="#BPMNElement"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
   <owl:Class rdf:about="#FlowObject">
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >false</swb:autogenId>
@@ -353,6 +394,22 @@
   <owl:Class rdf:about="#Laneable">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ErrorIntermediateEvent">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Sólo puede usarse adherido a los límites gráficos de una actividad o dentro de ella. Se activa al presentarse un error.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#IntermediateEvent"/>
+    </rdfs:subClassOf>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:label xml:lang="es">Evento intermedio de error</rdfs:label>
+    <rdfs:label xml:lang="en">Error intermediate event</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#Catchable"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Attachable"/>
+    </rdfs:subClassOf>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="InclusiveGateway">
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -369,9 +426,9 @@
     <rdfs:subClassOf>
       <owl:Class rdf:ID="Participant"/>
     </rdfs:subClassOf>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="ParallelGateway">
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -397,6 +454,21 @@
     <rdfs:subClassOf rdf:resource="#Activity"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
+  <owl:Class rdf:ID="SignalStartEvent">
+    <rdfs:subClassOf rdf:resource="#StartEvent"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Espera una señal difundida por otro proceso para activarse.</rdfs:comment>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:label xml:lang="es">Evento inicial de señal</rdfs:label>
+    <rdfs:label xml:lang="en">Signal start event</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#Catchable"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Messageable">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
+  </owl:Class>
   <owl:Class rdf:ID="Entity">
     <rdfs:label xml:lang="en">Entity</rdfs:label>
     <rdfs:label xml:lang="es">Entidad</rdfs:label>
@@ -405,9 +477,21 @@
     <rdfs:subClassOf rdf:resource="#SupportingElement"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
-  <owl:Class rdf:ID="Messageable">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
+  <owl:Class rdf:ID="CancelIntermediateEvent">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#IntermediateEvent"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Catchable"/>
+    <rdfs:label xml:lang="es">Evento intermedio de cancelación</rdfs:label>
+    <rdfs:label xml:lang="en">Cancel intermediate event</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Attachable"/>
+    </rdfs:subClassOf>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Es adherido a sub-procesos de transacción. Se activa si se llega a un evento final de cancelación dentro de la transacción o si se recibe una señal por parte del protocolo.</rdfs:comment>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="ReceiveTask">
     <rdfs:label xml:lang="es">Tarea de recepción</rdfs:label>
@@ -428,9 +512,26 @@
     <rdfs:subClassOf>
       <owl:Class rdf:about="#Participant"/>
     </rdfs:subClassOf>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="CompensateIntermediateEvent">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Attachable"/>
+    </rdfs:subClassOf>
+    <rdfs:label xml:lang="es">Evento intermedio de compensación</rdfs:label>
+    <rdfs:label xml:lang="en">Compensation intermediate event</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#IntermediateEvent"/>
+    </rdfs:subClassOf>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:subClassOf rdf:resource="#Throwable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#Catchable"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Se utiliza para indicar la necesidad de una compensación. En el flujo normal indica la compensación de todas las actividades anteriores terminadas. Cuando está adherido a una actividad, ésta será la actividad que se compensará (mediante una actividad de compensación asociada).</rdfs:comment>
   </owl:Class>
   <owl:Class rdf:ID="ArtifactInput">
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -446,6 +547,16 @@
     <rdfs:subClassOf rdf:resource="#SupportingElement"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
+  <owl:Class rdf:ID="NormalStartEvent">
+    <rdfs:subClassOf rdf:resource="#StartEvent"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:label xml:lang="es">Evento de inicio normal</rdfs:label>
+    <rdfs:label xml:lang="en">Normal start event</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Este evento no contiene marcador, es usado para marcar el inicio de subprocesos.</rdfs:comment>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
   <owl:Class rdf:ID="Transaction">
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >false</swb:autogenId>
@@ -456,21 +567,41 @@
     <rdfs:subClassOf rdf:resource="#SupportingElement"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
-  <owl:Class rdf:ID="IntermediateEvent">
+  <owl:Class rdf:ID="TimerIntermediateEvent">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#IntermediateEvent"/>
+    </rdfs:subClassOf>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="#Throwable"/>
+    <rdfs:label xml:lang="es">Evento intermedio temporizado</rdfs:label>
+    <rdfs:label xml:lang="en">Timer intermediate event</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Es activado por una fecha y hora específica o un periodo de tiempo determinado. Cuando se usa en el flujo normal del proceso funciona como un mecanismo de retardo.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="#Catchable"/>
     <rdfs:subClassOf>
-      <swb:Interface rdf:ID="Catchable">
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Interface>
+      <owl:Class rdf:about="#Attachable"/>
     </rdfs:subClassOf>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="MultipleStartEvent">
+    <rdfs:subClassOf rdf:resource="#Catchable"/>
+    <rdfs:subClassOf rdf:resource="#StartEvent"/>
+    <rdfs:label xml:lang="es">Evento de inicio múltiple</rdfs:label>
+    <rdfs:label xml:lang="en">Multiple start event</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Indica que existen varias maneras de iniciar el proceso, sin embargo sólo es requerido uno de los eventos o reglas definidas para activarlo. Cada activación crea una nueva instancia del proceso.</rdfs:comment>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#IntermediateEvent">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Ocurren entre un evento de inicio y uno de fin. Afectan el flujo del proceso, pero no inician o terminan directamente el mismo. Los eventos intermedios tienen un gatillo que indica la causa del evento y pueden o no definir un resultado que es la consecuencia del final de una secuencia de flujo.</rdfs:comment>
     <rdfs:subClassOf rdf:resource="#Event"/>
     <rdfs:label xml:lang="es">Evento intermedio</rdfs:label>
     <rdfs:label xml:lang="en">Intermediate event</rdfs:label>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Ocurren entre un evento de inicio y uno de fin. Afectan el flujo del proceso, pero no inician o terminan directamente el mismo. Los eventos intermedios tienen un gatillo que indica la causa del evento y pueden o no definir un resultado que es la consecuencia del final de una secuencia de flujo.</rdfs:comment>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="Message">
@@ -549,6 +680,17 @@
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Ruleable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#UserGroupable"/>
   </owl:Class>
+  <owl:Class rdf:ID="ConditionStartEvent">
+    <rdfs:subClassOf rdf:resource="#StartEvent"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#Catchable"/>
+    <rdfs:label xml:lang="es">Evento de inicio condicional</rdfs:label>
+    <rdfs:label xml:lang="en">Conditional start event</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Se activa tras evaluar una condición booleana.</rdfs:comment>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
   <owl:Class rdf:ID="Gate">
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Se usa en la definición de los atributos de las compuertas.</rdfs:comment>
@@ -560,6 +702,17 @@
     <rdfs:subClassOf>
       <owl:Class rdf:about="#Assignable"/>
     </rdfs:subClassOf>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="TimerStartEvent">
+    <rdfs:subClassOf rdf:resource="#StartEvent"/>
+    <rdfs:subClassOf rdf:resource="#Catchable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:label xml:lang="es">Evento de inicio temporizado</rdfs:label>
+    <rdfs:label xml:lang="en">Timer start event</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >El evento se activa de acuerdo a una fecha y hora determinada o un periodo de tiempo establecido.</rdfs:comment>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="Conditionable">
@@ -676,12 +829,28 @@
     <rdfs:subClassOf rdf:resource="#Task"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
+  <owl:Class rdf:about="#Attachable">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
+  </owl:Class>
   <owl:Class rdf:ID="LinkDetail">
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
     <rdfs:label xml:lang="en">Link detail</rdfs:label>
     <rdfs:label xml:lang="es">Detalle de enlace</rdfs:label>
     <rdfs:subClassOf rdf:resource="#EventDetail"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ConditionalIntermediateEvent">
+    <rdfs:subClassOf rdf:resource="#IntermediateEvent"/>
+    <rdfs:subClassOf rdf:resource="#Catchable"/>
+    <rdfs:subClassOf rdf:resource="#Attachable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:label xml:lang="es">Evento intermedio condicional</rdfs:label>
+    <rdfs:label xml:lang="en">Conditional intermediate event</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Se activa cuando la condición asociada al mismo se evalúa en TRUE.</rdfs:comment>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="AdHocable">
@@ -695,6 +864,18 @@
     <rdfs:label xml:lang="en">Condition</rdfs:label>
     <rdfs:label xml:lang="es">Condición</rdfs:label>
     <rdfs:subClassOf rdf:resource="#SupportingElement"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="LinkIntermediateEvent">
+    <rdfs:subClassOf rdf:resource="#IntermediateEvent"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:label xml:lang="es">Evento intermedio de enlace</rdfs:label>
+    <rdfs:label xml:lang="en">Link intermediate event</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Conecta distintas secciones de un proceso (a un mismo nivel, es decir, no puede enlazar hacia procesos padre).</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="#Catchable"/>
+    <rdfs:subClassOf rdf:resource="#Throwable"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="ErrorDetail">
@@ -792,14 +973,6 @@
     <rdfs:label xml:lang="es">Propiedades de salida</rdfs:label>
     <rdfs:domain rdf:resource="#OutputSet"/>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="categoryRef">
-    <rdfs:range rdf:resource="#Category"/>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Especifica la categoría que representa el grupo.</rdfs:comment>
-    <rdfs:label xml:lang="en">Category reference</rdfs:label>
-    <rdfs:label xml:lang="es">Referencia a categoría</rdfs:label>
-    <rdfs:domain rdf:resource="#Group"/>
-  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasTrigger">
     <rdfs:domain rdf:resource="#Catchable"/>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -807,6 +980,14 @@
     <rdfs:label xml:lang="es">Activador</rdfs:label>
     <rdfs:label xml:lang="en">Trigger</rdfs:label>
     <rdfs:range rdf:resource="#EventDetail"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="categoryRef">
+    <rdfs:range rdf:resource="#Category"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Especifica la categoría que representa el grupo.</rdfs:comment>
+    <rdfs:label xml:lang="en">Category reference</rdfs:label>
+    <rdfs:label xml:lang="es">Referencia a categoría</rdfs:label>
+    <rdfs:domain rdf:resource="#Group"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="loopCondition">
     <rdfs:domain rdf:resource="#StandardLoopable"/>
@@ -1213,12 +1394,12 @@
     <rdfs:domain rdf:resource="#Assignment"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="target">
-    <rdfs:domain rdf:resource="#IntermediateEvent"/>
+    <rdfs:range rdf:resource="#Activity"/>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Debería especificarse un destino para un evento intermedio. Éste destino debe ser una actividad (Tarea o sub-proceso). Esto significa que el evento intermedio está pegado a la actividad destino (indicando una excepción o compensación para esa actividad).</rdfs:comment>
     <rdfs:label xml:lang="en">Target</rdfs:label>
     <rdfs:label xml:lang="es">Destino</rdfs:label>
-    <rdfs:range rdf:resource="#Activity"/>
+    <rdfs:domain rdf:resource="#Attachable"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasInputMap">
     <rdfs:range rdf:resource="#Expression"/>
@@ -1663,6 +1844,10 @@
     <rdfs:label xml:lang="es">Estado</rdfs:label>
     <rdfs:label xml:lang="en">Status</rdfs:label>
   </owl:DatatypeProperty>
+  <swb:Interface rdf:ID="TransactionUsable">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Interface>
   <swb:Class rdf:ID="AdHocProcess">
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >false</swb:autogenId>
@@ -1710,17 +1895,37 @@
     >true</swb:autogenId>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
+  <swb:Class rdf:ID="ErrorEndEvent">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Indica que ocurrió un error en un sub-proceso. El evento será difundido al evento intermedio de error con el mismo código de error o al evento intermedio de error más cercano en el flujo. </rdfs:comment>
+    <rdfs:label xml:lang="en">Error end event</rdfs:label>
+    <rdfs:label xml:lang="es">Evento final de error</rdfs:label>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#EndEvent"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swb:Class rdf:ID="TerminateEndEvent">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Al activarse las actividades del proceso deberán terminarse de manera inmediata (el proceso termina sin compensación ni manejo de eventos).</rdfs:comment>
+    <rdfs:label xml:lang="en">Terminate end event</rdfs:label>
+    <rdfs:label xml:lang="es">Evento final de terminación</rdfs:label>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#EndEvent"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
   <swb:Class rdf:ID="ServiceTask">
     <swb:classGroupId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Task</swb:classGroupId>
     <rdfs:subClassOf rdf:resource="#BiMessageable"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
     <rdfs:subClassOf rdf:resource="#Task"/>
     <rdfs:subClassOf rdf:resource="#Implementable"/>
     <rdfs:label xml:lang="en">Service task</rdfs:label>
     <rdfs:label xml:lang="es">Tarea de servicio</rdfs:label>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
   <swb:Class rdf:ID="SendTask">
     <rdfs:subClassOf rdf:resource="#Messageable"/>
@@ -1740,6 +1945,29 @@
     <rdfs:subClassOf rdf:resource="#SequenceFlow"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
+  <swb:Class rdf:ID="CancelEndEvent">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Se usa dentro de los sub-procesos transaccionales. Indica que la transacción debe cancelarse y el evento intermedio de cancelación adherido a la transacción debe ser activado. Implica el envío de un mensaje de cancelación a los participantes de la transacción por medio del protocolo establecido.</rdfs:comment>
+    <rdfs:label xml:lang="en">Cancel end event</rdfs:label>
+    <rdfs:label xml:lang="es">Evento final de cancelación</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#EndEvent"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swb:Class rdf:ID="MessageIntermediateEvent">
+    <rdfs:subClassOf rdf:resource="#Attachable"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Se activa al recibir (catch) un mensaje de un participante. Puede usarse también para enviar un mensaje (throw).</rdfs:comment>
+    <rdfs:label xml:lang="es">Evento intermedio de mensaje</rdfs:label>
+    <rdfs:label xml:lang="en">Message intermediate event</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#IntermediateEvent"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#Catchable"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="#Throwable"/>
+  </swb:Class>
   <swb:Class rdf:ID="ConditionalSequenceFlow">
     <rdfs:subClassOf rdf:resource="#Conditionable"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -1747,15 +1975,88 @@
     <rdfs:subClassOf rdf:resource="#SequenceFlow"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
-  <swb:Class rdf:ID="StartEvent">
+  <swb:Interface rdf:ID="NormalFlowUsable">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Interface>
+  <swb:Class rdf:ID="MultipleIntermediateEvent">
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="#Event"/>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Indica el comienzo de un proceso en particular. Contiene un trigger que define la causa del evento, dicho trigger sólo es usado para activar el evento, no para disparar la activación de otros eventos.</rdfs:comment>
-    <rdfs:label xml:lang="en">Start event</rdfs:label>
-    <rdfs:label xml:lang="es">Evento inicial</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#Attachable"/>
+    <rdfs:label xml:lang="es">Evento intermedio múltiple</rdfs:label>
+    <rdfs:label xml:lang="en">Multiple intermediate event</rdfs:label>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
     <rdfs:subClassOf rdf:resource="#Catchable"/>
+    <rdfs:subClassOf rdf:resource="#Throwable"/>
+    <rdfs:subClassOf rdf:resource="#IntermediateEvent"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Indica que el evento tiene asociados varios activadores (trigger). Sin embargo, sólo uno activa el evento. En el flujo normal del proceso, puede activarse (catch) o disparar un activador (throw). Cuando se adhiere a una actividad, sólo puede activarse (catch).</rdfs:comment>
+  </swb:Class>
+  <swb:Class rdf:ID="MessageEndEvent">
+    <rdfs:label xml:lang="es">Evento final de mensaje</rdfs:label>
+    <rdfs:label xml:lang="en">Message end event</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cuando el proceso termina, envía un mensaje a un participante.</rdfs:comment>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#EndEvent"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swb:Interface rdf:ID="SubProcessUsable">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Interface>
+  <swb:Class rdf:ID="SignalIntermediateEvent">
+    <rdfs:subClassOf rdf:resource="#Attachable"/>
+    <rdfs:subClassOf rdf:resource="#Catchable"/>
+    <rdfs:subClassOf rdf:resource="#Throwable"/>
+    <rdfs:label xml:lang="en">Signal intermediate event</rdfs:label>
+    <rdfs:label xml:lang="es">Evento intermedio de señal</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#IntermediateEvent"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Envía o recibe señales a través de los distintos niveles del proceso, pools o incluso entre diagramas. Cuando se adhiere a los límites de una actividad, sólo puede recibir señales.</rdfs:comment>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swb:Class rdf:ID="CompensateEndEvent">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Indica que es necesaria una compensación.</rdfs:comment>
+    <rdfs:label xml:lang="en">Compensation end event</rdfs:label>
+    <rdfs:label xml:lang="es">Evento final de compensación</rdfs:label>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#EndEvent"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swb:Class rdf:ID="SignalEndEvent">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Al activarse, una señal será difundida a todos los procesos habilitados para recibir señales.</rdfs:comment>
+    <rdfs:label xml:lang="en">Signal end event</rdfs:label>
+    <rdfs:label xml:lang="es">Evento final de señal</rdfs:label>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#EndEvent"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swb:Class rdf:ID="NormalEndEvent">
+    <rdfs:label xml:lang="es">Evento final normal</rdfs:label>
+    <rdfs:label xml:lang="en">Normal end event</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Indica el término normal del proceso, sin disparar ninguna acción adicional.</rdfs:comment>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#EndEvent"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swb:Class rdf:ID="MultipleEndEvent">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Activa múltiples consecuencias al terminar el proceso (genera varias salidas, envía mensajes, etc.). Todas deben ocurrir.</rdfs:comment>
+    <rdfs:label xml:lang="en">Multiple end event</rdfs:label>
+    <rdfs:label xml:lang="es">Evento final múltiple</rdfs:label>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#EndEvent"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
 </rdf:RDF>
