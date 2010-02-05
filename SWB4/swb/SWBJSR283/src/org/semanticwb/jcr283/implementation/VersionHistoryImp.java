@@ -60,7 +60,7 @@ public class VersionHistoryImp extends NodeImp implements VersionHistory
 
                     org.semanticwb.jcr283.repository.model.Version versionNode = new org.semanticwb.jcr283.repository.model.Version(child.getSemanticObject());
                     jcr_rootVersion = (VersionImp) createNodeImp(versionNode, this, this.getIndex() + 1, childPathRootVersion, session);
-                    nodeManager.addNode(jcr_rootVersion, childPathRootVersion, path);
+                    nodeManager.addNode(jcr_rootVersion);
                     break;
                 }
             }

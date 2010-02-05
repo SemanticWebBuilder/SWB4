@@ -57,7 +57,6 @@ public class NodeImp extends ItemImp implements Node
 {
 
     private static final String ALL = "*";
-    
     private static final String JCR_CREATED = "jcr:created";
     private static final String JCR_LASTMODIFIED = "jcr:lastModified";
     private static final String JCR_LASTMODIFIEDBY = "jcr:lastModifiedBy";
@@ -87,7 +86,7 @@ public class NodeImp extends ItemImp implements Node
 
     protected NodeImp(Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
     {
-        this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), NodeDefinitionImp.getNodeDefinition(base, parent,NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass())), base.getName(), parent, index, path, depth, session, base.getId(), false);
+        this(NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass()), NodeDefinitionImp.getNodeDefinition(base, parent, NodeTypeManagerImp.loadNodeType(base.getSemanticObject().getSemanticClass())), base.getName(), parent, index, path, depth, session, base.getId(), false);
         this.obj = base.getSemanticObject();
         loadStoredProperties(false);
         for (PropertyImp prop : nodeManager.getAllChildProperties(path))
@@ -165,17 +164,17 @@ public class NodeImp extends ItemImp implements Node
         PropertyImp prop = nodeManager.getProtectedProperty(getPathFromName(JCR_VERSION_HISTORY));
         if (prop.getLength() == -1)
         {
-            log.trace("Initilizing versionHistory for node " + path);            
+            log.trace("Initilizing versionHistory for node " + path);
             NodeImp jcr_version_Storage = versionManagerImp.getVersionStorage();
             if (jcr_version_Storage == null)
             {
                 throw new RepositoryException("The version storage was not found");
             }
-            NodeImp temp=jcr_version_Storage.insertNode("jcr:versionHistory");
-            VersionHistoryImp history=(VersionHistoryImp)temp;
+            NodeImp temp = jcr_version_Storage.insertNode("jcr:versionHistory");
+            VersionHistoryImp history = (VersionHistoryImp) temp;
             history.init(this);
             prop.set(valueFactoryImp.createValue(history));
-            nodeManager.addNode(history, history.path, path);
+            nodeManager.addNode(history);
         }
     }
 
@@ -508,7 +507,7 @@ public class NodeImp extends ItemImp implements Node
                 throw new NoSuchNodeTypeException("The NodeType " + primaryNodeTypeName + " was not found");
             }
         }
-        NodeDefinitionImp childDefinition = NodeDefinitionImp.getNodeDefinition(nameToAdd, this,primaryNodeType);
+        NodeDefinitionImp childDefinition = NodeDefinitionImp.getNodeDefinition(nameToAdd, this, primaryNodeType);
         if (childDefinition == null)
         {
             throw new ConstraintViolationException("The node can not be added");
@@ -548,7 +547,7 @@ public class NodeImp extends ItemImp implements Node
         log.trace("Creating the node " + nameToAdd);
         NodeImp newChild = createNodeImp(primaryNodeType, childDefinition, nameToAdd, this, childIndex, childpath, session, newId);
         this.isModified = true;
-        return nodeManager.addNode(newChild, childpath, path);
+        return nodeManager.addNode(newChild);
 
     }
 
@@ -1197,8 +1196,6 @@ public class NodeImp extends ItemImp implements Node
         }
         return versionManagerImp.getVersionHistory(path);
     }
-
-    
 
     @Deprecated
     public Version getBaseVersion() throws UnsupportedRepositoryOperationException, RepositoryException
