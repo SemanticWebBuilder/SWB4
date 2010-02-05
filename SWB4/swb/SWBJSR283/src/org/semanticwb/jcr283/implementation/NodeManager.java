@@ -4,7 +4,6 @@
  */
 package org.semanticwb.jcr283.implementation;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
@@ -22,198 +21,28 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.jcr283.repository.model.Base;
 import org.semanticwb.jcr283.repository.model.Root;
-import org.semanticwb.jcr283.repository.model.Workspace;
 import org.semanticwb.model.GenericIterator;
 
 /**
  *
  * @author victor.lorenzana
  */
-public class NodeManager
+public final class NodeManager
 {
 
-    protected class NodeStatus
-    {
-
-        private boolean locked;
-        private boolean deleted;
-        private final NodeImp node;
-        private boolean allchildLoaded = false;
-
-        public NodeStatus(NodeImp node, boolean deleted)
-        {
-            this.deleted = deleted;
-            this.node = node;
-        }
-
-        public boolean isLocked()
-        {
-            return locked;
-        }
-
-        public void unlock()
-        {
-            locked = true;
-        }
-
-        public void lock(boolean isDeep, boolean sessionScope) throws RepositoryException
-        {
-            locked = true;
-            PropertyImp jcr_lock = getProtectedProperty(node.getPathFromName("jcr:lockIsDeep"));
-            jcr_lock.set(valueFactory.createValue(isDeep));
-        }
-
-        public boolean getAddChildLoaded()
-        {
-            return allchildLoaded;
-        }
-
-        public void allChildLoaded()
-        {
-            allchildLoaded = true;
-        }
-
-        public NodeStatus(NodeImp node)
-        {
-            this.deleted = false;
-            this.node = node;
-        }
-
-        public NodeImp getNode()
-        {
-            return node;
-        }
-
-        public void delete()
-        {
-            this.deleted = true;
-        }
-
-        @Override
-        public boolean equals(Object obj)
-        {
-            if (obj == null)
-            {
-                return false;
-            }
-            if (getClass() != obj.getClass())
-            {
-                return false;
-            }
-            final NodeStatus other = (NodeStatus) obj;
-            if (this.node != other.node && (this.node == null || !this.node.equals(other.node)))
-            {
-                return false;
-            }
-            return true;
-        }
-
-        @Override
-        public int hashCode()
-        {
-            int hash = 7;
-            hash = 67 * hash + (this.node != null ? this.node.hashCode() : 0);
-            return hash;
-        }
-
-        public void restore()
-        {
-            this.deleted = false;
-        }
-
-        public boolean isDeleted()
-        {
-            return deleted;
-        }
-    }
-
-    protected class PropertyStatus
-    {
-
-        private boolean deleted;
-        private final PropertyImp property;
-
-        public PropertyStatus(PropertyImp property, boolean deleted)
-        {
-            this.deleted = deleted;
-            this.property = property;
-        }
-
-        public PropertyStatus(PropertyImp property)
-        {
-            this.deleted = false;
-            this.property = property;
-        }
-
-        @Override
-        public boolean equals(Object obj)
-        {
-            if (obj == null)
-            {
-                return false;
-            }
-            if (getClass() != obj.getClass())
-            {
-                return false;
-            }
-            final PropertyStatus other = (PropertyStatus) obj;
-            if (this.property != other.property && (this.property == null || !this.property.equals(other.property)))
-            {
-                return false;
-            }
-            return true;
-        }
-
-        @Override
-        public int hashCode()
-        {
-            int hash = 3;
-            hash = 37 * hash + (this.property != null ? this.property.hashCode() : 0);
-            return hash;
-        }
-
-        public PropertyImp getProperty()
-        {
-            return property;
-        }
-
-        public void delete()
-        {
-            this.deleted = true;
-        }
-
-        public void restore()
-        {
-            this.deleted = false;
-        }
-
-        public boolean isDeleted()
-        {
-            return deleted;
-        }
-    }
     private static final String JCR_SYSTEM = "jcr:system";
     private static final String JCR_VERSION_STORAGE = "jcr:versionStorage";
     private static final String PATH_SEPARATOR = "/";
-    private Hashtable<String, NodeStatus> nodes = new Hashtable<String, NodeStatus>();
-    private Hashtable<String, NodeStatus> nodesbyId = new Hashtable<String, NodeStatus>();
-    private Hashtable<String, HashSet<NodeStatus>> nodesbyParent = new Hashtable<String, HashSet<NodeStatus>>();
+    private final HashtableNodeManager nodes;
     private Hashtable<String, PropertyStatus> properties = new Hashtable<String, PropertyStatus>();
     private Hashtable<String, HashSet<PropertyStatus>> propertiesbyParent = new Hashtable<String, HashSet<PropertyStatus>>();
     private final static Logger log = SWBUtils.getLogger(NodeManager.class);
-    private ValueFactory valueFactory;
+    private final SessionImp session;
 
     public NodeManager(SessionImp session)
     {
-        try
-        {
-            valueFactory = session.getValueFactory();
-        }
-        catch(Exception e)
-        {
-            valueFactory=null;
-            log.error(e);
-        }
+        nodes = new HashtableNodeManager(session);
+        this.session = session;
     }
 
     public NodeImp loadRoot(org.semanticwb.jcr283.repository.model.Workspace ws, SessionImp session) throws RepositoryException
@@ -229,7 +58,7 @@ public class NodeManager
                 newroot.setName("jcr:root");
             }
             RootNodeImp root = new RootNodeImp(ws.getRoot(), session);
-            this.addNode(root, "/", null);
+            this.addNode(root);
 
         }
         RootNodeImp root = (RootNodeImp) nodes.get(PATH_SEPARATOR).getNode();
@@ -241,7 +70,7 @@ public class NodeManager
         if (nodes.get(systemPath) == null)
         {
             NodeImp system = root.insertNode(JCR_SYSTEM);
-            this.addNode(system, systemPath, "/");
+            this.addNode(system);
             system.saveData();
         }
         NodeImp system = nodes.get(systemPath).getNode();
@@ -265,13 +94,13 @@ public class NodeManager
         if (!nodes.containsKey(system.getPathFromName(JCR_VERSION_STORAGE)))
         {
             NodeImp jcr_versionStorage = system.insertNode(JCR_VERSION_STORAGE);
-            this.addNode(jcr_versionStorage, jcr_versionStorage.path, system.path);
+            this.addNode(jcr_versionStorage);
             jcr_versionStorage.saveData();
         }
         else
         {
             NodeImp versionStorage = nodes.get(system.getPathFromName(JCR_VERSION_STORAGE)).getNode();
-            this.addNode(versionStorage, versionStorage.path, system.path);
+            this.addNode(versionStorage);
         }
     }
 
@@ -287,139 +116,21 @@ public class NodeManager
 
     public NodeImp getNodeByIdentifier(String id, SessionImp session, NodeTypeImp nodeTypeToSeach) throws RepositoryException
     {
-        if (nodesbyId.containsKey(id))
-        {
-            if (!nodesbyId.get(id).isDeleted())
-            {
-                return nodesbyId.get(id).getNode();
-            }
-        }
-        else
-        {
-            // load node
-            Base nodeToLoad = null;
-            ArrayList<Base> nodesToLoad = new ArrayList<Base>();
-            Workspace ws = Workspace.ClassMgr.getWorkspace(session.getWorkspace().getName());
-            if (nodeTypeToSeach == null)
-            {
-                NodeTypeImp baseNodeTye = NodeTypeManagerImp.loadNodeType(Base.sclass);
-                NodeTypeIteratorImp nodeTypes = baseNodeTye.getSubtypesImp();
-                while (nodeTypes.hasNext())
-                {
-                    NodeTypeImp nodeType = (NodeTypeImp) nodeTypes.nextNodeType();
-                    nodeToLoad = (org.semanticwb.jcr283.repository.model.Base) ws.getSemanticObject().getModel().getGenericObject(ws.getSemanticObject().getModel().getObjectUri(id, nodeType.getSemanticClass()), nodeType.getSemanticClass());
-                    if (nodeToLoad != null)
-                    {
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                nodeToLoad = (org.semanticwb.jcr283.repository.model.Base) ws.getSemanticObject().getModel().getGenericObject(ws.getSemanticObject().getModel().getObjectUri(id, nodeTypeToSeach.getSemanticClass()), nodeTypeToSeach.getSemanticClass());
-            }
-
-            if (nodeToLoad != null)
-            {
-                nodesToLoad.add(nodeToLoad);
-                Base parent = nodeToLoad.getParentNode();
-                NodeImp parentloaded = null;
-                boolean loaded = false;
-                while (loaded != true)
-                {
-                    if (nodesbyId.containsKey(parent.getId()))
-                    {
-                        loaded = true;
-                        parentloaded = nodesbyId.get(parent.getId()).getNode();
-                    }
-                    else
-                    {
-                        String tempid = parent.getId();
-                        nodesToLoad.add(parent);
-                        parent = parent.getParentNode();
-                        if (parent == null)
-                        {
-                            throw new RepositoryException("The parentNode for the node with id " + tempid + " was not found");
-                        }
-                    }
-                }
-                if (parentloaded != null)
-                {
-                    for (int i = nodesToLoad.size() - 1; i >= 0; i--)
-                    {
-                        Base base = nodesToLoad.get(i);
-                        String path = parentloaded.path;
-                        String childpath = parentloaded.getPathFromName(base.getName());
-                        int childIndex = countNodes(base.getName(), parentloaded, session, false, base.getId());
-                        if (childIndex > 0)
-                        {
-                            childIndex--;
-                        }
-                        if (childIndex > 0)
-                        {
-                            childpath += "[" + childIndex + "]";
-                        }
-                        NodeImp temp = NodeImp.createNodeImp(base, parentloaded, childIndex, childpath, session);
-                        this.addNode(temp, childpath, path);
-                        parentloaded = temp;
-                    }
-                }
-            }
-        }
-        if (nodesbyId.get(id) != null)
-        {
-            return nodesbyId.get(id).getNode();
-        }
-        return null;
+        return nodes.getNodeByIdentifier(id, session, nodeTypeToSeach);
     }
 
-    public NodeImp addNode(NodeImp node, String path, String pathParent)
+    public NodeImp addNode(NodeImp node)
     {
-        log.trace("Inserting node " + path + " into the NodeManager");
-        NodeStatus nodestatus = null;
-        if (this.nodes.containsKey(path))
+        if (nodes.containsKey(node.path))
         {
-            nodestatus = this.nodes.get(path);
+            return nodes.get(node.path).getNode();
         }
         else
         {
-            nodestatus = new NodeStatus(node);
-            this.nodes.put(path, nodestatus);
-        }
-        if (!nodesbyId.containsKey(node.id))
-        {
-            nodesbyId.put(node.id, nodestatus);
-        }
-        if (pathParent != null)
-        {
-            if (nodesbyParent.containsKey(pathParent))
-            {
-                HashSet<NodeStatus> childs = nodesbyParent.get(pathParent);
-                if (childs == null)
-                {
-                    childs = new HashSet<NodeStatus>();
-                }
-                if (!childs.contains(nodestatus))
-                {
-                    childs.add(nodestatus);
-                }
 
-            }
-            else
-            {
-                HashSet<NodeStatus> childs = new HashSet<NodeStatus>();
-                if (childs == null)
-                {
-                    childs = new HashSet<NodeStatus>();
-                }
-                if (!childs.contains(nodestatus))
-                {
-                    childs.add(nodestatus);
-                }
-                nodesbyParent.put(pathParent, childs);
-            }
+            nodes.put(node.path, new NodeStatus(node, session));
         }
-        return nodestatus.getNode();
+        return nodes.get(node.path).getNode();
     }
 
     private void restoreProperty(String path)
@@ -476,61 +187,8 @@ public class NodeManager
      */
     public int countNodes(String name, NodeImp parent, SessionImp session, boolean loadchilds, String id) throws RepositoryException
     {
-        int countNodes = 0;
-        if (nodesbyParent.containsKey(parent.path))
-        {
-            if (loadchilds)
-            {
-                loadChilds(parent, session, false);
-            }
-            HashSet<NodeStatus> childnodes = nodesbyParent.get(parent.path);
-            for (NodeStatus nodeStatus : childnodes)
-            {
-                if (nodeStatus.getNode().name.equals(name))
-                {
-                    if (id == null)
-                    {
-                        countNodes++;
-                    }
-                    else
-                    {
-                        if (!id.equals(nodeStatus.getNode().id))
-                        {
-                            countNodes++;
-                        }
-                    }
-                }
-            }
-        }
-        return countNodes;
+        return nodes.countNodes(name, parent, session, loadchilds, id);
 
-        /*int countNodes = 0;
-        if (exact)
-        {
-        return this.nodes.containsKey(path) ? 1 : 0;
-        }
-        else
-        {
-        for (String pathNode : nodes.keySet())
-        {
-        if (pathNode.startsWith(path))
-        {
-        String dif = pathNode.substring(path.length());
-        if (!dif.equals(""))
-        {
-        if (dif.startsWith("[") && dif.endsWith("]") && dif.indexOf(PATH_SEPARATOR) == -1)
-        {
-        countNodes++;
-        }
-        }
-        else
-        {
-        countNodes++;
-        }
-        }
-        }
-        }
-        return countNodes;*/
     }
 
     public boolean hasNode(String path)
@@ -540,26 +198,7 @@ public class NodeManager
 
     public boolean hasNode(String parentNode, String name)
     {
-        if (this.nodesbyParent.containsKey(parentNode) && this.nodesbyParent.get(parentNode).size() > 0)
-        {
-            Set<NodeStatus> childs = this.nodesbyParent.get(parentNode);
-            for (NodeStatus node : childs)
-            {
-                try
-                {
-                    if (!node.isDeleted() && node.getNode().getName().equals(name))
-                    {
-                        return true;
-                    }
-                }
-                catch (Exception e)
-                {
-                    log.debug(e);
-                    return false;
-                }
-            }
-        }
-        return false;
+        return nodes.hasNode(parentNode, name);
     }
 
     public void move(String oldPath, String newPath, NodeImp newParent)
@@ -608,22 +247,12 @@ public class NodeManager
      */
     public boolean hasChildNodes(String pathParent)
     {
-        return this.nodesbyParent.containsKey(pathParent) && this.nodesbyParent.get(pathParent).size() > 0;
+        return nodes.hasChildNodes(pathParent);
     }
 
     public boolean hasProperty(String path)
     {
         return this.properties.get(path) == null ? false : true;
-        /*PropertyStatus propStatus=this.properties.get(path);
-        if(propStatus==null)
-        {
-        return false;
-        }
-        if(propStatus.getProperty().definition.isProtected() || propStatus.isDeleted())
-        {
-        return false;
-        }
-        return true;*/
     }
 
     public boolean hasChildProperty(String pathParent)
@@ -654,7 +283,6 @@ public class NodeManager
                 {
                     try
                     {
-                        String pathParent = nodetoextract.getPath();
                         loadChilds(nodetoextract, session, false);
                         depth++;
                     }
@@ -710,7 +338,6 @@ public class NodeManager
                 {
                     try
                     {
-                        String pathParent = nodetoextract.getPath();
                         loadChilds(nodetoextract, session, false);
                         depth++;
                     }
@@ -848,7 +475,7 @@ public class NodeManager
                     if (replace || !nodes.containsKey(childpath))
                     {
                         NodeImp childNode = new NodeImp(child, parent, childindex, childpath, parent.getDepth() + 1, session);
-                        this.addNode(childNode, childpath, path);
+                        this.addNode(childNode);
                         return childNode;
                     }
                 }
@@ -859,68 +486,22 @@ public class NodeManager
 
     Set<NodeImp> getProtectedChildNodes(String parenPath) throws RepositoryException
     {
-        HashSet<NodeImp> getChilds = new HashSet<NodeImp>();
-        HashSet<NodeStatus> childs = nodesbyParent.get(parenPath);
-        if (childs != null && childs.size() > 0)
-        {
-            for (NodeStatus node : childs)
-            {
-                if (!node.isDeleted() && node.getNode().getDefinition().isProtected())
-                {
-                    getChilds.add(node.getNode());
-                }
-            }
-        }
-        return getChilds;
+        return nodes.getProtectedChildNodes(parenPath);
     }
 
     void clearDeletedChildNodes(String parenPath) throws RepositoryException
     {
-        HashSet<NodeStatus> childs = nodesbyParent.get(parenPath);
-        if (childs != null && childs.size() > 0)
-        {
-            for (NodeStatus node : childs)
-            {
-                if (node.isDeleted() && node.getNode().getDefinition().isProtected())
-                {
-                    nodes.remove(node.getNode().path);
-                }
-            }
-        }
+        nodes.clearDeletedChildNodes(parenPath);
     }
 
     Set<NodeImp> getDeletedChildNodes(String parenPath) throws RepositoryException
     {
-        HashSet<NodeImp> getChilds = new HashSet<NodeImp>();
-        HashSet<NodeStatus> childs = nodesbyParent.get(parenPath);
-        if (childs != null && childs.size() > 0)
-        {
-            for (NodeStatus node : childs)
-            {
-                if (node.isDeleted() && node.getNode().getDefinition().isProtected())
-                {
-                    getChilds.add(node.getNode());
-                }
-            }
-        }
-        return getChilds;
+        return nodes.getDeletedChildNodes(parenPath);
     }
 
     public Set<NodeImp> getChildNodes(String parenPath) throws RepositoryException
     {
-        HashSet<NodeImp> getChilds = new HashSet<NodeImp>();
-        HashSet<NodeStatus> childs = nodesbyParent.get(parenPath);
-        if (childs != null && childs.size() > 0)
-        {
-            for (NodeStatus node : childs)
-            {
-                if (!node.isDeleted() && !node.getNode().getDefinition().isProtected())
-                {
-                    getChilds.add(node.getNode());
-                }
-            }
-        }
-        return getChilds;
+        return nodes.getChildNodes(parenPath);
     }
 
     public void loadChild(NodeImp node, String name, SessionImp session, boolean replace) throws RepositoryException
@@ -953,7 +534,7 @@ public class NodeManager
                     if (replace || !nodes.containsKey(childpath))
                     {
                         NodeImp childNode = new NodeImp(child, node, childindex, childpath, node.getDepth() + 1, session);
-                        this.addNode(childNode, childpath, path);
+                        this.addNode(childNode);
                     }
                 }
             }
@@ -962,38 +543,7 @@ public class NodeManager
 
     public void loadChilds(NodeImp node, SessionImp session, boolean replace) throws RepositoryException
     {
-        if (node.getSemanticObject() != null && !nodes.get(node.path).getAddChildLoaded())
-        {
-            GenericIterator<Base> childs = new Base(node.getSemanticObject()).listNodes();
-            while (childs.hasNext())
-            {
-                Base child = childs.next();
-                int childindex = 0;
-                childindex = countNodes(child.getName(), node, session, false, child.getId());
-                String childpath = null;
-                String path = node.path;
-                if (path.endsWith(PATH_SEPARATOR))
-                {
-                    childpath = path + child.getName();
-                }
-                else
-                {
-                    childpath = path + PATH_SEPARATOR + child.getName();
-                }
-
-                if (childindex > 0)
-                {
-                    childpath += "[" + childindex + "]";
-                }
-                if (replace || !nodes.containsKey(childpath))
-                {
-                    NodeImp childNode = NodeImp.createNodeImp(child, node, childindex, childpath, session);
-                    //NodeImp childNode=NodeImp.createNodeImp(child, node, childindex, childpath, session);
-                    this.addNode(childNode, childpath, path);
-                }
-            }
-            nodes.get(node.path).allChildLoaded();
-        }
+        nodes.loadChilds(node, session, replace);
     }
 
     NodeStatus getNodeStatus(String path)
