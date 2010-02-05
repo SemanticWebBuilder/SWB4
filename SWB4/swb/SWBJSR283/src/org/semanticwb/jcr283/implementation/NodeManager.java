@@ -13,6 +13,7 @@ import javax.jcr.InvalidItemStateException;
 import javax.jcr.ItemExistsException;
 import javax.jcr.ReferentialIntegrityException;
 import javax.jcr.RepositoryException;
+import javax.jcr.ValueFactory;
 import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.NoSuchNodeTypeException;
@@ -31,6 +32,166 @@ import org.semanticwb.model.GenericIterator;
 public class NodeManager
 {
 
+    protected class NodeStatus
+    {
+
+        private boolean locked;
+        private boolean deleted;
+        private final NodeImp node;
+        private boolean allchildLoaded = false;
+
+        public NodeStatus(NodeImp node, boolean deleted)
+        {
+            this.deleted = deleted;
+            this.node = node;
+        }
+
+        public boolean isLocked()
+        {
+            return locked;
+        }
+
+        public void unlock()
+        {
+            locked = true;
+        }
+
+        public void lock(boolean isDeep, boolean sessionScope) throws RepositoryException
+        {
+            locked = true;
+            PropertyImp jcr_lock = getProtectedProperty(node.getPathFromName("jcr:lockIsDeep"));
+            jcr_lock.set(valueFactory.createValue(isDeep));
+        }
+
+        public boolean getAddChildLoaded()
+        {
+            return allchildLoaded;
+        }
+
+        public void allChildLoaded()
+        {
+            allchildLoaded = true;
+        }
+
+        public NodeStatus(NodeImp node)
+        {
+            this.deleted = false;
+            this.node = node;
+        }
+
+        public NodeImp getNode()
+        {
+            return node;
+        }
+
+        public void delete()
+        {
+            this.deleted = true;
+        }
+
+        @Override
+        public boolean equals(Object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+            if (getClass() != obj.getClass())
+            {
+                return false;
+            }
+            final NodeStatus other = (NodeStatus) obj;
+            if (this.node != other.node && (this.node == null || !this.node.equals(other.node)))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        public int hashCode()
+        {
+            int hash = 7;
+            hash = 67 * hash + (this.node != null ? this.node.hashCode() : 0);
+            return hash;
+        }
+
+        public void restore()
+        {
+            this.deleted = false;
+        }
+
+        public boolean isDeleted()
+        {
+            return deleted;
+        }
+    }
+
+    protected class PropertyStatus
+    {
+
+        private boolean deleted;
+        private final PropertyImp property;
+
+        public PropertyStatus(PropertyImp property, boolean deleted)
+        {
+            this.deleted = deleted;
+            this.property = property;
+        }
+
+        public PropertyStatus(PropertyImp property)
+        {
+            this.deleted = false;
+            this.property = property;
+        }
+
+        @Override
+        public boolean equals(Object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+            if (getClass() != obj.getClass())
+            {
+                return false;
+            }
+            final PropertyStatus other = (PropertyStatus) obj;
+            if (this.property != other.property && (this.property == null || !this.property.equals(other.property)))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        public int hashCode()
+        {
+            int hash = 3;
+            hash = 37 * hash + (this.property != null ? this.property.hashCode() : 0);
+            return hash;
+        }
+
+        public PropertyImp getProperty()
+        {
+            return property;
+        }
+
+        public void delete()
+        {
+            this.deleted = true;
+        }
+
+        public void restore()
+        {
+            this.deleted = false;
+        }
+
+        public boolean isDeleted()
+        {
+            return deleted;
+        }
+    }
     private static final String JCR_SYSTEM = "jcr:system";
     private static final String JCR_VERSION_STORAGE = "jcr:versionStorage";
     private static final String PATH_SEPARATOR = "/";
@@ -40,9 +201,19 @@ public class NodeManager
     private Hashtable<String, PropertyStatus> properties = new Hashtable<String, PropertyStatus>();
     private Hashtable<String, HashSet<PropertyStatus>> propertiesbyParent = new Hashtable<String, HashSet<PropertyStatus>>();
     private final static Logger log = SWBUtils.getLogger(NodeManager.class);
+    private ValueFactory valueFactory;
 
-    public NodeManager()
+    public NodeManager(SessionImp session)
     {
+        try
+        {
+            valueFactory = session.getValueFactory();
+        }
+        catch(Exception e)
+        {
+            valueFactory=null;
+            log.error(e);
+        }
     }
 
     public NodeImp loadRoot(org.semanticwb.jcr283.repository.model.Workspace ws, SessionImp session) throws RepositoryException
@@ -130,7 +301,7 @@ public class NodeManager
             ArrayList<Base> nodesToLoad = new ArrayList<Base>();
             Workspace ws = Workspace.ClassMgr.getWorkspace(session.getWorkspace().getName());
             if (nodeTypeToSeach == null)
-            {                
+            {
                 NodeTypeImp baseNodeTye = NodeTypeManagerImp.loadNodeType(Base.sclass);
                 NodeTypeIteratorImp nodeTypes = baseNodeTye.getSubtypesImp();
                 while (nodeTypes.hasNext())
@@ -825,6 +996,11 @@ public class NodeManager
         }
     }
 
+    NodeStatus getNodeStatus(String path)
+    {
+        return nodes.get(path);
+    }
+
     public void removeProperty(String path, String parentPath)
     {
         if (properties.containsKey(path))
@@ -842,145 +1018,4 @@ public class NodeManager
     }
 }
 
-class NodeStatus
-{
 
-    private boolean deleted;
-    private final NodeImp node;
-    private boolean allchildLoaded = false;
-
-    public NodeStatus(NodeImp node, boolean deleted)
-    {
-        this.deleted = deleted;
-        this.node = node;
-    }
-
-    public boolean getAddChildLoaded()
-    {
-        return allchildLoaded;
-    }
-
-    public void allChildLoaded()
-    {
-        allchildLoaded = true;
-    }
-
-    public NodeStatus(NodeImp node)
-    {
-        this.deleted = false;
-        this.node = node;
-    }
-
-    public NodeImp getNode()
-    {
-        return node;
-    }
-
-    public void delete()
-    {
-        this.deleted = true;
-    }
-
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (obj == null)
-        {
-            return false;
-        }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final NodeStatus other = (NodeStatus) obj;
-        if (this.node != other.node && (this.node == null || !this.node.equals(other.node)))
-        {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int hash = 7;
-        hash = 67 * hash + (this.node != null ? this.node.hashCode() : 0);
-        return hash;
-    }
-
-    public void restore()
-    {
-        this.deleted = false;
-    }
-
-    public boolean isDeleted()
-    {
-        return deleted;
-    }
-}
-
-class PropertyStatus
-{
-
-    private boolean deleted;
-    private final PropertyImp property;
-
-    public PropertyStatus(PropertyImp property, boolean deleted)
-    {
-        this.deleted = deleted;
-        this.property = property;
-    }
-
-    public PropertyStatus(PropertyImp property)
-    {
-        this.deleted = false;
-        this.property = property;
-    }
-
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (obj == null)
-        {
-            return false;
-        }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final PropertyStatus other = (PropertyStatus) obj;
-        if (this.property != other.property && (this.property == null || !this.property.equals(other.property)))
-        {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int hash = 3;
-        hash = 37 * hash + (this.property != null ? this.property.hashCode() : 0);
-        return hash;
-    }
-
-    public PropertyImp getProperty()
-    {
-        return property;
-    }
-
-    public void delete()
-    {
-        this.deleted = true;
-    }
-
-    public void restore()
-    {
-        this.deleted = false;
-    }
-
-    public boolean isDeleted()
-    {
-        return deleted;
-    }
-}

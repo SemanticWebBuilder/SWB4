@@ -41,14 +41,15 @@ public class WorkspaceImp  implements Workspace {
     private final NodeTypeManagerImp nodeTypeManager=new NodeTypeManagerImp();
     private final VersionManagerImp versionManagerImp;
     private final QueryManagerImp queryManagerImp;
+    private final LockManagerImp lockManagerImp;
     public WorkspaceImp(SessionImp session,org.semanticwb.jcr283.repository.model.Workspace ws) throws RepositoryException
     {
         this.session=session;
         session.setWorkspace(this);
         name=ws.getName();        
-        nodeManager=new NodeManager();
+        nodeManager=new NodeManager(session);
         queryManagerImp=new QueryManagerImp(session);
-
+        lockManagerImp=new LockManagerImp(session, nodeManager);
         nodeManager.loadRoot(ws, session);
         String path="/jcr:system/jcr:versionStorage";
         NodeImp versionSotrage=nodeManager.getNode(path);
@@ -104,12 +105,12 @@ public class WorkspaceImp  implements Workspace {
 
     public LockManager getLockManager() throws UnsupportedRepositoryOperationException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return lockManagerImp;
     }
 
     public QueryManager getQueryManager() throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return queryManagerImp;
     }
 
     public NamespaceRegistry getNamespaceRegistry() throws RepositoryException
