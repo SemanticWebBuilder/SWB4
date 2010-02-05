@@ -11,20 +11,16 @@ import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.query.QueryResult;
 import javax.jcr.query.RowIterator;
-import org.semanticwb.Logger;
-import org.semanticwb.SWBUtils;
 /**
  *
  * @author victor.lorenzana
  */
 public class QueryResultImp implements QueryResult{
 
-
-    private final SessionImp session;
+    
     private final Set<NodeImp> nodes;
-    public QueryResultImp(SessionImp session,Set<NodeImp> nodes)
-    {
-        this.session=session;
+    public QueryResultImp(Set<NodeImp> nodes)
+    {        
         this.nodes=nodes;
     }
     public String[] getColumnNames() throws RepositoryException

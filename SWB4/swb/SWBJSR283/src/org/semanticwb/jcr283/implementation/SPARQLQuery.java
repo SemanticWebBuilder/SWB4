@@ -95,6 +95,6 @@ public class SPARQLQuery extends QueryImp
                 nodes.add(node);
             }
         }
-        return new QueryResultImp(session, nodes);
+        return new QueryResultImp(nodes);
     }
 }
