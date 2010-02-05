@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class PoolBase extends org.semanticwb.process.model.Swimlane implements org.semanticwb.process.model.ProcessReferensable,org.semanticwb.process.model.Laneable,org.semanticwb.process.model.Participable,org.semanticwb.model.Descriptiveable
+public abstract class PoolBase extends org.semanticwb.process.model.Swimlane implements org.semanticwb.process.model.Laneable,org.semanticwb.process.model.Participable,org.semanticwb.process.model.ProcessReferensable,org.semanticwb.model.Descriptiveable
 {
        public static final org.semanticwb.platform.SemanticProperty swp_boundaryVisible=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#boundaryVisible");
        public static final org.semanticwb.platform.SemanticProperty swp_mainPool=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#mainPool");
