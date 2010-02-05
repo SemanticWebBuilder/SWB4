@@ -5,16 +5,24 @@
 package org.semanticwb.jcr283.implementation;
 
 import java.util.Calendar;
-import java.util.UUID;
+import javax.jcr.AccessDeniedException;
+import javax.jcr.InvalidItemStateException;
+import javax.jcr.ItemExistsException;
 import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
+import javax.jcr.ReferentialIntegrityException;
 import javax.jcr.RepositoryException;
+import javax.jcr.lock.LockException;
+import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.NoSuchNodeTypeException;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.version.OnParentVersionAction;
 import javax.jcr.version.Version;
+import javax.jcr.version.VersionException;
 import javax.jcr.version.VersionHistory;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 
 /**
  *
@@ -22,7 +30,7 @@ import javax.jcr.version.VersionHistory;
  */
 public class VersionImp extends NodeImp implements Version
 {
-
+    private final static Logger log = SWBUtils.getLogger(VersionImp.class);
     public VersionImp(org.semanticwb.jcr283.repository.model.Version version, VersionHistoryImp parent, int index, String path, int depth, SessionImp session)
     {
         super(version, parent, index, path, depth, session);
@@ -103,6 +111,13 @@ public class VersionImp extends NodeImp implements Version
                     throw new RepositoryException("The definition of propert " + prop.getPath() + " is abort");                
             }            
         }
+    }
+
+    @Override
+    public void saveData() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
+    {
+        log.trace("Saving Version node "+path);
+        super.saveData();
     }
 
     public VersionHistory getContainingHistory() throws RepositoryException
