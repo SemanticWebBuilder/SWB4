@@ -4,7 +4,6 @@
  */
 package org.semanticwb.jcr283.implementation;
 
-import java.util.Hashtable;
 import javax.jcr.AccessDeniedException;
 import javax.jcr.InvalidItemStateException;
 import javax.jcr.ItemExistsException;
@@ -29,8 +28,7 @@ import javax.jcr.version.VersionManager;
 public class VersionManagerImp implements VersionManager
 {
     private final NodeImp versionStorage;
-    private Hashtable<String, VersionHistoryImp> versionhistories = new Hashtable<String, VersionHistoryImp>();
-    private Hashtable<String, VersionImp> baseVersions = new Hashtable<String, VersionImp>();
+    
     private final SessionImp session;
     private final NodeManager nodeManager;
     public VersionManagerImp(SessionImp session,NodeImp versionStorage,NodeManager nodeManager)
@@ -43,19 +41,7 @@ public class VersionManagerImp implements VersionManager
     {
         return versionStorage;
     }
-
-    public void setBaseVersion(VersionImp version, String path)
-    {
-        baseVersions.put(path, version);
-    }
-
-    public void addVersionHistory(VersionHistoryImp version,NodeImp versionableNode) throws RepositoryException
-    {
-        if (!versionhistories.containsKey(versionableNode.path))
-        {
-            versionhistories.put(versionableNode.path, version);
-        }
-    }
+    
     @SuppressWarnings(value="deprecation")
     public Version checkin(String absPath) throws VersionException, UnsupportedRepositoryOperationException, InvalidItemStateException, LockException, RepositoryException
     {
@@ -108,11 +94,7 @@ public class VersionManagerImp implements VersionManager
         {
             throw new UnsupportedRepositoryOperationException("The node is not versionable");
         }
-        if(!versionhistories.containsKey(absPath))
-        {
-            return this.getBaseVersionImp(absPath).getContainingHistory();
-        }
-        return versionhistories.get(absPath);
+        return node.getBaseVersion().getContainingHistory();        
     }
 
     public Version getBaseVersion(String absPath) throws UnsupportedRepositoryOperationException, RepositoryException
@@ -121,19 +103,20 @@ public class VersionManagerImp implements VersionManager
     }
     public VersionImp getBaseVersionImp(String absPath) throws UnsupportedRepositoryOperationException, RepositoryException
     {
-        if(!baseVersions.containsKey(absPath))
+        if (!ItemImp.isValidAbsPath(absPath))
         {
-            NodeImp node=nodeManager.getNode(absPath);
-            if(node==null)
-            {
-                throw new UnsupportedRepositoryOperationException();
-            }
-            PropertyImp prop=nodeManager.getProtectedProperty(node.getPathFromName("jcr:baseVersion"));
-            Node baseVersion=prop.getNode();
-            baseVersions.put(absPath, (VersionImp)baseVersion);
-            return (VersionImp)baseVersion;
+            throw new RepositoryException("The path is not absolute: " + absPath);
         }
-        return baseVersions.get(absPath);
+        if (!session.getWorkspaceImp().getNodeManager().hasNode(absPath))
+        {
+            throw new RepositoryException("the node " + absPath + " was not found");
+        }
+        NodeImp node=session.getWorkspaceImp().getNodeManager().getNode(absPath);
+        if(!node.isVersionable())
+        {
+            throw new UnsupportedRepositoryOperationException("The node is not versionable");
+        }
+        return node.getBaseVersionImp();
     }
 
     public void restore(Version[] versions, boolean removeExisting) throws ItemExistsException, UnsupportedRepositoryOperationException, VersionException, LockException, InvalidItemStateException, RepositoryException

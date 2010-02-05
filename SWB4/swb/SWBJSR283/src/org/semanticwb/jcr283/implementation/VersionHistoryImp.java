@@ -107,7 +107,7 @@ public class VersionHistoryImp extends NodeImp implements VersionHistory
             prop.set(new ValueFactoryImp().createValue(jcr_rootVersion));
         }
 
-        session.getWorkspaceImp().getVersionManagerImp().setBaseVersion(jcr_rootVersion, versionableNode.path);
+        
 
         PropertyImp jcr_versionable_uuid = nodeManager.getProtectedProperty(this.getPathFromName(JCR_VERSIONABLE_UUID));
         if (jcr_versionable_uuid.getLength() == -1)
