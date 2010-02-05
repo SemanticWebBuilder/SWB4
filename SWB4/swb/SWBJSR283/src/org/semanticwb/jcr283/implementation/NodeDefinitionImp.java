@@ -155,7 +155,7 @@ public class NodeDefinitionImp extends ItemDefinitionImp implements NodeDefiniti
         }
         if (childDefinition == null)
         {
-            for (NodeDefinitionImp childNodeDefinition : ((NodeDefinitionImp) parent.definition).getDeclaringNodeTypeImp().getChildNodeDefinitionsImp())
+            for (NodeDefinitionImp childNodeDefinition : parent.nodeType.getChildNodeDefinitionsImp())
             {
                 if (childNodeDefinition.getName().equals("*"))
                 {
