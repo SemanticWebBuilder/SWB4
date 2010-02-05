@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class LaneBase extends org.semanticwb.process.model.Swimlane implements org.semanticwb.model.Roleable,org.semanticwb.process.model.Laneable,org.semanticwb.model.Ruleable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Descriptiveable
+public abstract class LaneBase extends org.semanticwb.process.model.Swimlane implements org.semanticwb.process.model.Laneable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Roleable,org.semanticwb.model.Ruleable,org.semanticwb.model.Descriptiveable
 {
        public static final org.semanticwb.platform.SemanticClass swp_Lane=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#Lane");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#Lane");
