@@ -65,7 +65,7 @@ public class NodeTypeManagerImp implements NodeTypeManager
 
     private static void loadNodeTypes()
     {
-        //log.trace("Loading nodetypes...");
+        log.trace("Loading nodetypes...");
         Iterator<SemanticClass> classes = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
         while (classes.hasNext())
         {

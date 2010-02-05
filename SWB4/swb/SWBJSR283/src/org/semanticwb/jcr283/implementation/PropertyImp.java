@@ -85,7 +85,7 @@ public class PropertyImp extends ItemImp implements Property
                 String value = literal.getString();
                 try
                 {
-                    //log.trace("loading value from database for the property " + path);
+                    log.trace("Loading value from database for the property " + path);
                     values.add(transformValue(valueFactoryImp.createValue(value), ((PropertyDefinitionImp) definition).getRequiredType()));
                 }
                 catch (Exception e)
@@ -116,7 +116,7 @@ public class PropertyImp extends ItemImp implements Property
         {
             return value;
         }
-        //log.trace("Tranforming value from " + PropertyType.nameFromValue(value.getType()) + " to " + PropertyType.nameFromValue(reqValue));
+        log.trace("Tranforming value from " + PropertyType.nameFromValue(value.getType()) + " to " + PropertyType.nameFromValue(reqValue));
         ValueImp newValue = new ValueImp(value, reqValue);
         return newValue;
     }
@@ -138,7 +138,7 @@ public class PropertyImp extends ItemImp implements Property
         {
             newValues.add(transformValue(value, reqType));
         }
-        //log.trace("Setting values to the property " + path + "  values.length: " + values.length);
+        log.trace("Setting values to the property " + path + "  values.length: " + values.length);
         this.values.clear();
         this.values.addAll(newValues);
         this.isModified = true;
@@ -424,7 +424,7 @@ public class PropertyImp extends ItemImp implements Property
                 prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(urinewProperty);
             }
             SemanticObject obj = parent.getSemanticObject();
-            //log.trace("Saving property " + path + " for node " + parent.path + " values :" + values.size());
+            log.trace("Saving property " + path + " for node " + parent.path + " values :" + values.size());
             obj.removeProperty(prop);
             for (Value value : this.values)
             {

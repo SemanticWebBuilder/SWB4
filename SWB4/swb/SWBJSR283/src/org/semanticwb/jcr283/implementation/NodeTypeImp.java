@@ -136,7 +136,7 @@ public class NodeTypeImp implements NodeType
             if (superClazz.isSubClass(Base.sclass))
             {
                 NodeTypeImp superNodeType = NodeTypeManagerImp.loadNodeType(superClazz);
-                //log.trace("loading superType " + superNodeType.getName() + " for nodeType " + this.getName());
+                log.trace("loading superType " + superNodeType.getName() + " for nodeType " + this.getName());
                 supertypes.add(superNodeType);
             }
         }
@@ -152,7 +152,7 @@ public class NodeTypeImp implements NodeType
             PropertyDefinitionImp pd = new PropertyDefinitionImp(propertyDefinitionObj, this);
             if (!propertyDefinitions.containsKey(pd.getName()))
             {
-                //log.trace("loading propertyDefinition " + pd.getName() + " for node " + this.getName());
+                log.trace("loading propertyDefinition " + pd.getName() + " for node " + this.getName());
                 propertyDefinitions.put(pd.getName(), pd);
             }
         }
@@ -179,7 +179,7 @@ public class NodeTypeImp implements NodeType
                                     PropertyDefinitionImp pd = new PropertyDefinitionImp(semanticProperty, nodeType);
                                     if (!propertyDefinitions.containsKey(pd.getName()))
                                     {
-                                        //log.trace("loading propertyDefinition " + pd.getName() + " for node " + this.getName());
+                                        log.trace("loading propertyDefinition " + pd.getName() + " for node " + this.getName());
                                         propertyDefinitions.put(pd.getName(), pd);
                                     }
                                 }
@@ -191,7 +191,7 @@ public class NodeTypeImp implements NodeType
                                     PropertyDefinitionImp pd = new PropertyDefinitionImp(semanticProperty);
                                     if (!propertyDefinitions.containsKey(pd.getName()))
                                     {
-                                        //log.trace("loading propertyDefinition " + pd.getName() + " for node " + this.getName());
+                                        log.trace("loading propertyDefinition " + pd.getName() + " for node " + this.getName());
                                         propertyDefinitions.put(pd.getName(), pd);
                                     }
                                 }
@@ -257,7 +257,7 @@ public class NodeTypeImp implements NodeType
             if (!childnodeDefinitions.containsKey(name))
             {
                 NodeDefinitionImp nodeDefinitionImp = new NodeDefinitionImp(childDefinition, this);
-                //log.trace("Loading nodeDefinition " + name + " for node " + this.getName());
+                log.trace("Loading nodeDefinition " + name + " for node " + this.getName());
                 childnodeDefinitions.put(nodeDefinitionImp.getName(), nodeDefinitionImp);
             }
         }
