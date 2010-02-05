@@ -37,17 +37,18 @@ public class WorkspaceImp  implements Workspace {
 
     private final SessionImp session;    
     private final String name;    
-    private final NodeManager nodeManager=new NodeManager();
-    private NodeTypeManagerImp nodeTypeManager;
+    private final NodeManager nodeManager;
+    private final NodeTypeManagerImp nodeTypeManager=new NodeTypeManagerImp();
     private final VersionManagerImp versionManagerImp;
-    
+    private final QueryManagerImp queryManagerImp;
     public WorkspaceImp(SessionImp session,org.semanticwb.jcr283.repository.model.Workspace ws) throws RepositoryException
     {
         this.session=session;
-        
-        name=ws.getName();
         session.setWorkspace(this);
-        nodeTypeManager=SWBRepository.getNodeTypeManagerImp();
+        name=ws.getName();        
+        nodeManager=new NodeManager();
+        queryManagerImp=new QueryManagerImp(session);
+
         nodeManager.loadRoot(ws, session);
         String path="/jcr:system/jcr:versionStorage";
         NodeImp versionSotrage=nodeManager.getNode(path);
@@ -118,7 +119,7 @@ public class WorkspaceImp  implements Workspace {
 
     public NodeTypeManager getNodeTypeManager() throws RepositoryException
     {
-        return nodeTypeManager;
+        return this.nodeTypeManager;
     }
     public NodeTypeManagerImp getNodeTypeManagerImp()
     {

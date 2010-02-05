@@ -40,7 +40,11 @@ public class NodeManager
     private Hashtable<String, PropertyStatus> properties = new Hashtable<String, PropertyStatus>();
     private Hashtable<String, HashSet<PropertyStatus>> propertiesbyParent = new Hashtable<String, HashSet<PropertyStatus>>();
     private final static Logger log = SWBUtils.getLogger(NodeManager.class);
-
+    
+    public NodeManager()
+    {
+    
+    }
     public NodeImp loadRoot(org.semanticwb.jcr283.repository.model.Workspace ws, SessionImp session) throws RepositoryException
     {
         if (!nodes.containsKey(PATH_SEPARATOR))
@@ -50,7 +54,7 @@ public class NodeManager
             {
                 Root newroot = Root.ClassMgr.createRoot("jcr:root", ws);
                 ws.setRoot(newroot);
-                newroot.setPrimaryType(Root.sclass.getPrefix()+":"+Root.sclass.getName());
+                newroot.setPrimaryType(Root.sclass.getPrefix() + ":" + Root.sclass.getName());
                 newroot.setName("jcr:root");
             }
             RootNodeImp root = new RootNodeImp(ws.getRoot(), session);
@@ -111,9 +115,20 @@ public class NodeManager
         else
         {
             // load node
+            Base nodeToLoad=null;
             ArrayList<Base> nodesToLoad = new ArrayList<Base>();
             Workspace ws = Workspace.ClassMgr.getWorkspace(session.getWorkspace().getName());
-            Base nodeToLoad = ws.getBase(id);
+            NodeTypeImp baseNodeTye=NodeTypeManagerImp.loadNodeType(Base.sclass);
+            NodeTypeIteratorImp nodeTypes=baseNodeTye.getSubtypesImp();
+            while(nodeTypes.hasNext())
+            {
+                NodeTypeImp nodeType=(NodeTypeImp)nodeTypes.nextNodeType();
+                nodeToLoad=(org.semanticwb.jcr283.repository.model.Base)ws.getSemanticObject().getModel().getGenericObject(ws.getSemanticObject().getModel().getObjectUri(id,nodeType.getSemanticClass()),nodeType.getSemanticClass());
+                if(nodeToLoad!=null)
+                {
+                    break;
+                }
+            }
 
             if (nodeToLoad != null)
             {
@@ -146,7 +161,7 @@ public class NodeManager
                         Base base = nodesToLoad.get(i);
                         String path = parentloaded.path;
                         String childpath = parentloaded.getPathFromName(base.getName());
-                        int childIndex = countNodes(base.getName(), parentloaded, session, false,base.getId());
+                        int childIndex = countNodes(base.getName(), parentloaded, session, false, base.getId());
                         if (childIndex > 0)
                         {
                             childIndex--;
@@ -236,7 +251,7 @@ public class NodeManager
      * @param exact
      * @return
      */
-    public int countNodes(String name, NodeImp parent, SessionImp session, boolean loadchilds,String id) throws RepositoryException
+    public int countNodes(String name, NodeImp parent, SessionImp session, boolean loadchilds, String id) throws RepositoryException
     {
         int countNodes = 0;
         if (nodesbyParent.containsKey(parent.path))
@@ -250,13 +265,13 @@ public class NodeManager
             {
                 if (nodeStatus.getNode().name.equals(name))
                 {
-                    if(id==null)
+                    if (id == null)
                     {
                         countNodes++;
                     }
                     else
                     {
-                        if(!id.equals(nodeStatus.getNode().id))
+                        if (!id.equals(nodeStatus.getNode().id))
                         {
                             countNodes++;
                         }
@@ -580,6 +595,47 @@ public class NodeManager
         return this.getChildNodes(node.getPath());
     }
 
+
+
+    public NodeImp getChildNodeById(NodeImp parent, String id, SessionImp session, boolean replace) throws RepositoryException
+    {
+        if (parent.getSemanticObject() != null)
+        {
+            GenericIterator<Base> childs = new Base(parent.getSemanticObject()).listNodes();
+            while (childs.hasNext())
+            {
+                Base child = childs.next();
+                if (child.getId().equals(id))
+                {
+                    int childindex = 0;
+                    childindex = countNodes(child.getName(), parent, session, false, child.getId());
+                    String childpath = null;
+                    String path = parent.path;
+                    if (path.endsWith(PATH_SEPARATOR))
+                    {
+                        childpath = path + child.getName();
+                    }
+                    else
+                    {
+                        childpath = path + PATH_SEPARATOR + child.getName();
+                    }
+
+                    if (childindex > 0)
+                    {
+                        childpath += "[" + childindex + "]";
+                    }
+                    if (replace || !nodes.containsKey(childpath))
+                    {
+                        NodeImp childNode = new NodeImp(child, parent, childindex, childpath, parent.getDepth() + 1, session);
+                        this.addNode(childNode, childpath, path);
+                        return childNode;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     Set<NodeImp> getProtectedChildNodes(String parenPath) throws RepositoryException
     {
         HashSet<NodeImp> getChilds = new HashSet<NodeImp>();
@@ -597,8 +653,8 @@ public class NodeManager
         return getChilds;
     }
 
-    void  clearDeletedChildNodes(String parenPath) throws RepositoryException
-    {        
+    void clearDeletedChildNodes(String parenPath) throws RepositoryException
+    {
         HashSet<NodeStatus> childs = nodesbyParent.get(parenPath);
         if (childs != null && childs.size() > 0)
         {
@@ -657,7 +713,7 @@ public class NodeManager
                 if (child.getName().equals(name))
                 {
                     int childindex = 0;
-                    childindex = countNodes(child.getName(), node, session, false,child.getId());
+                    childindex = countNodes(child.getName(), node, session, false, child.getId());
                     String childpath = null;
                     String path = node.path;
                     if (path.endsWith(PATH_SEPARATOR))
@@ -692,7 +748,7 @@ public class NodeManager
             {
                 Base child = childs.next();
                 int childindex = 0;
-                childindex = countNodes(child.getName(), node, session, false,child.getId());
+                childindex = countNodes(child.getName(), node, session, false, child.getId());
                 String childpath = null;
                 String path = node.path;
                 if (path.endsWith(PATH_SEPARATOR))

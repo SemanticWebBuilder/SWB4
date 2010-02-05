@@ -20,6 +20,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.jcr283.repository.model.Base;
+import org.semanticwb.jcr283.repository.model.NodeTypes;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticLiteral;
 import org.semanticwb.platform.SemanticObject;
@@ -52,7 +53,6 @@ public class NodeTypeImp implements NodeType
     private final boolean isAbstract;
     private final boolean hasOrderableChildNodes;
     private final String primaryItemName;
-    
 
     public NodeTypeImp(SemanticClass clazz)
     {
@@ -64,7 +64,7 @@ public class NodeTypeImp implements NodeType
         if (aditionalSuperTypes != null)
         {
             aditionalSuperTypes.addAll(aditionalSuperTypes);
-        }        
+        }
         this.clazz = clazz;
         SemanticProperty prop = getSemanticProperty(Property.JCR_IS_MIXIN);
         SemanticLiteral value = clazz.getRequiredProperty(prop);
@@ -292,10 +292,9 @@ public class NodeTypeImp implements NodeType
         while (classes.hasNext())
         {
             SemanticClass oclazz = classes.next();
-            if (oclazz.isSubClass(clazz))
+            if (oclazz.isSubClass(NodeTypes.sclass) && oclazz.isSubClass(clazz))
             {
-                NodeTypeImp nodeType = NodeTypeManagerImp.loadNodeType(clazz);
-                //log.trace("Loading subtype " + nodeType.getName() + " for nodeType " + this.getName());
+                NodeTypeImp nodeType = NodeTypeManagerImp.loadNodeType(oclazz);
                 subtypes.add(nodeType);
             }
         }
@@ -312,6 +311,11 @@ public class NodeTypeImp implements NodeType
     }
 
     public NodeTypeIterator getSubtypes()
+    {
+        return new NodeTypeIteratorImp(subtypes);
+    }
+
+    public NodeTypeIteratorImp getSubtypesImp()
     {
         return new NodeTypeIteratorImp(subtypes);
     }

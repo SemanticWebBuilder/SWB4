@@ -108,15 +108,31 @@ public class VersionManagerImp implements VersionManager
         {
             throw new UnsupportedRepositoryOperationException("The node is not versionable");
         }
+        if(!versionhistories.containsKey(absPath))
+        {
+            return this.getBaseVersionImp(absPath).getContainingHistory();
+        }
         return versionhistories.get(absPath);
     }
 
     public Version getBaseVersion(String absPath) throws UnsupportedRepositoryOperationException, RepositoryException
     {
-        return baseVersions.get(absPath);
+        return getBaseVersionImp(absPath);
     }
     public VersionImp getBaseVersionImp(String absPath) throws UnsupportedRepositoryOperationException, RepositoryException
     {
+        if(!baseVersions.containsKey(absPath))
+        {
+            NodeImp node=nodeManager.getNode(absPath);
+            if(node==null)
+            {
+                throw new UnsupportedRepositoryOperationException();
+            }
+            PropertyImp prop=nodeManager.getProtectedProperty(node.getPathFromName("jcr:baseVersion"));
+            Node baseVersion=prop.getNode();
+            baseVersions.put(absPath, (VersionImp)baseVersion);
+            return (VersionImp)baseVersion;
+        }
         return baseVersions.get(absPath);
     }
 
