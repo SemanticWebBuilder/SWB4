@@ -28,11 +28,8 @@ public class TestRepository
     {
 
         SWBUtils.createInstance(TestRepository.class.getResource("/").getFile());
-
-        String base = SWBUtils.getApplicationPath();
-        //SemanticMgr.setSchemaModel(SemanticMgr.ModelSchema.OWL_DL_MEM_RDFS_INF);
+        String base = SWBUtils.getApplicationPath();        
         SWBPlatform.createInstance();
-
         SWBPlatform.getSemanticMgr().addBaseOntology(base + "../../../web/WEB-INF/owl/swb.owl");
         SWBPlatform.getSemanticMgr().addBaseOntology(base + "../../../web/WEB-INF/owl/jcr283.owl");
         SWBPlatform.getSemanticMgr().loadBaseVocabulary();
