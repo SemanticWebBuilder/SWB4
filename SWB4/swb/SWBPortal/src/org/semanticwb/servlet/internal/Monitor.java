@@ -33,11 +33,14 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.lang.management.*;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.management.InstanceNotFoundException;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
+import javax.management.openmbean.CompositeData;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -66,18 +69,33 @@ public class Monitor implements InternalServlet
     private Vector<SWBMonitorData> buffer;
     private Timer timer;
     private int max = 2500;
+    private int maxgc = 50;
     private int delays = 250;
     private TimerTask t = null;
     private SWBSummary summary = null;
     private SWBMonitorBeans monitorbeans = null;
+    private ConcurrentHashMap<String, BasureroCtl> basureros;
+    private Vector<CompositeData> basureroBuff;
+
+    private SWBGCDump dumper;
 //    private static MonitoredHost mh=null;
 //    private static MonitoredVm mvm = null;
+
+    
 
     public void init(ServletContext config) throws ServletException
     {
         log.event("Initializing InternalServlet Monitor...");
         monitorbeans = new SWBMonitorBeans();
         buffer = new Vector<SWBMonitorData>(max);
+        basureros = new ConcurrentHashMap<String, BasureroCtl>();
+        dumper = new SWBGCDump();
+        basureroBuff=new Vector<CompositeData>(maxgc);
+        for ( GarbageCollectorMXBean gc :dumper.getCollectors()){
+            basureros.put(gc.getName(), new BasureroCtl());
+            BasureroCtl actual =basureros.get(gc.getName());
+            
+        }
         t = new TimerTask()
         {
 
@@ -144,6 +162,18 @@ public class Monitor implements InternalServlet
             buffer.remove(0);
         }
         buffer.add(new SWBMonitorData(monitorbeans));
+        for (com.sun.management.GarbageCollectorMXBean gc :dumper.getCollectors()){
+            BasureroCtl basurero = basureros.get(gc.getName());
+            GcInfo gcinfo = gc.getLastGcInfo(); 
+            if (basurero.idx<gcinfo.getId()){
+                basurero.idx=gcinfo.getId();
+                if (basureroBuff.size()==maxgc){
+                    basureroBuff.remove(0);
+                }
+                basureroBuff.add(gcinfo.toCompositeData(gcinfo.getCompositeType()));
+            }
+
+        }
     }
 
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException
@@ -209,7 +239,22 @@ public class Monitor implements InternalServlet
         } catch (Exception ex)
         {
             ex.printStackTrace();
-        } 
+        }
+        buf = new ByteArrayOutputStream();
+        os = new ObjectOutputStream(buf);
+       os.writeObject(basureros);
+       os.close();
+       out.println(buf.toString().length());
+        is = new ObjectInputStream(new ByteArrayInputStream(buf.toByteArray()));
+        try
+        {
+            Vector<CompositeData> bas = (Vector<CompositeData>)is.readObject();
+            out.println(bas.size());
+
+        } catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
     }
 
     private void doMonitor()
@@ -386,3 +431,10 @@ public class Monitor implements InternalServlet
         return true;
     }
 }
+
+
+class BasureroCtl implements Serializable{
+        private static final long serialVersionUID = 33233L;
+        long idx=0;
+       // Vector<CompositeData> basureroBuff;
+    }

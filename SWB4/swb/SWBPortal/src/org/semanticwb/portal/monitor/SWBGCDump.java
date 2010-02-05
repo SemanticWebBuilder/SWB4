@@ -43,8 +43,8 @@ public class SWBGCDump
 
     private static List<GarbageCollectorMXBean> garbageCollectorMBeans = getGarbageCollectorMXBeans();
 
-    public GarbageCollectorMXBean[] getCollectors(){
-        return garbageCollectorMBeans.toArray(new GarbageCollectorMXBean[garbageCollectorMBeans.size()]);
+    public com.sun.management.GarbageCollectorMXBean[] getCollectors(){
+        return garbageCollectorMBeans.toArray(new com.sun.management.GarbageCollectorMXBean[garbageCollectorMBeans.size()]);
     }
 
     public static String getGc()
@@ -99,7 +99,7 @@ public class SWBGCDump
             ret.append("ID: " + id + "\n");
             ret.append("Hora Inicio: " + startTime + "\n");
             ret.append("Hora de Termino: " + endTime + "\n");
-            ret.append("Diraci&oacute;n: " + duration + "\n");
+            ret.append("Duraci&oacute;n: " + duration + "\n");
             Map mapBefore = gci.getMemoryUsageBeforeGc();
             Map mapAfter = gci.getMemoryUsageAfterGc();
 

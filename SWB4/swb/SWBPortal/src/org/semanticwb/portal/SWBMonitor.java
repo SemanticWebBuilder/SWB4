@@ -61,10 +61,14 @@ public class SWBMonitor
         t=new TimerTask(){
             public void run()
             {
-                _run();
+                try {
+                    _run();
+                } catch (java.lang.NullPointerException npe){
+                //Ignore, Posible NPE at Exit - MAPS74
+                }
             }
         };
-        timer = new Timer();
+        timer = new Timer("SWBMonitor("+max+","+delays+"s)", true);
         timer.schedule(t, delays*1000, delays*1000);
 
         log.event("Initializing SWBMonitor("+max+","+delays+"s)...");
