@@ -27,11 +27,12 @@ public class QueryManagerImp implements QueryManager
 
     public Query createQuery(String statement, String language) throws InvalidQueryException, RepositoryException
     {
-        if (!language.equalsIgnoreCase(QueryImp.SPARQL))
+        if (language.equalsIgnoreCase(SPARQLQuery.SPARQL))
         {
-            throw new InvalidQueryException("This implementation only accepts XPATH language");
+            return new SPARQLQuery(session, statement);
         }
-        return new QueryImp(session, statement, language);
+        throw new RepositoryException("The language "+language+" is not supported");
+        
     }
 
     public QueryObjectModelFactory getQOMFactory()

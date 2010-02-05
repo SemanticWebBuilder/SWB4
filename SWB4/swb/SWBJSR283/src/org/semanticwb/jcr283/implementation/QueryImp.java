@@ -4,7 +4,6 @@
  */
 package org.semanticwb.jcr283.implementation;
 
-import java.util.HashSet;
 import javax.jcr.ItemExistsException;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
@@ -18,43 +17,26 @@ import javax.jcr.query.InvalidQueryException;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryResult;
 import javax.jcr.version.VersionException;
-import org.semanticwb.platform.SemanticObject;
 
 /**
  *
  * @author victor.lorenzana
  */
-public class QueryImp implements Query
-{
+public abstract  class QueryImp implements Query
+{   
+    protected final String statement;
+    protected final String language;
+    protected final SessionImp session;
 
-    public static final String SPARQL = "SPARQL";
-    private static final String NL = "\r\n";
-    private StringBuilder prefixStatement = new StringBuilder("");
-    private final String statement;
-    private final String language;
-    private final SessionImp session;
-
-    public QueryImp(SessionImp session, String statement, String language) throws RepositoryException
+    public QueryImp(SessionImp session, String statement, String language)
     {
         this.session = session;
         this.statement = statement;
-        this.language = language;
-        for (String prefix : session.getNamespacePrefixes())
-        {
-            String uri = session.getNamespaceURI(prefix);
-            if (!uri.endsWith("#"))
-            {
-                uri += "#";
-            }
-            prefixStatement.append("PREFIX " + prefix + ": <" + uri + ">" + NL);
-        }
+        this.language = language;        
     }
 
-    public QueryResult execute() throws InvalidQueryException, RepositoryException
-    {
-        HashSet<SemanticObject> nodes = new HashSet<SemanticObject>();
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    public abstract QueryResult execute() throws InvalidQueryException, RepositoryException;
+    
 
     public void setLimit(long limit)
     {
@@ -68,12 +50,12 @@ public class QueryImp implements Query
 
     public String getStatement()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return statement;
     }
 
     public String getLanguage()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return language;
     }
 
     public String getStoredQueryPath() throws ItemNotFoundException, RepositoryException
