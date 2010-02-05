@@ -7,16 +7,22 @@ package org.semanticwb.jcr283.implementation;
 import java.util.HashSet;
 import java.util.UUID;
 import javax.jcr.AccessDeniedException;
+import javax.jcr.InvalidItemStateException;
+import javax.jcr.ItemExistsException;
 import javax.jcr.NodeIterator;
 import javax.jcr.ReferentialIntegrityException;
 import javax.jcr.RepositoryException;
 import javax.jcr.UnsupportedRepositoryOperationException;
+import javax.jcr.lock.LockException;
+import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.NoSuchNodeTypeException;
 import javax.jcr.version.LabelExistsVersionException;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionException;
 import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.jcr283.repository.model.Base;
 import org.semanticwb.model.GenericIterator;
 
@@ -26,8 +32,9 @@ import org.semanticwb.model.GenericIterator;
  */
 public class VersionHistoryImp extends NodeImp implements VersionHistory
 {
-    private static final String JCR_PREDECESSORS = "jcr:predecessors";
 
+    private final static Logger log = SWBUtils.getLogger(VersionHistoryImp.class);
+    private static final String JCR_PREDECESSORS = "jcr:predecessors";
     private static final String JCR_ROOT_VERSION_NAME = "jcr:rootVersion";
     private static final String JCR_SUCCESSORS = "jcr:successors";
     private static final String JCR_VERSIONABLE_UUID = "jcr:versionableUuid";
@@ -44,17 +51,25 @@ public class VersionHistoryImp extends NodeImp implements VersionHistory
         }
         String versionableId = prop.getString();
         versionableNode = (NodeImp) session.getNodeByIdentifier(versionableId);
-        GenericIterator<Base> childs = vh.listNodes();
-        while (childs.hasNext())
+        String childPathRootVersion = getPathFromName(JCR_ROOT_VERSION_NAME);
+        if (nodeManager.hasNode(childPathRootVersion))
         {
-            Base child = childs.next();
-            if (child.getName().equals(JCR_ROOT_VERSION_NAME))
+            jcr_rootVersion = (VersionImp) nodeManager.getProtectedNode(childPathRootVersion, session);
+        }
+        else
+        {
+            GenericIterator<Base> childs = vh.listNodes();
+            while (childs.hasNext())
             {
-                String childPath = getPathFromName(JCR_ROOT_VERSION_NAME);
-                org.semanticwb.jcr283.repository.model.Version versionNode = new org.semanticwb.jcr283.repository.model.Version(child.getSemanticObject());
-                jcr_rootVersion = new VersionImp(versionNode, this, this.getIndex() + 1, childPath, this.depth + 1, session);
-                nodeManager.addNode(jcr_rootVersion, childPath, path);
-                break;
+                Base child = childs.next();
+                if (child.getName().equals(JCR_ROOT_VERSION_NAME))
+                {
+
+                    org.semanticwb.jcr283.repository.model.Version versionNode = new org.semanticwb.jcr283.repository.model.Version(child.getSemanticObject());
+                    jcr_rootVersion = (VersionImp) createNodeImp(versionNode, this, this.getIndex() + 1, childPathRootVersion, session);
+                    nodeManager.addNode(jcr_rootVersion, childPathRootVersion, path);
+                    break;
+                }
             }
         }
         if (jcr_rootVersion == null)
@@ -74,7 +89,7 @@ public class VersionHistoryImp extends NodeImp implements VersionHistory
 
     public VersionHistoryImp(NodeDefinitionImp nodeDefinition, NodeImp parent, SessionImp session, NodeImp versionableNode) throws NoSuchNodeTypeException, RepositoryException
     {
-        super(SWBRepository.getNodeTypeManagerImp().getNodeTypeImp("nt:versionHistory"), nodeDefinition, "jcr:versionHistory", parent, 0, parent.path + PATH_SEPARATOR + "jcr:versionHistory", parent.getDepth() + 1, session, UUID.randomUUID().toString(),true);
+        super(SWBRepository.getNodeTypeManagerImp().getNodeTypeImp("nt:versionHistory"), nodeDefinition, "jcr:versionHistory", parent, 0, parent.path + PATH_SEPARATOR + "jcr:versionHistory", parent.getDepth() + 1, session, UUID.randomUUID().toString(), true);
         this.versionableNode = versionableNode;
         String path_jcr_rootVersion = this.getPathFromName(JCR_ROOT_VERSION_NAME);
         if (!nodeManager.hasNode(path_jcr_rootVersion))
@@ -91,26 +106,32 @@ public class VersionHistoryImp extends NodeImp implements VersionHistory
         {
             prop.set(new ValueFactoryImp().createValue(jcr_rootVersion));
         }
+
         session.getWorkspaceImp().getVersionManagerImp().setBaseVersion(jcr_rootVersion, versionableNode.path);
 
+        PropertyImp jcr_versionable_uuid = nodeManager.getProtectedProperty(this.getPathFromName(JCR_VERSIONABLE_UUID));
+        if (jcr_versionable_uuid.getLength() == -1)
+        {
+            jcr_versionable_uuid.set(valueFactoryImp.createValue(versionableNode.id));
+        }
     }
-
 
     NodeImp insertVersionNode(String nameToAdd) throws RepositoryException
     {
-       VersionImp newversion=(VersionImp)this.insertNode(nameToAdd, null);
-       newversion.init(versionableNode);
-       VersionImp baseverion=this.versionableNode.getBaseVersionImp();
+        VersionImp newversion = (VersionImp) this.insertNode(nameToAdd, null);
+        newversion.init(versionableNode);
+        VersionImp baseverion = this.versionableNode.getBaseVersionImp();
 
 
-       PropertyImp jcr_predecessors=nodeManager.getProtectedProperty(newversion.getPathFromName(JCR_PREDECESSORS));
-       jcr_predecessors.addValue(valueFactoryImp.createValue(baseverion));
-       
-       PropertyImp jcr_successors=nodeManager.getProtectedProperty(baseverion.getPathFromName(JCR_SUCCESSORS));
-       jcr_successors.addValue(valueFactoryImp.createValue(newversion));
+        PropertyImp jcr_predecessors = nodeManager.getProtectedProperty(newversion.getPathFromName(JCR_PREDECESSORS));
+        jcr_predecessors.addValue(valueFactoryImp.createValue(baseverion));
 
-       return newversion;
+        PropertyImp jcr_successors = nodeManager.getProtectedProperty(baseverion.getPathFromName(JCR_SUCCESSORS));
+        jcr_successors.addValue(valueFactoryImp.createValue(newversion));
+
+        return newversion;
     }
+
     @Deprecated
     public String getVersionableUUID() throws RepositoryException
     {
@@ -134,11 +155,11 @@ public class VersionHistoryImp extends NodeImp implements VersionHistory
 
     public VersionIterator getAllVersions() throws RepositoryException
     {
-        HashSet<VersionImp> getAllVersions=new HashSet<VersionImp>();
+        HashSet<VersionImp> getAllVersions = new HashSet<VersionImp>();
         nodeManager.loadChilds(this, session, false);
-        for(NodeImp node : nodeManager.getProtectedChildNodes(path))
+        for (NodeImp node : nodeManager.getProtectedChildNodes(path))
         {
-            getAllVersions.add((VersionImp)node);
+            getAllVersions.add((VersionImp) node);
         }
         return new VersionIteratorImp(getAllVersions);
     }
@@ -196,5 +217,12 @@ public class VersionHistoryImp extends NodeImp implements VersionHistory
     public void removeVersion(String versionName) throws ReferentialIntegrityException, AccessDeniedException, UnsupportedRepositoryOperationException, VersionException, RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void saveData() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
+    {
+        log.trace("Saving Version History node " + path);
+        super.saveData();
     }
 }

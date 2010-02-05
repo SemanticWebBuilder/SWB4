@@ -425,7 +425,7 @@ public class PropertyImp extends ItemImp implements Property
             }
             SemanticObject obj = parent.getSemanticObject();
             //log.trace("Saving property " + path + " for node " + parent.path + " values :" + values.size());
-
+            obj.removeProperty(prop);
             for (Value value : this.values)
             {
                 int type = value.getType();
@@ -434,7 +434,6 @@ public class PropertyImp extends ItemImp implements Property
                     case PropertyType.BINARY:
                         try
                         {
-
                             obj.setInputStreamProperty(prop, value.getBinary().getStream(), prop.getName());
                         }
                         catch (Exception e)
