@@ -7,6 +7,8 @@ import javax.jcr.Repository;
 import javax.jcr.RepositoryFactory;
 import javax.jcr.Session;
 import javax.jcr.version.Version;
+import javax.jcr.version.VersionHistory;
+import javax.jcr.version.VersionIterator;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 
@@ -54,6 +56,17 @@ public class TestRepository
                 System.out.println(node.isModified());
                 System.out.println(node.getIdentifier());
                 System.out.println(node.getPath());
+                if(node.isNodeType("mix:versionable"))
+                {
+                    VersionHistory history=session.getWorkspace().getVersionManager().getVersionHistory(node.getPath());
+                    VersionIterator itVersions=history.getAllVersions();
+                    while(itVersions.hasNext())
+                    {
+                        Version version=itVersions.nextVersion();
+                        System.out.println("Version : "+version.getName());
+
+                    }
+                }
             }
             Node demo = root.addNode("demo:demo");
             System.out.println(demo.isModified());
