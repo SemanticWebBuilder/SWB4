@@ -74,8 +74,9 @@ public class Monitor implements InternalServlet
     private TimerTask t = null;
     private SWBSummary summary = null;
     private SWBMonitorBeans monitorbeans = null;
-    private ConcurrentHashMap<String, BasureroCtl> basureros;
-    private Vector<CompositeData> basureroBuff;
+//    //Java 6.0
+//    private ConcurrentHashMap<String, BasureroCtl> basureros;
+//    private Vector<CompositeData> basureroBuff;
 
     private SWBGCDump dumper;
 //    private static MonitoredHost mh=null;
@@ -88,14 +89,16 @@ public class Monitor implements InternalServlet
         log.event("Initializing InternalServlet Monitor...");
         monitorbeans = new SWBMonitorBeans();
         buffer = new Vector<SWBMonitorData>(max);
-        basureros = new ConcurrentHashMap<String, BasureroCtl>();
+        
         dumper = new SWBGCDump();
-        basureroBuff=new Vector<CompositeData>(maxgc);
-        for ( GarbageCollectorMXBean gc :dumper.getCollectors()){
-            basureros.put(gc.getName(), new BasureroCtl());
-            BasureroCtl actual =basureros.get(gc.getName());
-            
-        }
+//        //Java 6.0
+//        basureros = new ConcurrentHashMap<String, BasureroCtl>();
+//        basureroBuff=new Vector<CompositeData>(maxgc);
+//        for ( GarbageCollectorMXBean gc :dumper.getCollectors()){
+//            basureros.put(gc.getName(), new BasureroCtl());
+//            BasureroCtl actual =basureros.get(gc.getName());
+//
+//        }
         t = new TimerTask()
         {
 
@@ -162,18 +165,19 @@ public class Monitor implements InternalServlet
             buffer.remove(0);
         }
         buffer.add(new SWBMonitorData(monitorbeans));
-        for (com.sun.management.GarbageCollectorMXBean gc :dumper.getCollectors()){
-            BasureroCtl basurero = basureros.get(gc.getName());
-            GcInfo gcinfo = gc.getLastGcInfo(); 
-            if (basurero.idx<gcinfo.getId()){
-                basurero.idx=gcinfo.getId();
-                if (basureroBuff.size()==maxgc){
-                    basureroBuff.remove(0);
-                }
-                basureroBuff.add(gcinfo.toCompositeData(gcinfo.getCompositeType()));
-            }
-
-        }
+//        //Java 6.0
+//        for (com.sun.management.GarbageCollectorMXBean gc :dumper.getCollectors()){
+//            BasureroCtl basurero = basureros.get(gc.getName());
+//            GcInfo gcinfo = gc.getLastGcInfo();
+//            if (basurero.idx<gcinfo.getId()){
+//                basurero.idx=gcinfo.getId();
+//                if (basureroBuff.size()==maxgc){
+//                    basureroBuff.remove(0);
+//                }
+//                basureroBuff.add(gcinfo.toCompositeData(gcinfo.getCompositeType()));
+//            }
+//
+//        }
     }
 
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException
@@ -240,21 +244,21 @@ public class Monitor implements InternalServlet
         {
             ex.printStackTrace();
         }
-        buf = new ByteArrayOutputStream();
-        os = new ObjectOutputStream(buf);
-       os.writeObject(basureros);
-       os.close();
-       out.println(buf.toString().length());
-        is = new ObjectInputStream(new ByteArrayInputStream(buf.toByteArray()));
-        try
-        {
-            Vector<CompositeData> bas = (Vector<CompositeData>)is.readObject();
-            out.println(bas.size());
-
-        } catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
+//        buf = new ByteArrayOutputStream();
+//        os = new ObjectOutputStream(buf);
+//       os.writeObject(basureros);
+//       os.close();
+//       out.println(buf.toString().length());
+//        is = new ObjectInputStream(new ByteArrayInputStream(buf.toByteArray()));
+//        try
+//        {
+//            Vector<CompositeData> bas = (Vector<CompositeData>)is.readObject();
+//            out.println(bas.size());
+//
+//        } catch (Exception ex)
+//        {
+//            ex.printStackTrace();
+//        }
     }
 
     private void doMonitor()
