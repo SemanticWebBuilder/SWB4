@@ -170,12 +170,16 @@ public class NodeManager
                         {
                             childpath += "[" + childIndex + "]";
                         }
-                        NodeImp temp = new NodeImp(base, parentloaded, childIndex, childpath, parentloaded.getDepth() + 1, session);
+                        NodeImp temp=NodeImp.createNodeImp(base, parentloaded, childIndex, childpath, session);
                         this.addNode(temp, path, childpath);
                         parentloaded = temp;
                     }
                 }
             }
+        }
+        if(nodesbyId.get(id)!=null)
+        {
+            return nodesbyId.get(id).getNode();
         }
         return null;
     }
