@@ -1,7 +1,6 @@
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Repository;
@@ -10,10 +9,8 @@ import javax.jcr.Session;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
-import org.apache.log4j.PropertyConfigurator;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.SWBUtils.IO;
 
 /*
  * To change this template, choose Tools | Templates
