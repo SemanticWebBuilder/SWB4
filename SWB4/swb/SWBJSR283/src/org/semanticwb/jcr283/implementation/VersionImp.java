@@ -112,13 +112,7 @@ public class VersionImp extends NodeImp implements Version
             }            
         }
     }
-
-    @Override
-    public void saveData() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
-    {
-        log.trace("Saving Version node "+path);
-        super.saveData();
-    }
+    
 
     public VersionHistory getContainingHistory() throws RepositoryException
     {

@@ -218,11 +218,5 @@ public class VersionHistoryImp extends NodeImp implements VersionHistory
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
-    @Override
-    public void saveData() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
-    {
-        log.trace("Saving Version History node " + path);
-        super.saveData();
-    }
+   
 }
