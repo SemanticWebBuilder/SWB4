@@ -306,10 +306,15 @@ public class PropertyImp extends ItemImp implements Property
                 throw new ItemNotFoundException();
             }
             String id = values.get(0).getString();
+
             NodeImp node = (NodeImp) session.getNodeByIdentifier(id);
             if (node == null)
             {
-                throw new ItemNotFoundException();
+                node=nodeManager.getNodeByIdentifier(id, session);
+                if (node == null)
+                {
+                    throw new ItemNotFoundException();
+                }
             }
             return node;
         }

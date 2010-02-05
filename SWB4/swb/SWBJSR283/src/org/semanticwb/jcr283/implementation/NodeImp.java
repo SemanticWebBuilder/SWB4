@@ -339,12 +339,11 @@ public class NodeImp extends ItemImp implements Node
         if (obj == null)
         {
             // create new Node
-            SemanticClass sclass = this.nodeType.getSemanticClass();
-            String newid = UUID.randomUUID().toString();
+            SemanticClass sclass = this.nodeType.getSemanticClass();            
             String workspacename = session.getWorkspaceImp().getName();
             org.semanticwb.jcr283.repository.model.Workspace model = org.semanticwb.jcr283.repository.model.Workspace.ClassMgr.getWorkspace(workspacename);
             //log.trace("Creating a node with id :" + newid + " and class " + sclass.getURI());
-            obj = model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(newid, sclass), sclass).getSemanticObject();
+            obj = model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass).getSemanticObject();
             base = new Base(obj);
             base.setName(this.name);
         }
