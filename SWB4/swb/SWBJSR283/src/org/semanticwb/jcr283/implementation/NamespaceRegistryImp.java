@@ -33,7 +33,7 @@ public class NamespaceRegistryImp implements NamespaceRegistry {
         for(String key : nsPrefixMap.keySet())
         {
             String value=nsPrefixMap.get(key);
-            //log.trace("Loading prefix "+ key +" for uri "+value);
+            log.trace("Loading prefix "+ key +" for uri "+value);
             values.put(key, value);
         }
     }

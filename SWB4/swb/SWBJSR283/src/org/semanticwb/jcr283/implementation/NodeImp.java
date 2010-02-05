@@ -165,7 +165,7 @@ public class NodeImp extends ItemImp implements Node
         PropertyImp prop = nodeManager.getProtectedProperty(getPathFromName(JCR_VERSION_HISTORY));
         if (prop.getLength() == -1)
         {
-            //log.trace("Initilizing versionHistory for node " + path);            
+            log.trace("Initilizing versionHistory for node " + path);            
             NodeImp jcr_version_Storage = versionManagerImp.getVersionStorage();
             if (jcr_version_Storage == null)
             {
@@ -320,7 +320,7 @@ public class NodeImp extends ItemImp implements Node
             SemanticClass sclass = this.nodeType.getSemanticClass();
             String workspacename = session.getWorkspaceImp().getName();
             org.semanticwb.jcr283.repository.model.Workspace model = org.semanticwb.jcr283.repository.model.Workspace.ClassMgr.getWorkspace(workspacename);
-            //log.trace("Creating a node with id :" + newid + " and class " + sclass.getURI());
+            log.trace("Creating a semantic node node with id :" + id + " and class " + sclass.getURI());
             obj = model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass).getSemanticObject();
             base = new Base(obj);
             base.setName(this.name);
@@ -406,7 +406,7 @@ public class NodeImp extends ItemImp implements Node
                             String pathProperty = getPathFromName(nameProperty);
                             if (!nodeManager.hasProperty(pathProperty))
                             {
-                                //log.trace("loading property " + pathProperty + " for node " + path);
+                                log.trace("loading property " + pathProperty + " for node " + path);
                                 PropertyImp prop = new PropertyImp(semanticProperty, this, pathProperty, this.session);
                                 prop.loadValues();
                                 nodeManager.addProperty(prop, prop.path, this.path, replace);
@@ -438,7 +438,7 @@ public class NodeImp extends ItemImp implements Node
                     String pathProperty = getPathFromName(nameProperty);
                     if (!nodeManager.hasProperty(pathProperty))
                     {
-                        //log.trace("loading property " + pathProperty + " for node " + path);
+                        log.trace("Loading property " + pathProperty + " for node " + path);
                         PropertyImp prop = new PropertyImp(semanticProperty, this, pathProperty, this.session);
                         nodeManager.addProperty(prop, prop.path, this.path, false);
                     }
@@ -545,7 +545,7 @@ public class NodeImp extends ItemImp implements Node
         {
             childpath += "[" + childIndex + "]";
         }
-        //log.trace("Creating the node " + nameToAdd);
+        log.trace("Creating the node " + nameToAdd);
         NodeImp newChild = createNodeImp(primaryNodeType, childDefinition, nameToAdd, this, childIndex, childpath, session, newId);
         this.isModified = true;
         return nodeManager.addNode(newChild, childpath, path);
@@ -976,7 +976,7 @@ public class NodeImp extends ItemImp implements Node
                 String pathProperty = getPathFromName(nameProperty);
                 if (!nodeManager.hasProperty(pathProperty))
                 {
-                    //log.trace("loading property " + pathProperty + " for node " + path);
+                    log.trace("Loading property " + pathProperty + " for node " + path);
                     PropertyImp propMix = new PropertyImp(semanticProperty, this, pathProperty, session);
                     nodeManager.addProperty(propMix, propMix.path, path, false);
                 }

@@ -49,7 +49,7 @@ public class NodeManager
     {
         if (!nodes.containsKey(PATH_SEPARATOR))
         {
-            //log.trace("Loading root node for repository " + ws.getName());
+            log.trace("Loading root node for repository " + ws.getName());
             if (ws.getRoot() == null)
             {
                 Root newroot = Root.ClassMgr.createRoot("jcr:root", ws);
@@ -192,7 +192,7 @@ public class NodeManager
 
     public NodeImp addNode(NodeImp node, String path, String pathParent)
     {
-        //log.trace("Inserting node " + path + " into the NodeManager");
+        log.trace("Inserting node " + path + " into the NodeManager");
         NodeStatus nodestatus = null;
         if (this.nodes.containsKey(path))
         {
