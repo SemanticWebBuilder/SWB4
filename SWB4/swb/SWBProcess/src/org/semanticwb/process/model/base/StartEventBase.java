@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class StartEventBase extends org.semanticwb.process.model.Event implements org.semanticwb.process.model.Catchable,org.semanticwb.process.model.Assignable,org.semanticwb.model.Descriptiveable
+public abstract class StartEventBase extends org.semanticwb.process.model.Event implements org.semanticwb.process.model.Assignable,org.semanticwb.model.Descriptiveable
 {
        public static final org.semanticwb.platform.SemanticClass swp_StartEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#StartEvent");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#StartEvent");
@@ -45,17 +45,6 @@ public abstract class StartEventBase extends org.semanticwb.process.model.Event 
        {
            return (getStartEvent(id, model)!=null);
        }
-   public static java.util.Iterator<org.semanticwb.process.model.StartEvent> listStartEventByTrigger(org.semanticwb.process.model.EventDetail hastrigger,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.StartEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasTrigger, hastrigger.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.process.model.StartEvent> listStartEventByTrigger(org.semanticwb.process.model.EventDetail hastrigger)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.model.StartEvent> it=new org.semanticwb.model.GenericIterator(hastrigger.getSemanticObject().getModel().listSubjects(swp_hasTrigger,hastrigger.getSemanticObject()));
-       return it;
-   }
    public static java.util.Iterator<org.semanticwb.process.model.StartEvent> listStartEventByAssignment(org.semanticwb.process.model.Assignment hasassignment,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.process.model.StartEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swp_hasAssignment, hasassignment.getSemanticObject()));
@@ -83,43 +72,5 @@ public abstract class StartEventBase extends org.semanticwb.process.model.Event 
     public StartEventBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.EventDetail> listTriggers()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.EventDetail>(getSemanticObject().listObjectProperties(swp_hasTrigger));
-    }
-
-    public boolean hasTrigger(org.semanticwb.process.model.EventDetail eventdetail)
-    {
-        if(eventdetail==null)return false;
-        return getSemanticObject().hasObjectProperty(swp_hasTrigger,eventdetail.getSemanticObject());
-    }
-
-    public void addTrigger(org.semanticwb.process.model.EventDetail value)
-    {
-        getSemanticObject().addObjectProperty(swp_hasTrigger, value.getSemanticObject());
-    }
-
-    public void removeAllTrigger()
-    {
-        getSemanticObject().removeProperty(swp_hasTrigger);
-    }
-
-    public void removeTrigger(org.semanticwb.process.model.EventDetail eventdetail)
-    {
-        getSemanticObject().removeObjectProperty(swp_hasTrigger,eventdetail.getSemanticObject());
-    }
-
-
-    public org.semanticwb.process.model.EventDetail getTrigger()
-    {
-         org.semanticwb.process.model.EventDetail ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_hasTrigger);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.process.model.EventDetail)obj.createGenericInstance();
-         }
-         return ret;
     }
 }
