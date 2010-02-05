@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class EmbeddedSubProcessBase extends org.semanticwb.process.model.SubProcess implements org.semanticwb.process.model.StandardLoopable,org.semanticwb.process.model.MultiInstantiable,org.semanticwb.process.model.Modelable,org.semanticwb.process.model.Observable,org.semanticwb.process.model.Assignable,org.semanticwb.process.model.Diagramable,org.semanticwb.process.model.Performable,org.semanticwb.process.model.IOAble,org.semanticwb.model.Descriptiveable
+public abstract class EmbeddedSubProcessBase extends org.semanticwb.process.model.SubProcess implements org.semanticwb.process.model.Modelable,org.semanticwb.process.model.MultiInstantiable,org.semanticwb.process.model.IOAble,org.semanticwb.process.model.StandardLoopable,org.semanticwb.process.model.Observable,org.semanticwb.process.model.Assignable,org.semanticwb.process.model.Performable,org.semanticwb.process.model.Diagramable,org.semanticwb.model.Descriptiveable
 {
        public static final org.semanticwb.platform.SemanticClass swp_EmbeddedSubProcess=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#EmbeddedSubProcess");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#EmbeddedSubProcess");

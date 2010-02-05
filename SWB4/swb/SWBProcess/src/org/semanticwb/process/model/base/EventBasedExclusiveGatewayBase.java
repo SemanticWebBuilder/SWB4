@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class EventBasedExclusiveGatewayBase extends org.semanticwb.process.model.ExclusiveGateway implements org.semanticwb.process.model.Gateable,org.semanticwb.process.model.Assignable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Instantiable
+public abstract class EventBasedExclusiveGatewayBase extends org.semanticwb.process.model.ExclusiveGateway implements org.semanticwb.process.model.Gateable,org.semanticwb.process.model.Instantiable,org.semanticwb.process.model.Assignable,org.semanticwb.model.Descriptiveable
 {
        public static final org.semanticwb.platform.SemanticClass swp_EventBasedExclusiveGateway=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#EventBasedExclusiveGateway");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#EventBasedExclusiveGateway");
