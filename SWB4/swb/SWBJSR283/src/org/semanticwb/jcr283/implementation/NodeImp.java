@@ -152,8 +152,7 @@ public class NodeImp extends ItemImp implements Node
         {
             if (this.isVersionable())
             {
-                initVersionHistory();
-                initVersionBase();
+                initVersionHistory();                
             }
         }
         catch (RepositoryException re)
@@ -161,25 +160,7 @@ public class NodeImp extends ItemImp implements Node
             log.error(re);
         }
     }
-
-    private void initVersionBase() throws RepositoryException
-    {
-        String pathBaseVersion = this.getPathFromName(JCR_BASE_VERSION);
-        PropertyImp prop = nodeManager.getProtectedProperty(pathBaseVersion);
-        if (prop.getLength() != -1)
-        {
-            Node node = prop.getNode();
-            if (node instanceof VersionImp)
-            {
-                versionManagerImp.setBaseVersion((VersionImp) node, path);
-            }
-            else
-            {
-                throw new RepositoryException("The baseVersion is not a version node");
-            }
-        }
-
-    }
+    
 
     private void initVersionHistory() throws RepositoryException
     {
@@ -193,8 +174,7 @@ public class NodeImp extends ItemImp implements Node
             {
                 throw new RepositoryException("The version storage was not found");
             }
-            VersionHistoryImp history = new VersionHistoryImp(versionDefinition, jcr_version_Storage, session, this);
-            versionManagerImp.addVersionHistory(history,this);
+            VersionHistoryImp history = new VersionHistoryImp(versionDefinition, jcr_version_Storage, session, this);            
             prop.set(valueFactoryImp.createValue(history));            
             nodeManager.addNode(history, history.path, path);
 
@@ -1124,7 +1104,7 @@ public class NodeImp extends ItemImp implements Node
             throw new UnsupportedRepositoryOperationException("The node must be saved before, because has changes or is new");
         }
         VersionHistoryImp history = (VersionHistoryImp) versionManagerImp.getVersionHistory(this.path);
-        Version obaseVersion = this.session.getWorkspaceImp().getVersionManagerImp().getBaseVersion(path);
+        VersionImp obaseVersion = this.getBaseVersionImp();
 
         float versionnumber = 1.0f;
         if (!obaseVersion.getName().equals("jcr:rootVersion"))
@@ -1269,13 +1249,12 @@ public class NodeImp extends ItemImp implements Node
         {
             throw new UnsupportedRepositoryOperationException(THE_NODE_IS_NOT_VERSIONABLE);
         }
-        VersionImp version = versionManagerImp.getBaseVersionImp(path);
-        if (version == null)
-        {
-            throw new RepositoryException("The base Version was not found");
-        }
+        PropertyImp jcr_baseVersion=nodeManager.getProtectedProperty(getPathFromName("jcr:baseVersion"));
+        VersionImp version=(VersionImp)jcr_baseVersion.getNode();
         return version;
     }
+
+    
 
     @Deprecated
     public Version getBaseVersion() throws UnsupportedRepositoryOperationException, RepositoryException
