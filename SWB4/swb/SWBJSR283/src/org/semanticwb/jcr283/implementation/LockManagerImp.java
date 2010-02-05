@@ -53,7 +53,7 @@ public class LockManagerImp implements LockManager {
 
     public Lock lock(String absPath, boolean isDeep, boolean isSessionScoped, long timeoutHint, String ownerInfo) throws LockException, PathNotFoundException, AccessDeniedException, InvalidItemStateException, RepositoryException
     {
-        NodeStatus status=nodeManager.getNodeStatus(absPath);
+        NodeManager.NodeStatus status=nodeManager.getNodeStatus(absPath);
         if(status==null)
         {
             throw new PathNotFoundException("The path "+absPath+" was not found");
@@ -62,13 +62,13 @@ public class LockManagerImp implements LockManager {
         {
             throw new InvalidItemStateException("Tne node is already locked");
         }
-        status.lock();
+        status.lock(isDeep,isSessionScoped);
         return new LockImp(session, status.getNode(), this);
     }
 
     public boolean isLocked(String absPath) throws PathNotFoundException, RepositoryException
     {
-        NodeStatus status=nodeManager.getNodeStatus(absPath);
+        NodeManager.NodeStatus status=nodeManager.getNodeStatus(absPath);
         if(status==null)
         {
             throw new PathNotFoundException("The path "+absPath+" was not found");
@@ -83,7 +83,7 @@ public class LockManagerImp implements LockManager {
 
     public void unlock(String absPath) throws PathNotFoundException, LockException, AccessDeniedException, InvalidItemStateException, RepositoryException
     {
-        NodeStatus status=nodeManager.getNodeStatus(absPath);
+        NodeManager.NodeStatus status=nodeManager.getNodeStatus(absPath);
         if(status==null)
         {
             throw new PathNotFoundException("The path "+absPath+" was not found");
