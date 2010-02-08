@@ -34,6 +34,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.GenericAdmResource;
@@ -105,7 +106,8 @@ public class WBMenu extends GenericAdmResource
      */
     public org.w3c.dom.Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
     {
-        Resource base=getResourceBase();
+        User user=paramRequest.getUser();
+        Resource base=paramRequest.getResourceBase();
         try
         {   
             boolean onlychilds=new Boolean(paramRequest.getArgument("onlychilds","false")).booleanValue();
@@ -133,8 +135,7 @@ public class WBMenu extends GenericAdmResource
             topicCurrent.setAttribute("path", tpid.getUrl());
             el.appendChild(topicCurrent);
             WebPage padre=padre = tpid.getParent();
-            //if(!onlychilds && padre!=null && padre.isVisible() && user.haveAccess(padre)) //TODO VER 4
-            if(!onlychilds && padre!=null && padre.isVisible())
+            if(!onlychilds && padre!=null && padre.isVisible() && user.haveAccess(padre))
             {
                 Element epadre = dom.createElement("parent");
                 epadre.setAttribute("id", padre.getId());
@@ -149,7 +150,7 @@ public class WBMenu extends GenericAdmResource
                 while(itehermanos.hasNext())
                 {
                     WebPage tphermano=itehermanos.next();
-                    //if(user.haveAccess(tphermano))    //TODO
+                    if(user.haveAccess(tphermano))
                     {
                         Element ehermano = dom.createElement("brother");
                         ehermano.setAttribute("id", tphermano.getId());
@@ -196,7 +197,7 @@ public class WBMenu extends GenericAdmResource
                 while (hijos.hasNext()) 
                 {
                     WebPage hijo = hijos.next();
-                    //if(user.haveAccess(hijo)) TODO: VER 4
+                    if(user.haveAccess(hijo))
                     {
                         Element ehijo = dom.createElement("child");
                         ehijo.setAttribute("id", hijo.getId());
