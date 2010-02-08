@@ -1024,7 +1024,6 @@ public class WBALoginReport extends GenericResource {
             sb_app.append("<param name=\"ndata\" value=\""+ ds.getRecordCount() +"\">");
         }else { // by each month
             String repositoryId = request.getParameter("wb_repository")!=null?request.getParameter("wb_repository") : (String)request.getAttribute("wb_repository");
-            System.out.println("WBALoginReport.repositorio="+repositoryId);
             int year13;
             try {
                 year13 = Integer.parseInt(request.getParameter("wb_year13"));

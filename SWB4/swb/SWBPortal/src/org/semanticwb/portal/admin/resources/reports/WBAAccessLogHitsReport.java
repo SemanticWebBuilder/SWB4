@@ -30,8 +30,6 @@ import java.text.SimpleDateFormat;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
@@ -93,11 +91,11 @@ public class WBAAccessLogHitsReport extends GenericResource {
             doRenderUserTypeSelect(request, response, paramsRequest);
         }else if(paramsRequest.getMode().equals("report_detail")) {
             doDetail(request,response,paramsRequest);
-        }else if(mode.equalsIgnoreCase("report_excel")) {
+        }else if(mode.equalsIgnoreCase("xls")) {
             doRepExcel(request, response, paramsRequest);
-        }else if(mode.equalsIgnoreCase("report_xml")) {
+        }else if(mode.equalsIgnoreCase("xml")) {
             doRepXml(request, response, paramsRequest);
-        }else if(mode.equalsIgnoreCase("graph")) {
+        }else if(mode.equalsIgnoreCase("histogram")) {
             doGraph(request, response, paramsRequest);
         }else {
             super.processRequest(request, response, paramsRequest);
@@ -120,17 +118,17 @@ public class WBAAccessLogHitsReport extends GenericResource {
         }
         devs.trimToSize();
 
-        ret.append("<select name=\"wb_devid\" id=\"wb_devid\" size=\"6\" >\n");
+        ret.append("<select name=\"wb_devid\" id=\"wb_devid\" size=\"6\" >");
         while(!devs.isEmpty()) {
             Device device = devs.get(0);
             ret.append("<option value=\""+device.getId()+"\"");
-            ret.append(">"+space+device.getDisplayTitle(language)+"</option>\n");
+            ret.append(">"+space+device.getDisplayTitle(language)+"</option>");
             devs.remove(0);
             if(device.listChilds().hasNext()) {
                 renderDeviceSelect(devs, device, language, ret, space+"&nbsp;&nbsp;&nbsp;");
             }
         }
-        ret.append("</select>\n");
+        ret.append("</select>");
         request.getSession(true).removeAttribute("devs");
 
         PrintWriter out = response.getWriter();
@@ -150,7 +148,7 @@ public class WBAAccessLogHitsReport extends GenericResource {
         while(!devs.isEmpty()) {
             Device device = devs.get(0);
             ret.append("<option value=\""+device.getId()+"\"");
-            ret.append(">"+space+device.getDisplayTitle(language)+"</option>\n");
+            ret.append(">"+space+device.getDisplayTitle(language)+"</option>");
             origList.remove(device);
             devs.remove(0);
             if(device.listChilds().hasNext()) {
@@ -289,10 +287,8 @@ public class WBAAccessLogHitsReport extends GenericResource {
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
-        final int I_ACCESS = 0;
         Resource base = paramsRequest.getResourceBase();
         StringBuilder ret = new StringBuilder();
-
         HashMap hm_sites = new HashMap();
 
         try {
@@ -306,7 +302,7 @@ public class WBAAccessLogHitsReport extends GenericResource {
                 }
             }
             // If there are sites continue
-            if(hm_sites.size() > I_ACCESS) {
+            if(hm_sites.size() > 0) {
                 String address = paramsRequest.getWebPage().getUrl();
                 String websiteId = request.getParameter("wb_site")==null ? (String)hm_sites.keySet().iterator().next():request.getParameter("wb_site");
                 String repositoryName = SWBContext.getWebSite(websiteId).getUserRepository().getDisplayTitle(paramsRequest.getUser().getLanguage());
@@ -371,9 +367,9 @@ public class WBAAccessLogHitsReport extends GenericResource {
                 ret.append("   gridMaster.startup();\n");
                 ret.append("});\n");
 
-ret.append("function fillReportDetalled(evt) {\n");
-ret.append("  doDetail('width=860, height=580, scrollbars, resizable, alwaysRaised, menubar',evt.grid.store.getValue(evt.grid.getItem(evt.rowIndex),'date')); \n");
-ret.append("}\n");
+                ret.append("function fillReportDetalled(evt) {\n");
+                ret.append("  doDetail('width=860, height=580, scrollbars, resizable, alwaysRaised, menubar',evt.grid.store.getValue(evt.grid.getItem(evt.rowIndex),'date')); \n");
+                ret.append("}\n");
 
                 ret.append("function getParams() {\n");
                 ret.append("   var params = '?';\n");
@@ -435,28 +431,28 @@ ret.append("}\n");
                 ret.append("function doDetail(size, key) { \n");
                 ret.append("   var params = getParams();\n");
                 ret.append("   params += '&key='+key;\n");
-                ret.append("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_detail")+"\"+params,\"detailWindow\", size);\n");
+                ret.append("   window.open(\""+url.setMode("report_detail")+"\"+params,\"detailWindow\", size);\n");
                 ret.append("}\n");
                 
                 ret.append("function doGraph(accion, size) {\n");
                 ret.append("   var params = getParams();\n");
-                ret.append("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("graph")+"\"+params,\"graphWindow\",size);\n");
+                ret.append("   window.open(\""+url.setMode("histogram")+"\"+params,\"graphWindow\",size);\n");
                 ret.append("}\n");
 
                 ret.append("function doExcel(accion, size) {\n");
                 ret.append("   var params = getParams();\n");
-                ret.append("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_excel")+"\"+params,\"graphWindow\",size);\n");
+                ret.append("   window.open(\""+url.setMode("xls")+"\"+params,\"graphWindow\",size);\n");
                 ret.append("}\n");
 
                 ret.append("function doXml(accion, size) {\n");
                 ret.append("   var params = getParams();\n");
-                ret.append("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_xml")+"\"+params,\"graphWindow\",size);\n");
+                ret.append("   window.open(\""+url.setMode("xml")+"\"+params,\"graphWindow\",size);\n");
                 ret.append("}\n");
 
                 ret.append("</script>\n");
 
                 ret.append("<div class=\"swbform\">\n");
-                ret.append("<form method=\"Post\" class=\"box\" action=\"" + address + "\" id=\"frmrep\" name=\"frmrep\">\n");
+                ret.append("<form method=\"Post\" class=\"box\" action=\"\" id=\"frmrep\" name=\"frmrep\">\n");
                 ret.append("<fieldset>\n");
                 ret.append("<table border=\"0\" width=\"95%\" align=\"center\">\n");
                 ret.append("<tr><td width=\"200\"></td><td width=\"200\"></td><td width=\"200\"></td><td width=\"200\"></td></tr>\n");
@@ -481,7 +477,7 @@ ret.append("}\n");
                 ret.append("</tr>\n");
                 
                 ret.append("<tr>\n");
-                ret.append("<td>"+paramsRequest.getLocaleString("by_interval_date")+":&nbsp;</td>\n");
+                ret.append("<td>"+paramsRequest.getLocaleString("by_range")+":&nbsp;</td>\n");
                 ret.append("<td>&nbsp;</td>\n");
                 ret.append("<td>&nbsp;</td>\n");
                 ret.append("<td>&nbsp;</td>\n");
@@ -492,8 +488,6 @@ ret.append("}\n");
                 ret.append("<td align=\"left\" colspan=\"2\">\n");
                 ret.append("<label for=\"wb_fecha11\">Del:&nbsp;</label>\n");
                 ret.append("<input type=\"text\" name=\"wb_fecha11\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha11\" value=\""+sdf.format(now.getTime())+"\" dojoType=\"dijit.form.DateTextBox\" required=\"true\" constraints=\"{datePattern:'dd/MM/yyyy'}\" maxlength=\"10\" style=\"width:110px;\" hasDownArrow=\"true\" />\n");
-                /*ret.append("</td>\n");
-                ret.append("<td>\n");*/
                 ret.append("&nbsp;&nbsp;");
                 ret.append("<label for=\"wb_t11\">Tiempo:&nbsp;</label>\n");
                 ret.append("<input type=\"text\" name=\"wb_t11\" id=\"wb_t11\" size=\"6\" style=\"width:40px;\" />\n");
@@ -506,8 +500,6 @@ ret.append("}\n");
                 ret.append("<td align=\"left\" colspan=\"2\">\n");
                 ret.append("<label for=\"wb_fecha12\">&nbsp;&nbsp;Al:&nbsp;</label>\n");
                 ret.append("<input type=\"text\" name=\"wb_fecha12\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha12\" value=\""+sdf.format(now.getTime())+"\" dojoType=\"dijit.form.DateTextBox\" required=\"true\" constraints=\"{datePattern:'dd/MM/yyyy'}\" maxlength=\"10\" style=\"width:110px;\" hasDownArrow=\"true\" />\n");
-                /*ret.append("</td>\n");
-                ret.append("<td>\n");*/
                 ret.append("&nbsp;&nbsp;");
                 ret.append("<label for=\"wb_t12\">Tiempo:&nbsp;</label>\n");
                 ret.append("<input name=\"wb_t12\" id=\"wb_t12\" />\n");
@@ -593,8 +585,8 @@ ret.append("}\n");
                 ret.append(" <tr>\n");
                 ret.append("     <td colspan=\"4\">&nbsp;&nbsp;&nbsp;\n");
                 ret.append("     <button dojoType=\"dijit.form.Button\" onClick=\"doXml('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">XML</button>&nbsp;\n");
-                ret.append("     <button dojoType=\"dijit.form.Button\" onClick=\"doExcel('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">MS Excel</button>&nbsp;\n");
-                ret.append("     <button dojoType=\"dijit.form.Button\" onClick=\"doGraph('width=600, height=550, scrollbars, resizable')\">"+paramsRequest.getLocaleString("graph")+"</button>&nbsp;\n");
+                ret.append("     <button dojoType=\"dijit.form.Button\" onClick=\"doExcel('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">"+paramsRequest.getLocaleString("spread_sheet")+"</button>&nbsp;\n");
+                ret.append("     <button dojoType=\"dijit.form.Button\" onClick=\"doGraph('width=600, height=550, scrollbars, resizable')\">"+paramsRequest.getLocaleString("histogram")+"</button>&nbsp;\n");
                 ret.append("     <button dojoType=\"dijit.form.Button\" onClick=\"doApply()\">"+paramsRequest.getLocaleString("apply")+"</button>\n");
                 ret.append("     </td>\n");
                 ret.append(" </tr>\n");
@@ -692,8 +684,8 @@ ret.append("}\n");
         out.println("            <th width=\"7%\" field=\"ipuser\">"+paramsRequest.getLocaleString("th_IPuser")+"</th>");
         out.println("            <th width=\"7%\" field=\"ipserver\">"+paramsRequest.getLocaleString("th_IPserver")+"</th>");
         out.println("            <th width=\"7%\" field=\"sessid\">"+paramsRequest.getLocaleString("th_IDsession")+"</th>");
-        out.println("            <th width=\"7%\" field=\"siteid\">"+paramsRequest.getLocaleString("th_TopicMap")+"</th>");
-        out.println("            <th width=\"7%\" field=\"sectid\">"+paramsRequest.getLocaleString("th_Topic")+"</th>");
+        out.println("            <th width=\"7%\" field=\"siteid\">"+paramsRequest.getLocaleString("th_Portal")+"</th>");
+        out.println("            <th width=\"7%\" field=\"sectid\">"+paramsRequest.getLocaleString("th_Section")+"</th>");
         out.println("            <th width=\"7%\" field=\"rep\">"+paramsRequest.getLocaleString("th_Repository")+"</th>");
         out.println("            <th width=\"7%\" field=\"user\">"+paramsRequest.getLocaleString("th_User")+"</th>");
         out.println("            <th width=\"7%\" field=\"usertype\">"+paramsRequest.getLocaleString("th_UserType")+"</th>");
@@ -743,15 +735,14 @@ ret.append("}\n");
             ret.append("    function doClose() {\n");
             ret.append("        window.close();\n");
             ret.append("    }\n");
-
             ret.append("</script>\n");
             ret.append("</head>\n");
 
             ret.append("<body class=\"soria\">\n");
-            ret.append("<div class=\"swbform\">\n");
-            ret.append("<form>");
-            ret.append("<fieldset>\n");
-            ret.append("<table border=\"0\" width=\"560\" height=\"460\">\n");
+//            ret.append("<div class=\"swbform\">\n");
+//            ret.append("<form>");
+//            ret.append("<fieldset>\n");
+            ret.append("<table border=\"0\" width=\"98%\" height=\"460\">\n");
             ret.append("<tr>\n");
             ret.append("<td colspan=\"3\"><img src=\""+SWBPlatform.getContextPath()+"/swbadmin/images/swb-logo-hor.jpg\" width=\"180\" height=\"36\" /></td>\n");
             ret.append("</tr>\n");
@@ -770,7 +761,7 @@ ret.append("}\n");
             int ndata = 0;
             ar_pag = getReportResults(request, paramsRequest);
             if(ar_pag.hasNext()) {
-                ret.append("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+SWBPlatform.getContextPath()+"/swbadmin/lib/SWBAplGraph.jar\" width=\"550\" height=\"450\">\n");
+                ret.append("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+SWBPlatform.getContextPath()+"/swbadmin/lib/SWBAplGraph.jar\" width=\"98%\" height=\"450\">\n");
                 ret.append("<param name=\"GraphType\" value=\"Lines\">\n");
                 ret.append("<param name=\"ncdata\" value=\"1\">\n");
                 ret.append("<param name=\"percent\" value=\"false\">\n");
@@ -788,15 +779,15 @@ ret.append("}\n");
                 ret.append("<param name=\"zoom\" value=\"true\">\n");
                 ret.append("</APPLET>\n");
             }else {
-                ret.append(paramsRequest.getLocaleString("no_records_found"));
+                ret.append(paramsRequest.getLocaleString("no_records"));
             }
 
             ret.append("</td>\n");
             ret.append("</tr>\n");
             ret.append("</table>\n");
-            ret.append("</fieldset>\n");
-            ret.append("</form>");
-            ret.append("</div>\n");
+//            ret.append("</fieldset>\n");
+//            ret.append("</form>");
+//            ret.append("</div>\n");
             ret.append("</body>\n");
             ret.append("</html>\n");
         }
@@ -844,7 +835,7 @@ ret.append("}\n");
                     out.println("</tr>");
                 }
             }else { // There are not records
-                out.println("<center><br><font color=\"black\">" + paramsRequest.getLocaleString("no_records_found") + "</font></center>");
+                out.println("<center><br><font color=\"black\">" + paramsRequest.getLocaleString("no_records") + "</font></center>");
             }
             out.println("</table>");
             
@@ -1264,7 +1255,7 @@ ret.append("}\n");
                             //4-s_aux receives website id, this value no matter
                             //5-s_aux receives section id
                             webpage = website.getWebPage(t[5]);
-                            if( sectionId!=null && !t[5].equalsIgnoreCase(sectionId) && (!includeSubsection || null==webpage || !sectionParent.isParentof(webpage)) ) {
+                            if(  sectionId!=null && (!t[5].equalsIgnoreCase(sectionId) || (!includeSubsection && sectionParent==null && sectionParent.isParentof(webpage)  ) ) ) {
                                 continue;
                             }
                             //6-s_aux receives repository id, this value no matter
