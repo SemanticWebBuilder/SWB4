@@ -5,11 +5,13 @@
 
 package org.semanticwb.jcr283.implementation;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.query.QueryResult;
+import javax.jcr.query.Row;
 import javax.jcr.query.RowIterator;
 /**
  *
@@ -19,18 +21,22 @@ public class QueryResultImp implements QueryResult{
 
     
     private final Set<NodeImp> nodes;
-    public QueryResultImp(Set<NodeImp> nodes)
+    private final String[] columnNames;
+    private final ArrayList<RowImp> rows;
+    public QueryResultImp(Set<NodeImp> nodes,String[] ColumnNames,ArrayList<RowImp> rows)
     {        
         this.nodes=nodes;
-    }
+        this.columnNames=ColumnNames;
+        this.rows=rows;
+    }    
     public String[] getColumnNames() throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return columnNames;
     }
 
     public RowIterator getRows() throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new RowIteratorImp(rows);
     }
 
     public NodeIterator getNodes() throws RepositoryException

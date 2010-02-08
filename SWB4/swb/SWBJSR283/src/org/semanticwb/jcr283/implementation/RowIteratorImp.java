@@ -2,39 +2,37 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package org.semanticwb.jcr283.implementation;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
+import javax.jcr.query.Row;
+import javax.jcr.query.RowIterator;
 
 /**
  *
  * @author victor.lorenzana
  */
-public final class NodeIteratorImp implements NodeIterator
-{
+public final class RowIteratorImp implements RowIterator {
 
-    private final Iterator<NodeImp> it;
+    private final Iterator<RowImp> it;
     private final long size;
     private long position = 0;
-    private final ArrayList<NodeImp> nodes = new ArrayList<NodeImp>();
-
-    public NodeIteratorImp(Set<NodeImp> nodes)
+    private final ArrayList<RowImp> rows = new ArrayList<RowImp>();
+    public RowIteratorImp(ArrayList<RowImp> nodes)
     {
-        for(NodeImp node : nodes)
+        for(RowImp node : nodes)
         {
-            this.nodes.add(node);
+            this.rows.add(node);
         }
-        it=this.nodes.iterator();
-        size=this.nodes.size();
+        it=this.rows.iterator();
+        size=this.rows.size();
     }
-
-    public Node nextNode()
+    public Row nextRow()
     {
-        NodeImp node=it.next();
+        RowImp node=it.next();
         if(node!=null)
             position++;
         return node;
@@ -62,11 +60,12 @@ public final class NodeIteratorImp implements NodeIterator
 
     public Object next()
     {
-        return this.nextNode();
+        return this.nextRow();
     }
 
     public void remove()
     {
         it.remove();
     }
+
 }

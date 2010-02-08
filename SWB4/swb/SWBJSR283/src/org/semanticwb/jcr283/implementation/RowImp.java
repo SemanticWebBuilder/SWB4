@@ -5,67 +5,63 @@
 
 package org.semanticwb.jcr283.implementation;
 
+import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
-import javax.jcr.lock.Lock;
-import javax.jcr.lock.LockException;
+import javax.jcr.Value;
+import javax.jcr.query.Row;
 
 /**
  *
  * @author victor.lorenzana
  */
-public final class LockImp implements Lock{
+public final class RowImp implements Row {
 
     private final SessionImp session;
-    private final NodeImp node;
-    private final LockManagerImp lockManager;
-    public LockImp(SessionImp session,NodeImp node,LockManagerImp lockManager)
+    private final ValueImp[] values;
+    private final String[] columnames;
+    public RowImp(SessionImp session,String[] columnames,ValueImp[] values)
     {
         this.session=session;
-        this.node=node;
-        this.lockManager=lockManager;
+        this.values=values;
+        this.columnames=columnames;
     }
-    public String getLockOwner()
+    public Value[] getValues() throws RepositoryException
+    {
+        return values;
+    }
+
+    public Value getValue(String columnName) throws ItemNotFoundException, RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public boolean isDeep()
+    public Node getNode() throws RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public Node getNode()
-    {
-        return node;
-    }
-
-    public String getLockToken()
+    public Node getNode(String selectorName) throws RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public long getSecondsRemaining() throws RepositoryException
+    public String getPath() throws RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public boolean isLive() throws RepositoryException
+    public String getPath(String selectorName) throws RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public boolean isSessionScoped()
+    public double getScore() throws RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public boolean isLockOwningSession()
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void refresh() throws LockException, RepositoryException
+    public double getScore(String selectorName) throws RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
