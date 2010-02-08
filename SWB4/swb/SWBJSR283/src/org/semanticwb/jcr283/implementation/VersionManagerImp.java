@@ -14,6 +14,7 @@ import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.UnsupportedRepositoryOperationException;
+import javax.jcr.ValueFactory;
 import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.version.Version;
@@ -36,11 +37,12 @@ public class VersionManagerImp implements VersionManager
     private final NodeImp versionStorage;
     private final SessionImp session;
     private final NodeManager nodeManager;
-    private final ValueFactoryImp valueFactory = new ValueFactoryImp();
+    private final ValueFactory valueFactory;
 
     public VersionManagerImp(SessionImp session, NodeImp versionStorage, NodeManager nodeManager)
     {
         this.session = session;
+        valueFactory=session.getValueFactoryImp();
         this.versionStorage = versionStorage;
         this.nodeManager = nodeManager;
     }

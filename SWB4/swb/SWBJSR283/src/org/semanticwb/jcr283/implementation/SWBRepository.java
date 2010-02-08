@@ -31,10 +31,9 @@ import org.semanticwb.security.auth.SWB4CallbackHandlerGateWayOffice;
  * @author victor.lorenzana
  */
 public class SWBRepository implements Repository {
-    private static final String JCR_ROOT = "jcr:root";
-
+    
     private static Logger log = SWBUtils.getLogger(SWBRepository.class);
-    private static Hashtable<String, Value> descriptors = new Hashtable<String, Value>();
+    private static Hashtable<String, Value[]> descriptors = new Hashtable<String, Value[]>();
     public static final String DEFAULT_WORKSPACE="default";
     private static NodeTypeManagerImp NodeTypeManagerImp;
     private static final NamespaceRegistryImp namespaceRegistryImp=new NamespaceRegistryImp();
@@ -43,16 +42,16 @@ public class SWBRepository implements Repository {
 
         log.event("Initializing SWBRepository ...");
         new NodeTypeManagerImp();
-        descriptors.put(OPTION_VERSIONING_SUPPORTED, new ValueImp(false));
-        descriptors.put(SPEC_VERSION_DESC, new ValueImp("2.0"));
-        descriptors.put(SPEC_NAME_DESC, new ValueImp("Content Repository for Java Technology API"));
-        descriptors.put(REP_VENDOR_DESC, new ValueImp("Semantic INFOTEC WebBuilder 4.0"));
-        descriptors.put(REP_VENDOR_URL_DESC, new ValueImp("http://www.webbuilder.org.mx"));
-        descriptors.put(REP_NAME_DESC, new ValueImp("Semantic INFOTEC WebBuilder 4.0 Repository"));
-        descriptors.put(REP_VERSION_DESC, new ValueImp("1.0.0.0"));        
-        descriptors.put(OPTION_TRANSACTIONS_SUPPORTED, new ValueImp(false));
-        descriptors.put(OPTION_OBSERVATION_SUPPORTED, new ValueImp(false));
-        descriptors.put(OPTION_LOCKING_SUPPORTED, new ValueImp(true));        
+        descriptors.put(OPTION_VERSIONING_SUPPORTED, new Value[]{new ValueImp(false)});
+        descriptors.put(SPEC_VERSION_DESC, new Value[]{new ValueImp("2.0")});
+        descriptors.put(SPEC_NAME_DESC, new Value[]{new ValueImp("Content Repository for Java Technology API")});
+        descriptors.put(REP_VENDOR_DESC, new Value[]{new ValueImp("Semantic INFOTEC WebBuilder 4.0")});
+        descriptors.put(REP_VENDOR_URL_DESC, new Value[]{new ValueImp("http://www.webbuilder.org.mx")});
+        descriptors.put(REP_NAME_DESC, new Value[]{new ValueImp("Semantic INFOTEC WebBuilder 4.0 Repository")});
+        descriptors.put(REP_VERSION_DESC, new Value[]{new ValueImp("1.0.0.0")});
+        descriptors.put(OPTION_TRANSACTIONS_SUPPORTED, new Value[]{new ValueImp(false)});
+        descriptors.put(OPTION_OBSERVATION_SUPPORTED, new Value[]{new ValueImp(false)});
+        descriptors.put(OPTION_LOCKING_SUPPORTED, new Value[]{new ValueImp(true)});
         checkDefaultWorkspace();
     }
     public static NamespaceRegistryImp getNamespaceRegistryImp()
@@ -93,19 +92,19 @@ public class SWBRepository implements Repository {
 
     public Value getDescriptorValue(String key)
     {
-        return descriptors.get(key);
+        return descriptors.get(key)[0];
     }
 
     public Value[] getDescriptorValues(String key)
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return descriptors.get(key);
     }
 
     public String getDescriptor(String key)
     {
         try
         {
-            return descriptors.get(key).getString();
+            return descriptors.get(key)[0].getString();
         }
         catch(Exception e){
             return null;        

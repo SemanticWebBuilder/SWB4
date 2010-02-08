@@ -102,7 +102,7 @@ public class VersionHistoryImp extends NodeImp implements VersionHistory
         PropertyImp prop = nodeManager.getProtectedProperty(pathBaseVersion);
         if (prop.getLength() == -1)
         {
-            prop.set(new ValueFactoryImp().createValue(jcr_rootVersion));
+            prop.set(session.getValueFactory().createValue(jcr_rootVersion));
         }
 
 

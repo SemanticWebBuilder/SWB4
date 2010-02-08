@@ -41,8 +41,7 @@ import org.semanticwb.platform.SemanticProperty;
  */
 public class PropertyImp extends ItemImp implements Property
 {
-
-    private static final ValueFactoryImp valueFactoryImp = new ValueFactoryImp();
+    
     private static final Logger log = SWBUtils.getLogger(PropertyImp.class);
     private final ArrayList<Value> values = new ArrayList<Value>();
     private SemanticProperty prop;

@@ -76,7 +76,7 @@ public class NodeImp extends ItemImp implements Node
     private static final String SEPARATOR = "/";
     private static final String THE_NODE_IS_NOT_VERSIONABLE = "The node is not versionable";
     private final static Logger log = SWBUtils.getLogger(NodeImp.class);
-    protected final static ValueFactoryImp valueFactoryImp = new ValueFactoryImp();
+    
     private SemanticObject obj = null;
     private final int index;
     protected final NodeTypeImp nodeType;
@@ -109,6 +109,7 @@ public class NodeImp extends ItemImp implements Node
     protected NodeImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session, String id, boolean isnew)
     {
         super(nodeDefinition, name, parent, path, depth, session);
+        
         this.index = index;
         this.isNew = isnew;
         this.id = id;
