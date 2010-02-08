@@ -29,10 +29,10 @@ public class ScrollPane extends Resizable, CustomNode
   }
 
   def w: Number = bind bounds.width + border + border + vsb.width;
-  override function getPrefWidth(height) {w}
+  override function getPrefWidth(width){w}
 
   def h: Number = bind bounds.height + border + border + hsb.height;
-  override function getPrefHeight(width) {h}
+  override function getPrefHeight(height){h}
 
   def vsb: ScrollBar = ScrollBar {
     min: 0

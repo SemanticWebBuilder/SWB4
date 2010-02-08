@@ -43,6 +43,7 @@ import javafx.scene.shape.LineTo;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeLineCap;
 
+import applets.commons.*;
 
 /**
  * @author javier.solis
@@ -50,11 +51,11 @@ import javafx.scene.shape.StrokeLineCap;
 
 var stylesheets = "{__DIR__}style.css";
 var color="#6060FF";
-//var color="#000000";
 var color_over="#FF6060";
 var color_focused="#FF8080";
 var color_fill="#f5f5ff";
-//var color_over="#f06060";
+var color_fill_pool="#d5d5ff";
+
 var style_task="fill: {color_fill}; stroke: {color}; strokeWidth: 2; arcWidth: 15; arcHeight: 15;";
 var style_task_text="font-size: 14px; font-family: \"'Verdana'\"; fill: #000000; font-weight: bold;";
 //var style_task_textbox="font-size: 14px; font-family: \"Helvetica, Arial\"; font-weight: bold; border-fill:transparent; background-fill:transparent; focus-fill:transparent; shadow-fill:transparent";
@@ -66,10 +67,13 @@ var style_event="fill: {color_fill}; stroke: {color}; strokeWidth: 2;";
 var style_connection="stroke: {color}; strokeWidth: 2;";
 var style_connection_arrow="stroke: {color}; strokeWidth: 2;";
 var style_toolbar="fill: #f0f0f0; stroke: #909090; strokeWidth: 2;";
+var style_pool="fill: {color_fill_pool}; stroke: {color}; strokeWidth: 1;";
 
 
 var maxx : Number = bind scene.width on replace{ modeler.organizeMap();};
 var maxy : Number = bind scene.height on replace{ modeler.organizeMap();};
+
+var conn:WBConnection = new WBConnection(FX.getArgument(WBConnection.PRM_JSESS).toString(),FX.getArgument(WBConnection.PRM_CGIPATH).toString(),FX.getProperty("javafx.application.codebase"));
 
 var dropShadow = DropShadow {
     offsetX: 3
@@ -95,6 +99,8 @@ var modeler:Modeler = Modeler
     pannable:true
     cursor:Cursor.CROSSHAIR
 }
+
+var counter: Integer;
 
 modeler.load("home");
 modeler.organizeMap();
@@ -134,13 +140,53 @@ class ToolBar extends CustomNode
                     width:bind maxx
                     content: [
                         Button{
+                            text:"Save"
+                            action: function():Void
+                            {
+                                var obj:JSONObject =new JSONObject();
+                                obj.put("uri","test");
+                                var nodes:JSONArray =new JSONArray();
+                                obj.putOpt("nodes",nodes);
+                                for(node in modeler.contents)
+                                {
+                                    var ele:JSONObject=new JSONObject();
+                                    nodes.put(ele);
+                                    if(node instanceof GraphElement)
+                                    {
+                                       var ge=node as GraphElement;
+                                       ele.put("class",ge.getClass().getName());
+                                       ele.put("title",ge.title);
+                                       ele.put("uri",ge.uri);
+                                       ele.put("x",ge.x);
+                                       ele.put("y",ge.y);
+                                    }
+                                    if(node instanceof FlowObject)
+                                    {
+                                       var ge=node as FlowObject;
+                                       ele.put("lane",ge.pool.uri);
+                                    }
+                                    if(node instanceof ConnectionObject)
+                                    {
+                                       var ge=node as ConnectionObject;
+                                       ele.put("class",ge.getClass().getName());
+                                       ele.put("uri",ge.uri);
+                                       ele.put("title",ge.title);
+                                       ele.put("start",ge.ini.uri);
+                                       ele.put("end",ge.end.uri);
+                                    }
+
+                                }
+                                println(obj.toString());
+                            }
+                        },
+                        Button{
                             text:"Task"
                             action: function():Void {
                                 modeler.disablePannable=true;
                                 modeler.tempNode=Task
                                 {
                                     title:"Task"
-                                    uri:"task"
+                                    uri:"new:task:{counter++}"
                                 }
                             }
                         },
@@ -151,7 +197,7 @@ class ToolBar extends CustomNode
                                 modeler.tempNode=SubProcess
                                 {
                                     title:"SubProcess"
-                                    uri:"subprocess"
+                                    uri:"new:subprocess:{counter++}"
                                 }
                             }
                         },
@@ -162,7 +208,7 @@ class ToolBar extends CustomNode
                                 modeler.tempNode=StartEvent
                                 {
                                     title:"Start Event"
-                                    uri:"startevent"
+                                    uri:"new:startevent:{counter++}"
                                 }
                             }
                         },
@@ -173,7 +219,7 @@ class ToolBar extends CustomNode
                                 modeler.tempNode=EndEvent
                                 {
                                     title:"End Event"
-                                    uri:"endevent"
+                                    uri:"new:endevent:{counter++}"
                                 }
                             }
                         },
@@ -184,7 +230,7 @@ class ToolBar extends CustomNode
                                 modeler.tempNode=InterEvent
                                 {
                                     title:"Inter Event"
-                                    uri:"interevent"
+                                    uri:"new:interevent:{counter++}"
                                 }
                             }
                         },
@@ -195,7 +241,7 @@ class ToolBar extends CustomNode
                                 modeler.tempNode=GateWay
                                 {
                                     title:"Gateway"
-                                    uri:"gateway"
+                                    uri:"new:gateway:{counter++}"
                                 }
                             }
                         },
@@ -206,7 +252,7 @@ class ToolBar extends CustomNode
                                 modeler.tempNode=ORGateWay
                                 {
                                     title:"OR Gateway"
-                                    uri:"orgateway"
+                                    uri:"new:orgateway:{counter++}"
                                 }
                             }
                         },
@@ -217,17 +263,28 @@ class ToolBar extends CustomNode
                                 modeler.tempNode=ANDGateWay
                                 {
                                     title:"AND Gateway"
-                                    uri:"andgateway"
+                                    uri:"new:andgateway:{counter++}"
                                 }
                             }
-                        }
+                        },
                         Button{
                             text:"Flow Link"
                             action: function():Void {
                                 modeler.disablePannable=true;
                                 modeler.tempNode=FlowLink
                                 {
-                                    uri:"flowlink"
+                                    uri:"new:flowlink:{counter++}"
+                                }
+                            }
+                        },
+                        Button{
+                            text:"Pool"
+                            action: function():Void {
+                                modeler.disablePannable=true;
+                                modeler.tempNode=Pool
+                                {
+                                    title:"Pool"
+                                    uri:"new:pool:{counter++}"
                                 }
                             }
                         }
@@ -254,10 +311,11 @@ class Modeler extends CustomNode
     public var overNode: Node;
     public var mousex:Number;
     public var mousey:Number;
+    public var clipView:ClipView;
 
     public override function create(): Node
     {
-         var ret=ClipView
+         clipView=ClipView
          //var ret=ScrollPane
          {
              node:Group
@@ -268,21 +326,22 @@ class Modeler extends CustomNode
              width:bind width
              height:bind height
              pannable: bind pannable and not disablePannable
+             //translateX:40;
              onMousePressed: function( e: MouseEvent ):Void
              {
                 println("onMousePressed modeler:{e}");
-                mousex=e.x;
-                mousey=e.y;
+                mousex=e.x+clipView.clipX;
+                mousey=e.y+clipView.clipY;
                 if(tempNode!=null)
                 {
                     var close: Boolean=true;
                     
-                    if(tempNode instanceof FlowObject)
+                    if(tempNode instanceof GraphElement)
                     {
                         add(tempNode);
-                        var a=tempNode as FlowObject;
-                        a.x=e.x-this.clip.translateX;
-                        a.y=e.y-clip.translateY;
+                        var a=tempNode as GraphElement;
+                        a.x=e.x+clipView.clipX;
+                        a.y=e.y+clipView.clipY;
                     }else if(tempNode instanceof ConnectionObject)
                     {
                         var a=tempNode as ConnectionObject;
@@ -309,8 +368,8 @@ class Modeler extends CustomNode
                 //println("onMouseDragged modeler:{e}");
                 if(tempNode!=null)
                 {
-                    mousex=e.x;
-                    mousey=e.y;
+                    mousex=e.x+clipView.clipX;
+                    mousey=e.y+clipView.clipY;
                     if(tempNode instanceof ConnectionObject)
                     {
                         var a=tempNode as ConnectionObject;
@@ -346,16 +405,17 @@ class Modeler extends CustomNode
                      }
                  }
              }
-             onKeyTyped: function( e: KeyEvent ):Void
-             {
-                 println(e);
-             }
+//             onKeyTyped: function( e: KeyEvent ):Void
+//             {
+//                 println(e);
+//             }
          };
-         return ret;
+         return clipView;
     }
 
     public function load(home: String)
     {
+        /*
         var t1= Task {
             x : 50, y : 100
             title : "Tarea 1"
@@ -369,11 +429,6 @@ class Modeler extends CustomNode
             uri : "task2"
         };
 
-        add(ANDGateWay {
-            x : 300, y : 100
-            uri : "gateway1"
-        });
-
         var se= StartEvent {
             x : 200, y : 100
             title : "Inicio"
@@ -386,32 +441,26 @@ class Modeler extends CustomNode
             uri : "end1"
         };
 
-//        var ie= InterEvent {
-//            x : 300, y : 100
-//            title : "Inicio"
-//            uri : "inter1"
-//        };
+        var p1= Pool {
+            x : 400, y : 300
+            title : "Pool"
+            uri : "pool"
+        };
+        add(p1);
 
-//        add(FlowLink{
-//            ini: se
-//            end: t1
-//            title : "Prueba"
-//            uri : "co1"
-//        });
+        add(ANDGateWay {
+            x : 300, y : 100
+            uri : "gateway1"
+        });
 
-//        add(FlowLink{
-//            ini: t1
-//            end: t2
-//            title : "Prueba"
-//            uri : "co2"
-//        });
+        t1.pool=p1;
+
 
         add(t1);
         add(t2);
         add(se);
         add(ee);
-//        add(ie);
-        
+        */
         //addRelation("home","padre1","Hijo","Padre");
     }
 
@@ -423,15 +472,6 @@ class Modeler extends CustomNode
     {
     }
 
-//    public function getTopic(fouri:String): FlowObject
-//    {
-//        for(flowObject in objects)// where content instanceof Topic)
-//        {
-//            if(flowObject.uri==fouri)return flowObject;
-//        }
-//        return null;
-//    }
-
     public function add(obj:Node)
     {
         insert obj into contents;
@@ -441,8 +481,6 @@ class Modeler extends CustomNode
     {
         delete obj from contents;
     }
-
-
 }
 
 /******************************************************************************/
@@ -671,21 +709,6 @@ class SubProcess extends FlowObject
             width: bind w
             height: bind h/2
         }
-//        text= TextBox
-//        {
-//             text: bind title
-//             //content: bind title
-//             //wrappingWidth: bind w
-//             style: style_task_text
-//             //textOrigin: TextOrigin.TOP
-//             transforms: [
-//                 Translate{
-//                     x: bind x-(text.boundsInLocal.width)/2+2
-//                     y: bind y-h/4-(text.boundsInLocal.height)/2+2
-//                 }
-//             ]
-//             //smooth:true;
-//        };
 
         shape= Rectangle
         {
@@ -751,24 +774,6 @@ class Task extends FlowObject
             width: bind w
             height: bind h
         }
-//        text= TextBox
-//        {
-//             text: bind title
-//             //content: bind title
-//             //wrappingWidth: bind w
-//             style: style_task_text
-//             //textOrigin: TextOrigin.TOP
-//             transforms: [
-//                 Translate{
-//                     x: bind x-(text.boundsInLocal.width)/2+2
-//                     y: bind y-(text.boundsInLocal.height)/2+2
-//                 }
-//             ]
-//             disable: false
-//             editable: false
-//             selectOnFocus:true
-//             //smooth:true;
-//        };
 
         shape= Rectangle
         {
@@ -796,7 +801,128 @@ class Task extends FlowObject
 }
 
 /******************************************************************************/
-class FlowObject extends CustomNode
+class FlowObject extends GraphElement
+{
+    public var pool : Pool;
+    public var dpx : Number;                        //diferencia de pool
+    public var dpy : Number;                        //diferencia de pool
+
+    override public function create(): Node
+    {
+        text=EditableText
+        {
+            text: bind title with inverse
+            width: bind w;
+            height: bind h;
+        }
+        return text;
+    }
+
+    var px = bind pool.x on replace
+    {
+        if(pool!=null)x=px+dpx;
+    }
+    var py = bind pool.y on replace
+    {
+        if(pool!=null)y=py+dpy;
+    }
+
+
+    override public function mousePressed( e: MouseEvent )
+    {
+        super.mousePressed(e);
+        if(modeler.clickedNode==this)
+        {
+            if(e.secondaryButtonDown)
+            {
+                modeler.tempNode=FlowLink
+                {
+                    uri:"flowlink"
+                }
+            }
+        }
+    }
+
+    override public function mouseReleased( e: MouseEvent )
+    {
+        super.mouseReleased(e);
+        if(pool!=null)
+        {
+            dpx=x-pool.x;
+            dpy=y-pool.y;
+        }
+
+    }
+
+    override public function remove()
+    {
+        super.remove();
+        for(connection in modeler.contents where connection instanceof ConnectionObject)
+        {
+            var c=connection as ConnectionObject;
+            if(c.end == this)c.remove();
+            if(c.ini == this)c.remove();
+        }
+    }
+
+
+}
+
+/******************************************************************************/
+class Pool extends GraphElement
+{
+    override public function create(): Node
+    {
+        cursor=Cursor.HAND;
+        w=400;
+        h=100;
+        text=EditableText
+        {
+            text: bind title with inverse
+            x:bind x-w/2+10
+            y:bind y
+            width: bind h
+            height: 20
+            rotate: -90
+        }
+
+        shape= Rectangle
+        {
+            x: bind x-w/2
+            y: bind y-h/2
+            width: w
+            height: h
+            style: style_pool
+            smooth:true;
+        };
+
+        return Group
+        {
+            content: [
+                shape,text
+            ]
+            scaleX: bind s;
+            scaleY: bind s;
+            opacity: bind o;
+            effect: dropShadow
+        };
+    }
+
+    override public function mousePressed( e: MouseEvent )
+    {
+       super.mousePressed(e);
+    }
+
+    override public function remove()
+    {
+       super.remove();
+    }
+
+}
+
+
+/******************************************************************************/
+class GraphElement extends CustomNode
 {
     public var x : Number;
     public var y : Number;
@@ -818,52 +944,6 @@ class FlowObject extends CustomNode
     var stkw : Number = 2;                  //strokeWidth
     var stkwo : Number = 3;                 //strokeWidth Over
 
-    var overtimer = Timeline {
-            repeatCount: 1 //Timeline.INDEFINITE
-            keyFrames : [
-                KeyFrame {
-                    time : .1s
-                    canSkip : true
-                    values : [
-                        o => 1.0 tween Interpolator.EASEBOTH
-                    ]
-                }
-/*
-                KeyFrame {
-                    time : .1s
-                    canSkip: true
-                    values : [
-                        s => 1.1 tween Interpolator.EASEBOTH
-                    ] // values
-                } // KeyFrame
-*/
-            ]
-    };
-
-    var normaltimer = Timeline {
-            repeatCount: 1 //Timeline.INDEFINITE
-            keyFrames : [
-                KeyFrame {
-                    time : .2s
-                    canSkip : true
-                    values : [
-                        o => 0.8 tween Interpolator.EASEOUT
-                    ]
-                }
-/*
-                KeyFrame {
-                    time : .2s
-                    canSkip: true
-                    values : [
-                        s => 1 tween Interpolator.EASEOUT
-                    ] // values
-                } // KeyFrame
-*/
-            ]
-    };
-
-    var movetimer:Timeline;
-
     var focusState = bind focused on replace
     {
         if (focused)
@@ -877,46 +957,6 @@ class FlowObject extends CustomNode
         }
     }
 
-    public function move(ax: Number, ay: Number)
-    {
-        visible=true;
-        if(mx==ax and my==ay)return;
-        mx=ax;
-        my=ay;
-
-        if(movetimer!=null)movetimer.stop();
-        movetimer = Timeline
-        {
-            repeatCount: 1 //Timeline.INDEFINITE
-            keyFrames : [
-                KeyFrame {
-                    time : .5s
-                    canSkip : true
-                    values : [
-                        x => mx tween Interpolator.EASEIN
-                    ]
-                }
-                KeyFrame {
-                    time : .5s
-                    canSkip: true
-                    values : [
-                        y => my tween Interpolator.EASEOUT
-                    ] // values
-                } // KeyFrame
-/*
-                KeyFrame {
-                    time : .5s
-                    canSkip: true
-                    values : [
-                        s => 1 tween Interpolator.LINEAR
-                    ] // values
-                } // KeyFrame
-*/
-            ]
-        };
-        movetimer.play();
-    }
-
     public override function create(): Node
     {
         text=EditableText
@@ -925,28 +965,15 @@ class FlowObject extends CustomNode
             width: bind w;
             height: bind h;
         }
-
-//        text= TextBox
-//        {
-//             text: bind title
-//             //content: bind title
-//             //wrappingWidth: bind w
-//             ////effect: dropShadow
-//             //styleClass: "task-text"
-//             style: style_task_text
-//             //textOrigin: TextOrigin.TOP
-//             transforms: [
-//                 Translate{
-//                     x: bind x-(text.boundsInLocal.width)/2+2
-//                     y: bind y-(text.boundsInLocal.height)/2+2
-//                 }
-//             ]
-//             //smooth:true;
-//        };
         return text;
     }
 
     override var onMouseClicked = function ( e: MouseEvent ) : Void
+    {
+        mouseClicked(e);
+    }
+
+    public function mouseClicked( e: MouseEvent )
     {
         println("onMouseClicked node:{e}");
         if(modeler.focusedNode==this)
@@ -959,31 +986,32 @@ class FlowObject extends CustomNode
         }
     }
 
+
     override var onMouseDragged = function ( e: MouseEvent ) : Void
+    {
+        mouseDragged(e);
+    }
+
+    public function mouseDragged( e: MouseEvent )
     {
         if(modeler.clickedNode==this)
         {
             var ax=dx+e.sceneX;
             var ay=dy+e.sceneY;
-            if(ax>0)x=ax else x=0;
-            if(ay>0)y=ay else y=0;
+            if(ax-w/2>0)x=ax else x=w/2;
+            if(ay-h/2>0)y=ay else y=h/2;
         }
     }
 
-
-
     override var onMousePressed = function( e: MouseEvent ):Void
+    {
+        mousePressed(e);
+    }
+
+    public function mousePressed( e: MouseEvent )
     {
         if(modeler.clickedNode==null)
         {
-            if(e.secondaryButtonDown)
-            {
-                modeler.tempNode=FlowLink
-                {
-                    uri:"flowlink"
-                }
-            }
-
             modeler.clickedNode=this;
             modeler.focusedNode=this;
             //if(modeler.tempNode==null)
@@ -996,7 +1024,13 @@ class FlowObject extends CustomNode
         println("onMousePress node:{e}");
     }
 
+
     override var onMouseReleased = function( e: MouseEvent ):Void
+    {
+        mouseReleased(e);
+    }
+
+    public function mouseReleased( e: MouseEvent )
     {
         if(modeler.clickedNode==this)
         {
@@ -1032,6 +1066,11 @@ class FlowObject extends CustomNode
 
     override var onKeyPressed = function( e: KeyEvent )
     {
+        keyPressed(e);
+    }
+
+    public function keyPressed( e: KeyEvent )
+    {
         if(e.code==e.code.VK_DELETE)
         {
             remove();
@@ -1039,18 +1078,11 @@ class FlowObject extends CustomNode
         println(e);
     }
 
+
     public function remove()
     {
         modeler.remove(this);
-        for(connection in modeler.contents where connection instanceof ConnectionObject)
-        {
-            var c=connection as ConnectionObject;
-            if(c.end == this)c.remove();
-            if(c.ini == this)c.remove();
-        }
     }
-
-
 }
 
 /******************************************************************************/
@@ -1058,7 +1090,6 @@ class FlowLink extends ConnectionObject
 {
 
 }
-
 
 /******************************************************************************/
 class ConnectionObject extends CustomNode
@@ -1152,14 +1183,14 @@ class ConnectionObject extends CustomNode
         modeler.remove(this);
     }
 
-    override var onMouseDragged = function ( e: MouseEvent ) : Void
-    {
-        if(modeler.clickedNode==this)
-        {
-//            x=dx+e.sceneX;
-//            y=dy+e.sceneY;
-        }
-    }
+//    override var onMouseDragged = function ( e: MouseEvent ) : Void
+//    {
+//        if(modeler.clickedNode==this)
+//        {
+////            x=dx+e.sceneX;
+////            y=dy+e.sceneY;
+//        }
+//    }
 
     override var onMousePressed = function( e: MouseEvent ):Void
     {
