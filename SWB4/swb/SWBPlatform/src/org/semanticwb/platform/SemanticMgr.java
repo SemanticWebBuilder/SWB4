@@ -812,4 +812,13 @@ public class SemanticMgr implements SWBInstanceObject
     {
         close();
     }
+
+    public void createKeyPair(){
+        SemanticModel model = getModel(SWBAdmin);
+        String [] llaves = SWBUtils.CryptoWrapper.storableKP();
+        SemanticProperty priv = model.createSemanticProperty(SWBAdmin+"/PrivateKey", model.getModelObject().getSemanticClass(), SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_STRING);
+        SemanticProperty publ = model.createSemanticProperty(SWBAdmin+"/PublicKey", model.getModelObject().getSemanticClass(), SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_STRING);
+        model.getModelObject().setProperty(priv, llaves[0]);
+        model.getModelObject().setProperty(publ, llaves[1]);
+    }
 }

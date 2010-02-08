@@ -68,8 +68,13 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.security.AlgorithmParameterGenerator;
+import java.security.AlgorithmParameters;
 import java.security.GeneralSecurityException;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.security.MessageDigest;
+import java.security.SecureRandom;
 import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.EmailAttachment;
 import java.util.Collection;
@@ -88,6 +93,7 @@ import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.DHParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.namespace.QName;
 import javax.xml.xpath.XPath;
@@ -4323,6 +4329,46 @@ public class SWBUtils {
             Cipher cipher = Cipher.getInstance("AES");
             cipher.init(Cipher.DECRYPT_MODE, secretKey);
             return cipher.doFinal(data);
+        }
+
+        /**
+         * Generates a 512bit DH key pair for secure exchange of symetric keys
+         * @return a 512bit DH key pair
+         */
+        public static KeyPair genDH512KeyPair()
+        {
+            try
+            {
+                // Create the parameter generator for a 512-bit DH key pair
+                AlgorithmParameterGenerator paramGen = AlgorithmParameterGenerator.getInstance("DiffieHellman");
+                String seed = java.lang.management.ManagementFactory.getRuntimeMXBean().getName() + System.currentTimeMillis();
+                paramGen.init(512,new SecureRandom(seed.getBytes()));
+
+
+                // Generate the parameters
+                AlgorithmParameters params = paramGen.generateParameters();
+                DHParameterSpec dhSpec = params.getParameterSpec(DHParameterSpec.class);
+                KeyPairGenerator keyGen = KeyPairGenerator.getInstance("DiffieHellman");
+
+                keyGen.initialize(dhSpec);
+                KeyPair keypair = keyGen.generateKeyPair();
+                // Return the three values in a string
+                //  return ""+dhSpec.getP()+","+dhSpec.getG()+","+dhSpec.getL();
+                return keypair;
+            } catch (Exception e)
+            {
+                e.printStackTrace();
+                assert (false);
+            }
+            return null;
+        }
+
+        public static String[] storableKP(){
+            String[] llaves = new String[2];
+            KeyPair kp = genDH512KeyPair();
+            llaves[0]=kp.getPrivate().getFormat()+"|"+new String(SFBase64.encodeBytes(kp.getPrivate().getEncoded(), false));
+            llaves[1]=kp.getPublic().getFormat()+"|"+new String(SFBase64.encodeBytes(kp.getPublic().getEncoded(), false));
+            return llaves;
         }
     }
 
