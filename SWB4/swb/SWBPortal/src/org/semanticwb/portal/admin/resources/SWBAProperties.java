@@ -38,6 +38,7 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.SWBProperties;
 import org.semanticwb.model.*;
+import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.api.*;
 
 /**
@@ -68,6 +69,7 @@ public class SWBAProperties extends GenericResource {
         properties.add("web.properties");
         properties.add("logging.properties");
         properties.add("System.properties");
+
     }
     
     /** Init the resource base configuration
@@ -233,6 +235,20 @@ public class SWBAProperties extends GenericResource {
                 out.println("<td >"+value+"</td>");
                 out.println("<td ><PRE >"+comment+"</PRE></td>");
                 
+                out.println("</tr>");
+            }
+            SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(SWBPlatform.getSemanticMgr().SWBAdmin+"/PublicKey");
+            String publicKey = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().getProperty(sp);
+            if (null!=publicKey){
+                out.println("<tr >");
+                out.println("<td >");
+                out.println("</td>");
+                out.println("<td >");
+                out.println("PKI - Public Key");
+                out.println("</td>");
+                out.println("<td >"+publicKey.substring(publicKey.indexOf("|")+1)+"</td>");
+                out.println("<td ><PRE >System Public Key</PRE></td>");
+
                 out.println("</tr>");
             }
             out.println("</tbody>");
