@@ -1206,30 +1206,30 @@ public class NodeImp extends ItemImp implements Node
     @Deprecated
     public Lock lock(boolean isDeep, boolean isSessionScoped) throws UnsupportedRepositoryOperationException, LockException, AccessDeniedException, InvalidItemStateException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return session.getWorkspaceImp().getLockManager().lock(path, isDeep, isSessionScoped, Long.MAX_VALUE,session.getUserID());
     }
 
     @Deprecated
     public Lock getLock() throws UnsupportedRepositoryOperationException, LockException, AccessDeniedException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return session.getWorkspaceImp().getLockManager().getLock(path);
     }
 
     @Deprecated
     public void unlock() throws UnsupportedRepositoryOperationException, LockException, AccessDeniedException, InvalidItemStateException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        session.getWorkspaceImp().getLockManager().unlock(path);
     }
 
     @Deprecated
     public boolean holdsLock() throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return session.getWorkspaceImp().getLockManager().holdsLock(path);
     }
 
     public boolean isLocked() throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return session.getWorkspaceImp().getLockManager().isLocked(path);
     }
 
     public void followLifecycleTransition(String transition) throws UnsupportedRepositoryOperationException, InvalidLifecycleTransitionException, RepositoryException

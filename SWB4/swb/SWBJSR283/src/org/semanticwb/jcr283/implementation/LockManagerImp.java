@@ -40,6 +40,10 @@ public class LockManagerImp implements LockManager
         {
             throw new PathNotFoundException("The path " + absPath + " was not found");
         }
+        if(node.getNode().isNodeType("mix:lockeable"))
+        {
+            throw new LockException("The node is not lockable");
+        }
         if(!node.isLocked())
         {
             throw new LockException("The node is not locked");
@@ -63,6 +67,10 @@ public class LockManagerImp implements LockManager
         if (status == null)
         {
             throw new PathNotFoundException("The path " + absPath + " was not found");
+        }
+        if(status.getNode().isNodeType("mix:lockeable"))
+        {
+            throw new LockException("The node is not lockable");
         }
         if (status.isLocked())
         {
