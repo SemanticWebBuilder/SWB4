@@ -185,12 +185,10 @@ public class WBADeviceReport extends GenericResource {
         response.setHeader("Pragma", "no-cache"); 
         PrintWriter out = response.getWriter();
         Resource base = getResourceBase();
-        
-        final int I_ACCESS = 0;        
+               
         GregorianCalendar gc_now = new GregorianCalendar();
         HashMap hm_sites = new HashMap();
         String rtype = null;
-        int i_access = 0;
 
         try {
             // Evaluates if there are sites
@@ -204,7 +202,7 @@ public class WBADeviceReport extends GenericResource {
             }
 
             // If there are sites continue
-            if (hm_sites.size() > I_ACCESS) {
+            if (hm_sites.size() > 0) {
                 String address = paramsRequest.getWebPage().getUrl();
                 String websiteId = request.getParameter("wb_site")==null ? (String)hm_sites.keySet().iterator().next():request.getParameter("wb_site");
 

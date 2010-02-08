@@ -51,6 +51,7 @@ import org.semanticwb.portal.db.SWBRecHit;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
+import org.semanticwb.portal.api.SWBResourceURL;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -128,7 +129,6 @@ public class WBAGlobalReport extends GenericResource {
         Resource base = getResourceBase();
 
         HashMap hm_sites = new HashMap();
-        int i_access = 0;
         String rtype;
         try{
             // Evaluates if there are sites
@@ -184,9 +184,11 @@ public class WBAGlobalReport extends GenericResource {
                     rtype = "0";
                 }
 
+                SWBResourceURL url = paramsRequest.getRenderUrl();
+                url.setCallMethod(url.Call_DIRECT);
+
                 // javascript
                 out.println("<script type=\"text/javascript\">");
-
                 out.println("dojo.require(\"dijit.form.DateTextBox\");");
                 out.println("dojo.addOnLoad(doBlockade);");
 
@@ -242,40 +244,40 @@ public class WBAGlobalReport extends GenericResource {
                 out.println("function doXml(accion, size) { ");
                 /*out.println("   if(validate(accion)) {");*/
                 out.println("      var params = getParams(accion);");
-                out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("xml")+"\"+params,\"graphWindow\",size);    ");
+                out.println("      window.open(\""+url.setMode("xml")+"\"+params,\"graphWindow\",size);    ");
                 /*out.println("   }");*/
                 out.println("}");
 
                 out.println("function doExcel(accion, size) { ");
                 /*out.println("   if(validate(accion)) {");*/
                 out.println("      var params = getParams(accion);");
-                out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("xls")+"\"+params,\"graphWindow\",size);    ");
+                out.println("      window.open(\""+url.setMode("xls")+"\"+params,\"graphWindow\",size);    ");
                 /*out.println("   }");*/
                 out.println("}");
 
                 out.println("function doHistogram(accion, size) { ");
                 out.println("      var params = getParams(accion);");
-                out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("histogram")+"\"+params,\"graphWindow\",size);    ");
+                out.println("      window.open(\""+url.setMode("histogram")+"\"+params,\"graphWindow\",size);    ");
                 out.println(" }");
 
                 out.println("function doGraph(accion, size) { ");
                 /*out.println("   if(validate(accion)) {");*/
                 out.println("      var params = getParams(accion);");
-                out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("graph")+"\"+params,\"graphWindow\",size);    ");
+                out.println("      window.open(\""+url.setMode("graph")+"\"+params,\"graphWindow\",size);    ");
                 /*out.println("   }");*/
                 out.println(" }");
 
                 out.println("function doPdf(accion, size) { ");
                 /*out.println("   if(validate(accion)) {");*/
                 out.println("      var params = getParams(accion);");
-                out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("pdf")+"\"+params,\"graphWindow\",size);    ");
+                out.println("      window.open(\""+url.setMode("pdf")+"\"+params,\"graphWindow\",size);    ");
                 /*out.println("   }");*/
                 out.println("}");
 
                 out.println("function doRtf(accion, size) { ");
                 /*out.println("   if(validate(accion)) {");*/
                 out.println("      var params = getParams(accion);");
-                out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("rtf")+"\"+params,\"graphWindow\",size);    ");
+                out.println("      window.open(\""+url.setMode("rtf")+"\"+params,\"graphWindow\",size);    ");
                 /*out.println("   }");*/
                 out.println("}");
 

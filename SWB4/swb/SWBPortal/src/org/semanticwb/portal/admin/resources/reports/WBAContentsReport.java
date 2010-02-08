@@ -33,11 +33,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
-import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.model.SWBContext;
-import org.semanticwb.portal.util.WebSiteSectionTree;
 import org.semanticwb.portal.util.SelectTree;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBResourceURL;
@@ -56,10 +54,7 @@ public class WBAContentsReport extends GenericResource {
 
     private String strRscType;
 
-    /*ContentMonitor content_mon=null;*/
-
     public WBAContentsReport() {
-        /*content_mon = ContentMonitor.getInstance();*/
     }
 
     @Override
@@ -85,9 +80,9 @@ public class WBAContentsReport extends GenericResource {
             doRenderSectionTree(request,response,paramsRequest);
         }else if(paramsRequest.getMode().equalsIgnoreCase("fillgridmtr")) {
             doFillReport(request,response,paramsRequest);
-        }else if(paramsRequest.getMode().equalsIgnoreCase("report_excel")) {
+        }else if(paramsRequest.getMode().equalsIgnoreCase("xls")) {
             doRepExcel(request,response,paramsRequest);
-        }else if(paramsRequest.getMode().equalsIgnoreCase("report_xml")) {
+        }else if(paramsRequest.getMode().equalsIgnoreCase("xml")) {
             doRepXml(request,response,paramsRequest);
         }else {
             super.processRequest(request, response, paramsRequest);
@@ -210,8 +205,6 @@ public class WBAContentsReport extends GenericResource {
         response.setHeader("Pragma", "no-cache");
         PrintWriter out = response.getWriter();
         Resource base = getResourceBase();
-
-        final int I_ACCESS = 0;
         HashMap hm_sites = new HashMap();
         String rtype = null;
         String language = paramsRequest.getUser().getLanguage();
@@ -223,19 +216,12 @@ public class WBAContentsReport extends GenericResource {
                 WebSite site = webSites.next();
                 // Evaluates if TopicMap is not Global
                 if(!site.getId().equals(SWBContext.getGlobalWebSite().getId())) {
-                    // Get access level of this user on this topicmap and if level is greater than "0" then user have access
-                    // TODO
-//                    i_access = AdmFilterMgr.getInstance().haveAccess2TopicMap(paramsRequest.getUser(),site.getDbdata().getId());
-//                    if(I_ACCESS < i_access) {
-//                        if(site.getDbdata().getDeleted()==0) {
-                            hm_sites.put(site.getId(), site.getDisplayTitle(language));
-//                        }
-//                    }
+                    hm_sites.put(site.getId(), site.getDisplayTitle(language));
                 }
             }
 
             // If there are sites continue
-            if(hm_sites.size() > I_ACCESS) {
+            if(hm_sites.size() > 0) {
                 String address = paramsRequest.getWebPage().getUrl();
                 String websiteId = request.getParameter("wb_site")==null ? (String)hm_sites.keySet().iterator().next():request.getParameter("wb_site");
 
@@ -307,7 +293,7 @@ public class WBAContentsReport extends GenericResource {
                 out.println("      if(dojo.byId('wb_show_son').checked) {");
                 out.println("         params += '&sons=' + dojo.byId('wb_show_son').value;");
                 out.println("      }");
-                out.println("      window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_xml") + "\"+params,\"graphWindow\",size);");
+                out.println("      window.open(\"" + url.setMode("xml") + "\"+params,\"graphWindow\",size);");
                 out.println("   }else {");
                 out.println("      alert('Para poder mostrarle el resumen de contenido, primero debe seleccionar una sección');");
                 out.println("   }");
@@ -320,7 +306,7 @@ public class WBAContentsReport extends GenericResource {
                 out.println("      if(dojo.byId('wb_show_son').checked) {");
                 out.println("         params += '&sons=' + dojo.byId('wb_show_son').value;");
                 out.println("      }");
-                out.println("      window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_excel") + "\"+params,\"graphWindow\",size);");
+                out.println("      window.open(\"" + url.setMode("xls") + "\"+params,\"graphWindow\",size);");
                 out.println("   }else {");
                 out.println("      alert('Para poder mostrarle el resumen de contenido, primero debe seleccionar una sección');");
                 out.println("   }");
@@ -336,7 +322,7 @@ public class WBAContentsReport extends GenericResource {
                 out.println("      if(dojo.byId('wb_show_son').checked) {");
                 out.println("         params += '&sons=' + dojo.byId('wb_show_son').value;");
                 out.println("      }");
-                out.println("      fillGrid(grid, '"+url.toString()+"', 'fillgridmtr', params);");
+                out.println("      fillGrid(grid, '"+url.setMode("view")+"', 'fillgridmtr', params);");
                 out.println("   }else {");
                 out.println("      alert('Para poder mostrarle el resumen de contenido, primero debe seleccionar una sección');");
                 out.println("   }");
@@ -347,35 +333,17 @@ public class WBAContentsReport extends GenericResource {
 
                 out.println("<div class=\"swbform\">");
                 out.println("<fieldset>");
-                out.println(paramsRequest.getLocaleString("description"));
+                out.println(paramsRequest.getLocaleString("contents_report"));
                 out.println("</fieldset>");
 
                 out.println("<form id=\"frmrep\" name=\"frmrep\" method=\"post\" action=\"" + address + "\">");
                 out.println("<fieldset>");
-                out.println("<legend>" + paramsRequest.getLocaleString("contents_report") + "</legend>");
-                /*out.println("<form id=\"frmrep\" name=\"frmrep\" method=\"post\" action=\"" + address + "\">");*/
+                out.println("<legend>" + paramsRequest.getLocaleString("filter") + "</legend>");
                 out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
                 out.println("<tr><td width=\"100\"></td><td width=\"200\"></td><td width=\"224\"></td><td width=\"264\"></td></tr>");
-
-                /*out.println("<tr>");
-                out.println("<td colspan=\"4\">");
-                out.println(paramsRequest.getLocaleString("description"));
-                out.println("</td></tr>");*/
-
-                /*out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
-                out.println("<tr>");
-                out.println(" <td colspan=\"4\">&nbsp;&nbsp;&nbsp;");
-                out.println("   <input type=\"button\" onClick=\"doXml('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"XML\" name=\"btnXml\" />&nbsp;");
-                out.println("   <input type=\"button\" onClick=\"doExcel('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"Excel\" name=\"btnExcel\" />&nbsp;");
-                out.println("   <input type=\"button\" onClick=\"doApply()\" value=\"" + paramsRequest.getLocaleString("apply") + "\" name=\"btnApply\" />");
-                out.println("   <input type=\"hidden\" name=\"tp\" id=\"tp\" />");
-                out.println(" </td>");
-                out.println("</tr>");
-                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");*/
-
+                
                 out.println("<tr>");
                 out.println("<td>" + paramsRequest.getLocaleString("site") + ":</td>");
-                //url.setMode("rendertree");
                 out.println("<td colspan=\"2\"><select id=\"wb_site\" name=\"wb_site\" onchange=\"renderTreeSectionsSite('"+url.toString()+"', 'rendertree', this.value, 'slave');\">");
                 Iterator<String> itKeys = hm_sites.keySet().iterator();
                 while(itKeys.hasNext()) {
@@ -409,16 +377,15 @@ public class WBAContentsReport extends GenericResource {
                 out.println("<tr>");
                 out.println(" <td colspan=\"4\">&nbsp;&nbsp;&nbsp;");
                 out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doXml('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">XML</button>&nbsp;");
-                out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doExcel('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">MS Excel</button>&nbsp;");
+                out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doExcel('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">"+paramsRequest.getLocaleString("spread_sheet")+"</button>&nbsp;");
                 out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doApply()\">"+paramsRequest.getLocaleString("apply")+"</button>");
-                out.println("   <input type=\"hidden\" name=\"tp\" id=\"tp\" />");
+//                out.println("   <input type=\"hidden\" name=\"tp\" id=\"tp\" />");
                 out.println(" </td>");
                 out.println("</tr>");
                 out.println("</table>");
                 out.println("</fieldset>");
                 out.println("</form>");
 
-                /*out.println("<tr><td colspan=\"4\" height=\"15\"><hr size=\"1\" noshade></td></tr>");*/
                 out.println("<fieldset>");
                 out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
                 out.println("<tr>");
@@ -430,9 +397,6 @@ public class WBAContentsReport extends GenericResource {
                 out.println("</tr>");
                 out.println("</table>");
                 out.println("</fieldset>");
-
-                /*out.println("<tr><td colspan=\"4\"><br /></td></tr>");
-                out.println("</table></form></fieldset>");*/
                 out.println("</div>");
             }
         }catch (Exception e) {

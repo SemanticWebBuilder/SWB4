@@ -84,11 +84,11 @@ public class WBAAccessSessionReport extends GenericResource {
             doFillReportDetalled(request, response, paramsRequest);
         } else if (paramsRequest.getMode().equals("report_detail")) {
             doDetail(request, response, paramsRequest);
-        } else if (mode.equalsIgnoreCase("report_excel")) {
+        } else if (mode.equalsIgnoreCase("xls")) {
             doRepExcel(request, response, paramsRequest);
-        } else if (mode.equalsIgnoreCase("report_xml")) {
+        } else if (mode.equalsIgnoreCase("xml")) {
             doRepXml(request, response, paramsRequest);
-        } else if (mode.equalsIgnoreCase("graph")) {
+        } else if (mode.equalsIgnoreCase("histogram")) {
             doGraph(request, response, paramsRequest);
         } else {
             super.processRequest(request, response, paramsRequest);
@@ -132,8 +132,6 @@ public class WBAAccessSessionReport extends GenericResource {
             jobj.put("items", jarr);
         } catch (JSONException jse) {
         }
-
-        /*getReportResults(request, paramsRequest);*/
         String s_key = (String) request.getSession(true).getAttribute("alfilter");
 
         if (null != hm_detail) {
@@ -236,18 +234,14 @@ public class WBAAccessSessionReport extends GenericResource {
                 ret.append("      structure: layout,\n");
                 ret.append("      rowSelector: \"10px\",\n");
                 ret.append("      rowsPerPage: \"15\"\n");
-
-ret.append(",onRowDblClick: fillReportDetalled   \n");
-
+                ret.append(",onRowDblClick: fillReportDetalled   \n");
                 ret.append("   }, \"gridMaster\");\n");
                 ret.append("   gridMaster.startup();\n");
                 ret.append("});\n");
 
-
-ret.append("function fillReportDetalled(evt) {\n");
-ret.append("doDetail('width=860, height=580, scrollbars, resizable, alwaysRaised, menubar',evt.grid.store.getValue(evt.grid.getItem(evt.rowIndex),'date')); \n");
-ret.append("}\n");
-
+                ret.append("function fillReportDetalled(evt) {\n");
+                ret.append("doDetail('width=860, height=580, scrollbars, resizable, alwaysRaised, menubar',evt.grid.store.getValue(evt.grid.getItem(evt.rowIndex),'date')); \n");
+                ret.append("}\n");
 
                 ret.append("function getParams() {\n");
                 ret.append("   var params = '?';\n");
@@ -288,28 +282,28 @@ ret.append("}\n");
                 ret.append("function doDetail(size, key) { \n");
                 ret.append("   var params = getParams();\n");
                 ret.append("   params += '&key='+key;\n");
-                ret.append("   window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_detail") + "\"+params,\"detailWindow\", size);\n");
+                ret.append("   window.open(\""+url.setMode("report_detail")+"\"+params,\"detailWindow\", size);\n");
                 ret.append("}\n");
 
                 ret.append("function doGraph(size) {\n");
                 ret.append("   var params = getParams();\n");
-                ret.append("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("graph")+"\"+params,\"graphWindow\",size);\n");
+                ret.append("   window.open(\""+url.setMode("histogram")+"\"+params,\"graphWindow\",size);\n");
                 ret.append("}\n");
 
                 ret.append("function doXml(accion, size) {\n");
                 ret.append("   var params = getParams();\n");
-                ret.append("   window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_xml") + "\"+params,\"graphWindow\",size);\n");
+                ret.append("   window.open(\""+url.setMode("xml")+"\"+params,\"graphWindow\",size);\n");
                 ret.append("}\n");
 
                 ret.append("function doExcel(accion, size) {\n");
                 ret.append("   var params = getParams();\n");
-                ret.append("   window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_excel") + "\"+params,\"graphWindow\",size);\n");
+                ret.append("   window.open(\""+url.setMode("xls")+"\"+params,\"graphWindow\",size);\n");
                 ret.append("}\n");
 
                 ret.append("</script>\n");
 
                 ret.append("<div class=\"swbform\">\n");
-                ret.append("<form method=\"Post\" class=\"box\" action=\"" + address + "\" id=\"frmrep\" name=\"frmrep\">\n");
+                ret.append("<form method=\"Post\" class=\"box\" action=\"\" id=\"frmrep\" name=\"frmrep\">\n");
                 ret.append("<fieldset>\n");
                 ret.append("<table border=\"0\" width=\"95%\" align=\"center\">\n");
                 ret.append("<tr><td width=\"200\"></td><td width=\"200\"></td><td width=\"200\"></td><td width=\"200\"></td></tr>\n");
@@ -330,7 +324,7 @@ ret.append("}\n");
                 ret.append("</tr>\n");
 
                 ret.append("<tr>\n");
-                ret.append("<td>" + paramsRequest.getLocaleString("by_interval_date") + ":&nbsp;</td>\n");
+                ret.append("<td>" + paramsRequest.getLocaleString("by_range") + ":&nbsp;</td>\n");
                 ret.append("<td>&nbsp;</td>\n");
                 ret.append("<td>&nbsp;</td>\n");
                 ret.append("<td>&nbsp;</td>\n");
@@ -355,10 +349,8 @@ ret.append("}\n");
                 ret.append("<td align=\"left\" colspan=\"2\">\n");
                 ret.append("<label for=\"wb_fecha12\">&nbsp;&nbsp;" + paramsRequest.getLocaleString("to") + ":&nbsp;</label>\n");
                 ret.append("<input type=\"text\" name=\"wb_fecha12\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha12\" value=\"" + sdf.format(now.getTime()) + "\" dojoType=\"dijit.form.DateTextBox\" required=\"true\" constraints=\"{datePattern:'dd/MM/yyyy'}\" maxlength=\"10\" style=\"width:110px;\" hasDownArrow=\"true\" />\n");
-                /*ret.append("</td>\n");
-                ret.append("<td>\n");*/
                 ret.append("&nbsp;&nbsp;");
-                ret.append("<label for=\"wb_t12\">" + paramsRequest.getLocaleString("to") + ":&nbsp;</label>\n");
+                ret.append("<label for=\"wb_t12\">" + paramsRequest.getLocaleString("time") + ":&nbsp;</label>\n");
                 ret.append("<input name=\"wb_t12\" id=\"wb_t12\" />\n");
                 ret.append("</td>\n");
                 ret.append("<td></td>\n");
@@ -396,9 +388,9 @@ ret.append("}\n");
                 ret.append(" <tr>\n");
                 ret.append("     <td colspan=\"4\">&nbsp;&nbsp;&nbsp;\n");
                 ret.append("     <button dojoType=\"dijit.form.Button\" onClick=\"doXml('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">XML</button>&nbsp;\n");
-                ret.append("     <button dojoType=\"dijit.form.Button\" onClick=\"doExcel('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">MS Excel</button>&nbsp;\n");
-                ret.append("     <button dojoType=\"dijit.form.Button\" onClick=\"doGraph('width=600, height=550, scrollbars, resizable')\">" + paramsRequest.getLocaleString("graph") + "</button>&nbsp;\n");
-                ret.append("     <button dojoType=\"dijit.form.Button\" onClick=\"doApply()\">" + paramsRequest.getLocaleString("apply") + "</button>\n");
+                ret.append("     <button dojoType=\"dijit.form.Button\" onClick=\"doExcel('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">"+paramsRequest.getLocaleString("spread_sheet")+"</button>&nbsp;\n");
+                ret.append("     <button dojoType=\"dijit.form.Button\" onClick=\"doGraph('width=600, height=550, scrollbars, resizable')\">"+paramsRequest.getLocaleString("histogram")+"</button>&nbsp;\n");
+                ret.append("     <button dojoType=\"dijit.form.Button\" onClick=\"doApply()\">"+paramsRequest.getLocaleString("apply")+"</button>\n");
                 ret.append("     </td>\n");
                 ret.append(" </tr>\n");
                 ret.append("</table>\n");
@@ -539,10 +531,7 @@ ret.append("}\n");
             ret.append("</head>\n");
 
             ret.append("<body class=\"soria\">\n");
-            ret.append("<div class=\"swbform\">\n");
-            ret.append("<form>");
-            ret.append("<fieldset>\n");
-            ret.append("<table border=\"0\" width=\"560\" height=\"460\">\n");
+            ret.append("<table border=\"0\" width=\"98%\" >\n");
             ret.append("<tr>\n");
             ret.append("<td colspan=\"3\"><img src=\""+SWBPlatform.getContextPath()+"/swbadmin/images/swb-logo-hor.jpg\" width=\"180\" height=\"36\" /></td>\n");
             ret.append("</tr>\n");
@@ -561,7 +550,7 @@ ret.append("}\n");
             int ndata = 0;
             ar_pag = getReportResults(request, paramsRequest);
             if(ar_pag.hasNext()) {
-                ret.append("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+SWBPlatform.getContextPath()+"/swbadmin/lib/SWBAplGraph.jar\" width=\"550\" height=\"450\">\n");
+                ret.append("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+SWBPlatform.getContextPath()+"/swbadmin/lib/SWBAplGraph.jar\" width=\"98%\" height=\"450\">\n");
                 ret.append("<param name=\"GraphType\" value=\"Lines\">\n");
                 ret.append("<param name=\"ncdata\" value=\"1\">\n");
                 ret.append("<param name=\"percent\" value=\"false\">\n");
@@ -579,15 +568,12 @@ ret.append("}\n");
                 ret.append("<param name=\"zoom\" value=\"true\">\n");
                 ret.append("</APPLET>\n");
             }else {
-                ret.append(paramsRequest.getLocaleString("no_records_found"));
+                ret.append(paramsRequest.getLocaleString("no_records"));
             }
 
             ret.append("</td>\n");
             ret.append("</tr>\n");
             ret.append("</table>\n");
-            ret.append("</fieldset>\n");
-            ret.append("</form>");
-            ret.append("</div>\n");
             ret.append("</body>\n");
             ret.append("</html>\n");
         }
@@ -628,7 +614,7 @@ ret.append("}\n");
                     out.println("</tr>");
                 }
             } else { // There are not records
-                out.println("<center><br><font color=\"black\">" + paramsRequest.getLocaleString("no_records_found") + "</font></center>");
+                out.println("<center><br><font color=\"black\">" + paramsRequest.getLocaleString("no_records") + "</font></center>");
             }
             out.println("</table>");
 
@@ -767,7 +753,7 @@ ret.append("}\n");
         out.close();
     }
 
-    public String[] DoArrMonth(SWBParamRequest paramsRequest) {
+    /*public String[] DoArrMonth(SWBParamRequest paramsRequest) {
         String[] arr_month = new String[12];
         try {
             arr_month[0] = paramsRequest.getLocaleString("month_january");
@@ -786,7 +772,7 @@ ret.append("}\n");
             log.error("Error on method DoArrMonth() resource " + strRscType + " with id " + getResourceBase().getId(), e);
         }
         return arr_month;
-    }
+    }*/
 
     /**
      * @param request
