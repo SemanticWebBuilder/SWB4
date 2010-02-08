@@ -5,6 +5,7 @@
 
 package org.semanticwb.jcr283.implementation;
 
+import atlas.event.Event;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
@@ -42,7 +43,16 @@ public class ObservationManagerImp implements ObservationManager{
 
     public void nodeAdded(NodeImp node)
     {
-        
+        String path=node.path;
+        String id=node.id;
+        for(EventListener listener : registeredEventListeners.keySet())
+        {
+            EventListenerInfo info =registeredEventListeners.get(listener);
+            if((info.getEventTypes() | EventImp.NODE_ADDED)==EventImp.NODE_ADDED)
+            {
+                EventImp event=new EventImp(EventImp.NODE_ADDED, path, session.getUserID(),id , userData);
+            }
+        }
     }
     public void nodeRemoved(NodeImp node)
     {
