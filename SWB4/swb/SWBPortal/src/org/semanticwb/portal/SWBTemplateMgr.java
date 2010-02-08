@@ -96,6 +96,7 @@ public class SWBTemplateMgr
         while (tpls.hasNext())
         {
             TemplateRef ref=tpls.next();
+            //System.out.println("ref:"+ref+" "+ref.getTemplate()+" "+ref.getTemplate().isValid());
             //valida tipo de herencia
             if(topic.hasTemplateRef(ref))
             {
@@ -104,6 +105,7 @@ public class SWBTemplateMgr
             {
                 if(ref.getInherit()==TemplateRef.INHERIT_ACTUAL)continue;
             }
+            if(!ref.getTemplate().isValid())continue;
             try
             {
                 Template tpl=getTemplateImp(ref.getTemplate());
