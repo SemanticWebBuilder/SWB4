@@ -39,12 +39,12 @@ public final class VersionManagerImp implements VersionManager
     private final NodeManager nodeManager;
     private final ValueFactory valueFactory;
 
-    public VersionManagerImp(SessionImp session, NodeImp versionStorage, NodeManager nodeManager)
+    public VersionManagerImp(SessionImp session, NodeImp versionStorage)
     {
         this.session = session;
         valueFactory=session.getValueFactoryImp();
         this.versionStorage = versionStorage;
-        this.nodeManager = nodeManager;
+        this.nodeManager = session.getWorkspaceImp().getNodeManager();
     }
 
     public NodeImp getVersionStorage()
