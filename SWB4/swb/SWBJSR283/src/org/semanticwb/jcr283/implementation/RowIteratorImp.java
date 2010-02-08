@@ -18,16 +18,13 @@ public final class RowIteratorImp implements RowIterator {
 
     private final Iterator<RowImp> it;
     private final long size;
-    private long position = 0;
-    private final ArrayList<RowImp> rows = new ArrayList<RowImp>();
-    public RowIteratorImp(ArrayList<RowImp> nodes)
+    private long position = 0;    
+    public RowIteratorImp(ArrayList<RowImp> rows)
     {
-        for(RowImp node : nodes)
-        {
-            this.rows.add(node);
-        }
-        it=this.rows.iterator();
-        size=this.rows.size();
+        ArrayList<RowImp> orows = new ArrayList<RowImp>();
+        orows.addAll(rows);
+        it=orows.iterator();
+        size=orows.size();
     }
     public Row nextRow()
     {

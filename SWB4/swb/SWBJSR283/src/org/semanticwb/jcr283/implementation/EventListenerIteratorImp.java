@@ -2,40 +2,37 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package org.semanticwb.jcr283.implementation;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
+import javax.jcr.observation.EventListener;
+import javax.jcr.observation.EventListenerIterator;
+
 
 /**
  *
  * @author victor.lorenzana
  */
-public final class NodeIteratorImp implements NodeIterator
-{
+public class EventListenerIteratorImp implements EventListenerIterator {
 
-    private final Iterator<NodeImp> it;
+    private final Iterator<EventListener> it;
     private final long size;
     private long position = 0;
-
-    public NodeIteratorImp(Set<NodeImp> nodes)
+    public EventListenerIteratorImp(Set<EventListener> events)
     {
-        ArrayList<NodeImp> values = new ArrayList<NodeImp>();
-        values.addAll(nodes);
-        it = values.iterator();
-        size = values.size();
+        ArrayList<EventListener> oevents = new ArrayList<EventListener>();
+        oevents.addAll(events);
+        it=oevents.iterator();
+        size=oevents.size();
     }
-
-    public Node nextNode()
+    public EventListener nextEventListener()
     {
-        NodeImp node = it.next();
-        if (node != null)
-        {
+        EventListener node=it.next();
+        if(node!=null)
             position++;
-        }
         return node;
     }
 
@@ -61,11 +58,12 @@ public final class NodeIteratorImp implements NodeIterator
 
     public Object next()
     {
-        return this.nextNode();
+        return this.nextEventListener();
     }
 
     public void remove()
     {
         it.remove();
     }
+
 }

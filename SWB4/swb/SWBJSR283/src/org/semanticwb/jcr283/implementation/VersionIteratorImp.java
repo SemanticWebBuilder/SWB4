@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.semanticwb.jcr283.implementation;
 
 import java.util.ArrayList;
@@ -15,26 +14,28 @@ import javax.jcr.version.VersionIterator;
  *
  * @author victor.lorenzana
  */
-public final class VersionIteratorImp implements VersionIterator {
+public final class VersionIteratorImp implements VersionIterator
+{
 
     private final Iterator<VersionImp> it;
     private final long size;
     private long position = 0;
-    private final ArrayList<VersionImp> nodes = new ArrayList<VersionImp>();
-    public VersionIteratorImp(Set<VersionImp> nodes)
+
+    public VersionIteratorImp(Set<VersionImp> versions)
     {
-        for(VersionImp node : nodes)
-        {
-            this.nodes.add(node);
-        }
-        it=this.nodes.iterator();
-        size=this.nodes.size();
+        ArrayList<VersionImp> values = new ArrayList<VersionImp>();
+        values.addAll(versions);
+        it = values.iterator();
+        size = values.size();
     }
+
     public Version nextVersion()
     {
-        VersionImp node=it.next();
-        if(node!=null)
+        VersionImp node = it.next();
+        if (node != null)
+        {
             position++;
+        }
         return node;
     }
 
@@ -67,5 +68,4 @@ public final class VersionIteratorImp implements VersionIterator {
     {
         it.remove();
     }
-
 }
