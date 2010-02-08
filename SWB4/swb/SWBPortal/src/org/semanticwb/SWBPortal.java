@@ -478,6 +478,8 @@ public class SWBPortal {
         if (site == null) {
             log.event("Creating Admin WebSite...");
             SWBPlatform.getSemanticMgr().createModel(SWBContext.WEBSITE_ADMIN, "http://www.semanticwb.org/SWBAdmin#");
+            //MAPS74
+            SWBPlatform.getSemanticMgr().createKeyPair();
         }
 
         //System.out.println("Checking OntEditor...");
