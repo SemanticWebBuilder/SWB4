@@ -5,7 +5,6 @@
 
 package org.semanticwb.jcr283.implementation;
 
-import java.util.HashSet;
 import java.util.Hashtable;
 import javax.jcr.RepositoryException;
 import javax.jcr.observation.EventJournal;
@@ -29,7 +28,7 @@ public class ObservationManagerImp implements ObservationManager{
     {
         if(!registeredEventListeners.containsKey(listener))
         {
-            EventListenerInfo info=new EventListenerInfo();
+            EventListenerInfo info=new EventListenerInfo(eventTypes, absPath, isDeep, uuid, nodeTypeName, noLocal);
             registeredEventListeners.put(listener, info);
         }
         else
@@ -45,7 +44,7 @@ public class ObservationManagerImp implements ObservationManager{
 
     public EventListenerIterator getRegisteredEventListeners() throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new EventListenerIteratorImp(registeredEventListeners.keySet());
     }
 
     public void setUserData(String userData) throws RepositoryException

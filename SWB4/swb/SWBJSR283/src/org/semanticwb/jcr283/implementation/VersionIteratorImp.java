@@ -5,8 +5,8 @@
 package org.semanticwb.jcr283.implementation;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
-import java.util.Set;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionIterator;
 
@@ -21,7 +21,7 @@ public final class VersionIteratorImp implements VersionIterator
     private final long size;
     private long position = 0;
 
-    public VersionIteratorImp(Set<VersionImp> versions)
+    public VersionIteratorImp(Collection<VersionImp> versions)
     {
         ArrayList<VersionImp> values = new ArrayList<VersionImp>();
         values.addAll(versions);
