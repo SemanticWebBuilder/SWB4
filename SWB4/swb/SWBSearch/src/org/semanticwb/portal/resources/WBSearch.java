@@ -239,7 +239,8 @@ public class WBSearch extends GenericAdmResource
             Element epagination=doc.createElement("pagination");
             search.appendChild(epagination);
 
-            int pm=(max-1)/ipageLength;
+            int pm=0;
+            if(ipageLength>0)pm=(max-1)/ipageLength;
             int pi=ipage-5;if(pi<0)pi=0;
             int pf=ipage+5;if(pf>pm)pf=pm;
 
