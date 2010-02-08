@@ -1040,15 +1040,18 @@ public class SemanticObject
         {
             SemanticObject obj=it.next();
             boolean add=true;
+            //System.out.println("obj:"+obj);
             if(cls==null)
             {
                 cls=obj.getSemanticClass();
                 valid=cls.getProperty("valid");
             }
+            //System.out.println("cls:"+cls+" valid:"+valid);
             if(valid!=null)
             {
                 if(!obj.getBooleanProperty(valid))add=false;
             }
+            //System.out.println("add:"+add);
             if(add)list.add(obj);
         }
         return list.iterator();
