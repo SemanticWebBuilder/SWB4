@@ -22,7 +22,7 @@ import org.semanticwb.model.GenericIterator;
  *
  * @author victor.lorenzana
  */
-public class HashtableNodeManager extends Hashtable<String, NodeStatus>
+public final class HashtableNodeManager extends Hashtable<String, NodeStatus>
 {
 
     private static final String PATH_SEPARATOR = "/";

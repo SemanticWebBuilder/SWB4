@@ -17,7 +17,12 @@ import javax.jcr.query.qom.QueryObjectModelFactory;
  */
 public class QueryManagerImp implements QueryManager
 {
-
+    private static final String[] supportedQueryLanguages;
+    static
+    {
+        supportedQueryLanguages=new String[1];
+        supportedQueryLanguages[0]=SPARQLQuery.SPARQL;
+    }
     private final SessionImp session;
 
     public QueryManagerImp(SessionImp session)
@@ -47,6 +52,6 @@ public class QueryManagerImp implements QueryManager
 
     public String[] getSupportedQueryLanguages() throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return supportedQueryLanguages;
     }
 }

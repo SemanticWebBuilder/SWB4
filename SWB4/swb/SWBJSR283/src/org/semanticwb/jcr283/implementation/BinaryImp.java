@@ -15,7 +15,7 @@ import javax.jcr.RepositoryException;
  *
  * @author victor.lorenzana
  */
-public class BinaryImp implements Binary {
+public final class BinaryImp implements Binary {
 
     private final byte[] cont;
     public BinaryImp(byte[] cont)
