@@ -2,6 +2,7 @@
 <rdf:RDF
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
+    xmlns:swbxf="http://www.semanticwebbuilder.org/swb4/xforms/ontology#"
     xmlns:swp="http://www.semanticwebbuilder.org/swb4/swp#"
     xmlns:owl="http://www.w3.org/2002/07/owl#"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
@@ -973,14 +974,6 @@
     <rdfs:label xml:lang="es">Propiedades de salida</rdfs:label>
     <rdfs:domain rdf:resource="#OutputSet"/>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasTrigger">
-    <rdfs:domain rdf:resource="#Catchable"/>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Define el tipo de activador esperado por un evento. Para los eventos de inicio sólo pueden ser de tipo MessageDetail, TimerDetail, ConditionalDetail y SignalDetail. Pueden establecerse varios activadores a la vez (Inicio de eventos múltiples).</rdfs:comment>
-    <rdfs:label xml:lang="es">Activador</rdfs:label>
-    <rdfs:label xml:lang="en">Trigger</rdfs:label>
-    <rdfs:range rdf:resource="#EventDetail"/>
-  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="categoryRef">
     <rdfs:range rdf:resource="#Category"/>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -988,6 +981,14 @@
     <rdfs:label xml:lang="en">Category reference</rdfs:label>
     <rdfs:label xml:lang="es">Referencia a categoría</rdfs:label>
     <rdfs:domain rdf:resource="#Group"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasTrigger">
+    <rdfs:domain rdf:resource="#Catchable"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Define el tipo de activador esperado por un evento. Para los eventos de inicio sólo pueden ser de tipo MessageDetail, TimerDetail, ConditionalDetail y SignalDetail. Pueden establecerse varios activadores a la vez (Inicio de eventos múltiples).</rdfs:comment>
+    <rdfs:label xml:lang="es">Activador</rdfs:label>
+    <rdfs:label xml:lang="en">Trigger</rdfs:label>
+    <rdfs:range rdf:resource="#EventDetail"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="loopCondition">
     <rdfs:domain rdf:resource="#StandardLoopable"/>
@@ -1048,6 +1049,29 @@
     <rdfs:label xml:lang="es">Categorías</rdfs:label>
     <rdfs:label xml:lang="en">Categories</rdfs:label>
     <rdfs:domain rdf:resource="#BPMNElement"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="processFormView">
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormView"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="processPage">
+    <rdfs:domain>
+      <swb:Class rdf:ID="Process">
+        <rdfs:subClassOf rdf:resource="#IOAble"/>
+        <rdfs:label xml:lang="es">Proceso</rdfs:label>
+        <rdfs:subClassOf rdf:resource="#Diagramable"/>
+        <rdfs:label xml:lang="en">Process</rdfs:label>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Un proceso es una actividad realizada dentro o entre compañías u organizaciones. Un diagrama de procesos de negocio puede por lo tanto, contener más de un proceso individual. Aunque los procesos sean independientes en la secuencia de flujo, pueden tener flujos de mensaje que los conecten.</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="#Modelable"/>
+        <rdfs:subClassOf rdf:resource="#SupportingElement"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="#Assignable"/>
+        <rdfs:subClassOf rdf:resource="#ProcessTraceable"/>
+        <rdfs:subClassOf rdf:resource="#Performable"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="fromRef">
     <rdfs:domain rdf:resource="#Message"/>
@@ -1290,24 +1314,7 @@
     <rdfs:range rdf:resource="#Condition"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="processRef">
-    <rdfs:range>
-      <swb:Class rdf:ID="Process">
-        <rdfs:subClassOf rdf:resource="#IOAble"/>
-        <rdfs:label xml:lang="es">Proceso</rdfs:label>
-        <rdfs:subClassOf rdf:resource="#Diagramable"/>
-        <rdfs:label xml:lang="en">Process</rdfs:label>
-        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Un proceso es una actividad realizada dentro o entre compañías u organizaciones. Un diagrama de procesos de negocio puede por lo tanto, contener más de un proceso individual. Aunque los procesos sean independientes en la secuencia de flujo, pueden tener flujos de mensaje que los conecten.</rdfs:comment>
-        <rdfs:subClassOf rdf:resource="#Modelable"/>
-        <rdfs:subClassOf rdf:resource="#SupportingElement"/>
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:subClassOf rdf:resource="#Assignable"/>
-        <rdfs:subClassOf rdf:resource="#ProcessTraceable"/>
-        <rdfs:subClassOf rdf:resource="#Performable"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:range>
+    <rdfs:range rdf:resource="#Process"/>
     <rdfs:label xml:lang="en">Process reference</rdfs:label>
     <rdfs:label xml:lang="es">Referencia a proceso</rdfs:label>
     <rdfs:domain rdf:resource="#ProcessReferensable"/>
@@ -1372,6 +1379,9 @@
     <rdfs:label xml:lang="en">Entity reference</rdfs:label>
     <rdfs:label xml:lang="es">Referencia a entidad</rdfs:label>
     <rdfs:range rdf:resource="#Entity"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="process">
+    <rdfs:range rdf:resource="#Process"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasPropertyInput">
     <rdfs:domain rdf:resource="#InputSet"/>
@@ -1844,6 +1854,15 @@
     <rdfs:label xml:lang="es">Estado</rdfs:label>
     <rdfs:label xml:lang="en">Status</rdfs:label>
   </owl:DatatypeProperty>
+  <swbxf:HerarquicalNode rdf:ID="hn_Processes">
+    <swbxf:heClass rdf:resource="#SubProcess"/>
+    <swb:title xml:lang="en">Processes</swb:title>
+    <swb:title xml:lang="es">Procesos</swb:title>
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >80</swb:index>
+    <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >swbIconCalendars</swb:iconClass>
+  </swbxf:HerarquicalNode>
   <swb:Interface rdf:ID="TransactionUsable">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
@@ -1888,6 +1907,10 @@
     <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >swp</swb:prefix>
   </swb:CodePackage>
+  <swbxf:DisplayObject rdf:ID="do_ProcessSite">
+    <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >swbIconWebSite</swb:iconClass>
+  </swbxf:DisplayObject>
   <swb:Class rdf:ID="AdHocSubProcess">
     <rdfs:subClassOf rdf:resource="#AdHocable"/>
     <rdfs:subClassOf rdf:resource="#EmbeddedSubProcess"/>
@@ -1915,6 +1938,14 @@
     <rdfs:subClassOf rdf:resource="#EndEvent"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
+  <swbxf:DisplayObject rdf:ID="do_ProcessWebPage">
+    <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >2</swbxf:dropMatchLevel>
+    <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swbxf:dragSupport>
+    <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >swbIconWebPage</swb:iconClass>
+  </swbxf:DisplayObject>
   <swb:Class rdf:ID="ServiceTask">
     <swb:classGroupId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Task</swb:classGroupId>
@@ -1968,6 +1999,10 @@
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
     <rdfs:subClassOf rdf:resource="#Throwable"/>
   </swb:Class>
+  <swb:Interface rdf:ID="NormalFlowUsable">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Interface>
   <swb:Class rdf:ID="ConditionalSequenceFlow">
     <rdfs:subClassOf rdf:resource="#Conditionable"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -1975,10 +2010,6 @@
     <rdfs:subClassOf rdf:resource="#SequenceFlow"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
-  <swb:Interface rdf:ID="NormalFlowUsable">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:Interface>
   <swb:Class rdf:ID="MultipleIntermediateEvent">
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
