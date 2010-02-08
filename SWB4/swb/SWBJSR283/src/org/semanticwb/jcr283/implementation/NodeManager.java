@@ -37,11 +37,13 @@ public final class NodeManager
     private Hashtable<String, HashSet<PropertyStatus>> propertiesbyParent = new Hashtable<String, HashSet<PropertyStatus>>();
     private final static Logger log = SWBUtils.getLogger(NodeManager.class);
     private final SessionImp session;
+    private final ObservationManagerImp observerManager;
 
     public NodeManager(SessionImp session)
     {
         nodes = new HashtableNodeManager(session);
         this.session = session;
+        this.observerManager=session.getWorkspaceImp().getObservationManagerImp();
     }
 
     public NodeImp loadRoot(org.semanticwb.jcr283.repository.model.Workspace ws, SessionImp session) throws RepositoryException
@@ -128,6 +130,10 @@ public final class NodeManager
         {
 
             nodes.put(node.path, new NodeStatus(node, session));
+            if(node.isNew)
+            {
+                observerManager.nodeAdded(node);
+            }
         }
         return nodes.get(node.path).getNode();
     }
@@ -154,7 +160,10 @@ public final class NodeManager
             }
             childnodes.add(propertyStatus);
             propertiesbyParent.put(pathParent, childnodes);
-
+            if(property.isNew)
+            {
+                observerManager.propertyAdded(property);
+            }
         }
         else
         {
@@ -555,6 +564,7 @@ public final class NodeManager
         if (properties.containsKey(path))
         {
             properties.get(path).delete();
+            observerManager.propertyRemoved(properties.get(path).getProperty());
         }
     }
 
@@ -563,6 +573,7 @@ public final class NodeManager
         if (nodes.containsKey(path))
         {
             nodes.get(path).delete();
+            observerManager.nodeRemoved(nodes.get(path).getNode());
         }
     }
 }

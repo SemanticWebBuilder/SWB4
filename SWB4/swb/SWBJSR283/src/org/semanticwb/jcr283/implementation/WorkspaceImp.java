@@ -42,6 +42,7 @@ public final class WorkspaceImp  implements Workspace {
     private final VersionManagerImp versionManagerImp;
     private final QueryManagerImp queryManagerImp;
     private final LockManagerImp lockManagerImp;
+    private final ObservationManagerImp observationManagerImp;
     public WorkspaceImp(SessionImp session,org.semanticwb.jcr283.repository.model.Workspace ws) throws RepositoryException
     {
         this.session=session;
@@ -58,7 +59,7 @@ public final class WorkspaceImp  implements Workspace {
             throw new RepositoryException("The node "+path+" was not found");
         }
         versionManagerImp=new VersionManagerImp(session, versionSotrage);
-        
+        observationManagerImp=new ObservationManagerImp(session);
     }
     
     public NodeManager getNodeManager()
@@ -134,8 +135,13 @@ public final class WorkspaceImp  implements Workspace {
 
     public ObservationManager getObservationManager() throws UnsupportedRepositoryOperationException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return observationManagerImp;
     }
+    public ObservationManagerImp getObservationManagerImp()
+    {
+        return observationManagerImp;
+    }
+
 
     public VersionManager getVersionManager() throws UnsupportedRepositoryOperationException, RepositoryException
     {
