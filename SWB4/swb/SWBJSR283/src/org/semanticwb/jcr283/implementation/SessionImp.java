@@ -34,6 +34,8 @@ import javax.jcr.nodetype.NoSuchNodeTypeException;
 import javax.jcr.retention.RetentionManager;
 import javax.jcr.security.AccessControlManager;
 import javax.jcr.version.VersionException;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
@@ -41,26 +43,26 @@ import org.xml.sax.SAXException;
  *
  * @author victor.lorenzana
  */
-public class SessionImp implements Session
+public final class SessionImp implements Session
 {
 
-    private WorkspaceImp workspace;    
-    private Principal principal;
+    private static Logger log = SWBUtils.getLogger(SWBRepository.class);
+    private WorkspaceImp workspace;
+    private final Principal principal;
     private final SWBRepository repository;
-    private boolean isLive=false;
-    private final ValueFactoryImp valueFactory=new ValueFactoryImp();
-    public SessionImp(SWBRepository repository,Principal principal)
+    private boolean isLive = false;
+    private final ValueFactoryImp valueFactory = new ValueFactoryImp();
+
+    public SessionImp(SWBRepository repository, Principal principal)
     {
         this.principal = principal;
-        this.repository=repository;
+        this.repository = repository;
     }
 
     public WorkspaceImp getWorkspaceImp()
     {
         return workspace;
     }
-
-
 
     public void setWorkspace(WorkspaceImp workspace)
     {
@@ -107,15 +109,16 @@ public class SessionImp implements Session
     {
         return repository.login(credentials);
     }
+
     @Deprecated
     public Node getNodeByUUID(String uuid) throws ItemNotFoundException, RepositoryException
     {
-        return workspace.getNodeManager().getNodeByIdentifier(uuid,this);
+        return workspace.getNodeManager().getNodeByIdentifier(uuid, this);
     }
 
     public Node getNodeByIdentifier(String id) throws ItemNotFoundException, RepositoryException
     {
-        return workspace.getNodeManager().getNodeByIdentifier(id,this);
+        return workspace.getNodeManager().getNodeByIdentifier(id, this);
     }
 
     private static boolean isValidAbsPath(String absPath)
@@ -138,6 +141,7 @@ public class SessionImp implements Session
             return getPropertyImp(absPath);
         }
     }
+
     public Item getItem(String absPath) throws PathNotFoundException, RepositoryException
     {
         return getItemImp(absPath);
@@ -147,9 +151,10 @@ public class SessionImp implements Session
     {
         return getNodeImp(absPath);
     }
+
     private NodeImp getNodeImp(String absPath) throws PathNotFoundException, RepositoryException
     {
-        NodeImp node = workspace.getNodeManager().getNode(absPath,this);
+        NodeImp node = workspace.getNodeManager().getNode(absPath, this);
         if (node == null)
         {
             throw new PathNotFoundException();
@@ -161,6 +166,7 @@ public class SessionImp implements Session
     {
         return getPropertyImp(absPath);
     }
+
     public PropertyImp getPropertyImp(String absPath) throws PathNotFoundException, RepositoryException
     {
         PropertyImp property = workspace.getNodeManager().getProperty(absPath);
@@ -173,7 +179,7 @@ public class SessionImp implements Session
 
     public boolean itemExists(String absPath) throws RepositoryException
     {
-        if(!nodeExists(absPath))
+        if (!nodeExists(absPath))
         {
             return propertyExists(absPath);
         }
@@ -195,25 +201,24 @@ public class SessionImp implements Session
 
     public void move(String srcAbsPath, String destAbsPath) throws ItemExistsException, PathNotFoundException, VersionException, ConstraintViolationException, LockException, RepositoryException
     {
-        ItemImp srcAbsPathItem =getItemImp(srcAbsPath);
-        ItemImp destAbsPathItem =getItemImp(destAbsPath);
-        String oldpath=srcAbsPathItem.getPath();
-        String name=ItemImp.extractName(srcAbsPathItem.getPath());
-        String path=destAbsPathItem.getPathFromName(name);
-        if(this.itemExists(path))
+        ItemImp srcAbsPathItem = getItemImp(srcAbsPath);
+        ItemImp destAbsPathItem = getItemImp(destAbsPath);
+        String oldpath = srcAbsPathItem.getPath();
+        String name = ItemImp.extractName(srcAbsPathItem.getPath());
+        String path = destAbsPathItem.getPathFromName(name);
+        if (this.itemExists(path))
         {
             throw new ItemExistsException();
         }
-        if(destAbsPathItem instanceof NodeImp)
+        if (destAbsPathItem instanceof NodeImp)
         {
-            workspace.getNodeManager().move(oldpath, path, (NodeImp)destAbsPathItem);
-        }        
+            workspace.getNodeManager().move(oldpath, path, (NodeImp) destAbsPathItem);
+        }
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public void removeItem(String absPath) throws VersionException, LockException, ConstraintViolationException, AccessDeniedException, RepositoryException
     {
-        
     }
 
     public void save() throws AccessDeniedException, ItemExistsException, ReferentialIntegrityException, ConstraintViolationException, InvalidItemStateException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
@@ -236,6 +241,7 @@ public class SessionImp implements Session
     {
         return valueFactory;
     }
+
     public ValueFactoryImp getValueFactoryImp()
     {
         return valueFactory;
@@ -308,27 +314,52 @@ public class SessionImp implements Session
 
     public void logout()
     {
-        isLive=false;        
+        isLive = false;
     }
 
     public boolean isLive()
     {
         return isLive;
     }
+
     @Deprecated
     public void addLockToken(String lt)
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try
+        {
+            workspace.getLockManagerImp().addLockToken(lt);
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+        }
     }
+
     @Deprecated
     public String[] getLockTokens()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try
+        {
+            return workspace.getLockManagerImp().getLockTokens();
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+            return null;
+        }
     }
+
     @Deprecated
     public void removeLockToken(String lt)
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try
+        {
+            workspace.getLockManagerImp().removeLockToken(lt);
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+        }
     }
 
     public AccessControlManager getAccessControlManager() throws UnsupportedRepositoryOperationException, RepositoryException

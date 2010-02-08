@@ -33,7 +33,7 @@ import org.xml.sax.ContentHandler;
  *
  * @author victor.lorenzana
  */
-public class WorkspaceImp  implements Workspace {
+public final class WorkspaceImp  implements Workspace {
 
     private final SessionImp session;    
     private final String name;    

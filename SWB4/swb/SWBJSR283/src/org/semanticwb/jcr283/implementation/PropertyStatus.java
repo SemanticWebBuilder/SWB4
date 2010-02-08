@@ -8,7 +8,7 @@ package org.semanticwb.jcr283.implementation;
  *
  * @author victor.lorenzana
  */
-public class PropertyStatus
+public final class PropertyStatus
 {
 
     private boolean deleted;

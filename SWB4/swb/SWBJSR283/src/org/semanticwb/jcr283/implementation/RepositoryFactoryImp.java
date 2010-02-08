@@ -14,7 +14,7 @@ import javax.jcr.RepositoryFactory;
  *
  * @author victor.lorenzana
  */
-public class RepositoryFactoryImp implements RepositoryFactory {
+public final class RepositoryFactoryImp implements RepositoryFactory {
 
     public Repository getRepository(Map parameters) throws RepositoryException
     {

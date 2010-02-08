@@ -24,7 +24,7 @@ import org.semanticwb.model.GenericIterator;
  *
  * @author victor.lorenzana
  */
-public class VersionHistoryImp extends NodeImp implements VersionHistory
+public final class VersionHistoryImp extends NodeImp implements VersionHistory
 {
 
     private final static Logger log = SWBUtils.getLogger(VersionHistoryImp.class);

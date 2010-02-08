@@ -39,7 +39,7 @@ import org.semanticwb.platform.SemanticProperty;
  *
  * @author victor.lorenzana
  */
-public class PropertyImp extends ItemImp implements Property
+public final class PropertyImp extends ItemImp implements Property
 {
     
     private static final Logger log = SWBUtils.getLogger(PropertyImp.class);

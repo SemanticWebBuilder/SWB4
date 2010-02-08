@@ -15,7 +15,7 @@ import javax.jcr.query.qom.QueryObjectModelFactory;
  *
  * @author victor.lorenzana
  */
-public class QueryManagerImp implements QueryManager
+public final class QueryManagerImp implements QueryManager
 {
     private final QueryObjectModelFactoryImp factory;
     private static final String[] supportedQueryLanguages;

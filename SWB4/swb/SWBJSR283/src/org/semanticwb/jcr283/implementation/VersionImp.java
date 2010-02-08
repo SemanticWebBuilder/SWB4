@@ -9,7 +9,6 @@ import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
-import javax.jcr.nodetype.NoSuchNodeTypeException;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.version.OnParentVersionAction;
 import javax.jcr.version.Version;
@@ -21,7 +20,7 @@ import org.semanticwb.SWBUtils;
  *
  * @author victor.lorenzana
  */
-public class VersionImp extends NodeImp implements Version
+public final class VersionImp extends NodeImp implements Version
 {
     private final static Logger log = SWBUtils.getLogger(VersionImp.class);
     public VersionImp(org.semanticwb.jcr283.repository.model.Version version, VersionHistoryImp parent, int index, String path, int depth, SessionImp session)

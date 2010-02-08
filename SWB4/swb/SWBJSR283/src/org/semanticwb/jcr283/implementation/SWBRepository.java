@@ -30,7 +30,7 @@ import org.semanticwb.security.auth.SWB4CallbackHandlerGateWayOffice;
  *
  * @author victor.lorenzana
  */
-public class SWBRepository implements Repository {
+public final class SWBRepository implements Repository {
     
     private static Logger log = SWBUtils.getLogger(SWBRepository.class);
     private static Hashtable<String, Value[]> descriptors = new Hashtable<String, Value[]>();

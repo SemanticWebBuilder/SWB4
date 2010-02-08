@@ -28,7 +28,7 @@ import org.semanticwb.platform.SemanticObject;
  *
  * @author victor.lorenzana
  */
-public class SPARQLQuery extends QueryImp
+public final class SPARQLQuery extends QueryImp
 {
 
     private static Logger log = SWBUtils.getLogger(SPARQLQuery.class);

@@ -17,7 +17,7 @@ import javax.jcr.lock.LockManager;
  *
  * @author victor.lorenzana
  */
-public class LockManagerImp implements LockManager
+public final class LockManagerImp implements LockManager
 {
 
     private final NodeManager nodeManager;

@@ -13,7 +13,7 @@ import javax.jcr.nodetype.PropertyDefinition;
  *
  * @author victor.lorenzana
  */
-public class NodeTypeDefinitionImp implements NodeTypeDefinition{
+public final class NodeTypeDefinitionImp implements NodeTypeDefinition{
 
     public String getName()
     {

@@ -36,7 +36,7 @@ import org.semanticwb.model.User;
  *
  * @author victor.lorenzana
  */
-public class SWBCredentials implements Credentials {
+public final class SWBCredentials implements Credentials {
     private Principal principal;
     public SWBCredentials(User principal)
     {

@@ -29,7 +29,7 @@ import org.semanticwb.platform.SemanticClass;
  *
  * @author victor.lorenzana
  */
-public class NodeTypeManagerImp implements NodeTypeManager
+public final class NodeTypeManagerImp implements NodeTypeManager
 {
 
     private static Logger log = SWBUtils.getLogger(NodeTypeManagerImp.class);

@@ -27,7 +27,7 @@ import javax.jcr.version.VersionException;
  *
  * @author victor.lorenzana
  */
-public class QueryObjectModelImp implements QueryObjectModel {
+public final class QueryObjectModelImp implements QueryObjectModel {
 
     private final SessionImp session;
     public QueryObjectModelImp(SessionImp session)

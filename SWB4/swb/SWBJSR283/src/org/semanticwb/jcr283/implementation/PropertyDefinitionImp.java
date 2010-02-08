@@ -20,7 +20,7 @@ import org.semanticwb.platform.SemanticProperty;
  *
  * @author victor.lorenzana
  */
-public class PropertyDefinitionImp extends ItemDefinitionImp implements PropertyDefinition
+public final class PropertyDefinitionImp extends ItemDefinitionImp implements PropertyDefinition
 {
 
     private final boolean isMultiple;

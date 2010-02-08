@@ -42,7 +42,7 @@ import javax.jcr.ValueFormatException;
  *
  * @author victor.lorenzana
  */
-public class ValueFactoryImp implements ValueFactory
+public final class ValueFactoryImp implements ValueFactory
 {
 
      public Value createValue(String value)
