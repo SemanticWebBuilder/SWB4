@@ -31,6 +31,7 @@ import org.semanticwb.security.auth.SWB4CallbackHandlerGateWayOffice;
  * @author victor.lorenzana
  */
 public final class SWBRepository implements Repository {
+    public static final String DEFAULT_URI_WORKSPACES = "http://www.semanticwb.org.mx/jcr283/workspace#";
     
     private static Logger log = SWBUtils.getLogger(SWBRepository.class);
     private static Hashtable<String, Value[]> descriptors = new Hashtable<String, Value[]>();
@@ -71,7 +72,7 @@ public final class SWBRepository implements Repository {
         org.semanticwb.jcr283.repository.model.Workspace ws=org.semanticwb.jcr283.repository.model.Workspace.ClassMgr.getWorkspace(DEFAULT_WORKSPACE);
         if(ws==null)
         {
-            ws=org.semanticwb.jcr283.repository.model.Workspace.ClassMgr.createWorkspace(DEFAULT_WORKSPACE, "http://www.semanticwb.org.mx/jcr283/default#");
+            ws=org.semanticwb.jcr283.repository.model.Workspace.ClassMgr.createWorkspace(DEFAULT_WORKSPACE, DEFAULT_URI_WORKSPACES);
             ws.setName(DEFAULT_WORKSPACE);
         }        
     }
