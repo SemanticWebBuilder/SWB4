@@ -20,16 +20,13 @@ public final class PropertyIteratorImp implements PropertyIterator
     private final Iterator<PropertyImp> it;
     private final long size;
     private long position = 0;
-    private final ArrayList<PropertyImp> nodes = new ArrayList<PropertyImp>();
 
     public PropertyIteratorImp(Set<PropertyImp> properties)
     {
-        for (PropertyImp node : nodes)
-        {
-            this.nodes.add(node);
-        }
-        it = this.nodes.iterator();
-        size = this.nodes.size();
+        ArrayList<PropertyImp> values = new ArrayList<PropertyImp>();
+        values.addAll(properties);
+        it = values.iterator();
+        size = values.size();
     }
 
     public Property nextProperty()

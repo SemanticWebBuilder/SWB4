@@ -20,16 +20,14 @@ public final class NodeTypeIteratorImp implements NodeTypeIterator
     private final Iterator<NodeTypeImp> it;
     private final long size;
     private long position = 0;
-    private final ArrayList<NodeTypeImp> nodes = new ArrayList<NodeTypeImp>();
+    
 
     public NodeTypeIteratorImp(Set<NodeTypeImp> nodeTypes)
     {
-        for (NodeTypeImp nodeType : nodeTypes)
-        {
-            nodes.add(nodeType);
-        }
-        it = nodes.iterator();
-        size = nodes.size();
+        ArrayList<NodeTypeImp> values = new ArrayList<NodeTypeImp>();
+        values.addAll(nodeTypes);
+        it = values.iterator();
+        size = values.size();
     }
 
     public NodeType nextNodeType()
