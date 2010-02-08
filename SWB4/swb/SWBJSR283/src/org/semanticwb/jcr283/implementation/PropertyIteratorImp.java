@@ -5,8 +5,8 @@
 package org.semanticwb.jcr283.implementation;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
-import java.util.Set;
 import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
 
@@ -21,7 +21,7 @@ public final class PropertyIteratorImp implements PropertyIterator
     private final long size;
     private long position = 0;
 
-    public PropertyIteratorImp(Set<PropertyImp> properties)
+    public PropertyIteratorImp(Collection<PropertyImp> properties)
     {
         ArrayList<PropertyImp> values = new ArrayList<PropertyImp>();
         values.addAll(properties);

@@ -6,8 +6,8 @@
 package org.semanticwb.jcr283.implementation;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
-import java.util.Set;
 import javax.jcr.observation.EventListener;
 import javax.jcr.observation.EventListenerIterator;
 
@@ -21,7 +21,7 @@ public class EventListenerIteratorImp implements EventListenerIterator {
     private final Iterator<EventListener> it;
     private final long size;
     private long position = 0;
-    public EventListenerIteratorImp(Set<EventListener> events)
+    public EventListenerIteratorImp(Collection<EventListener> events)
     {
         ArrayList<EventListener> oevents = new ArrayList<EventListener>();
         oevents.addAll(events);

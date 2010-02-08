@@ -5,8 +5,8 @@
 package org.semanticwb.jcr283.implementation;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
-import java.util.Set;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 
@@ -21,7 +21,7 @@ public final class NodeIteratorImp implements NodeIterator
     private final long size;
     private long position = 0;
 
-    public NodeIteratorImp(Set<NodeImp> nodes)
+    public NodeIteratorImp(Collection<NodeImp> nodes)
     {
         ArrayList<NodeImp> values = new ArrayList<NodeImp>();
         values.addAll(nodes);

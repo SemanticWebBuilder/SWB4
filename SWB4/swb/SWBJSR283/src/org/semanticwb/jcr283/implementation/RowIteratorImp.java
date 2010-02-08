@@ -6,6 +6,7 @@
 package org.semanticwb.jcr283.implementation;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import javax.jcr.query.Row;
 import javax.jcr.query.RowIterator;
@@ -19,7 +20,7 @@ public final class RowIteratorImp implements RowIterator {
     private final Iterator<RowImp> it;
     private final long size;
     private long position = 0;    
-    public RowIteratorImp(ArrayList<RowImp> rows)
+    public RowIteratorImp(Collection<RowImp> rows)
     {
         ArrayList<RowImp> orows = new ArrayList<RowImp>();
         orows.addAll(rows);
