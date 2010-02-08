@@ -49,7 +49,7 @@ public final class WorkspaceImp  implements Workspace {
         name=ws.getName();        
         nodeManager=new NodeManager(session);
         queryManagerImp=new QueryManagerImp(session);
-        lockManagerImp=new LockManagerImp(session, nodeManager);
+        lockManagerImp=new LockManagerImp(session);
         nodeManager.loadRoot(ws, session);
         String path="/jcr:system/jcr:versionStorage";
         NodeImp versionSotrage=nodeManager.getNode(path);
@@ -57,7 +57,7 @@ public final class WorkspaceImp  implements Workspace {
         {
             throw new RepositoryException("The node "+path+" was not found");
         }
-        versionManagerImp=new VersionManagerImp(session,versionSotrage,nodeManager);
+        versionManagerImp=new VersionManagerImp(session, versionSotrage);
         
     }
     

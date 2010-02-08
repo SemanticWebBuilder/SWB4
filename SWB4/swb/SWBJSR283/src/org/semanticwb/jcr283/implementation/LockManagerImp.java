@@ -23,10 +23,10 @@ public final class LockManagerImp implements LockManager
     private final NodeManager nodeManager;
     private final SessionImp session;
 
-    public LockManagerImp(SessionImp session, NodeManager nodeManager)
-    {
-        this.nodeManager = nodeManager;
+    public LockManagerImp(SessionImp session)
+    {        
         this.session = session;
+        nodeManager=session.getWorkspaceImp().getNodeManager();
     }
 
     public void addLockToken(String lockToken) throws LockException, RepositoryException
