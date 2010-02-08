@@ -267,7 +267,7 @@ public class Search extends GenericAdmResource
                     search.setAttribute("back", "" + as);
                 }
 
-                // ********************** Paginaci�n **********************
+                // ********************** Paginación **********************
                 if (cont > seg)
                 {
                     int p = (cont + seg - 1) / seg;
