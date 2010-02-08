@@ -4,6 +4,7 @@
  */
 package org.semanticwb.jcr283.implementation;
 
+import java.util.Calendar;
 import javax.jcr.AccessDeniedException;
 import javax.jcr.InvalidItemStateException;
 import javax.jcr.PathNotFoundException;
@@ -35,16 +36,21 @@ public class LockManagerImp implements LockManager
 
     public Lock getLock(String absPath) throws PathNotFoundException, LockException, AccessDeniedException, RepositoryException
     {
+        return getLockImp(absPath);
+    }
+
+    public LockImp getLockImp(String absPath) throws PathNotFoundException, LockException, AccessDeniedException, RepositoryException
+    {
         NodeStatus node = nodeManager.getNodeStatus(absPath);
         if (node == null)
         {
             throw new PathNotFoundException("The path " + absPath + " was not found");
         }
-        if(node.getNode().isNodeType("mix:lockeable"))
+        if (node.getNode().isNodeType("mix:lockeable"))
         {
             throw new LockException("The node is not lockable");
         }
-        if(!node.isLocked())
+        if (!node.isLocked())
         {
             throw new LockException("The node is not locked");
         }
@@ -61,14 +67,14 @@ public class LockManagerImp implements LockManager
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public Lock lock(String absPath, boolean isDeep, boolean isSessionScoped, long timeoutHint, String ownerInfo) throws LockException, PathNotFoundException, AccessDeniedException, InvalidItemStateException, RepositoryException
+    public Lock lock(String absPath, boolean isDeep, boolean isSessionScoped, Calendar expiration, String ownerInfo) throws LockException, PathNotFoundException, AccessDeniedException, InvalidItemStateException, RepositoryException
     {
         NodeStatus status = nodeManager.getNodeStatus(absPath);
         if (status == null)
         {
             throw new PathNotFoundException("The path " + absPath + " was not found");
         }
-        if(status.getNode().isNodeType("mix:lockeable"))
+        if (status.getNode().isNodeType("mix:lockeable"))
         {
             throw new LockException("The node is not lockable");
         }
@@ -76,7 +82,46 @@ public class LockManagerImp implements LockManager
         {
             throw new InvalidItemStateException("Tne node is already locked");
         }
-        return status.lock(isDeep, isSessionScoped, session.getUserID(),timeoutHint);
+        return status.lock(isDeep, isSessionScoped, session.getUserID(), expiration);
+    }
+
+    public Lock lock(String absPath, boolean isDeep, boolean isSessionScoped, long timeoutHint, String ownerInfo) throws LockException, PathNotFoundException, AccessDeniedException, InvalidItemStateException, RepositoryException
+    {
+        NodeStatus status = nodeManager.getNodeStatus(absPath);
+        if (status == null)
+        {
+            throw new PathNotFoundException("The path " + absPath + " was not found");
+        }
+        if (status.getNode().isNodeType("mix:lockeable"))
+        {
+            throw new LockException("The node is not lockable");
+        }
+        if (status.isLocked())
+        {
+            throw new InvalidItemStateException("Tne node is already locked");
+        }
+        return status.lock(isDeep, isSessionScoped, session.getUserID(), timeoutHint);
+    }
+
+    public LockImp lockParent(String absPath) throws RepositoryException
+    {
+        NodeStatus nodeToLock = nodeManager.getNodeStatus(absPath);
+        if (nodeToLock.getNode().getParent() != null)
+        {
+            NodeImp parent = nodeManager.getNode(nodeToLock.getNode().getParent().getPath());
+            if (!parent.isNodeType("mix:lockable"))
+            {
+                throw new RepositoryException();
+            }
+            if (!parent.isLocked())
+            {
+                throw new RepositoryException();
+            }
+            LockImp lock = getLockImp(parent.path);
+            return nodeToLock.lock(lock.isDeep(), lock.isSessionScoped(), lock.getLockOwner(), lock.getExpiration());
+        }
+        throw new RepositoryException("The parent node is null");
+
     }
 
     public boolean isLocked(String absPath) throws PathNotFoundException, RepositoryException

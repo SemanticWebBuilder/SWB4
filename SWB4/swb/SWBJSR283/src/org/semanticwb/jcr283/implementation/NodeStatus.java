@@ -19,13 +19,16 @@ public final class NodeStatus
     private final NodeImp node;
     private boolean allchildLoaded = false;
     private final SessionImp session;
-    
+    private final NodeManager nodeManager;
+    private final LockManagerImp lockManager;
 
     public NodeStatus(NodeImp node, SessionImp session)
     {
         this.deleted = false;
         this.node = node;
         this.session = session;
+        this.nodeManager = session.getWorkspaceImp().getNodeManager();
+        lockManager = session.getWorkspaceImp().getLockManagerImp();
     }
 
     public boolean isLocked()
@@ -53,15 +56,9 @@ public final class NodeStatus
         return lock;
     }
 
-    public LockImp lock(boolean isDeep, boolean isSessionScoped, String owner, long timeoutHint) throws RepositoryException
+    public LockImp lock(boolean isDeep, boolean isSessionScoped, String owner, Calendar expiration) throws RepositoryException
     {
-        Calendar expiration=null;
-        if (timeoutHint > 0 && timeoutHint<Long.MAX_VALUE)
-        {
-            Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.SECOND, (int)timeoutHint);
-        }
-        lock = new LockImp(session, node, owner, isDeep, isSessionScoped,expiration);
+        lock = new LockImp(session, node, owner, isDeep, isSessionScoped, expiration);
 
         PropertyImp jcr_lock = session.getWorkspaceImp().getNodeManager().getProtectedProperty(node.getPathFromName("jcr:lockIsDeep"));
         jcr_lock.set(session.getValueFactory().createValue(isDeep));
@@ -73,6 +70,50 @@ public final class NodeStatus
         {
             jcr_lock.saveData();
             jcr_lockOwner.saveData();
+        }
+        if (isDeep)
+        {
+            for (NodeImp child : nodeManager.getChildNodes(node))
+            {
+                if (child.isNodeType("mix:lockable"))
+                {
+                    lockManager.lockParent(child.path);
+                }
+            }
+        }
+        return lock;
+    }
+
+    public LockImp lock(boolean isDeep, boolean isSessionScoped, String owner, long timeoutHint) throws RepositoryException
+    {
+        Calendar expiration = null;
+        if (timeoutHint > 0 && timeoutHint < Long.MAX_VALUE)
+        {
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.SECOND, (int) timeoutHint);
+        }
+        lock = new LockImp(session, node, owner, isDeep, isSessionScoped, expiration);
+
+        PropertyImp jcr_lock = session.getWorkspaceImp().getNodeManager().getProtectedProperty(node.getPathFromName("jcr:lockIsDeep"));
+        jcr_lock.set(session.getValueFactory().createValue(isDeep));
+
+        PropertyImp jcr_lockOwner = session.getWorkspaceImp().getNodeManager().getProtectedProperty(node.getPathFromName("jcr:lockOwner"));
+        jcr_lockOwner.set(session.getValueFactory().createValue(owner));
+
+        if (!isSessionScoped)
+        {
+            jcr_lock.saveData();
+            jcr_lockOwner.saveData();
+        }
+        if (isDeep)
+        {
+            for (NodeImp child : nodeManager.getChildNodes(node))
+            {
+                if (child.isNodeType("mix:lockable"))
+                {
+                    lockManager.lockParent(child.path);
+                }
+            }
         }
         return lock;
 

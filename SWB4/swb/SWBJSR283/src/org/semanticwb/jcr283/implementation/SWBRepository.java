@@ -5,6 +5,7 @@
 
 package org.semanticwb.jcr283.implementation;
 
+import java.security.Principal;
 import java.util.Hashtable;
 import javax.jcr.Credentials;
 import javax.jcr.LoginException;
@@ -12,11 +13,17 @@ import javax.jcr.NoSuchWorkspaceException;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.SimpleCredentials;
 import javax.jcr.Value;
+import javax.security.auth.Subject;
+import javax.security.auth.login.LoginContext;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.jcr283.repository.model.Root;
 import org.semanticwb.jcr283.repository.model.Workspace;
+import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.UserRepository;
+import org.semanticwb.security.auth.SWB4CallbackHandlerGateWayOffice;
 
 
 /**
@@ -86,7 +93,7 @@ public class SWBRepository implements Repository {
 
     public Value getDescriptorValue(String key)
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return descriptors.get(key);
     }
 
     public Value[] getDescriptorValues(String key)
@@ -105,18 +112,71 @@ public class SWBRepository implements Repository {
         }
     }
 
+    private Principal authenticate(String pUserName, String pPassword)
+    {
+        boolean trusted = false;
+        try
+        {
+            trusted = Boolean.parseBoolean(SWBPlatform.getEnv("swbrep/repositoryTrusted", "false"));
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+        }
+        if (trusted)
+        {
+            return new TrustedPrincipal(pUserName);
+        }
+        UserRepository ur = SWBContext.getAdminRepository();
+        String context = ur.getLoginContext();
+        Subject subject = new Subject();
+        LoginContext lc;
+        try
+        {
+            SWB4CallbackHandlerGateWayOffice callbackHandler = new SWB4CallbackHandlerGateWayOffice(pUserName, pPassword);
+            lc = new LoginContext(context, subject, callbackHandler);
+            lc.login();
+            Principal principal = subject.getPrincipals().iterator().next();
+            return principal;
+        }
+        catch (Exception e)
+        {
+            log.debug("Can't log User", e);
+        }
+        return null;
+    }
     public Session login(Credentials credentials, String workspaceName) throws LoginException, NoSuchWorkspaceException, RepositoryException
     {
         if(workspaceName==null)
         {
             workspaceName=DEFAULT_WORKSPACE;
         }
-        SessionImp session=new SessionImp("",this);
         Workspace ws=Workspace.ClassMgr.getWorkspace(workspaceName);
         if(ws==null)
         {
             throw new NoSuchWorkspaceException("The workspace "+workspaceName+" was not found");
         }        
+        SessionImp session=null;
+        if (credentials instanceof SimpleCredentials)
+            {
+                SimpleCredentials simpleCredentials = (SimpleCredentials) credentials;
+                Principal principal = authenticate(simpleCredentials.getUserID(), new String(simpleCredentials.getPassword()));
+                if (principal == null)
+                {
+                    throw new LoginException("The user can not be authenticated");
+                }
+                session=new SessionImp(this, principal);
+            }
+            else if (credentials instanceof SWBCredentials)
+            {
+                session= new SessionImp(this,((SWBCredentials) credentials).getPrincipal());
+            }
+            else
+            {
+                throw new LoginException("The credentials are not valid");
+            }
+        
+    
         WorkspaceImp workspaceImp=new WorkspaceImp(session,ws);
         session.setWorkspace(workspaceImp);
         return session;
