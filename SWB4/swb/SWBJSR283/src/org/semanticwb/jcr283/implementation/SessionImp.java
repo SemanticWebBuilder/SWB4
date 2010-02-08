@@ -48,6 +48,7 @@ public class SessionImp implements Session
     private Principal principal;
     private final SWBRepository repository;
     private boolean isLive=false;
+    private final ValueFactoryImp valueFactory=new ValueFactoryImp();
     public SessionImp(SWBRepository repository,Principal principal)
     {
         this.principal = principal;
@@ -104,7 +105,7 @@ public class SessionImp implements Session
 
     public Session impersonate(Credentials credentials) throws LoginException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return repository.login(credentials);
     }
     @Deprecated
     public Node getNodeByUUID(String uuid) throws ItemNotFoundException, RepositoryException
@@ -233,7 +234,11 @@ public class SessionImp implements Session
 
     public ValueFactory getValueFactory() throws UnsupportedRepositoryOperationException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return valueFactory;
+    }
+    public ValueFactoryImp getValueFactoryImp()
+    {
+        return valueFactory;
     }
 
     public boolean hasPermission(String absPath, String actions) throws RepositoryException
@@ -283,22 +288,22 @@ public class SessionImp implements Session
 
     public void setNamespacePrefix(String prefix, String uri) throws NamespaceException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        workspace.getNamespaceRegistry().registerNamespace(prefix, uri);
     }
 
     public String[] getNamespacePrefixes() throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return workspace.getNamespaceRegistry().getPrefixes();
     }
 
     public String getNamespaceURI(String prefix) throws NamespaceException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return workspace.getNamespaceRegistry().getURI(prefix);
     }
 
     public String getNamespacePrefix(String uri) throws NamespaceException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return workspace.getNamespaceRegistry().getPrefix(uri);
     }
 
     public void logout()
