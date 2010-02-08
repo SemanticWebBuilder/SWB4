@@ -28,7 +28,7 @@ public class PortalUsers extends GenericResource {
          try {
             request.setAttribute("paramRequest", paramRequest);
             RequestDispatcher rd = request.getRequestDispatcher("/swbadmin/jsp/microsite/perfil/portalUsers.jsp");
-            rd.include(request, response);
+            if(rd!=null)rd.include(request, response);
         } catch (Exception e) {
             e.printStackTrace();
         }
