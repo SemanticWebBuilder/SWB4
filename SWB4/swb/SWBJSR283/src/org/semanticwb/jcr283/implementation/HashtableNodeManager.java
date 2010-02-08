@@ -30,10 +30,11 @@ public final class HashtableNodeManager extends Hashtable<String, NodeStatus>
     private Hashtable<String, NodeStatus> nodesbyId = new Hashtable<String, NodeStatus>();
     private Hashtable<String, HashSet<NodeStatus>> nodesbyParent = new Hashtable<String, HashSet<NodeStatus>>();
     private final SessionImp session;
-
+    private final LockManagerImp lockManager;
     public HashtableNodeManager(SessionImp session)
     {
         this.session = session;
+        lockManager=session.getWorkspaceImp().getLockManagerImp();
     }
 
     public NodeImp getNodeByIdentifier(String id, SessionImp session, NodeTypeImp nodeTypeToSeach) throws RepositoryException
@@ -305,6 +306,18 @@ public final class HashtableNodeManager extends Hashtable<String, NodeStatus>
                     childs.add(nodestatus);
                 }
                 nodesbyParent.put(pathParent, childs);
+            }
+            NodeStatus parent=this.get(pathParent);
+            if(parent.isLocked() && parent.getLock().isDeep())
+            {
+                try
+                {
+                    lockManager.lockParent(path);
+                }
+                catch(Exception e)
+                {
+                    log.error(e);
+                }
             }
         }
         return super.put(path, nodestatus);

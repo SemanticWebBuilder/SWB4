@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.AccessControlException;
+import java.security.Principal;
 import javax.jcr.AccessDeniedException;
 import javax.jcr.Credentials;
 import javax.jcr.InvalidItemStateException;
@@ -43,12 +44,13 @@ import org.xml.sax.SAXException;
 public class SessionImp implements Session
 {
 
-    private WorkspaceImp workspace;
-    private final String userid;
+    private WorkspaceImp workspace;    
+    private Principal principal;
     private final SWBRepository repository;
-    public SessionImp(String userid,SWBRepository repository)
+    private boolean isLive=false;
+    public SessionImp(SWBRepository repository,Principal principal)
     {
-        this.userid = userid;
+        this.principal = principal;
         this.repository=repository;
     }
 
@@ -77,7 +79,7 @@ public class SessionImp implements Session
 
     public String getUserID()
     {
-        return userid;
+        return principal.getName();
     }
 
     public String[] getAttributeNames()
@@ -301,12 +303,12 @@ public class SessionImp implements Session
 
     public void logout()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        isLive=false;        
     }
 
     public boolean isLive()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return isLive;
     }
     @Deprecated
     public void addLockToken(String lt)

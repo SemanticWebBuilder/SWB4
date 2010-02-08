@@ -108,6 +108,11 @@ public class WorkspaceImp  implements Workspace {
         return lockManagerImp;
     }
 
+    public LockManagerImp getLockManagerImp()
+    {
+        return lockManagerImp;
+    }
+
     public QueryManager getQueryManager() throws RepositoryException
     {
         return queryManagerImp;

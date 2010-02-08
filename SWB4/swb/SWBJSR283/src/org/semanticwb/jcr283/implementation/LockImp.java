@@ -34,6 +34,11 @@ public final class LockImp implements Lock
         this.expiration = expiration;
     }
 
+    public Calendar getExpiration()
+    {
+        return expiration;
+    }
+
     public String getLockOwner()
     {
         return lockOwner;
