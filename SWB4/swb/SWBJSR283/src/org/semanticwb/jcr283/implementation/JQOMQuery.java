@@ -14,7 +14,7 @@ import javax.jcr.query.QueryResult;
  *
  * @author victor.lorenzana
  */
-public class JQOMQuery extends QueryImp {
+public final class JQOMQuery extends QueryImp {
 
     public JQOMQuery(SessionImp session, String statement)
     {

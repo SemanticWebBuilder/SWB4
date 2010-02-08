@@ -11,7 +11,7 @@ import javax.jcr.version.OnParentVersionAction;
  *
  * @author victor.lorenzana
  */
-public class RootNodeDefinition extends NodeDefinitionImp  {
+public final class RootNodeDefinition extends NodeDefinitionImp  {
 
     public RootNodeDefinition(NodeTypeImp nodeType,NodeTypeImp defaultPrimaryType)
     {

@@ -46,7 +46,7 @@ import javax.jcr.query.qom.UpperCase;
  *
  * @author victor.lorenzana
  */
-public class QueryObjectModelFactoryImp implements QueryObjectModelFactory {
+public final class QueryObjectModelFactoryImp implements QueryObjectModelFactory {
 
     private final SessionImp session;
     public QueryObjectModelFactoryImp(SessionImp session)

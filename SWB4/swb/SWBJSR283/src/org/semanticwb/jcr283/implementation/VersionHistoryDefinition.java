@@ -12,7 +12,7 @@ import javax.jcr.version.OnParentVersionAction;
  *
  * @author victor.lorenzana
  */
-public class VersionHistoryDefinition extends NodeDefinitionImp {
+public final class VersionHistoryDefinition extends NodeDefinitionImp {
     private static final String NT_VERSION_HISTORY = "nt:versionHistory";
 
 

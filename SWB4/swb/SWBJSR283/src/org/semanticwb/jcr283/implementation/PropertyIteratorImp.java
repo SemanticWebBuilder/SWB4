@@ -14,7 +14,7 @@ import javax.jcr.PropertyIterator;
  *
  * @author victor.lorenzana
  */
-public class PropertyIteratorImp implements PropertyIterator
+public final class PropertyIteratorImp implements PropertyIterator
 {
 
     private final Iterator<PropertyImp> it;

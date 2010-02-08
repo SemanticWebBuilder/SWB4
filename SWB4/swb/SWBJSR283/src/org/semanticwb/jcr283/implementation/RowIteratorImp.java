@@ -7,7 +7,6 @@ package org.semanticwb.jcr283.implementation;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Set;
 import javax.jcr.query.Row;
 import javax.jcr.query.RowIterator;
 

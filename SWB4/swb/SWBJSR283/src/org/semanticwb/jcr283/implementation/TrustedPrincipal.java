@@ -11,7 +11,7 @@ import java.security.Principal;
  *
  * @author victor.lorenzana
  */
-public class TrustedPrincipal implements Principal {
+public final class TrustedPrincipal implements Principal {
 
     String name;
     public TrustedPrincipal(String name)

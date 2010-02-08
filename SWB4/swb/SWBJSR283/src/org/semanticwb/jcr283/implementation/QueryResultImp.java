@@ -11,13 +11,12 @@ import java.util.Set;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.query.QueryResult;
-import javax.jcr.query.Row;
 import javax.jcr.query.RowIterator;
 /**
  *
  * @author victor.lorenzana
  */
-public class QueryResultImp implements QueryResult{
+public final class QueryResultImp implements QueryResult{
 
     
     private final Set<NodeImp> nodes;

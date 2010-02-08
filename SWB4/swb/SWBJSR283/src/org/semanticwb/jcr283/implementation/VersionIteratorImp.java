@@ -15,7 +15,7 @@ import javax.jcr.version.VersionIterator;
  *
  * @author victor.lorenzana
  */
-public class VersionIteratorImp implements VersionIterator {
+public final class VersionIteratorImp implements VersionIterator {
 
     private final Iterator<VersionImp> it;
     private final long size;

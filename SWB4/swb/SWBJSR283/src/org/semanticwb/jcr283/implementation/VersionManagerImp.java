@@ -28,7 +28,7 @@ import org.semanticwb.SWBUtils;
  *
  * @author victor.lorenzana
  */
-public class VersionManagerImp implements VersionManager
+public final class VersionManagerImp implements VersionManager
 {
 
     private static final String JCR_ISCHECKEDOUT = "jcr:isCheckedOut";

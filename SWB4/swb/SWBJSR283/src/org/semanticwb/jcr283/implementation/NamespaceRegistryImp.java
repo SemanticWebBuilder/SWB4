@@ -19,7 +19,7 @@ import org.semanticwb.SWBUtils;
  *
  * @author victor.lorenzana
  */
-public class NamespaceRegistryImp implements NamespaceRegistry {
+public final class NamespaceRegistryImp implements NamespaceRegistry {
 
     private static Logger log = SWBUtils.getLogger(NamespaceRegistryImp.class);
     private final HashMap<String,String> values =new HashMap<String, String>();

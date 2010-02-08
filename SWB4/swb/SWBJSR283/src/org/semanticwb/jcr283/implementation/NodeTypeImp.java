@@ -30,7 +30,7 @@ import org.semanticwb.platform.SemanticProperty;
  *
  * @author victor.lorenzana
  */
-public class NodeTypeImp implements NodeType
+public final class NodeTypeImp implements NodeType
 {
 
     private static final SemanticProperty childNodeDefinitionProperty = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(NamespaceRegistry.NAMESPACE_JCR + "#childNodeDefinition");

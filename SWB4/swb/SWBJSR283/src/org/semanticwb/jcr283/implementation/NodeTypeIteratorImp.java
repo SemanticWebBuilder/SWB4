@@ -14,7 +14,7 @@ import javax.jcr.nodetype.NodeTypeIterator;
  *
  * @author victor.lorenzana
  */
-public class NodeTypeIteratorImp implements NodeTypeIterator
+public final class NodeTypeIteratorImp implements NodeTypeIterator
 {
 
     private final Iterator<NodeTypeImp> it;

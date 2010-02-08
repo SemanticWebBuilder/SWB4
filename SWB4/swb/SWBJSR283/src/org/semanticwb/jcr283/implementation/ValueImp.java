@@ -29,7 +29,7 @@ import org.semanticwb.SWBUtils;
  *
  * @author victor.lorenzana
  */
-public class ValueImp implements Value
+public final class ValueImp implements Value
 {
 
     static Logger log = SWBUtils.getLogger(ValueImp.class);

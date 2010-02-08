@@ -13,7 +13,7 @@ import org.semanticwb.jcr283.repository.model.Base;
  *
  * @author victor.lorenzana
  */
-public class RootNodeImp extends NodeImp {
+public final class RootNodeImp extends NodeImp {
 
     private final static Logger log = SWBUtils.getLogger(RootNodeImp.class);
     public RootNodeImp(Base base,SessionImp session)
