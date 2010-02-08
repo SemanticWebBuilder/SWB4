@@ -100,7 +100,7 @@ public final class WorkspaceImp  implements Workspace {
     @Deprecated
     public void restore(Version[] versions, boolean removeExisting) throws ItemExistsException, UnsupportedRepositoryOperationException, VersionException, LockException, InvalidItemStateException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        versionManagerImp.restore(versions, removeExisting);
     }
 
     public LockManager getLockManager() throws UnsupportedRepositoryOperationException, RepositoryException
@@ -164,17 +164,39 @@ public final class WorkspaceImp  implements Workspace {
 
     public void createWorkspace(String name) throws AccessDeniedException, UnsupportedRepositoryOperationException, RepositoryException
     {
-        org.semanticwb.jcr283.repository.model.base.WorkspaceBase.ClassMgr.createWorkspace(name,"");
+        org.semanticwb.jcr283.repository.model.Workspace ws=org.semanticwb.jcr283.repository.model.base.WorkspaceBase.ClassMgr.getWorkspace(name);
+        if(ws==null)
+        {
+            throw new UnsupportedRepositoryOperationException("The workspace "+name+" already exists");
+        }
+        org.semanticwb.jcr283.repository.model.base.WorkspaceBase.ClassMgr.createWorkspace(name,SWBRepository.DEFAULT_URI_WORKSPACES);
     }
 
     public void createWorkspace(String name, String srcWorkspace) throws AccessDeniedException, UnsupportedRepositoryOperationException, NoSuchWorkspaceException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        org.semanticwb.jcr283.repository.model.Workspace ws=org.semanticwb.jcr283.repository.model.base.WorkspaceBase.ClassMgr.getWorkspace(name);
+        if(ws==null)
+        {
+            throw new UnsupportedRepositoryOperationException("The workspace "+name+" already exists");
+        }
+        ws=org.semanticwb.jcr283.repository.model.base.WorkspaceBase.ClassMgr.createWorkspace(name,SWBRepository.DEFAULT_URI_WORKSPACES);
+        // clone de workspace
+        
+        
     }
 
     public void deleteWorkspace(String name) throws AccessDeniedException, UnsupportedRepositoryOperationException, NoSuchWorkspaceException, RepositoryException
     {
-        org.semanticwb.jcr283.repository.model.base.WorkspaceBase.ClassMgr.createWorkspace(name,"");
+        org.semanticwb.jcr283.repository.model.Workspace ws=org.semanticwb.jcr283.repository.model.base.WorkspaceBase.ClassMgr.getWorkspace(name);
+        if(ws==null)
+        {
+            throw new NoSuchWorkspaceException();
+        }
+        if(ws.getName().equals(SWBRepository.DEFAULT_WORKSPACE))
+        {
+            throw new AccessDeniedException("The default workspace can not be deleted");
+        }
+        ws.remove();
     }
 
 }
