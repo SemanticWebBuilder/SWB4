@@ -17,6 +17,7 @@ import javax.jcr.query.qom.QueryObjectModelFactory;
  */
 public class QueryManagerImp implements QueryManager
 {
+    private final QueryObjectModelFactoryImp factory;
     private static final String[] supportedQueryLanguages;
     static
     {
@@ -28,6 +29,7 @@ public class QueryManagerImp implements QueryManager
     public QueryManagerImp(SessionImp session)
     {
         this.session = session;
+        factory=new QueryObjectModelFactoryImp(session);
     }
 
     public Query createQuery(String statement, String language) throws InvalidQueryException, RepositoryException
@@ -36,13 +38,17 @@ public class QueryManagerImp implements QueryManager
         {
             return new SPARQLQuery(session, statement);
         }
+        if (language.equalsIgnoreCase(Query.JCR_JQOM))
+        {
+            return new JQOMQuery(session, statement);
+        }
         throw new RepositoryException("The language "+language+" is not supported");
         
     }
 
     public QueryObjectModelFactory getQOMFactory()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return factory;
     }
 
     public Query getQuery(Node node) throws InvalidQueryException, RepositoryException

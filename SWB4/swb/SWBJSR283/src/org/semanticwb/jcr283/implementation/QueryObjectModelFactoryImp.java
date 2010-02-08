@@ -55,6 +55,7 @@ public class QueryObjectModelFactoryImp implements QueryObjectModelFactory {
     }
     public QueryObjectModel createQuery(Source source, Constraint constraint, Ordering[] orderings, Column[] columns) throws InvalidQueryException, RepositoryException
     {
+        
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
