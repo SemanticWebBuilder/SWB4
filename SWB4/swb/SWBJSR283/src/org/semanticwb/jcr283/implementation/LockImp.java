@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.semanticwb.jcr283.implementation;
 
+import java.util.Calendar;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.lock.Lock;
@@ -14,25 +14,34 @@ import javax.jcr.lock.LockException;
  *
  * @author victor.lorenzana
  */
-public final class LockImp implements Lock{
+public final class LockImp implements Lock
+{
 
     private final SessionImp session;
     private final NodeImp node;
-    private final LockManagerImp lockManager;
-    public LockImp(SessionImp session,NodeImp node,LockManagerImp lockManager)
+    private final String lockOwner;
+    private final boolean isDeep;
+    private final boolean isSessionScoped;
+    private final Calendar expiration;
+
+    public LockImp(SessionImp session, NodeImp node, String lockOwner, boolean isDeep, boolean isSessionScoped, Calendar expiration)
     {
-        this.session=session;
-        this.node=node;
-        this.lockManager=lockManager;
+        this.session = session;
+        this.node = node;
+        this.lockOwner = lockOwner;
+        this.isDeep = isDeep;
+        this.isSessionScoped = isSessionScoped;
+        this.expiration = expiration;
     }
+
     public String getLockOwner()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return lockOwner;
     }
 
     public boolean isDeep()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return isDeep;
     }
 
     public Node getNode()
@@ -47,17 +56,27 @@ public final class LockImp implements Lock{
 
     public long getSecondsRemaining() throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (expiration != null)
+        {
+            Calendar now = Calendar.getInstance();
+            long millis = expiration.getTimeInMillis() - now.getTimeInMillis();
+            long seconds = millis / 1000;
+            return seconds;
+        }
+        else
+        {
+            return Long.MAX_VALUE;
+        }
     }
 
     public boolean isLive() throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return getSecondsRemaining() > 0 || getSecondsRemaining() == Long.MAX_VALUE ? true : false;
     }
 
     public boolean isSessionScoped()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return isSessionScoped;
     }
 
     public boolean isLockOwningSession()
@@ -69,5 +88,4 @@ public final class LockImp implements Lock{
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
 }

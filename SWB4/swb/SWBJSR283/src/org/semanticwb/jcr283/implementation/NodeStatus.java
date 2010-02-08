@@ -4,6 +4,7 @@
  */
 package org.semanticwb.jcr283.implementation;
 
+import java.util.Calendar;
 import javax.jcr.RepositoryException;
 
 /**
@@ -13,11 +14,12 @@ import javax.jcr.RepositoryException;
 public final class NodeStatus
 {
 
-    private boolean locked;
+    private LockImp lock;
     private boolean deleted;
     private final NodeImp node;
     private boolean allchildLoaded = false;
     private final SessionImp session;
+    
 
     public NodeStatus(NodeImp node, SessionImp session)
     {
@@ -28,28 +30,51 @@ public final class NodeStatus
 
     public boolean isLocked()
     {
-        return locked;
+        return lock == null ? true : false;
     }
 
-    public void unlock()
+    public void unlock(String userid) throws RepositoryException
     {
-        locked = true;
+        if (lock != null)
+        {
+
+            PropertyImp jcr_lock = session.getWorkspaceImp().getNodeManager().getProtectedProperty(node.getPathFromName("jcr:lockIsDeep"));
+            jcr_lock.set(session.getValueFactory().createValue(false));
+
+            PropertyImp jcr_lockOwner = session.getWorkspaceImp().getNodeManager().getProtectedProperty(node.getPathFromName("jcr:lockOwner"));
+            jcr_lockOwner.remove();
+
+        }
+        lock = null;
     }
 
-    public void lock(boolean isDeep, boolean sessionScope, String owner) throws RepositoryException
+    public LockImp getLock()
     {
-        locked = true;
+        return lock;
+    }
+
+    public LockImp lock(boolean isDeep, boolean isSessionScoped, String owner, long timeoutHint) throws RepositoryException
+    {
+        Calendar expiration=null;
+        if (timeoutHint > 0 && timeoutHint<Long.MAX_VALUE)
+        {
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.SECOND, (int)timeoutHint);
+        }
+        lock = new LockImp(session, node, owner, isDeep, isSessionScoped,expiration);
+
         PropertyImp jcr_lock = session.getWorkspaceImp().getNodeManager().getProtectedProperty(node.getPathFromName("jcr:lockIsDeep"));
         jcr_lock.set(session.getValueFactory().createValue(isDeep));
 
         PropertyImp jcr_lockOwner = session.getWorkspaceImp().getNodeManager().getProtectedProperty(node.getPathFromName("jcr:lockOwner"));
         jcr_lockOwner.set(session.getValueFactory().createValue(owner));
 
-        if (!sessionScope)
+        if (!isSessionScoped)
         {
             jcr_lock.saveData();
             jcr_lockOwner.saveData();
         }
+        return lock;
 
     }
 

@@ -35,12 +35,16 @@ public class LockManagerImp implements LockManager
 
     public Lock getLock(String absPath) throws PathNotFoundException, LockException, AccessDeniedException, RepositoryException
     {
-        NodeImp node = nodeManager.getNode(absPath);
+        NodeStatus node = nodeManager.getNodeStatus(absPath);
         if (node == null)
         {
             throw new PathNotFoundException("The path " + absPath + " was not found");
         }
-        return new LockImp(session, node, this);
+        if(!node.isLocked())
+        {
+            throw new LockException("The node is not locked");
+        }
+        return node.getLock();
     }
 
     public String[] getLockTokens() throws RepositoryException
@@ -64,8 +68,7 @@ public class LockManagerImp implements LockManager
         {
             throw new InvalidItemStateException("Tne node is already locked");
         }
-        status.lock(isDeep, isSessionScoped, ownerInfo);
-        return new LockImp(session, status.getNode(), this);
+        return status.lock(isDeep, isSessionScoped, session.getUserID(),timeoutHint);
     }
 
     public boolean isLocked(String absPath) throws PathNotFoundException, RepositoryException
@@ -90,6 +93,7 @@ public class LockManagerImp implements LockManager
         {
             throw new PathNotFoundException("The path " + absPath + " was not found");
         }
-        status.unlock();
+
+        status.unlock(session.getUserID());
     }
 }
