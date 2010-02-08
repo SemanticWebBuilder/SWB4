@@ -68,6 +68,7 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.math.BigInteger;
 import java.security.AlgorithmParameterGenerator;
 import java.security.AlgorithmParameters;
 import java.security.GeneralSecurityException;
@@ -4339,21 +4340,18 @@ public class SWBUtils {
         {
             try
             {
-                // Create the parameter generator for a 512-bit DH key pair
-                AlgorithmParameterGenerator paramGen = AlgorithmParameterGenerator.getInstance("DiffieHellman");
+//G:5921382131818732078214846392362267449901665998994312391474243991527053233608335346713531453486300649663919884743851175664346252910611325867870956952765311
+//P:7320146440434454524904417198968017809897422432177536304525783639409510677068356316239906231779766559317603787655735698196575597092483528499492916137131397
+//L:511
                 String seed = java.lang.management.ManagementFactory.getRuntimeMXBean().getName() + System.currentTimeMillis();
-                paramGen.init(512,new SecureRandom(seed.getBytes()));
-
-
-                // Generate the parameters
-                AlgorithmParameters params = paramGen.generateParameters();
-                DHParameterSpec dhSpec = params.getParameterSpec(DHParameterSpec.class);
+                BigInteger p = new BigInteger("7320146440434454524904417198968017809897422432177536304525783639409510677068356316239906231779766559317603787655735698196575597092483528499492916137131397");
+                BigInteger g = new BigInteger("5921382131818732078214846392362267449901665998994312391474243991527053233608335346713531453486300649663919884743851175664346252910611325867870956952765311");
+                int l = 511;
+                DHParameterSpec dhSpec = new DHParameterSpec(p, g, l);
                 KeyPairGenerator keyGen = KeyPairGenerator.getInstance("DiffieHellman");
 
-                keyGen.initialize(dhSpec);
+                keyGen.initialize(dhSpec, new SecureRandom(seed.getBytes()));
                 KeyPair keypair = keyGen.generateKeyPair();
-                // Return the three values in a string
-                //  return ""+dhSpec.getP()+","+dhSpec.getG()+","+dhSpec.getL();
                 return keypair;
             } catch (Exception e)
             {
@@ -4363,11 +4361,12 @@ public class SWBUtils {
             return null;
         }
 
-        public static String[] storableKP(){
+        public static String[] storableKP()
+        {
             String[] llaves = new String[2];
             KeyPair kp = genDH512KeyPair();
-            llaves[0]=kp.getPrivate().getFormat()+"|"+new String(SFBase64.encodeBytes(kp.getPrivate().getEncoded(), false));
-            llaves[1]=kp.getPublic().getFormat()+"|"+new String(SFBase64.encodeBytes(kp.getPublic().getEncoded(), false));
+            llaves[0] = kp.getPrivate().getFormat() + "|" + new String(SFBase64.encodeBytes(kp.getPrivate().getEncoded(), false));
+            llaves[1] = kp.getPublic().getFormat() + "|" + new String(SFBase64.encodeBytes(kp.getPublic().getEncoded(), false));
             return llaves;
         }
     }
