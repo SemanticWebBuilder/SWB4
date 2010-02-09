@@ -67,8 +67,9 @@ public class WBConnection
         try
         {
             URL cb=new URL(codeBase);
-            System.out.println("codeBase:"+codeBase+" url:"+cb);
-            url=new URL(cb.getProtocol(),cb.getHost(),cb.getPort(),cgiPath);
+            System.out.println("codeBase:"+codeBase+" cgipath:"+cgipath+" cb:"+cb);
+            url=new URL(cb,cgiPath);
+            System.out.println("url:"+url);
         }catch(Exception e){e.printStackTrace();}
     }
 
