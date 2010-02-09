@@ -30,7 +30,7 @@ package org.semanticwb.portal;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import javax.security.auth.Subject;
@@ -60,7 +60,7 @@ import org.semanticwb.servlet.internal.Login;
 public class SWBUserMgr 
 {
     private static Logger log = SWBUtils.getLogger(SWBUserMgr.class);
-    private HashMap<String, SWBSessionObject> sessionobjects;
+    private ConcurrentHashMap<String, SWBSessionObject> sessionobjects;
     //private HashMap<String, HttpSession> sessions;
     
     public static final String SUBJECTATT = "_swbsubject";
@@ -72,7 +72,7 @@ public class SWBUserMgr
     
     public void init() {
         log.event("Initializing SWBUserMgr...");
-        sessionobjects=new HashMap<String, SWBSessionObject>();
+        sessionobjects=new ConcurrentHashMap<String, SWBSessionObject>();
         //sessions=new HashMap<String, HttpSession>();
     }
     
