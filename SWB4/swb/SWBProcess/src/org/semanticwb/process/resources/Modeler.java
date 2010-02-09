@@ -141,6 +141,7 @@ public class Modeler extends GenericResource
         out.println("              name: \"SWBAppBPMNModeler\"");
         out.println("        },");
         out.println("        {");
+        out.println("              jsess: \"" + request.getSession().getId() + "\",");
         out.println("              cgipath: \"" + urlapp + "\"");
         out.println("        }");
         out.println("    );");
