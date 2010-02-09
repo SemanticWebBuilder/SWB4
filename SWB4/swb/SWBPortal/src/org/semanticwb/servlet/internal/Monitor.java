@@ -81,7 +81,8 @@ public class Monitor implements InternalServlet
     private TimerTask t = null;
     private SWBSummary summary = null;
     private SWBMonitorBeans monitorbeans = null;
-    private Cipher cipher = null;
+    private SecretKey secretKey = null;
+   // private Cipher cipher = null;
 //    //Java 6.0
 //    private ConcurrentHashMap<String, BasureroCtl> basureros;
 //    private Vector<CompositeData> basureroBuff;
@@ -109,10 +110,8 @@ public class Monitor implements InternalServlet
                 PrivateKey privateKey = keyFact.generatePrivate(PK);
                 ka.init(privateKey);
                 ka.doPhase(publicKey, true);
-                SecretKey secretKey = new SecretKeySpec(ka.generateSecret(), 0, 16, "AES");
+                secretKey = new SecretKeySpec(ka.generateSecret(), 0, 16, "AES");
                 //SecretKey secretKey = ka.generateSecret("AES");
-                cipher = Cipher.getInstance("AES");
-                cipher.init(Cipher.ENCRYPT_MODE, secretKey);
             }
         } catch (java.security.GeneralSecurityException gse)
         {
@@ -212,7 +211,7 @@ public class Monitor implements InternalServlet
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException
     {
 
-        if (null == cipher)
+        if (null == secretKey)
         {
             response.setContentType("text/plain");
             response.getWriter().println("Not Initializad...");
@@ -220,6 +219,8 @@ public class Monitor implements InternalServlet
         }
         try
         {
+            Cipher cipher = Cipher.getInstance("AES");
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
             response.setContentType("application/octet-stream");
             CipherOutputStream out = new CipherOutputStream(response.getOutputStream(), cipher);
             ObjectOutputStream data = new ObjectOutputStream(out);
