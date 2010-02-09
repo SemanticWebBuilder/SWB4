@@ -40,6 +40,7 @@ import javax.crypto.Cipher;
 import javax.crypto.CipherOutputStream;
 import javax.crypto.KeyAgreement;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import javax.management.InstanceNotFoundException;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
@@ -108,7 +109,8 @@ public class Monitor implements InternalServlet
                 PrivateKey privateKey = keyFact.generatePrivate(PK);
                 ka.init(privateKey);
                 ka.doPhase(publicKey, true);
-                SecretKey secretKey = ka.generateSecret("AES");
+                SecretKey secretKey = new SecretKeySpec(ka.generateSecret(), 0, 16, "AES");
+                //SecretKey secretKey = ka.generateSecret("AES");
                 cipher = Cipher.getInstance("AES");
                 cipher.init(Cipher.ENCRYPT_MODE, secretKey);
             }
