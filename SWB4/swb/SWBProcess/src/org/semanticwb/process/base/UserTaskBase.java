@@ -1,7 +1,7 @@
 package org.semanticwb.process.base;
 
 
-public abstract class UserTaskBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.FilterableClass,org.semanticwb.process.Activity,org.semanticwb.model.Tagable,org.semanticwb.model.Trashable,org.semanticwb.model.Undeleteable,org.semanticwb.process.FlowObject,org.semanticwb.model.Hiddenable,org.semanticwb.model.Activeable,org.semanticwb.model.Referensable,org.semanticwb.model.Indexable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Viewable,org.semanticwb.model.Expirable,org.semanticwb.process.Task,org.semanticwb.model.Searchable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Rankable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Resourceable,org.semanticwb.model.Filterable,org.semanticwb.model.RuleRefable,org.semanticwb.model.FilterableNode
+public abstract class UserTaskBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Rankable,org.semanticwb.model.Viewable,org.semanticwb.model.Searchable,org.semanticwb.process.Activity,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Tagable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Indexable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Filterable,org.semanticwb.model.Expirable,org.semanticwb.model.Resourceable,org.semanticwb.process.Task,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableClass,org.semanticwb.model.TemplateRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Referensable,org.semanticwb.process.FlowObject,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable
 {
        public static final org.semanticwb.platform.SemanticClass swbxf_FormView=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormView");
        public static final org.semanticwb.platform.SemanticProperty swbps_processFormView=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#processFormView");
@@ -228,17 +228,6 @@ public abstract class UserTaskBase extends org.semanticwb.model.WebPage implemen
        org.semanticwb.model.GenericIterator<org.semanticwb.process.UserTask> it=new org.semanticwb.model.GenericIterator(hasthisroleassmemberinv.getSemanticObject().getModel().listSubjects(swb_hasThisRoleAssMemberInv,hasthisroleassmemberinv.getSemanticObject()));
        return it;
    }
-   public static java.util.Iterator<org.semanticwb.process.UserTask> listUserTaskByCreator(org.semanticwb.model.User creator,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.UserTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_creator, creator.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.process.UserTask> listUserTaskByCreator(org.semanticwb.model.User creator)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.process.UserTask> it=new org.semanticwb.model.GenericIterator(creator.getSemanticObject().getModel().listSubjects(swb_creator,creator.getSemanticObject()));
-       return it;
-   }
    public static java.util.Iterator<org.semanticwb.process.UserTask> listUserTaskByRuleRef(org.semanticwb.model.RuleRef hasruleref,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.process.UserTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_hasRuleRef, hasruleref.getSemanticObject()));
@@ -248,6 +237,17 @@ public abstract class UserTaskBase extends org.semanticwb.model.WebPage implemen
    public static java.util.Iterator<org.semanticwb.process.UserTask> listUserTaskByRuleRef(org.semanticwb.model.RuleRef hasruleref)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.process.UserTask> it=new org.semanticwb.model.GenericIterator(hasruleref.getSemanticObject().getModel().listSubjects(swb_hasRuleRef,hasruleref.getSemanticObject()));
+       return it;
+   }
+   public static java.util.Iterator<org.semanticwb.process.UserTask> listUserTaskByCreator(org.semanticwb.model.User creator,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.UserTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_creator, creator.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.process.UserTask> listUserTaskByCreator(org.semanticwb.model.User creator)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.process.UserTask> it=new org.semanticwb.model.GenericIterator(creator.getSemanticObject().getModel().listSubjects(swb_creator,creator.getSemanticObject()));
        return it;
    }
    public static java.util.Iterator<org.semanticwb.process.UserTask> listUserTaskByFormView(org.semanticwb.model.FormView processformview,org.semanticwb.model.SWBModel model)
@@ -348,6 +348,26 @@ public abstract class UserTaskBase extends org.semanticwb.model.WebPage implemen
     public void setExecutions(int value)
     {
         getSemanticObject().setIntProperty(swbps_executions, value);
+    }
+
+    public int getY()
+    {
+        return getSemanticObject().getIntProperty(swbps_y);
+    }
+
+    public void setY(int value)
+    {
+        getSemanticObject().setIntProperty(swbps_y, value);
+    }
+
+    public int getX()
+    {
+        return getSemanticObject().getIntProperty(swbps_x);
+    }
+
+    public void setX(int value)
+    {
+        getSemanticObject().setIntProperty(swbps_x, value);
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.process.FlowObjectInstance> listFlowObjectInstances()
