@@ -17,10 +17,6 @@ import javafx.scene.text.Text;
 import javafx.scene.transform.Translate;
 import javafx.scene.text.TextOrigin;
 
-import javafx.animation.Interpolator;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-
 import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 
@@ -177,6 +173,9 @@ class ToolBar extends CustomNode
 
                                 }
                                 println(obj.toString());
+
+                                var comando="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>updateModel</cmd><json>{obj.toString()}</json></req>";
+                                println(conn.getData(comando));
                             }
                         },
                         Button{
