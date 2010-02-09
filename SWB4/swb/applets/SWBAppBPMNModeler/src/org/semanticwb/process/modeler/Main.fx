@@ -40,6 +40,8 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeLineCap;
 
 import applets.commons.*;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.Image;
 
 /**
  * @author javier.solis
@@ -86,6 +88,8 @@ var lighting = Lighting{
     }
 }
 
+println("dir:{__DIR__}");
+
 var modeler:Modeler = Modeler
 {
     layoutX:0
@@ -130,6 +134,56 @@ class ToolBar extends CustomNode
                     width:bind maxx
                     height:23
                     style:style_toolbar
+                },
+                Flow {
+                    height: bind maxy
+                    width: 69
+                    content: [
+                        ImageView {
+                            image: Image {
+                                url: "{__DIR__}images/barra_top.png"
+                            }
+                        },
+                        ImageView {
+                            image: Image {
+                                url: "{__DIR__}images/task_2.png"
+                            }
+                            onMouseClicked: function ( e: MouseEvent ) : Void
+                            {
+                                modeler.disablePannable=true;
+                                modeler.tempNode=Task
+                                {
+                                    title:"Task"
+                                    uri:"new:task:{counter++}"
+                                }
+                            }
+                        },
+                        ImageView {
+                            image: Image {
+                                url: "{__DIR__}images/start_2.png"
+                            }
+                        },
+                        ImageView {
+                            image: Image {
+                                url: "{__DIR__}images/end_2.png"
+                            }
+                        },
+                        ImageView {
+                            image: Image {
+                                url: "{__DIR__}images/if_2.png"
+                            }
+                        },
+                        ImageView {
+                            image: Image {
+                                url: "{__DIR__}images/flow_2.png"
+                            }
+                        },
+                        ImageView {
+                            image: Image {
+                                url: "{__DIR__}images/barra_bottom.png"
+                            }
+                        }
+                    ]
                 },
                 Flow {
                     height: 23
@@ -180,6 +234,7 @@ class ToolBar extends CustomNode
                         },
                         Button{
                             text:"Task"
+
                             action: function():Void {
                                 modeler.disablePannable=true;
                                 modeler.tempNode=Task
