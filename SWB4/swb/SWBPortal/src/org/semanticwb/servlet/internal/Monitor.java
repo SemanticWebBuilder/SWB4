@@ -1,31 +1,28 @@
 /**
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
-*
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
-* del SemanticWebBuilder 4.0.
-*
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
-* de la misma.
-*
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
-* dirección electrónica:
-*  http://www.semanticwebbuilder.org
-**/
-
-
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 package org.semanticwb.servlet.internal;
 
 import com.sun.management.GcInfo;
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import static java.lang.management.ManagementFactory.*;
@@ -35,18 +32,27 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.lang.management.*;
+import java.security.KeyFactory;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import javax.crypto.Cipher;
+import javax.crypto.CipherOutputStream;
+import javax.crypto.KeyAgreement;
+import javax.crypto.SecretKey;
 import javax.management.InstanceNotFoundException;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
-import javax.management.openmbean.CompositeData;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.base.util.SFBase64;
+import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.monitor.SWBGCDump;
 import org.semanticwb.portal.monitor.SWBMonitorBeans;
 import org.semanticwb.portal.monitor.SWBMonitorData;
@@ -74,22 +80,43 @@ public class Monitor implements InternalServlet
     private TimerTask t = null;
     private SWBSummary summary = null;
     private SWBMonitorBeans monitorbeans = null;
+    private Cipher cipher = null;
 //    //Java 6.0
 //    private ConcurrentHashMap<String, BasureroCtl> basureros;
 //    private Vector<CompositeData> basureroBuff;
-
     private SWBGCDump dumper;
-//    private static MonitoredHost mh=null;
-//    private static MonitoredVm mvm = null;
-
-    
 
     public void init(ServletContext config) throws ServletException
     {
         log.event("Initializing InternalServlet Monitor...");
         monitorbeans = new SWBMonitorBeans();
         buffer = new Vector<SWBMonitorData>(max);
-        
+        try
+        {
+            SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(SWBPlatform.getSemanticMgr().SWBAdmin + "/PrivateKey");
+            String priv = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().getProperty(sp);
+            priv = priv.substring(priv.indexOf("|") + 1);
+            String PKey = new String(SFBase64.decode(priv));
+            String pKey = new String(SFBase64.decode(SWBPlatform.getEnv("swbMonitor/PublicKey", null)));
+            if (null != pKey)
+            {
+                java.security.spec.X509EncodedKeySpec pK = new java.security.spec.X509EncodedKeySpec(pKey.getBytes());
+                java.security.spec.PKCS8EncodedKeySpec PK = new java.security.spec.PKCS8EncodedKeySpec(PKey.getBytes());
+                KeyFactory keyFact = KeyFactory.getInstance("DiffieHellman");
+                KeyAgreement ka = KeyAgreement.getInstance("DiffieHellman");
+                PublicKey publicKey = keyFact.generatePublic(pK);
+                PrivateKey privateKey = keyFact.generatePrivate(PK);
+                ka.init(privateKey);
+                ka.doPhase(publicKey, true);
+                SecretKey secretKey = ka.generateSecret("AES");
+                cipher = Cipher.getInstance("AES");
+                cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            }
+        } catch (java.security.GeneralSecurityException gse)
+        {
+            log.error(gse);
+           // assert (false);
+        }
         dumper = new SWBGCDump();
 //        //Java 6.0
 //        basureros = new ConcurrentHashMap<String, BasureroCtl>();
@@ -160,7 +187,7 @@ public class Monitor implements InternalServlet
 
     private void _run()
     {
-        if(buffer.size()==max)
+        if (buffer.size() == max)
         {
             buffer.remove(0);
         }
@@ -181,6 +208,113 @@ public class Monitor implements InternalServlet
     }
 
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException
+    {
+
+        if (null == cipher)
+        {
+            response.setContentType("text/plain");
+            response.getWriter().println("Not Initializad...");
+            return;
+        }
+        try
+        {
+            response.setContentType("application/octet-stream");
+            CipherOutputStream out = new CipherOutputStream(response.getOutputStream(), cipher);
+            ObjectOutputStream data = new ObjectOutputStream(out);
+            if ("summary".equals(request.getParameter("cmd")))
+            {
+                data.writeObject(summary.getSample());
+                
+            }
+            if ("datapkg".equals(request.getParameter("cmd")))
+            {
+                data.writeObject(buffer);
+                
+            }
+            if ("deathlock".equals(request.getParameter("cmd")))
+            {
+                data.writeObject(SWBThreadDumper.dumpDeathLock());
+                
+            }
+            if ("blocked".equals(request.getParameter("cmd")))
+            {
+                data.writeObject(SWBThreadDumper.dumpBLOCKEDThread());
+                
+            }
+            if ("blockedst".equals(request.getParameter("cmd")))
+            {
+                data.writeObject(SWBThreadDumper.dumpBLOCKEDThreadWithStackTrace());
+                
+            }
+            if ("threads".equals(request.getParameter("cmd")))
+            {
+                data.writeObject(SWBThreadDumper.dumpThread());
+                
+            }
+            if ("threadsst".equals(request.getParameter("cmd")))
+            {
+                data.writeObject(SWBThreadDumper.dumpThreadWithStackTrace());
+                
+            }
+            if ("lastGC".equals(request.getParameter("cmd")))
+            {
+                data.writeObject(SWBGCDump.getGc());
+                
+            }
+            if ("lastGCVerbose".equals(request.getParameter("cmd")))
+            {
+                data.writeObject(SWBGCDump.getVerboseGc());
+                
+            }
+            if ("swbmonitor".equals(request.getParameter("cmd")))
+            {
+                data.writeObject(SWBPortal.getMonitor().getMonitorRecords());
+                
+            }
+            if ("swbavgmonitor".equals(request.getParameter("cmd")))
+            {
+                data.writeObject(SWBPortal.getMonitor().getAverageMonitorRecords(5));
+                
+            }
+//            if ("".equals(request.getParameter("cmd")))
+//            {
+//                data.writeObject("");
+//                
+//            }
+//            if ("".equals(request.getParameter("cmd")))
+//            {
+//                data.writeObject("");
+//                
+//            }
+//            if ("".equals(request.getParameter("cmd")))
+//            {
+//                data.writeObject("");
+//                
+//            }
+//            if ("".equals(request.getParameter("cmd")))
+//            {
+//                data.writeObject("");
+//
+//            }
+            data.flush();
+//            String datos = new String(cipher.doFinal(summary.getSample().GetSumaryHTML().getBytes()));
+//            System.out.println(datos);
+//            datos = SFBase64.encodeBytes(datos.getBytes(), false);
+//            System.out.println(datos);
+//            PrintWriter out = response.getWriter();
+//
+//            out.println(datos);
+            data.close();
+            out.close();
+        } catch (Exception ex)
+        {
+            log.error(ex);
+        }
+
+
+    }
+
+    public void _doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException
     {
         PrintWriter out = response.getWriter();
 
@@ -232,14 +366,14 @@ public class Monitor implements InternalServlet
 //        }
         out.print("</body></html>");
         ByteArrayOutputStream buf = new ByteArrayOutputStream();
-       ObjectOutputStream os = new ObjectOutputStream(buf);
-       os.writeObject(buffer);
-       os.close();
-       out.println(buf.toString().length());
-       ObjectInputStream is = new ObjectInputStream(new ByteArrayInputStream(buf.toByteArray()));
+        ObjectOutputStream os = new ObjectOutputStream(buf);
+        os.writeObject(buffer);
+        os.close();
+        out.println(buf.toString().length());
+        ObjectInputStream is = new ObjectInputStream(new ByteArrayInputStream(buf.toByteArray()));
         try
         {
-            out.println(((Vector<SWBMonitorData>)is.readObject()).size());
+            out.println(((Vector<SWBMonitorData>) is.readObject()).size());
         } catch (Exception ex)
         {
             ex.printStackTrace();
@@ -436,9 +570,10 @@ public class Monitor implements InternalServlet
     }
 }
 
+class BasureroCtl implements Serializable
+{
 
-class BasureroCtl implements Serializable{
-        private static final long serialVersionUID = 33233L;
-        long idx=0;
-       // Vector<CompositeData> basureroBuff;
-    }
+    private static final long serialVersionUID = 33233L;
+    long idx = 0;
+    // Vector<CompositeData> basureroBuff;
+}
