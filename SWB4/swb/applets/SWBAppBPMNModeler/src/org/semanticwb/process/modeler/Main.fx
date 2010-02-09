@@ -92,8 +92,8 @@ println("dir:{__DIR__}");
 
 var modeler:Modeler = Modeler
 {
-    layoutX:0
-    layoutY:23
+    layoutX:69
+    layoutY:0
     width:bind maxx
     height:bind maxy-23
     pannable:true
@@ -130,11 +130,11 @@ class ToolBar extends CustomNode
          var ret=Group
          {
              content: [
-                Rectangle{
-                    width:bind maxx
-                    height:23
-                    style:style_toolbar
-                },
+//                Rectangle{
+//                    width:69
+//                    height:bind maxy
+//                    style:style_toolbar
+//                },
                 Flow {
                     height: bind maxy
                     width: 69
@@ -144,53 +144,10 @@ class ToolBar extends CustomNode
                                 url: "{__DIR__}images/barra_top.png"
                             }
                         },
-                        ImageView {
-                            image: Image {
-                                url: "{__DIR__}images/task_2.png"
-                            }
-                            onMouseClicked: function ( e: MouseEvent ) : Void
-                            {
-                                modeler.disablePannable=true;
-                                modeler.tempNode=Task
-                                {
-                                    title:"Task"
-                                    uri:"new:task:{counter++}"
-                                }
-                            }
-                        },
-                        ImageView {
-                            image: Image {
-                                url: "{__DIR__}images/start_2.png"
-                            }
-                        },
-                        ImageView {
-                            image: Image {
-                                url: "{__DIR__}images/end_2.png"
-                            }
-                        },
-                        ImageView {
-                            image: Image {
-                                url: "{__DIR__}images/if_2.png"
-                            }
-                        },
-                        ImageView {
-                            image: Image {
-                                url: "{__DIR__}images/flow_2.png"
-                            }
-                        },
-                        ImageView {
-                            image: Image {
-                                url: "{__DIR__}images/barra_bottom.png"
-                            }
-                        }
-                    ]
-                },
-                Flow {
-                    height: 23
-                    width:bind maxx
-                    content: [
-                        Button{
+                        ImgButton {
                             text:"Save"
+                            image: "images/task_1.png"
+                            imageOver: "images/task_2.png"
                             action: function():Void
                             {
                                 var obj:JSONObject =new JSONObject();
@@ -232,10 +189,12 @@ class ToolBar extends CustomNode
                                 println(conn.getData(comando));
                             }
                         },
-                        Button{
+                        ImgButton {
                             text:"Task"
-
-                            action: function():Void {
+                            image: "images/task_1.png"
+                            imageOver: "images/task_2.png"
+                            action: function():Void
+                            {
                                 modeler.disablePannable=true;
                                 modeler.tempNode=Task
                                 {
@@ -244,8 +203,10 @@ class ToolBar extends CustomNode
                                 }
                             }
                         },
-                        Button{
+                        ImgButton {
                             text:"SubProcess"
+                            image: "images/task_1.png"
+                            imageOver: "images/task_2.png"
                             action: function():Void {
                                 modeler.disablePannable=true;
                                 modeler.tempNode=SubProcess
@@ -255,8 +216,10 @@ class ToolBar extends CustomNode
                                 }
                             }
                         },
-                        Button{
+                        ImgButton {
                             text:"Start Event"
+                            image: "images/start_1.png"
+                            imageOver: "images/start_2.png"
                             action: function():Void {
                                 modeler.disablePannable=true;
                                 modeler.tempNode=StartEvent
@@ -266,19 +229,10 @@ class ToolBar extends CustomNode
                                 }
                             }
                         },
-                        Button{
-                            text:"End Event"
-                            action: function():Void {
-                                modeler.disablePannable=true;
-                                modeler.tempNode=EndEvent
-                                {
-                                    title:"End Event"
-                                    uri:"new:endevent:{counter++}"
-                                }
-                            }
-                        },
-                        Button{
+                        ImgButton {
                             text:"Inter Event"
+                            image:"images/inter_1.png"
+                            imageOver:"images/inter_2.png"
                             action: function():Void {
                                 modeler.disablePannable=true;
                                 modeler.tempNode=InterEvent
@@ -288,8 +242,24 @@ class ToolBar extends CustomNode
                                 }
                             }
                         },
-                        Button{
+                        ImgButton {
+                            text:"End Event"
+                            image:"images/end_1.png"
+                            imageOver:"images/end_2.png"
+                            action: function():Void
+                            {
+                                modeler.disablePannable=true;
+                                modeler.tempNode=EndEvent
+                                {
+                                    title:"End Event"
+                                    uri:"new:endevent:{counter++}"
+                                }
+                            }
+                        },
+                        ImgButton {
                             text:"Gateway"
+                            image: "images/if_1.png"
+                            imageOver: "images/if_2.png"
                             action: function():Void {
                                 modeler.disablePannable=true;
                                 modeler.tempNode=GateWay
@@ -299,8 +269,10 @@ class ToolBar extends CustomNode
                                 }
                             }
                         },
-                        Button{
+                        ImgButton {
                             text:"OR Gateway"
+                            image: "images/if_1.png"
+                            imageOver: "images/if_2.png"
                             action: function():Void {
                                 modeler.disablePannable=true;
                                 modeler.tempNode=ORGateWay
@@ -310,8 +282,10 @@ class ToolBar extends CustomNode
                                 }
                             }
                         },
-                        Button{
+                        ImgButton {
                             text:"AND Gateway"
+                            image: "images/if_1.png"
+                            imageOver: "images/if_2.png"
                             action: function():Void {
                                 modeler.disablePannable=true;
                                 modeler.tempNode=ANDGateWay
@@ -321,8 +295,10 @@ class ToolBar extends CustomNode
                                 }
                             }
                         },
-                        Button{
+                        ImgButton {
                             text:"Flow Link"
+                            image: "images/flow_1.png"
+                            imageOver: "images/flow_2.png"
                             action: function():Void {
                                 modeler.disablePannable=true;
                                 modeler.tempNode=FlowLink
@@ -331,8 +307,10 @@ class ToolBar extends CustomNode
                                 }
                             }
                         },
-                        Button{
+                        ImgButton {
                             text:"Pool"
+                            image: "images/task_1.png"
+                            imageOver: "images/task_2.png"
                             action: function():Void {
                                 modeler.disablePannable=true;
                                 modeler.tempNode=Pool
@@ -341,15 +319,74 @@ class ToolBar extends CustomNode
                                     uri:"new:pool:{counter++}"
                                 }
                             }
+                        },
+                        ImageView {
+                            image: Image {
+                                url: "{__DIR__}images/barra_bottom.png"
+                            }
                         }
                     ]
                 }
              ]
+             cursor:Cursor.HAND;
          };
          return ret;
     }
 }
 
+/******************************************************************************/
+class ImgButton extends CustomNode
+{
+    public var text:String;
+    public var image:String;
+    public var imageOver:String;
+    public var over:Boolean;
+    public var content:Node;
+
+    public var action:function():Void;
+
+    override protected function create():Node
+    {
+         content=Group
+         {
+             content:[
+               ImageView {
+	         image: Image {
+		   url: "{__DIR__}{image}"
+	         }
+                 visible: bind not over
+               },
+               ImageView {
+	         image: Image {
+		   url: "{__DIR__}{imageOver}"
+	         }
+                 visible: bind over
+               }
+            ]
+            onMouseEntered: function( e: MouseEvent ):Void
+            {
+                 over=true;
+            }
+            onMouseExited: function( e: MouseEvent ):Void
+            {
+                 over=false;
+            }
+            onMousePressed: function( e: MouseEvent ):Void
+            {
+                 content.requestFocus();
+                 action();
+            }
+            onKeyTyped: function( e: KeyEvent ):Void
+            {
+                 content.requestFocus();
+                 action();
+            }
+        }
+        return content;
+    }
+
+
+}
 
 /******************************************************************************/
 class Modeler extends CustomNode
@@ -396,6 +433,7 @@ class Modeler extends CustomNode
                         var a=tempNode as GraphElement;
                         a.x=e.x+clipView.clipX;
                         a.y=e.y+clipView.clipY;
+                        a.snapToGrid();
                     }else if(tempNode instanceof ConnectionObject)
                     {
                         var a=tempNode as ConnectionObject;
@@ -1090,10 +1128,15 @@ class GraphElement extends CustomNode
         {
             modeler.clickedNode=null;
             //if(modeler.tempNode==null)modeler.disablePannable=false;
-            x=(Math.round(x/25))*25;            //grid
-            y=(Math.round(y/25))*25;            //grid
+            snapToGrid();
         }
         println("onMouseRelease node");
+    }
+
+    public function snapToGrid()
+    {
+        x=(Math.round(x/25))*25;            //grid
+        y=(Math.round(y/25))*25;            //grid
     }
 
     override var onMouseEntered = function(e)
