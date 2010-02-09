@@ -82,7 +82,7 @@ public class Monitor implements InternalServlet
     private SWBSummary summary = null;
     private SWBMonitorBeans monitorbeans = null;
     private SecretKey secretKey = null;
-   // private Cipher cipher = null;
+    // private Cipher cipher = null;
 //    //Java 6.0
 //    private ConcurrentHashMap<String, BasureroCtl> basureros;
 //    private Vector<CompositeData> basureroBuff;
@@ -116,7 +116,7 @@ public class Monitor implements InternalServlet
         } catch (java.security.GeneralSecurityException gse)
         {
             log.error(gse);
-           // assert (false);
+            // assert (false);
         }
         dumper = new SWBGCDump();
 //        //Java 6.0
@@ -219,66 +219,68 @@ public class Monitor implements InternalServlet
         }
         try
         {
-            Cipher cipher = Cipher.getInstance("AES");
-            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-            response.setContentType("application/octet-stream");
-            CipherOutputStream out = new CipherOutputStream(response.getOutputStream(), cipher);
-            ObjectOutputStream data = new ObjectOutputStream(out);
-            if ("summary".equals(request.getParameter("cmd")))
+            if (null != request.getParameter("cmd"))
             {
-                data.writeObject(summary.getSample());
-                
-            }
-            if ("datapkg".equals(request.getParameter("cmd")))
-            {
-                data.writeObject(buffer);
-                
-            }
-            if ("deathlock".equals(request.getParameter("cmd")))
-            {
-                data.writeObject(SWBThreadDumper.dumpDeathLock());
-                
-            }
-            if ("blocked".equals(request.getParameter("cmd")))
-            {
-                data.writeObject(SWBThreadDumper.dumpBLOCKEDThread());
-                
-            }
-            if ("blockedst".equals(request.getParameter("cmd")))
-            {
-                data.writeObject(SWBThreadDumper.dumpBLOCKEDThreadWithStackTrace());
-                
-            }
-            if ("threads".equals(request.getParameter("cmd")))
-            {
-                data.writeObject(SWBThreadDumper.dumpThread());
-                
-            }
-            if ("threadsst".equals(request.getParameter("cmd")))
-            {
-                data.writeObject(SWBThreadDumper.dumpThreadWithStackTrace());
-                
-            }
-            if ("lastGC".equals(request.getParameter("cmd")))
-            {
-                data.writeObject(SWBGCDump.getGc());
-                
-            }
-            if ("lastGCVerbose".equals(request.getParameter("cmd")))
-            {
-                data.writeObject(SWBGCDump.getVerboseGc());
-                
-            }
-            if ("swbmonitor".equals(request.getParameter("cmd")))
-            {
-                data.writeObject(SWBPortal.getMonitor().getMonitorRecords());
-                
-            }
-            if ("swbavgmonitor".equals(request.getParameter("cmd")))
-            {
-                data.writeObject(SWBPortal.getMonitor().getAverageMonitorRecords(5));
-                
-            }
+                Cipher cipher = Cipher.getInstance("AES");
+                cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+                response.setContentType("application/octet-stream");
+                CipherOutputStream out = new CipherOutputStream(response.getOutputStream(), cipher);
+                ObjectOutputStream data = new ObjectOutputStream(out);
+                if ("summary".equals(request.getParameter("cmd")))
+                {
+                    data.writeObject(summary.getSample());
+
+                }
+                if ("datapkg".equals(request.getParameter("cmd")))
+                {
+                    data.writeObject(buffer);
+
+                }
+                if ("deathlock".equals(request.getParameter("cmd")))
+                {
+                    data.writeObject(SWBThreadDumper.dumpDeathLock());
+
+                }
+                if ("blocked".equals(request.getParameter("cmd")))
+                {
+                    data.writeObject(SWBThreadDumper.dumpBLOCKEDThread());
+
+                }
+                if ("blockedst".equals(request.getParameter("cmd")))
+                {
+                    data.writeObject(SWBThreadDumper.dumpBLOCKEDThreadWithStackTrace());
+
+                }
+                if ("threads".equals(request.getParameter("cmd")))
+                {
+                    data.writeObject(SWBThreadDumper.dumpThread());
+
+                }
+                if ("threadsst".equals(request.getParameter("cmd")))
+                {
+                    data.writeObject(SWBThreadDumper.dumpThreadWithStackTrace());
+
+                }
+                if ("lastGC".equals(request.getParameter("cmd")))
+                {
+                    data.writeObject(SWBGCDump.getGc());
+
+                }
+                if ("lastGCVerbose".equals(request.getParameter("cmd")))
+                {
+                    data.writeObject(SWBGCDump.getVerboseGc());
+
+                }
+                if ("swbmonitor".equals(request.getParameter("cmd")))
+                {
+                    data.writeObject(SWBPortal.getMonitor().getMonitorRecords());
+
+                }
+                if ("swbavgmonitor".equals(request.getParameter("cmd")))
+                {
+                    data.writeObject(SWBPortal.getMonitor().getAverageMonitorRecords(5));
+
+                }
 //            if ("".equals(request.getParameter("cmd")))
 //            {
 //                data.writeObject("");
@@ -299,7 +301,7 @@ public class Monitor implements InternalServlet
 //                data.writeObject("");
 //
 //            }
-            data.flush();
+                data.flush();
 //            String datos = new String(cipher.doFinal(summary.getSample().GetSumaryHTML().getBytes()));
 //            System.out.println(datos);
 //            datos = SFBase64.encodeBytes(datos.getBytes(), false);
@@ -307,8 +309,13 @@ public class Monitor implements InternalServlet
 //            PrintWriter out = response.getWriter();
 //
 //            out.println(datos);
-            data.close();
-            out.close();
+                data.close();
+                out.close();
+            } else
+            {
+                response.setContentType("text/plain");
+                response.getWriter().println("Nothing to do...");
+            }
         } catch (Exception ex)
         {
             log.error(ex);
