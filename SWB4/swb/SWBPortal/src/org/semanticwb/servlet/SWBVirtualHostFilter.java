@@ -265,6 +265,10 @@ public class SWBVirtualHostFilter implements Filter
             swbPortal = SWBPortal.createInstance(filterConfig.getServletContext(),this);
         }
 
+        InternalServlet monitor = new Monitor();
+        intServlets.put("swbmonitor.ssl", monitor);
+        monitor.init(filterConfig.getServletContext());
+
         InternalServlet serv = new Distributor();
         intServlets.put("swb", serv);
         intServlets.put("wb", serv);
@@ -317,10 +321,6 @@ public class SWBVirtualHostFilter implements Filter
         InternalServlet googleMap = new GoogleSiteMap();
         intServlets.put("sitemap.txt", googleMap);
         googleMap.init(filterConfig.getServletContext());
-
-        InternalServlet monitor = new Monitor();
-        intServlets.put("swbmonitor.ssl", monitor);
-        monitor.init(filterConfig.getServletContext());
 
     }
 
