@@ -135,11 +135,13 @@ public class Modeler extends GenericResource
         out.println("        {");
         out.println("              archive: \""+ SWBPlatform.getContextPath() + "/swbadmin/lib/SWBAppBPMNModeler.jar,"+ SWBPlatform.getContextPath() + "/swbadmin/lib/json.jar,"+ SWBPlatform.getContextPath() + "/swbadmin/lib/SWBAplCommons.jar\",");
         out.println("              draggable: true,");
-        out.println("              cgipath: \"" + urlapp + "\",");
         out.println("              width: 800,");
         out.println("              height: 500,");
         out.println("              code: \"org.semanticwb.process.modeler.Main\",");
         out.println("              name: \"SWBAppBPMNModeler\"");
+        out.println("        },");
+        out.println("        {");
+        out.println("              cgipath: \"" + urlapp + "\"");
         out.println("        }");
         out.println("    );");
         out.println("    </script>");
