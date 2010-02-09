@@ -1,7 +1,7 @@
 package org.semanticwb.process.base;
 
 
-public abstract class ComplexGateWayBase extends org.semanticwb.process.GateWay implements org.semanticwb.process.FlowObject,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class ComplexGateWayBase extends org.semanticwb.process.GateWay implements org.semanticwb.model.Descriptiveable,org.semanticwb.process.FlowObject,org.semanticwb.model.Traceable
 {
        public static final org.semanticwb.platform.SemanticClass swbps_ComplexGateWay=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ComplexGateWay");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ComplexGateWay");

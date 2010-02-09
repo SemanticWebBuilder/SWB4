@@ -1,7 +1,7 @@
 package org.semanticwb.process.base;
 
 
-public abstract class AutoTaskBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.process.FlowObject,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.process.Task,org.semanticwb.process.Activity
+public abstract class AutoTaskBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.model.Descriptiveable,org.semanticwb.process.FlowObject,org.semanticwb.model.Traceable,org.semanticwb.process.Task,org.semanticwb.process.Activity
 {
        public static final org.semanticwb.platform.SemanticClass swbps_AutoTask=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#AutoTask");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#AutoTask");
@@ -368,6 +368,26 @@ public abstract class AutoTaskBase extends org.semanticwb.model.base.GenericObje
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
+    }
+
+    public int getY()
+    {
+        return getSemanticObject().getIntProperty(swbps_y);
+    }
+
+    public void setY(int value)
+    {
+        getSemanticObject().setIntProperty(swbps_y, value);
+    }
+
+    public int getX()
+    {
+        return getSemanticObject().getIntProperty(swbps_x);
+    }
+
+    public void setX(int value)
+    {
+        getSemanticObject().setIntProperty(swbps_x, value);
     }
 
     public void remove()

@@ -1,7 +1,7 @@
 package org.semanticwb.process.base;
 
 
-public abstract class EventBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.process.FlowObject,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class EventBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.model.Descriptiveable,org.semanticwb.process.FlowObject,org.semanticwb.model.Traceable
 {
        public static final org.semanticwb.platform.SemanticClass swbps_Event=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Event");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Event");
@@ -342,6 +342,26 @@ public abstract class EventBase extends org.semanticwb.model.base.GenericObjectB
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
+    }
+
+    public int getY()
+    {
+        return getSemanticObject().getIntProperty(swbps_y);
+    }
+
+    public void setY(int value)
+    {
+        getSemanticObject().setIntProperty(swbps_y, value);
+    }
+
+    public int getX()
+    {
+        return getSemanticObject().getIntProperty(swbps_x);
+    }
+
+    public void setX(int value)
+    {
+        getSemanticObject().setIntProperty(swbps_x, value);
     }
 
     public void remove()

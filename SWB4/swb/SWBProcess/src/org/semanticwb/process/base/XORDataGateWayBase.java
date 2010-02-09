@@ -1,7 +1,7 @@
 package org.semanticwb.process.base;
 
 
-public abstract class XORDataGateWayBase extends org.semanticwb.process.XORGateWay implements org.semanticwb.process.FlowObject,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class XORDataGateWayBase extends org.semanticwb.process.XORGateWay implements org.semanticwb.model.Descriptiveable,org.semanticwb.process.FlowObject,org.semanticwb.model.Traceable
 {
        public static final org.semanticwb.platform.SemanticClass swbps_XORDataGateWay=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#XORDataGateWay");
        public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#XORDataGateWay");
