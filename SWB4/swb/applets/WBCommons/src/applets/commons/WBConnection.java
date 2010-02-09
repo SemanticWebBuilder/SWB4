@@ -46,8 +46,8 @@ public class WBConnection
 {
     private Applet _applet=null;
     
-    private static final String PRM_JSESS="jsess";
-    private static final String PRM_CGIPATH="cgipath";    
+    public static final String PRM_JSESS="jsess";
+    public static final String PRM_CGIPATH="cgipath";
     
     private String cgiPath="/gtw.jsp";
     private String jsess=null;                    //session del usuario
@@ -58,6 +58,20 @@ public class WBConnection
     {
         setApplet(applet);
     }
+
+    /** Creates a new instance of WBConnection */
+    public WBConnection(String jsess, String cgipath, String codeBase)
+    {
+        this.jsess=jsess;
+        this.cgiPath=cgipath;
+        try
+        {
+            URL cb=new URL(codeBase);
+            System.out.println("codeBase:"+codeBase+" url:"+cb);
+            url=new URL(cb.getProtocol(),cb.getHost(),cb.getPort(),cgiPath);
+        }catch(Exception e){e.printStackTrace();}
+    }
+
     
     public void setApplet(Applet applet)
     {
