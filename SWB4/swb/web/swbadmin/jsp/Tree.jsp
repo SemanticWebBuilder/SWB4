@@ -823,6 +823,7 @@
         //mgr.addAltEntry("http://www.semanticwb.org/catalogs", "file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/cat.owl");
         mgr.addAltEntry("http://www.semanticwebbuilder.org/swb4/process", "file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/swb_process.owl");
         mgr.addAltEntry("http://www.semanticwebbuilder.org/swb4/community", "file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/community.owl");
+        mgr.addAltEntry("http://www.semanticwebbuilder.org/swb4/pnc", "file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/pnc.owl");
 
         //String swbowl="file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/cat.owl";
         //java.io.File owlf=new java.io.File(swbowl);
@@ -830,7 +831,8 @@
         //sont=new SemanticOntology("", com.hp.hpl.jena.rdf.model.ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM_RDFS_INF,base.getRDFModel()));
         //sont=new SemanticOntology("", mgr.getOntology("http://www.semanticwb.org/catalogs", OntModelSpec.OWL_MEM_RDFS_INF));
         //sont=new SemanticOntology("", mgr.getOntology("http://www.semanticwebbuilder.org/swb4/ontology", OntModelSpec.OWL_MEM_RDFS_INF));
-        sont=new SemanticOntology("", mgr.getOntology("http://www.semanticwebbuilder.org/swb4/community", OntModelSpec.OWL_MEM_RDFS_INF));
+        //sont=new SemanticOntology("", mgr.getOntology("http://www.semanticwebbuilder.org/swb4/community", OntModelSpec.OWL_MEM_RDFS_INF));
+        sont=new SemanticOntology("", mgr.getOntology("http://www.semanticwebbuilder.org/swb4/pnc", OntModelSpec.OWL_MEM_RDFS_INF));
 /*
         swbowl="file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/swb.owl";
         owlf=new java.io.File(swbowl);
