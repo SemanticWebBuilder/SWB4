@@ -237,28 +237,32 @@ public class SWBAProperties extends GenericResource {
                 
                 out.println("</tr>");
             }
-            SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(SWBPlatform.getSemanticMgr().SWBAdmin+"/PublicKey");
-            String publicKey = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().getProperty(sp);
-            if (null!=publicKey){
-                out.println("<tr >");
-                out.println("<td >");
-                out.println("</td>");
-                out.println("<td >");
-                out.println("PKI - Public Key");
-                out.println("</td>");
-                out.println("<td >"+publicKey.substring(publicKey.indexOf("|")+1)+"</td>");
-                out.println("<td ><PRE >System Public Key</PRE></td>");
+            if (fileSelected.equals("System.properties"))
+            {
+                SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(SWBPlatform.getSemanticMgr().SWBAdmin + "/PublicKey");
+                String publicKey = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().getProperty(sp);
+                if (null != publicKey)
+                {
+                    out.println("<tr >");
+                    out.println("<td >");
+                    out.println("</td>");
+                    out.println("<td >");
+                    out.println("PKI - Public Key");
+                    out.println("</td>");
+                    out.println("<td >" + publicKey.substring(publicKey.indexOf("|") + 1) + "</td>");
+                    out.println("<td ><PRE >System Public Key</PRE></td>");
 
-                out.println("</tr>");
-            }
-            out.println("</tbody>");
-            out.println("</table>");
-            out.println("</fieldset>");
-            out.println("<fieldset>");
+                    out.println("</tr>");
+                }
+                out.println("</tbody>");
+                out.println("</table>");
+                out.println("</fieldset>");
+                out.println("<fieldset>");
 //            out.println("<tfoot>");
 //            out.println("<tr>");
 //            out.println("<td colspan=4 ><HR size=\"1\" noshade>");
 //
+            }
             if(prop.hasChangeIt()){
                 SWBResourceURL urlRoll = paramRequest.getActionUrl();
                 urlRoll.setParameter("act","rollback");
