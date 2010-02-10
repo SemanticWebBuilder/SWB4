@@ -30,7 +30,7 @@
     //out.println("<div dojoType=\"dijit.layout.ContentPane\" postCreate=\"setTabTitle('"+id+"','"+cls.getLocalName()+"','"+icon+"');\" />");
     String eid=URLEncoder.encode(id);
 
-    out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" style=\"width=100%;height=100%;\" id=\""+id+"/tab2\" nested=\"true\">");
+    out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" style=\"width=100%;height=100%;\" id=\""+id+"/tab2\" nested_=\"true\">");
 
     out.println("<div dojoType=\"dijit.layout.ContentPane\" title=\"Información\" refreshOnShow=\"true\" href=\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/resourceInfo.jsp?suri="+eid+"\" >");
     out.println("</div>");
