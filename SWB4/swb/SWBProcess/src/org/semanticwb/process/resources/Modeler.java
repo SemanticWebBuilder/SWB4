@@ -10,16 +10,25 @@ import java.io.PrintWriter;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.SWBClass;
 import org.semanticwb.model.User;
+import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.process.EndEvent;
+import org.semanticwb.process.InitEvent;
+import org.semanticwb.process.ProcessSite;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -31,7 +40,14 @@ import org.w3c.dom.Node;
 public class Modeler extends GenericResource
 {
     private Logger log = SWBUtils.getLogger(Modeler.class);
-
+    private static final String PROP_CLASS = "class";
+    private static final String PROP_TITLE = "title";
+    private static final String PROP_URI = "uri";
+    private static final String PROP_X = "x";
+    private static final String PROP_Y = "y";
+    private static final String PROP_LANE = "lane";
+    private static final String PROP_START = "start";
+    private static final String PROP_END = "end";
 
     /**
      *
@@ -78,6 +94,16 @@ public class Modeler extends GenericResource
             tm = cmd.substring(cmd.indexOf('.') + 1, cmd.lastIndexOf('.'));
             id = cmd.substring(cmd.lastIndexOf('.') + 1);
         }
+        GenericObject go = ont.getGenericObject(request.getParameter("suri"));
+        SemanticClass sc = go.getSemanticObject().getSemanticClass();
+
+        org.semanticwb.process.Process process = null;
+        org.semanticwb.process.ProcessSite pross = null;
+        if(sc.equals(org.semanticwb.process.Process.swbps_Process))
+        {
+            process = (org.semanticwb.process.Process)go;
+            pross = process.getProcessSite();
+        }
 
         System.out.println("tmpcmd:"+tmpcmd);
         log.debug("getService: " + request.getParameter("suri"));
@@ -85,6 +111,81 @@ public class Modeler extends GenericResource
         {
             Node node=src.getElementsByTagName("json").item(0);
             System.out.println("json:"+node.getTextContent());
+
+            JSONArray jsarr = null;
+            JSONObject jsobj = null;
+            try {
+                jsobj = new JSONObject(node.getTextContent());
+                jsarr = jsobj.getJSONArray("nodes");
+
+                System.out.println("======================================");
+                System.out.println("JSONObjets found:"+jsarr.length());
+
+                for(int i=0; i<jsarr.length();i++)
+                {
+
+                    jsobj = jsarr.getJSONObject(i);
+                    System.out.println("jsobj:"+jsobj.toString()+", i: "+i);
+
+                    String str_class = jsobj.getString(PROP_CLASS);
+                    String str_title = jsobj.getString(PROP_TITLE);
+                    String str_uri = jsobj.getString(PROP_URI);
+                    int x=0, y=0;
+                    String str_lane=null;
+                    String str_start = null;
+                    String str_end = null;
+
+                    System.out.println("class:"+str_class);
+                    System.out.println("title:"+str_title);
+                    System.out.println("uri:"+str_uri);
+
+                    String cls_ends = str_class.substring(str_class.indexOf("$"));
+                    System.out.println("ends...."+cls_ends);
+
+                    if(str_class.endsWith("$StartEvent") || str_class.endsWith("$EndEvent") || str_class.endsWith("$Task") ||
+                       str_class.endsWith("$InterEvent") || str_class.endsWith("$GateWay") || str_class.endsWith("$ORGateWay") ||
+                       str_class.endsWith("$ANDGateWay") ||
+                       str_class.endsWith("$SubProcess"))
+                    {
+//                        switch (str_class)
+//                        {
+//                            case ()
+//                        }
+//                        InitEvent iniev = pross.createInitEvent();
+//                        EndEvent endev = pross.createEndEvent();
+
+
+                        x=jsobj.getInt(PROP_X);
+                        y=jsobj.getInt(PROP_Y);
+                        str_lane=jsobj.getString(PROP_LANE);
+                        System.out.println("x:"+x);
+                        System.out.println("y:"+y);
+                        System.out.println("lane:"+str_lane);
+                    }
+
+                    // se guarda en un hashmap para despues crearlos al final, ya que existan los demás elementos creados
+                    if(str_class.endsWith("$FlowLink"))
+                    {
+                        str_start = jsobj.getString(PROP_START);
+                        str_end = jsobj.getString(PROP_END); 
+
+                        System.out.println("start:"+str_start);
+                        System.out.println("end:"+str_end);
+                    }
+                    if(str_class.endsWith("$Pool"))
+                    {
+                        x=jsobj.getInt(PROP_X);
+                        y=jsobj.getInt(PROP_Y);
+                        System.out.println("x:"+x);
+                        System.out.println("y:"+y);
+                    }
+                    
+                }
+            } catch (Exception e) {
+                log.error("Error al leer JSON...",e);
+            }
+
+
 
             Document dom = SWBUtils.XML.getNewDocument();
             Element ret=dom.createElement("ret");
