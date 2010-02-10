@@ -147,6 +147,7 @@ public class SelectMultiple extends org.semanticwb.model.base.SelectMultipleBase
             while (it2.hasNext())
             {
                 SemanticObject semanticObject = it2.next();
+                //System.out.println("semanticObject:"+semanticObject+" vals:"+vals);
                 vals.add(semanticObject.getURI());
             }
 
