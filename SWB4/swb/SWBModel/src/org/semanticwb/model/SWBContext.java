@@ -132,16 +132,19 @@ public class SWBContext extends SWBContextBase
         {
             Entry<String,SemanticModel> entry=it.next();
             SemanticModel model=entry.getValue();
-            GenericObject gen=model.getModelObject().createGenericInstance();
-            //System.out.println("gen:"+gen+" "+adminShow);
-            if(gen instanceof WebSite)
+            if(model!=null && model.getModelObject()!=null)
             {
-                if(adminShow)
+                GenericObject gen=model.getModelObject().createGenericInstance();
+                //System.out.println("gen:"+gen+" "+adminShow);
+                if(gen instanceof WebSite)
                 {
-                    arr.add((WebSite)gen);
-                }else if(!filtered.contains(gen.getId()))
-                {
-                    arr.add((WebSite)gen);
+                    if(adminShow)
+                    {
+                        arr.add((WebSite)gen);
+                    }else if(!filtered.contains(gen.getId()))
+                    {
+                        arr.add((WebSite)gen);
+                    }
                 }
             }
         }
