@@ -7,6 +7,7 @@ package org.semanticwb.jcr283.implementation;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Set;
 import javax.jcr.RepositoryException;
 
@@ -17,6 +18,8 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.jcr283.repository.model.Base;
 import org.semanticwb.jcr283.repository.model.Workspace;
 import org.semanticwb.model.GenericIterator;
+import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.repository.Referenceable;
 
 /**
  *
@@ -24,8 +27,8 @@ import org.semanticwb.model.GenericIterator;
  */
 public final class HashtableNodeManager extends Hashtable<String, NodeStatus>
 {
-    private static final String MIX_REFERENCEABLE = "mix:referenceable";
 
+    private static final String MIX_REFERENCEABLE = "mix:referenceable";
     private static final String PATH_SEPARATOR = "/";
     private final static Logger log = SWBUtils.getLogger(HashtableNodeManager.class);
     private Hashtable<String, NodeStatus> nodesbyId = new Hashtable<String, NodeStatus>();
@@ -170,6 +173,43 @@ public final class HashtableNodeManager extends Hashtable<String, NodeStatus>
         }
     }
 
+    public NodeImp getNodeByUUID(String uuid, SessionImp session)
+    {
+        if (nodesByUUID.containsKey(uuid))
+        {
+            if (nodesByUUID.get(uuid).isDeleted())
+            {
+                return null;
+            }
+            else
+            {
+                return nodesByUUID.get(uuid).getNode();
+            }
+        }
+        else
+        {
+            Workspace ws = Workspace.ClassMgr.getWorkspace(session.getWorkspace().getName());
+            Iterator<SemanticObject> objs = ws.getSemanticObject().getModel().listSubjects(Referenceable.jcr_uuid, uuid);
+            if (objs.hasNext())
+            {
+                SemanticObject obj = objs.next();
+                Base base = new Base(obj);
+                try
+                {
+                    NodeImp node = getNodeByIdentifier(base.getId(), session, NodeTypeManagerImp.loadNodeType(obj.getSemanticClass()));
+
+                    return node;
+                }
+                catch (Exception e)
+                {
+                    log.error(e);
+                }
+            }
+
+        }
+        return null;
+    }
+
     @Override
     public synchronized NodeStatus remove(Object key)
     {
@@ -188,11 +228,11 @@ public final class HashtableNodeManager extends Hashtable<String, NodeStatus>
             {
                 log.error(e);
             }
-            if(nodeStatus.getNode().parent!=null)
+            if (nodeStatus.getNode().parent != null)
             {
-                String pathParent=nodeStatus.getNode().parent.path;
-                HashSet<NodeStatus> childs=nodesbyParent.get(pathParent);
-                if(childs!=null && childs.contains(nodeStatus))
+                String pathParent = nodeStatus.getNode().parent.path;
+                HashSet<NodeStatus> childs = nodesbyParent.get(pathParent);
+                if (childs != null && childs.contains(nodeStatus))
                 {
                     childs.remove(nodeStatus);
                 }

@@ -113,7 +113,12 @@ public final class SessionImp implements Session
     @Deprecated
     public Node getNodeByUUID(String uuid) throws ItemNotFoundException, RepositoryException
     {
-        return workspace.getNodeManager().getNodeByIdentifier(uuid, this);
+        NodeImp node=workspace.getNodeManager().getNodeByUUID(uuid, this);
+        if(node==null)
+        {
+            throw new ItemNotFoundException("The node with uuid "+uuid+" was not found");
+        }
+        return node;
     }
 
     public Node getNodeByIdentifier(String id) throws ItemNotFoundException, RepositoryException

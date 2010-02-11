@@ -119,7 +119,10 @@ public final class NodeManager
     {
         return nodes.getNodeByIdentifier(id, session, nodeTypeToSeach);
     }
-
+    public NodeImp getNodeByUUID(String uuid, SessionImp session)
+    {
+        return nodes.getNodeByUUID(uuid, session);
+    }
     public NodeImp addNode(NodeImp node)
     {
         if (nodes.containsKey(node.path))
