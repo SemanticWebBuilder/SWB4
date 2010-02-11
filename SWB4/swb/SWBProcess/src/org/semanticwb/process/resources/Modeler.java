@@ -7,6 +7,8 @@ package org.semanticwb.process.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Iterator;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,19 +18,20 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
-import org.semanticwb.model.SWBClass;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticClass;
-import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
-import org.semanticwb.process.EndEvent;
+import org.semanticwb.process.ConditionalFlow;
+import org.semanticwb.process.FlowObject;
 import org.semanticwb.process.InitEvent;
-import org.semanticwb.process.ProcessSite;
+import org.semanticwb.process.SequenceFlow;
+import org.semanticwb.process.UserTask;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -87,23 +90,30 @@ public class Modeler extends GenericResource
     }
 
     private Document getService(String cmd, Document src, User user, HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) {
+
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+        GenericObject go = ont.getGenericObject(request.getParameter("suri"));
+        SemanticClass sc = go.getSemanticObject().getSemanticClass();
+
+        HashMap<String, FlowObject> hm_new = new HashMap();
+        HashMap<String, String> hm_link = new HashMap();
+
         String tmpcmd = cmd, tm = null, id = null;
         if (null != cmd && cmd.indexOf('.') != -1) {
             tmpcmd = cmd.substring(0, cmd.indexOf('.'));
             tm = cmd.substring(cmd.indexOf('.') + 1, cmd.lastIndexOf('.'));
             id = cmd.substring(cmd.lastIndexOf('.') + 1);
         }
-        GenericObject go = ont.getGenericObject(request.getParameter("suri"));
-        SemanticClass sc = go.getSemanticObject().getSemanticClass();
-
+        
         org.semanticwb.process.Process process = null;
         org.semanticwb.process.ProcessSite pross = null;
+
         if(sc.equals(org.semanticwb.process.Process.swbps_Process))
         {
             process = (org.semanticwb.process.Process)go;
             pross = process.getProcessSite();
         }
+        else return null;
 
         System.out.println("tmpcmd:"+tmpcmd);
         log.debug("getService: " + request.getParameter("suri"));
@@ -127,9 +137,12 @@ public class Modeler extends GenericResource
                     jsobj = jsarr.getJSONObject(i);
                     System.out.println("jsobj:"+jsobj.toString()+", i: "+i);
 
+                    // Propiedades que siempre traen los elementos del modelo
                     String str_class = jsobj.getString(PROP_CLASS);
                     String str_title = jsobj.getString(PROP_TITLE);
                     String str_uri = jsobj.getString(PROP_URI);
+
+                    //Propiedades particulares de los elementos del modelo, estan pueden ser todas o algunas.
                     int x=0, y=0;
                     String str_lane=null;
                     String str_start = null;
@@ -142,22 +155,74 @@ public class Modeler extends GenericResource
                     String cls_ends = str_class.substring(str_class.indexOf("$"));
                     System.out.println("ends...."+cls_ends);
 
+                    GenericObject lgo = null;
+                    FlowObject fgo = null;
+                    // Tipo de clase a crear o actualizar
+                    if(str_uri.startsWith("new:"))
+                    {
+                        // para crear el FlowObject
+                        //TODO:
+                        fgo = null;
+
+                        if(cls_ends.endsWith("$StartEvent"))
+                        {
+                            fgo=pross.createInitEvent();
+                        }
+                        else if(cls_ends.endsWith("$EndEvent"))
+                        {
+                            fgo=pross.createEndEvent();
+
+                        }
+                        else if(cls_ends.endsWith("$Task"))
+                        {
+                            fgo = createTask(process, str_title);
+                        }
+                        else if(cls_ends.endsWith("$InterEvent"))
+                        {
+                            fgo = pross.createInterEvent();
+                        }
+                        else if(cls_ends.endsWith("$GateWay"))
+                        {
+                            fgo=pross.createGateWay();
+                        }
+                        else if(cls_ends.endsWith("$ORGateWay"))
+                        {
+                            fgo=pross.createORGateWay();
+                        }
+                        else if(cls_ends.endsWith("$ANDGateWay"))
+                        {
+                            fgo=pross.createANDGateWay();
+                        }
+                        else if(cls_ends.endsWith("$SubProcess"))
+                        {
+                            fgo=createSubProcess(process, str_title);
+                        }
+                        process.addFlowObject(fgo);
+                    }
+                    else
+                    {
+                        // para obtener el FlowObject existente y actualizar las propiedades
+                        lgo = ont.getGenericObject(str_uri);
+                    }
+
+                    if(lgo instanceof FlowObject) fgo = (FlowObject)lgo;
+                    if(fgo!=null) hm_new.put(str_uri, fgo);
+
+                    if(str_title!=null&&str_title.trim().length()>0) fgo.setTitle(str_title);
+
+                    // Para agregar las propiedades al fgo
+
                     if(str_class.endsWith("$StartEvent") || str_class.endsWith("$EndEvent") || str_class.endsWith("$Task") ||
                        str_class.endsWith("$InterEvent") || str_class.endsWith("$GateWay") || str_class.endsWith("$ORGateWay") ||
-                       str_class.endsWith("$ANDGateWay") ||
-                       str_class.endsWith("$SubProcess"))
+                       str_class.endsWith("$ANDGateWay") || str_class.endsWith("$SubProcess"))
                     {
-//                        switch (str_class)
-//                        {
-//                            case ()
-//                        }
-//                        InitEvent iniev = pross.createInitEvent();
-//                        EndEvent endev = pross.createEndEvent();
-
-
                         x=jsobj.getInt(PROP_X);
                         y=jsobj.getInt(PROP_Y);
+                        fgo.setX(x);
+                        fgo.setY(y);
+                        
                         str_lane=jsobj.getString(PROP_LANE);
+
                         System.out.println("x:"+x);
                         System.out.println("y:"+y);
                         System.out.println("lane:"+str_lane);
@@ -169,6 +234,8 @@ public class Modeler extends GenericResource
                         str_start = jsobj.getString(PROP_START);
                         str_end = jsobj.getString(PROP_END); 
 
+                        hm_link.put(str_start,str_end);
+
                         System.out.println("start:"+str_start);
                         System.out.println("end:"+str_end);
                     }
@@ -176,11 +243,26 @@ public class Modeler extends GenericResource
                     {
                         x=jsobj.getInt(PROP_X);
                         y=jsobj.getInt(PROP_Y);
+                        fgo.setX(x);
+                        fgo.setY(y);
+                        
                         System.out.println("x:"+x);
                         System.out.println("y:"+y);
                     }
-                    
                 }
+                Iterator<String> its=hm_link.keySet().iterator();
+                while(its.hasNext())
+                {
+                    String key = its.next();
+                    String val = hm_link.get(key);
+                    FlowObject fof = hm_new.get(key);
+                    FlowObject fot = hm_new.get(val);
+                    if(fof!=null&&fot!=null)
+                    {
+                        SequenceFlow sf = linkObject(fof, fot);
+                    }
+                }
+
             } catch (Exception e) {
                 log.error("Error al leer JSON...",e);
             }
@@ -335,5 +417,44 @@ public class Modeler extends GenericResource
         return dom;
     }
 
+
+    public org.semanticwb.process.Process createSubProcess(org.semanticwb.process.Process process,String name)
+    {
+        org.semanticwb.process.Process sps=process.getProcessSite().createProcess();
+        sps.setTitle(name);
+        //process.addFlowObject(sps);
+        return sps;
+    }
+
+    public UserTask createTask(org.semanticwb.process.Process process,String name)
+    {
+        UserTask task=process.getProcessSite().createUserTask(SWBPlatform.getIDGenerator().getID(name, null, true));
+        task.setTitle(name);
+        task.setActive(true);
+        //process.addFlowObject(task);
+        Resource res=task.getWebSite().createResource();
+        res.setTitle(name);
+        res.setActive(true);
+        res.setResourceType(task.getWebSite().getResourceType("ProcessForm"));
+        task.addResource(res);
+        return task;
+    }
+
+    public SequenceFlow linkObject(FlowObject from, FlowObject to)
+    {
+        SequenceFlow seq=from.getProcessSite().createSequenceFlow();
+        from.addToConnectionObject(seq);
+        seq.setToFlowObject(to);
+        return seq;
+    }
+
+    public SequenceFlow linkConditionObject(FlowObject from, FlowObject to, String condition)
+    {
+        ConditionalFlow seq=from.getProcessSite().createConditionalFlow();
+        from.addToConnectionObject(seq);
+        seq.setToFlowObject(to);
+        seq.setFlowCondition(condition);
+        return seq;
+    }
 
 }
