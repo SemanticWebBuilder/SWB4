@@ -97,21 +97,24 @@ public class Monitor implements InternalServlet
         {
             SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(SWBPlatform.getSemanticMgr().SWBAdmin + "/PrivateKey");
             String priv = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().getProperty(sp);
-            priv = priv.substring(priv.indexOf("|") + 1);
-            String PKey = new String(SFBase64.decode(priv));
-            String pKey = new String(SFBase64.decode(SWBPlatform.getEnv("swbMonitor/PublicKey", null)));
-            if (null != pKey)
+            if (priv != null)
             {
-                java.security.spec.X509EncodedKeySpec pK = new java.security.spec.X509EncodedKeySpec(pKey.getBytes());
-                java.security.spec.PKCS8EncodedKeySpec PK = new java.security.spec.PKCS8EncodedKeySpec(PKey.getBytes());
-                KeyFactory keyFact = KeyFactory.getInstance("DiffieHellman");
-                KeyAgreement ka = KeyAgreement.getInstance("DiffieHellman");
-                PublicKey publicKey = keyFact.generatePublic(pK);
-                PrivateKey privateKey = keyFact.generatePrivate(PK);
-                ka.init(privateKey);
-                ka.doPhase(publicKey, true);
-                secretKey = new SecretKeySpec(ka.generateSecret(), 0, 16, "AES");
-                //SecretKey secretKey = ka.generateSecret("AES");
+                priv = priv.substring(priv.indexOf("|") + 1);
+                String PKey = new String(SFBase64.decode(priv));
+                String pKey = new String(SFBase64.decode(SWBPlatform.getEnv("swbMonitor/PublicKey", null)));
+                if (null != pKey)
+                {
+                    java.security.spec.X509EncodedKeySpec pK = new java.security.spec.X509EncodedKeySpec(pKey.getBytes());
+                    java.security.spec.PKCS8EncodedKeySpec PK = new java.security.spec.PKCS8EncodedKeySpec(PKey.getBytes());
+                    KeyFactory keyFact = KeyFactory.getInstance("DiffieHellman");
+                    KeyAgreement ka = KeyAgreement.getInstance("DiffieHellman");
+                    PublicKey publicKey = keyFact.generatePublic(pK);
+                    PrivateKey privateKey = keyFact.generatePrivate(PK);
+                    ka.init(privateKey);
+                    ka.doPhase(publicKey, true);
+                    secretKey = new SecretKeySpec(ka.generateSecret(), 0, 16, "AES");
+                    //SecretKey secretKey = ka.generateSecret("AES");
+                }
             }
         } catch (java.security.GeneralSecurityException gse)
         {
