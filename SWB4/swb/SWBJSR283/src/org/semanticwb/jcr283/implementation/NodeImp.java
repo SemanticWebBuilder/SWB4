@@ -80,8 +80,7 @@ public class NodeImp extends ItemImp implements Node
     private SemanticObject obj = null;
     private final int index;
     protected final NodeTypeImp nodeType;
-    protected final NodeTypeManagerImp nodeTypeManager;
-    protected final String id;
+    protected final NodeTypeManagerImp nodeTypeManager;    
     private final VersionManagerImp versionManagerImp;
 
     protected NodeImp(Base base, NodeImp parent, int index, String path, int depth, SessionImp session)
@@ -108,11 +107,9 @@ public class NodeImp extends ItemImp implements Node
 
     protected NodeImp(NodeTypeImp nodeType, NodeDefinitionImp nodeDefinition, String name, NodeImp parent, int index, String path, int depth, SessionImp session, String id, boolean isnew)
     {
-        super(nodeDefinition, name, parent, path, depth, session);
-        
+        super(nodeDefinition, name, parent, path, depth, session,id);
         this.index = index;
-        this.isNew = isnew;
-        this.id = id;
+        this.isNew = isnew;        
         this.nodeType = nodeType;
         this.nodeTypeManager = session.getWorkspaceImp().getNodeTypeManagerImp();
         versionManagerImp = session.getWorkspaceImp().getVersionManagerImp();

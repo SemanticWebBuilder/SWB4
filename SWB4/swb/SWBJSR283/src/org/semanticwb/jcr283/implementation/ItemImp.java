@@ -38,7 +38,8 @@ public abstract class ItemImp implements Item
     protected final SessionImp session;
     protected final ItemDefinitionImp definition;
     protected final ValueFactoryImp valueFactoryImp;
-    public ItemImp(ItemDefinitionImp definition, String name, NodeImp parent, String path, int depth, SessionImp session)
+    protected final String id;
+    public ItemImp(ItemDefinitionImp definition, String name, NodeImp parent, String path, int depth, SessionImp session,String id)
     {
         this.name = name;
         this.parent = parent;
@@ -48,6 +49,7 @@ public abstract class ItemImp implements Item
         this.definition = definition;
         nodeManager = session.getWorkspaceImp().getNodeManager();
         this.valueFactoryImp=session.getValueFactoryImp();
+        this.id=id;
 
     }
 
