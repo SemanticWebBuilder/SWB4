@@ -209,7 +209,7 @@ public final class HashtableNodeManager extends Hashtable<String, NodeStatus>
         }
         return null;
     }
-
+    @SuppressWarnings(value="deprecation")
     @Override
     public synchronized NodeStatus remove(Object key)
     {
@@ -348,7 +348,7 @@ public final class HashtableNodeManager extends Hashtable<String, NodeStatus>
         }
         return countNodes;
     }
-
+    @SuppressWarnings(value="deprecation")
     @Override
     public synchronized NodeStatus put(String path, NodeStatus nodestatus)
     {

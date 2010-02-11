@@ -45,7 +45,7 @@ public class ObservationManagerImp implements ObservationManager
             throw new RepositoryException("The listener was already registered");
         }
     }
-
+    @SuppressWarnings(value="deprecation")
     private void fileEvent(ItemImp item, int eventType)
     {
         String path = item.path;
