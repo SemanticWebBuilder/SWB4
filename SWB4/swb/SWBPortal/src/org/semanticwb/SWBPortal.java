@@ -370,6 +370,7 @@ public class SWBPortal {
             Connection con = SWBUtils.DB.getDefaultConnection();
             if (con != null) {
                 log.info("-->Database: " + SWBUtils.DB.getDatabaseName());
+              //  checkHSQLHAck(con); //MAPS74
                 haveDB = true;
                 //Si no existen las tablas, se crean automaticamente
 //                PreparedStatement sr=con.prepareStatement("select * from swb_counter");
@@ -2577,5 +2578,29 @@ public class SWBPortal {
                 "}\n" +
                 "</script>\n";
         return ret;
+    }
+
+    private void checkHSQLHAck(Connection con){
+        try {
+            boolean fix = false;
+            String base = "";
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("select obj from SWB_SYS_STMT where prop='Uv::http://jena.hpl.hp.com/2003/04/DB#EngineType'");
+            while (rs.next()){
+                  base = rs.getString("obj");
+                if (base.endsWith("HSQL")){
+                    fix = true;
+                }
+              //  System.out.println("Subj"+rs.getString("subj"));
+              //  System.out.println("Prop"+rs.getString("prop"));
+                System.out.println("Obj"+rs.getString("obj"));
+                System.out.println();
+            }
+            rs.close();
+            st.executeUpdate("update SWB_SYS_STMT set obj='"+base+"DB' where prop='Uv::http://jena.hpl.hp.com/2003/04/DB#EngineType'");
+            st.close();
+        } catch (Exception e) {
+            log.error("Problem Updating HSQL Header",e);
+        }
     }
 }
