@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.UUID;
 import javax.jcr.AccessDeniedException;
 import javax.jcr.Binary;
 import javax.jcr.InvalidItemStateException;
@@ -56,7 +57,7 @@ public final class PropertyImp extends ItemImp implements Property
 
     public PropertyImp(PropertyDefinitionImp definition, String name, NodeImp parent, String path, SessionImp session) throws RepositoryException
     {
-        super(definition, name, parent, path, parent.getDepth() + 1, session);
+        super(definition, name, parent, path, parent.getDepth() + 1, session,UUID.randomUUID().toString());
         prop = null;
         this.isNew = true;
     }
@@ -304,12 +305,12 @@ public final class PropertyImp extends ItemImp implements Property
             {
                 throw new ItemNotFoundException();
             }
-            String id = values.get(0).getString();
+            String nodeid = values.get(0).getString();
 
-            NodeImp node = (NodeImp) session.getNodeByIdentifier(id);
+            NodeImp node = (NodeImp) session.getNodeByIdentifier(nodeid);
             if (node == null)
             {
-                node=nodeManager.getNodeByIdentifier(id, session);
+                node=nodeManager.getNodeByIdentifier(nodeid, session);
                 if (node == null)
                 {
                     throw new ItemNotFoundException();

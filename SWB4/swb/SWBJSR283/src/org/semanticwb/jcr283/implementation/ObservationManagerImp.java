@@ -2,37 +2,42 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.semanticwb.jcr283.implementation;
 
-import atlas.event.Event;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.Set;
 import javax.jcr.RepositoryException;
+import javax.jcr.observation.Event;
 import javax.jcr.observation.EventJournal;
 import javax.jcr.observation.EventListener;
 import javax.jcr.observation.EventListenerIterator;
 import javax.jcr.observation.ObservationManager;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 
 /**
  *
  * @author victor.lorenzana
  */
-public class ObservationManagerImp implements ObservationManager{
+public class ObservationManagerImp implements ObservationManager
+{
 
-    private Hashtable<EventListener,EventListenerInfo> registeredEventListeners=new Hashtable<EventListener, EventListenerInfo>();
+    static Logger log = SWBUtils.getLogger(ObservationManagerImp.class);
+    private Hashtable<EventListener, EventListenerInfo> registeredEventListeners = new Hashtable<EventListener, EventListenerInfo>();
     private final SessionImp session;
     private String userData;
+
     public ObservationManagerImp(SessionImp session)
     {
-        this.session=session;
+        this.session = session;
     }
+
     public void addEventListener(EventListener listener, int eventTypes, String absPath, boolean isDeep, String[] uuid, String[] nodeTypeName, boolean noLocal) throws RepositoryException
     {
-        if(!registeredEventListeners.containsKey(listener))
+        if (!registeredEventListeners.containsKey(listener))
         {
-            EventListenerInfo info=new EventListenerInfo(eventTypes, absPath, isDeep, uuid, nodeTypeName, noLocal);
+            EventListenerInfo info = new EventListenerInfo(eventTypes, absPath, isDeep, uuid, nodeTypeName, noLocal);
             registeredEventListeners.put(listener, info);
         }
         else
@@ -40,39 +45,111 @@ public class ObservationManagerImp implements ObservationManager{
             throw new RepositoryException("The listener was already registered");
         }
     }
+    
+    private void fileNodeEvent(NodeImp node, int eventType)
+    {
+        String path = node.path;
+        
+        for (EventListener listener : registeredEventListeners.keySet())
+        {
+            Collection<Event> events = new HashSet<Event>();
+            EventListenerInfo info = registeredEventListeners.get(listener);
+            if ((info.getEventTypes() | eventType) == eventType)
+            {
+                if (info.getAbsPath() != null && path.equals(info.getAbsPath()))
+                {
+                    EventImp event = new EventImp(EventImp.NODE_ADDED, path, session.getUserID(), id, userData);
+                    events.add(event);                    
+                }
+                else if (info.getUuid() != null)
+                {
+                    try
+                    {
+                        if (node.isNodeType("mix:referenceable"))
+                        {
+                            for (String uuid : info.getUuid())
+                            {
+                                try
+                                {
+                                    if (uuid.equals(node.getUUID()))
+                                    {
+                                        EventImp event = new EventImp(EventImp.NODE_ADDED, path, session.getUserID(), id, userData);
+                                        events.add(event);                                        
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    log.error(e);
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        log.error(e);
+                    }
+                }
+                else if (info.getNodeTypeName() != null)
+                {
+                    for (String nodeTyeName : info.getNodeTypeName())
+                    {
+                        try
+                        {
+                            if (node.isNodeType(nodeTyeName))
+                            {
+                                EventImp event = new EventImp(EventImp.NODE_ADDED, path, session.getUserID(), id, userData);
+                                events.add(event);                                
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            log.error(e);
+                        }
+                    }
+                }
+                else if (info.isDeep() && info.getAbsPath()!=null)
+                {
+                    NodeImp parent=session.getWorkspaceImp().getNodeManager().getNode(info.getAbsPath());
+                    if(parent!=null)
+                    {
+                        if(path.startsWith(node.path))
+                        {
+                            EventImp event = new EventImp(EventImp.NODE_ADDED, path, session.getUserID(), id, userData);
+                            events.add(event);
+                        }
+                    }
+                }
+                listener.onEvent(new EventIteratorImp(events));
+            }
+
+        }
+    }
 
     public void nodeAdded(NodeImp node)
     {
-        String path=node.path;
-        String id=node.id;
-        for(EventListener listener : registeredEventListeners.keySet())
-        {
-            EventListenerInfo info =registeredEventListeners.get(listener);
-            if((info.getEventTypes() | EventImp.NODE_ADDED)==EventImp.NODE_ADDED)
-            {
-                EventImp event=new EventImp(EventImp.NODE_ADDED, path, session.getUserID(),id , userData);
-            }
-        }
+        fileNodeEvent(node, Event.NODE_ADDED);
     }
+
     public void nodeRemoved(NodeImp node)
     {
-
+        fileNodeEvent(node, Event.NODE_REMOVED);
     }
+
     public void nodeMoved(NodeImp node)
     {
-
+        fileNodeEvent(node, Event.NODE_MOVED);
     }
+
     public void propertyAdded(PropertyImp prop)
     {
-
     }
+
     public void propertyRemoved(PropertyImp prop)
     {
-
     }
+
     public void propertyMoved(PropertyImp prop)
     {
-
     }
 
     public void removeEventListener(EventListener listener) throws RepositoryException
@@ -84,13 +161,15 @@ public class ObservationManagerImp implements ObservationManager{
     {
         return new EventListenerIteratorImp(registeredEventListeners.keySet());
     }
+
     public String getUserData()
     {
         return userData;
     }
+
     public void setUserData(String userData) throws RepositoryException
     {
-        this.userData=userData;
+        this.userData = userData;
     }
 
     public EventJournal getEventJournal() throws RepositoryException
@@ -102,5 +181,4 @@ public class ObservationManagerImp implements ObservationManager{
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
 }
