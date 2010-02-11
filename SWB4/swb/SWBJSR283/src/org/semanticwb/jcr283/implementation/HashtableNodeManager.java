@@ -24,17 +24,20 @@ import org.semanticwb.model.GenericIterator;
  */
 public final class HashtableNodeManager extends Hashtable<String, NodeStatus>
 {
+    private static final String MIX_REFERENCEABLE = "mix:referenceable";
 
     private static final String PATH_SEPARATOR = "/";
     private final static Logger log = SWBUtils.getLogger(HashtableNodeManager.class);
     private Hashtable<String, NodeStatus> nodesbyId = new Hashtable<String, NodeStatus>();
     private Hashtable<String, HashSet<NodeStatus>> nodesbyParent = new Hashtable<String, HashSet<NodeStatus>>();
-    private final SessionImp session;
+    private Hashtable<String, NodeStatus> nodesByUUID = new Hashtable<String, NodeStatus>();
+    //private final SessionImp session;
     private final LockManagerImp lockManager;
+
     public HashtableNodeManager(SessionImp session)
     {
-        this.session = session;
-        lockManager=session.getWorkspaceImp().getLockManagerImp();
+        //this.session = session;
+        lockManager = session.getWorkspaceImp().getLockManagerImp();
     }
 
     public NodeImp getNodeByIdentifier(String id, SessionImp session, NodeTypeImp nodeTypeToSeach) throws RepositoryException
@@ -165,6 +168,38 @@ public final class HashtableNodeManager extends Hashtable<String, NodeStatus>
                 }
             }
         }
+    }
+
+    @Override
+    public synchronized NodeStatus remove(Object key)
+    {
+        NodeStatus nodeStatus = this.get(key.toString());
+        if (nodeStatus != null)
+        {
+            try
+            {
+                if (nodeStatus.getNode().isNodeType(MIX_REFERENCEABLE))
+                {
+                    String uuid = nodeStatus.getNode().getUUID();
+                    nodesByUUID.remove(uuid);
+                }
+            }
+            catch (Exception e)
+            {
+                log.error(e);
+            }
+            if(nodeStatus.getNode().parent!=null)
+            {
+                String pathParent=nodeStatus.getNode().parent.path;
+                HashSet<NodeStatus> childs=nodesbyParent.get(pathParent);
+                if(childs!=null && childs.contains(nodeStatus))
+                {
+                    childs.remove(nodeStatus);
+                }
+            }
+            nodesbyId.remove(nodeStatus.getNode().id);
+        }
+        return super.remove(key.toString());
     }
 
     Set<NodeImp> getProtectedChildNodes(String parenPath) throws RepositoryException
@@ -307,18 +342,30 @@ public final class HashtableNodeManager extends Hashtable<String, NodeStatus>
                 }
                 nodesbyParent.put(pathParent, childs);
             }
-            NodeStatus parent=this.get(pathParent);
-            if(parent.isLocked() && parent.getLock().isDeep())
+            NodeStatus parent = this.get(pathParent);
+            if (parent.isLocked() && parent.getLock().isDeep())
             {
                 try
                 {
                     lockManager.lockParent(path);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     log.error(e);
                 }
             }
+        }
+        try
+        {
+            if (nodestatus.getNode().isNodeType(MIX_REFERENCEABLE))
+            {
+                nodesByUUID.put(nodestatus.getNode().getUUID(), nodestatus);
+            }
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+
         }
         return super.put(path, nodestatus);
     }
