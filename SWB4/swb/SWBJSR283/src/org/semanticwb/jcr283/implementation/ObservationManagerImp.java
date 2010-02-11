@@ -45,11 +45,11 @@ public class ObservationManagerImp implements ObservationManager
             throw new RepositoryException("The listener was already registered");
         }
     }
-    
-    private void fileNodeEvent(NodeImp node, int eventType)
+
+    private void fileEvent(ItemImp item, int eventType)
     {
-        String path = node.path;
-        
+        String path = item.path;
+        String id = item.id;
         for (EventListener listener : registeredEventListeners.keySet())
         {
             Collection<Event> events = new HashSet<Event>();
@@ -59,22 +59,22 @@ public class ObservationManagerImp implements ObservationManager
                 if (info.getAbsPath() != null && path.equals(info.getAbsPath()))
                 {
                     EventImp event = new EventImp(EventImp.NODE_ADDED, path, session.getUserID(), id, userData);
-                    events.add(event);                    
+                    events.add(event);
                 }
                 else if (info.getUuid() != null)
                 {
                     try
                     {
-                        if (node.isNodeType("mix:referenceable"))
+                        if (item instanceof NodeImp && ((NodeImp) item).isNodeType("mix:referenceable"))
                         {
                             for (String uuid : info.getUuid())
                             {
                                 try
                                 {
-                                    if (uuid.equals(node.getUUID()))
+                                    if (uuid.equals(((NodeImp) item).getUUID()))
                                     {
-                                        EventImp event = new EventImp(EventImp.NODE_ADDED, path, session.getUserID(), id, userData);
-                                        events.add(event);                                        
+                                        EventImp event = new EventImp(eventType, path, session.getUserID(), id, userData);
+                                        events.add(event);
                                     }
                                 }
                                 catch (Exception e)
@@ -95,10 +95,10 @@ public class ObservationManagerImp implements ObservationManager
                     {
                         try
                         {
-                            if (node.isNodeType(nodeTyeName))
+                            if (item instanceof NodeImp && ((NodeImp) item).isNodeType(nodeTyeName))
                             {
-                                EventImp event = new EventImp(EventImp.NODE_ADDED, path, session.getUserID(), id, userData);
-                                events.add(event);                                
+                                EventImp event = new EventImp(eventType, path, session.getUserID(), id, userData);
+                                events.add(event);
                             }
                         }
                         catch (Exception e)
@@ -107,14 +107,14 @@ public class ObservationManagerImp implements ObservationManager
                         }
                     }
                 }
-                else if (info.isDeep() && info.getAbsPath()!=null)
+                else if (info.isDeep() && info.getAbsPath() != null)
                 {
-                    NodeImp parent=session.getWorkspaceImp().getNodeManager().getNode(info.getAbsPath());
-                    if(parent!=null)
+                    NodeImp parent = session.getWorkspaceImp().getNodeManager().getNode(info.getAbsPath());
+                    if (parent != null)
                     {
-                        if(path.startsWith(node.path))
+                        if (path.startsWith(parent.path))
                         {
-                            EventImp event = new EventImp(EventImp.NODE_ADDED, path, session.getUserID(), id, userData);
+                            EventImp event = new EventImp(eventType, path, session.getUserID(), id, userData);
                             events.add(event);
                         }
                     }
@@ -127,29 +127,32 @@ public class ObservationManagerImp implements ObservationManager
 
     public void nodeAdded(NodeImp node)
     {
-        fileNodeEvent(node, Event.NODE_ADDED);
+        fileEvent(node, Event.NODE_ADDED);
     }
 
     public void nodeRemoved(NodeImp node)
     {
-        fileNodeEvent(node, Event.NODE_REMOVED);
+        fileEvent(node, Event.NODE_REMOVED);
     }
 
     public void nodeMoved(NodeImp node)
     {
-        fileNodeEvent(node, Event.NODE_MOVED);
+        fileEvent(node, Event.NODE_MOVED);
     }
 
     public void propertyAdded(PropertyImp prop)
     {
+        fileEvent(prop, Event.PROPERTY_ADDED);
     }
 
     public void propertyRemoved(PropertyImp prop)
     {
+        fileEvent(prop, Event.PROPERTY_REMOVED);
     }
 
-    public void propertyMoved(PropertyImp prop)
+    public void propertyChanged(PropertyImp prop)
     {
+        fileEvent(prop, Event.PROPERTY_CHANGED);
     }
 
     public void removeEventListener(EventListener listener) throws RepositoryException
