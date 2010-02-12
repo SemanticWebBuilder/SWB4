@@ -218,5 +218,10 @@ namespace WBOffice4.Forms
         {
             loadContents();
         }
+
+        private void radioButtonMyDocuments_CheckedChanged(object sender, EventArgs e)
+        {
+            loadContents();
+        }
     }
 }

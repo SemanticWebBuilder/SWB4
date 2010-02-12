@@ -210,6 +210,7 @@
             this.radioButtonMyDocuments.TabStop = true;
             this.radioButtonMyDocuments.Text = "Mis documentos";
             this.radioButtonMyDocuments.UseVisualStyleBackColor = true;
+            this.radioButtonMyDocuments.CheckedChanged += new System.EventHandler(this.radioButtonMyDocuments_CheckedChanged);
             // 
             // radioButtonAll
             // 
