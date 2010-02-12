@@ -304,12 +304,11 @@ public class WB4WriterTest
     }
 
     @Test
-    @Ignore
+    //@Ignore
     public void showContentsInFlowTest()
     {
         try
-        {
-            WB4Writer writer = new WB4Writer(this.xContext);
+        {            
             WB4Writer.showContentsInFlow();
         }
         catch (Throwable wbe)
@@ -336,7 +335,7 @@ public class WB4WriterTest
     }
 
     @Test
-    //@Ignore
+    @Ignore
     public void saveToSiteTest()
     {
         try
