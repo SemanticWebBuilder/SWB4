@@ -7,6 +7,7 @@ package org.semanticwb.process.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import javax.servlet.ServletInputStream;
@@ -96,7 +97,6 @@ public class Modeler extends GenericResource
         SemanticClass sc = go.getSemanticObject().getSemanticClass();
 
         HashMap<String, FlowObject> hm_new = new HashMap();
-        HashMap<String, String> hm_link = new HashMap();
 
         String tmpcmd = cmd, tm = null, id = null;
         if (null != cmd && cmd.indexOf('.') != -1) {
@@ -133,7 +133,6 @@ public class Modeler extends GenericResource
 
                 for(int i=0; i<jsarr.length();i++)
                 {
-
                     jsobj = jsarr.getJSONObject(i);
                     System.out.println("jsobj:"+jsobj.toString()+", i: "+i);
 
@@ -142,12 +141,6 @@ public class Modeler extends GenericResource
                     String str_title = jsobj.getString(PROP_TITLE);
                     String str_uri = jsobj.getString(PROP_URI);
 
-                    //Propiedades particulares de los elementos del modelo, estan pueden ser todas o algunas.
-                    int x=0, y=0;
-                    String str_lane=null;
-                    String str_start = null;
-                    String str_end = null;
-
                     System.out.println("class:"+str_class);
                     System.out.println("title:"+str_title);
                     System.out.println("uri:"+str_uri);
@@ -155,15 +148,10 @@ public class Modeler extends GenericResource
                     String cls_ends = str_class.substring(str_class.indexOf("$"));
                     System.out.println("ends...."+cls_ends);
 
-                    GenericObject lgo = null;
                     FlowObject fgo = null;
                     // Tipo de clase a crear o actualizar
                     if(str_uri.startsWith("new:"))
                     {
-                        // para crear el FlowObject
-                        //TODO:
-                        fgo = null;
-
                         if(cls_ends.endsWith("$StartEvent"))
                         {
                             fgo=pross.createInitEvent();
@@ -171,7 +159,6 @@ public class Modeler extends GenericResource
                         else if(cls_ends.endsWith("$EndEvent"))
                         {
                             fgo=pross.createEndEvent();
-
                         }
                         else if(cls_ends.endsWith("$Task"))
                         {
@@ -202,72 +189,69 @@ public class Modeler extends GenericResource
                     else
                     {
                         // para obtener el FlowObject existente y actualizar las propiedades
-                        lgo = ont.getGenericObject(str_uri);
+                        GenericObject lgo = ont.getGenericObject(str_uri);
+                        if(lgo instanceof FlowObject) fgo = (FlowObject)lgo;
                     }
 
-                    if(lgo instanceof FlowObject) fgo = (FlowObject)lgo;
-                    if(fgo!=null) hm_new.put(str_uri, fgo);
-
-                    if(str_title!=null&&str_title.trim().length()>0) fgo.setTitle(str_title);
-
-                    // Para agregar las propiedades al fgo
-
-                    if(str_class.endsWith("$StartEvent") || str_class.endsWith("$EndEvent") || str_class.endsWith("$Task") ||
-                       str_class.endsWith("$InterEvent") || str_class.endsWith("$GateWay") || str_class.endsWith("$ORGateWay") ||
-                       str_class.endsWith("$ANDGateWay") || str_class.endsWith("$SubProcess"))
+                    if(fgo!=null)
                     {
-                        x=jsobj.getInt(PROP_X);
-                        y=jsobj.getInt(PROP_Y);
+                        hm_new.put(str_uri, fgo);
+
+                        if(str_title!=null)fgo.setTitle(str_title);
+
+                        // Para agregar las propiedades al fgo
+                        int x=jsobj.getInt(PROP_X);
+                        int y=jsobj.getInt(PROP_Y);
                         fgo.setX(x);
                         fgo.setY(y);
-                        
-                        str_lane=jsobj.getString(PROP_LANE);
-
                         System.out.println("x:"+x);
                         System.out.println("y:"+y);
+
+                        //TODO:lane property
+                        String str_lane=jsobj.getString(PROP_LANE);
                         System.out.println("lane:"+str_lane);
                     }
+                }
+                for(int i=0; i<jsarr.length();i++)
+                {
+                    jsobj = jsarr.getJSONObject(i);
+                    System.out.println("jsobj:"+jsobj.toString()+", i: "+i);
 
-                    // se guarda en un hashmap para despues crearlos al final, ya que existan los demás elementos creados
+                    // Propiedades que siempre traen los elementos del modelo
+                    String str_class = jsobj.getString(PROP_CLASS);
+                    //String str_title = jsobj.getString(PROP_TITLE);
+                    String str_uri = jsobj.getString(PROP_URI);
+
                     if(str_class.endsWith("$FlowLink"))
                     {
-                        str_start = jsobj.getString(PROP_START);
-                        str_end = jsobj.getString(PROP_END); 
+                        String str_start = jsobj.getString(PROP_START);
+                        String str_end = jsobj.getString(PROP_END);
 
-                        hm_link.put(str_start,str_end);
+                        FlowObject fos = hm_new.get(str_start);
+                        FlowObject foe = hm_new.get(str_end);
 
+                        if(fos!=null&&foe!=null)
+                        {
+                            //Si existe la relacion, la elimina
+                            GenericObject obj=ont.getGenericObject(str_uri);
+                            if(obj instanceof SequenceFlow)
+                            {
+                                obj.getSemanticObject().remove();
+                            }
+
+                            SequenceFlow sf = pross.createSequenceFlow();
+                            fos.addToConnectionObject(sf);
+                            sf.setToFlowObject(foe);
+                            //if(str_title!=null)sf.setTitle(str_title);
+                        }
                         System.out.println("start:"+str_start);
                         System.out.println("end:"+str_end);
                     }
-                    if(str_class.endsWith("$Pool"))
-                    {
-                        x=jsobj.getInt(PROP_X);
-                        y=jsobj.getInt(PROP_Y);
-                        fgo.setX(x);
-                        fgo.setY(y);
-                        
-                        System.out.println("x:"+x);
-                        System.out.println("y:"+y);
-                    }
                 }
-                Iterator<String> its=hm_link.keySet().iterator();
-                while(its.hasNext())
-                {
-                    String key = its.next();
-                    String val = hm_link.get(key);
-                    FlowObject fof = hm_new.get(key);
-                    FlowObject fot = hm_new.get(val);
-                    if(fof!=null&&fot!=null)
-                    {
-                        SequenceFlow sf = linkObject(fof, fot);
-                    }
-                }
-
             } catch (Exception e) {
                 log.error("Error al leer JSON...",e);
+                return getError(3);
             }
-
-
 
             Document dom = SWBUtils.XML.getNewDocument();
             Element ret=dom.createElement("ret");
@@ -344,6 +328,7 @@ public class Modeler extends GenericResource
         urlapp.setParameter("suri", suri);
 
         out.println("<div class=\"applet\">");
+        //out.println("<IFRAME alt=\"Modeler\" scrolling=\"no\" frameborder=\"0\" src=\"/test.html\" height=\"100%\" width=\"100%\" ></IFRAME>");
         out.println("<IFRAME alt=\"Modeler\" scrolling=\"no\" frameborder=\"0\" src=\""+urlapp+"\" height=\"100%\" width=\"100%\" ></IFRAME>");
         out.println("</div>");
     }
