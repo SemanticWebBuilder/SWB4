@@ -77,28 +77,32 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
             @Override
             public void valueChanged(ListSelectionEvent e)
             {
-                int index = e.getFirstIndex();
-                jButtonAuthorize.setEnabled(false);
-                jButtonReject.setEnabled(false);
-                jButtonSee.setEnabled(false);
-                DefaultTableModel model = (DefaultTableModel) jTableContents.getModel();
-                if (index != -1 && model.getRowCount() > 0)
+                if (jTableContents.getSelectedRow() != -1)
                 {
-                    ResourceInfo resourceInfo = (ResourceInfo) model.getValueAt(index, 0);
-                    try
+                    int index = jTableContents.getSelectedRow();
+                    jButtonAuthorize.setEnabled(false);
+                    jButtonReject.setEnabled(false);
+                    jButtonSee.setEnabled(false);
+                    DefaultTableModel model = (DefaultTableModel) jTableContents.getModel();
+                    if (index != -1 && model.getRowCount() > 0)
                     {
-                        if (OfficeApplication.getOfficeApplicationProxy().isReviewer(resourceInfo))
+                        ResourceInfo resourceInfo = (ResourceInfo) model.getValueAt(index, 0);
+                        try
                         {
-                            jButtonAuthorize.setEnabled(true);
-                            jButtonReject.setEnabled(true);
+                            if (OfficeApplication.getOfficeApplicationProxy().isReviewer(resourceInfo))
+                            {
+                                jButtonAuthorize.setEnabled(true);
+                                jButtonReject.setEnabled(true);
+                                jButtonSee.setEnabled(true);
+                            }
                         }
-                    }
-                    catch (Exception ue)
-                    {
-                        ue.printStackTrace();
-                    }
-                    jButtonSee.setEnabled(true);
+                        catch (Exception ue)
+                        {
+                            ue.printStackTrace();
+                        }
 
+
+                    }
                 }
             }
         });
@@ -124,6 +128,9 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
 
     private void loadContents()
     {
+        jButtonAuthorize.setEnabled(false);
+        jButtonReject.setEnabled(false);
+        jButtonSee.setEnabled(false);
         DefaultTableModel model = (DefaultTableModel) jTableContents.getModel();
         int rows = model.getRowCount();
         for (int i = 1; i <= rows; i++)
@@ -395,16 +402,16 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
             DefaultTableModel model = (DefaultTableModel) this.jTableContents.getModel();
             ResourceInfo info = (ResourceInfo) model.getValueAt(this.jTableContents.getSelectedRow(), 0);
             String version = info.version;
-            if(version.equalsIgnoreCase(ALL))
+            if (version.equalsIgnoreCase(ALL))
             {
-                version=info.lastversion;
+                version = info.lastversion;
             }
             String name = null;
             try
             {
                 name = OfficeApplication.getOfficeDocumentProxy().createPreview(info.repository, info.contentid, version, info.type);
                 String urlproxy = OfficeApplication.getOfficeApplicationProxy().getWebAddress().toString();
-                if (!urlproxy.endsWith(PATH_SEPARATOR+GTW))
+                if (!urlproxy.endsWith(PATH_SEPARATOR + GTW))
                 {
                     if (!urlproxy.endsWith(PATH_SEPARATOR))
                     {
@@ -540,7 +547,6 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
             this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
     }//GEN-LAST:event_jRadioButtonForAuthorizeActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButtonAuthorize;
