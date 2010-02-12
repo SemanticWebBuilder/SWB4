@@ -808,6 +808,10 @@ public class PFlowManager
         }
         else
         {
+            if(resource.getPflowInstance().getStatus() == 3 && resource.getPflowInstance().getStep() != null)
+            {
+                return true;
+            }
             if (!(resource.getPflowInstance().getStatus() == 3 || resource.getPflowInstance().getStatus() == 2 || resource.getPflowInstance().getStep() == null))
             {
                 return true;
