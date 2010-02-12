@@ -318,8 +318,8 @@ public class Modeler extends GenericResource
         out.println("        {");
         out.println("              archive: \""+ SWBPlatform.getContextPath() + "/swbadmin/lib/SWBAppBPMNModeler.jar,"+ SWBPlatform.getContextPath() + "/swbadmin/lib/json.jar,"+ SWBPlatform.getContextPath() + "/swbadmin/lib/SWBAplCommons.jar\",");
         out.println("              draggable: true,");
-        out.println("              width: 800,");
-        out.println("              height: 500,");
+        out.println("              width: 900,");
+        out.println("              height: 700,");
         out.println("              code: \"org.semanticwb.process.modeler.Main\",");
         out.println("              name: \"SWBAppBPMNModeler\"");
         out.println("        },");
@@ -344,7 +344,7 @@ public class Modeler extends GenericResource
         urlapp.setParameter("suri", suri);
 
         out.println("<div class=\"applet\">");
-        out.println("<IFRAME alt=\"Modeler\" scrolling=\"no\" frameborder=\"0\" src=\""+urlapp+"\" height=\"500\" width=\"100%\" ></IFRAME>");
+        out.println("<IFRAME alt=\"Modeler\" scrolling=\"no\" frameborder=\"0\" src=\""+urlapp+"\" height=\"100%\" width=\"100%\" ></IFRAME>");
         out.println("</div>");
     }
 
