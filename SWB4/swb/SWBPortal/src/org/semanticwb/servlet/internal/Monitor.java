@@ -72,7 +72,7 @@ public class Monitor implements InternalServlet
     private static MemoryMXBean mmbean;
     private static List<MemoryPoolMXBean> pools;
     private static List<GarbageCollectorMXBean> gcmbeans;
-    private static MBeanServer mbs;
+//    private static MBeanServer mbs;
     private Vector<SWBMonitorData> buffer;
     private Timer timer;
     private int max = 2500;
@@ -82,6 +82,7 @@ public class Monitor implements InternalServlet
     private SWBSummary summary = null;
     private SWBMonitorBeans monitorbeans = null;
     private SecretKey secretKey = null;
+    public static long timetakenLast = 0;
     // private Cipher cipher = null;
 //    //Java 6.0
 //    private ConcurrentHashMap<String, BasureroCtl> basureros;
@@ -135,9 +136,9 @@ public class Monitor implements InternalServlet
 
             public void run()
             {
-
+                long current = System.nanoTime();//System.currentTimeMillis();
                 _run();
-
+                timetakenLast = System.nanoTime() - current;//System.currentTimeMillis()-current;
             }
         };
         timer = new Timer("Monitoring Facility", true);
@@ -165,7 +166,7 @@ public class Monitor implements InternalServlet
         mmbean = getMemoryMXBean();
         pools = getMemoryPoolMXBeans();
         gcmbeans = getGarbageCollectorMXBeans();
-        mbs = sun.management.ManagementFactory.createPlatformMBeanServer();
+//        mbs = sun.management.ManagementFactory.createPlatformMBeanServer();
         if (null == summary)
         {
             summary = new SWBSummary();//mvm);
@@ -408,6 +409,7 @@ public class Monitor implements InternalServlet
 //        }
     }
 
+/*
     private void doMonitor()
     {
         printVerboseGc();
@@ -429,6 +431,9 @@ public class Monitor implements InternalServlet
             }
         }
     }
+ 
+ *
+ */
     private static String INDENT = "    ";
 
     private static void printThreadInfo(ThreadInfo ti)

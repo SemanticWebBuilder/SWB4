@@ -66,7 +66,7 @@ public class SWBSummaryData implements Serializable {
             ret.append("<li>Hora de Inicio: "+formatDate(startTime)+"</li>\n");
             ret.append("<li>Tiempo de Uso: "+formatTime(upTime)+"</li>\n");
             ret.append("<li>Tiempo de Procesamiento: "+formatTime(processCpuTime/1000000)+"</li>\n</ul>\n</div>\n");
-            ret.append("<div id\"SO\">");
+            ret.append("<div id=\"SO\">");
             ret.append("<ul>\n<li>Sistema Operatvo: "+osName+"</li>\n");
             ret.append("<li>Arquitectura: "+vmArch+"</li>\n");
             ret.append("<li>Procesadores: "+nCPUs+"</li>\n");
@@ -75,7 +75,7 @@ public class SWBSummaryData implements Serializable {
             ret.append("<li>Memoria f&iacute;sica Libre: "+formatLong(freePhysicalMem/1024)+" kbytes</li>\n");
             ret.append("<li>Total Memoria SWAP: "+formatLong(totalSwapMem/1024)+" kbytes</li>\n");
             ret.append("<li>Memoria SWAP Libre: "+formatLong(FreeSwapMem/1024)+" kbytes</li>\n</ul>\n</div>\n");
-            ret.append("<div id\"Threads\">");
+            ret.append("<div id=\"Threads\">");
             ret.append("<ul>\n<li>Threads Vivos: "+liveTh+"</li>\n");
             ret.append("<li>Pico de Threads: "+peakTh+"</li>\n");
             ret.append("<li>Deamons Threads: "+deamonTh+"</li>\n");
@@ -83,7 +83,7 @@ public class SWBSummaryData implements Serializable {
             ret.append("<li>Classes Cargadas: "+currentClass+"</li>\n");
             ret.append("<li>Total Clases: "+totalClass+"</li>\n");
             ret.append("<li>Classes Descargadas: "+unloadedClass+"</li>\n</ul>\n</div>\n");
-            ret.append("<div id\"Memory\">");
+            ret.append("<div id=\"Memory\">");
             ret.append("<ul>\n<li>Memoria Heap en uso: "+formatLong(currentHeap/1024)+" kbytes</li>\n");
             ret.append("<li>Heap M&aacute;ximo: "+formatLong(maxHeap/1024)+" kbytes</li>\n");
             ret.append("<li>Tama&ntilde;o asignado de Heap: "+formatLong(currentCommited/1024)+" kbytes</li>\n");
@@ -92,7 +92,7 @@ public class SWBSummaryData implements Serializable {
                 ret.append("<li>GC: "+curr+"</li>\n");
             }
             ret.append("</ul>\n</div>\n");
-            ret.append("<div id\"VMArgs\">");
+            ret.append("<div id=\"VMArgs\">");
             ret.append("<ul>\n<li>Argumentos: "+vmArgs+"</li>\n");
             ret.append("<li>ClassPath: "+vmClassPath+"</li>\n");
             ret.append("<li>LibraryPath: "+vmLibraryPath+"</li>\n");
