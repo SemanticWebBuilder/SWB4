@@ -37,6 +37,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 /**
  *
@@ -130,5 +132,23 @@ public class WBConnection
         }catch(Exception e){System.out.println("Error to open service..."+e);}
         return ret.toString();
     }       
-    
+
+    public String getUrl()
+    {
+        return url.toString();
+    }
+
+    public String getUri()
+    {
+        String ret="";
+        String url=getUrl();
+        int i=url.indexOf("suri=");
+        if(i>0)
+        {
+            ret=url.substring(i+5);
+            ret=URLDecoder.decode(ret);
+        }
+        return ret;
+    }
+
 }
