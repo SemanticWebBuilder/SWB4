@@ -39,18 +39,18 @@ public class SWBMonitorData implements Serializable
     public int nCPUs;
     public long currentHeap, maxHeap, currentCommited, objectsPending = -1L;
     public float instantCPU = Float.MIN_VALUE;
-    public long commitedVirtualMem, totalPhysicalMem, freePhysicalMem, totalSwapMem, FreeSwapMem = -1L;
+  //  public long commitedVirtualMem, totalPhysicalMem, freePhysicalMem, totalSwapMem, FreeSwapMem = -1L;
 
     public SWBMonitorData(SWBMonitorBeans beans)
     {
         if (null != beans.sunOperatingSystemMXBean)
         {
             processCpuTime = beans.sunOperatingSystemMXBean.getProcessCpuTime();
-            commitedVirtualMem = beans.sunOperatingSystemMXBean.getCommittedVirtualMemorySize();
-            FreeSwapMem = beans.sunOperatingSystemMXBean.getFreeSwapSpaceSize();
-            freePhysicalMem = beans.sunOperatingSystemMXBean.getFreePhysicalMemorySize();
-            totalPhysicalMem = beans.sunOperatingSystemMXBean.getTotalPhysicalMemorySize();
-            totalSwapMem = beans.sunOperatingSystemMXBean.getTotalSwapSpaceSize();
+//            commitedVirtualMem = beans.sunOperatingSystemMXBean.getCommittedVirtualMemorySize();
+//            FreeSwapMem = beans.sunOperatingSystemMXBean.getFreeSwapSpaceSize();
+//            freePhysicalMem = beans.sunOperatingSystemMXBean.getFreePhysicalMemorySize();
+//            totalPhysicalMem = beans.sunOperatingSystemMXBean.getTotalPhysicalMemorySize();
+//            totalSwapMem = beans.sunOperatingSystemMXBean.getTotalSwapSpaceSize();
         }
         nCPUs = beans.operatingSystemMBean.getAvailableProcessors();
         upTime = beans.runtimeMBean.getUptime();
