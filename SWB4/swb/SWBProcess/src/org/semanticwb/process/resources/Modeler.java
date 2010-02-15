@@ -29,6 +29,7 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.process.ConditionalFlow;
+import org.semanticwb.process.ConnectionObject;
 import org.semanticwb.process.FlowObject;
 import org.semanticwb.process.InitEvent;
 import org.semanticwb.process.SequenceFlow;
@@ -145,45 +146,57 @@ public class Modeler extends GenericResource
                     System.out.println("title:"+str_title);
                     System.out.println("uri:"+str_uri);
 
-                    String cls_ends = str_class.substring(str_class.indexOf("$"));
+                    String cls_ends = str_class.substring(str_class.lastIndexOf("."));
                     System.out.println("ends...."+cls_ends);
 
                     FlowObject fgo = null;
                     // Tipo de clase a crear o actualizar
                     if(str_uri.startsWith("new:"))
                     {
-                        if(cls_ends.endsWith("$StartEvent"))
+                        if(cls_ends.endsWith(".StartEvent"))
                         {
                             fgo=pross.createInitEvent();
                         }
-                        else if(cls_ends.endsWith("$EndEvent"))
+                        else if(cls_ends.endsWith(".EndEvent"))
                         {
                             fgo=pross.createEndEvent();
                         }
-                        else if(cls_ends.endsWith("$Task"))
+                        else if(cls_ends.endsWith(".Task"))
                         {
                             fgo = createTask(process, str_title);
                         }
-                        else if(cls_ends.endsWith("$InterEvent"))
+                        else if(cls_ends.endsWith(".InterEvent"))
                         {
                             fgo = pross.createInterEvent();
                         }
-                        else if(cls_ends.endsWith("$GateWay"))
+                        else if(cls_ends.endsWith(".GateWay"))
                         {
                             fgo=pross.createGateWay();
                         }
-                        else if(cls_ends.endsWith("$ORGateWay"))
+                        else if(cls_ends.endsWith(".ORGateWay"))
                         {
                             fgo=pross.createORGateWay();
                         }
-                        else if(cls_ends.endsWith("$ANDGateWay"))
+                        else if(cls_ends.endsWith(".ANDGateWay"))
                         {
                             fgo=pross.createANDGateWay();
                         }
-                        else if(cls_ends.endsWith("$SubProcess"))
+                        else if(cls_ends.endsWith(".SubProcess"))
                         {
                             fgo=createSubProcess(process, str_title);
                         }
+//                        else if(cls_ends.endsWith(".Pool"))
+//                        {
+//                            fgo=createSubProcess(process, str_title);
+//                        }
+//                        else if(cls_ends.endsWith(".Lane"))
+//                        {
+//                            fgo=createSubProcess(process, str_title);
+//                        }
+//                        else if(cls_ends.endsWith(".Artifact"))
+//                        {
+//                            fgo=createSubProcess(process, str_title);
+//                        }
                         process.addFlowObject(fgo);
                     }
                     else
@@ -239,10 +252,8 @@ public class Modeler extends GenericResource
                                 obj.getSemanticObject().remove();
                             }
 
-                            SequenceFlow sf = pross.createSequenceFlow();
-                            fos.addToConnectionObject(sf);
-                            sf.setToFlowObject(foe);
-                            //if(str_title!=null)sf.setTitle(str_title);
+                            SequenceFlow sf = linkObject(fos, foe);
+
                         }
                         System.out.println("start:"+str_start);
                         System.out.println("end:"+str_end);
@@ -253,13 +264,65 @@ public class Modeler extends GenericResource
                 return getError(3);
             }
 
-            Document dom = SWBUtils.XML.getNewDocument();
-            Element ret=dom.createElement("ret");
-            ret.appendChild(dom.createTextNode("OK"));
-            dom.appendChild(ret);
+            System.out.println("getModelJSON:"+getProcessJSON(process).toString());
+
+            String retComm = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>updateModel</cmd><json>" + getProcessJSON(process).toString() + "</json></req>";
+
+            Document dom = SWBUtils.XML.xmlToDom(retComm);
             return dom;
+            
         }
         return getError(2);
+    }
+
+    /** Utilizado para generar un JSON del modelo, para la comunicacion con el applet
+     *
+     * @param process, Modelo a convertir en formato JSON
+     * @return JSONObject, informacion del proceso en formato JSON
+     */
+    public JSONObject getProcessJSON(org.semanticwb.process.Process process) {
+
+        JSONObject json_ret = null;
+        JSONArray nodes = null;
+        JSONObject ele = null;
+
+        try {
+            json_ret = new JSONObject();
+            json_ret.put("uri", process.getURI());
+            json_ret.put("title",process.getTitle());
+            nodes = new JSONArray();
+            json_ret.putOpt("nodes", nodes);
+
+            Iterator<FlowObject> it_fo = process.listFlowObjects();
+            while (it_fo.hasNext()) {
+                FlowObject obj = it_fo.next();
+                ele = new JSONObject();
+                nodes.put(ele);
+                ele.put("class", obj.getClass().getName());
+                ele.put("title", obj.getTitle());
+                ele.put("uri", obj.getURI());
+                ele.put("x", obj.getX());
+                ele.put("y", obj.getY());
+                //ele.put("lane", obj.getX());
+            }
+
+            Iterator<ConnectionObject> it_co = process.listToConnectionObjects();
+            while (it_fo.hasNext()) {
+                ConnectionObject obj = it_co.next();
+                ele = new JSONObject();
+                nodes.put(ele);
+                ele.put("class", obj.getClass().getName());
+                //ele.put("title", obj.getTitle());
+                ele.put("uri", obj.getURI());
+                ele.put("start",obj.getFromFlowObject().getURI());
+                ele.put("end",obj.getToFlowObject().getURI());
+            }
+
+        } catch (Exception e) {
+            log.error("Error al general el JSON del Modelo.....getModelJSON(" + process.getTitle() + ", uri:" + process.getURI() + ")", e);
+        }
+
+        return json_ret;
     }
 
     /**
