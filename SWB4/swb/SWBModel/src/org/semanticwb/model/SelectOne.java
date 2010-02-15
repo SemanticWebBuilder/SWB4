@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
@@ -148,6 +149,16 @@ public class SelectOne extends SelectOneBase
                     {
                         it=SWBComparator.sortSermanticObjects(lang, SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClassesAsSemanticObjects());
                     }
+                }else if(isUserRepository())
+                {
+                    SemanticModel model=getModel();
+                    SWBModel m=(SWBModel)model.getModelObject().createGenericInstance();
+                    if(m instanceof WebSite)
+                    {
+                        m=((WebSite)m).getUserRepository();
+                        model=m.getSemanticObject().getModel();
+                    }
+                    it=SWBComparator.sortSermanticObjects(lang, model.listInstancesOfClass(cls));
                 }else
                 {
                     it=SWBComparator.sortSermanticObjects(lang, getModel().listInstancesOfClass(cls));
