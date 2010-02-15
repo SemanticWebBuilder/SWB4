@@ -146,24 +146,21 @@ public class TimeElement extends org.semanticwb.model.base.TimeElementBase {
         if(prop.getDisplayProperty()==null)return;
 
         String value=request.getParameter(prop.getName());
-        String old=obj.getProperty(prop);
         //System.out.println("com:"+old+"-"+value+"-");
-        if(value!=null)
+        if(value!=null && value.length()>0)
         {
-            if(value.length()>0 && !value.equals(old))
+            //System.out.println("old:"+old+" value:"+value);
+            if(value.startsWith("T"))value=value.substring(1);
+            try
             {
-                //System.out.println("old:"+old+" value:"+value);
-                try
-                {
-                    obj.setDateTimeProperty(prop, new Timestamp(format.parse(value).getTime()));
-                }catch(Exception e)
-                {
-                    log.error(e);
-                }
-            }else if(value.length()==0 && old!=null)
+                obj.setDateTimeProperty(prop, new Timestamp(format.parse(value).getTime()));
+            }catch(Exception e)
             {
-                obj.removeProperty(prop);
+                log.error(e);
             }
+        }else
+        {
+            obj.removeProperty(prop);
         }
     }
 }
