@@ -81,14 +81,41 @@ public class Modeler extends GenericResource
             response.sendError(404, request.getRequestURI());
             return;
         }
-        String ret;
-        Document res = getService(cmd, dom, paramRequest.getUser(), request, response, paramRequest);
-        if (res == null) {
-            ret = SWBUtils.XML.domToXml(getError(3));
-        } else {
-            ret = SWBUtils.XML.domToXml(res, true);
+
+        if (cmd.equals("getProcessJSON"))
+        {
+            try
+            {
+                SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+                GenericObject go = ont.getGenericObject(request.getParameter("suri"));
+                org.semanticwb.process.Process process = null;
+                if(go!=null && go instanceof org.semanticwb.process.Process)
+                {
+                    process = (org.semanticwb.process.Process)go;
+                    String json=getProcessJSON(process).toString();
+                    System.out.println("json:"+json);
+                    out.print(json);
+                }else
+                {
+                    log.error("Error to create JSON: Process not found");
+                    out.print("ERROR: Process not found");
+                }
+            }catch(Exception e)
+            {
+                log.error("Error to create JSON...",e);
+                out.print("ERROR:"+e.getMessage());
+            }
+        }else
+        {
+            String ret;
+            Document res = getService(cmd, dom, paramRequest.getUser(), request, response, paramRequest);
+            if (res == null) {
+                ret = SWBUtils.XML.domToXml(getError(3));
+            } else {
+                ret = SWBUtils.XML.domToXml(res, true);
+            }
+            out.print(new String(ret.getBytes()));
         }
-        out.print(new String(ret.getBytes()));
     }
 
     private Document getService(String cmd, Document src, User user, HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) {
@@ -279,19 +306,6 @@ public class Modeler extends GenericResource
             Document dom = SWBUtils.XML.xmlToDom(retComm);
             return dom;
             
-        }else if (tmpcmd.equals("getProcessJSON"))
-        {
-            try
-            {
-                String json=getProcessJSON(process).toString();
-                String retComm = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req>"+SWBUtils.TEXT.encode(json,"UTF8")+"</req>";
-                Document dom = SWBUtils.XML.xmlToDom(retComm);
-                return dom;
-            }catch(Exception e)
-            {
-                log.error("Error to create JSON...",e);
-                return getError(3);
-            }
         }
         return getError(2);
     }
