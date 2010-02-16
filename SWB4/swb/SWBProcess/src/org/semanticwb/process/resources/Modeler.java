@@ -8,8 +8,10 @@ package org.semanticwb.process.resources;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Vector;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +24,7 @@ import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
@@ -143,10 +146,19 @@ public class Modeler extends GenericResource
         }
         else return null;
 
-        System.out.println("tmpcmd:"+tmpcmd);
+//        System.out.println("tmpcmd:"+tmpcmd);
         log.debug("getService: " + request.getParameter("suri"));
         if (tmpcmd.equals("updateModel"))
         {
+            // Cargando los uris de los elementos existentes en el proceso
+            // eliminando las conexiones entre ellos para generarlas nuevamente
+            Vector<String> vpe = loadProcessElements(process);
+
+            String str_class = null;
+            String str_title = null;
+            String str_uri = null;
+
+
             Node node=src.getElementsByTagName("json").item(0);
             System.out.println("json:"+node.getTextContent());
 
@@ -159,27 +171,148 @@ public class Modeler extends GenericResource
                 System.out.println("======================================");
                 System.out.println("JSONObjets found:"+jsarr.length());
 
+                
+                // primero para crear POOL
                 for(int i=0; i<jsarr.length();i++)
                 {
                     jsobj = jsarr.getJSONObject(i);
-                    System.out.println("jsobj:"+jsobj.toString()+", i: "+i);
+//                    System.out.println("jsobj:"+jsobj.toString()+", i: "+i);
 
                     // Propiedades que siempre traen los elementos del modelo
-                    String str_class = jsobj.getString(PROP_CLASS);
-                    String str_title = jsobj.getString(PROP_TITLE);
-                    String str_uri = jsobj.getString(PROP_URI);
+                    str_class = jsobj.getString(PROP_CLASS);
+                    str_title = jsobj.getString(PROP_TITLE);
+                    str_uri = jsobj.getString(PROP_URI);
 
-                    System.out.println("class:"+str_class);
-                    System.out.println("title:"+str_title);
-                    System.out.println("uri:"+str_uri);
+//                    System.out.println("class:"+str_class);
+//                    System.out.println("title:"+str_title);
+//                    System.out.println("uri:"+str_uri);
 
                     String cls_ends = str_class.substring(str_class.lastIndexOf("."));
-                    System.out.println("ends...."+cls_ends);
+//                    System.out.println("ends...."+cls_ends);
 
                     GenericObject lgo = null;
                     FlowObject fgo = null;
                     // Tipo de clase a crear o actualizar
-                    if(str_uri.startsWith("new:")&& !cls_ends.equals("$FlowLink"))
+                    if(str_uri.startsWith("new:") && cls_ends.equals(".Pool"))
+                    {
+//                        fgo=createPool(process, str_title);
+//                        process.addFlowObject(fgo);
+                    }
+                    else
+                    {
+                        // para obtener el FlowObject existente y actualizar las propiedades
+                        lgo = ont.getGenericObject(str_uri);
+                    }
+
+                    //se agregan todos los FlowObject encontrados
+                    if (lgo instanceof FlowObject) {
+                        fgo = (FlowObject) lgo;
+                    }
+
+                    if(fgo!=null&&cls_ends.endsWith(".Pool"))
+                    {
+                        hm_new.put(str_uri, fgo);
+
+                        if(str_title!=null)fgo.setTitle(str_title);
+
+                        // Para agregar las propiedades al fgo
+                        int x=jsobj.getInt(PROP_X);
+                        int y=jsobj.getInt(PROP_Y);
+                        fgo.setX(x);
+                        fgo.setY(y);
+//                        System.out.println("x:"+x);
+//                        System.out.println("y:"+y);
+
+                        //TODO:lane property
+                        String str_lane=jsobj.getString(PROP_LANE);
+//                        System.out.println("lane:"+str_lane);
+                        //eliminando el elemento encontrado del vector
+                        vpe.remove(fgo.getURI());
+                    }
+                }
+
+                // segundo para crear Lane
+                for(int i=0; i<jsarr.length();i++)
+                {
+                    jsobj = jsarr.getJSONObject(i);
+//                    System.out.println("jsobj:"+jsobj.toString()+", i: "+i);
+
+                    // Propiedades que siempre traen los elementos del modelo
+                    str_class = jsobj.getString(PROP_CLASS);
+                    str_title = jsobj.getString(PROP_TITLE);
+                    str_uri = jsobj.getString(PROP_URI);
+
+//                    System.out.println("class:"+str_class);
+//                    System.out.println("title:"+str_title);
+//                    System.out.println("uri:"+str_uri);
+
+                    String cls_ends = str_class.substring(str_class.lastIndexOf("."));
+//                    System.out.println("ends...."+cls_ends);
+
+                    GenericObject lgo = null;
+                    FlowObject fgo = null;
+                    // Tipo de clase a crear o actualizar
+                    if(str_uri.startsWith("new:")&& cls_ends.equals(".Lane"))
+                    {
+//                        fgo=createLane(process, str_title);
+//                        process.addFlowObject(fgo);
+                    }
+                    else
+                    {
+                        // para obtener el FlowObject existente y actualizar las propiedades
+                        lgo = ont.getGenericObject(str_uri);
+                    }
+
+                    //se agregan todos los FlowObject encontrados
+                    if (lgo instanceof FlowObject) {
+                        fgo = (FlowObject) lgo;
+                    }
+
+                    if(fgo!=null&&cls_ends.endsWith(".Lane"))
+                    {
+                        hm_new.put(str_uri, fgo);
+
+                        if(str_title!=null)fgo.setTitle(str_title);
+
+                        // Para agregar las propiedades al fgo
+                        int x=jsobj.getInt(PROP_X);
+                        int y=jsobj.getInt(PROP_Y);
+                        fgo.setX(x);
+                        fgo.setY(y);
+//                        System.out.println("x:"+x);
+//                        System.out.println("y:"+y);
+
+                        //TODO:lane property
+                        String str_lane=jsobj.getString(PROP_LANE);
+//                        System.out.println("lane:"+str_lane);
+                        //eliminando el elemento encontrado del vector
+                        vpe.remove(fgo.getURI());
+                    }
+                }
+
+
+                // tercero crear los FlowObjects restantes
+                for(int i=0; i<jsarr.length();i++)
+                {
+                    jsobj = jsarr.getJSONObject(i);
+//                    System.out.println("jsobj:"+jsobj.toString()+", i: "+i);
+
+                    // Propiedades que siempre traen los elementos del modelo
+                    str_class = jsobj.getString(PROP_CLASS);
+                    str_title = jsobj.getString(PROP_TITLE);
+                    str_uri = jsobj.getString(PROP_URI);
+
+//                    System.out.println("class:"+str_class);
+//                    System.out.println("title:"+str_title);
+//                    System.out.println("uri:"+str_uri);
+
+                    String cls_ends = str_class.substring(str_class.lastIndexOf("."));
+//                    System.out.println("ends...."+cls_ends);
+
+                    GenericObject lgo = null;
+                    FlowObject fgo = null;
+                    // Tipo de clase a crear o actualizar
+                    if(str_uri.startsWith("new:")&& !cls_ends.equals(".FlowLink"))
                     {
                         if(cls_ends.endsWith(".StartEvent"))
                         {
@@ -213,19 +346,11 @@ public class Modeler extends GenericResource
                         {
                             fgo=createSubProcess(process, str_title);
                         }
-//                        else if(cls_ends.endsWith(".Pool"))
-//                        {
-//                            fgo=createSubProcess(process, str_title);
-//                        }
-//                        else if(cls_ends.endsWith(".Lane"))
-//                        {
-//                            fgo=createSubProcess(process, str_title);
-//                        }
 //                        else if(cls_ends.endsWith(".Artifact"))
 //                        {
 //                            fgo=createSubProcess(process, str_title);
 //                        }
-                        process.addFlowObject(fgo);
+                        if(fgo!=null) process.addFlowObject(fgo);
                     }
                     else
                     {
@@ -236,12 +361,6 @@ public class Modeler extends GenericResource
                     //se agregan todos los FlowObject encontrados
                     if (lgo instanceof FlowObject) {
                         fgo = (FlowObject) lgo;
-
-                        //eliminando el FlowLink Existente
-                        if (cls_ends.equals(".FlowLink")) {
-                            ((SequenceFlow) fgo).remove();
-                            fgo = null;
-                        }
                     }
 
                     if(fgo!=null&&!cls_ends.endsWith(".FlowLink"))
@@ -255,24 +374,39 @@ public class Modeler extends GenericResource
                         int y=jsobj.getInt(PROP_Y);
                         fgo.setX(x);
                         fgo.setY(y);
-                        System.out.println("x:"+x);
-                        System.out.println("y:"+y);
+//                        System.out.println("x:"+x);
+//                        System.out.println("y:"+y);
 
                         //TODO:lane property
                         String str_lane=jsobj.getString(PROP_LANE);
-                        System.out.println("lane:"+str_lane);
+//                        System.out.println("lane:"+str_lane);
+                        //eliminando el elemento encontrado del vector
+                        vpe.remove(fgo.getURI());
                     }
                 }
+
+                // Eliminando del Proceso los elementos que fueron eliminados del modelo
+                // que son los que quedaron en el vector.
+                Enumeration<String> enuele = vpe.elements();
+                while (enuele.hasMoreElements()) {
+
+                    String o_uri = enuele.nextElement();
+                    System.out.println("Elemento a quitar URI:"+o_uri);
+                    SemanticObject so = ont.getSemanticObject(o_uri);
+                    so.remove();
+                }
+
+                // Generando los ConnectionObject
                 for(int i=0; i<jsarr.length();i++)
                 {
-                    System.out.println("Revisando FlowLinks");
+//                    System.out.println("Revisando FlowLinks");
                     jsobj = jsarr.getJSONObject(i);
-                    System.out.println("jsobj:"+jsobj.toString()+", i: "+i);
+//                    System.out.println("jsobj:"+jsobj.toString()+", i: "+i);
 
                     // Propiedades que siempre traen los elementos del modelo
-                    String str_class = jsobj.getString(PROP_CLASS);
-                    //String str_title = jsobj.getString(PROP_TITLE);
-                    String str_uri = jsobj.getString(PROP_URI);
+                    str_class = jsobj.getString(PROP_CLASS);
+                    //str_title = jsobj.getString(PROP_TITLE);
+                    str_uri = jsobj.getString(PROP_URI);
 
                     if(str_class.endsWith(".FlowLink"))
                     {
@@ -284,18 +418,10 @@ public class Modeler extends GenericResource
 
                         if(fos!=null&&foe!=null)
                         {
-                            //Si existe la relacion, la elimina
-                            GenericObject obj=ont.getGenericObject(str_uri);
-                            if(obj instanceof SequenceFlow)
-                            {
-                                obj.getSemanticObject().remove();
-                            }
-
                             SequenceFlow sf = linkObject(fos, foe);
-
                         }
-                        System.out.println("start:"+str_start);
-                        System.out.println("end:"+str_end);
+//                        System.out.println("start:"+str_start);
+//                        System.out.println("end:"+str_end);
                     }
                 }
             } catch (Exception e) {
@@ -310,6 +436,40 @@ public class Modeler extends GenericResource
         return getError(2);
     }
 
+    /** Utilizado para identificar que elementos del proceso han eliminado
+     *  Aquí también se eliminan todos los elementos de coneccion existentes
+     *
+     * @param process, Modelo a cargar los elementos del proceso
+     * @return Vector, con los uris de los elementos existentes.
+     */
+    public Vector loadProcessElements(org.semanticwb.process.Process process)
+    {
+        Vector retvec = new Vector();
+        try {
+            Iterator<FlowObject> it_fo = process.listFlowObjects();
+            while (it_fo.hasNext()) {
+                FlowObject obj = it_fo.next();
+                retvec.add(obj.getURI());
+            }
+            Iterator<ConnectionObject> it_co = null;
+            it_fo = process.listFlowObjects();
+            while (it_fo.hasNext())
+            {
+                FlowObject obj = it_fo.next();
+                it_co = obj.listToConnectionObjects();
+                while (it_co.hasNext())
+                {
+                    ConnectionObject cobj = it_co.next();
+                    cobj.remove();
+                }
+            }
+        } catch (Exception e) {
+            log.error("Error al general el JSON del Modelo.....getModelJSON(" + process.getTitle() + ", uri:" + process.getURI() + ")", e);
+        }
+        return retvec;
+    }
+
+
     /** Utilizado para generar un JSON del modelo, para la comunicacion con el applet
      *
      * @param process, Modelo a convertir en formato JSON
@@ -321,7 +481,7 @@ public class Modeler extends GenericResource
         JSONArray nodes = null;
         JSONObject ele = null;
 
-        System.out.println("getProcessJSON()");
+//        System.out.println("getProcessJSON()");
 
         try {
             json_ret = new JSONObject();
