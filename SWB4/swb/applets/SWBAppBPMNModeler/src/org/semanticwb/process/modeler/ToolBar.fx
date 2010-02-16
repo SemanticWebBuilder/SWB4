@@ -21,6 +21,7 @@ import javafx.stage.Alert;
 import javafx.stage.Stage;
 import applets.commons.WBConnection;
 import org.semanticwb.process.modeler.SubMenu;
+import java.lang.Exception;
 
 public var counter: Integer;
 public var conn:WBConnection = new WBConnection(FX.getArgument(WBConnection.PRM_JSESS).toString(),FX.getArgument(WBConnection.PRM_CGIPATH).toString(),FX.getProperty("javafx.application.codebase"));
@@ -42,8 +43,20 @@ public class ToolBar extends CustomNode
     var dy : Number;                        //temporal drag y
 
 
+    public function loadProcess(): Void
+    {
+        try
+        {
+            var comando="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getProcessJSON</cmd></req>";
+            var json=conn.getData(comando);
+            println("json:{json}");
+        }catch(e:Exception){println(e);}
+    }
+
     public override function create(): Node
     {
+        loadProcess();
+
         var lane=ImgButton
         {
             text:"Lane"
