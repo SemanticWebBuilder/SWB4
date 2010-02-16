@@ -275,14 +275,23 @@ public class Modeler extends GenericResource
                 log.error("Error al leer JSON...",e);
                 return getError(3);
             }
-
-            System.out.println("getModelJSON:"+getProcessJSON(process).toString());
-
-            String retComm = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>updateModel</cmd><json>" + getProcessJSON(process).toString() + "</json></req>";
-
+            String retComm = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req>OK</req>";
             Document dom = SWBUtils.XML.xmlToDom(retComm);
             return dom;
             
+        }else if (tmpcmd.equals("getProcessJSON"))
+        {
+            try
+            {
+                String json=getProcessJSON(process).toString();
+                String retComm = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req>"+SWBUtils.TEXT.encode(json,"UTF8")+"</req>";
+                Document dom = SWBUtils.XML.xmlToDom(retComm);
+                return dom;
+            }catch(Exception e)
+            {
+                log.error("Error to create JSON...",e);
+                return getError(3);
+            }
         }
         return getError(2);
     }
