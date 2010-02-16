@@ -22,6 +22,10 @@ import javafx.stage.Stage;
 import applets.commons.WBConnection;
 import org.semanticwb.process.modeler.SubMenu;
 import java.lang.Exception;
+import org.semanticwb.process.modeler.StartEvent;
+import org.semanticwb.process.modeler.FlowLink;
+import org.semanticwb.process.modeler.SubProcess;
+import applets.commons.WBXMLParser;
 
 public var counter: Integer;
 public var conn:WBConnection = new WBConnection(FX.getArgument(WBConnection.PRM_JSESS).toString(),FX.getArgument(WBConnection.PRM_CGIPATH).toString(),FX.getProperty("javafx.application.codebase"));
@@ -50,6 +54,89 @@ public class ToolBar extends CustomNode
             var comando="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getProcessJSON</cmd></req>";
             var json=conn.getData(comando);
             println("json:{json}");
+
+            var jsobj=new JSONObject(json);
+            var jsarr = jsobj.getJSONArray("nodes");
+            var i=0;
+            //GraphicElements
+            while(i<jsarr.length())
+            {
+                //generic
+                var js = jsarr.getJSONObject(i);
+                var cls:String=js.getString("class");
+                var uri:String=js.getString("uri");
+
+                var ge:GraphElement=null;
+                if(cls.endsWith(".UserTask"))
+                {
+                    ge=Task{};
+                }else if(cls.endsWith(".Process"))
+                {
+                    ge=SubProcess{};
+                }else if(cls.endsWith(".InitEvent"))
+                {
+                    ge=StartEvent{};
+                }else if(cls.endsWith(".EndEvent"))
+                {
+                    ge=EndEvent{};
+                }else if(cls.endsWith(".GateWay"))
+                {
+                    ge=GateWay{};
+                }else if(cls.endsWith(".ORGateWay"))
+                {
+                    ge=ORGateWay{};
+                }else if(cls.endsWith(".ANDGateWay"))
+                {
+                    ge=ANDGateWay{};
+                }
+                if(ge!=null)
+                {
+                    var title=js.getString("title");
+                    var x=js.getInt("x");
+                    var y=js.getInt("y");
+
+                    ge.modeler=modeler;
+                    ge.uri=uri;
+                    ge.title=title;
+                    ge.x=x;
+                    ge.y=y;
+                    modeler.add(ge);
+                    println("jsobj:{js.toString()}, i: {i}");
+                }
+                i++;
+            }
+
+            //ConnectionObjects
+            i=0;
+            while(i<jsarr.length())
+            {
+                //generic
+                var js = jsarr.getJSONObject(i);
+                var cls:String=js.getString("class");
+                var uri:String=js.getString("uri");
+
+                var co:ConnectionObject=null;
+
+                if(cls.endsWith(".SequenceFlow"))
+                {
+                    co=FlowLink{};
+                }
+                if(co!=null)
+                {
+                    //ConnectionObjects
+                    var start=js.getString("start");
+                    var end=js.getString("end");
+
+                    co.modeler=modeler;
+                    co.uri=uri;
+                    //co.title=title;
+                    co.ini=modeler.getGraphElementByURI(start);
+                    co.end=modeler.getGraphElementByURI(end);
+                    modeler.add(co);
+                    println("jsobj:{js.toString()}, i: {i}");
+                }
+                i++;
+            }
         }catch(e:Exception){println(e);}
     }
 
@@ -158,7 +245,7 @@ public class ToolBar extends CustomNode
                                 }
                                 //println(obj.toString());
 
-                                var comando="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>updateModel</cmd><json>{obj.toString()}</json></req>";
+                                var comando="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>updateModel</cmd><json>{WBXMLParser.encode(obj.toString(),"UTF8")}</json></req>";
                                 var data=conn.getData(comando);
                                 AppletStageExtension.eval("parent.reloadTreeNodeByURI('{conn.getUri()}')");
                                 if(data.indexOf("OK")>0)

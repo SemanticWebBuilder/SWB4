@@ -11,6 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.Group;
 import javafx.scene.layout.ClipView;
 import javafx.scene.input.MouseEvent;
+import org.semanticwb.process.modeler.GraphElement;
 
 
 /**
@@ -194,9 +195,9 @@ public class Modeler extends CustomNode
     {
     }
 
-    public function addRelation(tpuri1:String, tpuri2:String, tpr1:String, tpr2:String)
-    {
-    }
+//    public function addRelation(tpuri1:String, tpuri2:String, tpr1:String, tpr2:String)
+//    {
+//    }
 
     public function add(obj:Node)
     {
@@ -212,4 +213,18 @@ public class Modeler extends CustomNode
     {
         delete obj from contents;
     }
+
+    public function getGraphElementByURI(uri:String):GraphElement
+    {
+        for(node in contents)
+        {
+            if(node instanceof GraphElement)
+            {
+                var ge=node as GraphElement;
+                if(ge.uri.equals(uri))return ge;
+            }
+        }
+        return null;
+    }
+
 }
