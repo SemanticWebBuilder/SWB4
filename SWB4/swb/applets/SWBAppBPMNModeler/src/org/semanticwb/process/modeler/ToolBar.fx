@@ -251,6 +251,8 @@ public class ToolBar extends CustomNode
                                 if(data.indexOf("OK")>0)
                                 {
                                     Alert.inform("SemanticWebBuilder","Los datos fueron enviados correctamente");
+                                    delete modeler.contents;
+                                    loadProcess();
                                 }else
                                 {
                                     Alert.inform("Error",data);
