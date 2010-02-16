@@ -106,6 +106,7 @@ public class Monitor implements InternalServlet
                 if (null != pKey)
                 {
                     java.security.spec.X509EncodedKeySpec pK = new java.security.spec.X509EncodedKeySpec(pKey.getBytes());
+                    log.trace("Public"+ pK);
                     java.security.spec.PKCS8EncodedKeySpec PK = new java.security.spec.PKCS8EncodedKeySpec(PKey.getBytes());
                     KeyFactory keyFact = KeyFactory.getInstance("DiffieHellman");
                     KeyAgreement ka = KeyAgreement.getInstance("DiffieHellman");
