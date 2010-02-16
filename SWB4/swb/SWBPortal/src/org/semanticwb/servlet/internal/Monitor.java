@@ -101,13 +101,13 @@ public class Monitor implements InternalServlet
             if (priv != null)
             {
                 priv = priv.substring(priv.indexOf("|") + 1);
-                String PKey = new String(SFBase64.decode(priv));
-                String pKey = new String(SFBase64.decode(SWBPlatform.getEnv("swbMonitor/PublicKey", null)));
+                byte[] PKey = SFBase64.decode(priv);
+                byte[] pKey = SFBase64.decode(SWBPlatform.getEnv("swbMonitor/PublicKey", null));
                 if (null != pKey)
                 {
-                    java.security.spec.X509EncodedKeySpec pK = new java.security.spec.X509EncodedKeySpec(pKey.getBytes());
-                    log.trace("Public"+ pK);
-                    java.security.spec.PKCS8EncodedKeySpec PK = new java.security.spec.PKCS8EncodedKeySpec(PKey.getBytes());
+                    java.security.spec.X509EncodedKeySpec pK = new java.security.spec.X509EncodedKeySpec(pKey);
+                    
+                    java.security.spec.PKCS8EncodedKeySpec PK = new java.security.spec.PKCS8EncodedKeySpec(PKey);
                     KeyFactory keyFact = KeyFactory.getInstance("DiffieHellman");
                     KeyAgreement ka = KeyAgreement.getInstance("DiffieHellman");
                     PublicKey publicKey = keyFact.generatePublic(pK);
@@ -587,6 +587,34 @@ public class Monitor implements InternalServlet
         }
         return true;
     }
+
+    public static String byteArrayToHexString(byte in[]) {
+
+	    byte ch = 0x00;
+	    int i = 0;
+
+	    if (in == null || in.length <= 0)
+	        return null;
+
+	    String pseudo[] = {"0", "1", "2","3", "4", "5", "6", "7", "8","9", "A", "B", "C", "D", "E","F"};
+	    StringBuffer out = new StringBuffer(in.length * 2);
+
+	    while (i < in.length) {
+
+	        ch = (byte) (in[i] & 0xF0); // Strip off high nibble
+	        ch = (byte) (ch >>> 4);	     // shift the bits down
+	        ch = (byte) (ch & 0x0F);    //	must do this is high order bit is on!
+
+	        out.append(pseudo[ (int) ch]); // convert the nibble to a String Character
+	        ch = (byte) (in[i] & 0x0F); // Strip off low nibble
+	        out.append(pseudo[ (int) ch]); // convert the nibble to a String Character
+	        i++;
+	    }
+
+	    String rslt = new String(out);
+	    return rslt;
+	}
+
 }
 
 class BasureroCtl implements Serializable
