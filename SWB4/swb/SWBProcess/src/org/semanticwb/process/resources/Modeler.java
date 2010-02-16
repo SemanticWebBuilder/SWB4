@@ -149,9 +149,10 @@ public class Modeler extends GenericResource
                     String cls_ends = str_class.substring(str_class.lastIndexOf("."));
                     System.out.println("ends...."+cls_ends);
 
+                    GenericObject lgo = null;
                     FlowObject fgo = null;
                     // Tipo de clase a crear o actualizar
-                    if(str_uri.startsWith("new:"))
+                    if(str_uri.startsWith("new:")&& !cls_ends.equals("$FlowLink"))
                     {
                         if(cls_ends.endsWith(".StartEvent"))
                         {
@@ -202,11 +203,21 @@ public class Modeler extends GenericResource
                     else
                     {
                         // para obtener el FlowObject existente y actualizar las propiedades
-                        GenericObject lgo = ont.getGenericObject(str_uri);
-                        if(lgo instanceof FlowObject) fgo = (FlowObject)lgo;
+                        lgo = ont.getGenericObject(str_uri);
                     }
 
-                    if(fgo!=null)
+                    //se agregan todos los FlowObject encontrados
+                    if (lgo instanceof FlowObject) {
+                        fgo = (FlowObject) lgo;
+
+                        //eliminando el FlowLink Existente
+                        if (cls_ends.equals(".FlowLink")) {
+                            ((SequenceFlow) fgo).remove();
+                            fgo = null;
+                        }
+                    }
+
+                    if(fgo!=null&&!cls_ends.endsWith(".FlowLink"))
                     {
                         hm_new.put(str_uri, fgo);
 
@@ -227,6 +238,7 @@ public class Modeler extends GenericResource
                 }
                 for(int i=0; i<jsarr.length();i++)
                 {
+                    System.out.println("Revisando FlowLinks");
                     jsobj = jsarr.getJSONObject(i);
                     System.out.println("jsobj:"+jsobj.toString()+", i: "+i);
 
@@ -235,7 +247,7 @@ public class Modeler extends GenericResource
                     //String str_title = jsobj.getString(PROP_TITLE);
                     String str_uri = jsobj.getString(PROP_URI);
 
-                    if(str_class.endsWith("$FlowLink"))
+                    if(str_class.endsWith(".FlowLink"))
                     {
                         String str_start = jsobj.getString(PROP_START);
                         String str_end = jsobj.getString(PROP_END);
@@ -285,6 +297,8 @@ public class Modeler extends GenericResource
         JSONObject json_ret = null;
         JSONArray nodes = null;
         JSONObject ele = null;
+
+        System.out.println("getProcessJSON()");
 
         try {
             json_ret = new JSONObject();
