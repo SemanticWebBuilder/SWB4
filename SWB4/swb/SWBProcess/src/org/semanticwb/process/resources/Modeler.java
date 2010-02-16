@@ -343,17 +343,25 @@ public class Modeler extends GenericResource
                 //ele.put("lane", obj.getX());
             }
 
-            Iterator<ConnectionObject> it_co = process.listToConnectionObjects();
-            while (it_fo.hasNext()) {
-                ConnectionObject obj = it_co.next();
-                ele = new JSONObject();
-                nodes.put(ele);
-                ele.put("class", obj.getClass().getName());
-                //ele.put("title", obj.getTitle());
-                ele.put("uri", obj.getURI());
-                ele.put("start",obj.getFromFlowObject().getURI());
-                ele.put("end",obj.getToFlowObject().getURI());
+            Iterator<ConnectionObject> it_co = null;
+            it_fo = process.listFlowObjects();
+            while (it_fo.hasNext())
+            {
+                FlowObject obj = it_fo.next();
+                it_co = obj.listToConnectionObjects();
+                while (it_co.hasNext())
+                {
+                    ConnectionObject cobj = it_co.next();
+                    ele = new JSONObject();
+                    nodes.put(ele);
+                    ele.put("class", cobj.getClass().getName());
+                    //ele.put("title", obj.getTitle());
+                    ele.put("uri", cobj.getURI());
+                    ele.put("start",cobj.getFromFlowObject().getURI());
+                    ele.put("end",cobj.getToFlowObject().getURI());
+                }
             }
+
 
         } catch (Exception e) {
             log.error("Error al general el JSON del Modelo.....getModelJSON(" + process.getTitle() + ", uri:" + process.getURI() + ")", e);
