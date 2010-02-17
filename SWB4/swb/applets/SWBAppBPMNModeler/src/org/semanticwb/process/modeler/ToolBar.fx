@@ -26,6 +26,7 @@ import org.semanticwb.process.modeler.StartEvent;
 import org.semanticwb.process.modeler.SequenceFlow;
 import org.semanticwb.process.modeler.SubProcess;
 import applets.commons.WBXMLParser;
+import org.semanticwb.process.modeler.ConditionalFlow;
 
 public var counter: Integer;
 public var conn:WBConnection = new WBConnection(FX.getArgument(WBConnection.PRM_JSESS).toString(),FX.getArgument(WBConnection.PRM_CGIPATH).toString(),FX.getProperty("javafx.application.codebase"));
@@ -348,6 +349,11 @@ public class ToolBar extends CustomNode
                                        var ge=node as FlowObject;
                                        ele.put("lane",ge.pool.uri);
                                     }
+                                    if(node instanceof Event)
+                                    {
+                                       var ge=node as Event;
+                                       ele.put("type",ge.type);
+                                    }
                                     if(node instanceof ConnectionObject)
                                     {
                                        var ge=node as ConnectionObject;
@@ -356,6 +362,11 @@ public class ToolBar extends CustomNode
                                        ele.put("title",ge.title);
                                        ele.put("start",ge.ini.uri);
                                        ele.put("end",ge.end.uri);
+                                       if(node instanceof ConditionalFlow)
+                                       {
+                                           var con=node as ConditionalFlow;
+                                           ele.put("action", ge.action);
+                                       }
                                     }
 
                                 }
