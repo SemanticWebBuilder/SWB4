@@ -313,7 +313,7 @@ public class Modeler extends GenericResource
                     GenericObject lgo = null;
                     FlowObject fgo = null;
                     // Tipo de clase a crear o actualizar
-                    if(str_uri.startsWith("new:")&& !cls_ends.equals(".FlowLink"))
+                    if(str_uri.startsWith("new:")&& !cls_ends.equals(".SequenceFlow"))
                     {
                         if(cls_ends.endsWith(".StartEvent"))
                         {
@@ -364,7 +364,7 @@ public class Modeler extends GenericResource
                         fgo = (FlowObject) lgo;
                     }
 
-                    if(fgo!=null&&!cls_ends.endsWith(".FlowLink"))
+                    if(fgo!=null&&!cls_ends.endsWith(".SequenceFlow"))
                     {
                         hm_new.put(str_uri, fgo);
 
@@ -409,7 +409,7 @@ public class Modeler extends GenericResource
                     //str_title = jsobj.getString(PROP_TITLE);
                     str_uri = jsobj.getString(PROP_URI);
 
-                    if(str_class.endsWith(".FlowLink"))
+                    if(str_class.endsWith(".SequenceFlow"))
                     {
                         String str_start = jsobj.getString(PROP_START);
                         String str_end = jsobj.getString(PROP_END);
