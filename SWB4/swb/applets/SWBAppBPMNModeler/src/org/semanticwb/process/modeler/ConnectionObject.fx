@@ -32,11 +32,12 @@ public class ConnectionObject  extends CustomNode
     public var end : GraphElement;
 
     public var title : String;
+    public var action : String=bind title;
     public var uri : String;
 
-    var text : Text;
+    public var text : EditableText;
 
-    var points : Point[];
+    public var points : Point[];
     var path : Path;
 
     var o : Number = 0.8;                   //opacity
@@ -44,20 +45,6 @@ public class ConnectionObject  extends CustomNode
     public override function create(): Node
     {
         cursor=Cursor.HAND;
-//        text= Text
-//        {
-//             content: bind title
-//             styleClass: "task-text"
-//             textOrigin: TextOrigin.TOP
-//             transforms: [
-//                 Translate{
-//                     x: bind x-(text.boundsInLocal.width)/2+2
-//                     y: bind y-(text.boundsInLocal.height)/2+2
-//                 }
-//             ]
-//             smooth:true;
-//        };
-
 //                HLineTo { x: 70 },
 //                QuadCurveTo { x: 120  y: 60  controlX: 100  controlY: 0 },
 //                ArcTo { x: 10  y: 50  radiusX: 100  radiusY: 100  sweepFlag: true },
@@ -67,6 +54,15 @@ public class ConnectionObject  extends CustomNode
         var pinter1=Point{ x: bind getInter1ConnectionX(ini,end,pini,pend) y: bind getInter1ConnectionY(ini,end,pini,pend) };
         var pinter2=Point{ x: bind getInter2ConnectionX(ini,end,pini,pend) y: bind getInter2ConnectionY(ini,end,pini,pend) };
         points=[pini,pinter1,pinter2,pend];
+
+        text=EditableText
+        {
+            text: bind title with inverse
+            x: bind pini.x + (pend.x - pini.x) / 2
+            y: bind pini.y + (pend.y - pini.y) / 2
+            width: 80
+            height: 20
+        }
 
         path=Path {
             elements: [

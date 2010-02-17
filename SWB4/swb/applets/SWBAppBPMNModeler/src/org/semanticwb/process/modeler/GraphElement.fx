@@ -124,7 +124,7 @@ public class GraphElement extends CustomNode
 
         if(e.secondaryButtonDown)
         {
-            var link=FlowLink
+            var link=SequenceFlow
             {
                 modeler:modeler
                 uri:"new:flowlink:{ToolBar.counter++}"
