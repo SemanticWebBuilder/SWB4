@@ -91,7 +91,6 @@ public class EditableText extends CustomNode
              action: function() {
                 stopEditing();
              }
-
         };
         return Group
         {
