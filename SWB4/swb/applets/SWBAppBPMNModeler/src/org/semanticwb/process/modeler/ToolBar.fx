@@ -23,7 +23,7 @@ import applets.commons.WBConnection;
 import org.semanticwb.process.modeler.SubMenu;
 import java.lang.Exception;
 import org.semanticwb.process.modeler.StartEvent;
-import org.semanticwb.process.modeler.FlowLink;
+import org.semanticwb.process.modeler.SequenceFlow;
 import org.semanticwb.process.modeler.SubProcess;
 import applets.commons.WBXMLParser;
 
@@ -119,7 +119,7 @@ public class ToolBar extends CustomNode
 
                 if(cls.endsWith(".SequenceFlow"))
                 {
-                    co=FlowLink{};
+                    co=SequenceFlow{};
                 }
                 if(co!=null)
                 {
@@ -143,6 +143,113 @@ public class ToolBar extends CustomNode
     public override function create(): Node
     {
         loadProcess();
+
+
+        var startEvent=SubMenu
+        {
+            modeler: modeler
+            text:"Start Event"
+            image: "images/start_1.png"
+            imageOver: "images/start_2.png"
+            imageClicked: "images/start_3.png"
+            buttons: [
+                ImgButton {
+                    text:"Start Event"
+                    image: "images/start_normal1.png"
+                    imageOver: "images/start_normal2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=StartEvent
+                        {
+                            modeler:modeler
+                            title:"Start Event"
+                            uri:"new:startevent:{counter++}"
+                            //type: Event.RULE;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Rule Start Event"
+                    image: "images/start_cond1.png"
+                    imageOver: "images/start_cond2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=StartEvent
+                        {
+                            modeler:modeler
+                            title:"Rule Start Event"
+                            uri:"new:startevent:{counter++}"
+                            type: Event.RULE;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Message Start Event"
+                    image: "images/start_msj1.png"
+                    imageOver: "images/start_msj2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=StartEvent
+                        {
+                            modeler:modeler
+                            title:"Message Start Event"
+                            uri:"new:startevent:{counter++}"
+                            type: Event.MESSAGE;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Multiple Start Event"
+                    image: "images/start_multi1.png"
+                    imageOver: "images/start_multi2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=StartEvent
+                        {
+                            modeler:modeler
+                            title:"Multiple Start Event"
+                            uri:"new:startevent:{counter++}"
+                            type: Event.MULTIPLE;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Signal Start Event"
+                    image: "images/start_senal1.png"
+                    imageOver: "images/start_senal2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=StartEvent
+                        {
+                            modeler:modeler
+                            title:"Signal Start Event"
+                            uri:"new:startevent:{counter++}"
+                            type: Event.MULTIPLE;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Timer Start Event"
+                    image: "images/start_tmp1.png"
+                    imageOver: "images/start_tmp2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=StartEvent
+                        {
+                            modeler:modeler
+                            title:"Timer Start Event"
+                            uri:"new:startevent:{counter++}"
+                            type: Event.TIMER;
+                        }
+                    }
+                }
+            ]
+        };
+
+
 
         var lane=ImgButton
         {
@@ -195,14 +302,23 @@ public class ToolBar extends CustomNode
                                 modeler.disablePannable=false;
                             }
                         },
-                        ImageView {
-                            image: Image {
-                                url: "{__DIR__}images/minimiza_1.png"
+                        ImgButton {
+                            text:"Hide"
+                            image: "images/sube_1.png"
+                            imageOver: "images/sube_2.png"
+                            action: function():Void
+                            {
+                                //stage.fullScreen = not stage.fullScreen;
                             }
-                            onMouseClicked: function (e: MouseEvent): Void {
+                        },
+                        ImgButton {
+                            text:"Maximize"
+                            image: "images/maxim_1.png"
+                            imageOver: "images/maxim_2.png"
+                            action: function():Void
+                            {
                                 stage.fullScreen = not stage.fullScreen;
                             }
-
                         },
                         ImgButton {
                             text:"Save"
@@ -282,8 +398,8 @@ public class ToolBar extends CustomNode
                         },
                         ImgButton {
                             text:"SubProcess"
-                            image: "images/task_1.png"
-                            imageOver: "images/task_2.png"
+                            image: "images/subtask_1.png"
+                            imageOver: "images/subtask_2.png"
                             action: function():Void {
                                 modeler.disablePannable=true;
                                 modeler.tempNode=SubProcess
@@ -294,21 +410,7 @@ public class ToolBar extends CustomNode
                                 }
                             }
                         },
-                        ImgButton {
-                            text:"Start Event"
-                            image: "images/start_1.png"
-                            imageOver: "images/start_2.png"
-                            action: function():Void {
-                                modeler.disablePannable=true;
-                                modeler.tempNode=StartEvent
-                                {
-                                    modeler:modeler
-                                    title:"Start Event"
-                                    uri:"new:startevent:{counter++}"
-                                    //type: Event.RULE;
-                                }
-                            }
-                        },
+                        startEvent,
                         ImgButton {
                             text:"Inter Event"
                             image:"images/inter_1.png"
@@ -388,15 +490,28 @@ public class ToolBar extends CustomNode
                             }
                         },
                         ImgButton {
-                            text:"Flow Link"
+                            text:"SequenceFlow"
                             image: "images/flow_1.png"
                             imageOver: "images/flow_2.png"
                             action: function():Void {
                                 modeler.disablePannable=true;
-                                modeler.tempNode=FlowLink
+                                modeler.tempNode=SequenceFlow
                                 {
                                     modeler:modeler
-                                    uri:"new:flowlink:{counter++}"
+                                    uri:"new:sequenceflow:{counter++}"
+                                }
+                            }
+                        },
+                        ImgButton {
+                            text:"Conditional Flow"
+                            image: "images/flow_1.png"
+                            imageOver: "images/flow_2.png"
+                            action: function():Void {
+                                modeler.disablePannable=true;
+                                modeler.tempNode=ConditionalFlow
+                                {
+                                    modeler:modeler
+                                    uri:"new:conditionalflow:{counter++}"
                                 }
                             }
                         },
@@ -447,14 +562,7 @@ public class ToolBar extends CustomNode
                         }
                     ]
                 },
-                SubMenu
-                {
-                    modeler:modeler
-                    w: 1000
-                    h: 50
-                    x: bind lane.layoutX+lane.layoutBounds.width
-                    y: bind lane.layoutY
-                }
+                startEvent.subBar
              ]
              cursor:Cursor.HAND;
         };
