@@ -259,7 +259,7 @@ public class SWBUtils {
                 "log4j.appender.stdout.layout=org.apache.log4j.PatternLayout" + "\n" +
                 "log4j.appender.stdout.layout.ConversionPattern=%d %p - %m%n" + "\n" +
                 "log4j.logger.org.semanticwb=trace";
-
+                
         try {
             Properties proper = new Properties();
             proper.load(IO.getStreamFromString(log_conf));
@@ -284,9 +284,19 @@ public class SWBUtils {
     private static void initFileLogger() {
 
         try {
-            FileInputStream in = new FileInputStream(SWBUtils.applicationPath
+            String log_conf = "log4j.rootLogger=info, stdout" + "\n" +
+                "log4j.appender.stdout=org.apache.log4j.ConsoleAppender" + "\n" +
+                "log4j.appender.stdout.layout=org.apache.log4j.PatternLayout" + "\n" +
+                "log4j.appender.stdout.layout.ConversionPattern=%d %p - %m%n" + "\n" +
+                "log4j.logger.org.semanticwb=trace";
+            File file = new File(SWBUtils.applicationPath
                     + "/WEB-INF/classes/logging.properties");
-            String log_conf = IO.readInputStream(in);
+            if (!file.exists())
+                file = new File(SWBUtils.applicationPath + "/logging.properties");
+            if (file.exists()) {
+                FileInputStream in = new FileInputStream(file);
+                log_conf = IO.readInputStream(in);
+            }
             log_conf = SWBUtils.TEXT.replaceAll(log_conf, "{apppath}", SWBUtils.applicationPath);
             Properties proper = new Properties();
             proper.load(IO.getStreamFromString(log_conf));
