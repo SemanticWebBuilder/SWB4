@@ -812,8 +812,11 @@
     String lang="es";
     if(user!=null)lang=user.getLanguage();
 
+    String id=request.getParameter("id");
+    if(id==null)id="mtree";
+
     SemanticOntology sont=(SemanticOntology)session.getAttribute("ontology");
-    if(sont==null)
+    if(sont==null && (id.equals("mclass")||id.equals("mprop")))
     {
         OntDocumentManager mgr=com.hp.hpl.jena.ontology.OntDocumentManager.getInstance();
         Model m=SWBPlatform.getSemanticMgr().loadRDFFileModel("file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/swb.owl");
@@ -821,9 +824,9 @@
 
         //mgr.addAltEntry("http://www.semanticwebbuilder.org/swb4/ontology", "file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/swb.owl");
         //mgr.addAltEntry("http://www.semanticwb.org/catalogs", "file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/cat.owl");
-        mgr.addAltEntry("http://www.semanticwebbuilder.org/swb4/process", "file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/swb_process.owl");
+        //mgr.addAltEntry("http://www.semanticwebbuilder.org/swb4/process", "file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/swb_process.owl");
         mgr.addAltEntry("http://www.semanticwebbuilder.org/swb4/community", "file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/community.owl");
-        mgr.addAltEntry("http://www.semanticwebbuilder.org/swb4/pnc", "file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/pnc.owl");
+        //mgr.addAltEntry("http://www.semanticwebbuilder.org/swb4/pnc", "file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/pnc.owl");
 
         //String swbowl="file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/cat.owl";
         //java.io.File owlf=new java.io.File(swbowl);
@@ -831,8 +834,8 @@
         //sont=new SemanticOntology("", com.hp.hpl.jena.rdf.model.ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM_RDFS_INF,base.getRDFModel()));
         //sont=new SemanticOntology("", mgr.getOntology("http://www.semanticwb.org/catalogs", OntModelSpec.OWL_MEM_RDFS_INF));
         //sont=new SemanticOntology("", mgr.getOntology("http://www.semanticwebbuilder.org/swb4/ontology", OntModelSpec.OWL_MEM_RDFS_INF));
-        //sont=new SemanticOntology("", mgr.getOntology("http://www.semanticwebbuilder.org/swb4/community", OntModelSpec.OWL_MEM_RDFS_INF));
-        sont=new SemanticOntology("", mgr.getOntology("http://www.semanticwebbuilder.org/swb4/pnc", OntModelSpec.OWL_MEM_RDFS_INF));
+        sont=new SemanticOntology("", mgr.getOntology("http://www.semanticwebbuilder.org/swb4/community", OntModelSpec.OWL_MEM_RDFS_INF));
+        //sont=new SemanticOntology("", mgr.getOntology("http://www.semanticwebbuilder.org/swb4/pnc", OntModelSpec.OWL_MEM_RDFS_INF));
 /*
         swbowl="file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/swb.owl";
         owlf=new java.io.File(swbowl);
@@ -847,16 +850,14 @@
     }
 
     //System.out.println("Inicio");
-    Iterator mit=sont.getRDFOntModel().listSubModels();
-    while(mit.hasNext())
-    {
-        OntModel model=(OntModel)mit.next();
-        //System.out.println(model.getNsPrefixMap());
-    }
+    //Iterator mit=sont.getRDFOntModel().listSubModels();
+    //while(mit.hasNext())
+    //{
+    //    OntModel model=(OntModel)mit.next();
+    //    //System.out.println(model.getNsPrefixMap());
+    //}
     //System.out.println("fin");
 
-    String id=request.getParameter("id");
-    if(id==null)id="mtree";
     //System.out.println(new Date()+" Tree1");
     SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
 
