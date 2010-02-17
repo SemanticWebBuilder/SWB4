@@ -56,6 +56,7 @@ public class Modeler extends GenericResource
     private static final String PROP_LANE = "lane";
     private static final String PROP_START = "start";
     private static final String PROP_END = "end";
+    private static final String PROP_ACTION = "action";
 
     /**
      *
@@ -419,6 +420,23 @@ public class Modeler extends GenericResource
                         if(fos!=null&&foe!=null)
                         {
                             SequenceFlow sf = linkObject(fos, foe);
+                        }
+//                        System.out.println("start:"+str_start);
+//                        System.out.println("end:"+str_end);
+                    }
+                    else if(str_class.endsWith(".ConditionalFlow"))
+                    {
+                        String str_start = jsobj.getString(PROP_START);
+                        String str_end = jsobj.getString(PROP_END);
+
+                        String str_action = jsobj.getString(PROP_ACTION);
+
+                        FlowObject fos = hm_new.get(str_start);
+                        FlowObject foe = hm_new.get(str_end);
+
+                        if(fos!=null&&foe!=null)
+                        {
+                            SequenceFlow sf = linkConditionObject(foe, foe, str_action);
                         }
 //                        System.out.println("start:"+str_start);
 //                        System.out.println("end:"+str_end);
