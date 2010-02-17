@@ -29,7 +29,7 @@ public-read var color_interEvent="#5e7a9e";
 public-read var color_gateway="#cc9900";
 
 public-read var style_task="fill: {color_fill}; stroke: {color}; strokeWidth: 2; arcWidth: 15; arcHeight: 15;";
-public-read var style_task_text="font-size: 14px; font-family: \"'Verdana'\"; fill: #000000; font-weight: bold;";
+public-read var style_task_text="font-size: 14px; font-family: \"'Verdana'\"; fill: #000000;font-weight: bold;";
 //var style_task_textbox="font-size: 14px; font-family: \"Helvetica, Arial\"; font-weight: bold; border-fill:transparent; background-fill:transparent; focus-fill:transparent; shadow-fill:transparent";
 public-read var style_task_textbox="font-size: 14px; font-family: \"Helvetica, Arial\"; font-weight: bold; focus-fill:transparent; shadow-fill:transparent";
 public-read var style_gateway="fill: {color_fill}; stroke: {color_gateway}; strokeWidth: 2;";

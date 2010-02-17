@@ -43,7 +43,7 @@ modeler.organizeMap();
 
 var toolbar:ToolBar = ToolBar
 {
-    w:69
+    w:49
     h:bind maxy
     modeler: modeler
 }

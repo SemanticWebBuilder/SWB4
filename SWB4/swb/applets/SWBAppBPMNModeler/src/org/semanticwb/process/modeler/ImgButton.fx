@@ -25,6 +25,7 @@ public class ImgButton extends CustomNode
     public var imageOver:String;
     public var over:Boolean;
     public var content:Node;
+    public var subMenu:SubMenu;
 
     public var action:function():Void;
 
@@ -57,6 +58,7 @@ public class ImgButton extends CustomNode
             onMousePressed: function( e: MouseEvent ):Void
             {
                  content.requestFocus();
+                 subMenu.action=this.action;
                  action();
             }
             onKeyTyped: function( e: KeyEvent ):Void
