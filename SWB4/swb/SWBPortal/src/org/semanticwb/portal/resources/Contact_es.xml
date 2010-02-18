@@ -4,14 +4,23 @@
 
 	<form name="frmContact" action="true" method="POST" enctype="multipart/form-data">
         <fieldset legend="Datos">
-            <input type="TEXT" name="cto" label="Dirección de Correo Electrónico del Contacto:" size="50"/>
+            <input type="TEXT" name="email" label="Dirección de Correo Electrónico del contacto:" size="50"/>
+
+            <statictext name="txtTarget">¿Cómo desea mostrar el recurso de contacto?:</statictext>
+            <input type="RADIO" name="modal" label="Modal" value="true"/>
+            <input type="RADIO" name="modal" label="No Modal" value="false"/>
+
+            <statictext name="txtTarget">¿Cómo desea acceder al recurso de contacto?:</statictext>
+            <input type="TEXT" name="link" label="Texto de la liga:" size="50"/>
+            <input type="TEXT" name="label" label="Etiqueta del botón:" size="50"/>
+            <input type="FILE" name="image" label="Imagen (bmp, gif, jpg, jpeg, png):" showfile="true" filetype="bmp|jpg|jpeg|gif|png" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen" size="40"/>
         </fieldset>
 
         <fieldset>
             <statictext name="b">
             <![CDATA[
             <button id="btnSave" dojoType="dijit.form.Button">Guardar</button>
-            <button id="btnReset" dojoType="dijit.form.Button">Reestablecer</button>
+            <button id="btnReset" dojoType="dijit.form.Button" type="reset">Reestablecer</button>
             ]]>
             </statictext>
         </fieldset>
@@ -35,6 +44,22 @@
                 }
             );
         });
+        ]]>
+    </script>
+
+    <script type="text/javascript">
+        <![CDATA[
+            if(!document.frmContact.modal[0].checked && !document.frmContact.modal[1].checked)
+                    document.frmContact.modal[1].checked=true;
+
+            function jsValida(frm) {
+                if(frm.email.value==null || frm.email.value=='' || frm.email.value==' ') {
+                    alert('Indique la dirección de correo electrónico del contacto.');
+                    frm.email.focus();
+                    return false;
+                }
+                return true;
+            }
         ]]>
     </script>
 </admresource>
