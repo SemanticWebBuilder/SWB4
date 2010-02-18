@@ -1,26 +1,25 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -34,6 +33,7 @@ import java.security.AccessControlException;
 import java.security.Principal;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.StringTokenizer;
 import javax.jcr.AccessDeniedException;
 import javax.jcr.Credentials;
 import javax.jcr.InvalidItemStateException;
@@ -65,9 +65,12 @@ import org.jdom.Namespace;
 import org.jdom.output.XMLOutputter;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.jcr170.implementation.util.NCName;
+import org.semanticwb.model.AdminFilter;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.repository.BaseNode;
@@ -101,7 +104,7 @@ public class SessionImp implements Session
     private final Hashtable<String, SimpleNode> nodesByUUID = new Hashtable<String, SimpleNode>();
     private final Hashtable<String, SimpleNode> nodes = new Hashtable<String, SimpleNode>();
     private final SimpleNode root;
-   
+
     SessionImp(SWBRepository repository, String workspaceName, Principal principal) throws RepositoryException
     {
         if (repository == null || workspaceName == null || principal == null)
@@ -112,9 +115,9 @@ public class SessionImp implements Session
         this.workspaceName = workspaceName;
         this.principal = principal;
         this.workspace = new WorkspaceImp(this, workspaceName);
-        org.semanticwb.repository.Workspace ws=SWBContext.getWorkspace(this.workspace.getName());
+        org.semanticwb.repository.Workspace ws = SWBContext.getWorkspace(this.workspace.getName());
         BaseNode rootBaseNode = ws.getRoot();
-        if(rootBaseNode==null)
+        if (rootBaseNode == null)
         {
             Unstructured oroot = Unstructured.ClassMgr.createUnstructured(ws);
             oroot.setName("jcr:root");
@@ -183,16 +186,16 @@ public class SessionImp implements Session
                     {
                         if (child.getPath().endsWith(value))
                         {
-                            getSimpleNodeByPath=child;
+                            getSimpleNodeByPath = child;
                             break;
                         }
                     }
                 }
             }
         }
-        if(getSimpleNodeByPath!=null && !getSimpleNodeByPath.getPath().equals(path))
+        if (getSimpleNodeByPath != null && !getSimpleNodeByPath.getPath().equals(path))
         {
-            getSimpleNodeByPath=null;
+            getSimpleNodeByPath = null;
         }
         return getSimpleNodeByPath;
     }
@@ -809,44 +812,43 @@ public class SessionImp implements Session
         //TODO: revisar esto para los demas tipos de movimientos, este moviento debería ser temporal, pero por tiempo se deja así
         Item srcItem = this.getItem(srcAbsPath);
         Item destItem = this.getItem(destAbsPath);
-        if(srcItem==null)
+        if (srcItem == null)
         {
-            throw new PathNotFoundException("The path "+srcAbsPath+" was not found");
+            throw new PathNotFoundException("The path " + srcAbsPath + " was not found");
         }
-        if(destItem==null)
+        if (destItem == null)
         {
-            throw new PathNotFoundException("The path "+destAbsPath+" was not found");
+            throw new PathNotFoundException("The path " + destAbsPath + " was not found");
         }
         if (srcItem instanceof SimpleNode && destItem instanceof SimpleNode)
         {
             SimpleNode srcSimpleNode = (SimpleNode) srcItem;
             SimpleNode destSimpleNode = (SimpleNode) destItem;
-            if(destSimpleNode.getPrimaryNodeType().canAddChildNode(srcSimpleNode.getName(), srcSimpleNode.getPrimaryNodeType().getName()))
+            if (destSimpleNode.getPrimaryNodeType().canAddChildNode(srcSimpleNode.getName(), srcSimpleNode.getPrimaryNodeType().getName()))
             {
                 if (srcSimpleNode.node != null && destSimpleNode.node != null)
                 {
-                    srcSimpleNode.node.setParent(destSimpleNode.node);                    
+                    srcSimpleNode.node.setParent(destSimpleNode.node);
                 }
                 else // TODO: check is necesary to do something
                 {
-
                 }
-                srcSimpleNode.parent=destSimpleNode;
+                srcSimpleNode.parent = destSimpleNode;
             }
             else
             {
-                throw new ConstraintViolationException("Can not be added a node of type "+ srcSimpleNode.getPrimaryNodeType().getName() +" to a node of type "+destSimpleNode.getPrimaryNodeType().getName());
+                throw new ConstraintViolationException("Can not be added a node of type " + srcSimpleNode.getPrimaryNodeType().getName() + " to a node of type " + destSimpleNode.getPrimaryNodeType().getName());
             }
         }
         else
         {
             if (!(srcItem instanceof SimpleNode))
             {
-                throw new RepositoryException("The item "+srcItem+" is not a node");
+                throw new RepositoryException("The item " + srcItem + " is not a node");
             }
             else
             {
-                throw new RepositoryException("The item "+destItem+" is not a node");
+                throw new RepositoryException("The item " + destItem + " is not a node");
             }
         }
     }
@@ -875,9 +877,42 @@ public class SessionImp implements Session
         return new ValueFactoryImp();
     }
 
-    public void checkPermission(String arg0, String arg1) throws AccessControlException, RepositoryException
+    public void checkPermission(String absPath, String actions) throws AccessControlException, RepositoryException
     {
-        throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
+        Item item = this.getItem(absPath);
+
+        if (item != null && item instanceof SimpleNode)
+        {
+            SimpleNode node = (SimpleNode) item;
+            User user = SWBContext.getAdminRepository().getUserByLogin(this.getUserID());
+            StringTokenizer st = new StringTokenizer(actions);
+            while (st.hasMoreTokens())
+            {
+                String value = st.nextToken();
+                if (value.equals("add_node"))
+                {
+                    if (!SWBPortal.getAdminFilterMgr().haveClassAction(user, node.clazz, AdminFilter.ACTION_ADD))
+                    {
+                        throw new AccessControlException("The node " + absPath + " has not the "+ value+" perssission");
+                    }
+                }
+                if (value.equals("remove"))
+                {
+                    if (!SWBPortal.getAdminFilterMgr().haveClassAction(user, node.clazz, AdminFilter.ACTION_DELETE))
+                    {
+                        throw new AccessControlException("The node " + absPath + " has not the "+ value+" perssission");
+                    }
+                }
+                else
+                {
+                    throw new AccessControlException("The node " + absPath + " has not the "+ value+" perssission");
+                }
+            }
+        }
+        else
+        {
+            throw new RepositoryException("The node " + absPath + "was not found");
+        }
     }
 
     public ContentHandler getImportContentHandler(String parentAbsPath, int arg1) throws PathNotFoundException, ConstraintViolationException, VersionException, LockException, RepositoryException
