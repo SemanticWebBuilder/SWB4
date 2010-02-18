@@ -895,12 +895,20 @@ public class SessionImp implements Session
                     {
                         throw new AccessControlException("The node " + absPath + " has not the "+ value+" perssission");
                     }
+                    else
+                    {
+                        return;
+                    }
                 }
-                if (value.equals("remove"))
+                else if (value.equals("remove"))
                 {
                     if (!SWBPortal.getAdminFilterMgr().haveClassAction(user, node.clazz, AdminFilter.ACTION_DELETE))
                     {
                         throw new AccessControlException("The node " + absPath + " has not the "+ value+" perssission");
+                    }
+                    else
+                    {
+                        return;
                     }
                 }
                 else
