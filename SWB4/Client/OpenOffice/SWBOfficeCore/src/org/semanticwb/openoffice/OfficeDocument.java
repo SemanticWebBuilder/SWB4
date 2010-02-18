@@ -57,6 +57,7 @@ import org.semanticwb.openoffice.ui.dialogs.DialogHistory;
 import org.semanticwb.openoffice.ui.dialogs.DialogSaveDocument;
 import org.semanticwb.openoffice.ui.dialogs.DialogUpdateContent;
 import org.semanticwb.openoffice.ui.wizard.ContentProperties;
+import org.semanticwb.openoffice.ui.wizard.PublishPage;
 import org.semanticwb.openoffice.ui.wizard.PublishVersion;
 import org.semanticwb.openoffice.ui.wizard.SelectCategory;
 import org.semanticwb.openoffice.ui.wizard.SelectPage;
@@ -683,7 +684,7 @@ public abstract class OfficeDocument
                 PublishContentToWebPageResultProducer resultProducer = new PublishContentToWebPageResultProducer(contentID, repositoryName, title, description);
                 WizardPage[] clazz = new WizardPage[]
                 {
-                    new SelectPage(siteid), new PublishVersion(contentID, repositoryName), new ViewProperties(repositoryName, contentID)
+                    new PublishPage(siteid,this), new PublishVersion(contentID, repositoryName), new ViewProperties(repositoryName, contentID)
                 };
                 Wizard wiz = WizardPage.createWizard(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("ASISTENTE_DE_PUBLICACIÓN_DE_CONTENIDO_EN_PÁGINA_WEB"), clazz, resultProducer);
                 wiz.show();
@@ -716,7 +717,7 @@ public abstract class OfficeDocument
             PublishContentToWebPageResultProducer resultProducer = new PublishContentToWebPageResultProducer(contentID, repositoryName);
             WizardPage[] clazz = new WizardPage[]
             {
-                new TitleAndDescription(false), new SelectPage(siteid), new PublishVersion(contentID, repositoryName), new ViewProperties(repositoryName, contentID)
+                new TitleAndDescription(false), new PublishPage(siteid,this), new PublishVersion(contentID, repositoryName), new ViewProperties(repositoryName, contentID)
             };
             Wizard wiz = WizardPage.createWizard(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("ASISTENTE_DE_PUBLICACIÓN_DE_CONTENIDO_EN_PÁGINA_WEB"), clazz, resultProducer);
             wiz.show();
