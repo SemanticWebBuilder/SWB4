@@ -47,11 +47,28 @@ public interface IOfficeApplication
     @XmlRpcMethod(methodName = "OfficeApplication.createPage")
     public void createPage(WebPageInfo page, String pageid, String title, String description) throws Exception;
 
+
+    @XmlRpcMethod(methodName = "OfficeApplication.canCreatePage")
+    public boolean canCreatePage(WebPageInfo page) throws Exception;
+
+
     @XmlRpcMethod(methodName = "OfficeApplication.existsPage")
     public boolean existsPage(WebSiteInfo site, String pageid) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeApplication.createCategory")
     public String createCategory(String repositoryName, String title, String description) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeApplication.canCreateCategory")
+    public boolean canCreateCategory(String repositoryName) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeApplication.canCreateCategory")
+    public boolean canCreateCategory(String repositoryName, String categoryId) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeApplication.canRemoveCategory")
+    public boolean canRemoveCategory(String repositoryName) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeApplication.canRemoveCategory")
+    public boolean canRemoveCategory(String repositoryName, String categoryId) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeApplication.createCategory")
     public String createCategory(String repositoryName, String categoryId, String title, String description) throws Exception;
