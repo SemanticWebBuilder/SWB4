@@ -56,6 +56,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.AdminFilter;
 import org.semanticwb.model.CalendarRef;
 import org.semanticwb.model.DisplayProperty;
 import org.semanticwb.model.GenericIterator;
@@ -735,7 +736,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             lastModified.setTimeInMillis(System.currentTimeMillis());
             nodeContent.setProperty(LASTMODIFIED, lastModified);
             nodeContent.save();
-            String versionName=null;
+            String versionName = null;
             try
             {
                 if (requestParts.size() == 0)
@@ -765,7 +766,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     resNode.setProperty(JCR_LASTMODIFIED, lastModified);
                     session.save();
                     Version version = resNode.checkin();
-                    versionName= version.getName();
+                    versionName = version.getName();
                     return versionName;
                 }
 
@@ -836,8 +837,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                             {
                                 if (officeResource.getRepositoryName() != null && officeResource.getRepositoryName().equals(repositoryName))
                                 {
-                                    String versionToShow=officeResource.getVersionToShow();
-                                    if(versionToShow.equals("*") || versionToShow.equals(versionName))
+                                    String versionToShow = officeResource.getVersionToShow();
+                                    if (versionToShow.equals("*") || versionToShow.equals(versionName))
                                     {
                                         InputStream in = getContent(repositoryName, contentId, versionToShow);
                                         officeResource.loadContent(in);
@@ -1523,6 +1524,27 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             {
                 session.logout();
             }
+        }
+    }
+
+    public boolean canPublishToResourceContent(String type) throws Exception
+    {
+        org.semanticwb.model.User wbuser = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(this.user);
+        if (type.equalsIgnoreCase("EXCEL"))
+        {
+            SemanticClass clazz = ExcelResource.ClassMgr.sclass;
+            return SWBPortal.getAdminFilterMgr().haveClassAction(wbuser, clazz, AdminFilter.ACTION_ADD);
+        }
+        else if (type.equalsIgnoreCase("PPT"))
+        {
+            SemanticClass clazz = PPTResource.ClassMgr.sclass;
+            return SWBPortal.getAdminFilterMgr().haveClassAction(wbuser, clazz, AdminFilter.ACTION_ADD);
+
+        }
+        else
+        {
+            SemanticClass clazz = WordResource.ClassMgr.sclass;
+            return SWBPortal.getAdminFilterMgr().haveClassAction(wbuser, clazz, AdminFilter.ACTION_ADD);
         }
     }
 
