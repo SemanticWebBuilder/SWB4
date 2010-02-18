@@ -46,9 +46,9 @@ import org.semanticwb.openoffice.ui.dialogs.DialogChangePassword;
 import org.semanticwb.openoffice.ui.dialogs.DialogDocumentsAuthorize;
 import org.semanticwb.openoffice.ui.dialogs.DialogLogin;
 import org.semanticwb.openoffice.ui.dialogs.DialogPreview;
+import org.semanticwb.openoffice.ui.wizard.CreateSelectPage;
 import org.semanticwb.openoffice.ui.wizard.Search;
 import org.semanticwb.openoffice.ui.wizard.SelectDirectory;
-import org.semanticwb.openoffice.ui.wizard.SelectPage;
 import org.semanticwb.openoffice.ui.wizard.SelectVersionToOpen;
 import org.semanticwb.openoffice.ui.wizard.SelectWebPageID;
 import org.semanticwb.openoffice.ui.wizard.TitleAndDescription;
@@ -288,7 +288,7 @@ public abstract class OfficeApplication
             CreatePageResultProducer resultProducer = new CreatePageResultProducer();            
             WizardPage[] clazz = new WizardPage[]
             {
-                new SelectPage(null), new TitleAndDescription(false), new SelectWebPageID()
+                new CreateSelectPage(null), new TitleAndDescription(false), new SelectWebPageID()
             };
             Wizard wiz = WizardPage.createWizard(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeApplication").getString("ASISTENTE_DE_CREACIÓN_DE_PÁGINA"), clazz, resultProducer);
             wiz.show();

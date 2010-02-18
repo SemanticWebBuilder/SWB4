@@ -1,26 +1,25 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 /*
  * SelectCategory.java
  *
@@ -49,13 +48,13 @@ import org.semanticwb.openoffice.OfficeApplication;
 import org.semanticwb.openoffice.ui.dialogs.DialogAddCategory;
 import org.semanticwb.openoffice.ui.icons.ImageLoader;
 
-
 /**
  *
  * @author  victor.lorenzana
  */
 public class SelectCategory extends WizardPage
 {
+
     private static final String EMPTY_STRING = "";
     private static final String NL = "\r\n";
     public static Map map = null;
@@ -94,7 +93,7 @@ public class SelectCategory extends WizardPage
                 if (category.childs > 0)
                 {
                     categoryNode.add(new DefaultMutableTreeNode(EMPTY_STRING));
-                }            
+                }
             }
         }
         catch (Exception e)
@@ -137,7 +136,7 @@ public class SelectCategory extends WizardPage
                 if (showRepository)
                 {
                     RepositoryNode repositoryNode = new RepositoryNode(repository);
-                    root.add(repositoryNode);                    
+                    root.add(repositoryNode);
                     addCategory(repositoryNode);
                     jTreeCategory.expandPath(new TreePath(repositoryNode.getPath()));
                 }
@@ -165,7 +164,7 @@ public class SelectCategory extends WizardPage
         DefaultTreeModel model = new DefaultTreeModel(root);
         model.setRoot(root);
         this.jTreeCategory.setModel(model);
-        addRepositories(root);        
+        addRepositories(root);
         jTreeCategory.setRootVisible(false);
         jTreeCategory.expandPath(new TreePath(root.getPath()));
 
@@ -189,7 +188,7 @@ public class SelectCategory extends WizardPage
         RepositoryInfo rep = (RepositoryInfo) this.getWizardDataMap().get(REPOSITORY_ID);
         if (rep.exclusive)
         {
-            int res = JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("¡EL_REPOSITORIO_SELECIONADO_SÓLO_PUEDE_PUBLICAR_CONTENIDOS_EN_EL_SITIO_")+" " + rep.siteInfo.title + "!"+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("¿DESEA_CONTINUAR?"), getDescription(), JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+            int res = JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("¡EL_REPOSITORIO_SELECIONADO_SÓLO_PUEDE_PUBLICAR_CONTENIDOS_EN_EL_SITIO_") + " " + rep.siteInfo.title + "!" + NL + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("¿DESEA_CONTINUAR?"), getDescription(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (res == JOptionPane.NO_OPTION)
             {
                 result = WizardPanelNavResult.REMAIN_ON_PAGE;
@@ -198,7 +197,7 @@ public class SelectCategory extends WizardPage
         }
         else
         {
-            int res = JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("¡EL_REPOSITORIO_SELECIONADO_PERMITE_PUBLICAR_EN_CUALQUIER_SITIO!")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("¿DESEA_CONTINUAR?"), getDescription(), JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+            int res = JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("¡EL_REPOSITORIO_SELECIONADO_PERMITE_PUBLICAR_EN_CUALQUIER_SITIO!") + NL + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("¿DESEA_CONTINUAR?"), getDescription(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (res == JOptionPane.NO_OPTION)
             {
                 result = WizardPanelNavResult.REMAIN_ON_PAGE;
@@ -337,14 +336,36 @@ private void jTreeCategoryValueChanged(javax.swing.event.TreeSelectionEvent evt)
             RepositoryNode rep = (RepositoryNode) selected;
             if (rep.getChildCount() == 0)
             {
-                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("¡NO_EXISTEN_CATEGORIAS_EN_ESTE_REPOSITORIO!")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("DEBE_CREAR_UNA_PARA_PODER_PUBLICAR_EL_CONTENIDO"), getDescription(), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("¡NO_EXISTEN_CATEGORIAS_EN_ESTE_REPOSITORIO!") + NL + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("DEBE_CREAR_UNA_PARA_PODER_PUBLICAR_EL_CONTENIDO"), getDescription(), JOptionPane.ERROR_MESSAGE);
             }
-            this.jButtonAddCategory.setEnabled(true);
+            try
+            {
+                if (OfficeApplication.getOfficeApplicationProxy().canCreateCategory(rep.getName()))
+                {
+                    this.jButtonAddCategory.setEnabled(true);
+                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
         }
     }
-    else
+    if (selected != null && selected instanceof CategoryNode)
     {
-        this.jButtonAddCategory.setEnabled(true);
+        CategoryNode catNode=(CategoryNode)selected;
+
+        try
+            {
+                if (OfficeApplication.getOfficeApplicationProxy().canCreateCategory(catNode.getRepository().name, catNode.getID()));
+                {
+                    this.jButtonAddCategory.setEnabled(true);
+                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
     }
     this.jButtonDeletCategory.setEnabled(false);
     if (selected != null && selected instanceof CategoryNode)
@@ -388,7 +409,7 @@ private void jButtonDeletCategoryActionPerformed(java.awt.event.ActionEvent evt)
             {
                 return;//-- remove node --
             }
-            if(OfficeApplication.getOfficeApplicationProxy().deleteCategory(repository.name,categoryId))
+            if (OfficeApplication.getOfficeApplicationProxy().deleteCategory(repository.name, categoryId))
             {
                 parentNode.remove(node);
                 ((DefaultTreeModel) jTreeCategory.getModel()).reload(parentNode);
@@ -397,7 +418,7 @@ private void jButtonDeletCategoryActionPerformed(java.awt.event.ActionEvent evt)
             {
                 JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("NO_SE_PUEDE_BORRAR_LA_CATEGORIA_POR_QUE_TIENE_CONTENIDOS"), getDescription(), JOptionPane.ERROR | JOptionPane.OK_OPTION);
             }
-            
+
         }
         else
         {
@@ -421,7 +442,6 @@ private void jTreeCategoryTreeWillExpand(javax.swing.event.TreeExpansionEvent ev
         addCategory(categoryNode.getRepository(), categoryNode);
     }
 }//GEN-LAST:event_jTreeCategoryTreeWillExpand
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAddCategory;
     private javax.swing.JButton jButtonDeletCategory;
@@ -432,6 +452,7 @@ private void jTreeCategoryTreeWillExpand(javax.swing.event.TreeExpansionEvent ev
     private javax.swing.JTree jTreeCategory;
     // End of variables declaration//GEN-END:variables
 }
+
 interface ToolTipTreeNode
 {
 
@@ -486,7 +507,7 @@ class RepositoryNode extends DefaultMutableTreeNode implements ToolTipTreeNode
     {
         if (repositoryInfo.exclusive)
         {
-            return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("REPOSITORIO_EXCLUSIVO_PARA_EL_SITIO_")+" " + repositoryInfo.siteInfo.title;
+            return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("REPOSITORIO_EXCLUSIVO_PARA_EL_SITIO_") + " " + repositoryInfo.siteInfo.title;
         }
         else
         {
@@ -607,7 +628,9 @@ class CategoryNode extends DefaultMutableTreeNode implements ToolTipTreeNode
 
 class TreeRender extends JPanel implements TreeCellRenderer
 {
+
     private static final String EMPTY_STRING = "";
+
     public Component getTreeCellRendererComponent(JTree tree, Object object, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus)
     {
         Component component = this;
@@ -623,7 +646,7 @@ class TreeRender extends JPanel implements TreeCellRenderer
         if (object instanceof RepositoryNode)
         {
             component = ((RepositoryNode) object).getComponent();
-        //component.setFont(tree.getFont());
+            //component.setFont(tree.getFont());
         }
         if (component != null && component instanceof JLabel)
         {
