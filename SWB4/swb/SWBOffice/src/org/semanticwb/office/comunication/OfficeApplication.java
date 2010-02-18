@@ -28,6 +28,7 @@ package org.semanticwb.office.comunication;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.security.AccessControlException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -47,6 +48,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.AdminFilter;
 import org.semanticwb.model.CalendarRef;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Resource;
@@ -55,6 +57,7 @@ import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.Role;
 import org.semanticwb.model.Rule;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
@@ -176,7 +179,8 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
 
     public RepositoryInfo[] getRepositories() throws Exception
     {
-        return loader.getWorkspacesForOffice();
+        User ouser = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(user);
+        return loader.getWorkspacesForOffice(ouser);
     }
 
     public CategoryInfo[] getCategories(String repositoryName) throws Exception
@@ -642,12 +646,16 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         while (sites.hasNext())
         {
             WebSite site = sites.next();
-            WebSiteInfo info = new WebSiteInfo();
-            info.title = site.getTitle();
-            info.id = site.getId();
-            if (!(info.id.equals(SWBContext.WEBSITE_ADMIN) || info.id.equals(SWBContext.WEBSITE_GLOBAL) || info.id.equals(SWBContext.WEBSITE_ONTEDITOR)))
+            User ouser = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(user);
+            if (SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(ouser, site.getSemanticObject()))
             {
-                websites.add(info);
+                WebSiteInfo info = new WebSiteInfo();
+                info.title = site.getTitle();
+                info.id = site.getId();
+                if (!(info.id.equals(SWBContext.WEBSITE_ADMIN) || info.id.equals(SWBContext.WEBSITE_GLOBAL) || info.id.equals(SWBContext.WEBSITE_ONTEDITOR)))
+                {
+                    websites.add(info);
+                }
             }
         }
         return websites.toArray(new WebSiteInfo[websites.size()]);
@@ -685,22 +693,26 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         while (pages.hasNext())
         {
             WebPage page = pages.next();
-            WebPageInfo info = new WebPageInfo();
-            info.id = page.getId();
-            info.active = page.isActive();
-            info.title = page.getTitle();
-            info.siteID = webpage.siteID;
-            info.description = page.getDescription();
-            info.url = page.getUrl();
-            int childs = 0;
-            GenericIterator<WebPage> childWebPages = page.listChilds();
-            while (childWebPages.hasNext())
+            User ouser = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(user);
+            if (SWBPortal.getAdminFilterMgr().haveAccessToWebPage(ouser, page))
             {
-                childWebPages.next();
-                childs++;
+                WebPageInfo info = new WebPageInfo();
+                info.id = page.getId();
+                info.active = page.isActive();
+                info.title = page.getTitle();
+                info.siteID = webpage.siteID;
+                info.description = page.getDescription();
+                info.url = page.getUrl();
+                int childs = 0;
+                GenericIterator<WebPage> childWebPages = page.listChilds();
+                while (childWebPages.hasNext())
+                {
+                    childWebPages.next();
+                    childs++;
+                }
+                info.childs = childs;
+                pagesToReturn.add(info);
             }
-            info.childs = childs;
-            pagesToReturn.add(info);
         }
         return pagesToReturn.toArray(new WebPageInfo[pagesToReturn.size()]);
     }
@@ -1074,13 +1086,13 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         OfficeResource officeResource = OfficeResource.getOfficeResource(resource.getId(), site);
         if (officeResource.getRepositoryName() != null && officeResource.getContent() != null)
         {
-            OfficeDocument doc=new OfficeDocument(this.user,this.password);
+            OfficeDocument doc = new OfficeDocument(this.user, this.password);
             try
             {
                 InputStream in = doc.getContent(officeResource.getRepositoryName(), officeResource.getContent(), officeResource.getVersionToShow());
                 officeResource.loadContent(in);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 log.error(e);
             }
@@ -1093,5 +1105,147 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
 
     public void noAutorize(Resource resource)
     {
+    }
+
+    public boolean canCreatePage(WebPageInfo webpage) throws Exception
+    {
+        WebSite site = SWBContext.getWebSite(webpage.siteID);
+        WebPage parent = site.getWebPage(webpage.id);
+        User ouser = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(user);
+        return SWBPortal.getAdminFilterMgr().haveClassAction(ouser, parent.getSemanticObject().getSemanticClass(), AdminFilter.ACTION_ADD);
+    }
+
+    public boolean canCreateCategory(String repositoryName) throws Exception
+    {
+        Session session = null;
+        Node root = null;
+        try
+        {
+            session = loader.openSession(repositoryName, this.user, this.password);
+            root = session.getRootNode();
+            try
+            {
+                session.checkPermission(root.getPath(), "add_node");
+                return true;
+            }
+            catch (AccessControlException ace)
+            {
+                log.debug(ace);
+                return false;
+            }
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+            throw e;
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
+
+    }
+
+    public boolean canCreateCategory(String repositoryName, String categoryId) throws Exception
+    {
+        Session session = null;
+        Node parent = null;
+        try
+        {
+            session = loader.openSession(repositoryName, this.user, this.password);
+            parent = session.getNodeByUUID(categoryId);
+            try
+            {
+                session.checkPermission(parent.getPath(), "add_node");
+                return true;
+            }
+            catch (AccessControlException ace)
+            {
+                log.debug(ace);
+                return false;
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace(System.out);
+            throw e;
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
+
+    }
+
+    public boolean canRemoveCategory(String repositoryName) throws Exception
+    {
+        Session session = null;
+        Node root = null;
+        try
+        {
+            session = loader.openSession(repositoryName, this.user, this.password);
+            root = session.getRootNode();
+            try
+            {
+                session.checkPermission(root.getPath(), "remove");
+                return true;
+            }
+            catch (AccessControlException ace)
+            {
+                log.debug(ace);
+                return false;
+            }
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+            throw e;
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
+    }
+
+    public boolean canRemoveCategory(String repositoryName, String categoryId) throws Exception
+    {
+        Session session = null;
+        Node parent = null;
+        try
+        {
+            session = loader.openSession(repositoryName, this.user, this.password);
+            parent = session.getNodeByUUID(categoryId);
+            try
+            {
+                session.checkPermission(parent.getPath(), "remove");
+                return true;
+            }
+            catch (AccessControlException ace)
+            {
+                log.debug(ace);
+                return false;
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace(System.out);
+            throw e;
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
     }
 }
