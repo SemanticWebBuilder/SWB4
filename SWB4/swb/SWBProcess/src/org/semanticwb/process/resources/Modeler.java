@@ -57,6 +57,12 @@ public class Modeler extends GenericResource
     private static final String PROP_START = "start";
     private static final String PROP_END = "end";
     private static final String PROP_ACTION = "action";
+    private static final String PROP_TYPE = "type";
+    private static final String TYPE_NORMAL = "";
+    private static final String TYPE_RULE = "rule";
+    private static final String TYPE_MESSAGE = "message";
+    private static final String TYPE_TIMER = "timer";
+    private static final String TYPE_MULTIPLE = "multiple";
 
     /**
      *
@@ -158,6 +164,7 @@ public class Modeler extends GenericResource
             String str_class = null;
             String str_title = null;
             String str_uri = null;
+            String str_type = null;
 
 
             Node node=src.getElementsByTagName("json").item(0);
@@ -169,9 +176,10 @@ public class Modeler extends GenericResource
                 jsobj = new JSONObject(node.getTextContent());
                 jsarr = jsobj.getJSONArray("nodes");
 
-                System.out.println("======================================");
-                System.out.println("JSONObjets found:"+jsarr.length());
-
+//                System.out.println("======================================");
+//                System.out.println("JSONObjets found:"+jsarr.length());
+//                System.out.println("JSON:"+jsobj.toString());
+//                System.out.println("======================================");
                 
                 // primero para crear POOL
                 for(int i=0; i<jsarr.length();i++)
@@ -313,11 +321,32 @@ public class Modeler extends GenericResource
                     GenericObject lgo = null;
                     FlowObject fgo = null;
                     // Tipo de clase a crear o actualizar
-                    if(str_uri.startsWith("new:")&& !cls_ends.equals(".SequenceFlow"))
+                    if(str_uri.startsWith("new:")&& !cls_ends.equals(".SequenceFlow")&&!cls_ends.endsWith(".ConditionalFlow"))
                     {
                         if(cls_ends.endsWith(".StartEvent"))
                         {
-                            fgo=pross.createInitEvent();
+                            str_type = jsobj.getString(PROP_TYPE);
+                            //TODO: Validar tipo para generar el elmento correspondiente
+                            if(str_type.equals(TYPE_MESSAGE))
+                            {
+                                fgo=pross.createInitEvent();
+                            }
+                            else if(str_type.equals(TYPE_MULTIPLE))
+                            {
+                                fgo=pross.createInitEvent();
+                            }
+                            else if(str_type.equals(TYPE_RULE))
+                            {
+                                fgo=pross.createInitEvent();
+                            }
+                            else if(str_type.equals(TYPE_TIMER))
+                            {
+                                fgo=pross.createInitEvent();
+                            }
+                            else //TYPE_NORMAL
+                            {
+                                fgo=pross.createInitEvent();
+                            }
                         }
                         else if(cls_ends.endsWith(".EndEvent"))
                         {
@@ -364,7 +393,7 @@ public class Modeler extends GenericResource
                         fgo = (FlowObject) lgo;
                     }
 
-                    if(fgo!=null&&!cls_ends.endsWith(".SequenceFlow"))
+                    if(fgo!=null&&!cls_ends.endsWith(".SequenceFlow")&&!cls_ends.endsWith(".ConditionalFlow")) //
                     {
                         hm_new.put(str_uri, fgo);
 
@@ -406,7 +435,7 @@ public class Modeler extends GenericResource
 
                     // Propiedades que siempre traen los elementos del modelo
                     str_class = jsobj.getString(PROP_CLASS);
-                    //str_title = jsobj.getString(PROP_TITLE);
+                    str_title = jsobj.getString(PROP_TITLE);
                     str_uri = jsobj.getString(PROP_URI);
 
                     if(str_class.endsWith(".SequenceFlow"))
@@ -420,6 +449,9 @@ public class Modeler extends GenericResource
                         if(fos!=null&&foe!=null)
                         {
                             SequenceFlow sf = linkObject(fos, foe);
+                            //TODO:
+                            // No tiene título el sequenceflow
+                            //sf.setTitle(str_title);
                         }
 //                        System.out.println("start:"+str_start);
 //                        System.out.println("end:"+str_end);
@@ -437,6 +469,9 @@ public class Modeler extends GenericResource
                         if(fos!=null&&foe!=null)
                         {
                             SequenceFlow sf = linkConditionObject(foe, foe, str_action);
+                            //TODO:
+                            // No tiene título el sequenceflow
+                            //sf.setTitle(str_title);
                         }
 //                        System.out.println("start:"+str_start);
 //                        System.out.println("end:"+str_end);
@@ -519,6 +554,9 @@ public class Modeler extends GenericResource
                 ele.put("x", obj.getX());
                 ele.put("y", obj.getY());
                 //ele.put("lane", obj.getX());
+                //TODO:
+                // validar clase para regresar el tipo correspondiente
+                if(obj instanceof InitEvent) ele.put("type",""); //((InitEvent)obj).getTitle()
             }
 
             Iterator<ConnectionObject> it_co = null;
@@ -533,10 +571,11 @@ public class Modeler extends GenericResource
                     ele = new JSONObject();
                     nodes.put(ele);
                     ele.put("class", cobj.getClass().getName());
-                    //ele.put("title", obj.getTitle());
+                    //ele.put("title", cobj.getTitle());
                     ele.put("uri", cobj.getURI());
                     ele.put("start",cobj.getFromFlowObject().getURI());
                     ele.put("end",cobj.getToFlowObject().getURI());
+                    if(cobj instanceof ConditionalFlow) ele.put("action",((ConditionalFlow)cobj).getFlowCondition());
                 }
             }
 
