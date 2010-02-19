@@ -1,26 +1,25 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 /*
  * SelectPage.java
  *
@@ -56,6 +55,7 @@ import org.semanticwb.openoffice.OfficeApplication;
  */
 public class SelectPage extends WizardPage
 {
+
     private static final String NL = "\r\n";
     public static final String WEBPAGE = "WEBPAGE";
     String siteId;
@@ -64,10 +64,10 @@ public class SelectPage extends WizardPage
     public SelectPage(String siteid)
     {
         initComponents();
-        this.siteId=siteid;
+        this.siteId = siteid;
         DefaultTreeSelectionModel selectionModel = new DefaultTreeSelectionModel();
         selectionModel.setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-        jTreeSite.setSelectionModel(selectionModel);        
+        jTreeSite.setSelectionModel(selectionModel);
         loadTree();
         jTreeSite.setRootVisible(false);
         jTreeSite.updateUI();
@@ -82,17 +82,15 @@ public class SelectPage extends WizardPage
     @Override
     public WizardPanelNavResult allowNext(String stepName, Map map, Wizard wizard)
     {
-        WizardPanelNavResult res=WizardPanelNavResult.PROCEED;
-        if(map.get(WEBPAGE)==null)
+        WizardPanelNavResult res = WizardPanelNavResult.PROCEED;
+        if (map.get(WEBPAGE) == null)
         {
-            res=WizardPanelNavResult.REMAIN_ON_PAGE;
+            res = WizardPanelNavResult.REMAIN_ON_PAGE;
             JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectPage").getString("¡DEBE_INDICAR_UNA_PÁGINA_WEB!"), getDescription(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             this.jTreeSite.requestFocus();
         }
         return res;
     }
-
-       
 
     class TreeRender extends JPanel implements TreeCellRenderer
     {
@@ -126,8 +124,8 @@ public class SelectPage extends WizardPage
                 {
                     if (object instanceof HomeWebPage)
                     {
-                        HomeWebPage homeWebPage=(HomeWebPage)object;
-                        if(homeWebPage.isActive())
+                        HomeWebPage homeWebPage = (HomeWebPage) object;
+                        if (homeWebPage.isActive())
                         {
                             label.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/home.png")));
                         }
@@ -138,8 +136,8 @@ public class SelectPage extends WizardPage
                     }
                     else
                     {
-                        WebPage page=(WebPage)object;
-                        if(page.isActive())
+                        WebPage page = (WebPage) object;
+                        if (page.isActive())
                         {
                             label.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/page.png")));
                         }
@@ -195,14 +193,14 @@ public class SelectPage extends WizardPage
                     model.insertNodeInto(site, root, 0);
 
                     WebPageInfo home = OfficeApplication.getOfficeApplicationProxy().getHomePage(website);
-                    HomeWebPage child = new HomeWebPage(home.id, home.title, home.description, website.id, home.url,home.active);
+                    HomeWebPage child = new HomeWebPage(home.id, home.title, home.description, website.id, home.url, home.active);
                     site.add(child);
                     if (home.childs > 0)
                     {
                         DefaultMutableTreeNode dummy = new DefaultMutableTreeNode();
                         child.add(dummy);
                     }
-                    TreeNode[] path=site.getPath();
+                    TreeNode[] path = site.getPath();
                     jTreeSite.expandPath(new TreePath(path));
                 }
                 else
@@ -210,16 +208,16 @@ public class SelectPage extends WizardPage
                     if (siteId.equals(website.id))
                     {
                         Site site = new Site(website.id, website.title);
-                        model.insertNodeInto(site, root, 0);                        
+                        model.insertNodeInto(site, root, 0);
                         WebPageInfo home = OfficeApplication.getOfficeApplicationProxy().getHomePage(website);
-                        HomeWebPage child = new HomeWebPage(home.id, home.title, home.description, website.id, home.url,home.active);
+                        HomeWebPage child = new HomeWebPage(home.id, home.title, home.description, website.id, home.url, home.active);
                         site.add(child);
                         if (home.childs > 0)
                         {
                             DefaultMutableTreeNode dummy = new DefaultMutableTreeNode();
                             child.add(dummy);
                         }
-                        TreeNode[] path=site.getPath();
+                        TreeNode[] path = site.getPath();
                         jTreeSite.expandPath(new TreePath(path));
                     }
                 }
@@ -250,7 +248,7 @@ public class SelectPage extends WizardPage
             parent.siteID = nodeParent.webSite;
             for (WebPageInfo webpage : OfficeApplication.getOfficeApplicationProxy().getPages(parent))
             {
-                WebPage child = new WebPage(webpage.id, webpage.title, webpage.description, webpage.siteID, webpage.url,webpage.active);
+                WebPage child = new WebPage(webpage.id, webpage.title, webpage.description, webpage.siteID, webpage.url, webpage.active);
                 nodeParent.add(child);
                 if (webpage.childs > 0)
                 {
@@ -346,7 +344,7 @@ private void jTreeSiteValueChanged(javax.swing.event.TreeSelectionEvent evt) {//
             Site rep = (Site) selected;
             if (rep.getChildCount() == 0)
             {
-                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectPage").getString("¡NO_EXISTEN_PÁGINAS_EN_ESTE_SITIO!")+ NL +java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectPage").getString("DEBE_CREAR_UNA_PAGINA_PARA_PODER_PUBLICAR_EL_CONTENIDO"), getDescription(), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectPage").getString("¡NO_EXISTEN_PÁGINAS_EN_ESTE_SITIO!") + NL + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectPage").getString("DEBE_CREAR_UNA_PAGINA_PARA_PODER_PUBLICAR_EL_CONTENIDO"), getDescription(), JOptionPane.ERROR_MESSAGE);
             }
             this.jButtonAddPage.setEnabled(true);
         }
@@ -356,7 +354,20 @@ private void jTreeSiteValueChanged(javax.swing.event.TreeSelectionEvent evt) {//
     {
         WebPage siteNode = (WebPage) selected;
         this.getWizardDataMap().put(WEBPAGE, siteNode);
-        this.jButtonAddPage.setEnabled(true);
+        WebPageInfo page = new WebPageInfo();
+        page.id = siteNode.id;
+        page.siteID = siteNode.getSite();
+        try
+        {
+            if (OfficeApplication.getOfficeApplicationProxy().canCreatePage(page))
+            {
+                this.jButtonAddPage.setEnabled(true);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
     this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_jTreeSiteValueChanged
@@ -395,7 +406,6 @@ private void jTreeSiteTreeWillExpand(javax.swing.event.TreeExpansionEvent evt)th
         this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }
 }//GEN-LAST:event_jTreeSiteTreeWillExpand
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAddPage;
     private javax.swing.JPanel jPanel1;
@@ -417,7 +427,6 @@ private void jTreeSiteTreeWillExpand(javax.swing.event.TreeExpansionEvent evt)th
         {
             super(id, title);
         }
-        
 
         @Override
         public boolean isRoot()
@@ -425,8 +434,6 @@ private void jTreeSiteTreeWillExpand(javax.swing.event.TreeExpansionEvent evt)th
             return true;
         }
     }
-
-    
 
     class Site extends DefaultMutableTreeNode implements ToolTipTreeNode
     {
@@ -438,8 +445,6 @@ private void jTreeSiteTreeWillExpand(javax.swing.event.TreeExpansionEvent evt)th
         {
             return false;
         }
-
-        
         private String id;
         private String title;
 
@@ -488,9 +493,9 @@ private void jTreeSiteTreeWillExpand(javax.swing.event.TreeExpansionEvent evt)th
     public class HomeWebPage extends WebPage
     {
 
-        public HomeWebPage(String id, String title, String description, String webSite, String url,boolean active)
+        public HomeWebPage(String id, String title, String description, String webSite, String url, boolean active)
         {
-            super(id, title, description, webSite, url,active);
+            super(id, title, description, webSite, url, active);
         }
     }
 
@@ -504,18 +509,20 @@ private void jTreeSiteTreeWillExpand(javax.swing.event.TreeExpansionEvent evt)th
         private String webSite;
         private String url;
         private boolean active;
-        public WebPage(String id, String title, String description, String webSite, String url,boolean active)
+
+        public WebPage(String id, String title, String description, String webSite, String url, boolean active)
         {
             this.id = id;
             this.title = title;
             this.description = description;
             this.webSite = webSite;
             this.url = url;
-            this.active=active;
+            this.active = active;
             component.setText(title);
             component.setToolTipText(description);
             component.setOpaque(true);
         }
+
         public boolean isActive()
         {
             return active;
@@ -574,8 +581,6 @@ private void jTreeSiteTreeWillExpand(javax.swing.event.TreeExpansionEvent evt)th
         {
             return component;
         }
-
-        
 
         @Override
         public boolean isRoot()
