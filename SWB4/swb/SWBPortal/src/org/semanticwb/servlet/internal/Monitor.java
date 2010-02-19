@@ -77,7 +77,7 @@ public class Monitor implements InternalServlet
     private Timer timer;
     private int max = 2500;
     private int maxgc = 50;
-    private int delays = 250;
+    private int delays = 1000;
     private TimerTask t = null;
     private SWBSummary summary = null;
     private SWBMonitorBeans monitorbeans = null;
