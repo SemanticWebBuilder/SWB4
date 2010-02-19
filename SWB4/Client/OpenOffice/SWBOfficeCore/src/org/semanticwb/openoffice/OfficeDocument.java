@@ -49,6 +49,7 @@ import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPage;
 import org.semanticwb.office.interfaces.ContentInfo;
 import org.semanticwb.office.interfaces.RepositoryInfo;
+import org.semanticwb.office.interfaces.WebSiteInfo;
 import org.semanticwb.openoffice.interfaces.IOpenOfficeDocument;
 import org.semanticwb.openoffice.ui.dialogs.DialogContentInformation;
 import org.semanticwb.openoffice.ui.dialogs.DialogDocumentDetail;
@@ -679,6 +680,20 @@ public abstract class OfficeDocument
         {
             if (OfficeApplication.tryLogin())
             {
+
+                try
+                {
+                    WebSiteInfo[] sites = OfficeApplication.getOfficeApplicationProxy().getSites();
+                    if (sites == null || sites.length <= 0)
+                    {
+                        JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("no_hay_sitios"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("ASISTENTE_DE_PUBLICACIÓN_DE_CONTENIDO_EN_PÁGINA_WEB"), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
                 contentID = this.getCustomProperties().get(CONTENT_ID_NAME);
                 String repositoryName = this.getCustomProperties().get(WORKSPACE_ID_NAME);
                 PublishContentToWebPageResultProducer resultProducer = new PublishContentToWebPageResultProducer(contentID, repositoryName, title, description);
