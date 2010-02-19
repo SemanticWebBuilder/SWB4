@@ -192,7 +192,8 @@ public class SelectPage extends WizardPage
                 if (siteId == null)
                 {
                     Site site = new Site(website.id, website.title);
-                    model.insertNodeInto(site, root, 0);                    
+                    model.insertNodeInto(site, root, 0);
+
                     WebPageInfo home = OfficeApplication.getOfficeApplicationProxy().getHomePage(website);
                     HomeWebPage child = new HomeWebPage(home.id, home.title, home.description, website.id, home.url,home.active);
                     site.add(child);
