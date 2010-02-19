@@ -754,8 +754,8 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         {
             for (String type : OfficeDocument.getOfficeTypes())
             {
-                ResourceType resourceType = site.createResourceType(type);
-                if (res.getResourceType().equals(resourceType))
+                ResourceType resourceType = site.getResourceType(type);
+                if (resourceType!=null && res.getResourceType().equals(resourceType))
                 {
                     OfficeResource officeResource = OfficeResource.getOfficeResource(res.getId(), site);
                     officeResource.setResourceBase(res);
@@ -841,8 +841,8 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         {
             for (String type : OfficeDocument.getOfficeTypes())
             {
-                ResourceType resourceType = site.createResourceType(type);
-                if (res.getResourceType().equals(resourceType))
+                ResourceType resourceType = site.getResourceType(type);
+                if (resourceType!=null && res.getResourceType().equals(resourceType))
                 {
                     OfficeResource officeResource = OfficeResource.getOfficeResource(res.getId(), site);
                     officeResource.setResourceBase(res);
@@ -912,8 +912,8 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         {
             for (String type : OfficeDocument.getOfficeTypes())
             {
-                ResourceType resourceType = site.createResourceType(type);
-                if (res.getResourceType().equals(resourceType))
+                ResourceType resourceType = site.getResourceType(type);
+                if (resourceType!=null && res.getResourceType().equals(resourceType))
                 {
                     OfficeResource officeResource = OfficeResource.getOfficeResource(res.getId(), site);
                     officeResource.setResourceBase(res);
