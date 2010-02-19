@@ -727,8 +727,22 @@ public abstract class OfficeDocument
             }
             catch (Exception e)
             {
+                e.printStackTrace();
             }
 
+            try
+            {
+                WebSiteInfo[] sites = OfficeApplication.getOfficeApplicationProxy().getSites();
+                if (sites == null || sites.length <= 0)
+                {
+                    JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("no_hay_sitios"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("ASISTENTE_DE_PUBLICACIÓN_DE_CONTENIDO_EN_PÁGINA_WEB"), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
             PublishContentToWebPageResultProducer resultProducer = new PublishContentToWebPageResultProducer(contentID, repositoryName);
             WizardPage[] clazz = new WizardPage[]
             {
