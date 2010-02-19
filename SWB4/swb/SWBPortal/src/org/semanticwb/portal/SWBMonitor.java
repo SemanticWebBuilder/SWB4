@@ -39,18 +39,18 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.base.db.DBConnectionPool;
 
 
-public class SWBMonitor
+public class SWBMonitor implements Serializable
 {
     static Logger log=SWBUtils.getLogger(SWBMonitor.class);    
     
-    private Timer timer;
-    private Vector vec=new Vector();
-    private int max=500;
-    private int delays = 5;
-    private TimerTask t=null;
+    private transient Timer timer;
+    private transient Vector vec=new Vector();
+    private transient int max=500;
+    private transient int delays = 5;
+    private transient TimerTask t=null;
     
-    private long instanceHits=0;
-    private long instanceHitTime=15;
+    private transient long instanceHits=0;
+    private transient long instanceHitTime=15;
     
     public SWBMonitor()
     {
