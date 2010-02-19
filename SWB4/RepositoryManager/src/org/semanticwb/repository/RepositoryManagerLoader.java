@@ -80,7 +80,7 @@ public class RepositoryManagerLoader
         return instance;
     }
 
-    public RepositoryInfo[] getWorkspacesForOffice()
+    public RepositoryInfo[] getWorkspacesForOffice(User user)
     {
         ArrayList<RepositoryInfo> workspaces = new ArrayList<RepositoryInfo>();
         for (RepositoryManager manager : repositoryManagers.values())
@@ -88,7 +88,7 @@ public class RepositoryManagerLoader
             OfficeManager officemanager=manager.getOfficeManager();
             if (officemanager!=null)
             {
-                Collection<RepositoryInfo> officeworkspaces=officemanager.getWorkspaces();
+                Collection<RepositoryInfo> officeworkspaces=officemanager.getWorkspaces(user);
                 workspaces.addAll(officeworkspaces);
             }
         }
