@@ -24,6 +24,10 @@ public class PublishPage extends SelectPage {
         super(siteid);
         this.document=document;
     }
+    public static String getDescription()
+    {
+        return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectPage").getString("SELECCIONAR_PÁGINA");
+    }
     @Override
     public WizardPanelNavResult allowNext(String stepName, Map map, Wizard wizardData)
     {
