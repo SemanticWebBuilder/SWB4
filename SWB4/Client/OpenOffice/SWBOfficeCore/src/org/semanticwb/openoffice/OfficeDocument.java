@@ -684,7 +684,7 @@ public abstract class OfficeDocument
                 PublishContentToWebPageResultProducer resultProducer = new PublishContentToWebPageResultProducer(contentID, repositoryName, title, description);
                 WizardPage[] clazz = new WizardPage[]
                 {
-                    new PublishPage(siteid,this), new PublishVersion(contentID, repositoryName), new ViewProperties(repositoryName, contentID)
+                    new PublishPage(siteid, this), new PublishVersion(contentID, repositoryName), new ViewProperties(repositoryName, contentID)
                 };
                 Wizard wiz = WizardPage.createWizard(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("ASISTENTE_DE_PUBLICACIÓN_DE_CONTENIDO_EN_PÁGINA_WEB"), clazz, resultProducer);
                 wiz.show();
@@ -717,7 +717,7 @@ public abstract class OfficeDocument
             PublishContentToWebPageResultProducer resultProducer = new PublishContentToWebPageResultProducer(contentID, repositoryName);
             WizardPage[] clazz = new WizardPage[]
             {
-                new TitleAndDescription(false), new PublishPage(siteid,this), new PublishVersion(contentID, repositoryName), new ViewProperties(repositoryName, contentID)
+                new TitleAndDescription(false), new PublishPage(siteid, this), new PublishVersion(contentID, repositoryName), new ViewProperties(repositoryName, contentID)
             };
             Wizard wiz = WizardPage.createWizard(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("ASISTENTE_DE_PUBLICACIÓN_DE_CONTENIDO_EN_PÁGINA_WEB"), clazz, resultProducer);
             wiz.show();
@@ -737,7 +737,7 @@ public abstract class OfficeDocument
         choices[2] = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("NO");
         try
         {
-            Set<File> files=this.getMisssingAttachtments();
+            Set<File> files = this.getMisssingAttachtments();
             if (files.size() > 0)
             {
                 for (File file : files)
@@ -769,11 +769,11 @@ public abstract class OfficeDocument
         }
         catch (Exception e)
         {
-            JOptionPane.showMessageDialog(null,"Error al validar archivos incrustados"+NL+"Detalle: "+ e.getMessage(),TITLE_SAVE_CONTENT_SITE,JOptionPane.OK_OPTION | JOptionPane.ERROR);
+            JOptionPane.showMessageDialog(null, "Error al validar archivos incrustados" + NL + "Detalle: " + e.getMessage(), TITLE_SAVE_CONTENT_SITE, JOptionPane.OK_OPTION | JOptionPane.ERROR);
             ErrorLog.log(e);
             return false;
         }
-        
+
 
     }
 
@@ -874,7 +874,7 @@ public abstract class OfficeDocument
                                 }
                                 catch (Exception e)
                                 {
-                                    JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("NO_SE_PUEDE_ACTUALIZAR_EL_CONTENIDO_LA_CAUSA_ES:_")+" " + e.getMessage(), TITLE_SAVE_CONTENT_SITE, JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("NO_SE_PUEDE_ACTUALIZAR_EL_CONTENIDO_LA_CAUSA_ES:_") + " " + e.getMessage(), TITLE_SAVE_CONTENT_SITE, JOptionPane.ERROR_MESSAGE);
                                     ErrorLog.log(e);
                                 }
                             }
