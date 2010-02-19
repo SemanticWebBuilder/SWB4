@@ -25,6 +25,7 @@
 
 package org.semanticwb.portal;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -327,7 +328,7 @@ public class SWBMonitor
     }
     
 
-    public class MonitorRecord
+    public class MonitorRecord implements Serializable
     {
         private long max=0;
         private long total=0;
