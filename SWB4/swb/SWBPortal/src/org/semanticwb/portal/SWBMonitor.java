@@ -254,7 +254,7 @@ public class SWBMonitor
         instanceHitTime=(instanceHitTime*49+time)/50;
     }
     
-    public class PoolRecord
+    public class PoolRecord implements Serializable
     {
         private long hits=0;
         private long hitsTime=0;
