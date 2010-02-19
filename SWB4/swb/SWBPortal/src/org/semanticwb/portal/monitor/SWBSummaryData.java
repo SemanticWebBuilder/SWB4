@@ -42,7 +42,7 @@ public class SWBSummaryData implements Serializable {
         public int  currentClass = -1;
         public long currentHeap, maxHeap, currentCommited, objectsPending, startedTh, unloadedClass, totalClass = -1L;
         public String[] gcDetails;
-        public long commitedVirtualMem, totalPhysicalMem, freePhysicalMem, totalSwapMem, FreeSwapMem = -1L;
+        public long commitedVirtualMem, totalPhysicalMem, freePhysicalMem, totalSwapMem, freeSwapMem = -1L;
         public float instantCPU = Float.MIN_VALUE;
 
     public SWBSummaryData()
@@ -74,7 +74,7 @@ public class SWBSummaryData implements Serializable {
             ret.append("<li>Total Memoria F&iacute;sica: "+formatLong(totalPhysicalMem/1024)+" kbytes</li>\n");
             ret.append("<li>Memoria f&iacute;sica Libre: "+formatLong(freePhysicalMem/1024)+" kbytes</li>\n");
             ret.append("<li>Total Memoria SWAP: "+formatLong(totalSwapMem/1024)+" kbytes</li>\n");
-            ret.append("<li>Memoria SWAP Libre: "+formatLong(FreeSwapMem/1024)+" kbytes</li>\n</ul>\n</div>\n");
+            ret.append("<li>Memoria SWAP Libre: "+formatLong(freeSwapMem/1024)+" kbytes</li>\n</ul>\n</div>\n");
             ret.append("<div id=\"Threads\">");
             ret.append("<ul>\n<li>Threads Vivos: "+liveTh+"</li>\n");
             ret.append("<li>Pico de Threads: "+peakTh+"</li>\n");

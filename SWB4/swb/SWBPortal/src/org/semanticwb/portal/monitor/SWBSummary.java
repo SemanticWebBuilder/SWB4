@@ -110,7 +110,7 @@ public class SWBSummary
         {
             ret.processCpuTime = sunOperatingSystemMXBean.getProcessCpuTime();
             ret.commitedVirtualMem = sunOperatingSystemMXBean.getCommittedVirtualMemorySize();
-            ret.FreeSwapMem = sunOperatingSystemMXBean.getFreeSwapSpaceSize();
+            ret.freeSwapMem = sunOperatingSystemMXBean.getFreeSwapSpaceSize();
             ret.freePhysicalMem = sunOperatingSystemMXBean.getFreePhysicalMemorySize();
             ret.totalPhysicalMem = sunOperatingSystemMXBean.getTotalPhysicalMemorySize();
             ret.totalSwapMem = sunOperatingSystemMXBean.getTotalSwapSpaceSize();
