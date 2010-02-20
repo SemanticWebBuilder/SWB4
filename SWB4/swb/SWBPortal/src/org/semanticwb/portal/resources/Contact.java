@@ -68,6 +68,7 @@ public class Contact extends GenericAdmResource {
 
     public void doSendEmail(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         Resource base = getResourceBase();
+        PrintWriter out = response.getWriter();
 
         String site = base.getWebSite().getDisplayTitle(paramsRequest.getUser().getLanguage());
         String contact = base.getAttribute("email");
@@ -110,13 +111,20 @@ public class Contact extends GenericAdmResource {
 //                response.setRenderParameter("email", "sended");
 //                response.setRenderParameter("name", name);
 
+out.print("hola mundo");
 
             }else{
 //                response.setRenderParameter("email", "missdata");
+
+out.print("missdate");
+
             }
         }catch(Exception e) {
             System.out.println("\n\nerror:"+e);
 //            response.setRenderParameter("email", "error");
+
+out.print(e);
+
         }
     }
 
@@ -216,7 +224,7 @@ out.println("}");
 out.println("function RSchange() {");
 out.println(" if (xmlhttp.readyState==4) {");
 //out.println("  document.getElementById('content').innerHTML=xmlhttp.responseText;");
-out.println("   alert('ok');");
+out.println("   alert('ok.'+xmlhttp.responseText);");
 out.println(" }");
 out.println("}");
 
