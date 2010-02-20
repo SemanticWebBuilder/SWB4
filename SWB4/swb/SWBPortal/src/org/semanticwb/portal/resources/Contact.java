@@ -69,6 +69,7 @@ public class Contact extends GenericAdmResource {
     public void doSendEmail(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         Resource base = getResourceBase();
         PrintWriter out = response.getWriter();
+        response.setContentType("text/html;charset=iso-8859-1");
 
         String site = base.getWebSite().getDisplayTitle(paramsRequest.getUser().getLanguage());
         String contact = base.getAttribute("email");
