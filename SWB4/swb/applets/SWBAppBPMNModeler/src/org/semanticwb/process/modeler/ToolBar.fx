@@ -122,6 +122,12 @@ public class ToolBar extends CustomNode
                 {
                     co=SequenceFlow{};
                 }
+                if(cls.endsWith(".ConditionalFlow"))
+                {
+                    co=ConditionalFlow{};
+                    var cond=js.getString("action");
+                    if(cond!=null)co.title=cond;
+                }
                 if(co!=null)
                 {
                     //ConnectionObjects
