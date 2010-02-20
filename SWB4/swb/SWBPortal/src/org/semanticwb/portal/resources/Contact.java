@@ -108,17 +108,12 @@ public class Contact extends GenericAdmResource {
                 aAddress = new ArrayList<InternetAddress>();
                 aAddress.add(address1);
                 SWBUtils.EMAIL.sendMail(contact, name, aAddress, null, null, subject, "text/plain", msgToCustomer.toString(), null, null, null);
-
-//                response.setRenderParameter("email", "sended");
-//                response.setRenderParameter("name", name);
-
-out.print("hola mundo");
+                out.print("Su correo fue enviado exitosamente");
 
             }else{
-//                response.setRenderParameter("email", "missdata");
-
-out.print("missdate");
-
+                out.println("Lo sentimos, por el momento no fue posible enviar su comentario.<br>");
+                out.println("Falta información para el envío de su correo:<br/>");
+                out.println("Debe escribir su correo electrónico y mensaje como minimo<br/><br/>");
             }
         }catch(Exception e) {
             System.out.println("\n\nerror:"+e);
@@ -193,54 +188,10 @@ out.print(e);
             boolean modal = Boolean.parseBoolean(base.getAttribute("modal"));
             if(modal) {
                 out.println("<script type=\"text/javascript\">");
-
-
-
-out.println("var xmlhttp,alerted;");
-out.println("/*@cc_on @*/");
-out.println("/*@if (@_jscript_version >= 5)");
-out.println("// JScript gives us Conditional compilation, we can cope with old IE versions.");
-out.println("  try {");
-out.println("  xmlhttp=new ActiveXObject(\"Msxml2.XMLHTTP\");");
-out.println(" } catch (e) {");
-out.println("  try {");
-out.println("    xmlhttp=new ActiveXObject(\"Microsoft.XMLHTTP\");");
-out.println("  } catch (E) {");
-out.println("   alert('You must have Microsofts XML parsers available');");
-out.println("  }");
-out.println(" }");
-out.println("@else");
-out.println(" alert('You must have JScript version 5 or above.');");
-out.println(" xmlhttp=false;");
-out.println(" alerted=true;");
-out.println("@end @*/");
-out.println("if (!xmlhttp && !alerted) {");
-out.println(" try {");
-out.println("  xmlhttp = new XMLHttpRequest();");
-out.println(" } catch (e) {");
-out.println("  alert('You need a browser which supports an XMLHttpRequest Object');");
-out.println(" }");
-out.println("}");
-
-out.println("function RSchange() {");
-out.println(" if (xmlhttp.readyState==4) {");
-//out.println("  document.getElementById('content').innerHTML=xmlhttp.responseText;");
-out.println("   alert('ok.'+xmlhttp.responseText);");
-out.println(" }");
-out.println("}");
-
-out.println("function justdoit(url) {");
-out.println("  if (xmlhttp) {");
-out.println("    d=document;");
-out.println("    xmlhttp.open(\"GET\", url, true);");
-out.println("    xmlhttp.onreadystatechange=RSchange;");
-out.println("    xmlhttp.send(null);");
-out.println("  }");
-out.println("}");
-
-
-
-
+                out.println("function justdoit(url) {");
+                out.println("  alert(postText(url));");
+                out.println("}");
+                
                 out.println("  function createCoverDiv(divId, bgcolor, opacity) {");
                 out.println("    var layer=document.createElement('div');");
                 out.println("    layer.id=divId;");
@@ -290,10 +241,8 @@ out.println("}");
                 out.print("</tr>");
                 out.print("<tr>");
                 out.print("<td colspan=\"2\" align=\"center\">");
-
-SWBResourceURL url=paramsRequest.getRenderUrl();
-url.setCallMethod(url.Call_DIRECT).setMode("sendEmail");
-
+                SWBResourceURL url=paramsRequest.getRenderUrl();
+                url.setCallMethod(url.Call_DIRECT).setMode("sendEmail");
                 out.print("<input name=\"submit\" type=\"button\" onclick=\"justdoit(\\'"+url+"\\'+\\'?name=\\'+dojo.byId(\\'name\\').value+\\'&email=\\'+dojo.byId(\\'email\\').value+\\'&subject=\\'+dojo.byId(\\'subject\\').value+\\'&message=\\'+dojo.byId(\\'message\\').value);removeCoverDiv(\\''+divId+'\\')\" value=\""+paramsRequest.getLocaleString("send")+"\" />");
                 out.print("&nbsp;&nbsp;&nbsp;");
                 out.print("<input name=\"reset\" type=\"reset\" value=\""+paramsRequest.getLocaleString("reset")+"\" />");
