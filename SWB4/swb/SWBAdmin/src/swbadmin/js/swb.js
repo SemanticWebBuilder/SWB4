@@ -142,6 +142,23 @@
           return ret;
       }
 
+      function postText(url)
+      {
+          var ret=[];
+          var obj=dojo.xhrPost({
+              url: url,
+              sync: true,
+              load: function(data){
+                  ret=data;
+              },
+              error: function(data){
+                  alert("An error occurred, with response: " + data);
+              },
+              handleAs: "text"
+          });
+          return ret;
+      }
+
 
       function showDialog(url, title)
       {
