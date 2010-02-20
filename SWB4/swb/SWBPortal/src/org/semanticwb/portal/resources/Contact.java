@@ -36,8 +36,8 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.GenericAdmResource;
-import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBResourceException;
+import org.semanticwb.portal.api.SWBResourceURL;
 
 public class Contact extends GenericAdmResource {
     private static Logger log = SWBUtils.getLogger(Banner.class);
@@ -58,23 +58,25 @@ public class Contact extends GenericAdmResource {
     }
 
     @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
+        if(paramsRequest.getMode().equalsIgnoreCase("sendEmail")) {
+            doSendEmail(request,response,paramsRequest);
+        }else {
+            super.processRequest(request, response, paramsRequest);
+        }
+    }
+
+    public void doSendEmail(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         Resource base = getResourceBase();
 
-        String site = response.getWebPage().getWebSite().getDisplayTitle(response.getUser().getLanguage());
+        String site = base.getWebSite().getDisplayTitle(paramsRequest.getUser().getLanguage());
         String contact = base.getAttribute("email");
-        // TODO
-        /*String name = SWBUtils.stringNullValidate(request.getParameter("name"));
-        String email = SWBUtils.stringNullValidate(request.getParameter("email"));
-        String subject = SWBUtils.stringNullValidate(request.getParameter("subject"));
-        String message = SWBUtils.stringNullValidate(request.getParameter("message"));
-        String rating = SWBUtils.stringNullValidate(request.getParameter("rating"));*/
+
         String name = request.getParameter("name");
         String customer = request.getParameter("email");
         String subject = request.getParameter("subject");
         String message = request.getParameter("message");
-//        String rating = request.getParameter("rating");
-        
+
         StringBuilder msgToCustomer = new StringBuilder();
         msgToCustomer.append("Gracias por contactarnos...\nEn un lapso de 24 horas responderemos a tu correo electr\363nico.");
         msgToCustomer.append("Su mensaje fue enviado a la siguiente direcci\363n de correo electr\363nico: "+contact+"\n\n");
@@ -98,32 +100,80 @@ public class Contact extends GenericAdmResource {
                 aAddress.add(address1);
                 SWBUtils.EMAIL.sendMail(customer, name, aAddress, null, null, subject, "text/plain", msgToContact.toString(), null, null, null);
 
-// send email to customer
-address1 = new InternetAddress();
-address1.setAddress(customer);
-aAddress = new ArrayList<InternetAddress>();
-aAddress.add(address1);
-SWBUtils.EMAIL.sendMail(contact, name, aAddress, null, null, subject, "text/plain", msgToCustomer.toString(), null, null, null);
+                // send email to customer
+                address1 = new InternetAddress();
+                address1.setAddress(customer);
+                aAddress = new ArrayList<InternetAddress>();
+                aAddress.add(address1);
+                SWBUtils.EMAIL.sendMail(contact, name, aAddress, null, null, subject, "text/plain", msgToCustomer.toString(), null, null, null);
 
-                response.setRenderParameter("email", "sended");
-                response.setRenderParameter("name", name);
+//                response.setRenderParameter("email", "sended");
+//                response.setRenderParameter("name", name);
 
 
             }else{
-                response.setRenderParameter("email", "missdata");
+//                response.setRenderParameter("email", "missdata");
             }
         }catch(Exception e) {
             System.out.println("\n\nerror:"+e);
-            response.setRenderParameter("email", "error");
+//            response.setRenderParameter("email", "error");
         }
-        /*if(ok) {
-            SWBUtils.EMAIL.sendBGEMail(cto, email, null, null, gracias, "text/plain", 0, parausuario);
-            response.setRenderParameter("email", "sended");
-            response.setRenderParameter("name", name);
-        }else {
-            response.setRenderParameter("email", "error");
-        }*/
     }
+
+//    @Override
+//    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+//        Resource base = getResourceBase();
+//
+//        String site = response.getWebPage().getWebSite().getDisplayTitle(response.getUser().getLanguage());
+//        String contact = base.getAttribute("email");
+//
+//        String name = request.getParameter("name");
+//        String customer = request.getParameter("email");
+//        String subject = request.getParameter("subject");
+//        String message = request.getParameter("message");
+//
+//        StringBuilder msgToCustomer = new StringBuilder();
+//        msgToCustomer.append("Gracias por contactarnos...\nEn un lapso de 24 horas responderemos a tu correo electr\363nico.");
+//        msgToCustomer.append("Su mensaje fue enviado a la siguiente direcci\363n de correo electr\363nico: "+contact+"\n\n");
+//
+//        StringBuilder msgToContact = new StringBuilder();
+//        msgToContact.append("Site: "+site);
+//        msgToContact.append("\nNombre: "+name);
+//        msgToContact.append("\nemail: "+customer);
+//        msgToContact.append("\nAsunto: "+subject);
+//        msgToContact.append("\nMensaje: "+message);
+//
+//        System.out.println("msgToCustomer="+msgToCustomer+"\n\nmsgToContact="+msgToContact+"\n******************");
+//
+//        try{
+//            if(customer!=null && customer.trim().length()>0 && message!=null && message.trim().length()>0)
+//            {
+//                // send email to contact
+//                InternetAddress address1 = new InternetAddress();
+//                address1.setAddress(contact);
+//                ArrayList<InternetAddress> aAddress = new ArrayList<InternetAddress>();
+//                aAddress.add(address1);
+//                SWBUtils.EMAIL.sendMail(customer, name, aAddress, null, null, subject, "text/plain", msgToContact.toString(), null, null, null);
+//
+//                // send email to customer
+//                address1 = new InternetAddress();
+//                address1.setAddress(customer);
+//                aAddress = new ArrayList<InternetAddress>();
+//                aAddress.add(address1);
+//                SWBUtils.EMAIL.sendMail(contact, name, aAddress, null, null, subject, "text/plain", msgToCustomer.toString(), null, null, null);
+//
+//                response.setRenderParameter("email", "sended");
+//                response.setRenderParameter("name", name);
+//
+//
+//            }else{
+//                response.setRenderParameter("email", "missdata");
+//            }
+//        }catch(Exception e) {
+//            System.out.println("\n\nerror:"+e);
+//            response.setRenderParameter("email", "error");
+//        }
+//    }
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
@@ -134,6 +184,54 @@ SWBUtils.EMAIL.sendMail(contact, name, aAddress, null, null, subject, "text/plai
             boolean modal = Boolean.parseBoolean(base.getAttribute("modal"));
             if(modal) {
                 out.println("<script type=\"text/javascript\">");
+
+
+
+out.println("var xmlhttp,alerted;");
+out.println("/*@cc_on @*/");
+out.println("/*@if (@_jscript_version >= 5)");
+out.println("// JScript gives us Conditional compilation, we can cope with old IE versions.");
+out.println("  try {");
+out.println("  xmlhttp=new ActiveXObject(\"Msxml2.XMLHTTP\");");
+out.println(" } catch (e) {");
+out.println("  try {");
+out.println("    xmlhttp=new ActiveXObject(\"Microsoft.XMLHTTP\");");
+out.println("  } catch (E) {");
+out.println("   alert('You must have Microsofts XML parsers available');");
+out.println("  }");
+out.println(" }");
+out.println("@else");
+out.println(" alert('You must have JScript version 5 or above.');");
+out.println(" xmlhttp=false;");
+out.println(" alerted=true;");
+out.println("@end @*/");
+out.println("if (!xmlhttp && !alerted) {");
+out.println(" try {");
+out.println("  xmlhttp = new XMLHttpRequest();");
+out.println(" } catch (e) {");
+out.println("  alert('You need a browser which supports an XMLHttpRequest Object');");
+out.println(" }");
+out.println("}");
+
+out.println("function RSchange() {");
+out.println(" if (xmlhttp.readyState==4) {");
+//out.println("  document.getElementById('content').innerHTML=xmlhttp.responseText;");
+out.println("   alert('ok');");
+out.println(" }");
+out.println("}");
+
+out.println("function justdoit(url) {");
+out.println("  if (xmlhttp) {");
+out.println("    d=document;");
+out.println("    xmlhttp.open(\"GET\", url, true);");
+out.println("    xmlhttp.onreadystatechange=RSchange;");
+out.println("    xmlhttp.send(null);");
+out.println("  }");
+out.println("}");
+
+
+
+
                 out.println("  function createCoverDiv(divId, bgcolor, opacity) {");
                 out.println("    var layer=document.createElement('div');");
                 out.println("    layer.id=divId;");
@@ -163,7 +261,7 @@ SWBUtils.EMAIL.sendMail(contact, name, aAddress, null, null, subject, "text/plai
 
                 out.println("    var contactContainer=document.createElement('div');");
                 out.print("contactContainer.innerHTML = ");
-                out.print("'<form action=\""+paramsRequest.getActionUrl()+"\" method=\"post\">");
+                out.print("'<form action=\""+paramsRequest.getActionUrl()+"\" method=\"post\" >");
                 out.print("<table width=\"90%\" bgcolor=\"#FFFFFF\">");
                 out.print("<tr>");
                 out.print("<td width=\"20%\">"+paramsRequest.getLocaleString("name")+"</td>");
@@ -179,11 +277,15 @@ SWBUtils.EMAIL.sendMail(contact, name, aAddress, null, null, subject, "text/plai
                 out.print("</tr>");
                 out.print("<tr>");
                 out.print("<td>"+paramsRequest.getLocaleString("message")+"</td>");
-                out.print("<td ><textarea name=\"message\" cols=\"50\" rows=\"5\"></textarea></td>");
+                out.print("<td ><textarea name=\"message\" id=\"message\" cols=\"50\" rows=\"5\"></textarea></td>");
                 out.print("</tr>");
                 out.print("<tr>");
                 out.print("<td colspan=\"2\" align=\"center\">");
-                out.print("<input name=\"submit\" type=\"submit\" value=\""+paramsRequest.getLocaleString("send")+"\" />");
+
+SWBResourceURL url=paramsRequest.getRenderUrl();
+url.setCallMethod(url.Call_DIRECT).setMode("sendEmail");
+
+                out.print("<input name=\"submit\" type=\"button\" onclick=\"justdoit(\\'"+url+"\\'+\\'?name=\\'+dojo.byId(\\'name\\').value+\\'&email=\\'+dojo.byId(\\'email\\').value+\\'&subject=\\'+dojo.byId(\\'subject\\').value+\\'&message=\\'+dojo.byId(\\'message\\').value);removeCoverDiv(\\''+divId+'\\')\" value=\""+paramsRequest.getLocaleString("send")+"\" />");
                 out.print("&nbsp;&nbsp;&nbsp;");
                 out.print("<input name=\"reset\" type=\"reset\" value=\""+paramsRequest.getLocaleString("reset")+"\" />");
                 out.print("&nbsp;&nbsp;&nbsp;");
@@ -243,19 +345,6 @@ SWBUtils.EMAIL.sendMail(contact, name, aAddress, null, null, subject, "text/plai
                 out.print("</form>");
             }
         }
-//        else if(email.equals("sended")) {
-//            String site = paramsRequest.getWebPage().getWebSite().getDisplayTitle(paramsRequest.getUser().getLanguage());
-//            String cto = paramsRequest.getResourceBase().getAttribute("email");
-//            String name = request.getParameter("name");
-//            String parausuario = (new StringBuilder()).append(name).append(", Muchas gracias por enviar su comentario y/o sugerencias acerca de ").append(site).append(".\n").toString();
-//            parausuario = (new StringBuilder()).append(parausuario).append("En un lapso de 24 horas responderemos a su correo electr\363nico.\n").toString();
-//            parausuario = (new StringBuilder()).append(parausuario).append("Su mensaje fue enviado a la siguiente direcci\363n de correo electr\363nico:  ").append(cto).append("\n\n").toString();
-//            parausuario = (new StringBuilder()).append(parausuario).append("Sinceramente,\n").toString();
-//            parausuario = (new StringBuilder()).append(parausuario).append(site).append("\n").toString();
-//            out.println("<pre>");
-//            out.println(parausuario);
-//            out.println("</pre>");
-//        }
         else if(email.equals("missdata")) {
             out.println("<pre>");
             out.println("Lo sentimos, por el momento no fue posible enviar su comentario.<br>");
@@ -263,48 +352,5 @@ SWBUtils.EMAIL.sendMail(contact, name, aAddress, null, null, subject, "text/plai
             out.println("Debe escribir su correo electrónico y mensaje como minimo<br/><br/>");
             out.println("<pre>");
         }
-//        else {
-//            String site = paramsRequest.getWebPage().getWebSite().getDisplayTitle(paramsRequest.getUser().getLanguage());
-//            out.println("Lo sentimos, por el momento no fue posible enviar su comentario, ");
-//            out.println("le agradeceremos intentarlo más tarde o bien utilizar otro medio.<br/><br/>");
-//            out.println("Por su atención, muchas gracias.<br/>");
-//            out.println(site);
-//        }
     }
-
-    /*private String buildForm(SWBParamRequest paramsRequest) throws SWBResourceException {
-            StringBuilder frm = new StringBuilder();
-            frm.append("<font face=\"Arial, Helvetica, sans-serif\">");
-            frm.append("<form action=\""+paramsRequest.getActionUrl()+"\" method=\"post\">");
-            frm.append("<table width=\"90%\" bgcolor=\"#FFFFFF\">");
-            frm.append("<tr>");
-            frm.append("<td width=\"20%\"><font size=\"2\"><strong>"+paramsRequest.getLocaleString("name")+"</strong></font></td>");
-            frm.append("<td><input name=\"name\" id=\"name\" size=\"50\" /></td>");
-            frm.append("</tr>");
-            frm.append("<tr>");
-            frm.append("<td><font size=\"2\"><strong>"+paramsRequest.getLocaleString("email")+"</strong></font></td>");
-            frm.append("<td><input name=\"email\" id=\"email\" size=\"50\" /></td>");
-            frm.append("</tr>");
-            frm.append("<tr>");
-            frm.append("<td><font size=\"2\"><strong>"+paramsRequest.getLocaleString("subject")+"</strong></font></td>");
-            frm.append("<td ><input name=\"subject\" id=\"subject\" size=\"50\" /></td>");
-            frm.append("</tr>");
-            frm.append("<tr>");
-            frm.append("<td><font size=\"2\"><strong>"+paramsRequest.getLocaleString("message")+"</strong></font></td>");
-            frm.append("<td ><textarea name=\"message\" cols=\"50\" rows=\"5\"></textarea></td>");
-            frm.append("</tr>");
-            frm.append("<tr>");
-            frm.append("<td colspan=\"2\" align=\"center\">");
-            frm.append("<input name=\"submit\" type=\"submit\" value=\""+paramsRequest.getLocaleString("send")+"\" />");
-            frm.append("&nbsp;&nbsp;&nbsp;");
-            frm.append("<input name=\"reset\" type=\"reset\" value=\""+paramsRequest.getLocaleString("reset")+"\" />");
-            frm.append("&nbsp;&nbsp;&nbsp;");
-            frm.append("<input name=\"cancel\" type=\"button\" onclick=\"removeCoverDiv(\''+divId+'\')\" value=\""+paramsRequest.getLocaleString("cancel")+"\" />");
-            frm.append("</td>");
-            frm.append("</tr>");
-            frm.append("</table>");
-            frm.append("</form>");
-            frm.append("</font>");
-            return frm.toString();
-    }*/
 }
