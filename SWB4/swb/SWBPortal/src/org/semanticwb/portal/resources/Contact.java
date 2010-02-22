@@ -90,8 +90,6 @@ public class Contact extends GenericAdmResource {
         msgToContact.append("\nAsunto: "+subject);
         msgToContact.append("\nMensaje: "+message);
 
-        System.out.println("msgToCustomer="+msgToCustomer+"\n\nmsgToContact="+msgToContact+"\n******************");
-
         try{
             if(customer!=null && customer.trim().length()>0 && message!=null && message.trim().length()>0)
             {
@@ -116,11 +114,7 @@ public class Contact extends GenericAdmResource {
                 out.println("Debe escribir su correo electrónico y mensaje como minimo<br/><br/>");
             }
         }catch(Exception e) {
-            System.out.println("\n\nerror:"+e);
-//            response.setRenderParameter("email", "error");
-
-out.print(e);
-
+            out.print(e);
         }
     }
 
