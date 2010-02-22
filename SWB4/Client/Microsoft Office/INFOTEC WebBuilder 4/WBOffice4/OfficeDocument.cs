@@ -474,6 +474,12 @@ namespace WBOffice4
             {
                 if (OfficeApplication.TryLogOn() && SetupDocument() && IsPublished)
                 {
+                    WebSiteInfo[] sites=OfficeApplication.OfficeApplicationProxy.getSites();
+                    if (sites == null || sites.Length == 0)
+                    {
+                        MessageBox.Show("¡No hay sitios web creados!", "Publicación de contenido", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
                     FormPublishcontentToPage frm = new FormPublishcontentToPage(this);
                     frm.ShowDialog();
                 }
@@ -489,6 +495,12 @@ namespace WBOffice4
             {
                 if (OfficeApplication.TryLogOn() && SetupDocument() && IsPublished)
                 {
+                    WebSiteInfo[] sites = OfficeApplication.OfficeApplicationProxy.getSites();
+                    if (sites == null || sites.Length == 0)
+                    {
+                        MessageBox.Show("¡No hay sitios web creados!", "Publicación de contenido", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
                     FormPublishcontentToPage frm = new FormPublishcontentToPage(this, title, description);
                     frm.ShowDialog();
                 }
