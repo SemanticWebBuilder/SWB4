@@ -25,9 +25,99 @@
             sobj = SemanticObject.createSemanticObject(uri);
         }
         if (sobj!=null && sobj.getGenericInstance() instanceof MicroSitePyme) {
-        }
+            MicroSitePyme msp = (MicroSitePyme) sobj.getGenericInstance();
+            int vote;
+            try {
+                vote = Integer.parseInt(request.getParameter("rating"));
+            }catch (NumberFormatException nfe) {
+                vote = 0;
+            }
+            double rank = msp.getRank();
+            long rev = msp.getReviews();
+            rank = rank * rev;
+            rev++;
+            rank = rank + vote;
+            rank = rank / rev;
+            msp.setRank(rank);
+            msp.setReviews(rev);
 
-        ServiceProvider sprovider=ms.getServiceProvider();
-        String webpath=SWBPortal.getWebWorkPath() + "/" + sprovider.getWorkPath() + "/";
+            SWBResourceURL url = paramRequest.getActionUrl();
+            url.setAction("vote");
+            url.setMode(paramRequest.getMode());
+            url.setCallMethod(SWBResourceURL.Call_DIRECT);
+        %>            
+            <script type="text/javascript">
+                <!--
+                dojo.require("dojox.form.Rating");
+
+                var request = false;
+                try {
+                    request = new XMLHttpRequest();
+                }catch (trymicrosoft) {
+                    try {
+                        request = new ActiveXObject("Msxml2.XMLHTTP");
+                    }catch (othermicrosoft) {
+                        try {
+                            request = new ActiveXObject("Microsoft.XMLHTTP");
+                        }catch (failed) {
+                            request = false;
+                        }
+                    }
+                }
+                if (!request) {
+                    alert("Error al inicializar XMLHttpRequest!");
+                }
+                var invoke = true;
+                var count = 0;
+
+                function vote(val) {
+                    if(count == 0) {
+                        if(!invoke)
+                            return;
+                        var uri='<%=uri%>';
+                        uri=escape(uri);
+                        var url = '<%=url%>?act=vote&value='+escape(val)+'&uri='+uri;
+                        console.log(url);
+                        request.open("GET", url, true);
+                        var obj=dijit.byId("rating");
+                        obj.onChange=function(){return;};
+                        obj._onMouse=function(){return;};
+                        obj.onStarClick=function(){return;};
+                        count++;
+                        request.onreadystatechange = ranked;
+                        request.send(null);
+                    }else {
+                        alert('¡Sólo es posible votar una vez!');
+                    }
+                }
+                function ranked() {
+                    if(request.readyState!=4) return;
+                    if(request.status==200) {
+                        var response = request.responseText;
+                        if ('Not OK'!=response && ''!=response) {
+                            var ranking = Math.floor(response.split('|')[0]);
+                            var votes = response.split('|')[1];
+                            var obj=dijit.byId("rank_stars");
+                            obj.attr("value",ranking);
+                            document.getElementById("reviews").innerHTML = votes;
+                            alert('¡Gracias por su voto!');
+                            invoke = false;
+                        }else {
+                            alert('Lo sentimos, ha ocurrido un problema al contabilizar la calificación!');
+                        }
+                    }
+                }
+
+                dojo.addOnLoad(
+                    function() {
+                        var props = {numStars:5, value:<%=rank%>, onChange:function() { vote(this.value); return; } };
+                        new dojox.form.Rating(props,"rating");
+                    }
+                );
+            </script>
+            <div class="rank_label">Calificar:</div>
+            <div class="rank_stars" id="rating"></div>
+        <%
+        }
     }
 %>
