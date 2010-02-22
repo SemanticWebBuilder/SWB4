@@ -502,7 +502,7 @@
       <DependentUpon>ContentProperties.cs</DependentUpon>
     </Compile>
     <Compile Include="Steps\DatabaseSetup.cs" />
-    <Compile Include="Steps\DummyNode.cs" />
+    <Compile Include="Resources\DummyNode.cs" />
     <Compile Include="Steps\LanguageListItem.cs" />
     <Compile Include="Steps\RepositoryNode.cs" />
     <Compile Include="Steps\SelectSiteCreatePage.cs">

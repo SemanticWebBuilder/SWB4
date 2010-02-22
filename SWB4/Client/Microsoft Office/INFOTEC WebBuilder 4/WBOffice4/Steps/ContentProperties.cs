@@ -84,18 +84,20 @@ namespace WBOffice4.Steps
                 String name = document.FilePath.Name.Replace(document.DefaultExtension, document.PublicationExtension);
                 String contentID = openOfficeDocument.save(title, description, repositoryName, categoryID, document.DocumentType.ToString().ToUpper(), contentType.id, name, properties, values);
                 this.Wizard.Data[TitleAndDescription.CONTENT_ID] = contentID;
-
-
                 document.SaveContentProperties(contentID, repositoryName);
-                DialogResult res = MessageBox.Show(this, "¿Desea publicar el contenido en una página web?", this.Wizard.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 this.Wizard.SetProgressBarEnd();
+                WebSiteInfo[] sites=OfficeApplication.OfficeApplicationProxy.getSites();
+                if (sites != null && sites.Length > 0)
+                {
+                    DialogResult res = MessageBox.Show(this, "¿Desea publicar el contenido en una página web?", this.Wizard.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);                                        
+                    if (res == DialogResult.Yes)
+                    {
+                        document.Publish(title, description);
+                    }
+                }
                 if (OfficeApplication.MenuListener != null)
                 {
                     OfficeApplication.MenuListener.DocumentPublished();
-                }
-                if (res == DialogResult.Yes)
-                {
-                    document.Publish(title, description);
                 }
             }
             catch (Exception ue)

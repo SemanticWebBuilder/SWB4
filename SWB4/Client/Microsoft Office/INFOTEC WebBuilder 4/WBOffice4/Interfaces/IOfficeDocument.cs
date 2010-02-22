@@ -211,7 +211,7 @@ namespace WBOffice4.Interfaces
         [XmlRpcMethod("OfficeDocument.existContentOldVersion")]
         ContentInfo existContentOldVersion(String contentid, String topicmap, String topicid);
 
-        [XmlRpcMethod("OfficeDocument.canpublishToResourceContent")]
+        [XmlRpcMethod("OfficeDocument.canPublishToResourceContent")]
         bool canPublishToResourceContent(String type);
 
     }
