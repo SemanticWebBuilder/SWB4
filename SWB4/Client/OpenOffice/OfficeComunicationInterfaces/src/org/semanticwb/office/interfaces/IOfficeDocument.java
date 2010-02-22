@@ -76,7 +76,7 @@ public interface IOfficeDocument
     @XmlRpcMethod(methodName = "OfficeDocument.publishToResourceContent")
     public ResourceInfo publishToResourceContent(String repositoryName, String contentId, String version, String title, String description, WebPageInfo webpage,PropertyInfo[] properties,String[] values) throws Exception;
 
-    @XmlRpcMethod(methodName = "OfficeDocument.canpublishToResourceContent")
+    @XmlRpcMethod(methodName = "OfficeDocument.canPublishToResourceContent")
     public boolean canPublishToResourceContent(String type) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.getResourceProperties")
