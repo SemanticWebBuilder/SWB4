@@ -112,7 +112,7 @@ namespace WBOffice4.Steps
             }
         }
 
-        private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
+        protected virtual void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
             this.toolStripButtonAddPage.Enabled = false;            
             if (e.Node.Tag!=null && e.Node.Tag is WebPageInfo)

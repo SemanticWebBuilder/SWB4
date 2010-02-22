@@ -53,6 +53,13 @@ namespace WBOffice4.Steps
             if (this.treeView1.SelectedNode != null && this.treeView1.SelectedNode.Tag != null && this.treeView1.SelectedNode.Tag is WebPageInfo)
             {
                 WebPageInfo webpage = this.treeView1.SelectedNode.Tag as WebPageInfo;
+                String type = document.DocumentType.ToString();
+                if (!OfficeApplication.OfficeDocumentProxy.canPublishToResourceContent(type))
+                {
+                    MessageBox.Show(this, "No tiene permisos para publicar en esta página", this.Wizard.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    e.Cancel = true;
+                    return;
+                }
                 this.Wizard.Data[WEB_PAGE] = webpage;
                 String version = this.Wizard.Data[SelectVersionToOpen.VERSION].ToString();
                 string repositoryName = this.Wizard.Data[SelectVersionToPublish.REPOSITORY_ID_NAME].ToString();

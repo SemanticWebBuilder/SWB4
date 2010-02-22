@@ -138,7 +138,7 @@
 
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton toolStripButtonAddPage;
+        protected System.Windows.Forms.ToolStripButton toolStripButtonAddPage;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         protected System.Windows.Forms.TreeView treeView1;
     }
