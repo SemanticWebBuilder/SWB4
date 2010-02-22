@@ -189,6 +189,17 @@ namespace WBOffice4.Steps
             {
                 if (treeView1.SelectedNode is CategoryNode)
                 {
+                    CategoryNode cat = (CategoryNode)treeView1.SelectedNode;
+                    if (!OfficeApplication.OfficeApplicationProxy.canCreateCategory(cat.Repository.name, cat.Category.UDDI))
+                    {
+                        this.toolStripButtonAddCategory.Enabled = false;
+                        return;
+                    }
+                    if (!OfficeApplication.OfficeApplicationProxy.canRemoveCategory(cat.Repository.name, cat.Category.UDDI))
+                    {
+                        this.toolStripButtonDeleteCategory.Enabled = false;
+                        return;
+                    }
                     this.Wizard.Data[CATEGORY_ID] = ((CategoryNode)treeView1.SelectedNode).Category.UDDI;
                     this.Wizard.Data[REPOSITORY_ID] = ((CategoryNode)treeView1.SelectedNode).Repository;
                     this.Cursor = Cursors.WaitCursor;
@@ -199,14 +210,26 @@ namespace WBOffice4.Steps
                             this.toolStripButtonDeleteCategory.Enabled = true;
                         }
                     }
-                    catch { }
+                    catch(Exception ue)
+                    {
+                        Debug.WriteLine(ue.StackTrace);
+                    }
                     this.Cursor = Cursors.Default;
                 }
                 else
                 {
+                    if (treeView1.SelectedNode is RepositoryNode)
+                    {
+                        RepositoryNode rep = (RepositoryNode)treeView1.SelectedNode;
+                        if (!OfficeApplication.OfficeApplicationProxy.canCreateCategory(rep.Text))
+                        {
+                            this.toolStripButtonAddCategory.Enabled = false;
+                            return;
+                        }
+                    }
                     if (e.Node.Nodes.Count == 0)
                     {
-                        MessageBox.Show(this, "¡No existen categorias en este repositorio!\r\nDebe crear una para poder publicar el contenido", "Agregar Categoria", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show(this, "¡No existen categorias en este repositorio!"+"\r\n"+"Debe crear una para poder publicar el contenido", "Agregar Categoria", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
                 this.toolStripButtonAddCategory.Enabled = true;

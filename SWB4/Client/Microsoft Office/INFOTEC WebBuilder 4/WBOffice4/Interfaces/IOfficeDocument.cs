@@ -203,13 +203,16 @@ namespace WBOffice4.Interfaces
         LanguageInfo[] getLanguages(SiteInfo site);
 
         [XmlRpcMethod("OfficeDocument.getTitleOfWebPage")]
-        String getTitleOfWebPage(PageInfo webPageInfo,LanguageInfo laguage);
+        String getTitleOfWebPage(PageInfo webPageInfo, LanguageInfo laguage);
 
         [XmlRpcMethod("OfficeDocument.setTitlesOfWebPage")]
-        void setTitlesOfWebPage(PageInfo webPageInfo,LanguageInfo[] languages,String[] values);
+        void setTitlesOfWebPage(PageInfo webPageInfo, LanguageInfo[] languages, String[] values);
 
         [XmlRpcMethod("OfficeDocument.existContentOldVersion")]
         ContentInfo existContentOldVersion(String contentid, String topicmap, String topicid);
-                
+
+        [XmlRpcMethod("OfficeDocument.canpublishToResourceContent")]
+        bool canPublishToResourceContent(String type);
+
     }
 }

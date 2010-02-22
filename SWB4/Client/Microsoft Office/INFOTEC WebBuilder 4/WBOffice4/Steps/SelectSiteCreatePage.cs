@@ -46,13 +46,40 @@ namespace WBOffice4.Steps
         {
             if (!(this.treeView1.SelectedNode != null && this.treeView1.SelectedNode.Tag != null && this.treeView1.SelectedNode.Tag is WebPageInfo))
             {
-                MessageBox.Show(this, "¡Debe indicar una página web", "Seleccionar página web", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, "¡Debe indicar una página web!", "Seleccionar página web", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 e.Cancel = true;
+                return;
             }
             else
             {
                 WebPageInfo parent = (WebPageInfo)this.treeView1.SelectedNode.Tag;
-                this.Wizard.Data[SelectSiteCreatePage.WEB_PAGE] = parent;
+                if (OfficeApplication.OfficeApplicationProxy.canCreatePage(parent))
+                {
+                    this.Wizard.Data[SelectSiteCreatePage.WEB_PAGE] = parent;
+                    return;
+                }
+                else
+                {
+                    MessageBox.Show(this, "¡No tiene permisos para crear páginas web!", "Seleccionar página web", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    e.Cancel = true;
+                    return;
+                }
+                
+            }
+        }
+        protected override void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            base.treeView1_AfterSelect(sender, e);
+            if (this.toolStripButtonAddPage.Enabled && e.Node.Tag!=null && e.Node.Tag is WebPageInfo)
+            {
+                if (OfficeApplication.OfficeApplicationProxy.canCreatePage((WebPageInfo)e.Node.Tag))
+                {
+                    this.toolStripButtonAddPage.Enabled = true;
+                }
+                else
+                {
+                    this.toolStripButtonAddPage.Enabled = false;
+                }
             }
         }
     }

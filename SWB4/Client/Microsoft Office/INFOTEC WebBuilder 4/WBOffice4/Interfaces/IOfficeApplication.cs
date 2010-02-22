@@ -29,7 +29,7 @@ using XmlRpcLibrary;
 namespace WBOffice4.Interfaces
 {
     public interface IOfficeApplication : IXmlRpcProxy
-    {        
+    {
         [XmlRpcMethod("OfficeApplication.isValidVersion")]
         bool isValidVersion(double version);
 
@@ -120,6 +120,20 @@ namespace WBOffice4.Interfaces
         [XmlRpcMethod("OfficeApplication.activePage")]
         void activePage(PageInfo webPageInfo, bool active);
 
+        [XmlRpcMethod("OfficeApplication.canCreatePage")]
+        bool canCreatePage(WebPageInfo page);
+
+        [XmlRpcMethod("OfficeApplication.canCreateCategory")]
+        bool canCreateCategory(String repositoryName);
+
+        [XmlRpcMethod("OfficeApplication.canCreateCategory")]
+        bool canCreateCategory(String repositoryName, String categoryId);
+
+        [XmlRpcMethod("OfficeApplication.canRemoveCategory")]
+        bool canRemoveCategory(String repositoryName);
+
+        [XmlRpcMethod("OfficeApplication.canRemoveCategory")]
+        bool canRemoveCategory(String repositoryName, String categoryId);
 
     }
 }

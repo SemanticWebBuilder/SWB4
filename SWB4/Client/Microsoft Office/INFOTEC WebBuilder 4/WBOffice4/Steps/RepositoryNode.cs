@@ -34,7 +34,7 @@ namespace WBOffice4.Steps
         private RepositoryInfo repository;
         public RepositoryNode(RepositoryInfo repository) : base(repository.name,0,1)
         {
-            this.repository = repository;
+            this.repository = repository;            
         }
         public RepositoryInfo Repository
         {
