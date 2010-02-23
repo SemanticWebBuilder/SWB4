@@ -32,7 +32,6 @@ package org.semanticwb.portal.integration.lucene;
 import com.hp.hpl.jena.query.larq.IndexBuilderString;
 import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
@@ -260,11 +259,15 @@ public class SWBLuceneIndexer extends SWBIndexer
                     if(indexTerm.getText()!=null)
                     {
                         Field.Store store=Field.Store.YES;
-                        if(!indexTerm.getStored())store=Field.Store.NO;
+                        if(!indexTerm.getStored()) {
+                            store=Field.Store.NO;
+                        }
 
                         Field.Index index=Field.Index.ANALYZED;
                         if(indexTerm.getIndexed()==IndexTerm.INDEXED_NO)index=Field.Index.NO;
-                        else if(indexTerm.getIndexed()==IndexTerm.INDEXED_NO_ANALYZED)index=Field.Index.NOT_ANALYZED;
+                        else if(indexTerm.getIndexed()==IndexTerm.INDEXED_NO_ANALYZED) {
+                            index=Field.Index.NOT_ANALYZED;
+                        }
 
                         doc.add(new Field(indexTerm.getField(),indexTerm.getText(),store, index));
                     }
@@ -318,8 +321,12 @@ public class SWBLuceneIndexer extends SWBIndexer
         {
             SearchTerm t = it.next();
             Occur operation = Occur.MUST;
-            if (t.getOperation() == SearchTerm.OPER_OR) operation = Occur.SHOULD;
-            if (t.getOperation() == SearchTerm.OPER_NOT) operation = Occur.MUST_NOT;
+            if (t.getOperation() == SearchTerm.OPER_OR) {
+                operation = Occur.SHOULD;
+            }
+            if (t.getOperation() == SearchTerm.OPER_NOT) {
+                operation = Occur.MUST_NOT;
+            }
             //System.out.println("add term:"+t.getField()+" "+t.getText()+" "+t.getOperation());
             String txt=t.getText();
             try
@@ -332,8 +339,12 @@ public class SWBLuceneIndexer extends SWBIndexer
         {
             SearchQuery t = it2.next();
             Occur operation = Occur.MUST;
-            if (t.getOperation() == SearchQuery.OPER_OR) operation = Occur.SHOULD;
-            if (t.getOperation() == SearchQuery.OPER_NOT) operation = Occur.MUST_NOT;
+            if (t.getOperation() == SearchQuery.OPER_OR) {
+                operation = Occur.SHOULD;
+            }
+            if (t.getOperation() == SearchQuery.OPER_NOT) {
+                operation = Occur.MUST_NOT;
+            }
             //System.out.println("add term:"+t.getField()+" "+t.getText()+" "+t.getOperation());
             try
             {
