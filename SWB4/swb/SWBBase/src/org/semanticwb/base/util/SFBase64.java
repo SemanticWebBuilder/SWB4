@@ -1,26 +1,25 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 package org.semanticwb.base.util;
 
 /**
@@ -49,93 +48,78 @@ package org.semanticwb.base.util;
  * @author rob@iharder.net
  * @version 1.3.4
  */
-public class SFBase64
-{
+public class SFBase64 {
 
     /** Specify encoding (value is <tt>true</tt>). */
     public final static boolean ENCODE = true;
-
-
     /** Specify decoding (value is <tt>false</tt>). */
     public final static boolean DECODE = false;
-
-
     /** Maximum line length (76) of Base64 output. */
     private final static int MAX_LINE_LENGTH = 76;
-
-
     /** The equals sign (=) as a byte. */
     private final static byte EQUALS_SIGN = (byte) '=';
-
-
     /** The new line character (\n) as a byte. */
     private final static byte NEW_LINE = (byte) '\n';
-
-
     /** The 64 valid Base64 values. */
     private final static byte[] ALPHABET =
-            {
-                (byte) 'A', (byte) 'B', (byte) 'C', (byte) 'D', (byte) 'E', (byte) 'F', (byte) 'G',
-                (byte) 'H', (byte) 'I', (byte) 'J', (byte) 'K', (byte) 'L', (byte) 'M', (byte) 'N',
-                (byte) 'O', (byte) 'P', (byte) 'Q', (byte) 'R', (byte) 'S', (byte) 'T', (byte) 'U',
-                (byte) 'V', (byte) 'W', (byte) 'X', (byte) 'Y', (byte) 'Z',
-                (byte) 'a', (byte) 'b', (byte) 'c', (byte) 'd', (byte) 'e', (byte) 'f', (byte) 'g',
-                (byte) 'h', (byte) 'i', (byte) 'j', (byte) 'k', (byte) 'l', (byte) 'm', (byte) 'n',
-                (byte) 'o', (byte) 'p', (byte) 'q', (byte) 'r', (byte) 's', (byte) 't', (byte) 'u',
-                (byte) 'v', (byte) 'w', (byte) 'x', (byte) 'y', (byte) 'z',
-                (byte) '0', (byte) '1', (byte) '2', (byte) '3', (byte) '4', (byte) '5',
-                (byte) '6', (byte) '7', (byte) '8', (byte) '9', (byte) '+', (byte) '/'
-            };
-
+    {
+        (byte) 'A', (byte) 'B', (byte) 'C', (byte) 'D', (byte) 'E', (byte) 'F', (byte) 'G',
+        (byte) 'H', (byte) 'I', (byte) 'J', (byte) 'K', (byte) 'L', (byte) 'M', (byte) 'N',
+        (byte) 'O', (byte) 'P', (byte) 'Q', (byte) 'R', (byte) 'S', (byte) 'T', (byte) 'U',
+        (byte) 'V', (byte) 'W', (byte) 'X', (byte) 'Y', (byte) 'Z',
+        (byte) 'a', (byte) 'b', (byte) 'c', (byte) 'd', (byte) 'e', (byte) 'f', (byte) 'g',
+        (byte) 'h', (byte) 'i', (byte) 'j', (byte) 'k', (byte) 'l', (byte) 'm', (byte) 'n',
+        (byte) 'o', (byte) 'p', (byte) 'q', (byte) 'r', (byte) 's', (byte) 't', (byte) 'u',
+        (byte) 'v', (byte) 'w', (byte) 'x', (byte) 'y', (byte) 'z',
+        (byte) '0', (byte) '1', (byte) '2', (byte) '3', (byte) '4', (byte) '5',
+        (byte) '6', (byte) '7', (byte) '8', (byte) '9', (byte) '+', (byte) '/'
+    };
     /**
      * Translates a Base64 value to either its 6-bit reconstruction value
      * or a negative number indicating some other meaning.
      **/
     private final static byte[] DECODABET =
-            {
-                -9, -9, -9, -9, -9, -9, -9, -9, -9, // Decimal  0 -  8
-                -5, -5, // Whitespace: Tab and Linefeed
-                -9, -9, // Decimal 11 - 12
-                -5, // Whitespace: Carriage Return
-                -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, // Decimal 14 - 26
-                -9, -9, -9, -9, -9, // Decimal 27 - 31
-                -5, // Whitespace: Space
-                -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, // Decimal 33 - 42
-                62, // Plus sign at decimal 43
-                -9, -9, -9, // Decimal 44 - 46
-                63, // Slash at decimal 47
-                52, 53, 54, 55, 56, 57, 58, 59, 60, 61, // Numbers zero through nine
-                -9, -9, -9, // Decimal 58 - 60
-                -1, // Equals sign at decimal 61
-                -9, -9, -9, // Decimal 62 - 64
-                0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, // Letters 'A' through 'N'
-                14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, // Letters 'O' through 'Z'
-                -9, -9, -9, -9, -9, -9, // Decimal 91 - 96
-                26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, // Letters 'a' through 'm'
-                39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, // Letters 'n' through 'z'
-                -9, -9, -9, -9                                 // Decimal 123 - 126
+    {
+        -9, -9, -9, -9, -9, -9, -9, -9, -9, // Decimal  0 -  8
+        -5, -5, // Whitespace: Tab and Linefeed
+        -9, -9, // Decimal 11 - 12
+        -5, // Whitespace: Carriage Return
+        -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, // Decimal 14 - 26
+        -9, -9, -9, -9, -9, // Decimal 27 - 31
+        -5, // Whitespace: Space
+        -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, // Decimal 33 - 42
+        62, // Plus sign at decimal 43
+        -9, -9, -9, // Decimal 44 - 46
+        63, // Slash at decimal 47
+        52, 53, 54, 55, 56, 57, 58, 59, 60, 61, // Numbers zero through nine
+        -9, -9, -9, // Decimal 58 - 60
+        -1, // Equals sign at decimal 61
+        -9, -9, -9, // Decimal 62 - 64
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, // Letters 'A' through 'N'
+        14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, // Letters 'O' through 'Z'
+        -9, -9, -9, -9, -9, -9, // Decimal 91 - 96
+        26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, // Letters 'a' through 'm'
+        39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, // Letters 'n' through 'z'
+        -9, -9, -9, -9                                 // Decimal 123 - 126
                 /*,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,     // Decimal 127 - 139
-                -9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,     // Decimal 140 - 152
-                -9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,     // Decimal 153 - 165
-                -9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,     // Decimal 166 - 178
-                -9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,     // Decimal 179 - 191
-                -9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,     // Decimal 192 - 204
-                -9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,     // Decimal 205 - 217
-                -9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,     // Decimal 218 - 230
-                -9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,     // Decimal 231 - 243
-                -9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9         // Decimal 244 - 255 */
-            };
-
+    -9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,     // Decimal 140 - 152
+    -9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,     // Decimal 153 - 165
+    -9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,     // Decimal 166 - 178
+    -9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,     // Decimal 179 - 191
+    -9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,     // Decimal 192 - 204
+    -9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,     // Decimal 205 - 217
+    -9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,     // Decimal 218 - 230
+    -9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,     // Decimal 231 - 243
+    -9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9         // Decimal 244 - 255 */
+    };
     private final static byte BAD_ENCODING = -9; // Indicates error in encoding
     private final static byte WHITE_SPACE_ENC = -5; // Indicates white space in encoding
     private final static byte EQUALS_SIGN_ENC = -1; // Indicates equals sign in encoding
-
 
     /** Defeats instantiation. */
     private SFBase64()
     {
     }
-
 
     /**
      * Testing. Feel free--in fact I encourage you--to throw out
@@ -147,19 +131,23 @@ public class SFBase64
         {
             // Test encoding/decoding byte arrays
             {
-                byte[] bytes1 = {(byte) 2, (byte) 2, (byte) 3, (byte) 0, (byte) 9}; // My zip code
-                byte[] bytes2 = {(byte) 99, (byte) 2, (byte) 2, (byte) 3, (byte) 0, (byte) 9};
+                byte[] bytes1 =
+                {
+                    (byte) 2, (byte) 2, (byte) 3, (byte) 0, (byte) 9
+                }; // My zip code
+                byte[] bytes2 =
+                {
+                    (byte) 99, (byte) 2, (byte) 2, (byte) 3, (byte) 0, (byte) 9
+                };
                 //System.out.println("Bytes 2,2,3,0,9 as Base64: " + encodeBytes(bytes1));
                 //System.out.println("Bytes 2,2,3,0,9 w/ offset: " + encodeBytes(bytes2, 1, bytes2.length - 1));
                 byte[] dbytes = decode(encodeBytes(bytes1));
                 System.out.print(encodeBytes(bytes1) + " decoded: ");
                 for (int i = 0; i < dbytes.length; i++)
+                {
                     System.out.print(dbytes[i] + (i < dbytes.length - 1 ? "," : "\n"));
+                }
             }   // end testing byte arrays
-
-
-
-
             // Test Input Stream
             {
                 // Read GIF stored in base64 form.
@@ -234,8 +222,6 @@ public class SFBase64
                 jframe.pack();
                 jframe.show();
             }   // end: Test Input Stream
-
-
             // Test Output Stream
             {
                 // Read raw bytes
@@ -292,8 +278,6 @@ public class SFBase64
                 jframe.show();
 
             }   // end: Test Output Stream
-
-
             // Test wagner's files
             {
                 java.io.FileInputStream fis = new java.io.FileInputStream("D:\\temp\\testencoding.txt");
@@ -301,13 +285,15 @@ public class SFBase64
                 java.io.FileOutputStream fos = new java.io.FileOutputStream("D:\\temp\\file.zip");
                 int b;
                 while ((b = b64is.read()) >= 0)
+                {
                     fos.write(b);
+                }
                 fos.close();
                 b64is.close();
 
             }   // end test wagner's file
 
-        }   // end try
+        } // end try
         catch (Exception e)
         {
             e.printStackTrace();
@@ -315,9 +301,7 @@ public class SFBase64
     }   // end main
 
 
-/* ********  E N C O D I N G   M E T H O D S  ******** */
-
-
+    /* ********  E N C O D I N G   M E T H O D S  ******** */
     /**
      * Encodes the first three bytes of array <var>threeBytes</var>
      * and returns a four-byte array in Base64 notation.
@@ -326,11 +310,10 @@ public class SFBase64
      * @return four byte array in Base64 notation.
      * @since 1.3
      */
-    private static byte[] encode3to4(byte[] threeBytes)
-    {
-        return encode3to4(threeBytes, 3);
-    }   // end encodeToBytes
-
+//    private static byte[] encode3to4(byte[] threeBytes)
+//    {
+//        return encode3to4(threeBytes, 3);
+//    }   // end encodeToBytes
 
     /**
      * Encodes up to the first three bytes of array <var>threeBytes</var>
@@ -351,7 +334,6 @@ public class SFBase64
         encode3to4(threeBytes, 0, numSigBytes, dest, 0);
         return dest;
     }
-
 
     /**
      * Encodes up to three bytes of the array <var>source</var>
@@ -460,37 +442,36 @@ public class SFBase64
             oos = new java.io.ObjectOutputStream(b64os);
 
             oos.writeObject(serializableObject);
-        }   // end try
+        } // end try
         catch (java.io.IOException e)
         {
             e.printStackTrace();
             return null;
-        }   // end catch
+        } // end catch
         finally
         {
             try
             {
                 oos.close();
             } catch (Exception e)
-            {
+            {   // Abandonamos calladamente el stream
             }
             try
             {
                 b64os.close();
             } catch (Exception e)
-            {
+            {   // Abandonamos calladamente el stream
             }
             try
             {
                 baos.close();
             } catch (Exception e)
-            {
+            {   // Abandonamos calladamente el stream
             }
         }   // end finally
 
         return new String(baos.toByteArray());
     }   // end encode
-
 
     /**
      * Encodes a byte array into Base64 notation.
@@ -519,7 +500,6 @@ public class SFBase64
         return encodeBytes(source, 0, source.length, breakLines);
     }   // end encodeBytes
 
-
     /**
      * Encodes a byte array into Base64 notation.
      *
@@ -533,7 +513,6 @@ public class SFBase64
         return encodeBytes(source, off, len, true);
     }   // end encodeBytes
 
-
     /**
      * Encodes a byte array into Base64 notation.
      *
@@ -546,8 +525,8 @@ public class SFBase64
     public static String encodeBytes(byte[] source, int off, int len, boolean breakLines)
     {
         int len43 = len * 4 / 3;
-        byte[] outBuff = new byte[(len43)                      // Main 4:3
-                + ((len % 3) > 0 ? 4 : 0)      // Account for padding
+        byte[] outBuff = new byte[(len43) // Main 4:3
+                + ((len % 3) > 0 ? 4 : 0) // Account for padding
                 + (breakLines ? (len43 / MAX_LINE_LENGTH) : 0)]; // New lines
         int d = 0;
         int e = 0;
@@ -574,7 +553,6 @@ public class SFBase64
 
         return new String(outBuff, 0, e);
     }   // end encodeBytes
-
 
     /**
      * Encodes a string in Base64 notation with line breaks
@@ -603,12 +581,7 @@ public class SFBase64
         return encodeBytes(s.getBytes(), breakLines);
     }   // end encodeString
 
-
-
-
-/* ********  D E C O D I N G   M E T H O D S  ******** */
-
-
+    /* ********  D E C O D I N G   M E T H O D S  ******** */
     /**
      * Decodes the first four bytes of array <var>fourBytes</var>
      * and returns an array up to three bytes long with the
@@ -625,11 +598,12 @@ public class SFBase64
         byte[] outBuff2 = new byte[count];
 
         for (int i = 0; i < count; i++)
+        {
             outBuff2[i] = outBuff1[i];
+        }
 
         return outBuff2;
     }
-
 
     /**
      * Decodes four bytes from array <var>source</var>
@@ -666,9 +640,7 @@ public class SFBase64
 
             destination[destOffset] = (byte) (outBuff >>> 16);
             return 1;
-        }
-
-        // Example: DkL=
+        } // Example: DkL=
         else if (source[srcOffset + 3] == EQUALS_SIGN)
         {
             // Two ways to do the same thing. Don't know which way I like best.
@@ -682,9 +654,7 @@ public class SFBase64
             destination[destOffset] = (byte) (outBuff >>> 16);
             destination[destOffset + 1] = (byte) (outBuff >>> 8);
             return 2;
-        }
-
-        // Example: DkLE
+        } // Example: DkLE
         else
         {
             try
@@ -716,7 +686,6 @@ public class SFBase64
         }
     }   // end decodeToBytes
 
-
     /**
      * Decodes data from Base64 notation.
      *
@@ -730,7 +699,6 @@ public class SFBase64
         //System.out.println("\n\n\n-->\n" + bytes.length + "---" +s.length() +"\n\n\n");
         return decode(bytes, 0, bytes.length);
     }   // end decode
-
 
     /**
      * Decodes data from Base64 notation and
@@ -746,7 +714,6 @@ public class SFBase64
     {
         return new String(decode(s));
     }   // end decodeToString
-
 
     /**
      * Attempts to decode Base64 data and deserialize a Java
@@ -769,34 +736,33 @@ public class SFBase64
             ois = new java.io.ObjectInputStream(bais);
 
             return ois.readObject();
-        }   // end try
+        } // end try
         catch (java.io.IOException e)
         {
             e.printStackTrace();
             return null;
-        }   // end catch
+        } // end catch
         catch (java.lang.ClassNotFoundException e)
         {
             e.printStackTrace();
             return null;
-        }   // end catch
+        } // end catch
         finally
         {
             try
             {
                 bais.close();
             } catch (Exception e)
-            {
+            {   // Abandonamos calladamente el stream
             }
             try
             {
                 ois.close();
             } catch (Exception e)
-            {
+            {   // Abandonamos calladamente el stream
             }
         }   // end finally
     }   // end decodeObject
-
 
     /**
      * Decodes Base64 content in byte array format and returns
@@ -836,12 +802,14 @@ public class SFBase64
 
                         // If that was the equals sign, break out of 'for' loop
                         if (sbiCrop == EQUALS_SIGN)
+                        {
                             break;
+                        }
                     }   // end if: quartet built
 
                 }   // end if: equals sign or better
 
-            }   // end if: white space, equals sign or better
+            } // end if: white space, equals sign or better
             else
             {
                 System.err.println("Bad Base64 input character at " + i + ": " + source[i] + "(decimal)");
@@ -854,13 +822,7 @@ public class SFBase64
         return out;
     }   // end decode
 
-
-
-
     /* ********  I N N E R   C L A S S   I N P U T S T R E A M  ******** */
-
-
-
     /**
      * A {@link Base64#InputStream} will read data from another
      * {@link java.io.InputStream}, given in the constructor,
@@ -870,8 +832,8 @@ public class SFBase64
      * @see java.io.FilterInputStream
      * @since 1.3
      */
-    public static class InputStream extends java.io.FilterInputStream
-    {
+    public static class InputStream extends java.io.FilterInputStream {
+
         private boolean encode;         // Encoding or decoding
         private int position;       // Current position in the buffer
         private byte[] buffer;         // Small buffer holding converted data
@@ -879,7 +841,6 @@ public class SFBase64
         private int numSigBytes;    // Number of meaningful bytes in the buffer
         private int lineLength;
         private boolean breakLines;     // Break lines at less than 80 characters
-
 
         /**
          * Constructs a {@link Base64#InputStream} in DECODE mode.
@@ -891,7 +852,6 @@ public class SFBase64
         {
             this(in, SFBase64.DECODE);
         }   // end constructor
-
 
         /**
          * Constructs a {@link Base64#InputStream} in
@@ -907,7 +867,6 @@ public class SFBase64
         {
             this(in, encode, true);
         }   // end constructor
-
 
         /**
          * Constructs a {@link Base64#InputStream} in
@@ -960,12 +919,14 @@ public class SFBase64
                                 numBinaryBytes++;
                             }   // end if: not end of stream
 
-                        }   // end try: read
+                        } // end try: read
                         catch (java.io.IOException e)
                         {
                             // Only a problem if we got no data at all.
                             if (i == 0)
+                            {
                                 throw e;
+                            }
 
                         }   // end catch
                     }   // end for: each needed input byte
@@ -975,13 +936,12 @@ public class SFBase64
                         encode3to4(b3, 0, numBinaryBytes, buffer, 0);
                         position = 0;
                         numSigBytes = 4;
-                    }   // end if: got data
+                    } // end if: got data
                     else
                     {
                         return -1;
                     }   // end else
-                }   // end if: encoding
-
+                } // end if: encoding
                 // Else decoding
                 else
                 {
@@ -997,8 +957,9 @@ public class SFBase64
                         } while (b >= 0 && DECODABET[b & 0x7f] <= WHITE_SPACE_ENC);
 
                         if (b < 0)
+                        {
                             break; // Reads a -1 if end of stream
-
+                        }
                         b4[i] = (byte) b;
                     }   // end for: each needed input byte
 
@@ -1006,11 +967,11 @@ public class SFBase64
                     {
                         numSigBytes = decode4to3(b4, 0, buffer, 0);
                         position = 0;
-                    }   // end if: got four characters
+                    } // end if: got four characters
                     else if (i == 0)
                     {
                         return -1;
-                    }   // end else if: also padded correctly
+                    } // end else if: also padded correctly
                     else
                     {
                         // Must have broken out from above.
@@ -1024,14 +985,16 @@ public class SFBase64
             if (position >= 0)
             {
                 // End of relevant data?
-                if (/*!encode &&*/ position >= numSigBytes)
+                if (/*!encode &&*/position >= numSigBytes)
+                {
                     return -1;
+                }
 
                 if (encode && breakLines && lineLength >= MAX_LINE_LENGTH)
                 {
                     lineLength = 0;
                     return '\n';
-                }   // end if
+                } // end if
                 else
                 {
                     lineLength++;   // This isn't important when decoding
@@ -1041,13 +1004,14 @@ public class SFBase64
                     int b = buffer[position++];
 
                     if (position >= bufferLength)
+                    {
                         position = -1;
+                    }
 
                     return b & 0xFF; // This is how you "cast" a byte that's
                     // intended to be unsigned.
                 }   // end else
-            }   // end if: position >= 0
-
+            } // end if: position >= 0
             // Else error
             else
             {
@@ -1055,7 +1019,6 @@ public class SFBase64
                 throw new java.io.IOException("Error in Base64 code reading stream.");
             }   // end else
         }   // end read
-
 
         /**
          * Calls {@link #read} repeatedly until the end of stream
@@ -1081,26 +1044,21 @@ public class SFBase64
                 //    return -1;
 
                 if (b >= 0)
+                {
                     dest[off + i] = (byte) b;
-                else if (i == 0)
+                } else if (i == 0)
+                {
                     return -1;
-                else
+                } else
+                {
                     break; // Out of 'for' loop
+                }
             }   // end for: each byte read
             return i;
         }   // end read
-
     }   // end inner class InputStream
 
-
-
-
-
-
     /* ********  I N N E R   C L A S S   O U T P U T S T R E A M  ******** */
-
-
-
     /**
      * A {@link Base64#OutputStream} will write data to another
      * {@link java.io.OutputStream}, given in the constructor,
@@ -1110,15 +1068,14 @@ public class SFBase64
      * @see java.io.FilterOutputStream
      * @since 1.3
      */
-    public static class OutputStream extends java.io.FilterOutputStream
-    {
+    public static class OutputStream extends java.io.FilterOutputStream {
+
         private boolean encode;
         private int position;
         private byte[] buffer;
         private int bufferLength;
         private int lineLength;
         private boolean breakLines;
-
 
         /**
          * Constructs a {@link Base64#OutputStream} in ENCODE mode.
@@ -1130,7 +1087,6 @@ public class SFBase64
         {
             this(out, SFBase64.ENCODE);
         }   // end constructor
-
 
         /**
          * Constructs a {@link Base64#OutputStream} in
@@ -1146,7 +1102,6 @@ public class SFBase64
         {
             this(out, encode, true);
         }   // end constructor
-
 
         /**
          * Constructs a {@link Base64#OutputStream} in
@@ -1169,7 +1124,6 @@ public class SFBase64
             this.position = 0;
             this.lineLength = 0;
         }   // end constructor
-
 
         /**
          * Writes the byte to the output stream after
@@ -1201,8 +1155,7 @@ public class SFBase64
 
                     position = 0;
                 }   // end if: enough to output
-            }   // end if: encoding
-
+            } // end if: encoding
             // Else, Decoding
             else
             {
@@ -1215,14 +1168,13 @@ public class SFBase64
                         out.write(SFBase64.decode4to3(buffer));
                         position = 0;
                     }   // end if: enough to output
-                }   // end if: meaningful base64 character
+                } // end if: meaningful base64 character
                 else if (DECODABET[theByte & 0x7f] != WHITE_SPACE_ENC)
                 {
                     throw new java.io.IOException("Invalid character in Base64 data.");
                 }   // end else: not white space either
             }   // end else: decoding
         }   // end write
-
 
         /**
          * Calls {@link #write} repeatedly until <var>len</var>
@@ -1242,7 +1194,6 @@ public class SFBase64
 
         }   // end write
 
-
         /**
          * Appropriately pads Base64 notation when encoding
          * or throws an exception if Base64 input is not
@@ -1260,7 +1211,7 @@ public class SFBase64
                 {
                     out.write(SFBase64.encode3to4(buffer, position));
                     position = 0;
-                }   // end if: encoding
+                } // end if: encoding
                 else
                 {
                     throw new java.io.IOException("Base64 input not properly padded.");
@@ -1269,7 +1220,6 @@ public class SFBase64
 
             out.flush();
         }   // end flush
-
 
         /**
          * Flushes and closes (I think, in the superclass) the stream.
@@ -1286,8 +1236,6 @@ public class SFBase64
             buffer = null;
             out = null;
         }   // end close
-
     }   // end inner class OutputStream
-
-
 }   // end class Base64
+

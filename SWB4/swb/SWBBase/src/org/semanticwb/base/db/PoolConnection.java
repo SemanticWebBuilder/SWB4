@@ -1,33 +1,30 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
-
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 /*
  * PoolConnection.java
  *
  * Created on 22 de octubre de 2001, 16:46
  */
-
 package org.semanticwb.base.db;
 
 import java.io.PrintStream;
@@ -48,20 +45,19 @@ import org.semanticwb.SWBUtils;
  *
  * @see java.sql.Connection
  */
-public class PoolConnection implements java.sql.Connection
-{
-    private static Logger log=SWBUtils.getLogger(PoolConnection.class);    
-    
+public class PoolConnection implements java.sql.Connection {
+
+    private static Logger log = SWBUtils.getLogger(PoolConnection.class);
     private java.sql.Connection con = null;
     private Vector vec = new Vector();
     private DBConnectionPool pool;
     private boolean isclosed = false;
     private String description = "";
     private long id = 0;
-    private long idle_time=0;
-    private boolean destroy=false;
+    private long idle_time = 0;
+    private boolean destroy = false;
     private boolean isdestroyed = false;
-    private StackTraceElement stack[]=null;
+    private StackTraceElement stack[] = null;
 
     /**
      * 
@@ -70,14 +66,14 @@ public class PoolConnection implements java.sql.Connection
      */
     public PoolConnection(Connection con, DBConnectionPool pool)
     {
-        idle_time=System.currentTimeMillis();
+        idle_time = System.currentTimeMillis();
         this.con = con;
         this.pool = pool;
         pool.checkedOut++;
-        log.trace("PoolConnection("+getId()+","+pool.getName()+"):"+pool.checkedOut);
+        log.trace("PoolConnection(" + getId() + "," + pool.getName() + "):" + pool.checkedOut);
         init();
     }
-    
+
     /**
      * 
      */
@@ -87,7 +83,6 @@ public class PoolConnection implements java.sql.Connection
         description = "";
         id = 0;
     }
-    
 
     /** Getter for property id.
      * @return Value of property id.
@@ -105,7 +100,7 @@ public class PoolConnection implements java.sql.Connection
      */
     public void setId(long id)
     {
-        stack=Thread.currentThread().getStackTrace();
+        stack = Thread.currentThread().getStackTrace();
         this.id = id;
     }
 
@@ -116,7 +111,7 @@ public class PoolConnection implements java.sql.Connection
 
     public void printTrackTrace(PrintStream out)
     {
-        for(int x=0;x<stack.length;x++)
+        for (int x = 0; x < stack.length; x++)
         {
             out.println(stack[x]);
         }
@@ -176,12 +171,17 @@ public class PoolConnection implements java.sql.Connection
                     {
                         ResultSet rs = st.getResultSet();
                         if (rs != null)
+                        {
                             rs.close();
+                        }
                         st.close();
                         log.warn("Statement was not closed..., " + description);
                         noerrors = false;
                     }
-                } catch (SQLException noe){/*Es correcto el error, ya que el susuario cerro la conexion*/}
+                } catch (SQLException noe)
+                {/*Es correcto el error, ya que el susuario cerro la conexion*/
+
+                }
             }
             vec.removeElementAt(0);
         }
@@ -207,29 +207,38 @@ public class PoolConnection implements java.sql.Connection
      */
     public void close() throws SQLException
     {
-        if(isclosed==false)
+        if (isclosed == false)
         {
-            if(destroy)
+            if (destroy)
             {
-                log.trace("Connection.close(destroy):"+getId());
+                log.trace("Connection.close(destroy):" + getId());
                 try
                 {
                     destroyConnection();
                     return;
-                }catch(Exception e){log.error("Connection "+description+", close.setAutocomit(false):",e);}
+                } catch (Exception e)
+                {
+                    log.error("Connection " + description + ", close.setAutocomit(false):", e);
+                }
             }
-            isclosed=true;
+            isclosed = true;
             pool.getConnectionManager().getTimeLock().removeConnection(this);
-            idle_time=System.currentTimeMillis();
+            idle_time = System.currentTimeMillis();
             try
             {
                 closeStatements();
-            }catch(Exception e){log.error("Connection "+description+", closeStatement:",e);}
+            } catch (Exception e)
+            {
+                log.error("Connection " + description + ", closeStatement:", e);
+            }
             try
             {
                 pool.freeConnection(this);
-            }catch(Exception e){log.error("Connection "+description+", freeConnection:",e);}
-            log.trace("close:("+getId()+","+pool.getName()+"):"+pool.checkedOut);
+            } catch (Exception e)
+            {
+                log.error("Connection " + description + ", freeConnection:", e);
+            }
+            log.trace("close:(" + getId() + "," + pool.getName() + "):" + pool.checkedOut);
         }
     }
 
@@ -247,7 +256,10 @@ public class PoolConnection implements java.sql.Connection
      */
     public void setAutoCommit(boolean param) throws SQLException
     {
-        if(param==false)destroy=true;
+        if (param == false)
+        {
+            destroy = true;
+        }
         con.setAutoCommit(param);
     }
 
@@ -263,7 +275,7 @@ public class PoolConnection implements java.sql.Connection
 
     public void setTypeMap(java.util.Map map) throws SQLException
     {
-        destroy=true;
+        destroy = true;
         con.setTypeMap(map);
     }
 
@@ -310,13 +322,13 @@ public class PoolConnection implements java.sql.Connection
 
     public void setReadOnly(boolean param) throws SQLException
     {
-        destroy=true;
+        destroy = true;
         con.setReadOnly(param);
     }
 
     public void setCatalog(String str) throws SQLException
     {
-        destroy=true;
+        destroy = true;
         con.setCatalog(str);
     }
 
@@ -328,7 +340,7 @@ public class PoolConnection implements java.sql.Connection
 
     public Statement createStatement() throws SQLException
     {
-        Statement st = new PoolStatement(con.createStatement(),this);
+        Statement st = new PoolStatement(con.createStatement(), this);
         vec.addElement(st);
         //System.out.println("New Statement was Created...");
         return st;
@@ -336,14 +348,14 @@ public class PoolConnection implements java.sql.Connection
 
     public Statement createStatement(int param, int param1) throws SQLException
     {
-        Statement st = new PoolStatement(con.createStatement(param, param1),this);
+        Statement st = new PoolStatement(con.createStatement(param, param1), this);
         vec.addElement(st);
         return st;
     }
 
     public PreparedStatement prepareStatement(String str) throws SQLException
     {
-        PreparedStatement st = new PoolPreparedStatement(con.prepareStatement(str),str,this);
+        PreparedStatement st = new PoolPreparedStatement(con.prepareStatement(str), str, this);
         return st;
     }
 
@@ -373,7 +385,7 @@ public class PoolConnection implements java.sql.Connection
         //destroy=true;
         con.rollback();
     }
-    
+
     /**
      * 
      */
@@ -381,8 +393,8 @@ public class PoolConnection implements java.sql.Connection
     {
         if (isdestroyed == false)
         {
-            isdestroyed=true;
-            isclosed=true;
+            isdestroyed = true;
+            isclosed = true;
             pool.checkedOut--;
             pool.getConnectionManager().getTimeLock().removeConnection(this);
             try
@@ -390,42 +402,45 @@ public class PoolConnection implements java.sql.Connection
                 //System.out.println("******************close****************");
                 //printTrackTrace(System.out);
                 con.close();
-            }catch(Exception e)
+            } catch (Exception e)
             {
-                log.error("Connection "+description+" finalize:"+e);
+                log.error("Connection " + description + " finalize:" + e);
             }
-            log.debug("destroyConnection:("+getId()+","+pool.getName()+"):"+pool.checkedOut);
+            log.debug("destroyConnection:(" + getId() + "," + pool.getName() + "):" + pool.checkedOut);
         }
-    }    
+    }
 
     @Override
     protected void finalize() throws Throwable
     {
         // We are no longer referenced by anyone (including the
         // connection pool). Time to close down.
-        try {
-            if(isdestroyed==false)
+        try
+        {
+            if (isdestroyed == false)
             {
-                log.warn("finalize("+getId()+")..., connection was not closed, "+description);
+                log.warn("finalize(" + getId() + ")..., connection was not closed, " + description);
                 destroyConnection();
             }
             //Thread.dumpStack();
             //printTrackTrace(System.out);
-        } finally {
+        } finally
+        {
             super.finalize();
         }
     }
 //************************************ jdk 1.4 *****************************************************************
+
     public java.sql.Savepoint setSavepoint() throws java.sql.SQLException
     {
-        destroy=true;
+        destroy = true;
         return con.setSavepoint();
         //return null;
     }
 
     public void setHoldability(int param) throws java.sql.SQLException
     {
-        destroy=true;
+        destroy = true;
         con.setHoldability(param);
     }
 
@@ -451,7 +466,7 @@ public class PoolConnection implements java.sql.Connection
 
     public java.sql.Savepoint setSavepoint(java.lang.String str) throws java.sql.SQLException
     {
-        destroy=true;
+        destroy = true;
         return con.setSavepoint(str);
     }
 
@@ -477,10 +492,10 @@ public class PoolConnection implements java.sql.Connection
 
     public void rollback(java.sql.Savepoint savepoint) throws java.sql.SQLException
     {
-        destroy=true;
+        destroy = true;
         con.rollback(savepoint);
     }
-    
+
     /**
      * Getter for property idle_time.
      * @return Value of property idle_time.
@@ -489,61 +504,60 @@ public class PoolConnection implements java.sql.Connection
     {
         return idle_time;
     }
-    
 //********************************* JAVA 1.6   
-/**
+    /**
     public Clob createClob() throws SQLException {
-        return con.createClob();
+    return con.createClob();
     }
 
     public Blob createBlob() throws SQLException {
-        return con.createBlob();
+    return con.createBlob();
     }
 
     public NClob createNClob() throws SQLException {
-        return con.createNClob();
+    return con.createNClob();
     }
 
     public SQLXML createSQLXML() throws SQLException {
-        return con.createSQLXML();
+    return con.createSQLXML();
     }
 
     public boolean isValid(int timeout) throws SQLException {
-        return con.isValid(timeout);
+    return con.isValid(timeout);
     }
 
     public void setClientInfo(String name, String value) throws SQLClientInfoException {
-        con.setClientInfo(name, value);
+    con.setClientInfo(name, value);
     }
 
     public void setClientInfo(Properties properties) throws SQLClientInfoException {
-        con.setClientInfo(properties);
+    con.setClientInfo(properties);
     }
 
     public String getClientInfo(String name) throws SQLException {
-        return con.getClientInfo(name);
+    return con.getClientInfo(name);
     }
 
     public Properties getClientInfo() throws SQLException {
-        return con.getClientInfo();
+    return con.getClientInfo();
     }
 
     public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
-        return con.createArrayOf(typeName, elements);
+    return con.createArrayOf(typeName, elements);
     }
 
     public Struct createStruct(String typeName, Object[] attributes) throws SQLException {
-        return con.createStruct(typeName, attributes);
+    return con.createStruct(typeName, attributes);
     }
 
     public <T> T unwrap(Class<T> iface) throws SQLException {
-        return con.unwrap(iface);
+    return con.unwrap(iface);
     }
 
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
-        return con.isWrapperFor(iface);
+    return con.isWrapperFor(iface);
     }
     
-   
-//*/
+
+    //*/
 }

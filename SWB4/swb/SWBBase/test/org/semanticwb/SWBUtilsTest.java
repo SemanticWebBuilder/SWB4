@@ -155,6 +155,7 @@ public class SWBUtilsTest {
             String result = SWBUtils.TEXT.decode(text, "UTF-8");
             System.out.println("result:" + result);
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
