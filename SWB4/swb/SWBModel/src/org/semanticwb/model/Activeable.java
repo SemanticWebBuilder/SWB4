@@ -1,5 +1,4 @@
 package org.semanticwb.model;
 
-public interface Activeable extends org.semanticwb.model.base.ActiveableBase
-{
-}
+public interface Activeable extends org.semanticwb.model.base.ActiveableBase {}
+

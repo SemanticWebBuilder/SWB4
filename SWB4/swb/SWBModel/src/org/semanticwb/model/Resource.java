@@ -1,26 +1,25 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 package org.semanticwb.model;
 
 import java.util.ArrayList;
@@ -37,112 +36,92 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 
+public class Resource extends org.semanticwb.model.base.ResourceBase {
 
-public class Resource extends org.semanticwb.model.base.ResourceBase 
-{
     private static Logger log = SWBUtils.getLogger(Resource.class);
-
-    private String siteid=null;
+    private String siteid = null;
     protected int randpriority;
-
 //    private Document m_dom=null;
-    private Document m_filter=null;
-    private NodeList m_filternode=null;
-
-    private long hits=0;
-    private long views=0;
+    private Document m_filter = null;
+    private NodeList m_filternode = null;
+    private long hits = 0;
+    private long views = 0;
     private long timer;                     //valores de sincronizacion de views, hits
     private static long time;               //tiempo en milisegundos por cada actualizacion
     private boolean viewed = false;
+    private static Random rand = new Random();
 
-    private static Random rand=new Random();
-
-    static
-    {
+    static {
         time = 600000L;
-        try
-        {
-            time = 1000L * Long.parseLong((String) SWBPlatform.getEnv("swb/accessLogTime","600"));
-        } catch (Exception e)
-        {
-            log.error("Error to read accessLogTime...",e);
+        try {
+            time = 1000L * Long.parseLong((String) SWBPlatform.getEnv("swb/accessLogTime", "600"));
+        } catch (Exception e) {
+            log.error("Error to read accessLogTime...", e);
         }
     }
 
-
-
-    public Resource(SemanticObject base)
-    {
+    public Resource(SemanticObject base) {
         super(base);
         //System.out.println("Create Resource:"+base.getURI());
         //new Exception().printStackTrace();
     }
 
-    public String getWebSiteId()
-    {
-        if(siteid==null)
-        {
-            siteid=getWebSite().getId();
+    public String getWebSiteId() {
+        if (siteid == null) {
+            siteid = getWebSite().getId();
         }
         return siteid;
     }
 
-    public boolean isCached()
-    {
-        boolean ret=false;
-        if(getResourceType().getResourceCache()>0)
-        {
-            ret=true;
+    public boolean isCached() {
+        boolean ret = false;
+        if (getResourceType().getResourceCache() > 0) {
+            ret = true;
         }
         return ret;
     }
 
-    public void refreshRandPriority()
-    {
+    public void refreshRandPriority() {
         //TODO:
         //if (this.getCamp() == 1)
         //    randpriority = SWBPriorityCalculator.getInstance().calcPriority(0);
         //else if (this.getCamp() == 2)
         //    randpriority = WBUtils.getInstance().calcPriority(6);
         //else
-            randpriority = calcPriority(getPriority());
+        randpriority = calcPriority(getPriority());
     }
 
-    private int calcPriority(int p)
-    {
-        if (p == 0)
-            return 0;
-        else if (p == 1)
-            return 1;
-        else if (p == 5)
-            return 50;
-        else if (p > 5)
-            return 60;
-        else {
-            return rand.nextInt(10 * p) + 1;
+    private int calcPriority(int p) {
+        int ret = 0;
+        if (p == 0) {
+            ret = 0;
+        } else if (p == 1) {
+            ret = 1;
+        } else if (p == 5) {
+            ret = 50;
+        } else if (p > 5) {
+            ret = 60;
+        } else {
+            ret = rand.nextInt(10 * p) + 1;
         }
+        return ret;
     }
 
-
-    public void setRandPriority(int randpriority)
-    {
-        this.randpriority=randpriority;
+    public void setRandPriority(int randpriority) {
+        this.randpriority = randpriority;
     }
 
     /**
      * @return  */
-    public int getRandPriority()
-    {
+    public int getRandPriority() {
         return randpriority;
     }
 
-    public Document getDom() 
-    {
+    public Document getDom() {
         return getSemanticObject().getDomProperty(swb_xml);
     }
 
-    public Document getDomConf()
-    {
+    public Document getDomConf() {
         return getSemanticObject().getDomProperty(swb_xmlConf);
     }
 
@@ -151,52 +130,27 @@ public class Resource extends org.semanticwb.model.base.ResourceBase
      * @param name String nombre del atributo
      * @param value String valor del atributo
      */
-    public void setAttribute(String name, String value)
-    {
-        try
-        {
-            Document dom=getDom();
+    public void setAttribute(String name, String value) {
+        try {
+            Document dom = getDom();
             Element res = (Element) dom.getFirstChild();
-            if(res==null){
+            if (res == null) {
                 Element ele = dom.createElement("resource");
                 dom.appendChild(ele);
             }
             SWBUtils.XML.setAttribute(dom, name, value);
-        } catch (Exception e)
-        {
-            log.error("Error in setAttribute: " + name + " ->Resource " + getId(),e);
+        } catch (Exception e) {
+            log.error("Error in setAttribute: " + name + " ->Resource " + getId(), e);
         }
     }
 
     /** Lee un atributo del DOM del Recurso
      * Si el atributo no esta declarado regresa el valor por defecto defvalue.
      */
-    public String getAttribute(String name, String defvalue)
-    {
+    public String getAttribute(String name, String defvalue) {
         String ret = getAttribute(name);
-        if (ret == null) ret = defvalue;
-        return ret;
-    }
-
-
-    /** Lee un atributo del DOM del Recurso
-     * Si el atributo no esta declarado regresa null.
-     */
-    public String getAttribute(String name)
-    {
-        String ret = null;
-        try
-        {
-            Document dom=getDom();
-            NodeList data = dom.getElementsByTagName(name);
-            if (data.getLength() > 0)
-            {
-                Node txt = data.item(0).getFirstChild();
-                if (txt != null) ret = txt.getNodeValue();
-            }
-        } catch (Exception e)
-        {
-            //log.error("Error in getAttribute: " + name + " ->Resource " + getId(), e);
+        if (ret == null) {
+            ret = defvalue;
         }
         return ret;
     }
@@ -204,50 +158,64 @@ public class Resource extends org.semanticwb.model.base.ResourceBase
     /** Lee un atributo del DOM del Recurso
      * Si el atributo no esta declarado regresa null.
      */
-    public Iterator<String> getAttributeNames() {
-        ArrayList attributeNames=new ArrayList();
+    public String getAttribute(String name) {
+        String ret = null;
         try {
-            Document dom=getDom();
-            Node root=dom.getFirstChild();
+            Document dom = getDom();
+            NodeList data = dom.getElementsByTagName(name);
+            if (data.getLength() > 0) {
+                Node txt = data.item(0).getFirstChild();
+                if (txt != null) {
+                    ret = txt.getNodeValue();
+                }
+            }
+        } catch (Exception e) {
+            log.warn(e);
+            //log.error("Error in getAttribute: " + name + " ->Resource " + getId(), noe);
+        }
+        return ret;
+    }
 
-            NodeList data=root.getChildNodes();
-            for(int x=0;x<data.getLength();x++) {
+    /** Lee un atributo del DOM del Recurso
+     * Si el atributo no esta declarado regresa iterador vacio.
+     */
+    public Iterator<String> getAttributeNames() {
+        ArrayList attributeNames = new ArrayList();
+        try {
+            Document dom = getDom();
+            Node root = dom.getFirstChild();
+
+            NodeList data = root.getChildNodes();
+            for (int x = 0; x < data.getLength(); x++) {
                 attributeNames.add(data.item(x).getNodeName());
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
+            log.warn(e);
         }
         return attributeNames.iterator();
     }
 
-
     /** Borra un atributo del DOM del Recurso
      */
-    public void removeAttribute(String name)
-    {
-        try
-        {
-            Document dom=getDom();
+    public void removeAttribute(String name) {
+        try {
+            Document dom = getDom();
             Node res = dom.getFirstChild();
             NodeList data = dom.getElementsByTagName(name);
-            if (data.getLength() > 0)
-            {
+            if (data.getLength() > 0) {
                 res.removeChild(data.item(0));
             }
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             log.error("Error in removeAttribute: " + name + " ->Resource " + getId(), e);
         }
     }
 
     /** Actualiza los atributos del DOM a base de datos. */
-    public void updateAttributesToDB() throws SWBException
-    {
-        Document dom=getDom();
-        if(dom!=null)
-        {
+    public void updateAttributesToDB() throws SWBException {
+        Document dom = getDom();
+        if (dom != null) {
             String xml = SWBUtils.XML.domToXml(dom);
-            if (xml != null && !xml.equals(getXml()))
-            {
+            if (xml != null && !xml.equals(getXml())) {
                 setXml(xml);
             }
         }
@@ -261,61 +229,52 @@ public class Resource extends org.semanticwb.model.base.ResourceBase
 //        super.setXml(xml);
 //        m_dom=null;
 //    }
-
-    public void addHit(HttpServletRequest request, User user, WebPage page)
-    {
+    public void addHit(HttpServletRequest request, User user, WebPage page) {
         //TODO:
     }
 
     /**
      * @throws AFException
      * @return  */
-    public String getData()
-    {
+    public String getData() {
         return getProperty("data");
     }
 
     /**
      * @param key
      */
-    public String getData(String key)
-    {
-        return getProperty("data/"+key);
+    public String getData(String key) {
+        return getProperty("data/" + key);
     }
-    
 
     /**
      * @param data
      * @throws AFException  */
-    public void setData(String data)
-    {
+    public void setData(String data) {
         setProperty("data", data);
     }
 
     /**
      * @param data
      * @throws AFException  */
-    public void setData(String key, String data)
-    {
-        setProperty("data/"+key, data);
+    public void setData(String key, String data) {
+        setProperty("data/" + key, data);
     }
 
     /**
      * @param usr
      * @throws AFException
      * @return  */
-    public String getData(User usr)
-    {
-        return getProperty("data/usr/"+usr.getUserRepository().getId()+"/"+usr.getId());
+    public String getData(User usr) {
+        return getProperty("data/usr/" + usr.getUserRepository().getId() + "/" + usr.getId());
     }
 
     /**
      * @param usr
      * @param data
      * @throws AFException  */
-    public void setData(User usr, String data)
-    {
-        setProperty("data/usr/"+usr.getUserRepository().getId()+"/"+usr.getId(),data);
+    public void setData(User usr, String data) {
+        setProperty("data/usr/" + usr.getUserRepository().getId() + "/" + usr.getId(), data);
     }
 
     /**
@@ -323,9 +282,8 @@ public class Resource extends org.semanticwb.model.base.ResourceBase
      * @param topic
      * @throws AFException
      * @return  */
-    public String getData(User usr, WebPage page)
-    {
-        return getProperty("data/usr/"+usr.getUserRepository().getId()+"/"+usr.getId()+"/wp/"+page.getWebSiteId()+"/"+page.getId());
+    public String getData(User usr, WebPage page) {
+        return getProperty("data/usr/" + usr.getUserRepository().getId() + "/" + usr.getId() + "/wp/" + page.getWebSiteId() + "/" + page.getId());
     }
 
     /**
@@ -333,162 +291,153 @@ public class Resource extends org.semanticwb.model.base.ResourceBase
      * @param topic
      * @param data
      * @throws AFException  */
-    public void setData(User usr, WebPage page, String data)
-    {
-        setProperty("data/usr/"+usr.getUserRepository().getId()+"/"+usr.getId()+"/wp/"+page.getWebSiteId()+"/"+page.getId(),data);
+    public void setData(User usr, WebPage page, String data) {
+        setProperty("data/usr/" + usr.getUserRepository().getId() + "/" + usr.getId() + "/wp/" + page.getWebSiteId() + "/" + page.getId(), data);
     }
 
     /**
      * @param topic
      * @throws AFException
      * @return  */
-    public String getData(WebPage page)
-    {
-        return getProperty("data/wp/"+page.getWebSiteId()+"/"+page.getId());
+    public String getData(WebPage page) {
+        return getProperty("data/wp/" + page.getWebSiteId() + "/" + page.getId());
     }
 
     /**
      * @param topic
      * @param data
      * @throws AFException  */
-    public void setData(WebPage page, String data)
-    {
-        setProperty("data/wp/"+page.getWebSiteId()+"/"+page.getId(),data);
+    public void setData(WebPage page, String data) {
+        setProperty("data/wp/" + page.getWebSiteId() + "/" + page.getId(), data);
     }
 
     /** Getter for property filterMap.
      * @return Value of property filterMap.
      */
-    public org.w3c.dom.NodeList getFilterNode()
-    {
-        ResourceFilter pfilter=getResourceFilter();
-        if(pfilter!=null)
-        {
-            Document aux=pfilter.getSemanticObject().getDomProperty(swb_xml);
-            if(aux!=m_filter)
-            {
-                m_filter=aux;
+    public org.w3c.dom.NodeList getFilterNode() {
+        ResourceFilter pfilter = getResourceFilter();
+        if (pfilter != null) {
+            Document aux = pfilter.getSemanticObject().getDomProperty(swb_xml);
+            if (aux != m_filter) {
+                m_filter = aux;
                 NodeList nl = aux.getElementsByTagName("topicmap");
                 int n = nl.getLength();
-                if (n > 0)
-                {
+                if (n > 0) {
                     m_filternode = nl;
-                } else
-                {
+                } else {
                     m_filternode = null;
                 }
             }
-        }else
-        {
-            m_filternode=null;
+        } else {
+            m_filternode = null;
         }
         //System.out.println("getFilterNode:"+getURI()+" "+m_filternode);
         return m_filternode;
     }
 
-
     /**  org.semanticwb.model.Inheritable
      * @param topic
      * @return  */
-    public boolean evalFilterMap(WebPage topic)
-    {
+    public boolean evalFilterMap(WebPage topic) {
         boolean ret = false;
         NodeList fi = getFilterNode();
-        if (fi == null) return true;
-        for (int x = 0; x < fi.getLength(); x++)
-        {
-            Element el = (Element) fi.item(x);
-            //System.out.println("evalFilterMap:"+topic.getWebSiteId()+"="+el.getAttribute("id"));
-            if (topic.getWebSiteId().equals(el.getAttribute("id")))
-            {
-                NodeList ti = el.getElementsByTagName("topic");
-                for (int y = 0; y < ti.getLength(); y++)
-                {
-                    Element eltp = (Element) ti.item(y);
-                    WebPage atopic = topic.getWebSite().getWebPage(eltp.getAttribute("id"));
-                    if (atopic != null)
-                    {
-                        if (topic.equals(atopic))
-                            ret = true;
-                        else if (eltp.getAttribute("childs").equals("true"))
-                        {
-                            if (topic.isChildof(atopic)) ret = true;
+        if (fi != null) {
+            for (int x = 0; x < fi.getLength(); x++) {
+                Element el = (Element) fi.item(x);
+                //System.out.println("evalFilterMap:"+topic.getWebSiteId()+"="+el.getAttribute("id"));
+                if (topic.getWebSiteId().equals(el.getAttribute("id"))) {
+                    NodeList ti = el.getElementsByTagName("topic");
+                    for (int y = 0; y < ti.getLength(); y++) {
+                        Element eltp = (Element) ti.item(y);
+                        WebPage atopic = topic.getWebSite().getWebPage(eltp.getAttribute("id"));
+                        if (atopic != null) {
+                            if (topic.equals(atopic)) {
+                                ret = true;
+                            } else if (eltp.getAttribute("childs").equals("true") && topic.isChildof(atopic))
+                            {
+                                ret = true;
+                            }
                         }
                     }
                 }
             }
+        } else {
+            ret = true;
         }
         return ret;
     }
 
     @Override
-    public long getHits()
-    {
-        if(hits==0)hits=super.getHits();
+    public long getHits() {
+        if (hits == 0) {
+            hits = super.getHits();
+        }
         return hits;
     }
 
-    public boolean incHits()
-    {
+    public boolean incHits() {
+        boolean ret = false;
         viewed = true;
-        if(hits==0)hits=getHits();
-        hits+=1;
-        long t = System.currentTimeMillis() - timer;
-        if (t > time || t < -time)
-        {
-            //TODO: evalDate4Views();
-            return true;
+        if (hits == 0) {
+            hits = getHits();
         }
-        return false;
+        hits += 1;
+        long t = System.currentTimeMillis() - timer;
+        if (t > time || t < -time) {
+            //TODO: evalDate4Views();
+            ret = true;
+        }
+        return ret;
     }
 
     @Override
-    public void setHits(long hits)
-    {
+    public void setHits(long hits) {
         super.setHits(hits);
-        this.hits=hits;
+        this.hits = hits;
     }
 
     @Override
-    public long getViews()
-    {
-        if(views==0)views=super.getViews();
+    public long getViews() {
+        if (views == 0) {
+            views = super.getViews();
+        }
         return views;
     }
 
-    public boolean incViews()
-    {
+    public boolean incViews() {
+        boolean ret = false;
         //System.out.println("incViews:"+views);
         viewed = true;
-        if(views==0)views=getViews();
-        views+=1;
-        long t = System.currentTimeMillis() - timer;
-        if (t > time || t < -time)
-        {
-            //TODO: evalDate4Views();
-            return true;
+        if (views == 0) {
+            views = getViews();
         }
-        return false;
+        views += 1;
+        long t = System.currentTimeMillis() - timer;
+        if (t > time || t < -time) {
+            //TODO: evalDate4Views();
+            ret = true;
+        }
+        return ret;
     }
 
     @Override
-    public void setViews(long views)
-    {
+    public void setViews(long views) {
         //System.out.println("setViews:"+views);
         super.setViews(views);
-        this.views=views;
+        this.views = views;
     }
 
-    public void updateViews()
-    {
+    public void updateViews() {
         //System.out.println("updateViews:"+views);
-        if(viewed)
-        {
+        if (viewed) {
             timer = System.currentTimeMillis();
-            if(views>0)setViews(views);
-            if(hits>0)setHits(hits);
+            if (views > 0) {
+                setViews(views);
+            }
+            if (hits > 0) {
+                setHits(hits);
+            }
             viewed = false;
         }
     }
-
 }

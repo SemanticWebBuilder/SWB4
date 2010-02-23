@@ -9,8 +9,10 @@ public interface VersionableBase extends org.semanticwb.repository.Referenceable
     public static final org.semanticwb.platform.SemanticProperty jcr_baseVersion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#baseVersion");
     public static final org.semanticwb.platform.SemanticProperty jcr_mergeFailed=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#mergeFailed");
     public static final org.semanticwb.platform.SemanticClass mix_Versionable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/mix/1.0#versionable");
+
     public boolean isIsCheckedOut();
-    public void setIsCheckedOut(boolean isCheckedOut);
+
+    public void setIsCheckedOut(boolean value);
 
     public void setVersionHistory(org.semanticwb.repository.VersionHistory versionhistory);
 

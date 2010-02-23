@@ -23,8 +23,6 @@
  
 package org.semanticwb.model;
 
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,12 +34,12 @@ public class Template extends TemplateBase
 {
     private String siteid=null;
     
-    private ArrayList parts;
+//    private ArrayList parts;
     private HashMap objects = new HashMap();
 
-    private String actPath;
+//    private String actPath;
     
-    private HashMap header=null;
+//    private HashMap header=null;
 
 
     //Para que se muestre funcionalidad de facebook como el boton, agregar las siguientes 2 líneas a los templates (Jorge)
@@ -643,50 +641,50 @@ public class Template extends TemplateBase
 //        return parts;
 //    }
 
-    private String findImagesInScript(String value, String ext)
-    {
-        StringBuffer aux = new StringBuffer(value.length());
-        int off = 0;
-        int f = 0;
-        int i = 0;
-        do
-        {
-            f = value.indexOf(ext, off);
-            i = value.lastIndexOf("'", f);
-            if (f > 0 && i >= 0)
-            {
-                i++;
-                if (value.startsWith("/", i) || value.startsWith("http://", i))
-                {
-                    aux.append(value.substring(off, f + ext.length()));
-                } else
-                {
-                    aux.append(value.substring(off, i) + actPath + value.substring(i, f + ext.length()));
-                }
-                off = f + ext.length();
-            }
-        } while (f > 0 && i > 0);
-        aux.append(value.substring(off));
-        return aux.toString();
-    }
-
-    private String findImageInScript(String value, String ext)
-    {
-        int f = value.indexOf(ext);
-        int i = value.lastIndexOf("'", f);
-        if (f > 0 && i >= 0)
-        {
-            i++;
-            if (value.startsWith("/", i) || value.startsWith("http://", i))
-            {
-                return value;
-            } else
-            {
-                return value.substring(0, i) + actPath + value.substring(i, value.length());
-            }
-        }
-        return value;
-    }
+//    private String findImagesInScript(String value, String ext)
+//    {
+//        StringBuffer aux = new StringBuffer(value.length());
+//        int off = 0;
+//        int f = 0;
+//        int i = 0;
+//        do
+//        {
+//            f = value.indexOf(ext, off);
+//            i = value.lastIndexOf("'", f);
+//            if (f > 0 && i >= 0)
+//            {
+//                i++;
+//                if (value.startsWith("/", i) || value.startsWith("http://", i))
+//                {
+//                    aux.append(value.substring(off, f + ext.length()));
+//                } else
+//                {
+//                    aux.append(value.substring(off, i) + actPath + value.substring(i, f + ext.length()));
+//                }
+//                off = f + ext.length();
+//            }
+//        } while (f > 0 && i > 0);
+//        aux.append(value.substring(off));
+//        return aux.toString();
+//    }
+//
+//    private String findImageInScript(String value, String ext)
+//    {
+//        int f = value.indexOf(ext);
+//        int i = value.lastIndexOf("'", f);
+//        if (f > 0 && i >= 0)
+//        {
+//            i++;
+//            if (value.startsWith("/", i) || value.startsWith("http://", i))
+//            {
+//                return value;
+//            } else
+//            {
+//                return value.substring(0, i) + actPath + value.substring(i, value.length());
+//            }
+//        }
+//        return value;
+//    }
     
 //    public String include(String src, HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap params)
 //    {
@@ -1594,7 +1592,10 @@ public class Template extends TemplateBase
         {
             info=info.getPreviousVersion();
         }
-        if(info!=null)ret=info.getVersionFile();
+        if(info!=null)
+        {
+            ret=info.getVersionFile();
+        }
         return ret;
     }
 }

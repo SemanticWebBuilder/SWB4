@@ -1182,7 +1182,7 @@ public class BaseNode extends BaseNodeBase
         if (historyNode.isVersionHistoryNode())
         {
             BaseNode ntVersion = historyNode.createNodeBase(JCR_ROOTVERSION, Version.nt_Version);
-            BaseNode versionLabels = historyNode.createNodeBase(JCR_VERSIONLABELS_NAME, VersionLabels.nt_VersionLabels);
+//            BaseNode versionLabels = historyNode.createNodeBase(JCR_VERSIONLABELS_NAME, VersionLabels.nt_VersionLabels);
             BaseNode ntFrozenNode = ntVersion.createNodeBase(JCR_FROZENNODE_NAME, FrozenNode.nt_FrozenNode);
             initializeFrozenProperties(ntFrozenNode.getSemanticObject());
             this.getSemanticObject().setObjectProperty(Versionable.jcr_baseVersion, ntVersion.getSemanticObject());
