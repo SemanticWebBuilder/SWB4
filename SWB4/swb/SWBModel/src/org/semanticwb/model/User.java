@@ -547,17 +547,32 @@ public class User extends UserBase implements Principal
         {
             String ut = curr.next();
             SemanticClass sc = getUserRepository().getUserType(ut);
-            if (null!=sc) lista.add(sc);
+            if (null!=sc)
+            {
+                lista.add(sc);
+            }
         }
         return lista.iterator();
     }
 
     public void setDefaultData(User user)
     {
-        if(getDevice()==null)setDevice(user.getDevice());
-        if(getIp()==null)setIp(user.getIp());
-        if(getLanguage()==null)setLanguage(user.getLanguage());
-        if(getCountry()==null)setCountry(user.getCountry());
+        if(getDevice()==null)
+        {
+            setDevice(user.getDevice());
+        }
+        if(getIp()==null)
+        {
+            setIp(user.getIp());
+        }
+        if(getLanguage()==null)
+        {
+            setLanguage(user.getLanguage());
+        }
+        if(getCountry()==null)
+        {
+            setCountry(user.getCountry());
+        }
     }
 
 }

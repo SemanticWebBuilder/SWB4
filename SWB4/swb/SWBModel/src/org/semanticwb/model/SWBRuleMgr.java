@@ -93,7 +93,10 @@ public class SWBRuleMgr
                 if (xml != null)
                 {
                     Document dom = SWBUtils.XML.xmlToDom(xml);
-                    if (dom != null) doms.put(rule.getURI(), dom);
+                    if (dom != null)
+                    {
+                        doms.put(rule.getURI(), dom);
+                    }
                 }
             } catch (Exception e)
             {
@@ -184,7 +187,7 @@ public class SWBRuleMgr
      * @return  */
     public boolean and(Node node, User user)
     {
-        boolean ret;
+        boolean ret=true;
         //System.out.println("and:"+node.getNodeName());
         NodeList nl = node.getChildNodes();
         for (int x = 0; x < nl.getLength(); x++)
@@ -192,20 +195,26 @@ public class SWBRuleMgr
             if(nl.item(x)!=null)
             {
                 if ("and".equals(nl.item(x).getNodeName()))
+                {
                     ret = and(nl.item(x), user);
+                }
                 else if ("or".equals(nl.item(x).getNodeName()))
+                {
                     ret = or(nl.item(x), user);
-                else
+                }else
+                {
                     ret = exp(nl.item(x), user);
+                }
                 if (!ret) 
                 {
                     //System.out.println(" AND false");
-                    return false;
+                    ret=false;
+                    break;
                 }
             }
         }
         //System.out.println(" AND true");
-        return true;
+        return ret;
     }
 
     /**
@@ -214,7 +223,7 @@ public class SWBRuleMgr
      * @return  */
     public boolean or(Node node, User user)
     {
-        boolean ret;
+        boolean ret=false;
         //System.out.println("or:"+node.getNodeName());
         NodeList nl = node.getChildNodes();
         for (int x = 0; x < nl.getLength(); x++)
@@ -222,15 +231,24 @@ public class SWBRuleMgr
             if(nl.item(x)!=null)
             {
                 if ("and".equals(nl.item(x).getNodeName()))
+                {
                     ret = and(nl.item(x), user);
+                }
                 else if ("or".equals(nl.item(x).getNodeName()))
+                {
                     ret = or(nl.item(x), user);
-                else
+                }else
+                {
                     ret = exp(nl.item(x), user);
-                if (ret) return true;
+                }
+                if (ret)
+                {
+                    ret=true;
+                    break;
+                }
             }
         }
-        return false;
+        return ret;
     }
 
     /**
@@ -244,11 +262,17 @@ public class SWBRuleMgr
         try
         {
             Node aux = node.getChildNodes().item(0);
-            if (aux == null) return false;
+            if (aux == null)
+            {
+                return false;
+            }
             String name = node.getNodeName();
             String cond = "=";
             Node att = node.getAttributes().getNamedItem("cond");
-            if (att != null) cond = att.getNodeValue();
+            if (att != null)
+            {
+                cond = att.getNodeValue();
+            }
             String value = aux.getNodeValue();
             
             //System.out.println("name:"+name+" cond:"+cond +" value:"+value);
@@ -297,51 +321,65 @@ public class SWBRuleMgr
             }else //se busca en el xml del usuario
             {
                 SemanticProperty prop=user.getSemanticObject().getSemanticClass().getProperty(name);
-                if(prop!=null)
+                if(prop!=null && prop.isDataTypeProperty())
                 {
-                    //SemanticProperty prop=it.next();
-                    if(prop.isDataTypeProperty())
+                    String usrval = user.getSemanticObject().getProperty(prop);
+                    //System.out.println(usrval+cond+value);
+                    if(usrval==null && value==null)
                     {
-                        String usrval = user.getSemanticObject().getProperty(prop);
-                        //System.out.println(usrval+cond+value);
-                        if(usrval==null && value==null)
+                        ret=true;
+                    }else if(usrval==null)
+                    {
+                        ret=false;
+                    }else if (cond.equals("="))
+                    {
+                        if (usrval.equals(value))
                         {
-                            ret=true;
-                        }else if(usrval==null)
+                            ret = true;
+                        }
+                    } else if (cond.equals("!="))
+                    {
+                        if (!usrval.equals(value))
                         {
-                            ret=false;
-                        }else if (cond.equals("="))
+                            ret = true;
+                        }
+                    } else if (cond.equals(">"))
+                    {
+                        try
                         {
-                            if (usrval.equals(value)) ret = true;
-                        } else if (cond.equals("!="))
-                        {
-                            if (!usrval.equals(value)) ret = true;
-                        } else if (cond.equals(">"))
-                        {
-                            try
+                            float i = Float.parseFloat(usrval);
+                            float j = Float.parseFloat(value);
+                            if (i > j)
                             {
-                                float i = Float.parseFloat(usrval);
-                                float j = Float.parseFloat(value);
-                                if (i > j) ret = true;
-                            } catch (NumberFormatException e)
-                            {
-                                if (usrval.compareTo(value) > 0) ret = true;
+                                ret = true;
                             }
-                        } else if (cond.equals("<"))
+                        } catch (NumberFormatException e)
                         {
-                            try
+                            if (usrval.compareTo(value) > 0)
                             {
-                                float i = Float.parseFloat(usrval);
-                                float j = Float.parseFloat(value);
-                                if (i < j) ret = true;
-                            } catch (NumberFormatException e)
-                            {
-                                if (usrval.compareTo(value) < 0) ret = true;
+                                ret = true;
                             }
                         }
-                        //System.out.println(ret);
-                        //if (ret) return true;
+                    } else if (cond.equals("<"))
+                    {
+                        try
+                        {
+                            float i = Float.parseFloat(usrval);
+                            float j = Float.parseFloat(value);
+                            if (i < j)
+                            {
+                                ret = true;
+                            }
+                        } catch (NumberFormatException e)
+                        {
+                            if (usrval.compareTo(value) < 0)
+                            {
+                                ret = true;
+                            }
+                        }
                     }
+                    //System.out.println(ret);
+                    //if (ret) return true;
                 }
             }
         } catch (Exception e)
@@ -365,7 +403,10 @@ public class SWBRuleMgr
             if (xml != null)
             {
                 Document dom = SWBUtils.XML.xmlToDom(xml);
-                if (dom != null) doms.put(rule.getURI(), dom);
+                if (dom != null)
+                {
+                    doms.put(rule.getURI(), dom);
+                }
             }
         } catch (Exception e)
         {

@@ -1,26 +1,25 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 package org.semanticwb.model;
 
 import com.hp.hpl.jena.query.Query;
@@ -44,8 +43,7 @@ import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.platform.SemanticVocabulary;
 import org.semanticwb.security.auth.ExtUserRepInt;
 
-public class UserRepository extends UserRepositoryBase
-{
+public class UserRepository extends UserRepositoryBase {
 
     static Logger log = SWBUtils.getLogger(UserRepository.class);
     //public static final String SWBUR_AuthMethod = "SWBUR_AuthMethod";
@@ -63,27 +61,21 @@ public class UserRepository extends UserRepositoryBase
     private static final String DEFTYPE = "_ExtendedAttributes";
     private static SemanticClass DEFSEMCLASS;
 
-
-    public UserRepository(SemanticObject base)
-    {
+    public UserRepository(SemanticObject base) {
         super(base);
         boolean ret = false;
         ExtUserRepInt classRet = null;
-        if (null == super.getUserRepExternalConfigFile())
-        {
+        if (null == super.getUserRepExternalConfigFile()) {
             ret = false;
-        } else
-        {
-            try
-            {
+        } else {
+            try {
                 Properties props = SWBUtils.TEXT.getPropertyFile(super.getUserRepExternalConfigFile());
                 String className = props.getProperty("class");
                 Class clase = Class.forName(className);
                 classRet = (ExtUserRepInt) clase.getConstructor(UserRepository.class, Properties.class).newInstance(this, props);
-                log.trace("External User Bridge Creado!"+classRet);
+                log.trace("External User Bridge Creado!" + classRet);
                 ret = true;
-            } catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 ret = false;
                 log.debug("Can't load class for External Repository Bridge", ex);
             }
@@ -93,24 +85,26 @@ public class UserRepository extends UserRepositoryBase
         bridge = classRet;
         //Reemplazando el código posterior:
         Iterator<SemanticClass> it = UserTypeDef.sclass.listSubClasses();
-        while (it.hasNext()){
+        while (it.hasNext()) {
             SemanticClass utd = it.next();
             //System.out.println("Adding: "+utd.getName());
-            if (!DEFTYPE.equals(utd.getName()))
-            userTypes.put(utd.getName(),utd);
-            else DEFSEMCLASS = utd;
+            if (!DEFTYPE.equals(utd.getName())) {
+                userTypes.put(utd.getName(), utd);
+            } else {
+                DEFSEMCLASS = utd;
+            }
             Iterator<SemanticProperty> itsp = utd.listProperties();
-            while(itsp.hasNext()){
+            while (itsp.hasNext()) {
                 //System.out.println("=======================================");
                 SemanticProperty sp = itsp.next();
                 //System.out.println("testing:"+sp.getURI()+"-"+getId());
                 //System.out.println("Range:"+sp.getRange());
                 //System.out.println("dip:"+sp.getDisplayProperty());
-                if (null == sp.getRange() || null == sp.getDisplayProperty() ) //|| !sp.getURI().startsWith(getId()))
-            {
-                continue;
-            }
-                userProps.put(sp.getName(),sp);
+                if (null == sp.getRange() || null == sp.getDisplayProperty()) //|| !sp.getURI().startsWith(getId()))
+                {
+                    continue;
+                }
+                userProps.put(sp.getName(), sp);
                 //System.out.println("Nombre:"+ sp.getName());
             }
         }
@@ -118,41 +112,40 @@ public class UserRepository extends UserRepositoryBase
 /*        StmtIterator ptopIt = getSemanticObject().getModel().getRDFModel().listStatements(getSemanticObject().getRDFResource(), null, (String) null);
         while (ptopIt.hasNext())
         {
-            Statement sp = (Statement) ptopIt.next();
-            //System.out.println("getPredicate:"+sp.getPredicate());
-            if (sp.getPredicate().getLocalName().startsWith(SWBUR_ClassUserTypeHold))
-            {
-                String uri = sp.getObject().toString();
-                userTypes.add(uri.split("#")[1]);
-            //System.out.println("userTypes:"+uri.split("#")[1]);
-            //getSemanticObject().getModel().registerClass(uri);
-            }
+        Statement sp = (Statement) ptopIt.next();
+        //System.out.println("getPredicate:"+sp.getPredicate());
+        if (sp.getPredicate().getLocalName().startsWith(SWBUR_ClassUserTypeHold))
+        {
+        String uri = sp.getObject().toString();
+        userTypes.add(uri.split("#")[1]);
+        //System.out.println("userTypes:"+uri.split("#")[1]);
+        //getSemanticObject().getModel().registerClass(uri);
+        }
         }*/
-    //System.out.println("***********end***************");
+        //System.out.println("***********end***************");
 
-    /*
-    String uri = getProperty(SWBUR_ClassHold);
-    if (uri != null)
-    {
-    uri = getId() + SWBUR_ClassPost;
-    getSemanticObject().getModel().registerClass(uri);
-    }
-    StmtIterator ptopIt = getSemanticObject().getModel().getRDFModel().listStatements(getSemanticObject().getRDFResource(), null, (String) null);
-    while (ptopIt.hasNext())
-    {
-    Statement sp = (Statement) ptopIt.next();
-    if (sp.getPredicate().getLocalName().startsWith(SWBUR_ClassUserTypeHold))
-    {
-    uri = sp.getObject().toString();
-    userTypes.add(uri.split("#")[1]);
-    getSemanticObject().getModel().registerClass(uri);
-    }
-    }
-     */
+        /*
+        String uri = getProperty(SWBUR_ClassHold);
+        if (uri != null)
+        {
+        uri = getId() + SWBUR_ClassPost;
+        getSemanticObject().getModel().registerClass(uri);
+        }
+        StmtIterator ptopIt = getSemanticObject().getModel().getRDFModel().listStatements(getSemanticObject().getRDFResource(), null, (String) null);
+        while (ptopIt.hasNext())
+        {
+        Statement sp = (Statement) ptopIt.next();
+        if (sp.getPredicate().getLocalName().startsWith(SWBUR_ClassUserTypeHold))
+        {
+        uri = sp.getObject().toString();
+        userTypes.add(uri.split("#")[1]);
+        getSemanticObject().getModel().registerClass(uri);
+        }
+        }
+         */
     }
 
-    public Iterator<String> searchUsersBy(String usrFirstName, String usrLastName, String usrSecondLastName, String usrEmail, String Role, String Group, String Active)
-    {
+    public Iterator<String> searchUsersBy(String usrFirstName, String usrLastName, String usrSecondLastName, String usrEmail, String Role, String Group, String Active) {
         //System.out.println("Grp: "+Group);
 
         Iterator<String> ret = null;
@@ -171,24 +164,18 @@ public class UserRepository extends UserRepositoryBase
         String _Role = Role != null ? Role : null;
         String _Group = Group != null ? Group : null;
 
-        if (null != _Role)
-        {
-            if (hasRole(_Role))
-            {
+        if (null != _Role) {
+            if (hasRole(_Role)) {
                 _Role = getRole(_Role).getURI();
-            } else
-            {
+            } else {
                 _Role = null;
             }
         }
 
-        if (null != _Group)
-        {
-            if (hasUserGroup(_Group))
-            {
+        if (null != _Group) {
+            if (hasUserGroup(_Group)) {
                 _Group = getUserGroup(_Group).getURI();
-            } else
-            {
+            } else {
                 _Group = null;
             }
         }
@@ -197,36 +184,29 @@ public class UserRepository extends UserRepositoryBase
         // Query string.
         //"SELECT ?title ?class WHERE {?x swb:title ?title. ?x rdf:type swb:WebPage}"
 
-        String queryString = prolog + NL +
-                "SELECT \n?x \nWHERE { \n?x rdf:type swb:User. \n";
+        String queryString = prolog + NL
+                + "SELECT \n?x \nWHERE { \n?x rdf:type swb:User. \n";
 //                        "SELECT \n?x ?fname ?lname ?slname ?mail ?login \nWHERE { \n?x rdf:type swb:User. \n";
 //        queryString += "?x swb:usrLogin ?login. \n";
-        if (null != _Role)
-        {
+        if (null != _Role) {
             queryString += "?x swb:hasRole <" + _Role + ">.\n";
         }
-        if (null != _Group)
-        {
+        if (null != _Group) {
             queryString += "?x swb:userGroup <" + _Group + ">.\n";
         }
-        if (null != Active)
-        {
+        if (null != Active) {
             queryString += "?x swb:active " + Active + ".\n";
         }
-        if (!"".equals(_usrFirstName))
-        {
+        if (!"".equals(_usrFirstName)) {
             queryString += "?x swb:usrFirstName ?gfn .   FILTER regex(?gfn, \"" + _usrFirstName + "\", \"i\"). \n";
         }
-        if (!"".equals(_usrLastName))
-        {
+        if (!"".equals(_usrLastName)) {
             queryString += "?x swb:usrLastName ?gln.   FILTER regex(?gln, \"" + _usrLastName + "\", \"i\"). \n";
         }
-        if (!"".equals(_usrSecondLastName))
-        {
+        if (!"".equals(_usrSecondLastName)) {
             queryString += "?x swb:usrSecondLastName ?gsln.   FILTER regex(?gsln, \"" + _usrSecondLastName + "\", \"i\"). \n";
         }
-        if (!"".equals(_usrEmail))
-        {
+        if (!"".equals(_usrEmail)) {
             queryString += "?x swb:usrEmail ?gml.   FILTER regex(?gml, \"" + _usrEmail + "\", \"i\"). \n";
         }
         queryString +=
@@ -247,12 +227,10 @@ public class UserRepository extends UserRepositoryBase
         // System.out.println() ;
 
         QueryExecution qexec = QueryExecutionFactory.create(query, model);
-        try
-        {
+        try {
             ResultSet rs = qexec.execSelect();
             ArrayList<String> lista = new ArrayList<String>();
-            for (; rs.hasNext();)
-            {
+            for (; rs.hasNext();) {
                 QuerySolution rb = rs.nextSolution();
                 String current = rb.get("x").toString();
                 /*+ "||" +
@@ -265,8 +243,7 @@ public class UserRepository extends UserRepositoryBase
 
             }
             ret = lista.iterator();
-        } finally
-        {
+        } finally {
             // QueryExecution objects should be closed to free any system resources
             qexec.close();
         }
@@ -274,30 +251,23 @@ public class UserRepository extends UserRepositoryBase
         return ret;
     }
 
-    public User getUserByLogin(String login)
-    {
+    public User getUserByLogin(String login) {
         User ret = null;
-        log.debug("Login a buscar: "+login+" External:"+EXTERNAL);
-        if (null != login)
-        {
+        log.debug("Login a buscar: " + login + " External:" + EXTERNAL);
+        if (null != login) {
             Iterator aux = getSemanticObject().getRDFResource().getModel().listStatements(null, User.swb_usrLogin.getRDFProperty(), getSemanticObject().getModel().getRDFModel().createLiteral(login));
             Iterator it = new GenericIterator(aux, true);
-            if (it.hasNext())
-            {
+            if (it.hasNext()) {
                 ret = (User) it.next();
             }
             if (EXTERNAL)
             {
-                if (bridge.syncUser(login, ret))
-                {
-                    if (null == ret)
-                    {
-                        aux = getSemanticObject().getRDFResource().getModel().listStatements(null, User.swb_usrLogin.getRDFProperty(), getSemanticObject().getModel().getRDFModel().createLiteral(login));
-                        it = new GenericIterator(aux, true);
-                        if (it.hasNext())
-                        {
-                            ret = (User) it.next();
-                        }
+                boolean sync=bridge.syncUser(login, ret);
+                if (sync && null == ret) {
+                    aux = getSemanticObject().getRDFResource().getModel().listStatements(null, User.swb_usrLogin.getRDFProperty(), getSemanticObject().getModel().getRDFModel().createLiteral(login));
+                    it = new GenericIterator(aux, true);
+                    if (it.hasNext()) {
+                        ret = (User) it.next();
                     }
                 }
             }
@@ -305,30 +275,22 @@ public class UserRepository extends UserRepositoryBase
         return ret;
     }
 
-    public User getUserByEmail(String email)
-    {
+    public User getUserByEmail(String email) {
         User ret = null;
-        log.debug("Email a buscar: "+email+" External:"+EXTERNAL);
-        if (null != email)
-        {
+        log.debug("Email a buscar: " + email + " External:" + EXTERNAL);
+        if (null != email) {
             Iterator aux = getSemanticObject().getRDFResource().getModel().listStatements(null, User.swb_usrEmail.getRDFProperty(), getSemanticObject().getModel().getRDFModel().createLiteral(email));
             Iterator it = new GenericIterator(aux, true);
-            if (it.hasNext())
-            {
+            if (it.hasNext()) {
                 ret = (User) it.next();
             }
-            if (EXTERNAL)
-            {
-                if (bridge.syncUser(email, ret))
-                {
-                    if (null == ret)
-                    {
-                        aux = getSemanticObject().getRDFResource().getModel().listStatements(null, User.swb_usrEmail.getRDFProperty(), getSemanticObject().getModel().getRDFModel().createLiteral(email));
-                        it = new GenericIterator(aux, true);
-                        if (it.hasNext())
-                        {
-                            ret = (User) it.next();
-                        }
+            if (EXTERNAL) {
+                boolean sync=bridge.syncUser(email, ret);
+                if (sync && null == ret) {
+                    aux = getSemanticObject().getRDFResource().getModel().listStatements(null, User.swb_usrEmail.getRDFProperty(), getSemanticObject().getModel().getRDFModel().createLiteral(email));
+                    it = new GenericIterator(aux, true);
+                    if (it.hasNext()) {
+                        ret = (User) it.next();
                     }
                 }
             }
@@ -336,249 +298,243 @@ public class UserRepository extends UserRepositoryBase
         return ret;
     }
 
-    public void syncUsers()
-    {
-        if (EXTERNAL)
-        {
+    public void syncUsers() {
+        if (EXTERNAL) {
             //System.out.println("entrando a syncUsers");
             bridge.syncUsers();
             //System.out.println("UsersSynced");
         }
     }
 
-    public SemanticProperty getExtendedAttribute(String name)
-    {
+    public SemanticProperty getExtendedAttribute(String name) {
         return getExtendedAttributesClass().getProperty(name);
     }
 
     /*public SemanticProperty createIntExtendedAttribute(String name)
     {
-        return createIntExtendedAttribute(name, null);
+    return createIntExtendedAttribute(name, null);
     }
 
     public SemanticProperty createIntExtendedAttribute(String name, String clsName)
     {
-        SemanticClass cls = (null == clsName) ? getExtendedAttributesClass() : getUserType(clsName);
-        SemanticProperty sp = cls.getProperty(name);
-        if (null == sp)
-        {
-            sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_INT);
-            SemanticObject dp = sp.getDisplayProperty();
-            if (dp == null)
-            {
-                dp = getSemanticObject().getModel().createSemanticObject("swbxff_i_" + name, DisplayProperty.swbxf_DisplayProperty);
-            }
-            DisplayProperty dobj = new DisplayProperty(dp);
-            Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
-                    SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
-                    dobj.getSemanticObject().getRDFResource().as(Resource.class));
-            getSemanticObject().getModel().getRDFModel().add(stmt);
-        }
-        return sp;
+    SemanticClass cls = (null == clsName) ? getExtendedAttributesClass() : getUserType(clsName);
+    SemanticProperty sp = cls.getProperty(name);
+    if (null == sp)
+    {
+    sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_INT);
+    SemanticObject dp = sp.getDisplayProperty();
+    if (dp == null)
+    {
+    dp = getSemanticObject().getModel().createSemanticObject("swbxff_i_" + name, DisplayProperty.swbxf_DisplayProperty);
+    }
+    DisplayProperty dobj = new DisplayProperty(dp);
+    Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
+    SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
+    dobj.getSemanticObject().getRDFResource().as(Resource.class));
+    getSemanticObject().getModel().getRDFModel().add(stmt);
+    }
+    return sp;
     }
 
     public SemanticProperty createLongExtendedAttribute(String name)
     {
-        return createLongExtendedAttribute(name, null);
+    return createLongExtendedAttribute(name, null);
     }
 
     public SemanticProperty createLongExtendedAttribute(String name, String clsName)
     {
-        SemanticClass cls = (null == clsName) ? getExtendedAttributesClass() : getUserType(clsName);
-        SemanticProperty sp = cls.getProperty(name);
-        if (null == sp)
-        {
-            sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_LONG);
-            SemanticObject dp = sp.getDisplayProperty();
-            if (dp == null)
-            {
-                dp = getSemanticObject().getModel().createSemanticObject("swbxff_l_" + name, DisplayProperty.swbxf_DisplayProperty);
-            }
-            DisplayProperty dobj = new DisplayProperty(dp);
-            Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
-                    SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
-                    dobj.getSemanticObject().getRDFResource().as(Resource.class));
-            getSemanticObject().getModel().getRDFModel().add(stmt);
-        }
-        return sp;
+    SemanticClass cls = (null == clsName) ? getExtendedAttributesClass() : getUserType(clsName);
+    SemanticProperty sp = cls.getProperty(name);
+    if (null == sp)
+    {
+    sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_LONG);
+    SemanticObject dp = sp.getDisplayProperty();
+    if (dp == null)
+    {
+    dp = getSemanticObject().getModel().createSemanticObject("swbxff_l_" + name, DisplayProperty.swbxf_DisplayProperty);
+    }
+    DisplayProperty dobj = new DisplayProperty(dp);
+    Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
+    SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
+    dobj.getSemanticObject().getRDFResource().as(Resource.class));
+    getSemanticObject().getModel().getRDFModel().add(stmt);
+    }
+    return sp;
     }
 
     public SemanticProperty createBooleanExtendedAttribute(String name)
     {
-        return createBooleanExtendedAttribute(name, null);
+    return createBooleanExtendedAttribute(name, null);
     }
 
     public SemanticProperty createBooleanExtendedAttribute(String name, String clsName)
     {
-        SemanticClass cls = (null == clsName) ? getExtendedAttributesClass() : getUserType(clsName);
-        SemanticProperty sp = cls.getProperty(name);
-        if (null == sp)
-        {
-            sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_BOOLEAN);
-            SemanticObject dp = sp.getDisplayProperty();
-            if (dp == null)
-            {
-                dp = getSemanticObject().getModel().createSemanticObject("swbxff_b_" + name, DisplayProperty.swbxf_DisplayProperty);
-            }
-            DisplayProperty dobj = new DisplayProperty(dp);
-            Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
-                    SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
-                    dobj.getSemanticObject().getRDFResource().as(Resource.class));
-            getSemanticObject().getModel().getRDFModel().add(stmt);
-        }
-        return sp;
+    SemanticClass cls = (null == clsName) ? getExtendedAttributesClass() : getUserType(clsName);
+    SemanticProperty sp = cls.getProperty(name);
+    if (null == sp)
+    {
+    sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_BOOLEAN);
+    SemanticObject dp = sp.getDisplayProperty();
+    if (dp == null)
+    {
+    dp = getSemanticObject().getModel().createSemanticObject("swbxff_b_" + name, DisplayProperty.swbxf_DisplayProperty);
+    }
+    DisplayProperty dobj = new DisplayProperty(dp);
+    Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
+    SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
+    dobj.getSemanticObject().getRDFResource().as(Resource.class));
+    getSemanticObject().getModel().getRDFModel().add(stmt);
+    }
+    return sp;
     }
 
     public SemanticProperty createDateTimeExtendedAttribute(String name)
     {
-        return createDateTimeExtendedAttribute(name, null);
+    return createDateTimeExtendedAttribute(name, null);
     }
 
     public SemanticProperty createDateTimeExtendedAttribute(String name, String clsName)
     {
-        SemanticClass cls = (null == clsName) ? getExtendedAttributesClass() : getUserType(clsName);
-        SemanticProperty sp = cls.getProperty(name);
-        if (null == sp)
-        {
-            sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_DATETIME);
-            SemanticObject dp = sp.getDisplayProperty();
-            if (dp == null)
-            {
-                dp = getSemanticObject().getModel().createSemanticObject("swbxff_t_" + name, DisplayProperty.swbxf_DisplayProperty);
-            }
-            DisplayProperty dobj = new DisplayProperty(dp);
-            Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
-                    SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
-                    dobj.getSemanticObject().getRDFResource().as(Resource.class));
-            getSemanticObject().getModel().getRDFModel().add(stmt);
-        }
-        return sp;
+    SemanticClass cls = (null == clsName) ? getExtendedAttributesClass() : getUserType(clsName);
+    SemanticProperty sp = cls.getProperty(name);
+    if (null == sp)
+    {
+    sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_DATETIME);
+    SemanticObject dp = sp.getDisplayProperty();
+    if (dp == null)
+    {
+    dp = getSemanticObject().getModel().createSemanticObject("swbxff_t_" + name, DisplayProperty.swbxf_DisplayProperty);
+    }
+    DisplayProperty dobj = new DisplayProperty(dp);
+    Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
+    SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
+    dobj.getSemanticObject().getRDFResource().as(Resource.class));
+    getSemanticObject().getModel().getRDFModel().add(stmt);
+    }
+    return sp;
     }
 
     public SemanticProperty createDoubleExtendedAttribute(String name)
     {
-        return createDoubleExtendedAttribute(name, null);
+    return createDoubleExtendedAttribute(name, null);
     }
 
     public SemanticProperty createDoubleExtendedAttribute(String name, String clsName)
     {
-        SemanticClass cls = (null == clsName) ? getExtendedAttributesClass() : getUserType(clsName);
-        SemanticProperty sp = cls.getProperty(name);
-        if (null == sp)
-        {
-            sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_DOUBLE);
-            SemanticObject dp = sp.getDisplayProperty();
-            if (dp == null)
-            {
-                dp = getSemanticObject().getModel().createSemanticObject("swbxff_d_" + name, DisplayProperty.swbxf_DisplayProperty);
-            }
-            DisplayProperty dobj = new DisplayProperty(dp);
-            Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
-                    SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
-                    dobj.getSemanticObject().getRDFResource().as(Resource.class));
-            getSemanticObject().getModel().getRDFModel().add(stmt);
-        }
-        return sp;
+    SemanticClass cls = (null == clsName) ? getExtendedAttributesClass() : getUserType(clsName);
+    SemanticProperty sp = cls.getProperty(name);
+    if (null == sp)
+    {
+    sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_DOUBLE);
+    SemanticObject dp = sp.getDisplayProperty();
+    if (dp == null)
+    {
+    dp = getSemanticObject().getModel().createSemanticObject("swbxff_d_" + name, DisplayProperty.swbxf_DisplayProperty);
+    }
+    DisplayProperty dobj = new DisplayProperty(dp);
+    Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
+    SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
+    dobj.getSemanticObject().getRDFResource().as(Resource.class));
+    getSemanticObject().getModel().getRDFModel().add(stmt);
+    }
+    return sp;
     }
 
     public SemanticProperty createFloatExtendedAttribute(String name)
     {
-        return createFloatExtendedAttribute(name, null);
+    return createFloatExtendedAttribute(name, null);
     }
 
     public SemanticProperty createFloatExtendedAttribute(String name, String clsName)
     {
-        SemanticClass cls = (null == clsName) ? getExtendedAttributesClass() : getUserType(clsName);
-        SemanticProperty sp = cls.getProperty(name);
-        if (null == sp)
-        {
-            sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_FLOAT);
-            SemanticObject dp = sp.getDisplayProperty();
-            if (dp == null)
-            {
-                dp = getSemanticObject().getModel().createSemanticObject("swbxff_f_" + name, DisplayProperty.swbxf_DisplayProperty);
-            }
-            DisplayProperty dobj = new DisplayProperty(dp);
-            Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
-                    SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
-                    dobj.getSemanticObject().getRDFResource().as(Resource.class));
-            getSemanticObject().getModel().getRDFModel().add(stmt);
-        }
-        return sp;
+    SemanticClass cls = (null == clsName) ? getExtendedAttributesClass() : getUserType(clsName);
+    SemanticProperty sp = cls.getProperty(name);
+    if (null == sp)
+    {
+    sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_FLOAT);
+    SemanticObject dp = sp.getDisplayProperty();
+    if (dp == null)
+    {
+    dp = getSemanticObject().getModel().createSemanticObject("swbxff_f_" + name, DisplayProperty.swbxf_DisplayProperty);
+    }
+    DisplayProperty dobj = new DisplayProperty(dp);
+    Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
+    SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
+    dobj.getSemanticObject().getRDFResource().as(Resource.class));
+    getSemanticObject().getModel().getRDFModel().add(stmt);
+    }
+    return sp;
     }
 
     public SemanticProperty createStringExtendedAttribute(String name)
     {
-        return createStringExtendedAttribute(name, null);
+    return createStringExtendedAttribute(name, null);
     }
 
     public SemanticProperty createStringExtendedAttribute(String name, String clsName)
     {
-        SemanticClass cls = (null == clsName) ? getExtendedAttributesClass() : getUserType(clsName);
-        SemanticProperty sp = cls.getProperty(name);
-        if (null == sp)
-        {
-            sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_STRING);
-            SemanticObject dp = sp.getDisplayProperty();
-            if (dp == null)
-            {
-                dp = getSemanticObject().getModel().createSemanticObject("swbxff_s_" + name, DisplayProperty.swbxf_DisplayProperty);
-            }
-            DisplayProperty dobj = new DisplayProperty(dp);
-            Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
-                    SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
-                    dobj.getSemanticObject().getRDFResource().as(Resource.class));
-            getSemanticObject().getModel().getRDFModel().add(stmt);
-        }
-        return sp;
+    SemanticClass cls = (null == clsName) ? getExtendedAttributesClass() : getUserType(clsName);
+    SemanticProperty sp = cls.getProperty(name);
+    if (null == sp)
+    {
+    sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_STRING);
+    SemanticObject dp = sp.getDisplayProperty();
+    if (dp == null)
+    {
+    dp = getSemanticObject().getModel().createSemanticObject("swbxff_s_" + name, DisplayProperty.swbxf_DisplayProperty);
+    }
+    DisplayProperty dobj = new DisplayProperty(dp);
+    Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
+    SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
+    dobj.getSemanticObject().getRDFResource().as(Resource.class));
+    getSemanticObject().getModel().getRDFModel().add(stmt);
+    }
+    return sp;
     }
 
     public SemanticProperty createListExtendedAttribute(String name, String[] values) //values= ["value1:value2:value3:...:valuen","lang|label1:label2:label3:...:labeln",...,"lang|label1:label2:label3:...:labeln"]
     {
-        return createListExtendedAttribute(name, null, values);
+    return createListExtendedAttribute(name, null, values);
     }
 
     public SemanticProperty createListExtendedAttribute(String name, String clsName, String[] values)//values= [value:label|value:label{@lang}]
     {
-        SemanticClass cls = (null == clsName) ? getExtendedAttributesClass() : getUserType(clsName);
-        SemanticProperty sp = cls.getProperty(name);
-        if (null == sp)
-        {
-            sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_STRING);
-            SemanticObject dp = sp.getDisplayProperty();
-            if (dp == null)
-            {
-                dp = getSemanticObject().getModel().createSemanticObject("swbxff_l_" + name, DisplayProperty.swbxf_DisplayProperty);
-            }
-            DisplayProperty dobj = new DisplayProperty(dp);
-
-            Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
-                    SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
-                    dobj.getSemanticObject().getRDFResource().as(Resource.class));
-            getSemanticObject().getModel().getRDFModel().add(stmt);
-            String[] vals = values[0].split(":");
-            for (int i = 1; i < values.length; i++)
-            {
-                String lang = values[1].split("\\|")[0];
-                String[] labels = values[1].split("\\|")[1].split(":");
-                StringBuilder cad = new StringBuilder(250);
-                for (int j = 0; j < vals.length; j++)
-                {
-                    cad.append(vals[j]).append(":").append(labels[j]).append((j + 1 == vals.length ? "" : "|"));
-                }
-                dobj.setSelectValues(cad.toString(), lang); //value:label|value:label{@lang}
-            }
-        }
-        return sp;
-    }
-/*/
-    
-    public Iterator<SemanticProperty> listAttributesofUserType(String name)
+    SemanticClass cls = (null == clsName) ? getExtendedAttributesClass() : getUserType(clsName);
+    SemanticProperty sp = cls.getProperty(name);
+    if (null == sp)
     {
+    sp = getSemanticObject().getModel().createSemanticProperty(getId() + "#" + name, cls, SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_STRING);
+    SemanticObject dp = sp.getDisplayProperty();
+    if (dp == null)
+    {
+    dp = getSemanticObject().getModel().createSemanticObject("swbxff_l_" + name, DisplayProperty.swbxf_DisplayProperty);
+    }
+    DisplayProperty dobj = new DisplayProperty(dp);
+
+    Statement stmt = getSemanticObject().getModel().getRDFModel().createStatement(getSemanticObject().getModel().getRDFModel().getResource(sp.getURI()),
+    SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY),
+    dobj.getSemanticObject().getRDFResource().as(Resource.class));
+    getSemanticObject().getModel().getRDFModel().add(stmt);
+    String[] vals = values[0].split(":");
+    for (int i = 1; i < values.length; i++)
+    {
+    String lang = values[1].split("\\|")[0];
+    String[] labels = values[1].split("\\|")[1].split(":");
+    StringBuilder cad = new StringBuilder(250);
+    for (int j = 0; j < vals.length; j++)
+    {
+    cad.append(vals[j]).append(":").append(labels[j]).append((j + 1 == vals.length ? "" : "|"));
+    }
+    dobj.setSelectValues(cad.toString(), lang); //value:label|value:label{@lang}
+    }
+    }
+    return sp;
+    }
+    /*/
+    public Iterator<SemanticProperty> listAttributesofUserType(String name) {
         ArrayList<SemanticProperty> alsp = new ArrayList<SemanticProperty>();
         Iterator<SemanticProperty> itsp = getUserType(name).listProperties();
-        while (itsp.hasNext())
-        {
+        while (itsp.hasNext()) {
             SemanticProperty sp = itsp.next();
             log.debug("Encontrada... " + sp + " - " + sp.getURI());
             if (null == sp.getRange() || null == sp.getDisplayProperty())// || !sp.getURI().startsWith(getId()))
@@ -591,12 +547,10 @@ public class UserRepository extends UserRepositoryBase
         return alsp.iterator();
     }
 
-    public Iterator<SemanticProperty> listExtendedAttributes()
-    {
+    public Iterator<SemanticProperty> listExtendedAttributes() {
         ArrayList<SemanticProperty> alsp = new ArrayList<SemanticProperty>();
         Iterator<SemanticProperty> itsp = getExtendedAttributesClass().listProperties();
-        while (itsp.hasNext())
-        {
+        while (itsp.hasNext()) {
             SemanticProperty sp = itsp.next();
             log.debug("Encontrada... " + sp + " - " + sp.getURI());
             if (null == sp.getRange() || null == sp.getDisplayProperty())// || !sp.getURI().startsWith(getId()))
@@ -609,20 +563,16 @@ public class UserRepository extends UserRepositoryBase
         return alsp.iterator();
     }
 
-    public Iterator<SemanticProperty> listBasicAttributes()
-    {
+    public Iterator<SemanticProperty> listBasicAttributes() {
         ArrayList<SemanticProperty> alsp = new ArrayList<SemanticProperty>();
         SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(User.swb_User.getURI());
-        if (null != sc)
-        {
+        if (null != sc) {
             Iterator<SemanticProperty> itsp = sc.listProperties();
-            while (itsp.hasNext())
-            {
+            while (itsp.hasNext()) {
                 SemanticProperty sp = itsp.next();
                 log.trace("Encontrada... " + sp);
                 log.trace("DisplayProperty: " + sp.getDisplayProperty());
-                if (null == sp.getRange() || null == sp.getDisplayProperty())
-                {
+                if (null == sp.getRange() || null == sp.getDisplayProperty()) {
                     continue;
                 }
                 log.debug("Agregada... " + sp);
@@ -632,20 +582,16 @@ public class UserRepository extends UserRepositoryBase
         return alsp.iterator();
     }
 
-    public Iterator<SemanticProperty> listAttributes()
-    {
+    public Iterator<SemanticProperty> listAttributes() {
         ArrayList<SemanticProperty> alsp = new ArrayList<SemanticProperty>();
-        String uri = null;
+        //String uri = null;
         SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(User.swb_User.getURI());
-        if (null != sc)
-        {
+        if (null != sc) {
             Iterator<SemanticProperty> itsp = sc.listProperties();
-            while (itsp.hasNext())
-            {
+            while (itsp.hasNext()) {
                 SemanticProperty sp = itsp.next();
                 log.trace("Encontrada..B. " + sp);
-                if (null == sp.getRange() || null == sp.getDisplayProperty())
-                {
+                if (null == sp.getRange() || null == sp.getDisplayProperty()) {
                     continue;
                 }
                 log.trace("Agregada..B. " + sp);
@@ -654,29 +600,24 @@ public class UserRepository extends UserRepositoryBase
         }
         sc = getExtendedAttributesClass();
         Iterator<SemanticProperty> itsp = sc.listProperties();
-        while (itsp.hasNext())
-        {
+        while (itsp.hasNext()) {
             SemanticProperty sp = itsp.next();
             log.trace("Encontrada..E. " + sp);
-            if (null == sp.getRange() || null == sp.getDisplayProperty())
-            {
+            if (null == sp.getRange() || null == sp.getDisplayProperty()) {
                 continue;
             }
             log.trace("Agregada..E. " + sp);
             alsp.add(sp);
         }
         Iterator<String> itut = getUserTypes();
-        while (itut.hasNext())
-        {
+        while (itut.hasNext()) {
             sc = getUserType(itut.next());
             log.trace("Clase de usuario: " + sc);
             itsp = sc.listProperties();
-            while (itsp.hasNext())
-            {
+            while (itsp.hasNext()) {
                 SemanticProperty sp = itsp.next();
                 log.trace("Encontrada..U. " + sp);
-                if (null == sp.getRange() || null == sp.getDisplayProperty())
-                {
+                if (null == sp.getRange() || null == sp.getDisplayProperty()) {
                     continue;
                 }
                 log.trace("Agregada..U. " + sp);
@@ -685,89 +626,79 @@ public class UserRepository extends UserRepositoryBase
         }
         return alsp.iterator();
     }
-    
-/*
+
+    /*
     public SemanticClass getExtendedAttributesClass()
     {
-        SemanticClass cls = null;
-        String uri = getProperty(SWBUR_ClassHold);
-        if (uri == null)
-        {
-            uri = getId() + SWBUR_ClassPost;
-            cls = getSemanticObject().getModel().createSemanticClass(uri);
-            setProperty(SWBUR_ClassHold, uri);
-        } else
-        {
-            cls = getSemanticObject().getModel().createSemanticClass(uri);
-        }
-        return cls;
+    SemanticClass cls = null;
+    String uri = getProperty(SWBUR_ClassHold);
+    if (uri == null)
+    {
+    uri = getId() + SWBUR_ClassPost;
+    cls = getSemanticObject().getModel().createSemanticClass(uri);
+    setProperty(SWBUR_ClassHold, uri);
+    } else
+    {
+    cls = getSemanticObject().getModel().createSemanticClass(uri);
+    }
+    return cls;
     }
 
     public SemanticClass getUserType(String name)
     {
 
-        SemanticClass cls = null;
-        if (null != name && !"".equals(name.trim()))
-        {
-            String uri = getProperty(SWBUR_ClassUserTypeHold + name);
-            if (uri == null)
-            {
-                uri = getId() + SWBUR_ClassUserTypePost + "#" + name;
-                cls = getSemanticObject().getModel().createSemanticClass(uri);
-                setProperty(SWBUR_ClassUserTypeHold + name, uri);
-                userTypes.add(uri.split("#")[1]);
-            } else
-            {
-                cls = getSemanticObject().getModel().createSemanticClass(uri);
-            }
-        }
-        return cls;
-    }
-*/
-    public SemanticClass getExtendedAttributesClass()
+    SemanticClass cls = null;
+    if (null != name && !"".equals(name.trim()))
     {
+    String uri = getProperty(SWBUR_ClassUserTypeHold + name);
+    if (uri == null)
+    {
+    uri = getId() + SWBUR_ClassUserTypePost + "#" + name;
+    cls = getSemanticObject().getModel().createSemanticClass(uri);
+    setProperty(SWBUR_ClassUserTypeHold + name, uri);
+    userTypes.add(uri.split("#")[1]);
+    } else
+    {
+    cls = getSemanticObject().getModel().createSemanticClass(uri);
+    }
+    }
+    return cls;
+    }
+     */
+    public SemanticClass getExtendedAttributesClass() {
         return DEFSEMCLASS;
     }
 
-    public SemanticClass getUserType(String name)
-    {
+    public SemanticClass getUserType(String name) {
         return userTypes.get(name);
     }
 
-    public Iterator<String> getUserTypes()
-    {
+    public Iterator<String> getUserTypes() {
         return userTypes.keySet().iterator();
     }
 
-    public boolean hasUserType(String name)
-    {
+    public boolean hasUserType(String name) {
         return userTypes.keySet().contains(name);
     }
 
-    public boolean isExternal()
-    {
+    public boolean isExternal() {
         return EXTERNAL;
     }
 
-    public ExtUserRepInt getBridge()
-    {
+    public ExtUserRepInt getBridge() {
         return bridge;
     }
 
-    public SemanticProperty getSemanticPropertyOf(String name)
-    {
+    public SemanticProperty getSemanticPropertyOf(String name) {
         return userProps.get(name);
     }
 
-    public User getUserByExternalID(String externalID)
-    {
+    public User getUserByExternalID(String externalID) {
         User ret = null;
-        if (null != externalID)
-        {
+        if (null != externalID) {
             Iterator aux = getSemanticObject().getRDFResource().getModel().listStatements(null, User.swb_externalID.getRDFProperty(), getSemanticObject().getModel().getRDFModel().createLiteral(externalID));
             Iterator it = new GenericIterator(aux, true);
-            if (it.hasNext())
-            {
+            if (it.hasNext()) {
                 ret = (User) it.next();
             }
         }

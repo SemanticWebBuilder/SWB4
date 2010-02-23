@@ -3,70 +3,73 @@ package org.semanticwb.model.base;
 
 public abstract class AdminFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Traceable,org.semanticwb.model.XMLable,org.semanticwb.model.Descriptiveable
 {
-       public static final org.semanticwb.platform.SemanticClass swb_AdminFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#AdminFilter");
-       public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#AdminFilter");
+    public static final org.semanticwb.platform.SemanticClass swb_AdminFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#AdminFilter");
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#AdminFilter");
+
     public static class ClassMgr
     {
 
-       public static java.util.Iterator<org.semanticwb.model.AdminFilter> listAdminFilters(org.semanticwb.model.SWBModel model)
-       {
-           java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-           return new org.semanticwb.model.GenericIterator<org.semanticwb.model.AdminFilter>(it, true);
-       }
+        public static java.util.Iterator<org.semanticwb.model.AdminFilter> listAdminFilters(org.semanticwb.model.SWBModel model)
+        {
+            java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
+            return new org.semanticwb.model.GenericIterator<org.semanticwb.model.AdminFilter>(it, true);
+        }
 
-       public static java.util.Iterator<org.semanticwb.model.AdminFilter> listAdminFilters()
-       {
-           java.util.Iterator it=sclass.listInstances();
-           return new org.semanticwb.model.GenericIterator<org.semanticwb.model.AdminFilter>(it, true);
-       }
+        public static java.util.Iterator<org.semanticwb.model.AdminFilter> listAdminFilters()
+        {
+            java.util.Iterator it=sclass.listInstances();
+            return new org.semanticwb.model.GenericIterator<org.semanticwb.model.AdminFilter>(it, true);
+        }
 
-       public static org.semanticwb.model.AdminFilter createAdminFilter(org.semanticwb.model.SWBModel model)
-       {
-           long id=model.getSemanticObject().getModel().getCounter(sclass);
-           return org.semanticwb.model.AdminFilter.ClassMgr.createAdminFilter(String.valueOf(id), model);
-       }
+        public static org.semanticwb.model.AdminFilter createAdminFilter(org.semanticwb.model.SWBModel model)
+        {
+            long id=model.getSemanticObject().getModel().getCounter(sclass);
+            return org.semanticwb.model.AdminFilter.ClassMgr.createAdminFilter(String.valueOf(id), model);
+        }
 
-       public static org.semanticwb.model.AdminFilter getAdminFilter(String id, org.semanticwb.model.SWBModel model)
-       {
-           return (org.semanticwb.model.AdminFilter)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-       }
+        public static org.semanticwb.model.AdminFilter getAdminFilter(String id, org.semanticwb.model.SWBModel model)
+        {
+            return (org.semanticwb.model.AdminFilter)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+        }
 
-       public static org.semanticwb.model.AdminFilter createAdminFilter(String id, org.semanticwb.model.SWBModel model)
-       {
-           return (org.semanticwb.model.AdminFilter)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
-       }
+        public static org.semanticwb.model.AdminFilter createAdminFilter(String id, org.semanticwb.model.SWBModel model)
+        {
+            return (org.semanticwb.model.AdminFilter)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+        }
 
-       public static void removeAdminFilter(String id, org.semanticwb.model.SWBModel model)
-       {
-           model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
-       }
+        public static void removeAdminFilter(String id, org.semanticwb.model.SWBModel model)
+        {
+            model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
+        }
 
-       public static boolean hasAdminFilter(String id, org.semanticwb.model.SWBModel model)
-       {
-           return (getAdminFilter(id, model)!=null);
-       }
-   public static java.util.Iterator<org.semanticwb.model.AdminFilter> listAdminFilterByModifiedBy(org.semanticwb.model.User modifiedby,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.model.AdminFilter> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_modifiedBy, modifiedby.getSemanticObject()));
-       return it;
-   }
+        public static boolean hasAdminFilter(String id, org.semanticwb.model.SWBModel model)
+        {
+            return (getAdminFilter(id, model)!=null);
+        }
 
-   public static java.util.Iterator<org.semanticwb.model.AdminFilter> listAdminFilterByModifiedBy(org.semanticwb.model.User modifiedby)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.model.AdminFilter> it=new org.semanticwb.model.GenericIterator(modifiedby.getSemanticObject().getModel().listSubjects(swb_modifiedBy,modifiedby.getSemanticObject()));
-       return it;
-   }
-   public static java.util.Iterator<org.semanticwb.model.AdminFilter> listAdminFilterByCreator(org.semanticwb.model.User creator,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.model.AdminFilter> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_creator, creator.getSemanticObject()));
-       return it;
-   }
+        public static java.util.Iterator<org.semanticwb.model.AdminFilter> listAdminFilterByModifiedBy(org.semanticwb.model.User modifiedby,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.AdminFilter> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_modifiedBy, modifiedby.getSemanticObject()));
+            return it;
+        }
 
-   public static java.util.Iterator<org.semanticwb.model.AdminFilter> listAdminFilterByCreator(org.semanticwb.model.User creator)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.model.AdminFilter> it=new org.semanticwb.model.GenericIterator(creator.getSemanticObject().getModel().listSubjects(swb_creator,creator.getSemanticObject()));
-       return it;
-   }
+        public static java.util.Iterator<org.semanticwb.model.AdminFilter> listAdminFilterByModifiedBy(org.semanticwb.model.User modifiedby)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.AdminFilter> it=new org.semanticwb.model.GenericIterator(modifiedby.getSemanticObject().getModel().listSubjects(swb_modifiedBy,modifiedby.getSemanticObject()));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.model.AdminFilter> listAdminFilterByCreator(org.semanticwb.model.User creator,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.AdminFilter> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_creator, creator.getSemanticObject()));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.model.AdminFilter> listAdminFilterByCreator(org.semanticwb.model.User creator)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.AdminFilter> it=new org.semanticwb.model.GenericIterator(creator.getSemanticObject().getModel().listSubjects(swb_creator,creator.getSemanticObject()));
+            return it;
+        }
     }
 
     public AdminFilterBase(org.semanticwb.platform.SemanticObject base)
@@ -93,7 +96,6 @@ public abstract class AdminFilterBase extends org.semanticwb.model.SWBClass impl
     {
         getSemanticObject().removeProperty(swb_modifiedBy);
     }
-
 
     public org.semanticwb.model.User getModifiedBy()
     {
@@ -160,7 +162,6 @@ public abstract class AdminFilterBase extends org.semanticwb.model.SWBClass impl
     {
         getSemanticObject().removeProperty(swb_creator);
     }
-
 
     public org.semanticwb.model.User getCreator()
     {

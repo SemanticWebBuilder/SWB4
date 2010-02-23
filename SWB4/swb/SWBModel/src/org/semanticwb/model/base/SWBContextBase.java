@@ -1,15 +1,9 @@
 package org.semanticwb.model.base;
 
-import java.util.Iterator;
-import org.semanticwb.model.*;
-import org.semanticwb.SWBPlatform;
-import org.semanticwb.platform.SemanticMgr;
-import org.semanticwb.platform.SemanticModel;
-import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticClass;
 public class SWBContextBase
 {
-    private static SemanticMgr mgr=org.semanticwb.SWBPlatform.getSemanticMgr();
+//    private static SemanticMgr mgr=org.semanticwb.SWBPlatform.getSemanticMgr();
     public static final SemanticClass swb_WebSite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebSite");
 
     public static org.semanticwb.model.WebSite getWebSite(String name)

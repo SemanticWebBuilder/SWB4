@@ -80,10 +80,16 @@ public class WebPage extends WebPageBase
      */
     public String getRealUrl()
     {
-        //TODO:
+        String ret=null;
         User user=SWBContext.getSessionUser(getWebSite().getUserRepository().getId());
-        if(user!=null)return getRealUrl(user.getLanguage());
-        return getRealUrl(null);
+        if(user!=null)
+        {
+            ret=getRealUrl(user.getLanguage());
+        }else
+        {
+            ret=getRealUrl(null);
+        }
+        return ret;
     }
 
     /**  Regresa el Url de la pagina
@@ -185,12 +191,36 @@ public class WebPage extends WebPageBase
         String target = (String) args.get("target");
         String hiddentopics=(String)args.get("hiddentopics");
 
-        if (separator == null) separator = "";
-        if (cssclass == null) cssclass = ""; else cssclass = "class=\"" + cssclass + "\"";
-        if (selectcolor == null) selectcolor = ""; else selectcolor = "color=\"" + selectcolor + "\"";
-        if (links == null) links = "true";
-        if(target==null)target="";
-        else target="target=\""+target+"\"";
+        if (separator == null)
+        {
+            separator = "";
+        }
+        if (cssclass == null)
+        {
+            cssclass = "";
+        } else
+        {
+            cssclass = "class=\"" + cssclass + "\"";
+        }
+        if (selectcolor == null)
+        {
+            selectcolor = "";
+        } else
+        {
+            selectcolor = "color=\"" + selectcolor + "\"";
+        }
+        if (links == null)
+        {
+            links = "true";
+        }
+        if(target==null)
+        {
+            target="";
+        }
+        else
+        {
+            target="target=\""+target+"\"";
+        }
 
         //Hidden Topics
         ArrayList hd=null;
@@ -212,16 +242,36 @@ public class WebPage extends WebPageBase
         if (home != null)
         {
             tphome = getWebSite().getWebPage(home);
-            if (tphome == null) tphome = getWebSite().getHomePage();
+            if (tphome == null)
+            {
+                tphome = getWebSite().getHomePage();
+            }
         } else
+        {
             tphome = getWebSite().getHomePage();
+        }
 
-        if (tpacssclass!=null && tpacssclass.length() > 0) ret.append("<span " + tpacssclass + ">");
-        else if (cssclass != null && cssclass.length() > 0) ret.append("<span " + cssclass + ">");
-        if (selectcolor != null && selectcolor.length() > 0) ret.append("<font " + selectcolor + ">");
+        if (tpacssclass!=null && tpacssclass.length() > 0)
+        {
+            ret.append("<span " + tpacssclass + ">");
+        }
+        else if (cssclass != null && cssclass.length() > 0)
+        {
+            ret.append("<span " + cssclass + ">");
+        }
+        if (selectcolor != null && selectcolor.length() > 0)
+        {
+            ret.append("<font " + selectcolor + ">");
+        }
         ret.append(this.getDisplayName(language));
-        if (selectcolor != null && selectcolor.length() > 0) ret.append("</font>");
-        if ((tpacssclass!=null && tpacssclass.length() > 0) || (cssclass != null && cssclass.length() > 0)) ret.append("</span>");
+        if (selectcolor != null && selectcolor.length() > 0)
+        {
+            ret.append("</font>");
+        }
+        if ((tpacssclass!=null && tpacssclass.length() > 0) || (cssclass != null && cssclass.length() > 0))
+        {
+            ret.append("</span>");
+        }
             
         if (tphome != this)
         {
@@ -242,10 +292,16 @@ public class WebPage extends WebPageBase
                         ret.insert(0, tp.getDisplayName(language));
                     }
                 }
-                if (arr.contains(tp)) break;
+                if (arr.contains(tp))
+                {
+                    break;
+                }
                 arr.add(tp);
                 tp = tp.getParent();
-                if (tphome == tp) break;
+                if (tphome == tp)
+                {
+                    break;
+                }
             }
         }
         return ret.toString();
@@ -263,7 +319,10 @@ public class WebPage extends WebPageBase
      */
     public String getUrl(WebPage virtualtopic)
     {
-        if(virtualtopic==null)return getUrl();
+        if(virtualtopic==null)
+        {
+            return getUrl();
+        }
         String ret=getRealUrl();
         ret+="/"+"_vtp";                    //DistributorParams.URLP_VTOPIC;
         ret+="/" + virtualtopic.getWebSiteId() + "/" + virtualtopic.getId();
@@ -284,8 +343,14 @@ public class WebPage extends WebPageBase
             while (tp!=null)
             {
                 ret++;
-                if (home.equals(tp)) break;
-                if (arr.contains(tp)) break;
+                if (home.equals(tp))
+                {
+                    break;
+                }
+                if (arr.contains(tp))
+                {
+                    break;
+                }
                 arr.add(tp);
                 tp = tp.getParent();
             }
@@ -299,16 +364,24 @@ public class WebPage extends WebPageBase
      */
     public boolean isChildof(WebPage page)
     {
+        boolean ret=false;
         ArrayList<WebPage> arr = new ArrayList();
         WebPage tp = this.getParent();
         while (tp!=null)
         {
-            if (tp.equals(page)) return true;
-            if (arr.contains(tp)) return false;
+            if (tp.equals(page))
+            {
+                ret=true;
+                break;
+            }
+            if (arr.contains(tp))
+            {
+                break;
+            }
             arr.add(tp);
             tp=tp.getParent();
         }
-        return false;
+        return ret;
     }
 
     /** indica si el topico es padre de otro topico.
@@ -328,8 +401,14 @@ public class WebPage extends WebPageBase
     {
         boolean ret=false;
         ret=listInheritRoleRefs().hasNext();
-        if(!ret)ret=listInheritUserGroupRefs().hasNext();
-        if(!ret)ret=listInheritRuleRefs().hasNext();
+        if(!ret)
+        {
+            ret=listInheritUserGroupRefs().hasNext();
+        }
+        if(!ret)
+        {
+            ret=listInheritRuleRefs().hasNext();
+        }
         return ret;
     }
     
@@ -433,13 +512,19 @@ public class WebPage extends WebPageBase
         while (it.hasNext())
         {
             WebPage tp=it.next();
-            if(tp.isVisible())set.add(tp);
+            if(tp.isVisible())
+            {
+                set.add(tp);
+            }
         }
         it = listWebPageVirtualChilds();
         while (it.hasNext())
         {
             WebPage tp=it.next();
-            if(tp.isVisible())set.add(tp);
+            if(tp.isVisible())
+            {
+                set.add(tp);
+            }
         }
         return set.iterator();
     }
@@ -457,10 +542,22 @@ public class WebPage extends WebPageBase
         while (it.hasNext())
         {
             WebPage tp=it.next();
-            if (active!=null && tp.isActive() != active) continue;
-            if (deleted!=null && tp.isDeleted() != deleted) continue;
-            if (hidden!=null && tp.isHidden() != hidden) continue;
-            if (onSchedule!=null && tp.isOnSchedule() == onSchedule) continue;
+            if (active!=null && tp.isActive() != active)
+            {
+                continue;
+            }
+            if (deleted!=null && tp.isDeleted() != deleted)
+            {
+                continue;
+            }
+            if (hidden!=null && tp.isHidden() != hidden)
+            {
+                continue;
+            }
+            if (onSchedule!=null && tp.isOnSchedule() == onSchedule)
+            {
+                continue;
+            }
             set.add(tp);
         }
         if(incVirChilds)
@@ -469,10 +566,22 @@ public class WebPage extends WebPageBase
             while (it.hasNext())
             {
                 WebPage tp=it.next();
-                if (active!=null && tp.isActive() != active) continue;
-                if (deleted!=null && tp.isDeleted() != deleted) continue;
-                if (hidden!=null && tp.isHidden() != hidden) continue;
-                if (onSchedule!=null && tp.isOnSchedule() == onSchedule) continue;
+                if (active!=null && tp.isActive() != active)
+                {
+                    continue;
+                }
+                if (deleted!=null && tp.isDeleted() != deleted)
+                {
+                    continue;
+                }
+                if (hidden!=null && tp.isHidden() != hidden)
+                {
+                    continue;
+                }
+                if (onSchedule!=null && tp.isOnSchedule() == onSchedule)
+                {
+                    continue;
+                }
                 set.add(tp);
             }
         }
@@ -501,14 +610,20 @@ public class WebPage extends WebPageBase
     @Override
     public long getViews()
     {
-        if(views==-1)views=super.getViews();
+        if(views==-1)
+        {
+            views=super.getViews();
+        }
         return views;
     }
 
     public boolean incViews()
     {
         viewed = true;
-        if(views==-1)views=getViews();
+        if(views==-1)
+        {
+            views=getViews();
+        }
         views+=1;
         long t = System.currentTimeMillis() - timer;
         if (t > time || t < -time)
@@ -548,11 +663,17 @@ public class WebPage extends WebPageBase
         {
             Resource recRes=it.next();
             java.sql.Timestamp ts = (java.sql.Timestamp)recRes.getUpdated();
-                if (auxt == null || auxt.before(ts)) auxt = ts;
+                if (auxt == null || auxt.before(ts))
+                {
+                    auxt = ts;
+                }
         }
         if (auxt != null)
         {
-            if(lang==null)lang = "es";
+            if(lang==null)
+            {
+                lang = "es";
+            }
 
             if (getWebSite().getLanguage() != null)
             {
