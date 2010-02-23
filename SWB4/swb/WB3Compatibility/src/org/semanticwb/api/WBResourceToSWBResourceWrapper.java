@@ -50,6 +50,8 @@ public class WBResourceToSWBResourceWrapper extends GenericResource
 
     public WBResourceToSWBResourceWrapper(com.infotec.wb.lib.WBResource wbResource)
     {
+        System.out.println("wbResource:"+wbResource);
+        Thread.currentThread().dumpStack();
         this.res = wbResource;
     }
 
