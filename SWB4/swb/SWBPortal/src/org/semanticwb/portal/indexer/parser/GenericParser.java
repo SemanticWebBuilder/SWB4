@@ -130,11 +130,9 @@ public class GenericParser
         String ret = "";
         if (gen != null) {
             SemanticObject sobj = gen.getSemanticObject();
-            if (gen instanceof Descriptiveable) {
-                SemanticProperty prop = Descriptiveable.swb_description;
-                if (prop != null) {
-                    ret = sobj.getPropertyIndexData(prop);
-                }
+            SemanticProperty prop = Descriptiveable.swb_description;
+            if (gen instanceof Descriptiveable && prop != null) {
+                ret = sobj.getPropertyIndexData(prop);
             }
         }
         return ret;
@@ -151,11 +149,9 @@ public class GenericParser
         String ret = "";
         if (gen != null) {
             SemanticObject sobj = gen.getSemanticObject();
-            if (gen instanceof Tagable) {
-                SemanticProperty prop = Tagable.swb_tags;
-                if (prop != null) {
-                    ret = sobj.getPropertyIndexData(prop);
-                }
+            SemanticProperty prop = Tagable.swb_tags;
+            if (gen instanceof Tagable && prop != null) {
+                ret = sobj.getPropertyIndexData(prop);
             }
         }
         return ret;
