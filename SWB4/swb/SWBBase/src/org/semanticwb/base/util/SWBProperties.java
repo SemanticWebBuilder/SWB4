@@ -1,27 +1,25 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
-
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 package org.semanticwb.base.util;
 
 import org.semanticwb.SWBUtils;
@@ -39,31 +37,24 @@ import java.util.*;
  * Objeto: para el manejo de archivos de propiedades.
  * @author Javier Solis Gonzalez
  */
-public class SWBProperties extends Properties
-{
-    Logger log=SWBUtils.getLogger(SWBProperties.class);
-    
-    private boolean readOnly=false;
-    
-    private final static String PREFIX="_comm_";
-    
+public class SWBProperties extends Properties {
+
+    Logger log = SWBUtils.getLogger(SWBProperties.class);
+    private boolean readOnly = false;
+    private final static String PREFIX = "_comm_";
     private static final String keyValueSeparators = "=: \t\r\n\f";
-
     private static final String strictKeyValueSeparators = "=:";
-
     private static final String specialSaveChars = "=: \t\r\n\f#!";
+    private static final String whiteSpaceChars = " \t\r\n\f";
+    private Vector arr = new Vector();
+    private boolean change = false;
 
-    private static final String whiteSpaceChars = " \t\r\n\f";    
-    
-    private Vector arr=new Vector();
-    
-    private boolean change=false;
-    
     /**
      * Creates an empty property list with no default values.
      */
-    public SWBProperties() {
-	this(null);
+    public SWBProperties()
+    {
+        this(null);
     }
 
     /**
@@ -71,28 +62,31 @@ public class SWBProperties extends Properties
      *
      * @param   defaults   the defaults.
      */
-    public SWBProperties(Properties defaults) {
-	super(defaults);
+    public SWBProperties(Properties defaults)
+    {
+        super(defaults);
     }
-    
+
     /**
      * Copia el contenido de properties
      * ejemplo:
      * System.getProperties
      * @param source 
      */
-    
     public void copy(Properties source)
     {
-        Iterator it=source.keySet().iterator();
-        while(it.hasNext())
+        Iterator it = source.keySet().iterator();
+        while (it.hasNext())
         {
-            String key=(String)it.next();
+            String key = (String) it.next();
             setProperty(key, source.getProperty(key));
-            if(!arr.contains(key))arr.add(key);
+            if (!arr.contains(key))
+            {
+                arr.add(key);
+            }
         }
     }
-    
+
     /**
      * Calls the <tt>Hashtable</tt> method <code>put</code>. Provided for
      * parallelism with the <tt>getProperty</tt> method. Enforces use of
@@ -107,11 +101,12 @@ public class SWBProperties extends Properties
      * @since    1.2
      */
     @Override
-    public synchronized Object setProperty(String key, String value) {
+    public synchronized Object setProperty(String key, String value)
+    {
         setChange(true);
         return super.setProperty(key, value);
     }
-    
+
     /**
      * Calls the <tt>Hashtable</tt> method <code>put</code>. Provided for
      * parallelism with the <tt>getProperty</tt> method. Enforces use of
@@ -126,34 +121,46 @@ public class SWBProperties extends Properties
      * @param key the key to be placed into this property list.
      * @param value the value corresponding to <tt>key</tt>.
      */
-    public synchronized Object setProperty(String key, String value, String comment) {
+    public synchronized Object setProperty(String key, String value, String comment)
+    {
         setChange(true);
-        StringBuffer com=new StringBuffer();
-        if(!arr.contains(key))arr.add(key);
-        if(comment!=null)
+        StringBuffer com = new StringBuffer();
+        if (!arr.contains(key))
         {
-            java.io.StringBufferInputStream inb= new java.io.StringBufferInputStream(comment);
+            arr.add(key);
+        }
+        if (comment != null)
+        {
+            java.io.StringBufferInputStream inb = new java.io.StringBufferInputStream(comment);
             try
             {
-                BufferedReader in = new BufferedReader(new InputStreamReader(inb, "8859_1"));   
-                String line=null;
-                while ((line = in.readLine())!=null) 
+                BufferedReader in = new BufferedReader(new InputStreamReader(inb, "8859_1"));
+                String line = null;
+                while ((line = in.readLine()) != null)
                 {
-                    if(line.length()>0)
+                    if (line.length() > 0)
                     {
-                        if(line.charAt(0)!='#')com.append("#"+line+"\r\n");
-                        else com.append(line+"\r\n");
-                    }else
+                        if (line.charAt(0) != '#')
+                        {
+                            com.append("#" + line + "\r\n");
+                        } else
+                        {
+                            com.append(line + "\r\n");
+                        }
+                    } else
                     {
                         com.append("\r\n");
                     }
                 }
-            }catch(Exception e){log.error(e);}
-            put(PREFIX+key, com.toString());
+            } catch (Exception e)
+            {
+                log.error(e);
+            }
+            put(PREFIX + key, com.toString());
         }
         return put(key, value);
-    }    
-    
+    }
+
     /**
      * 
      * @return 
@@ -162,7 +169,7 @@ public class SWBProperties extends Properties
     {
         return isChange();
     }
-    
+
     /**
      * Reads a property list (key and element pairs) from the input
      * stream.  The stream is assumed to be using the ISO 8859-1
@@ -315,76 +322,110 @@ public class SWBProperties extends Properties
      * 		   malformed Unicode escape sequence.
      */
     @Override
-    public synchronized void load(InputStream inStream) throws IOException 
-    { 
+    public synchronized void load(InputStream inStream) throws IOException
+    {
         setChange(false);
         arr.clear();
         clear();
-        String buf="";
+        String buf = "";
         BufferedReader in = new BufferedReader(new InputStreamReader(inStream, "8859_1"));
-	while (true) {
+        while (true)
+        {
             // Get next line
             String line = in.readLine();
             if (line == null)
+            {
                 return;
-                
-            if (line.length() > 0) {
-                
+            }
+
+            if (line.length() > 0)
+            {
+
                 // Find start of key
                 int len = line.length();
                 int keyStart;
-                for (keyStart=0; keyStart<len; keyStart++)
+                for (keyStart = 0; keyStart < len; keyStart++)
+                {
                     if (whiteSpaceChars.indexOf(line.charAt(keyStart)) == -1)
+                    {
                         break;
+                    }
+                }
 
                 // Blank lines are ignored
                 if (keyStart == len)
+                {
                     continue;
+                }
 
                 // Continue lines that end in slashes if they are not comments
                 char firstChar = line.charAt(keyStart);
-                if ((firstChar != '#') && (firstChar != '!')) {
+                if ((firstChar != '#') && (firstChar != '!'))
+                {
                     //System.out.println("Si:"+line);
-                    while (continueLine(line)) {
+                    while (continueLine(line))
+                    {
                         String nextLine = in.readLine();
                         if (nextLine == null)
+                        {
                             nextLine = "";
-                        String loppedLine = line.substring(0, len-1);
+                        }
+                        String loppedLine = line.substring(0, len - 1);
                         // Advance beyond whitespace on new line
                         int startIndex;
-                        for (startIndex=0; startIndex<nextLine.length(); startIndex++)
+                        for (startIndex = 0; startIndex < nextLine.length(); startIndex++)
+                        {
                             if (whiteSpaceChars.indexOf(nextLine.charAt(startIndex)) == -1)
+                            {
                                 break;
-                        nextLine = nextLine.substring(startIndex,nextLine.length());
-                        line = loppedLine+nextLine;
+                            }
+                        }
+                        nextLine = nextLine.substring(startIndex, nextLine.length());
+                        line = loppedLine + nextLine;
                         len = line.length();
                     }
 
                     // Find separation between key and value
                     int separatorIndex;
-                    for (separatorIndex=keyStart; separatorIndex<len; separatorIndex++) {
+                    for (separatorIndex = keyStart; separatorIndex < len; separatorIndex++)
+                    {
                         char currentChar = line.charAt(separatorIndex);
                         if (currentChar == '\\')
+                        {
                             separatorIndex++;
-                        else if (keyValueSeparators.indexOf(currentChar) != -1)
+                        } else if (keyValueSeparators.indexOf(currentChar) != -1)
+                        {
                             break;
+                        }
                     }
 
                     // Skip over whitespace after key if any
                     int valueIndex;
-                    for (valueIndex=separatorIndex; valueIndex<len; valueIndex++)
+                    for (valueIndex = separatorIndex; valueIndex < len; valueIndex++)
+                    {
                         if (whiteSpaceChars.indexOf(line.charAt(valueIndex)) == -1)
+                        {
                             break;
+                        }
+                    }
 
                     // Skip over one non whitespace key value separators if any
-                    if (valueIndex < len)
-                        if (strictKeyValueSeparators.indexOf(line.charAt(valueIndex)) != -1)
+                    if (valueIndex < len && strictKeyValueSeparators.indexOf(line.charAt(valueIndex)) != -1)
+                    {
+                        //MAPS74 If redundante
+//                        if (strictKeyValueSeparators.indexOf(line.charAt(valueIndex)) != -1)
+//                        {
                             valueIndex++;
+//                        }
+                    }
 
                     // Skip over white space after other separators if any
-                    while (valueIndex < len) {
+                    while (valueIndex < len)
+                    {
                         if (whiteSpaceChars.indexOf(line.charAt(valueIndex)) == -1)
+                        {
                             break;
+                        }
                         valueIndex++;
                     }
                     String key = line.substring(keyStart, separatorIndex);
@@ -393,74 +434,111 @@ public class SWBProperties extends Properties
                     // Convert then store key and value
                     key = loadConvert(key);
                     value = loadConvert(value);
-                    if(!arr.contains(key))arr.add(key);
+                    if (!arr.contains(key))
+                    {
+                        arr.add(key);
+                    }
                     put(key, value);
                     //if(buf.length()>2)buf=buf.substring(0,buf.length()-2);
-                    put(PREFIX+key, buf);
-                    buf="";
-                }else
+                    put(PREFIX + key, buf);
+                    buf = "";
+                } else
                 {
-                    buf+=line+"\r\n";
+                    buf += line + "\r\n";
                     //System.out.println("No:"+line);
                 }
-            }else
+            } else
             {
-                buf+="\r\n";
+                buf += "\r\n";
                 //System.out.println("No:");
             }
-	}
+        }
     }
-    
+
     /*
      * Converts encoded &#92;uxxxx to unicode chars
      * and changes special saved chars to their original forms
      */
-    private String loadConvert(String theString) {
+    private String loadConvert(String theString)
+    {
         char aChar;
         int len = theString.length();
         StringBuffer outBuffer = new StringBuffer(len);
 
-        for (int x=0; x<len; ) {
+        for (int x = 0; x < len;)
+        {
             aChar = theString.charAt(x++);
-            if (aChar == '\\') {
+            if (aChar == '\\')
+            {
                 aChar = theString.charAt(x++);
-                if (aChar == 'u') {
+                if (aChar == 'u')
+                {
                     // Read the xxxx
-                    int value=0;
-		    for (int i=0; i<4; i++) {
-		        aChar = theString.charAt(x++);
-		        switch (aChar) {
-		          case '0': case '1': case '2': case '3': case '4':
-		          case '5': case '6': case '7': case '8': case '9':
-		             value = (value << 4) + aChar - '0';
-			     break;
-			  case 'a': case 'b': case 'c':
-                          case 'd': case 'e': case 'f':
-			     value = (value << 4) + 10 + aChar - 'a';
-			     break;
-			  case 'A': case 'B': case 'C':
-                          case 'D': case 'E': case 'F':
-			     value = (value << 4) + 10 + aChar - 'A';
-			     break;
-			  default:
-                              throw new IllegalArgumentException(
-                                           "Malformed \\uxxxx encoding.");
+                    int value = 0;
+                    for (int i = 0; i < 4; i++)
+                    {
+                        aChar = theString.charAt(x++);
+                        switch (aChar)
+                        {
+                            case '0':
+                            case '1':
+                            case '2':
+                            case '3':
+                            case '4':
+                            case '5':
+                            case '6':
+                            case '7':
+                            case '8':
+                            case '9':
+                                value = (value << 4) + aChar - '0';
+                                break;
+                            case 'a':
+                            case 'b':
+                            case 'c':
+                            case 'd':
+                            case 'e':
+                            case 'f':
+                                value = (value << 4) + 10 + aChar - 'a';
+                                break;
+                            case 'A':
+                            case 'B':
+                            case 'C':
+                            case 'D':
+                            case 'E':
+                            case 'F':
+                                value = (value << 4) + 10 + aChar - 'A';
+                                break;
+                            default:
+                                throw new IllegalArgumentException(
+                                        "Malformed \\uxxxx encoding.");
                         }
                     }
-                    outBuffer.append((char)value);
-                } else {
-                    if (aChar == 't') aChar = '\t';
-                    else if (aChar == 'r') aChar = '\r';
-                    else if (aChar == 'n') aChar = '\n';
-                    else if (aChar == 'f') aChar = '\f';
+                    outBuffer.append((char) value);
+                } else
+                {
+                    if (aChar == 't')
+                    {
+                        aChar = '\t';
+                    } else if (aChar == 'r')
+                    {
+                        aChar = '\r';
+                    } else if (aChar == 'n')
+                    {
+                        aChar = '\n';
+                    } else if (aChar == 'f')
+                    {
+                        aChar = '\f';
+                    }
                     outBuffer.append(aChar);
                 }
             } else
+            {
                 outBuffer.append(aChar);
+            }
         }
         return outBuffer.toString();
-    }   
-    
+    }
+
     /**
      * Returns an enumeration of all the keys in this property list,
      * including distinct keys in the default property list if a key
@@ -473,43 +551,53 @@ public class SWBProperties extends Properties
      * @see     java.util.Properties#defaults
      */
     @Override
-    public Enumeration propertyNames() {
-	Hashtable h = new Hashtable();
-	enumerate(h);
-	return h.keys();
-    }   
-    
+    public Enumeration propertyNames()
+    {
+        Hashtable h = new Hashtable();
+        enumerate(h);
+        return h.keys();
+    }
+
     /**
      * 
      * @return 
      */
     public Enumeration propertyOrderedNames()
     {
-        if(arr.isEmpty())return propertyNames();
+        if (arr.isEmpty())
+        {
+            return propertyNames();
+        }
         return arr.elements();
     }
-    
+
     /**
      * Enumerates all key/value pairs in the specified hastable.
      * @param h the hashtable
      */
-    private synchronized void enumerate(Hashtable h) {
-        if(defaults!=null)
+    private synchronized void enumerate(Hashtable h)
+    {
+        if (defaults != null)
         {
-            for (Enumeration e = defaults.keys() ; e.hasMoreElements() ;) {
-                String key = (String)e.nextElement();
-                if(!key.startsWith(PREFIX))
+            for (Enumeration e = defaults.keys(); e.hasMoreElements();)
+            {
+                String key = (String) e.nextElement();
+                if (!key.startsWith(PREFIX))
                 {
                     h.put(key, defaults.get(key));
                 }
             }
         }
-	for (Enumeration e = keys() ; e.hasMoreElements() ;) {
-	    String key = (String)e.nextElement();
-            if(!key.startsWith(PREFIX))h.put(key, get(key));
-	}
-    }    
-    
+        for (Enumeration e = keys(); e.hasMoreElements();)
+        {
+            String key = (String) e.nextElement();
+            if (!key.startsWith(PREFIX))
+            {
+                h.put(key, get(key));
+            }
+        }
+    }
+
     /**
      * Searches for the property with the specified key in this property list.
      * If the key is not found in this property list, the default property list,
@@ -521,90 +609,115 @@ public class SWBProperties extends Properties
      * @see     #setProperty
      * @see     #defaults
      */
-    public String getComment(String key) {
-        key=PREFIX+key;
-	Object oval = super.get(key);
-	String sval = (oval instanceof String) ? (String)oval : null;
-	return ((sval == null) && (defaults != null)) ? defaults.getProperty(key) : sval;
-    }    
-    
+    public String getComment(String key)
+    {
+        key = PREFIX + key;
+        Object oval = super.get(key);
+        String sval = (oval instanceof String) ? (String) oval : null;
+        return ((sval == null) && (defaults != null)) ? defaults.getProperty(key) : sval;
+    }
+
     /*
      * Converts unicodes to encoded &#92;uxxxx
      * and writes out any of the characters in specialSaveChars
      * with a preceding slash
      */
-    private String saveConvert(String theString, boolean escapeSpace) {
+    private String saveConvert(String theString, boolean escapeSpace)
+    {
         int len = theString.length();
-        StringBuffer outBuffer = new StringBuffer(len*2);
+        StringBuffer outBuffer = new StringBuffer(len * 2);
 
-        for(int x=0; x<len; x++) {
+        for (int x = 0; x < len; x++)
+        {
             char aChar = theString.charAt(x);
-            switch(aChar) {
-		case ' ':
-		    if (x == 0 || escapeSpace) 
-			outBuffer.append('\\');
+            switch (aChar)
+            {
+                case ' ':
+                    if (x == 0 || escapeSpace)
+                    {
+                        outBuffer.append('\\');
+                    }
 
-		    outBuffer.append(' ');
-		    break;
-                case '\\':outBuffer.append('\\'); outBuffer.append('\\');
-                          break;
-                case '\t':outBuffer.append('\\'); outBuffer.append('t');
-                          break;
-                case '\n':outBuffer.append('\\'); outBuffer.append('n');
-                          break;
-                case '\r':outBuffer.append('\\'); outBuffer.append('r');
-                          break;
-                case '\f':outBuffer.append('\\'); outBuffer.append('f');
-                          break;
+                    outBuffer.append(' ');
+                    break;
+                case '\\':
+                    outBuffer.append('\\');
+                    outBuffer.append('\\');
+                    break;
+                case '\t':
+                    outBuffer.append('\\');
+                    outBuffer.append('t');
+                    break;
+                case '\n':
+                    outBuffer.append('\\');
+                    outBuffer.append('n');
+                    break;
+                case '\r':
+                    outBuffer.append('\\');
+                    outBuffer.append('r');
+                    break;
+                case '\f':
+                    outBuffer.append('\\');
+                    outBuffer.append('f');
+                    break;
                 default:
-                    if ((aChar < 0x0020) || (aChar > 0x007e)) {
+                    if ((aChar < 0x0020) || (aChar > 0x007e))
+                    {
                         outBuffer.append('\\');
                         outBuffer.append('u');
                         outBuffer.append(toHex((aChar >> 12) & 0xF));
-                        outBuffer.append(toHex((aChar >>  8) & 0xF));
-                        outBuffer.append(toHex((aChar >>  4) & 0xF));
-                        outBuffer.append(toHex( aChar        & 0xF));
-                    } else {
+                        outBuffer.append(toHex((aChar >> 8) & 0xF));
+                        outBuffer.append(toHex((aChar >> 4) & 0xF));
+                        outBuffer.append(toHex(aChar & 0xF));
+                    } else
+                    {
                         if (specialSaveChars.indexOf(aChar) != -1)
+                        {
                             outBuffer.append('\\');
+                        }
                         outBuffer.append(aChar);
                     }
             }
         }
         return outBuffer.toString();
-    }    
+    }
 
     /*
      * Returns true if the given line is a line that must
      * be appended to the next line
      */
-    private boolean continueLine(String line) {
+    private boolean continueLine(String line)
+    {
         int slashCount = 0;
         int index = line.length() - 1;
         while ((index >= 0) && (line.charAt(index--) == '\\'))
+        {
             slashCount++;
+        }
         return (slashCount % 2 != 0);
     }
 
     @Override
-    public synchronized int hashCode() {
+    public synchronized int hashCode()
+    {
         return super.hashCode();
     }
 
     @Override
-    public synchronized boolean equals(Object o) {
+    public synchronized boolean equals(Object o)
+    {
         return super.equals(o);
     }
-    
+
     @Override
     public Object remove(Object key)
     {
         setChange(true);
         arr.remove(key);
-        super.remove(PREFIX+key);
+        super.remove(PREFIX + key);
         return super.remove(key);
     }
-    
+
     /**
      * Writes this property list (key and element pairs) in this
      * <code>Properties</code> table to the output stream in a format suitable
@@ -659,7 +772,7 @@ public class SWBProperties extends Properties
      */
     @Override
     public synchronized void store(OutputStream out, String header)
-    throws IOException
+            throws IOException
     {
         setChange(false);
         BufferedWriter awriter;
@@ -669,36 +782,41 @@ public class SWBProperties extends Properties
             writeln(awriter, "#" + header);
             writeln(awriter, "#" + new Date().toString());
         }
-        for (Enumeration e = arr.elements(); e.hasMoreElements();) {
-            String key = (String)e.nextElement();
-            
-            String comm=(String)get(PREFIX+key);
-            if(comm!=null)
+        for (Enumeration e = arr.elements(); e.hasMoreElements();)
+        {
+            String key = (String) e.nextElement();
+
+            String comm = (String) get(PREFIX + key);
+            if (comm != null)
+            {
                 awriter.write(comm);
-            
-            String val = (String)get(key);
+            }
+
+            String val = (String) get(key);
             key = saveConvert(key, true);
 
-	    /* No need to escape embedded and trailing spaces for value, hence
-	     * pass false to flag.
-	     */
+            /* No need to escape embedded and trailing spaces for value, hence
+             * pass false to flag.
+             */
             val = saveConvert(val, false);
             writeln(awriter, key + "=" + val);
         }
         awriter.flush();
     }
 
-    private static void writeln(BufferedWriter bw, String s) throws IOException {
+    private static void writeln(BufferedWriter bw, String s) throws IOException
+    {
         bw.write(s);
         bw.newLine();
-    }    
-    
+    }
+
     /**
      * Convert a nibble to a hex character
      * @param	nibble	the nibble to convert.
      */
-    private static char toHex(int nibble) {
-	return hexDigit[(nibble & 0xF)];
+    private static char toHex(int nibble)
+    {
+        return hexDigit[(nibble & 0xF)];
     }
 
     /**
@@ -709,7 +827,7 @@ public class SWBProperties extends Properties
     {
         return readOnly;
     }
-    
+
     /**
      * Setter for property readOnly.
      * @param readOnly New value of property readOnly.
@@ -718,18 +836,19 @@ public class SWBProperties extends Properties
     {
         this.readOnly = readOnly;
     }
-    
     /** A table of hex digits */
-    private static final char[] hexDigit = {
-	'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'
+    private static final char[] hexDigit =
+    {
+        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
     };
 
-    public boolean isChange() {
+    public boolean isChange()
+    {
         return change;
     }
 
-    public synchronized void setChange(boolean change) {
+    public synchronized void setChange(boolean change)
+    {
         this.change = change;
     }
-    
 }

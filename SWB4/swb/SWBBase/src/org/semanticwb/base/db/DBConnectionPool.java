@@ -1,32 +1,30 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 /*
  * DBConnectionPool.java
  *
  * Created on 14 de mayo de 2002, 13:12
  */
-
 package org.semanticwb.base.db;
 
 import java.sql.*;
@@ -40,10 +38,9 @@ import org.semanticwb.SWBUtils;
  * esté abierta antes de que se regrese a un cliente.
  * @author  Javier Solis Gonzalez (jsolis@infotec.com.mx) 
  */
-public class DBConnectionPool
-{
-    private static Logger log=SWBUtils.getLogger(DBConnectionPool.class);    
-    
+public class DBConnectionPool {
+
+    private static Logger log = SWBUtils.getLogger(DBConnectionPool.class);
     /**
      * 
      */
@@ -57,11 +54,10 @@ public class DBConnectionPool
     private String password;
     private String URL;
     private String user;
-    private long idle_time=0;
+    private long idle_time = 0;
     private DBConnectionManager manager;
-    
-    private long hits=0;
-    private long hitsTime=0;
+    private long hits = 0;
+    private long hitsTime = 0;
 
     /**
      * Crea un nuevo objeto connection pool.
@@ -75,15 +71,15 @@ public class DBConnectionPool
      * @param idle_time 
      */
     public DBConnectionPool(DBConnectionManager manager, String name, String URL, String user, String password,
-                            int maxConn, long idle_time)
+            int maxConn, long idle_time)
     {
-        this.manager=manager;
+        this.manager = manager;
         this.name = name;
         setURL(URL);
         this.user = user;
         this.password = password;
         this.maxConn = maxConn;
-        this.idle_time=idle_time*1000;
+        this.idle_time = idle_time * 1000;
     }
 
     /**
@@ -94,28 +90,31 @@ public class DBConnectionPool
      */
     public void freeConnection(Connection con)
     {
-        boolean add=true;
+        boolean add = true;
         // Put the connection at the end of the Vector
         try
         {
-            if(idle_time>0 && (System.currentTimeMillis()-((PoolConnection)con).getIdleTime())>idle_time)
+            if (idle_time > 0 && (System.currentTimeMillis() - ((PoolConnection) con).getIdleTime()) > idle_time)
             {
-                ((PoolConnection)con).destroyConnection();
-                add=false;
+                ((PoolConnection) con).destroyConnection();
+                add = false;
             }
-            if(((PoolConnection)con).getNativeConnection().isClosed())
+            if (((PoolConnection) con).getNativeConnection().isClosed())
             {
-                ((PoolConnection)con).destroyConnection();
-                add=false;
+                ((PoolConnection) con).destroyConnection();
+                add = false;
             }
-            if(add)
+            if (add)
             {
-                synchronized(freeConnections)
+                synchronized (freeConnections)
                 {
                     freeConnections.addElement(con);
                 }
             }
-        }catch(Exception e){log.warn("To return connection to pool",e);}
+        } catch (Exception e)
+        {
+            log.warn("To return connection to pool", e);
+        }
     }
 
     /**
@@ -128,7 +127,7 @@ public class DBConnectionPool
     public Connection getConnection()
     {
         PoolConnection con = null;
-        synchronized(freeConnections)
+        synchronized (freeConnections)
         {
             if (freeConnections.size() > 0)
             {
@@ -136,49 +135,49 @@ public class DBConnectionPool
                 con = (PoolConnection) freeConnections.remove(0);
             }
         }
-        if(con!=null)
+        if (con != null)
         {
             try
             {
-                if(idle_time>0 && (System.currentTimeMillis()-con.getIdleTime())>idle_time)
+                if (idle_time > 0 && (System.currentTimeMillis() - con.getIdleTime()) > idle_time)
                 {
-                    log.warn("Removed bad connection "+con.getId()+" (idle_time) from " + name + ", " + con.getDescription());
+                    log.warn("Removed bad connection " + con.getId() + " (idle_time) from " + name + ", " + con.getDescription());
                     //con.printTrackTrace(System.out);
                     con.destroyConnection();
-                    con=null;
+                    con = null;
                     return getConnection();
                 }
                 if (con.getNativeConnection().isClosed())
                 {
-                    log.warn("Removed bad connection "+con.getId()+" (isClosed) from " + name + ", " + con.getDescription());
+                    log.warn("Removed bad connection " + con.getId() + " (isClosed) from " + name + ", " + con.getDescription());
                     //con.printTrackTrace(System.out);
                     con.destroyConnection();
-                    con=null;
+                    con = null;
                     return getConnection();
                 }
-/*              
+                /*
                 try
                 {
-                    con.getMetaData();
-//                        Statement st=con.createStatement();
-//                        ResultSet rs=st.executeQuery("desc swb_admlog");
-//                        rs.close();
-//                        st.close();
+                con.getMetaData();
+                //                        Statement st=con.createStatement();
+                //                        ResultSet rs=st.executeQuery("desc swb_admlog");
+                //                        rs.close();
+                //                        st.close();
                 }catch(Exception e)
                 {
-                    log.warn("Removed bad connection "+con.getId()+" (desc) from " + name + ", " + con.getDescription());
-                    //con.printTrackTrace(System.out);
-                    con.destroyConnection();
-                    con=null;
-                    return getConnection();
-                }
-*/
-            } catch (SQLException e)
-            {
-                log.error("Removed bad connection "+con.getId()+" from " + name + ", " + con.getDescription(),e);
+                log.warn("Removed bad connection "+con.getId()+" (desc) from " + name + ", " + con.getDescription());
                 //con.printTrackTrace(System.out);
                 con.destroyConnection();
                 con=null;
+                return getConnection();
+                }
+                 */
+            } catch (SQLException e)
+            {
+                log.error("Removed bad connection " + con.getId() + " from " + name + ", " + con.getDescription(), e);
+                //con.printTrackTrace(System.out);
+                con.destroyConnection();
+                con = null;
                 return getConnection();
             }
             con.init();
@@ -186,12 +185,12 @@ public class DBConnectionPool
         {
             con = (PoolConnection) newConnection();
         }
-        
-        if(con!=null)
+
+        if (con != null)
         {
             manager.getTimeLock().addConnection(con);
         }
-        log.trace("getConnection():"+con.getId()+" "+con.getPool().getName()+" "+freeConnections.size());
+        log.trace("getConnection():" + con.getId() + " " + con.getPool().getName() + " " + freeConnections.size());
         return con;
     }
 
@@ -228,10 +227,10 @@ public class DBConnectionPool
      */
     public void release()
     {
-        PoolConnection con=null;
-        synchronized(freeConnections)
+        PoolConnection con = null;
+        synchronized (freeConnections)
         {
-            while(freeConnections.size() > 0)
+            while (freeConnections.size() > 0)
             {
                 con = (PoolConnection) freeConnections.remove(0);
                 try
@@ -241,14 +240,13 @@ public class DBConnectionPool
                     log.debug("Closed connection for pool " + name + ", " + con.getDescription());
                 } catch (Exception e)
                 {
-                    log.error("Can't close connection for pool " + name + ", " + con.getDescription(),e);
+                    log.error("Can't close connection for pool " + name + ", " + con.getDescription(), e);
                 }
-                con=null;
+                con = null;
             }
-        }        
+        }
         //System.out.println("release()");
     }
-
 
     /**
      * Crea una nueva conexión usando un identificador de usuario y passsword si son especificados.
@@ -269,8 +267,8 @@ public class DBConnectionPool
             log.debug("Created a new connection in pool " + name);
         } catch (SQLException e)
         {
-            log.error("Can't create a new connection for " + URL,e);
-            return null;
+            log.error("Can't create a new connection for " + URL, e);
+            con = null;
         }
         //System.out.println(new java.util.Date()+ ": newConnection");
         return con;
@@ -295,15 +293,17 @@ public class DBConnectionPool
             log.debug("Created a new connection in pool " + name);
         } catch (SQLException e)
         {
-            log.error("Can't create a new connection for " + URL,e);
+            log.error("Can't create a new connection for " + URL, e);
             return null;
         }
-        if(con!=null)
+        if (con != null)
         {
             return new AutoConnection(con, this);
-        }else return null;
+        } else
+        {
+            return null;
+        }
     }
-    
 
     /**
      * Crea una nueva conexión usando un identificador de usuario y passsword si son especificados.
@@ -323,15 +323,17 @@ public class DBConnectionPool
             log.debug("Created a new connection in pool " + name);
         } catch (SQLException e)
         {
-            log.error("Can't create a new connection for " + URL,e);
+            log.error("Can't create a new connection for " + URL, e);
             return null;
         }
-        if(con!=null)
+        if (con != null)
         {
             return new PoolConnection(con, this);
-        }else return null;
+        } else
+        {
+            return null;
+        }
     }
-
 
     /** Getter for property name.
      * @return Value of property name.
@@ -350,7 +352,6 @@ public class DBConnectionPool
     {
         return password;
     }
-
 
     /** Getter for property maxConn.
      * @return Value of property maxConn.
@@ -385,7 +386,7 @@ public class DBConnectionPool
      */
     public void setURL(java.lang.String URL)
     {
-        this.URL = SWBUtils.TEXT.replaceAll(URL,"{apppath}",SWBUtils.getApplicationPath());
+        this.URL = SWBUtils.TEXT.replaceAll(URL, "{apppath}", SWBUtils.getApplicationPath());
         //System.out.println("URL:"+this.URL);
     }
 
@@ -414,26 +415,26 @@ public class DBConnectionPool
     {
         return hits;
     }
-    
+
     /** 
      * @return Regresa las total de solicitudes de conexiones
      */
     public long getHitsTime()
     {
-        return hitsTime/100;
-    }    
-    
+        return hitsTime / 100;
+    }
+
     /**
      * 
      * @param time
      */
     public void addHit(long time)
     {
-        time=time*100;
+        time = time * 100;
         hits++;
-        hitsTime=(hitsTime*9+time)/10;
+        hitsTime = (hitsTime * 9 + time) / 10;
     }
-    
+
     /**
      * 
      * @return
@@ -442,5 +443,4 @@ public class DBConnectionPool
     {
         return manager;
     }
-
 }

@@ -1,33 +1,30 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
-
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 /*
  * DBConnectionManager.java
  *
  * Created on 22 de octubre de 2001, 16:46
  */
-
 package org.semanticwb.base.db;
 
 import java.io.*;
@@ -50,14 +47,11 @@ import org.semanticwb.SWBUtils;
  *
  * @author  Javier Solis Gonzalez (jsolis@infotec.com.mx)
  */
+public class DBConnectionManager {
 
-public class DBConnectionManager
-{
-    private static Logger log=SWBUtils.getLogger(DBConnectionManager.class);
-    
+    private static Logger log = SWBUtils.getLogger(DBConnectionManager.class);
     private Vector drivers = new Vector();
     private Hashtable pools = new Hashtable();
-
     private boolean isJNDI;
     private String JNDIPatern;
     private Context initCtx;
@@ -129,7 +123,6 @@ public class DBConnectionManager
         return cl;
     }
 
-
     /**
      * Cierra una conexi�n del pool especificado.
      *
@@ -149,10 +142,13 @@ public class DBConnectionManager
         {
             try
             {
-                if (con != null) con.close();
+                if (con != null)
+                {
+                    con.close();
+                }
             } catch (SQLException ex)
             {
-                log.error("Error to create JNDI Pool Connection...",ex);
+                log.error("Error to create JNDI Pool Connection...", ex);
             }
         }
     }
@@ -165,12 +161,13 @@ public class DBConnectionManager
      */
     public Connection getNoPoolConnection(String name)
     {
+        Connection ret = null;
         DBConnectionPool pool = (DBConnectionPool) pools.get(name);
         if (pool != null)
         {
-            return pool.newNoPoolConnection();
+            ret = pool.newNoPoolConnection();
         }
-        return null;
+        return ret;
     }
 
     /**
@@ -181,15 +178,14 @@ public class DBConnectionManager
      */
     public Connection getAutoConnection(String name)
     {
+        Connection ret = null;
         DBConnectionPool pool = (DBConnectionPool) pools.get(name);
         if (pool != null)
         {
-            return pool.newAutoConnection();
+            ret = pool.newAutoConnection();
         }
-        return null;
+        return ret;
     }
-
-
 
     /**
      * Regresa una conexi�n abierta. Si ninguna otra conexi�n est� disponible y el n�mero m�ximo
@@ -213,6 +209,7 @@ public class DBConnectionManager
      */
     public Connection getConnection(String name, String description)
     {
+        Connection ret = null;
         if (!isJNDI)
         {
             DBConnectionPool pool = (DBConnectionPool) pools.get(name);
@@ -221,11 +218,14 @@ public class DBConnectionManager
                 PoolConnection con = (PoolConnection) pool.getConnection();
                 if (con != null)
                 {
-                    if (description == null) description = "NoDesc";
+                    if (description == null)
+                    {
+                        description = "NoDesc";
+                    }
                     con.setDescription(description);
                 }
                 //System.out.println("getConnection("+con.getId()+","+name+","+description+")");
-                return con;
+                ret = con;
             }
         } else
         {
@@ -240,18 +240,18 @@ public class DBConnectionManager
                     log.info("Initialized JNDI Connection Pool " + name);
                 } catch (Exception ex)
                 {
-                    log.error("Error to get DataSource of Context...",ex);
+                    log.error("Error to get DataSource of Context...", ex);
                 }
             }
             try
             {
-                return ds.getConnection();
+                ret = ds.getConnection();
             } catch (SQLException ex)
             {
-                log.error("Error to get JNDI Pool Connection...",ex);
+                log.error("Error to get JNDI Pool Connection...", ex);
             }
         }
-        return null;
+        return ret;
     }
 
     /**
@@ -266,12 +266,13 @@ public class DBConnectionManager
      */
     public Connection getConnection(String name, long time)
     {
+        Connection ret = null;
         if (!isJNDI)
         {
             DBConnectionPool pool = (DBConnectionPool) pools.get(name);
             if (pool != null)
             {
-                return pool.getConnection(time);
+                ret = pool.getConnection(time);
             }
         } else
         {
@@ -284,22 +285,22 @@ public class DBConnectionManager
                     pools.put(name, ds);
                     //TODO:
                     //ds.setLogWriter(log);
-                    log.info("Initialized JNDI Pool [" + name+"]");
+                    log.info("Initialized JNDI Pool [" + name + "]");
                 } catch (Exception ex)
                 {
-                    log.error("Error to get DataSource of Context...",ex);
+                    log.error("Error to get DataSource of Context...", ex);
                 }
             }
             try
             {
                 ds.setLoginTimeout((int) (time / 1000));
-                return ds.getConnection();
+                ret = ds.getConnection();
             } catch (SQLException ex)
             {
-                log.error("Error to get JNDI Pool Connection...",ex);
+                log.error("Error to get JNDI Pool Connection...", ex);
             }
         }
-        return null;
+        return ret;
     }
 
     /**
@@ -349,8 +350,14 @@ public class DBConnectionManager
                 String password = props.getProperty(poolName + ".password");
                 String maxconn = props.getProperty(poolName + ".maxconn", "0");
                 String sidle_time = props.getProperty(poolName + ".idle_time", "0");
-                if (user != null) user = user.trim();
-                if (password != null) password = password.trim();
+                if (user != null)
+                {
+                    user = user.trim();
+                }
+                if (password != null)
+                {
+                    password = password.trim();
+                }
                 int max;
                 try
                 {
@@ -360,7 +367,7 @@ public class DBConnectionManager
                     log.warn("Invalid maxconn value " + maxconn + " for " + poolName);
                     max = 0;
                 }
-                long idle_time=0;
+                long idle_time = 0;
                 try
                 {
                     idle_time = Long.parseLong(sidle_time.trim());
@@ -368,11 +375,11 @@ public class DBConnectionManager
                 {
                     log.warn("Invalid idle_time value " + sidle_time + " for " + poolName);
                     idle_time = 0;
-                }                
+                }
                 DBConnectionPool pool =
                         new DBConnectionPool(this, poolName, url, user, password, max, idle_time);
                 pools.put(poolName, pool);
-                log.info("Initialized Connection Pool [" + poolName+"]");
+                log.info("Initialized Connection Pool [" + poolName + "]");
             }
         }
     }
@@ -386,13 +393,17 @@ public class DBConnectionManager
         Properties dbProps = new SWBProperties();
         try
         {
-            if(is!=null)
+            if (is != null)
             {
                 dbProps.load(is);
-            }else throw new FileNotFoundException();
+            } else
+            {
+                throw new FileNotFoundException();
+            }
+            is.close();
         } catch (Exception e)
         {
-            log.error("Can't read the properties file. Make sure db.properties is in the CLASSPATH",e);
+            log.error("Can't read the properties file. Make sure db.properties is in the CLASSPATH", e);
             return;
         }
 
@@ -407,7 +418,7 @@ public class DBConnectionManager
                 initCtx = new InitialContext();
             } catch (javax.naming.NamingException ex)
             {
-                log.error("Error to initialize JNDI Context",ex);
+                log.error("Error to initialize JNDI Context", ex);
             }
         }
         if (!isJNDI)
@@ -432,7 +443,7 @@ public class DBConnectionManager
             String driverClassName = st.nextToken().trim();
             try
             {
-                Driver driver = (Driver)Class.forName(driverClassName).newInstance();
+                Driver driver = (Driver) Class.forName(driverClassName).newInstance();
                 DriverManager.registerDriver(driver);
                 drivers.addElement(driver);
                 log.info("Registered JDBC driver " + driverClassName);
@@ -442,7 +453,6 @@ public class DBConnectionManager
             }
         }
     }
-
 
     /** Getter for property timeLock.
      * @return Value of property timeLock.
@@ -459,36 +469,35 @@ public class DBConnectionManager
      */
     public java.util.Hashtable getPools()
     {
-        java.util.Hashtable map=new java.util.Hashtable();
-        Enumeration en=pools.keys();
-        while(en.hasMoreElements())
+        java.util.Hashtable map = new java.util.Hashtable();
+        Enumeration en = pools.keys();
+        while (en.hasMoreElements())
         {
-            String key=(String)en.nextElement();
-            Object obj=pools.get(key);
-            if(obj instanceof DBConnectionPool)
+            String key = (String) en.nextElement();
+            Object obj = pools.get(key);
+            if (obj instanceof DBConnectionPool)
             {
                 map.put(key, obj);
             }
         }
         return map;
     }
-    
+
     /** 
      * @return Regresa las total de solicitudes de conexiones
      */
     public long getHits()
     {
-        long hits=0;
-        Enumeration en=pools.elements();
-        while(en.hasMoreElements())
+        long hits = 0;
+        Enumeration en = pools.elements();
+        while (en.hasMoreElements())
         {
-            Object obj=en.nextElement();
-            if(obj instanceof DBConnectionPool)
+            Object obj = en.nextElement();
+            if (obj instanceof DBConnectionPool)
             {
-                hits+=((DBConnectionPool)obj).getHits();
-            }            
+                hits += ((DBConnectionPool) obj).getHits();
+            }
         }
         return hits;
     }
-
 }

@@ -1,33 +1,30 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
-
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 /*
  * PoolStatement.java
  *
  * Created on 20 de febrero de 2003, 12:43
  */
-
 package org.semanticwb.base.db;
 
 import java.io.InputStream;
@@ -41,13 +38,13 @@ import java.util.Calendar;
  * Objeto que sobrescribe la clase Statement para poder tener control la misma desde el Pool de conexiones.
  * @author  Javier Solis Gonzalez (jsolis@infotec.com.mx) 
  */
-public class PoolPreparedStatement implements java.sql.PreparedStatement
-{
+public class PoolPreparedStatement implements java.sql.PreparedStatement {
+
     private PreparedStatement st;
     private boolean closed = false;
-    private String query=null;
-    private String args="";
-    private boolean debug=false;
+    private String query = null;
+    private String args = "";
+    private boolean debug = false;
     private Connection con;
 
     /** Creates a new instance of PoolStatement
@@ -65,8 +62,8 @@ public class PoolPreparedStatement implements java.sql.PreparedStatement
     public PoolPreparedStatement(PreparedStatement st, String query, Connection con)
     {
         this.st = st;
-        this.query=query;
-        this.con=con;
+        this.query = query;
+        this.con = con;
     }
 
     public void addBatch(String str) throws java.sql.SQLException
@@ -97,25 +94,37 @@ public class PoolPreparedStatement implements java.sql.PreparedStatement
 
     public boolean execute(String str) throws java.sql.SQLException
     {
-        if(debug)System.out.println("execute:"+str);
+        if (debug)
+        {
+            System.out.println("execute:" + str);
+        }
         return st.execute(str);
     }
 
     public int[] executeBatch() throws java.sql.SQLException
     {
-        if(debug)System.out.println("executeBatch():");
+        if (debug)
+        {
+            System.out.println("executeBatch():");
+        }
         return st.executeBatch();
     }
 
     public java.sql.ResultSet executeQuery(String str) throws java.sql.SQLException
     {
-        if(debug)System.out.println("executeQuery:"+str);
+        if (debug)
+        {
+            System.out.println("executeQuery:" + str);
+        }
         return st.executeQuery(str);
     }
 
     public int executeUpdate(String str) throws java.sql.SQLException
     {
-        if(debug)System.out.println("executeUpdate:"+str);
+        if (debug)
+        {
+            System.out.println("executeUpdate:" + str);
+        }
         return st.executeUpdate(str);
     }
 
@@ -157,7 +166,10 @@ public class PoolPreparedStatement implements java.sql.PreparedStatement
 
     public java.sql.ResultSet getResultSet() throws java.sql.SQLException
     {
-        if(debug)System.out.println("getResultSet");
+        if (debug)
+        {
+            System.out.println("getResultSet");
+        }
         return st.getResultSet();
     }
 
@@ -224,19 +236,28 @@ public class PoolPreparedStatement implements java.sql.PreparedStatement
 //********************************** version 1.4
     public boolean execute(String str, String[] str1) throws java.sql.SQLException
     {
-        if(debug)System.out.println("execute:"+str+" "+str1);
+        if (debug)
+        {
+            System.out.println("execute:" + str + " " + str1);
+        }
         return st.execute(str, str1);
     }
 
     public boolean execute(String str, int[] values) throws java.sql.SQLException
     {
-        if(debug)System.out.println("execute:"+str+" "+values);
+        if (debug)
+        {
+            System.out.println("execute:" + str + " " + values);
+        }
         return st.execute(str, values);
     }
 
     public boolean execute(String str, int param) throws java.sql.SQLException
     {
-        if(debug)System.out.println("execute:"+str+" "+param);
+        if (debug)
+        {
+            System.out.println("execute:" + str + " " + param);
+        }
         return st.execute(str, param);
     }
 
@@ -252,19 +273,28 @@ public class PoolPreparedStatement implements java.sql.PreparedStatement
 
     public int executeUpdate(String str, String[] str1) throws java.sql.SQLException
     {
-        if(debug)System.out.println("executeUpdate():"+str+" "+str1);
+        if (debug)
+        {
+            System.out.println("executeUpdate():" + str + " " + str1);
+        }
         return st.executeUpdate(str, str1);
     }
 
     public int executeUpdate(String str, int param) throws java.sql.SQLException
     {
-        if(debug)System.out.println("executeUpdate():"+str+" "+param);
+        if (debug)
+        {
+            System.out.println("executeUpdate():" + str + " " + param);
+        }
         return st.executeUpdate(str, param);
     }
 
     public int executeUpdate(String str, int[] values) throws java.sql.SQLException
     {
-        if(debug)System.out.println("executeUpdate():"+str+" "+values);
+        if (debug)
+        {
+            System.out.println("executeUpdate():" + str + " " + values);
+        }
         return st.executeUpdate(str, values);
     }
 
@@ -275,295 +305,379 @@ public class PoolPreparedStatement implements java.sql.PreparedStatement
 
     public ResultSet executeQuery() throws SQLException
     {
-        if(debug)System.out.println("executeQuery():"+query);
+        if (debug)
+        {
+            System.out.println("executeQuery():" + query);
+        }
         return st.executeQuery();
     }
 
-    public int executeUpdate() throws SQLException {
-        if(debug)System.out.println("executeUpdate():"+query);
+    public int executeUpdate() throws SQLException
+    {
+        if (debug)
+        {
+            System.out.println("executeUpdate():" + query);
+        }
         return st.executeUpdate();
     }
 
-    public void setNull(int parameterIndex, int sqlType) throws SQLException {
-        if(debug)args+=" "+parameterIndex+" "+sqlType;
+    public void setNull(int parameterIndex, int sqlType) throws SQLException
+    {
+        if (debug)
+        {
+            args += " " + parameterIndex + " " + sqlType;
+        }
         st.setNull(parameterIndex, sqlType);
     }
 
-    public void setBoolean(int parameterIndex, boolean x) throws SQLException {
-        if(debug)args+=" "+parameterIndex+" "+x;
+    public void setBoolean(int parameterIndex, boolean x) throws SQLException
+    {
+        if (debug)
+        {
+            args += " " + parameterIndex + " " + x;
+        }
         st.setBoolean(parameterIndex, x);
     }
 
-    public void setByte(int parameterIndex, byte x) throws SQLException {
-        if(debug)args+=" "+parameterIndex+" "+x;
+    public void setByte(int parameterIndex, byte x) throws SQLException
+    {
+        if (debug)
+        {
+            args += " " + parameterIndex + " " + x;
+        }
         st.setByte(parameterIndex, x);
     }
 
-    public void setShort(int parameterIndex, short x) throws SQLException {
-        if(debug)args+=" "+parameterIndex+" "+x;
+    public void setShort(int parameterIndex, short x) throws SQLException
+    {
+        if (debug)
+        {
+            args += " " + parameterIndex + " " + x;
+        }
         st.setShort(parameterIndex, x);
     }
 
-    public void setInt(int parameterIndex, int x) throws SQLException {
-        if(debug)args+=" "+parameterIndex+" "+x;
+    public void setInt(int parameterIndex, int x) throws SQLException
+    {
+        if (debug)
+        {
+            args += " " + parameterIndex + " " + x;
+        }
         st.setInt(parameterIndex, x);
     }
 
-    public void setLong(int parameterIndex, long x) throws SQLException {
-        if(debug)args+=" "+parameterIndex+" "+x;
+    public void setLong(int parameterIndex, long x) throws SQLException
+    {
+        if (debug)
+        {
+            args += " " + parameterIndex + " " + x;
+        }
         st.setLong(parameterIndex, x);
     }
 
-    public void setFloat(int parameterIndex, float x) throws SQLException {
-        if(debug)args+=" "+parameterIndex+" "+x;
+    public void setFloat(int parameterIndex, float x) throws SQLException
+    {
+        if (debug)
+        {
+            args += " " + parameterIndex + " " + x;
+        }
         st.setFloat(parameterIndex, x);
     }
 
-    public void setDouble(int parameterIndex, double x) throws SQLException {
-        if(debug)args+=" "+parameterIndex+" "+x;
+    public void setDouble(int parameterIndex, double x) throws SQLException
+    {
+        if (debug)
+        {
+            args += " " + parameterIndex + " " + x;
+        }
         st.setDouble(parameterIndex, x);
     }
 
-    public void setBigDecimal(int parameterIndex, BigDecimal x) throws SQLException {
-        if(debug)args+=" "+parameterIndex+" "+x;
+    public void setBigDecimal(int parameterIndex, BigDecimal x) throws SQLException
+    {
+        if (debug)
+        {
+            args += " " + parameterIndex + " " + x;
+        }
         st.setBigDecimal(parameterIndex, x);
     }
 
-    public void setString(int parameterIndex, String x) throws SQLException {
-        if(debug)args+=" "+parameterIndex+" "+x;
+    public void setString(int parameterIndex, String x) throws SQLException
+    {
+        if (debug)
+        {
+            args += " " + parameterIndex + " " + x;
+        }
         st.setString(parameterIndex, x);
     }
 
-    public void setBytes(int parameterIndex, byte[] x) throws SQLException {
-        if(debug)args+=" "+parameterIndex+" "+x;
+    public void setBytes(int parameterIndex, byte[] x) throws SQLException
+    {
+        if (debug)
+        {
+            args += " " + parameterIndex + " " + x;
+        }
         st.setBytes(parameterIndex, x);
     }
 
-    public void setDate(int parameterIndex, Date x) throws SQLException {
-        if(debug)args+=" "+parameterIndex+" "+x;
+    public void setDate(int parameterIndex, Date x) throws SQLException
+    {
+        if (debug)
+        {
+            args += " " + parameterIndex + " " + x;
+        }
         st.setDate(parameterIndex, x);
     }
 
-    public void setTime(int parameterIndex, Time x) throws SQLException {
-        if(debug)args+=" "+parameterIndex+" "+x;
+    public void setTime(int parameterIndex, Time x) throws SQLException
+    {
+        if (debug)
+        {
+            args += " " + parameterIndex + " " + x;
+        }
         st.setTime(parameterIndex, x);
     }
 
-    public void setTimestamp(int parameterIndex, Timestamp x) throws SQLException {
-        if(debug)args+=" "+parameterIndex+" "+x;
+    public void setTimestamp(int parameterIndex, Timestamp x) throws SQLException
+    {
+        if (debug)
+        {
+            args += " " + parameterIndex + " " + x;
+        }
         st.setTimestamp(parameterIndex, x);
     }
 
-    public void setAsciiStream(int parameterIndex, InputStream x, int length) throws SQLException {
+    public void setAsciiStream(int parameterIndex, InputStream x, int length) throws SQLException
+    {
         st.setAsciiStream(parameterIndex, x, length);
     }
 
-    public void setUnicodeStream(int parameterIndex, InputStream x, int length) throws SQLException {
+    public void setUnicodeStream(int parameterIndex, InputStream x, int length) throws SQLException
+    {
         st.setUnicodeStream(parameterIndex, x, length);
     }
 
-    public void setBinaryStream(int parameterIndex, InputStream x, int length) throws SQLException {
+    public void setBinaryStream(int parameterIndex, InputStream x, int length) throws SQLException
+    {
         st.setBinaryStream(parameterIndex, x, length);
     }
 
-    public void clearParameters() throws SQLException {
+    public void clearParameters() throws SQLException
+    {
         st.clearParameters();
     }
 
-    public void setObject(int parameterIndex, Object x, int targetSqlType, int scale) throws SQLException {
+    public void setObject(int parameterIndex, Object x, int targetSqlType, int scale) throws SQLException
+    {
         st.setObject(parameterIndex, x, targetSqlType, scale);
     }
 
-    public void setObject(int parameterIndex, Object x, int targetSqlType) throws SQLException {
+    public void setObject(int parameterIndex, Object x, int targetSqlType) throws SQLException
+    {
         st.setObject(parameterIndex, x, targetSqlType);
     }
 
-    public void setObject(int parameterIndex, Object x) throws SQLException {
+    public void setObject(int parameterIndex, Object x) throws SQLException
+    {
         st.setObject(parameterIndex, x);
     }
 
-    public boolean execute() throws SQLException {
+    public boolean execute() throws SQLException
+    {
         boolean ret;
-        long time=0;
-        if(debug)
+        long time = 0;
+        if (debug)
         {
-            time=System.currentTimeMillis();
+            time = System.currentTimeMillis();
             System.out.println("----------------------------------------------");
-            System.out.println("--> execute():"+query);
-            System.out.println("--> args:"+args);
-            args="";
+            System.out.println("--> execute():" + query);
+            System.out.println("--> args:" + args);
+            args = "";
             //new Exception().printStackTrace();
         }
-        ret=st.execute();
-        if(debug)System.out.println("------------------"+(System.currentTimeMillis() - time)+"-----------------------");
+        ret = st.execute();
+        if (debug)
+        {
+            System.out.println("------------------" + (System.currentTimeMillis() - time) + "-----------------------");
+        }
         return ret;
     }
 
-    public void addBatch() throws SQLException {
+    public void addBatch() throws SQLException
+    {
         st.addBatch();
     }
 
-    public void setCharacterStream(int parameterIndex, Reader reader, int length) throws SQLException {
+    public void setCharacterStream(int parameterIndex, Reader reader, int length) throws SQLException
+    {
         st.setCharacterStream(parameterIndex, reader, length);
     }
 
-    public void setRef(int i, Ref x) throws SQLException {
+    public void setRef(int i, Ref x) throws SQLException
+    {
         st.setRef(i, x);
     }
 
-    public void setBlob(int i, Blob x) throws SQLException {
+    public void setBlob(int i, Blob x) throws SQLException
+    {
         st.setBlob(i, x);
     }
 
-    public void setClob(int i, Clob x) throws SQLException {
+    public void setClob(int i, Clob x) throws SQLException
+    {
         st.setClob(i, x);
     }
 
-    public void setArray(int i, Array x) throws SQLException {
+    public void setArray(int i, Array x) throws SQLException
+    {
         st.setArray(i, x);
     }
 
-    public ResultSetMetaData getMetaData() throws SQLException {
+    public ResultSetMetaData getMetaData() throws SQLException
+    {
         return st.getMetaData();
     }
 
-    public void setDate(int parameterIndex, Date x, Calendar cal) throws SQLException {
+    public void setDate(int parameterIndex, Date x, Calendar cal) throws SQLException
+    {
         st.setDate(parameterIndex, x, cal);
     }
 
-    public void setTime(int parameterIndex, Time x, Calendar cal) throws SQLException {
+    public void setTime(int parameterIndex, Time x, Calendar cal) throws SQLException
+    {
         st.setTime(parameterIndex, x, cal);
     }
 
-    public void setTimestamp(int parameterIndex, Timestamp x, Calendar cal) throws SQLException {
+    public void setTimestamp(int parameterIndex, Timestamp x, Calendar cal) throws SQLException
+    {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public void setNull(int paramIndex, int sqlType, String typeName) throws SQLException {
+    public void setNull(int paramIndex, int sqlType, String typeName) throws SQLException
+    {
         st.setNull(paramIndex, sqlType, typeName);
     }
 
-    public void setURL(int parameterIndex, URL x) throws SQLException {
+    public void setURL(int parameterIndex, URL x) throws SQLException
+    {
         st.setURL(parameterIndex, x);
     }
 
-    public ParameterMetaData getParameterMetaData() throws SQLException {
+    public ParameterMetaData getParameterMetaData() throws SQLException
+    {
         return st.getParameterMetaData();
     }
-
 //********************************** version 1.6
-/**
+    /**
 
     public void setPoolable(boolean poolable) throws SQLException {
-        st.setPoolable(poolable);
+    st.setPoolable(poolable);
     }
 
     public boolean isPoolable() throws SQLException {
-        return st.isPoolable();
+    return st.isPoolable();
     }
 
     public <T> T unwrap(Class<T> iface) throws SQLException {
-        return st.unwrap(iface);
+    return st.unwrap(iface);
     }
 
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
-        return st.isWrapperFor(iface);
+    return st.isWrapperFor(iface);
     }
 
     public void setAsciiStream(int parameterIndex, InputStream x, long length) throws SQLException
     {
-        st.setAsciiStream(parameterIndex, x, length);
+    st.setAsciiStream(parameterIndex, x, length);
     }
 
     public void setAsciiStream(int parameterIndex, InputStream x) throws SQLException
     {
-        st.setAsciiStream(parameterIndex, x);
+    st.setAsciiStream(parameterIndex, x);
     }
 
     public void setBinaryStream(int parameterIndex, InputStream x, long length) throws SQLException
     {
-        st.setBinaryStream(parameterIndex, x, length);
+    st.setBinaryStream(parameterIndex, x, length);
     }
 
     public void setBinaryStream(int parameterIndex, InputStream x) throws SQLException
     {
-        st.setBinaryStream(parameterIndex, x);
+    st.setBinaryStream(parameterIndex, x);
     }
 
     public void setBlob(int parameterIndex, InputStream inputStream, long length) throws SQLException
     {
-        st.setBlob(parameterIndex, inputStream, length);
+    st.setBlob(parameterIndex, inputStream, length);
     }
 
     public void setBlob(int parameterIndex, InputStream inputStream) throws SQLException
     {
-        st.setBlob(parameterIndex, inputStream);
+    st.setBlob(parameterIndex, inputStream);
     }
 
     public void setCharacterStream(int parameterIndex, Reader reader, long length) throws SQLException
     {
-        st.setCharacterStream(parameterIndex, reader, length);
+    st.setCharacterStream(parameterIndex, reader, length);
     }
 
     public void setCharacterStream(int parameterIndex, Reader reader) throws SQLException
     {
-        st.setCharacterStream(parameterIndex, reader);
+    st.setCharacterStream(parameterIndex, reader);
     }
 
     public void setClob(int parameterIndex, Reader reader, long length) throws SQLException
     {
-        st.setClob(parameterIndex, reader, length);
+    st.setClob(parameterIndex, reader, length);
     }
 
     public void setClob(int parameterIndex, Reader reader) throws SQLException
     {
-        st.setClob(parameterIndex, reader);
+    st.setClob(parameterIndex, reader);
     }
 
     public void setNCharacterStream(int parameterIndex, Reader value, long length) throws SQLException
     {
-        st.setNCharacterStream(parameterIndex, value, length);
+    st.setNCharacterStream(parameterIndex, value, length);
     }
 
     public void setNCharacterStream(int parameterIndex, Reader value) throws SQLException
     {
-        st.setNCharacterStream(parameterIndex, value);
+    st.setNCharacterStream(parameterIndex, value);
     }
 
     public void setNClob(int parameterIndex, NClob value) throws SQLException
     {
-        st.setNClob(parameterIndex, value);
+    st.setNClob(parameterIndex, value);
     }
 
     public void setNClob(int parameterIndex, Reader reader, long length) throws SQLException
     {
-        st.setNClob(parameterIndex, reader, length);
+    st.setNClob(parameterIndex, reader, length);
     }
 
     public void setNClob(int parameterIndex, Reader reader) throws SQLException
     {
-        st.setNClob(parameterIndex, reader);
+    st.setNClob(parameterIndex, reader);
     }
 
     public void setNString(int parameterIndex, String value) throws SQLException
     {
-        st.setNString(parameterIndex, value);
+    st.setNString(parameterIndex, value);
     }
 
     public void setRowId(int parameterIndex, RowId x) throws SQLException
     {
-        st.setRowId(parameterIndex, x);
+    st.setRowId(parameterIndex, x);
     }
 
     public void setSQLXML(int parameterIndex, SQLXML xmlObject) throws SQLException
     {
-        st.setSQLXML(parameterIndex, xmlObject);
+    st.setSQLXML(parameterIndex, xmlObject);
     }
 
 
 
 
-//*/
-
-
+    //*/
 }
