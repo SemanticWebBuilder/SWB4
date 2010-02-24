@@ -28,7 +28,6 @@
 
 package org.semanticwb.model;
 
-import java.util.HashMap;
 import org.semanticwb.platform.SemanticObject;
 
 /**
