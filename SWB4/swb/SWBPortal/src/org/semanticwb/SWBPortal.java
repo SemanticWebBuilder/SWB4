@@ -1530,6 +1530,77 @@ public class SWBPortal
                         {
                             continue;
                         }
+                        if (iswordcontent && tag.getTagString().toLowerCase().equals("object") && !tag.isEndTag())
+                        {
+                            boolean isFlash = false;
+                            Enumeration en = tag.getParamNames();
+                            while (en.hasMoreElements())
+                            {
+                                String name = (String) en.nextElement();
+                                if (name != null && name.toLowerCase().equals("classid") && tag.getParam(name) != null && tag.getParam(name).toLowerCase().equals("clsid:D27CDB6E-AE6D-11cf-96B8-444553540000".toLowerCase()))
+                                {
+                                    isFlash = true;
+                                    break;
+                                }
+                            }
+                            if (isFlash)
+                            {
+                                HtmlTag embed = new HtmlTag();
+                                embed.setTag("embed");
+                                if (tag.getParam("width") != null && !tag.getParam("width").equals(""))
+                                {
+                                    embed.setParam("width", tag.getParam("width"));
+                                }
+                                if (tag.getParam("height") != null && !tag.getParam("height").equals(""))
+                                {
+                                    embed.setParam("height", tag.getParam("height"));
+                                }
+                                while (!(tag.isEndTag() && tag.getTagString().equals("object")))
+                                {
+                                    ttype = tok.nextToken();
+                                    if (ttype == HtmlStreamTokenizer.TT_TAG)
+                                    {
+                                        tok.parseTag(tok.getStringValue(), tag);
+                                        if (tag.getTagString().equals("param") && !tag.isEndTag())
+                                        {
+                                            String name = tag.getParam("name");
+                                            if (name != null && name.toLowerCase().equals("movie") && tag.getParam("value") != null && !tag.getParam("value").equals(""))
+                                            {
+                                                String filename = findFileName(tag.getParam("value"));
+                                                embed.setParam("id", filename);
+                                                embed.setParam("name", filename);
+                                                String sruta = ruta + filename;
+                                                embed.setParam("src", sruta);
+                                            }
+                                            if (name != null && name.toLowerCase().equals("quality") && tag.getParam("value") != null && !tag.getParam("value").equals(""))
+                                            {
+                                                embed.setParam("quality", tag.getParam("value"));
+                                            }
+                                        }
+                                    }
+
+                                }
+
+
+                                embed.setParam("pluginspage", "http://www.macromedia.com/go/getflashplayer");
+                                embed.setParam("type", "application/x-shockwave-flash");
+                                ret.append("\r\n<script type=\"text/javascript\">\r\n<!--\r\ndocument.write('" + embed.toString() + "</embed>');\r\n-->\r\n</script>");
+                                ttype = tok.nextToken();
+                                while (!(ttype == HtmlStreamTokenizer.TT_TAG || ttype == HtmlStreamTokenizer.TT_COMMENT))
+                                {
+                                    ttype = tok.nextToken();
+                                }
+                                if (ttype == HtmlStreamTokenizer.TT_TAG || ttype == HtmlStreamTokenizer.TT_COMMENT)
+                                {
+                                    if (ttype == HtmlStreamTokenizer.TT_COMMENT && tok.getRawString().equals("<!-- -->"))
+                                    {
+                                        continue;
+                                    }
+                                }
+                                tok.parseTag(tok.getStringValue(), tag);
+
+                            }
+                        }
                         if ((tag.getTagString().toLowerCase().equals("img") || tag.getTagString().toLowerCase().equals("applet") || tag.getTagString().toLowerCase().equals("script") || tag.getTagString().toLowerCase().equals("tr") || tag.getTagString().toLowerCase().equals("td") || tag.getTagString().toLowerCase().equals("table") || tag.getTagString().toLowerCase().equals("body") || tag.getTagString().toLowerCase().equals("input") || tag.getTagString().toLowerCase().equals("a") || tag.getTagString().toLowerCase().equals("form") || tag.getTagString().toLowerCase().equals("area") || tag.getTagString().toLowerCase().equals("meta") || tag.getTagString().toLowerCase().equals("bca") || tag.getTagString().toLowerCase().equals("link") || tag.getTagString().toLowerCase().equals("param") || tag.getTagString().toLowerCase().equals("embed") || tag.getTagString().toLowerCase().equals("iframe") || tag.getTagString().toLowerCase().equals("frame")) && !tok.getRawString().startsWith("<!--"))
                         {
                             if (!tag.isEndTag())
@@ -1552,77 +1623,7 @@ public class SWBPortal
                                     value = SWBUtils.TEXT.replaceAll(value, "%3f", "?");
                                     value = SWBUtils.TEXT.replaceAll(value, "%3F", "?");
 
-                                    if (iswordcontent && tag.getTagString().toLowerCase().equals("object") && !tag.isEndTag())
-                                    {
-                                        boolean isFlash = false;
-                                        Enumeration en2 = tag.getParamNames();
-                                        while (en2.hasMoreElements())
-                                        {
-                                            String name2 = (String) en2.nextElement();
-                                            if (name2 != null && name2.toLowerCase().equals("classid") && tag.getParam(name2) != null && tag.getParam(name2).toLowerCase().equals("clsid:D27CDB6E-AE6D-11cf-96B8-444553540000".toLowerCase()))
-                                            {
-                                                isFlash = true;
-                                                break;
-                                            }
-                                        }
-                                        if (isFlash)
-                                        {
-                                            HtmlTag embed = new HtmlTag();
-                                            embed.setTag("embed");
-                                            if (tag.getParam("width") != null && !tag.getParam("width").equals(""))
-                                            {
-                                                embed.setParam("width", tag.getParam("width"));
-                                            }
-                                            if (tag.getParam("height") != null && !tag.getParam("height").equals(""))
-                                            {
-                                                embed.setParam("height", tag.getParam("height"));
-                                            }
-                                            while (!(tag.isEndTag() && tag.getTagString().equals("object")))
-                                            {
-                                                ttype = tok.nextToken();
-                                                if (ttype == HtmlStreamTokenizer.TT_TAG)
-                                                {
-                                                    tok.parseTag(tok.getStringValue(), tag);
-                                                    if (tag.getTagString().equals("param") && !tag.isEndTag())
-                                                    {
-                                                        String name3 = tag.getParam("name");
-                                                        if (name3 != null && name3.toLowerCase().equals("movie") && tag.getParam("value") != null && !tag.getParam("value").equals(""))
-                                                        {
-                                                            String filename = findFileName(tag.getParam("value"));
-                                                            embed.setParam("id", filename);
-                                                            embed.setParam("name", filename);
-                                                            String sruta = ruta + filename;
-                                                            embed.setParam("src", sruta);
-                                                        }
-                                                        if (name3 != null && name3.toLowerCase().equals("quality") && tag.getParam("value") != null && !tag.getParam("value").equals(""))
-                                                        {
-                                                            embed.setParam("quality", tag.getParam("value"));
-                                                        }
-                                                    }
-                                                }
 
-                                            }
-
-
-                                            embed.setParam("pluginspage", "http://www.macromedia.com/go/getflashplayer");
-                                            embed.setParam("type", "application/x-shockwave-flash");
-                                            ret.append("\r\n<script type=\"text/javascript\">\r\n<!--\r\ndocument.write('" + embed.toString() + "</embed>');\r\n-->\r\n</script>");
-                                            ttype = tok.nextToken();
-                                            while (!(ttype == HtmlStreamTokenizer.TT_TAG || ttype == HtmlStreamTokenizer.TT_COMMENT))
-                                            {
-                                                ttype = tok.nextToken();
-                                            }
-                                            if (ttype == HtmlStreamTokenizer.TT_TAG || ttype == HtmlStreamTokenizer.TT_COMMENT)
-                                            {
-                                                if (ttype == HtmlStreamTokenizer.TT_COMMENT && tok.getRawString().equals("<!-- -->"))
-                                                {
-                                                    continue;
-                                                }
-                                            }
-                                            tok.parseTag(tok.getStringValue(), tag);
-
-                                        }
-                                    }
                                     String sruta = null;
                                     if (name.toLowerCase().equals("src") && tag.getTagString().toLowerCase().equals("img")) // imagenes deben siempre parsearse, agregado por Víctor Lorenzana
                                     {
