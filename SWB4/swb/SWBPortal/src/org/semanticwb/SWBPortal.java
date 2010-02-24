@@ -91,7 +91,8 @@ import org.w3c.dom.NodeList;
  * @author Jorge Jim&eacute;nez
  * @version 1.0
  */
-public class SWBPortal {
+public class SWBPortal
+{
 
     /**
      * Holds the names and values for the variables declared in {@literal web.properties} file.
@@ -236,7 +237,8 @@ public class SWBPortal {
      * @param servletContext the {@code ServletContex} agregated to the new instance
      * @return SWBPortal     the new instance of this component
      */
-    static public synchronized SWBPortal createInstance(ServletContext servletContext) {
+    static public synchronized SWBPortal createInstance(ServletContext servletContext)
+    {
         //new Exception().printStackTrace();
         return createInstance(servletContext, null);
     }
@@ -248,8 +250,10 @@ public class SWBPortal {
      * @param filter         the {@code Filter} assigned to the new instance's virtual host filter
      * @return SWBPortal     the new instance of this component
      */
-    static public synchronized SWBPortal createInstance(ServletContext servletContext, Filter filter) {
-        if (instance == null) {
+    static public synchronized SWBPortal createInstance(ServletContext servletContext, Filter filter)
+    {
+        if (instance == null)
+        {
             SWBPortal.virtualHostFilter = filter;
             instance = new SWBPortal();
             SWBPortal.servletContext = servletContext;
@@ -277,7 +281,8 @@ public class SWBPortal {
      * Constructor that initializes the environment of its new instance by calling method {@code init()}
      * <p>Constructor que inicia el ambiente de su nueva instancia llamando al m&eacute;todo {@code init()}</p>
      */
-    private SWBPortal() {
+    private SWBPortal()
+    {
         log.event("Initializing SemanticWebBuilder Portal...");
         init();
     }
@@ -324,7 +329,8 @@ public class SWBPortal {
      * </ul>
      * </p>
      */
-    private void init() {
+    private void init()
+    {
         props = SWBUtils.TEXT.getPropertyFile("/web.properties");
 
         workPath = getEnv("swb/workPath");
@@ -334,19 +340,27 @@ public class SWBPortal {
         SWBUtils.EMAIL.setSMTPPassword(getEnv("swb/smtpPassword"));
         SWBUtils.EMAIL.setAdminEmail(getEnv("af/adminEmail"));
 
-        try {
+        try
+        {
             //TODO:revisar sincronizacion
             //if (confCS.equalsIgnoreCase("Client")) remoteWorkPath = (String) AFUtils.getInstance().getEnv("swb/remoteWorkPath");
 
             workPath = (String) getEnv("swb/workPath", "/work");
-            if (workPath.startsWith("file:")) {
+            if (workPath.startsWith("file:"))
+            {
                 workPath = (new File(workPath.substring(5))).toString();
-            } else if (workPath.startsWith("http://")) {
+            }
+            else if (workPath.startsWith("http://"))
+            {
                 workPath = (URLEncoder.encode(workPath));
-            } else {
+            }
+            else
+            {
                 workPath = SWBUtils.getApplicationPath() + workPath;
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             log.error("Can't read the context path...", e);
             workPath = "";
         }
@@ -363,14 +377,16 @@ public class SWBPortal {
         platform.setOntEditFile(getEnv("swb/ontEditFile", "/swbadmin/rdf/SWBOntEdit.nt"));
         platform.setProperties(props);
 
-        try {
+        try
+        {
             //Runtime.getRuntime().gc();
 //            long inimem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 
             Connection con = SWBUtils.DB.getDefaultConnection();
-            if (con != null) {
+            if (con != null)
+            {
                 log.info("-->Database: " + SWBUtils.DB.getDatabaseName());
-              //  checkHSQLHAck(con); //MAPS74
+                //  checkHSQLHAck(con); //MAPS74
                 haveDB = true;
                 //Si no existen las tablas, se crean automaticamente
 //                PreparedStatement sr=con.prepareStatement("select * from swb_counter");
@@ -387,19 +403,24 @@ public class SWBPortal {
                 con.close();
             }
 
-            if (!haveDB()) {
+            if (!haveDB())
+            {
                 log.warn("-->Default SemanticWebBuilder database not found...");
                 return;
             }
-            if (!haveDBTables()) {
+            if (!haveDBTables())
+            {
                 log.warn("-->Default SemanticWebBuilder database tables not found...");
                 return;
             }
 
-            try {
+            try
+            {
                 System.setProperty("sun.net.client.defaultConnectTimeout", getEnv("swb/defaultConnectTimeout", "5000"));
                 System.setProperty("sun.net.client.defaultReadTimeout", getEnv("swb/defaultReadTimeout", "30000"));
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 log.error("Error seting defaultConnectTimeout, defaultReadTimeout");
             }
 
@@ -421,7 +442,8 @@ public class SWBPortal {
 //                AFUtils.log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_WBLoader_Init_versioneerror"), true);
 //            }
 //
-            if (!"ignore".equals(getEnv("swb/security.auth.login.config", "ignore"))) {
+            if (!"ignore".equals(getEnv("swb/security.auth.login.config", "ignore")))
+            {
                 System.setProperty("java.security.auth.login.config", SWBUtils.getApplicationPath() + "/WEB-INF/classes" + getEnv("swb/security.auth.login.config", "/wb_jaas.config"));
                 log.info("-->Login Config:" + System.getProperty("java.security.auth.login.config"));
             }
@@ -464,7 +486,9 @@ public class SWBPortal {
 //            util.log(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "log_WBLoader_Init_MemoryUsedbyWb") + "\t" + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() - inimem), true);
 //
 //            util.log(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "log_WBLoader_Init_WbInicializing"), true);
-        } catch (Throwable e) {
+        }
+        catch (Throwable e)
+        {
             log.error("Error loading SemanticWebBuilder Instance...", e);
         }
 
@@ -475,139 +499,157 @@ public class SWBPortal {
         try
         {
 
-        WebSite site = SWBContext.getAdminWebSite();
-        if (site == null) {
-            log.event("Creating Admin WebSite...");
-            SWBPlatform.getSemanticMgr().createModel(SWBContext.WEBSITE_ADMIN, "http://www.semanticwb.org/SWBAdmin#");
-            //MAPS74
-            SWBPlatform.getSemanticMgr().createKeyPair();
-        }
+            WebSite site = SWBContext.getAdminWebSite();
+            if (site == null)
+            {
+                log.event("Creating Admin WebSite...");
+                SWBPlatform.getSemanticMgr().createModel(SWBContext.WEBSITE_ADMIN, "http://www.semanticwb.org/SWBAdmin#");
+                //MAPS74
+                SWBPlatform.getSemanticMgr().createKeyPair();
+            }
 
-        //System.out.println("Checking OntEditor...");
+            //System.out.println("Checking OntEditor...");
 
-        site = SWBContext.getOntEditor();
-        if (site == null) {
-            log.event("Creating Ontology Editor WebSite...");
-            SWBPlatform.getSemanticMgr().createModel(SWBContext.WEBSITE_ONTEDITOR, "http://www.semanticwb.org/SWBOntEdit#");
-        }
+            site = SWBContext.getOntEditor();
+            if (site == null)
+            {
+                log.event("Creating Ontology Editor WebSite...");
+                SWBPlatform.getSemanticMgr().createModel(SWBContext.WEBSITE_ONTEDITOR, "http://www.semanticwb.org/SWBOntEdit#");
+            }
 
-        UserRepository urep = SWBContext.getAdminRepository();
-        if (urep == null) {
-            log.event("Creating Admin User Repository...");
-            urep = SWBContext.createUserRepository(SWBContext.USERREPOSITORY_ADMIN, "http://www.semanticwb.org/uradm#");
-            urep.setTitle("Admin User Repository");
-            urep.setDescription("Admin User Repository");
-            //TODO: cambiar a semantic prop
+            UserRepository urep = SWBContext.getAdminRepository();
+            if (urep == null)
+            {
+                log.event("Creating Admin User Repository...");
+                urep = SWBContext.createUserRepository(SWBContext.USERREPOSITORY_ADMIN, "http://www.semanticwb.org/uradm#");
+                urep.setTitle("Admin User Repository");
+                urep.setDescription("Admin User Repository");
+                //TODO: cambiar a semantic prop
 //            urep.setProperty(UserRepository.SWBUR_AuthMethod, "FORM"); //BASIC
 //            urep.setProperty(UserRepository.SWBUR_LoginContext, "swb4TripleStoreModule");
 //            urep.setProperty(UserRepository.SWBUR_CallBackHandlerClassName, "org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp");
-            //MAPS74 - Cambiado a semantic prop
-            urep.setAuthMethod("FORM");
-            urep.setLoginContext("swb4TripleStoreModule");
-            urep.setCallBackHandlerClassName("org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp");
+                //MAPS74 - Cambiado a semantic prop
+                urep.setAuthMethod("FORM");
+                urep.setLoginContext("swb4TripleStoreModule");
+                urep.setCallBackHandlerClassName("org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp");
 
-            urep.setUndeleteable(true);
-            //site.setUserRepository(urep);
-            //Create User
-            User user = urep.createUser();
-            user.setLogin("admin");
-            user.setPassword("webbuilder");
-            user.setEmail("admin@semanticwb.org");
-            user.setFirstName("Admin");
-            user.setLanguage("es");
-            user.setCreated(new Date());
-            user.setUpdated(new Date());
-            user.setActive(true);
+                urep.setUndeleteable(true);
+                //site.setUserRepository(urep);
+                //Create User
+                User user = urep.createUser();
+                user.setLogin("admin");
+                user.setPassword("webbuilder");
+                user.setEmail("admin@semanticwb.org");
+                user.setFirstName("Admin");
+                user.setLanguage("es");
+                user.setCreated(new Date());
+                user.setUpdated(new Date());
+                user.setActive(true);
 
-            UserGroup grp1 = urep.createUserGroup("admin");
-            grp1.setTitle("Administrator", "en");
-            grp1.setTitle("Administrador", "es");
-            grp1.setCreated(new Date());
-            grp1.setUpdated(new Date());
-            grp1.setCreator(user);
-            grp1.setModifiedBy(user);
-            grp1.setUndeleteable(true);
-            UserGroup grp2 = urep.createUserGroup("su");
-            grp2.setTitle("Super User", "en");
-            grp2.setTitle("Super Usuario", "es");
-            grp2.setCreated(new Date());
-            grp2.setUpdated(new Date());
-            grp2.setCreator(user);
-            grp2.setModifiedBy(user);
-            grp2.setUndeleteable(true);
-            grp2.setParent(grp1);
-            user.addUserGroup(grp1);
+                UserGroup grp1 = urep.createUserGroup("admin");
+                grp1.setTitle("Administrator", "en");
+                grp1.setTitle("Administrador", "es");
+                grp1.setCreated(new Date());
+                grp1.setUpdated(new Date());
+                grp1.setCreator(user);
+                grp1.setModifiedBy(user);
+                grp1.setUndeleteable(true);
+                UserGroup grp2 = urep.createUserGroup("su");
+                grp2.setTitle("Super User", "en");
+                grp2.setTitle("Super Usuario", "es");
+                grp2.setCreated(new Date());
+                grp2.setUpdated(new Date());
+                grp2.setCreator(user);
+                grp2.setModifiedBy(user);
+                grp2.setUndeleteable(true);
+                grp2.setParent(grp1);
+                user.addUserGroup(grp1);
 
-            try {
-                site = SWBContext.getWebSite("demo");
-                if (site == null) {
-                    log.event("Creating Demo WebSite...");
-                    UTIL.InstallZip(new File(getWorkPath() + "/sitetemplates/demo.zip"));
+                try
+                {
+                    site = SWBContext.getWebSite("demo");
+                    if (site == null)
+                    {
+                        log.event("Creating Demo WebSite...");
+                        UTIL.InstallZip(new File(getWorkPath() + "/sitetemplates/demo.zip"));
+                    }
                 }
-            } catch (Exception e) {
-                log.error(e);
+                catch (Exception e)
+                {
+                    log.error(e);
+                }
             }
-        }
 
-        //Check for GlobalWebSite
-        site = SWBContext.getGlobalWebSite();
-        if (site == null) {
-            log.event("Creating Global WebSite...");
-            site = SWBContext.createWebSite(SWBContext.WEBSITE_GLOBAL, "http://www.semanticwb.org/wsglobal#");
-            site.setTitle("Global");
-            site.setDescription("Global WebSite");
-            site.setActive(true);
-            site.setUndeleteable(true);
-            //Crear lenguajes por defecto
-            Language lang = site.createLanguage("es");
-            lang.setTitle("Español", "es");
-            lang.setTitle("Spanish", "en");
-            lang = site.createLanguage("en");
-            lang.setTitle("Ingles", "es");
-            lang.setTitle("English", "en");
-        //Create HomePage
+            //Check for GlobalWebSite
+            site = SWBContext.getGlobalWebSite();
+            if (site == null)
+            {
+                log.event("Creating Global WebSite...");
+                site = SWBContext.createWebSite(SWBContext.WEBSITE_GLOBAL, "http://www.semanticwb.org/wsglobal#");
+                site.setTitle("Global");
+                site.setDescription("Global WebSite");
+                site.setActive(true);
+                site.setUndeleteable(true);
+                //Crear lenguajes por defecto
+                Language lang = site.createLanguage("es");
+                lang.setTitle("Español", "es");
+                lang.setTitle("Spanish", "en");
+                lang = site.createLanguage("en");
+                lang.setTitle("Ingles", "es");
+                lang.setTitle("English", "en");
+                //Create HomePage
 //            WebPage home = site.createWebPage("home");
 //            site.setHomePage(home);
 //            home.setActive(true);
-        //Create DNS
+                //Create DNS
 //            Dns dns = site.createDns("localhost");
 //            dns.setTitle("localhost");
 //            dns.setDescription("DNS por default", "es");
 //            dns.setDescription("Default DNS", "en");
 //            dns.setDefault(true);
 //            dns.setWebPage(home);
-        }
+            }
 
-        urep = SWBContext.getDefaultRepository();
-        if (urep == null) {
-            log.event("Creating Default User Repository...");
-            urep = SWBContext.createUserRepository(SWBContext.USERREPOSITORY_DEFAULT, "http://www.semanticwb.org/urswb#");
-            urep.setTitle("Default UserRepository");
-            urep.setDescription("Default UserRpository");
+            urep = SWBContext.getDefaultRepository();
+            if (urep == null)
+            {
+                log.event("Creating Default User Repository...");
+                urep = SWBContext.createUserRepository(SWBContext.USERREPOSITORY_DEFAULT, "http://www.semanticwb.org/urswb#");
+                urep.setTitle("Default UserRepository");
+                urep.setDescription("Default UserRpository");
 //            urep.setProperty(UserRepository.SWBUR_AuthMethod, "FORM"); //BASIC
 //            urep.setProperty(UserRepository.SWBUR_LoginContext, "swb4TripleStoreModule");
 //            urep.setProperty(UserRepository.SWBUR_CallBackHandlerClassName, "org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp");
-            //MAPS74 - Cambiado a semantic prop
-            urep.setAuthMethod("FORM");
-            urep.setLoginContext("swb4TripleStoreModule");
-            urep.setCallBackHandlerClassName("org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp");
-            site.setUserRepository(urep);
-        }
+                //MAPS74 - Cambiado a semantic prop
+                urep.setAuthMethod("FORM");
+                urep.setLoginContext("swb4TripleStoreModule");
+                urep.setCallBackHandlerClassName("org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp");
+                site.setUserRepository(urep);
+            }
 
-        }catch(Exception e){e.printStackTrace();}
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
 
         //System.out.println("Checking Database...");
         //Crear tablas LOGS
-        try {
+        try
+        {
             Connection con = SWBUtils.DB.getDefaultConnection();
             Statement st = con.createStatement();
-            try {
+            try
+            {
                 ResultSet rs = st.executeQuery("select count(*) from swb_admlog");
-                if (rs.next()) {
+                if (rs.next())
+                {
                     int x = rs.getInt(1);
                 }
                 rs.close();
-            } catch (SQLException ne) {
+            }
+            catch (SQLException ne)
+            {
                 //ne.printStackTrace();
                 log.event("Creating Logs Tables...");
                 GenericDB db = new GenericDB();
@@ -616,7 +658,9 @@ public class SWBPortal {
             }
             st.close();
             con.close();
-        } catch (SQLException e) {
+        }
+        catch (SQLException e)
+        {
             log.error(e);
         }
 
@@ -659,35 +703,43 @@ public class SWBPortal {
         //Inicializa el RuleMgr
         Rule.getRuleMgr();
 
-        try {
+        try
+        {
             log.debug("Loading admin Files from: /WEB-INF/lib/SWBAdmin.jar");
             String zipPath = SWBUtils.getApplicationPath() + "/WEB-INF/lib/SWBAdmin.jar";
             ZipFile zf = new ZipFile(zipPath);
             Enumeration e = zf.entries();
-            while (e.hasMoreElements()) {
+            while (e.hasMoreElements())
+            {
                 ZipEntry ze = (ZipEntry) e.nextElement();
                 log.debug("/" + ze.getName() + ", " + ze.getSize() + ", " + ze.getTime());
                 admFiles.put("/" + ze.getName(), new JarFile(ze, zipPath));
             }
             zf.close();
-        //log.event("-->Admin Files in Memory:\t" + admFiles.size());
-        } catch (Exception e) {
+            //log.event("-->Admin Files in Memory:\t" + admFiles.size());
+        }
+        catch (Exception e)
+        {
             log.warn("Error loading files for Webbuilder Administration:" + SWBUtils.getApplicationPath() + "/WEB-INF/lib/SWBAdmin.jar", e);
         }
 
-        try {
+        try
+        {
             log.debug("Loading admin Files from: /WEB-INF/lib/dojo.jar");
             String zipPath = SWBUtils.getApplicationPath() + "/WEB-INF/lib/dojo.jar";
             ZipFile zf = new ZipFile(zipPath);
             Enumeration e = zf.entries();
-            while (e.hasMoreElements()) {
+            while (e.hasMoreElements())
+            {
                 ZipEntry ze = (ZipEntry) e.nextElement();
                 log.debug("/" + ze.getName() + ", " + ze.getSize() + ", " + ze.getTime());
                 admFiles.put("/" + ze.getName(), new JarFile(ze, zipPath));
             }
             zf.close();
             log.event("-->Admin Files in Memory:\t" + admFiles.size());
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             log.warn("Error loading files for Webbuilder Administration:" + SWBUtils.getApplicationPath() + "/WEB-INF/lib/dojo.zip", e);
         }
     }
@@ -727,7 +779,8 @@ public class SWBPortal {
      * environment variable. <p>Carga el modelo descrito para cada ontolog&iacute;a
      * indicada en {@code swb/ontologyFiles}.</p>
      */
-    public void loadSemanticModels() {
+    public void loadSemanticModels()
+    {
         log.event("Loading SemanticModels...");
 
         String owlPath = getEnv("swb/ontologyFiles", "/WEB-INF/owl/swb.owl");
@@ -736,7 +789,8 @@ public class SWBPortal {
 
         //Load Ontology from file
         StringTokenizer st = new StringTokenizer(owlPath, ",;");
-        while (st.hasMoreTokens()) {
+        while (st.hasMoreTokens())
+        {
             String file = st.nextToken();
             String swbowl = "file:" + SWBUtils.getApplicationPath() + file;
             SemanticModel model = SWBPlatform.getSemanticMgr().addBaseOntology(swbowl);
@@ -768,7 +822,8 @@ public class SWBPortal {
 
         SWBPlatform.getSemanticMgr().loadDBModels();
 
-        if (getEnv("swb/addModel_DBPedia", "false").equals("true")) {
+        if (getEnv("swb/addModel_DBPedia", "false").equals("true"))
+        {
             SWBPlatform.getSemanticMgr().loadRemoteModel("DBPedia", "http://dbpedia.org/sparql", "http://dbpedia.org/resource/", false);
         }
 //        if(SWBPlatform.getEnv("swb/addOnt_DBPedia","false").equals("true"))
@@ -789,8 +844,10 @@ public class SWBPortal {
      * {@literal /swb}, o {@literal /} si es el contexto ra&iacute;z</p>
      * @return the string representing the context path for this resource's instance.
      */
-    public static String getContextPath() {
-        if (instance != null) {
+    public static String getContextPath()
+    {
+        if (instance != null)
+        {
             return instance.contextPath;
         }
         return "";
@@ -808,17 +865,24 @@ public class SWBPortal {
      *        If the string ends with a {@literal /}, the value stored won't contain it.
      *        This is: <br/>value received {@literal /swb/} -> value stored {@literal /swb}
      */
-    public void setContextPath(String contextPath) {
+    public void setContextPath(String contextPath)
+    {
         log.event("ContextPath:" + contextPath);
         this.contextPath = contextPath;
 
-        try {
-            if (contextPath.endsWith("/")) {
+        try
+        {
+            if (contextPath.endsWith("/"))
+            {
                 webWorkPath = contextPath + getEnv("swb/webWorkPath").substring(1);
-            } else {
+            }
+            else
+            {
                 webWorkPath = contextPath + getEnv("swb/webWorkPath");
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             log.error("Can't read the context path...", e);
             webWorkPath = "";
         }
@@ -831,7 +895,8 @@ public class SWBPortal {
      * Ejemplo: /opt/swb/work</p>
      * @return a string representing the work directory's physical path
      */
-    public static String getWorkPath() {
+    public static String getWorkPath()
+    {
         return workPath;
     }
 
@@ -841,7 +906,8 @@ public class SWBPortal {
      * Ejemplo: /[context]/work </p>
      * @return a string representing the work directory's web path
      */
-    public static String getWebWorkPath() {
+    public static String getWebWorkPath()
+    {
         return webWorkPath;
     }
 
@@ -855,7 +921,8 @@ public class SWBPortal {
      * @return a string representing the environment variable's value. In case the
      *         indicated variable is not found, {@code null} will be returned.
      */
-    public static String getEnv(String name) {
+    public static String getEnv(String name)
+    {
         return getEnv(name, null);
     }
 
@@ -871,17 +938,21 @@ public class SWBPortal {
      * @return un string con el valor de la variable indicada por {@code name}, si existe,
      * en caso contrario devuelve el valor de {@code defect}.
      */
-    public static String getEnv(String name, String defect) {
+    public static String getEnv(String name, String defect)
+    {
         String obj = null;
 
         obj = System.getProperty("swb.web." + name);
-        if (obj != null) {
+        if (obj != null)
+        {
             return obj;
         }
-        if (props != null) {
+        if (props != null)
+        {
             obj = props.getProperty(name);
         }
-        if (obj == null) {
+        if (obj == null)
+        {
             return defect;
         }
         return obj;
@@ -892,7 +963,8 @@ public class SWBPortal {
      * <p>Obtiene el servletContext asociado a este recurso.</p>
      * @return the servletContext used in this object's creation
      */
-    public static ServletContext getServletContext() {
+    public static ServletContext getServletContext()
+    {
         return servletContext;
     }
 
@@ -902,7 +974,8 @@ public class SWBPortal {
      * @return the filter used in this object creation, {@code null} if no filter 
      *         was specified.
      */
-    public static Filter getVirtualHostFilter() {
+    public static Filter getVirtualHostFilter()
+    {
         return virtualHostFilter;
     }
 
@@ -911,7 +984,8 @@ public class SWBPortal {
      * <p>Obtiene la referencia a todas las propiedades declaradas en el archivo web.properties.</p>
      * @return the properties object wich stores the configured properties in {@literal web.properties} file.
      */
-    public static Properties getWebProperties() {
+    public static Properties getWebProperties()
+    {
         return props;
     }
 
@@ -920,7 +994,8 @@ public class SWBPortal {
      * <p>Indica si esta instancia de portal tiene relacionada una base de datos.</p>
      * @return the boolean indicating if a database existis for this instance of portal.
      */
-    public static boolean haveDB() {
+    public static boolean haveDB()
+    {
         return haveDB;
     }
 
@@ -930,7 +1005,8 @@ public class SWBPortal {
      * necesarias para trabajar.</p>
      * @return the boolean indicating if this instance of portal has database tables to work with.
      */
-    public static boolean haveDBTables() {
+    public static boolean haveDBTables()
+    {
         return haveDBTables;
     }
 
@@ -939,7 +1015,8 @@ public class SWBPortal {
      * <p>Indica si esta instancia de portal est&aacute; trabajanso con una base de datos.</p>
      * @return the boolean indicating if this instance of portal is working with a database.
      */
-    public static boolean isUseDB() {
+    public static boolean isUseDB()
+    {
         return useDB;
     }
 
@@ -948,7 +1025,8 @@ public class SWBPortal {
      * <p>Modifica el indicador de esta instancia de portal para trabajar con una base de datos.</p>
      * @param useDB a boolean that indicates to this instance of portal if it has to use a database.
      */
-    public static void setUseDB(boolean useDB) {
+    public static void setUseDB(boolean useDB)
+    {
         SWBPortal.useDB = useDB;
     }
 
@@ -958,7 +1036,8 @@ public class SWBPortal {
      * directorio de trabajo de esta instancia de portal.</p>
      * @param path the string representing the file to delete, which has to be within the work directory.
      */
-    public static void removeFileFromWorkPath(String path) {
+    public static void removeFileFromWorkPath(String path)
+    {
         //TOTO:Impementar Replicacion de archivos
         File file = new File(getWorkPath() + path);
         file.delete();
@@ -974,10 +1053,12 @@ public class SWBPortal {
      *         work directory or is equal to {@code null}
      * @return an inputStream with the indicated file's content
      */
-    public static InputStream getFileFromWorkPath(String path) throws SWBException {
+    public static InputStream getFileFromWorkPath(String path) throws SWBException
+    {
         InputStream ret = null;
         //TOTO:Impementar Replicacion de archivos
-        try {
+        try
+        {
 //            String confCS = (String) getEnv("swb/clientServer");
 //
 //            if(confCS.equalsIgnoreCase("ClientFR")) {
@@ -994,7 +1075,9 @@ public class SWBPortal {
 //            } else {
             ret = new FileInputStream(getWorkPath() + path);
 //            }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             throw new SWBException(e.getMessage(), e);
         }
         return ret;
@@ -1019,10 +1102,12 @@ public class SWBPortal {
      * @param userid a string with the user id, wich is used if the file repository is shared among several clients
      * @throws org.semanticwb.SWBException if the path specified cannot be created or is {@code null}
      */
-    public static void writeFileToWorkPath(String path, InputStream in, String userid) throws SWBException {
+    public static void writeFileToWorkPath(String path, InputStream in, String userid) throws SWBException
+    {
         //System.out.println("writeFileToWorkPath:"+path);
         //TOTO:Impementar Replicacion de archivos
-        try {
+        try
+        {
 //            String confCS = (String) AFUtils.getInstance().getEnv("wb/clientServer");
 //
 //            //System.out.println("clientServer:"+confCS);
@@ -1046,7 +1131,9 @@ public class SWBPortal {
             FileOutputStream out = new FileOutputStream(file);
             SWBUtils.IO.copyStream(in, out);
 //            }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             throw new SWBException(e.getMessage(), e);
         }
     }
@@ -1060,7 +1147,8 @@ public class SWBPortal {
      * @throws IOException if the file specified cannot be read.
      * @throws SWBException
      */
-    public static String readFileFromWorkPath(String path) throws IOException, SWBException {
+    public static String readFileFromWorkPath(String path) throws IOException, SWBException
+    {
         return SWBUtils.IO.readInputStream(getFileFromWorkPath(path));
     }
 
@@ -1076,11 +1164,15 @@ public class SWBPortal {
      * @return a stream with the indicated file's content
      * @throws org.semanticwb.SWBException if there's a problem while reading the file's content.
      */
-    public static InputStreamReader getFileFromWorkPath(String path, String encode) throws SWBException {
+    public static InputStreamReader getFileFromWorkPath(String path, String encode) throws SWBException
+    {
         InputStreamReader ret = null;
-        try {
+        try
+        {
             ret = new InputStreamReader(getFileFromWorkPath(path), encode);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             throw new SWBException(e.getMessage(), e);
         }
         return ret;
@@ -1095,17 +1187,22 @@ public class SWBPortal {
      * @return a string representing the specified file's content
      * @throws SWBException if there's a problem while reading the file's content.
      */
-    public static String readFileFromWorkPath(String path, String encode) throws SWBException {
+    public static String readFileFromWorkPath(String path, String encode) throws SWBException
+    {
         StringBuffer ret = new StringBuffer(SWBUtils.IO.getBufferSize());
-        try {
+        try
+        {
             InputStreamReader file = getFileFromWorkPath(path, encode);
             char[] bfile = new char[SWBUtils.IO.getBufferSize()];
             int x;
-            while ((x = file.read(bfile, 0, SWBUtils.IO.getBufferSize())) > -1) {
+            while ((x = file.read(bfile, 0, SWBUtils.IO.getBufferSize())) > -1)
+            {
                 ret.append(bfile, 0, x);
             }
             file.close();
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             throw new SWBException(e.getMessage(), e);
         }
         return ret.toString();
@@ -1117,7 +1214,6 @@ public class SWBPortal {
 //    public String getRemoteWorkPath() {
 //        return remoteWorkPath;
 //    }
-
     //TODO:validar client
     /**
      * Indicates if the SemanticWebBuilder instance is configured as a client.
@@ -1125,7 +1221,8 @@ public class SWBPortal {
      * configurada como cliente.</p>
      * @return a boolean that indicates if the SWB instance is configured as a client.
      */
-    public static boolean isClient() {
+    public static boolean isClient()
+    {
         return client;
     }
 
@@ -1134,7 +1231,8 @@ public class SWBPortal {
      * <p>Obtiene la ruta del distribuidor de esta instancia de SWB</p>
      * @return a string representing the distributor path within the context of this instance of SWB.
      */
-    public static String getDistributorPath() {
+    public static String getDistributorPath()
+    {
         return getContextPath() + "/" + getEnv("swb/distributor", "swb");
     }
 
@@ -1143,7 +1241,8 @@ public class SWBPortal {
      * <p>Obtiene una referencia al administrador de usuarios de esta instancia de SWB</p>
      * @return a SWBUserMgr object for this instance of SWB
      */
-    public static SWBUserMgr getUserMgr() {
+    public static SWBUserMgr getUserMgr()
+    {
         return usrMgr;
     }
 
@@ -1152,7 +1251,8 @@ public class SWBPortal {
      * <p>Obtiene una referencia al monitor de esta instancia de SWB</p>
      * @return a SWBMonitor object for this instance of SWB.
      */
-    public static SWBMonitor getMonitor() {
+    public static SWBMonitor getMonitor()
+    {
         return monitor;
     }
 
@@ -1161,7 +1261,8 @@ public class SWBPortal {
      * <p>Obtiene una referencia al administrador de recursos de esta instancia de SWB</p>
      * @return a SWBResourceMgr object for this instance of SWB.
      */
-    public static SWBResourceMgr getResourceMgr() {
+    public static SWBResourceMgr getResourceMgr()
+    {
         return resmgr;
     }
 
@@ -1170,7 +1271,8 @@ public class SWBPortal {
      * <p>Obtiene una referencia al administrador de plantillas de esta instancia de SWB</p>
      * @return a SWBTemplateMgr object for this instance of SWB.
      */
-    public static SWBTemplateMgr getTemplateMgr() {
+    public static SWBTemplateMgr getTemplateMgr()
+    {
         return templatemgr;
     }
 
@@ -1179,7 +1281,8 @@ public class SWBPortal {
      * <p>Obtiene una referencia al administrador de servicios de esta instancia de SWB</p>
      * @return a SWBServiceMgr object for this instance of SWB.
      */
-    public static SWBServiceMgr getServiceMgr() {
+    public static SWBServiceMgr getServiceMgr()
+    {
         return servicemgr;
     }
 
@@ -1188,7 +1291,8 @@ public class SWBPortal {
      * <p>Obtiene una referencia al administrador de servicios de esta instancia de SWB</p>
      * @return a SWBServiceMgr object for this instance of SWB.
      */
-    public static SWBAdminFilterMgr getAdminFilterMgr() {
+    public static SWBAdminFilterMgr getAdminFilterMgr()
+    {
         return adminfiltermgr;
     }
 
@@ -1198,7 +1302,8 @@ public class SWBPortal {
      * base de datos de esta instancia de SWB</p>
      * @return a SWBDBAdmLog object for this instance of SWB.
      */
-    public static SWBDBAdmLog getDBAdmLog() {
+    public static SWBDBAdmLog getDBAdmLog()
+    {
         return admlog;
     }
 
@@ -1207,7 +1312,8 @@ public class SWBPortal {
      * <p>Obtiene una referencia al centro de mensajes de esta instancia de SWB</p>
      * @return a SWBMessageCenter object for this instance of SWB.
      */
-    public static SWBMessageCenter getMessageCenter() {
+    public static SWBMessageCenter getMessageCenter()
+    {
         return msgcenter;
     }
 
@@ -1216,7 +1322,8 @@ public class SWBPortal {
      * <p>Obtiene una referencia a la bit&aacute;cora de accesos de esta instancia de SWB</p>
      * @return a SWBAccessLog object for this instance of SWB.
      */
-    public static SWBAccessLog getAccessLog() {
+    public static SWBAccessLog getAccessLog()
+    {
         return acclog;
     }
 
@@ -1226,7 +1333,8 @@ public class SWBPortal {
      * de esta instancia de SWB</p>
      * @return a PFlowManager object for this instance of SWB.
      */
-    public static PFlowManager getPFlowManager() {
+    public static PFlowManager getPFlowManager()
+    {
         return pflowMgr;
     }
 
@@ -1235,7 +1343,8 @@ public class SWBPortal {
      * <p>Obtiene una referencia al incrementador de accesos de esta instancia de SWB</p>
      * @return a SWBAccessIncrement object for this instance of SWB.
      */
-    public static SWBAccessIncrement getAccessIncrement() {
+    public static SWBAccessIncrement getAccessIncrement()
+    {
         return accInc;
     }
 
@@ -1244,7 +1353,8 @@ public class SWBPortal {
      * <p>Obtiene una referencia al administrador de &iacute;ndices de esta instancia de SWB.</p>
      * @return a SWBIndexMgr object for this instance of SWB.
      */
-    public static SWBIndexMgr getIndexMgr() {
+    public static SWBIndexMgr getIndexMgr()
+    {
         return indmgr;
     }
 
@@ -1257,11 +1367,14 @@ public class SWBPortal {
      * @param path a string representing an existing path within SWBAdmin.jar or dojo.jar files.
      * @return a jarFile object with the specified file's content.
      */
-    public static JarFile getAdminFile(String path) {
+    public static JarFile getAdminFile(String path)
+    {
         JarFile f = new JarFile(path);
-        if (!f.exists()) {
+        if (!f.exists())
+        {
             JarFile aux = (JarFile) admFiles.get(path);
-            if (aux != null) {
+            if (aux != null)
+            {
                 f = aux;
             }
         }
@@ -1281,12 +1394,15 @@ public class SWBPortal {
      * @param path a string representing an existing path within SWBAdmin.jar or dojo.jar files.
      * @return an input stream with the specified file's content.
      */
-    public static InputStream getAdminFileStream(String path) {
+    public static InputStream getAdminFileStream(String path)
+    {
         JarFile f = (JarFile) admFiles.get(path);
-        if (f == null) {
+        if (f == null)
+        {
             f = new JarFile(path);
         }
-        if (!f.exists()) {
+        if (!f.exists())
+        {
             return null;
         }
         return f.getInputStream();
@@ -1297,15 +1413,19 @@ public class SWBPortal {
      * <p>Obtiene todos los lenguajes de todos los sitios en esta instancia de SWB</p>
      * @return an arrayList with all languages available in all sites
      */
-    public static ArrayList getAppLanguages() {
+    public static ArrayList getAppLanguages()
+    {
         ArrayList languages = new ArrayList();
         Iterator<WebSite> it = SWBContext.listWebSites();
-        while (it.hasNext()) {
+        while (it.hasNext())
+        {
             WebSite site = it.next();
             Iterator<Language> itLang = site.listLanguages();
-            while (itLang.hasNext()) {
+            while (itLang.hasNext())
+            {
                 Language lang = itLang.next();
-                if (!languages.contains(lang.getId())) {
+                if (!languages.contains(lang.getId()))
+                {
                     languages.add(lang.getId());
                 }
             }
@@ -1322,7 +1442,8 @@ public class SWBPortal {
      * b&uacute;squeda de anclas en HTML, generaci&oacute;n de im&aacute;genes tipo
      * captcha, listado de archivos referenciados por c&oacute;digo HTML.</p>
      */
-    public static class UTIL {
+    public static class UTIL
+    {
 
         /**
          * a string that contains all characters in the english alphabet and the 10 digits. <p>
@@ -1344,7 +1465,8 @@ public class SWBPortal {
          * @param ruta the string with the new path to write to {@code datos}.
          * @return a string with the HTML code with relative paths modified.
          */
-        public static String parseHTML(String datos, String ruta) {
+        public static String parseHTML(String datos, String ruta)
+        {
             return parseHTML(datos, ruta, 0);
         }
 
@@ -1371,14 +1493,16 @@ public class SWBPortal {
          * @return a string with the HTML code with relative paths modified.
          * @author Jorge Jim&eacute;nez
          */
-        public static String parseHTML(String datos, String ruta, int pages) {
+        public static String parseHTML(String datos, String ruta, int pages)
+        {
 
             hAnchors = new HashMap();
             //detección de si el contenido es de word
             boolean iswordcontent = false;
             int posword = -1;
             posword = datos.toLowerCase().indexOf("name=generator content=\"microsoft word");
-            if (posword > -1) {
+            if (posword > -1)
+            {
                 iswordcontent = true;
             }
             //termina detección de si es contenido de word
@@ -1387,22 +1511,29 @@ public class SWBPortal {
             int pos = -1;
             int pos1 = -1;
             StringBuffer ret = new StringBuffer();
-            try {
+            try
+            {
                 HtmlStreamTokenizer tok = new HtmlStreamTokenizer(new ByteArrayInputStream(datos.getBytes()));
-                while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF) {
+                while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF)
+                {
                     int ttype = tok.getTokenType();
                     //if (ttype==HtmlStreamTokenizer.TT_COMMENT) continue;
-                    if (ttype == HtmlStreamTokenizer.TT_TAG || ttype == HtmlStreamTokenizer.TT_COMMENT) {
-                        if (ttype == HtmlStreamTokenizer.TT_COMMENT && tok.getRawString().equals("<!-- -->")) {
+                    if (ttype == HtmlStreamTokenizer.TT_TAG || ttype == HtmlStreamTokenizer.TT_COMMENT)
+                    {
+                        if (ttype == HtmlStreamTokenizer.TT_COMMENT && tok.getRawString().equals("<!-- -->"))
+                        {
                             continue;
                         }
                         tok.parseTag(tok.getStringValue(), tag);
 
-                        if (tok.getRawString().toLowerCase().startsWith("<!--[if")) {
+                        if (tok.getRawString().toLowerCase().startsWith("<!--[if"))
+                        {
                             continue;
                         }
-                        if ((tag.getTagString().toLowerCase().equals("img") || tag.getTagString().toLowerCase().equals("applet") || tag.getTagString().toLowerCase().equals("script") || tag.getTagString().toLowerCase().equals("tr") || tag.getTagString().toLowerCase().equals("td") || tag.getTagString().toLowerCase().equals("table") || tag.getTagString().toLowerCase().equals("body") || tag.getTagString().toLowerCase().equals("input") || tag.getTagString().toLowerCase().equals("a") || tag.getTagString().toLowerCase().equals("form") || tag.getTagString().toLowerCase().equals("area") || tag.getTagString().toLowerCase().equals("meta") || tag.getTagString().toLowerCase().equals("bca") || tag.getTagString().toLowerCase().equals("link") || tag.getTagString().toLowerCase().equals("param") || tag.getTagString().toLowerCase().equals("embed") || tag.getTagString().toLowerCase().equals("iframe") || tag.getTagString().toLowerCase().equals("frame")) && !tok.getRawString().startsWith("<!--")) {
-                            if (!tag.isEndTag()) {
+                        if ((tag.getTagString().toLowerCase().equals("img") || tag.getTagString().toLowerCase().equals("applet") || tag.getTagString().toLowerCase().equals("script") || tag.getTagString().toLowerCase().equals("tr") || tag.getTagString().toLowerCase().equals("td") || tag.getTagString().toLowerCase().equals("table") || tag.getTagString().toLowerCase().equals("body") || tag.getTagString().toLowerCase().equals("input") || tag.getTagString().toLowerCase().equals("a") || tag.getTagString().toLowerCase().equals("form") || tag.getTagString().toLowerCase().equals("area") || tag.getTagString().toLowerCase().equals("meta") || tag.getTagString().toLowerCase().equals("bca") || tag.getTagString().toLowerCase().equals("link") || tag.getTagString().toLowerCase().equals("param") || tag.getTagString().toLowerCase().equals("embed") || tag.getTagString().toLowerCase().equals("iframe") || tag.getTagString().toLowerCase().equals("frame")) && !tok.getRawString().startsWith("<!--"))
+                        {
+                            if (!tag.isEndTag())
+                            {
                                 ret.append("<");
                                 ret.append(tag.getTagString());
                                 ret.append(" ");
@@ -1410,7 +1541,8 @@ public class SWBPortal {
                                 String name = "";
                                 String value = "";
                                 String actionval = "";
-                                while (en.hasMoreElements()) {
+                                while (en.hasMoreElements())
+                                {
                                     boolean bwritestyle = true;
                                     name = (String) en.nextElement();
                                     value = tag.getParam(name);
@@ -1420,68 +1552,166 @@ public class SWBPortal {
                                     value = SWBUtils.TEXT.replaceAll(value, "%3f", "?");
                                     value = SWBUtils.TEXT.replaceAll(value, "%3F", "?");
 
+                                    if (iswordcontent && tag.getTagString().toLowerCase().equals("object") && !tag.isEndTag())
+                                    {
+                                        boolean isFlash = false;
+                                        Enumeration en2 = tag.getParamNames();
+                                        while (en2.hasMoreElements())
+                                        {
+                                            String name2 = (String) en2.nextElement();
+                                            if (name2 != null && name2.toLowerCase().equals("classid") && tag.getParam(name2) != null && tag.getParam(name2).toLowerCase().equals("clsid:D27CDB6E-AE6D-11cf-96B8-444553540000".toLowerCase()))
+                                            {
+                                                isFlash = true;
+                                                break;
+                                            }
+                                        }
+                                        if (isFlash)
+                                        {
+                                            HtmlTag embed = new HtmlTag();
+                                            embed.setTag("embed");
+                                            if (tag.getParam("width") != null && !tag.getParam("width").equals(""))
+                                            {
+                                                embed.setParam("width", tag.getParam("width"));
+                                            }
+                                            if (tag.getParam("height") != null && !tag.getParam("height").equals(""))
+                                            {
+                                                embed.setParam("height", tag.getParam("height"));
+                                            }
+                                            while (!(tag.isEndTag() && tag.getTagString().equals("object")))
+                                            {
+                                                ttype = tok.nextToken();
+                                                if (ttype == HtmlStreamTokenizer.TT_TAG)
+                                                {
+                                                    tok.parseTag(tok.getStringValue(), tag);
+                                                    if (tag.getTagString().equals("param") && !tag.isEndTag())
+                                                    {
+                                                        String name3 = tag.getParam("name");
+                                                        if (name3 != null && name3.toLowerCase().equals("movie") && tag.getParam("value") != null && !tag.getParam("value").equals(""))
+                                                        {
+                                                            String filename = findFileName(tag.getParam("value"));
+                                                            embed.setParam("id", filename);
+                                                            embed.setParam("name", filename);
+                                                            String sruta = ruta + filename;
+                                                            embed.setParam("src", sruta);
+                                                        }
+                                                        if (name3 != null && name3.toLowerCase().equals("quality") && tag.getParam("value") != null && !tag.getParam("value").equals(""))
+                                                        {
+                                                            embed.setParam("quality", tag.getParam("value"));
+                                                        }
+                                                    }
+                                                }
+
+                                            }
+
+
+                                            embed.setParam("pluginspage", "http://www.macromedia.com/go/getflashplayer");
+                                            embed.setParam("type", "application/x-shockwave-flash");
+                                            ret.append("\r\n<script type=\"text/javascript\">\r\n<!--\r\ndocument.write('" + embed.toString() + "</embed>');\r\n-->\r\n</script>");
+                                            ttype = tok.nextToken();
+                                            while (!(ttype == HtmlStreamTokenizer.TT_TAG || ttype == HtmlStreamTokenizer.TT_COMMENT))
+                                            {
+                                                ttype = tok.nextToken();
+                                            }
+                                            if (ttype == HtmlStreamTokenizer.TT_TAG || ttype == HtmlStreamTokenizer.TT_COMMENT)
+                                            {
+                                                if (ttype == HtmlStreamTokenizer.TT_COMMENT && tok.getRawString().equals("<!-- -->"))
+                                                {
+                                                    continue;
+                                                }
+                                            }
+                                            tok.parseTag(tok.getStringValue(), tag);
+
+                                        }
+                                    }
                                     String sruta = null;
                                     if (name.toLowerCase().equals("src") && tag.getTagString().toLowerCase().equals("img")) // imagenes deben siempre parsearse, agregado por Víctor Lorenzana
                                     {
                                         sruta = ruta;
                                         value = findFileName(value);
                                     }
-                                    else if ((name.toLowerCase().equals("src") || name.toLowerCase().equals("href") || name.toLowerCase().equals("background") || name.toLowerCase().equals("codebase") || name.toLowerCase().equals("value")) && !value.startsWith("http://") && !value.startsWith("https://") && !value.startsWith("mailto:") && !value.startsWith("javascript:") && !value.startsWith("ftp:") && !value.startsWith("rtsp:") && !value.startsWith("telnet:") && !value.startsWith("#") && !value.startsWith("/") && !value.startsWith("../") && !value.startsWith("{")) { //Comentado Jorge Jiménez y Vic Lorenzana (30/07/2009)
-                                        if (!tag.getTagString().toLowerCase().equals("input") && !value.toLowerCase().equals("true") && !value.toLowerCase().equals("false") && value.indexOf(".") > -1) {
+                                    else if ((name.toLowerCase().equals("src") || name.toLowerCase().equals("href") || name.toLowerCase().equals("background") || name.toLowerCase().equals("codebase") || name.toLowerCase().equals("value")) && !value.startsWith("http://") && !value.startsWith("https://") && !value.startsWith("mailto:") && !value.startsWith("javascript:") && !value.startsWith("ftp:") && !value.startsWith("rtsp:") && !value.startsWith("telnet:") && !value.startsWith("#") && !value.startsWith("/") && !value.startsWith("../") && !value.startsWith("{"))
+                                    { //Comentado Jorge Jiménez y Vic Lorenzana (30/07/2009)
+                                        if (!tag.getTagString().toLowerCase().equals("input") && !value.toLowerCase().equals("true") && !value.toLowerCase().equals("false") && value.indexOf(".") > -1)
+                                        {
                                             sruta = ruta;
                                         }
                                         //poner solo archivo
-                                        if (((pos = value.indexOf("/")) > -1) || (pos = value.indexOf("\\")) > -1) {
+                                        if (((pos = value.indexOf("/")) > -1) || (pos = value.indexOf("\\")) > -1)
+                                        {
                                             value = findFileName(value);
                                         }
-                                    } else if (name.toLowerCase().equals("href") && value.startsWith("../")) {
+                                    }
+                                    else if (name.toLowerCase().equals("href") && value.startsWith("../"))
+                                    {
                                         sruta = ruta; //Agregado 29/07/2009 (Jorge Jiménez-Vic Lorenzana)
                                         value = findFileName(value);
-                                    } else if (name.toLowerCase().equals("href") && value.startsWith("#_") && pages > 1) { //Es un ancla
+                                    }
+                                    else if (name.toLowerCase().equals("href") && value.startsWith("#_") && pages > 1)
+                                    { //Es un ancla
                                         int page = findAnchorInContent(datos, value, pages);
-                                        if (page > 0) {
+                                        if (page > 0)
+                                        {
                                             value = "?page=" + page + "&" + value;
                                         }
-                                    } else if (name.toLowerCase().equals("onmouseover") || name.toLowerCase().equals("onload") || name.toLowerCase().equals("onmouseout") || name.toLowerCase().equals("onclick")) {
+                                    }
+                                    else if (name.toLowerCase().equals("onmouseover") || name.toLowerCase().equals("onload") || name.toLowerCase().equals("onmouseout") || name.toLowerCase().equals("onclick"))
+                                    {
                                         String out = findImagesInScript(value, ".gif'", ruta);
                                         out = findImagesInScript(out, ".jpg'", ruta);
                                         //ret.append(ruta);
-                                        if (!out.equals("")) {
+                                        if (!out.equals(""))
+                                        {
                                             value = out;
                                         }
-                                    } else if (tag.getTagString().toLowerCase().equals("body") && iswordcontent && (name.equals("link") || name.equals("vlink"))) { //elimina los liks
+                                    }
+                                    else if (tag.getTagString().toLowerCase().equals("body") && iswordcontent && (name.equals("link") || name.equals("vlink")))
+                                    { //elimina los liks
                                         bwritestyle = false;
                                     }
-                                    if (bwritestyle) {
+                                    if (bwritestyle)
+                                    {
                                         ret.append(name);
                                         ret.append("=\"");
-                                        if (sruta != null) {
+                                        if (sruta != null)
+                                        {
                                             ret.append(sruta);
                                         }
                                         ret.append(value);
                                         ret.append("\" ");
                                     }
                                 }
-                                if (tag.isEmpty()) {
+                                if (tag.isEmpty())
+                                {
                                     ret.append("/");
                                 }
                                 ret.append(">");
-                                if (tag.getTagString().toLowerCase().equals("form")) {
+                                if (tag.getTagString().toLowerCase().equals("form"))
+                                {
                                     ret.append(actionval);
                                 }
-                            } else {
+                            }
+                            else
+                            {
                                 ret.append(tok.getRawString());
                             }
-                        } else {
+                        }
+                        else
+                        {
                             ret.append(tok.getRawString());
                         }
-                    } else if (ttype == HtmlStreamTokenizer.TT_TEXT) {
+                    }
+                    else if (ttype == HtmlStreamTokenizer.TT_TEXT)
+                    {
                         ret.append(tok.getRawString());
                     }
                 }
-            } catch (NumberFormatException f) {
+            }
+            catch (NumberFormatException f)
+            {
                 log.error(f);
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 log.error(e);
             }
             return ret.toString();
@@ -1494,22 +1724,28 @@ public class SWBPortal {
          * @return a string with the file name found. If no file name is found
          *         {@code value} is returned intact.
          */
-        private static String findFileName(String value) {
+        private static String findFileName(String value)
+        {
             String out = "";
-            if (value.startsWith("../")) {
+            if (value.startsWith("../"))
+            {
                 out = takeOffString(value, "../");
-                if (!out.equals("")) {
+                if (!out.equals(""))
+                {
                     value = out;
                 }
             }
             int x = value.lastIndexOf(".");
-            if (x > -1) {
+            if (x > -1)
+            {
                 int y = value.lastIndexOf("\\", x);
-                if (y > -1) {
+                if (y > -1)
+                {
                     value = value.substring(y + 1);
                 }
                 y = value.lastIndexOf("/", x);
-                if (y > -1) {
+                if (y > -1)
+                {
                     value = value.substring(y + 1);
                 }
             }
@@ -1526,14 +1762,18 @@ public class SWBPortal {
          * @param takeOff the substring to eliminate
          * @return the string whithout {@code takeOff}
          */
-        public static String takeOffString(String value, String takeOff) {
+        public static String takeOffString(String value, String takeOff)
+        {
             int pos = -1;
-            do {
+            do
+            {
                 pos = value.indexOf(takeOff);
-                if (pos != -1) {
+                if (pos != -1)
+                {
                     value = value.substring(pos + takeOff.length());
                 }
-            } while (pos != -1);
+            }
+            while (pos != -1);
             return value;
         }
 
@@ -1545,14 +1785,20 @@ public class SWBPortal {
          * @param pages the number of pages {@code content} is divided into
          * @return the page number in which {@code ancla} was found
          */
-        private static int findAnchorInContent(String content, String ancla, int pages) {
+        private static int findAnchorInContent(String content, String ancla, int pages)
+        {
             ancla = ancla.substring(1);
             Integer page = (Integer) hAnchors.get(ancla);
-            if (page != null) { //existe en hash de anclas
+            if (page != null)
+            { //existe en hash de anclas
                 return page.intValue();
-            } else {
-                for (int i = 0; i <= pages; i++) {
-                    if (findAnchorInContentPage(content, ancla, i, pages)) {
+            }
+            else
+            {
+                for (int i = 0; i <= pages; i++)
+                {
+                    if (findAnchorInContentPage(content, ancla, i, pages))
+                    {
                         return i;
                     }
                 }
@@ -1571,64 +1817,91 @@ public class SWBPortal {
          * @param itpages the total number of pages in {@code datos}
          * @return a boolean indicating whether the anchor was found or not
          */
-        public static boolean findAnchorInContentPage(String datos, String ancla, int page, int itpages) {
+        public static boolean findAnchorInContentPage(String datos, String ancla, int page, int itpages)
+        {
             HtmlTag tag = new HtmlTag();
             boolean flag = false;
             boolean flag1 = false;
             boolean flag2 = false;
-            try {
+            try
+            {
                 HtmlStreamTokenizer tok = new HtmlStreamTokenizer(new java.io.ByteArrayInputStream(datos.getBytes()));
-                while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF) {
+                while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF)
+                {
                     int ttype = tok.getTokenType();
-                    if (ttype == HtmlStreamTokenizer.TT_TAG || ttype == HtmlStreamTokenizer.TT_COMMENT) {
+                    if (ttype == HtmlStreamTokenizer.TT_TAG || ttype == HtmlStreamTokenizer.TT_COMMENT)
+                    {
                         tok.parseTag(tok.getStringValue(), tag);
-                        if (tok.getRawString().toLowerCase().startsWith("<!--[if")) {
+                        if (tok.getRawString().toLowerCase().startsWith("<!--[if"))
+                        {
                             continue;
                         }
-                        if (tag.getTagString().toLowerCase().equals("div")) {
+                        if (tag.getTagString().toLowerCase().equals("div"))
+                        {
                             flag1 = true;
-                            if (!tag.isEndTag()) {
+                            if (!tag.isEndTag())
+                            {
                                 Enumeration en = tag.getParamNames();
                                 String name = "";
                                 String value = "";
-                                while (en.hasMoreElements()) {
+                                while (en.hasMoreElements())
+                                {
                                     name = (String) en.nextElement();
                                     value = tag.getParam(name);
-                                    if (name.toLowerCase().equals("class")) {
-                                        if (value.toLowerCase().equals("section" + page)) {
+                                    if (name.toLowerCase().equals("class"))
+                                    {
+                                        if (value.toLowerCase().equals("section" + page))
+                                        {
                                             flag = true;
                                         }
-                                    } else if (flag) {
+                                    }
+                                    else if (flag)
+                                    {
                                         flag2 = true;
                                     }
                                 }
-                            } else {
-                                if (flag && !flag2) {
+                            }
+                            else
+                            {
+                                if (flag && !flag2)
+                                {
                                     //entra a este if y se rompe el ciclo solo si la página actual es menos al total de páginas encontradas en el documento,
                                     //si es igual, entonces no lo rompe y se termina hasta que se acaba el html, para que funcionen los pie de página si existen
                                     //al final del dicumento
-                                    if (page < itpages) {
+                                    if (page < itpages)
+                                    {
                                         break;
                                     }
-                                } else if (flag && flag2) {
+                                }
+                                else if (flag && flag2)
+                                {
                                     flag2 = false;
                                 }
                             }
-                        } else if (flag1 && flag) {
-                            if (tag.getTagString().toLowerCase().equals("a")) {
-                                if (!tag.isEndTag()) {
+                        }
+                        else if (flag1 && flag)
+                        {
+                            if (tag.getTagString().toLowerCase().equals("a"))
+                            {
+                                if (!tag.isEndTag())
+                                {
                                     Enumeration en = tag.getParamNames();
                                     String name = "";
                                     String value = "";
                                     String actionval = "";
-                                    while (en.hasMoreElements()) {
+                                    while (en.hasMoreElements())
+                                    {
                                         name = (String) en.nextElement();
                                         value = tag.getParam(name);
-                                        if (name.toLowerCase().equals("name") && value.equals(ancla)) { //encontrado
+                                        if (name.toLowerCase().equals("name") && value.equals(ancla))
+                                        { //encontrado
                                             hAnchors.put(value, new Integer(page));
                                             return true;
-                                        } else if (name.toLowerCase().equals("name") && value.startsWith("_")) { //es una ancla, guardarla en hash de anclas
-                                            if (hAnchors.get(value) == null) {
+                                        }
+                                        else if (name.toLowerCase().equals("name") && value.startsWith("_"))
+                                        { //es una ancla, guardarla en hash de anclas
+                                            if (hAnchors.get(value) == null)
+                                            {
                                                 hAnchors.put(value, new Integer(page));
                                             }
                                         }
@@ -1638,7 +1911,9 @@ public class SWBPortal {
                         }
                     }
                 }
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 log.error(e);
             }
             return false;
@@ -1655,28 +1930,37 @@ public class SWBPortal {
          * @return a string like {@code value} but with the file paths replaced with {@code ruta}
          *         for the file paths containing the file extension {@code ext}
          */
-        private static String findImagesInScript(String value, String ext, String ruta) {
+        private static String findImagesInScript(String value, String ext, String ruta)
+        {
             StringBuffer aux = new StringBuffer(value.length());
             int off = 0;
             int f = 0;
             int i = 0;
             int j = 0;
-            do {
+            do
+            {
                 f = value.indexOf(ext, off);
                 i = value.lastIndexOf("'", f);
                 j = value.lastIndexOf("/", f);
-                if (f > 0 && i >= 0) {
+                if (f > 0 && i >= 0)
+                {
                     i++;
-                    if (value.startsWith("/", i) || value.startsWith("http://", i)) {
+                    if (value.startsWith("/", i) || value.startsWith("http://", i))
+                    {
                         aux.append(value.substring(off, f + ext.length()));
-                    } else if (j > -1) {
+                    }
+                    else if (j > -1)
+                    {
                         aux.append(value.substring(off, i) + ruta + value.substring(j + 1, f + ext.length()));
-                    } else {
+                    }
+                    else
+                    {
                         aux.append(value.substring(off, i) + ruta + value.substring(i, f + ext.length()));
                     }
                     off = f + ext.length();
                 }
-            } while (f > 0 && i > 0);
+            }
+            while (f > 0 && i > 0);
             aux.append(value.substring(off));
             return aux.toString();
         }
@@ -1701,29 +1985,37 @@ public class SWBPortal {
          * @param ruta the string representing the replacing path
          * @return a string with the HTML code with relative paths modified.
          */
-        public static String parseXsl(String datos, String ruta) {
+        public static String parseXsl(String datos, String ruta)
+        {
             HtmlTag tag = new HtmlTag();
             int pos = -1;
             int pos1 = -1;
             StringBuffer ret = new StringBuffer();
-            try {
+            try
+            {
                 HtmlStreamTokenizer tok = new HtmlStreamTokenizer(new ByteArrayInputStream(datos.getBytes()));
-                while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF) {
+                while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF)
+                {
                     int ttype = tok.getTokenType();
                     //if (ttype==HtmlStreamTokenizer.TT_COMMENT) continue;
-                    if (ttype == HtmlStreamTokenizer.TT_TAG || ttype == HtmlStreamTokenizer.TT_COMMENT) {
-                        if (ttype == HtmlStreamTokenizer.TT_COMMENT && tok.getRawString().equals("<!-- -->")) {
+                    if (ttype == HtmlStreamTokenizer.TT_TAG || ttype == HtmlStreamTokenizer.TT_COMMENT)
+                    {
+                        if (ttype == HtmlStreamTokenizer.TT_COMMENT && tok.getRawString().equals("<!-- -->"))
+                        {
                             continue;
                         }
                         tok.parseTag(tok.getStringValue(), tag);
 
-                        if (tok.getRawString().toLowerCase().startsWith("<!--[if")) {
+                        if (tok.getRawString().toLowerCase().startsWith("<!--[if"))
+                        {
                             continue;
                         }
                         //if (tag.getTagString().toLowerCase().startsWith("o:")){System.out.println("o:Salto");   continue;}
-                        if (tag.getTagString().toLowerCase().equals("img") || tag.getTagString().toLowerCase().equals("applet") || tag.getTagString().toLowerCase().equals("script") || tag.getTagString().toLowerCase().equals("td") || tag.getTagString().toLowerCase().equals("table") || tag.getTagString().toLowerCase().equals("body") || tag.getTagString().toLowerCase().equals("input") || tag.getTagString().toLowerCase().equals("a") || tag.getTagString().toLowerCase().equals("form") || tag.getTagString().toLowerCase().equals("area") || tag.getTagString().toLowerCase().equals("meta") || tag.getTagString().toLowerCase().equals("bca") || tag.getTagString().toLowerCase().equals("link") || tag.getTagString().toLowerCase().equals("param") || tag.getTagString().toLowerCase().equals("embed") || tag.getTagString().toLowerCase().equals("iframe") || tag.getTagString().toLowerCase().equals("frame")) {
+                        if (tag.getTagString().toLowerCase().equals("img") || tag.getTagString().toLowerCase().equals("applet") || tag.getTagString().toLowerCase().equals("script") || tag.getTagString().toLowerCase().equals("td") || tag.getTagString().toLowerCase().equals("table") || tag.getTagString().toLowerCase().equals("body") || tag.getTagString().toLowerCase().equals("input") || tag.getTagString().toLowerCase().equals("a") || tag.getTagString().toLowerCase().equals("form") || tag.getTagString().toLowerCase().equals("area") || tag.getTagString().toLowerCase().equals("meta") || tag.getTagString().toLowerCase().equals("bca") || tag.getTagString().toLowerCase().equals("link") || tag.getTagString().toLowerCase().equals("param") || tag.getTagString().toLowerCase().equals("embed") || tag.getTagString().toLowerCase().equals("iframe") || tag.getTagString().toLowerCase().equals("frame"))
+                        {
 
-                            if (!tag.isEndTag()) {
+                            if (!tag.isEndTag())
+                            {
                                 ret.append("<");
                                 ret.append(tag.getTagString());
                                 ret.append(" ");
@@ -1731,25 +2023,31 @@ public class SWBPortal {
                                 String name = "";
                                 String value = "";
                                 String actionval = "";
-                                while (en.hasMoreElements()) {
+                                while (en.hasMoreElements())
+                                {
                                     name = (String) en.nextElement();
                                     value = tag.getParam(name);
                                     ret.append(name);
                                     ret.append("=\"");
-                                    if ((name.toLowerCase().equals("src") || name.toLowerCase().equals("href") || name.toLowerCase().equals("background") || name.toLowerCase().equals("codebase") || name.toLowerCase().equals("value")) && !value.startsWith("http://") && !value.startsWith("mailto:") && !value.startsWith("javascript:") && !value.startsWith("ftp:") && !value.startsWith("rtsp:") && !value.startsWith("telnet:") && !value.startsWith("#") && !value.startsWith("/") && !value.startsWith("{")) {
-                                        if (!tag.getTagString().toLowerCase().equals("input") && !value.toLowerCase().equals("true") && !value.toLowerCase().equals("false") && value.indexOf(".") > -1) {
+                                    if ((name.toLowerCase().equals("src") || name.toLowerCase().equals("href") || name.toLowerCase().equals("background") || name.toLowerCase().equals("codebase") || name.toLowerCase().equals("value")) && !value.startsWith("http://") && !value.startsWith("mailto:") && !value.startsWith("javascript:") && !value.startsWith("ftp:") && !value.startsWith("rtsp:") && !value.startsWith("telnet:") && !value.startsWith("#") && !value.startsWith("/") && !value.startsWith("{"))
+                                    {
+                                        if (!tag.getTagString().toLowerCase().equals("input") && !value.toLowerCase().equals("true") && !value.toLowerCase().equals("false") && value.indexOf(".") > -1)
+                                        {
                                             ret.append(ruta);
                                         }
                                         //poner solo archivo
-                                        if (((pos = value.indexOf("/")) > -1) || (pos = value.indexOf("\\")) > -1) {
+                                        if (((pos = value.indexOf("/")) > -1) || (pos = value.indexOf("\\")) > -1)
+                                        {
                                             value = findFileName(value);
                                         }
                                     }
-                                    if (name.toLowerCase().equals("onmouseover") || name.toLowerCase().equals("onload") || name.toLowerCase().equals("onmouseout") || name.toLowerCase().equals("onclick")) {
+                                    if (name.toLowerCase().equals("onmouseover") || name.toLowerCase().equals("onload") || name.toLowerCase().equals("onmouseout") || name.toLowerCase().equals("onclick"))
+                                    {
                                         String out = findImagesInScript(value, ".gif'", ruta);
                                         out = findImagesInScript(out, ".jpg'", ruta);
                                         //ret.append(ruta);
-                                        if (!out.equals("")) {
+                                        if (!out.equals(""))
+                                        {
                                             value = out;
                                         }
                                     }
@@ -1757,28 +2055,40 @@ public class SWBPortal {
                                     ret.append("\" ");
                                 }
                                 //if(tag.getTagString().toLowerCase().equals("img") && tok.getStringValue().toString().endsWith("/")) {
-                                if (tag.isEmpty()) {
+                                if (tag.isEmpty())
+                                {
                                     ret.append("/");
                                 }
 
                                 ret.append(">");
 
-                                if (tag.getTagString().toLowerCase().equals("form")) {
+                                if (tag.getTagString().toLowerCase().equals("form"))
+                                {
                                     ret.append(actionval);
                                 }
-                            } else {
+                            }
+                            else
+                            {
                                 ret.append(tok.getRawString());
                             }
-                        } else {
+                        }
+                        else
+                        {
                             ret.append(tok.getRawString());
                         }
-                    } else if (ttype == HtmlStreamTokenizer.TT_TEXT) {
+                    }
+                    else if (ttype == HtmlStreamTokenizer.TT_TEXT)
+                    {
                         ret.append(tok.getRawString());
                     }
                 }
-            } catch (NumberFormatException f) {
+            }
+            catch (NumberFormatException f)
+            {
                 log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBUtils_decodifica"), f);
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBUtils_IOHTML"), e);
             }
             return ret.toString();
@@ -1799,97 +2109,132 @@ public class SWBPortal {
          * @param datos the string representing the HTML code to analize.
          * @return a semicolon separated string with the file paths retrieved
          */
-        public static String FindAttaches(String datos) {
+        public static String FindAttaches(String datos)
+        {
             HtmlTag tag = new HtmlTag();
             StringBuffer ret = new StringBuffer();
             Vector vvector = new Vector();
-            try {
+            try
+            {
                 HtmlStreamTokenizer tok = new HtmlStreamTokenizer(new ByteArrayInputStream(datos.getBytes()));
-                while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF) {
+                while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF)
+                {
 
                     int ttype = tok.getTokenType();
-                    if (ttype == HtmlStreamTokenizer.TT_TAG || ttype == HtmlStreamTokenizer.TT_COMMENT) {
+                    if (ttype == HtmlStreamTokenizer.TT_TAG || ttype == HtmlStreamTokenizer.TT_COMMENT)
+                    {
                         tok.parseTag(tok.getStringValue(), tag);
 
-                        if (tok.getRawString().toLowerCase().startsWith("<!--[if")) {
+                        if (tok.getRawString().toLowerCase().startsWith("<!--[if"))
+                        {
                             continue;
                         }
                         //if (tag.getTagString().toLowerCase().startsWith("o:")){System.out.println("o:Salto");   continue;}
-                        if (tag.getTagString().toLowerCase().equals("img") || tag.getTagString().toLowerCase().equals("applet") || tag.getTagString().toLowerCase().equals("script") || tag.getTagString().toLowerCase().equals("td") || tag.getTagString().toLowerCase().equals("table") || tag.getTagString().toLowerCase().equals("body") || tag.getTagString().toLowerCase().equals("input") || tag.getTagString().toLowerCase().equals("a") || tag.getTagString().toLowerCase().equals("area") || tag.getTagString().toLowerCase().equals("link") || tag.getTagString().toLowerCase().equals("param") || tag.getTagString().toLowerCase().equals("embed")) {
-                            if (!tag.isEndTag()) {
+                        if (tag.getTagString().toLowerCase().equals("img") || tag.getTagString().toLowerCase().equals("applet") || tag.getTagString().toLowerCase().equals("script") || tag.getTagString().toLowerCase().equals("td") || tag.getTagString().toLowerCase().equals("table") || tag.getTagString().toLowerCase().equals("body") || tag.getTagString().toLowerCase().equals("input") || tag.getTagString().toLowerCase().equals("a") || tag.getTagString().toLowerCase().equals("area") || tag.getTagString().toLowerCase().equals("link") || tag.getTagString().toLowerCase().equals("param") || tag.getTagString().toLowerCase().equals("embed"))
+                        {
+                            if (!tag.isEndTag())
+                            {
                                 //ret.append("<");
                                 //ret.append(tag.getTagString());
                                 //ret.append(" ");
                                 Enumeration en = tag.getParamNames();
                                 String name = "";
                                 String value = "";
-                                while (en.hasMoreElements()) {
+                                while (en.hasMoreElements())
+                                {
                                     name = (String) en.nextElement();
                                     value = tag.getParam(name);
                                     String out = null;
-                                    if ((name.toLowerCase().equals("src") || name.toLowerCase().equals("href") || name.toLowerCase().equals("background") || name.toLowerCase().equals("codebase") || name.toLowerCase().equals("value")) && !value.startsWith("http://") && !value.startsWith("mailto:") && !value.startsWith("javascript:") && !value.startsWith("ftp:") && !value.startsWith("telnet:") && !value.startsWith("#") && !value.startsWith("/") && !value.startsWith("{")) {
+                                    if ((name.toLowerCase().equals("src") || name.toLowerCase().equals("href") || name.toLowerCase().equals("background") || name.toLowerCase().equals("codebase") || name.toLowerCase().equals("value")) && !value.startsWith("http://") && !value.startsWith("mailto:") && !value.startsWith("javascript:") && !value.startsWith("ftp:") && !value.startsWith("telnet:") && !value.startsWith("#") && !value.startsWith("/") && !value.startsWith("{"))
+                                    {
                                         String stype = "";
-                                        if (tag.getTagString().toLowerCase().equals("input")) {
+                                        if (tag.getTagString().toLowerCase().equals("input"))
+                                        {
                                             stype = tag.getParam("type").toLowerCase();
                                         }
-                                        if (!value.startsWith("http://") && !value.startsWith("https://") && (!tag.getTagString().toLowerCase().equals("input") || (tag.getTagString().toLowerCase().equals("input") && stype.equals("image")))) {
-                                            if (value.toLowerCase().endsWith(".gif") || value.toLowerCase().endsWith(".jpg") || value.toLowerCase().endsWith(".jpeg") || value.toLowerCase().endsWith(".bmp") ||
-                                                    value.toLowerCase().endsWith(".doc") || value.toLowerCase().endsWith(".htm") || value.toLowerCase().endsWith(".html") || value.toLowerCase().endsWith(".zip") ||
-                                                    value.toLowerCase().endsWith(".txt") || value.toLowerCase().endsWith(".pdf") || value.toLowerCase().endsWith(".xls") || value.toLowerCase().endsWith(".ppt") ||
-                                                    value.toLowerCase().endsWith(".xsl") || value.toLowerCase().endsWith(".xslt") || value.toLowerCase().endsWith(".bin") || value.toLowerCase().endsWith(".tar") || value.toLowerCase().endsWith(".css")) {
+                                        if (!value.startsWith("http://") && !value.startsWith("https://") && (!tag.getTagString().toLowerCase().equals("input") || (tag.getTagString().toLowerCase().equals("input") && stype.equals("image"))))
+                                        {
+                                            if (value.toLowerCase().endsWith(".gif") || value.toLowerCase().endsWith(".jpg") || value.toLowerCase().endsWith(".jpeg") || value.toLowerCase().endsWith(".bmp")
+                                                    || value.toLowerCase().endsWith(".doc") || value.toLowerCase().endsWith(".htm") || value.toLowerCase().endsWith(".html") || value.toLowerCase().endsWith(".zip")
+                                                    || value.toLowerCase().endsWith(".txt") || value.toLowerCase().endsWith(".pdf") || value.toLowerCase().endsWith(".xls") || value.toLowerCase().endsWith(".ppt")
+                                                    || value.toLowerCase().endsWith(".xsl") || value.toLowerCase().endsWith(".xslt") || value.toLowerCase().endsWith(".bin") || value.toLowerCase().endsWith(".tar") || value.toLowerCase().endsWith(".css"))
+                                            {
                                                 out = value;
                                             }
                                         }
-                                    } else if ((name.toLowerCase().equals("src") || name.toLowerCase().equals("href") || name.toLowerCase().equals("background") || name.toLowerCase().equals("codebase") || name.toLowerCase().equals("value")) && !value.startsWith("http://") && !value.startsWith("mailto:") && !value.startsWith("javascript:") && !value.startsWith("ftp:") && !value.startsWith("telnet:") && !value.startsWith("#") && !value.startsWith("/") && value.startsWith("{")) {
+                                    }
+                                    else if ((name.toLowerCase().equals("src") || name.toLowerCase().equals("href") || name.toLowerCase().equals("background") || name.toLowerCase().equals("codebase") || name.toLowerCase().equals("value")) && !value.startsWith("http://") && !value.startsWith("mailto:") && !value.startsWith("javascript:") && !value.startsWith("ftp:") && !value.startsWith("telnet:") && !value.startsWith("#") && !value.startsWith("/") && value.startsWith("{"))
+                                    {
                                         int pos = -1;
                                         pos = value.indexOf("}");
-                                        if (pos != -1) {
+                                        if (pos != -1)
+                                        {
                                             out = value.substring(pos + 1);
                                         }
-                                    } else if (name.toLowerCase().equals("href") && value.startsWith("/")) {
+                                    }
+                                    else if (name.toLowerCase().equals("href") && value.startsWith("/"))
+                                    {
                                         out = value;
-                                    } else if (name.toLowerCase().equals("onmouseover")) {
+                                    }
+                                    else if (name.toLowerCase().equals("onmouseover"))
+                                    {
                                         //if(!value.startsWith("http://") && !value.startsWith("https://"))
                                         int pos = -1, pos1 = -1;
                                         pos = value.indexOf("http://");
                                         pos1 = value.indexOf("https://");
-                                        if (pos < 0 && pos1 < 0) {
+                                        if (pos < 0 && pos1 < 0)
+                                        {
                                             out = findImageInScript1(value, ".gif'", "");
                                             out = findImageInScript1(out, ".jpg'", "");
                                         }
                                     }
-                                    if (out != null) {
+                                    if (out != null)
+                                    {
                                         boolean flag = false;
-                                        for (int i = 0; i < vvector.size(); i++) {
-                                            if (out.equals((String) vvector.elementAt(i))) {
+                                        for (int i = 0; i < vvector.size(); i++)
+                                        {
+                                            if (out.equals((String) vvector.elementAt(i)))
+                                            {
                                                 flag = true;
                                             }
                                         }
-                                        if (!flag) {
+                                        if (!flag)
+                                        {
                                             vvector.addElement(out);
                                         }
                                     }
 
-                                //ret.append("\" ");
+                                    //ret.append("\" ");
                                 }
-                            //ret.append(">");
-                            //if(tag.getTagString().toLowerCase().equals("form")) ret.append(actionval);
-                            } else {
+                                //ret.append(">");
+                                //if(tag.getTagString().toLowerCase().equals("form")) ret.append(actionval);
+                            }
+                            else
+                            {
                                 //ret.append(tok.getRawString());
                             }
-                        } else {
+                        }
+                        else
+                        {
                             //ret.append(tok.getRawString());
                         }
-                    } else if (ttype == HtmlStreamTokenizer.TT_TEXT) {
+                    }
+                    else if (ttype == HtmlStreamTokenizer.TT_TEXT)
+                    {
                         //ret.append(tok.getRawString());
                     }
                 }
-                for (int i = 0; i < vvector.size(); i++) {
+                for (int i = 0; i < vvector.size(); i++)
+                {
                     ret.append((String) vvector.elementAt(i) + ";");
                 }
-            } catch (NumberFormatException f) {
+            }
+            catch (NumberFormatException f)
+            {
                 log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBUtils_decodifica"), f);
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBUtils_IOHTML"), e);
             }
             return ret.toString();
@@ -1909,15 +2254,20 @@ public class SWBPortal {
          * @param ruta a string that is not used in this method, so don't bother
          * @return a string with the local file path found with extension {@code ext}
          */
-        private static String findImageInScript1(String value, String ext, String ruta) {
+        private static String findImageInScript1(String value, String ext, String ruta)
+        {
             int f = value.indexOf(ext);
             int i = value.lastIndexOf("'", f);
             int j = value.lastIndexOf("'");
-            if (f > 0 && i >= 0) {
+            if (f > 0 && i >= 0)
+            {
                 i++;
-                if (value.startsWith("/", i) || value.startsWith("http://", i)) {
+                if (value.startsWith("/", i) || value.startsWith("http://", i))
+                {
                     return value;
-                } else {
+                }
+                else
+                {
                     return value.substring(i, j);
                 }
             }
@@ -1933,9 +2283,11 @@ public class SWBPortal {
          *         and if {@code size} is less than zero an exception will be thrown.
          * @throws NegativeArraySizeException if the {@code size} argument is less than zero.
          */
-        private String getRandString(int size) {
+        private String getRandString(int size)
+        {
             StringBuilder sb = new StringBuilder(size);
-            for (int i = 0; i < size; i++) {
+            for (int i = 0; i < size; i++)
+            {
                 sb.append(ALPHABETH.charAt((int) (Math.random() * ALPHABETH.length())));
             }
             return sb.toString();
@@ -1959,11 +2311,15 @@ public class SWBPortal {
          * @throws javax.servlet.ServletException
          * @throws java.io.IOException
          */
-        public void sendValidateImage(HttpServletRequest request, HttpServletResponse response, int size, String cad) throws ServletException, IOException {
+        public void sendValidateImage(HttpServletRequest request, HttpServletResponse response, int size, String cad) throws ServletException, IOException
+        {
             String cadena = null;
-            if (null == cad) {
+            if (null == cad)
+            {
                 cadena = getRandString(size);
-            } else {
+            }
+            else
+            {
                 cadena = cad;
             }
             request.getSession(true).setAttribute("swb_valCad", cadena);
@@ -1978,10 +2334,12 @@ public class SWBPortal {
             g.setFont(f);
             g.drawString(cadena, 15, 30);
 
-            for (int i = 0; i <= 150; i += 10) {
+            for (int i = 0; i <= 150; i += 10)
+            {
                 g.drawLine(i, 0, i, 39);
             }
-            for (int i = 0; i <= 40; i += 10) {
+            for (int i = 0; i <= 40; i += 10)
+            {
                 g.drawLine(0, i, 149, i);
             }
 
@@ -1993,10 +2351,13 @@ public class SWBPortal {
             log.error(e);
             }*/
 
-            try {
+            try
+            {
                 response.setContentType("image/png");
                 javax.imageio.ImageIO.write(buffer, "png", response.getOutputStream());
-            } catch (IOException e) {
+            }
+            catch (IOException e)
+            {
                 log.error(e);
             }
         }
@@ -2022,17 +2383,22 @@ public class SWBPortal {
          * @throws javax.servlet.ServletException
          * @throws java.io.IOException
          */
-        public void sendValidateImage(HttpServletRequest request, HttpServletResponse response, String attributeName, int size, String cad) throws ServletException, IOException {
+        public void sendValidateImage(HttpServletRequest request, HttpServletResponse response, String attributeName, int size, String cad) throws ServletException, IOException
+        {
             final int width = 150;
             final int height = 60;
 
             String cadena = null;
-            if (null == cad) {
+            if (null == cad)
+            {
                 cadena = getRandString(size);
-            } else {
+            }
+            else
+            {
                 cadena = cad;
             }
-            if (null == attributeName) {
+            if (null == attributeName)
+            {
                 attributeName = "swb_valCad";
             }
             request.getSession(true).setAttribute(attributeName, cadena);
@@ -2046,191 +2412,236 @@ public class SWBPortal {
             g.setFont(f);
             g.drawString(cadena, 15, 30);
 
-            for (int i = 0; i <= width; i += 17) {
+            for (int i = 0; i <= width; i += 17)
+            {
                 g.drawLine(i, 0, i, height);
             }
-            for (int i = 0; i <= height; i += 19) {
+            for (int i = 0; i <= height; i += 19)
+            {
                 g.drawLine(0, i, width - 1, i);
             }
 
-            try {
+            try
+            {
                 response.setContentType("image/png");
                 javax.imageio.ImageIO.write(buffer, "png", response.getOutputStream());
-            } catch (IOException e) {
+            }
+            catch (IOException e)
+            {
                 log.error(e);
             }
         }
 
-        public static String renderGallery(String... imgurl) {
+        public static String renderGallery(String... imgurl)
+        {
             ImageGallery ig = new ImageGallery();
             return ig.renderGallery(imgurl);
         }
 
-         public static WebSite InstallZip(File zipFile) {
-             return InstallZip(zipFile, null, null, null);
-          }
+        public static WebSite InstallZip(File zipFile)
+        {
+            return InstallZip(zipFile, null, null, null);
+        }
 
-        public static WebSite InstallZip(File zipFile, String file2read) {
+        public static WebSite InstallZip(File zipFile, String file2read)
+        {
             return InstallZip(zipFile, file2read, null, null);
         }
 
-        public static WebSite InstallZip(File zipFile, String file2read, String newWebSiteid, String newWebSiteTitle) {
-        try {
-            String modelspath = SWBPortal.getWorkPath() + "/models/";
-            if (file2read == null) {
-                file2read = "siteInfo.xml";
-            }
-            String siteInfo = SWBUtils.IO.readFileFromZipAsString(zipFile.getAbsolutePath(), file2read);
-            String oldIDModel = null, oldNamespace = null, oldTitle = null, oldDescription = null;
-            Document dom = SWBUtils.XML.xmlToDom(siteInfo);
-            Node nodeModel = dom.getFirstChild();
-            if (nodeModel.getNodeName().equals("model")) {
-                HashMap smodels = new HashMap();
-                NodeList nlChilds = nodeModel.getChildNodes();
-                for (int i = 0; i < nlChilds.getLength(); i++) {
-                    Node node = nlChilds.item(i);
-                    if (node.getNodeName().equals("id")) {
-                        oldIDModel = node.getFirstChild().getNodeValue();
-                    }
-                    if (node.getNodeName().equals("namespace")) {
-                        oldNamespace = node.getFirstChild().getNodeValue();
-                    }
-                    if (node.getNodeName().equals("title")) {
-                        oldTitle = node.getFirstChild().getNodeValue();
-                    }
-                    if (node.getNodeName().equals("description")) {
-                        oldDescription = node.getFirstChild().getNodeValue();
-                    }
-                    if (node.getNodeName().equals("model")) { //Tiene submodelos - un submodelo puede inclusive tener submodelos, esto tiene que ser iterativo
-                        iteraModels(node, smodels);
-                    }
+        public static WebSite InstallZip(File zipFile, String file2read, String newWebSiteid, String newWebSiteTitle)
+        {
+            try
+            {
+                String modelspath = SWBPortal.getWorkPath() + "/models/";
+                if (file2read == null)
+                {
+                    file2read = "siteInfo.xml";
                 }
+                String siteInfo = SWBUtils.IO.readFileFromZipAsString(zipFile.getAbsolutePath(), file2read);
+                String oldIDModel = null, oldNamespace = null, oldTitle = null, oldDescription = null;
+                Document dom = SWBUtils.XML.xmlToDom(siteInfo);
+                Node nodeModel = dom.getFirstChild();
+                if (nodeModel.getNodeName().equals("model"))
+                {
+                    HashMap smodels = new HashMap();
+                    NodeList nlChilds = nodeModel.getChildNodes();
+                    for (int i = 0; i < nlChilds.getLength(); i++)
+                    {
+                        Node node = nlChilds.item(i);
+                        if (node.getNodeName().equals("id"))
+                        {
+                            oldIDModel = node.getFirstChild().getNodeValue();
+                        }
+                        if (node.getNodeName().equals("namespace"))
+                        {
+                            oldNamespace = node.getFirstChild().getNodeValue();
+                        }
+                        if (node.getNodeName().equals("title"))
+                        {
+                            oldTitle = node.getFirstChild().getNodeValue();
+                        }
+                        if (node.getNodeName().equals("description"))
+                        {
+                            oldDescription = node.getFirstChild().getNodeValue();
+                        }
+                        if (node.getNodeName().equals("model"))
+                        { //Tiene submodelos - un submodelo puede inclusive tener submodelos, esto tiene que ser iterativo
+                            iteraModels(node, smodels);
+                        }
+                    }
 
-                String newId = newWebSiteid;
-                if (newId == null) {
-                    newId = oldIDModel;
-                }
-                String newTitle = newWebSiteTitle;
-                if (newTitle == null) {
-                    newTitle = oldTitle;
-                    newWebSiteTitle = oldTitle;
-                }
-                java.io.File extractTo = new File(modelspath + newId);
-                //Descomprimir zip
-                org.semanticwb.SWBUtils.IO.unzip(zipFile, extractTo);
-                //Mover directorios de modelos a directorio work leyendo rdfs
-                File[] fieldsUnziped = extractTo.listFiles();
-                for (int i = 0; i < fieldsUnziped.length; i++) {
-                    File file = fieldsUnziped[i];
-                    if (file.isDirectory()) { //
-                        if (file.getName().equals(oldIDModel)) { //Es la carpeta del modelo principal a cargar
-                            SWBUtils.IO.copyStructure(file.getAbsolutePath() + "/", extractTo.getAbsolutePath() + "/");
-                            SWBUtils.IO.removeDirectory(file.getAbsolutePath());
-                        } else {
-                            if (file.getName().endsWith("_usr") || file.getName().endsWith("_rep")) {
-                                //las carpetas de los submodelos, predefinidos en wb
-                                String wbmodelType = "";
-                                if (file.getName().endsWith("_usr")) {
-                                    wbmodelType = "_usr";
-                                }
-                                if (file.getName().endsWith("_rep")) {
-                                    wbmodelType = "_rep";
-                                }
-
-                                SWBUtils.IO.copyStructure(file.getAbsolutePath(), extractTo.getAbsolutePath() + wbmodelType + "/");
+                    String newId = newWebSiteid;
+                    if (newId == null)
+                    {
+                        newId = oldIDModel;
+                    }
+                    String newTitle = newWebSiteTitle;
+                    if (newTitle == null)
+                    {
+                        newTitle = oldTitle;
+                        newWebSiteTitle = oldTitle;
+                    }
+                    java.io.File extractTo = new File(modelspath + newId);
+                    //Descomprimir zip
+                    org.semanticwb.SWBUtils.IO.unzip(zipFile, extractTo);
+                    //Mover directorios de modelos a directorio work leyendo rdfs
+                    File[] fieldsUnziped = extractTo.listFiles();
+                    for (int i = 0; i < fieldsUnziped.length; i++)
+                    {
+                        File file = fieldsUnziped[i];
+                        if (file.isDirectory())
+                        { //
+                            if (file.getName().equals(oldIDModel))
+                            { //Es la carpeta del modelo principal a cargar
+                                SWBUtils.IO.copyStructure(file.getAbsolutePath() + "/", extractTo.getAbsolutePath() + "/");
                                 SWBUtils.IO.removeDirectory(file.getAbsolutePath());
-                            } else { //Puede ser un submodelo tipo sitio
-                                //TODO
                             }
-                        }
-                    } else { //TODO:Archivos rdf(modelos) y xml (siteinfo) y readme, eliminarlos
-                        String fileName = file.getName();
-                        if (fileName.equalsIgnoreCase(file2read) || fileName.equals("readme.txt")) { //Archivo siteinfo
-                            file.delete();
-                        }
-                    }
-                }
-                //Parseo de nombre de NameSpace anteriores por nuevos
-                String newNs = "http://www." + newId + ".swb#";
-                File fileModel = new File(modelspath + newId + "/" + oldIDModel + ".nt");
-                FileInputStream frdfio = new FileInputStream(fileModel);
-                String rdfcontent = SWBUtils.IO.readInputStream(frdfio);
-                fileModel.delete();
+                            else
+                            {
+                                if (file.getName().endsWith("_usr") || file.getName().endsWith("_rep"))
+                                {
+                                    //las carpetas de los submodelos, predefinidos en wb
+                                    String wbmodelType = "";
+                                    if (file.getName().endsWith("_usr"))
+                                    {
+                                        wbmodelType = "_usr";
+                                    }
+                                    if (file.getName().endsWith("_rep"))
+                                    {
+                                        wbmodelType = "_rep";
+                                    }
 
-                rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, oldNamespace, newNs); //Reemplazar namespace anterior x nuevo
-                rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, newNs + oldIDModel, newNs + newId); //Reempplazar namespace y id anterior x nuevos
-
-                rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, "<topicmap id=\\\"" + oldIDModel + "\\\">", "<topicmap id=\\\"" + newId + "\\\">"); // Rempalzar el tag: <topicmap id=\"[oldIDModel]\"> del xml de filtros de recursos
-                //Reemplaza ids de repositorios de usuarios y documentos x nuevos
-                rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, oldIDModel + "_usr", newId + "_usr");
-                rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, "http://user." + oldIDModel + ".swb#", "http://user." + newId + ".swb#");
-                rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, oldIDModel + "_rep", newId + "_rep");
-                rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, "http://repository." + oldIDModel + ".swb#", "http://repository." + newId + ".swb#");
-
-                //rdfcontent = SWBUtils.TEXT.replaceAllIgnoreCase(rdfcontent, oldName, newName); //Reemplazar nombre anterior x nuevo nombre
-                //rdfcontent = parseRdfContent(rdfcontent, oldTitle, newTitle, oldIDModel, newId, newNs);
-
-                //Mediante inputStream creado generar sitio
-                InputStream io = SWBUtils.IO.getStreamFromString(rdfcontent);
-                SemanticModel model = SWBPlatform.getSemanticMgr().createModelByRDF(newId, newNs, io, "N-TRIPLE");
-                WebSite website = SWBContext.getWebSite(model.getName());
-                website.setTitle(newTitle);
-                website.setDescription(oldDescription);
-                String xmodelID = null;
-                Iterator smodelsKeys = smodels.keySet().iterator();
-                while (smodelsKeys.hasNext()) { // Por c/submodelo que exista
-                    String key = (String) smodelsKeys.next();
-                    HashMap smodelValues = (HashMap) smodels.get(key);
-                    Iterator itkVaues = smodelValues.keySet().iterator();
-                    while (itkVaues.hasNext()) {
-                        String kvalue = (String) itkVaues.next();
-                        if (kvalue.equals("id")) {
-                            xmodelID = (String) smodelValues.get(kvalue);
-                        }
-                    }
-                    //Buscar rdf del submodelo
-                    fileModel = new File(modelspath + newId + "/" + xmodelID + ".nt");
-                    if (fileModel != null && fileModel.exists()) {
-                        frdfio = new FileInputStream(fileModel);
-                        String rdfmodel = SWBUtils.IO.readInputStream(frdfio);
-                        if (key.endsWith("_usr")) { //Para los submodelos de usuarios
-                            int pos = xmodelID.lastIndexOf("_usr");
-                            if (pos > -1) {
-                                xmodelID = xmodelID.substring(0, pos);
-                                rdfmodel = SWBUtils.TEXT.replaceAll(rdfmodel, xmodelID, newId);
-                                io = SWBUtils.IO.getStreamFromString(rdfmodel);
-                                SemanticModel usermodel = SWBPlatform.getSemanticMgr().createModelByRDF(newId + "_usr", "http://user." + newId + ".swb#", io, "N-TRIPLE");
-                                if (usermodel != null) {
-                                    UserRepository userRep = SWBContext.getUserRepository(usermodel.getName());
-                                    userRep.setTitle("Repositorio de Usuarios (" + newWebSiteTitle + ")", "es");
-                                    userRep.setTitle("Users Repository (" + newWebSiteTitle + ")", "en");
+                                    SWBUtils.IO.copyStructure(file.getAbsolutePath(), extractTo.getAbsolutePath() + wbmodelType + "/");
+                                    SWBUtils.IO.removeDirectory(file.getAbsolutePath());
+                                }
+                                else
+                                { //Puede ser un submodelo tipo sitio
+                                    //TODO
                                 }
                             }
                         }
-                        if (key.endsWith("_rep")) { //Para los submodelos de dosumentos
-                            int pos = xmodelID.lastIndexOf("_rep");
-                            if (pos > -1) {
-                                xmodelID = xmodelID.substring(0, pos);
-                                rdfmodel = SWBUtils.TEXT.replaceAll(rdfmodel, xmodelID, newId);
-                                io = SWBUtils.IO.getStreamFromString(rdfmodel);
-                                SemanticModel repomodel = SWBPlatform.getSemanticMgr().createModelByRDF(newId + "_rep", "http://repository." + newId + ".swb#", io, "N-TRIPLE");
-                                if (repomodel != null) {
-                                    Workspace repo = SWBContext.getWorkspace(repomodel.getName());
-                                    repo.setTitle("Repositorio de Documentos (" + newWebSiteTitle + ")", "es");
-                                    repo.setTitle("Documents Repository (" + newWebSiteTitle + ")", "en");
-                                }
+                        else
+                        { //TODO:Archivos rdf(modelos) y xml (siteinfo) y readme, eliminarlos
+                            String fileName = file.getName();
+                            if (fileName.equalsIgnoreCase(file2read) || fileName.equals("readme.txt"))
+                            { //Archivo siteinfo
+                                file.delete();
                             }
                         }
-                        fileModel.delete();
                     }
+                    //Parseo de nombre de NameSpace anteriores por nuevos
+                    String newNs = "http://www." + newId + ".swb#";
+                    File fileModel = new File(modelspath + newId + "/" + oldIDModel + ".nt");
+                    FileInputStream frdfio = new FileInputStream(fileModel);
+                    String rdfcontent = SWBUtils.IO.readInputStream(frdfio);
+                    fileModel.delete();
+
+                    rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, oldNamespace, newNs); //Reemplazar namespace anterior x nuevo
+                    rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, newNs + oldIDModel, newNs + newId); //Reempplazar namespace y id anterior x nuevos
+
+                    rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, "<topicmap id=\\\"" + oldIDModel + "\\\">", "<topicmap id=\\\"" + newId + "\\\">"); // Rempalzar el tag: <topicmap id=\"[oldIDModel]\"> del xml de filtros de recursos
+                    //Reemplaza ids de repositorios de usuarios y documentos x nuevos
+                    rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, oldIDModel + "_usr", newId + "_usr");
+                    rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, "http://user." + oldIDModel + ".swb#", "http://user." + newId + ".swb#");
+                    rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, oldIDModel + "_rep", newId + "_rep");
+                    rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, "http://repository." + oldIDModel + ".swb#", "http://repository." + newId + ".swb#");
+
+                    //rdfcontent = SWBUtils.TEXT.replaceAllIgnoreCase(rdfcontent, oldName, newName); //Reemplazar nombre anterior x nuevo nombre
+                    //rdfcontent = parseRdfContent(rdfcontent, oldTitle, newTitle, oldIDModel, newId, newNs);
+
+                    //Mediante inputStream creado generar sitio
+                    InputStream io = SWBUtils.IO.getStreamFromString(rdfcontent);
+                    SemanticModel model = SWBPlatform.getSemanticMgr().createModelByRDF(newId, newNs, io, "N-TRIPLE");
+                    WebSite website = SWBContext.getWebSite(model.getName());
+                    website.setTitle(newTitle);
+                    website.setDescription(oldDescription);
+                    String xmodelID = null;
+                    Iterator smodelsKeys = smodels.keySet().iterator();
+                    while (smodelsKeys.hasNext())
+                    { // Por c/submodelo que exista
+                        String key = (String) smodelsKeys.next();
+                        HashMap smodelValues = (HashMap) smodels.get(key);
+                        Iterator itkVaues = smodelValues.keySet().iterator();
+                        while (itkVaues.hasNext())
+                        {
+                            String kvalue = (String) itkVaues.next();
+                            if (kvalue.equals("id"))
+                            {
+                                xmodelID = (String) smodelValues.get(kvalue);
+                            }
+                        }
+                        //Buscar rdf del submodelo
+                        fileModel = new File(modelspath + newId + "/" + xmodelID + ".nt");
+                        if (fileModel != null && fileModel.exists())
+                        {
+                            frdfio = new FileInputStream(fileModel);
+                            String rdfmodel = SWBUtils.IO.readInputStream(frdfio);
+                            if (key.endsWith("_usr"))
+                            { //Para los submodelos de usuarios
+                                int pos = xmodelID.lastIndexOf("_usr");
+                                if (pos > -1)
+                                {
+                                    xmodelID = xmodelID.substring(0, pos);
+                                    rdfmodel = SWBUtils.TEXT.replaceAll(rdfmodel, xmodelID, newId);
+                                    io = SWBUtils.IO.getStreamFromString(rdfmodel);
+                                    SemanticModel usermodel = SWBPlatform.getSemanticMgr().createModelByRDF(newId + "_usr", "http://user." + newId + ".swb#", io, "N-TRIPLE");
+                                    if (usermodel != null)
+                                    {
+                                        UserRepository userRep = SWBContext.getUserRepository(usermodel.getName());
+                                        userRep.setTitle("Repositorio de Usuarios (" + newWebSiteTitle + ")", "es");
+                                        userRep.setTitle("Users Repository (" + newWebSiteTitle + ")", "en");
+                                    }
+                                }
+                            }
+                            if (key.endsWith("_rep"))
+                            { //Para los submodelos de dosumentos
+                                int pos = xmodelID.lastIndexOf("_rep");
+                                if (pos > -1)
+                                {
+                                    xmodelID = xmodelID.substring(0, pos);
+                                    rdfmodel = SWBUtils.TEXT.replaceAll(rdfmodel, xmodelID, newId);
+                                    io = SWBUtils.IO.getStreamFromString(rdfmodel);
+                                    SemanticModel repomodel = SWBPlatform.getSemanticMgr().createModelByRDF(newId + "_rep", "http://repository." + newId + ".swb#", io, "N-TRIPLE");
+                                    if (repomodel != null)
+                                    {
+                                        Workspace repo = SWBContext.getWorkspace(repomodel.getName());
+                                        repo.setTitle("Repositorio de Documentos (" + newWebSiteTitle + ")", "es");
+                                        repo.setTitle("Documents Repository (" + newWebSiteTitle + ")", "en");
+                                    }
+                                }
+                            }
+                            fileModel.delete();
+                        }
+                    }
+                    return website;
                 }
-                return website;
             }
-        } catch (Exception e) {
-            log.error(e);
+            catch (Exception e)
+            {
+                log.error(e);
+            }
+            return null;
         }
-        return null;
-      }
     }
 
     /**
@@ -2249,24 +2660,34 @@ public class SWBPortal {
      *         and the styles modified according to the arguments received. If
      *         {@code content} equals {@code null}, the returned value is an empty string.
      */
-    public static String removeStylesOutDivs(String content, String tmid, HashMap hTMhStyleObjs) {
+    public static String removeStylesOutDivs(String content, String tmid, HashMap hTMhStyleObjs)
+    {
         StringBuffer ret = new StringBuffer();
-        try {
+        try
+        {
             boolean title = false;
             boolean style = false;
             HtmlTag tag = new HtmlTag();
             HtmlStreamTokenizer tok = new HtmlStreamTokenizer(SWBUtils.IO.getStreamFromString(content));
-            while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF) {
+            while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF)
+            {
                 int ttype = tok.getTokenType();
-                if (ttype == HtmlStreamTokenizer.TT_COMMENT || ttype == HtmlStreamTokenizer.TT_TEXT) {
-                    if (!title) {
-                        if (style) {
+                if (ttype == HtmlStreamTokenizer.TT_COMMENT || ttype == HtmlStreamTokenizer.TT_TEXT)
+                {
+                    if (!title)
+                    {
+                        if (style)
+                        {
                             ret.append(parseStyles2(tok.getRawString(), tmid, hTMhStyleObjs));
-                        } else {
+                        }
+                        else
+                        {
                             ret.append(tok.getRawString());
                         }
                     }
-                } else if (ttype == HtmlStreamTokenizer.TT_TAG) {
+                }
+                else if (ttype == HtmlStreamTokenizer.TT_TAG)
+                {
                     tok.parseTag(tok.getStringValue(), tag);
 
                     String tagname = tag.getTagString();
@@ -2275,60 +2696,81 @@ public class SWBPortal {
 
                     if (true) //validar si se requiere eliminar tags de
                     {
-                        if (tname.equals("title")) {
-                            if (tag.isEndTag()) {
+                        if (tname.equals("title"))
+                        {
+                            if (tag.isEndTag())
+                            {
                                 title = false;
-                            } else {
+                            }
+                            else
+                            {
                                 title = true;
                             }
                         }
-                        if (tname.equals("html") || tname.equals("title") || tname.equals("head") || tname.equals("meta") || tname.equals("link") || tname.startsWith("o:") || tname.startsWith("st1:")) {
+                        if (tname.equals("html") || tname.equals("title") || tname.equals("head") || tname.equals("meta") || tname.equals("link") || tname.startsWith("o:") || tname.startsWith("st1:"))
+                        {
                             continue;
                         }
 
-                        if (tname.equals("body")) {
-                            if (!tag.isEndTag()) {
+                        if (tname.equals("body"))
+                        {
+                            if (!tag.isEndTag())
+                            {
                                 tagname = "DIV";
                                 tag.removeParam("link");
                                 tag.removeParam("vlink");
                                 tag.removeParam("alink");
-                            } else {
+                            }
+                            else
+                            {
                                 ret.append("</DIV>");
                                 continue;
                             }
                         }
                     }
 
-                    if (tag.isEndTag()) {
+                    if (tag.isEndTag())
+                    {
                         ret.append(tok.getRawString());
-                        if (tname.equals("style")) {
+                        if (tname.equals("style"))
+                        {
                             style = false;
                         }
-                    } else {
+                    }
+                    else
+                    {
                         ret.append("<");
                         ret.append(tagname);
 
-                        if (tname.equals("style")) {
+                        if (tname.equals("style"))
+                        {
                             tag.setParam("type", "text/css");
                             style = true;
-                        } else if (tname.equals("img")) {
-                            if (!tag.hasParam("alt")) {
+                        }
+                        else if (tname.equals("img"))
+                        {
+                            if (!tag.hasParam("alt"))
+                            {
                                 tag.setParam("alt", "");
                             }
-                            if (!tag.hasParam("longdesc")) {
+                            if (!tag.hasParam("longdesc"))
+                            {
                                 tag.setParam("longdesc", "#");
                             }
                             tag.removeParam("v:shapes");
                         }
 
                         Enumeration en = tag.getParamNames();
-                        while (en.hasMoreElements()) {
+                        while (en.hasMoreElements())
+                        {
                             String name = (String) en.nextElement();
                             String value = tag.getParam(name);
-                            if (name.toLowerCase().equals("style")) {
+                            if (name.toLowerCase().equals("style"))
+                            {
                                 ret.append(" " + name + "='");
                                 StringTokenizer st = new StringTokenizer(value, ";");
-                                while (st.hasMoreTokens()) {
+                                while (st.hasMoreTokens())
+                                {
                                     String token = st.nextToken();
                                     String aux = token.toLowerCase().trim();
                                     if (!(aux.startsWith("font:") || aux.startsWith("font-")))// || aux.startsWith("color")))
@@ -2337,7 +2779,9 @@ public class SWBPortal {
                                     }
                                 }
                                 ret.append("\'");
-                            } else {
+                            }
+                            else
+                            {
                                 ret.append(" " + name + "=\"" + value + "\"");
                             }
                         }
@@ -2345,7 +2789,9 @@ public class SWBPortal {
                     }
                 }
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             log.error(e);
         }
         return ret.toString();
@@ -2364,18 +2810,24 @@ public class SWBPortal {
      *         {@literal <li>} and {@literal <div>} HTML tags according to the styles
      *         contained in {@code hTMhStyleObjs}.
      */
-    private static String parseStyles2(String styles, String tmid, HashMap hTMhStyleObjs) {
+    private static String parseStyles2(String styles, String tmid, HashMap hTMhStyleObjs)
+    {
         styles = parseStyles(styles, tmid, hTMhStyleObjs);
 
         HashMap hStyleObjs = (HashMap) hTMhStyleObjs.get(tmid);
-        if (hStyleObjs != null) {
+        if (hStyleObjs != null)
+        {
             ContentStyles contentStyle = (ContentStyles) hStyleObjs.get("MsoNormal");
-            if (contentStyle != null) {
+            if (contentStyle != null)
+            {
                 Iterator it = SWBUtils.TEXT.findInterStr(styles, "p.", ", ");
-                while (it.hasNext()) {
+                while (it.hasNext())
+                {
                     String name = ((String) it.next()).trim();
-                    if (name.indexOf('\n') == -1) {
-                        if (!hStyleObjs.containsKey(name)) {
+                    if (name.indexOf('\n') == -1)
+                    {
+                        if (!hStyleObjs.containsKey(name))
+                        {
                             styles = findStyles(styles, name, contentStyle.getFont(), contentStyle.getSize(), contentStyle.getColor());
                         }
                     }
@@ -2398,18 +2850,24 @@ public class SWBPortal {
      *         {@literal <li>} and {@literal <div>} HTML tags according to the styles
      *         contained in {@code hTMhStyleObjs}.
      */
-    private static String parseStyles(String content, String tmid, HashMap hTMhStyleObjs) {
+    private static String parseStyles(String content, String tmid, HashMap hTMhStyleObjs)
+    {
 
         HashMap hStyleObjs = (HashMap) hTMhStyleObjs.get(tmid);
-        if (hStyleObjs != null && hStyleObjs.size() > 0) { //encontro estilos
+        if (hStyleObjs != null && hStyleObjs.size() > 0)
+        { //encontro estilos
             Iterator iStyles = hStyleObjs.keySet().iterator();
-            while (iStyles.hasNext()) {
+            while (iStyles.hasNext())
+            {
                 String styleName = (String) iStyles.next();
-                if (styleName != null && styleName.trim().length() > 0) {
+                if (styleName != null && styleName.trim().length() > 0)
+                {
                     ContentStyles contentStyle = (ContentStyles) hStyleObjs.get(styleName);
-                    if (contentStyle.getName() != null && (contentStyle.getFont() != null || contentStyle.getSize() != null || contentStyle.getColor() != null)) {
+                    if (contentStyle.getName() != null && (contentStyle.getFont() != null || contentStyle.getSize() != null || contentStyle.getColor() != null))
+                    {
                         String sname = styleName;             //contentStyle.getName(); //cambio para soportar multiples nombres
-                        if (!sname.equals("h1") && !sname.equals("h2") && !sname.equals("h3")) {
+                        if (!sname.equals("h1") && !sname.equals("h2") && !sname.equals("h3"))
+                        {
                             sname = "p." + sname + ", li." + sname + ", div." + sname;
                         }
                         content = findStyles(content, sname, contentStyle.getFont(),
@@ -2434,47 +2892,60 @@ public class SWBPortal {
      * @return a string like {@code content} but with the font format styles related
      *         to the style class defined by {@code word} replaced with the arguments' values
      */
-    public static String findStyles(String content, String word, String font, String size, String color) {
+    public static String findStyles(String content, String word, String font, String size, String color)
+    {
         int pos = -1;
         pos = content.indexOf(word);
-        if (pos > -1) {
+        if (pos > -1)
+        {
             int pos1 = -1;
             pos1 = content.indexOf("{", pos);
-            if (pos1 > -1 && font != null) {
+            if (pos1 > -1 && font != null)
+            {
                 int ifont = -1;
                 ifont = content.indexOf("font-family:", pos1);
                 int fintot = content.indexOf("}", pos1);
-                if (ifont > -1) { //cambio de font
+                if (ifont > -1)
+                { //cambio de font
                     int fin = -1;
                     fin = content.indexOf(";", ifont);
-                    if (fin > -1) {
+                    if (fin > -1)
+                    {
                         content = content.substring(0, ifont + 12) + font + content.substring(fin);
                     }
                 }
             }
-            if (pos1 > -1 && size != null) {
+            if (pos1 > -1 && size != null)
+            {
                 int isize = -1;
                 isize = content.indexOf("font-size:", pos1);
                 int fintot = content.indexOf("}", pos1);
-                if (isize > -1 && isize < fintot) { //cambio de size
+                if (isize > -1 && isize < fintot)
+                { //cambio de size
                     int fin = -1;
                     fin = content.indexOf(";", isize);
-                    if (fin > -1) {
+                    if (fin > -1)
+                    {
                         content = content.substring(0, isize + 10) + size + content.substring(fin);
                     }
                 }
             }
-            if (pos1 > -1 && color != null) {
+            if (pos1 > -1 && color != null)
+            {
                 int icolor = -1;
                 icolor = content.indexOf("color:", pos1);
                 int fintot = content.indexOf("}", pos1);
-                if (icolor > -1 && icolor < fintot) { //cambio de color
+                if (icolor > -1 && icolor < fintot)
+                { //cambio de color
                     int fin = -1;
                     fin = content.indexOf(";", icolor);
-                    if (fin > -1) {
+                    if (fin > -1)
+                    {
                         content = content.substring(0, icolor + 6) + color + content.substring(fin);
                     }
-                } else if (icolor == -1 || (icolor > -1 && icolor > fintot)) { //cambio de color
+                }
+                else if (icolor == -1 || (icolor > -1 && icolor > fintot))
+                { //cambio de color
                     content = content.substring(0, fintot) + "color:" + color + ";" + content.substring(fintot);
                 }
             }
@@ -2482,55 +2953,72 @@ public class SWBPortal {
         return content;
     }
 
-    
-
     /**
      * Metodo sobrado en este momento, pero servira para cuando un submodelo (sitio), tenga mas submodelos (sitios,repositorios)
      * @param node
      * @param smodels
      */
-    private static void iteraModels(Node node, HashMap smodels) {
+    private static void iteraModels(Node node, HashMap smodels)
+    {
         HashMap submodel = new HashMap();
         NodeList nlChildModels = node.getChildNodes();
-        for (int j = 0; j < nlChildModels.getLength(); j++) {
+        for (int j = 0; j < nlChildModels.getLength(); j++)
+        {
             Node nodeSModel = nlChildModels.item(j);
-            if (nodeSModel.getNodeName().equals("type")) { //Revisar si existe el submodel en la instancia a importar
+            if (nodeSModel.getNodeName().equals("type"))
+            { //Revisar si existe el submodel en la instancia a importar
                 NodeList nlSite = node.getChildNodes();
-                for (int k = 0; k < nlSite.getLength(); k++) {
-                    if (nlSite.item(k).getNodeName().equals("id")) {
+                for (int k = 0; k < nlSite.getLength(); k++)
+                {
+                    if (nlSite.item(k).getNodeName().equals("id"))
+                    {
                         smodels.put(nlSite.item(k).getFirstChild().getNodeValue(), submodel);
                     }
                 }
-            } else if (nodeSModel.getNodeName().equals("id")) {
+            }
+            else if (nodeSModel.getNodeName().equals("id"))
+            {
                 submodel.put("id", nodeSModel.getFirstChild().getNodeValue());
-            } else if (nodeSModel.getNodeName().equals("namespace")) {
+            }
+            else if (nodeSModel.getNodeName().equals("namespace"))
+            {
                 submodel.put("namespace", nodeSModel.getFirstChild().getNodeValue());
-            } else if (nodeSModel.getNodeName().equals("title")) {
+            }
+            else if (nodeSModel.getNodeName().equals("title"))
+            {
                 submodel.put("title", nodeSModel.getFirstChild().getNodeValue());
-            } else if (nodeSModel.getNodeName().equals("description")) {
+            }
+            else if (nodeSModel.getNodeName().equals("description"))
+            {
                 submodel.put("description", nodeSModel.getFirstChild().getNodeValue());
             }
         }
     }
 
-    public static String getFileUploadCtrlString(String name, HttpServletRequest request) {
+    public static String getFileUploadCtrlString(String name, HttpServletRequest request)
+    {
         String ret = "";
         String attchMsg = "";
-        if (name != null && request.getAttribute("attachCount_" + name) != null) {
+        if (name != null && request.getAttribute("attachCount_" + name) != null)
+        {
             attchMsg = "Archivo(s) existentes:<br/>";
             int count = Integer.parseInt((String) request.getAttribute("attachCount_" + name));
-            for (int i = 1; i <= count; i++) {
+            for (int i = 1; i <= count; i++)
+            {
                 String fileName = (String) request.getAttribute("attach_" + name + "_" + i);
                 int pos = fileName.lastIndexOf("/");
-                if (pos > -1) {
+                if (pos > -1)
+                {
                     fileName = fileName.substring(pos + 1);
                 }
                 String target = "";
-                if (request.getAttribute("attachTarget_" + name + "_" + i) != null) {
+                if (request.getAttribute("attachTarget_" + name + "_" + i) != null)
+                {
                     target = (String) request.getAttribute("attachTarget_" + name + "_" + i);
                 }
 
-                if (request.getAttribute("attachRemovePath_" + name + "_" + i) != null) {
+                if (request.getAttribute("attachRemovePath_" + name + "_" + i) != null)
+                {
                     attchMsg += "<a href=\"" + request.getAttribute("attachRemovePath_" + name + "_" + i) + "\">X</a> ";
                 }
                 attchMsg += i + ")<a href=\"" + request.getAttribute("attach_" + name + "_" + i) + "\" target=\"" + target + "\">" + fileName + "</a>";
@@ -2542,65 +3030,71 @@ public class SWBPortal {
         //Página ejemplo de implementación:http://blog.tremend.ro/2007/03/01/ajax-file-upload-monitoring-monitor-your-file-upload-with-dwr-and-commons-fileupload/
         //Fecha de implemetación:26/Febrero/2009
         //TODO:Haecer que este Bloque solo sea puesto una vez, independientemente de cuantos fileuploads tiene mi forma
-        ret = "<link rel=\"stylesheet\" type=\"text/css\" media=\"screen\" href=\"" + SWBPlatform.getContextPath() + "/swbadmin/css/upload/upload.css\"/>\n" +
-                "<script type='text/javascript' src=\"" + SWBPlatform.getContextPath() + "/dwr/util.js\"></script>\n" +
-                "<script type='text/javascript' src=\"" + SWBPlatform.getContextPath() + "/dwr/engine.js\"></script>\n" +
-                "<script type=\"text/javascript\" src=\"" + SWBPlatform.getContextPath() + "/dwr/interface/uploadProxy.js\"></script>\n" +
-                "<script type='text/javascript' src=\"" + SWBPlatform.getContextPath() + "/swbadmin/js/upload/upload.js\"></script>\n";
+        ret = "<link rel=\"stylesheet\" type=\"text/css\" media=\"screen\" href=\"" + SWBPlatform.getContextPath() + "/swbadmin/css/upload/upload.css\"/>\n"
+                + "<script type='text/javascript' src=\"" + SWBPlatform.getContextPath() + "/dwr/util.js\"></script>\n"
+                + "<script type='text/javascript' src=\"" + SWBPlatform.getContextPath() + "/dwr/engine.js\"></script>\n"
+                + "<script type=\"text/javascript\" src=\"" + SWBPlatform.getContextPath() + "/dwr/interface/uploadProxy.js\"></script>\n"
+                + "<script type='text/javascript' src=\"" + SWBPlatform.getContextPath() + "/swbadmin/js/upload/upload.js\"></script>\n";
         //TODO:Haecer que esta linea solo sea puesta una vez, independientemente de cuantos fileuploads tiene mi forma
         ret += "<iframe id='target_upload_" + name + "' name='target_upload_" + name + "' src='' style='display: none'></iframe><br/>" + //
-                attchMsg +
-                "<input id=\"" + name + "\" name=\"" + name + "\" type=\"file\" onChange=\"javascript:if(uploadjs_" + name + "(document.getElementById('" + formName + "'))) {return startUploadMonitoring('" + name + "');}\"> <br/>" +
-                "<div id=\"uploadStatus_" + name + "\" style=\"width:230px\">\n" +
-                "   <div id=\"uploadProgressBar_" + name + "\" style=\"width:200px; height: 2px; border: 0px solid #BBB; text-align: center; float: left;\">\n" +
-                "       <div id=\"uploadIndicator_" + name + "\" style=\" height: 1px; position: relative; margin: 0px; padding: 1px; background: #9DC0F4; width: 0; float: left;\"></div>\n" +
-                "   </div>\n" +
-                "   <div id=\"uploadPercentage_" + name + "\" style=\"width:5px; float: right;\"></div>\n" +
-                "</div>\n";
+                attchMsg
+                + "<input id=\"" + name + "\" name=\"" + name + "\" type=\"file\" onChange=\"javascript:if(uploadjs_" + name + "(document.getElementById('" + formName + "'))) {return startUploadMonitoring('" + name + "');}\"> <br/>"
+                + "<div id=\"uploadStatus_" + name + "\" style=\"width:230px\">\n"
+                + "   <div id=\"uploadProgressBar_" + name + "\" style=\"width:200px; height: 2px; border: 0px solid #BBB; text-align: center; float: left;\">\n"
+                + "       <div id=\"uploadIndicator_" + name + "\" style=\" height: 1px; position: relative; margin: 0px; padding: 1px; background: #9DC0F4; width: 0; float: left;\"></div>\n"
+                + "   </div>\n"
+                + "   <div id=\"uploadPercentage_" + name + "\" style=\"width:5px; float: right;\"></div>\n"
+                + "</div>\n";
 
-        ret += "<script type=\"text/javascript\">\n" +
-                "function uploadjs_" + name + "(forma){\n" +
-                "if(forma." + name + ".value==''){alert('El campo archivo no debe estar vacio');forma." + name + ".focus(); return false;}" + //TODO:Internacionalizar
-                "  var encoding=forma.encoding;\n" +
-                "  forma.encoding='multipart/form-data';\n" +
-                "  var method=forma.method;\n" +
-                "  forma.method='post';\n" +
-                "  var action=forma.action;\n" +
-                "  forma.action='" + SWBPlatform.getContextPath() + "/Upload';\n" +
-                "  var target=forma.target;\n" +
-                "  forma.target='target_upload_" + name + "';\n" +
-                "  forma.submit();\n" +
-                "  forma.encoding=encoding;\n" +
-                "  forma.method=method;\n" +
-                "  forma.action=action;\n" +
-                "  forma.target=target;\n" +
-                "  return true;\n" +
-                "}\n" +
-                "</script>\n";
+        ret += "<script type=\"text/javascript\">\n"
+                + "function uploadjs_" + name + "(forma){\n"
+                + "if(forma." + name + ".value==''){alert('El campo archivo no debe estar vacio');forma." + name + ".focus(); return false;}" + //TODO:Internacionalizar
+                "  var encoding=forma.encoding;\n"
+                + "  forma.encoding='multipart/form-data';\n"
+                + "  var method=forma.method;\n"
+                + "  forma.method='post';\n"
+                + "  var action=forma.action;\n"
+                + "  forma.action='" + SWBPlatform.getContextPath() + "/Upload';\n"
+                + "  var target=forma.target;\n"
+                + "  forma.target='target_upload_" + name + "';\n"
+                + "  forma.submit();\n"
+                + "  forma.encoding=encoding;\n"
+                + "  forma.method=method;\n"
+                + "  forma.action=action;\n"
+                + "  forma.target=target;\n"
+                + "  return true;\n"
+                + "}\n"
+                + "</script>\n";
         return ret;
     }
 
-    private void checkHSQLHAck(Connection con){
-        try {
+    private void checkHSQLHAck(Connection con)
+    {
+        try
+        {
             boolean fix = false;
             String base = "";
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery("select obj from SWB_SYS_STMT where prop='Uv::http://jena.hpl.hp.com/2003/04/DB#EngineType'");
-            while (rs.next()){
-                  base = rs.getString("obj");
-                if (base.endsWith("HSQL")){
+            while (rs.next())
+            {
+                base = rs.getString("obj");
+                if (base.endsWith("HSQL"))
+                {
                     fix = true;
                 }
-              //  System.out.println("Subj"+rs.getString("subj"));
-              //  System.out.println("Prop"+rs.getString("prop"));
-                System.out.println("Obj"+rs.getString("obj"));
+                //  System.out.println("Subj"+rs.getString("subj"));
+                //  System.out.println("Prop"+rs.getString("prop"));
+                System.out.println("Obj" + rs.getString("obj"));
                 System.out.println();
             }
             rs.close();
-            st.executeUpdate("update SWB_SYS_STMT set obj='"+base+"DB' where prop='Uv::http://jena.hpl.hp.com/2003/04/DB#EngineType'");
+            st.executeUpdate("update SWB_SYS_STMT set obj='" + base + "DB' where prop='Uv::http://jena.hpl.hp.com/2003/04/DB#EngineType'");
             st.close();
-        } catch (Exception e) {
-            log.error("Problem Updating HSQL Header",e);
+        }
+        catch (Exception e)
+        {
+            log.error("Problem Updating HSQL Header", e);
         }
     }
 }
