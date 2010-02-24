@@ -30,7 +30,7 @@ using System.Diagnostics;
 using WBOffice4;
 using Word = Microsoft.Office.Interop.Word;
 using Office = Microsoft.Office.Core;
-
+using System.Xml;
 namespace WB4Office2007Library
 {
     public class Word2007OfficeDocument : OfficeDocument
@@ -195,6 +195,61 @@ namespace WB4Office2007Library
             }
             return attachments;
         }
+        private ICollection<FileInfo> GetFlashLinks()
+        {
+            List<FileInfo> attachments = new List<FileInfo>();
+            String xml = this.document.WordOpenXML;
+            XmlDocument docopenXml = new XmlDocument();
+            docopenXml.LoadXml(xml);            
+            XmlNamespaceManager manager = new XmlNamespaceManager(docopenXml.NameTable);            
+            string prefix = manager.LookupPrefix("http://schemas.microsoft.com/office/2006/activeX");
+            String snamespace = manager.LookupNamespace("ax");
+            if (prefix == null)
+            {
+                prefix = "ax";
+                manager.AddNamespace(prefix, "http://schemas.microsoft.com/office/2006/activeX");
+            }
+            prefix = manager.LookupPrefix("http://schemas.microsoft.com/office/2006/xmlPackage");
+            if (prefix == null)
+            {
+                prefix = "pkg";
+                manager.AddNamespace(prefix, "http://schemas.microsoft.com/office/2006/xmlPackage");
+            }
+
+            XmlNodeList nodes = docopenXml.SelectNodes("//pkg:xmlData/ax:ocx/ax:ocxPr", manager);
+            foreach (XmlNode node in nodes)
+            {
+                if (node is XmlElement)
+                {
+                    XmlElement ocxPr = (XmlElement)node;
+                    String nameatt = ocxPr.GetAttribute("name", "http://schemas.microsoft.com/office/2006/activeX");
+                    if (nameatt != null && (nameatt.ToLower().Equals("src") || nameatt.ToLower().Equals("movie")))
+                    {
+                        String value = ocxPr.GetAttribute("value", "http://schemas.microsoft.com/office/2006/activeX");
+                        if (value != null && value.ToLower().EndsWith(".swf"))
+                        {
+                            String archivo = value;
+                            System.Uri basepath = new System.Uri(this.document.Path + "\\");
+                            System.Uri filepath = new System.Uri(basepath, archivo);
+                            if (filepath.IsFile)
+                            {
+                                FileInfo farchivo = new FileInfo(filepath.LocalPath);
+                                if (farchivo.Extension.IndexOf(".") != -1)
+                                {
+                                    if (!attachments.Contains(farchivo))
+                                    {
+
+                                        attachments.Add(farchivo);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return attachments;
+        }
         private ICollection<FileInfo> GetHyperLinks()
         {
             List<FileInfo> attachments = new List<FileInfo>();
@@ -218,6 +273,7 @@ namespace WB4Office2007Library
                 List<FileInfo> attachments = new List<FileInfo>();
                 attachments.AddRange(this.GetInlineShapesLinks());
                 attachments.AddRange(this.GetHyperLinks());
+                attachments.AddRange(this.GetFlashLinks());
                 return attachments;
             }
         }
@@ -329,6 +385,14 @@ namespace WB4Office2007Library
                     {
                         links.Add(link.Address);
                     }
+                }
+                foreach(FileInfo file in GetFlashLinks())
+                {
+                    links.Add(file.FullName);
+                }
+                foreach (FileInfo file in GetInlineShapesLinks())
+                {
+                    links.Add(file.FullName);
                 }
                 return links.ToArray();
             }
