@@ -131,6 +131,21 @@ public class SemanticModel
         return it;
     }
 
+    public Iterator<SemanticObject> listSubjectsByClass(SemanticProperty prop,SemanticObject obj, SemanticClass cls)
+    {
+        ArrayList ret=new ArrayList();
+        SemanticIterator<SemanticObject> it = new SemanticIterator(getRDFModel().listStatements(null, prop.getRDFProperty(), obj.getRDFResource()), true);
+        //Filter by class
+        while (it.hasNext())
+        {
+            SemanticObject semanticObject = it.next();
+            if(semanticObject.instanceOf(cls))
+            {
+                ret.add(semanticObject);
+            }
+        }
+        return ret.iterator();
+    }
 
     public String getName() {
         return m_name;
