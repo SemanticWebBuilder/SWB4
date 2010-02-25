@@ -183,7 +183,7 @@ public class SWBModelAdmin extends GenericResource {
                 WebSite ws = itws.next();
                 out.println("<tr><td>");
                 urlAction.setParameter("wsid", ws.getId());
-                out.println("<a href=\"" + urlAction.toString() + "\" onclick=\"submitUrl('" + urlAction.toString() + "',this);return false;\">" + ws.getTitle() + "</a>");
+                out.println("<a href=\"" + urlAction.toString() + "\" onclick=\"submitUrl('" + urlAction.toString() + "',this);return false;\">" + ws.getDisplayTitle(paramRequest.getUser().getLanguage()) + "</a>");
                 out.println("</td></tr>");
             }
             out.println("</table>");
@@ -398,8 +398,8 @@ public class SWBModelAdmin extends GenericResource {
                     strbr.append("<model>\n");
                     strbr.append("<id>" + site.getId() + "</id>\n");
                     strbr.append("<namespace>" + site.getNameSpace() + "</namespace>\n");
-                    strbr.append("<title>" + site.getTitle() + "</title>\n");
-                    strbr.append("<description>" + site.getDescription() + "</description>\n");
+                    strbr.append("<title>" + site.getDisplayTitle(response.getUser().getLanguage()) + "</title>\n");
+                    strbr.append("<description>" + site.getDisplayDescription(response.getUser().getLanguage()) + "</description>\n");
                     //--------------Generación de submodelos------------------------------------------------
                     Iterator<SemanticObject> sitSubModels = site.getSemanticObject().listObjectProperties(WebSite.swb_hasSubModel);
                     while (sitSubModels.hasNext()) {
