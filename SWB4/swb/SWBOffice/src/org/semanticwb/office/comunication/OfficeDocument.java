@@ -407,6 +407,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         info.childs = childs;
         // mantiene el id original
         // ciudado el contenido original ya no se puede publicar igual, pero se agrega funcionlidad para modalidad restauración
+        log.trace("publicando documento con id :"+contentid);
         ResourceInfo res = this.publishToResourceContent(resourceid, repositoryName, contentid, "*", title, description, info, viewProperties, viewValues);
         return Resource.ClassMgr.getResource(res.id, site);
     }
