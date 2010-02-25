@@ -381,6 +381,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 
     private Resource migrateResource(String webworkpath, File workpath, String siteid, String webpageId, String resourceid, String version, String title, String description, String repositoryName, String categoryID, String type, PropertyInfo[] viewProperties, String[] viewValues, String file) throws Exception
     {
+        log.trace("Migrando documento de office con id :"+resourceid);
         String nodeType = cm_content.getPrefix() + ":" + cm_content.getName();
         // guarda en repositorio y publica
         WebSite site = WebSite.ClassMgr.getWebSite(siteid);
@@ -407,7 +408,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         info.childs = childs;
         // mantiene el id original
         // ciudado el contenido original ya no se puede publicar igual, pero se agrega funcionlidad para modalidad restauración
-        log.trace("publicando documento con id :"+contentid);
+        log.trace("Publicando documento con id :"+contentid);
         ResourceInfo res = this.publishToResourceContent(resourceid, repositoryName, contentid, "*", title, description, info, viewProperties, viewValues);
         return Resource.ClassMgr.getResource(res.id, site);
     }
