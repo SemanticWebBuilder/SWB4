@@ -8,6 +8,7 @@
 <%@page import="org.semanticwb.platform.SemanticObject,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*,org.semanticwb.pymtur.MicroSitePyme,org.semanticwb.pymtur.ServiceProvider" %>
 
 <%
+    SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
     SemanticObject sobj = null;
     WebPage community = null;
     WebPage currentpage = (WebPage) request.getAttribute("webpage");
