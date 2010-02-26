@@ -20,6 +20,7 @@
  * dirección electrónica:
  *  http://www.semanticwebbuilder.org
  **/
+
 package org.semanticwb.servlet.internal;
 
 import com.sun.management.GcInfo;
@@ -41,9 +42,6 @@ import javax.crypto.CipherOutputStream;
 import javax.crypto.KeyAgreement;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import javax.management.InstanceNotFoundException;
-import javax.management.MBeanServer;
-import javax.management.ObjectName;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -76,18 +74,18 @@ public class Monitor implements InternalServlet
     private Vector<SWBMonitorData> buffer;
     private Timer timer;
     private int max = 2500;
-    private int maxgc = 50;
+//    private int maxgc = 50;
     private int delays = 1000;
     private TimerTask t = null;
     private SWBSummary summary = null;
     private SWBMonitorBeans monitorbeans = null;
     private SecretKey secretKey = null;
     public static long timetakenLast = 0;
-    // private Cipher cipher = null;
+//    private Cipher cipher = null;
 //    //Java 6.0
 //    private ConcurrentHashMap<String, BasureroCtl> basureros;
 //    private Vector<CompositeData> basureroBuff;
-    private SWBGCDump dumper;
+//    private SWBGCDump dumper;
 
     public void init(ServletContext config) throws ServletException
     {
@@ -123,7 +121,7 @@ public class Monitor implements InternalServlet
             log.error(gse);
             // assert (false);
         }
-        dumper = new SWBGCDump();
+//        dumper = new SWBGCDump();
 //        //Java 6.0
 //        basureros = new ConcurrentHashMap<String, BasureroCtl>();
 //        basureroBuff=new Vector<CompositeData>(maxgc);
