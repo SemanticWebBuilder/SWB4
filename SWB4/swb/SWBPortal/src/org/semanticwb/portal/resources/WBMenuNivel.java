@@ -198,6 +198,9 @@ public class WBMenuNivel extends GenericAdmResource
                     ehermano.setAttribute("level", Integer.toString(tphermano.getLevel()));
                     ehermano.setAttribute("nivel", Integer.toString(nivel));                    
                     ehermano.setAttribute("caracter", Integer.toString(ancho*nivel));
+                    if (tphermano.getTarget() != null && !"".equalsIgnoreCase(tphermano.getTarget())) {
+                        ehermano.setAttribute("target", tphermano.getTarget());
+                    }
 
                     if (tphermano.equals(tpid)||(tpid.getParent()!=null&&tpid.getParent().equals(tphermano))||tphermano.isParentof(tpid)) {
                         ehermano.setAttribute("current", "1");
@@ -220,6 +223,9 @@ public class WBMenuNivel extends GenericAdmResource
                             ehijo.setAttribute("path", hijo.getUrl());
                             ehijo.setAttribute("level", Integer.toString(hijo.getLevel()));
                             ehijo.setAttribute("nivel", Integer.toString(nivel+1));
+                            if (hijo.getTarget() != null && !"".equalsIgnoreCase(hijo.getTarget())) {
+                                ehijo.setAttribute("target", hijo.getTarget());
+                            }
                             if (hijo.equals(tpid)||hijo.isParentof(tpid)) {
                                 ehijo.setAttribute("current", "1");
                             }
@@ -266,6 +272,9 @@ public class WBMenuNivel extends GenericAdmResource
                     }
                     else {
                         ehijo.setAttribute("current", "0");
+                    }
+                    if (hijo.getTarget() != null && !"".equalsIgnoreCase(hijo.getTarget())) {
+                        ehijo.setAttribute("target", hijo.getTarget());
                     }
                     nodo.appendChild(ehijo);
                     addChild(dom, ehijo, hijo, actual+1, nivel, user, currenttopic);
