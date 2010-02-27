@@ -215,8 +215,11 @@ public class WBMenuMap extends GenericAdmResource
                     ele.setAttribute("inPath", ""+tp.isParentof(topic));
                     if(tp==topic) ele.setAttribute("current", "true");
                     else ele.setAttribute("current", "false");
-                    if(tpurl.startsWith("http://")||tpurl.startsWith("https://")) ele.setAttribute("target", "_blank");
-                    else ele.setAttribute("target", "_self");
+                    if (tpurl.startsWith("http://")||tpurl.startsWith("https://")) {
+                        ele.setAttribute("target", "_blank");
+                    } else if (tp.getTarget() != null && !"".equalsIgnoreCase(tp.getTarget())) {
+                        ele.setAttribute("target", tp.getTarget());
+                    } else ele.setAttribute("target", "_self");
 
                     int auxl=0;
                     if(((nsup<0 || rlevel<=nsup) || (ninf<0 || rlevel>=(max-ninf))))

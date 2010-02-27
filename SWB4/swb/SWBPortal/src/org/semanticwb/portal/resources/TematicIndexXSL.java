@@ -160,6 +160,9 @@ public class TematicIndexXSL extends GenericAdmResource
                     son.setAttribute("sonref",hijo.getUrl());
                     son.setAttribute("path", path);
                     son.setAttribute("id", hijo.getId());
+                    if (hijo.getTarget() != null && !"".equalsIgnoreCase(hijo.getTarget())) {
+                        son.setAttribute("target", hijo.getTarget());
+                    }
                     Element sontitle = dom.createElement("sontitle");
                     sontitle.appendChild(dom.createTextNode(hijo.getDisplayName(usrlanguage)));
                     son.appendChild(sontitle);
@@ -190,6 +193,9 @@ public class TematicIndexXSL extends GenericAdmResource
                             grandson.setAttribute("grandsonref",nieto.getUrl());
                             grandson.setAttribute("path", path);
                             grandson.setAttribute("id", nieto.getId());
+                            if (nieto.getTarget() != null && !"".equalsIgnoreCase(nieto.getTarget())) {
+                                grandson.setAttribute("target", nieto.getTarget());
+                            }
                             Element grandsontitle = dom.createElement("grandsontitle");
                             grandsontitle.appendChild(dom.createTextNode(nieto.getDisplayName(usrlanguage)));
                             grandson.appendChild(grandsontitle);

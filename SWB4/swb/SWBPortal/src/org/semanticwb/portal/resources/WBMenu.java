@@ -141,6 +141,9 @@ public class WBMenu extends GenericAdmResource
                 epadre.setAttribute("id", padre.getId());
                 epadre.setAttribute("name", padre.getDisplayName(lang));
                 epadre.setAttribute("path", padre.getUrl());
+                if (padre.getTarget() != null && !"".equalsIgnoreCase(padre.getTarget())) {
+                    epadre.setAttribute("target", padre.getTarget());
+                }
                 el.appendChild(epadre);
             }
             Element ehermanos = dom.createElement("brothers");
@@ -156,6 +159,9 @@ public class WBMenu extends GenericAdmResource
                         ehermano.setAttribute("id", tphermano.getId());
                         ehermano.setAttribute("name", tphermano.getDisplayName(lang));
                         ehermano.setAttribute("path", tphermano.getUrl());
+                        if (tphermano.getTarget() != null && !"".equalsIgnoreCase(tphermano.getTarget())) {
+                            ehermano.setAttribute("target", tphermano.getTarget());
+                        }
                         if (tphermano.equals(tpid)) 
                         {
                             ehermano.setAttribute("current", "1");
@@ -171,6 +177,9 @@ public class WBMenu extends GenericAdmResource
                                     ehijo.setAttribute("id", hijo.getId());
                                     ehijo.setAttribute("name", hijo.getDisplayName(lang));
                                     ehijo.setAttribute("path", hijo.getUrl());
+                                    if (hijo.getTarget() != null && !"".equalsIgnoreCase(hijo.getTarget())) {
+                                        ehijo.setAttribute("target", hijo.getTarget());
+                                    }
                                     ehermano.appendChild(ehijo);
                                 }
                             }
@@ -191,6 +200,9 @@ public class WBMenu extends GenericAdmResource
                 ehermano.setAttribute("name", tpid.getDisplayName(lang));
                 ehermano.setAttribute("path", tpid.getUrl());
                 ehermano.setAttribute("current", "1");
+                if (tpid.getTarget() != null && !"".equalsIgnoreCase(tpid.getTarget())) {
+                    ehermano.setAttribute("target", tpid.getTarget());
+                }
                 ehermanos.appendChild(ehermano);
 
                 Iterator <WebPage> hijos = tpid.listVisibleChilds(lang);
@@ -203,6 +215,9 @@ public class WBMenu extends GenericAdmResource
                         ehijo.setAttribute("id", hijo.getId());
                         ehijo.setAttribute("name", hijo.getDisplayName(lang));
                         ehijo.setAttribute("path", hijo.getUrl());
+                        if (hijo.getTarget() != null && !"".equalsIgnoreCase(hijo.getTarget())) {
+                            ehijo.setAttribute("target", hijo.getTarget());
+                        }
                         ehermano.appendChild(ehijo);
                     }
                 }
