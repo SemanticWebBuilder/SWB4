@@ -24,8 +24,18 @@
 package org.semanticwb.repository;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Resource.
+ */
 public class Resource extends org.semanticwb.repository.base.ResourceBase 
 {
+    
+    /**
+     * Instantiates a new resource.
+     * 
+     * @param base the base
+     */
     public Resource(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

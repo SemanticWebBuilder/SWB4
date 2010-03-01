@@ -28,7 +28,17 @@ package org.semanticwb.model;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticObject;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Reference.
+ */
 public class Reference extends ReferenceBase {
+    
+    /**
+     * Instantiates a new reference.
+     * 
+     * @param base the base
+     */
     public Reference(SemanticObject base) {
         super(base);
     }
