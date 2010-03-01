@@ -23,7 +23,17 @@
  */
 package org.semanticwb.model;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class UserGroupRef.
+ */
 public class UserGroupRef extends org.semanticwb.model.base.UserGroupRefBase {
+    
+    /**
+     * Instantiates a new user group ref.
+     * 
+     * @param base the base
+     */
     public UserGroupRef(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
