@@ -36,16 +36,32 @@ import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SecurityQuestion.
+ */
 public class SecurityQuestion extends org.semanticwb.model.base.SecurityQuestionBase {
+    
+    /**
+     * Instantiates a new security question.
+     * 
+     * @param base the base
+     */
     public SecurityQuestion(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.FormElementBase#process(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty)
+     */
     @Override
     public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop) {
         super.process(request, obj, prop);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.FormElementBase#renderElement(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty, java.lang.String, java.lang.String, java.lang.String)
+     */
     @Override
     public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
                                 String mode, String lang) {
@@ -64,10 +80,30 @@ public class SecurityQuestion extends org.semanticwb.model.base.SecurityQuestion
         return ret;
     }
 
+    /**
+     * Render iphone.
+     * 
+     * @param obj the obj
+     * @param prop the prop
+     * @param type the type
+     * @param mode the mode
+     * @param lang the lang
+     * @return the string
+     */
     public String renderIphone(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
         return "";
     }
 
+    /**
+     * Render xhtml.
+     * 
+     * @param obj the obj
+     * @param prop the prop
+     * @param type the type
+     * @param mode the mode
+     * @param lang the lang
+     * @return the string
+     */
     public String renderXHTML(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
         StringBuilder  ret          = new StringBuilder(250);
         String         name         = prop.getName();

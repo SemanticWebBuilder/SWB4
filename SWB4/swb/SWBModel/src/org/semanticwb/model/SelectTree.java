@@ -37,7 +37,17 @@ import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SelectTree.
+ */
 public class SelectTree extends org.semanticwb.model.base.SelectTreeBase {
+    
+    /**
+     * Instantiates a new select tree.
+     * 
+     * @param base the base
+     */
     public SelectTree(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
@@ -60,7 +70,16 @@ public class SelectTree extends org.semanticwb.model.base.SelectTreeBase {
         return ret;
     }
 */
-    private String addObject(SemanticObject obj, String selected, String lang, String separator) {
+    /**
+ * Adds the object.
+ * 
+ * @param obj the obj
+ * @param selected the selected
+ * @param lang the lang
+ * @param separator the separator
+ * @return the string
+ */
+private String addObject(SemanticObject obj, String selected, String lang, String separator) {
         String ret = "<option value=\"" + obj.getURI() + "\" ";
 
         if (obj.getURI().equals(selected)) {
@@ -84,6 +103,9 @@ public class SelectTree extends org.semanticwb.model.base.SelectTreeBase {
         return ret;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.SelectOne#renderElement(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty, java.lang.String, java.lang.String, java.lang.String)
+     */
     @Override
     public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
                                 String mode, String lang) {

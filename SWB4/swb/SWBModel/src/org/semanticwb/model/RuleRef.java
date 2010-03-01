@@ -28,7 +28,17 @@ package org.semanticwb.model;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticObject;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class RuleRef.
+ */
 public class RuleRef extends RuleRefBase {
+    
+    /**
+     * Instantiates a new rule ref.
+     * 
+     * @param base the base
+     */
     public RuleRef(SemanticObject base) {
         super(base);
     }
