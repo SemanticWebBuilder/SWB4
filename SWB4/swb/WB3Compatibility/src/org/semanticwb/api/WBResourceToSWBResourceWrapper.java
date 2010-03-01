@@ -46,12 +46,12 @@ import org.semanticwb.portal.api.SWBResourceException;
  */
 public class WBResourceToSWBResourceWrapper extends GenericResource
 {
-    com.infotec.wb.lib.WBResource res = null;
+    private com.infotec.wb.lib.WBResource res = null;
 
     public WBResourceToSWBResourceWrapper(com.infotec.wb.lib.WBResource wbResource)
     {
-        System.out.println("wbResource:"+wbResource);
-        Thread.currentThread().dumpStack();
+//        System.out.println("wbResource:"+wbResource);
+//        Thread.currentThread().dumpStack();
         this.res = wbResource;
     }
 
