@@ -42,16 +42,37 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SWBContext.
+ */
 public class SWBContext extends SWBContextBase {
 
+    /** The USERREPOSITOR y_ admin. */
     public static String USERREPOSITORY_ADMIN = "uradm";
+    
+    /** The USERREPOSITOR y_ default. */
     public static String USERREPOSITORY_DEFAULT = "urswb";
+    
+    /** The WEBSIT e_ admin. */
     public static String WEBSITE_ADMIN = "SWBAdmin";
+    
+    /** The WEBSIT e_ global. */
     public static String WEBSITE_GLOBAL = "SWBGlobal";
+    
+    /** The WEBSIT e_ onteditor. */
     public static String WEBSITE_ONTEDITOR = "SWBOntEdit";
+    
+    /** The instance. */
     private static SWBContext instance = null;
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBContext.class);
+    
+    /** The m_sessions. */
     private static HashMap<String, SessionUser> m_sessions = new HashMap();
+    
+    /** The filtered. */
     private static ArrayList<String> filtered = new ArrayList();
 
     static {
@@ -61,9 +82,17 @@ public class SWBContext extends SWBContextBase {
         filtered.add(WEBSITE_GLOBAL);
     }
 
+    /**
+     * Instantiates a new sWB context.
+     */
     private SWBContext() {
     }
 
+    /**
+     * Creates the instance.
+     * 
+     * @return the sWB context
+     */
     static public synchronized SWBContext createInstance() {
         if (instance == null) {
             instance = new SWBContext();
@@ -72,26 +101,57 @@ public class SWBContext extends SWBContextBase {
         return instance;
     }
 
+    /**
+     * Gets the admin web site.
+     * 
+     * @return the admin web site
+     */
     public static WebSite getAdminWebSite() {
         return getWebSite(WEBSITE_ADMIN);
     }
 
+    /**
+     * Gets the ont editor.
+     * 
+     * @return the ont editor
+     */
     public static WebSite getOntEditor() {
         return getWebSite(WEBSITE_ONTEDITOR);
     }
 
+    /**
+     * Gets the global web site.
+     * 
+     * @return the global web site
+     */
     public static WebSite getGlobalWebSite() {
         return getWebSite(WEBSITE_GLOBAL);
     }
 
+    /**
+     * Gets the default repository.
+     * 
+     * @return the default repository
+     */
     public static UserRepository getDefaultRepository() {
         return getUserRepository(USERREPOSITORY_DEFAULT);
     }
 
+    /**
+     * Gets the admin repository.
+     * 
+     * @return the admin repository
+     */
     public static UserRepository getAdminRepository() {
         return getUserRepository(USERREPOSITORY_ADMIN);
     }
 
+    /**
+     * Gets the form view.
+     * 
+     * @param id the id
+     * @return the form view
+     */
     public static FormView getFormView(String id) {
         FormView view = null;
 
@@ -108,10 +168,21 @@ public class SWBContext extends SWBContextBase {
         return view;
     }
 
+    /**
+     * List web sites.
+     * 
+     * @return the java.util. iterator
+     */
     public static java.util.Iterator<org.semanticwb.model.WebSite> listWebSites() {
         return listWebSites(false);
     }
 
+    /**
+     * List web sites.
+     * 
+     * @param direct the direct
+     * @return the java.util. iterator
+     */
     public static java.util.Iterator<org.semanticwb.model.WebSite> listWebSites(boolean direct)
     {
         boolean adminShow = !SWBPlatform.getEnv("swb/adminShow",
@@ -144,6 +215,11 @@ public class SWBContext extends SWBContextBase {
         return arr.iterator();
     }
 
+    /**
+     * Sets the session user.
+     * 
+     * @param user the new session user
+     */
     public static void setSessionUser(User user) {
         if (user != null) {
             SessionUser sess = m_sessions.get(Thread.currentThread().getName());
@@ -157,12 +233,19 @@ public class SWBContext extends SWBContextBase {
         }
     }
 
+    /**
+     * Gets the session user.
+     * 
+     * @return the session user
+     */
     public static User getSessionUser() {
         return getSessionUser(null);
     }
 
     /**
-     * Regresa usuario Administrador si esta firmado y tiene permisos de administracion, de lo contrario regresa null
+     * Regresa usuario Administrador si esta firmado y tiene permisos de administracion, de lo contrario regresa null.
+     * 
+     * @return the admin user
      * @return
      */
     public static User getAdminUser() 
@@ -187,6 +270,12 @@ public class SWBContext extends SWBContextBase {
         return ret;
     }
 
+    /**
+     * Gets the session user.
+     * 
+     * @param usrrep the usrrep
+     * @return the session user
+     */
     public static User getSessionUser(String usrrep) {
         Principal user = null;
         SessionUser sess = m_sessions.get(Thread.currentThread().getName());
@@ -198,6 +287,11 @@ public class SWBContext extends SWBContextBase {
         return (User) user;
     }
 
+    /**
+     * Gets the session user id.
+     * 
+     * @return the session user id
+     */
     public static long getSessionUserID() {
         long ret = 0;
         //Principal user = null;
@@ -211,10 +305,16 @@ public class SWBContext extends SWBContextBase {
     }
 
     /**
-     *
+     * The Class UTILS.
      */
     public static class UTILS {
 
+        /**
+         * Gets the icon class.
+         * 
+         * @param obj the obj
+         * @return the icon class
+         */
         public static String getIconClass(SemanticObject obj) {
 
             // System.out.println("getIconClass:"+obj);
