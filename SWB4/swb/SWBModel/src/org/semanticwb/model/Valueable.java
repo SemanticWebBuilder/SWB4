@@ -23,15 +23,33 @@
  */
 package org.semanticwb.model;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface Valueable.
+ */
 public interface Valueable extends org.semanticwb.model.GenericObject {
+    
+    /** The Constant swb_value. */
     public static final org.semanticwb.platform.SemanticProperty swb_value =
         org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(
             "http://www.semanticwebbuilder.org/swb4/ontology#value");
+    
+    /** The Constant swb_Valueable. */
     public static final org.semanticwb.platform.SemanticClass swb_Valueable =
         org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(
             "http://www.semanticwebbuilder.org/swb4/ontology#Valueable");
 
+    /**
+     * Gets the value.
+     * 
+     * @return the value
+     */
     public String getValue();
 
+    /**
+     * Sets the value.
+     * 
+     * @param value the new value
+     */
     public void setValue(String value);
 }

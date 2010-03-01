@@ -24,8 +24,18 @@
 package org.semanticwb.repository;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class VersionHistory.
+ */
 public class VersionHistory extends org.semanticwb.repository.base.VersionHistoryBase 
 {
+    
+    /**
+     * Instantiates a new version history.
+     * 
+     * @param base the base
+     */
     public VersionHistory(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

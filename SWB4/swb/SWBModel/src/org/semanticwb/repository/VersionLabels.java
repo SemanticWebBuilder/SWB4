@@ -24,8 +24,18 @@
 package org.semanticwb.repository;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class VersionLabels.
+ */
 public class VersionLabels extends org.semanticwb.repository.base.VersionLabelsBase 
 {
+    
+    /**
+     * Instantiates a new version labels.
+     * 
+     * @param base the base
+     */
     public VersionLabels(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

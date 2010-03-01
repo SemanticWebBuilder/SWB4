@@ -24,8 +24,18 @@
 package org.semanticwb.repository;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Version.
+ */
 public class Version extends org.semanticwb.repository.base.VersionBase 
 {
+    
+    /**
+     * Instantiates a new version.
+     * 
+     * @param base the base
+     */
     public Version(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
