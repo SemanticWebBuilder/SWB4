@@ -39,11 +39,24 @@ import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SelectMultiple.
+ */
 public class SelectMultiple extends org.semanticwb.model.base.SelectMultipleBase {
+    
+    /**
+     * Instantiates a new select multiple.
+     * 
+     * @param base the base
+     */
     public SelectMultiple(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.FormElementBase#process(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty)
+     */
     @Override
     public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop) {
 
@@ -72,6 +85,9 @@ public class SelectMultiple extends org.semanticwb.model.base.SelectMultipleBase
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.FormElementBase#renderElement(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty, java.lang.String, java.lang.String, java.lang.String)
+     */
     @Override
     public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
                                 String mode, String lang) {
