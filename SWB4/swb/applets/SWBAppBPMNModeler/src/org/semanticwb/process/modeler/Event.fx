@@ -15,11 +15,27 @@ import javafx.scene.image.ImageView;
 /**
  * @author javier.solis
  */
-public-read var TIMER="timer";
-public-read var MESSAGE="message";
-public-read var RULE="rule";
-public-read var LINK="link";
-public-read var MULTIPLE="multiple";
+public-read var W_TIMER="w_timer";
+public-read var W_MESSAGE="w_message";
+public-read var W_CONDITINAL="w_conditinal";
+public-read var W_LINK="w_link";
+public-read var W_MULTIPLE="w_multiple";
+public-read var W_SIGNAL="w_signal";
+public-read var W_PARALLEL="w_parallel";
+public-read var W_SCALATION="w_scalation";
+public-read var W_ERROR="w_error";
+public-read var W_COMPENSATION="w_compensation";
+public-read var W_CANCELATION="w_cancelation";
+
+public-read var B_MESSAGE="b_message";
+public-read var B_ERROR="b_error";
+public-read var B_CANCELATION="b_cancelation";
+public-read var B_COMPENSATION="b_compensation";
+public-read var B_SIGNAL="b_signal";
+public-read var B_MULTIPLE="b_multiple";
+public-read var B_SCALATION="b_scalation";
+public-read var B_TERMINATION="b_termination";
+public-read var B_LINK="b_link";
 
 public class Event extends FlowObject
 {
@@ -77,31 +93,31 @@ public class Event extends FlowObject
 
     public function setType(type:String):Void
     {
-        if(type.equals(TIMER))
+        if(type.equals(W_TIMER))
         {
             message.image=Styles.msg_timer;
             ix=11;
             iy=11;
             is=0.8;
-        }else if(type.equals(LINK))
+        }else if(type.equals(W_LINK))
         {
             message.image=Styles.msg_link;
             ix=10;
             iy=10;
             is=0.8;
-        }else if(type.equals(MESSAGE))
+        }else if(type.equals(W_MESSAGE))
         {
             message.image=Styles.msg_message;
             ix=9;
             iy=8;
             is=1;
-        }else if(type.equals(RULE))
+        }else if(type.equals(W_CONDITINAL))
         {
             message.image=Styles.msg_rule;
             ix=8;
             iy=9;
             is=0.9;
-        }else if(type.equals(MULTIPLE))
+        }else if(type.equals(W_MULTIPLE))
         {
             message.image=Styles.msg_multiple;
             ix=12;

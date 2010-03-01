@@ -34,6 +34,8 @@ public class SubMenu extends CustomNode
     public var y:Number;
     public var w:Number;
     public var h:Number;
+    public var offx:Number;
+    public var offy:Number;
     public var text:String;
     public var image:String;
     public var imageOver:String;
@@ -90,8 +92,8 @@ public class SubMenu extends CustomNode
 
          subBar=Group
          {
-             translateX:bind layoutX
-             translateY:bind layoutY
+             translateX:bind layoutX + offx
+             translateY:bind layoutY + offy
              visible: bind clicked
              content: [
                 Flow {
