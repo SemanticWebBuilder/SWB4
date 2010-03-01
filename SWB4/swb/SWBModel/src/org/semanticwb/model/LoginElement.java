@@ -34,13 +34,27 @@ import org.semanticwb.platform.SemanticProperty;
 
 import javax.servlet.http.HttpServletRequest;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class LoginElement.
+ */
 public class LoginElement extends org.semanticwb.model.base.LoginElementBase {
+    
+    /** The log. */
     static Logger log = SWBUtils.getLogger(LoginElement.class);
 
+    /**
+     * Instantiates a new login element.
+     * 
+     * @param base the base
+     */
     public LoginElement(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.Text#renderElement(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty, java.lang.String, java.lang.String, java.lang.String)
+     */
     @Override
     public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
                                 String mode, String lang) {
@@ -57,6 +71,9 @@ public class LoginElement extends org.semanticwb.model.base.LoginElementBase {
         return super.renderElement(request, obj, prop, type, mode, lang);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.FormElementBase#validate(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty)
+     */
     @Override
     public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop)
             throws FormValidateException
@@ -105,6 +122,12 @@ public class LoginElement extends org.semanticwb.model.base.LoginElementBase {
         }
     }
 
+    /**
+     * Checks if is valid id.
+     * 
+     * @param id the id
+     * @return true, if is valid id
+     */
     private boolean isValidId(String id)
     {
         boolean ret = true;

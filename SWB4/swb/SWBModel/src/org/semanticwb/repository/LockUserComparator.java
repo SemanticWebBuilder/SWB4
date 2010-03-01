@@ -28,15 +28,19 @@
 
 package org.semanticwb.repository;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Interface LockUserComparator.
+ * 
  * @author victor.lorenzana
  */
 public interface LockUserComparator {
+    
     /**
+     * Can unlock node locked by user.
      * 
-     * @param lockOwner
-     * @param unlockUser
+     * @param lockOwner the lock owner
+     * @param unlockUser the unlock user
      * @return 0 if the user has the same level, positive if
      */
     public boolean canUnlockNodeLockedByUser(String lockOwner,String unlockUser);

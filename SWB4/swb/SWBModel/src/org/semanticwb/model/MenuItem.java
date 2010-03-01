@@ -23,7 +23,17 @@
  */
 package org.semanticwb.model;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class MenuItem.
+ */
 public class MenuItem extends org.semanticwb.model.base.MenuItemBase {
+    
+    /**
+     * Instantiates a new menu item.
+     * 
+     * @param base the base
+     */
     public MenuItem(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
