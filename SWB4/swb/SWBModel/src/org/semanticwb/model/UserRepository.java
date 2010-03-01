@@ -43,8 +43,13 @@ import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.platform.SemanticVocabulary;
 import org.semanticwb.security.auth.ExtUserRepInt;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class UserRepository.
+ */
 public class UserRepository extends UserRepositoryBase {
 
+    /** The log. */
     static Logger log = SWBUtils.getLogger(UserRepository.class);
     //public static final String SWBUR_AuthMethod = "SWBUR_AuthMethod";
     //public static final String SWBUR_LoginContext = "SWBUR_LoginContext";
@@ -53,14 +58,32 @@ public class UserRepository extends UserRepositoryBase {
 //    public static final String SWBUR_ClassPost = "#clsExtendedAttibutes";
 //    public static final String SWBUR_ClassUserTypeHold = "userType";
 //    public static final String SWBUR_ClassUserTypePost = "/clsUserType";
+    /** The user types. */
     private static HashMap<String, SemanticClass> userTypes = new HashMap<String, SemanticClass>();
+    
+    /** The user props. */
     private static HashMap<String, SemanticProperty> userProps = new HashMap<String, SemanticProperty>();
+    
+    /** The Constant NL. */
     private static final String NL = System.getProperty("line.separator");
+    
+    /** The EXTERNAL. */
     private final boolean EXTERNAL;
+    
+    /** The bridge. */
     private final ExtUserRepInt bridge;
+    
+    /** The Constant DEFTYPE. */
     private static final String DEFTYPE = "_ExtendedAttributes";
+    
+    /** The DEFSEMCLASS. */
     private static SemanticClass DEFSEMCLASS;
 
+    /**
+     * Instantiates a new user repository.
+     * 
+     * @param base the base
+     */
     public UserRepository(SemanticObject base) {
         super(base);
         boolean ret = false;
@@ -145,6 +168,18 @@ public class UserRepository extends UserRepositoryBase {
          */
     }
 
+    /**
+     * Search users by.
+     * 
+     * @param usrFirstName the usr first name
+     * @param usrLastName the usr last name
+     * @param usrSecondLastName the usr second last name
+     * @param usrEmail the usr email
+     * @param Role the role
+     * @param Group the group
+     * @param Active the active
+     * @return the iterator
+     */
     public Iterator<String> searchUsersBy(String usrFirstName, String usrLastName, String usrSecondLastName, String usrEmail, String Role, String Group, String Active) {
         //System.out.println("Grp: "+Group);
 
@@ -251,6 +286,12 @@ public class UserRepository extends UserRepositoryBase {
         return ret;
     }
 
+    /**
+     * Gets the user by login.
+     * 
+     * @param login the login
+     * @return the user by login
+     */
     public User getUserByLogin(String login) {
         User ret = null;
         log.debug("Login a buscar: " + login + " External:" + EXTERNAL);
@@ -275,6 +316,12 @@ public class UserRepository extends UserRepositoryBase {
         return ret;
     }
 
+    /**
+     * Gets the user by email.
+     * 
+     * @param email the email
+     * @return the user by email
+     */
     public User getUserByEmail(String email) {
         User ret = null;
         log.debug("Email a buscar: " + email + " External:" + EXTERNAL);
@@ -298,6 +345,9 @@ public class UserRepository extends UserRepositoryBase {
         return ret;
     }
 
+    /**
+     * Sync users.
+     */
     public void syncUsers() {
         if (EXTERNAL) {
             //System.out.println("entrando a syncUsers");
@@ -306,6 +356,12 @@ public class UserRepository extends UserRepositoryBase {
         }
     }
 
+    /**
+     * Gets the extended attribute.
+     * 
+     * @param name the name
+     * @return the extended attribute
+     */
     public SemanticProperty getExtendedAttribute(String name) {
         return getExtendedAttributesClass().getProperty(name);
     }
@@ -531,6 +587,12 @@ public class UserRepository extends UserRepositoryBase {
     return sp;
     }
     /*/
+    /**
+     * List attributesof user type.
+     * 
+     * @param name the name
+     * @return the iterator
+     */
     public Iterator<SemanticProperty> listAttributesofUserType(String name) {
         ArrayList<SemanticProperty> alsp = new ArrayList<SemanticProperty>();
         Iterator<SemanticProperty> itsp = getUserType(name).listProperties();
@@ -547,6 +609,11 @@ public class UserRepository extends UserRepositoryBase {
         return alsp.iterator();
     }
 
+    /**
+     * List extended attributes.
+     * 
+     * @return the iterator
+     */
     public Iterator<SemanticProperty> listExtendedAttributes() {
         ArrayList<SemanticProperty> alsp = new ArrayList<SemanticProperty>();
         Iterator<SemanticProperty> itsp = getExtendedAttributesClass().listProperties();
@@ -563,6 +630,11 @@ public class UserRepository extends UserRepositoryBase {
         return alsp.iterator();
     }
 
+    /**
+     * List basic attributes.
+     * 
+     * @return the iterator
+     */
     public Iterator<SemanticProperty> listBasicAttributes() {
         ArrayList<SemanticProperty> alsp = new ArrayList<SemanticProperty>();
         SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(User.swb_User.getURI());
@@ -582,6 +654,11 @@ public class UserRepository extends UserRepositoryBase {
         return alsp.iterator();
     }
 
+    /**
+     * List attributes.
+     * 
+     * @return the iterator
+     */
     public Iterator<SemanticProperty> listAttributes() {
         ArrayList<SemanticProperty> alsp = new ArrayList<SemanticProperty>();
         //String uri = null;
@@ -665,34 +742,78 @@ public class UserRepository extends UserRepositoryBase {
     return cls;
     }
      */
+    /**
+     * Gets the extended attributes class.
+     * 
+     * @return the extended attributes class
+     */
     public SemanticClass getExtendedAttributesClass() {
         return DEFSEMCLASS;
     }
 
+    /**
+     * Gets the user type.
+     * 
+     * @param name the name
+     * @return the user type
+     */
     public SemanticClass getUserType(String name) {
         return userTypes.get(name);
     }
 
+    /**
+     * Gets the user types.
+     * 
+     * @return the user types
+     */
     public Iterator<String> getUserTypes() {
         return userTypes.keySet().iterator();
     }
 
+    /**
+     * Checks for user type.
+     * 
+     * @param name the name
+     * @return true, if successful
+     */
     public boolean hasUserType(String name) {
         return userTypes.keySet().contains(name);
     }
 
+    /**
+     * Checks if is external.
+     * 
+     * @return true, if is external
+     */
     public boolean isExternal() {
         return EXTERNAL;
     }
 
+    /**
+     * Gets the bridge.
+     * 
+     * @return the bridge
+     */
     public ExtUserRepInt getBridge() {
         return bridge;
     }
 
+    /**
+     * Gets the semantic property of.
+     * 
+     * @param name the name
+     * @return the semantic property of
+     */
     public SemanticProperty getSemanticPropertyOf(String name) {
         return userProps.get(name);
     }
 
+    /**
+     * Gets the user by external id.
+     * 
+     * @param externalID the external id
+     * @return the user by external id
+     */
     public User getUserByExternalID(String externalID) {
         User ret = null;
         if (null != externalID) {

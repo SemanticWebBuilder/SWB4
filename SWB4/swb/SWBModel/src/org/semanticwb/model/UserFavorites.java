@@ -23,7 +23,17 @@
  */
 package org.semanticwb.model;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class UserFavorites.
+ */
 public class UserFavorites extends org.semanticwb.model.base.UserFavoritesBase {
+    
+    /**
+     * Instantiates a new user favorites.
+     * 
+     * @param base the base
+     */
     public UserFavorites(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }

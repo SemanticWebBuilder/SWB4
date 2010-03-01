@@ -1,4 +1,3 @@
-
 /**
  * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
  * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
@@ -23,21 +22,31 @@
  */
 package org.semanticwb.model;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticObject;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.ArrayList;
 import java.util.Iterator;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class UserGroup.
+ */
 public class UserGroup extends UserGroupBase {
+    
+    /**
+     * Instantiates a new user group.
+     * 
+     * @param base the base
+     */
     public UserGroup(SemanticObject base) {
         super(base);
     }
 
+    /**
+     * List all childs.
+     * 
+     * @return the iterator
+     */
     public Iterator<UserGroup> listAllChilds() {
         ArrayList<UserGroup> arr = new ArrayList();
 
@@ -46,6 +55,11 @@ public class UserGroup extends UserGroupBase {
         return arr.iterator();
     }
 
+    /**
+     * Adds the childs.
+     * 
+     * @param arr the arr
+     */
     private void addChilds(ArrayList<UserGroup> arr) {
         arr.add(this);
 

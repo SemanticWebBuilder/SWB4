@@ -38,23 +38,46 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.platform.SemanticVocabulary;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class User.
+ */
 public class User extends UserBase implements Principal
 {
+    
+    /** The log. */
     static Logger log = SWBUtils.getLogger(User.class);
+    
+    /** The device. */
     private Device device = null;
+    
+    /** The ip. */
     private String ip = null;
+    
+    /** The login. */
     private boolean login = false;
 
+    /**
+     * Instantiates a new user.
+     * 
+     * @param base the base
+     */
     public User(SemanticObject base)
     {
         super(base);
     }
 
+    /* (non-Javadoc)
+     * @see java.security.Principal#getName()
+     */
     public String getName()
     {
         return getLogin();
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.UserBase#setPassword(java.lang.String)
+     */
     @Override
     public void setPassword(String password)
     {
@@ -74,36 +97,73 @@ public class User extends UserBase implements Principal
         }
     }
 
+    /**
+     * Gets the device.
+     * 
+     * @return the device
+     */
     public Device getDevice()
     {
         return device;
     }
 
+    /**
+     * Sets the device.
+     * 
+     * @param device the new device
+     */
     public void setDevice(Device device)
     {
         this.device = device;
     }
 
+    /**
+     * Gets the ip.
+     * 
+     * @return the ip
+     */
     public String getIp()
     {
         return ip;
     }
 
+    /**
+     * Sets the ip.
+     * 
+     * @param ip the new ip
+     */
     public void setIp(String ip)
     {
         this.ip = ip;
     }
 
+    /**
+     * Checks if is signed.
+     * 
+     * @return true, if is signed
+     */
     public boolean isSigned()
     {
         return login;
     }
 
+    /**
+     * Checks if is registered.
+     * 
+     * @return true, if is registered
+     */
     public boolean isRegistered()
     {
         return !(getSemanticObject().isVirtual());
     }
 
+    /**
+     * Check credential.
+     * 
+     * @param credential the credential
+     * @throws NoSuchAlgorithmException the no such algorithm exception
+     * @throws UnsupportedEncodingException the unsupported encoding exception
+     */
     public void checkCredential(Object credential) throws NoSuchAlgorithmException, UnsupportedEncodingException
     {
         if (getUserRepository().isExternal())
@@ -116,6 +176,14 @@ public class User extends UserBase implements Principal
 
     }
 
+    /**
+     * Sets the user type attribute.
+     * 
+     * @param userType the user type
+     * @param name the name
+     * @param value the value
+     * @throws SWBException the sWB exception
+     */
     public void setUserTypeAttribute(String userType, String name, Object value) throws SWBException
     {
         SemanticProperty prop = null;
@@ -136,6 +204,13 @@ public class User extends UserBase implements Principal
         setExtendedAttribute(prop, value);
     }
 
+    /**
+     * Sets the extended attribute.
+     * 
+     * @param name the name
+     * @param value the value
+     * @throws SWBException the sWB exception
+     */
     public void setExtendedAttribute(String name, Object value) throws SWBException
     {
         SemanticProperty prop = getUserRepository().getSemanticPropertyOf(name);//getSemanticObject().getSemanticClass().getProperty(name);
@@ -146,6 +221,13 @@ public class User extends UserBase implements Principal
         setExtendedAttribute(prop, value);
     }
 
+    /**
+     * Sets the extended attribute.
+     * 
+     * @param prop the prop
+     * @param value the value
+     * @throws SWBException the sWB exception
+     */
     public void setExtendedAttribute(SemanticProperty prop, Object value) throws SWBException
     {
         if (null == value)
@@ -237,6 +319,12 @@ public class User extends UserBase implements Principal
         }
     }
 
+    /**
+     * Gets the extended attribute.
+     * 
+     * @param name the name
+     * @return the extended attribute
+     */
     public Object getExtendedAttribute(String name)
     {
         SemanticProperty prop = getUserRepository().getSemanticPropertyOf(name);//getSemanticObject().getSemanticClass().getProperty(name);
@@ -248,6 +336,11 @@ public class User extends UserBase implements Principal
         return getExtendedAttribute(prop);
     }
 
+    /**
+     * Gets the full name.
+     * 
+     * @return the full name
+     */
     public String getFullName()
     {
         String fn = getFirstName();
@@ -274,6 +367,12 @@ public class User extends UserBase implements Principal
         return fn + ln + sln;
     }
 
+    /**
+     * Gets the extended attribute.
+     * 
+     * @param prop the prop
+     * @return the extended attribute
+     */
     public Object getExtendedAttribute(SemanticProperty prop)
     {
         Object obj = null;
@@ -315,12 +414,24 @@ public class User extends UserBase implements Principal
         return obj;
     }
 
+    /**
+     * Removes the extended attribute.
+     * 
+     * @param name the name
+     * @throws SWBException the sWB exception
+     */
     public void removeExtendedAttribute(String name) throws SWBException
     {
         SemanticProperty prop = getUserRepository().getSemanticPropertyOf(name);//getSemanticObject().getSemanticClass().getProperty(name);
         removeExtendedAttribute(prop);
     }
 
+    /**
+     * Removes the extended attribute.
+     * 
+     * @param prop the prop
+     * @throws SWBException the sWB exception
+     */
     public void removeExtendedAttribute(SemanticProperty prop) throws SWBException
     {
         if (null != prop && null != prop.getRange())
@@ -364,6 +475,12 @@ public class User extends UserBase implements Principal
     }
      */
 
+    /**
+     * Checks for user type.
+     * 
+     * @param userType the user type
+     * @return true, if successful
+     */
     public boolean hasUserType(String userType)
     {
         boolean ret = false;
@@ -380,6 +497,12 @@ public class User extends UserBase implements Principal
         return ret;
     }
 
+    /**
+     * Checks for favorite.
+     * 
+     * @param obj the obj
+     * @return true, if successful
+     */
     public boolean hasFavorite(SemanticObject obj)
     {
         boolean ret = false;
@@ -391,6 +514,12 @@ public class User extends UserBase implements Principal
         return ret;
     }
 
+    /**
+     * Have access.
+     * 
+     * @param obj the obj
+     * @return true, if successful
+     */
     public boolean haveAccess(GenericObject obj)
     {
         //System.out.println(this+" haveAccess:"+obj);
@@ -476,6 +605,9 @@ public class User extends UserBase implements Principal
         return ret;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.UserBase#hasRole(org.semanticwb.model.Role)
+     */
     @Override
     public boolean hasRole(Role role)
     {
@@ -494,6 +626,12 @@ public class User extends UserBase implements Principal
         return ret;
     }
 
+    /**
+     * Checks for device.
+     * 
+     * @param device the device
+     * @return true, if successful
+     */
     public boolean hasDevice(Device device)
     {
         boolean ret = false;
@@ -516,6 +654,9 @@ public class User extends UserBase implements Principal
         return ret;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.UserBase#hasUserGroup(org.semanticwb.model.UserGroup)
+     */
     @Override
     public boolean hasUserGroup(UserGroup group)
     {
@@ -539,6 +680,11 @@ public class User extends UserBase implements Principal
         return ret;
     }
 
+    /**
+     * Gets the asociated user types.
+     * 
+     * @return the asociated user types
+     */
     private Iterator<SemanticClass> getAsociatedUserTypes()
     {
         ArrayList<SemanticClass> lista = new ArrayList<SemanticClass>();
@@ -555,6 +701,11 @@ public class User extends UserBase implements Principal
         return lista.iterator();
     }
 
+    /**
+     * Sets the default data.
+     * 
+     * @param user the new default data
+     */
     public void setDefaultData(User user)
     {
         if(getDevice()==null)

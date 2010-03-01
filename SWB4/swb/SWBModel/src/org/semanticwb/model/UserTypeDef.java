@@ -23,7 +23,17 @@
  */
 package org.semanticwb.model;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class UserTypeDef.
+ */
 public class UserTypeDef extends org.semanticwb.model.base.UserTypeDefBase {
+    
+    /**
+     * Instantiates a new user type def.
+     * 
+     * @param base the base
+     */
     public UserTypeDef(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }

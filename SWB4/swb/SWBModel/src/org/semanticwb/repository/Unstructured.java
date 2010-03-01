@@ -26,8 +26,18 @@ package org.semanticwb.repository;
 import org.semanticwb.repository.base.*;
 import org.semanticwb.platform.SemanticObject;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Unstructured.
+ */
 public class Unstructured extends UnstructuredBase 
 {
+    
+    /**
+     * Instantiates a new unstructured.
+     * 
+     * @param base the base
+     */
     public Unstructured(SemanticObject base)
     {
         super(base);
