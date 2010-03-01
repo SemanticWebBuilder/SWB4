@@ -26,21 +26,35 @@ package org.semanticwb.model;
 import org.semanticwb.platform.*;
 import java.util.*;
 
+// TODO: Auto-generated Javadoc
 /**
- * objeto: comparador de topicos, se utiliza para ordenar topicos
+ * objeto: comparador de topicos, se utiliza para ordenar topicos.
+ * 
  * @author Javier Solis Gonzalez
  * @version
  */
 public class SWBComparator implements Comparator {
+    
+    /** The lang. */
     String lang = null;
 
-    /** Creates new WBPriorityComaprator */
+    /**
+     * Creates new WBPriorityComaprator.
+     */
     public SWBComparator() {}
 
+    /**
+     * Instantiates a new sWB comparator.
+     * 
+     * @param lang the lang
+     */
     public SWBComparator(String lang) {
         this.lang = lang;
     }
 
+    /* (non-Javadoc)
+     * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+     */
     public int compare(java.lang.Object obj1, java.lang.Object obj2)
     {
         int            ret;
@@ -109,6 +123,13 @@ public class SWBComparator implements Comparator {
         return ret;
     }
 
+    /**
+     * Sort sermantic objects.
+     * 
+     * @param lang the lang
+     * @param its the its
+     * @return the iterator
+     */
     public static Iterator sortSermanticObjects(String lang, Iterator... its) {
         TreeSet set = new TreeSet(new SWBComparator(lang));
 
@@ -142,10 +163,22 @@ public class SWBComparator implements Comparator {
         return set.iterator();
     }
 */
-    public static Iterator sortSermanticObjects(Iterator it) {
+    /**
+ * Sort sermantic objects.
+ * 
+ * @param it the it
+ * @return the iterator
+ */
+public static Iterator sortSermanticObjects(Iterator it) {
         return sortSermanticObjectsSet(it).iterator();
     }
 
+    /**
+     * Sort sermantic objects set.
+     * 
+     * @param it the it
+     * @return the sets the
+     */
     public static Set sortSermanticObjectsSet(Iterator it) {
         TreeSet set = new TreeSet(new SWBComparator());
 
@@ -160,6 +193,12 @@ public class SWBComparator implements Comparator {
         return set;
     }
 
+    /**
+     * Sort sermantic properties.
+     * 
+     * @param it the it
+     * @return the iterator
+     */
     public static Iterator<SemanticProperty> sortSermanticProperties(Iterator<SemanticProperty> it) {
         TreeSet set = new TreeSet(new Comparator<SemanticProperty>() {
             public int compare(SemanticProperty obj1, SemanticProperty obj2) {
@@ -174,10 +213,22 @@ public class SWBComparator implements Comparator {
         return set.iterator();
     }
 
+    /**
+     * Sort sortable object.
+     * 
+     * @param it the it
+     * @return the iterator
+     */
     public static Iterator sortSortableObject(Iterator it) {
         return sortSortableObjectSet(it).iterator();
     }
 
+    /**
+     * Sort sortable object set.
+     * 
+     * @param it the it
+     * @return the sets the
+     */
     public static Set sortSortableObjectSet(Iterator it) {
         TreeSet set = new TreeSet(new Comparator() {
             SWBComparator com = new SWBComparator();
@@ -193,10 +244,24 @@ public class SWBComparator implements Comparator {
         return set;
     }
 
+    /**
+     * Sort by display name.
+     * 
+     * @param it the it
+     * @param lang the lang
+     * @return the iterator
+     */
     public static Iterator sortByDisplayName(Iterator it, String lang) {
         return sortByDisplayNameSet(it, lang).iterator();
     }
 
+    /**
+     * Sort by display name set.
+     * 
+     * @param it the it
+     * @param lang the lang
+     * @return the sets the
+     */
     public static Set sortByDisplayNameSet(Iterator it, String lang) {
         TreeSet set = new TreeSet(new SWBComparator(lang));
 
@@ -207,18 +272,44 @@ public class SWBComparator implements Comparator {
         return set;
     }
 
+    /**
+     * Sort by created.
+     * 
+     * @param it the it
+     * @return the iterator
+     */
     public static Iterator sortByCreated(Iterator it) {
         return sortByCreated(it, true);
     }
 
+    /**
+     * Sort by created set.
+     * 
+     * @param it the it
+     * @return the sets the
+     */
     public static Set sortByCreatedSet(Iterator it) {
         return sortByCreatedSet(it, true);
     }
 
+    /**
+     * Sort by created.
+     * 
+     * @param it the it
+     * @param ascendente the ascendente
+     * @return the iterator
+     */
     public static Iterator sortByCreated(Iterator it, boolean ascendente) {
         return sortByCreatedSet(it, ascendente).iterator();
     }
 
+    /**
+     * Sort by created set.
+     * 
+     * @param it the it
+     * @param ascendente the ascendente
+     * @return the sets the
+     */
     public static Set sortByCreatedSet(Iterator it, boolean ascendente) {
         TreeSet set = null;
 
@@ -255,6 +346,13 @@ public class SWBComparator implements Comparator {
         return set;
     }
 
+    /**
+     * Compare sortable.
+     * 
+     * @param o1 the o1
+     * @param o2 the o2
+     * @return the int
+     */
     public int compareSortable(Object o1, Object o2) {
         int ret = 1;
         int v1  = 999999999;

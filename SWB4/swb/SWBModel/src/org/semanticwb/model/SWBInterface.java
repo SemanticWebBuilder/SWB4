@@ -23,7 +23,13 @@
  */
 package org.semanticwb.model;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface SWBInterface.
+ */
 public interface SWBInterface extends org.semanticwb.model.GenericObject {
+    
+    /** The Constant swb_SWBInterface. */
     public static final org.semanticwb.platform.SemanticClass swb_SWBInterface =
         org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(
             "http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface");

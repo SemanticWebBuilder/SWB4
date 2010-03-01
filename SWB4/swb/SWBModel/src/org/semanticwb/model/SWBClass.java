@@ -27,11 +27,24 @@ package org.semanticwb.model;
 
 import java.util.Iterator;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SWBClass.
+ */
 public class SWBClass extends org.semanticwb.model.base.SWBClassBase {
+    
+    /**
+     * Instantiates a new sWB class.
+     * 
+     * @param base the base
+     */
     public SWBClass(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.SWBClassBase#isValid()
+     */
     public boolean isValid() {
 
         // System.out.println("isValid:"+getURI()+" "+getClass().getName());
