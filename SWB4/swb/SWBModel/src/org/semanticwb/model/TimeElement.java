@@ -38,14 +38,30 @@ import java.text.SimpleDateFormat;
 
 import javax.servlet.http.HttpServletRequest;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TimeElement.
+ */
 public class TimeElement extends org.semanticwb.model.base.TimeElementBase {
+    
+    /** The log. */
     private static Logger           log    = SWBUtils.getLogger(TimeElement.class);
+    
+    /** The format. */
     private static SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
 
+    /**
+     * Instantiates a new time element.
+     * 
+     * @param base the base
+     */
     public TimeElement(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.FormElementBase#renderElement(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty, java.lang.String, java.lang.String, java.lang.String)
+     */
     @Override
     public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
                                 String mode, String lang) {
@@ -177,10 +193,18 @@ public class TimeElement extends org.semanticwb.model.base.TimeElementBase {
     }
 
     // TODO:borra
+    /**
+     * Gets the time constraints.
+     * 
+     * @return the time constraints
+     */
     public String getTimeConstraints() {
         return null;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.FormElementBase#process(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty)
+     */
     @Override
     public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop) {
 

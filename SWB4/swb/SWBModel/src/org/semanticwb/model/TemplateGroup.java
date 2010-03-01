@@ -28,7 +28,17 @@ package org.semanticwb.model;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticObject;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TemplateGroup.
+ */
 public class TemplateGroup extends TemplateGroupBase {
+    
+    /**
+     * Instantiates a new template group.
+     * 
+     * @param base the base
+     */
     public TemplateGroup(SemanticObject base) {
         super(base);
     }

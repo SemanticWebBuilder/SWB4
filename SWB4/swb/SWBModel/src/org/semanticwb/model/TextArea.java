@@ -36,11 +36,24 @@ import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TextArea.
+ */
 public class TextArea extends TextAreaBase {
+    
+    /**
+     * Instantiates a new text area.
+     * 
+     * @param base the base
+     */
     public TextArea(SemanticObject base) {
         super(base);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.FormElementBase#renderElement(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty, java.lang.String, java.lang.String, java.lang.String)
+     */
     @Override
     public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
                                 String mode, String lang) {
@@ -59,11 +72,33 @@ public class TextArea extends TextAreaBase {
         return ret;
     }
 
+    /**
+     * Render iphone.
+     * 
+     * @param request the request
+     * @param obj the obj
+     * @param prop the prop
+     * @param type the type
+     * @param mode the mode
+     * @param lang the lang
+     * @return the string
+     */
     public String renderIphone(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
                                String mode, String lang) {
         return "";
     }
 
+    /**
+     * Render xhtml.
+     * 
+     * @param request the request
+     * @param obj the obj
+     * @param prop the prop
+     * @param type the type
+     * @param mode the mode
+     * @param lang the lang
+     * @return the string
+     */
     public String renderXHTML(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
                               String mode, String lang) {
         String         ret      = "";
