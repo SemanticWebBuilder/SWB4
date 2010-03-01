@@ -1,12 +1,12 @@
 package org.semanticwb.portal.community.base;
 
 
-public class BlogResourceBase extends org.semanticwb.portal.community.CommunityResource 
+public abstract class BlogResourceBase extends org.semanticwb.portal.community.CommunityResource 
 {
-       public static final org.semanticwb.platform.SemanticClass swbcomm_Blog=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Blog");
-       public static final org.semanticwb.platform.SemanticProperty swbcomm_hasBlog=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasBlog");
-       public static final org.semanticwb.platform.SemanticClass swbcomm_BlogResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#BlogResource");
-       public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#BlogResource");
+    public static final org.semanticwb.platform.SemanticClass swbcomm_Blog=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Blog");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_hasBlog=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasBlog");
+    public static final org.semanticwb.platform.SemanticClass swbcomm_BlogResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#BlogResource");
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#BlogResource");
 
     public BlogResourceBase()
     {
@@ -24,8 +24,12 @@ public class BlogResourceBase extends org.semanticwb.portal.community.CommunityR
 
     public boolean hasBlog(org.semanticwb.portal.community.Blog blog)
     {
-        if(blog==null)return false;
-        return getSemanticObject().hasObjectProperty(swbcomm_hasBlog,blog.getSemanticObject());
+        boolean ret=false;
+        if(blog!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swbcomm_hasBlog,blog.getSemanticObject());
+        }
+        return ret;
     }
 
     public void addBlog(org.semanticwb.portal.community.Blog value)
@@ -42,7 +46,6 @@ public class BlogResourceBase extends org.semanticwb.portal.community.CommunityR
     {
         getSemanticObject().removeObjectProperty(swbcomm_hasBlog,blog.getSemanticObject());
     }
-
 
     public org.semanticwb.portal.community.Blog getBlog()
     {

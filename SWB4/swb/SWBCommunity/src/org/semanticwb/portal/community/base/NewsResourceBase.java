@@ -1,12 +1,12 @@
 package org.semanticwb.portal.community.base;
 
 
-public class NewsResourceBase extends org.semanticwb.portal.community.CommunityResource 
+public abstract class NewsResourceBase extends org.semanticwb.portal.community.CommunityResource 
 {
-       public static final org.semanticwb.platform.SemanticClass swbcomm_NewsElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#NewsElement");
-       public static final org.semanticwb.platform.SemanticProperty swbcomm_hasNews=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasNews");
-       public static final org.semanticwb.platform.SemanticClass swbcomm_NewsResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#NewsResource");
-       public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#NewsResource");
+    public static final org.semanticwb.platform.SemanticClass swbcomm_NewsElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#NewsElement");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_hasNews=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasNews");
+    public static final org.semanticwb.platform.SemanticClass swbcomm_NewsResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#NewsResource");
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#NewsResource");
 
     public NewsResourceBase()
     {
@@ -24,8 +24,12 @@ public class NewsResourceBase extends org.semanticwb.portal.community.CommunityR
 
     public boolean hasNews(org.semanticwb.portal.community.NewsElement newselement)
     {
-        if(newselement==null)return false;
-        return getSemanticObject().hasObjectProperty(swbcomm_hasNews,newselement.getSemanticObject());
+        boolean ret=false;
+        if(newselement!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swbcomm_hasNews,newselement.getSemanticObject());
+        }
+        return ret;
     }
 
     public void addNews(org.semanticwb.portal.community.NewsElement value)
@@ -42,7 +46,6 @@ public class NewsResourceBase extends org.semanticwb.portal.community.CommunityR
     {
         getSemanticObject().removeObjectProperty(swbcomm_hasNews,newselement.getSemanticObject());
     }
-
 
     public org.semanticwb.portal.community.NewsElement getNews()
     {

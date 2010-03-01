@@ -1,12 +1,12 @@
 package org.semanticwb.portal.community.base;
 
 
-public class PhotoResourceBase extends org.semanticwb.portal.community.CommunityResource 
+public abstract class PhotoResourceBase extends org.semanticwb.portal.community.CommunityResource 
 {
-       public static final org.semanticwb.platform.SemanticClass swbcomm_PhotoElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#PhotoElement");
-       public static final org.semanticwb.platform.SemanticProperty swbcomm_hasPhoto=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasPhoto");
-       public static final org.semanticwb.platform.SemanticClass swbcomm_PhotoResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#PhotoResource");
-       public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#PhotoResource");
+    public static final org.semanticwb.platform.SemanticClass swbcomm_PhotoElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#PhotoElement");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_hasPhoto=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasPhoto");
+    public static final org.semanticwb.platform.SemanticClass swbcomm_PhotoResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#PhotoResource");
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#PhotoResource");
 
     public PhotoResourceBase()
     {
@@ -24,8 +24,12 @@ public class PhotoResourceBase extends org.semanticwb.portal.community.Community
 
     public boolean hasPhoto(org.semanticwb.portal.community.PhotoElement photoelement)
     {
-        if(photoelement==null)return false;
-        return getSemanticObject().hasObjectProperty(swbcomm_hasPhoto,photoelement.getSemanticObject());
+        boolean ret=false;
+        if(photoelement!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swbcomm_hasPhoto,photoelement.getSemanticObject());
+        }
+        return ret;
     }
 
     public void addPhoto(org.semanticwb.portal.community.PhotoElement value)
@@ -42,7 +46,6 @@ public class PhotoResourceBase extends org.semanticwb.portal.community.Community
     {
         getSemanticObject().removeObjectProperty(swbcomm_hasPhoto,photoelement.getSemanticObject());
     }
-
 
     public org.semanticwb.portal.community.PhotoElement getPhoto()
     {

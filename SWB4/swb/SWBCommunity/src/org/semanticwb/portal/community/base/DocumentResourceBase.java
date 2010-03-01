@@ -1,12 +1,12 @@
 package org.semanticwb.portal.community.base;
 
 
-public class DocumentResourceBase extends org.semanticwb.portal.community.CommunityResource 
+public abstract class DocumentResourceBase extends org.semanticwb.portal.community.CommunityResource 
 {
-       public static final org.semanticwb.platform.SemanticClass swbcomm_DocumentElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#DocumentElement");
-       public static final org.semanticwb.platform.SemanticProperty swbcomm_hasDocument=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasDocument");
-       public static final org.semanticwb.platform.SemanticClass swbcomm_DocumentResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#DocumentResource");
-       public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#DocumentResource");
+    public static final org.semanticwb.platform.SemanticClass swbcomm_DocumentElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#DocumentElement");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_hasDocument=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasDocument");
+    public static final org.semanticwb.platform.SemanticClass swbcomm_DocumentResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#DocumentResource");
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#DocumentResource");
 
     public DocumentResourceBase()
     {
@@ -24,8 +24,12 @@ public class DocumentResourceBase extends org.semanticwb.portal.community.Commun
 
     public boolean hasDocument(org.semanticwb.portal.community.DocumentElement documentelement)
     {
-        if(documentelement==null)return false;
-        return getSemanticObject().hasObjectProperty(swbcomm_hasDocument,documentelement.getSemanticObject());
+        boolean ret=false;
+        if(documentelement!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swbcomm_hasDocument,documentelement.getSemanticObject());
+        }
+        return ret;
     }
 
     public void addDocument(org.semanticwb.portal.community.DocumentElement value)
@@ -42,7 +46,6 @@ public class DocumentResourceBase extends org.semanticwb.portal.community.Commun
     {
         getSemanticObject().removeObjectProperty(swbcomm_hasDocument,documentelement.getSemanticObject());
     }
-
 
     public org.semanticwb.portal.community.DocumentElement getDocument()
     {
