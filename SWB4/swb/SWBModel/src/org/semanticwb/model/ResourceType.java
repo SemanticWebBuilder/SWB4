@@ -23,11 +23,26 @@
  */
 package org.semanticwb.model;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ResourceType.
+ */
 public class ResourceType extends org.semanticwb.model.base.ResourceTypeBase {
+    
+    /** The MOD e_ content. */
     public static int MODE_CONTENT  = 1;
+    
+    /** The MOD e_ strategy. */
     public static int MODE_STRATEGY = 2;
+    
+    /** The MOD e_ system. */
     public static int MODE_SYSTEM   = 3;
 
+    /**
+     * Instantiates a new resource type.
+     * 
+     * @param base the base
+     */
     public ResourceType(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }

@@ -23,7 +23,17 @@
  */
 package org.semanticwb.model;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ResourceSubType.
+ */
 public class ResourceSubType extends org.semanticwb.model.base.ResourceSubTypeBase {
+    
+    /**
+     * Instantiates a new resource sub type.
+     * 
+     * @param base the base
+     */
     public ResourceSubType(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
