@@ -28,13 +28,33 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.repository.base.*;
 import org.semanticwb.platform.SemanticObject;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Workspace.
+ */
 public class Workspace extends WorkspaceBase
 {    
+    
+    /** The log. */
     static Logger log = SWBUtils.getLogger(Workspace.class);
+    
+    /**
+     * Instantiates a new workspace.
+     * 
+     * @param base the base
+     */
     public Workspace(SemanticObject base)
     {
         super(base);        
     }
+    
+    /**
+     * Creates the workspace.
+     * 
+     * @param id the id
+     * @param namespace the namespace
+     * @return the org.semanticwb.repository. workspace
+     */
     public static org.semanticwb.repository.Workspace createWorkspace(String id, String namespace)
     {
 
