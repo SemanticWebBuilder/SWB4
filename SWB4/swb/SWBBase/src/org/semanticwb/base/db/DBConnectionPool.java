@@ -32,6 +32,7 @@ import java.util.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
+// TODO: Auto-generated Javadoc
 /**
  * Esta clase interna representa un connection pool. Crea nuevas conexiones con base en la demanda,
  * hasta un numero máximo si esta especificado. Tambien se cerciora de que una conexión todavia
@@ -40,35 +41,52 @@ import org.semanticwb.SWBUtils;
  */
 public class DBConnectionPool {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(DBConnectionPool.class);
-    /**
-     * 
-     */
+    
+    /** The checked out. */
     protected int checkedOut;
-    /**
-     * 
-     */
+    
+    /** The free connections. */
     protected Vector freeConnections = new Vector();
+    
+    /** The max conn. */
     private int maxConn;
+    
+    /** The name. */
     private String name;
+    
+    /** The password. */
     private String password;
+    
+    /** The URL. */
     private String URL;
+    
+    /** The user. */
     private String user;
+    
+    /** The idle_time. */
     private long idle_time = 0;
+    
+    /** The manager. */
     private DBConnectionManager manager;
+    
+    /** The hits. */
     private long hits = 0;
+    
+    /** The hits time. */
     private long hitsTime = 0;
 
     /**
      * Crea un nuevo objeto connection pool.
-     *
-     * @param manager 
+     * 
+     * @param manager the manager
      * @param name      El nombre del pool
      * @param URL       El URL JDBC de la base de datos.
      * @param user      Un usuario de la base de datos o nulo.
      * @param password  El password del usuario de la base de datos o nulo.
      * @param maxConn   El número máximo de conexiones o 0 para definir que no tenga límite.
-     * @param idle_time 
+     * @param idle_time the idle_time
      */
     public DBConnectionPool(DBConnectionManager manager, String name, String URL, String user, String password,
             int maxConn, long idle_time)
@@ -122,7 +140,9 @@ public class DBConnectionPool {
      * creada al menos que el número máximo de conexiones haya sido alcanzado. Si una conexión
      * libre ha sido cerrada por la base de datos, se elimina del pool y este método es llamado
      * otra vez recursivamente.
-     * @return 
+     * 
+     * @return the connection
+     * @return
      */
     public Connection getConnection()
     {
@@ -202,9 +222,10 @@ public class DBConnectionPool {
      * <P>
      * Si ninguna conexión está disponible y el número máximo ha sido alcanzado, este método espera
      * por una conexión liberada el tiempo especificado.
-     *
+     * 
      * @param timeout El valor del timeout en milisegundos.
-     * @return 
+     * @return the connection
+     * @return
      */
     public Connection getConnection(long timeout)
     {
@@ -250,7 +271,9 @@ public class DBConnectionPool {
 
     /**
      * Crea una nueva conexión usando un identificador de usuario y passsword si son especificados.
-     * @return 
+     * 
+     * @return the connection
+     * @return
      */
     public Connection newNoPoolConnection()
     {
@@ -276,6 +299,8 @@ public class DBConnectionPool {
 
     /**
      * Crea una nueva conexión que se auto conecta si se piede la conexion.
+     * 
+     * @return the connection
      * @return
      */
     public Connection newAutoConnection()
@@ -307,6 +332,8 @@ public class DBConnectionPool {
 
     /**
      * Crea una nueva conexión usando un identificador de usuario y passsword si son especificados.
+     * 
+     * @return the connection
      */
     private Connection newConnection()
     {
@@ -408,7 +435,9 @@ public class DBConnectionPool {
         this.user = user;
     }
 
-    /** 
+    /**
+     * Gets the hits.
+     * 
      * @return Regresa las total de solicitudes de conexiones
      */
     public long getHits()
@@ -416,7 +445,9 @@ public class DBConnectionPool {
         return hits;
     }
 
-    /** 
+    /**
+     * Gets the hits time.
+     * 
      * @return Regresa las total de solicitudes de conexiones
      */
     public long getHitsTime()
@@ -425,8 +456,9 @@ public class DBConnectionPool {
     }
 
     /**
+     * Adds the hit.
      * 
-     * @param time
+     * @param time the time
      */
     public void addHit(long time)
     {
@@ -436,7 +468,9 @@ public class DBConnectionPool {
     }
 
     /**
+     * Gets the connection manager.
      * 
+     * @return the connection manager
      * @return
      */
     public DBConnectionManager getConnectionManager()

@@ -32,6 +32,7 @@ import java.sql.Timestamp;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
+// TODO: Auto-generated Javadoc
 /**
  * Administra la duración de las conexiones con el fin de
  * identificar cuando una conexión excedio el tiempo limite
@@ -41,21 +42,30 @@ import org.semanticwb.SWBUtils;
  */
 public class PoolConnectionTimeLock extends TimerTask {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(PoolConnectionTimeLock.class);
+    
+    /** The timer. */
     private Timer timer = null;
     //private Timestamp lastupdate;
+    /** The pools. */
     private HashMap pools = new HashMap();
+    
+    /** The last time. */
     private long lastTime = System.currentTimeMillis();
 
-    /** Creates a new instance of PoolConnectionTimeLock */
+    /**
+     * Creates a new instance of PoolConnectionTimeLock.
+     */
     public PoolConnectionTimeLock()
     {
         //this.lastupdate = new Timestamp(new java.util.Date().getTime());
     }
 
     /**
+     * Adds the connection.
      * 
-     * @param con
+     * @param con the con
      */
     public synchronized void addConnection(PoolConnection con)
     {
@@ -85,8 +95,9 @@ public class PoolConnectionTimeLock extends TimerTask {
     }
 
     /**
+     * Removes the connection.
      * 
-     * @param con
+     * @param con the con
      */
     public synchronized void removeConnection(PoolConnection con)
     {
@@ -107,6 +118,9 @@ public class PoolConnectionTimeLock extends TimerTask {
         }
     }
 
+    /* (non-Javadoc)
+     * @see java.util.TimerTask#run()
+     */
     public void run()
     {
         //System.out.println("Checking Connections...");
@@ -131,7 +145,7 @@ public class PoolConnectionTimeLock extends TimerTask {
     }
 
     /**
-     * 
+     * Destroy.
      */
     public void destroy()
     {
@@ -145,7 +159,7 @@ public class PoolConnectionTimeLock extends TimerTask {
     }
 
     /**
-     * 
+     * Inits the.
      */
     public void init()
     {
@@ -155,7 +169,7 @@ public class PoolConnectionTimeLock extends TimerTask {
     }
 
     /**
-     * 
+     * Stop.
      */
     public void stop()
     {

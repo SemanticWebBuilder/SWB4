@@ -26,26 +26,66 @@ package org.semanticwb.base.util.parser.html;
 import java.io.*;
 import org.semanticwb.SWBUtils;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class HTMLParser.
+ */
 public class HTMLParser implements HTMLParserConstants {
 
+    /** The SUMMAR y_ length. */
     public static int SUMMARY_LENGTH = 200;
+    
+    /** The title. */
     StringBuffer title = new StringBuffer(SUMMARY_LENGTH);
+    
+    /** The summary. */
     StringBuffer summary = new StringBuffer(SUMMARY_LENGTH * 2);
+    
+    /** The length. */
     int length = 0;
+    
+    /** The title complete. */
     boolean titleComplete = false;
+    
+    /** The in title. */
     boolean inTitle = false;
+    
+    /** The in script. */
     boolean inScript = false;
+    
+    /** The after tag. */
     boolean afterTag = false;
+    
+    /** The after space. */
     boolean afterSpace = false;
+    
+    /** The eol. */
     String eol = System.getProperty("line.separator");
+    
+    /** The pipe in. */
     PipedReader pipeIn = null;
+    
+    /** The pipe out. */
     PipedWriter pipeOut;
 
+    /**
+     * Instantiates a new hTML parser.
+     * 
+     * @param file the file
+     * @throws FileNotFoundException the file not found exception
+     */
     public HTMLParser(File file) throws FileNotFoundException
     {
         this(new FileInputStream(file));
     }
 
+    /**
+     * Gets the title.
+     * 
+     * @return the title
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws InterruptedException the interrupted exception
+     */
     public String getTitle() throws IOException, InterruptedException
     {
         if (pipeIn == null)
@@ -66,6 +106,13 @@ public class HTMLParser implements HTMLParserConstants {
         return title.toString().trim();
     }
 
+    /**
+     * Gets the summary.
+     * 
+     * @return the summary
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws InterruptedException the interrupted exception
+     */
     public String getSummary() throws IOException, InterruptedException
     {
         if (pipeIn == null)
@@ -99,6 +146,13 @@ public class HTMLParser implements HTMLParserConstants {
         }
     }
 
+    /**
+     * Gets the text.
+     * 
+     * @return the text
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws InterruptedException the interrupted exception
+     */
     public String getText() throws IOException, InterruptedException
     {
         String ret = null;
@@ -106,6 +160,12 @@ public class HTMLParser implements HTMLParserConstants {
         return ret;
     }
 
+    /**
+     * Gets the reader.
+     * 
+     * @return the reader
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public Reader getReader() throws IOException
     {
         if (pipeIn == null)
@@ -120,6 +180,11 @@ public class HTMLParser implements HTMLParserConstants {
         return pipeIn;
     }
 
+    /**
+     * Adds the to summary.
+     * 
+     * @param text the text
+     */
     void addToSummary(String text)
     {
         if (summary.length() < SUMMARY_LENGTH)
@@ -135,6 +200,12 @@ public class HTMLParser implements HTMLParserConstants {
         }
     }
 
+    /**
+     * Adds the text.
+     * 
+     * @param text the text
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     void addText(String text) throws IOException
     {
         if (inScript)
@@ -163,6 +234,11 @@ public class HTMLParser implements HTMLParserConstants {
         afterSpace = false;
     }
 
+    /**
+     * Adds the space.
+     * 
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     void addSpace() throws IOException
     {
         if (inScript)
@@ -186,6 +262,12 @@ public class HTMLParser implements HTMLParserConstants {
         }
     }
 
+    /**
+     * HTML document.
+     * 
+     * @throws ParseException the parse exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     final public void HTMLDocument() throws ParseException, IOException
     {
         Token t;
@@ -251,6 +333,12 @@ public class HTMLParser implements HTMLParserConstants {
         jj_consume_token(0);
     }
 
+    /**
+     * Tag.
+     * 
+     * @throws ParseException the parse exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     final public void Tag() throws ParseException, IOException
     {
         Token t1, t2;
@@ -305,6 +393,12 @@ public class HTMLParser implements HTMLParserConstants {
         jj_consume_token(TagEnd);
     }
 
+    /**
+     * Arg value.
+     * 
+     * @return the token
+     * @throws ParseException the parse exception
+     */
     final public Token ArgValue() throws ParseException
     {
         Token t = null;
@@ -370,6 +464,12 @@ public class HTMLParser implements HTMLParserConstants {
 //        throw new Error("Missing return statement in function");
     }
 
+    /**
+     * Decl.
+     * 
+     * @return the token
+     * @throws ParseException the parse exception
+     */
     final public Token Decl() throws ParseException
     {
         Token t;
@@ -416,6 +516,11 @@ public class HTMLParser implements HTMLParserConstants {
         // throw new Error("Missing return statement in function");
     }
 
+    /**
+     * Comment tag.
+     * 
+     * @throws ParseException the parse exception
+     */
     final public void CommentTag() throws ParseException
     {
         switch ((jj_ntk == -1) ? jj_ntk() : jj_ntk)
@@ -463,6 +568,12 @@ public class HTMLParser implements HTMLParserConstants {
         }
     }
 
+    /**
+     * Jj_2_1.
+     * 
+     * @param xla the xla
+     * @return true, if successful
+     */
     final private boolean jj_2_1(int xla)
     {
         jj_la = xla;
@@ -472,6 +583,12 @@ public class HTMLParser implements HTMLParserConstants {
         return retval;
     }
 
+    /**
+     * Jj_2_2.
+     * 
+     * @param xla the xla
+     * @return true, if successful
+     */
     final private boolean jj_2_2(int xla)
     {
         jj_la = xla;
@@ -481,6 +598,11 @@ public class HTMLParser implements HTMLParserConstants {
         return retval;
     }
 
+    /**
+     * Jj_3_1.
+     * 
+     * @return true, if successful
+     */
     final private boolean jj_3_1()
     {
         if (jj_scan_token(ArgQuote1))
@@ -502,6 +624,11 @@ public class HTMLParser implements HTMLParserConstants {
         return false;
     }
 
+    /**
+     * Jj_3_2.
+     * 
+     * @return true, if successful
+     */
     final private boolean jj_3_2()
     {
         if (jj_scan_token(ArgQuote2))
@@ -522,16 +649,35 @@ public class HTMLParser implements HTMLParserConstants {
         }
         return false;
     }
+    
+    /** The token_source. */
     public HTMLParserTokenManager token_source;
+    
+    /** The jj_input_stream. */
     SimpleCharStream jj_input_stream;
+    
+    /** The jj_nt. */
     public Token token, jj_nt;
+    
+    /** The jj_ntk. */
     private int jj_ntk;
+    
+    /** The jj_lastpos. */
     private Token jj_scanpos, jj_lastpos;
+    
+    /** The jj_la. */
     private int jj_la;
+    
+    /** The looking ahead. */
     public boolean lookingAhead = false;
     //private boolean jj_semLA;
+    /** The jj_gen. */
     private int jj_gen;
+    
+    /** The jj_la1. */
     final private int[] jj_la1 = new int[13];
+    
+    /** The jj_la1_0. */
     static private int[] jj_la1_0;
 
     static
@@ -539,6 +685,9 @@ public class HTMLParser implements HTMLParserConstants {
         jj_la1_0();
     }
 
+    /**
+     * Jj_la1_0.
+     */
     private static void jj_la1_0()
     {
         jj_la1_0 = new int[]
@@ -546,10 +695,21 @@ public class HTMLParser implements HTMLParserConstants {
                     0xb3e, 0xb3e, 0x1000, 0x38000, 0x2000, 0x8000, 0x10000, 0x20000, 0x3b000, 0x3b000, 0x800000, 0x2000000, 0x18,
                 };
     }
+    
+    /** The jj_2_rtns. */
     final private JJCalls[] jj_2_rtns = new JJCalls[2];
+    
+    /** The jj_rescan. */
     private boolean jj_rescan = false;
+    
+    /** The jj_gc. */
     private int jj_gc = 0;
 
+    /**
+     * Instantiates a new hTML parser.
+     * 
+     * @param stream the stream
+     */
     public HTMLParser(java.io.InputStream stream)
     {
         jj_input_stream = new SimpleCharStream(stream, 1, 1);
@@ -567,6 +727,11 @@ public class HTMLParser implements HTMLParserConstants {
         }
     }
 
+    /**
+     * Re init.
+     * 
+     * @param stream the stream
+     */
     public void ReInit(java.io.InputStream stream)
     {
         jj_input_stream.ReInit(stream, 1, 1);
@@ -584,6 +749,11 @@ public class HTMLParser implements HTMLParserConstants {
         }
     }
 
+    /**
+     * Instantiates a new hTML parser.
+     * 
+     * @param stream the stream
+     */
     public HTMLParser(java.io.Reader stream)
     {
         jj_input_stream = new SimpleCharStream(stream, 1, 1);
@@ -601,6 +771,11 @@ public class HTMLParser implements HTMLParserConstants {
         }
     }
 
+    /**
+     * Re init.
+     * 
+     * @param stream the stream
+     */
     public void ReInit(java.io.Reader stream)
     {
         jj_input_stream.ReInit(stream, 1, 1);
@@ -618,6 +793,11 @@ public class HTMLParser implements HTMLParserConstants {
         }
     }
 
+    /**
+     * Instantiates a new hTML parser.
+     * 
+     * @param tm the tm
+     */
     public HTMLParser(HTMLParserTokenManager tm)
     {
         token_source = tm;
@@ -634,6 +814,11 @@ public class HTMLParser implements HTMLParserConstants {
         }
     }
 
+    /**
+     * Re init.
+     * 
+     * @param tm the tm
+     */
     public void ReInit(HTMLParserTokenManager tm)
     {
         token_source = tm;
@@ -650,6 +835,13 @@ public class HTMLParser implements HTMLParserConstants {
         }
     }
 
+    /**
+     * Jj_consume_token.
+     * 
+     * @param kind the kind
+     * @return the token
+     * @throws ParseException the parse exception
+     */
     final private Token jj_consume_token(int kind) throws ParseException
     {
         Token oldToken;
@@ -687,6 +879,12 @@ public class HTMLParser implements HTMLParserConstants {
         throw generateParseException();
     }
 
+    /**
+     * Jj_scan_token.
+     * 
+     * @param kind the kind
+     * @return true, if successful
+     */
     final private boolean jj_scan_token(int kind)
     {
         if (jj_scanpos == jj_lastpos)
@@ -720,6 +918,11 @@ public class HTMLParser implements HTMLParserConstants {
         return (jj_scanpos.kind != kind);
     }
 
+    /**
+     * Gets the next token.
+     * 
+     * @return the next token
+     */
     final public Token getNextToken()
     {
         if (token.next != null)
@@ -734,6 +937,12 @@ public class HTMLParser implements HTMLParserConstants {
         return token;
     }
 
+    /**
+     * Gets the token.
+     * 
+     * @param index the index
+     * @return the token
+     */
     final public Token getToken(int index)
     {
         Token t = lookingAhead ? jj_scanpos : token;
@@ -750,6 +959,11 @@ public class HTMLParser implements HTMLParserConstants {
         return t;
     }
 
+    /**
+     * Jj_ntk.
+     * 
+     * @return the int
+     */
     final private int jj_ntk()
     {
         if ((jj_nt = token.next) == null)
@@ -760,12 +974,28 @@ public class HTMLParser implements HTMLParserConstants {
             return (jj_ntk = jj_nt.kind);
         }
     }
+    
+    /** The jj_expentries. */
     private java.util.Vector jj_expentries = new java.util.Vector();
+    
+    /** The jj_expentry. */
     private int[] jj_expentry;
+    
+    /** The jj_kind. */
     private int jj_kind = -1;
+    
+    /** The jj_lasttokens. */
     private int[] jj_lasttokens = new int[100];
+    
+    /** The jj_endpos. */
     private int jj_endpos;
 
+    /**
+     * Jj_add_error_token.
+     * 
+     * @param kind the kind
+     * @param pos the pos
+     */
     private void jj_add_error_token(int kind, int pos)
     {
         if (pos >= 100)
@@ -814,6 +1044,11 @@ public class HTMLParser implements HTMLParserConstants {
         }
     }
 
+    /**
+     * Generate parse exception.
+     * 
+     * @return the parses the exception
+     */
     public ParseException generateParseException()
     {
         jj_expentries.removeAllElements();
@@ -860,14 +1095,23 @@ public class HTMLParser implements HTMLParserConstants {
         return new ParseException(token, exptokseq, tokenImage);
     }
 
+    /**
+     * Enable_tracing.
+     */
     final public void enable_tracing()
     {
     }
 
+    /**
+     * Disable_tracing.
+     */
     final public void disable_tracing()
     {
     }
 
+    /**
+     * Jj_rescan_token.
+     */
     final private void jj_rescan_token()
     {
         jj_rescan = true;
@@ -896,6 +1140,12 @@ public class HTMLParser implements HTMLParserConstants {
         jj_rescan = false;
     }
 
+    /**
+     * Jj_save.
+     * 
+     * @param index the index
+     * @param xla the xla
+     */
     final private void jj_save(int index, int xla)
     {
         JJCalls p = jj_2_rtns[index];
@@ -913,11 +1163,21 @@ public class HTMLParser implements HTMLParserConstants {
         p.arg = xla;
     }
 
+    /**
+     * The Class JJCalls.
+     */
     static final class JJCalls {
 
+        /** The gen. */
         int gen;
+        
+        /** The first. */
         Token first;
+        
+        /** The arg. */
         int arg;
+        
+        /** The next. */
         JJCalls next;
     }
 //    void handleException(Exception e) {

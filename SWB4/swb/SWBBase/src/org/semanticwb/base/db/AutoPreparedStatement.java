@@ -37,24 +37,44 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto que sobrescribe la clase Statement para poder tener control la misma desde el Pool de conexiones.
  * @author  Javier Solis Gonzalez (jsolis@infotec.com.mx) 
  */
 public class AutoPreparedStatement implements java.sql.PreparedStatement {
 
+    /** The st. */
     private PreparedStatement st;
+    
+    /** The closed. */
     private boolean closed = false;
+    
+    /** The query. */
     private String query = null;
+    
+    /** The args. */
     private String args = "";
+    
+    /** The debug. */
     private boolean debug = false;
+    
+    /** The aconn. */
     private AutoConnection aconn;
+    
+    /** The conn. */
     private Connection conn;
+    
+    /** The batchs. */
     private ArrayList<String> batchs;
     //private HashMap<Integer, Object> params;
 
-    /** Creates a new instance of PoolStatement
-     * @param st
+    /**
+     * Creates a new instance of PoolStatement.
+     * 
+     * @param aconn the aconn
+     * @param query the query
+     * @throws SQLException the sQL exception
      */
     public AutoPreparedStatement(AutoConnection aconn, String query) throws SQLException
     {
@@ -64,6 +84,11 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         checkStatement();
     }
 
+    /**
+     * Check statement.
+     * 
+     * @throws SQLException the sQL exception
+     */
     private void checkStatement() throws SQLException
     {
         if (!closed && aconn.getNativeConnection() != conn)
@@ -86,6 +111,9 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         }
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#addBatch(java.lang.String)
+     */
     public void addBatch(String str) throws java.sql.SQLException
     {
         if (debug)
@@ -97,12 +125,18 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         batchs.add(str);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#cancel()
+     */
     public void cancel() throws java.sql.SQLException
     {
         checkStatement();
         st.cancel();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#clearBatch()
+     */
     public void clearBatch() throws java.sql.SQLException
     {
         checkStatement();
@@ -110,18 +144,27 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         batchs.clear();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#clearWarnings()
+     */
     public void clearWarnings() throws java.sql.SQLException
     {
         checkStatement();
         st.clearWarnings();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#close()
+     */
     public void close() throws java.sql.SQLException
     {
         closed = true;
         st.close();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#execute(java.lang.String)
+     */
     public boolean execute(String str) throws java.sql.SQLException
     {
         if (debug)
@@ -132,6 +175,9 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         return st.execute(str);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#executeBatch()
+     */
     public int[] executeBatch() throws java.sql.SQLException
     {
         if (debug)
@@ -149,6 +195,9 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         return st.executeBatch();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#executeQuery(java.lang.String)
+     */
     public java.sql.ResultSet executeQuery(String str) throws java.sql.SQLException
     {
         if (debug)
@@ -159,6 +208,9 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         return st.executeQuery(str);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#executeUpdate(java.lang.String)
+     */
     public int executeUpdate(String str) throws java.sql.SQLException
     {
         if (debug)
@@ -169,6 +221,9 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         return st.executeUpdate(str);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#getConnection()
+     */
     public java.sql.Connection getConnection() throws java.sql.SQLException
     {
         checkStatement();
@@ -176,42 +231,63 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         //return st.getConnection();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#getFetchDirection()
+     */
     public int getFetchDirection() throws java.sql.SQLException
     {
         checkStatement();
         return st.getFetchDirection();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#getFetchSize()
+     */
     public int getFetchSize() throws java.sql.SQLException
     {
         checkStatement();
         return st.getFetchSize();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#getMaxFieldSize()
+     */
     public int getMaxFieldSize() throws java.sql.SQLException
     {
         checkStatement();
         return st.getMaxFieldSize();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#getMaxRows()
+     */
     public int getMaxRows() throws java.sql.SQLException
     {
         checkStatement();
         return st.getMaxRows();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#getMoreResults()
+     */
     public boolean getMoreResults() throws java.sql.SQLException
     {
         checkStatement();
         return st.getMoreResults();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#getQueryTimeout()
+     */
     public int getQueryTimeout() throws java.sql.SQLException
     {
         checkStatement();
         return st.getQueryTimeout();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#getResultSet()
+     */
     public java.sql.ResultSet getResultSet() throws java.sql.SQLException
     {
         if (debug)
@@ -222,79 +298,120 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         return st.getResultSet();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#getResultSetConcurrency()
+     */
     public int getResultSetConcurrency() throws java.sql.SQLException
     {
         checkStatement();
         return st.getResultSetConcurrency();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#getResultSetType()
+     */
     public int getResultSetType() throws java.sql.SQLException
     {
         checkStatement();
         return st.getResultSetType();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#getUpdateCount()
+     */
     public int getUpdateCount() throws java.sql.SQLException
     {
         checkStatement();
         return st.getUpdateCount();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#getWarnings()
+     */
     public java.sql.SQLWarning getWarnings() throws java.sql.SQLException
     {
         checkStatement();
         return st.getWarnings();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#setCursorName(java.lang.String)
+     */
     public void setCursorName(String str) throws java.sql.SQLException
     {
         checkStatement();
         st.setCursorName(str);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#setEscapeProcessing(boolean)
+     */
     public void setEscapeProcessing(boolean param) throws java.sql.SQLException
     {
         checkStatement();
         st.setEscapeProcessing(param);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#setFetchDirection(int)
+     */
     public void setFetchDirection(int param) throws java.sql.SQLException
     {
         checkStatement();
         st.setFetchDirection(param);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#setFetchSize(int)
+     */
     public void setFetchSize(int param) throws java.sql.SQLException
     {
         checkStatement();
         st.setFetchSize(param);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#setMaxFieldSize(int)
+     */
     public void setMaxFieldSize(int param) throws java.sql.SQLException
     {
         checkStatement();
         st.setMaxFieldSize(param);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#setMaxRows(int)
+     */
     public void setMaxRows(int param) throws java.sql.SQLException
     {
         checkStatement();
         st.setMaxRows(param);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#setQueryTimeout(int)
+     */
     public void setQueryTimeout(int param) throws java.sql.SQLException
     {
         checkStatement();
         st.setQueryTimeout(param);
     }
 
+    /**
+     * Checks if is closed.
+     * 
+     * @return true, if is closed
+     */
     public boolean isClosed()
     {
         return closed;
     }
 
 //********************************** version 1.4
-    public boolean execute(String str, String[] str1) throws java.sql.SQLException
+    /* (non-Javadoc)
+ * @see java.sql.Statement#execute(java.lang.String, java.lang.String[])
+ */
+public boolean execute(String str, String[] str1) throws java.sql.SQLException
     {
         if (debug)
         {
@@ -304,6 +421,9 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         return st.execute(str, str1);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#execute(java.lang.String, int[])
+     */
     public boolean execute(String str, int[] values) throws java.sql.SQLException
     {
         if (debug)
@@ -314,6 +434,9 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         return st.execute(str, values);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#execute(java.lang.String, int)
+     */
     public boolean execute(String str, int param) throws java.sql.SQLException
     {
         if (debug)
@@ -324,18 +447,27 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         return st.execute(str, param);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#getResultSetHoldability()
+     */
     public int getResultSetHoldability() throws java.sql.SQLException
     {
         checkStatement();
         return st.getResultSetHoldability();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#getMoreResults(int)
+     */
     public boolean getMoreResults(int param) throws java.sql.SQLException
     {
         checkStatement();
         return st.getMoreResults(param);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#executeUpdate(java.lang.String, java.lang.String[])
+     */
     public int executeUpdate(String str, String[] str1) throws java.sql.SQLException
     {
         if (debug)
@@ -346,6 +478,9 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         return st.executeUpdate(str, str1);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#executeUpdate(java.lang.String, int)
+     */
     public int executeUpdate(String str, int param) throws java.sql.SQLException
     {
         if (debug)
@@ -356,6 +491,9 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         return st.executeUpdate(str, param);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#executeUpdate(java.lang.String, int[])
+     */
     public int executeUpdate(String str, int[] values) throws java.sql.SQLException
     {
         if (debug)
@@ -366,12 +504,18 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         return st.executeUpdate(str, values);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#getGeneratedKeys()
+     */
     public java.sql.ResultSet getGeneratedKeys() throws java.sql.SQLException
     {
         checkStatement();
         return st.getGeneratedKeys();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#executeQuery()
+     */
     public ResultSet executeQuery() throws SQLException
     {
         if (debug)
@@ -382,6 +526,9 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         return st.executeQuery();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#executeUpdate()
+     */
     public int executeUpdate() throws SQLException
     {
         if (debug)
@@ -404,6 +551,9 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         return st.executeUpdate();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setNull(int, int)
+     */
     public void setNull(int parameterIndex, int sqlType) throws SQLException
     {
         if (debug)
@@ -414,6 +564,9 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         st.setNull(parameterIndex, sqlType);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setBoolean(int, boolean)
+     */
     public void setBoolean(int parameterIndex, boolean x) throws SQLException
     {
         if (debug)
@@ -424,6 +577,9 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         st.setBoolean(parameterIndex, x);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setByte(int, byte)
+     */
     public void setByte(int parameterIndex, byte x) throws SQLException
     {
         if (debug)
@@ -434,6 +590,9 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         st.setByte(parameterIndex, x);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setShort(int, short)
+     */
     public void setShort(int parameterIndex, short x) throws SQLException
     {
         if (debug)
@@ -444,6 +603,9 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         st.setShort(parameterIndex, x);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setInt(int, int)
+     */
     public void setInt(int parameterIndex, int x) throws SQLException
     {
         if (debug)
@@ -454,6 +616,9 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         st.setInt(parameterIndex, x);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setLong(int, long)
+     */
     public void setLong(int parameterIndex, long x) throws SQLException
     {
         if (debug)
@@ -464,6 +629,9 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         st.setLong(parameterIndex, x);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setFloat(int, float)
+     */
     public void setFloat(int parameterIndex, float x) throws SQLException
     {
         if (debug)
@@ -474,6 +642,9 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         st.setFloat(parameterIndex, x);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setDouble(int, double)
+     */
     public void setDouble(int parameterIndex, double x) throws SQLException
     {
         if (debug)
@@ -484,6 +655,9 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         st.setDouble(parameterIndex, x);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setBigDecimal(int, java.math.BigDecimal)
+     */
     public void setBigDecimal(int parameterIndex, BigDecimal x) throws SQLException
     {
         if (debug)
@@ -494,6 +668,9 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         st.setBigDecimal(parameterIndex, x);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setString(int, java.lang.String)
+     */
     public void setString(int parameterIndex, String x) throws SQLException
     {
 //        if(x.equals("Uv::http://www.semanticwebbuilder.org/swb4/ontology#ResourceType:"))
@@ -509,6 +686,9 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         st.setString(parameterIndex, x);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setBytes(int, byte[])
+     */
     public void setBytes(int parameterIndex, byte[] x) throws SQLException
     {
         if (debug)
@@ -519,6 +699,9 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         st.setBytes(parameterIndex, x);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setDate(int, java.sql.Date)
+     */
     public void setDate(int parameterIndex, Date x) throws SQLException
     {
         if (debug)
@@ -529,6 +712,9 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         st.setDate(parameterIndex, x);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setTime(int, java.sql.Time)
+     */
     public void setTime(int parameterIndex, Time x) throws SQLException
     {
         if (debug)
@@ -539,6 +725,9 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         st.setTime(parameterIndex, x);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setTimestamp(int, java.sql.Timestamp)
+     */
     public void setTimestamp(int parameterIndex, Timestamp x) throws SQLException
     {
         if (debug)
@@ -549,48 +738,72 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         st.setTimestamp(parameterIndex, x);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setAsciiStream(int, java.io.InputStream, int)
+     */
     public void setAsciiStream(int parameterIndex, InputStream x, int length) throws SQLException
     {
         checkStatement();
         st.setAsciiStream(parameterIndex, x, length);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setUnicodeStream(int, java.io.InputStream, int)
+     */
     public void setUnicodeStream(int parameterIndex, InputStream x, int length) throws SQLException
     {
         checkStatement();
         st.setUnicodeStream(parameterIndex, x, length);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setBinaryStream(int, java.io.InputStream, int)
+     */
     public void setBinaryStream(int parameterIndex, InputStream x, int length) throws SQLException
     {
         checkStatement();
         st.setBinaryStream(parameterIndex, x, length);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#clearParameters()
+     */
     public void clearParameters() throws SQLException
     {
         checkStatement();
         st.clearParameters();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setObject(int, java.lang.Object, int, int)
+     */
     public void setObject(int parameterIndex, Object x, int targetSqlType, int scale) throws SQLException
     {
         checkStatement();
         st.setObject(parameterIndex, x, targetSqlType, scale);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setObject(int, java.lang.Object, int)
+     */
     public void setObject(int parameterIndex, Object x, int targetSqlType) throws SQLException
     {
         checkStatement();
         st.setObject(parameterIndex, x, targetSqlType);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setObject(int, java.lang.Object)
+     */
     public void setObject(int parameterIndex, Object x) throws SQLException
     {
         checkStatement();
         st.setObject(parameterIndex, x);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#execute()
+     */
     public boolean execute() throws SQLException
     {
         checkStatement();
@@ -637,78 +850,117 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
         return ret;
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#addBatch()
+     */
     public void addBatch() throws SQLException
     {
         checkStatement();
         st.addBatch();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setCharacterStream(int, java.io.Reader, int)
+     */
     public void setCharacterStream(int parameterIndex, Reader reader, int length) throws SQLException
     {
         checkStatement();
         st.setCharacterStream(parameterIndex, reader, length);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setRef(int, java.sql.Ref)
+     */
     public void setRef(int i, Ref x) throws SQLException
     {
         checkStatement();
         st.setRef(i, x);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setBlob(int, java.sql.Blob)
+     */
     public void setBlob(int i, Blob x) throws SQLException
     {
         checkStatement();
         st.setBlob(i, x);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setClob(int, java.sql.Clob)
+     */
     public void setClob(int i, Clob x) throws SQLException
     {
         checkStatement();
         st.setClob(i, x);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setArray(int, java.sql.Array)
+     */
     public void setArray(int i, Array x) throws SQLException
     {
         checkStatement();
         st.setArray(i, x);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#getMetaData()
+     */
     public ResultSetMetaData getMetaData() throws SQLException
     {
         checkStatement();
         return st.getMetaData();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setDate(int, java.sql.Date, java.util.Calendar)
+     */
     public void setDate(int parameterIndex, Date x, Calendar cal) throws SQLException
     {
         checkStatement();
         st.setDate(parameterIndex, x, cal);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setTime(int, java.sql.Time, java.util.Calendar)
+     */
     public void setTime(int parameterIndex, Time x, Calendar cal) throws SQLException
     {
         checkStatement();
         st.setTime(parameterIndex, x, cal);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setTimestamp(int, java.sql.Timestamp, java.util.Calendar)
+     */
     public void setTimestamp(int parameterIndex, Timestamp x, Calendar cal) throws SQLException
     {
         checkStatement();
         st.setTimestamp(parameterIndex, x, cal);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setNull(int, int, java.lang.String)
+     */
     public void setNull(int paramIndex, int sqlType, String typeName) throws SQLException
     {
         checkStatement();
         st.setNull(paramIndex, sqlType, typeName);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setURL(int, java.net.URL)
+     */
     public void setURL(int parameterIndex, URL x) throws SQLException
     {
         checkStatement();
         st.setURL(parameterIndex, x);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#getParameterMetaData()
+     */
     public ParameterMetaData getParameterMetaData() throws SQLException
     {
         checkStatement();

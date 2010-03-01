@@ -37,29 +37,68 @@ import javax.mail.internet.InternetAddress;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SWBMail.
+ */
 public class SWBMail 
 {
+    
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(SWBMail.class);
 
+    /** The from email. */
     private String fromEmail = null;
+    
+    /** The from name. */
     private String fromName = null;
+    
+    /** The to email. */
     private Collection toEmail = null;
+    
+    /** The cc email. */
     private Collection ccEmail = null;
+    
+    /** The bcc email. */
     private Collection bccEmail = null;
+    
+    /** The attachments. */
     private ArrayList<EmailAttachment> attachments = new ArrayList();
+    
+    /** The addresses. */
     private ArrayList<InternetAddress> addresses = new ArrayList();
+    
+    /** The login. */
     private String login;
+    
+    /** The password. */
     private String password;
+    
+    /** The subject. */
     private String subject = null;
+    
+    /** The data. */
     private String data = null;
+    
+    /** The content type. */
     private String contentType = null;
+    
+    /** The smtpserver. */
     private String smtpserver = null;
 
-    /** Creates a new instance of AFMailData */
+    /**
+     * Creates a new instance of AFMailData.
+     */
     public SWBMail() {
     }
 
-    /** Creates a new instance of AFMailData */
+    /**
+     * Creates a new instance of AFMailData.
+     * 
+     * @param toEmail the to email
+     * @param subject the subject
+     * @param description the description
+     */
     public SWBMail(Collection toEmail, String subject, String description) {
         this.fromEmail = "webmail.infotec.com.mx";
         this.toEmail = toEmail;
@@ -67,6 +106,16 @@ public class SWBMail
         this.data = description;
     }
 
+    /**
+     * Instantiates a new sWB mail.
+     * 
+     * @param fromEmail the from email
+     * @param toEmail the to email
+     * @param ccEmail the cc email
+     * @param bccEmail the bcc email
+     * @param subject the subject
+     * @param data the data
+     */
     public SWBMail(String fromEmail, Collection toEmail, Collection ccEmail, Collection bccEmail,
             String subject, String data) {
         this.fromEmail = fromEmail;
@@ -77,8 +126,10 @@ public class SWBMail
         this.data = data;
     }
 
-    /** Setter for property addresses.
+    /**
+     * Setter for property addresses.
      * 
+     * @param addresses the new address
      */
     public void setAddress(ArrayList<InternetAddress> addresses) {
         this.addresses = addresses;
@@ -92,18 +143,30 @@ public class SWBMail
         return addresses;
     }
 
+    /**
+     * Adds the address.
+     * 
+     * @param address the address
+     */
     public void addAddress(InternetAddress address) {
         addresses.add(address);
     }
 
+    /**
+     * Adds the address.
+     * 
+     * @param address the address
+     */
     public void addAddress(String address) {
         InternetAddress inetAddress = new InternetAddress();
         inetAddress.setAddress(address);
         addresses.add(inetAddress);
     }
 
-    /** Setter for property attachments.
+    /**
+     * Setter for property attachments.
      * 
+     * @param attachments the new attachments
      */
     public void setAttachments(ArrayList<EmailAttachment> attachments) {
         this.attachments = attachments;
@@ -117,6 +180,11 @@ public class SWBMail
         return attachments;
     }
 
+    /**
+     * Adds the attachment.
+     * 
+     * @param attachment the attachment
+     */
     public void addAttachment(EmailAttachment attachment) {
         attachments.add(attachment);
     }
@@ -145,9 +213,10 @@ public class SWBMail
         return fromName;
     }
 
-    /** Setter for property fromName.
-     * @param fromEmail New value of property fromName.
-     *
+    /**
+     * Setter for property fromName.
+     * 
+     * @param fromName the new from name
      */
     public void setFromName(java.lang.String fromName) {
         this.fromName = fromName;
@@ -226,9 +295,10 @@ public class SWBMail
         return login;
     }
 
-    /** Setter for property login.
-     * @param data New value of property login.
-     *
+    /**
+     * Setter for property login.
+     * 
+     * @param login the new login
      */
     public void setLogin(java.lang.String login) {
         this.login = login;
@@ -242,9 +312,10 @@ public class SWBMail
         return password;
     }
 
-    /** Setter for property password.
-     * @param data New value of property password.
-     *
+    /**
+     * Setter for property password.
+     * 
+     * @param password the new password
      */
     public void setPassword(java.lang.String password) {
         this.password = password;
@@ -258,9 +329,10 @@ public class SWBMail
         return contentType;
     }
 
-    /** Setter for property data.
-     * @param data New value of property data.
-     *
+    /**
+     * Setter for property data.
+     * 
+     * @param contentType the new content type
      */
     public void setContentType(java.lang.String contentType) {
         this.contentType = contentType;
@@ -282,17 +354,19 @@ public class SWBMail
         this.subject = subject;
     }
     
-    /** Setter for property smtpserver.
-     * @param subject New value of property smtpserver.
-     *
+    /**
+     * Setter for property smtpserver.
+     * 
+     * @param smtpserver the new host name
      */
     public void setHostName(java.lang.String smtpserver) {
         this.smtpserver = smtpserver;
     }
     
-    /** Setter for property smtpserver.
-     * @param subject New value of property smtpserver.
-     *
+    /**
+     * Setter for property smtpserver.
+     * 
+     * @return the host name
      */
     public String getHostName() {
         return smtpserver;

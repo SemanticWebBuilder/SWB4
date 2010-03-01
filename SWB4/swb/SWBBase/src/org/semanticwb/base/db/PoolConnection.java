@@ -33,6 +33,7 @@ import java.util.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
+// TODO: Auto-generated Javadoc
 /**
  * Una conexi�n (sesi�n) con una base de datos. Sentencias SQL son ejecutadas y los resultados se
  * obtienen dentro del contexto de la conexi�n.
@@ -47,22 +48,44 @@ import org.semanticwb.SWBUtils;
  */
 public class PoolConnection implements java.sql.Connection {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(PoolConnection.class);
+    
+    /** The con. */
     private java.sql.Connection con = null;
+    
+    /** The vec. */
     private Vector vec = new Vector();
+    
+    /** The pool. */
     private DBConnectionPool pool;
+    
+    /** The isclosed. */
     private boolean isclosed = false;
+    
+    /** The description. */
     private String description = "";
+    
+    /** The id. */
     private long id = 0;
+    
+    /** The idle_time. */
     private long idle_time = 0;
+    
+    /** The destroy. */
     private boolean destroy = false;
+    
+    /** The isdestroyed. */
     private boolean isdestroyed = false;
+    
+    /** The stack. */
     private StackTraceElement stack[] = null;
 
     /**
+     * Instantiates a new pool connection.
      * 
-     * @param con
-     * @param pool
+     * @param con the con
+     * @param pool the pool
      */
     public PoolConnection(Connection con, DBConnectionPool pool)
     {
@@ -75,7 +98,7 @@ public class PoolConnection implements java.sql.Connection {
     }
 
     /**
-     * 
+     * Inits the.
      */
     public void init()
     {
@@ -104,11 +127,21 @@ public class PoolConnection implements java.sql.Connection {
         this.id = id;
     }
 
+    /**
+     * Gets the stack trace elements.
+     * 
+     * @return the stack trace elements
+     */
     public StackTraceElement[] getStackTraceElements()
     {
         return stack;
     }
 
+    /**
+     * Prints the track trace.
+     * 
+     * @param out the out
+     */
     public void printTrackTrace(PrintStream out)
     {
         for (int x = 0; x < stack.length; x++)
@@ -118,7 +151,9 @@ public class PoolConnection implements java.sql.Connection {
     }
 
     /**
+     * Gets the native connection.
      * 
+     * @return the native connection
      * @return
      */
     public java.sql.Connection getNativeConnection()
@@ -154,7 +189,9 @@ public class PoolConnection implements java.sql.Connection {
     }
 
     /**
+     * Close statements.
      * 
+     * @return true, if successful
      * @return
      */
     public boolean closeStatements()
@@ -189,8 +226,9 @@ public class PoolConnection implements java.sql.Connection {
     }
 
     /**
+     * _close.
      * 
-     * @throws java.sql.SQLException
+     * @throws SQLException the sQL exception
      */
     public void _close() throws SQLException
     {
@@ -201,9 +239,10 @@ public class PoolConnection implements java.sql.Connection {
      * Cierra la conexi�n con la base de datos en vez de esperar. Una conexi�n puede ser cerrada
      * autom�ticamente cuando es garbage collected. Tambi�n ciertos errores fatales puden cerrar la
      * conexi�n.
-     *
+     * 
+     * @throws SQLException the sQL exception
      * @exception java.sql.SQLException
-     *              Si un error de acceso a kla base de datos ocurre.
+     * Si un error de acceso a kla base de datos ocurre.
      */
     public void close() throws SQLException
     {
@@ -248,10 +287,11 @@ public class PoolConnection implements java.sql.Connection {
      * como una transacci�n individual. De lo contrario, sus sentencias SQL se agrupan en una transacci�n
      * que finalizar� por una llamada al m�todo <code>commit</code> o al m�todo <code>rollback</code>.
      * Por default un nuevo objeto PoolConnection est� en modo auto-commit.
-     *
-     * @param param 
+     * 
+     * @param param the new auto commit
+     * @throws SQLException the sQL exception
      * @exception java.sql.SQLException
-     *              Si un error de acceso a kla base de datos ocurre.
+     * Si un error de acceso a kla base de datos ocurre.
      * @see       getAutoCommit()
      */
     public void setAutoCommit(boolean param) throws SQLException
@@ -263,81 +303,126 @@ public class PoolConnection implements java.sql.Connection {
         con.setAutoCommit(param);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#getWarnings()
+     */
     public SQLWarning getWarnings() throws SQLException
     {
         return con.getWarnings();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#getCatalog()
+     */
     public String getCatalog() throws SQLException
     {
         return con.getCatalog();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#setTypeMap(java.util.Map)
+     */
     public void setTypeMap(java.util.Map map) throws SQLException
     {
         destroy = true;
         con.setTypeMap(map);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#getTypeMap()
+     */
     public java.util.Map getTypeMap() throws SQLException
     {
         return con.getTypeMap();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#getTransactionIsolation()
+     */
     public int getTransactionIsolation() throws SQLException
     {
         //destroy=true;
         return con.getTransactionIsolation();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#isReadOnly()
+     */
     public boolean isReadOnly() throws SQLException
     {
         return con.isReadOnly();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#getMetaData()
+     */
     public DatabaseMetaData getMetaData() throws SQLException
     {
         return con.getMetaData();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#clearWarnings()
+     */
     public void clearWarnings() throws SQLException
     {
         con.clearWarnings();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#nativeSQL(java.lang.String)
+     */
     public String nativeSQL(String str) throws SQLException
     {
         return con.nativeSQL(str);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#prepareStatement(java.lang.String, int, int)
+     */
     public PreparedStatement prepareStatement(String str, int param, int param2) throws SQLException
     {
         return con.prepareStatement(str, param, param2);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#setTransactionIsolation(int)
+     */
     public void setTransactionIsolation(int param) throws SQLException
     {
         con.setTransactionIsolation(param);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#setReadOnly(boolean)
+     */
     public void setReadOnly(boolean param) throws SQLException
     {
         destroy = true;
         con.setReadOnly(param);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#setCatalog(java.lang.String)
+     */
     public void setCatalog(String str) throws SQLException
     {
         destroy = true;
         con.setCatalog(str);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#isClosed()
+     */
     public boolean isClosed() throws SQLException
     {
         //Thread.dumpStack();
         return isclosed || con.isClosed();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#createStatement()
+     */
     public Statement createStatement() throws SQLException
     {
         Statement st = new PoolStatement(con.createStatement(), this);
@@ -346,6 +431,9 @@ public class PoolConnection implements java.sql.Connection {
         return st;
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#createStatement(int, int)
+     */
     public Statement createStatement(int param, int param1) throws SQLException
     {
         Statement st = new PoolStatement(con.createStatement(param, param1), this);
@@ -353,33 +441,51 @@ public class PoolConnection implements java.sql.Connection {
         return st;
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#prepareStatement(java.lang.String)
+     */
     public PreparedStatement prepareStatement(String str) throws SQLException
     {
         PreparedStatement st = new PoolPreparedStatement(con.prepareStatement(str), str, this);
         return st;
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#getAutoCommit()
+     */
     public boolean getAutoCommit() throws SQLException
     {
         return con.getAutoCommit();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#prepareCall(java.lang.String)
+     */
     public CallableStatement prepareCall(String str) throws SQLException
     {
         return con.prepareCall(str);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#commit()
+     */
     public void commit() throws SQLException
     {
         //destroy=true;
         con.commit();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#prepareCall(java.lang.String, int, int)
+     */
     public CallableStatement prepareCall(String str, int param, int param2) throws SQLException
     {
         return con.prepareCall(str, param, param2);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#rollback()
+     */
     public void rollback() throws SQLException
     {
         //destroy=true;
@@ -387,7 +493,7 @@ public class PoolConnection implements java.sql.Connection {
     }
 
     /**
-     * 
+     * Destroy connection.
      */
     protected void destroyConnection()
     {
@@ -410,6 +516,9 @@ public class PoolConnection implements java.sql.Connection {
         }
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#finalize()
+     */
     @Override
     protected void finalize() throws Throwable
     {
@@ -431,65 +540,101 @@ public class PoolConnection implements java.sql.Connection {
     }
 //************************************ jdk 1.4 *****************************************************************
 
-    public java.sql.Savepoint setSavepoint() throws java.sql.SQLException
+    /* (non-Javadoc)
+ * @see java.sql.Connection#setSavepoint()
+ */
+public java.sql.Savepoint setSavepoint() throws java.sql.SQLException
     {
         destroy = true;
         return con.setSavepoint();
         //return null;
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#setHoldability(int)
+     */
     public void setHoldability(int param) throws java.sql.SQLException
     {
         destroy = true;
         con.setHoldability(param);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#prepareStatement(java.lang.String, int)
+     */
     public java.sql.PreparedStatement prepareStatement(java.lang.String str, int param) throws java.sql.SQLException
     {
         return con.prepareStatement(str, param);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#prepareStatement(java.lang.String, int, int, int)
+     */
     public java.sql.PreparedStatement prepareStatement(java.lang.String str, int param, int param2, int param3) throws java.sql.SQLException
     {
         return con.prepareStatement(str, param, param2, param3);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#prepareStatement(java.lang.String, int[])
+     */
     public java.sql.PreparedStatement prepareStatement(java.lang.String str, int[] values) throws java.sql.SQLException
     {
         return con.prepareStatement(str, values);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#getHoldability()
+     */
     public int getHoldability() throws java.sql.SQLException
     {
         return con.getHoldability();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#setSavepoint(java.lang.String)
+     */
     public java.sql.Savepoint setSavepoint(java.lang.String str) throws java.sql.SQLException
     {
         destroy = true;
         return con.setSavepoint(str);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#createStatement(int, int, int)
+     */
     public java.sql.Statement createStatement(int param, int param1, int param2) throws java.sql.SQLException
     {
         return con.createStatement(param, param1, param2);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#prepareCall(java.lang.String, int, int, int)
+     */
     public java.sql.CallableStatement prepareCall(java.lang.String str, int param, int param2, int param3) throws java.sql.SQLException
     {
         return con.prepareCall(str, param, param2, param3);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#releaseSavepoint(java.sql.Savepoint)
+     */
     public void releaseSavepoint(java.sql.Savepoint savepoint) throws java.sql.SQLException
     {
         con.releaseSavepoint(savepoint);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#prepareStatement(java.lang.String, java.lang.String[])
+     */
     public java.sql.PreparedStatement prepareStatement(java.lang.String str, java.lang.String[] str1) throws java.sql.SQLException
     {
         return con.prepareStatement(str, str1);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Connection#rollback(java.sql.Savepoint)
+     */
     public void rollback(java.sql.Savepoint savepoint) throws java.sql.SQLException
     {
         destroy = true;

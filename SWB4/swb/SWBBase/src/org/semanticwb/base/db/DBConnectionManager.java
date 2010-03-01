@@ -41,6 +41,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.base.util.SWBProperties;
 import org.semanticwb.SWBUtils;
 
+// TODO: Auto-generated Javadoc
 /**
  * Esta clase proporciona acceso a uno o más connection pools
  * definidos en el archivo de propiedades db.properties. 
@@ -49,16 +50,29 @@ import org.semanticwb.SWBUtils;
  */
 public class DBConnectionManager {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(DBConnectionManager.class);
+    
+    /** The drivers. */
     private Vector drivers = new Vector();
+    
+    /** The pools. */
     private Hashtable pools = new Hashtable();
+    
+    /** The is jndi. */
     private boolean isJNDI;
+    
+    /** The JNDI patern. */
     private String JNDIPatern;
+    
+    /** The init ctx. */
     private Context initCtx;
+    
+    /** The time lock. */
     private PoolConnectionTimeLock timeLock = new PoolConnectionTimeLock();
 
     /**
-     * 
+     * Instantiates a new dB connection manager.
      */
     public DBConnectionManager()
     {
@@ -67,7 +81,9 @@ public class DBConnectionManager {
     }
 
     /**
+     * Gets the num connections.
      * 
+     * @return the num connections
      * @return
      */
     public int getNumConnections()
@@ -86,8 +102,10 @@ public class DBConnectionManager {
     }
 
     /**
+     * Gets the connections.
      * 
-     * @param name
+     * @param name the name
+     * @return the connections
      * @return
      */
     public int getConnections(String name)
@@ -105,8 +123,10 @@ public class DBConnectionManager {
     }
 
     /**
+     * Gets the free connections.
      * 
-     * @param name
+     * @param name the name
+     * @return the free connections
      * @return
      */
     public int getFreeConnections(String name)
@@ -125,9 +145,9 @@ public class DBConnectionManager {
 
     /**
      * Cierra una conexi�n del pool especificado.
-     *
-     * @param   name    El nombre del pool definido en el archivo de propiedades.
-     * @param   con     La conexi�n.
+     * 
+     * @param name the name
+     * @param con the con
      */
     public void freeConnection(String name, Connection con)
     {
@@ -155,8 +175,8 @@ public class DBConnectionManager {
 
     /**
      * Regresa una conexión que no pertenece al pool.
-     *
-     * @param   name        El nombre del pool definido en el archivo de propiedades.
+     * 
+     * @param name the name
      * @return  Connection  La conexi�n o nulo.
      */
     public Connection getNoPoolConnection(String name)
@@ -172,8 +192,8 @@ public class DBConnectionManager {
 
     /**
      * Regresa una conexión que no se registra en el pool, pero que se auto restablece si se piede la conexion.
-     *
-     * @param   name        El nombre del pool definido en el archivo de propiedades.
+     * 
+     * @param name the name
      * @return  Connection  La conexi�n o nulo.
      */
     public Connection getAutoConnection(String name)
@@ -190,8 +210,8 @@ public class DBConnectionManager {
     /**
      * Regresa una conexi�n abierta. Si ninguna otra conexi�n est� disponible y el n�mero m�ximo
      * de conexiones no se ha alcanzado, una nueva conexi�n es creada.
-     *
-     * @param   name        El nombre del pool definido en el archivo de propiedades.
+     * 
+     * @param name the name
      * @return  Connection  La conexi�n o nulo.
      */
     public Connection getConnection(String name)
@@ -202,9 +222,9 @@ public class DBConnectionManager {
     /**
      * Regresa una conexi�n abierta. Si ninguna otra conexi�n est� disponible y el n�mero m�ximo
      * de conexiones no se ha alcanzado, una nueva conexi�n es creada.
-     *
-     * @param   name        El nombre del pool definido en el archivo de propiedades.
-     * @param   description Descripcion del para debugeo.
+     * 
+     * @param name the name
+     * @param description the description
      * @return  Connection  La conexi�n o nulo.
      */
     public Connection getConnection(String name, String description)
@@ -259,9 +279,9 @@ public class DBConnectionManager {
      * de conexiones no se ha alcanzado, una nueva conexi�n es creada. Si el n�mero m�ximo ha sido
      * alcanzado espera hasta que una conexi�n este disponible o el tiempo especificado haya
      * transcurrido.
-     *
-     * @param   name        El nombre del pool definido en el archivo de propiedades.
-     * @param   time        El n�mero de milisegundos para espera de la conexi�n.
+     * 
+     * @param name the name
+     * @param time the time
      * @return  Connection  La conexi�n o nulo.
      */
     public Connection getConnection(String name, long time)
@@ -328,8 +348,8 @@ public class DBConnectionManager {
      * &lt;poolname&gt;.password    El password del usuario de la base de datos. (Si el usuario se especifica)
      * &lt;poolname&gt;.maxconn     El n�mero m�ximo de conexiones (opcional)
      * </PRE>
-     *
-     * @param   props   Las propiedades del connection pool.
+     * 
+     * @param props the props
      */
     private void createPools(Properties props)
     {
@@ -431,8 +451,8 @@ public class DBConnectionManager {
     /**
      * Carga y registra todos los drivers JDBC. Esto lo realiza el DBConnectionManager, en comparaci�n
      * con el DBConnectionPool, puesto que muchos pools pueden compartir el mismo driver.
-     *
-     * @param   props   Las propiedades del connection pool.
+     * 
+     * @param props the props
      */
     private void loadDrivers(Properties props)
     {
@@ -483,7 +503,9 @@ public class DBConnectionManager {
         return map;
     }
 
-    /** 
+    /**
+     * Gets the hits.
+     * 
      * @return Regresa las total de solicitudes de conexiones
      */
     public long getHits()

@@ -30,6 +30,7 @@
 
 package org.semanticwb.base;
 
+// TODO: Auto-generated Javadoc
 /**
  * objeto: indica que el objeto puede recibir notificaciones de otro objeto.
  * @author Javier Solis Gonzalez
@@ -37,9 +38,13 @@ package org.semanticwb.base;
  */
 public interface SWBObserver
 {
-    /** Avisa al observador de un cambio.
-     * @param s
-     * @param obj  */
+    
+    /**
+     * Avisa al observador de un cambio.
+     * 
+     * @param s the s
+     * @param obj the obj
+     */
     public void sendDBNotify(String s, Object obj);
 }
 

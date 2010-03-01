@@ -41,6 +41,7 @@ import java.security.AccessController;
 import org.semanticwb.SWBUtils;
 import sun.security.action.GetPropertyAction;
 
+// TODO: Auto-generated Javadoc
 /**
  * Utility class for HTML form encoding. This class contains static methods
  * for converting a String to the <CODE>application/x-www-form-urlencoded</CODE> MIME
@@ -84,8 +85,14 @@ import sun.security.action.GetPropertyAction;
  */
 public class URLEncoder
 {
+    
+    /** The dont need encoding. */
     static BitSet dontNeedEncoding;
+    
+    /** The Constant caseDiff. */
     static final int caseDiff = ('a' - 'A');
+    
+    /** The dflt enc name. */
     static String dfltEncName = null;
 
     static
@@ -171,12 +178,9 @@ public class URLEncoder
      * Translates a string into <code>x-www-form-urlencoded</code>
      * format. This method uses the platform's default encoding
      * as the encoding scheme to obtain the bytes for unsafe characters.
-     *
-     * @param   s   <code>String</code> to be translated.
-//     * @deprecated The resulting string may vary depending on the platform's
-//     *             default encoding. Instead, use the encode(String,String)
-//     *             method to specify the encoding.
-     * @return  the translated <code>String</code>.
+     * 
+     * @param s the s
+     * @return  the translated .
      */
     public static String encode(String s)
     {
@@ -205,14 +209,13 @@ public class URLEncoder
      * World Wide Web Consortium Recommendation</a> states that
      * UTF-8 should be used. Not doing so may introduce
      * incompatibilites.</em>
-     *
-     * @param   s   <code>String</code> to be translated.
-     * @param   enc   The name of a supported
-     *    <a href="../lang/package-summary.html#charenc">character
-     *    encoding</a>.
-     * @return  the translated <code>String</code>.
+     * 
+     * @param s the s
+     * @param enc the enc
+     * @return  the translated .
+     * @throws UnsupportedEncodingException the unsupported encoding exception
      * @exception  UnsupportedEncodingException
-     *             If the named encoding is not supported
+     * If the named encoding is not supported
      * @see URLDecoder#decode(java.lang.String, java.lang.String)
      * @since 1.4
      */

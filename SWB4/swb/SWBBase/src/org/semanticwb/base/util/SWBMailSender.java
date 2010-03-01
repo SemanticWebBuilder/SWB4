@@ -33,6 +33,7 @@ import java.util.*;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.Logger;
 
+// TODO: Auto-generated Javadoc
 /**
  * objecto: encargado de procesar y enviar correos electronicos.
  * @author jei
@@ -40,19 +41,26 @@ import org.semanticwb.Logger;
 public class SWBMailSender extends java.lang.Thread
 {
 
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(SWBMailSender.class);
     
+    /** The emails. */
     LinkedList emails = null;
 
 
-    /** Creates a new instance of WBMessageServer
-     * @param center
-     * @throws java.net.SocketException  */
+    /**
+     * Creates a new instance of WBMessageServer.
+     * 
+     * @throws SocketException the socket exception
+     */
     public SWBMailSender() throws java.net.SocketException
     {
         emails = new LinkedList();
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Thread#run()
+     */
     @Override
     public void run()
     {
@@ -87,6 +95,11 @@ public class SWBMailSender extends java.lang.Thread
         }
     }
 
+    /**
+     * Adds the e mail.
+     * 
+     * @param email the email
+     */
     public void addEMail(SWBMail email)
     {
         emails.addFirst(email);

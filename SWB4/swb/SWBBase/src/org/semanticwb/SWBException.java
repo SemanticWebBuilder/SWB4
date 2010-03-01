@@ -30,6 +30,7 @@
 package org.semanticwb;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * Generic exception in the SemanticWebBuilder API.
  * <p>La excepci&oacute;n gen&eacute;rica en el API de SemanticWebBuilder.</p>

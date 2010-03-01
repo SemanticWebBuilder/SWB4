@@ -22,6 +22,7 @@
  **/
 package org.semanticwb.base.util;
 
+// TODO: Auto-generated Javadoc
 /**
  * Encodes and decodes to and from Base64 notation.
  *
@@ -112,8 +113,14 @@ public class SFBase64 {
     -9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,     // Decimal 231 - 243
     -9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9         // Decimal 244 - 255 */
     };
+    
+    /** The Constant BAD_ENCODING. */
     private final static byte BAD_ENCODING = -9; // Indicates error in encoding
+    
+    /** The Constant WHITE_SPACE_ENC. */
     private final static byte WHITE_SPACE_ENC = -5; // Indicates white space in encoding
+    
+    /** The Constant EQUALS_SIGN_ENC. */
     private final static byte EQUALS_SIGN_ENC = -1; // Indicates equals sign in encoding
 
     /** Defeats instantiation. */
@@ -124,6 +131,8 @@ public class SFBase64 {
     /**
      * Testing. Feel free--in fact I encourage you--to throw out
      * this entire "main" method when you actually deploy this code.
+     * 
+     * @param args the arguments
      */
     public static void main(String[] args)
     {
@@ -305,8 +314,9 @@ public class SFBase64 {
     /**
      * Encodes the first three bytes of array <var>threeBytes</var>
      * and returns a four-byte array in Base64 notation.
-     *
+     * 
      * @param threeBytes the array to convert
+     * @param numSigBytes the num sig bytes
      * @return four byte array in Base64 notation.
      * @since 1.3
      */
@@ -347,13 +357,13 @@ public class SFBase64 {
      * the <var>destination</var> array.
      * The actual number of significant bytes in your array is
      * given by <var>numSigBytes</var>.
-     *
+     * 
      * @param source the array to convert
      * @param srcOffset the index where conversion begins
      * @param numSigBytes the number of significant bytes in your array
      * @param destination the array to hold the conversion
      * @param destOffset the index where output will be put
-     * @return the <var>destination</var> array
+     * @return the  array
      * @since 1.3
      */
     private static byte[] encode3to4(
@@ -477,8 +487,9 @@ public class SFBase64 {
      * Encodes a byte array into Base64 notation.
      * Equivalen to calling
      * <code>encodeBytes( source, 0, source.length )</code>
-     *
+     * 
      * @param source The data to convert
+     * @return the string
      * @since 1.4
      */
     public static String encodeBytes(byte[] source)
@@ -490,9 +501,10 @@ public class SFBase64 {
      * Encodes a byte array into Base64 notation.
      * Equivalen to calling
      * <code>encodeBytes( source, 0, source.length )</code>
-     *
+     * 
      * @param source The data to convert
      * @param breakLines Break lines at 80 characters or less.
+     * @return the string
      * @since 1.4
      */
     public static String encodeBytes(byte[] source, boolean breakLines)
@@ -502,10 +514,11 @@ public class SFBase64 {
 
     /**
      * Encodes a byte array into Base64 notation.
-     *
+     * 
      * @param source The data to convert
      * @param off Offset in array where conversion should begin
      * @param len Length of data to convert
+     * @return the string
      * @since 1.4
      */
     public static String encodeBytes(byte[] source, int off, int len)
@@ -515,11 +528,12 @@ public class SFBase64 {
 
     /**
      * Encodes a byte array into Base64 notation.
-     *
+     * 
      * @param source The data to convert
      * @param off Offset in array where conversion should begin
      * @param len Length of data to convert
      * @param breakLines Break lines at 80 characters or less.
+     * @return the string
      * @since 1.4
      */
     public static String encodeBytes(byte[] source, int off, int len, boolean breakLines)
@@ -824,22 +838,35 @@ public class SFBase64 {
 
     /* ********  I N N E R   C L A S S   I N P U T S T R E A M  ******** */
     /**
-     * A {@link Base64#InputStream} will read data from another
+     * A {@link Base64#InputStream} will read data from another.
+     * 
      * {@link java.io.InputStream}, given in the constructor,
      * and encode/decode to/from Base64 notation on the fly.
-     *
      * @see Base64
      * @see java.io.FilterInputStream
      * @since 1.3
      */
     public static class InputStream extends java.io.FilterInputStream {
 
+        /** The encode. */
         private boolean encode;         // Encoding or decoding
+        
+        /** The position. */
         private int position;       // Current position in the buffer
+        
+        /** The buffer. */
         private byte[] buffer;         // Small buffer holding converted data
+        
+        /** The buffer length. */
         private int bufferLength;   // Length of buffer (3 or 4)
+        
+        /** The num sig bytes. */
         private int numSigBytes;    // Number of meaningful bytes in the buffer
+        
+        /** The line length. */
         private int lineLength;
+        
+        /** The break lines. */
         private boolean breakLines;     // Break lines at less than 80 characters
 
         /**
@@ -893,8 +920,9 @@ public class SFBase64 {
         /**
          * Reads enough of the input stream to convert
          * to/from Base64 and returns the next byte.
-         *
+         * 
          * @return next byte
+         * @throws IOException Signals that an I/O exception has occurred.
          * @since 1.3
          */
         public int read() throws java.io.IOException
@@ -1025,11 +1053,12 @@ public class SFBase64 {
          * is reached or <var>len</var> bytes are read.
          * Returns number of bytes read into array or -1 if
          * end of stream is encountered.
-         *
+         * 
          * @param dest array to hold values
          * @param off offset for array
          * @param len max number of bytes to read into array
          * @return bytes read into array or -1 if end of stream is encountered.
+         * @throws IOException Signals that an I/O exception has occurred.
          * @since 1.3
          */
         public int read(byte[] dest, int off, int len) throws java.io.IOException
@@ -1060,21 +1089,32 @@ public class SFBase64 {
 
     /* ********  I N N E R   C L A S S   O U T P U T S T R E A M  ******** */
     /**
-     * A {@link Base64#OutputStream} will write data to another
+     * A {@link Base64#OutputStream} will write data to another.
+     * 
      * {@link java.io.OutputStream}, given in the constructor,
      * and encode/decode to/from Base64 notation on the fly.
-     *
      * @see Base64
      * @see java.io.FilterOutputStream
      * @since 1.3
      */
     public static class OutputStream extends java.io.FilterOutputStream {
 
+        /** The encode. */
         private boolean encode;
+        
+        /** The position. */
         private int position;
+        
+        /** The buffer. */
         private byte[] buffer;
+        
+        /** The buffer length. */
         private int bufferLength;
+        
+        /** The line length. */
         private int lineLength;
+        
+        /** The break lines. */
         private boolean breakLines;
 
         /**
@@ -1133,8 +1173,9 @@ public class SFBase64 {
          * gets a write() call.
          * When decoding, bytes are buffered four
          * at a time.
-         *
+         * 
          * @param theByte the byte to write
+         * @throws IOException Signals that an I/O exception has occurred.
          * @since 1.3
          */
         public void write(int theByte) throws java.io.IOException
@@ -1179,10 +1220,11 @@ public class SFBase64 {
         /**
          * Calls {@link #write} repeatedly until <var>len</var>
          * bytes are written.
-         *
+         * 
          * @param theBytes array from which to read bytes
          * @param off offset for array
          * @param len max number of bytes to read into array
+         * @throws IOException Signals that an I/O exception has occurred.
          * @since 1.3
          */
         public void write(byte[] theBytes, int off, int len) throws java.io.IOException
@@ -1198,7 +1240,8 @@ public class SFBase64 {
          * Appropriately pads Base64 notation when encoding
          * or throws an exception if Base64 input is not
          * properly padded when decoding.
-         *
+         * 
+         * @throws IOException Signals that an I/O exception has occurred.
          * @since 1.3
          */
         public void flush() throws java.io.IOException
@@ -1223,7 +1266,8 @@ public class SFBase64 {
 
         /**
          * Flushes and closes (I think, in the superclass) the stream.
-         *
+         * 
+         * @throws IOException Signals that an I/O exception has occurred.
          * @since 1.3
          */
         public void close() throws java.io.IOException
