@@ -23,7 +23,17 @@
  */
 package org.semanticwb.model;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class PFlowInstance.
+ */
 public class PFlowInstance extends org.semanticwb.model.base.PFlowInstanceBase {
+    
+    /**
+     * Instantiates a new p flow instance.
+     * 
+     * @param base the base
+     */
     public PFlowInstance(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }

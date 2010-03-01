@@ -28,7 +28,17 @@ package org.semanticwb.model;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticObject;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class PFlow.
+ */
 public class PFlow extends PFlowBase {
+    
+    /**
+     * Instantiates a new p flow.
+     * 
+     * @param base the base
+     */
     public PFlow(SemanticObject base) {
         super(base);
     }
